@@ -398,17 +398,15 @@ describe('E20-1 strict character cultivation runtime baseline (hero_rank dead co
     );
   });
 
-  it('resolves strict cultivation for all 11 objects with hero_rank closed as unimplemented dead config', () => {
+  it('resolves strict cultivation for all 9 formal objects with hero_rank closed as unimplemented dead config', () => {
     const objectIds = [
       '101010',
       '102001',
       '103002',
       '107001',
       '107002',
-      '108001',
       '108003',
       '109001',
-      '111001',
       '112001',
       'STARBORN',
     ];
@@ -418,10 +416,8 @@ describe('E20-1 strict character cultivation runtime baseline (hero_rank dead co
       '103002': 103002,
       '107001': 107001,
       '107002': 107002,
-      '108001': 108001,
       '108003': 108003,
       '109001': 109001,
-      '111001': 111001,
       '112001': 112001,
       STARBORN: 199001,
     };

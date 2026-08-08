@@ -1,6 +1,11 @@
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 import { deriveCharacterAcceptanceArtifacts } from '../../src/character-acceptance/characterAcceptanceDerivation.js';
 import {
+  createOptimizationScenarioRequirementClassifier,
+  getOptimizationCandidateRosterPolicy,
+  getOptimizationScenarioPolicy,
+} from '../../src/optimization-scenario/optimizationScenarioPolicy.js';
+import {
   CHARACTER_ACCEPTANCE_CONTRACT_NAME,
   CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME,
   CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION,
@@ -47,6 +52,7 @@ export function createCharacterAcceptanceManifest({
   const requirementInventory = {
     records: createCharacterAcceptanceRequirementSources({
       profile,
+      sourceGapRecords: unresolvedLedger?.records ?? [],
     }),
   };
   const sourceGapInventory = {
@@ -96,6 +102,13 @@ export function createCharacterAcceptanceManifest({
       zeroDistanceSimulationComplete:
         profile.zeroDistanceSimulationComplete === true,
       realClientEvidenceComplete: profile.realClientEvidenceComplete === true,
+      optimizationScenarioPolicy: {
+        policyId: getOptimizationScenarioPolicy().policyId,
+        policyHash: getOptimizationScenarioPolicy().policyHash,
+        rosterPolicyId: getOptimizationCandidateRosterPolicy().rosterPolicyId,
+        rosterHash: getOptimizationCandidateRosterPolicy().rosterHash,
+        reason: getOptimizationScenarioPolicy().reason,
+      },
     },
     evidence,
     requirementInventory,
@@ -132,9 +145,16 @@ export function createCharacterAcceptanceMatrix({
   }).matrix;
 }
 
-export function createCharacterAcceptanceRequirementSources({ profile }) {
+export function createCharacterAcceptanceRequirementSources({
+  profile,
+  sourceGapRecords = [],
+}) {
   const ownerId = Number(profile.owner?.ownerId);
   const requirements = [];
+  const classifyOptimizationScope =
+    createOptimizationScenarioRequirementClassifier(profile);
+  const classifyNonBlockingSourceRecord =
+    createNonBlockingSourceRecordClassifier(sourceGapRecords);
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
@@ -142,9 +162,25 @@ export function createCharacterAcceptanceRequirementSources({ profile }) {
     );
     records.forEach((record, index) => {
       const subjectIdentity = resolveContractIdentity(record, dimension, index);
+      const optimizationScenario = classifyOptimizationScope(record);
+      const sourceGapDisposition =
+        classifyNonBlockingSourceRecord(record);
+      const productBoundaryEvidence = createProductBoundaryEvidence({
+        ownerId,
+        profile,
+        record,
+        sourceGapDisposition,
+      });
+      const aggregateStatDependency =
+        dimension === 'stat-dependency' &&
+        Array.isArray(record.static) &&
+        Array.isArray(record.dynamic);
       const notApplicable =
         isNotApplicableRecord(record) ||
-        isUnwiredControlWindowRequirement(record, dimension, profile);
+        isUnwiredControlWindowRequirement(record, dimension, profile) ||
+        optimizationScenario != null ||
+        sourceGapDisposition != null ||
+        aggregateStatDependency;
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
         dimension,
@@ -164,8 +200,24 @@ export function createCharacterAcceptanceRequirementSources({ profile }) {
           ownerId,
         }),
         sourceIdentities: collectSourceIdentities(record),
+        ...(optimizationScenario == null
+          ? {}
+          : { optimizationScenario }),
+        ...(sourceGapDisposition == null
+          ? {}
+          : { sourceGapDisposition }),
+        ...(productBoundaryEvidence == null
+          ? {}
+          : { productBoundaryEvidence }),
         reasons: notApplicable
           ? [
+              ...(optimizationScenario?.reason
+                ? [optimizationScenario.reason]
+                : []),
+              ...(sourceGapDisposition?.reasons ?? []),
+              ...(aggregateStatDependency
+                ? ['aggregate-stat-dependency-index-not-standalone-requirement']
+                : []),
               ...(normalizeReasons(record).length
                 ? normalizeReasons(record)
                 : ['source-confirmed-not-applicable']),
@@ -203,6 +255,138 @@ export function createCharacterAcceptanceScenarioCaseSources({
     ),
     createVisualScenarioCaseSource(visualScenario),
   ];
+}
+
+function createProductBoundaryEvidence({
+  ownerId,
+  profile,
+  record,
+  sourceGapDisposition,
+}) {
+  if (Number(ownerId) !== 109001 || Number(record?.elementId) !== 799) {
+    return null;
+  }
+  const rootPathId = String(
+    record.relationPath?.[0]?.from ?? ''
+  ).replace(/^element:/, '');
+  const rootRecord = flattenContractRecords(
+    profile?.contracts?.effects,
+    'effects'
+  ).find(
+    candidate =>
+      Number(candidate?.controlSkillId) === Number(record.controlSkillId) &&
+      Number(candidate?.mapIndex) === Number(record.mapIndex) &&
+      String(candidate?.pathId) === rootPathId
+  );
+  return {
+    schemaVersion: 1,
+    evidenceIdentity: 'm12-b3-e20-2-109001-s3:m23:element-799-orphan',
+    evidenceKind: 'client-resource-graph-native-consumer-boundary',
+    disposition: 'not-applicable',
+    reason: 'm23-client-orphan-no-reachable-native-consumer',
+    resourceGraph: {
+      controlSkillId: Number(record.controlSkillId),
+      mapIndex: Number(record.mapIndex),
+      triggerFrame: Number(record.trigger?.startFrame),
+      rootElementId: Number(rootRecord?.elementId),
+      rootPathId,
+      childElementId: Number(record.elementId),
+      childPathId: String(record.pathId),
+      relationPath: structuredClone(record.relationPath ?? []),
+      sourceIdentity: record.sourceIdentity ?? null,
+      rootSourceIdentities: structuredClone(
+        rootRecord?.sourceIdentities ?? []
+      ),
+    },
+    nativeConsumer: {
+      reachable: false,
+      rootJudgmentIdentity: String(rootRecord?.semanticIdentity ?? ''),
+      sourceRecordIdentities: structuredClone(
+        sourceGapDisposition?.sourceRecordIdentities ?? []
+      ),
+      rawRecordIdentities: structuredClone(
+        sourceGapDisposition?.rawRecordIdentities ?? []
+      ),
+      reasons: structuredClone(sourceGapDisposition?.reasons ?? []),
+      conclusion:
+        'reference-edge-present-but-root-judgment-has-no-native-current-packet-candidate',
+    },
+    runtimeBoundary: {
+      synthesizedProjectionAllowed: false,
+      manualRuntimeRetained: true,
+      formalOptimizationRequired: false,
+    },
+  };
+}
+
+function createNonBlockingSourceRecordClassifier(records) {
+  const byRawIdentity = new Map();
+  const byControlAndElementPath = new Map();
+  for (const source of records ?? []) {
+    if (source?.impactClassification === 'gameplay-impacting') continue;
+    for (const rawIdentity of source?.rawRecordIdentities ?? []) {
+      const rows = byRawIdentity.get(String(rawIdentity)) ?? [];
+      rows.push(source);
+      byRawIdentity.set(String(rawIdentity), rows);
+    }
+    for (const sourceIdentity of source?.sourceIdentities ?? []) {
+      const match = String(sourceIdentity).match(
+        /^battle-effect:(\d+):\d+:([^:]+):/
+      );
+      if (!match) continue;
+      const key = `${Number(match[1])}|${match[2]}`;
+      const rows = byControlAndElementPath.get(key) ?? [];
+      rows.push(source);
+      byControlAndElementPath.set(key, rows);
+    }
+  }
+  return record => {
+    const rawIdentities = uniqueStrings(record?.rawEffectIdentities ?? []);
+    const controlAndElementKeys = uniqueStrings(
+      [
+        ...rawIdentities.flatMap(identity => {
+          const match = String(identity).match(
+            /^(\d+)\|\d+\|.*\|element:([^|]+)\|/
+          );
+          return match ? [`${Number(match[1])}|${match[2]}`] : [];
+        }),
+        ...(record?.rootBattleIdentities ?? []).map(
+          identity => `${Number(record.controlSkillId)}|${identity}`
+        ),
+      ]
+    );
+    const matches = [
+      ...new Map(
+        [
+          ...rawIdentities.flatMap(
+            identity => byRawIdentity.get(identity) ?? []
+          ),
+          ...controlAndElementKeys.flatMap(
+            key => byControlAndElementPath.get(key) ?? []
+          ),
+        ]
+          .map(source => [String(source.recordIdentity), source])
+      ).values(),
+    ];
+    if (matches.length === 0) return null;
+    return {
+      disposition: 'not-applicable',
+      sourceRecordIdentities: uniqueStrings(
+        matches.map(source => source.recordIdentity)
+      ),
+      rawRecordIdentities: rawIdentities,
+      controlAndElementKeys,
+      impactClassifications: uniqueStrings(
+        matches.map(source => source.impactClassification)
+      ),
+      reasons: uniqueStrings(
+        matches.flatMap(source => [
+          'nonblocking-source-record-projection',
+          ...(source.reasons ?? []),
+        ])
+      ),
+    };
+  };
 }
 
 export function createScenarioProfileProjectionRows({
@@ -362,9 +546,24 @@ export function createCharacterAcceptanceCatalog(
     kind: 'azpr-character-acceptance-catalog',
     protocolIdentity: CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY,
     manifestIndexHash: manifestIndex.indexHash,
+    optimizationScenarioPolicy: {
+      policyId: getOptimizationScenarioPolicy().policyId,
+      policyHash: getOptimizationScenarioPolicy().policyHash,
+    },
+    optimizationCandidateRoster: structuredClone(
+      getOptimizationCandidateRosterPolicy()
+    ),
+    productScenarioExcludedCharacters: structuredClone(
+      getOptimizationCandidateRosterPolicy().productScenarioExcludedCharacters
+    ),
     entries,
     summary: {
       ownerCount: entries.length,
+      formalCharacterDenominator:
+        getOptimizationCandidateRosterPolicy().formalDenominator,
+      productScenarioExcludedCharacterCount:
+        getOptimizationCandidateRosterPolicy().productScenarioExcludedCharacters
+          .length,
       maturityCounts: countBy(entries, entry => entry.maturityState),
       optimizationReadyCount: entries.filter(entry => entry.optimizationReady)
         .length,

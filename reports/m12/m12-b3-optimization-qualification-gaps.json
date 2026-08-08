@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "0b242d3faec69a07",
+  "rosterHash": "130c9cd5f5192ad6",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "7e398c1d43fba378",
-        "0b242d3faec69a07"
+        "39acb167dbcf7801",
+        "130c9cd5f5192ad6"
       ]
     },
     {
@@ -236,34 +236,6 @@
       "gapHash": "c99a421e56f2b5e4"
     },
     {
-      "gapIdentity": "character:108001:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "108001",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=108001]"
-      ],
-      "details": {},
-      "gapHash": "e0fd6ecbe9634bb4"
-    },
-    {
-      "gapIdentity": "character:108001:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "108001",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=108001]"
-      ],
-      "details": {},
-      "gapHash": "511beee7802afee2"
-    },
-    {
       "gapIdentity": "character:108003:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "108003",
@@ -304,34 +276,6 @@
       ],
       "details": {},
       "gapHash": "8b52f0586fe42981"
-    },
-    {
-      "gapIdentity": "character:111001:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "111001",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=111001]"
-      ],
-      "details": {},
-      "gapHash": "33a85403ff54f196"
-    },
-    {
-      "gapIdentity": "character:111001:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "111001",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=111001]"
-      ],
-      "details": {},
-      "gapHash": "552b205bc92cd8f0"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -448,22 +392,22 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 22,
+    "blockingUniqueGapCount": 18,
     "byCategory": {
       "evidence-insufficient": 1,
-      "not-implemented": 21
+      "not-implemented": 17
     },
     "byCode": {
       "acceptance-product-visual-signoff-pending": 1,
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 8,
-      "character-not-optimization-ready": 11,
+      "character-acceptance-not-published": 6,
+      "character-not-optimization-ready": 9,
       "set-skill-dynamic-unapplied": 1
     },
     "byObjectKind": {
-      "character": 20,
+      "character": 16,
       "set-skill": 2
     }
   },
-  "ledgerHash": "fde454a7f02ec2b3"
+  "ledgerHash": "9e046d2a3c1f56fa"
 }

@@ -245,6 +245,8 @@ function executeVisualScenario({
     first,
     second
   );
+  const thunderLifecycle = inspectThunderLifecycle(first);
+  const inputWindowBoundaries = inspectInputWindowBoundaries(fixture, first);
   const probeResults = recipe.probes.map(probe =>
     inspectRecipeProbe(first, probe)
   );
@@ -258,6 +260,20 @@ function executeVisualScenario({
     ...Object.entries(criticalMatrix)
       .filter(([key]) => key !== 'details')
       .map(([key, passed]) => ({ identity: 'critical:' + key, passed })),
+    ...(Number(recipe.ownerId) === 109001
+      ? [
+          {
+            identity: 'buff-apply-refresh-stack-expire',
+            passed: thunderLifecycle.passed,
+            actual: thunderLifecycle.details,
+          },
+          {
+            identity: 'input-window-inside-outside-boundaries',
+            passed: inputWindowBoundaries.passed,
+            actual: inputWindowBoundaries.details,
+          },
+        ]
+      : []),
     ...probeResults,
   ];
   const failed = assertionResults.filter(result => !result.passed);
@@ -305,6 +321,10 @@ function executeVisualScenario({
       failedIdentities: failed.map(result => result.identity),
     },
     criticalMatrix,
+    mechanismProbes: {
+      thunderLifecycle,
+      inputWindowBoundaries,
+    },
     probeResults,
     assertionResults: assertionResults.map(result => ({
       assertionIdentity: result.identity,
@@ -358,14 +378,17 @@ function executeVisualScenario({
           event.payload?.stateIdentity ?? event.stateIdentity ?? null,
         operation: event.payload?.operation ?? event.type ?? null,
       })),
-      effects: (first.trace?.effects?.events ?? []).map((event, index) => ({
-        projectionIdentity:
-          'machine-effect:' + fixture.scenario.id + ':' + index,
-        actionId: event.actionId ?? null,
-        effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
-        operation: event.operation ?? null,
-        targetId: event.targetId ?? null,
-      })),
+      effects: [
+        ...(first.trace?.effects?.events ?? []).map((event, index) => ({
+          projectionIdentity:
+            'machine-effect:' + fixture.scenario.id + ':' + index,
+          actionId: event.actionId ?? null,
+          effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+          operation: event.operation ?? null,
+          targetId: event.targetId ?? null,
+        })),
+        ...projectVerifiedTuningComponentEffects(first, fixture.scenario.id),
+      ],
       diagnostics: [
         ...(first.trace?.diagnostics?.validationWarnings ?? []),
         ...(first.trace?.diagnostics?.actionRules?.diagnostics ?? []),
@@ -404,11 +427,20 @@ function executeVisualScenario({
 function inspectCriticalMatrix(ownerId, first, second) {
   const prefix = String(ownerId) + '-critical-';
   const boundary = { low: 499, threshold: 500 };
+  const damageEvents = first.trace?.damage ?? [];
+  const capturedSample = damageEvents.find(
+    event =>
+      event.actionId === prefix + 'sampled-low' &&
+      event.eventType === 'VERIFIED_COMBAT_HIT' &&
+      event.formula?.randomBranch?.mode === 'captured-critical-roll'
+  );
+  const overriddenHitIdentity = capturedSample?.hitIdentity ?? null;
   const findHit = suffix =>
-    (first.trace?.damage ?? []).find(
+    damageEvents.find(
       event =>
         event.actionId === prefix + suffix &&
-        event.eventType === 'VERIFIED_COMBAT_HIT'
+        event.eventType === 'VERIFIED_COMBAT_HIT' &&
+        event.hitIdentity === overriddenHitIdentity
     ) ?? null;
   const sampledLow = findHit('sampled-low');
   const sampledBoundary = findHit('sampled-boundary');
@@ -416,6 +448,31 @@ function inspectCriticalMatrix(ownerId, first, second) {
   const critical = findHit('critical');
   const nonCritical = findHit('non-critical');
   const miss = findHit('miss-critical');
+  const rateZero = findHit('rate-zero');
+  const rateOneHundred = findHit('rate-one-hundred');
+  const preHitBefore = (first.trace?.damage ?? []).find(
+    event =>
+      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.eventType === 'VERIFIED_COMBAT_HIT' &&
+      String(event.hitIdentity ?? '').endsWith('|47|6')
+  );
+  const preHitAfter = (first.trace?.damage ?? []).find(
+    event =>
+      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.eventType === 'VERIFIED_COMBAT_HIT' &&
+      String(event.hitIdentity ?? '').endsWith('|56|7')
+  );
+  const nonCrittable = (first.trace?.damage ?? []).find(
+    event =>
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      Number(event.elementId) === 251
+  );
+  const nonCrittablePeer = (first.trace?.damage ?? []).find(
+    event =>
+      event.actionId === nonCrittable?.actionId &&
+      event.eventType === 'VERIFIED_COMBAT_HIT' &&
+      event.formula?.randomBranch
+  );
   const expectedResult = expected?.formula?.verifiedResult?.expectedCritical;
   return {
     sameSeedReplay: sameHashes(first.hashes, second.hashes),
@@ -438,14 +495,263 @@ function inspectCriticalMatrix(ownerId, first, second) {
       expectedResult?.criticalEventMaterialized === false &&
       expectedResult?.weightedValue === expected?.rawDamage,
     missSuppressesHit: miss == null,
+    ...(ownerId === 109001
+      ? {
+          rateZero:
+            rateZero?.formula?.randomBranch?.criticalThreshold === 0 &&
+            rateZero?.formula?.randomBranch?.criticalRoll === 0 &&
+            rateZero?.formula?.randomBranch?.critical === false,
+          rateOneHundredPercent:
+            rateOneHundred?.formula?.randomBranch?.criticalThreshold === 10000 &&
+            rateOneHundred?.formula?.randomBranch?.criticalRoll === 9999 &&
+            rateOneHundred?.formula?.randomBranch?.critical === true,
+          preHitAttributeChange:
+            preHitBefore?.formula?.randomBranch
+              ?.sourceCriticalRateBasisPoints === 500 &&
+            preHitBefore?.formula?.randomBranch
+              ?.sourceCriticalDamageBasisPoints === 15000 &&
+            preHitAfter?.formula?.randomBranch
+              ?.sourceCriticalRateBasisPoints === 586 &&
+            preHitAfter?.formula?.randomBranch
+              ?.sourceCriticalDamageBasisPoints === 15172,
+          nonCrittableRejection:
+            nonCrittable?.formula?.status ===
+              'verified-tuning-formula-applied' &&
+            nonCrittable?.formula?.randomBranch == null &&
+            Number(nonCrittable?.rawDamage) > 0 &&
+            Boolean(nonCrittablePeer?.formula?.randomBranch),
+        }
+      : {}),
     details: {
       sampledLow: projectCriticalHit(sampledLow),
       sampledBoundary: projectCriticalHit(sampledBoundary),
       expected: projectCriticalHit(expected),
       critical: projectCriticalHit(critical),
       nonCritical: projectCriticalHit(nonCritical),
+      rateZero: projectCriticalHit(rateZero),
+      rateOneHundred: projectCriticalHit(rateOneHundred),
+      preHitBefore: projectCriticalHit(preHitBefore),
+      preHitAfter: projectCriticalHit(preHitAfter),
+      nonCrittable: projectCriticalHit(nonCrittable),
+      nonCrittablePeer: projectCriticalHit(nonCrittablePeer),
     },
   };
+}
+
+function inspectThunderLifecycle(run) {
+  const marks = (run.trace?.resources?.tuningMarks ?? []).filter(
+    event => Number(event.markId) === 250
+  );
+  const findMark = (actionId, predicate = () => true) =>
+    marks.find(event => event.actionId === actionId && predicate(event)) ?? null;
+  const apply = findMark(
+    'moyin-lifecycle-a5-1',
+    event => event.kind === 'acquire'
+  );
+  const stack = findMark(
+    'moyin-lifecycle-a5-2',
+    event => event.kind === 'acquire'
+  );
+  const cap = findMark(
+    'moyin-lifecycle-a5-3',
+    event => event.kind === 'acquire'
+  );
+  const refresh = findMark(
+    'moyin-lifecycle-a5-6-refresh',
+    event => event.kind === 'acquire'
+  );
+  const expire = marks.find(event => event.kind === 'expire') ?? null;
+  const firstHeldDamage = (run.trace?.damage ?? []).find(
+    event =>
+      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      Number(event.elementId) === 251
+  );
+  const nextHeldDamage = (run.trace?.damage ?? []).find(
+    event =>
+      event.actionId === 'moyin-lifecycle-a5-4' &&
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      Number(event.elementId) === 251
+  );
+  const heldDamageInsideCooldown = (run.trace?.damage ?? []).find(
+    event =>
+      ['moyin-lifecycle-a5-2', 'moyin-lifecycle-a5-3'].includes(
+        event.actionId
+      ) &&
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      Number(event.elementId) === 251
+  );
+  const persistentEffect = (run.trace?.effects?.events ?? []).find(
+    event =>
+      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.effectId === 'tuning-mark:250:persistent' &&
+      event.operation === 'apply' &&
+      event.targetId === 'actor-109001'
+  );
+  const expiryBoundaryHit = (run.trace?.damage ?? []).find(
+    event =>
+      event.actionId === 'moyin-expiry-boundary-hit' &&
+      event.eventType === 'VERIFIED_COMBAT_HIT' &&
+      String(event.hitIdentity ?? '').endsWith('|12|1')
+  );
+  const modifierByAttribute = new Map(
+    (persistentEffect?.modifiers ?? []).map(modifier => [
+      Number(modifier.attributeId),
+      Number(modifier.valueRaw),
+    ])
+  );
+  const passed =
+    apply?.before === 0 &&
+    apply?.after === 2 &&
+    apply?.delta === 2 &&
+    stack?.before === 2 &&
+    stack?.after === 4 &&
+    cap?.before === 4 &&
+    cap?.after === 5 &&
+    refresh?.before === 5 &&
+    refresh?.after === 5 &&
+    refresh?.delta === 0 &&
+    expire?.before === 5 &&
+    expire?.after === 4 &&
+    expire?.delta === -1 &&
+    expire?.frameIndex === expiryBoundaryHit?.absoluteFrame &&
+    expiryBoundaryHit?.formula?.randomBranch?.sourceCriticalRateBasisPoints ===
+      672 &&
+    firstHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
+    Number(firstHeldDamage?.rawDamage) > 0 &&
+    firstHeldDamage?.absoluteFrame === apply?.frameIndex &&
+    heldDamageInsideCooldown == null &&
+    nextHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
+    Number(nextHeldDamage?.rawDamage) > Number(firstHeldDamage?.rawDamage) &&
+    Math.abs(
+      Number(nextHeldDamage?.timeMs) -
+        Number(firstHeldDamage?.timeMs) -
+        5000
+    ) < 0.001 &&
+    modifierByAttribute.get(7) === 43 &&
+    modifierByAttribute.get(8) === 86;
+  return {
+    passed,
+    details: {
+      apply,
+      stack,
+      cap,
+      refresh,
+      expire,
+      firstHeldDamage: projectCriticalHit(firstHeldDamage),
+      nextHeldDamage: projectCriticalHit(nextHeldDamage),
+      heldDamageInsideCooldown: projectCriticalHit(heldDamageInsideCooldown),
+      persistentEffect,
+      expiryBoundaryHit: projectCriticalHit(expiryBoundaryHit),
+    },
+  };
+}
+
+function inspectInputWindowBoundaries(fixture, run) {
+  const selections = new Map(
+    (run.trace?.variants?.selections ?? []).map(selection => [
+      selection.actionId,
+      selection,
+    ])
+  );
+  const actions = new Map(
+    (fixture.actions ?? []).map(action => [action.id, action])
+  );
+  const cases = [
+    ['window-outside-before', 39, 10900101],
+    ['window-inside-start', 41, 10900143],
+    ['window-inside-end', 76, 10900143],
+    ['window-outside-after', 78, 10900101],
+  ].map(([actionId, expectedOffset, expectedControlSkillId]) => {
+    const action = actions.get(actionId);
+    const contextAction = actions.get(
+      action?.intent?.attackInput?.contextActionId
+    );
+    const actualOffset =
+      Number(action?.schedule?.frame) - Number(contextAction?.schedule?.frame);
+    const selection = selections.get(actionId) ?? null;
+    return {
+      actionId,
+      expectedOffset,
+      actualOffset,
+      expectedControlSkillId,
+      actualControlSkillId: Number(selection?.controlSkillId),
+      passed:
+        actualOffset === expectedOffset &&
+        Number(selection?.controlSkillId) === expectedControlSkillId,
+      selection,
+    };
+  });
+  return {
+    passed: cases.every(entry => entry.passed),
+    details: {
+      sourceControlSkillId: 10900112,
+      transitionControlSkillId: 10900143,
+      sourceWindow: '(40,77] source frames',
+      cases,
+    },
+  };
+}
+
+function projectVerifiedTuningComponentEffects(run, scenarioId) {
+  const thunder = mechanicsPackage.tuningMechanicsCatalog?.profiles?.find(
+    profile => Number(profile.markId) === 250
+  );
+  if (!thunder) return [];
+  const damageComponentIds = new Set(
+    (thunder.heldDamageTemplates ?? []).map(template =>
+      Number(template.elementConfigId)
+    )
+  );
+  const persistentModifiers = thunder.persistentModifiers ?? [];
+  const rows = [];
+  for (const [index, event] of (run.trace?.damage ?? []).entries()) {
+    if (
+      event.eventType !== 'VERIFIED_TUNING_DAMAGE' ||
+      !damageComponentIds.has(Number(event.elementId)) ||
+      event.formula?.status !== 'verified-tuning-formula-applied'
+    ) {
+      continue;
+    }
+    rows.push({
+      projectionIdentity:
+        'machine-tuning-damage-effect:' + scenarioId + ':' + index,
+      actionId: event.actionId ?? null,
+      effectIdentity: 'battle-element:' + Number(event.elementId),
+      operation: 'settle-damage',
+      targetId: event.targetId ?? null,
+      sourceIdentity: event.formula?.sourceIdentity ?? null,
+      rawDamage: event.rawDamage ?? null,
+    });
+  }
+  for (const [index, event] of (run.trace?.effects?.events ?? []).entries()) {
+    if (event.effectId !== 'tuning-mark:250:persistent') continue;
+    for (const modifier of event.modifiers ?? []) {
+      const verified = persistentModifiers.find(
+        candidate =>
+          Number(candidate.attributeId) === Number(modifier.attributeId) &&
+          Number(candidate.valueRaw) === Number(modifier.valueRaw)
+      );
+      if (!verified) continue;
+      rows.push({
+        projectionIdentity:
+          'machine-tuning-modifier-effect:' +
+          scenarioId +
+          ':' +
+          index +
+          ':' +
+          verified.componentId,
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + Number(verified.componentId),
+        operation: event.operation ?? null,
+        targetId: event.targetId ?? null,
+        sourceIdentity: verified.sourceIdentity ?? null,
+        attributeId: Number(verified.attributeId),
+        valueRaw: Number(verified.valueRaw),
+      });
+    }
+  }
+  return rows;
 }
 
 function projectCriticalHit(event) {
@@ -518,6 +824,15 @@ function createAcceptanceReport(manifests, visualRuns, catalog, manifestIndex) {
     baselineCommit: '308dd07fbbb8fe0759062e9dcc02c65b0fd46115',
     status: 'r1-implementation-complete-awaiting-product-acceptance',
     protocolIdentity: 'm11-d-character-acceptance-v1',
+    optimizationScenarioPolicy: structuredClone(
+      catalog.optimizationScenarioPolicy
+    ),
+    optimizationCandidateRoster: structuredClone(
+      catalog.optimizationCandidateRoster
+    ),
+    productScenarioExcludedCharacters: structuredClone(
+      catalog.productScenarioExcludedCharacters
+    ),
     r1: {
       baseCommit: '5add67feb2a0ced22453df78d1408312a9e33fdb',
       status: 'implementation-complete-awaiting-product-acceptance',
@@ -561,6 +876,10 @@ function createAcceptanceReport(manifests, visualRuns, catalog, manifestIndex) {
     manifestIndexHash: manifestIndex.indexHash,
     summary: {
       ownerCount: manifests.length,
+      formalCharacterDenominator:
+        catalog.summary.formalCharacterDenominator,
+      productScenarioExcludedCharacterCount:
+        catalog.summary.productScenarioExcludedCharacterCount,
       runtimeIntegratedCount: manifests.filter(manifest =>
         manifest.maturity.earnedStates.includes('runtime-integrated')
       ).length,

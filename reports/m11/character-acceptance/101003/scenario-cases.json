@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "e3ad554a45a45cbe",
+        "reportHash": "ea95a20fd0ed1b96",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "54dc7997e7805bd7",
-          "data": "3184384090197a27",
-          "trace": "06525be94a224aab",
+          "input": "a1ee7b9ed1e9cb15",
+          "data": "0651926d20fa7c01",
+          "trace": "0815a3a269b240a1",
           "evaluation": null
         }
       },
@@ -1387,7 +1387,7 @@
           "assertionHash": "1be842279270d75b"
         }
       ],
-      "scenarioCaseHash": "31a81ca3def32785"
+      "scenarioCaseHash": "3902f9fa372e39f0"
     },
     {
       "schemaVersion": 1,
@@ -1395,7 +1395,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "e87f87885b162c7a",
+        "reportHash": "4a480e500084716b",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -1403,9 +1403,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "61a93b3529b800ab",
-          "data": "1219ae706521d162",
-          "trace": "61aec679d0b2959d",
+          "input": "cfae9af52953b6e9",
+          "data": "cf1c9a13bdaa75f4",
+          "trace": "6dbd3af52001dff3",
           "evaluation": null
         }
       },
@@ -6620,7 +6620,7 @@
           "assertionHash": "14aedd3a456ce1ad"
         }
       ],
-      "scenarioCaseHash": "db5b5d7379146c4b"
+      "scenarioCaseHash": "e955c9c7219aa5eb"
     },
     {
       "schemaVersion": 1,
@@ -6628,7 +6628,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "4c5d6097c0f85bd5",
+        "inputHash": "1195fdb4833c19f7",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -6637,9 +6637,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "4c5d6097c0f85bd5",
-          "data": "6d2259dd05baab32",
-          "trace": "1b5eae32ed5ed017",
+          "input": "1195fdb4833c19f7",
+          "data": "f2ffcc30d9b3bea0",
+          "trace": "ec8b35804c0a42f1",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -8066,6 +8066,384 @@
           "assertionHash": "4adf0680b75d2a17"
         },
         {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:0",
+          "selector": {
+            "actionId": "101003-critical-sampled-low",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "f752142478fd0701"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:1",
+          "selector": {
+            "actionId": "101003-critical-sampled-boundary",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "a58a809679991b0b"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:10",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|104|6",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:10"
+          ],
+          "reasons": [],
+          "assertionHash": "012c7e5cde75b08e"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:11",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|109|7",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:11"
+          ],
+          "reasons": [],
+          "assertionHash": "5ebcca10599479fa"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:12",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|projectile|101003066|101003101|0|0|control:10100310|sub:0|behavior:-78150393795048980|config:0|bullet:101003101:0:0|element:101003066:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:12"
+          ],
+          "reasons": [],
+          "assertionHash": "8afd3030404f2aa0"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:13",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|30|2",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:13"
+          ],
+          "reasons": [],
+          "assertionHash": "c943228146b286a4"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:14",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|31|3",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:14"
+          ],
+          "reasons": [],
+          "assertionHash": "4768c892b63f7c67"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:15",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|40|4",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:15"
+          ],
+          "reasons": [],
+          "assertionHash": "fabca288f69dc9f7"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:16",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|51|5",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:16"
+          ],
+          "reasons": [],
+          "assertionHash": "5a179a88cb74068c"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:17",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|55|6",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:17"
+          ],
+          "reasons": [],
+          "assertionHash": "266a236bb87efe28"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:18",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|58|7",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:18"
+          ],
+          "reasons": [],
+          "assertionHash": "8ca39a18aa5c228c"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:19",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|62|8",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:19"
+          ],
+          "reasons": [],
+          "assertionHash": "f86e030fe08705bc"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:2",
+          "selector": {
+            "actionId": "101003-critical-expected",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "6010bb45eb0bf032"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:20",
+          "selector": {
+            "actionId": "han-firework-charged",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|65|9",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:20"
+          ],
+          "reasons": [],
+          "assertionHash": "6f54ed9897ec7b9a"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:3",
+          "selector": {
+            "actionId": "101003-critical-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "80ead7c1cff00945"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:4",
+          "selector": {
+            "actionId": "101003-critical-non-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "e61d9330bba84d85"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:5",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|61|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "ab311acc810171a6"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:6",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|68|2",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:6"
+          ],
+          "reasons": [],
+          "assertionHash": "8d40e81693e22202"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:7",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|73|3",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "7474b81d2df39ef1"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:8",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|94|4",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:8"
+          ],
+          "reasons": [],
+          "assertionHash": "6db7a6d4ee634910"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101003-visual-acceptance:9",
+          "selector": {
+            "actionId": "han-star-skill",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|99|5",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101003-visual-acceptance:9"
+          ],
+          "reasons": [],
+          "assertionHash": "99a3c463d04bd982"
+        },
+        {
           "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:0",
           "selector": {
             "actionId": "han-star-skill",
@@ -9333,18 +9711,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "0fdcc63d692b9c2c"
+      "scenarioCaseHash": "028f0f220353e8e4"
     }
   ],
   "summary": {
     "scenarioCount": 3,
     "executionPassedCount": 3,
-    "assertionCount": 352,
-    "assertionPassedCount": 346,
+    "assertionCount": 373,
+    "assertionPassedCount": 367,
     "runnerKindCounts": {
       "canonical-character-golden": 2,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "70955cd76167f9d9"
+  "scenarioSetHash": "ef18451db1f1a7a8"
 }

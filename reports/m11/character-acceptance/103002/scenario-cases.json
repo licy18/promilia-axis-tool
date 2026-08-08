@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/103002/golden-trace.json",
-        "reportHash": "1e47e646bbc3a61b",
+        "reportHash": "afd680ef97872162",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 103002 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "e410bc0c54925c69",
-          "data": "83881b84e925c5d7",
-          "trace": "4906394c227da39b",
+          "input": "2a6fa447c8fd06b3",
+          "data": "b706fa0ec241c68d",
+          "trace": "da1afb199b8417d5",
           "evaluation": null
         }
       },
@@ -9132,7 +9132,7 @@
           "assertionHash": "ab53f19f8379ae6b"
         }
       ],
-      "scenarioCaseHash": "488c4a21807313b4"
+      "scenarioCaseHash": "34a4df59d9eca60b"
     },
     {
       "schemaVersion": 1,
@@ -9140,7 +9140,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-        "inputHash": "8fe7db05aa4a7fc9",
+        "inputHash": "bb18e0a37071c7bf",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/103002-visual.json"
       },
       "execution": {
@@ -9149,9 +9149,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "8fe7db05aa4a7fc9",
-          "data": "de89b74f1712be5c",
-          "trace": "dc418b9a6b3db0d5",
+          "input": "bb18e0a37071c7bf",
+          "data": "1a777f7036c58046",
+          "trace": "5e27f714eaa01f13",
           "evaluation": "b06186eaa569be69"
         }
       },
@@ -10700,6 +10700,222 @@
           "assertionHash": "da7a8a03595a336a"
         },
         {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:0",
+          "selector": {
+            "actionId": "103002-critical-sampled-low",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "0ba7f8c49db996ff"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:1",
+          "selector": {
+            "actionId": "103002-critical-sampled-boundary",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "777df94537990b2b"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:10",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|21|2",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:10"
+          ],
+          "reasons": [],
+          "assertionHash": "6603a3f43aa91b9c"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:11",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|26|3",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:11"
+          ],
+          "reasons": [],
+          "assertionHash": "7996a5058355d502"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:2",
+          "selector": {
+            "actionId": "103002-critical-expected",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "430befa1daa63cda"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:3",
+          "selector": {
+            "actionId": "103002-critical-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "863674be2ee9b5bd"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:4",
+          "selector": {
+            "actionId": "103002-critical-non-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "2787b3ca29e0b451"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:5",
+          "selector": {
+            "actionId": "ruby-chain-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "7a6521f8bfcf7ea2"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:6",
+          "selector": {
+            "actionId": "ruby-chain-a2",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:6"
+          ],
+          "reasons": [],
+          "assertionHash": "6354e66781f95675"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:7",
+          "selector": {
+            "actionId": "ruby-chain-a3",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "605811fd559be076"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:8",
+          "selector": {
+            "actionId": "ruby-chain-a3",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:8"
+          ],
+          "reasons": [],
+          "assertionHash": "6a3533e8e21ec330"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-103002-visual-acceptance:9",
+          "selector": {
+            "actionId": "ruby-chain-e1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10300201|1|elements|33|6530960959018090325|17|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-103002-visual-acceptance:9"
+          ],
+          "reasons": [],
+          "assertionHash": "ac72c4b5b702573e"
+        },
+        {
           "assertionIdentity": "trace-effect:machine-effect:m11-d-103002-visual-acceptance:0",
           "selector": {
             "actionId": "ruby-chain-e1",
@@ -11892,18 +12108,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "b7f4b079ca06ac45"
+      "scenarioCaseHash": "67b9c50fe0a37ec4"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 489,
-    "assertionPassedCount": 488,
+    "assertionCount": 501,
+    "assertionPassedCount": 500,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "c0567b6e7efefe5f"
+  "scenarioSetHash": "a3ef7fe349810ec2"
 }

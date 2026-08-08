@@ -226,6 +226,12 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       ...(effectiveScenario.combatScenario?.target == null
         ? {}
         : { targetPolicy: effectiveScenario.combatScenario.target }),
+      ...(effectiveScenario.combatScenario?.optimizationScenarioPolicy == null
+        ? {}
+        : {
+            optimizationScenarioPolicy:
+              effectiveScenario.combatScenario.optimizationScenarioPolicy,
+          }),
     },
     critical: effectiveScenario.combatScenario?.critical ?? null,
     actions: (effectiveScenario.actions ?? []).map(projectTraceAction),
@@ -1000,6 +1006,8 @@ function createDataIdentity({ scenario, gameData }) {
     mechanicsCatalogId: scenario.mechanicsProfileCatalog?.catalogId ?? null,
     mechanicsCatalogVersion:
       scenario.mechanicsProfileCatalog?.catalogVersion ?? null,
+    optimizationScenarioPolicy:
+      scenario.combatScenario?.optimizationScenarioPolicy ?? null,
     gameDataReferenceIdentity:
       scenario.gameDataCatalog?.referenceIdentity ?? null,
     gameDataSummary: {

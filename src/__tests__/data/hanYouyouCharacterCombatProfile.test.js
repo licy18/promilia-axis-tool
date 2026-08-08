@@ -32,7 +32,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         reachableControlCount: 29,
         executionFormCount: 14,
         hitCount: 73,
-      semanticEffectCount: 44,
+      semanticEffectCount: 36,
         excludedControlCount: 7,
       },
       validation: {
@@ -72,7 +72,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       passiveCount: 1,
       switchTriggerCount: 1,
     });
-    expect(sourceManifest.summary.identityCount).toBe(542);
+    expect(sourceManifest.summary.identityCount).toBe(524);
     expect(reachableGraph.summary).toMatchObject({
       controlCount: 29,
       exclusionCount: 7,
@@ -233,10 +233,10 @@ describe('M10-B2 Han Youyou character combat profile', () => {
     expect(
       profile.coverage.find(item => item.dimension === 'dynamicProperties')
     ).toMatchObject({
-      status: 'static-evidence-gap',
-      recordCount: 22,
+      status: 'applied',
+      recordCount: 15,
       appliedCount: 15,
-      unresolvedCount: 7,
+      unresolvedCount: 0,
     });
   });
 

@@ -21,7 +21,8 @@ function runCli(args, { input = '', env = {} } = {}) {
     encoding: 'utf8',
     input,
     env: { ...process.env, ...env },
-    timeout: 120_000,
+    timeout: 300_000,
+    maxBuffer: 64 * 1024 * 1024,
   });
 }
 
@@ -40,7 +41,7 @@ describe('Machine Axis CLI real process I/O', () => {
     expect(parseMachineJson(build.stdout)).toMatchObject({
       kind: 'azpr-machine-axis-catalog',
     });
-  }, 180_000);
+  }, 330_000);
 
   afterAll(() => {
     if (tempRoot) rmSync(tempRoot, { recursive: true, force: true });

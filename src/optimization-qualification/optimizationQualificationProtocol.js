@@ -4,6 +4,13 @@ import {
   deriveOptimizationQualificationStageGate,
   validateOptimizationQualificationBindingHash,
 } from './optimizationQualificationStageGate';
+import {
+  classifyOptimizationCandidateCharacter,
+  getOptimizationScenarioPolicy,
+  isOptimizationCandidateCharacterInScope,
+  isOptimizationScenarioActionKindInScope,
+  validateOptimizationScenarioPolicyBinding,
+} from '../optimization-scenario/optimizationScenarioPolicy';
 
 export const OPTIMIZATION_QUALIFICATION_SCHEMA_VERSION = 1;
 export const OPTIMIZATION_QUALIFICATION_CATALOG_CONTRACT_NAME =
@@ -737,6 +744,96 @@ export function createOptimizationQualificationIssuesForContract(
     );
   }
   if (qualification?.mode !== 'formal') return issues;
+  const scenarioPolicy = getOptimizationScenarioPolicy();
+  const policyBinding = validateOptimizationScenarioPolicyBinding(
+    contract?.scenario?.optimizationScenarioPolicy
+  );
+  for (const issue of policyBinding.issues) {
+    issues.push(
+      createIssue(
+        issue.code,
+        'scenario.optimizationScenarioPolicy',
+        {
+          expected: issue.expected,
+          actual: issue.actual,
+          reason: scenarioPolicy.reason,
+        }
+      )
+    );
+  }
+  (contract?.scenario?.team ?? []).forEach((slot, index) => {
+    const characterId = Number(slot?.characterId);
+    if (!isOptimizationCandidateCharacterInScope(characterId)) {
+      const disposition = classifyOptimizationCandidateCharacter(characterId);
+      issues.push(
+        createIssue(
+          'machine-axis-formal-character-product-scenario-excluded',
+          `scenario.team.${index}.characterId`,
+          {
+            characterId,
+            disposition: disposition.disposition,
+            reason: disposition.reason,
+            rosterPolicyId: disposition.rosterPolicyId,
+            rosterHash: disposition.rosterHash,
+          }
+        )
+      );
+    }
+  });
+  const projectile = contract?.scenario?.projectile ?? {};
+  if (
+    Number(projectile.targetDistance) !== 0 ||
+    projectile.defaultWillHit !== true
+  ) {
+    issues.push(
+      createIssue(
+        'optimization-scenario-policy-zero-distance-required',
+        'scenario.projectile',
+        {
+          expected: { targetDistance: 0, defaultWillHit: true },
+          actual: structuredClone(projectile),
+          reason: scenarioPolicy.reason,
+        }
+      )
+    );
+  }
+  const expectedTarget = scenarioPolicy.assumptions.targetPolicy;
+  const actualTarget = contract?.scenario?.target ?? null;
+  if (hashCanonicalValue(actualTarget) !== hashCanonicalValue(expectedTarget)) {
+    issues.push(
+      createIssue(
+        'optimization-scenario-policy-passive-boss-target-required',
+        'scenario.target',
+        {
+          expected: structuredClone(expectedTarget),
+          actual: structuredClone(actualTarget),
+          reason: scenarioPolicy.reason,
+        }
+      )
+    );
+  }
+  contract.actions.forEach((action, index) => {
+    const actionKind = action?.intent?.actionKind;
+    if (
+      action?.intent?.kind === 'public-action' &&
+      actionKind &&
+      !isOptimizationScenarioActionKindInScope(actionKind)
+    ) {
+      issues.push(
+        createIssue(
+          'machine-axis-formal-action-scenario-out-of-scope',
+          `actions.${index}.intent.actionKind`,
+          {
+            actionId: action.id,
+            actionKind,
+            reason: scenarioPolicy.reason,
+            policyId: scenarioPolicy.policyId,
+            policyHash: scenarioPolicy.policyHash,
+          }
+        )
+      );
+    }
+  });
   const catalogValidation = validateOptimizationQualificationCatalog(catalog);
   if (qualification.catalogHash !== catalog.catalogHash) {
     issues.push(

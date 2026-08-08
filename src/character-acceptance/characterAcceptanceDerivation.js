@@ -4,6 +4,7 @@ export const CHARACTER_ACCEPTANCE_DERIVATION_SCHEMA_VERSION = 1;
 export const CHARACTER_ACCEPTANCE_SCENARIO_CASE_SCHEMA_VERSION = 1;
 
 const NON_GAMEPLAY_SOURCE_REASONS = new Set([
+  'semantic-condition-not-standalone-gameplay-effect',
   'semantic-wrapper-not-gameplay-effect',
   'resource-root-wrapper-reference-not-a-runtime-transaction',
   'window-does-not-select-an-action-control',
@@ -72,6 +73,27 @@ export function finalizeRequirementInventory(records = []) {
             : 'gameplay-impacting'),
         coverageSelector: normalizeSelector(record?.coverageSelector),
         sourceIdentities: uniqueStrings(record?.sourceIdentities ?? []),
+        ...(record?.optimizationScenario == null
+          ? {}
+          : {
+              optimizationScenario: structuredClone(
+                record.optimizationScenario
+              ),
+            }),
+        ...(record?.sourceGapDisposition == null
+          ? {}
+          : {
+              sourceGapDisposition: structuredClone(
+                record.sourceGapDisposition
+              ),
+            }),
+        ...(record?.productBoundaryEvidence == null
+          ? {}
+          : {
+              productBoundaryEvidence: structuredClone(
+                record.productBoundaryEvidence
+              ),
+            }),
         reasons: uniqueStrings(record?.reasons ?? []),
       };
       return {
@@ -301,6 +323,20 @@ export function deriveAcceptanceMatrix(requirementInventory, coverage) {
         edges.map(edge => edge.scenarioIdentity)
       ),
       sourceIdentities: source.sourceIdentities,
+      ...(source.optimizationScenario == null
+        ? {}
+        : {
+            optimizationScenario: structuredClone(
+              source.optimizationScenario
+            ),
+          }),
+      ...(source.sourceGapDisposition == null
+        ? {}
+        : {
+            sourceGapDisposition: structuredClone(
+              source.sourceGapDisposition
+            ),
+          }),
       reasons: notApplicable
         ? source.reasons.length
           ? source.reasons
@@ -422,6 +458,20 @@ export function deriveNotApplicableRecords(
       sourceKind: 'requirement-inventory',
       sourceIdentities: record.sourceIdentities,
       sourceRecordHash: record.sourceRecordHash,
+      ...(record.optimizationScenario == null
+        ? {}
+        : {
+            optimizationScenario: structuredClone(
+              record.optimizationScenario
+            ),
+          }),
+      ...(record.sourceGapDisposition == null
+        ? {}
+        : {
+            sourceGapDisposition: structuredClone(
+              record.sourceGapDisposition
+            ),
+          }),
     }));
   const sourceRecords = sourceGapInventory.records
     .filter(record => !record.blocking)
@@ -610,6 +660,14 @@ function createProjectionAssertionDefinitions(projection) {
       controlSkillId: row.controlSkillId,
     });
   }
+  for (const row of projection.criticalDecisions) {
+    add('trace-critical-decision:' + row.projectionIdentity, {
+      kind: 'critical-effective-threshold',
+      expectedBasisPoints: row.effectiveThresholdBasisPoints,
+      actionId: row.actionId,
+      hitIdentity: row.hitIdentity,
+    });
+  }
   for (const [factIdentity] of Object.entries(projection.facts)) {
     add('scenario-fact:' + factIdentity, {
       kind: 'scenario-fact',
@@ -738,10 +796,12 @@ function normalizeExpectation(expectation) {
 }
 
 function normalizeSourceDisposition(record) {
+  const reasons = uniqueStrings([...(record?.reasons ?? []), record?.reason]);
   if (
     record?.sourceDisposition === 'not-applicable' ||
     record?.status === 'not-applicable' ||
-    record?.impactClassification === 'not-applicable'
+    record?.impactClassification === 'not-applicable' ||
+    reasons.some(reason => NON_GAMEPLAY_SOURCE_REASONS.has(reason))
   ) {
     return 'not-applicable';
   }

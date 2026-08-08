@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "0b242d3faec69a07",
+  "rosterHash": "130c9cd5f5192ad6",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "bd4ec96c2e75c4e5"
+          "6ada1a6a7bfb25bb"
         ]
       },
-      "manifestHash": "0ee3cd41bf334854"
+      "manifestHash": "0ba3b1883881eed9"
     },
     {
       "objectKind": "character",
@@ -84,10 +84,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "76fcca75b70f0d03"
+          "780738f7978cbbb2"
         ]
       },
-      "manifestHash": "9b44d167719674e8"
+      "manifestHash": "13bd1a85e3ddd7b3"
     },
     {
       "objectKind": "character",
@@ -151,36 +151,6 @@
     },
     {
       "objectKind": "character",
-      "objectId": "108001",
-      "displayName": "忒拉拉",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=108001]"
-      ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
-      "evidence": {
-        "sourceCharacterIds": [
-          108001
-        ],
-        "mechanismHash": "96daa11fff252daf",
-        "characterAcceptanceManifestHashes": []
-      },
-      "manifestHash": "d2ad55f14dda8abb"
-    },
-    {
-      "objectKind": "character",
       "objectId": "108003",
       "displayName": "米蒂",
       "sourceIdentities": [
@@ -231,40 +201,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "9a56420db5c08e12"
+          "fd4dd8806b3bc801"
         ]
       },
-      "manifestHash": "641ce4f21afa9f5d"
-    },
-    {
-      "objectKind": "character",
-      "objectId": "111001",
-      "displayName": "法兰塔",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=111001]"
-      ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
-      "evidence": {
-        "sourceCharacterIds": [
-          111001
-        ],
-        "mechanismHash": "f7ea274127d727b3",
-        "characterAcceptanceManifestHashes": []
-      },
-      "manifestHash": "030b7e2ec8ea2f7f"
+      "manifestHash": "a293f4bf2994d093"
     },
     {
       "objectKind": "character",
@@ -30824,9 +30764,9 @@
     }
   ],
   "summary": {
-    "objectCount": 265,
+    "objectCount": 263,
     "maturityCounts": {
-      "extracted": 23,
+      "extracted": 21,
       "optimization-ready": 210,
       "runtime-integrated": 32
     },
@@ -30839,5 +30779,5 @@
     },
     "optimizationReadyTotal": 210
   },
-  "manifestsHash": "3a64115a9bdb3818"
+  "manifestsHash": "44f387f512518c29"
 }

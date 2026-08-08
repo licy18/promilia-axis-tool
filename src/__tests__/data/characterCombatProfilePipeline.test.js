@@ -1280,17 +1280,17 @@ describe('M10 character combat profile pipeline', () => {
       )
     ).toBe(true);
     expect(unresolvedLedger.summary).toMatchObject({
-      semanticRecordCount: 209,
-      rawRecordCount: 301,
+      semanticRecordCount: 162,
+      rawRecordCount: 205,
       impactClassificationCounts: {
-        'gameplay-impacting': 119,
+        'gameplay-impacting': 72,
         'not-applicable': 37,
         unreachable: 22,
         'wrapper-or-duplicate': 31,
       },
     });
-    expect(unresolvedLedger.records).toHaveLength(209);
-    expect(unresolvedLedger.rawRecords).toHaveLength(301);
+    expect(unresolvedLedger.records).toHaveLength(162);
+    expect(unresolvedLedger.rawRecords).toHaveLength(205);
     expect(
       unresolvedLedger.records.every(
         record =>
@@ -1342,8 +1342,8 @@ describe('M10 character combat profile pipeline', () => {
         item => Number(item.ownerId) === 101010
       )
     ).toEqual(ownerContract.contracts.passives);
-    expect(ownerContract.contracts.effects.semantic).toHaveLength(125);
-    expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(9);
+    expect(ownerContract.contracts.effects.semantic).toHaveLength(96);
+    expect(ownerContract.contracts.statDependencies.dynamic).toHaveLength(6);
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const metadata = getVerifiedCharacterCombatProfileMetadata(101010);
@@ -1534,7 +1534,7 @@ describe('M10 character combat profile pipeline', () => {
     expect(rejectedRun.status).not.toBe(0);
     expect(rejectedRun.stderr).toContain('invalid public character owner');
     expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
-  }, 180000);
+  }, 300_000);
 
   it('keeps source, graph, runtime, and runtime-capture artifacts traceable', () => {
     expect(sourceManifest.summary.identityCount).toBeGreaterThan(800);

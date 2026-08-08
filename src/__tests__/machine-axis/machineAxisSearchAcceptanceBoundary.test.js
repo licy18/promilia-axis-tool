@@ -564,17 +564,17 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     });
     const result = report.results[0];
     expect(result.sampling.samples.map(sample => sample.score)).toEqual([
-      20, 21,
+      26, 27,
     ]);
-    expect(result.score).toBe(20.5);
-    expect(result.metrics.hpDamage).toBe(20.5);
-    expect(result.metrics.burst.hpDamage).toBe(20.5);
+    expect(result.score).toBe(26.5);
+    expect(result.metrics.hpDamage).toBe(26.5);
+    expect(result.metrics.burst.hpDamage).toBe(26.5);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {
       const hpDamage = result.contributions[dimension].reduce(
         (sum, entry) => sum + Number(entry.hpDamage ?? 0),
         0
       );
-      expect(hpDamage).toBeCloseTo(20.5, 8);
+      expect(hpDamage).toBeCloseTo(26.5, 8);
     }
     expect(result.sampling.samples).toEqual(
       expect.arrayContaining([

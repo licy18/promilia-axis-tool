@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101010/golden-trace.json",
-        "reportHash": "fd1c9892c19b17e5",
+        "reportHash": "5eaea78ed4c872ae",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101010 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "586971ff54df0fd5",
-          "data": "d593bf812010b28f",
-          "trace": "68fe84889646d52e",
+          "input": "5034bcb6d4717107",
+          "data": "417fabe5ad1fd6a5",
+          "trace": "63ab54e791aeab54",
           "evaluation": null
         }
       },
@@ -8538,7 +8538,7 @@
           "assertionHash": "02f555520d2e7e91"
         }
       ],
-      "scenarioCaseHash": "966967a05425bd0d"
+      "scenarioCaseHash": "72aa1e00fe683264"
     },
     {
       "schemaVersion": 1,
@@ -8546,7 +8546,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-        "inputHash": "46be7a071e372b36",
+        "inputHash": "bb8cb6b2da7c5e04",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101010-visual.json"
       },
       "execution": {
@@ -8555,9 +8555,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "46be7a071e372b36",
-          "data": "a71d3e907d8b802a",
-          "trace": "841d419e450e9cfe",
+          "input": "bb8cb6b2da7c5e04",
+          "data": "34b77abc3a2a6bf8",
+          "trace": "37ce92ccc51f54bc",
           "evaluation": "adc4612197816c14"
         }
       },
@@ -9905,6 +9905,474 @@
           "assertionHash": "6db7e161cbcfef5b"
         },
         {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:0",
+          "selector": {
+            "actionId": "101010-critical-sampled-low",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "b416cc32616875a3"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:1",
+          "selector": {
+            "actionId": "101010-critical-sampled-boundary",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "da78e332b97778cd"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:10",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|4|8275426223765851682|219|6",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:10"
+          ],
+          "reasons": [],
+          "assertionHash": "ccb49d80ccc89001"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:11",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|4|8275426223765851682|225|7",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:11"
+          ],
+          "reasons": [],
+          "assertionHash": "7a3032a725e19149"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:12",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|4|8275426223765851682|231|8",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:12"
+          ],
+          "reasons": [],
+          "assertionHash": "6cf66fe7e9d1fcb9"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:13",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|4|8275426223765851682|237|9",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:13"
+          ],
+          "reasons": [],
+          "assertionHash": "957cc9d4009d14ea"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:14",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|16|59197623417195618|272|10",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:14"
+          ],
+          "reasons": [],
+          "assertionHash": "d2487021f3380ce3"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:15",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|16|59197623417195618|278|11",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:15"
+          ],
+          "reasons": [],
+          "assertionHash": "b51968e34a0913b0"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:16",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|16|59197623417195618|284|12",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:16"
+          ],
+          "reasons": [],
+          "assertionHash": "451684668b1fb244"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:17",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|13|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:17"
+          ],
+          "reasons": [],
+          "assertionHash": "f1055e9dc555bf7c"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:18",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|18|2",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:18"
+          ],
+          "reasons": [],
+          "assertionHash": "08b00a8db4c1d710"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:19",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|23|3",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:19"
+          ],
+          "reasons": [],
+          "assertionHash": "19381a2e43d167fb"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:2",
+          "selector": {
+            "actionId": "101010-critical-expected",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "549ce586f6de4636"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:20",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|28|4",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:20"
+          ],
+          "reasons": [],
+          "assertionHash": "edad71c1b5091bb3"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:21",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|33|5",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:21"
+          ],
+          "reasons": [],
+          "assertionHash": "bdc9d831050e1606"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:22",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|1|7245988392201001564|38|6",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:22"
+          ],
+          "reasons": [],
+          "assertionHash": "fc0aaa419c1efb96"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:23",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|2|-393717411505334080|55|7",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:23"
+          ],
+          "reasons": [],
+          "assertionHash": "addf6ee5f09561e2"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:24",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|2|-393717411505334080|60|8",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:24"
+          ],
+          "reasons": [],
+          "assertionHash": "8faef57f0e7fb78d"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:25",
+          "selector": {
+            "actionId": "xiaoyu-burst-a1",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|1|elements|2|-393717411505334080|65|9",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:25"
+          ],
+          "reasons": [],
+          "assertionHash": "0e4275a699334be9"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:3",
+          "selector": {
+            "actionId": "101010-critical-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "322e8aa5ce75e26f"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:4",
+          "selector": {
+            "actionId": "101010-critical-non-critical",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "9feeb58800427f07"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:5",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|2|-6429706496330270988|136|1",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "4b79ac457a5e783d"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:6",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|2|-6429706496330270988|145|2",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:6"
+          ],
+          "reasons": [],
+          "assertionHash": "a09e6e9fe20d4ace"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:7",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|2|-6429706496330270988|151|3",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "4350b1e059d494ee"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:8",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|2|-6429706496330270988|157|4",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:8"
+          ],
+          "reasons": [],
+          "assertionHash": "557ec4b37b341eb5"
+        },
+        {
+          "assertionIdentity": "trace-critical-decision:machine-critical:m11-d-101010-visual-acceptance:9",
+          "selector": {
+            "actionId": "xiaoyu-ultimate",
+            "expectedBasisPoints": 500,
+            "hitIdentity": "10101013|0|elements|2|-6429706496330270988|163|5",
+            "kind": "critical-effective-threshold"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-critical:m11-d-101010-visual-acceptance:9"
+          ],
+          "reasons": [],
+          "assertionHash": "73cd2062f1fb96ef"
+        },
+        {
           "assertionIdentity": "trace-effect:machine-effect:m11-d-101010-visual-acceptance:0",
           "selector": {
             "actionId": "xiaoyu-ultimate",
@@ -10705,18 +11173,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "c5d62ff9addeb411"
+      "scenarioCaseHash": "5fb756d7c0f74c1d"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 428,
-    "assertionPassedCount": 426,
+    "assertionCount": 454,
+    "assertionPassedCount": 452,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "9d5492970c738dd3"
+  "scenarioSetHash": "f6282b3e120b6544"
 }

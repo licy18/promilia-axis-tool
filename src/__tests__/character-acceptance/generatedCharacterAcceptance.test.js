@@ -152,12 +152,18 @@ describe('generated character acceptance manifests', () => {
           screenshotSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
         }),
       ]);
-      expect(manifest.maturity.blockers).toEqual(
-        expect.arrayContaining([
-          'acceptance-required-matrix-incomplete',
-          'acceptance-blocking-ledger-not-empty',
-        ])
-      );
+      if (ownerId === 109001) {
+        expect(manifest.maturity.blockers).toEqual([
+          'acceptance-product-visual-signoff-pending',
+        ]);
+      } else {
+        expect(manifest.maturity.blockers).toEqual(
+          expect.arrayContaining([
+            'acceptance-required-matrix-incomplete',
+            'acceptance-blocking-ledger-not-empty',
+          ])
+        );
+      }
       expect(manifest.maturity.blockers).toContain(
         'acceptance-product-visual-signoff-pending'
       );

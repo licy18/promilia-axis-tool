@@ -11,6 +11,10 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
 import {
+  createOptimizationScenarioPolicyBinding,
+  getOptimizationScenarioPolicy,
+} from '../../optimization-scenario/optimizationScenarioPolicy';
+import {
   createOptimizationQualificationIssuesForContract,
   resolveOptimizationCultivationProfile,
   validateOptimizationCultivationProfile,
@@ -143,9 +147,13 @@ function createAxis({
         },
       })),
       enemy: { enemyId: 300032 },
+      target: structuredClone(
+        getOptimizationScenarioPolicy().assumptions.targetPolicy
+      ),
       initialRuntimeState: {},
       projectile: { targetDistance: 0, defaultWillHit: true },
       critical: { policy: 'expected', seed: null },
+      optimizationScenarioPolicy: createOptimizationScenarioPolicyBinding(),
       optimizationQualification: {
         mode,
         catalogHash: qualificationCatalog.catalogHash,
@@ -157,14 +165,14 @@ function createAxis({
 }
 
 describe('M12-B3 optimization qualification generation', () => {
-  it('recomputes the frozen 11/43/62/137/12 roster and honest blockers', async () => {
+  it('recomputes the frozen 9/43/62/137/12 roster and honest blockers', async () => {
     const artifacts = await createOptimizationQualificationArtifacts({
       projectRoot,
     });
 
     expect(artifacts.summary.denominators).toEqual({
-      characterOptimizationObjects: 11,
-      sourceCharacterAliases: 12,
+      characterOptimizationObjects: 9,
+      sourceCharacterAliases: 10,
       kibos: 43,
       soulEssences: 62,
       equipment: 137,
@@ -259,9 +267,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 22,
+      blockingUniqueGapCount: 18,
       byCategory: {
-        'not-implemented': 21,
+        'not-implemented': 17,
         'evidence-insufficient': 1,
       },
     });
@@ -380,7 +388,7 @@ describe('M12-B3 optimization qualification generation', () => {
         decidedAt: '2026-08-07',
       },
     });
-    expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(12);
+    expect(artifacts.catalog.cultivation.character.profiles).toHaveLength(10);
     for (const profile of artifacts.catalog.cultivation.character.profiles) {
       expect(profile.levelBreakthroughRanks).toHaveLength(6);
       expect(
@@ -1467,7 +1475,7 @@ describe('M12-B3 strict cultivation profile', () => {
     const characterProfiles = qualificationCatalog.cultivation.character.profiles;
     const soulProfiles = qualificationCatalog.cultivation.soulEssence.profiles;
 
-    expect(characterProfiles.length).toBeGreaterThanOrEqual(11);
+    expect(characterProfiles).toHaveLength(10);
     expect(
       characterProfiles.every(
         profile =>
@@ -1500,7 +1508,7 @@ describe('M12-B3 strict cultivation profile', () => {
     ).toBe(true);
     expect(
       soul95Edges.find(edge => edge.actorObjectId === '111001')?.compatible
-    ).toBe(false);
+    ).toBeUndefined();
   });
 });
 

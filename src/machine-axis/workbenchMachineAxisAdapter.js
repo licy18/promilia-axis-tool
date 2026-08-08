@@ -272,6 +272,18 @@ function createContractFromProject(project, { service, metadata } = {}) {
         policy: project.combatScenario?.critical?.policy ?? 'non-critical',
         seed: project.combatScenario?.critical?.seed ?? null,
       },
+      ...(project.combatScenario?.target == null
+        ? {}
+        : {
+            target: structuredClone(project.combatScenario.target),
+          }),
+      ...(project.combatScenario?.optimizationScenarioPolicy == null
+        ? {}
+        : {
+            optimizationScenarioPolicy: structuredClone(
+              project.combatScenario.optimizationScenarioPolicy
+            ),
+          }),
       ...(project.optimizationQualification == null
         ? {}
         : {
@@ -406,6 +418,9 @@ function createMachineActionFromProject({
         ? {
             sequenceIndex: attackInputIndex,
             groupId: textOrNull(action.attackGroupId),
+            contextActionId: textOrNull(
+              action.runtimeContextActionId ?? action.contextActionId
+            ),
           }
         : null,
     },

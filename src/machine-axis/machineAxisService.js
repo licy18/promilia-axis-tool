@@ -26,6 +26,13 @@ import {
   resolveStarGiftSkillLevelBonusesBySkillId,
 } from '../optimization-qualification/optimizationQualificationProtocol';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import {
+  classifyOptimizationCandidateCharacter,
+  classifyOptimizationScenarioActionKind,
+  getOptimizationCandidateRosterPolicy,
+  getOptimizationScenarioPolicy,
+  isOptimizationScenarioActionKindInScope,
+} from '../optimization-scenario/optimizationScenarioPolicy';
 import { DEFAULT_HEADLESS_COMBAT_CORE } from '../simulation/headless/defaultHeadlessCombatCore';
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
@@ -108,6 +115,14 @@ export function createMachineAxisService({
         verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
         mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
         mechanicsProfileVersion: 1,
+        optimizationScenarioPolicyId:
+          getOptimizationScenarioPolicy().policyId,
+        optimizationScenarioPolicyHash:
+          getOptimizationScenarioPolicy().policyHash,
+        optimizationCandidateRosterPolicyId:
+          getOptimizationCandidateRosterPolicy().rosterPolicyId,
+        optimizationCandidateRosterHash:
+          getOptimizationCandidateRosterPolicy().rosterHash,
       },
       characters: coreCatalog.characters,
       publicActions,
@@ -116,6 +131,8 @@ export function createMachineAxisService({
       optimizationQualification: createOptimizationQualificationCatalogProjection(
         optimizationQualificationCatalog
       ),
+      optimizationScenarioPolicy: getOptimizationScenarioPolicy(),
+      optimizationCandidateRoster: getOptimizationCandidateRosterPolicy(),
       summary: {
         characterCount: coreCatalog.summary.characterCount,
         publicActionCount: publicActions.length,
@@ -610,6 +627,12 @@ export function createMachineAxisService({
         combatScenario: {
           projectile: contract.scenario.projectile,
           critical: contract.scenario.critical,
+          ...(contract.scenario.optimizationScenarioPolicy == null
+            ? {}
+            : {
+                optimizationScenarioPolicy:
+                  contract.scenario.optimizationScenarioPolicy,
+              }),
           ...(contract.scenario.target == null
             ? {}
             : { target: contract.scenario.target }),
@@ -1187,6 +1210,8 @@ function createActionTemplate({
     ownerSlot,
     gameData,
     issues,
+    formalOptimization:
+      contract.scenario.optimizationQualification?.mode === 'formal',
   });
 }
 
@@ -1196,6 +1221,7 @@ function createActorActionTemplate({
   ownerSlot,
   gameData,
   issues,
+  formalOptimization,
 }) {
   const skills = getSkillsForCharacter(ownerSlot.characterId);
   const skill = skills.find(
@@ -1231,6 +1257,26 @@ function createActorActionTemplate({
     return null;
   }
   const entry = catalogCandidates[0];
+  if (
+    formalOptimization === true &&
+    !isOptimizationScenarioActionKindInScope(entry.kind)
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-formal-action-scenario-out-of-scope',
+        `actions.${index}.intent.actionKind`,
+        `Action ${entry.kind} is excluded from the formal optimization scenario`,
+        {
+          actionId: action.id,
+          actionKind: entry.kind,
+          reason: getOptimizationScenarioPolicy().reason,
+          policyId: getOptimizationScenarioPolicy().policyId,
+          policyHash: getOptimizationScenarioPolicy().policyHash,
+        }
+      )
+    );
+    return null;
+  }
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.SKILL,
     skillId: entry.skillId,
@@ -1494,6 +1540,13 @@ function resolveAttackInputSegment(action, mapping, index, issues) {
 
 function createAttackInputFields(action, mapping, segment) {
   return {
+    ...(action.intent.attackInput?.contextActionId
+      ? {
+          contextActionId: String(
+            action.intent.attackInput.contextActionId
+          ),
+        }
+      : {}),
     attackGroupId:
       action.intent.attackInput?.groupId ?? `machine-axis-${action.id}`,
     attackSequenceIndex: segment.sequenceIndex,
@@ -1860,6 +1913,8 @@ function createActorCatalogEntries(character, gameData) {
       hitIdentities: collectMappingHitIdentities(mapping ?? {}),
       semanticVariants: collectSemanticVariants(character.id, entry, mapping),
       mappingIdentity: mapping?.identity ?? null,
+      optimizationScenario: classifyOptimizationScenarioActionKind(entry.kind),
+      optimizationRoster: classifyOptimizationCandidateCharacter(character.id),
     };
   });
 }

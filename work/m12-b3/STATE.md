@@ -57,7 +57,7 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - C13 verification passes focused source/runtime `6 / 178`, complete optimization qualification `9 / 63`, three-character profile/golden/migration `4 / 38`, canonical/runtime/cycle `6 / 190`, Machine Axis `12 / 159`, nine deterministic audits, and the 1875-module production build. The standard Machine Axis hashes remain unchanged.
 - Generated roster, consolidated manifests, gap ledger, binding matrix, summary, and runtime catalog are deterministic under `npm run audit:optimization-qualification`.
 - Strict cultivation profile v1 is wired into Machine Axis, canonical input hashing, and direct Workbench adapter round-trip. The frozen profile hash is `c432bd0a3f2d6415`: character `80 / star gift 7 / completed attributes through 6 / all current nodes / level breakthrough 3`; Kibo `80 / four talents 10 => 120 / bond 1 => 900 basis points / dnaFactors []`; soul essence `80 / rank 6 / star 1`; equipment `4-star / +9 / tuning 110 / starborn`.
-- Formal qualification derives one whole-stage gate from the `11/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
+- Formal qualification derives one whole-stage gate from the product-frozen `9/43/62/137/12` records, admissions, set-skill thresholds, actor-Kibo/soul/equipment bindings, equipment slots, and source hashes. Partial green catalogs are rejected before project/search; research scenarios remain compatible.
 - Static cultivation applies character level, completed star-gift attributes strictly through `selectedRank - 1`, current/prior eligible nodes, Kibo level/talents/bond, soul-essence level/rank, equipment enhancement, and source-backed tuning. `hero_rank` currently contributes only level/rank legality and auditable table declarations. Its attributes remain in `unappliedStaticSources`, and skill declarations do not imply availability or effect runtime.
 - The reviewed `GameAssembly.dll` is `222485544B / c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b`. Exact bindings include `HeroData.Populate(HeroAttrInfo)@0x2458520`, `RefreshAttributes@0x2458C00`, `RefreshHeroSkill@0x2458F50`, `AttrModuleInfo..ctor@0x244EE60`, `RefreshModules@0x244E9F0`, and `GameUtil.PackAttrInfoByFightAttr@0x39714F0`. These calls do not establish whether server-provided `HeroAttrInfo` already includes `hero_rank.attribute`; no adjacent-rank final-panel capture exists, so attribute application remains `runtime-evidence-required`.
 - All 12 source character identities have six `hero_rank` rows. Owner `112001` has two source unlock IDs that disagree with its passive slots; the mismatch remains evidence-blocked. Existing runtime passive effects are recorded separately and do not prove breakthrough availability.
@@ -196,10 +196,26 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 ## Hard Boundaries
 
 - Do not run formal team/loadout/action-axis optimization.
-- Do not start M12-C until the full `11/43/62/137/12` denominator and binding matrix qualify.
+- Do not start M12-C until the product-frozen `9/43/62/137/12` denominator and binding matrix qualify.
 - Do not modify the dirty main workspace, UI, package size, performance, or unrelated character/Kibo mechanics.
 
 ## 预存外部漂移（非 E2 引入，等待决策）
 
 - ~~`audit:verified-combat` 在已提交基线上即失败~~ **已解决（2026-08-05 用户批准重基线）**：`C:/PC2/Codex/AzPr/BWiki/data/combat-formula-knowledge.json` 从 v3.1.1（sha256 `ba27896e…`、66263B）漂移到 v3.1.2（`8671ad36…`、87062B）；经用户批准后重定基线提交 `99454e1e`，E17 阶段一在此基础上继续；已同步包哈希/资格哈希/Machine Axis 标准哈希并全量重验收。
 - E2 仅更新了 `reports/applied-source-binding-audit.json`（loadoutPropertyTagSourceCount 49→51，对应 10101/10018 两个新 runtime-applied 灵魂），单独提交。
+
+## M12-B3-E20-2-109001-S3 当前检查点（2026-08-08）
+
+### 冻结政策
+
+- scenario policy：`m12c-zero-distance-passive-boss-v1` / `c241492911786b34`。距离 0、投射物立即命中、Boss 不攻击、无限 HP、默认不启用韧性/击破/死亡截断；正式链路缺绑定或漂移即锁定。
+- roster policy：`m12c-wind-thunder-mark-producer-roster-v1` / `760e59dac2c7c1c5`。正式 9 人：`101010,102001,103002,107001,107002,108003,109001,112001,STARBORN`；来源别名 10。末音后待做 5 人：`102001,107001,107002,108003,112001`。
+- 产品排除：`108001` 只有 150 生产，750 仅消费；`111001` 没有 250/750 生产，只有 judgment 消费。两者 reason=`m12c-no-in-scope-wind-or-thunder-mark-production`，不进正式候选、完整验收、绑定矩阵或 optimization-ready 分母；源/runtime 保留。
+- 保留来源：10200113 `211/216/220F` 750；10700112 `10F`、10700113 `133F` 750；10700212 `90F` 独立 750；10800313、10800322 `37F` 250；11200112 `27F` 250。
+
+### 生成资格与边界
+
+- qualification denominator `9/43/62/137/12`；source snapshot `39acb167dbcf7801`、roster `130c9cd5f5192ad6`、manifests `44f387f512518c29`、ledger `9e046d2a3c1f56fa`、binding matrix `7f2ea0c47f0b6845`、catalog `68996d22cce80720`；blocking unique gap `18`，M12-C/formal search 继续锁定。
+- Kibo DNA 固定 `[]`；奇波/灵子/装备/套装分母不变。下一步只完成末音产品签收，不开始下一角色或 E20-3。
+- 109001 已达到 required/pass/N/A/blocked=`142/142/70/0`，source/acceptance gap=`0/0`，仅 `acceptance-product-visual-signoff-pending`。产品视觉签收不由实现侧代签。
+- 最终审计：Vitest `191/191` 文件、`1451/1451` 用例；verified-combat、character-combat、scenario-policy、character-acceptance、optimization-qualification、visual-acceptance、production-imports、Workbench data、action-status、applied-source-bindings 均 clean；production build 与 `git diff --check` 通过。额外 bundle budget 检查仍为分支 HEAD 已存在的 `workbenchWithinBudget=false / totalJavaScriptWithinBudget=false`（本阶段没有新增门状态跃迁），按禁止纯性能优化的边界不在 S3 展开。

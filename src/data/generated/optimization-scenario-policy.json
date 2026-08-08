@@ -1,14 +1,66 @@
 {
   "schemaVersion": 1,
-  "contractName": "AzPrCharacterAcceptanceCatalog",
-  "kind": "azpr-character-acceptance-catalog",
-  "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "d70847bd9c90cb45",
-  "optimizationScenarioPolicy": {
-    "policyId": "m12c-zero-distance-passive-boss-v1",
-    "policyHash": "c241492911786b34"
+  "contractName": "AzPrOptimizationScenarioPolicy",
+  "policyId": "m12c-zero-distance-passive-boss-v1",
+  "phase": "M12-C",
+  "status": "product-frozen",
+  "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+  "assumptions": {
+    "actorTargetInitialDistance": 0,
+    "actorTargetDistanceMode": "fixed-zero",
+    "projectileImpactPolicy": "zero-distance-immediate-hit",
+    "enemyBehavior": "passive-static-target",
+    "enemyActiveAttacks": false,
+    "enemyReactionStimuli": false,
+    "targetPolicy": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    }
   },
-  "optimizationCandidateRoster": {
+  "optimizationSurface": {
+    "excludedActionKinds": [
+      "dodge-attack",
+      "limit-counter",
+      "perfect-parry",
+      "plunging-attack"
+    ],
+    "retainedActionKinds": [
+      "charged-attack",
+      "normal-attack",
+      "star-carry",
+      "star-combo",
+      "star-skill",
+      "ultimate"
+    ],
+    "excludedTriggerFamilies": [
+      "enemy-active-attack",
+      "player-receive-damage",
+      "player-dodge",
+      "player-block",
+      "player-parry",
+      "player-counter",
+      "position-or-airborne-required"
+    ],
+    "runtimeRetention": "manual-runtime-preserved",
+    "formalCandidateDisposition": "reject-before-search"
+  },
+  "consumers": [
+    "character-acceptance",
+    "machine-axis-candidate-surface",
+    "machine-axis-formal-admission",
+    "machine-axis-cycle-replay",
+    "trial-release",
+    "workbench-machine-axis-import-export"
+  ],
+  "hashBindings": [
+    "input",
+    "data",
+    "trace",
+    "build"
+  ],
+  "candidateRoster": {
     "schemaVersion": 1,
     "contractName": "AzPrOptimizationCandidateRosterPolicy",
     "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
@@ -602,234 +654,5 @@
     ],
     "rosterHash": "760e59dac2c7c1c5"
   },
-  "productScenarioExcludedCharacters": [
-    {
-      "characterId": 108001,
-      "name": "忒拉拉",
-      "optimizationObjectId": "108001",
-      "disposition": "product-scenario-excluded",
-      "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
-      "productionEvidence": [],
-      "consumptionEvidence": [
-        {
-          "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
-          "actionKind": "star-skill",
-          "controlSkillId": 10800112,
-          "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:-4643639711478347961|57|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 0,
-          "startFrame": 57,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-4643639711478347961|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
-          "actionKind": "star-skill",
-          "controlSkillId": 10800112,
-          "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:4731523060341306954|57|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 108001264,
-          "startFrame": 57,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
-          "actionKind": "ultimate",
-          "controlSkillId": 10800113,
-          "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:-1822534463770343586|128|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 0,
-          "startFrame": 128,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=-1822534463770343586|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
-          "actionKind": "ultimate",
-          "controlSkillId": 10800113,
-          "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:4731523060341306954|128|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 108001262,
-          "startFrame": 128,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
-        }
-      ],
-      "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
-    },
-    {
-      "characterId": 111001,
-      "name": "法兰塔",
-      "optimizationObjectId": "111001",
-      "disposition": "product-scenario-excluded",
-      "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
-      "productionEvidence": [],
-      "consumptionEvidence": [
-        {
-          "actionIdentity": "actor|111001|11100112|0|11100112|star-skill",
-          "actionKind": "star-skill",
-          "controlSkillId": 11100112,
-          "effectIdentity": "11100112|1|elements|9|4731523060341306954|element:4731523060341306954|73|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 0,
-          "startFrame": 73,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/skill_control_11100112__-8979285907132699409.json#skillResourceMaps[1].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/MonoBehaviour_-7250173701731532512__-7250173701731532512.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
-          "actionKind": "ultimate",
-          "controlSkillId": 11100113,
-          "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:-6084749423908212668|212|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 0,
-          "startFrame": 212,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-6084749423908212668|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
-          "actionKind": "ultimate",
-          "controlSkillId": 11100113,
-          "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:4731523060341306954|212|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 750,
-          "packetElementId": 799,
-          "judgmentElementId": 111001332,
-          "startFrame": 212,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
-        },
-        {
-          "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
-          "actionKind": "ultimate",
-          "controlSkillId": 11100113,
-          "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:536980873299289094|212|0",
-          "operation": "tuningOverlimit-consumption",
-          "markId": 250,
-          "packetElementId": 299,
-          "judgmentElementId": 111001332,
-          "startFrame": 212,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
-        }
-      ],
-      "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
-    }
-  ],
-  "entries": [
-    {
-      "ownerId": 101003,
-      "ownerName": "寒悠悠",
-      "maturityState": "runtime-integrated",
-      "earnedStates": [
-        "extracted",
-        "runtime-integrated"
-      ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 54,
-      "matrixRequiredCount": 159,
-      "matrixPassedCount": 111,
-      "manifestHash": "739456eaf9be503f",
-      "qualificationSubjectHash": "894d93c5d02a132d",
-      "sourceOfTruthHash": "e762a3342e5e4f17",
-      "profileHash": "4dfafed4bcb63c941edfea78a7241fda8ec942bb8f24fa9efd4633d5709ff3f2",
-      "visualScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ]
-    },
-    {
-      "ownerId": 101010,
-      "ownerName": "涂山小玉",
-      "maturityState": "runtime-integrated",
-      "earnedStates": [
-        "extracted",
-        "runtime-integrated"
-      ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 134,
-      "matrixRequiredCount": 255,
-      "matrixPassedCount": 143,
-      "manifestHash": "6ada1a6a7bfb25bb",
-      "qualificationSubjectHash": "77a2e93832b36c83",
-      "sourceOfTruthHash": "99773ddd7402aa26",
-      "profileHash": "777c6dfa76c9c005c36617f1f4003d32ea46d06c57dcb6e792f1176f3a0120fc",
-      "visualScenarioIds": [
-        "m11-d-101010-visual-acceptance"
-      ]
-    },
-    {
-      "ownerId": 103002,
-      "ownerName": "红宝石",
-      "maturityState": "runtime-integrated",
-      "earnedStates": [
-        "extracted",
-        "runtime-integrated"
-      ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 239,
-      "matrixRequiredCount": 588,
-      "matrixPassedCount": 162,
-      "manifestHash": "780738f7978cbbb2",
-      "qualificationSubjectHash": "b6846ef5f14599b5",
-      "sourceOfTruthHash": "96b8b414b119a7f6",
-      "profileHash": "8532a2ade8682abdc97f53123f3dfef271541d0bc0e57c67b6fc74df33b38f00",
-      "visualScenarioIds": [
-        "m11-d-103002-visual-acceptance"
-      ]
-    },
-    {
-      "ownerId": 109001,
-      "ownerName": "末音",
-      "maturityState": "runtime-integrated",
-      "earnedStates": [
-        "extracted",
-        "runtime-integrated"
-      ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "blockingLedgerCount": 0,
-      "matrixRequiredCount": 142,
-      "matrixPassedCount": 142,
-      "manifestHash": "fd4dd8806b3bc801",
-      "qualificationSubjectHash": "58a65daee024aeb7",
-      "sourceOfTruthHash": "1856aa0ee3767995",
-      "profileHash": "0a9baf9dc55e0845af50430156169e0d394685aa3610e8e008ff6b337a256ec4",
-      "visualScenarioIds": [
-        "m11-d-109001-visual-acceptance"
-      ]
-    }
-  ],
-  "summary": {
-    "ownerCount": 4,
-    "formalCharacterDenominator": 9,
-    "productScenarioExcludedCharacterCount": 2,
-    "maturityCounts": {
-      "runtime-integrated": 4
-    },
-    "optimizationReadyCount": 0
-  },
-  "catalogHash": "a507f77dcc0c612c"
+  "policyHash": "c241492911786b34"
 }

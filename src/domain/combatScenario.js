@@ -1,4 +1,5 @@
 import { normalizeCombatCriticalScenario } from './combatCriticalPolicy';
+import { normalizeOptimizationScenarioPolicyBinding } from '../optimization-scenario/optimizationScenarioPolicy';
 
 export const DEFAULT_PROJECTILE_TARGET_DISTANCE = 0;
 
@@ -24,6 +25,14 @@ export function normalizeCombatScenario(value = null) {
           : Boolean(projectile.defaultWillHit),
     },
     critical: normalizeCombatCriticalScenario(value?.critical),
+    ...(value?.optimizationScenarioPolicy == null
+      ? {}
+      : {
+          optimizationScenarioPolicy:
+            normalizeOptimizationScenarioPolicyBinding(
+              value.optimizationScenarioPolicy
+            ),
+        }),
     ...(value?.target == null
       ? {}
       : { target: normalizeCombatTargetPolicy(value.target) }),

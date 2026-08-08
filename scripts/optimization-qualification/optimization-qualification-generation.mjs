@@ -2,6 +2,8 @@ import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 
+import optimizationScenarioPolicy from '../../src/data/generated/optimization-scenario-policy.json' with { type: 'json' };
+
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 import { deriveOptimizationQualificationStageGate } from '../../src/optimization-qualification/optimizationQualificationStageGate.js';
 import {
@@ -158,8 +160,8 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
-  characterOptimizationObjects: 11,
-  sourceCharacterAliases: 12,
+  characterOptimizationObjects: 9,
+  sourceCharacterAliases: 10,
   kibos: 43,
   soulEssences: 62,
   equipment: 137,
@@ -167,6 +169,11 @@ export const FROZEN_B3_DENOMINATORS = Object.freeze({
 });
 
 const TARGET_ELEMENTS = new Set(['风', '雷']);
+const FORMAL_CHARACTER_OPTIMIZATION_OBJECT_IDS = new Set(
+  optimizationScenarioPolicy.candidateRoster.formalOptimizationObjectIds
+    .filter(identity => identity !== 'STARBORN')
+    .map(Number)
+);
 const STARBORN_SOURCE_CHARACTER_IDS = Object.freeze([199001, 199002]);
 const KIBO_DNA_PRODUCT_SCOPE = Object.freeze({
   status: 'not-applicable',
@@ -663,7 +670,9 @@ export async function createOptimizationQualificationArtifacts({
   );
 
   const targetCharacters = characters
-    .filter(character => hasTargetElement(character.element?.abbrName))
+    .filter(character =>
+      FORMAL_CHARACTER_OPTIMIZATION_OBJECT_IDS.has(Number(character.id))
+    )
     .sort(sortByNumericId);
   const starbornAliases = STARBORN_SOURCE_CHARACTER_IDS.map(characterId =>
     requireById(characters, characterId, 'STARBORN source character')
@@ -875,8 +884,16 @@ export async function createOptimizationQualificationArtifacts({
       phase: 'M12-B3-E16',
       sourceSnapshot,
       filterContract: {
-        characterElements: ['风', '雷'],
-        characterElementField: 'characters.items[].element.abbrName',
+        optimizationScenarioPolicyId: optimizationScenarioPolicy.policyId,
+        optimizationScenarioPolicyHash: optimizationScenarioPolicy.policyHash,
+        candidateRosterPolicyId:
+          optimizationScenarioPolicy.candidateRoster.rosterPolicyId,
+        candidateRosterHash:
+          optimizationScenarioPolicy.candidateRoster.rosterHash,
+        formalCharacterOptimizationObjectIds:
+          optimizationScenarioPolicy.candidateRoster.formalOptimizationObjectIds,
+        characterFilter:
+          'frozen-candidate-roster-policy-instead-of-element-only-filter',
         kiboElements: ['风', '雷'],
         kiboElementField: 'kibos.items[].element',
         discreteTagDelimiter: '、',
@@ -887,6 +904,14 @@ export async function createOptimizationQualificationArtifacts({
       },
       productScope: {
         kiboDna: structuredClone(KIBO_DNA_PRODUCT_SCOPE),
+        optimizationScenario: structuredClone(optimizationScenarioPolicy),
+        characterRoster: structuredClone(
+          optimizationScenarioPolicy.candidateRoster
+        ),
+        productScenarioExcludedCharacters: structuredClone(
+          optimizationScenarioPolicy.candidateRoster
+            .productScenarioExcludedCharacters
+        ),
       },
       denominators,
       characters: characterObjects,

@@ -101,9 +101,9 @@
       "requirementIdentity": "contract:action-form:actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
       "dimension": "action-form",
       "subjectIdentity": "actor:101010:perfect-parry:xiaoyu-perfect-parry-counter",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101049,
         "kind": "action-form",
@@ -113,8 +113,25 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]"
       ],
-      "reasons": [],
-      "sourceRecordHash": "de1dd39a58a6f4c1"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "perfect-parry"
+        ],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101027,
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "d506201f36105018"
     },
     {
       "requirementIdentity": "contract:action-form:actor:101010:star-carry:xiaoyu-star-carry",
@@ -139,9 +156,9 @@
       "requirementIdentity": "contract:action-form:actor|101010|10101001|6|10101015|dodge-attack:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|101010|10101001|6|10101015|dodge-attack:default",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101015,
         "kind": "action-form",
@@ -151,16 +168,34 @@
       "sourceIdentities": [
         "characters.items[id=101010].skillSlots[group=ground,slot=204]"
       ],
-      "reasons": [],
-      "sourceRecordHash": "fae3318055ac1e8e"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "dodge-attack"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101001|6|10101015|dodge-attack"
+        ],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "279c70cbf293ff19"
     },
     {
       "requirementIdentity": "contract:action-form:actor|101010|10101001|7|10101011|plunging-attack:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|101010|10101001|7|10101011|plunging-attack:default",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101011,
         "kind": "action-form",
@@ -170,8 +205,26 @@
       "sourceIdentities": [
         "characters.items[id=101010].skillSlots[group=aerial,slot=301]"
       ],
-      "reasons": [],
-      "sourceRecordHash": "e04960fe00560e79"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "plunging-attack"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101001|7|10101011|plunging-attack"
+        ],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "a4ad290895ffee93"
     },
     {
       "requirementIdentity": "contract:action-form:actor|101010|10101012|0|10101012|star-skill:default",
@@ -234,9 +287,9 @@
       "requirementIdentity": "contract:action-form:actor|101010|10101021|1|10101025|limit-counter:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|101010|10101021|1|10101025|limit-counter:default",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101025,
         "kind": "action-form",
@@ -246,8 +299,26 @@
       "sourceIdentities": [
         "characters.items[id=101010].skillSlots[group=ground,slot=207]"
       ],
-      "reasons": [],
-      "sourceRecordHash": "6f29e3317ced2a02"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "983480849f4fc18a"
     },
     {
       "requirementIdentity": "contract:action-form:xiaoyu-burst-three-inputs:segment:1",
@@ -1080,9 +1151,9 @@
       "requirementIdentity": "contract:control-window:control-window:42:e2749ff6d154ce3c",
       "dimension": "control-window",
       "subjectIdentity": "control-window:42:e2749ff6d154ce3c",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101011|sub:0|40-52|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6396620767498473135__6396620767498473135.json#behaviorlineControl[0].behaviorList[pathId=-2500383344039162193]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-2500383344039162193__-2500383344039162193.json"
@@ -1090,16 +1161,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6396620767498473135__6396620767498473135.json#behaviorlineControl[0].behaviorList[pathId=-2500383344039162193]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-2500383344039162193__-2500383344039162193.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "3532a4b1237cd7c6"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "9d761b5e2f9f5c86"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:43:9b11560487ccdd13",
       "dimension": "control-window",
       "subjectIdentity": "control-window:43:9b11560487ccdd13",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101011|sub:0|50-92|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-5049690194762133841__-5049690194762133841.json#behaviorlineControl[0].behaviorList[pathId=834764862242754223]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_834764862242754223__834764862242754223.json"
@@ -1107,16 +1192,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_-5049690194762133841__-5049690194762133841.json#behaviorlineControl[0].behaviorList[pathId=834764862242754223]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_834764862242754223__834764862242754223.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "055a34756bdcea81"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "a67fa2e29e18e5b7"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:44:779e1fabc64f3275",
       "dimension": "control-window",
       "subjectIdentity": "control-window:44:779e1fabc64f3275",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101011|sub:0|90-313|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6523824232135397039__6523824232135397039.json#behaviorlineControl[0].behaviorList[pathId=2606436075587505839]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_2606436075587505839__2606436075587505839.json"
@@ -1124,8 +1223,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_6523824232135397039__6523824232135397039.json#behaviorlineControl[0].behaviorList[pathId=2606436075587505839]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/MonoBehaviour_2606436075587505839__2606436075587505839.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "4814981c8a03644b"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "0e17519554caab6d"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:45:81332d1fbeabf441",
@@ -1327,9 +1440,9 @@
       "requirementIdentity": "contract:control-window:control-window:55:2d1855a05eb38e87",
       "dimension": "control-window",
       "subjectIdentity": "control-window:55:2d1855a05eb38e87",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101015|sub:0|0-80|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-6866853371364295990__-6866853371364295990.json#behaviorlineControl[0].behaviorList[pathId=4707391544383519434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4707391544383519434__4707391544383519434.json"
@@ -1337,16 +1450,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-6866853371364295990__-6866853371364295990.json#behaviorlineControl[0].behaviorList[pathId=4707391544383519434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4707391544383519434__4707391544383519434.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "89f57c3a7556f561"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "447d182297c3b0d5"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:56:15402c1d4bf03e47",
       "dimension": "control-window",
       "subjectIdentity": "control-window:56:15402c1d4bf03e47",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101015|sub:0|22-216|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-1008528241414882614__-1008528241414882614.json#behaviorlineControl[0].behaviorList[pathId=-4090788073586672950]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-4090788073586672950__-4090788073586672950.json"
@@ -1354,16 +1481,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-1008528241414882614__-1008528241414882614.json#behaviorlineControl[0].behaviorList[pathId=-4090788073586672950]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-4090788073586672950__-4090788073586672950.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "74ef7c2ef8795eae"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "0d9ca6b3ca9f87dc"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:57:6fcfd51cc99aa9fc",
       "dimension": "control-window",
       "subjectIdentity": "control-window:57:6fcfd51cc99aa9fc",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101015|sub:0|22-216|target:10101001/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7246267674440090934__-7246267674440090934.json#behaviorlineControl[0].behaviorList[pathId=4211073580757236426]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4211073580757236426__4211073580757236426.json"
@@ -1371,16 +1512,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7246267674440090934__-7246267674440090934.json#behaviorlineControl[0].behaviorList[pathId=4211073580757236426]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_4211073580757236426__4211073580757236426.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "34e96e6c79a3e5f2"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "995ed2df9bb5327e"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:58:8704044a60513146",
       "dimension": "control-window",
       "subjectIdentity": "control-window:58:8704044a60513146",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101015|sub:0|55-249|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7754338892306236726__-7754338892306236726.json#behaviorlineControl[0].behaviorList[pathId=-897986250524247350]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-897986250524247350__-897986250524247350.json"
@@ -1388,8 +1543,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-7754338892306236726__-7754338892306236726.json#behaviorlineControl[0].behaviorList[pathId=-897986250524247350]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/MonoBehaviour_-897986250524247350__-897986250524247350.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "0d9d5b40fcbdbcf6"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "025b199abaf41b6e"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:59:a3ac97b821df869b",
@@ -1503,9 +1672,9 @@
       "requirementIdentity": "contract:control-window:control-window:64:a6e1172d9e7f588e",
       "dimension": "control-window",
       "subjectIdentity": "control-window:64:a6e1172d9e7f588e",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101025|sub:0|1-65|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-2492287290080143346__-2492287290080143346.json#behaviorlineControl[0].behaviorList[pathId=1584060666627119118]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_1584060666627119118__1584060666627119118.json"
@@ -1513,16 +1682,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-2492287290080143346__-2492287290080143346.json#behaviorlineControl[0].behaviorList[pathId=1584060666627119118]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_1584060666627119118__1584060666627119118.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "150dbf0f542f172e"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "aba0ca0ab8106697"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:65:9af09f56f3b47fa3",
       "dimension": "control-window",
       "subjectIdentity": "control-window:65:9af09f56f3b47fa3",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101025|sub:0|60-96|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6799115387162765298__-6799115387162765298.json#behaviorlineControl[0].behaviorList[pathId=-7360650682097903602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-7360650682097903602__-7360650682097903602.json"
@@ -1530,16 +1713,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6799115387162765298__-6799115387162765298.json#behaviorlineControl[0].behaviorList[pathId=-7360650682097903602]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-7360650682097903602__-7360650682097903602.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "9d280ea978f60ac7"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "9bb7a4b62a84fd4e"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:66:b6b2ff48b7c92a06",
       "dimension": "control-window",
       "subjectIdentity": "control-window:66:b6b2ff48b7c92a06",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101025|sub:0|60-96|target:10101042/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-5145301466758555634__-5145301466758555634.json#behaviorlineControl[0].behaviorList[pathId=-6857785426171701234]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6857785426171701234__-6857785426171701234.json"
@@ -1547,16 +1744,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-5145301466758555634__-5145301466758555634.json#behaviorlineControl[0].behaviorList[pathId=-6857785426171701234]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-6857785426171701234__-6857785426171701234.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "3e8a44c48c5933ba"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "b282d0f93c41d811"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:67:89cc5c15b2247386",
       "dimension": "control-window",
       "subjectIdentity": "control-window:67:89cc5c15b2247386",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101025|sub:0|94-292|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-8776477944309590002__-8776477944309590002.json#behaviorlineControl[0].behaviorList[pathId=-9057682781265111026]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-9057682781265111026__-9057682781265111026.json"
@@ -1564,8 +1775,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-8776477944309590002__-8776477944309590002.json#behaviorlineControl[0].behaviorList[pathId=-9057682781265111026]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-9057682781265111026__-9057682781265111026.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "63960a83005b6320"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "51e722225b278e4b"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:68:da35b0476185e5f5",
@@ -1588,9 +1813,9 @@
       "requirementIdentity": "contract:control-window:control-window:69:bf33c8e35befe138",
       "dimension": "control-window",
       "subjectIdentity": "control-window:69:bf33c8e35befe138",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101027|sub:0|0-175|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7433729315793741630__-7433729315793741630.json#behaviorlineControl[0].behaviorList[pathId=-8941427149800482622]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-8941427149800482622__-8941427149800482622.json"
@@ -1598,8 +1823,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7433729315793741630__-7433729315793741630.json#behaviorlineControl[0].behaviorList[pathId=-8941427149800482622]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-8941427149800482622__-8941427149800482622.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "9a250aa8c80cd135"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101027
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "4427232c9f34a03a"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:7:f7ebbed86859cf6f",
@@ -1622,9 +1861,9 @@
       "requirementIdentity": "contract:control-window:control-window:70:79b9335935101d1d",
       "dimension": "control-window",
       "subjectIdentity": "control-window:70:79b9335935101d1d",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101027|sub:0|36-228|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json"
@@ -1632,8 +1871,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_3141049058949978306__3141049058949978306.json#behaviorlineControl[0].behaviorList[pathId=-1247428681608668990]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-1247428681608668990__-1247428681608668990.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "cc1524279acdf4db"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101027
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "9840b595fda0d664"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:71:c6eeabbd35b0d1b8",
@@ -1939,11 +2192,23 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-2614605678287990511__-2614605678287990511.json#behaviorlineControl[0].behaviorList[pathId=-7482853203788508911]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-7482853203788508911__-7482853203788508911.json"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
       "reasons": [
         "client-internal-unwired-control-window",
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "8ac8fe845c6cc8a0"
+      "sourceRecordHash": "b9421755fa7b9414"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:87:2ce8dc2e9730bcf7",
@@ -1959,11 +2224,23 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-5559762524617125615__-5559762524617125615.json#behaviorlineControl[0].behaviorList[pathId=-5404575292279172847]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-5404575292279172847__-5404575292279172847.json"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
       "reasons": [
         "client-internal-unwired-control-window",
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "9fde082221aa93ae"
+      "sourceRecordHash": "bf9d6c748e62dfee"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:88:7fa4a6e165977006",
@@ -1979,11 +2256,23 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_2044522852379578641__2044522852379578641.json#behaviorlineControl[0].behaviorList[pathId=7470766586274173201]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_7470766586274173201__7470766586274173201.json"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
       "reasons": [
         "client-internal-unwired-control-window",
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "4978008eb1456c5f"
+      "sourceRecordHash": "b97008fbde7ceee3"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:89:e0a9c83853767021",
@@ -1999,11 +2288,23 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-3895071568620564207__-3895071568620564207.json#behaviorlineControl[0].behaviorList[pathId=5498732111081296145]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_5498732111081296145__5498732111081296145.json"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
       "reasons": [
         "client-internal-unwired-control-window",
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "f9da6f5b61706c9b"
+      "sourceRecordHash": "668ed989ebfd105f"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:9:cb1ba7cb61ba513e",
@@ -2026,9 +2327,9 @@
       "requirementIdentity": "contract:control-window:control-window:90:c0d421f18cbd91d9",
       "dimension": "control-window",
       "subjectIdentity": "control-window:90:c0d421f18cbd91d9",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101049|sub:1|0-61|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4526361435749672292__-4526361435749672292.json#behaviorlineControl[0].behaviorList[pathId=6672344027157895836]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_6672344027157895836__6672344027157895836.json"
@@ -2036,16 +2337,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4526361435749672292__-4526361435749672292.json#behaviorlineControl[0].behaviorList[pathId=6672344027157895836]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_6672344027157895836__6672344027157895836.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "a92605b4978e3ad4"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "cdec33f31d5fb6bb"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:91:2e2115d4b30cc48b",
       "dimension": "control-window",
       "subjectIdentity": "control-window:91:2e2115d4b30cc48b",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101049|sub:1|60-100|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4483679388224841060__-4483679388224841060.json#behaviorlineControl[0].behaviorList[pathId=-1047399730354775396]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-1047399730354775396__-1047399730354775396.json"
@@ -2053,16 +2368,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4483679388224841060__-4483679388224841060.json#behaviorlineControl[0].behaviorList[pathId=-1047399730354775396]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-1047399730354775396__-1047399730354775396.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "34f3334fd1b815e2"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "78e8ec1d0b15f3ed"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:92:a8eb19abb122fbf8",
       "dimension": "control-window",
       "subjectIdentity": "control-window:92:a8eb19abb122fbf8",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101049|sub:1|60-100|target:10101001/sub:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_190439942930569884__190439942930569884.json#behaviorlineControl[0].behaviorList[pathId=-3833100382134527332]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-3833100382134527332__-3833100382134527332.json"
@@ -2070,16 +2399,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_190439942930569884__190439942930569884.json#behaviorlineControl[0].behaviorList[pathId=-3833100382134527332]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-3833100382134527332__-3833100382134527332.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "54f68821fa8d0eb1"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "ef89d274b21dd5de"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:93:b899128917c8e786",
       "dimension": "control-window",
       "subjectIdentity": "control-window:93:b899128917c8e786",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101049|sub:1|60-100|target:10101003/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_4220857072916241052__4220857072916241052.json#behaviorlineControl[0].behaviorList[pathId=-5150377184786179428]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-5150377184786179428__-5150377184786179428.json"
@@ -2087,16 +2430,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_4220857072916241052__4220857072916241052.json#behaviorlineControl[0].behaviorList[pathId=-5150377184786179428]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-5150377184786179428__-5150377184786179428.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "a3efb78e0cc4160c"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "bf96204b5e717057"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:94:c6b958b8eb853a78",
       "dimension": "control-window",
       "subjectIdentity": "control-window:94:c6b958b8eb853a78",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:101010|control:10101049|sub:1|99-309|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4722366522854663524__-4722366522854663524.json#behaviorlineControl[0].behaviorList[pathId=-2366429288157013348]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-2366429288157013348__-2366429288157013348.json"
@@ -2104,8 +2461,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-4722366522854663524__-4722366522854663524.json#behaviorlineControl[0].behaviorList[pathId=-2366429288157013348]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/MonoBehaviour_-2366429288157013348__-2366429288157013348.json"
       ],
-      "reasons": [],
-      "sourceRecordHash": "7305813fa1bc8ec1"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "65a774ea3778c89a"
     },
     {
       "requirementIdentity": "contract:effect:effect:0:1953f4061108e592",
@@ -2153,7 +2524,7 @@
       "requirementIdentity": "contract:effect:effect:10:e654bd3dc9732c20",
       "dimension": "effect",
       "subjectIdentity": "effect:10:e654bd3dc9732c20",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2168,13 +2539,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "0928e1967eeeac8a"
+      "sourceRecordHash": "b798047385137141"
     },
     {
       "requirementIdentity": "contract:effect:effect:11:9a08d6f01bb29f9e",
       "dimension": "effect",
       "subjectIdentity": "effect:11:9a08d6f01bb29f9e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2189,13 +2560,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3b23e78c6ef9fc0a"
+      "sourceRecordHash": "afff3f851c154857"
     },
     {
       "requirementIdentity": "contract:effect:effect:12:d84de1bb3e5155ba",
       "dimension": "effect",
       "subjectIdentity": "effect:12:d84de1bb3e5155ba",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2211,7 +2582,7 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "af7f9c9227a9098b"
+      "sourceRecordHash": "b37c2c0bf272fc4a"
     },
     {
       "requirementIdentity": "contract:effect:effect:13:a158e9c773573aaa",
@@ -2236,7 +2607,7 @@
       "requirementIdentity": "contract:effect:effect:14:d093fc576fb770b5",
       "dimension": "effect",
       "subjectIdentity": "effect:14:d093fc576fb770b5",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2251,13 +2622,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "18e8f1f3b2286a7b"
+      "sourceRecordHash": "cbc829dc13b10f30"
     },
     {
       "requirementIdentity": "contract:effect:effect:15:9104fb024473254c",
       "dimension": "effect",
       "subjectIdentity": "effect:15:9104fb024473254c",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2272,13 +2643,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "b522beb9d2d33037"
+      "sourceRecordHash": "b3cce84570c084ce"
     },
     {
       "requirementIdentity": "contract:effect:effect:16:3038b77fd1d009de",
       "dimension": "effect",
       "subjectIdentity": "effect:16:3038b77fd1d009de",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2293,13 +2664,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "1086070baeca1f83"
+      "sourceRecordHash": "0fcf04335e89adc2"
     },
     {
       "requirementIdentity": "contract:effect:effect:17:0c029e9b841ac340",
       "dimension": "effect",
       "subjectIdentity": "effect:17:0c029e9b841ac340",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2314,13 +2685,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "9326048bc8995871"
+      "sourceRecordHash": "3c8eca66042367c8"
     },
     {
       "requirementIdentity": "contract:effect:effect:18:acdbb0cb3609996a",
       "dimension": "effect",
       "subjectIdentity": "effect:18:acdbb0cb3609996a",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2335,13 +2706,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "b5abcb6c8587b4a3"
+      "sourceRecordHash": "ffecb68687d414e8"
     },
     {
       "requirementIdentity": "contract:effect:effect:19:964c1256cb9388d2",
       "dimension": "effect",
       "subjectIdentity": "effect:19:964c1256cb9388d2",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2357,7 +2728,7 @@
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "2ca9f5003c633790"
+      "sourceRecordHash": "5e1a7007dc793833"
     },
     {
       "requirementIdentity": "contract:effect:effect:2:0c702405753986f0",
@@ -2382,7 +2753,7 @@
       "requirementIdentity": "contract:effect:effect:20:f22f2d837ab612b4",
       "dimension": "effect",
       "subjectIdentity": "effect:20:f22f2d837ab612b4",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2397,15 +2768,15 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "7e25d58d1c9e1d14"
+      "sourceRecordHash": "d25b32e96cae7f9b"
     },
     {
       "requirementIdentity": "contract:effect:effect:21:0ecdcd672906dc35",
       "dimension": "effect",
       "subjectIdentity": "effect:21:0ecdcd672906dc35",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010019",
         "kind": "effect"
@@ -2415,18 +2786,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/skill_control_10101011__-6723473642285730715.json#skillResourceMaps[0].elements[2]",
         "battle-element-assets.jsonl#path_id=-6256105027482071899"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "plunging-attack"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101001|7|10101011|plunging-attack"
+        ],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "df93bdcb089cb6a1"
+      "sourceRecordHash": "9bd43064768fd4f7"
     },
     {
       "requirementIdentity": "contract:effect:effect:22:01411bd10b8158e9",
       "dimension": "effect",
       "subjectIdentity": "effect:22:01411bd10b8158e9",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:996",
         "kind": "effect"
@@ -2436,11 +2823,35 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/skill_control_10101012__-2381657275272288454.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=-2721791746389150347"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:243b607e62ba6d1c4c74"
+        ],
+        "rawRecordIdentities": [
+          "10101012|0|elements|3|-8630062226069243067|element:-2721791746389150347|50|0"
+        ],
+        "controlAndElementKeys": [
+          "10101012|-2721791746389150347",
+          "10101012|-8630062226069243067"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "f15a57446a8955eb"
+      "sourceRecordHash": "5c2b56c9f387c8be"
     },
     {
       "requirementIdentity": "contract:effect:effect:23:aab263f22325cb94",
@@ -2490,9 +2901,9 @@
       "requirementIdentity": "contract:effect:effect:25:debc65c1d8ac6ab3",
       "dimension": "effect",
       "subjectIdentity": "effect:25:debc65c1d8ac6ab3",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:997",
         "kind": "effect"
@@ -2502,19 +2913,43 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/skill_control_10101012__-2381657275272288454.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=9155281695412256774"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:2ed140f3484cb879e2a3"
+        ],
+        "rawRecordIdentities": [
+          "10101012|0|elements|3|-8630062226069243067|element:9155281695412256774|50|0"
+        ],
+        "controlAndElementKeys": [
+          "10101012|-8630062226069243067",
+          "10101012|9155281695412256774"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "7d768e4ce5f080bc"
+      "sourceRecordHash": "f15bbc0a35293a82"
     },
     {
       "requirementIdentity": "contract:effect:effect:26:e49453e00ae231f4",
       "dimension": "effect",
       "subjectIdentity": "effect:26:e49453e00ae231f4",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -2524,19 +2959,43 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:23e3211c1d8cf3f33b87"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1085330686087474031",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "bbc51e5326b7a095"
+      "sourceRecordHash": "fceabde94dad8b82"
     },
     {
       "requirementIdentity": "contract:effect:effect:27:ea1b0b8b09c19a3d",
       "dimension": "effect",
       "subjectIdentity": "effect:27:ea1b0b8b09c19a3d",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -2546,19 +3005,43 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:23e3211c1d8cf3f33b87"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1085330686087474031",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "733b77263d2834c7"
+      "sourceRecordHash": "a0b2f2cbf26e7f22"
     },
     {
       "requirementIdentity": "contract:effect:effect:28:43b29e4cbc1c761d",
       "dimension": "effect",
       "subjectIdentity": "effect:28:43b29e4cbc1c761d",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -2568,17 +3051,41 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:23e3211c1d8cf3f33b87"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1085330686087474031|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1085330686087474031",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "cc10108292a751fd"
+      "sourceRecordHash": "cb26a6df77122f2a"
     },
     {
       "requirementIdentity": "contract:effect:effect:29:83cbab27af3f2b1f",
       "dimension": "effect",
       "subjectIdentity": "effect:29:83cbab27af3f2b1f",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2594,7 +3101,7 @@
         "effect-combine-semantics-unresolved",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "8c03d3574c299d2f"
+      "sourceRecordHash": "4b8aa3cc37de23aa"
     },
     {
       "requirementIdentity": "contract:effect:effect:3:dafbebb173cf3147",
@@ -2619,7 +3126,7 @@
       "requirementIdentity": "contract:effect:effect:30:960e8abc37bd6e79",
       "dimension": "effect",
       "subjectIdentity": "effect:30:960e8abc37bd6e79",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -2635,15 +3142,15 @@
         "effect-combine-semantics-unresolved",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "47910ec31682f4cb"
+      "sourceRecordHash": "09c9ebb43a112622"
     },
     {
       "requirementIdentity": "contract:effect:effect:31:9bfd80326b4a4d9b",
       "dimension": "effect",
       "subjectIdentity": "effect:31:9bfd80326b4a4d9b",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -2653,19 +3160,44 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:b510d79adbf721ecfeda"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1722401594839030113",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection",
+          "sp-formula-not-literal-function-5"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "fde177bb2270b6e3"
+      "sourceRecordHash": "e04f87be007eb9d0"
     },
     {
       "requirementIdentity": "contract:effect:effect:32:74e3261b0cf44e3e",
       "dimension": "effect",
       "subjectIdentity": "effect:32:74e3261b0cf44e3e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -2675,19 +3207,44 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:b510d79adbf721ecfeda"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1722401594839030113",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection",
+          "sp-formula-not-literal-function-5"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "3c71c919f96afb25"
+      "sourceRecordHash": "bbf1cf824f7431f0"
     },
     {
       "requirementIdentity": "contract:effect:effect:33:f18c33e7db25479e",
       "dimension": "effect",
       "subjectIdentity": "effect:33:f18c33e7db25479e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -2697,19 +3254,44 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:b510d79adbf721ecfeda"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-1722401594839030113|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-1722401594839030113",
+          "10101013|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection",
+          "sp-formula-not-literal-function-5"
+        ]
+      },
       "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "6978ac8ac19b797b"
+      "sourceRecordHash": "db006b2fade32bc8"
     },
     {
       "requirementIdentity": "contract:effect:effect:34:78a757afabb182e0",
       "dimension": "effect",
       "subjectIdentity": "effect:34:78a757afabb182e0",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:996",
         "kind": "effect"
@@ -2719,19 +3301,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=-2721791746389150347"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3bd35e94ab08082102e6"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-2721791746389150347",
+          "10101013|-8630062226069243067"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "fa9f100e791dfddd"
+      "sourceRecordHash": "99e44e820fbe1953"
     },
     {
       "requirementIdentity": "contract:effect:effect:35:c22753b5c4c733cc",
       "dimension": "effect",
       "subjectIdentity": "effect:35:c22753b5c4c733cc",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:996",
         "kind": "effect"
@@ -2741,19 +3349,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=-2721791746389150347"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3bd35e94ab08082102e6"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-2721791746389150347",
+          "10101013|-8630062226069243067"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "11409db178127d69"
+      "sourceRecordHash": "38d1f9009b4fb303"
     },
     {
       "requirementIdentity": "contract:effect:effect:36:1917cceca99d1b2b",
       "dimension": "effect",
       "subjectIdentity": "effect:36:1917cceca99d1b2b",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:996",
         "kind": "effect"
@@ -2763,11 +3397,37 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=-2721791746389150347"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3bd35e94ab08082102e6"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:-2721791746389150347|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-2721791746389150347",
+          "10101013|-8630062226069243067"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "8ef35b536be43ab7"
+      "sourceRecordHash": "5b9772ac3649439f"
     },
     {
       "requirementIdentity": "contract:effect:effect:37:3360418e9463f506",
@@ -2924,9 +3584,9 @@
       "requirementIdentity": "contract:effect:effect:43:4958430d6ba27181",
       "dimension": "effect",
       "subjectIdentity": "effect:43:4958430d6ba27181",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -2936,19 +3596,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:1722c8035dfed06ed0f2"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-5107736885784262990",
+          "10101013|-7412029037550756065"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "9f64b8b9a9b67d53"
+      "sourceRecordHash": "412ae57f55801f3b"
     },
     {
       "requirementIdentity": "contract:effect:effect:44:f4150ad08abb39f6",
       "dimension": "effect",
       "subjectIdentity": "effect:44:f4150ad08abb39f6",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -2958,19 +3644,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:1722c8035dfed06ed0f2"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-5107736885784262990",
+          "10101013|-7412029037550756065"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "7346e6b6e327de9f"
+      "sourceRecordHash": "5cbb83c0d25df487"
     },
     {
       "requirementIdentity": "contract:effect:effect:45:0bedceabffd65a70",
       "dimension": "effect",
       "subjectIdentity": "effect:45:0bedceabffd65a70",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -2980,11 +3692,37 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[5]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:1722c8035dfed06ed0f2"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|219|1",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|225|0",
+          "10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|231|2"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-5107736885784262990",
+          "10101013|-7412029037550756065"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "de13edd5b0796bc7"
+      "sourceRecordHash": "e33a93b188ac0553"
     },
     {
       "requirementIdentity": "contract:effect:effect:46:abfe6d2eaa2db3aa",
@@ -3078,7 +3816,7 @@
       "requirementIdentity": "contract:effect:effect:5:0b136736ddc8fd0f",
       "dimension": "effect",
       "subjectIdentity": "effect:5:0b136736ddc8fd0f",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3093,7 +3831,7 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3c7e3e5a380a077f"
+      "sourceRecordHash": "5bc463d83825b88e"
     },
     {
       "requirementIdentity": "contract:effect:effect:50:d74fbf7f2f215dfc",
@@ -3226,7 +3964,7 @@
       "requirementIdentity": "contract:effect:effect:56:e9a972e0b42099cd",
       "dimension": "effect",
       "subjectIdentity": "effect:56:e9a972e0b42099cd",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3241,13 +3979,13 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "7535b987de143243"
+      "sourceRecordHash": "3c3fe6e4e0bf1568"
     },
     {
       "requirementIdentity": "contract:effect:effect:57:57495bb46f0a63a9",
       "dimension": "effect",
       "subjectIdentity": "effect:57:57495bb46f0a63a9",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3262,7 +4000,7 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "b28e5e93ac4afe0f"
+      "sourceRecordHash": "a894042ca51ab66c"
     },
     {
       "requirementIdentity": "contract:effect:effect:58:6a0546185c29d0d9",
@@ -3306,7 +4044,7 @@
       "requirementIdentity": "contract:effect:effect:6:697c195646dd1537",
       "dimension": "effect",
       "subjectIdentity": "effect:6:697c195646dd1537",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3321,7 +4059,7 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "c1994aff4f90ca55"
+      "sourceRecordHash": "b624120b6d5f59d8"
     },
     {
       "requirementIdentity": "contract:effect:effect:60:e6d5c4f00557507c",
@@ -3346,7 +4084,7 @@
       "requirementIdentity": "contract:effect:effect:61:dfdbf8c6a609f546",
       "dimension": "effect",
       "subjectIdentity": "effect:61:dfdbf8c6a609f546",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3361,15 +4099,15 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "a73dd58d95325f87"
+      "sourceRecordHash": "ca6cc0cffd3fe776"
     },
     {
       "requirementIdentity": "contract:effect:effect:62:177561a90b0261f4",
       "dimension": "effect",
       "subjectIdentity": "effect:62:177561a90b0261f4",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:997",
         "kind": "effect"
@@ -3379,19 +4117,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=9155281695412256774"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3cc68eec0e7c4cc0d4df"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-8630062226069243067",
+          "10101013|9155281695412256774"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "e7a2fb7a1fd5e9da"
+      "sourceRecordHash": "5e10ce8a029a1387"
     },
     {
       "requirementIdentity": "contract:effect:effect:63:767d50e4340819ac",
       "dimension": "effect",
       "subjectIdentity": "effect:63:767d50e4340819ac",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:997",
         "kind": "effect"
@@ -3401,19 +4165,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=9155281695412256774"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3cc68eec0e7c4cc0d4df"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-8630062226069243067",
+          "10101013|9155281695412256774"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "b4a8a792d71c246e"
+      "sourceRecordHash": "f749db9b74346193"
     },
     {
       "requirementIdentity": "contract:effect:effect:64:a4e5b7cacf69ca55",
       "dimension": "effect",
       "subjectIdentity": "effect:64:a4e5b7cacf69ca55",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:997",
         "kind": "effect"
@@ -3423,19 +4213,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[12]",
         "battle-element-assets.jsonl#path_id=9155281695412256774"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:3cc68eec0e7c4cc0d4df"
+        ],
+        "rawRecordIdentities": [
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|272|0",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|278|2",
+          "10101013|0|elements|12|-8630062226069243067|element:9155281695412256774|284|1"
+        ],
+        "controlAndElementKeys": [
+          "10101013|-8630062226069243067",
+          "10101013|9155281695412256774"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "f3886aad975e8f44"
+      "sourceRecordHash": "b1faaccf44ebe7d1"
     },
     {
       "requirementIdentity": "contract:effect:effect:65:ef8425caf98f3113",
       "dimension": "effect",
       "subjectIdentity": "effect:65:ef8425caf98f3113",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -3444,21 +4260,48 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].bulletElements[3]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:08861da21b5beb132359",
+          "semantic-gap:7bb9e25bba8ea474efc4"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|bulletElements|3|element-101010210|element:-1085330686087474031|109|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-1085330686087474031",
+          "10101021|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-target-unresolved",
+          "effect-trigger-frame-missing",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame",
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "36b6c6dcdaace14e"
+      "sourceRecordHash": "44834951a8f4cc08"
     },
     {
       "requirementIdentity": "contract:effect:effect:66:0bdc37ea5319ebd3",
       "dimension": "effect",
       "subjectIdentity": "effect:66:0bdc37ea5319ebd3",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -3469,21 +4312,49 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[8]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:08861da21b5beb132359",
+          "semantic-gap:7bb9e25bba8ea474efc4"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|elements|5|-5107736885784262990|element:-1085330686087474031|unresolved-frame|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-1085330686087474031",
+          "10101021|-5107736885784262990",
+          "10101021|4731523060341306954"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-target-unresolved",
+          "effect-trigger-frame-missing",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "effect-target-static-evidence-gap",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
         "effect-trigger-frame-static-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "semantic-wrapper-not-gameplay-effect",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "020f1ce993f42aef"
+      "sourceRecordHash": "ef72313048057375"
     },
     {
       "requirementIdentity": "contract:effect:effect:67:724436dfe30c2985",
       "dimension": "effect",
       "subjectIdentity": "effect:67:724436dfe30c2985",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -3492,21 +4363,47 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].bulletElements[3]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:a8d78628f8de28a1d109",
+          "semantic-gap:dee1b03a165e9711dd33"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|bulletElements|3|element-101010210|element:-1722401594839030113|109|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-1722401594839030113",
+          "10101021|-5107736885784262990"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-trigger-frame-missing",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection",
+          "sp-formula-not-literal-function-5"
+        ]
+      },
       "reasons": [
+        "effect-trigger-frame-missing",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame",
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "9c0a52022fd1a1ac"
+      "sourceRecordHash": "f900b9b7159e9d1a"
     },
     {
       "requirementIdentity": "contract:effect:effect:68:cd7961c1891baeeb",
       "dimension": "effect",
       "subjectIdentity": "effect:68:cd7961c1891baeeb",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -3518,13 +4415,45 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[9]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:08861da21b5beb132359",
+          "semantic-gap:7bb9e25bba8ea474efc4",
+          "semantic-gap:a8d78628f8de28a1d109",
+          "semantic-gap:dee1b03a165e9711dd33"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|elements|5|-5107736885784262990|element:-1722401594839030113|unresolved-frame|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-1085330686087474031",
+          "10101021|-1722401594839030113",
+          "10101021|-5107736885784262990",
+          "10101021|4731523060341306954"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-target-unresolved",
+          "effect-trigger-frame-missing",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection",
+          "sp-formula-not-literal-function-5"
+        ]
+      },
       "reasons": [
         "effect-target-static-evidence-gap",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
         "effect-trigger-frame-static-evidence-gap",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "sp-formula-not-literal-function-5",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "5825231ba1ccb334"
+      "sourceRecordHash": "98f011044c655c6f"
     },
     {
       "requirementIdentity": "contract:effect:effect:69:433cee64bd57fae8",
@@ -3549,7 +4478,7 @@
       "requirementIdentity": "contract:effect:effect:7:f2ea9b5ec0d99eeb",
       "dimension": "effect",
       "subjectIdentity": "effect:7:f2ea9b5ec0d99eeb",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3564,7 +4493,7 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3a723874cdad6b26"
+      "sourceRecordHash": "f273cbc6ac2ca58f"
     },
     {
       "requirementIdentity": "contract:effect:effect:70:1fa796d547f174bd",
@@ -3621,9 +4550,9 @@
       "requirementIdentity": "contract:effect:effect:72:49bf06528f806d1a",
       "dimension": "effect",
       "subjectIdentity": "effect:72:49bf06528f806d1a",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -3632,21 +4561,50 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].bulletElements[3]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:2bde8cc136e834122c49",
+          "semantic-gap:46fd8db0e48466c17a07"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|bulletElements|3|element-101010210|element:-7412029037550756065|109|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-5107736885784262990",
+          "10101021|-7412029037550756065"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-target-unresolved",
+          "effect-trigger-frame-missing",
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "runtime-target-from-projectile-collision",
         "runtime-trigger-projectile-collision-frame",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "b02c924cbbf35dea"
+      "sourceRecordHash": "5156c5cd21cab348"
     },
     {
       "requirementIdentity": "contract:effect:effect:73:c2f8907444281f8a",
       "dimension": "effect",
       "subjectIdentity": "effect:73:c2f8907444281f8a",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -3656,13 +4614,43 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101021.asset/MonoBehaviour/skill_control_10101021__2612419143143785643.json#skillResourceMaps[0].elements[6]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
+      "sourceGapDisposition": {
+        "disposition": "not-applicable",
+        "sourceRecordIdentities": [
+          "semantic-gap:2bde8cc136e834122c49",
+          "semantic-gap:46fd8db0e48466c17a07"
+        ],
+        "rawRecordIdentities": [
+          "10101021|0|elements|5|-5107736885784262990|element:-7412029037550756065|unresolved-frame|0"
+        ],
+        "controlAndElementKeys": [
+          "10101021|-5107736885784262990",
+          "10101021|-7412029037550756065",
+          "10101021|4731523060341306954"
+        ],
+        "impactClassifications": [
+          "wrapper-or-duplicate"
+        ],
+        "reasons": [
+          "effect-target-unresolved",
+          "effect-trigger-frame-missing",
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "nonblocking-source-record-projection"
+        ]
+      },
       "reasons": [
         "effect-target-static-evidence-gap",
+        "effect-target-unresolved",
+        "effect-trigger-frame-missing",
         "effect-trigger-frame-static-evidence-gap",
         "nested-damage-runtime-family-unimplemented",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "nonblocking-source-record-projection",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "40babbec9a5d92a3"
+      "sourceRecordHash": "be5577a99ce840ab"
     },
     {
       "requirementIdentity": "contract:effect:effect:74:333e1f8d0050b26b",
@@ -3711,7 +4699,7 @@
       "requirementIdentity": "contract:effect:effect:76:9feabe22eef2c636",
       "dimension": "effect",
       "subjectIdentity": "effect:76:9feabe22eef2c636",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3726,15 +4714,15 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "2815846349fde462"
+      "sourceRecordHash": "6b2a3a57c76e8009"
     },
     {
       "requirementIdentity": "contract:effect:effect:77:fb3f42c7a29b07d0",
       "dimension": "effect",
       "subjectIdentity": "effect:77:fb3f42c7a29b07d0",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3744,18 +4732,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "47f6070b84bd7d81"
+      "sourceRecordHash": "5873fccb237f2561"
     },
     {
       "requirementIdentity": "contract:effect:effect:78:e5248fa6e0172eb2",
       "dimension": "effect",
       "subjectIdentity": "effect:78:e5248fa6e0172eb2",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3765,18 +4769,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "e596f24bb044a145"
+      "sourceRecordHash": "e36718640b59f575"
     },
     {
       "requirementIdentity": "contract:effect:effect:79:6561e09f2a02367d",
       "dimension": "effect",
       "subjectIdentity": "effect:79:6561e09f2a02367d",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3786,16 +4806,32 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "4fb47bfa82f76683"
+      "sourceRecordHash": "1b6d9b3ed2e76859"
     },
     {
       "requirementIdentity": "contract:effect:effect:8:6208e560a1de8164",
       "dimension": "effect",
       "subjectIdentity": "effect:8:6208e560a1de8164",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -3810,15 +4846,15 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "a0d03460996a7eb2"
+      "sourceRecordHash": "7ec4e20abd7bf375"
     },
     {
       "requirementIdentity": "contract:effect:effect:80:35b3317f05887221",
       "dimension": "effect",
       "subjectIdentity": "effect:80:35b3317f05887221",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3828,18 +4864,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "547b2e60fcb56ff5"
+      "sourceRecordHash": "ed9553fb40022c63"
     },
     {
       "requirementIdentity": "contract:effect:effect:81:37b21b8497d56d45",
       "dimension": "effect",
       "subjectIdentity": "effect:81:37b21b8497d56d45",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3849,18 +4901,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "fe087bce668cae25"
+      "sourceRecordHash": "e9d4f291c54b2e85"
     },
     {
       "requirementIdentity": "contract:effect:effect:82:81a16cc1be3435ba",
       "dimension": "effect",
       "subjectIdentity": "effect:82:81a16cc1be3435ba",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3870,18 +4938,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "8ea911a63731a027"
+      "sourceRecordHash": "a93ad2129d24f29d"
     },
     {
       "requirementIdentity": "contract:effect:effect:83:e0facd0b53591ffc",
       "dimension": "effect",
       "subjectIdentity": "effect:83:e0facd0b53591ffc",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3891,18 +4975,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "42f2aa2daa9f15bb"
+      "sourceRecordHash": "f62d967818741167"
     },
     {
       "requirementIdentity": "contract:effect:effect:84:a9a0977a45550007",
       "dimension": "effect",
       "subjectIdentity": "effect:84:a9a0977a45550007",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010115",
         "kind": "effect"
@@ -3912,18 +5012,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=4329849906773849220"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "46dd76c98c8c28ef"
+      "sourceRecordHash": "ae6be4fd97e05445"
     },
     {
       "requirementIdentity": "contract:effect:effect:85:bc94fc3d240ea30f",
       "dimension": "effect",
       "subjectIdentity": "effect:85:bc94fc3d240ea30f",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -3933,18 +5049,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "87ff73ebdf9a8a2c"
+      "sourceRecordHash": "bd994a23109f4e48"
     },
     {
       "requirementIdentity": "contract:effect:effect:86:152a4b5c928bba3d",
       "dimension": "effect",
       "subjectIdentity": "effect:86:152a4b5c928bba3d",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -3954,18 +5086,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "e220a6eee56b95f4"
+      "sourceRecordHash": "df2e969abf118478"
     },
     {
       "requirementIdentity": "contract:effect:effect:87:dc31fd63d2a9d192",
       "dimension": "effect",
       "subjectIdentity": "effect:87:dc31fd63d2a9d192",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -3975,18 +5123,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "82047c5cf2cbe85e"
+      "sourceRecordHash": "b6eb2551db857adc"
     },
     {
       "requirementIdentity": "contract:effect:effect:88:a93c2b5e7d5d174e",
       "dimension": "effect",
       "subjectIdentity": "effect:88:a93c2b5e7d5d174e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -3996,18 +5160,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "80510c8092f7d0d0"
+      "sourceRecordHash": "abb44c2f71a7d362"
     },
     {
       "requirementIdentity": "contract:effect:effect:89:0ee02905eea51ef6",
       "dimension": "effect",
       "subjectIdentity": "effect:89:0ee02905eea51ef6",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -4017,16 +5197,32 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "1910142725d68906"
+      "sourceRecordHash": "ba534795c449d014"
     },
     {
       "requirementIdentity": "contract:effect:effect:9:ad202637e5cd205e",
       "dimension": "effect",
       "subjectIdentity": "effect:9:ad202637e5cd205e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
@@ -4041,15 +5237,15 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "99372de2c32f4d3e"
+      "sourceRecordHash": "3138f0121e0d8e47"
     },
     {
       "requirementIdentity": "contract:effect:effect:90:ab62145a9bc0472d",
       "dimension": "effect",
       "subjectIdentity": "effect:90:ab62145a9bc0472d",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -4059,18 +5255,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "87c8b10b1ceebd18"
+      "sourceRecordHash": "fdd4f49c95023184"
     },
     {
       "requirementIdentity": "contract:effect:effect:91:7eeb67ac2557e1e7",
       "dimension": "effect",
       "subjectIdentity": "effect:91:7eeb67ac2557e1e7",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -4080,18 +5292,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "50ff05f8cbbe852c"
+      "sourceRecordHash": "3bc64702a6611112"
     },
     {
       "requirementIdentity": "contract:effect:effect:92:5aa87d7fdf021968",
       "dimension": "effect",
       "subjectIdentity": "effect:92:5aa87d7fdf021968",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010199",
         "kind": "effect"
@@ -4101,18 +5329,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=8047766170799718774"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "fd6a6d0bf25d7544"
+      "sourceRecordHash": "830528e0d932ff14"
     },
     {
       "requirementIdentity": "contract:effect:effect:93:44d948dba4080ee1",
       "dimension": "effect",
       "subjectIdentity": "effect:93:44d948dba4080ee1",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:102001093",
         "kind": "effect"
@@ -4122,16 +5366,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]",
         "battle-element-assets.jsonl#path_id=-2035055823451510697"
       ],
-      "reasons": [],
-      "sourceRecordHash": "e9bc043e75b092c6"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "perfect-parry"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|2|10101027|perfect-parry"
+        ],
+        "controlSkillIds": [
+          10101027
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "86ff43bc4accee11"
     },
     {
       "requirementIdentity": "contract:effect:effect:94:1b4830c8fe3ea94e",
       "dimension": "effect",
       "subjectIdentity": "effect:94:1b4830c8fe3ea94e",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010063",
         "kind": "effect"
@@ -4141,18 +5403,34 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]",
         "battle-element-assets.jsonl#path_id=-3932294994803982599"
       ],
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "perfect-parry"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|2|10101027|perfect-parry"
+        ],
+        "controlSkillIds": [
+          10101027
+        ]
+      },
       "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "4e500efc5c58ecb2"
+      "sourceRecordHash": "e1e1616ce6e15a7d"
     },
     {
       "requirementIdentity": "contract:effect:effect:95:7afa67c79687ce75",
       "dimension": "effect",
       "subjectIdentity": "effect:95:7afa67c79687ce75",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "effectIdentity": "battle-element:101010064",
         "kind": "effect"
@@ -4162,8 +5440,26 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]",
         "battle-element-assets.jsonl#path_id=4277244978079165007"
       ],
-      "reasons": [],
-      "sourceRecordHash": "2d3672963a68b3f4"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "perfect-parry"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|2|10101027|perfect-parry"
+        ],
+        "controlSkillIds": [
+          10101027
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "d6a2ceb0b15edcbd"
     },
     {
       "requirementIdentity": "contract:hit:10101001|0|elements|0|-2245783402811878012|12|1",
@@ -5291,9 +6587,9 @@
       "requirementIdentity": "contract:hit:10101011|0|elements|0|-9038391806014875439|36|1",
       "dimension": "hit",
       "subjectIdentity": "10101011|0|elements|0|-9038391806014875439|36|1",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101011|0|elements|0|-9038391806014875439|36|1",
         "kind": "hit"
@@ -5301,8 +6597,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101011.asset/MonoBehaviour/skill_control_10101011__-6723473642285730715.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9038391806014875439"
       ],
-      "reasons": [],
-      "sourceRecordHash": "99cdfbd01db486d9"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "64ea88a09b57570f"
     },
     {
       "requirementIdentity": "contract:hit:10101012|0|elements|0|-5870764486374818424|15|1",
@@ -5648,9 +6958,9 @@
       "requirementIdentity": "contract:hit:10101015|0|elements|0|-7461455105045004652|14|2",
       "dimension": "hit",
       "subjectIdentity": "10101015|0|elements|0|-7461455105045004652|14|2",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101015|0|elements|0|-7461455105045004652|14|2",
         "kind": "hit"
@@ -5658,16 +6968,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/skill_control_10101015__-7989668557726864893.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-7461455105045004652"
       ],
-      "reasons": [],
-      "sourceRecordHash": "122c27cd13340551"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "0e33e28bf5289b5d"
     },
     {
       "requirementIdentity": "contract:hit:10101015|0|elements|0|-7461455105045004652|19|3",
       "dimension": "hit",
       "subjectIdentity": "10101015|0|elements|0|-7461455105045004652|19|3",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101015|0|elements|0|-7461455105045004652|19|3",
         "kind": "hit"
@@ -5675,16 +6999,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/skill_control_10101015__-7989668557726864893.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-7461455105045004652"
       ],
-      "reasons": [],
-      "sourceRecordHash": "9aabb27cd4dcb125"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "6409a808581bab01"
     },
     {
       "requirementIdentity": "contract:hit:10101015|0|elements|0|-7461455105045004652|9|1",
       "dimension": "hit",
       "subjectIdentity": "10101015|0|elements|0|-7461455105045004652|9|1",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101015|0|elements|0|-7461455105045004652|9|1",
         "kind": "hit"
@@ -5692,8 +7030,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101015.asset/MonoBehaviour/skill_control_10101015__-7989668557726864893.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-7461455105045004652"
       ],
-      "reasons": [],
-      "sourceRecordHash": "b553ccd890726be4"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "0642e1ded522a606"
     },
     {
       "requirementIdentity": "contract:hit:10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
@@ -5733,9 +7085,9 @@
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|15|1",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|15|1",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|15|1",
         "kind": "hit"
@@ -5743,16 +7095,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "e39acd36781ad64b"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "8809de6eb56291e6"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|21|2",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|21|2",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|21|2",
         "kind": "hit"
@@ -5760,16 +7126,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "faaa71f05d3659ad"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "76383ddde172d2fc"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|27|3",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|27|3",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|27|3",
         "kind": "hit"
@@ -5777,16 +7157,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "d4d834ed8931501c"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "4d54776ca1240ff3"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|33|4",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|33|4",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|33|4",
         "kind": "hit"
@@ -5794,16 +7188,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "5f9b439e52408f54"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "43390618b4823497"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|39|5",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|39|5",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|39|5",
         "kind": "hit"
@@ -5811,16 +7219,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "e68dd615c84c4cd1"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "5691d4565e34bd14"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|45|6",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|45|6",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|45|6",
         "kind": "hit"
@@ -5828,16 +7250,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "ba73cb638489bd73"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "fe62745daa926b4a"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|51|7",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|51|7",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|51|7",
         "kind": "hit"
@@ -5845,16 +7281,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "9426bc96b0e0be65"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "507c2e766fbce728"
     },
     {
       "requirementIdentity": "contract:hit:10101025|0|elements|0|-5394695384185407020|57|8",
       "dimension": "hit",
       "subjectIdentity": "10101025|0|elements|0|-5394695384185407020|57|8",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101025|0|elements|0|-5394695384185407020|57|8",
         "kind": "hit"
@@ -5862,8 +7312,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-5394695384185407020"
       ],
-      "reasons": [],
-      "sourceRecordHash": "e29d08b1e3bf5c4a"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "72f2c7c52e5e91bd"
     },
     {
       "requirementIdentity": "contract:hit:10101026|0|elements|0|6429354647570570854|40|1",
@@ -5954,9 +7418,9 @@
       "requirementIdentity": "contract:hit:10101049|1|projectile|101010175|101010272|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|nested-bullet:101010272|execution:bullet:101010272|logic:1|action:0|element:0|element:101010175:2",
       "dimension": "hit",
       "subjectIdentity": "10101049|1|projectile|101010175|101010272|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|nested-bullet:101010272|execution:bullet:101010272|logic:1|action:0|element:0|element:101010175:2",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101049|1|projectile|101010175|101010272|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|nested-bullet:101010272|execution:bullet:101010272|logic:1|action:0|element:0|element:101010175:2",
         "kind": "hit"
@@ -5964,16 +7428,30 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillResourceMaps[1].bulletElements[2]|battle-element-assets.jsonl#elementConfigId=101010175"
       ],
-      "reasons": [],
-      "sourceRecordHash": "153948b39976dbbb"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "ea37a89beb3b4e69"
     },
     {
       "requirementIdentity": "contract:hit:10101049|1|projectile|101010176|101010271|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|execution:bullet:101010271|logic:1|action:0|element:0|element:101010176:0",
       "dimension": "hit",
       "subjectIdentity": "10101049|1|projectile|101010176|101010271|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|execution:bullet:101010271|logic:1|action:0|element:0|element:101010176:0",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10101049|1|projectile|101010176|101010271|0|0|control:10101049|sub:1|behavior:-1456802738572092772|config:0|bullet:101010271:0:0|execution:bullet:101010271|logic:1|action:0|element:0|element:101010176:0",
         "kind": "hit"
@@ -5981,8 +7459,22 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=101010176"
       ],
-      "reasons": [],
-      "sourceRecordHash": "80cd53110eeb3694"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "4d18c44758803ce2"
     },
     {
       "requirementIdentity": "contract:input-timing:actor:101010:charged-attack",
@@ -6053,9 +7545,9 @@
       "requirementIdentity": "contract:public-action:actor|101010|10101001|6|10101015|dodge-attack",
       "dimension": "public-action",
       "subjectIdentity": "actor|101010|10101001|6|10101015|dodge-attack",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101015,
         "kind": "action-form",
@@ -6063,16 +7555,34 @@
         "subSkillIndex": 0
       },
       "sourceIdentities": [],
-      "reasons": [],
-      "sourceRecordHash": "ac3d4a1829854061"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "dodge-attack"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101001|6|10101015|dodge-attack"
+        ],
+        "controlSkillIds": [
+          10101015
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "e21687659d56eee2"
     },
     {
       "requirementIdentity": "contract:public-action:actor|101010|10101001|7|10101011|plunging-attack",
       "dimension": "public-action",
       "subjectIdentity": "actor|101010|10101001|7|10101011|plunging-attack",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101011,
         "kind": "action-form",
@@ -6080,8 +7590,26 @@
         "subSkillIndex": 0
       },
       "sourceIdentities": [],
-      "reasons": [],
-      "sourceRecordHash": "590cd2f15f247a37"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "plunging-attack"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101001|7|10101011|plunging-attack"
+        ],
+        "controlSkillIds": [
+          10101011
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "5d83056eb9a45a03"
     },
     {
       "requirementIdentity": "contract:public-action:actor|101010|10101012|0|10101012|star-skill",
@@ -6155,9 +7683,9 @@
       "requirementIdentity": "contract:public-action:actor|101010|10101021|1|10101025|limit-counter",
       "dimension": "public-action",
       "subjectIdentity": "actor|101010|10101021|1|10101025|limit-counter",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101025,
         "kind": "action-form",
@@ -6165,16 +7693,34 @@
         "subSkillIndex": 0
       },
       "sourceIdentities": [],
-      "reasons": [],
-      "sourceRecordHash": "7010c00fefc64e0c"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "limit-counter"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|1|10101025|limit-counter"
+        ],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "fc8b0305345aecb6"
     },
     {
       "requirementIdentity": "contract:public-action:actor|101010|10101021|2|10101027|perfect-parry",
       "dimension": "public-action",
       "subjectIdentity": "actor|101010|10101021|2|10101027|perfect-parry",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10101027,
         "kind": "action-form",
@@ -6182,8 +7728,27 @@
         "subSkillIndex": 0
       },
       "sourceIdentities": [],
-      "reasons": [],
-      "sourceRecordHash": "663dc4041b57ef80"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [
+          "perfect-parry"
+        ],
+        "actionIdentities": [
+          "actor|101010|10101021|2|10101027|perfect-parry"
+        ],
+        "controlSkillIds": [
+          10101027,
+          10101049
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "dba943f30873be73"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:101010:element:101010115",
@@ -6206,9 +7771,9 @@
       "requirementIdentity": "contract:resource-transaction:actor:101010:element:101010115",
       "dimension": "resource-transaction",
       "subjectIdentity": "actor:101010:element:101010115",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "verified-special-resource-operation-ready",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "kind": "resource",
         "resourceIdentity": "actor:101010:element:101010115"
@@ -6216,22 +7781,39 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=8047766170799718774|IL2CPP:-7197581663443823049|injectElementDataList|formulaParams.formulaParamValues[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/MonoBehaviour_-1886122234490169330__-1886122234490169330.json#startFrame|toOwnElementBaseDatas"
       ],
-      "reasons": [],
-      "sourceRecordHash": "8000c8e37c3c4702"
+      "optimizationScenario": {
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "actionKinds": [],
+        "actionIdentities": [],
+        "controlSkillIds": [
+          10101025
+        ]
+      },
+      "reasons": [
+        "m12c-zero-distance-passive-boss-out-of-scope",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "20c420fb60ca733b"
     },
     {
       "requirementIdentity": "contract:stat-dependency:stat-dependency:0:166d5206e60e9d3f",
       "dimension": "stat-dependency",
       "subjectIdentity": "stat-dependency:0:166d5206e60e9d3f",
-      "sourceDisposition": "gap",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": null,
       "sourceIdentities": [
         "NewTable/template_value.rows[id=101010].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010207.asset/MonoBehaviour/ast_101010207__-3124965708053832775.json#elementConfigId=101010207#changePeopertyConditionArrayDatas[attributeID=229]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-119715824990577950__-119715824990577950.json#startFrame|toOwnElementDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-1058249236301801642__-1058249236301801642.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/MonoBehaviour_-6673499874988910762__-6673499874988910762.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101013.asset/MonoBehaviour/skill_control_10101013__8396291485036452603.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/MonoBehaviour_-7068593164247836478__-7068593164247836478.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101027.asset/MonoBehaviour/skill_control_10101027__6614629684779963080.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=4277244978079165007"
       ],
-      "reasons": [],
-      "sourceRecordHash": "dd8a7fb1349ee58a"
+      "reasons": [
+        "aggregate-stat-dependency-index-not-standalone-requirement",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "27d56b9657c5775d"
     },
     {
       "requirementIdentity": "contract:state-machine:actor:101010:element:101010115",
@@ -7140,9 +8722,9 @@
   ],
   "summary": {
     "recordCount": 382,
-    "appliedCount": 246,
-    "gapCount": 115,
-    "notApplicableCount": 21,
+    "appliedCount": 205,
+    "gapCount": 50,
+    "notApplicableCount": 127,
     "dimensionCounts": {
       "action-form": 21,
       "attack-input-chain": 2,
@@ -7169,5 +8751,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "2884f34eee53328b"
+  "inventoryHash": "252cdb131194ca58"
 }

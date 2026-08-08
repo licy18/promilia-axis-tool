@@ -2136,3 +2136,13 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 每完成一个阶段或改变核心数据模型，都应更新本手册。
 
 详细任务拆解、里程碑和验收标准维护在 `DEVELOPMENT_PLAN.md`。
+
+### M12-B3-E20-2-109001-S3 机制收口与试点政策（2026-08-08）
+
+- 全局 optimization scenario policy `m12c-zero-distance-passive-boss-v1`（`c241492911786b34`）已成为 character acceptance、Machine Axis 候选面、formal admission、cycle replay、trial release 与 Workbench 的共同合同。固定距离 0、投射物立即命中、静态无限 HP 且不攻击的 Boss、关闭韧性/击破/死亡截断均进入 canonical 输入/data/trace/build hash；正式输入缺失或漂移时结构化拒绝。
+- 反应/专用位移动作保留 runtime，但正式面以 `m12c-zero-distance-passive-boss-out-of-scope` 生成 N/A。故 `battle-element:102001093` 及完美招架/极限反击的 action/hit/effect/window 不再是假实现必做项；主动动作和主动追击窗口仍要求真实结算及边界探针。
+- 角色 roster policy `m12c-wind-thunder-mark-producer-roster-v1`（`760e59dac2c7c1c5`）把 formal denominator 从 11 改为 9：`101010/102001/103002/107001/107002/108003/109001/112001/STARBORN`，来源别名分母 10。末音后待做普通角色仅 `102001/107001/107002/108003/112001`；`108001/111001` 因没有当前动作面内的 250/750 主动生产根而结构化产品排除。来源根见 `src/data/generated/optimization-scenario-policy.json`，生成器同时保留动作、frame、path、production/consumption 分类。
+- 末音当前 requirement `212`，其中 required/pass `142/142`、N/A `70`、blocked `0`；source gap `0`、acceptance gap `0`、non-blocking `14`，Machine Axis 稳定重放与 Workbench round-trip 均通过。成熟度仍为 `runtime-integrated`，唯一剩余门是 `acceptance-product-visual-signoff-pending`，不得自行写成 visually-accepted/optimization-ready。
+- 真实机制闭合：`251` 调谐伤害、`252` 每层暴击率、`253` 每层暴击伤害已由 250 印记运行时消费；印记 `0→2→4→5`、封顶刷新 `5→5`、同帧当前包、5 秒伤害冷却及右开到期均由真实 trace 证明。critical 0%/100%、不可暴击拒绝、hit 前属性变化和主动追击窗口内外边界均由 canonical 结算断言，而非手写 facts。
+- 产品/来源 N/A：`102001093` 属被排除的完美招架反击；`battle-element:799` 仍为 M23 客户端孤儿，其 `10900113/map0/frame183` 可达根之 judgment/消费成功分支不可解析且无原生消费者，未生成投影、未实现假逻辑。旧 11 个唯一 gap 曾展开成 28 个 blocked matrix rows，是同一 selector 在 golden、Machine Axis、source/requirement 维度重复绑定所致；政策重算先得到 required `156`、pass `133`、N/A `56`、blocked rows `23`、unique gap `10`，再经真实机制/协议闭环达到上述 `142/142/70/0`。
+- 当前 optimization qualification 由生成器重算为 `9/43/62/137/12`，source snapshot `39acb167dbcf7801`、roster `130c9cd5f5192ad6`、manifests `44f387f512518c29`、ledger `9e046d2a3c1f56fa`、binding matrix `7f2ea0c47f0b6845`、catalog `68996d22cce80720`，阻断 18，formal admission 仍锁定。Kibo DNA 继续规范为 `[]`；不进入下个角色、E20-3、M12-C 或正式搜索。

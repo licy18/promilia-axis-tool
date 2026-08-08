@@ -65,7 +65,11 @@ describe('Machine Axis contract', () => {
       durationFrames: null,
       level: null,
       semanticVariant: null,
-      attackInput: { sequenceIndex: 3, groupId: null },
+      attackInput: {
+        sequenceIndex: 3,
+        groupId: null,
+        contextActionId: null,
+      },
     });
     expect(normalized.actions[0].intent).not.toHaveProperty('controlSkillId');
     expect(normalized.actions[0].intent).not.toHaveProperty('subSkillIndex');

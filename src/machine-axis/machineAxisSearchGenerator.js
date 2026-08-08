@@ -1,6 +1,10 @@
 import { msToFrame } from '../domain/timebase';
 import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
+import {
+  isOptimizationCandidateCharacterInScope,
+  isOptimizationScenarioActionKindInScope,
+} from '../optimization-scenario/optimizationScenarioPolicy';
 
 export const MACHINE_AXIS_SEARCH_GENERATOR_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_GENERATOR_CONTRACT =
@@ -43,10 +47,22 @@ export function createMachineAxisSearchGenerator({
 
   function getCharacterActionCandidates(
     characterId,
-    { includeNormalAttacks = true } = {}
+    {
+      includeNormalAttacks = true,
+      enforceCandidateRoster = false,
+    } = {}
   ) {
+    if (
+      enforceCandidateRoster &&
+      !isOptimizationCandidateCharacterInScope(characterId)
+    ) {
+      return [];
+    }
     return (publicActionsByCharacter.get(Number(characterId)) ?? [])
       .filter(entry => entry.schedulable === true)
+      .filter(entry =>
+        isOptimizationScenarioActionKindInScope(entry.actionKind)
+      )
       .filter(
         entry =>
           includeNormalAttacks || String(entry.actionKind) !== 'normal-attack'
@@ -138,6 +154,8 @@ export function createMachineAxisSearchGenerator({
         activeCharacterId,
         {
           includeNormalAttacks: options.includeNormalAttacks !== false,
+          enforceCandidateRoster:
+            scenario.optimizationQualification?.mode === 'formal',
         }
       );
       const maxActorActions = positiveIntegerOrNull(options.maxActionsPerOwner);

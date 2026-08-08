@@ -1,5 +1,6 @@
 export { MACHINE_AXIS_TRANSPORT_METADATA_KEY } from './machineAxisTransport';
 import { validateRawMachineAxisSchema } from './machineAxisSchemaValidation';
+import { normalizeOptimizationScenarioPolicyBinding } from '../optimization-scenario/optimizationScenarioPolicy';
 
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
@@ -65,6 +66,14 @@ export function normalizeMachineAxisContract(value = {}) {
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
       projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
+      ...(scenario.optimizationScenarioPolicy == null
+        ? {}
+        : {
+            optimizationScenarioPolicy:
+              normalizeOptimizationScenarioPolicyBinding(
+                scenario.optimizationScenarioPolicy
+              ),
+          }),
       ...(scenario.optimizationQualification == null
         ? {}
         : {
@@ -361,6 +370,7 @@ function normalizeAttackInput(value) {
   return {
     sequenceIndex,
     groupId: textOrNull(value.groupId),
+    contextActionId: textOrNull(value.contextActionId),
   };
 }
 

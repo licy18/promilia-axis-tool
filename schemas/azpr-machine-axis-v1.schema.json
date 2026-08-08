@@ -65,6 +65,9 @@
         "optimizationQualification": {
           "$ref": "#/$defs/optimizationQualification"
         },
+        "optimizationScenarioPolicy": {
+          "$ref": "#/$defs/optimizationScenarioPolicyBinding"
+        },
         "cultivationProfile": { "$ref": "#/$defs/cultivationProfile" }
       }
     },
@@ -151,6 +154,17 @@
       "properties": {
         "mode": { "enum": ["research", "formal"] },
         "catalogHash": { "type": ["string", "null"] }
+      }
+    },
+    "optimizationScenarioPolicyBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyId", "policyHash", "rosterPolicyId", "rosterHash"],
+      "properties": {
+        "policyId": { "type": "string", "minLength": 1 },
+        "policyHash": { "type": "string", "minLength": 1 },
+        "rosterPolicyId": { "type": "string", "minLength": 1 },
+        "rosterHash": { "type": "string", "minLength": 1 }
       }
     },
     "cultivationProfile": {
@@ -321,7 +335,8 @@
       "required": ["sequenceIndex"],
       "properties": {
         "sequenceIndex": { "type": "integer", "minimum": 1 },
-        "groupId": { "type": ["string", "null"] }
+        "groupId": { "type": ["string", "null"] },
+        "contextActionId": { "type": ["string", "null"] }
       }
     },
     "schedule": {

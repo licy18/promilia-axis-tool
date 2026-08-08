@@ -33,8 +33,8 @@
       },
       "characterAcceptance": {
         "path": "src/data/generated/character-acceptance-catalog.json",
-        "sha256": "8c1b7fb4533df1b302496d53e9af5d05fdb213738bfc6aaef98033d0352b4f5f",
-        "bytes": 3690
+        "sha256": "df8a9435c91d82bf0202b3430ffa9ae6faa25e55074adeefe9f02341e7a36ebb",
+        "bytes": 53483
       },
       "visualAcceptance": {
         "path": "src/data/generated/m12-b3-visual-acceptance-catalog.json",
@@ -4200,14 +4200,25 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "7e398c1d43fba378"
+    "sourceSnapshotHash": "39acb167dbcf7801"
   },
   "filterContract": {
-    "characterElements": [
-      "风",
-      "雷"
+    "optimizationScenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
+    "optimizationScenarioPolicyHash": "c241492911786b34",
+    "candidateRosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+    "candidateRosterHash": "760e59dac2c7c1c5",
+    "formalCharacterOptimizationObjectIds": [
+      "101010",
+      "103002",
+      "109001",
+      "102001",
+      "107001",
+      "107002",
+      "108003",
+      "112001",
+      "STARBORN"
     ],
-    "characterElementField": "characters.items[].element.abbrName",
+    "characterFilter": "frozen-candidate-roster-policy-instead-of-element-only-filter",
     "kiboElements": [
       "风",
       "雷"
@@ -4226,11 +4237,1383 @@
       "status": "not-applicable",
       "reason": "kibo-dna-out-of-scope-current-version",
       "canonicalValue": []
-    }
+    },
+    "optimizationScenario": {
+      "schemaVersion": 1,
+      "contractName": "AzPrOptimizationScenarioPolicy",
+      "policyId": "m12c-zero-distance-passive-boss-v1",
+      "phase": "M12-C",
+      "status": "product-frozen",
+      "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+      "assumptions": {
+        "actorTargetInitialDistance": 0,
+        "actorTargetDistanceMode": "fixed-zero",
+        "projectileImpactPolicy": "zero-distance-immediate-hit",
+        "enemyBehavior": "passive-static-target",
+        "enemyActiveAttacks": false,
+        "enemyReactionStimuli": false,
+        "targetPolicy": {
+          "hpMode": "infinite",
+          "toughnessMode": "disabled",
+          "breakMode": "disabled",
+          "deathTruncation": "disabled"
+        }
+      },
+      "optimizationSurface": {
+        "excludedActionKinds": [
+          "dodge-attack",
+          "limit-counter",
+          "perfect-parry",
+          "plunging-attack"
+        ],
+        "retainedActionKinds": [
+          "charged-attack",
+          "normal-attack",
+          "star-carry",
+          "star-combo",
+          "star-skill",
+          "ultimate"
+        ],
+        "excludedTriggerFamilies": [
+          "enemy-active-attack",
+          "player-receive-damage",
+          "player-dodge",
+          "player-block",
+          "player-parry",
+          "player-counter",
+          "position-or-airborne-required"
+        ],
+        "runtimeRetention": "manual-runtime-preserved",
+        "formalCandidateDisposition": "reject-before-search"
+      },
+      "consumers": [
+        "character-acceptance",
+        "machine-axis-candidate-surface",
+        "machine-axis-formal-admission",
+        "machine-axis-cycle-replay",
+        "trial-release",
+        "workbench-machine-axis-import-export"
+      ],
+      "hashBindings": [
+        "input",
+        "data",
+        "trace",
+        "build"
+      ],
+      "candidateRoster": {
+        "schemaVersion": 1,
+        "contractName": "AzPrOptimizationCandidateRosterPolicy",
+        "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+        "status": "product-frozen",
+        "inclusionCriterion": {
+          "scope": "remaining-normal-characters",
+          "requiredMarkIds": [
+            250,
+            750
+          ],
+          "requiredOperation": "tuningMark-positive-stack-delta",
+          "requiredActionDisposition": "optimization-in-scope-active-action",
+          "rejectedEvidenceKinds": [
+            "tuningOverlimit-consumption",
+            "judgment-read",
+            "excluded-action-association"
+          ]
+        },
+        "verifiedMechanicsSource": {
+          "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
+          "packageId": "azpr-tc-2026-07-18",
+          "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86"
+        },
+        "formalDenominator": 9,
+        "formalOptimizationObjectIds": [
+          "101010",
+          "103002",
+          "109001",
+          "102001",
+          "107001",
+          "107002",
+          "108003",
+          "112001",
+          "STARBORN"
+        ],
+        "grandfatheredCharacters": [
+          {
+            "characterId": 101010,
+            "name": "涂山小玉",
+            "optimizationObjectId": "101010",
+            "disposition": "included-grandfathered",
+            "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+            "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|101010|10101001|0|10101003|normal-attack]"
+          },
+          {
+            "characterId": 103002,
+            "name": "红宝石",
+            "optimizationObjectId": "103002",
+            "disposition": "included-grandfathered",
+            "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+            "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|103002|10300201|0|10300203|normal-attack]"
+          },
+          {
+            "characterId": 109001,
+            "name": "末音",
+            "optimizationObjectId": "109001",
+            "disposition": "included-grandfathered",
+            "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+            "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|109001|10900101|0|10900103|normal-attack]"
+          }
+        ],
+        "markProducerCharacters": [
+          {
+            "characterId": 102001,
+            "name": "莉莉",
+            "optimizationObjectId": "102001",
+            "disposition": "included-verified-mark-producer",
+            "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+            "productionEvidence": [
+              {
+                "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10200113,
+                "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|211|2",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 1,
+                "startFrame": 211,
+                "relationPath": [
+                  {
+                    "from": "element:1318664144613157792",
+                    "to": "element:1474042154774785480",
+                    "relation": "injectElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_5790785966890863275__5790785966890863275.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10200113,
+                "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|216|1",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 1,
+                "startFrame": 216,
+                "relationPath": [
+                  {
+                    "from": "element:1318664144613157792",
+                    "to": "element:1474042154774785480",
+                    "relation": "injectElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_1384799686497127083__1384799686497127083.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10200113,
+                "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|220|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 1,
+                "startFrame": 220,
+                "relationPath": [
+                  {
+                    "from": "element:1318664144613157792",
+                    "to": "element:1474042154774785480",
+                    "relation": "injectElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_-6639102421339288917__-6639102421339288917.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "consumptionEvidence": []
+          },
+          {
+            "characterId": 107001,
+            "name": "西芙莉雅",
+            "optimizationObjectId": "107001",
+            "disposition": "included-verified-mark-producer",
+            "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+            "productionEvidence": [
+              {
+                "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+                "actionKind": "normal-attack",
+                "controlSkillId": 10700103,
+                "effectIdentity": "10700103|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 1,
+                "startFrame": null,
+                "relationPath": [
+                  {
+                    "from": "element:-5198070001380788731",
+                    "to": "element:1474042154774785480",
+                    "relation": "notDelElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[3]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+                "actionKind": "normal-attack",
+                "controlSkillId": 10700103,
+                "effectIdentity": "10700103|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": null,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[6]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+                "actionKind": "normal-attack",
+                "controlSkillId": 10700103,
+                "effectIdentity": "10700103|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 1,
+                "startFrame": null,
+                "relationPath": [
+                  {
+                    "from": "element:-5198070001380788731",
+                    "to": "element:1474042154774785480",
+                    "relation": "notDelElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].elements[4]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+                "actionKind": "normal-attack",
+                "controlSkillId": 10700103,
+                "effectIdentity": "10700103|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": null,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700112,
+                "effectIdentity": "10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 10,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700112,
+                "effectIdentity": "10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|1",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 10,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700112,
+                "effectIdentity": "10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 10,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700112,
+                "effectIdentity": "10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|1",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 10,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700112,
+                "effectIdentity": "10700112|0|elements|24|-8863380330050196731|element:1474042154774785480|53|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 2,
+                "startFrame": 53,
+                "relationPath": [
+                  {
+                    "from": "element:-8863380330050196731",
+                    "to": "element:-5198070001380788731",
+                    "relation": "elementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  },
+                  {
+                    "from": "element:-5198070001380788731",
+                    "to": "element:1474042154774785480",
+                    "relation": "notDelElementDataList",
+                    "status": "verified-battle-element-reference-resolved"
+                  }
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1248620457979526792__-1248620457979526792.json#startFrame|directInjectTargetType",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              },
+              {
+                "actionIdentity": "actor|107001|10700113|0|10700113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10700113,
+                "effectIdentity": "10700113|0|elements|5|1474042154774785480|element:1474042154774785480|133|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 133,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/MonoBehaviour_-4555925827987686937__-4555925827987686937.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "consumptionEvidence": []
+          },
+          {
+            "characterId": 107002,
+            "name": "米砂",
+            "optimizationObjectId": "107002",
+            "disposition": "included-verified-mark-producer",
+            "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+            "productionEvidence": [
+              {
+                "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700212,
+                "effectIdentity": "10700212|0|elements|3|1474042154774785480|element:1474042154774785480|90|0",
+                "elementId": 750,
+                "markId": 750,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 90,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+              }
+            ],
+            "consumptionEvidence": [
+              {
+                "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700212,
+                "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:-6104701335743815286|82|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 0,
+                "startFrame": 82,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-6104701335743815286|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10700212,
+                "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:4731523060341306954|82|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 107002264,
+                "startFrame": 82,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType"
+              }
+            ]
+          },
+          {
+            "characterId": 108003,
+            "name": "米蒂",
+            "optimizationObjectId": "108003",
+            "disposition": "included-verified-mark-producer",
+            "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+            "productionEvidence": [
+              {
+                "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10800313,
+                "effectIdentity": "10800313|0|bulletElements|1|element-250|element:-3809486317990090417|unresolved-frame|0",
+                "elementId": 250,
+                "markId": 250,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": null,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-3809486317990090417|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+              },
+              {
+                "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10800313,
+                "effectIdentity": "10800313|0|elements|3|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
+                "elementId": 250,
+                "markId": 250,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": null,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3809486317990090417|trigger-unresolved",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+              },
+              {
+                "actionIdentity": "actor|108003|10800322|0|10800322|star-carry",
+                "actionKind": "star-carry",
+                "controlSkillId": 10800322,
+                "effectIdentity": "10800322|0|elements|0|-3809486317990090417|element:-3809486317990090417|37|0",
+                "elementId": 250,
+                "markId": 250,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 37,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-3809486317990090417|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+              }
+            ],
+            "consumptionEvidence": []
+          },
+          {
+            "characterId": 112001,
+            "name": "姬瑟贝露",
+            "optimizationObjectId": "112001",
+            "disposition": "included-verified-mark-producer",
+            "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+            "productionEvidence": [
+              {
+                "actionIdentity": "actor|112001|11200112|0|11200112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 11200112,
+                "effectIdentity": "11200112|0|elements|3|-3809486317990090417|element:-3809486317990090417|27|0",
+                "elementId": 250,
+                "markId": 250,
+                "stackDelta": 1,
+                "depth": 0,
+                "startFrame": 27,
+                "relationPath": [],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/skill_control_11200112__2244200307259366473.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3809486317990090417|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/MonoBehaviour_5182973323990506066__5182973323990506066.json#startFrame|toOwnElementBaseDatas",
+                "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+              }
+            ],
+            "consumptionEvidence": [
+              {
+                "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 11200113,
+                "effectIdentity": "11200113|0|elements|7|-7212963066810547935|element:-7212963066810547935|191|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 250,
+                "packetElementId": 299,
+                "judgmentElementId": 0,
+                "startFrame": 191,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-7212963066810547935|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/MonoBehaviour_2617385811689971573__2617385811689971573.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 11200113,
+                "effectIdentity": "11200113|0|elements|7|-7212963066810547935|element:536980873299289094|191|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 250,
+                "packetElementId": 299,
+                "judgmentElementId": 112001260,
+                "startFrame": 191,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/MonoBehaviour_2617385811689971573__2617385811689971573.json#startFrame|targetType"
+              }
+            ]
+          }
+        ],
+        "starborn": {
+          "optimizationObjectId": "STARBORN",
+          "disposition": "included-single-unified-object",
+          "sourceCharacterIds": [
+            199001,
+            199002
+          ]
+        },
+        "productScenarioExcludedCharacters": [
+          {
+            "characterId": 108001,
+            "name": "忒拉拉",
+            "optimizationObjectId": "108001",
+            "disposition": "product-scenario-excluded",
+            "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+            "productionEvidence": [],
+            "consumptionEvidence": [
+              {
+                "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10800112,
+                "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:-4643639711478347961|57|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 0,
+                "startFrame": 57,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-4643639711478347961|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 10800112,
+                "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:4731523060341306954|57|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 108001264,
+                "startFrame": 57,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10800113,
+                "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:-1822534463770343586|128|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 0,
+                "startFrame": 128,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=-1822534463770343586|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 10800113,
+                "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:4731523060341306954|128|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 108001262,
+                "startFrame": 128,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+              }
+            ],
+            "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+          },
+          {
+            "characterId": 111001,
+            "name": "法兰塔",
+            "optimizationObjectId": "111001",
+            "disposition": "product-scenario-excluded",
+            "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+            "productionEvidence": [],
+            "consumptionEvidence": [
+              {
+                "actionIdentity": "actor|111001|11100112|0|11100112|star-skill",
+                "actionKind": "star-skill",
+                "controlSkillId": 11100112,
+                "effectIdentity": "11100112|1|elements|9|4731523060341306954|element:4731523060341306954|73|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 0,
+                "startFrame": 73,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/skill_control_11100112__-8979285907132699409.json#skillResourceMaps[1].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/MonoBehaviour_-7250173701731532512__-7250173701731532512.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 11100113,
+                "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:-6084749423908212668|212|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 0,
+                "startFrame": 212,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-6084749423908212668|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 11100113,
+                "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:4731523060341306954|212|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 750,
+                "packetElementId": 799,
+                "judgmentElementId": 111001332,
+                "startFrame": 212,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+              },
+              {
+                "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+                "actionKind": "ultimate",
+                "controlSkillId": 11100113,
+                "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:536980873299289094|212|0",
+                "operation": "tuningOverlimit-consumption",
+                "markId": 250,
+                "packetElementId": 299,
+                "judgmentElementId": 111001332,
+                "startFrame": 212,
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+              }
+            ],
+            "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+          }
+        ],
+        "rosterHash": "760e59dac2c7c1c5"
+      },
+      "policyHash": "c241492911786b34"
+    },
+    "characterRoster": {
+      "schemaVersion": 1,
+      "contractName": "AzPrOptimizationCandidateRosterPolicy",
+      "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+      "status": "product-frozen",
+      "inclusionCriterion": {
+        "scope": "remaining-normal-characters",
+        "requiredMarkIds": [
+          250,
+          750
+        ],
+        "requiredOperation": "tuningMark-positive-stack-delta",
+        "requiredActionDisposition": "optimization-in-scope-active-action",
+        "rejectedEvidenceKinds": [
+          "tuningOverlimit-consumption",
+          "judgment-read",
+          "excluded-action-association"
+        ]
+      },
+      "verifiedMechanicsSource": {
+        "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
+        "packageId": "azpr-tc-2026-07-18",
+        "packageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86"
+      },
+      "formalDenominator": 9,
+      "formalOptimizationObjectIds": [
+        "101010",
+        "103002",
+        "109001",
+        "102001",
+        "107001",
+        "107002",
+        "108003",
+        "112001",
+        "STARBORN"
+      ],
+      "grandfatheredCharacters": [
+        {
+          "characterId": 101010,
+          "name": "涂山小玉",
+          "optimizationObjectId": "101010",
+          "disposition": "included-grandfathered",
+          "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+          "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|101010|10101001|0|10101003|normal-attack]"
+        },
+        {
+          "characterId": 103002,
+          "name": "红宝石",
+          "optimizationObjectId": "103002",
+          "disposition": "included-grandfathered",
+          "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+          "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|103002|10300201|0|10300203|normal-attack]"
+        },
+        {
+          "characterId": 109001,
+          "name": "末音",
+          "optimizationObjectId": "109001",
+          "disposition": "included-grandfathered",
+          "inclusionBasis": "existing-product-scope-not-retrospectively-removed",
+          "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings[identity=actor|109001|10900101|0|10900103|normal-attack]"
+        }
+      ],
+      "markProducerCharacters": [
+        {
+          "characterId": 102001,
+          "name": "莉莉",
+          "optimizationObjectId": "102001",
+          "disposition": "included-verified-mark-producer",
+          "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+          "productionEvidence": [
+            {
+              "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10200113,
+              "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|211|2",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 1,
+              "startFrame": 211,
+              "relationPath": [
+                {
+                  "from": "element:1318664144613157792",
+                  "to": "element:1474042154774785480",
+                  "relation": "injectElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_5790785966890863275__5790785966890863275.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10200113,
+              "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|216|1",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 1,
+              "startFrame": 216,
+              "relationPath": [
+                {
+                  "from": "element:1318664144613157792",
+                  "to": "element:1474042154774785480",
+                  "relation": "injectElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_1384799686497127083__1384799686497127083.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10200113,
+              "effectIdentity": "10200113|0|elements|7|1318664144613157792|element:1474042154774785480|220|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 1,
+              "startFrame": 220,
+              "relationPath": [
+                {
+                  "from": "element:1318664144613157792",
+                  "to": "element:1474042154774785480",
+                  "relation": "injectElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_-6639102421339288917__-6639102421339288917.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            }
+          ],
+          "consumptionEvidence": []
+        },
+        {
+          "characterId": 107001,
+          "name": "西芙莉雅",
+          "optimizationObjectId": "107001",
+          "disposition": "included-verified-mark-producer",
+          "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+          "productionEvidence": [
+            {
+              "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+              "actionKind": "normal-attack",
+              "controlSkillId": 10700103,
+              "effectIdentity": "10700103|4|bulletElements|3|element-107001133|element:1474042154774785480|unresolved-frame|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 1,
+              "startFrame": null,
+              "relationPath": [
+                {
+                  "from": "element:-5198070001380788731",
+                  "to": "element:1474042154774785480",
+                  "relation": "notDelElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[3]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+              "actionKind": "normal-attack",
+              "controlSkillId": 10700103,
+              "effectIdentity": "10700103|4|bulletElements|6|element-750|element:1474042154774785480|unresolved-frame|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": null,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].bulletElements[6]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+              "actionKind": "normal-attack",
+              "controlSkillId": 10700103,
+              "effectIdentity": "10700103|4|elements|4|-5198070001380788731|element:1474042154774785480|unresolved-frame|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 1,
+              "startFrame": null,
+              "relationPath": [
+                {
+                  "from": "element:-5198070001380788731",
+                  "to": "element:1474042154774785480",
+                  "relation": "notDelElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].elements[4]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700101|0|10700103|normal-attack",
+              "actionKind": "normal-attack",
+              "controlSkillId": 10700103,
+              "effectIdentity": "10700103|4|elements|7|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": null,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/skill_control_10700103__-254077335684835681.json#skillResourceMaps[4].elements[7]|battle-element-assets.jsonl#path_id=1474042154774785480|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700112,
+              "effectIdentity": "10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 10,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700112,
+              "effectIdentity": "10700112|0|elements|5|1474042154774785480|element:1474042154774785480|10|1",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 10,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700112,
+              "effectIdentity": "10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 10,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_588802666480550264__588802666480550264.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700112,
+              "effectIdentity": "10700112|1|elements|5|1474042154774785480|element:1474042154774785480|10|1",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 10,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[1].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_6770209787263084539__6770209787263084539.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700112,
+              "effectIdentity": "10700112|0|elements|24|-8863380330050196731|element:1474042154774785480|53|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 2,
+              "startFrame": 53,
+              "relationPath": [
+                {
+                  "from": "element:-8863380330050196731",
+                  "to": "element:-5198070001380788731",
+                  "relation": "elementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                },
+                {
+                  "from": "element:-5198070001380788731",
+                  "to": "element:1474042154774785480",
+                  "relation": "notDelElementDataList",
+                  "status": "verified-battle-element-reference-resolved"
+                }
+              ],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1248620457979526792__-1248620457979526792.json#startFrame|directInjectTargetType",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            },
+            {
+              "actionIdentity": "actor|107001|10700113|0|10700113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10700113,
+              "effectIdentity": "10700113|0|elements|5|1474042154774785480|element:1474042154774785480|133|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 133,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/MonoBehaviour_-4555925827987686937__-4555925827987686937.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            }
+          ],
+          "consumptionEvidence": []
+        },
+        {
+          "characterId": 107002,
+          "name": "米砂",
+          "optimizationObjectId": "107002",
+          "disposition": "included-verified-mark-producer",
+          "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+          "productionEvidence": [
+            {
+              "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700212,
+              "effectIdentity": "10700212|0|elements|3|1474042154774785480|element:1474042154774785480|90|0",
+              "elementId": 750,
+              "markId": 750,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 90,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1474042154774785480|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=wind]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=750]|battle-element-assets.jsonl#path_id=4731523060341306954"
+            }
+          ],
+          "consumptionEvidence": [
+            {
+              "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700212,
+              "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:-6104701335743815286|82|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 0,
+              "startFrame": 82,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-6104701335743815286|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10700212,
+              "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:4731523060341306954|82|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 107002264,
+              "startFrame": 82,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType"
+            }
+          ]
+        },
+        {
+          "characterId": 108003,
+          "name": "米蒂",
+          "optimizationObjectId": "108003",
+          "disposition": "included-verified-mark-producer",
+          "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+          "productionEvidence": [
+            {
+              "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10800313,
+              "effectIdentity": "10800313|0|bulletElements|1|element-250|element:-3809486317990090417|unresolved-frame|0",
+              "elementId": 250,
+              "markId": 250,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": null,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-3809486317990090417|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+            },
+            {
+              "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10800313,
+              "effectIdentity": "10800313|0|elements|3|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
+              "elementId": 250,
+              "markId": 250,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": null,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3809486317990090417|trigger-unresolved",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+            },
+            {
+              "actionIdentity": "actor|108003|10800322|0|10800322|star-carry",
+              "actionKind": "star-carry",
+              "controlSkillId": 10800322,
+              "effectIdentity": "10800322|0|elements|0|-3809486317990090417|element:-3809486317990090417|37|0",
+              "elementId": 250,
+              "markId": 250,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 37,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-3809486317990090417|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+            }
+          ],
+          "consumptionEvidence": []
+        },
+        {
+          "characterId": 112001,
+          "name": "姬瑟贝露",
+          "optimizationObjectId": "112001",
+          "disposition": "included-verified-mark-producer",
+          "inclusionBasis": "in-scope-active-action-produces-wind-or-thunder-mark",
+          "productionEvidence": [
+            {
+              "actionIdentity": "actor|112001|11200112|0|11200112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 11200112,
+              "effectIdentity": "11200112|0|elements|3|-3809486317990090417|element:-3809486317990090417|27|0",
+              "elementId": 250,
+              "markId": 250,
+              "stackDelta": 1,
+              "depth": 0,
+              "startFrame": 27,
+              "relationPath": [],
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/skill_control_11200112__2244200307259366473.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3809486317990090417|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/MonoBehaviour_5182973323990506066__5182973323990506066.json#startFrame|toOwnElementBaseDatas",
+              "tuningMarkSourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094"
+            }
+          ],
+          "consumptionEvidence": [
+            {
+              "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 11200113,
+              "effectIdentity": "11200113|0|elements|7|-7212963066810547935|element:-7212963066810547935|191|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 250,
+              "packetElementId": 299,
+              "judgmentElementId": 0,
+              "startFrame": 191,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-7212963066810547935|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/MonoBehaviour_2617385811689971573__2617385811689971573.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 11200113,
+              "effectIdentity": "11200113|0|elements|7|-7212963066810547935|element:536980873299289094|191|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 250,
+              "packetElementId": 299,
+              "judgmentElementId": 112001260,
+              "startFrame": 191,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/MonoBehaviour_2617385811689971573__2617385811689971573.json#startFrame|targetType"
+            }
+          ]
+        }
+      ],
+      "starborn": {
+        "optimizationObjectId": "STARBORN",
+        "disposition": "included-single-unified-object",
+        "sourceCharacterIds": [
+          199001,
+          199002
+        ]
+      },
+      "productScenarioExcludedCharacters": [
+        {
+          "characterId": 108001,
+          "name": "忒拉拉",
+          "optimizationObjectId": "108001",
+          "disposition": "product-scenario-excluded",
+          "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+          "productionEvidence": [],
+          "consumptionEvidence": [
+            {
+              "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10800112,
+              "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:-4643639711478347961|57|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 0,
+              "startFrame": 57,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-4643639711478347961|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 10800112,
+              "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:4731523060341306954|57|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 108001264,
+              "startFrame": 57,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10800113,
+              "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:-1822534463770343586|128|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 0,
+              "startFrame": 128,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=-1822534463770343586|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 10800113,
+              "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:4731523060341306954|128|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 108001262,
+              "startFrame": 128,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+            }
+          ],
+          "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+        },
+        {
+          "characterId": 111001,
+          "name": "法兰塔",
+          "optimizationObjectId": "111001",
+          "disposition": "product-scenario-excluded",
+          "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+          "productionEvidence": [],
+          "consumptionEvidence": [
+            {
+              "actionIdentity": "actor|111001|11100112|0|11100112|star-skill",
+              "actionKind": "star-skill",
+              "controlSkillId": 11100112,
+              "effectIdentity": "11100112|1|elements|9|4731523060341306954|element:4731523060341306954|73|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 0,
+              "startFrame": 73,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/skill_control_11100112__-8979285907132699409.json#skillResourceMaps[1].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/MonoBehaviour_-7250173701731532512__-7250173701731532512.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 11100113,
+              "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:-6084749423908212668|212|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 0,
+              "startFrame": 212,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-6084749423908212668|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 11100113,
+              "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:4731523060341306954|212|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 750,
+              "packetElementId": 799,
+              "judgmentElementId": 111001332,
+              "startFrame": 212,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+            },
+            {
+              "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+              "actionKind": "ultimate",
+              "controlSkillId": 11100113,
+              "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:536980873299289094|212|0",
+              "operation": "tuningOverlimit-consumption",
+              "markId": 250,
+              "packetElementId": 299,
+              "judgmentElementId": 111001332,
+              "startFrame": 212,
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+            }
+          ],
+          "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+        }
+      ],
+      "rosterHash": "760e59dac2c7c1c5"
+    },
+    "productScenarioExcludedCharacters": [
+      {
+        "characterId": 108001,
+        "name": "忒拉拉",
+        "optimizationObjectId": "108001",
+        "disposition": "product-scenario-excluded",
+        "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+        "productionEvidence": [],
+        "consumptionEvidence": [
+          {
+            "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+            "actionKind": "star-skill",
+            "controlSkillId": 10800112,
+            "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:-4643639711478347961|57|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 0,
+            "startFrame": 57,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-4643639711478347961|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|108001|10800112|0|10800112|star-skill",
+            "actionKind": "star-skill",
+            "controlSkillId": 10800112,
+            "effectIdentity": "10800112|0|elements|8|-4643639711478347961|element:4731523060341306954|57|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 108001264,
+            "startFrame": 57,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/skill_control_10800112__-4901894643090470632.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800112.asset/MonoBehaviour/MonoBehaviour_-2858144684643943284__-2858144684643943284.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+            "actionKind": "ultimate",
+            "controlSkillId": 10800113,
+            "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:-1822534463770343586|128|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 0,
+            "startFrame": 128,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=-1822534463770343586|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|108001|10800113|0|10800113|ultimate",
+            "actionKind": "ultimate",
+            "controlSkillId": 10800113,
+            "effectIdentity": "10800113|0|elements|11|-1822534463770343586|element:4731523060341306954|128|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 108001262,
+            "startFrame": 128,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/skill_control_10800113__5611257496587501138.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800113.asset/MonoBehaviour/MonoBehaviour_-7862101168306621279__-7862101168306621279.json#startFrame|targetType"
+          }
+        ],
+        "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+      },
+      {
+        "characterId": 111001,
+        "name": "法兰塔",
+        "optimizationObjectId": "111001",
+        "disposition": "product-scenario-excluded",
+        "reason": "m12c-no-in-scope-wind-or-thunder-mark-production",
+        "productionEvidence": [],
+        "consumptionEvidence": [
+          {
+            "actionIdentity": "actor|111001|11100112|0|11100112|star-skill",
+            "actionKind": "star-skill",
+            "controlSkillId": 11100112,
+            "effectIdentity": "11100112|1|elements|9|4731523060341306954|element:4731523060341306954|73|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 0,
+            "startFrame": 73,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/skill_control_11100112__-8979285907132699409.json#skillResourceMaps[1].elements[9]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/MonoBehaviour_-7250173701731532512__-7250173701731532512.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+            "actionKind": "ultimate",
+            "controlSkillId": 11100113,
+            "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:-6084749423908212668|212|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 0,
+            "startFrame": 212,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-6084749423908212668|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+            "actionKind": "ultimate",
+            "controlSkillId": 11100113,
+            "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:4731523060341306954|212|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 750,
+            "packetElementId": 799,
+            "judgmentElementId": 111001332,
+            "startFrame": 212,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=4731523060341306954|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+          },
+          {
+            "actionIdentity": "actor|111001|11100113|0|11100113|ultimate",
+            "actionKind": "ultimate",
+            "controlSkillId": 11100113,
+            "effectIdentity": "11100113|0|elements|10|-6084749423908212668|element:536980873299289094|212|0",
+            "operation": "tuningOverlimit-consumption",
+            "markId": 250,
+            "packetElementId": 299,
+            "judgmentElementId": 111001332,
+            "startFrame": 212,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/skill_control_11100113__1507425031352514401.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=536980873299289094|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100113.asset/MonoBehaviour/MonoBehaviour_7231807665209313293__7231807665209313293.json#startFrame|targetType"
+          }
+        ],
+        "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
+      }
+    ]
   },
   "denominators": {
-    "characterOptimizationObjects": 11,
-    "sourceCharacterAliases": 12,
+    "characterOptimizationObjects": 9,
+    "sourceCharacterAliases": 10,
     "kibos": 43,
     "soulEssences": 62,
     "equipment": 137,
@@ -4327,24 +5710,6 @@
       "sourceIdentity": "generated/characters.json#items[id=107002]"
     },
     {
-      "optimizationObjectId": "108001",
-      "displayName": "忒拉拉",
-      "sourceCharacterIds": [
-        108001
-      ],
-      "sourceNames": [
-        "忒拉拉"
-      ],
-      "elements": [
-        "火",
-        "风"
-      ],
-      "position": "猛攻",
-      "weaponType": "长柄武器",
-      "mechanismHash": "96daa11fff252daf",
-      "sourceIdentity": "generated/characters.json#items[id=108001]"
-    },
-    {
       "optimizationObjectId": "108003",
       "displayName": "米蒂",
       "sourceCharacterIds": [
@@ -4378,24 +5743,6 @@
       "weaponType": "双刀",
       "mechanismHash": "fd47d5ed36224b04",
       "sourceIdentity": "generated/characters.json#items[id=109001]"
-    },
-    {
-      "optimizationObjectId": "111001",
-      "displayName": "法兰塔",
-      "sourceCharacterIds": [
-        111001
-      ],
-      "sourceNames": [
-        "法兰塔"
-      ],
-      "elements": [
-        "风",
-        "雷"
-      ],
-      "position": "破坏",
-      "weaponType": "长柄武器",
-      "mechanismHash": "f7ea274127d727b3",
-      "sourceIdentity": "generated/characters.json#items[id=111001]"
     },
     {
       "optimizationObjectId": "112001",
@@ -29383,5 +30730,5 @@
       ]
     }
   },
-  "rosterHash": "0b242d3faec69a07"
+  "rosterHash": "130c9cd5f5192ad6"
 }

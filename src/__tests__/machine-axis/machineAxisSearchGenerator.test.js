@@ -23,7 +23,7 @@ describe('Machine Axis search generator', () => {
   });
 
   it('exposes schedulable character and kibo action candidates from the catalog', () => {
-    const characterActions = generator.getCharacterActionCandidates(101007);
+    const characterActions = generator.getCharacterActionCandidates(101010);
     expect(characterActions.length).toBeGreaterThan(0);
     expect(characterActions.every(entry => entry.schedulable === true)).toBe(
       true
@@ -32,13 +32,19 @@ describe('Machine Axis search generator', () => {
       characterActions.some(entry => entry.actionKind === 'normal-attack')
     ).toBe(true);
 
-    const kiboActions = generator.getKiboActionCandidates(500001, 101007);
+    const kiboActions = generator.getKiboActionCandidates(500001, 101010);
     expect(
       kiboActions.some(
         entry =>
           entry.actionKind === 'signature' && entry.publicActionId === 50000102
       )
     ).toBe(true);
+
+    expect(
+      generator.getCharacterActionCandidates(108001, {
+        enforceCandidateRoster: true,
+      })
+    ).toEqual([]);
   });
 
   it('generates deterministic next-action candidates with absolute schedules', () => {

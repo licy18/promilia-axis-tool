@@ -1066,3 +1066,12 @@ npm run test -- --run
 - `PROJECT_MANUAL.md`：更新阶段状态。
 - `DEVELOPMENT_PLAN.md`：勾勒下一阶段任务变化。
 - 相关架构文档：数据结构或运行时有实质变化时同步更新。
+
+## 10. M12-C 首个试点产品政策覆盖（2026-08-08，当前权威口径）
+
+- 首个试点固定为角色与目标全程距离 0、投射物立即命中、无限 HP 静态 Boss、Boss 不攻击，且默认关闭韧性/击破/死亡截断。该合同由 `m12c-zero-distance-passive-boss-v1` 生成，policy hash 为 `c241492911786b34`；输入、canonical data/trace、build hash、Machine Axis、formal admission、cycle replay、trial release 与 Workbench 导入必须一致携带，缺失或漂移即在搜索前拒绝。
+- 专用闪击/闪避/跃击/跳跃/下落/位移动作，以及完美闪避、完美格挡/招架、极限反击和任何依赖 Boss 主动攻击的反应动作，不进入正式候选面；来源 requirement、专属 hit/effect/window 保留并以 `m12c-zero-distance-passive-boss-out-of-scope` 生成结构化 N/A。手工/研究 runtime 保留，不回退既有实现。
+- 角色候选由 `m12c-wind-thunder-mark-producer-roster-v1` 冻结，roster hash `760e59dac2c7c1c5`。正式分母改为 9 个优化对象：既有 `101010/103002/109001`，可在当前动作面主动生产 750/250 印记的 `102001/107001/107002/108003/112001`，以及统一 `STARBORN`。底层来源别名共 10 个；`199001/199002` 仍只合并成一个产品对象。
+- 生产来源：`10200113` frame `211/216/220` 向 750 注入多层；`10700112@10`、`10700113@133` 含 depth=0 的 750 根；`10700212@90` 含独立 depth=0 的 750 根（不能与 `@82` 消费判断混淆）；`10800313` 与 `10800322@37` 含 250 根；`11200112@27` 含 250 根。
+- `108001` 只有 150 生产根，750 仅存在于消费/overdrive 路径；`111001` 没有 250/750 生产根，仅通过 judgment 消费已有印记。两者以 `m12c-no-in-scope-wind-or-thunder-mark-production` 标为 `product-scenario-excluded`，保留源数据、手工 runtime 与覆盖清单，但不进入候选 roster、完整 character acceptance、optimization-ready 门禁或正式绑定矩阵。
+- 因此末音签收后剩余普通角色为 5 个：`102001/107001/107002/108003/112001`；不开始下一个角色，先停在末音产品视觉签收点。奇波/灵子/装备/套装分母仍为 `43/62/137/12`，Kibo DNA 固定 `[]`；M12-C 与正式搜索继续锁定。

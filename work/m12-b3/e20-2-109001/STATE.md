@@ -449,3 +449,33 @@
 ## 坑
 
 - 顶层 `skill_control_<id>.json` 不存在；可读 JSON 在 `<id>.asset/MonoBehaviour/` 子目录，且多数文件是行为切片，只有一份含 skillControlData
+
+## S3 完成检查点（2026-08-08，等待产品视觉签收）
+
+### 政策重算
+
+- 全局 scenario policy `c241492911786b34` 与 roster policy `760e59dac2c7c1c5` 已进入 fixture、Machine Axis、canonical hash、Workbench、formal admission 与生成报告。反应动作 N/A 后，109001 先从 required/pass/N/A=`195/167/17`、28 blocked rows、11 unique gaps 重算到 `156/133/56`、23 blocked rows、10 unique gaps。
+- 最终 requirement `212`：required/pass/N/A/blocked=`142/142/70/0`；ledger source/acceptance/non-blocking=`0/0/14`。scenario 两条均执行通过，自动断言 `605/606`；唯一未通过项是需要产品身份的视觉签收，不是机制断言。
+
+### 机制已真实闭合
+
+- `battle-element:251`：250 印记的真实 tuning damage 消费者。A5 后当前包普通 hit 使用取得前阈值 `500`，后续 hit 使用 `586`；5 秒 cooldown 内后两次 A5 不重复触发，边界第 4 次触发，raw damage `316→789`。
+- `battle-element:252/253`：每层安装 attr7 `+43bp` 与 attr8 `+86bp` 的团队 persistent modifier。印记按 `0→2→4→5` 叠加、封顶 `5→5` 刷新；最后刷新后 20 秒右开到期，边界帧先到期 `5→4` 再结算主动 A1，阈值回落到 `672`。
+- `buff-apply-refresh-stack-expire` 使用同一真实印记生命周期覆盖应用、叠层、封顶刷新、同帧顺序、冷却与右开到期。
+- critical：attr7 `-10000` 时 threshold `0` 且 roll `0` 不暴击；负效果到期而 `+9500` 尚在时 threshold `10000` 且 roll `9999` 暴击；不可暴击 tuning damage 无 critical random branch，同帧普通 hit 有；属性在 hit 前到期改变该 hit 阈值。
+- 主动追击窗口 `10900112→10900143` 的源区间为 `(40,77]`：offset `39/78` 走普通输入，`41/76` 命中追击；contextActionId 经 Schema、compile、Workbench round-trip 保留。
+
+### 因产品场景政策或来源边界 N/A
+
+- `battle-element:102001093` 与完美招架/极限反击专属 action/hit/effect/window：reason=`m12c-zero-distance-passive-boss-out-of-scope`，现有 runtime/test 保留，不再进入正式优化面。
+- `battle-element:799`：`10900113/map0/frame183` 资源图中的 child，根 `109001361` 需要不可解析的 tuning-consume judgment/mark/success branch；M23 全客户端复核仍无可达原生消费者。以 `m23-client-orphan-no-reachable-native-consumer` 结构化 N/A，不投影 effect id、不实现假逻辑。
+
+### 28 blocked rows 的来源
+
+- 原 11 unique gaps 为 251/252/253、102001093、799、buff lifecycle、4 个 critical 条件和 input-window boundary。一个 unique selector 会同时绑定 golden、Machine Axis、source requirement/acceptance requirement 的多行，因此展开为 28 blocked rows，并不代表 28 个独立机制。政策先移出反应面、保留结构化 N/A；其余项由 trace assertion 与实际消费者逐项闭合，最终 matrix blocked=0。
+
+### 当前边界
+
+- maturity 仍为 `runtime-integrated`；唯一 blocker `acceptance-product-visual-signoff-pending`。不得自行写成 visually-accepted/optimization-ready。
+- 不进入下一角色、E20-3、M12-C 或正式搜索；Kibo DNA 保持 `[]`。
+- 最终审计：Vitest `191/191` 文件、`1451/1451` 用例；verified-combat / character-combat 双生成器对拍 clean，scenario policy、character acceptance、optimization qualification、visual acceptance、production imports、Workbench data、action status、applied source bindings 均 clean；production build 与 `git diff --check` 通过。bundle budget 的两个 false 在本分支 HEAD 已存在，S3 未跨越新门状态，按范围不做纯性能拆包。
