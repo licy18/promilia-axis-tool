@@ -415,10 +415,25 @@ function compileEnemy(
     sourceEnemy,
     profiles: enemyLevelProfiles,
   });
+  const profileAttributes =
+    enemy.profile?.source?.status === 'authoritative-resolved'
+      ? enemy.profile.attributes
+      : null;
   const elementDefenses = ENEMY_ELEMENT_DEFENSE_DEFINITIONS.map(definition =>
-    compileEnemyElementDefense(enemy, definition, elementsById, levelScaling)
+    compileEnemyElementDefense(
+      enemy,
+      definition,
+      elementsById,
+      levelScaling,
+      profileAttributes
+    )
   );
-  const toughnessBase = levelScaling.stats.maxToughness;
+  const profileNumber = key => {
+    const value = Number(profileAttributes?.[key]);
+    return Number.isFinite(value) ? value : null;
+  };
+  const toughnessBase =
+    profileNumber('maxToughness') ?? levelScaling.stats.maxToughness;
   const toughnessMultiplier = positiveNumberOrDefault(
     enemy.toughnessMultiplier,
     1
@@ -439,9 +454,11 @@ function compileEnemy(
   const defenseMultiplier = positiveNumberOrDefault(enemy.defenseMultiplier, 1);
   const stats = {
     attack: levelScaling.stats.attack,
-    maxHp: levelScaling.stats.maxHp,
-    physicalDefense: levelScaling.stats.physicalDefense,
-    magicalDefense: levelScaling.stats.magicalDefense,
+    maxHp: profileNumber('maxHp') ?? levelScaling.stats.maxHp,
+    physicalDefense:
+      profileNumber('physicalDefense') ?? levelScaling.stats.physicalDefense,
+    magicalDefense:
+      profileNumber('magicalDefense') ?? levelScaling.stats.magicalDefense,
     maxToughness,
     initialToughness,
   };
@@ -464,6 +481,14 @@ function compileEnemy(
       initialToughness,
     },
     levelScaling,
+    profileAttributeResolution: {
+      status: profileAttributes
+        ? 'authoritative-machine-axis-profile-applied'
+        : 'enemy-level-profile-applied',
+      profileId: enemy.profile?.profileId ?? null,
+      profileHash: enemy.profile?.profileHash ?? null,
+      sourceIdentity: enemy.profile?.source?.identity ?? null,
+    },
     toughness: {
       sourceKind: 'azpr-client-level-grown-WEAKNESS_POINT_MAX',
       sourceStatus: Number.isFinite(toughnessBase)
@@ -496,7 +521,8 @@ function compileEnemyElementDefense(
   enemy,
   definition,
   elementsById,
-  levelScaling
+  levelScaling,
+  profileAttributes = null
 ) {
   const attribute = (enemy.baseAttributes ?? []).find(
     item => item.key === definition.attributeKey
@@ -506,9 +532,14 @@ function compileEnemyElementDefense(
   const rawTemplateValue = Number.isFinite(attribute?.value)
     ? attribute.value
     : null;
-  const baseValue = Number.isFinite(levelAttribute?.effectiveValue)
-    ? levelAttribute.effectiveValue
-    : null;
+  const profileValue = Number(
+    profileAttributes?.elementDefenses?.[definition.attributeKey]
+  );
+  const baseValue = Number.isFinite(profileValue)
+    ? profileValue
+    : Number.isFinite(levelAttribute?.effectiveValue)
+      ? levelAttribute.effectiveValue
+      : null;
   const configuredOverride =
     enemy.elementDefenseOverrides?.[definition.attributeKey];
   const overrideValue = Number.isFinite(configuredOverride)
@@ -533,8 +564,10 @@ function compileEnemyElementDefense(
     sourceStatus:
       overrideValue != null
         ? 'user-override'
-        : baseValue != null
-          ? 'azpr-client-level-grown-attribute'
+        : Number.isFinite(profileValue)
+          ? 'authoritative-machine-axis-profile'
+          : baseValue != null
+            ? 'azpr-client-level-grown-attribute'
           : `missing-level-grown-attribute-${levelScaling.status}`,
     appliedToDamage: false,
   };

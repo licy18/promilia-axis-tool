@@ -92,7 +92,10 @@ export function createWorkbenchDraftFromMachineAxisImport(imported) {
     (project.actors ?? []).map(actor => [String(actor.id), actor])
   );
   const machineActionsById = new Map(
-    (imported.contract?.actions ?? []).map(action => [String(action.id), action])
+    (imported.contract?.actions ?? []).map(action => [
+      String(action.id),
+      action,
+    ])
   );
   const teamSlots = structuredClone(project.metadata?.teamSlots ?? []);
   const firstSkillAction = (project.actions ?? []).find(
@@ -253,6 +256,9 @@ function createContractFromProject(project, { service, metadata } = {}) {
         toughnessMultiplier: positiveNumberOrNull(enemy.toughnessMultiplier),
         initialToughnessRatio: finiteNumberOrNull(enemy.initialToughnessRatio),
         elementDefenseOverrides: copyPlainRecord(enemy.elementDefenseOverrides),
+        ...(enemy.profile == null
+          ? {}
+          : { profile: structuredClone(enemy.profile) }),
       },
       initialRuntimeState: remapWorkbenchInitialRuntimeState(
         project.initialRuntimeState,
@@ -282,6 +288,13 @@ function createContractFromProject(project, { service, metadata } = {}) {
         : {
             optimizationScenarioPolicy: structuredClone(
               project.combatScenario.optimizationScenarioPolicy
+            ),
+          }),
+      ...(project.combatScenario?.objectiveContract == null
+        ? {}
+        : {
+            objectiveContract: structuredClone(
+              project.combatScenario.objectiveContract
             ),
           }),
       ...(project.optimizationQualification == null

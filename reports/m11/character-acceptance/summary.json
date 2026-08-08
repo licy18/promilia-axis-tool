@@ -6,7 +6,7 @@
   "protocolIdentity": "m11-d-character-acceptance-v1",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
-    "policyHash": "c60fb5a713a5f691"
+    "policyHash": "967b0667f315db5b"
   },
   "optimizationCandidateRoster": {
     "schemaVersion": 1,
@@ -30,7 +30,7 @@
     "verifiedMechanicsSource": {
       "sourceIdentity": "src/data/generated/verified-combat-mechanics-package.json#actionMappings|controlBindings.effects",
       "packageId": "azpr-tc-2026-07-18",
-      "packageHash": "ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e"
+      "packageHash": "226b60bec7c3b9e701b0a5483ec71685c71530bbec65f1df632362a30f588a4b"
     },
     "formalDenominator": 9,
     "formalOptimizationObjectIds": [
@@ -600,7 +600,7 @@
         "sourceRetention": "source-data-manual-runtime-and-coverage-retained"
       }
     ],
-    "rosterHash": "7c96de67bf19b48e"
+    "rosterHash": "a690b860f0967e3d"
   },
   "productScenarioExcludedCharacters": [
     {
@@ -794,14 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "65ed0671802d8eb1",
-      "sourceOfTruthHash": "5df33e0a841361ef",
+      "manifestHash": "0ce4d9672be6983a",
+      "sourceOfTruthHash": "4785015d2c2bb9f7",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "a0f040218b6d711e",
-        "data": "82f85ddcb0c6dc97",
-        "trace": "84bcf3470d8fec44",
-        "evaluation": "920e7363ae12290d"
+        "input": "92e884dba9c9feb2",
+        "data": "b5595174c4d3c84d",
+        "trace": "51d76ecd847037b5",
+        "evaluation": "53eb57b729f3a7e6",
+        "build": "78f3467e6c9c99ae"
       }
     },
     {
@@ -855,14 +856,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "8883a3ea3f64c417",
-      "sourceOfTruthHash": "5f1ffde25647521b",
+      "manifestHash": "e5e2e29db4ddde51",
+      "sourceOfTruthHash": "dfb95905b131c326",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "72250cb23f351447",
-        "data": "2f78bc4d910210af",
-        "trace": "00bc0f912b467cda",
-        "evaluation": "adc4612197816c14"
+        "input": "01a944da9e1a431f",
+        "data": "b6e05ad48dd145c1",
+        "trace": "b7f60eb6619f5eea",
+        "evaluation": "204c04b2ab3f5fb4",
+        "build": "a716c30e9ff7f47e"
       }
     },
     {
@@ -917,14 +919,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c43c104ecd1e082e",
-      "sourceOfTruthHash": "f1d632f650346141",
+      "manifestHash": "975abaeb7fc1fc80",
+      "sourceOfTruthHash": "9b06ed4c4337647d",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "de9c4af1ba6994e4",
-        "data": "b9b7d46052e649d9",
-        "trace": "a58dd129d3398a81",
-        "evaluation": "b06186eaa569be69"
+        "input": "83fedb99ae319234",
+        "data": "2dd4b7e567d694df",
+        "trace": "549b70ac5431ef85",
+        "evaluation": "208849308c4ec837",
+        "build": "addabc39de902bd0"
       }
     },
     {
@@ -974,19 +977,20 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9177bc243d29a268",
-      "sourceOfTruthHash": "993854f151e055ac",
+      "manifestHash": "6eb2de85f92a0348",
+      "sourceOfTruthHash": "7cc35332869b9992",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "d4c2ef7c14cfdf35",
-        "data": "e43a71a0c2a1b1f8",
-        "trace": "71c98ddca9ae3207",
-        "evaluation": "132029f4e682f2be"
+        "input": "d3932ecdc7498595",
+        "data": "96e13c850d2ca43d",
+        "trace": "a705857d68a8ce49",
+        "evaluation": "855dd5b0926bf110",
+        "build": "394452733dc91b7a"
       }
     }
   ],
-  "catalogHash": "55f077d48437a9a3",
-  "manifestIndexHash": "2fbe004e1b9970f6",
+  "catalogHash": "9a0e87b89c27b268",
+  "manifestIndexHash": "30a45ea74b993fd7",
   "summary": {
     "ownerCount": 4,
     "formalCharacterDenominator": 9,

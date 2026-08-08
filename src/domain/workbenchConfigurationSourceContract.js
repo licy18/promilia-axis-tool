@@ -120,9 +120,16 @@ function createEnemySource({
     entityId: normalizedEnemyId,
     requestedInstanceId,
     instance,
-    instanceConfig: instance?.enemyConfig,
-    resolvedConfig: config,
+    instanceConfig: withoutDerivedEnemyProfile(instance?.enemyConfig),
+    resolvedConfig: withoutDerivedEnemyProfile(config),
   });
+}
+
+function withoutDerivedEnemyProfile(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  const result = { ...value };
+  delete result.profile;
+  return result;
 }
 
 function createEntitySource({

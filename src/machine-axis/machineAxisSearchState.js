@@ -795,11 +795,14 @@ function normalizeEnemyState(enemy) {
     toughness: roundMetric(numberOrZero(enemy.toughness)),
     maxToughness: roundMetric(numberOrZero(enemy.maxToughness)),
     inBreak: enemy.inBreak === true,
+    breakPhase:
+      enemy.breakPhase ?? (enemy.inBreak ? 'linear_recovery' : 'normal'),
     breakElapsedMs: roundMetric(numberOrZero(enemy.breakElapsedMs)),
     recoveryDelayRemainingMs: roundMetric(
       numberOrZero(enemy.recoveryDelayRemainingMs)
     ),
     defeated: Number(enemy.hp) <= 0,
+    profileSourceIdentity: enemy.profileSourceIdentity ?? null,
   };
 }
 

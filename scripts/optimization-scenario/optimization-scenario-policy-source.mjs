@@ -1,4 +1,8 @@
 import verifiedMechanicsPackage from '../../src/data/generated/verified-combat-mechanics-package.json' with { type: 'json' };
+import {
+  MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
+  createMachineAxisObjectivePolicy,
+} from '../../src/machine-axis/machineAxisObjectiveContract.js';
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 
 export const M12C_OPTIMIZATION_SCENARIO_POLICY_REASON =
@@ -26,6 +30,7 @@ const MARK_PRODUCER_CHARACTER_IDS = Object.freeze([
 ]);
 const PRODUCT_EXCLUDED_CHARACTER_IDS = Object.freeze([108001, 111001]);
 const FORMAL_MARK_IDS = new Set([250, 750]);
+const OBJECTIVE_POLICY = createMachineAxisObjectivePolicy();
 
 const POLICY_SOURCE = Object.freeze({
   schemaVersion: 1,
@@ -41,12 +46,10 @@ const POLICY_SOURCE = Object.freeze({
     enemyBehavior: 'passive-static-target',
     enemyActiveAttacks: false,
     enemyReactionStimuli: false,
-    targetPolicy: {
-      hpMode: 'infinite',
-      toughnessMode: 'disabled',
-      breakMode: 'disabled',
-      deathTruncation: 'disabled',
-    },
+    targetPolicy: structuredClone(
+      OBJECTIVE_POLICY.objectivesById[MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE]
+        .targetPolicy
+    ),
   },
   optimizationSurface: {
     excludedActionKinds: [...EXCLUDED_ACTION_KINDS],
@@ -78,6 +81,7 @@ export function createOptimizationScenarioPolicy() {
   const roster = createCandidateRosterPolicy();
   const policy = {
     ...structuredClone(POLICY_SOURCE),
+    objectivePolicy: createMachineAxisObjectivePolicy(),
     candidateRoster: roster,
   };
   return {
@@ -87,29 +91,35 @@ export function createOptimizationScenarioPolicy() {
 }
 
 function createCandidateRosterPolicy() {
-  const grandfatheredCharacters = GRANDFATHERED_CHARACTER_IDS.map(characterId => ({
-    characterId,
-    name: ownerName(characterId),
-    optimizationObjectId: String(characterId),
-    disposition: 'included-grandfathered',
-    inclusionBasis: 'existing-product-scope-not-retrospectively-removed',
-    sourceIdentity: actionMappingSourceIdentity(characterId),
-  }));
-  const markProducerCharacters = MARK_PRODUCER_CHARACTER_IDS.map(characterId => {
-    const productionEvidence = createProductionEvidence(characterId);
-    if (productionEvidence.length === 0) {
-      throw new Error(`optimization-roster-producer-evidence-missing:${characterId}`);
-    }
-    return {
+  const grandfatheredCharacters = GRANDFATHERED_CHARACTER_IDS.map(
+    characterId => ({
       characterId,
       name: ownerName(characterId),
       optimizationObjectId: String(characterId),
-      disposition: 'included-verified-mark-producer',
-      inclusionBasis: 'in-scope-active-action-produces-wind-or-thunder-mark',
-      productionEvidence,
-      consumptionEvidence: createConsumptionEvidence(characterId),
-    };
-  });
+      disposition: 'included-grandfathered',
+      inclusionBasis: 'existing-product-scope-not-retrospectively-removed',
+      sourceIdentity: actionMappingSourceIdentity(characterId),
+    })
+  );
+  const markProducerCharacters = MARK_PRODUCER_CHARACTER_IDS.map(
+    characterId => {
+      const productionEvidence = createProductionEvidence(characterId);
+      if (productionEvidence.length === 0) {
+        throw new Error(
+          `optimization-roster-producer-evidence-missing:${characterId}`
+        );
+      }
+      return {
+        characterId,
+        name: ownerName(characterId),
+        optimizationObjectId: String(characterId),
+        disposition: 'included-verified-mark-producer',
+        inclusionBasis: 'in-scope-active-action-produces-wind-or-thunder-mark',
+        productionEvidence,
+        consumptionEvidence: createConsumptionEvidence(characterId),
+      };
+    }
+  );
   const productScenarioExcludedCharacters = PRODUCT_EXCLUDED_CHARACTER_IDS.map(
     characterId => {
       const productionEvidence = createProductionEvidence(characterId);
@@ -194,7 +204,8 @@ function createProductionEvidence(characterId) {
       depth: Number(effect.depth),
       startFrame: integerOrNull(effect.trigger?.startFrame),
       relationPath: structuredClone(effect.relationPath ?? []),
-      sourceIdentity: effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity,
+      sourceIdentity:
+        effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity,
       tuningMarkSourceIdentity: effect.tuningMark.sourceIdentity,
     }))
     .sort(sortEffectEvidence);
@@ -213,9 +224,12 @@ function createConsumptionEvidence(characterId) {
       operation: 'tuningOverlimit-consumption',
       markId: Number(effect.tuningOverlimit.markId),
       packetElementId: Number(effect.tuningOverlimit.packetElementId),
-      judgmentElementId: integerOrNull(effect.tuningOverlimit.judgmentElementId),
+      judgmentElementId: integerOrNull(
+        effect.tuningOverlimit.judgmentElementId
+      ),
       startFrame: integerOrNull(effect.trigger?.startFrame),
-      sourceIdentity: effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity,
+      sourceIdentity:
+        effect.sourceOrder?.sourceIdentity ?? effect.sourceIdentity,
     }))
     .sort(sortEffectEvidence);
 }
@@ -230,7 +244,9 @@ function collectInScopeEffects(characterId) {
   return (verifiedMechanicsPackage.actionMappings ?? [])
     .filter(mapping => Number(mapping.ownerId) === Number(characterId))
     .filter(mapping => mapping.schedulable === true)
-    .filter(mapping => !EXCLUDED_ACTION_KINDS.includes(String(mapping.actionKind)))
+    .filter(
+      mapping => !EXCLUDED_ACTION_KINDS.includes(String(mapping.actionKind))
+    )
     .flatMap(mapping => {
       const control = controlsById.get(Number(mapping.controlSkillId));
       return (control?.effects ?? []).map(effect => ({ mapping, effect }));
@@ -264,7 +280,10 @@ function sortEffectEvidence(left, right) {
     Number(left.controlSkillId) - Number(right.controlSkillId) ||
     Number(left.startFrame ?? Number.MAX_SAFE_INTEGER) -
       Number(right.startFrame ?? Number.MAX_SAFE_INTEGER) ||
-    String(left.effectIdentity).localeCompare(String(right.effectIdentity), 'en')
+    String(left.effectIdentity).localeCompare(
+      String(right.effectIdentity),
+      'en'
+    )
   );
 }
 

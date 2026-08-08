@@ -652,7 +652,7 @@ describe('Workbench view', () => {
     ).toBe('12,461');
     expect(
       wrapper.find('[data-testid="workbench-runtime-enemy-hp-state"]').text()
-    ).toBe('剩余 0');
+    ).toBe('剩余 74,318');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-delta"]')
@@ -662,7 +662,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 6,667');
+    ).toBe('剩余 26,822 / 26,822');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
     ).toBe('1 日志');
@@ -747,8 +747,10 @@ describe('Workbench view', () => {
     );
     expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
     expect(runtimeCurvePoints[0].attributes('data-curve-mode')).toBe('delta');
-    expect(runtimeCurvePoints[0].attributes('data-state-value')).toBe('0');
-    expect(runtimeCurvePoints[0].attributes('data-overrun')).toBe('3833');
+    expect(runtimeCurvePoints[0].attributes('data-state-value')).toBe(
+      '74317.698'
+    );
+    expect(runtimeCurvePoints[0].attributes('data-overrun')).toBe('0');
 
     await wrapper
       .find(
@@ -768,10 +770,10 @@ describe('Workbench view', () => {
       '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="enemyHpDamage"]'
     );
     expect(stateModeHpPoint.attributes('data-curve-mode')).toBe('state');
-    expect(stateModeHpPoint.attributes('data-value')).toBe('0');
+    expect(stateModeHpPoint.attributes('data-value')).toBe('74317.698');
     expect(stateModeHpPoint.attributes('data-cumulative')).toBe('12461');
-    expect(stateModeHpPoint.attributes('data-state-value')).toBe('0');
-    expect(stateModeHpPoint.attributes('data-overrun')).toBe('3833');
+    expect(stateModeHpPoint.attributes('data-state-value')).toBe('74317.698');
+    expect(stateModeHpPoint.attributes('data-overrun')).toBe('0');
     const stateModeSeriesRows = wrapper.findAll(
       '[data-testid="workbench-runtime-resource-chart-series"]'
     );
@@ -779,7 +781,7 @@ describe('Workbench view', () => {
       stateModeSeriesRows
         .find(row => row.attributes('data-series-key') === 'enemy-hp')
         ?.text()
-    ).toContain('剩余 0 / 溢出 3,833');
+    ).toContain('剩余 74,318 / 1点');
     expect(
       stateModeSeriesRows
         .filter(row => row.attributes('data-track-key') === 'selfEnergyChange')
@@ -808,7 +810,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-row"]').text()
-    ).toContain('普通攻击 · HP -8,628 · 韧性 0 · SP 0');
+    ).toContain('普通攻击 · HP -12,461 · 韧性 0 · SP 0');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
@@ -1456,7 +1458,7 @@ describe('Workbench view', () => {
     expect(actionResultDetailRows.delta.text()).toBe('Delta12,461');
     expect(actionResultDetailRows.cumulative.text()).toBe('累计12,461');
     expect(actionResultDetailRows['state-status'].text()).toBe(
-      '剩余 / 状态0 · raw-hp-projection'
+      '剩余 / 状态74,317.698 · raw-hp-projection'
     );
     const actionContributionPanel = wrapper.find(
       '[data-testid="workbench-action-contribution-panel"]'
@@ -6155,12 +6157,12 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-value"]')
         .text()
-    ).toBe('0');
+    ).toBe('74,318');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-overrun"]')
-        .text()
-    ).toBe('3,833');
+        .exists()
+    ).toBe(false);
     expect(
       wrapper
         .find(
@@ -7280,7 +7282,7 @@ describe('Workbench view', () => {
           '[data-testid="workbench-runtime-resource-chart-selection-primary-state"]'
         )
         .text()
-    ).toBe('累计 12,461 · 剩余 0 · 溢出 3,833');
+    ).toBe('累计 12,461 · 剩余 74,318');
     const runtimeCurveSelectionRows = Object.fromEntries(
       runtimeCurveSelection
         .findAll(
@@ -7893,15 +7895,15 @@ describe('Workbench view', () => {
     const toughnessStat = wrapper.find(
       '[data-testid="workbench-enemy-toughness-stat"]'
     );
-    expect(toughnessStat.text()).toContain('6,667 / 6,667');
+    expect(toughnessStat.text()).toContain('26,822 / 26,822');
     expect(toughnessStat.attributes('data-toughness-source-status')).toBe(
-      'toughness-config-derived-from-enemy-base-attribute'
+      'toughness-config-derived-from-client-level-growth'
     );
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 6,667');
+    ).toBe('剩余 26,822 / 26,822');
 
     await wrapper
       .find('[data-testid="workbench-enemy-toughness-multiplier-input"]')
@@ -7911,12 +7913,12 @@ describe('Workbench view', () => {
       .setValue('50');
     await nextTick();
 
-    expect(toughnessStat.text()).toContain('6,667 / 13,334');
+    expect(toughnessStat.text()).toContain('26,822 / 53,644');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 13,334');
+    ).toBe('剩余 26,822 / 53,644');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     expect(
@@ -7958,7 +7960,7 @@ describe('Workbench view', () => {
     expect(fireRow().text()).toContain('火');
     expect(fireRow().text()).toContain('0%');
     expect(fireRow().attributes('data-source-status')).toBe(
-      'azpr-enemy-base-attribute'
+      'azpr-client-level-grown-attribute'
     );
     expect(fireInput().element.value).toBe('');
 
@@ -12541,7 +12543,7 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': 'bf120b37069fbea0',
+          'data-canonical-trace-hash': '50e954f885613fb1',
           'data-canonical-trace-action-count': '44',
           'data-machine-axis-import-active': 'true',
         });
@@ -12589,7 +12591,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('bf120b37069fbea0');
+    expect(inspector.attributes('data-trace-hash')).toBe('50e954f885613fb1');
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12628,7 +12630,7 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('bf120b37069fbea0');
+        ).toBe('50e954f885613fb1');
         expect(
           wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
         ).toBe('hit');

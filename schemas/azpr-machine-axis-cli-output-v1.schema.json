@@ -10,6 +10,7 @@
     { "$ref": "#/$defs/explanation" },
     { "$ref": "#/$defs/comparison" },
     { "$ref": "#/$defs/cycle" },
+    { "$ref": "#/$defs/kill" },
     { "$ref": "#/$defs/error" }
   ],
   "$defs": {
@@ -21,7 +22,8 @@
         "input": { "type": "string", "minLength": 1 },
         "data": { "type": "string", "minLength": 1 },
         "trace": { "type": "string", "minLength": 1 },
-        "evaluation": { "type": "string", "minLength": 1 }
+        "evaluation": { "type": "string", "minLength": 1 },
+        "build": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": false
     },
@@ -172,6 +174,44 @@
         "stateClosure": { "type": "array" },
         "evidence": { "type": "object" },
         "samples": { "type": "array" },
+        "hashes": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "kill": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "contractName",
+        "kind",
+        "valid",
+        "status",
+        "issues",
+        "objectiveContract",
+        "enemyProfile",
+        "targetPolicy",
+        "score",
+        "killProof",
+        "healing",
+        "hashes"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrMachineAxisFastestKill" },
+        "kind": { "const": "azpr-machine-axis-fastest-kill-evaluation" },
+        "valid": { "type": "boolean" },
+        "status": { "enum": ["killed", "not-killed", "rejected"] },
+        "issues": { "type": "array" },
+        "objectiveContract": { "type": ["object", "null"] },
+        "enemySettlementTiming": { "type": ["object", "null"] },
+        "enemyProfile": { "type": ["object", "null"] },
+        "targetPolicy": { "type": "object" },
+        "score": { "type": ["object", "null"] },
+        "formalScore": { "type": ["number", "null"] },
+        "formalStatus": { "type": "string" },
+        "killProof": { "type": ["object", "null"] },
+        "diagnostics": { "type": ["object", "null"] },
+        "healing": { "type": ["object", "null"] },
         "hashes": { "type": "object" }
       },
       "additionalProperties": true

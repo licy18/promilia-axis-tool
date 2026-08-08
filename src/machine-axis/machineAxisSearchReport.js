@@ -36,7 +36,8 @@ export function createMachineAxisSearchReport({
       projectile: contract.scenario?.projectile ?? null,
     },
     dataIdentity: contract.dataIdentity ?? null,
-    objective: searchResult?.options?.objective ?? 'damage',
+    objective: searchResult?.options?.objective ?? 'cycle-dps-no-toughness',
+    objectiveContract: searchResult?.options?.objectiveContract ?? null,
     summary: searchResult?.summary ?? null,
     results: rows,
   };
@@ -69,6 +70,13 @@ function createResultRow({
     rank,
     teamCandidateId: entry.teamCandidateId ?? 'fixed-team',
     score: entry.score,
+    scoreDirection: entry.scoreDirection ?? 'maximize',
+    finalScoreEligible: entry.finalScoreEligible === true,
+    heuristic: {
+      value: entry.heuristicScore ?? null,
+      finalScore: false,
+      purpose: 'beam-expansion-only',
+    },
     deltaVsRank1: rank === 1 ? 0 : Number(entry.score) - Number(bestScore),
     team: projectTeam(axis),
     axis,
@@ -91,6 +99,8 @@ function createResultRow({
         null,
     },
     sampling: entry.sampling ?? null,
+    objectiveProof: entry.objectiveProof ?? null,
+    objectiveIssues: entry.objectiveIssues ?? [],
     boundariesConsumed: entry.boundariesConsumed ?? [],
     coverageTrust: coverage,
     metrics: {
@@ -99,6 +109,7 @@ function createResultRow({
       burst: metrics.burst,
       toughnessDamage: metrics.toughnessDamage,
       netToughnessDamage: metrics.netToughnessDamage,
+      healing: metrics.healing,
       resourceSurplus: metrics.resourceSurplus,
       idle: metrics.idle,
       nonExecutableActions: metrics.nonExecutableActions,
@@ -121,7 +132,7 @@ function createResultRow({
         enemy: state.enemy,
       },
       loopClosureState: createSearchLoopClosureProjection(state),
-      note: `${searchOptions.objective ?? 'damage'} objective, ${axis.scenario?.name ?? 'axis'}`,
+      note: `${searchOptions.objective ?? 'cycle-dps-no-toughness'} objective, ${axis.scenario?.name ?? 'axis'}`,
     },
   };
 }
@@ -146,6 +157,7 @@ function projectEnemyAssumptions(contract) {
     toughnessMultiplier: enemy.toughnessMultiplier ?? null,
     initialToughnessRatio: enemy.initialToughnessRatio ?? null,
     elementDefenseOverrides: enemy.elementDefenseOverrides ?? null,
+    profile: enemy.profile ?? null,
   };
 }
 

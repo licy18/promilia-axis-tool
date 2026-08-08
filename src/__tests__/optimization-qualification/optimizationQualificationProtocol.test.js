@@ -9,6 +9,7 @@ import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
 import {
   createOptimizationScenarioPolicyBinding,
@@ -147,6 +148,9 @@ function createAxis({
         },
       })),
       enemy: { enemyId: 300032 },
+      objectiveContract: createMachineAxisObjectiveContract(
+        'cycle-dps-no-toughness'
+      ),
       target: structuredClone(
         getOptimizationScenarioPolicy().assumptions.targetPolicy
       ),
@@ -1360,6 +1364,52 @@ describe('M12-B3 strict cultivation profile', () => {
       ])
     );
     expect(prepared.project).toBeNull();
+  });
+
+  it('rejects legacy objectives and evidence-open toughness timing at formal admission', () => {
+    const legacy = createAxis({ mode: 'formal' });
+    legacy.scenario.objectiveContract =
+      createMachineAxisObjectiveContract('damage');
+    const legacyIssues =
+      createOptimizationQualificationIssuesForContract(legacy);
+    expect(legacyIssues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-objective-formal-ineligible',
+      })
+    );
+
+    const withToughness = createAxis({ mode: 'formal' });
+    withToughness.scenario.objectiveContract =
+      createMachineAxisObjectiveContract('cycle-dps-with-toughness');
+    withToughness.scenario.target = structuredClone(
+      withToughness.scenario.objectiveContract.targetPolicy
+    );
+    expect(
+      createOptimizationQualificationIssuesForContract(withToughness)
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-enemy-settlement-client-order-open',
+      })
+    );
+
+    const fastestKill = createAxis({ mode: 'formal' });
+    fastestKill.scenario.objectiveContract =
+      createMachineAxisObjectiveContract('fastest-kill');
+    fastestKill.scenario.target = structuredClone(
+      fastestKill.scenario.objectiveContract.targetPolicy
+    );
+    expect(
+      createOptimizationQualificationIssuesForContract(fastestKill)
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-enemy-profile-object-required',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-enemy-settlement-client-order-open',
+        }),
+      ])
+    );
   });
 
   it('derives formal unlock from complete records, admissions, sets, bindings, counts, and hashes', async () => {

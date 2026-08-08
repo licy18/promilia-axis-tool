@@ -1069,9 +1069,9 @@ npm run test -- --run
 
 ## 10. M12-C 首个试点产品政策覆盖（2026-08-08，当前权威口径）
 
-- 首个试点固定为角色与目标全程距离 0、投射物立即命中、无限 HP 静态 Boss、Boss 不攻击，且默认关闭韧性/击破/死亡截断。该合同由 `m12c-zero-distance-passive-boss-v1` 生成，policy hash 为 `c60fb5a713a5f691`；输入、canonical data/trace、build hash、Machine Axis、formal admission、cycle replay、trial release 与 Workbench 导入必须一致携带，缺失或漂移即在搜索前拒绝。
+- 首个试点固定为角色与目标全程距离 0、投射物立即命中、无限 HP 静态 Boss、Boss 不攻击，且默认关闭韧性/击破/死亡截断。该合同由 `m12c-zero-distance-passive-boss-v1` 生成，policy hash 为 `967b0667f315db5b`；输入、canonical data/trace、build hash、Machine Axis、formal admission、cycle replay、trial release 与 Workbench 导入必须一致携带，缺失或漂移即在搜索前拒绝。
 - 专用闪击/闪避/跃击/跳跃/下落/位移动作，以及完美闪避、完美格挡/招架、极限反击和任何依赖 Boss 主动攻击的反应动作，不进入正式候选面；来源 requirement、专属 hit/effect/window 保留并以 `m12c-zero-distance-passive-boss-out-of-scope` 生成结构化 N/A。手工/研究 runtime 保留，不回退既有实现。
-- 角色候选由 `m12c-wind-thunder-mark-producer-roster-v1` 冻结，roster hash `7c96de67bf19b48e`。正式分母改为 9 个优化对象：既有 `101010/103002/109001`，可在当前动作面主动生产 750/250 印记的 `102001/107001/107002/108003/112001`，以及统一 `STARBORN`。底层来源别名共 10 个；`199001/199002` 仍只合并成一个产品对象。
+- 角色候选由 `m12c-wind-thunder-mark-producer-roster-v1` 冻结，roster hash `a690b860f0967e3d`。正式分母改为 9 个优化对象：既有 `101010/103002/109001`，可在当前动作面主动生产 750/250 印记的 `102001/107001/107002/108003/112001`，以及统一 `STARBORN`。底层来源别名共 10 个；`199001/199002` 仍只合并成一个产品对象。
 - 生产来源：`10200113` frame `211/216/220` 向 750 注入多层；`10700112@10`、`10700113@133` 含 depth=0 的 750 根；`10700212@90` 含独立 depth=0 的 750 根（不能与 `@82` 消费判断混淆）；`10800313` 与 `10800322@37` 含 250 根；`11200112@27` 含 250 根。
 - `108001` 只有 150 生产根，750 仅存在于消费/overdrive 路径；`111001` 没有 250/750 生产根，仅通过 judgment 消费已有印记。两者以 `m12c-no-in-scope-wind-or-thunder-mark-production` 标为 `product-scenario-excluded`，保留源数据、手工 runtime 与覆盖清单，但不进入候选 roster、完整 character acceptance、optimization-ready 门禁或正式绑定矩阵。
 - 因此末音签收后剩余普通角色为 5 个：`102001/107001/107002/108003/112001`；不开始下一个角色，先停在末音产品视觉签收点。奇波/灵子/装备/套装分母仍为 `43/62/137/12`，Kibo DNA 固定 `[]`；M12-C 与正式搜索继续锁定。
@@ -1080,7 +1080,7 @@ npm run test -- --run
 
 - `set-skill:3:4` 的正式文本“普攻命中后自身攻击力 +1%、12 秒、最多 10 层”与当前唯一可达控制图冲突。全量反查 212,053 份 SkillList JSON 与 14,779 个战斗元素，没有第二个 `19998005` 绑定，也没有该 ATK/12s/10 层精确签名；该文本按产品裁决登记为旧数据，不再驱动运行时。
 - 当前可执行图为权威来源：`set-skill:3:2` 使自身 MAXHP +6.2%；四件套常驻根 `199999086` 使自身 MAXHP +2%；`199999022 -> 199999023` 在每 5 次 `AfterReceiveDamage` 后再给予自身 MAXHP +5%，以 Cover 语义保持。常驻 +2% 已进入静态装配运行时；受击分支来源已闭合，但在 `m12c-zero-distance-passive-boss-v1` 的 Boss 不攻击场景中结构化 N/A。
-- 套装 N/A 不使用独立硬编码：证据、灵子/套装生成器和资格门禁共同绑定 scenario policy `c60fb5a713a5f691` 与 roster policy `7c96de67bf19b48e`，政策漂移即 fail-closed。证据文件 `set-three-source-identity-evidence.json` 为 13,883B，SHA-256 `74b91a85a55c20c1f9a3c2fe54c04d5a197070be6e03ca6505d94cdae2c43d6c`。
+- 套装 N/A 不使用独立硬编码：证据、灵子/套装生成器和资格门禁共同绑定 scenario policy `967b0667f315db5b` 与 roster policy `a690b860f0967e3d`，政策漂移即 fail-closed。证据文件 `set-three-source-identity-evidence.json` 为 13,883B，SHA-256 `4649262068c0e4a4ff860b0a059d673072d9a180317daf7d764c0e9b4d453577`。
 - 生成资格现为套装技能 `12/12 optimization-ready`、视觉目录 `254/254`；套装阻断清零。全局剩余 16 个唯一阻断均属于角色（1 个静态 profile、6 个验收未发布、9 个角色未 optimization-ready），因此 M12-C 与正式搜索仍锁定。
 - E21 已完成；M12-C 前不再有套装机制任务。下一步仍是末音产品视觉签收、其余 5 名正式角色、STARBORN 统一对象、绑定矩阵与 trial-release/循环重放总门禁。
 
@@ -1093,3 +1093,12 @@ npm run test -- --run
 - 当前资格分母 `9/43/62/137/12`，qualification source/roster/manifests/ledger/binding/catalog=`0a4b69e0716de917/a3edc962effdcba0/1cb4029bc8a8c91f/c70e8c978317e184/8d6ae083ad89db3b/4346c39d4d818730`，全局剩余 16 个 blocker 均为角色项。verified package=`ed65d281dc63732353605142ee3f8ebebd7329618def661d8477b48d266e6e7e`，文件 SHA-256=`1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0`。
 - 当前执行边界不变：先等待末音产品视觉复验，不启动 108003、其他角色、STARBORN、E22、M12-C 或正式搜索；Kibo DNA 继续固定 `[]`。
 - 验证已收口：串行 Vitest `192/192` 文件、`1472/1472` 用例；verified-combat/character-combat 生成器对拍、scenario/roster policy、character acceptance、visual acceptance、optimization qualification、production imports、Workbench data、action status、applied source bindings、Kibo headless 均 clean；production build 1878 modules 通过。
+
+## 13. M12 优化器正式主指标合同重构（2026-08-08）
+
+- 正式主指标固定为 `cycle-dps-no-toughness`、`cycle-dps-with-toughness`、`fastest-kill`，默认值为 `cycle-dps-no-toughness`。旧 `damage`、`burst`、`toughness` 仅保留为 `legacy-diagnostic`，不能进入 formal admission、trial release 或 M12-C。
+- 无韧性循环使用无限 HP、权威等级与实际防御，关闭韧性、击破和死亡截断；有韧性循环使用无限 HP、实际防御/韧性/恢复/破韧规则；最快击杀使用实际 HP、防御、韧性与首次致死 cursor。三者均固定距离 0、目标静止且不攻击。
+- `AzPrEnemyProfile` 严格绑定 enemyId、level、来源身份/hash、实际 HP/DEF/MDEF/元素防御/韧性与 break rules。等级成长由已合并的 enemy-level pipeline 提供，优化器不得补默认值或伪造档案。
+- 当前可审计运行时按“破韧发生包 1x、同帧后续 broken 包 2x、破韧结束右开”结算；客户端原生同帧与恢复顺序证据尚未闭合，因此有韧循环与最快击杀保持 `machine-axis-enemy-settlement-client-order-open`，诊断 proof 的 `formalScore` 为 null。
+- batch/search/cycle/kill 统一统计 requested/effective healing、overhealing、effective HPS、settlement count，以及 source actor/action 贡献。护盾、suppressed 事件与生命伤害不混入治疗统计。
+- objective、target policy、enemy profile 与 settlement contract 进入 canonical input/data/trace/build hash。M12-C 与正式搜索继续锁定，本阶段只收口合同与组合运行时。

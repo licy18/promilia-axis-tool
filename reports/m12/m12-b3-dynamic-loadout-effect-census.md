@@ -1,6 +1,6 @@
 # M12-B3-C Dynamic Loadout Effect Census
 
-- Census: `82dce89508283d20`
+- Census: `bf1b9ef761ed1db5`
 - Soul essences: 62
 - Set skills: 12
 - Runtime applied: 74

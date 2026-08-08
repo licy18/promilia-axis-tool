@@ -791,6 +791,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     toughnessMultiplier: enemyConfig.toughnessMultiplier,
     initialToughnessRatio: enemyConfig.initialToughnessRatio,
     elementDefenseOverrides: enemyConfig.elementDefenseOverrides,
+    profile: enemyConfig.profile,
   });
   const titleAction = actionDrafts[0];
   const firstSkill = titleAction
@@ -972,6 +973,9 @@ export function normalizeWorkbenchEnemyConfig(config = {}) {
     elementDefenseOverrides: normalizeElementDefenseOverrides(
       source.elementDefenseOverrides
     ),
+    ...(source.profile == null
+      ? {}
+      : { profile: JSON.parse(JSON.stringify(source.profile)) }),
   };
 }
 

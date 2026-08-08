@@ -72,7 +72,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     'cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd',
   verifiedMechanics:
-    '1f3ed08b56ebf56c48ecf1f7909dbd537d172918253b0f6871b3048540f44aa0',
+    '2fc58e7e84d8c42f3382f8022330049b768aa9e6d75c99318162004558709543',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -156,7 +156,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   elementFormula:
     'ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e',
   setThreeSourceIdentityEvidence:
-    '74b91a85a55c20c1f9a3c2fe54c04d5a197070be6e03ca6505d94cdae2c43d6c',
+    '4649262068c0e4a4ff860b0a059d673072d9a180317daf7d764c0e9b4d453577',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({

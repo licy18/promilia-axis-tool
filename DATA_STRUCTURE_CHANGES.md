@@ -27833,3 +27833,15 @@ EnemyLevelStatResolution
 编译后 `levelScaling.stats` 保存完整客户端等级成长基线。为兼容既有 runtime 合同，`scenario.enemy.stats` 的 HP/双防仍是等级成长基线，由 verified runtime 再应用 `hpMultiplier / defenseMultiplier`；韧性上限和初始值则继续在编译时应用 `toughnessMultiplier`。新增 `effectiveStats` 统一表示最终 Workbench 面板：HP、双防和韧性均已应用各自最终倍率。`effectiveStats` 只供面板与审计消费，不重复进入伤害结算。
 
 `scenario.enemy.level` 同时保留为 verified damage runtime 的 `targetLevel`；它对防御因子与等级压制的影响和属性成长是两条独立消费链。缺 profile、缺默认 pack 或等级越界时，解析器令 `stats / effectiveStats` 的各数值字段为 `null`，Workbench 显示缺证据状态，compiler 不回退原始模板面板、不插值、不外推。WorkbenchProjectFile schemaVersion 不升级；项目仍只持久化 enemy ID、level 与最终倍率，profile 由生成 game data 在导入、canonical、Machine Axis、cycle 和草稿 round-trip 时重新解析。
+
+## 458. Machine Axis primary objective / enemy profile / healing contracts
+
+Machine Axis 新增严格、版本化的 `AzPrMachineAxisObjectiveContract` 与 `AzPrMachineAxisObjectivePolicy`。每个 objective 保存 `objectiveId/classification/formalEligible/scoring/proofRequirements/targetPolicy/objectiveHash`；三项 primary 与三项 legacy-diagnostic 的定义、默认值和目标政策进入 scenario policy 与 canonical input/data/trace/build hash。
+
+`scenario.enemy.profile` 使用 `AzPrEnemyProfile` consumer contract，保存 enemyId、level、profileHash、来源 identity/hash/status、实际 maxHp/DEF/MDEF/maxToughness/元素防御与 break rules。该结构不重复计算等级成长；合并后的 enemy-level pipeline 负责构造权威输入。
+
+`AzPrMachineAxisFastestKill` v1 输出首次致死 proof：`lethalFrame/timeMs/cursor/sourceActorId/sourceActionId/hitIdentity/requestedHpDamage/effectiveHpDamage/overkill`。未击杀候选不生成正式 TTK；致死后不再接受 HP 或 toughness settlement。
+
+canonical damage event 增加 `preDefenseValue/requestedHpDamage/effectiveHpDamage/overkill/inBreakForHpDamage/hpDamageMultiplier/toughnessBefore/toughnessAfter/breakTriggered/deathTriggered/deathState/settlementCursor`。Cycle 报告保存逐包 settlement 与敌人状态迁移，边界包括 HP/韧性、defeated、break phase、恢复计时与 profile 来源。
+
+batch/search/cycle/kill 的 `metrics.healing` 统一为 requested/effective healing、overhealing、effectiveHps、settlementCount 与 source actor/action 聚合。只消费 canonical 实际治疗 settlement；shield、suppressed 和 vital damage 均明确排除。

@@ -131,6 +131,16 @@ export function createCanonicalHeadlessCombatCore({
     const trace = createCanonicalCombatTrace({ compilation, simulation });
     const evaluation = createCanonicalCombatEvaluation(simulation);
     const traceHash = hashCanonicalValue(trace);
+    const buildHash = hashCanonicalValue({
+      objectiveContract:
+        compilation.scenario.combatScenario?.objectiveContract ?? null,
+      optimizationScenarioPolicy:
+        compilation.scenario.combatScenario?.optimizationScenarioPolicy ?? null,
+      enemyProfile: compilation.scenario.enemy?.profile ?? null,
+      inputHash: compilation.hashes.input,
+      dataHash: compilation.hashes.data,
+      traceHash,
+    });
     return {
       schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
       contractName: CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT,
@@ -143,6 +153,7 @@ export function createCanonicalHeadlessCombatCore({
         ...compilation.hashes,
         trace: traceHash,
         evaluation: hashCanonicalValue(evaluation),
+        build: buildHash,
       },
       traceHash,
       inputHash: compilation.hashes.input,
@@ -222,6 +233,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       durationMs: simulation.scenario?.durationMs ?? 0,
       frameRate: Number(effectiveScenario.time?.fps) || 60,
       enemyId: simulation.scenario?.enemyId ?? null,
+      enemyProfile: projectEnemyProfileIdentity(
+        effectiveScenario.enemy?.profile
+      ),
       actorIds: (effectiveScenario.actors ?? []).map(actor => actor.id),
       ...(effectiveScenario.combatScenario?.target == null
         ? {}
@@ -231,6 +245,12 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
         : {
             optimizationScenarioPolicy:
               effectiveScenario.combatScenario.optimizationScenarioPolicy,
+          }),
+      ...(effectiveScenario.combatScenario?.objectiveContract == null
+        ? {}
+        : {
+            objectiveContract:
+              effectiveScenario.combatScenario.objectiveContract,
           }),
     },
     critical: effectiveScenario.combatScenario?.critical ?? null,
@@ -537,6 +557,8 @@ function projectRuntimePayload(payload = null) {
     'confidence',
     'change',
     'requestedChange',
+    'requestedHeal',
+    'appliedHeal',
     'overheal',
     'beforeValue',
     'afterValue',
@@ -646,6 +668,17 @@ function projectDamageEvent(event = {}) {
       ? [...event.sourceSequencePath]
       : null,
     rawDamage: event.rawDamage ?? 0,
+    requestedHpDamage: event.requestedHpDamage ?? null,
+    effectiveHpDamage: event.effectiveHpDamage ?? event.rawDamage ?? 0,
+    overkill: event.overkill ?? 0,
+    inBreakForHpDamage: event.inBreakForHpDamage ?? null,
+    hpDamageMultiplier: event.hpDamageMultiplier ?? null,
+    toughnessBefore: event.toughnessBefore ?? null,
+    toughnessAfter: event.toughnessAfter ?? null,
+    breakTriggered: event.breakTriggered === true,
+    deathTriggered: event.deathTriggered === true,
+    deathState: event.deathState ?? null,
+    settlementCursor: event.settlementCursor ?? null,
     toughnessDamage: event.toughnessDamage ?? 0,
     formula: {
       version: event.formulaVersion ?? null,
@@ -656,6 +689,10 @@ function projectDamageEvent(event = {}) {
       verifiedResult: {
         mode: verifiedResult.mode ?? null,
         value: verifiedResult.value ?? null,
+        preDefenseValue:
+          verifiedResult.trace?.find(
+            step => step?.name === 'world_event_conflict'
+          )?.value ?? null,
         raw: verifiedResult.raw ?? null,
         preShieldRaw: verifiedResult.preShieldRaw ?? null,
         integer: verifiedResult.integer ?? null,
@@ -1115,6 +1152,8 @@ function createDataIdentity({ scenario, gameData }) {
       scenario.mechanicsProfileCatalog?.catalogVersion ?? null,
     optimizationScenarioPolicy:
       scenario.combatScenario?.optimizationScenarioPolicy ?? null,
+    objectiveContract: scenario.combatScenario?.objectiveContract ?? null,
+    enemyProfile: projectEnemyProfileIdentity(scenario.enemy?.profile),
     gameDataReferenceIdentity:
       scenario.gameDataCatalog?.referenceIdentity ?? null,
     gameDataSummary: {
@@ -1124,6 +1163,21 @@ function createDataIdentity({ scenario, gameData }) {
       elementCount: gameData.elements?.length ?? 0,
     },
   });
+}
+
+function projectEnemyProfileIdentity(profile) {
+  if (!profile || typeof profile !== 'object') return null;
+  return {
+    schemaVersion: profile.schemaVersion ?? null,
+    contractName: profile.contractName ?? null,
+    profileId: profile.profileId ?? null,
+    profileHash: profile.profileHash ?? null,
+    enemyId: profile.enemyId ?? null,
+    level: profile.level ?? null,
+    sourceStatus: profile.source?.status ?? null,
+    sourceIdentity: profile.source?.identity ?? null,
+    sourceHash: profile.source?.hash ?? null,
+  };
 }
 
 function accumulateContribution(target, identity, event) {

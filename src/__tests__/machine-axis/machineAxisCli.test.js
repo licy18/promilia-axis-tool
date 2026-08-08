@@ -429,8 +429,14 @@ describe('Machine Axis CLI', () => {
     ['search', '--top-n', 'x'],
     ['search', '--max-depth', '-1'],
     ['search', '--objective', 'nope'],
+    ['cycle', '-', '--objective', 'damage'],
+    ['cycle', '-', '--objective', 'fastest-kill'],
+    ['kill', '-', '--objective', 'damage'],
+    ['kill', '-', '--objective', 'cycle-dps-with-toughness'],
+    ['kill', '-', '--objective', 'nope'],
     ['search', '-', '--format', 'jsonl'],
     ['cycle', '-', '--format', 'jsonl'],
+    ['kill', '-', '--format', 'jsonl'],
   ])(
     'rejects valued-option usage before reading input or calling the service',
     async (...args) => {

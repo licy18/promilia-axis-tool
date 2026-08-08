@@ -9,6 +9,16 @@ import {
   validateMachineAxisContract,
 } from './machineAxisContract';
 import { createSearchStateSnapshot } from './machineAxisSearchState';
+import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
+import {
+  MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
+  createMachineAxisObjectiveContract,
+  validateMachineAxisObjectiveContract,
+} from './machineAxisObjectiveContract';
+import {
+  getMachineAxisEnemySettlementContract,
+  getMachineAxisEnemySettlementFormalReadiness,
+} from './machineAxisEnemySettlementContract';
 
 export const MACHINE_AXIS_CYCLE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CYCLE_CONTRACT_NAME = 'AzPrMachineAxisCycleDps';
@@ -48,6 +58,8 @@ export function normalizeMachineAxisCycleEnvelope(value = {}) {
       endFrame: integerOrNull(loop.endFrame),
     },
     options: {
+      objective:
+        textOrNull(options.objective) ?? MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
       criticalPolicy: textOrNull(options.criticalPolicy) ?? 'expected',
       seeds: normalizeSeeds(options.seeds),
     },
@@ -209,7 +221,7 @@ export function validateMachineAxisCycleEnvelope(value = {}) {
   }
   if (isRecord(source.options)) {
     for (const key of Object.keys(source.options)) {
-      if (!['criticalPolicy', 'seeds'].includes(key)) {
+      if (!['objective', 'criticalPolicy', 'seeds'].includes(key)) {
         issues.push(
           cycleIssue(
             'machine-axis-cycle-additional-property',
@@ -255,6 +267,19 @@ export function validateMachineAxisCycleEnvelope(value = {}) {
         'machine-axis-cycle-critical-policy-invalid',
         'options.criticalPolicy',
         `Unsupported cycle critical policy: ${policy}`
+      )
+    );
+  }
+  const objective =
+    source.options?.objective ?? MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE;
+  if (
+    !['cycle-dps-no-toughness', 'cycle-dps-with-toughness'].includes(objective)
+  ) {
+    issues.push(
+      cycleIssue(
+        'machine-axis-cycle-objective-invalid',
+        'options.objective',
+        `Cycle evaluator does not support objective: ${objective}`
       )
     );
   }
@@ -304,6 +329,59 @@ export function createMachineAxisCycleEvaluator({
       });
     }
     const normalized = validation.normalized;
+    const objectiveContract =
+      runtimeOptions.objectiveContract ??
+      createMachineAxisObjectiveContract(normalized.options.objective);
+    const objectiveValidation =
+      validateMachineAxisObjectiveContract(objectiveContract);
+    if (
+      !objectiveValidation.valid ||
+      objectiveValidation.contract.objectiveId !== normalized.options.objective
+    ) {
+      return createRejectedReport({
+        envelope: normalized,
+        issues: [
+          ...objectiveValidation.issues.map(entry =>
+            cycleIssue(
+              entry.code,
+              `objectiveContract${entry.field ? `.${entry.field}` : ''}`,
+              entry.message
+            )
+          ),
+          ...(objectiveValidation.valid &&
+          objectiveValidation.contract.objectiveId !==
+            normalized.options.objective
+            ? [
+                cycleIssue(
+                  'machine-axis-cycle-objective-contract-mismatch',
+                  'objectiveContract.objectiveId',
+                  'Cycle objective does not match the supplied objective contract'
+                ),
+              ]
+            : []),
+        ],
+        objectiveContract,
+      });
+    }
+    const settlementContract = getMachineAxisEnemySettlementContract();
+    const settlementReadiness = getMachineAxisEnemySettlementFormalReadiness();
+    if (
+      normalized.options.objective === 'cycle-dps-with-toughness' &&
+      settlementReadiness.formalReady !== true &&
+      runtimeOptions.allowUnverifiedRuntimeTiming !== true
+    ) {
+      return createRejectedReport({
+        envelope: normalized,
+        issues: settlementReadiness.issues.map(entry =>
+          cycleIssue(entry.code, entry.path, entry.message, {
+            contractId: entry.contractId,
+            contractHash: entry.contractHash,
+          })
+        ),
+        objectiveContract: objectiveValidation.contract,
+        settlementContract,
+      });
+    }
     const criticalPolicy =
       runtimeOptions.criticalPolicy ?? normalized.options.criticalPolicy;
     const requestedSeeds = normalizeSeeds(
@@ -338,6 +416,7 @@ export function createMachineAxisCycleEvaluator({
         prepareRun,
         simulateBoundary,
         runtimeOptions,
+        objectiveContract: objectiveValidation.contract,
       })
     );
     const rejected = samples.filter(sample => sample.valid !== true);
@@ -350,6 +429,11 @@ export function createMachineAxisCycleEvaluator({
           seeds: seeds.filter(seed => seed != null),
         },
         samples,
+        objectiveContract: objectiveValidation.contract,
+        settlementContract:
+          normalized.options.objective === 'cycle-dps-with-toughness'
+            ? settlementContract
+            : null,
       });
     }
     return createAcceptedReport({
@@ -357,6 +441,11 @@ export function createMachineAxisCycleEvaluator({
       criticalPolicy,
       seeds,
       samples,
+      objectiveContract: objectiveValidation.contract,
+      settlementContract:
+        normalized.options.objective === 'cycle-dps-with-toughness'
+          ? settlementContract
+          : null,
     });
   }
 
@@ -379,11 +468,31 @@ export function collectCycleDamageContributions(
   const byActor = new Map();
   const byAction = new Map();
   const byHit = new Map();
+  const enemySettlementPackets = [];
+  const enemyStateTransitions = [];
   let hpDamage = 0;
   let combatHitCount = 0;
   for (const event of damageEvents ?? []) {
-    if (event?.stateEventKind) continue;
     const frame = resolveDamageFrame(event, fps);
+    if (
+      event?.stateEventKind &&
+      frame != null &&
+      frame >= normalizedStart &&
+      frame < normalizedEnd
+    ) {
+      enemyStateTransitions.push({
+        stateEventKind: event.stateEventKind,
+        absoluteFrame: frame,
+        timeMs: finiteNumberOrNull(event.timeMs),
+        runtimePhasePriority: finiteNumberOrNull(event.runtimePhasePriority),
+        runtimePriority: finiteNumberOrNull(event.runtimePriority),
+        runtimeSequenceIndex: finiteNumberOrNull(event.runtimeSequenceIndex),
+        toughnessDamage: finiteNumberOrNull(event.toughnessDamage) ?? 0,
+        weaknessResult: event.formula?.weaknessResult ?? null,
+      });
+      continue;
+    }
+    if (event?.stateEventKind) continue;
     const damage = finiteNumberOrNull(event?.rawDamage);
     if (
       frame == null ||
@@ -399,6 +508,29 @@ export function collectCycleDamageContributions(
     const hitIdentity = String(
       event.hitIdentity ?? event.hitKey ?? `hit-${event.hitIndex ?? '?'}`
     );
+    enemySettlementPackets.push({
+      absoluteFrame: frame,
+      timeMs: finiteNumberOrNull(event.timeMs),
+      runtimePhasePriority: finiteNumberOrNull(event.runtimePhasePriority),
+      runtimePriority: finiteNumberOrNull(event.runtimePriority),
+      runtimeSequenceIndex: finiteNumberOrNull(event.runtimeSequenceIndex),
+      actionId,
+      actorId,
+      hitIdentity,
+      preDefenseHpDamage: finiteNumberOrNull(
+        event.formula?.verifiedResult?.preDefenseValue
+      ),
+      requestedHpDamage: finiteNumberOrNull(event.requestedHpDamage),
+      effectiveHpDamage: finiteNumberOrNull(event.effectiveHpDamage) ?? damage,
+      overkill: finiteNumberOrNull(event.overkill) ?? 0,
+      inBreakForHpDamage: event.inBreakForHpDamage === true,
+      hpDamageMultiplier: finiteNumberOrNull(event.hpDamageMultiplier),
+      toughnessBefore: finiteNumberOrNull(event.toughnessBefore),
+      toughnessAfter: finiteNumberOrNull(event.toughnessAfter),
+      toughnessDamage: finiteNumberOrNull(event.toughnessDamage) ?? 0,
+      breakTriggered: event.breakTriggered === true,
+      deathTriggered: event.deathTriggered === true,
+    });
     hpDamage += damage;
     combatHitCount += 1;
     addContribution(byActor, actorId, {
@@ -435,6 +567,8 @@ export function collectCycleDamageContributions(
     byActor: finalizeContributions(byActor),
     byAction: finalizeContributions(byAction),
     byHit: finalizeContributions(byHit),
+    enemySettlementPackets,
+    enemyStateTransitions,
   };
 }
 
@@ -523,6 +657,7 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
     ['kiboPassiveRuntime', normalizeKiboPassiveRuntimeState],
     ['targetStates', normalizeTargetState],
     ['specialStates', normalizeSpecialState],
+    ['enemy', normalizeEnemyBoundaryState],
     ['shields', normalizeShieldState],
     ['pendingEvents', normalizePendingState],
   ];
@@ -656,11 +791,13 @@ function evaluateCycleSample({
   prepareRun,
   simulateBoundary,
   runtimeOptions,
+  objectiveContract,
 }) {
   const firstContract = createCycleScenarioContract(
     envelope.contract,
     criticalPolicy,
-    seed
+    seed,
+    objectiveContract
   );
   let firstPrepared;
   try {
@@ -687,8 +824,13 @@ function evaluateCycleSample({
   });
   if (!loopPlan.valid) return rejectedSample(seed, loopPlan.issues);
 
-  const sampledFirstCycle = collectCycleDamageContributions(
-    firstPrepared.run.trace.damage,
+  const sampledFirstCycle = attachCycleHealing(
+    collectCycleDamageContributions(firstPrepared.run.trace.damage, {
+      startFrame: envelope.loop.startFrame,
+      endFrame: envelope.loop.endFrame,
+      fps: firstContract.scenario.fps,
+    }),
+    firstPrepared.run,
     {
       startFrame: envelope.loop.startFrame,
       endFrame: envelope.loop.endFrame,
@@ -776,16 +918,27 @@ function evaluateCycleSample({
       ),
     ]);
   }
-  const proofFirstCycle = collectCycleDamageContributions(
-    replayPrepared.run.trace.damage,
+  const proofFirstCycle = attachCycleHealing(
+    collectCycleDamageContributions(replayPrepared.run.trace.damage, {
+      startFrame: envelope.loop.startFrame,
+      endFrame: envelope.loop.endFrame,
+      fps: firstContract.scenario.fps,
+    }),
+    replayPrepared.run,
     {
       startFrame: envelope.loop.startFrame,
       endFrame: envelope.loop.endFrame,
       fps: firstContract.scenario.fps,
     }
   );
-  const secondCycle = collectCycleDamageContributions(
-    replayPrepared.run.trace.damage,
+  const secondCycle = attachCycleHealing(
+    collectCycleDamageContributions(replayPrepared.run.trace.damage, {
+      startFrame: envelope.loop.endFrame,
+      endFrame: secondEndFrame,
+      fps: firstContract.scenario.fps,
+      actionIdMap: loopPlan.secondToSourceActionId,
+    }),
+    replayPrepared.run,
     {
       startFrame: envelope.loop.endFrame,
       endFrame: secondEndFrame,
@@ -1221,22 +1374,30 @@ function projectResolvedActionForm(value) {
   };
 }
 
-function createCycleScenarioContract(contract, criticalPolicy, seed) {
+function createCycleScenarioContract(
+  contract,
+  criticalPolicy,
+  seed,
+  objectiveContract
+) {
   const value = structuredClone(contract);
   value.scenario.critical = {
     policy: criticalPolicy,
     seed: criticalPolicy === 'sampled' ? seed : null,
   };
-  value.scenario.target = {
-    hpMode: 'infinite',
-    toughnessMode: 'disabled',
-    breakMode: 'disabled',
-    deathTruncation: 'disabled',
-  };
+  value.scenario.objectiveContract = structuredClone(objectiveContract);
+  value.scenario.target = structuredClone(objectiveContract.targetPolicy);
   return value;
 }
 
-function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
+function createAcceptedReport({
+  envelope,
+  criticalPolicy,
+  seeds,
+  samples,
+  objectiveContract,
+  settlementContract,
+}) {
   const fps = Number(envelope.contract.scenario.fps) || 60;
   const durationFrames = envelope.loop.endFrame - envelope.loop.startFrame;
   const aggregate = aggregateSamples(samples);
@@ -1259,7 +1420,9 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
     status: 'closed',
     issues: [],
     warnings,
-    assumptions: DEFAULT_CYCLE_ASSUMPTIONS,
+    objectiveContract,
+    enemySettlementTiming: settlementContract,
+    assumptions: createCycleAssumptions(objectiveContract),
     critical: {
       policy: criticalPolicy,
       seeds: criticalPolicy === 'sampled' ? seeds : [],
@@ -1286,7 +1449,18 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
         aggregate.hpDamage / Math.max(VALUE_TOLERANCE, durationFrames / fps)
       ),
       combatHitCount: aggregate.combatHitCount,
+      healing: aggregate.healing,
     },
+    formalScore:
+      settlementContract?.evidence?.formalReady === false
+        ? null
+        : roundMetric(
+            aggregate.hpDamage / Math.max(VALUE_TOLERANCE, durationFrames / fps)
+          ),
+    formalStatus:
+      settlementContract?.evidence?.formalReady === false
+        ? 'blocked-runtime-semantics-evidence-open'
+        : 'formal-score-ready',
     sampleStatistics,
     contributions: aggregate.contributions,
     replayProof:
@@ -1325,7 +1499,18 @@ function createAcceptedReport({ envelope, criticalPolicy, seeds, samples }) {
     },
     hashes: createAggregateHashes(samples),
   };
+  value.hashes.build = hashCanonicalValue({
+    objectiveContract,
+    optimizationScenarioPolicy:
+      envelope.contract.scenario?.optimizationScenarioPolicy ?? null,
+    enemyProfile: envelope.contract.scenario?.enemy?.profile ?? null,
+    inputHash: value.hashes.input,
+    dataHash: value.hashes.data,
+    traceHash: value.hashes.trace,
+  });
   value.hashes.cycle = hashCanonicalValue({
+    objectiveContract: value.objectiveContract,
+    enemySettlementTiming: value.enemySettlementTiming,
     assumptions: value.assumptions,
     critical: value.critical,
     loop: value.loop,
@@ -1345,6 +1530,8 @@ function createRejectedReport({
   issues,
   critical = null,
   samples = [],
+  objectiveContract = null,
+  settlementContract = null,
 }) {
   return {
     schemaVersion: MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
@@ -1354,7 +1541,9 @@ function createRejectedReport({
     status: 'rejected',
     issues: dedupeIssues(issues ?? []),
     warnings: [],
-    assumptions: DEFAULT_CYCLE_ASSUMPTIONS,
+    objectiveContract,
+    enemySettlementTiming: settlementContract,
+    assumptions: createCycleAssumptions(objectiveContract),
     critical,
     loop: isRecord(envelope?.loop)
       ? {
@@ -1369,8 +1558,20 @@ function createRejectedReport({
       data: null,
       trace: null,
       evaluation: null,
+      build: null,
       cycle: null,
     },
+  };
+}
+
+function createCycleAssumptions(objectiveContract) {
+  const target = objectiveContract?.targetPolicy;
+  if (!target) return DEFAULT_CYCLE_ASSUMPTIONS;
+  return {
+    enemyHp: target.hpMode,
+    toughness: target.toughnessMode,
+    break: target.breakMode,
+    deathTruncation: target.deathTruncation,
   };
 }
 
@@ -1384,14 +1585,44 @@ function aggregateSamples(samples) {
     byActor: aggregateContributionDimension(samples, 'byActor'),
     byAction: aggregateContributionDimension(samples, 'byAction'),
     byHit: aggregateContributionDimension(samples, 'byHit'),
+    healingBySourceActor: aggregateHealingContributionDimension(
+      samples,
+      'bySourceActor'
+    ),
+    healingBySourceAction: aggregateHealingContributionDimension(
+      samples,
+      'bySourceAction'
+    ),
   };
-  for (const rows of Object.values(contributions)) {
+  for (const rows of [
+    contributions.byActor,
+    contributions.byAction,
+    contributions.byHit,
+  ]) {
     reconcileContributionTotal(rows, roundedHpDamage);
   }
+  const healing = {
+    requestedHealing: roundMetric(
+      mean(samples.map(sample => sample.firstCycle.healing?.requestedHealing))
+    ),
+    effectiveHealing: roundMetric(
+      mean(samples.map(sample => sample.firstCycle.healing?.effectiveHealing))
+    ),
+    overhealing: roundMetric(
+      mean(samples.map(sample => sample.firstCycle.healing?.overhealing))
+    ),
+    effectiveHps: roundMetric(
+      mean(samples.map(sample => sample.firstCycle.healing?.effectiveHps))
+    ),
+    settlementCount: roundMetric(
+      mean(samples.map(sample => sample.firstCycle.healing?.settlementCount))
+    ),
+  };
   return {
     hpDamage: roundedHpDamage,
     combatHitCount: roundMetric(combatHitCount),
     contributions,
+    healing,
   };
 }
 
@@ -1407,7 +1638,8 @@ function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
     )
   );
   const contributionConservation = Object.fromEntries(
-    Object.entries(aggregate.contributions).map(([dimension, rows]) => {
+    ['byActor', 'byAction', 'byHit'].map(dimension => {
+      const rows = aggregate.contributions[dimension] ?? [];
       const contributionMean = roundMetric(
         rows.reduce((sum, row) => sum + (Number(row.hpDamage) || 0), 0)
       );
@@ -1423,11 +1655,45 @@ function createCycleSampleStatistics({ samples, durationSeconds, aggregate }) {
       ];
     })
   );
+  const healingContributionConservation = Object.fromEntries(
+    ['healingBySourceActor', 'healingBySourceAction'].map(dimension => {
+      const rows = aggregate.contributions[dimension] ?? [];
+      const contributionMean = roundMetric(
+        rows.reduce((sum, row) => sum + (Number(row.effectiveHealing) || 0), 0)
+      );
+      const sampleMean = aggregate.healing.effectiveHealing;
+      const difference = roundMetric(contributionMean - sampleMean);
+      return [
+        dimension,
+        {
+          sampleMean,
+          contributionMean,
+          difference,
+          conserved: Math.abs(difference) <= VALUE_TOLERANCE,
+        },
+      ];
+    })
+  );
   return {
     sampleCount: samples.length,
     loopHpDamage,
     cycleDps,
+    healing: {
+      requestedHealing: describeCycleSampleValues(
+        samples.map(sample => sample.firstCycle.healing?.requestedHealing ?? 0)
+      ),
+      effectiveHealing: describeCycleSampleValues(
+        samples.map(sample => sample.firstCycle.healing?.effectiveHealing ?? 0)
+      ),
+      overhealing: describeCycleSampleValues(
+        samples.map(sample => sample.firstCycle.healing?.overhealing ?? 0)
+      ),
+      effectiveHps: describeCycleSampleValues(
+        samples.map(sample => sample.firstCycle.healing?.effectiveHps ?? 0)
+      ),
+    },
     contributionConservation,
+    healingContributionConservation,
   };
 }
 
@@ -1504,6 +1770,54 @@ function aggregateContributionDimension(samples, key) {
       sampleCount: samples.length,
     }))
     .sort((left, right) => left.identity.localeCompare(right.identity, 'en'));
+}
+
+function aggregateHealingContributionDimension(samples, key) {
+  const byIdentity = new Map();
+  for (const sample of samples) {
+    for (const row of sample.firstCycle.healing?.[key] ?? []) {
+      const identity = String(row.identity ?? 'unattributed');
+      const aggregate = byIdentity.get(identity) ?? {
+        ...row,
+        requestedHealing: 0,
+        effectiveHealing: 0,
+        overhealing: 0,
+        effectiveHps: 0,
+        settlementCount: 0,
+      };
+      for (const field of [
+        'requestedHealing',
+        'effectiveHealing',
+        'overhealing',
+        'effectiveHps',
+        'settlementCount',
+      ]) {
+        aggregate[field] += Number(row[field]) || 0;
+      }
+      byIdentity.set(identity, aggregate);
+    }
+  }
+  return [...byIdentity.values()]
+    .map(row => ({
+      ...row,
+      requestedHealing: roundMetric(row.requestedHealing / samples.length),
+      effectiveHealing: roundMetric(row.effectiveHealing / samples.length),
+      overhealing: roundMetric(row.overhealing / samples.length),
+      effectiveHps: roundMetric(row.effectiveHps / samples.length),
+      settlementCount: roundMetric(row.settlementCount / samples.length),
+      sampleCount: samples.length,
+    }))
+    .sort((left, right) => left.identity.localeCompare(right.identity, 'en'));
+}
+
+function attachCycleHealing(damage, run, options) {
+  return {
+    ...damage,
+    healing: createMachineAxisHealingStatistics(
+      run?.trace?.events ?? [],
+      options
+    ),
+  };
 }
 
 function projectSampleReport(sample) {
@@ -2152,6 +2466,26 @@ function normalizeEffectState(snapshot) {
     }))
     .filter(row => row.remainingFrames > 0)
     .sort(compareCanonicalRows);
+}
+
+function normalizeEnemyBoundaryState(snapshot) {
+  const enemy = snapshot.enemy ?? {};
+  return {
+    hp: Number(enemy.hp) || 0,
+    maxHp: Number(enemy.maxHp) || 0,
+    toughness: Number(enemy.toughness) || 0,
+    maxToughness: Number(enemy.maxToughness) || 0,
+    inBreak: enemy.inBreak === true,
+    breakPhase:
+      enemy.breakPhase ?? (enemy.inBreak ? 'linear_recovery' : 'normal'),
+    breakElapsedMs: Math.max(0, Number(enemy.breakElapsedMs) || 0),
+    recoveryDelayRemainingMs: Math.max(
+      0,
+      Number(enemy.recoveryDelayRemainingMs) || 0
+    ),
+    defeated: enemy.defeated === true || Number(enemy.hp) <= 0,
+    profileSourceIdentity: enemy.profileSourceIdentity ?? null,
+  };
 }
 
 function normalizeSoulTriggerIntervalState(snapshot) {

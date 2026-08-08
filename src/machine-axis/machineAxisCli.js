@@ -1,5 +1,10 @@
 import { createMachineAxisService } from './machineAxisService';
 import { COMBAT_CRITICAL_POLICIES } from '../domain/combatCriticalPolicy';
+import {
+  MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+  MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+  createMachineAxisObjectiveContract,
+} from './machineAxisObjectiveContract';
 
 export const MACHINE_AXIS_CLI_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CLI_CONTRACT_NAME = 'AzPrMachineAxisCli';
@@ -20,6 +25,7 @@ const COMMANDS = new Set([
   'batch',
   'search',
   'cycle',
+  'kill',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -220,7 +226,12 @@ export function parseCliArguments(argv = []) {
         options.maxKiboActions = number;
       }
     } else if (flag === '--objective') {
-      if (!['damage', 'burst', 'toughness'].includes(value)) {
+      if (
+        ![
+          ...MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+          ...MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+        ].includes(value)
+      ) {
         return {
           valid: false,
           command,
@@ -239,6 +250,32 @@ export function parseCliArguments(argv = []) {
       message: `Unknown command: ${command ?? 'missing'}`,
     };
   }
+  if (
+    command === 'cycle' &&
+    options.objective != null &&
+    !['cycle-dps-no-toughness', 'cycle-dps-with-toughness'].includes(
+      options.objective
+    )
+  ) {
+    return {
+      valid: false,
+      command,
+      options,
+      message: `Objective ${options.objective} is incompatible with cycle`,
+    };
+  }
+  if (
+    command === 'kill' &&
+    options.objective != null &&
+    options.objective !== 'fastest-kill'
+  ) {
+    return {
+      valid: false,
+      command,
+      options,
+      message: `Objective ${options.objective} is incompatible with kill`,
+    };
+  }
   if (!OUTPUT_FORMATS.has(options.format)) {
     return {
       valid: false,
@@ -248,7 +285,7 @@ export function parseCliArguments(argv = []) {
     };
   }
   if (
-    ['batch', 'search', 'cycle'].includes(command) &&
+    ['batch', 'search', 'cycle', 'kill'].includes(command) &&
     options.format === 'jsonl'
   ) {
     return {
@@ -341,6 +378,7 @@ async function executeCommand(parsed, service, io) {
         options.seeds ??
         (options.seed != null ? [String(options.seed)] : undefined),
       criticalPolicy: options.criticalPolicy,
+      objective: options.objective,
     });
     return {
       exitCode:
@@ -358,6 +396,9 @@ async function executeCommand(parsed, service, io) {
         contract,
         teamCandidates: envelope?.contract
           ? envelope.teamCandidates
+          : undefined,
+        objectiveContract: envelope?.contract
+          ? envelope.objectiveContract
           : undefined,
         options: envelope?.contract ? (envelope.options ?? {}) : {},
       },
@@ -383,12 +424,44 @@ async function executeCommand(parsed, service, io) {
   }
   if (command === 'cycle') {
     const [envelope] = await readContracts(options.input, options, io);
-    const value = service.evaluateCycle(envelope, {
-      seeds:
-        options.seeds ??
-        (options.seed != null ? [String(options.seed)] : undefined),
-      criticalPolicy: options.criticalPolicy,
-    });
+    const value = service.evaluateCycle(
+      {
+        ...envelope,
+        options: {
+          ...(envelope?.options ?? {}),
+          ...(options.objective == null
+            ? {}
+            : { objective: options.objective }),
+        },
+      },
+      {
+        seeds:
+          options.seeds ??
+          (options.seed != null ? [String(options.seed)] : undefined),
+        criticalPolicy: options.criticalPolicy,
+      }
+    );
+    return {
+      exitCode:
+        value?.valid === false
+          ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+          : MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
+    };
+  }
+  if (command === 'kill') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const value = service.evaluateKill(
+      {
+        ...envelope,
+        objectiveContract:
+          envelope?.objectiveContract ??
+          createMachineAxisObjectiveContract('fastest-kill'),
+      },
+      {
+        criticalPolicy: options.criticalPolicy,
+      }
+    );
     return {
       exitCode:
         value?.valid === false

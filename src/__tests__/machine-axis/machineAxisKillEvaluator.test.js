@@ -1,0 +1,361 @@
+import { describe, expect, it } from 'vitest';
+
+import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
+import { createMachineAxisEnemyProfile } from '../../machine-axis/machineAxisEnemyProfileContract';
+import {
+  compareFastestKillCandidates,
+  createFastestKillProof,
+} from '../../machine-axis/machineAxisKillEvaluator';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
+import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+
+function createResolvedProfile({ maxHp = 1000, defense = 250 } = {}) {
+  return createMachineAxisEnemyProfile({
+    profileId: `enemy:300032:level:80:hp:${maxHp}:defense:${defense}`,
+    enemyId: 300032,
+    level: 80,
+    source: {
+      status: 'authoritative-resolved',
+      kind: 'enemy-level-pipeline',
+      identity: `feature/m12-b3-enemy-level#enemy:300032:level:80:hp:${maxHp}:defense:${defense}`,
+      hash: `enemy-level-output-${maxHp}-${defense}`,
+    },
+    attributes: {
+      maxHp,
+      physicalDefense: defense,
+      magicalDefense: defense,
+      maxToughness: 100,
+      elementDefenses: { FIRE_DEFENSE: 500 },
+    },
+    breakRules: {
+      recoveryDelayMs: 100,
+      recoveryRateBasisPoints: 1000,
+      breakTimeMs: 1000,
+      breakEndTimeMs: 200,
+      breakDamageUpBasisPoints: 10000,
+      weaknessDamageMaximum: 100,
+      weaknessDamageMinimum: 1,
+      typeMultipliersBasisPoints: { normal: 10000 },
+      elementMultipliersBasisPoints: { fire: 10000 },
+    },
+  });
+}
+
+function createContract(profile = createResolvedProfile()) {
+  return {
+    scenario: {
+      fps: 60,
+      durationMs: 2000,
+      enemy: {
+        enemyId: 300032,
+        level: 80,
+        profile,
+      },
+    },
+  };
+}
+
+function damagePacket({
+  frame,
+  sequence,
+  damage,
+  requested = damage,
+  lethal = false,
+  breakTriggered = false,
+  actionId = `action-${sequence}`,
+}) {
+  return {
+    absoluteFrame: frame,
+    timeMs: (frame * 1000) / 60,
+    runtimePhasePriority: 0,
+    runtimePriority: 3,
+    runtimeSequenceIndex: sequence,
+    actorId: 'actor-a',
+    actionId,
+    hitIdentity: `${actionId}|hit:0`,
+    hitKey: 'hit:0',
+    hitIndex: 0,
+    requestedHpDamage: requested,
+    effectiveHpDamage: damage,
+    rawDamage: damage,
+    overkill: Math.max(0, requested - damage),
+    toughnessDamage: 10,
+    breakTriggered,
+    deathTriggered: lethal,
+  };
+}
+
+function createRun(damage, events = []) {
+  return {
+    trace: {
+      scenario: { durationMs: 2000, frameRate: 60 },
+      damage,
+      events,
+    },
+    evaluation: { totals: { netToughnessDamage: 0 } },
+    hashes: {
+      input: '0000000000000001',
+      data: '0000000000000002',
+      trace: '0000000000000003',
+      evaluation: '0000000000000004',
+      build: '0000000000000005',
+    },
+  };
+}
+
+function prove(run, contract = createContract()) {
+  return createFastestKillProof(run, contract, {
+    objectiveContract: createMachineAxisObjectiveContract('fastest-kill'),
+    allowUnverifiedRuntimeTiming: true,
+  });
+}
+
+describe('Machine Axis fastest-kill proof', () => {
+  installVerifiedCombatMechanicsPackage(mechanicsPackage);
+
+  it('structurally blocks formal use while client settlement ordering is open', () => {
+    const lethal = damagePacket({
+      frame: 60,
+      sequence: 1,
+      damage: 100,
+      requested: 120,
+      lethal: true,
+    });
+    const blocked = createFastestKillProof(
+      createRun([lethal]),
+      createContract(),
+      {
+        objectiveContract: createMachineAxisObjectiveContract('fastest-kill'),
+      }
+    );
+    const diagnostic = prove(createRun([lethal]));
+
+    expect(blocked).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-enemy-settlement-client-order-open',
+        }),
+      ],
+    });
+    expect(diagnostic).toMatchObject({
+      valid: true,
+      status: 'killed',
+      formalScore: null,
+      formalStatus: 'blocked-runtime-semantics-evidence-open',
+    });
+  });
+
+  it('reports exact first lethal packet, high overkill, and same-packet break', () => {
+    const prior = damagePacket({ frame: 60, sequence: 1, damage: 900 });
+    const lethal = damagePacket({
+      frame: 60,
+      sequence: 2,
+      damage: 100,
+      requested: 350,
+      lethal: true,
+      breakTriggered: true,
+      actionId: 'lethal-action',
+    });
+    const report = prove(createRun([lethal, prior]));
+
+    expect(report.killProof).toMatchObject({
+      feasible: true,
+      firstLethal: {
+        frame: 60,
+        actionId: 'lethal-action',
+        effectiveHpDamage: 100,
+        requestedHpDamage: 350,
+        overkill: 250,
+        breakTriggered: true,
+        deathTriggered: true,
+        cursor: { runtimeSequenceIndex: 2 },
+      },
+      stopAfterDeath: {
+        verified: true,
+        postLethalSettlementCount: 0,
+      },
+    });
+  });
+
+  it('rejects HP or toughness settlement after death', () => {
+    const lethal = damagePacket({
+      frame: 30,
+      sequence: 1,
+      damage: 100,
+      lethal: true,
+    });
+    const afterDeath = damagePacket({
+      frame: 31,
+      sequence: 2,
+      damage: 0,
+    });
+    afterDeath.toughnessDamage = 1;
+
+    expect(prove(createRun([lethal, afterDeath]))).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-fastest-kill-post-death-settlement',
+        }),
+      ],
+    });
+  });
+
+  it('keeps an un-killed axis infeasible and ranks real earlier kills first', () => {
+    const unKilled = prove(
+      createRun([damagePacket({ frame: 60, sequence: 1, damage: 999 })])
+    );
+    const later = prove(
+      createRun([
+        damagePacket({
+          frame: 61,
+          sequence: 1,
+          damage: 1000,
+          lethal: true,
+        }),
+      ])
+    );
+    const earlier = prove(
+      createRun([
+        damagePacket({
+          frame: 60,
+          sequence: 5,
+          damage: 1000,
+          lethal: true,
+        }),
+      ])
+    );
+
+    expect(unKilled).toMatchObject({
+      valid: true,
+      status: 'not-killed',
+      formalScore: null,
+      killProof: { feasible: false, firstLethal: null },
+    });
+    expect(
+      [unKilled, later, earlier].sort(compareFastestKillCandidates)
+    ).toEqual([earlier, later, unKilled]);
+  });
+
+  it('cuts healing at the exact lethal cursor within the same frame', () => {
+    const lethal = damagePacket({
+      frame: 60,
+      sequence: 5,
+      damage: 1000,
+      lethal: true,
+    });
+    const before = {
+      type: 'VERIFIED_DIRECT_HEAL',
+      absoluteFrame: 60,
+      timeMs: 1000,
+      runtimePhasePriority: 0,
+      runtimePriority: 2,
+      runtimeSequenceIndex: 4,
+      actorId: 'healer',
+      actionId: 'heal-before',
+      payload: { requestedChange: 50, change: 40, overheal: 10 },
+    };
+    const after = {
+      type: 'VERIFIED_TUNING_PERIODIC_HEAL',
+      absoluteFrame: 60,
+      timeMs: 1000,
+      runtimePhasePriority: 0,
+      runtimePriority: 4,
+      runtimeSequenceIndex: 6,
+      actorId: 'healer',
+      actionId: 'heal-after',
+      payload: { requestedChange: 70, change: 70 },
+    };
+    const report = prove(createRun([lethal], [after, before]));
+
+    expect(report.healing).toMatchObject({
+      requestedHealing: 50,
+      effectiveHealing: 40,
+      overhealing: 10,
+      bySourceActor: [
+        expect.objectContaining({
+          sourceActorId: 'healer',
+          effectiveHealing: 40,
+        }),
+      ],
+      bySourceAction: [
+        expect.objectContaining({
+          sourceActionId: 'heal-before',
+          effectiveHealing: 40,
+        }),
+      ],
+    });
+  });
+
+  it('fail-closes missing or renamed enemy profile inputs before scoring', () => {
+    const lethal = damagePacket({
+      frame: 60,
+      sequence: 1,
+      damage: 1000,
+      lethal: true,
+    });
+    const missing = createContract(null);
+    const renamedProfile = structuredClone(createResolvedProfile());
+    renamedProfile.attributes.defense =
+      renamedProfile.attributes.physicalDefense;
+    delete renamedProfile.attributes.physicalDefense;
+
+    expect(prove(createRun([lethal]), missing).valid).toBe(false);
+    expect(
+      prove(createRun([lethal]), createContract(renamedProfile)).issues
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-enemy-profile-property-required',
+          path: 'scenario.enemy.profile.attributes.physicalDefense',
+        }),
+      ])
+    );
+  });
+
+  it('changes real kill feasibility and exact TTK when only actual defense changes', () => {
+    const objectiveContract =
+      createMachineAxisObjectiveContract('fastest-kill');
+    const createEnvelope = defense => {
+      const contract = structuredClone(cycleFixture.contract);
+      contract.scenario.enemy.level = 80;
+      contract.scenario.enemy.profile = createResolvedProfile({
+        maxHp: 20,
+        defense,
+      });
+      return {
+        schemaVersion: 1,
+        contractName: 'AzPrMachineAxisFastestKill',
+        kind: 'azpr-machine-axis-fastest-kill',
+        contract,
+        objectiveContract,
+      };
+    };
+    const service = createMachineAxisService();
+    const lowDefense = service.evaluateKill(createEnvelope(0), {
+      allowUnverifiedRuntimeTiming: true,
+    });
+    const highDefense = service.evaluateKill(createEnvelope(1_000_000), {
+      allowUnverifiedRuntimeTiming: true,
+    });
+
+    expect(lowDefense.issues).toEqual([]);
+    expect(lowDefense).toMatchObject({
+      valid: true,
+      status: 'killed',
+      killProof: { feasible: true },
+    });
+    expect(highDefense).toMatchObject({
+      valid: true,
+      status: 'not-killed',
+      killProof: { feasible: false },
+    });
+    expect(lowDefense.hashes.data).not.toBe(highDefense.hashes.data);
+    expect(lowDefense.hashes.build).not.toBe(highDefense.hashes.build);
+  }, 30_000);
+});

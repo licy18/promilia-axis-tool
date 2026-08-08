@@ -72,6 +72,19 @@ describe('Machine Axis batch evaluator', () => {
     expect(row.metrics.burst.hpDamage).toBeGreaterThan(0);
     expect(row.metrics.burst.endMs).toBeLessThanOrEqual(120000);
     expect(Object.keys(row.metrics.burst.byActor).length).toBeGreaterThan(0);
+    expect(row.metrics.healing).toMatchObject({
+      requestedHealing: expect.any(Number),
+      effectiveHealing: expect.any(Number),
+      overhealing: expect.any(Number),
+      effectiveHps: expect.any(Number),
+      settlementCount: expect.any(Number),
+      bySourceActor: expect.any(Array),
+      bySourceAction: expect.any(Array),
+    });
+    expect(row.metrics.healing.requestedHealing).toBeCloseTo(
+      row.metrics.healing.effectiveHealing + row.metrics.healing.overhealing,
+      8
+    );
 
     expect(row.metrics.resourceSurplus.actors).toHaveLength(3);
     expect(row.metrics.resourceSurplus.actors[0]).toMatchObject({
@@ -100,6 +113,12 @@ describe('Machine Axis batch evaluator', () => {
       direct.evaluation.byAction.length
     );
     expect(row.contributions.byActor).toHaveLength(3);
+    expect(row.contributions.healingBySourceActor).toEqual(
+      row.metrics.healing.bySourceActor
+    );
+    expect(row.contributions.healingBySourceAction).toEqual(
+      row.metrics.healing.bySourceAction
+    );
   }, 30_000);
 
   it('preserves input order and supports expected policy override deterministically', async () => {
@@ -172,6 +191,10 @@ describe('Machine Axis batch evaluator', () => {
     expect(hpDamage.quantiles.p50).toBeGreaterThan(0);
     expect(row.sampling.metrics.burstHpDamage.count).toBe(3);
     expect(row.sampling.metrics.dps.mean).toBeGreaterThan(0);
+    expect(row.sampling.metrics.requestedHealing.count).toBe(3);
+    expect(row.sampling.metrics.effectiveHealing.count).toBe(3);
+    expect(row.sampling.metrics.overhealing.count).toBe(3);
+    expect(row.sampling.metrics.effectiveHps.count).toBe(3);
   }, 30_000);
 
   it('reports invalid envelopes and per-run validation failures', async () => {

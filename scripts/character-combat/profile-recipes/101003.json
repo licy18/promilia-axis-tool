@@ -824,8 +824,8 @@
           "actions.selectionByActionId.han-ultimate.subSkillIndex": 0,
           "actions.selectionByActionId.xiaoyu-hit-during-buff.controlSkillId": 10101001,
           "actions.selectionByActionId.xiaoyu-hit-after-expiry.controlSkillId": 10101001,
-          "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 5009,
-          "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 3428,
+          "combat.selectedHpDamageByActionId.xiaoyu-hit-during-buff": 5157,
+          "combat.selectedHpDamageByActionId.xiaoyu-hit-after-expiry": 3565,
           "dynamicProperties.effectIdsByActionId.xiaoyu-hit-during-buff": [
             "battle-element:-4841411980842434486",
             "battle-element:-5652413049857383353",
@@ -1067,8 +1067,8 @@
         "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
         "combat.ownerHitCountByActionId.han-star-skill": 7,
         "combat.ownerHitCountByActionId.han-ultimate": 7,
-        "combat.ownerTotalHpDamage": 78149,
-        "combat.ownerTotalToughnessDamage": 0,
+        "combat.ownerTotalHpDamage": 160349,
+        "combat.ownerTotalToughnessDamage": 5911.384107,
   "resources.targetStateSummary.profileCount": 2,
         "resources.targetStateSummary.eventCount": 9,
         "resources.targetStateSummary.appliedGroupCount": 2,
@@ -1142,7 +1142,7 @@
         "effects.passiveTrace.3.targetId": "actor-101010",
         "dynamicProperties.maxPercentRawByAttributeId.1": 1300,
         "dynamicProperties.maxExtraRawByAttributeId.229": 1055.9066162109375,
-        "comparison.damageDelta": 2051
+        "comparison.damageDelta": 6968
       },
       "greaterThan": {
         "resources.actorSpByActorId.actor-101003.currentValue": 0,

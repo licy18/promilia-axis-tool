@@ -1,5 +1,11 @@
 import { COMBAT_CRITICAL_POLICIES } from '../domain/combatCriticalPolicy';
 import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
+import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
+import {
+  MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+  MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+  createMachineAxisObjectiveContract,
+} from './machineAxisObjectiveContract';
 
 export const MACHINE_AXIS_BATCH_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_BATCH_CONTRACT_NAME = 'AzPrMachineAxisBatch';
@@ -16,6 +22,10 @@ const SAMPLE_METRIC_KEYS = [
   'combatHitCount',
   'burstHpDamage',
   'idleMs',
+  'requestedHealing',
+  'effectiveHealing',
+  'overhealing',
+  'effectiveHps',
 ];
 
 const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
@@ -59,6 +69,7 @@ export function createMachineAxisBatchEvaluator({
       'criticalPolicy',
       'seeds',
       'burstWindowMs',
+      'objective',
     ]);
     const runs = await runWithConcurrency(
       normalization.normalized.runs,
@@ -158,7 +169,12 @@ export function normalizeBatchEnvelope(value) {
       ? normalizeBatchOptions(
           {
             ...(entry.options ?? {}),
-            ...pickDefined(entry, ['criticalPolicy', 'seeds', 'burstWindowMs']),
+            ...pickDefined(entry, [
+              'criticalPolicy',
+              'seeds',
+              'burstWindowMs',
+              'objective',
+            ]),
           },
           `${path}.options`,
           issues
@@ -190,6 +206,25 @@ function normalizeBatchOptions(value, path, issues) {
     return {};
   }
   const options = {};
+  if (value.objective != null) {
+    const objective = String(value.objective);
+    if (
+      ![
+        ...MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+        ...MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+      ].includes(objective)
+    ) {
+      issues.push(
+        createBatchIssue(
+          `${path}.objective`,
+          'batch-objective-unsupported',
+          `unsupported objective: ${objective}`
+        )
+      );
+    } else {
+      options.objective = objective;
+    }
+  }
   if (value.criticalPolicy != null) {
     const policy = String(value.criticalPolicy);
     if (!CRITICAL_POLICIES.has(policy)) {
@@ -270,8 +305,12 @@ async function executeRun(run, index, overrideOptions, simulate) {
       'criticalPolicy',
       'seeds',
       'burstWindowMs',
+      'objective',
     ]),
   };
+  effective.objectiveContract = effective.objective
+    ? createMachineAxisObjectiveContract(effective.objective)
+    : null;
   const label = run.label;
   if (
     effective.criticalPolicy === COMBAT_CRITICAL_POLICIES.SAMPLED &&
@@ -301,10 +340,13 @@ async function executeRun(run, index, overrideOptions, simulate) {
   if (seeds.length > 0) {
     const samples = [];
     for (const seed of seeds) {
-      const contract = applyCriticalOverride(run.contract, {
-        policy: COMBAT_CRITICAL_POLICIES.SAMPLED,
-        seed,
-      });
+      const contract = applyCriticalOverride(
+        applyBatchObjective(run.contract, effective.objectiveContract),
+        {
+          policy: COMBAT_CRITICAL_POLICIES.SAMPLED,
+          seed,
+        }
+      );
       samples.push(
         await executeSingleSample(contract, effective, { seed }, simulate)
       );
@@ -325,22 +367,33 @@ async function executeRun(run, index, overrideOptions, simulate) {
             : 'runtime-failed',
       scenario: okSamples.find(sample => sample.scenario)?.scenario ?? null,
       seeds,
+      objectiveContract: effective.objectiveContract,
+      formalScore: null,
+      formalStatus: createBatchFormalStatus(effective.objectiveContract),
       samples: samples.map(sample => ({
         seed: sample.seed,
         status: sample.status,
         critical: sample.critical,
         hashes: sample.hashes,
         metrics: sample.metrics,
+        contributions: sample.contributions,
         errors: sample.errors,
       })),
       sampling: buildSamplingAggregates(okSamples),
+      contributions: aggregateSampleContributions(okSamples),
       executionMs: Date.now() - startedAt,
       errors: samples.flatMap(sample => sample.errors ?? []),
     };
   }
+  const objectiveContract = applyBatchObjective(
+    run.contract,
+    effective.objectiveContract
+  );
   const contract = effective.criticalPolicy
-    ? applyCriticalOverride(run.contract, { policy: effective.criticalPolicy })
-    : run.contract;
+    ? applyCriticalOverride(objectiveContract, {
+        policy: effective.criticalPolicy,
+      })
+    : objectiveContract;
   const sample = await executeSingleSample(
     contract,
     effective,
@@ -354,6 +407,9 @@ async function executeRun(run, index, overrideOptions, simulate) {
     status: sample.status,
     scenario: sample.scenario,
     critical: sample.critical,
+    objectiveContract: effective.objectiveContract,
+    formalScore: null,
+    formalStatus: createBatchFormalStatus(effective.objectiveContract),
     hashes: sample.hashes,
     metrics: sample.metrics,
     contributions: sample.contributions,
@@ -428,6 +484,31 @@ async function executeSingleSample(contract, effective, { seed }, simulate) {
   }
 }
 
+function applyBatchObjective(contract, objectiveContract) {
+  if (!objectiveContract) return contract;
+  return {
+    ...contract,
+    scenario: {
+      ...(contract.scenario ?? {}),
+      objectiveContract: structuredClone(objectiveContract),
+      ...(objectiveContract.targetPolicy == null
+        ? {}
+        : { target: structuredClone(objectiveContract.targetPolicy) }),
+    },
+  };
+}
+
+function createBatchFormalStatus(objectiveContract) {
+  if (!objectiveContract) return 'batch-diagnostic-no-objective-selected';
+  if (objectiveContract.classification === 'legacy-diagnostic') {
+    return 'legacy-diagnostic-not-formal';
+  }
+  if (objectiveContract.objectiveId === 'fastest-kill') {
+    return 'requires-fastest-kill-proof';
+  }
+  return 'requires-accepted-loop-proof';
+}
+
 function projectBatchScenario(run) {
   return {
     projectId: run.trace?.scenario?.projectId ?? null,
@@ -448,6 +529,10 @@ export function createRunMetrics(run, contract = {}, options = {}) {
   const burst = computeBurstWindow(run.trace?.damage ?? [], burstWindowMs);
   const idle = computeIdle(run, durationMs);
   const nonExecutableActions = collectNonExecutableActions(run);
+  const healing = createMachineAxisHealingStatistics(run.trace?.events ?? [], {
+    durationMs,
+    fps: run.trace?.scenario?.frameRate ?? contract.scenario?.fps ?? 60,
+  });
   return {
     hpDamage,
     dps: durationMs > 0 ? hpDamage / (durationMs / 1000) : 0,
@@ -459,6 +544,7 @@ export function createRunMetrics(run, contract = {}, options = {}) {
     skippedActionCount: numberOrZero(totals.skippedActionCount),
     selfEnergyDelta: numberOrZero(totals.selfEnergyDelta),
     burst,
+    healing,
     resourceSurplus: computeResourceSurplus(run, contract),
     idle,
     nonExecutableActions,
@@ -719,12 +805,18 @@ export function createContributions(run) {
     }
     byHit.set(identity, row);
   }
+  const healing = createMachineAxisHealingStatistics(run.trace?.events ?? [], {
+    durationMs: run.trace?.scenario?.durationMs ?? 0,
+    fps: run.trace?.scenario?.frameRate ?? 60,
+  });
   return {
     byActor: run.evaluation?.byActor ?? [],
     byAction: run.evaluation?.byAction ?? [],
     byHit: [...byHit.values()].sort((left, right) =>
       left.identity.localeCompare(right.identity, 'en')
     ),
+    healingBySourceActor: healing.bySourceActor,
+    healingBySourceAction: healing.bySourceAction,
   };
 }
 
@@ -773,11 +865,78 @@ function buildSamplingAggregates(okSamples) {
       if (key === 'burstHpDamage') {
         return numberOrZero(sample.metrics?.burst?.hpDamage);
       }
+      if (
+        [
+          'requestedHealing',
+          'effectiveHealing',
+          'overhealing',
+          'effectiveHps',
+        ].includes(key)
+      ) {
+        return numberOrZero(sample.metrics?.healing?.[key]);
+      }
       return numberOrZero(sample.metrics?.[key]);
     });
     metrics[key] = describeSamples(values);
   }
   return { count: okSamples.length, metrics };
+}
+
+function aggregateSampleContributions(samples) {
+  if (!samples.length) return null;
+  const representative = samples[0]?.contributions ?? {};
+  return {
+    ...representative,
+    byActor: averageContributionRows(samples, 'byActor'),
+    byAction: averageContributionRows(samples, 'byAction'),
+    byHit: averageContributionRows(samples, 'byHit'),
+    healingBySourceActor: averageContributionRows(
+      samples,
+      'healingBySourceActor'
+    ),
+    healingBySourceAction: averageContributionRows(
+      samples,
+      'healingBySourceAction'
+    ),
+  };
+}
+
+function averageContributionRows(samples, key) {
+  const rowsBySample = samples.map(
+    sample =>
+      new Map(
+        (sample.contributions?.[key] ?? []).map(row => [
+          String(row.identity),
+          row,
+        ])
+      )
+  );
+  const identities = new Set(rowsBySample.flatMap(rows => [...rows.keys()]));
+  return [...identities]
+    .sort((left, right) => left.localeCompare(right, 'en'))
+    .map(identity => {
+      const rows = rowsBySample.map(sample => sample.get(identity) ?? null);
+      const representative = rows.find(Boolean) ?? { identity };
+      const numericKeys = new Set(
+        rows.flatMap(row =>
+          Object.entries(row ?? {})
+            .filter(([, value]) => Number.isFinite(value))
+            .map(([name]) => name)
+        )
+      );
+      return {
+        ...representative,
+        ...Object.fromEntries(
+          [...numericKeys]
+            .sort((left, right) => left.localeCompare(right, 'en'))
+            .map(name => [
+              name,
+              rows.reduce((sum, row) => sum + numberOrZero(row?.[name]), 0) /
+                samples.length,
+            ])
+        ),
+      };
+    });
 }
 
 function describeSamples(values) {

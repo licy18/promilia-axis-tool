@@ -68,6 +68,7 @@
         "optimizationScenarioPolicy": {
           "$ref": "#/$defs/optimizationScenarioPolicyBinding"
         },
+        "objectiveContract": { "$ref": "#/$defs/objectiveContract" },
         "cultivationProfile": { "$ref": "#/$defs/cultivationProfile" }
       }
     },
@@ -113,7 +114,142 @@
           "minimum": 0,
           "maximum": 1
         },
-        "elementDefenseOverrides": { "type": "object" }
+        "elementDefenseOverrides": { "type": "object" },
+        "profile": { "$ref": "#/$defs/enemyProfile" }
+      }
+    },
+    "enemyProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "contractName",
+        "profileId",
+        "profileHash",
+        "enemyId",
+        "level",
+        "source",
+        "attributes",
+        "breakRules"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrEnemyProfile" },
+        "profileId": { "type": "string", "minLength": 1 },
+        "profileHash": { "type": "string", "minLength": 1 },
+        "enemyId": { "type": "integer", "minimum": 1 },
+        "level": { "type": "integer", "minimum": 1 },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "kind", "identity", "hash"],
+          "properties": {
+            "status": { "type": "string", "minLength": 1 },
+            "kind": { "type": "string", "minLength": 1 },
+            "identity": { "type": "string", "minLength": 1 },
+            "hash": { "type": "string", "minLength": 1 }
+          }
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maxHp",
+            "physicalDefense",
+            "magicalDefense",
+            "maxToughness",
+            "elementDefenses"
+          ],
+          "properties": {
+            "maxHp": { "type": "number", "exclusiveMinimum": 0 },
+            "physicalDefense": { "type": "number", "minimum": 0 },
+            "magicalDefense": { "type": "number", "minimum": 0 },
+            "maxToughness": { "type": "number", "exclusiveMinimum": 0 },
+            "elementDefenses": {
+              "type": "object",
+              "additionalProperties": { "type": "number" }
+            }
+          }
+        },
+        "breakRules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "recoveryDelayMs",
+            "recoveryRateBasisPoints",
+            "breakTimeMs",
+            "breakEndTimeMs",
+            "breakDamageUpBasisPoints",
+            "typeMultipliersBasisPoints",
+            "elementMultipliersBasisPoints"
+          ],
+          "properties": {
+            "recoveryDelayMs": { "type": "number", "minimum": 0 },
+            "recoveryRateBasisPoints": { "type": "number", "minimum": 0 },
+            "breakTimeMs": { "type": "number", "exclusiveMinimum": 0 },
+            "breakEndTimeMs": { "type": "number", "minimum": 0 },
+            "breakDamageUpBasisPoints": { "type": "number", "minimum": 0 },
+            "weaknessDamageMaximum": {
+              "anyOf": [
+                { "type": "number", "const": -1 },
+                { "type": "number", "exclusiveMinimum": 0 },
+                { "type": "null" }
+              ]
+            },
+            "weaknessDamageMinimum": {
+              "anyOf": [
+                { "type": "number", "const": -1 },
+                { "type": "number", "minimum": 0 },
+                { "type": "null" }
+              ]
+            },
+            "typeMultipliersBasisPoints": {
+              "type": "object",
+              "additionalProperties": { "type": "number" }
+            },
+            "elementMultipliersBasisPoints": {
+              "type": "object",
+              "additionalProperties": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "objectiveContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "contractName",
+        "objectiveId",
+        "classification",
+        "formalEligible",
+        "targetPolicy",
+        "scoring",
+        "proofRequirements",
+        "objectiveHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "contractName": { "const": "AzPrMachineAxisObjectiveContract" },
+        "objectiveId": {
+          "enum": [
+            "cycle-dps-no-toughness",
+            "cycle-dps-with-toughness",
+            "fastest-kill",
+            "damage",
+            "burst",
+            "toughness"
+          ]
+        },
+        "classification": { "enum": ["primary", "legacy-diagnostic"] },
+        "formalEligible": { "type": "boolean" },
+        "targetPolicy": {
+          "anyOf": [{ "$ref": "#/$defs/targetPolicy" }, { "type": "null" }]
+        },
+        "scoring": { "type": "object" },
+        "proofRequirements": { "type": "object" },
+        "objectiveHash": { "type": "string", "minLength": 1 }
       }
     },
     "critical": {
@@ -206,7 +342,11 @@
           "type": "array",
           "items": { "type": "integer", "minimum": 1 }
         },
-        "levelBreakthroughRank": { "type": "integer", "minimum": 0, "maximum": 5 }
+        "levelBreakthroughRank": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
       }
     },
     "kiboCultivation": {
@@ -262,7 +402,13 @@
     "equipmentSlotCultivation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["rarity", "enhancementLevel", "tuningScore", "instanceTier", "maxValue"],
+      "required": [
+        "rarity",
+        "enhancementLevel",
+        "tuningScore",
+        "instanceTier",
+        "maxValue"
+      ],
       "properties": {
         "rarity": { "type": "integer", "minimum": 1, "maximum": 4 },
         "enhancementLevel": { "type": "integer", "minimum": 0, "maximum": 9 },

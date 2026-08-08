@@ -26,6 +26,9 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "objective": {
+          "enum": ["cycle-dps-no-toughness", "cycle-dps-with-toughness"]
+        },
         "criticalPolicy": {
           "enum": ["sampled", "expected", "critical", "non-critical"]
         },

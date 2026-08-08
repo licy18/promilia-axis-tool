@@ -2140,7 +2140,7 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 ### M12-B3-E20-2-109001-S3-R1 无头 parity 修复（2026-08-08，等待产品复验）
 
 - S3 的机制账本清零结论保留，但产品验收以两个真实反例打回：A5 在璀璨关闭时错误获得雷印记，A4 先合成印记再消费且错误消耗璀璨；同批又确认星决重置事件可被后续 readiness 无限复用，且 Charge 技能被近似成并行 `readyAtMs` 槽。R1 统一修复这四类无头核心错误，不启动 108003。
-- 全局 policy 继续是 `m12c-zero-distance-passive-boss-v1 / c60fb5a713a5f691`，roster 是 `m12c-wind-thunder-mark-producer-roster-v1 / 7c96de67bf19b48e`。正式 9 人为 `101010/103002/109001/102001/107001/107002/108003/112001/STARBORN`；末音后待做 5 人为 `102001/107001/107002/108003/112001`；`108001/111001` 保持 `product-scenario-excluded`。Kibo DNA 固定 `[]`。
+- 全局 policy 继续是 `m12c-zero-distance-passive-boss-v1 / 967b0667f315db5b`，roster 是 `m12c-wind-thunder-mark-producer-roster-v1 / a690b860f0967e3d`。正式 9 人为 `101010/103002/109001/102001/107001/107002/108003/112001/STARBORN`；末音后待做 5 人为 `102001/107001/107002/108003/112001`；`108001/111001` 保持 `product-scenario-excluded`。Kibo DNA 固定 `[]`。
 - 编译器以来源驱动的 `element_formula 102100 = IF(self.ELEMENT_LAYERS[M] > I,T,F)` 生成 activation-only wrapper，适用于 inject/judgment，不写 109001 ID 特判。A5 只在璀璨存在且动作/命中合法时于 47F 应用恰好 `+2`；A4/追击只把璀璨作为允许条件，实际消费 `element 250`，成功消费后才生成一个 `element 296` 超限 packet，绝不生成临时 `+1`、绝不消费璀璨。Workbench/动作分析只投影已应用事务，条件失败保留结构化 suppression。
 - Golden 反例已锁死：旧 frame 547 的 A5 `0→2` 消失；璀璨在 frame 731 获得，frame 847 的 A5 才 `0→2`；frame 1029 的 A4 只执行 `2→1`，璀璨不变，并产生一个 `element 296` packet（raw/HP `110461`，toughness `6123`，`sourceSequencePath=[0,60,49,296,0]`）；璀璨只在右开 8 秒边界 frame 1211 到期。连续 A4 为 `2→1→0`，资源不足的第三次不出 packet；主动 `10900112→10900143` 追击可消费一枚印记但不消费璀璨。
 - 冷却核心改为通用一次性 transaction：只有 accepted/executed 的来源动作在真实 effect 时刻物化；`slot=-1` 只解析事件发生时正在冷却的目标，没有目标也立即消费而不预存；每个事件/目标至多结算一次。Fixed `-20s` 对 Charge 的一次 RefreshCoolTime 最多恢复一层，blocked、资源不足、重叠、`execute=false` 均不产生重置。
@@ -2155,3 +2155,12 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 产品已接受敌人等级基线 `d1587a8800b23bd848e267ae0baf219ab92fc96a`，closeout 为 `ae3be2f04d6e478abf8a52dad5495a81daf969c1`。运行时依据 `enemy_pack.templateID`、等级模板值与 `FormulaUtility.CalculateAttribute`结算 ATK/MAXHP/DEF/MDEF/韧性，缺 pack、template 或精确等级行时 fail closed。
 - 迅狼 `300032` Lv80 已由原始 `MAXHP=8628 / DEF=MDEF=9000` 纠正为等级成长后 `MAXHP=86778.6984 / DEF=MDEF=810 / maxToughness=26822.0077`。有限面板数值与试点 `hpMode=infinite`执行政策分层保存，无限 HP 不再通过放大 hpMultiplier 伪造。
 - `enemy-level-profiles.json`、`resolveEnemyLevelStats`、compiler、canonical headless、Machine Axis 与 Workbench 共用同一来源链。结构化证据见 `reports/m12/m12-b3-enemy-level-evidence-20260808.json`，任务记录见 `work/m12-b3-enemy-level/STATE.md`。
+
+### M12 优化器三主指标合同重构（2026-08-08）
+
+- 正式目标现为 `cycle-dps-no-toughness`、`cycle-dps-with-toughness` 与 `fastest-kill`；旧 `damage/burst/toughness` 降为诊断项，正式流程在模拟前拒绝 legacy 或漂移的 objective contract。
+- 两个循环指标只接受半开区间且连续两轮闭合的循环 proof；最快击杀按首次致死 frame、time 与完整 runtime cursor 排序，并保存致死 action/hit、requested/effective damage 和 overkill。
+- 优化器严格消费 enemy-level pipeline 产出的权威敌人档案，不自行计算等级成长。无来源、缺字段或 hash 不一致时 fail closed。
+- 破韧发生包、同帧后续包与恢复帧的客户端原生排序证据仍 open；因此有韧循环和最快击杀暂不具备 formal score，诊断结果不得冒充正式准入。
+- 治疗统计已加入 batch/search/cycle/kill 报告，包含 requested/effective/overheal/HPS 与 source actor/action 聚合；护盾和 suppressed 事件保持独立。
+- 合并不解锁 M12-C 或正式搜索；Kibo DNA 继续固定 `[]`。

@@ -115,6 +115,36 @@
       "severity": "warning"
     }
   ],
+  "objectiveContract": {
+    "schemaVersion": 1,
+    "contractName": "AzPrMachineAxisObjectiveContract",
+    "objectiveId": "cycle-dps-no-toughness",
+    "classification": "primary",
+    "formalEligible": true,
+    "targetPolicy": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "scoring": {
+      "metric": "closed-cycle-hp-dps",
+      "direction": "maximize",
+      "damageBasis": "settled-post-defense-hp-damage",
+      "formula": "loopHpDamage / loopDurationSeconds",
+      "finalRankingEligibility": "accepted-loop-proof-only"
+    },
+    "proofRequirements": {
+      "loopBoundary": "strict-half-open-replayable-loop",
+      "actorBoundary": "non-degrading-and-next-loop-ready",
+      "enemyBoundary": "defense-and-level-inputs-stable",
+      "toughnessSettlement": "disabled",
+      "killRequired": false,
+      "enemyProfile": "resolved-defense-and-level-inputs"
+    },
+    "objectiveHash": "c8d9866a1bf9431b"
+  },
+  "enemySettlementTiming": null,
   "assumptions": {
     "enemyHp": "infinite",
     "toughness": "disabled",
@@ -150,8 +180,17 @@
   "metrics": {
     "loopHpDamage": 212.19998169,
     "cycleDps": 42.43999634,
-    "combatHitCount": 4
+    "combatHitCount": 4,
+    "healing": {
+      "requestedHealing": 0,
+      "effectiveHealing": 0,
+      "overhealing": 0,
+      "effectiveHps": 0,
+      "settlementCount": 0
+    }
   },
+  "formalScore": 42.43999634,
+  "formalStatus": "formal-score-ready",
   "sampleStatistics": {
     "sampleCount": 1,
     "loopHpDamage": {
@@ -182,6 +221,64 @@
         "p95": 42.43999634
       }
     },
+    "healing": {
+      "requestedHealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "effectiveHealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "overhealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "effectiveHps": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      }
+    },
     "contributionConservation": {
       "byActor": {
         "sampleMean": 212.19998169,
@@ -198,6 +295,20 @@
       "byHit": {
         "sampleMean": 212.19998169,
         "contributionMean": 212.19998169,
+        "difference": 0,
+        "conserved": true
+      }
+    },
+    "healingContributionConservation": {
+      "healingBySourceActor": {
+        "sampleMean": 0,
+        "contributionMean": 0,
+        "difference": 0,
+        "conserved": true
+      },
+      "healingBySourceAction": {
+        "sampleMean": 0,
+        "contributionMean": 0,
         "difference": 0,
         "conserved": true
       }
@@ -284,7 +395,9 @@
         "lastFrame": 116,
         "sampleCount": 1
       }
-    ]
+    ],
+    "healingBySourceActor": [],
+    "healingBySourceAction": []
   },
   "replayProof": {
     "stable": true,
@@ -435,6 +548,46 @@
           "equal": true,
           "start": [],
           "end": []
+        },
+        {
+          "dimension": "enemy",
+          "equal": true,
+          "start": {
+            "hp": 690.24,
+            "maxHp": 690.24,
+            "toughness": 213.344,
+            "maxToughness": 213.344,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": {
+              "contractName": "AzPrEnemyProfile",
+              "profileHash": "c4fadaa635a1ad2e",
+              "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+              "sourceHash": "c62fee767da4dcc9",
+              "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+            }
+          },
+          "end": {
+            "hp": 690.24,
+            "maxHp": 690.24,
+            "toughness": 213.344,
+            "maxToughness": 213.344,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": {
+              "contractName": "AzPrEnemyProfile",
+              "profileHash": "c4fadaa635a1ad2e",
+              "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+              "sourceHash": "c62fee767da4dcc9",
+              "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+            }
+          }
         },
         {
           "dimension": "shields",
@@ -590,6 +743,46 @@
           "equal": true,
           "start": [],
           "end": []
+        },
+        {
+          "dimension": "enemy",
+          "equal": true,
+          "start": {
+            "hp": 690.24,
+            "maxHp": 690.24,
+            "toughness": 213.344,
+            "maxToughness": 213.344,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": {
+              "contractName": "AzPrEnemyProfile",
+              "profileHash": "c4fadaa635a1ad2e",
+              "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+              "sourceHash": "c62fee767da4dcc9",
+              "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+            }
+          },
+          "end": {
+            "hp": 690.24,
+            "maxHp": 690.24,
+            "toughness": 213.344,
+            "maxToughness": 213.344,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": {
+              "contractName": "AzPrEnemyProfile",
+              "profileHash": "c4fadaa635a1ad2e",
+              "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+              "sourceHash": "c62fee767da4dcc9",
+              "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+            }
+          }
         },
         {
           "dimension": "shields",
@@ -777,9 +970,17 @@
           "toughness": 213.344,
           "maxToughness": 213.344,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": {
+            "contractName": "AzPrEnemyProfile",
+            "profileHash": "c4fadaa635a1ad2e",
+            "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+            "sourceHash": "c62fee767da4dcc9",
+            "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          },
           "valueShields": [],
           "hitCountShields": []
         },
@@ -922,9 +1123,17 @@
           "toughness": 213.344,
           "maxToughness": 213.344,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": {
+            "contractName": "AzPrEnemyProfile",
+            "profileHash": "c4fadaa635a1ad2e",
+            "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+            "sourceHash": "c62fee767da4dcc9",
+            "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          },
           "valueShields": [],
           "hitCountShields": []
         },
@@ -1067,9 +1276,17 @@
           "toughness": 213.344,
           "maxToughness": 213.344,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": {
+            "contractName": "AzPrEnemyProfile",
+            "profileHash": "c4fadaa635a1ad2e",
+            "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+            "sourceHash": "c62fee767da4dcc9",
+            "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          },
           "valueShields": [],
           "hitCountShields": []
         },
@@ -1149,17 +1366,19 @@
       "issues": [],
       "hashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7f6ecb53d02b1525",
-        "data": "ccce0df2f15d4a16",
-        "trace": "ccfeb2e8a03a4be5",
-        "evaluation": "6eafa465898dbceb"
+        "input": "d0309f29f740d5b4",
+        "data": "2b3818fdafe6738d",
+        "trace": "03d051dcf801ad3a",
+        "evaluation": "6eafa465898dbceb",
+        "build": "fbd0eaab0a9cbfa5"
       },
       "proofHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7f6ecb53d02b1525",
-        "data": "ccce0df2f15d4a16",
-        "trace": "ccfeb2e8a03a4be5",
-        "evaluation": "6eafa465898dbceb"
+        "input": "d0309f29f740d5b4",
+        "data": "2b3818fdafe6738d",
+        "trace": "03d051dcf801ad3a",
+        "evaluation": "6eafa465898dbceb",
+        "build": "fbd0eaab0a9cbfa5"
       },
       "firstCycle": {
         "interval": "[start,end)",
@@ -1239,7 +1458,103 @@
             "firstFrame": 116,
             "lastFrame": 116
           }
-        ]
+        ],
+        "enemySettlementPackets": [
+          {
+            "absoluteFrame": 71,
+            "timeMs": 1183.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 55,
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "preDefenseHpDamage": 69.75999450683594,
+            "requestedHpDamage": 37.899993896484375,
+            "effectiveHpDamage": 37.899993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 88,
+            "timeMs": 1466.666667,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 76,
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "preDefenseHpDamage": 113.3599853515625,
+            "requestedHpDamage": 61.5,
+            "effectiveHpDamage": 61.5,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 116,
+            "timeMs": 1933.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 107,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 56.399993896484375,
+            "effectiveHpDamage": 56.399993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 121,
+            "timeMs": 2016.666666,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 118,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 56.399993896484375,
+            "effectiveHpDamage": 56.399993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          }
+        ],
+        "enemyStateTransitions": [],
+        "healing": {
+          "requestedHealing": 0,
+          "effectiveHealing": 0,
+          "overhealing": 0,
+          "effectiveHps": 0,
+          "settlementCount": 0,
+          "bySourceActor": [],
+          "bySourceAction": []
+        }
       },
       "secondCycle": {
         "interval": "[start,end)",
@@ -1319,7 +1634,103 @@
             "firstFrame": 416,
             "lastFrame": 416
           }
-        ]
+        ],
+        "enemySettlementPackets": [
+          {
+            "absoluteFrame": 371,
+            "timeMs": 6183.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 324,
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "preDefenseHpDamage": 69.75999450683594,
+            "requestedHpDamage": 37.899993896484375,
+            "effectiveHpDamage": 37.899993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 388,
+            "timeMs": 6466.666667,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 340,
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "preDefenseHpDamage": 113.3599853515625,
+            "requestedHpDamage": 61.5,
+            "effectiveHpDamage": 61.5,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 416,
+            "timeMs": 6933.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 366,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 56.399993896484375,
+            "effectiveHpDamage": 56.399993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 421,
+            "timeMs": 7016.666666,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 372,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 56.399993896484375,
+            "effectiveHpDamage": 56.399993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 213.344,
+            "toughnessAfter": 213.344,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          }
+        ],
+        "enemyStateTransitions": [],
+        "healing": {
+          "requestedHealing": 0,
+          "effectiveHealing": 0,
+          "overhealing": 0,
+          "effectiveHps": 0,
+          "settlementCount": 0,
+          "bySourceActor": [],
+          "bySourceAction": []
+        }
       },
       "replayProof": {
         "stable": true,
@@ -1470,6 +1881,46 @@
               "equal": true,
               "start": [],
               "end": []
+            },
+            {
+              "dimension": "enemy",
+              "equal": true,
+              "start": {
+                "hp": 690.24,
+                "maxHp": 690.24,
+                "toughness": 213.344,
+                "maxToughness": 213.344,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": {
+                  "contractName": "AzPrEnemyProfile",
+                  "profileHash": "c4fadaa635a1ad2e",
+                  "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+                  "sourceHash": "c62fee767da4dcc9",
+                  "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+                }
+              },
+              "end": {
+                "hp": 690.24,
+                "maxHp": 690.24,
+                "toughness": 213.344,
+                "maxToughness": 213.344,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": {
+                  "contractName": "AzPrEnemyProfile",
+                  "profileHash": "c4fadaa635a1ad2e",
+                  "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+                  "sourceHash": "c62fee767da4dcc9",
+                  "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+                }
+              }
             },
             {
               "dimension": "shields",
@@ -1625,6 +2076,46 @@
               "equal": true,
               "start": [],
               "end": []
+            },
+            {
+              "dimension": "enemy",
+              "equal": true,
+              "start": {
+                "hp": 690.24,
+                "maxHp": 690.24,
+                "toughness": 213.344,
+                "maxToughness": 213.344,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": {
+                  "contractName": "AzPrEnemyProfile",
+                  "profileHash": "c4fadaa635a1ad2e",
+                  "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+                  "sourceHash": "c62fee767da4dcc9",
+                  "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+                }
+              },
+              "end": {
+                "hp": 690.24,
+                "maxHp": 690.24,
+                "toughness": 213.344,
+                "maxToughness": 213.344,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": {
+                  "contractName": "AzPrEnemyProfile",
+                  "profileHash": "c4fadaa635a1ad2e",
+                  "profileId": "enemy:300032:level:1:c62fee767da4dcc9",
+                  "sourceHash": "c62fee767da4dcc9",
+                  "sourceIdentity": "azpr-enemy-level-template-1#level=1|outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+                }
+              }
             },
             {
               "dimension": "shields",
@@ -2126,10 +2617,11 @@
     ]
   },
   "hashes": {
-    "input": "7f6ecb53d02b1525",
-    "data": "ccce0df2f15d4a16",
-    "trace": "ccfeb2e8a03a4be5",
+    "input": "d0309f29f740d5b4",
+    "data": "2b3818fdafe6738d",
+    "trace": "03d051dcf801ad3a",
     "evaluation": "6eafa465898dbceb",
-    "cycle": "0976ddc375d0d1fa"
+    "cycle": "b3618dafd180f6d0",
+    "build": "7bd2524eaecc64a8"
   }
 }

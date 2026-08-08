@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "3dfbeea54b34a37f1df49d439307bef1f7b7ab8c90c2939b70a97b8a902fed9c",
+  "sourcePackageHash": "57bb9ba81504560e396378bc61307bb03e009aa475057784257d19e67f9f37a8",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "f06ad3fbef760e0e",
-    "traceHash": "eb0474efb2bd750a",
-    "dataHash": "b04cbb475d9cbe36",
+    "inputHash": "6662fdbba135e64e",
+    "traceHash": "c4a446dbdc38dc12",
+    "dataHash": "8cbb44eaa9d8fe19",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -331,8 +331,8 @@
             3360,
             3365
           ],
-          "totalHpDamage": 445,
-          "totalToughnessDamage": 89
+          "totalHpDamage": 2577,
+          "totalToughnessDamage": 515
         },
         "ruby-enhanced-shot-1": {
           "hitCount": 3,
@@ -341,8 +341,8 @@
             221,
             226
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-enhanced-shot-2": {
           "hitCount": 3,
@@ -351,8 +351,8 @@
             454,
             459
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-enhanced-shot-3": {
           "hitCount": 3,
@@ -361,8 +361,8 @@
             691,
             696
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-enhanced-shot-4": {
           "hitCount": 3,
@@ -371,8 +371,8 @@
             911,
             916
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-enhanced-shot-5": {
           "hitCount": 3,
@@ -381,8 +381,8 @@
             1144,
             1149
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-enhanced-shot-6": {
           "hitCount": 3,
@@ -391,8 +391,8 @@
             1381,
             1386
           ],
-          "totalHpDamage": 147,
-          "totalToughnessDamage": 105
+          "totalHpDamage": 858,
+          "totalToughnessDamage": 600
         },
         "ruby-limit-counter": {
           "hitCount": 3,
@@ -401,7 +401,7 @@
             3023,
             3028
           ],
-          "totalHpDamage": 495,
+          "totalHpDamage": 2862,
           "totalToughnessDamage": 0
         },
         "ruby-post-ultimate-shot": {
@@ -411,7 +411,7 @@
             2741,
             2746
           ],
-          "totalHpDamage": 297,
+          "totalHpDamage": 1716,
           "totalToughnessDamage": 0
         },
         "ruby-star-skill": {
@@ -425,8 +425,8 @@
             1914,
             1919
           ],
-          "totalHpDamage": 664,
-          "totalToughnessDamage": 464
+          "totalHpDamage": 3839,
+          "totalToughnessDamage": 2688
         },
         "ruby-ultimate": {
           "hitCount": 25,
@@ -457,8 +457,8 @@
             2519,
             2525
           ],
-          "totalHpDamage": 7384,
-          "totalToughnessDamage": 773
+          "totalHpDamage": 42736,
+          "totalToughnessDamage": 4504
         },
         "switch-back-to-ruby--on-enter--actor-103002--star-carry": {
           "hitCount": 5,
@@ -469,34 +469,34 @@
             3976,
             3982
           ],
-          "totalHpDamage": 1021,
-          "totalToughnessDamage": 714
+          "totalHpDamage": 5902,
+          "totalToughnessDamage": 4131
         }
       },
-      "ownerHitTotalHpDamage": 11188,
-      "ownerHitTotalToughnessDamage": 2670,
+      "ownerHitTotalHpDamage": 64780,
+      "ownerHitTotalToughnessDamage": 15438,
       "selectedHpDamageByActionId": {
-        "ruby-enhanced-shot-1": 147,
-        "ruby-enhanced-shot-2": 147,
-        "ruby-enhanced-shot-3": 147,
-        "ruby-enhanced-shot-4": 147,
-        "ruby-enhanced-shot-5": 147,
-        "ruby-enhanced-shot-6": 147,
-        "ruby-post-ultimate-shot": 297,
-        "ruby-ultimate": 156539
+        "ruby-enhanced-shot-1": 858,
+        "ruby-enhanced-shot-2": 858,
+        "ruby-enhanced-shot-3": 858,
+        "ruby-enhanced-shot-4": 858,
+        "ruby-enhanced-shot-5": 858,
+        "ruby-enhanced-shot-6": 858,
+        "ruby-post-ultimate-shot": 1716,
+        "ruby-ultimate": 191891
       },
-      "totalHpDamage": 164516,
-      "totalToughnessDamage": 2286,
-      "ownerTotalHpDamage": 164422,
-      "ownerTotalToughnessDamage": 2220,
+      "totalHpDamage": 218558,
+      "totalToughnessDamage": 6443,
+      "ownerTotalHpDamage": 218014,
+      "ownerTotalToughnessDamage": 6063,
       "enemy": {
         "pointCount": 263,
-        "initialHp": 862800,
-        "finalHp": 698284,
-        "maxHp": 862800,
-        "initialToughness": 6667,
-        "finalToughness": 4381,
-        "maxToughness": 6667
+        "initialHp": 8677869.84,
+        "finalHp": 8459311.84,
+        "maxHp": 8677869.84,
+        "initialToughness": 26822.0077,
+        "finalToughness": 20379.0077,
+        "maxToughness": 26822.0077
       }
     },
     "resources": {
@@ -1932,9 +1932,9 @@
       "clearLoadoutCharacterIds": [
         103002
       ],
-      "primaryDamage": 297,
-      "baselineDamage": 126,
-      "damageDelta": 171,
+      "primaryDamage": 1716,
+      "baselineDamage": 723,
+      "damageDelta": 993,
       "primaryDynamicPropertySources": [
         {
           "attributeId": 229,
@@ -1959,7 +1959,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "125a141dbe20859733957dd10e05e7d31706ddc6c4f15b5df8750530d3155a12"
+      "baselineReplayHash": "af40b7dc631ad8b987f137993a7a060feae85aa9842440221d24915190bf44f9"
     },
     "trace": {
       "damage": [
@@ -1975,9 +1975,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -1993,9 +1993,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2011,9 +2011,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2029,9 +2029,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2047,9 +2047,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2065,9 +2065,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2083,9 +2083,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2101,9 +2101,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2119,9 +2119,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2137,9 +2137,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2155,9 +2155,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2173,9 +2173,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2191,9 +2191,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2209,9 +2209,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2227,9 +2227,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2245,9 +2245,9 @@
             1,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2263,9 +2263,9 @@
             2,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2281,9 +2281,9 @@
             3,
             0
           ],
-          "rawDamage": 49,
-          "hpDamage": 49,
-          "toughnessDamage": 35,
+          "rawDamage": 286,
+          "hpDamage": 286,
+          "toughnessDamage": 200,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2299,9 +2299,9 @@
             1,
             0
           ],
-          "rawDamage": 166,
-          "hpDamage": 166,
-          "toughnessDamage": 116,
+          "rawDamage": 959,
+          "hpDamage": 959,
+          "toughnessDamage": 672,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2337,9 +2337,9 @@
             2,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2355,9 +2355,9 @@
             3,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2373,9 +2373,9 @@
             4,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2391,9 +2391,9 @@
             5,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2409,9 +2409,9 @@
             6,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2427,9 +2427,9 @@
             7,
             0
           ],
-          "rawDamage": 83,
-          "hpDamage": 83,
-          "toughnessDamage": 58,
+          "rawDamage": 480,
+          "hpDamage": 480,
+          "toughnessDamage": 336,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2445,9 +2445,9 @@
             1,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2483,9 +2483,9 @@
             2,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2501,9 +2501,9 @@
             3,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2519,9 +2519,9 @@
             4,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2537,9 +2537,9 @@
             5,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2555,9 +2555,9 @@
             6,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2573,9 +2573,9 @@
             7,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2591,9 +2591,9 @@
             8,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2609,9 +2609,9 @@
             9,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2627,9 +2627,9 @@
             10,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2645,9 +2645,9 @@
             11,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2663,9 +2663,9 @@
             12,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2681,9 +2681,9 @@
             13,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2699,9 +2699,9 @@
             14,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2717,9 +2717,9 @@
             15,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2735,9 +2735,9 @@
             16,
             0
           ],
-          "rawDamage": 12,
-          "hpDamage": 12,
-          "toughnessDamage": 8,
+          "rawDamage": 69,
+          "hpDamage": 69,
+          "toughnessDamage": 48,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2753,9 +2753,9 @@
             17,
             0
           ],
-          "rawDamage": 710,
-          "hpDamage": 710,
-          "toughnessDamage": 497,
+          "rawDamage": 4112,
+          "hpDamage": 4112,
+          "toughnessDamage": 2878,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2771,9 +2771,9 @@
             18,
             0
           ],
-          "rawDamage": 212,
-          "hpDamage": 212,
-          "toughnessDamage": 148,
+          "rawDamage": 1226,
+          "hpDamage": 1226,
+          "toughnessDamage": 858,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2793,7 +2793,7 @@
           ],
           "rawDamage": 49024,
           "hpDamage": 49024,
-          "toughnessDamage": 1922,
+          "toughnessDamage": 13152.0077,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2809,8 +2809,8 @@
             19,
             0
           ],
-          "rawDamage": 424,
-          "hpDamage": 424,
+          "rawDamage": 2452,
+          "hpDamage": 2452,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2825,7 +2825,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516449,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2841,8 +2841,8 @@
             20,
             0
           ],
-          "rawDamage": 424,
-          "hpDamage": 424,
+          "rawDamage": 2452,
+          "hpDamage": 2452,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2857,7 +2857,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2873,8 +2873,8 @@
             21,
             0
           ],
-          "rawDamage": 3294,
-          "hpDamage": 3294,
+          "rawDamage": 19074,
+          "hpDamage": 19074,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2889,7 +2889,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2905,8 +2905,8 @@
             22,
             0
           ],
-          "rawDamage": 532,
-          "hpDamage": 532,
+          "rawDamage": 3079,
+          "hpDamage": 3079,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2921,7 +2921,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2937,8 +2937,8 @@
             23,
             0
           ],
-          "rawDamage": 532,
-          "hpDamage": 532,
+          "rawDamage": 3079,
+          "hpDamage": 3079,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2953,7 +2953,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2969,8 +2969,8 @@
             24,
             0
           ],
-          "rawDamage": 532,
-          "hpDamage": 532,
+          "rawDamage": 3079,
+          "hpDamage": 3079,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -2985,7 +2985,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3001,8 +3001,8 @@
             25,
             0
           ],
-          "rawDamage": 532,
-          "hpDamage": 532,
+          "rawDamage": 3079,
+          "hpDamage": 3079,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3017,7 +3017,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3031,7 +3031,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3045,7 +3045,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3059,7 +3059,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3093,7 +3093,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3107,7 +3107,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3121,7 +3121,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3135,7 +3135,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3149,7 +3149,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3163,7 +3163,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3177,7 +3177,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3191,7 +3191,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3205,7 +3205,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3219,7 +3219,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3253,7 +3253,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3267,7 +3267,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3281,7 +3281,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3295,7 +3295,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3309,7 +3309,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3323,7 +3323,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3337,7 +3337,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3351,7 +3351,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3365,7 +3365,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3379,7 +3379,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3413,7 +3413,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3427,7 +3427,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3441,7 +3441,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3455,7 +3455,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3469,7 +3469,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3483,7 +3483,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3497,7 +3497,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3511,7 +3511,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3525,7 +3525,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3539,7 +3539,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3573,7 +3573,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3587,7 +3587,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3603,8 +3603,8 @@
             1,
             0
           ],
-          "rawDamage": 99,
-          "hpDamage": 99,
+          "rawDamage": 572,
+          "hpDamage": 572,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3621,8 +3621,8 @@
             2,
             0
           ],
-          "rawDamage": 99,
-          "hpDamage": 99,
+          "rawDamage": 572,
+          "hpDamage": 572,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3637,7 +3637,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3653,8 +3653,8 @@
             3,
             0
           ],
-          "rawDamage": 99,
-          "hpDamage": 99,
+          "rawDamage": 572,
+          "hpDamage": 572,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -3669,7 +3669,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3683,7 +3683,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3697,7 +3697,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3711,7 +3711,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3725,7 +3725,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3739,7 +3739,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3753,7 +3753,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3787,7 +3787,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3801,7 +3801,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3815,7 +3815,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3829,7 +3829,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3843,7 +3843,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3857,7 +3857,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516449,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3871,7 +3871,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3885,7 +3885,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3899,7 +3899,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3913,7 +3913,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3947,7 +3947,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3961,7 +3961,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3975,7 +3975,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -3989,7 +3989,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4003,7 +4003,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4017,7 +4017,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4031,7 +4031,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4045,7 +4045,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4059,7 +4059,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4073,7 +4073,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4087,7 +4087,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4101,7 +4101,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4115,7 +4115,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4129,7 +4129,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4143,7 +4143,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4157,7 +4157,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4171,7 +4171,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4185,7 +4185,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516465,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4199,7 +4199,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4213,7 +4213,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4227,7 +4227,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4241,7 +4241,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4255,7 +4255,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4269,7 +4269,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4283,7 +4283,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4297,7 +4297,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4311,7 +4311,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4325,7 +4325,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4339,7 +4339,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4355,8 +4355,8 @@
             1,
             0
           ],
-          "rawDamage": 165,
-          "hpDamage": 165,
+          "rawDamage": 954,
+          "hpDamage": 954,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4373,8 +4373,8 @@
             2,
             0
           ],
-          "rawDamage": 165,
-          "hpDamage": 165,
+          "rawDamage": 954,
+          "hpDamage": 954,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4389,7 +4389,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4405,8 +4405,8 @@
             3,
             0
           ],
-          "rawDamage": 165,
-          "hpDamage": 165,
+          "rawDamage": 954,
+          "hpDamage": 954,
           "toughnessDamage": 0,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -4421,7 +4421,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4435,7 +4435,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529556,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4449,7 +4449,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4463,7 +4463,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4477,7 +4477,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4491,7 +4491,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4505,7 +4505,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4519,7 +4519,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4533,7 +4533,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4547,7 +4547,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4561,7 +4561,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4575,7 +4575,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.92572,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4589,7 +4589,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925736,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4603,7 +4603,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4617,7 +4617,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4631,7 +4631,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.529557,
+          "toughnessDamage": -243.516464,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4645,7 +4645,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4659,7 +4659,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925721,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4673,7 +4673,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631286,
+          "toughnessDamage": -243.925735,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4687,7 +4687,7 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -60.631287,
+          "toughnessDamage": -243.925623,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4717,9 +4717,9 @@
             1,
             0
           ],
-          "rawDamage": 166,
-          "hpDamage": 166,
-          "toughnessDamage": 33,
+          "rawDamage": 963,
+          "hpDamage": 963,
+          "toughnessDamage": 193,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4735,9 +4735,9 @@
             2,
             0
           ],
-          "rawDamage": 111,
-          "hpDamage": 111,
-          "toughnessDamage": 22,
+          "rawDamage": 642,
+          "hpDamage": 642,
+          "toughnessDamage": 128,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4753,9 +4753,9 @@
             3,
             0
           ],
-          "rawDamage": 168,
-          "hpDamage": 168,
-          "toughnessDamage": 34,
+          "rawDamage": 972,
+          "hpDamage": 972,
+          "toughnessDamage": 194,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4772,9 +4772,9 @@
             1,
             0
           ],
-          "rawDamage": 47,
-          "hpDamage": 47,
-          "toughnessDamage": 33,
+          "rawDamage": 272,
+          "hpDamage": 272,
+          "toughnessDamage": 190,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4791,9 +4791,9 @@
             2,
             0
           ],
-          "rawDamage": 47,
-          "hpDamage": 47,
-          "toughnessDamage": 33,
+          "rawDamage": 272,
+          "hpDamage": 272,
+          "toughnessDamage": 190,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4810,9 +4810,9 @@
             1,
             0
           ],
-          "rawDamage": 437,
-          "hpDamage": 437,
-          "toughnessDamage": 306,
+          "rawDamage": 2530,
+          "hpDamage": 2530,
+          "toughnessDamage": 1771,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4850,9 +4850,9 @@
             2,
             0
           ],
-          "rawDamage": 146,
-          "hpDamage": 146,
-          "toughnessDamage": 102,
+          "rawDamage": 843,
+          "hpDamage": 843,
+          "toughnessDamage": 590,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4869,9 +4869,9 @@
             3,
             0
           ],
-          "rawDamage": 146,
-          "hpDamage": 146,
-          "toughnessDamage": 102,
+          "rawDamage": 843,
+          "hpDamage": 843,
+          "toughnessDamage": 590,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4888,9 +4888,9 @@
             4,
             0
           ],
-          "rawDamage": 146,
-          "hpDamage": 146,
-          "toughnessDamage": 102,
+          "rawDamage": 843,
+          "hpDamage": 843,
+          "toughnessDamage": 590,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4907,9 +4907,9 @@
             5,
             0
           ],
-          "rawDamage": 146,
-          "hpDamage": 146,
-          "toughnessDamage": 102,
+          "rawDamage": 843,
+          "hpDamage": 843,
+          "toughnessDamage": 590,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         }
@@ -5944,7 +5944,7 @@
         }
       ]
     },
-    "summaryHash": "b73ba11734f9f39ae6ada33624eb3786d3e27c60336588fd35977f2124b260d7"
+    "summaryHash": "0f7372b8d0f16869f74b0ad409e02f30422fb7fb691247d50097985d159a0099"
   },
   "expected": {
     "exact": {
@@ -6003,18 +6003,18 @@
         1914,
         1919
       ],
-      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 664,
-      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 464,
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage": 3839,
+      "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage": 2688,
       "combat.ownerHitSummaryByActionId.ruby-ultimate.hitCount": 25,
-      "combat.ownerHitSummaryByActionId.ruby-ultimate.totalHpDamage": 7384,
-      "combat.ownerHitSummaryByActionId.ruby-ultimate.totalToughnessDamage": 773,
-      "combat.selectedHpDamageByActionId.ruby-ultimate": 156539,
-      "combat.ownerHitTotalHpDamage": 11188,
-      "combat.ownerHitTotalToughnessDamage": 2670,
-      "combat.ownerTotalHpDamage": 164422,
-      "combat.ownerTotalToughnessDamage": 2220,
-      "combat.enemy.initialHp": 862800,
-      "combat.enemy.finalHp": 698284,
+      "combat.ownerHitSummaryByActionId.ruby-ultimate.totalHpDamage": 42736,
+      "combat.ownerHitSummaryByActionId.ruby-ultimate.totalToughnessDamage": 4504,
+      "combat.selectedHpDamageByActionId.ruby-ultimate": 191891,
+      "combat.ownerHitTotalHpDamage": 64780,
+      "combat.ownerHitTotalToughnessDamage": 15438,
+      "combat.ownerTotalHpDamage": 218014,
+      "combat.ownerTotalToughnessDamage": 6063,
+      "combat.enemy.initialHp": 8677869.84,
+      "combat.enemy.finalHp": 8459311.84,
       "resources.specialResourceTrace.0.actionId": "ruby-reload",
       "resources.specialResourceTrace.0.frame": 24,
       "resources.specialResourceTrace.0.beforeValue": 0,
@@ -6083,9 +6083,9 @@
       "effects.passiveTrace.9.targetId": "actor-103002",
       "dynamicProperties.ownerSources.0.attributeId": 1,
       "dynamicProperties.ownerSources.0.dynamicExtraRaw": 0,
-      "comparison.primaryDamage": 297,
-      "comparison.baselineDamage": 126,
-      "comparison.damageDelta": 171
+      "comparison.primaryDamage": 1716,
+      "comparison.baselineDamage": 723,
+      "comparison.damageDelta": 993
     },
     "greaterThan": {
       "combat.ownerTotalHpDamage": 0,
@@ -6419,15 +6419,15 @@
       {
         "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.totalHpDamage",
         "operator": "exact",
-        "expected": 664,
-        "actual": 664,
+        "expected": 3839,
+        "actual": 3839,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitSummaryByActionId.ruby-star-skill.totalToughnessDamage",
         "operator": "exact",
-        "expected": 464,
-        "actual": 464,
+        "expected": 2688,
+        "actual": 2688,
         "passed": true
       },
       {
@@ -6440,64 +6440,64 @@
       {
         "jsonPath": "combat.ownerHitSummaryByActionId.ruby-ultimate.totalHpDamage",
         "operator": "exact",
-        "expected": 7384,
-        "actual": 7384,
+        "expected": 42736,
+        "actual": 42736,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitSummaryByActionId.ruby-ultimate.totalToughnessDamage",
         "operator": "exact",
-        "expected": 773,
-        "actual": 773,
+        "expected": 4504,
+        "actual": 4504,
         "passed": true
       },
       {
         "jsonPath": "combat.selectedHpDamageByActionId.ruby-ultimate",
         "operator": "exact",
-        "expected": 156539,
-        "actual": 156539,
+        "expected": 191891,
+        "actual": 191891,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "exact",
-        "expected": 11188,
-        "actual": 11188,
+        "expected": 64780,
+        "actual": 64780,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerHitTotalToughnessDamage",
         "operator": "exact",
-        "expected": 2670,
-        "actual": 2670,
+        "expected": 15438,
+        "actual": 15438,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 164422,
-        "actual": 164422,
+        "expected": 218014,
+        "actual": 218014,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalToughnessDamage",
         "operator": "exact",
-        "expected": 2220,
-        "actual": 2220,
+        "expected": 6063,
+        "actual": 6063,
         "passed": true
       },
       {
         "jsonPath": "combat.enemy.initialHp",
         "operator": "exact",
-        "expected": 862800,
-        "actual": 862800,
+        "expected": 8677869.84,
+        "actual": 8677869.84,
         "passed": true
       },
       {
         "jsonPath": "combat.enemy.finalHp",
         "operator": "exact",
-        "expected": 698284,
-        "actual": 698284,
+        "expected": 8459311.84,
+        "actual": 8459311.84,
         "passed": true
       },
       {
@@ -6979,36 +6979,36 @@
       {
         "jsonPath": "comparison.primaryDamage",
         "operator": "exact",
-        "expected": 297,
-        "actual": 297,
+        "expected": 1716,
+        "actual": 1716,
         "passed": true
       },
       {
         "jsonPath": "comparison.baselineDamage",
         "operator": "exact",
-        "expected": 126,
-        "actual": 126,
+        "expected": 723,
+        "actual": 723,
         "passed": true
       },
       {
         "jsonPath": "comparison.damageDelta",
         "operator": "exact",
-        "expected": 171,
-        "actual": 171,
+        "expected": 993,
+        "actual": 993,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 164422,
+        "actual": 218014,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalToughnessDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 2220,
+        "actual": 6063,
         "passed": true
       },
       {
@@ -7029,11 +7029,11 @@
         "jsonPath": "comparison.damageDelta",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 171,
+        "actual": 993,
         "passed": true
       }
     ]
   },
-  "replayHash": "69b7953d865d593c5310d0dc08e3d5e9e3c73cfa9c8040f13f9fd9d07e451afa",
-  "profileHash": "dd5d91f97ac86131158d483002712dc579ecefd4f518bce1ffe4798754478018"
+  "replayHash": "a8ee5ffb36788ebc177f6baca1fb5cb751a5ef35c534872b0d610c80546fb9fc",
+  "profileHash": "7943ed8d6ed1ba4f689f0fa57bf7c58faeaa05606dbd5b05b0d4c1a26fcf3f55"
 }

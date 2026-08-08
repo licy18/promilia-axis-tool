@@ -1,4 +1,7 @@
-import { ACTION_TYPES } from '../domain/projectSchema';
+import {
+  ACTION_TYPES,
+  applyResolvedEnemyProfileToInstance,
+} from '../domain/projectSchema';
 import { attachActionSourceSequence } from '../domain/actionSourceSequence';
 import {
   DEFAULT_WORKBENCH_TEAM_SLOTS,
@@ -38,12 +41,18 @@ import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import { createMachineAxisBatchEvaluator } from './machineAxisBatchEvaluator';
 import { createMachineAxisCycleEvaluator } from './machineAxisCycleEvaluator';
+import { createMachineAxisKillEvaluator } from './machineAxisKillEvaluator';
 import {
   createMachineAxisSearchEngine,
   normalizeSearchOptions,
   selectTopN,
 } from './machineAxisSearchEngine';
 import { createMachineAxisSearchReport } from './machineAxisSearchReport';
+import { createMachineAxisEnemyProfileFromCompiledEnemy } from './machineAxisEnemyProfileContract';
+import {
+  createMachineAxisObjectiveContract,
+  validateMachineAxisObjectiveContract,
+} from './machineAxisObjectiveContract';
 import { expandKiboAutoCastActions } from './kiboAutoCastScheduler';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
@@ -115,8 +124,7 @@ export function createMachineAxisService({
         verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
         mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
         mechanicsProfileVersion: 1,
-        optimizationScenarioPolicyId:
-          getOptimizationScenarioPolicy().policyId,
+        optimizationScenarioPolicyId: getOptimizationScenarioPolicy().policyId,
         optimizationScenarioPolicyHash:
           getOptimizationScenarioPolicy().policyHash,
         optimizationCandidateRosterPolicyId:
@@ -128,9 +136,10 @@ export function createMachineAxisService({
       publicActions,
       kibos,
       enemies: coreCatalog.enemies,
-      optimizationQualification: createOptimizationQualificationCatalogProjection(
-        optimizationQualificationCatalog
-      ),
+      optimizationQualification:
+        createOptimizationQualificationCatalogProjection(
+          optimizationQualificationCatalog
+        ),
       optimizationScenarioPolicy: getOptimizationScenarioPolicy(),
       optimizationCandidateRoster: getOptimizationCandidateRosterPolicy(),
       summary: {
@@ -191,6 +200,7 @@ export function createMachineAxisService({
           input: compilation.hashes.input,
           data: compilation.hashes.data,
           trace: run.hashes.trace,
+          build: run.hashes.build,
         },
         actionResolutions: compilation.actionResolutions,
       };
@@ -271,6 +281,13 @@ export function createMachineAxisService({
     }).evaluate(envelope, options);
   }
 
+  function evaluateKill(envelope, options = {}) {
+    return createMachineAxisKillEvaluator({ service: api }).evaluate(
+      envelope,
+      options
+    );
+  }
+
   async function search(envelope, options = {}) {
     const contract = Object.prototype.hasOwnProperty.call(
       envelope ?? {},
@@ -322,9 +339,53 @@ export function createMachineAxisService({
         'maxWaitCandidates',
         'criticalPolicy',
         'seeds',
+        'allowUnverifiedRuntimeTiming',
       ]),
     };
     const normalizedOptions = normalizeSearchOptions(mergedOptions);
+    if (normalizedOptions.objective == null) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-search-objective-invalid',
+          'options.objective',
+          `Unsupported search objective: ${mergedOptions.objective}`
+        ),
+      ]);
+    }
+    const objectiveContract =
+      envelope?.objectiveContract ??
+      createMachineAxisObjectiveContract(normalizedOptions.objective);
+    const objectiveValidation = validateMachineAxisObjectiveContract(
+      objectiveContract,
+      {
+        formal: contract.scenario?.optimizationQualification?.mode === 'formal',
+      }
+    );
+    if (
+      objectiveValidation.valid !== true ||
+      objectiveValidation.contract.objectiveId !== normalizedOptions.objective
+    ) {
+      throw new MachineAxisValidationError([
+        ...objectiveValidation.issues.map(issue =>
+          createMachineAxisDiagnostic(
+            issue.code,
+            `objectiveContract${issue.field ? `.${issue.field}` : ''}`,
+            issue.message
+          )
+        ),
+        ...(objectiveValidation.valid === true &&
+        objectiveValidation.contract.objectiveId !== normalizedOptions.objective
+          ? [
+              createMachineAxisDiagnostic(
+                'machine-axis-search-objective-contract-mismatch',
+                'objectiveContract.objectiveId',
+                'Search objective does not match the supplied objective contract'
+              ),
+            ]
+          : []),
+      ]);
+    }
+    normalizedOptions.objectiveContract = objectiveValidation.contract;
     if (mergedOptions.seeds != null && normalizedOptions.seeds == null) {
       throw new MachineAxisValidationError([
         createMachineAxisDiagnostic(
@@ -355,7 +416,10 @@ export function createMachineAxisService({
     const teamFailures = [];
     const summaries = [];
     for (const candidate of teamCandidates) {
-      const candidateContract = applySearchTeamCandidate(contract, candidate);
+      const candidateContract = applySearchObjectiveContract(
+        applySearchTeamCandidate(contract, candidate),
+        objectiveValidation.contract
+      );
       const engine = createMachineAxisSearchEngine({ service: api });
       try {
         const result = await engine.search({
@@ -457,7 +521,7 @@ export function createMachineAxisService({
   function prepare(machineAxis) {
     const contractValidation = validateMachineAxisContract(machineAxis);
     const normalizedContract = contractValidation.normalized;
-    const contract = {
+    let contract = {
       ...normalizedContract,
       actions: expandKiboAutoCastActions(normalizedContract, {
         kiboCatalogById,
@@ -574,7 +638,8 @@ export function createMachineAxisService({
     for (const draft of actionDrafts) {
       if (draft.type !== ACTION_TYPES.SKILL) continue;
       const slot = contract.scenario.team.find(
-        candidate => Number(candidate.characterId) === Number(draft.actorCharacterId)
+        candidate =>
+          Number(candidate.characterId) === Number(draft.actorCharacterId)
       );
       const bonusesForSlot = starGiftSkillLevelBonusBySlot.get(
         String(slot?.slotId ?? '')
@@ -633,6 +698,9 @@ export function createMachineAxisService({
                 optimizationScenarioPolicy:
                   contract.scenario.optimizationScenarioPolicy,
               }),
+          ...(contract.scenario.objectiveContract == null
+            ? {}
+            : { objectiveContract: contract.scenario.objectiveContract }),
           ...(contract.scenario.target == null
             ? {}
             : { target: contract.scenario.target }),
@@ -670,9 +738,8 @@ export function createMachineAxisService({
             actorConfig => ({
               ...actorConfig,
               optimizationCultivationApplication:
-                applicationByCharacterId.get(
-                  Number(actorConfig.characterId)
-                ) ?? null,
+                applicationByCharacterId.get(Number(actorConfig.characterId)) ??
+                null,
             })
           ),
         },
@@ -718,6 +785,57 @@ export function createMachineAxisService({
         actionVariantPreflight = stabilization.actionVariantPreflight;
         resolvedDurationFramesByActionId =
           stabilization.durationFramesByActionId;
+      }
+    }
+    if (
+      !issues.length &&
+      canonicalCompilation &&
+      contract.scenario.enemy.profile == null
+    ) {
+      const mechanicsPackage = requireMechanicsPackage();
+      const breakProfile = (mechanicsPackage.ownerProfiles?.enemy ?? []).find(
+        candidate =>
+          Number(candidate.enemyId) ===
+          Number(canonicalCompilation.scenario?.enemy?.enemyId)
+      );
+      const profile = createMachineAxisEnemyProfileFromCompiledEnemy({
+        enemy: canonicalCompilation.scenario?.enemy,
+        breakProfile,
+      });
+      if (profile) {
+        contract = {
+          ...contract,
+          scenario: {
+            ...contract.scenario,
+            enemy: { ...contract.scenario.enemy, profile },
+          },
+        };
+        project = {
+          ...project,
+          enemy: applyResolvedEnemyProfileToInstance(project.enemy, profile),
+          metadata: {
+            ...project.metadata,
+            enemyConfig: {
+              ...(project.metadata?.enemyConfig ?? {}),
+              profile,
+            },
+          },
+        };
+        const restabilization = stabilizeMachineAxisScheduling({
+          contract,
+          project,
+          templates: templates.filter(Boolean),
+          core,
+        });
+        issues.push(...restabilization.issues);
+        if (restabilization.valid) {
+          project = restabilization.project;
+          finalScheduleResult = restabilization.scheduleResult;
+          canonicalCompilation = restabilization.canonicalCompilation;
+          actionVariantPreflight = restabilization.actionVariantPreflight;
+          resolvedDurationFramesByActionId =
+            restabilization.durationFramesByActionId;
+        }
       }
     }
     project.metadata.transport = {
@@ -786,6 +904,7 @@ export function createMachineAxisService({
     compare,
     evaluateBatch,
     evaluateCycle,
+    evaluateKill,
     search,
     prepare,
     prepareValidated,
@@ -1542,9 +1661,7 @@ function createAttackInputFields(action, mapping, segment) {
   return {
     ...(action.intent.attackInput?.contextActionId
       ? {
-          contextActionId: String(
-            action.intent.attackInput.contextActionId
-          ),
+          contextActionId: String(action.intent.attackInput.contextActionId),
         }
       : {}),
     attackGroupId:
@@ -2418,6 +2535,19 @@ function applySearchTeamCandidate(contract, candidate) {
         id: candidate.id,
         ...candidate.metadata,
       },
+    },
+  };
+}
+
+function applySearchObjectiveContract(contract, objectiveContract) {
+  return {
+    ...contract,
+    scenario: {
+      ...(contract.scenario ?? {}),
+      objectiveContract: structuredClone(objectiveContract),
+      ...(objectiveContract.targetPolicy == null
+        ? {}
+        : { target: structuredClone(objectiveContract.targetPolicy) }),
     },
   };
 }
