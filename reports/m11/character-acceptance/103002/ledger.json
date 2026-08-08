@@ -3,23 +3,6 @@
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [
     {
-      "recordIdentity": "source-gap:042666a73cc1a860",
-      "uniqueGapIdentity": "source-gap:042666a73cc1a860",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:-8301357918827043072:unresolved:unresolved",
-        "effect:10300244|1|elements|3|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|3|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0",
-        "semantic-gap:a502b0bea6ae44a53d81"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:06075b1331017c98",
       "uniqueGapIdentity": "source-gap:06075b1331017c98",
       "category": "upstream-source-gap",
@@ -71,40 +54,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:0c6fd9d19d38b0b9",
-      "uniqueGapIdentity": "source-gap:0c6fd9d19d38b0b9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:374ea853dc8b2e600deb"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:0e79d829bda52359",
-      "uniqueGapIdentity": "source-gap:0e79d829bda52359",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:355e246d8f3f123e6647"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:114ec42541a95251",
       "uniqueGapIdentity": "source-gap:114ec42541a95251",
       "category": "upstream-source-gap",
@@ -139,40 +88,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:138e42c60afd6fe5",
-      "uniqueGapIdentity": "source-gap:138e42c60afd6fe5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300243|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:5c642ad70c98f6a0abac"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:166d4d8da2e77538",
-      "uniqueGapIdentity": "source-gap:166d4d8da2e77538",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:199b0cf60d6b7d30eebf"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:167d2322bf98f745",
       "uniqueGapIdentity": "source-gap:167d2322bf98f745",
       "category": "upstream-source-gap",
@@ -189,23 +104,6 @@
         "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
         "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0",
         "semantic-gap:752db51e412f0d037ddd"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:189dffb22ca8a449",
-      "uniqueGapIdentity": "source-gap:189dffb22ca8a449",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:b1fbc3370228fa88a6bd"
       ],
       "blocking": true
     },
@@ -257,57 +155,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:461d2fd9d2a63739c69b"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1d6bced583ea9168",
-      "uniqueGapIdentity": "source-gap:1d6bced583ea9168",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:326d2522b055b48005be"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1de4b7a317089f59",
-      "uniqueGapIdentity": "source-gap:1de4b7a317089f59",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:466374251647106866:unresolved:unresolved",
-        "effect:10300212|0|elements|29|466374251647106866|element:466374251647106866|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|29|466374251647106866|element:466374251647106866|unresolved-frame|0",
-        "semantic-gap:cd1fe88e0d33a6ee8797"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1e4b104245de86b9",
-      "uniqueGapIdentity": "source-gap:1e4b104245de86b9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:44579d66c9d51702d88b"
       ],
       "blocking": true
     },
@@ -448,74 +295,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:2b966785a3a0717d",
-      "uniqueGapIdentity": "source-gap:2b966785a3a0717d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:37ef859d71d068161574"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:2fd5754619f74c5a",
-      "uniqueGapIdentity": "source-gap:2fd5754619f74c5a",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-1715488869977622004:unresolved:unresolved",
-        "effect:10300221|0|elements|7|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|7|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
-        "semantic-gap:2948dc04c205593b0473"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:31eb2f99ceb54899",
-      "uniqueGapIdentity": "source-gap:31eb2f99ceb54899",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:89b4a2ebc41537dc8394"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:3235164673797804",
-      "uniqueGapIdentity": "source-gap:3235164673797804",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:ac8bb32d8d0278cc1658"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:33279b14a0b4c653",
       "uniqueGapIdentity": "source-gap:33279b14a0b4c653",
       "category": "upstream-source-gap",
@@ -618,23 +397,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4442276ba0b759cd",
-      "uniqueGapIdentity": "source-gap:4442276ba0b759cd",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:7c4eb224857da9fe0f25"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:478bcc6837a6f682",
       "uniqueGapIdentity": "source-gap:478bcc6837a6f682",
       "category": "upstream-source-gap",
@@ -688,57 +450,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4c3fd1637d992ba8",
-      "uniqueGapIdentity": "source-gap:4c3fd1637d992ba8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300212|0|elements|26|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|26|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:863d406e747300c1ddfe"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4ca0c70366abb10e",
-      "uniqueGapIdentity": "source-gap:4ca0c70366abb10e",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300210|2|elements|14|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|2|elements|14|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:65c415ac1a8e64ad7eda"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4e2be6ea6a9b0feb",
-      "uniqueGapIdentity": "source-gap:4e2be6ea6a9b0feb",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300213|0|elements|29|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|29|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:7a53b53ec95f641c0187"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:4e42385a67820fcc",
       "uniqueGapIdentity": "source-gap:4e42385a67820fcc",
       "category": "upstream-source-gap",
@@ -752,23 +463,6 @@
       "sourceRecordIdentities": [
         "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:957b94df87f68a9814b9"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4ec9d04055ac13a5",
-      "uniqueGapIdentity": "source-gap:4ec9d04055ac13a5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300205|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:03f6e0d97f3e54ab6781"
       ],
       "blocking": true
     },
@@ -841,23 +535,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:58ee429a68948b08",
-      "uniqueGapIdentity": "source-gap:58ee429a68948b08",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:0e616c3d26908ed03ae3"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:5d80ced99bf6133b",
       "uniqueGapIdentity": "source-gap:5d80ced99bf6133b",
       "category": "upstream-source-gap",
@@ -871,40 +548,6 @@
       "sourceRecordIdentities": [
         "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:35682617b262edf92696"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:5fa014e144fbb1c4",
-      "uniqueGapIdentity": "source-gap:5fa014e144fbb1c4",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300212|0|elements|27|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|27|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:6f7f25d37fdcbb3f6d2f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:605133b6180ddfb1",
-      "uniqueGapIdentity": "source-gap:605133b6180ddfb1",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:dfb22b453fe7339fdd6c"
       ],
       "blocking": true
     },
@@ -960,23 +603,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:70062a2343beeaad",
-      "uniqueGapIdentity": "source-gap:70062a2343beeaad",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:f4655d831c1ee71959ce"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:707062137438e359",
       "uniqueGapIdentity": "source-gap:707062137438e359",
       "category": "upstream-source-gap",
@@ -994,23 +620,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:71476be851d45f24",
-      "uniqueGapIdentity": "source-gap:71476be851d45f24",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:b1158d44fede28648ac0"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7179cd0ff2ee975c",
       "uniqueGapIdentity": "source-gap:7179cd0ff2ee975c",
       "category": "upstream-source-gap",
@@ -1024,23 +633,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:62d840c0f2ee4de7a166"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:74d3c32b4c7c9279",
-      "uniqueGapIdentity": "source-gap:74d3c32b4c7c9279",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:e365468d03953628d676"
       ],
       "blocking": true
     },
@@ -1126,125 +718,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:89db5d72eee92510c787"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7abfeb604cf85281",
-      "uniqueGapIdentity": "source-gap:7abfeb604cf85281",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300243|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:96835d1f3ae1247ca2ab"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7fbc90ac6a603230",
-      "uniqueGapIdentity": "source-gap:7fbc90ac6a603230",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300213|0|elements|30|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|30|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:b70b9738eb878d4a67a8"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7fe7d903a458850d",
-      "uniqueGapIdentity": "source-gap:7fe7d903a458850d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:579a721aeb7fa76743d0"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8366ae2368715e4a",
-      "uniqueGapIdentity": "source-gap:8366ae2368715e4a",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300210|0|elements|15|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|0|elements|15|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:b0e32f48c8195a9119a9"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8573b694bf2cb891",
-      "uniqueGapIdentity": "source-gap:8573b694bf2cb891",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:8fc477b874f714550e88"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:863ec63cefc9d52d",
-      "uniqueGapIdentity": "source-gap:863ec63cefc9d52d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:c630dae63590566f287a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8a0d297a4b6ae2d8",
-      "uniqueGapIdentity": "source-gap:8a0d297a4b6ae2d8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:4116b8151836fb9d1492"
       ],
       "blocking": true
     },
@@ -1368,23 +841,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:9ae13039a4d3af1f",
-      "uniqueGapIdentity": "source-gap:9ae13039a4d3af1f",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|0|elements|20|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|20|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:8680b6b43058688e74fe"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:9f798bc0bef72951",
       "uniqueGapIdentity": "source-gap:9f798bc0bef72951",
       "category": "upstream-source-gap",
@@ -1419,23 +875,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:a1a5f0b285626b7f",
-      "uniqueGapIdentity": "source-gap:a1a5f0b285626b7f",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:-5857702920164552208:unresolved:unresolved",
-        "effect:10300213|0|elements|26|-5857702920164552208|element:-5857702920164552208|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|26|-5857702920164552208|element:-5857702920164552208|unresolved-frame|0",
-        "semantic-gap:58bc96c2f694b1eef328"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:a413a05e5a6c4901",
       "uniqueGapIdentity": "source-gap:a413a05e5a6c4901",
       "category": "upstream-source-gap",
@@ -1449,91 +888,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:71cf034d25fef59f9379"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:a9d0458a0ef49957",
-      "uniqueGapIdentity": "source-gap:a9d0458a0ef49957",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-127131817645696752:unresolved:unresolved",
-        "effect:10300227|0|elements|1|-127131817645696752|element:-127131817645696752|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|1|-127131817645696752|element:-127131817645696752|unresolved-frame|0",
-        "semantic-gap:077b2f71da07db9444a1"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:aa92e295cb151a23",
-      "uniqueGapIdentity": "source-gap:aa92e295cb151a23",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|2|elements|8|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|8|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:765a705c9b523e7d5c33"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b24ef4c258798c98",
-      "uniqueGapIdentity": "source-gap:b24ef4c258798c98",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:21e5c375393fc6205c4f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b3c082d97444f465",
-      "uniqueGapIdentity": "source-gap:b3c082d97444f465",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:2d8fb9d22d7fe4e4b562"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b61d968cd61e5511",
-      "uniqueGapIdentity": "source-gap:b61d968cd61e5511",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:5e22da319734ca1cfb37"
       ],
       "blocking": true
     },
@@ -1555,57 +909,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:bf8249b1b6050381",
-      "uniqueGapIdentity": "source-gap:bf8249b1b6050381",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:21b47d60671adbf0c430"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c0e902e23b3b5d39",
-      "uniqueGapIdentity": "source-gap:c0e902e23b3b5d39",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:01cd5a503f89ae78b4bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c67837ae3fc0aee5",
-      "uniqueGapIdentity": "source-gap:c67837ae3fc0aee5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:6f8e64cb58bf41904b2d"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:c77bbe48df521891",
       "uniqueGapIdentity": "source-gap:c77bbe48df521891",
       "category": "upstream-source-gap",
@@ -1619,57 +922,6 @@
       "sourceRecordIdentities": [
         "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0",
         "semantic-gap:cb9fc07d80425cebc2f0"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c7b5697e48f7f49e",
-      "uniqueGapIdentity": "source-gap:c7b5697e48f7f49e",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300244|1|elements|5|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|5|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:aa55150723aeb8f57088"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:cc485f2687274335",
-      "uniqueGapIdentity": "source-gap:cc485f2687274335",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:759b637eab5ae161c07b"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:cf0be86aa7c60fc7",
-      "uniqueGapIdentity": "source-gap:cf0be86aa7c60fc7",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:-8301357918827043072:unresolved:unresolved",
-        "effect:10300204|2|elements|6|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|6|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0",
-        "semantic-gap:c5ea0c7b4758fa22015b"
       ],
       "blocking": true
     },
@@ -1725,57 +977,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:d51c2a8560268818",
-      "uniqueGapIdentity": "source-gap:d51c2a8560268818",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300210|0|elements|16|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|0|elements|16|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:50ce561a8960de552c98"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d71c1fffa5824105",
-      "uniqueGapIdentity": "source-gap:d71c1fffa5824105",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:36c0a0482d34bb7ccc6a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d90618c536310f21",
-      "uniqueGapIdentity": "source-gap:d90618c536310f21",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:8a6b56952da1379c7605"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:d9d8202dfc6c3254",
       "uniqueGapIdentity": "source-gap:d9d8202dfc6c3254",
       "category": "upstream-source-gap",
@@ -1789,23 +990,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:83f92f214c5daf39b606"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:da051c8f620fefcf",
-      "uniqueGapIdentity": "source-gap:da051c8f620fefcf",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-7783775984244194322:unresolved:unresolved",
-        "effect:10300221|0|elements|8|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|8|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
-        "semantic-gap:a3e78b61e25ccf799f10"
       ],
       "blocking": true
     },
@@ -1844,23 +1028,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:e274c7b39dbc52c8",
-      "uniqueGapIdentity": "source-gap:e274c7b39dbc52c8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:fe2934e87becd8fe47c6"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:e2924e34753e950a",
       "uniqueGapIdentity": "source-gap:e2924e34753e950a",
       "category": "upstream-source-gap",
@@ -1874,127 +1041,6 @@
       "sourceRecordIdentities": [
         "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:c3000150b603bbc6cb40"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e6f3ed509c7ffe0c",
-      "uniqueGapIdentity": "source-gap:e6f3ed509c7ffe0c",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:901b3cf6efcca89fe48e"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e707427f63076a94",
-      "uniqueGapIdentity": "source-gap:e707427f63076a94",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:75ffb77a2b92ca8b807f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e72303f7aec26240",
-      "uniqueGapIdentity": "source-gap:e72303f7aec26240",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300210|2|elements|13|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|2|elements|13|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:d172be8fe4e07b6bd612"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e940fafa7ae6a121",
-      "uniqueGapIdentity": "source-gap:e940fafa7ae6a121",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:381237104ae38d778a2f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ea10e83743649a05",
-      "uniqueGapIdentity": "source-gap:ea10e83743649a05",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:4227003560910032429:unresolved:unresolved",
-        "effect:10300213|0|elements|26|-5857702920164552208|element:4227003560910032429|unresolved-frame|0",
-        "effect:10300213|0|elements|27|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|26|-5857702920164552208|element:4227003560910032429|unresolved-frame|0",
-        "effect:10300213|0|elements|27|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:23c5a305561a70503159"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ea1c183866bf95c9",
-      "uniqueGapIdentity": "source-gap:ea1c183866bf95c9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:a56eab8201859c8901bf"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ec211c9353c1a4b5",
-      "uniqueGapIdentity": "source-gap:ec211c9353c1a4b5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:aa87c70731d9ab62c7c8"
       ],
       "blocking": true
     },
@@ -2063,57 +1109,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:3c1f2a7f883c166aed41"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f176273f20dd1866",
-      "uniqueGapIdentity": "source-gap:f176273f20dd1866",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|1|elements|29|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|29|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:7b848b134c6a782002a4"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f2e86078275ef009",
-      "uniqueGapIdentity": "source-gap:f2e86078275ef009",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:23d00cd0e0c37fe48062"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f4c33f8772247765",
-      "uniqueGapIdentity": "source-gap:f4c33f8772247765",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:afda56d111d79f39ed2f"
       ],
       "blocking": true
     },
@@ -2199,23 +1194,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:45c17a135e4a28ec70be"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:fec96948d419b635",
-      "uniqueGapIdentity": "source-gap:fec96948d419b635",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:faf653c419a99f481f18"
       ],
       "blocking": true
     },
@@ -4328,7 +3306,7 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:18:c05ca0dcb759c1a8",
+      "requirementIdentity": "contract:effect:effect:11:c05ca0dcb759c1a8",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4337,12 +3315,12 @@
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:18da0685144c7a36",
-      "uniqueGapIdentity": "acceptance-gap:18da0685144c7a36"
+      "recordIdentity": "acceptance-gap:c2acd393c51fc7ff",
+      "uniqueGapIdentity": "acceptance-gap:c2acd393c51fc7ff"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:21:512a390234ba49ff",
+      "requirementIdentity": "contract:effect:effect:13:512a390234ba49ff",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4351,12 +3329,12 @@
         "battle-element-assets.jsonl#path_id=3879285143630828198"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:6da7b1c3194e280d",
-      "uniqueGapIdentity": "acceptance-gap:6da7b1c3194e280d"
+      "recordIdentity": "acceptance-gap:9af2234349c1c07e",
+      "uniqueGapIdentity": "acceptance-gap:9af2234349c1c07e"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:22:ffcc5f500c8f3543",
+      "requirementIdentity": "contract:effect:effect:14:ffcc5f500c8f3543",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4365,12 +3343,12 @@
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:38e24a65a7438c6c",
-      "uniqueGapIdentity": "acceptance-gap:38e24a65a7438c6c"
+      "recordIdentity": "acceptance-gap:536f52fa9b5d893b",
+      "uniqueGapIdentity": "acceptance-gap:536f52fa9b5d893b"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:35:34d972da6df89285",
+      "requirementIdentity": "contract:effect:effect:24:34d972da6df89285",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4379,12 +3357,12 @@
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:a68c8765ce60da34",
-      "uniqueGapIdentity": "acceptance-gap:a68c8765ce60da34"
+      "recordIdentity": "acceptance-gap:e3e6d4eafea5c046",
+      "uniqueGapIdentity": "acceptance-gap:e3e6d4eafea5c046"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:36:12aca86209798a73",
+      "requirementIdentity": "contract:effect:effect:25:12aca86209798a73",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4393,12 +3371,12 @@
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:6abf81291153f88d",
-      "uniqueGapIdentity": "acceptance-gap:6abf81291153f88d"
+      "recordIdentity": "acceptance-gap:62dd0662e55cf61d",
+      "uniqueGapIdentity": "acceptance-gap:62dd0662e55cf61d"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:37:a19fb39eeb2a7959",
+      "requirementIdentity": "contract:effect:effect:26:a19fb39eeb2a7959",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4407,12 +3385,12 @@
         "battle-element-assets.jsonl#path_id=2917355649561243897"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:5c288b90e14e40f4",
-      "uniqueGapIdentity": "acceptance-gap:5c288b90e14e40f4"
+      "recordIdentity": "acceptance-gap:adb2601c72f80f8a",
+      "uniqueGapIdentity": "acceptance-gap:adb2601c72f80f8a"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:38:cec7891ac6334881",
+      "requirementIdentity": "contract:effect:effect:27:cec7891ac6334881",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4421,26 +3399,12 @@
         "battle-element-assets.jsonl#path_id=2917355649561243897"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:acf0183aba2c4248",
-      "uniqueGapIdentity": "acceptance-gap:acf0183aba2c4248"
+      "recordIdentity": "acceptance-gap:a503b4be82bd06c4",
+      "uniqueGapIdentity": "acceptance-gap:a503b4be82bd06c4"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:4:07e43545fba3b7e8",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]",
-        "battle-element-assets.jsonl#path_id=4227003560910032429"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5f9b9d869451ba0d",
-      "uniqueGapIdentity": "acceptance-gap:5f9b9d869451ba0d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:41:4ae0696c19cd86cf",
+      "requirementIdentity": "contract:effect:effect:29:4ae0696c19cd86cf",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4449,12 +3413,26 @@
         "battle-element-assets.jsonl#path_id=4227003560910032429"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:454c7e8e5c4ce629",
-      "uniqueGapIdentity": "acceptance-gap:454c7e8e5c4ce629"
+      "recordIdentity": "acceptance-gap:e21f18f6a09f7ceb",
+      "uniqueGapIdentity": "acceptance-gap:e21f18f6a09f7ceb"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:51:ec6d3f48a86f920d",
+      "requirementIdentity": "contract:effect:effect:3:07e43545fba3b7e8",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]",
+        "battle-element-assets.jsonl#path_id=4227003560910032429"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:0a125b1e03a3b50e",
+      "uniqueGapIdentity": "acceptance-gap:0a125b1e03a3b50e"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:37:ec6d3f48a86f920d",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4463,12 +3441,12 @@
         "battle-element-assets.jsonl#path_id=-1715488869977622004"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:d984c8cd6664b685",
-      "uniqueGapIdentity": "acceptance-gap:d984c8cd6664b685"
+      "recordIdentity": "acceptance-gap:3b9b5b0c449d9001",
+      "uniqueGapIdentity": "acceptance-gap:3b9b5b0c449d9001"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:53:f952f49bf3462277",
+      "requirementIdentity": "contract:effect:effect:38:f952f49bf3462277",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4477,12 +3455,12 @@
         "battle-element-assets.jsonl#path_id=-3809486317990090417"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:d749bbfadbcd13e2",
-      "uniqueGapIdentity": "acceptance-gap:d749bbfadbcd13e2"
+      "recordIdentity": "acceptance-gap:ffafb61cd99fda1f",
+      "uniqueGapIdentity": "acceptance-gap:ffafb61cd99fda1f"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:54:98e18266279467c5",
+      "requirementIdentity": "contract:effect:effect:39:98e18266279467c5",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4491,12 +3469,12 @@
         "battle-element-assets.jsonl#path_id=-637110086033006477"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:529a6a28851c04e9",
-      "uniqueGapIdentity": "acceptance-gap:529a6a28851c04e9"
+      "recordIdentity": "acceptance-gap:76d723efa244d63a",
+      "uniqueGapIdentity": "acceptance-gap:76d723efa244d63a"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:55:e0776849629e0737",
+      "requirementIdentity": "contract:effect:effect:40:e0776849629e0737",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4505,12 +3483,12 @@
         "battle-element-assets.jsonl#path_id=-7783775984244194322"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:c8a59c22a7862d67",
-      "uniqueGapIdentity": "acceptance-gap:c8a59c22a7862d67"
+      "recordIdentity": "acceptance-gap:20b020e8b6dfa015",
+      "uniqueGapIdentity": "acceptance-gap:20b020e8b6dfa015"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:59:332ea80773f8364a",
+      "requirementIdentity": "contract:effect:effect:43:332ea80773f8364a",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4519,12 +3497,12 @@
         "battle-element-assets.jsonl#path_id=-127131817645696752"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:f0d9b50e9aaea6f9",
-      "uniqueGapIdentity": "acceptance-gap:f0d9b50e9aaea6f9"
+      "recordIdentity": "acceptance-gap:33434df315031ba0",
+      "uniqueGapIdentity": "acceptance-gap:33434df315031ba0"
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:61:7f77f05444f33a40",
+      "requirementIdentity": "contract:effect:effect:44:7f77f05444f33a40",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
@@ -4533,8 +3511,8 @@
         "battle-element-assets.jsonl#path_id=-2035055823451510697"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:c4e49372d1f98632",
-      "uniqueGapIdentity": "acceptance-gap:c4e49372d1f98632"
+      "recordIdentity": "acceptance-gap:090bb519ffe3ea75",
+      "uniqueGapIdentity": "acceptance-gap:090bb519ffe3ea75"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -6815,6 +5793,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:44:7f77f05444f33a40",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
+        "battle-element-assets.jsonl#path_id=-2035055823451510697"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:090bb519ffe3ea75",
+      "uniqueGapIdentity": "acceptance-gap:090bb519ffe3ea75"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:23:6a3831de3fc27850",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -6836,6 +5828,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:0a03e0d2a4d30748",
       "uniqueGapIdentity": "acceptance-gap:0a03e0d2a4d30748"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:3:07e43545fba3b7e8",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]",
+        "battle-element-assets.jsonl#path_id=4227003560910032429"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:0a125b1e03a3b50e",
+      "uniqueGapIdentity": "acceptance-gap:0a125b1e03a3b50e"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -7019,20 +6025,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:18:c05ca0dcb759c1a8",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
-        "battle-element-assets.jsonl#path_id=-1498771669867596146"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:18da0685144c7a36",
-      "uniqueGapIdentity": "acceptance-gap:18da0685144c7a36"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:hit:10300221|0|elements|5|5847071117717026074|70|3",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -7126,6 +6118,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:208c1bdc366a4444",
       "uniqueGapIdentity": "acceptance-gap:208c1bdc366a4444"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:40:e0776849629e0737",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
+        "battle-element-assets.jsonl#path_id=-7783775984244194322"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:20b020e8b6dfa015",
+      "uniqueGapIdentity": "acceptance-gap:20b020e8b6dfa015"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -7504,6 +6510,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:43:332ea80773f8364a",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
+        "battle-element-assets.jsonl#path_id=-127131817645696752"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:33434df315031ba0",
+      "uniqueGapIdentity": "acceptance-gap:33434df315031ba0"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:76:ecbb3d69211122d7",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -7559,20 +6579,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:37f2122ac8dbb511",
       "uniqueGapIdentity": "acceptance-gap:37f2122ac8dbb511"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:22:ffcc5f500c8f3543",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
-        "battle-element-assets.jsonl#path_id=466374251647106866"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:38e24a65a7438c6c",
-      "uniqueGapIdentity": "acceptance-gap:38e24a65a7438c6c"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -7633,6 +6639,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:3adf6db1173fc28e",
       "uniqueGapIdentity": "acceptance-gap:3adf6db1173fc28e"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:37:ec6d3f48a86f920d",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
+        "battle-element-assets.jsonl#path_id=-1715488869977622004"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:3b9b5b0c449d9001",
+      "uniqueGapIdentity": "acceptance-gap:3b9b5b0c449d9001"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -7845,20 +6865,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:452f09f5149277bb",
       "uniqueGapIdentity": "acceptance-gap:452f09f5149277bb"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:41:4ae0696c19cd86cf",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]",
-        "battle-element-assets.jsonl#path_id=4227003560910032429"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:454c7e8e5c4ce629",
-      "uniqueGapIdentity": "acceptance-gap:454c7e8e5c4ce629"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -8174,20 +7180,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:54:98e18266279467c5",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
-        "battle-element-assets.jsonl#path_id=-637110086033006477"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:529a6a28851c04e9",
-      "uniqueGapIdentity": "acceptance-gap:529a6a28851c04e9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:variant-edge:variant-edge:124:98ac073cb727cd4d",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -8221,6 +7213,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:533fdb1106620265",
       "uniqueGapIdentity": "acceptance-gap:533fdb1106620265"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:14:ffcc5f500c8f3543",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
+        "battle-element-assets.jsonl#path_id=466374251647106866"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:536f52fa9b5d893b",
+      "uniqueGapIdentity": "acceptance-gap:536f52fa9b5d893b"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -8404,20 +7410,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:37:a19fb39eeb2a7959",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-1358196052883222818__-1358196052883222818.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[36]",
-        "battle-element-assets.jsonl#path_id=2917355649561243897"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5c288b90e14e40f4",
-      "uniqueGapIdentity": "acceptance-gap:5c288b90e14e40f4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:variant-edge:variant-edge:118:292f5410f5a52603",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -8487,20 +7479,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:5f5bd03724bb7174",
       "uniqueGapIdentity": "acceptance-gap:5f5bd03724bb7174"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:4:07e43545fba3b7e8",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]",
-        "battle-element-assets.jsonl#path_id=4227003560910032429"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5f9b9d869451ba0d",
-      "uniqueGapIdentity": "acceptance-gap:5f9b9d869451ba0d"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -8585,6 +7563,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:624e86201f138699",
       "uniqueGapIdentity": "acceptance-gap:624e86201f138699"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:25:12aca86209798a73",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_8489770418213277406__8489770418213277406.json#startFrame|targetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
+        "battle-element-assets.jsonl#path_id=-8725062263845393396"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:62dd0662e55cf61d",
+      "uniqueGapIdentity": "acceptance-gap:62dd0662e55cf61d"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -8708,20 +7700,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:36:12aca86209798a73",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_8489770418213277406__8489770418213277406.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
-        "battle-element-assets.jsonl#path_id=-8725062263845393396"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:6abf81291153f88d",
-      "uniqueGapIdentity": "acceptance-gap:6abf81291153f88d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:variant-edge:variant-edge:112:bbed95d757da36c1",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -8743,20 +7721,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:6cae5ddec15a830c",
       "uniqueGapIdentity": "acceptance-gap:6cae5ddec15a830c"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:21:512a390234ba49ff",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
-        "battle-element-assets.jsonl#path_id=3879285143630828198"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:6da7b1c3194e280d",
-      "uniqueGapIdentity": "acceptance-gap:6da7b1c3194e280d"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -8889,6 +7853,20 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:767b1bb99ee25c0c",
       "uniqueGapIdentity": "acceptance-gap:767b1bb99ee25c0c"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:39:98e18266279467c5",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
+        "battle-element-assets.jsonl#path_id=-637110086033006477"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:76d723efa244d63a",
+      "uniqueGapIdentity": "acceptance-gap:76d723efa244d63a"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -9538,6 +8516,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:13:512a390234ba49ff",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
+        "battle-element-assets.jsonl#path_id=3879285143630828198"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:9af2234349c1c07e",
+      "uniqueGapIdentity": "acceptance-gap:9af2234349c1c07e"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:hit:10300213|0|elements|35|5057923295719837084|261|17",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -9658,6 +8650,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:27:cec7891ac6334881",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_2083420758843707102__2083420758843707102.json#startFrame|targetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[36]",
+        "battle-element-assets.jsonl#path_id=2917355649561243897"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:a503b4be82bd06c4",
+      "uniqueGapIdentity": "acceptance-gap:a503b4be82bd06c4"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:125:b3c6e41e424d550c",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -9667,20 +8673,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:a5f35a5b79e49790",
       "uniqueGapIdentity": "acceptance-gap:a5f35a5b79e49790"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:35:34d972da6df89285",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_2818728561424649950__2818728561424649950.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
-        "battle-element-assets.jsonl#path_id=-8725062263845393396"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:a68c8765ce60da34",
-      "uniqueGapIdentity": "acceptance-gap:a68c8765ce60da34"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -9804,17 +8796,17 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:38:cec7891ac6334881",
+      "requirementIdentity": "contract:effect:effect:26:a19fb39eeb2a7959",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_2083420758843707102__2083420758843707102.json#startFrame|targetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_-1358196052883222818__-1358196052883222818.json#startFrame|targetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[36]",
         "battle-element-assets.jsonl#path_id=2917355649561243897"
       ],
       "blocking": true,
-      "recordIdentity": "acceptance-gap:acf0183aba2c4248",
-      "uniqueGapIdentity": "acceptance-gap:acf0183aba2c4248"
+      "recordIdentity": "acceptance-gap:adb2601c72f80f8a",
+      "uniqueGapIdentity": "acceptance-gap:adb2601c72f80f8a"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -10226,6 +9218,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:11:c05ca0dcb759c1a8",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]",
+        "battle-element-assets.jsonl#path_id=-1498771669867596146"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:c2acd393c51fc7ff",
+      "uniqueGapIdentity": "acceptance-gap:c2acd393c51fc7ff"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:hit:10300221|0|elements|5|5847071117717026074|76|4",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -10262,20 +9268,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:61:7f77f05444f33a40",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-2035055823451510697"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c4e49372d1f98632",
-      "uniqueGapIdentity": "acceptance-gap:c4e49372d1f98632"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:133:4b22281b440bd5d3",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -10297,20 +9289,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:c60541eeddc78f1d",
       "uniqueGapIdentity": "acceptance-gap:c60541eeddc78f1d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:55:e0776849629e0737",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
-        "battle-element-assets.jsonl#path_id=-7783775984244194322"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c8a59c22a7862d67",
-      "uniqueGapIdentity": "acceptance-gap:c8a59c22a7862d67"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -10530,20 +9508,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:53:f952f49bf3462277",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
-        "battle-element-assets.jsonl#path_id=-3809486317990090417"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:d749bbfadbcd13e2",
-      "uniqueGapIdentity": "acceptance-gap:d749bbfadbcd13e2"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:6:4a8f13008e8b84f2",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -10553,20 +9517,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:d89bebb79152c8ac",
       "uniqueGapIdentity": "acceptance-gap:d89bebb79152c8ac"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:51:ec6d3f48a86f920d",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
-        "battle-element-assets.jsonl#path_id=-1715488869977622004"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:d984c8cd6664b685",
-      "uniqueGapIdentity": "acceptance-gap:d984c8cd6664b685"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -10663,6 +9613,34 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:e1fd78fe58bc7a65",
       "uniqueGapIdentity": "acceptance-gap:e1fd78fe58bc7a65"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:29:4ae0696c19cd86cf",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]",
+        "battle-element-assets.jsonl#path_id=4227003560910032429"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:e21f18f6a09f7ceb",
+      "uniqueGapIdentity": "acceptance-gap:e21f18f6a09f7ceb"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:24:34d972da6df89285",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_2818728561424649950__2818728561424649950.json#startFrame|targetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[34]",
+        "battle-element-assets.jsonl#path_id=-8725062263845393396"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:e3e6d4eafea5c046",
+      "uniqueGapIdentity": "acceptance-gap:e3e6d4eafea5c046"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -10954,20 +9932,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:59:332ea80773f8364a",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-127131817645696752"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:f0d9b50e9aaea6f9",
-      "uniqueGapIdentity": "acceptance-gap:f0d9b50e9aaea6f9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:115:3e1ad6dfbf54280c",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -11196,6 +10160,20 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:effect:effect:38:f952f49bf3462277",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]",
+        "battle-element-assets.jsonl#path_id=-3809486317990090417"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:ffafb61cd99fda1f",
+      "uniqueGapIdentity": "acceptance-gap:ffafb61cd99fda1f"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:37:b64f62fc40bec984",
       "status": "static-evidence-gap",
       "reason": "acceptance-selector-unavailable",
@@ -11217,23 +10195,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:ffb86ea03e2306bf",
       "uniqueGapIdentity": "acceptance-gap:ffb86ea03e2306bf"
-    },
-    {
-      "recordIdentity": "source-gap:042666a73cc1a860",
-      "uniqueGapIdentity": "source-gap:042666a73cc1a860",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:-8301357918827043072:unresolved:unresolved",
-        "effect:10300244|1|elements|3|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|3|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0",
-        "semantic-gap:a502b0bea6ae44a53d81"
-      ],
-      "blocking": true
     },
     {
       "recordIdentity": "source-gap:06075b1331017c98",
@@ -11287,40 +10248,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:0c6fd9d19d38b0b9",
-      "uniqueGapIdentity": "source-gap:0c6fd9d19d38b0b9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:374ea853dc8b2e600deb"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:0e79d829bda52359",
-      "uniqueGapIdentity": "source-gap:0e79d829bda52359",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:355e246d8f3f123e6647"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:114ec42541a95251",
       "uniqueGapIdentity": "source-gap:114ec42541a95251",
       "category": "upstream-source-gap",
@@ -11355,40 +10282,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:138e42c60afd6fe5",
-      "uniqueGapIdentity": "source-gap:138e42c60afd6fe5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300243|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:5c642ad70c98f6a0abac"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:166d4d8da2e77538",
-      "uniqueGapIdentity": "source-gap:166d4d8da2e77538",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:199b0cf60d6b7d30eebf"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:167d2322bf98f745",
       "uniqueGapIdentity": "source-gap:167d2322bf98f745",
       "category": "upstream-source-gap",
@@ -11405,23 +10298,6 @@
         "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
         "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0",
         "semantic-gap:752db51e412f0d037ddd"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:189dffb22ca8a449",
-      "uniqueGapIdentity": "source-gap:189dffb22ca8a449",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:b1fbc3370228fa88a6bd"
       ],
       "blocking": true
     },
@@ -11473,57 +10349,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:461d2fd9d2a63739c69b"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1d6bced583ea9168",
-      "uniqueGapIdentity": "source-gap:1d6bced583ea9168",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:326d2522b055b48005be"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1de4b7a317089f59",
-      "uniqueGapIdentity": "source-gap:1de4b7a317089f59",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:466374251647106866:unresolved:unresolved",
-        "effect:10300212|0|elements|29|466374251647106866|element:466374251647106866|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|29|466374251647106866|element:466374251647106866|unresolved-frame|0",
-        "semantic-gap:cd1fe88e0d33a6ee8797"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:1e4b104245de86b9",
-      "uniqueGapIdentity": "source-gap:1e4b104245de86b9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:44579d66c9d51702d88b"
       ],
       "blocking": true
     },
@@ -11664,74 +10489,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:2b966785a3a0717d",
-      "uniqueGapIdentity": "source-gap:2b966785a3a0717d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:37ef859d71d068161574"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:2fd5754619f74c5a",
-      "uniqueGapIdentity": "source-gap:2fd5754619f74c5a",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-1715488869977622004:unresolved:unresolved",
-        "effect:10300221|0|elements|7|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|7|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
-        "semantic-gap:2948dc04c205593b0473"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:31eb2f99ceb54899",
-      "uniqueGapIdentity": "source-gap:31eb2f99ceb54899",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:89b4a2ebc41537dc8394"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:3235164673797804",
-      "uniqueGapIdentity": "source-gap:3235164673797804",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:ac8bb32d8d0278cc1658"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:33279b14a0b4c653",
       "uniqueGapIdentity": "source-gap:33279b14a0b4c653",
       "category": "upstream-source-gap",
@@ -11834,23 +10591,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4442276ba0b759cd",
-      "uniqueGapIdentity": "source-gap:4442276ba0b759cd",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:7c4eb224857da9fe0f25"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:478bcc6837a6f682",
       "uniqueGapIdentity": "source-gap:478bcc6837a6f682",
       "category": "upstream-source-gap",
@@ -11904,57 +10644,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:4c3fd1637d992ba8",
-      "uniqueGapIdentity": "source-gap:4c3fd1637d992ba8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300212|0|elements|26|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|26|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:863d406e747300c1ddfe"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4ca0c70366abb10e",
-      "uniqueGapIdentity": "source-gap:4ca0c70366abb10e",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300210|2|elements|14|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|2|elements|14|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:65c415ac1a8e64ad7eda"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4e2be6ea6a9b0feb",
-      "uniqueGapIdentity": "source-gap:4e2be6ea6a9b0feb",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300213|0|elements|29|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|29|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:7a53b53ec95f641c0187"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:4e42385a67820fcc",
       "uniqueGapIdentity": "source-gap:4e42385a67820fcc",
       "category": "upstream-source-gap",
@@ -11968,23 +10657,6 @@
       "sourceRecordIdentities": [
         "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:957b94df87f68a9814b9"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:4ec9d04055ac13a5",
-      "uniqueGapIdentity": "source-gap:4ec9d04055ac13a5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300205|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:03f6e0d97f3e54ab6781"
       ],
       "blocking": true
     },
@@ -12057,23 +10729,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:58ee429a68948b08",
-      "uniqueGapIdentity": "source-gap:58ee429a68948b08",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:0e616c3d26908ed03ae3"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:5d80ced99bf6133b",
       "uniqueGapIdentity": "source-gap:5d80ced99bf6133b",
       "category": "upstream-source-gap",
@@ -12087,40 +10742,6 @@
       "sourceRecordIdentities": [
         "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:35682617b262edf92696"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:5fa014e144fbb1c4",
-      "uniqueGapIdentity": "source-gap:5fa014e144fbb1c4",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300212|0|elements|27|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|27|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:6f7f25d37fdcbb3f6d2f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:605133b6180ddfb1",
-      "uniqueGapIdentity": "source-gap:605133b6180ddfb1",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:dfb22b453fe7339fdd6c"
       ],
       "blocking": true
     },
@@ -12176,23 +10797,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:70062a2343beeaad",
-      "uniqueGapIdentity": "source-gap:70062a2343beeaad",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:f4655d831c1ee71959ce"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:707062137438e359",
       "uniqueGapIdentity": "source-gap:707062137438e359",
       "category": "upstream-source-gap",
@@ -12210,23 +10814,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:71476be851d45f24",
-      "uniqueGapIdentity": "source-gap:71476be851d45f24",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:b1158d44fede28648ac0"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:7179cd0ff2ee975c",
       "uniqueGapIdentity": "source-gap:7179cd0ff2ee975c",
       "category": "upstream-source-gap",
@@ -12240,23 +10827,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:62d840c0f2ee4de7a166"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:74d3c32b4c7c9279",
-      "uniqueGapIdentity": "source-gap:74d3c32b4c7c9279",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:e365468d03953628d676"
       ],
       "blocking": true
     },
@@ -12342,125 +10912,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:89db5d72eee92510c787"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7abfeb604cf85281",
-      "uniqueGapIdentity": "source-gap:7abfeb604cf85281",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300243|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:96835d1f3ae1247ca2ab"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7fbc90ac6a603230",
-      "uniqueGapIdentity": "source-gap:7fbc90ac6a603230",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300213|0|elements|30|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|30|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:b70b9738eb878d4a67a8"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:7fe7d903a458850d",
-      "uniqueGapIdentity": "source-gap:7fe7d903a458850d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:579a721aeb7fa76743d0"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8366ae2368715e4a",
-      "uniqueGapIdentity": "source-gap:8366ae2368715e4a",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300210|0|elements|15|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|0|elements|15|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:b0e32f48c8195a9119a9"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8573b694bf2cb891",
-      "uniqueGapIdentity": "source-gap:8573b694bf2cb891",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:8fc477b874f714550e88"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:863ec63cefc9d52d",
-      "uniqueGapIdentity": "source-gap:863ec63cefc9d52d",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:c630dae63590566f287a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:8a0d297a4b6ae2d8",
-      "uniqueGapIdentity": "source-gap:8a0d297a4b6ae2d8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:4116b8151836fb9d1492"
       ],
       "blocking": true
     },
@@ -12584,23 +11035,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:9ae13039a4d3af1f",
-      "uniqueGapIdentity": "source-gap:9ae13039a4d3af1f",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|0|elements|20|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|20|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:8680b6b43058688e74fe"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:9f798bc0bef72951",
       "uniqueGapIdentity": "source-gap:9f798bc0bef72951",
       "category": "upstream-source-gap",
@@ -12635,23 +11069,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:a1a5f0b285626b7f",
-      "uniqueGapIdentity": "source-gap:a1a5f0b285626b7f",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:-5857702920164552208:unresolved:unresolved",
-        "effect:10300213|0|elements|26|-5857702920164552208|element:-5857702920164552208|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|26|-5857702920164552208|element:-5857702920164552208|unresolved-frame|0",
-        "semantic-gap:58bc96c2f694b1eef328"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:a413a05e5a6c4901",
       "uniqueGapIdentity": "source-gap:a413a05e5a6c4901",
       "category": "upstream-source-gap",
@@ -12665,91 +11082,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:71cf034d25fef59f9379"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:a9d0458a0ef49957",
-      "uniqueGapIdentity": "source-gap:a9d0458a0ef49957",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300227:0:-127131817645696752:unresolved:unresolved",
-        "effect:10300227|0|elements|1|-127131817645696752|element:-127131817645696752|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300227|0|elements|1|-127131817645696752|element:-127131817645696752|unresolved-frame|0",
-        "semantic-gap:077b2f71da07db9444a1"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:aa92e295cb151a23",
-      "uniqueGapIdentity": "source-gap:aa92e295cb151a23",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|2|elements|8|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|8|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:765a705c9b523e7d5c33"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b24ef4c258798c98",
-      "uniqueGapIdentity": "source-gap:b24ef4c258798c98",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:21e5c375393fc6205c4f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b3c082d97444f465",
-      "uniqueGapIdentity": "source-gap:b3c082d97444f465",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:2d8fb9d22d7fe4e4b562"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:b61d968cd61e5511",
-      "uniqueGapIdentity": "source-gap:b61d968cd61e5511",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:5e22da319734ca1cfb37"
       ],
       "blocking": true
     },
@@ -12771,57 +11103,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:bf8249b1b6050381",
-      "uniqueGapIdentity": "source-gap:bf8249b1b6050381",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:3663436943335475859:unresolved:unresolved",
-        "effect:10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:21b47d60671adbf0c430"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c0e902e23b3b5d39",
-      "uniqueGapIdentity": "source-gap:c0e902e23b3b5d39",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300204|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:01cd5a503f89ae78b4bc"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c67837ae3fc0aee5",
-      "uniqueGapIdentity": "source-gap:c67837ae3fc0aee5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300204|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:6f8e64cb58bf41904b2d"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:c77bbe48df521891",
       "uniqueGapIdentity": "source-gap:c77bbe48df521891",
       "category": "upstream-source-gap",
@@ -12835,57 +11116,6 @@
       "sourceRecordIdentities": [
         "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0",
         "semantic-gap:cb9fc07d80425cebc2f0"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:c7b5697e48f7f49e",
-      "uniqueGapIdentity": "source-gap:c7b5697e48f7f49e",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300244|1|elements|5|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|5|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:aa55150723aeb8f57088"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:cc485f2687274335",
-      "uniqueGapIdentity": "source-gap:cc485f2687274335",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300202|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:759b637eab5ae161c07b"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:cf0be86aa7c60fc7",
-      "uniqueGapIdentity": "source-gap:cf0be86aa7c60fc7",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:-8301357918827043072:unresolved:unresolved",
-        "effect:10300204|2|elements|6|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|6|-8301357918827043072|element:-8301357918827043072|unresolved-frame|0",
-        "semantic-gap:c5ea0c7b4758fa22015b"
       ],
       "blocking": true
     },
@@ -12941,57 +11171,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:d51c2a8560268818",
-      "uniqueGapIdentity": "source-gap:d51c2a8560268818",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:0:6226025878936021619:unresolved:unresolved",
-        "effect:10300210|0|elements|16|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|0|elements|16|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:50ce561a8960de552c98"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d71c1fffa5824105",
-      "uniqueGapIdentity": "source-gap:d71c1fffa5824105",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:36c0a0482d34bb7ccc6a"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:d90618c536310f21",
-      "uniqueGapIdentity": "source-gap:d90618c536310f21",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:8a6b56952da1379c7605"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:d9d8202dfc6c3254",
       "uniqueGapIdentity": "source-gap:d9d8202dfc6c3254",
       "category": "upstream-source-gap",
@@ -13005,23 +11184,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
         "semantic-gap:83f92f214c5daf39b606"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:da051c8f620fefcf",
-      "uniqueGapIdentity": "source-gap:da051c8f620fefcf",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300221:0:-7783775984244194322:unresolved:unresolved",
-        "effect:10300221|0|elements|8|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300221|0|elements|8|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0",
-        "semantic-gap:a3e78b61e25ccf799f10"
       ],
       "blocking": true
     },
@@ -13060,23 +11222,6 @@
       "blocking": true
     },
     {
-      "recordIdentity": "source-gap:e274c7b39dbc52c8",
-      "uniqueGapIdentity": "source-gap:e274c7b39dbc52c8",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300204|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:fe2934e87becd8fe47c6"
-      ],
-      "blocking": true
-    },
-    {
       "recordIdentity": "source-gap:e2924e34753e950a",
       "uniqueGapIdentity": "source-gap:e2924e34753e950a",
       "category": "upstream-source-gap",
@@ -13090,127 +11235,6 @@
       "sourceRecordIdentities": [
         "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
         "semantic-gap:c3000150b603bbc6cb40"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e6f3ed509c7ffe0c",
-      "uniqueGapIdentity": "source-gap:e6f3ed509c7ffe0c",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300202|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:901b3cf6efcca89fe48e"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e707427f63076a94",
-      "uniqueGapIdentity": "source-gap:e707427f63076a94",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:4227003560910032429:unresolved:unresolved",
-        "effect:10300203|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|7|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:75ffb77a2b92ca8b807f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e72303f7aec26240",
-      "uniqueGapIdentity": "source-gap:e72303f7aec26240",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:2:3663436943335475859:unresolved:unresolved",
-        "effect:10300210|2|elements|13|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300210|2|elements|13|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:d172be8fe4e07b6bd612"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:e940fafa7ae6a121",
-      "uniqueGapIdentity": "source-gap:e940fafa7ae6a121",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:381237104ae38d778a2f"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ea10e83743649a05",
-      "uniqueGapIdentity": "source-gap:ea10e83743649a05",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:4227003560910032429:unresolved:unresolved",
-        "effect:10300213|0|elements|26|-5857702920164552208|element:4227003560910032429|unresolved-frame|0",
-        "effect:10300213|0|elements|27|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|26|-5857702920164552208|element:4227003560910032429|unresolved-frame|0",
-        "effect:10300213|0|elements|27|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:23c5a305561a70503159"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ea1c183866bf95c9",
-      "uniqueGapIdentity": "source-gap:ea1c183866bf95c9",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300203|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:a56eab8201859c8901bf"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:ec211c9353c1a4b5",
-      "uniqueGapIdentity": "source-gap:ec211c9353c1a4b5",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:6226025878936021619:unresolved:unresolved",
-        "effect:10300201|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
-        "semantic-gap:aa87c70731d9ab62c7c8"
       ],
       "blocking": true
     },
@@ -13279,57 +11303,6 @@
       "sourceRecordIdentities": [
         "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:3c1f2a7f883c166aed41"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f176273f20dd1866",
-      "uniqueGapIdentity": "source-gap:f176273f20dd1866",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:4227003560910032429:unresolved:unresolved",
-        "effect:10300201|1|elements|29|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|29|4227003560910032429|element:4227003560910032429|unresolved-frame|0",
-        "semantic-gap:7b848b134c6a782002a4"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f2e86078275ef009",
-      "uniqueGapIdentity": "source-gap:f2e86078275ef009",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300201|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:23d00cd0e0c37fe48062"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:f4c33f8772247765",
-      "uniqueGapIdentity": "source-gap:f4c33f8772247765",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300202|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:afda56d111d79f39ed2f"
       ],
       "blocking": true
     },
@@ -13415,23 +11388,6 @@
       "sourceRecordIdentities": [
         "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
         "semantic-gap:45c17a135e4a28ec70be"
-      ],
-      "blocking": true
-    },
-    {
-      "recordIdentity": "source-gap:fec96948d419b635",
-      "uniqueGapIdentity": "source-gap:fec96948d419b635",
-      "category": "upstream-source-gap",
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:3663436943335475859:unresolved:unresolved",
-        "effect:10300203|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0"
-      ],
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-        "semantic-gap:faf653c419a99f481f18"
       ],
       "blocking": true
     },
@@ -18517,18 +16473,17 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 503,
-    "sourceGapCount": 131,
+    "uniqueBlockingCount": 443,
+    "sourceGapCount": 71,
     "acceptanceGapCount": 372,
     "nonBlockingCount": 297,
     "statusCounts": {
       "runtime-evidence-required": 4,
-      "static-evidence-gap": 499
+      "static-evidence-gap": 439
     },
     "reasonCounts": {
       "acceptance-scenario-coverage-missing": 155,
       "acceptance-selector-unavailable": 217,
-      "effect-target-unresolved|effect-trigger-frame-missing": 60,
       "effect-trigger-frame-missing": 1,
       "runtime-dependent": 4,
       "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 7,
@@ -18536,10 +16491,10 @@
     },
     "categoryCounts": {
       "acceptance-scenario-gap": 372,
-      "upstream-source-gap": 131
+      "upstream-source-gap": 71
     }
   },
-  "ledgerHash": "85857ca59d316954",
+  "ledgerHash": "4de2c5d2b754669d",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:source-gap:0090f2ac6f468ecc",

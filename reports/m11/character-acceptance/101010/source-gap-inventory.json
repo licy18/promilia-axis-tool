@@ -3,50 +3,6 @@
   "kind": "character-acceptance-source-gap-inventory",
   "records": [
     {
-      "uniqueGapIdentity": "source-gap:00e966662870941f",
-      "sourceRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0",
-        "semantic-gap:8b24af5da8f299e369ce"
-      ],
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-1722401594839030113:unresolved:unresolved",
-        "effect:10101021|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101021|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "08e958e20e7b2bfa"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:0393d9380da103e0",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|13|1781318263043700654|element:9155281695412256774|unresolved-frame|0",
-        "semantic-gap:81648816105c80463b4a"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:9155281695412256774:unresolved:unresolved",
-        "effect:10101013|0|elements|13|1781318263043700654|element:9155281695412256774|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "fc3cfc171ade6c1e"
-    },
-    {
       "uniqueGapIdentity": "source-gap:04d19421283a9868",
       "sourceRecordIdentities": [
         "effect:10101042|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
@@ -79,25 +35,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "b25de928c261495f"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:05227e53ec541267",
-      "sourceRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
-        "semantic-gap:b98d88209ace3af57457"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:4731523060341306954:unresolved:unresolved",
-        "effect:10101021|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "e173975c0d8b9fd8"
     },
     {
       "uniqueGapIdentity": "source-gap:06ac2775bff037bd",
@@ -259,33 +196,6 @@
       "sourceRecordHash": "ef1878437bc5e7c1"
     },
     {
-      "uniqueGapIdentity": "source-gap:15a8b3c949df82d0",
-      "sourceRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0",
-        "semantic-gap:2f3b192eca2c1dfa4738"
-      ],
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-1722401594839030113:unresolved:unresolved",
-        "effect:10101049|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101049|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "2807ab948a4725a6"
-    },
-    {
       "uniqueGapIdentity": "source-gap:189c3c29dc363bf9",
       "sourceRecordIdentities": [
         "effect:10101013|0|elements|5|-5107736885784262990|element:-7412029037550756065|219|1",
@@ -377,25 +287,6 @@
       "sourceRecordHash": "9436b9f24cbc4ab6"
     },
     {
-      "uniqueGapIdentity": "source-gap:202cb15b007af876",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
-        "semantic-gap:7d107d98e1ddb3432e30"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:4329849906773849220:unresolved:unresolved",
-        "effect:10101013|0|elements|19|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101013|0|elements|24|4874764405196817692|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "2720fad6bd81131c"
-    },
-    {
       "uniqueGapIdentity": "source-gap:208c34718d255bf2",
       "sourceRecordIdentities": [
         "effect:10101021|0|elements|0|601520908186242978|element:-3124965708053832775|1|0",
@@ -428,25 +319,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "684d90ec95a1b764"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:20da68b2e08a2bfa",
-      "sourceRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
-        "semantic-gap:17577f7260c0e60dacfe"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:4731523060341306954:unresolved:unresolved",
-        "effect:10101049|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1c9dcd57491e1f31"
     },
     {
       "uniqueGapIdentity": "source-gap:20fb12c0a095fbf6",
@@ -515,27 +387,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "8a2843ecfdc97c1a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:22acb6e1cee2594e",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0",
-        "semantic-gap:b6e3f5ed94fb74bf6e2a"
-      ],
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-1722401594839030113:unresolved:unresolved",
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101013|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "bd83240e47bdc4fc"
     },
     {
       "uniqueGapIdentity": "source-gap:22bb769b66c9562a",
@@ -679,25 +530,6 @@
       "sourceRecordHash": "1190dce77bdb95bb"
     },
     {
-      "uniqueGapIdentity": "source-gap:26e0a659e3bcca6b",
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|10|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|2|elements|5|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "semantic-gap:951f2aea88ab51aa4820"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:4329849906773849220:unresolved:unresolved",
-        "effect:10101010|2|elements|10|4874764405196817692|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|2|elements|5|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d92d79836c829beb"
-    },
-    {
       "uniqueGapIdentity": "source-gap:279912a49509f14f",
       "sourceRecordIdentities": [
         "actor:101010:charged-attack:xiaoyu-enhanced-special-charged|control:10101042|sub:1|window:60-100:2|target:0|sub:0",
@@ -730,25 +562,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "ce5d708dbc83a834"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:28f5cb6f693ed154",
-      "sourceRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
-        "semantic-gap:54293123e2b7dbbcaf35"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-7412029037550756065:unresolved:unresolved",
-        "effect:10101049|1|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "484ec7999d7cef06"
     },
     {
       "uniqueGapIdentity": "source-gap:2b3e4b42cad626da",
@@ -842,29 +655,6 @@
       "sourceRecordHash": "94dc762e5992402e"
     },
     {
-      "uniqueGapIdentity": "source-gap:353b8786ec1ec889",
-      "sourceRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0",
-        "semantic-gap:74e7efdd43340a02d601"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-1085330686087474031:unresolved:unresolved",
-        "effect:10101042|0|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "2357630b44875c4d"
-    },
-    {
       "uniqueGapIdentity": "source-gap:367b287c79c74f20",
       "sourceRecordIdentities": [
         "actor:101010|star-skill|control:10101012|sub:0|control:10101012|sub:0|window:86-120:1|target:0|sub:0",
@@ -950,23 +740,6 @@
       "sourceRecordHash": "e1ddf69a13a28b75"
     },
     {
-      "uniqueGapIdentity": "source-gap:39b375a3927c413e",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
-        "semantic-gap:e2ecf11a29474a4a978b"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:4731523060341306954:unresolved:unresolved",
-        "effect:10101013|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "2f6e4bcbaaac4815"
-    },
-    {
       "uniqueGapIdentity": "source-gap:3ad95e065a8f50e0",
       "sourceRecordIdentities": [
         "effect:10101010|2|elements|7|-1458914462506140012|element:1474042154774785480|0|0",
@@ -1035,57 +808,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "a58ed4b160a9c8a3"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:437d31e337dd8a64",
-      "sourceRecordIdentities": [
-        "effect:10101025|0|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "semantic-gap:203ce5e4e361ac49c356"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101025:0:4329849906773849220:unresolved:unresolved",
-        "effect:10101025|0|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "8680da00fb6ee732"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:442754832c332b1b",
-      "sourceRecordIdentities": [
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:46875b5a4626a6019e5f"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "cb16d1d6b4661213"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:44fbd2f84d51034d",
-      "sourceRecordIdentities": [
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:80a5e4c9770f91d03b93"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101042|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "0143e6e030f21015"
     },
     {
       "uniqueGapIdentity": "source-gap:45773d2435f496aa",
@@ -1190,40 +912,6 @@
       "sourceRecordHash": "c98c697061004f57"
     },
     {
-      "uniqueGapIdentity": "source-gap:4e4f12a202a89a01",
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|12|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
-        "semantic-gap:1155cc3cff1753caa382"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:-8148787786042882084:unresolved:unresolved",
-        "effect:10101010|2|elements|12|1474042154774785480|element:-8148787786042882084|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "c9699e6a563a7d71"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:4f162d45cd16cb53",
-      "sourceRecordIdentities": [
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:7130366faed38e3587ff"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101021|0|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "54def5f90dbd2539"
-    },
-    {
       "uniqueGapIdentity": "source-gap:50dbcac768dee9d9",
       "sourceRecordIdentities": [
         "effect:10101013|0|elements|28|601520908186242978|element:-3124965708053832775|1|0",
@@ -1256,23 +944,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "d78b980c54000492"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:5634e1667d83c510",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|26|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
-        "semantic-gap:d99c8f4a3a7303161efd"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-8148787786042882084:unresolved:unresolved",
-        "effect:10101013|0|elements|26|1474042154774785480|element:-8148787786042882084|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "c7f35cf143897680"
     },
     {
       "uniqueGapIdentity": "source-gap:566dcb4d2af947ce",
@@ -1394,29 +1065,6 @@
       "sourceRecordHash": "ecdb9d7bb881b58c"
     },
     {
-      "uniqueGapIdentity": "source-gap:5e5b06dad622b242",
-      "sourceRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0",
-        "semantic-gap:b287386eb769b8b7bfa6"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-1085330686087474031:unresolved:unresolved",
-        "effect:10101021|0|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101021|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "824e6aa714f43ad7"
-    },
-    {
       "uniqueGapIdentity": "source-gap:5eb74c34e7e0261b",
       "sourceRecordIdentities": [
         "semantic-gap:7cce8cd87bbf2ffd9a29",
@@ -1468,40 +1116,6 @@
       "sourceRecordHash": "8694fd23994e87d9"
     },
     {
-      "uniqueGapIdentity": "source-gap:6156e148928ae564",
-      "sourceRecordIdentities": [
-        "effect:10101012|0|elements|4|1781318263043700654|element:9155281695412256774|unresolved-frame|0",
-        "semantic-gap:55ca66b434b3af583d92"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101012:0:9155281695412256774:unresolved:unresolved",
-        "effect:10101012|0|elements|4|1781318263043700654|element:9155281695412256774|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ab36d4d2fff313ff"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:6282d759094618a1",
-      "sourceRecordIdentities": [
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:5a6b48a5bd78173fc684"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101049|1|elements|1|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "350a183994f9a0ba"
-    },
-    {
       "uniqueGapIdentity": "source-gap:62a58d0d3900b63c",
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:0->actor:101010|control:10101010|sub:1->-2323960829737228709->8",
@@ -1534,23 +1148,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "ecb7a4449720238e"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:67cb43f50bc2fc30",
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|12|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
-        "semantic-gap:056c93cbcf5c14dd30be"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:1474042154774785480:unresolved:unresolved",
-        "effect:10101010|2|elements|12|1474042154774785480|element:1474042154774785480|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "784eff0a18276e84"
     },
     {
       "uniqueGapIdentity": "source-gap:680c6206615d3f79",
@@ -1655,23 +1252,6 @@
       "sourceRecordHash": "6c787b0fc5aee287"
     },
     {
-      "uniqueGapIdentity": "source-gap:6d9c8c69ab5253d8",
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:17711d34c907cbccb749"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|2|elements|15|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "93dc7471caec034f"
-    },
-    {
       "uniqueGapIdentity": "source-gap:6e73fb9d7ce79545",
       "sourceRecordIdentities": [
         "actor:101010|ultimate|control:10101013|sub:0|control:10101013|sub:0|window:295-329:1|target:0|sub:0",
@@ -1687,23 +1267,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "18ed5f08830d3ba8"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:6ebcb347c3ff499d",
-      "sourceRecordIdentities": [
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:55412eaf7b3dcabda350"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|1|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ef34ec8cbd9971f0"
     },
     {
       "uniqueGapIdentity": "source-gap:6eedef20ac0c4b8d",
@@ -1740,25 +1303,6 @@
       "sourceRecordHash": "c230440480de234a"
     },
     {
-      "uniqueGapIdentity": "source-gap:70437bd584cb64b5",
-      "sourceRecordIdentities": [
-        "effect:10101010|1|bulletElements|2|element-101010115|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|1|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "semantic-gap:5bc30f6a980dba6d7704"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:1:4329849906773849220:unresolved:unresolved",
-        "effect:10101010|1|bulletElements|2|element-101010115|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|1|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "83da8622841f165e"
-    },
-    {
       "uniqueGapIdentity": "source-gap:7266e9601cca3c24",
       "sourceRecordIdentities": [
         "effect:10101042|0|bulletElements|3|element-101010210|element:-7412029037550756065|53|0",
@@ -1791,63 +1335,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "9e7fcfcc5711ea8d"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:769e6e7c695142b3",
-      "sourceRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
-        "semantic-gap:d09c267ed4e3e41f9267"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:4731523060341306954:unresolved:unresolved",
-        "effect:10101042|1|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "e201caace712be85"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:774e20c25752b23e",
-      "sourceRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
-        "semantic-gap:63971afae779e38fcc6a"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-7412029037550756065:unresolved:unresolved",
-        "effect:10101042|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1cbec70b23c1de68"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:77c36d82089526e2",
-      "sourceRecordIdentities": [
-        "effect:10101010|2|elements|12|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
-        "effect:10101010|2|elements|13|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
-        "semantic-gap:19fe66070e9a18efc51d"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:2:-4529113272733101309:unresolved:unresolved",
-        "effect:10101010|2|elements|12|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
-        "effect:10101010|2|elements|13|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "41e4f8ebd7a11200"
     },
     {
       "uniqueGapIdentity": "source-gap:77e5a778165feb01",
@@ -2094,42 +1581,6 @@
       "sourceRecordHash": "60b6ce5531d744a5"
     },
     {
-      "uniqueGapIdentity": "source-gap:8afe3bc49261f68d",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|26|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
-        "effect:10101013|0|elements|27|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
-        "semantic-gap:7c28aece8adc93f2fd01"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-4529113272733101309:unresolved:unresolved",
-        "effect:10101013|0|elements|26|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
-        "effect:10101013|0|elements|27|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "5b3cf5df525d1559"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:8c11adf3fdadb266",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|13|1781318263043700654|element:-2721791746389150347|unresolved-frame|0",
-        "semantic-gap:cd8da7ba015209d6a765"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-2721791746389150347:unresolved:unresolved",
-        "effect:10101013|0|elements|13|1781318263043700654|element:-2721791746389150347|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "b7edf7b6628e2800"
-    },
-    {
       "uniqueGapIdentity": "source-gap:90920e71482e2f9c",
       "sourceRecordIdentities": [
         "effect:10101012|0|elements|3|-8630062226069243067|element:-2721791746389150347|50|0",
@@ -2215,25 +1666,6 @@
       "sourceRecordHash": "e0b7f3e4276db5d5"
     },
     {
-      "uniqueGapIdentity": "source-gap:958893fc89425279",
-      "sourceRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
-        "semantic-gap:3f67329be9765b3f2c3d"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-7412029037550756065:unresolved:unresolved",
-        "effect:10101042|1|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ba0a9ad7562ee2b5"
-    },
-    {
       "uniqueGapIdentity": "source-gap:95bfdfd933f013fd",
       "sourceRecordIdentities": [
         "actor:101010:charged-attack:xiaoyu-enhanced-special-charged|control:10101042|sub:1|window:99-309:4|target:0|sub:0",
@@ -2249,29 +1681,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "de2e298352597b4a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:9945039bcc9ba0eb",
-      "sourceRecordIdentities": [
-        "effect:10101049|1|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0",
-        "semantic-gap:023543f4a3a40d8479e6"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101049:1:-1085330686087474031:unresolved:unresolved",
-        "effect:10101049|1|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101049|1|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "dab114ba2873f82e"
     },
     {
       "uniqueGapIdentity": "source-gap:9a4afe85b6c009b3",
@@ -2471,25 +1880,6 @@
       "sourceRecordHash": "83054ecc9e885f1c"
     },
     {
-      "uniqueGapIdentity": "source-gap:abaca62b8e618990",
-      "sourceRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0",
-        "semantic-gap:42f8b6182ff4eefa0493"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:4731523060341306954:unresolved:unresolved",
-        "effect:10101042|0|bulletElements|4|element-799|element:4731523060341306954|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:4731523060341306954|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "38591dc26374461c"
-    },
-    {
       "uniqueGapIdentity": "source-gap:ac4ca05f4e588bc2",
       "sourceRecordIdentities": [
         "effect:10101013|0|elements|5|-5107736885784262990|element:-5107736885784262990|219|1",
@@ -2545,23 +1935,6 @@
       "impactClassification": "gameplay-impacting",
       "blocking": true,
       "sourceRecordHash": "d1b756e6606de6b8"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:aff446a13343a777",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
-        "semantic-gap:287a27ed65e9da26f81f"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-7412029037550756065:unresolved:unresolved",
-        "effect:10101013|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4fc6a3325f6f1977"
     },
     {
       "uniqueGapIdentity": "source-gap:b086ef91e24fc7fe",
@@ -2688,23 +2061,6 @@
       "sourceRecordHash": "7534f3bd7d3d6552"
     },
     {
-      "uniqueGapIdentity": "source-gap:ba4b409df6632027",
-      "sourceRecordIdentities": [
-        "effect:10101012|0|elements|4|1781318263043700654|element:1781318263043700654|unresolved-frame|0",
-        "semantic-gap:8aa717d714c98156b788"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101012:0:1781318263043700654:unresolved:unresolved",
-        "effect:10101012|0|elements|4|1781318263043700654|element:1781318263043700654|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "0a95c284a8618be8"
-    },
-    {
       "uniqueGapIdentity": "source-gap:bb6dec4c537722aa",
       "sourceRecordIdentities": [
         "effect:10101042|1|elements|0|601520908186242978|element:-3124965708053832775|1|0",
@@ -2739,23 +2095,6 @@
       "sourceRecordHash": "9161b90fc5e944dc"
     },
     {
-      "uniqueGapIdentity": "source-gap:bb9568745b838819",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|26|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
-        "semantic-gap:9573f5e25e5c81b0c6d8"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:1474042154774785480:unresolved:unresolved",
-        "effect:10101013|0|elements|26|1474042154774785480|element:1474042154774785480|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "27da2f15c4445cc4"
-    },
-    {
       "uniqueGapIdentity": "source-gap:bc00037ec4f180e0",
       "sourceRecordIdentities": [
         "actor:101010|control:10101010|sub:1->actor:101010|control:10101010|sub:1->-2323960829737228709->7",
@@ -2773,25 +2112,6 @@
       "sourceRecordHash": "a41fb1543cf240e5"
     },
     {
-      "uniqueGapIdentity": "source-gap:bc2cabb8f19144ee",
-      "sourceRecordIdentities": [
-        "effect:10101010|0|bulletElements|2|element-101010115|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|0|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0",
-        "semantic-gap:a2db58cb651bb41e000e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:0:4329849906773849220:unresolved:unresolved",
-        "effect:10101010|0|bulletElements|2|element-101010115|element:4329849906773849220|unresolved-frame|0",
-        "effect:10101010|0|elements|4|4329849906773849220|element:4329849906773849220|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4ec19449b876cbc3"
-    },
-    {
       "uniqueGapIdentity": "source-gap:bc5c9df3b8956a82",
       "sourceRecordIdentities": [
         "semantic-gap:a0d9f1b107b3d411f2bc",
@@ -2807,23 +2127,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "316ec062ac8fa35c"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:bf77de4b91941dff",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:67429a4b95eb7849412e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101013|0|elements|29|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "bad86361245d0941"
     },
     {
       "uniqueGapIdentity": "source-gap:c29fa3732b59734a",
@@ -2846,56 +2149,6 @@
       "sourceRecordHash": "c56255ce3715495d"
     },
     {
-      "uniqueGapIdentity": "source-gap:c2d16d2628629fc2",
-      "sourceRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0",
-        "semantic-gap:df34505f31790c50b085"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-1085330686087474031:unresolved:unresolved",
-        "effect:10101042|1|bulletElements|4|element-799|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "2c9795f1a1ddbe36"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:c52f8a9da13475ce",
-      "sourceRecordIdentities": [
-        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0",
-        "semantic-gap:d486d516290126a77a87"
-      ],
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:0:-1722401594839030113:unresolved:unresolved",
-        "effect:10101042|0|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|0|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "b2071652f327f05a"
-    },
-    {
       "uniqueGapIdentity": "source-gap:c6a67efb22374ca6",
       "sourceRecordIdentities": [
         "actor:101010|star-skill|control:10101012|sub:0|control:10101012|sub:0|window:0-93:0|target:0|sub:0",
@@ -2913,25 +2166,6 @@
       "sourceRecordHash": "17282d719e619cac"
     },
     {
-      "uniqueGapIdentity": "source-gap:c6ee2f8ea74621e6",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0",
-        "semantic-gap:2eaca5aaafd8907f8037"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:-1085330686087474031:unresolved:unresolved",
-        "effect:10101013|0|elements|6|4731523060341306954|element:-1085330686087474031|unresolved-frame|0",
-        "effect:10101013|0|elements|8|-1085330686087474031|element:-1085330686087474031|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "8d9d92cd5c7b8cb1"
-    },
-    {
       "uniqueGapIdentity": "source-gap:c7dd2c9f33a14a56",
       "sourceRecordIdentities": [
         "effect:10101042|1|elements|5|-5107736885784262990|element:-1085330686087474031|unresolved-frame|0",
@@ -2947,23 +2181,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "75918fcb40587e46"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:c9efe322951bc85d",
-      "sourceRecordIdentities": [
-        "effect:10101013|0|elements|13|1781318263043700654|element:1781318263043700654|unresolved-frame|0",
-        "semantic-gap:273f9dd069492db49272"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101013:0:1781318263043700654:unresolved:unresolved",
-        "effect:10101013|0|elements|13|1781318263043700654|element:1781318263043700654|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "5e34ed41fc5d40a4"
     },
     {
       "uniqueGapIdentity": "source-gap:cca9a278bc287e69",
@@ -3141,23 +2358,6 @@
       "sourceRecordHash": "82a03cd59f3aa9f7"
     },
     {
-      "uniqueGapIdentity": "source-gap:dbaa562c8568ed61",
-      "sourceRecordIdentities": [
-        "effect:10101005|0|elements|3|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0",
-        "semantic-gap:5fca62b0e080c05a66f5"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101005:0:-4529113272733101309:unresolved:unresolved",
-        "effect:10101005|0|elements|3|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "a6300fadee257334"
-    },
-    {
       "uniqueGapIdentity": "source-gap:dbff8c95e4d83f34",
       "sourceRecordIdentities": [
         "actor:101010|plunging-attack|control:10101011|sub:0|control:10101011|sub:0|window:90-313:2|target:0|sub:0",
@@ -3224,33 +2424,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "785c5dfa7bab53a1"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:de807208c313a413",
-      "sourceRecordIdentities": [
-        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0",
-        "semantic-gap:090e4d91edee07601590"
-      ],
-      "status": "unknown-formula",
-      "reason": "effect-trigger-frame-missing|sp-formula-not-literal-function-5",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101042:1:-1722401594839030113:unresolved:unresolved",
-        "effect:10101042|1|bulletElements|4|element-799|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|6|element-794|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|bulletElements|7|element-793|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|6|4731523060341306954|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|8|-1085330686087474031|element:-1722401594839030113|unresolved-frame|0",
-        "effect:10101042|1|elements|9|-1722401594839030113|element:-1722401594839030113|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "7ebaa72605eb4327"
     },
     {
       "uniqueGapIdentity": "source-gap:e07f88239324fcd7",
@@ -3355,23 +2528,6 @@
       "sourceRecordHash": "8ebbcc2d15a5dbce"
     },
     {
-      "uniqueGapIdentity": "source-gap:e34ae538aca7518b",
-      "sourceRecordIdentities": [
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0",
-        "semantic-gap:33ac8d9926692dcb861b"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101010:0:-3124965708053832775:unresolved:unresolved",
-        "effect:10101010|0|elements|9|-3124965708053832775|element:-3124965708053832775|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "a9e21052857c422e"
-    },
-    {
       "uniqueGapIdentity": "source-gap:e5bcf7f4d0f99754",
       "sourceRecordIdentities": [
         "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-4003851066891217312|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0",
@@ -3457,25 +2613,6 @@
       "sourceRecordHash": "74ecad0b1b73b3c0"
     },
     {
-      "uniqueGapIdentity": "source-gap:e85ad891c404eded",
-      "sourceRecordIdentities": [
-        "effect:10101021|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0",
-        "semantic-gap:c677f3890ce9d0b65a51"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101021:0:-7412029037550756065:unresolved:unresolved",
-        "effect:10101021|0|bulletElements|4|element-799|element:-7412029037550756065|unresolved-frame|0",
-        "effect:10101021|0|elements|6|4731523060341306954|element:-7412029037550756065|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4d878c3e0e0c7405"
-    },
-    {
       "uniqueGapIdentity": "source-gap:e88157b4d49f1b98",
       "sourceRecordIdentities": [
         "effect:10101042|0|bulletElements|3|element-101010210|element:-1722401594839030113|53|0",
@@ -3491,23 +2628,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "bc71b7dada8517cf"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:e952d3bc4c2deefa",
-      "sourceRecordIdentities": [
-        "effect:10101027|0|elements|1|4277244978079165007|element:4277244978079165007|unresolved-frame|0",
-        "semantic-gap:eea74a26406dbe0505cc"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101027:0:4277244978079165007:unresolved:unresolved",
-        "effect:10101027|0|elements|1|4277244978079165007|element:4277244978079165007|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1ffb044612d06f49"
     },
     {
       "uniqueGapIdentity": "source-gap:eb7e68a2cc7a5e59",
@@ -3752,47 +2872,26 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "dcb41256245b0762"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:fd565ef8b62f4e9c",
-      "sourceRecordIdentities": [
-        "effect:10101012|0|elements|4|1781318263043700654|element:-2721791746389150347|unresolved-frame|0",
-        "semantic-gap:7993a0581cbdc7540a4f"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10101012:0:-2721791746389150347:unresolved:unresolved",
-        "effect:10101012|0|elements|4|1781318263043700654|element:-2721791746389150347|unresolved-frame|0"
-      ],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4184ebeecd52e80d"
     }
   ],
   "summary": {
-    "uniqueGapCount": 209,
-    "blockingCount": 119,
+    "uniqueGapCount": 162,
+    "blockingCount": 72,
     "nonBlockingCount": 90,
     "statusCounts": {
       "not-applicable": 90,
       "runtime-evidence-required": 13,
-      "static-evidence-gap": 101,
-      "unknown-formula": 5
+      "static-evidence-gap": 59
     },
     "reasonCounts": {
       "effect-combine-semantics-unresolved": 2,
       "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-duration-unresolved": 9,
       "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-duration-unresolved|switch-wrapper-relation-unresolved": 1,
-      "effect-target-unresolved|effect-trigger-frame-missing": 24,
-      "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded": 9,
       "effect-target-unresolved|effect-trigger-frame-missing|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 4,
       "effect-target-unresolved|effect-trigger-frame-missing|nested-effect-wrapper-semantics-unresolved": 4,
-      "effect-trigger-frame-missing": 7,
+      "effect-trigger-frame-missing": 5,
       "effect-trigger-frame-missing|nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 4,
-      "effect-trigger-frame-missing|sp-formula-not-literal-function-5": 5,
-      "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 11,
+      "effect-trigger-frame-missing|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 4,
       "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 9,
       "nested-effect-wrapper-semantics-unresolved": 5,
       "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 5,
@@ -3809,5 +2908,5 @@
       "window-does-not-select-an-action-control": 36
     }
   },
-  "inventoryHash": "2ea19ff939ad021d"
+  "inventoryHash": "1bbb7117912fb6d0"
 }

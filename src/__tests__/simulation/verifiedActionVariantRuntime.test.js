@@ -136,11 +136,6 @@ describe('verified action variant and special resource runtime', () => {
           valueRaw: 5400,
           propertyTags: [307],
         }),
-        expect.objectContaining({
-          attributeId: 7,
-          bucket: 'dynamicExtra',
-          valueRaw: 300,
-        }),
       ])
     );
   });

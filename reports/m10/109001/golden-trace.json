@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b3-e20-2:109001:120s-mechanisms-coverage-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "040475c3e712cbb9ee0874342d6ec47f5a23ee26c91acb0ae15bf91d720c75eb",
+  "sourcePackageHash": "9aa0cef255f37faeb4b2676e13ca57f8b7c2c43bb58c6fc97116aaeb46dbc4e1",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "5a08de18a7887176",
-    "traceHash": "dc224728f1e8c6c4",
-    "dataHash": "0a16783a54cecc7b",
+    "inputHash": "57497d4ab8964e5b",
+    "traceHash": "6e22beca699e408b",
+    "dataHash": "68e04e173a369b94",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -1423,18 +1423,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 300,
+          "dynamicExtraRaw": 43,
           "effectIds": [
-            "battle-element:109001316"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 343,
-          "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1442,9 +1432,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 386,
+          "dynamicExtraRaw": 86,
           "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1482,18 +1471,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 300,
+            "dynamicExtraRaw": 86,
             "effectIds": [
-              "battle-element:109001316"
-            ]
-          },
-          {
-            "attributeId": 7,
-            "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 386,
-            "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1512,9 +1491,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 386,
+            "dynamicExtraRaw": 86,
             "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1533,9 +1511,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 386,
+            "dynamicExtraRaw": 86,
             "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1554,9 +1531,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 386,
+            "dynamicExtraRaw": 86,
             "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1579,25 +1555,14 @@
             ]
           }
         ],
-        "moyin-star-skill": [
-          {
-            "attributeId": 7,
-            "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 300,
-            "effectIds": [
-              "battle-element:109001316"
-            ]
-          }
-        ],
+        "moyin-star-skill": [],
         "moyin-star-skill-2": [
           {
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 343,
+            "dynamicExtraRaw": 43,
             "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1616,9 +1581,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 343,
+            "dynamicExtraRaw": 43,
             "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1637,18 +1601,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 300,
+            "dynamicExtraRaw": 43,
             "effectIds": [
-              "battle-element:109001316"
-            ]
-          },
-          {
-            "attributeId": 7,
-            "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 343,
-            "effectIds": [
-              "battle-element:109001316",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1674,30 +1628,23 @@
       },
       "effectIdsByActionId": {
         "moyin-a5": [
-          "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
         "moyin-charged": [
-          "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
         "moyin-limit-counter": [
-          "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
         "moyin-perfect-parry": [
           "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
-        "moyin-star-skill": [
-          "battle-element:109001316"
-        ],
+        "moyin-star-skill": [],
         "moyin-star-skill-2": [
-          "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
         "moyin-star-skill-3": [
-          "battle-element:109001316",
           "tuning-mark:250:persistent"
         ],
         "moyin-ultimate": [
@@ -1711,7 +1658,7 @@
         "21": 0
       },
       "maxExtraRawByAttributeId": {
-        "7": 386,
+        "7": 86,
         "8": 172,
         "21": 5400
       }
@@ -1728,18 +1675,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 300,
+          "dynamicExtraRaw": 43,
           "effectIds": [
-            "battle-element:109001316"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 343,
-          "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1747,9 +1684,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 386,
+          "dynamicExtraRaw": 86,
           "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1786,18 +1722,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 300,
+          "dynamicExtraRaw": 43,
           "effectIds": [
-            "battle-element:109001316"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 343,
-          "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1805,9 +1731,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 386,
+          "dynamicExtraRaw": 86,
           "effectIds": [
-            "battle-element:109001316",
             "tuning-mark:250:persistent"
           ]
         },
@@ -5267,14 +5192,6 @@
               "valueRaw": 5400,
               "formulaFamily": null,
               "formulaValue": null
-            },
-            {
-              "kind": "battle-property",
-              "attributeId": 7,
-              "bucket": "dynamicExtra",
-              "valueRaw": 300,
-              "formulaFamily": null,
-              "formulaValue": null
             }
           ]
         },
@@ -5804,7 +5721,7 @@
         }
       ]
     },
-    "summaryHash": "14e651637b668fd621683ecb1b355dbc7059ea2862aa4f5dfe90b0821f38f0d7"
+    "summaryHash": "eb5e0dd433c04dcfaff6be04498effd17dc1c3636fc6f7df3b260da2a3bce9bf"
   },
   "expected": {
     "exact": {
@@ -5860,6 +5777,6 @@
       }
     ]
   },
-  "replayHash": "da5e2302f1c5cdb377d0d23b3236712c1958de5a5ea6550385ff459d5fe6471f",
-  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
+  "replayHash": "0ec73bd40b78ee7f4d6093ee038cd633db3a9cafbcda7c6316d8aa4d69ca2ef4",
+  "profileHash": "3d0cea8c7d3c18fd6c45a68d20ec4d3cc7bdef1a1412ee9bf328a70be1e542ef"
 }

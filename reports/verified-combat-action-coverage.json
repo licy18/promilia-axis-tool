@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "8f21567a6716d92063599b3ad3064a4b0cf97f119d13cdd202be6901c2c5d8d2",
+  "packageHash": "546e2ae14ec5e1430451b5b7231718c35b5cd635b7496427caa38f02b02df5b3",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -57347,11 +57347,7 @@
       "publicVariantLabel": "星决技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100313].level.labels[0]"
     },
     {
@@ -57365,8 +57361,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100322].level.labels[0]"
@@ -57492,9 +57486,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100712].level.labels[2]"
     },
@@ -57513,9 +57505,7 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100713].level.labels[0]"
     },
@@ -57543,9 +57533,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100721].level.labels[1]"
     },
@@ -57559,10 +57547,7 @@
       "publicVariantLabel": "精准防御",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10100721].level.labels[2]"
     },
     {
@@ -57607,9 +57592,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101001].level.labels[2]"
     },
@@ -57704,9 +57687,7 @@
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101012].level.labels[0]"
     },
@@ -57745,8 +57726,6 @@
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
@@ -57776,10 +57755,7 @@
       "publicVariantLabel": "极限反击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10101021].level.labels[1]"
     },
     {
@@ -57857,10 +57833,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200112].level.labels[0]"
     },
     {
@@ -57886,10 +57859,7 @@
       "publicVariantLabel": "星决技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200113].level.labels[0]"
     },
     {
@@ -57915,10 +57885,7 @@
       "publicVariantLabel": "精准防御",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10200122].level.labels[2]"
     },
     {
@@ -57991,8 +57958,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300212].level.labels[0]"
@@ -58021,8 +57986,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -58042,10 +58005,7 @@
       "publicVariantLabel": "星携技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10300221].level.labels[0]"
     },
     {
@@ -58154,10 +58114,10 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700112].level.labels[0]"
     },
@@ -58188,9 +58148,7 @@
         "trigger-frame-missing",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700113].level.labels[0]"
     },
@@ -58254,10 +58212,7 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[4]"
     },
     {
@@ -58285,10 +58240,7 @@
       "publicVariantLabel": "重击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700201].level.labels[1]"
     },
     {
@@ -58333,8 +58285,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -58371,9 +58321,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700213].level.labels[0]"
     },
@@ -58441,10 +58389,7 @@
       "publicVariantLabel": "重击1",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700301].level.labels[1]"
     },
     {
@@ -58572,8 +58517,6 @@
       "reasons": [
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -58619,10 +58562,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10700321].level.labels[2]"
     },
     {
@@ -58709,8 +58649,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -58747,8 +58685,6 @@
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -58769,9 +58705,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800121].level.labels[0]"
     },
@@ -58798,10 +58732,7 @@
       "publicVariantLabel": "精准防御",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800121].level.labels[2]"
     },
     {
@@ -58905,10 +58836,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800212].level.labels[0]"
     },
     {
@@ -58939,14 +58867,13 @@
         "projectile-impact-frame-runtime-dependent",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800213].level.labels[0]"
     },
@@ -58990,10 +58917,7 @@
       "publicVariantLabel": "精准防御",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800222].level.labels[2]"
     },
     {
@@ -59093,10 +59017,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800312].level.labels[0]"
     },
     {
@@ -59142,9 +59063,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800322].level.labels[0]"
     },
@@ -59171,10 +59090,7 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800322].level.labels[2]"
     },
     {
@@ -59200,10 +59116,7 @@
       "publicVariantLabel": "重击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800501].level.labels[1]"
     },
     {
@@ -59312,10 +59225,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800522].level.labels[2]"
     },
     {
@@ -59342,8 +59252,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900101].level.labels[1]"
     },
@@ -59420,9 +59329,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900113].level.labels[0]"
     },
@@ -59462,10 +59369,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900121].level.labels[3]"
     },
     {
@@ -59577,10 +59481,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900212].level.labels[0]"
     },
     {
@@ -59607,8 +59508,6 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900213].level.labels[0]"
@@ -59649,10 +59548,7 @@
       "publicVariantLabel": "精准防御",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10900221].level.labels[2]"
     },
     {
@@ -59717,10 +59613,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11100112].level.labels[0]"
     },
     {
@@ -59749,8 +59642,6 @@
       "reasons": [
         "trigger-frame-missing",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -59799,10 +59690,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11100121].level.labels[2]"
     },
     {
@@ -59927,10 +59815,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200112].level.labels[0]"
     },
     {
@@ -59958,8 +59843,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -60006,10 +59889,7 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200121].level.labels[2]"
     },
     {
@@ -60133,8 +60013,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -60156,10 +60034,7 @@
       "publicVariantLabel": "星携技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200222].level.labels[0]"
     },
     {
@@ -60188,10 +60063,7 @@
       "publicVariantLabel": "集中闪避",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=11200222].level.labels[2]"
     },
     {
@@ -60271,10 +60143,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900112].level.labels[0]"
     },
     {
@@ -60301,9 +60170,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900113].level.labels[0]"
     },
@@ -60330,10 +60197,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900122].level.labels[2]"
     },
     {
@@ -60413,10 +60277,7 @@
       "publicVariantLabel": "星鸣技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900212].level.labels[0]"
     },
     {
@@ -60443,9 +60304,7 @@
       "selected": true,
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900213].level.labels[0]"
     },
@@ -60472,10 +60331,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900222].level.labels[2]"
     },
     {
@@ -60621,8 +60477,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -60667,10 +60521,7 @@
       "publicVariantLabel": "完美招架",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=19900321].level.labels[2]"
     },
     {
@@ -66507,10 +66358,7 @@
       "publicVariantLabel": "重击",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
     }
   ],
@@ -66607,11 +66455,7 @@
         "actor|101003|10100313|0|10100313|ultimate"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -66625,8 +66469,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -66802,9 +66644,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100726.asset/MonoBehaviour/skill_control_10100726__7447622486681453647.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -66823,9 +66663,7 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100713.asset/MonoBehaviour/skill_control_10100713__1531881944304593899.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -66853,9 +66691,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100725.asset/MonoBehaviour/skill_control_10100725__5501753604138136014.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -66869,10 +66705,7 @@
         "actor|101007|10100721|2|10100727|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100727.asset/MonoBehaviour/skill_control_10100727__-3907624397172951421.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -66902,9 +66735,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101010.asset/MonoBehaviour/skill_control_10101010__-4083445640248946767.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -66980,9 +66811,7 @@
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101012.asset/MonoBehaviour/skill_control_10101012__-2381657275272288454.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -67021,8 +66850,6 @@
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
@@ -67052,10 +66879,7 @@
         "actor|101010|10101021|1|10101025|limit-counter"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101025.asset/MonoBehaviour/skill_control_10101025__-923069009673977205.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67172,10 +66996,7 @@
         "actor|102001|10200112|0|10200112|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/skill_control_10200112__-7095613606184577220.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67214,10 +67035,7 @@
         "actor|102001|10200113|0|10200113|ultimate"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/skill_control_10200113__-6869786966838262589.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67256,10 +67074,7 @@
         "actor|102001|10200122|2|10200127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/skill_control_10200127__7322017283242739048.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67382,8 +67197,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -67412,8 +67225,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -67433,10 +67244,7 @@
         "actor|103002|10300221|0|10300221|star-carry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67662,10 +67470,10 @@
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/skill_control_10700112__-5120092426558530615.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -67722,9 +67530,7 @@
         "trigger-frame-missing",
         "judgment-condition-runtime-unimplemented",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -67786,10 +67592,7 @@
         "actor|107001|10700121|4|10700127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700127.asset/MonoBehaviour/skill_control_10700127__8277644567552771477.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67817,10 +67620,7 @@
         "actor|107002|10700201|1|10700210|charged-attack"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -67878,8 +67678,6 @@
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -67942,9 +67740,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68025,10 +67821,7 @@
         "actor|107003|10700301|1|10700310|charged-attack"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700310.asset/MonoBehaviour/skill_control_10700310__-3211225105598185224.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68174,8 +67967,6 @@
       "reasons": [
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -68234,10 +68025,7 @@
         "actor|107003|10700321|2|10700327|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700327.asset/MonoBehaviour/skill_control_10700327__7372151656569484753.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68374,8 +68162,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -68412,8 +68198,6 @@
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -68434,9 +68218,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800121.asset/MonoBehaviour/skill_control_10800121__2521515895843894629.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68463,10 +68245,7 @@
         "actor|108001|10800121|2|10800127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800127.asset/MonoBehaviour/skill_control_10800127__-3873098642969195753.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68592,10 +68371,7 @@
         "actor|108002|10800212|0|10800212|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800212.asset/MonoBehaviour/skill_control_10800212__7174959462035616441.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68626,14 +68402,13 @@
         "projectile-impact-frame-runtime-dependent",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-not-expanded",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800213.asset/MonoBehaviour/skill_control_10800213__2713514196818492109.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68677,10 +68452,7 @@
         "actor|108002|10800222|2|10800227|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800227.asset/MonoBehaviour/skill_control_10800227__-8230466805465533694.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68763,10 +68535,7 @@
         "actor|108003|10800312|0|10800312|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/skill_control_10800312__2653349801109799750.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68812,9 +68581,7 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68841,10 +68608,7 @@
         "actor|108003|10800322|2|10800327|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800327.asset/MonoBehaviour/skill_control_10800327__-4018422389919717477.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68870,10 +68634,7 @@
         "actor|108005|10800501|1|10800510|charged-attack"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800510.asset/MonoBehaviour/skill_control_10800510__4942782995926397820.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69008,10 +68769,7 @@
         "actor|108005|10800522|2|10800527|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800527.asset/MonoBehaviour/skill_control_10800527__-735368816659101125.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69038,8 +68796,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900110.asset/MonoBehaviour/skill_control_10900110__-5663576871920802460.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69116,9 +68873,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/skill_control_10900113__2137438021568488942.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -69158,10 +68913,7 @@
         "actor|109001|10900121|3|10900127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69241,10 +68993,7 @@
         "actor|109002|10900212|0|10900212|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900212.asset/MonoBehaviour/skill_control_10900212__5226200918337200106.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69271,8 +69020,6 @@
       ],
       "classification": "applied",
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900213.asset/MonoBehaviour/skill_control_10900213__8734496154904828250.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
@@ -69326,10 +69073,7 @@
         "actor|109002|10900221|2|10900227|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900227.asset/MonoBehaviour/skill_control_10900227__1394814315523894636.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69420,10 +69164,7 @@
         "actor|111001|11100112|0|11100112|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100112.asset/MonoBehaviour/skill_control_11100112__-8979285907132699409.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69465,8 +69206,6 @@
       "reasons": [
         "trigger-frame-missing",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -69528,10 +69267,7 @@
         "actor|111001|11100121|2|11100127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100127.asset/MonoBehaviour/skill_control_11100127__-2273242165675661573.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69648,10 +69384,7 @@
         "actor|112001|11200112|0|11200112|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/skill_control_11200112__2244200307259366473.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69679,8 +69412,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -69766,10 +69497,7 @@
         "actor|112001|11200121|2|11200127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200127.asset/MonoBehaviour/skill_control_11200127__-7091876315655592181.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69904,8 +69632,6 @@
       "classification": "applied",
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -69927,10 +69653,7 @@
         "actor|112002|11200222|0|11200222|star-carry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200222.asset/MonoBehaviour/skill_control_11200222__-5519277350238354650.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -69959,10 +69682,7 @@
         "actor|112002|11200222|2|11200227|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200227.asset/MonoBehaviour/skill_control_11200227__688251830259090730.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70040,10 +69760,7 @@
         "actor|199001|19900112|0|19900112|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/skill_control_19900112__-2500904238031557495.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70070,9 +69787,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900113.asset/MonoBehaviour/skill_control_19900113__-2870074648039143124.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70099,10 +69814,7 @@
         "actor|199001|19900122|2|19900127|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900127.asset/MonoBehaviour/skill_control_19900127__-8887070078290847092.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70180,10 +69892,7 @@
         "actor|199002|19900212|0|19900212|star-skill"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900212.asset/MonoBehaviour/skill_control_19900212__-2953997094206733183.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70210,9 +69919,7 @@
       ],
       "classification": "applied",
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900213.asset/MonoBehaviour/skill_control_19900213__1031463935081374465.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -70239,10 +69946,7 @@
         "actor|199002|19900222|2|19900227|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900227.asset/MonoBehaviour/skill_control_19900227__9012285578792220206.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -70369,8 +70073,6 @@
         "judgment-condition-runtime-unimplemented",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -70428,10 +70130,7 @@
         "actor|199003|19900321|2|19900327|perfect-parry"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900327.asset/MonoBehaviour/skill_control_19900327__5658480599461289026.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -78498,10 +78197,7 @@
         "actor|103002|10300201|1|10300210|charged-attack"
       ],
       "classification": "applied",
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -102494,43 +102190,38 @@
             "10100704|0|elements|2|1489300265369089459|element:81548204761092781|6|26",
             "10100704|0|elements|2|1489300265369089459|element:81548204761092781|18|27",
             "10100704|0|elements|2|1489300265369089459|element:81548204761092781|24|28",
-            "10100704|0|elements|2|1489300265369089459|element:81548204761092781|8|29",
-            "10100704|0|elements|3|81548204761092781|element:81548204761092781|unresolved-frame|0"
+            "10100704|0|elements|2|1489300265369089459|element:81548204761092781|8|29"
           ],
           "hitCount": 2,
           "effectCount": 60,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 61
+              "verified-zero": 60
             },
             "toughness": {
-              "verified-zero": 61
+              "verified-zero": 60
             },
             "sp": {
-              "verified-zero": 61
+              "verified-zero": 60
             },
             "hp": {
-              "verified-zero": 61
+              "verified-zero": 60
             },
             "shield": {
-              "verified-zero": 61
+              "verified-zero": 60
             },
             "dynamicProperty": {
               "applied": 30,
-              "unresolved": 1,
               "verified-zero": 30
             },
             "mark": {
-              "verified-zero": 61
+              "verified-zero": 60
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=101007].skillSlots[group=backup,skillId=10100704]|NewTable/skillsub_logic.rows[skillId=10100704].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100704.asset/MonoBehaviour/skill_control_10100704__4000583694502083513.json"
         }
       ]
@@ -108640,45 +108331,40 @@
           "selectedEffectIdentities": [
             "10101005|0|elements|2|1474042154774785480|element:1474042154774785480|31|0",
             "10101005|0|elements|2|1474042154774785480|element:-8148787786042882084|31|0",
-            "10101005|0|elements|2|1474042154774785480|element:-4529113272733101309|31|0",
-            "10101005|0|elements|3|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
+            "10101005|0|elements|2|1474042154774785480|element:-4529113272733101309|31|0"
           ],
           "hitCount": 8,
           "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
               "applied": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             },
             "toughness": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "sp": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "hp": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 3
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 1,
               "verified-zero": 2
             },
             "mark": {
               "applied": 1,
-              "verified-zero": 3
+              "verified-zero": 2
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=101010].skillSlots[group=backup,skillId=10101005]|NewTable/skillsub_logic.rows[skillId=10101005].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/skill_control_10101005__-2159662366896181319.json"
         }
       ]
@@ -111932,51 +111618,42 @@
             "10200105|0|elements|3|7991633998808797407|element:7991633998808797407|20|0",
             "10200105|0|elements|3|7991633998808797407|element:1474042154774785480|20|0",
             "10200105|0|elements|3|7991633998808797407|element:-8148787786042882084|20|0",
-            "10200105|0|elements|3|7991633998808797407|element:-4529113272733101309|20|0",
-            "10200105|0|elements|4|1474042154774785480|element:1474042154774785480|unresolved-frame|0",
-            "10200105|0|elements|4|1474042154774785480|element:-8148787786042882084|unresolved-frame|0",
-            "10200105|0|elements|4|1474042154774785480|element:-4529113272733101309|unresolved-frame|0",
-            "10200105|0|elements|5|-4529113272733101309|element:-4529113272733101309|unresolved-frame|0"
+            "10200105|0|elements|3|7991633998808797407|element:-4529113272733101309|20|0"
           ],
           "hitCount": 5,
           "effectCount": 4,
           "effectDimensionSummary": {
             "damage": {
               "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 7
+              "verified-zero": 4
             },
             "toughness": {
-              "verified-zero": 9
+              "verified-zero": 5
             },
             "sp": {
               "unresolved": 1,
-              "verified-zero": 8
+              "verified-zero": 4
             },
             "hp": {
-              "verified-zero": 9
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 9
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 2,
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "mark": {
               "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 7
+              "verified-zero": 4
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "sp-formula-not-literal-function-5"
           ],
           "sourceIdentity": "characters.items[id=102001].skillSlots[group=backup,skillId=10200105]|NewTable/skillsub_logic.rows[skillId=10200105].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/skill_control_10200105__-5042441330129687906.json"
         }
@@ -124202,46 +123879,40 @@
           "selectedEffectIdentities": [
             "10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
             "10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-            "10300204|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-            "10300204|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0",
             "10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
             "10300204|0|elements|19|-5857702920164552208|element:-5857702920164552208|0|0",
-            "10300204|0|elements|19|-5857702920164552208|element:4227003560910032429|0|0",
-            "10300204|0|elements|20|4227003560910032429|element:4227003560910032429|unresolved-frame|0"
+            "10300204|0|elements|19|-5857702920164552208|element:4227003560910032429|0|0"
           ],
           "hitCount": 4,
           "effectCount": 2,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "toughness": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "sp": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "hp": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 8
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "mark": {
-              "verified-zero": 8
+              "verified-zero": 5
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "selected-control-player-variant-duration-unresolved",
             "next-control-event-bridge-window-unavailable"
           ],
@@ -125809,42 +125480,37 @@
           ],
           "selectedEffectIdentities": [
             "10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-            "10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-            "10300205|0|elements|1|3663436943335475859|element:3663436943335475859|unresolved-frame|0",
-            "10300205|0|elements|2|6226025878936021619|element:6226025878936021619|unresolved-frame|0"
+            "10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
           ],
           "hitCount": 4,
           "effectCount": 0,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "toughness": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "sp": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "hp": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "shield": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "dynamicProperty": {
-              "verified-zero": 4
+              "verified-zero": 2
             },
             "mark": {
-              "verified-zero": 4
+              "verified-zero": 2
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=103002].skillSlots[group=backup,skillId=10300205]|NewTable/skillsub_logic.rows[skillId=10300205].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300205.asset/MonoBehaviour/skill_control_10300205__8622352564572962458.json"
         }
       ]
@@ -133173,43 +132839,38 @@
           "selectedEffectIdentities": [
             "10700204|0|elements|3|7790264186762117375|element:7790264186762117375|84|0",
             "10700204|0|elements|3|7790264186762117375|element:-3902053340404252506|84|0",
-            "10700204|0|elements|3|7790264186762117375|element:1466117413664505892|84|0",
-            "10700204|0|elements|4|-3902053340404252506|element:-3902053340404252506|unresolved-frame|0",
-            "10700204|0|elements|5|1466117413664505892|element:1466117413664505892|unresolved-frame|0"
+            "10700204|0|elements|3|7790264186762117375|element:1466117413664505892|84|0"
           ],
           "hitCount": 9,
           "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "toughness": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "sp": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "hp": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "shield": {
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 2,
               "verified-zero": 1
             },
             "mark": {
-              "verified-zero": 5
+              "verified-zero": 3
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved",
             "selected-control-player-variant-duration-unresolved",
             "next-control-event-bridge-window-unavailable"
           ],
@@ -136873,38 +136534,6 @@
             "10700305|0|elements|6|-2209252398611915319|element:2261719052410233627|13|0",
             "10700305|0|elements|6|-2209252398611915319|element:111997552699621986|13|0",
             "10700305|0|elements|6|-2209252398611915319|element:-2399374653039769919|13|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-4198429380706307040|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:1380338162511956824|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:7145818198363765852|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-6568087848177418791|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-3650390171282745757|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-2566147800586806319|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:3090494906222608275|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:2261719052410233627|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:111997552699621986|unresolved-frame|0",
-            "10700305|0|elements|7|-4198429380706307040|element:-2399374653039769919|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:1380338162511956824|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:7145818198363765852|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:-6568087848177418791|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:-3650390171282745757|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:-2566147800586806319|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:3090494906222608275|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:2261719052410233627|unresolved-frame|0",
-            "10700305|0|elements|8|1380338162511956824|element:111997552699621986|unresolved-frame|0",
-            "10700305|0|elements|10|-2399374653039769919|element:-2399374653039769919|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:-6568087848177418791|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:-3650390171282745757|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:-2566147800586806319|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:3090494906222608275|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:2261719052410233627|unresolved-frame|0",
-            "10700305|0|elements|11|-6568087848177418791|element:111997552699621986|unresolved-frame|0",
-            "10700305|0|elements|13|-2761342006446812276|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|14|-2566147800586806319|element:-2566147800586806319|unresolved-frame|0",
-            "10700305|0|elements|14|-2566147800586806319|element:3090494906222608275|unresolved-frame|0",
-            "10700305|0|elements|14|-2566147800586806319|element:2261719052410233627|unresolved-frame|0",
             "10700305|0|elements|16|1903981504896983719|element:1903981504896983719|13|0",
             "10700305|0|elements|16|1903981504896983719|element:-4717928479518477389|13|0",
             "10700305|0|elements|16|1903981504896983719|element:-4900985883342326221|13|0",
@@ -136912,17 +136541,6 @@
             "10700305|0|elements|16|1903981504896983719|element:-8299271806812782810|13|0",
             "10700305|0|elements|16|1903981504896983719|element:-2761342006446812276|13|0",
             "10700305|0|elements|16|1903981504896983719|element:603054927462084748|13|0",
-            "10700305|0|elements|17|-4717928479518477389|element:-4717928479518477389|unresolved-frame|0",
-            "10700305|0|elements|17|-4717928479518477389|element:-4900985883342326221|unresolved-frame|0",
-            "10700305|0|elements|17|-4717928479518477389|element:3580793557647588758|unresolved-frame|0",
-            "10700305|0|elements|17|-4717928479518477389|element:-8299271806812782810|unresolved-frame|0",
-            "10700305|0|elements|17|-4717928479518477389|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|17|-4717928479518477389|element:603054927462084748|unresolved-frame|0",
-            "10700305|0|elements|18|-4900985883342326221|element:-4900985883342326221|unresolved-frame|0",
-            "10700305|0|elements|18|-4900985883342326221|element:3580793557647588758|unresolved-frame|0",
-            "10700305|0|elements|20|-8299271806812782810|element:-8299271806812782810|unresolved-frame|0",
-            "10700305|0|elements|20|-8299271806812782810|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|20|-8299271806812782810|element:603054927462084748|unresolved-frame|0",
             "10700305|0|elements|23|-2828939863018468688|element:-2828939863018468688|13|0",
             "10700305|0|elements|23|-2828939863018468688|element:963067093454898123|13|0",
             "10700305|0|elements|23|-2828939863018468688|element:-5989153878108714404|13|0",
@@ -136931,20 +136549,6 @@
             "10700305|0|elements|23|-2828939863018468688|element:-2761342006446812276|13|0",
             "10700305|0|elements|23|-2828939863018468688|element:3981002976634983138|13|0",
             "10700305|0|elements|23|-2828939863018468688|element:7178660213303110676|13|0",
-            "10700305|0|elements|24|963067093454898123|element:963067093454898123|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:-5989153878108714404|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:8325941193328874573|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:9191315569087229876|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:3981002976634983138|unresolved-frame|0",
-            "10700305|0|elements|24|963067093454898123|element:7178660213303110676|unresolved-frame|0",
-            "10700305|0|elements|25|-5989153878108714404|element:-5989153878108714404|unresolved-frame|0",
-            "10700305|0|elements|26|8325941193328874573|element:8325941193328874573|unresolved-frame|0",
-            "10700305|0|elements|27|9191315569087229876|element:9191315569087229876|unresolved-frame|0",
-            "10700305|0|elements|27|9191315569087229876|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|27|9191315569087229876|element:3981002976634983138|unresolved-frame|0",
-            "10700305|0|elements|27|9191315569087229876|element:7178660213303110676|unresolved-frame|0",
-            "10700305|0|elements|29|7178660213303110676|element:7178660213303110676|unresolved-frame|0",
             "10700305|0|elements|32|647759340322234593|element:647759340322234593|13|0",
             "10700305|0|elements|32|647759340322234593|element:5222445263880226089|13|0",
             "10700305|0|elements|32|647759340322234593|element:4566749784865379056|13|0",
@@ -136970,63 +136574,6 @@
             "10700305|0|elements|32|647759340322234593|element:7312265477123870759|13|0",
             "10700305|0|elements|32|647759340322234593|element:6012521140755665265|13|0",
             "10700305|0|elements|32|647759340322234593|element:-3074471772125082841|13|0",
-            "10700305|0|elements|33|5222445263880226089|element:5222445263880226089|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:4566749784865379056|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:3062233395572391410|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:9131855171522767891|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:9180813266341484993|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-8659630540035402940|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:7461986401492542517|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:7909425456957953442|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-15321724073304604|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-7137430521727835695|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:1989770371036017764|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:6102133457878105271|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-4305995279707980247|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-1677344282117150831|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:7861911541119917233|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:4308277382311054823|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:8667023792951433112|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:3939720093155976420|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-4983645826914030750|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-4987541363161719177|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:7312265477123870759|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:6012521140755665265|unresolved-frame|0",
-            "10700305|0|elements|33|5222445263880226089|element:-3074471772125082841|unresolved-frame|0",
-            "10700305|0|elements|34|4566749784865379056|element:4566749784865379056|unresolved-frame|0",
-            "10700305|0|elements|35|3062233395572391410|element:3062233395572391410|unresolved-frame|0",
-            "10700305|0|elements|36|9131855171522767891|element:9131855171522767891|unresolved-frame|0",
-            "10700305|0|elements|37|9180813266341484993|element:9180813266341484993|unresolved-frame|0",
-            "10700305|0|elements|38|-8659630540035402940|element:-8659630540035402940|unresolved-frame|0",
-            "10700305|0|elements|39|7461986401492542517|element:7461986401492542517|unresolved-frame|0",
-            "10700305|0|elements|40|7909425456957953442|element:7909425456957953442|unresolved-frame|0",
-            "10700305|0|elements|41|-15321724073304604|element:-15321724073304604|unresolved-frame|0",
-            "10700305|0|elements|42|-7137430521727835695|element:-7137430521727835695|unresolved-frame|0",
-            "10700305|0|elements|43|1989770371036017764|element:1989770371036017764|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:6102133457878105271|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-4305995279707980247|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-1677344282117150831|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:7861911541119917233|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:4308277382311054823|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:8667023792951433112|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:3939720093155976420|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-4983645826914030750|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-4987541363161719177|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:7312265477123870759|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:6012521140755665265|unresolved-frame|0",
-            "10700305|0|elements|44|6102133457878105271|element:-3074471772125082841|unresolved-frame|0",
-            "10700305|0|elements|45|-4305995279707980247|element:-4305995279707980247|unresolved-frame|0",
-            "10700305|0|elements|46|-1677344282117150831|element:-1677344282117150831|unresolved-frame|0",
-            "10700305|0|elements|47|7861911541119917233|element:7861911541119917233|unresolved-frame|0",
-            "10700305|0|elements|48|4308277382311054823|element:4308277382311054823|unresolved-frame|0",
-            "10700305|0|elements|49|8667023792951433112|element:8667023792951433112|unresolved-frame|0",
-            "10700305|0|elements|50|3939720093155976420|element:3939720093155976420|unresolved-frame|0",
-            "10700305|0|elements|51|-4983645826914030750|element:-4983645826914030750|unresolved-frame|0",
-            "10700305|0|elements|52|-4987541363161719177|element:-4987541363161719177|unresolved-frame|0",
-            "10700305|0|elements|53|7312265477123870759|element:7312265477123870759|unresolved-frame|0",
-            "10700305|0|elements|54|6012521140755665265|element:6012521140755665265|unresolved-frame|0",
             "10700305|0|elements|56|5266922367287018750|element:5266922367287018750|13|0",
             "10700305|0|elements|56|5266922367287018750|element:-7587397208932996433|13|0",
             "10700305|0|elements|56|5266922367287018750|element:-8626054053722677814|13|0",
@@ -137036,22 +136583,6 @@
             "10700305|0|elements|56|5266922367287018750|element:-781203794500300851|13|0",
             "10700305|0|elements|56|5266922367287018750|element:-2761342006446812276|13|0",
             "10700305|0|elements|56|5266922367287018750|element:-5507887098240786852|13|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-7587397208932996433|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-8626054053722677814|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-5340875584667911442|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-357030330608168702|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:350556128042790843|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-781203794500300851|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|57|-7587397208932996433|element:-5507887098240786852|unresolved-frame|0",
-            "10700305|0|elements|58|-8626054053722677814|element:-8626054053722677814|unresolved-frame|0",
-            "10700305|0|elements|58|-8626054053722677814|element:-5340875584667911442|unresolved-frame|0",
-            "10700305|0|elements|60|-357030330608168702|element:-357030330608168702|unresolved-frame|0",
-            "10700305|0|elements|60|-357030330608168702|element:350556128042790843|unresolved-frame|0",
-            "10700305|0|elements|61|350556128042790843|element:350556128042790843|unresolved-frame|0",
-            "10700305|0|elements|62|-781203794500300851|element:-781203794500300851|unresolved-frame|0",
-            "10700305|0|elements|62|-781203794500300851|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|62|-781203794500300851|element:-5507887098240786852|unresolved-frame|0",
             "10700305|0|elements|65|3815952018898402225|element:3815952018898402225|13|0",
             "10700305|0|elements|65|3815952018898402225|element:3015413247602579683|13|0",
             "10700305|0|elements|65|3815952018898402225|element:6967958142952167018|13|0",
@@ -137065,34 +136596,6 @@
             "10700305|0|elements|65|3815952018898402225|element:-8852336713703738695|13|0",
             "10700305|0|elements|65|3815952018898402225|element:3123393596132114044|13|0",
             "10700305|0|elements|65|3815952018898402225|element:-1835179025033267204|13|0",
-            "10700305|0|elements|66|3015413247602579683|element:3015413247602579683|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:6967958142952167018|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-6803031949367494354|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:2770683714618817059|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-5346673668224909326|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:7038297866399472804|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-4626217503754631283|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:5779723690050196408|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-8852336713703738695|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:3123393596132114044|unresolved-frame|0",
-            "10700305|0|elements|66|3015413247602579683|element:-1835179025033267204|unresolved-frame|0",
-            "10700305|0|elements|67|6967958142952167018|element:6967958142952167018|unresolved-frame|0",
-            "10700305|0|elements|68|-6803031949367494354|element:-6803031949367494354|unresolved-frame|0",
-            "10700305|0|elements|69|2770683714618817059|element:2770683714618817059|unresolved-frame|0",
-            "10700305|0|elements|70|-5346673668224909326|element:-5346673668224909326|unresolved-frame|0",
-            "10700305|0|elements|70|-5346673668224909326|element:7038297866399472804|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:-4626217503754631283|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:5779723690050196408|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:-8852336713703738695|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:3123393596132114044|unresolved-frame|0",
-            "10700305|0|elements|72|-4626217503754631283|element:-1835179025033267204|unresolved-frame|0",
-            "10700305|0|elements|75|-8852336713703738695|element:-8852336713703738695|unresolved-frame|0",
-            "10700305|0|elements|75|-8852336713703738695|element:3123393596132114044|unresolved-frame|0",
-            "10700305|0|elements|75|-8852336713703738695|element:-1835179025033267204|unresolved-frame|0",
-            "10700305|0|elements|76|3123393596132114044|element:3123393596132114044|unresolved-frame|0",
-            "10700305|0|elements|77|-1835179025033267204|element:-1835179025033267204|unresolved-frame|0",
             "10700305|0|elements|78|5439132795384295641|element:5439132795384295641|13|0",
             "10700305|0|elements|78|5439132795384295641|element:-4539090972426934065|13|0",
             "10700305|0|elements|78|5439132795384295641|element:-4845107193546442966|13|0",
@@ -137102,21 +136605,6 @@
             "10700305|0|elements|78|5439132795384295641|element:-5181933423373200081|13|0",
             "10700305|0|elements|78|5439132795384295641|element:-2761342006446812276|13|0",
             "10700305|0|elements|78|5439132795384295641|element:7652968262826254090|13|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-4539090972426934065|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-4845107193546442966|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:2261719052410233627|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-1431178473602126937|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-2918223944459599332|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-5181933423373200081|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|79|-4539090972426934065|element:7652968262826254090|unresolved-frame|0",
-            "10700305|0|elements|80|-4845107193546442966|element:-4845107193546442966|unresolved-frame|0",
-            "10700305|0|elements|80|-4845107193546442966|element:2261719052410233627|unresolved-frame|0",
-            "10700305|0|elements|82|-1431178473602126937|element:-1431178473602126937|unresolved-frame|0",
-            "10700305|0|elements|83|-2918223944459599332|element:-2918223944459599332|unresolved-frame|0",
-            "10700305|0|elements|84|-5181933423373200081|element:-5181933423373200081|unresolved-frame|0",
-            "10700305|0|elements|84|-5181933423373200081|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|84|-5181933423373200081|element:7652968262826254090|unresolved-frame|0",
             "10700305|0|elements|87|5934765844750176151|element:5934765844750176151|13|0",
             "10700305|0|elements|87|5934765844750176151|element:-1009658800668423806|13|0",
             "10700305|0|elements|87|5934765844750176151|element:5194709900904067444|13|0",
@@ -137124,68 +136612,42 @@
             "10700305|0|elements|87|5934765844750176151|element:-1535175235224837338|13|0",
             "10700305|0|elements|87|5934765844750176151|element:7668311999287911535|13|0",
             "10700305|0|elements|87|5934765844750176151|element:-8525519615702437656|13|0",
-            "10700305|0|elements|88|-1009658800668423806|element:-1009658800668423806|unresolved-frame|0",
-            "10700305|0|elements|88|-1009658800668423806|element:5194709900904067444|unresolved-frame|0",
-            "10700305|0|elements|88|-1009658800668423806|element:-9062122638127535430|unresolved-frame|0",
-            "10700305|0|elements|88|-1009658800668423806|element:-1535175235224837338|unresolved-frame|0",
-            "10700305|0|elements|88|-1009658800668423806|element:7668311999287911535|unresolved-frame|0",
-            "10700305|0|elements|88|-1009658800668423806|element:-8525519615702437656|unresolved-frame|0",
-            "10700305|0|elements|89|5194709900904067444|element:5194709900904067444|unresolved-frame|0",
-            "10700305|0|elements|90|-9062122638127535430|element:-9062122638127535430|unresolved-frame|0",
-            "10700305|0|elements|90|-9062122638127535430|element:-1535175235224837338|unresolved-frame|0",
-            "10700305|0|elements|90|-9062122638127535430|element:7668311999287911535|unresolved-frame|0",
-            "10700305|0|elements|90|-9062122638127535430|element:-8525519615702437656|unresolved-frame|0",
-            "10700305|0|elements|92|7668311999287911535|element:7668311999287911535|unresolved-frame|0",
-            "10700305|0|elements|93|-8525519615702437656|element:-8525519615702437656|unresolved-frame|0",
             "10700305|0|elements|94|-1092282808674225295|element:-1092282808674225295|13|0",
             "10700305|0|elements|94|-1092282808674225295|element:8821658759994224323|13|0",
             "10700305|0|elements|94|-1092282808674225295|element:-919802514088697649|13|0",
             "10700305|0|elements|94|-1092282808674225295|element:-2366966283771492003|13|0",
             "10700305|0|elements|94|-1092282808674225295|element:-6782021254926881992|13|0",
             "10700305|0|elements|94|-1092282808674225295|element:-2761342006446812276|13|0",
-            "10700305|0|elements|94|-1092282808674225295|element:6700000335208321442|13|0",
-            "10700305|0|elements|95|8821658759994224323|element:8821658759994224323|unresolved-frame|0",
-            "10700305|0|elements|95|8821658759994224323|element:-919802514088697649|unresolved-frame|0",
-            "10700305|0|elements|95|8821658759994224323|element:-2366966283771492003|unresolved-frame|0",
-            "10700305|0|elements|95|8821658759994224323|element:-6782021254926881992|unresolved-frame|0",
-            "10700305|0|elements|95|8821658759994224323|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|95|8821658759994224323|element:6700000335208321442|unresolved-frame|0",
-            "10700305|0|elements|96|-919802514088697649|element:-919802514088697649|unresolved-frame|0",
-            "10700305|0|elements|96|-919802514088697649|element:-2366966283771492003|unresolved-frame|0",
-            "10700305|0|elements|98|-6782021254926881992|element:-6782021254926881992|unresolved-frame|0",
-            "10700305|0|elements|98|-6782021254926881992|element:-2761342006446812276|unresolved-frame|0",
-            "10700305|0|elements|98|-6782021254926881992|element:6700000335208321442|unresolved-frame|0"
+            "10700305|0|elements|94|-1092282808674225295|element:6700000335208321442|13|0"
           ],
           "hitCount": 4,
           "effectCount": 68,
           "effectDimensionSummary": {
             "damage": {
               "applied": 18,
-              "unresolved": 42,
-              "verified-zero": 234
+              "verified-zero": 79
             },
             "toughness": {
-              "verified-zero": 294
+              "verified-zero": 97
             },
             "sp": {
               "applied": 1,
-              "unresolved": 3,
-              "verified-zero": 290
+              "verified-zero": 96
             },
             "hp": {
-              "verified-zero": 294
+              "verified-zero": 97
             },
             "shield": {
-              "verified-zero": 294
+              "verified-zero": 97
             },
             "dynamicProperty": {
               "applied": 21,
-              "unresolved": 116,
-              "verified-zero": 157
+              "unresolved": 19,
+              "verified-zero": 57
             },
             "mark": {
-              "unresolved": 18,
-              "verified-zero": 276
+              "unresolved": 9,
+              "verified-zero": 88
             }
           },
           "mechanicsClassification": "applied",
@@ -137197,9 +136659,7 @@
             "hp:damage-formula-inputs-incomplete",
             "toughness:pre-shield-damage-inputs-incomplete",
             "stack-lifecycle-runtime-unimplemented",
-            "property-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "property-formula-not-literal-function-5"
           ],
           "sourceIdentity": "characters.items[id=107003].skillSlots[group=backup,skillId=10700305]|NewTable/skillsub_logic.rows[skillId=10700305].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700305.asset/MonoBehaviour/skill_control_10700305__-7487668593202213511.json"
         }
@@ -141521,45 +140981,40 @@
             "10800105|0|elements|8|7308766782724258890|element:7308766782724258890|53|0",
             "10800105|0|elements|8|7308766782724258890|element:-4584762200956675209|53|0",
             "10800105|0|elements|8|7308766782724258890|element:2902650939197551343|53|0",
-            "10800105|0|elements|9|-4584762200956675209|element:-4584762200956675209|unresolved-frame|0",
-            "10800105|0|elements|10|2902650939197551343|element:2902650939197551343|unresolved-frame|0",
             "10800105|0|elements|11|-6067357134401363123|element:-6067357134401363123|53|0"
           ],
           "hitCount": 4,
           "effectCount": 3,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "toughness": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "sp": {
               "unresolved": 1,
-              "verified-zero": 6
+              "verified-zero": 4
             },
             "hp": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 2,
               "verified-zero": 3
             },
             "mark": {
-              "verified-zero": 7
+              "verified-zero": 5
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
           "reasons": [
-            "sp-formula-not-literal-function-5",
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
+            "sp-formula-not-literal-function-5"
           ],
           "sourceIdentity": "characters.items[id=108001].skillSlots[group=backup,skillId=10800105]|NewTable/skillsub_logic.rows[skillId=10800105].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800105.asset/MonoBehaviour/skill_control_10800105__-3354269337577749161.json"
         }
@@ -148167,38 +147622,12 @@
                   "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
                   "conversion": "230 source frames at 60fps"
                 },
-                "hits": [
-                  {
-                    "hitIdentity": "10900101|1|elements|0|-5633710717881758712|13|1",
-                    "elementId": 109001251,
-                    "pathId": "-5633710717881758712",
-                    "frame": 13,
-                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_6367904100170400693__6367904100170400693.json#startFrame|targetType"
-                  },
-                  {
-                    "hitIdentity": "10900101|1|elements|0|-5633710717881758712|16|2",
-                    "elementId": 109001251,
-                    "pathId": "-5633710717881758712",
-                    "frame": 16,
-                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_-7113223423314558027__-7113223423314558027.json#startFrame|targetType"
-                  },
-                  {
-                    "hitIdentity": "10900101|1|elements|0|-5633710717881758712|19|3",
-                    "elementId": 109001251,
-                    "pathId": "-5633710717881758712",
-                    "frame": 19,
-                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_1081335820946113461__1081335820946113461.json#startFrame|targetType"
-                  }
-                ],
+                "hits": [],
                 "hitEnvelope": {
-                  "firstFrame": 13,
-                  "lastFrame": 19,
-                  "status": "applied",
-                  "sourceIdentities": [
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_6367904100170400693__6367904100170400693.json#startFrame|targetType",
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_-7113223423314558027__-7113223423314558027.json#startFrame|targetType",
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_1081335820946113461__1081335820946113461.json#startFrame|targetType"
-                  ]
+                  "firstFrame": null,
+                  "lastFrame": null,
+                  "status": "unresolved",
+                  "sourceIdentities": []
                 },
                 "windows": [
                   {
@@ -148454,38 +147883,12 @@
                 "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
                 "conversion": "230 source frames at 60fps"
               },
-              "hits": [
-                {
-                  "hitIdentity": "10900101|1|elements|0|-5633710717881758712|13|1",
-                  "elementId": 109001251,
-                  "pathId": "-5633710717881758712",
-                  "frame": 13,
-                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_6367904100170400693__6367904100170400693.json#startFrame|targetType"
-                },
-                {
-                  "hitIdentity": "10900101|1|elements|0|-5633710717881758712|16|2",
-                  "elementId": 109001251,
-                  "pathId": "-5633710717881758712",
-                  "frame": 16,
-                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_-7113223423314558027__-7113223423314558027.json#startFrame|targetType"
-                },
-                {
-                  "hitIdentity": "10900101|1|elements|0|-5633710717881758712|19|3",
-                  "elementId": 109001251,
-                  "pathId": "-5633710717881758712",
-                  "frame": 19,
-                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_1081335820946113461__1081335820946113461.json#startFrame|targetType"
-                }
-              ],
+              "hits": [],
               "hitEnvelope": {
-                "firstFrame": 13,
-                "lastFrame": 19,
-                "status": "applied",
-                "sourceIdentities": [
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_6367904100170400693__6367904100170400693.json#startFrame|targetType",
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_-7113223423314558027__-7113223423314558027.json#startFrame|targetType",
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/MonoBehaviour_1081335820946113461__1081335820946113461.json#startFrame|targetType"
-                ]
+                "firstFrame": null,
+                "lastFrame": null,
+                "status": "unresolved",
+                "sourceIdentities": []
               },
               "windows": [
                 {
@@ -151616,52 +151019,40 @@
             "10900105|0|elements|7|5485634636675905737|47|1",
             "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
             "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
-            "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
-            "10900105|0|elements|8|-3809486317990090417|element:-3809486317990090417|unresolved-frame|0",
-            "10900105|0|elements|8|-3809486317990090417|element:-637110086033006477|unresolved-frame|0",
-            "10900105|0|elements|8|-3809486317990090417|element:-1715488869977622004|unresolved-frame|0",
-            "10900105|0|elements|8|-3809486317990090417|element:-7783775984244194322|unresolved-frame|0",
-            "10900105|0|elements|9|-1715488869977622004|element:-1715488869977622004|unresolved-frame|0",
-            "10900105|0|elements|10|-7783775984244194322|element:-7783775984244194322|unresolved-frame|0"
+            "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0"
           ],
           "hitCount": 10,
           "effectCount": 5,
           "effectDimensionSummary": {
             "damage": {
               "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 9
+              "verified-zero": 4
             },
             "toughness": {
-              "verified-zero": 11
+              "verified-zero": 5
             },
             "sp": {
-              "verified-zero": 11
+              "verified-zero": 5
             },
             "hp": {
-              "verified-zero": 11
+              "verified-zero": 5
             },
             "shield": {
-              "verified-zero": 11
+              "verified-zero": 5
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 4,
-              "verified-zero": 5
+              "verified-zero": 3
             },
             "mark": {
               "applied": 1,
-              "unresolved": 1,
-              "verified-zero": 9
+              "verified-zero": 4
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=109001].skillSlots[group=backup,skillId=10900105]|NewTable/skillsub_logic.rows[skillId=10900105].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json"
         }
       ]
@@ -155901,45 +155292,40 @@
             "10900205|0|elements|4|3107436379383955232|element:2771922491407305440|26|0",
             "10900205|0|elements|4|3107436379383955232|element:-8555577344516787750|26|0",
             "10900205|0|elements|6|3706045285006738812|element:3706045285006738812|0|0",
-            "10900205|0|elements|6|3706045285006738812|element:3472400132896615341|0|0",
-            "10900205|0|elements|7|3472400132896615341|element:3472400132896615341|unresolved-frame|0"
+            "10900205|0|elements|6|3706045285006738812|element:3472400132896615341|0|0"
           ],
           "hitCount": 9,
           "effectCount": 6,
           "effectDimensionSummary": {
             "damage": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 5
             },
             "toughness": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "sp": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "hp": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "shield": {
-              "verified-zero": 7
+              "verified-zero": 6
             },
             "dynamicProperty": {
               "applied": 3,
-              "unresolved": 1,
               "verified-zero": 3
             },
             "mark": {
               "applied": 1,
-              "verified-zero": 6
+              "verified-zero": 5
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=109002].skillSlots[group=backup,skillId=10900205]|NewTable/skillsub_logic.rows[skillId=10900205].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900205.asset/MonoBehaviour/skill_control_10900205__-7555466023000775157.json"
         }
       ]
@@ -168083,43 +167469,38 @@
             "11100105|0|elements|8|6566976064291435373|element:6566976064291435373|0|0",
             "11100105|0|elements|8|6566976064291435373|element:6566976064291435373|0|1",
             "11100105|0|elements|8|6566976064291435373|element:1608089504845989313|0|0",
-            "11100105|0|elements|8|6566976064291435373|element:1608089504845989313|0|1",
-            "11100105|0|elements|9|1608089504845989313|element:1608089504845989313|unresolved-frame|0"
+            "11100105|0|elements|8|6566976064291435373|element:1608089504845989313|0|1"
           ],
           "hitCount": 10,
           "effectCount": 4,
           "effectDimensionSummary": {
             "damage": {
-              "verified-zero": 21
+              "verified-zero": 20
             },
             "toughness": {
-              "verified-zero": 21
+              "verified-zero": 20
             },
             "sp": {
-              "verified-zero": 21
+              "verified-zero": 20
             },
             "hp": {
-              "verified-zero": 21
+              "verified-zero": 20
             },
             "shield": {
-              "verified-zero": 21
+              "verified-zero": 20
             },
             "dynamicProperty": {
               "applied": 2,
-              "unresolved": 1,
               "verified-zero": 18
             },
             "mark": {
-              "verified-zero": 21
+              "verified-zero": 20
             }
           },
           "mechanicsClassification": "applied",
           "classification": "applied",
           "runtimeReady": true,
-          "reasons": [
-            "effect-trigger-frame-missing",
-            "effect-target-unresolved"
-          ],
+          "reasons": [],
           "sourceIdentity": "characters.items[id=111001].skillSlots[group=backup,skillId=11100105]|NewTable/skillsub_logic.rows[skillId=11100105].skillTag|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11100105.asset/MonoBehaviour/skill_control_11100105__4654364052066999994.json"
         }
       ]

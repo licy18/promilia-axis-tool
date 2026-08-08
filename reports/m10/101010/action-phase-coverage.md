@@ -23,14 +23,14 @@
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
 | normal-attack | 是 | applied-with-residual-gaps | trigger-frame-missing |
-| charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；projectile-impact-frame-runtime-dependent；trigger-frame-missing |
+| charged-attack | 是 | applied-with-residual-gaps | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
 | dodge-attack | 是 | applied |  |
 | plunging-attack | 是 | applied |  |
-| star-skill | 是 | applied-with-residual-gaps | base-function-unverified；effect-target-unresolved；effect-trigger-frame-missing；hp:damage-formula-inputs-incomplete；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；toughness:pre-shield-damage-inputs-incomplete；trigger-frame-missing；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved |
+| star-skill | 是 | applied-with-residual-gaps | base-function-unverified；hp:damage-formula-inputs-incomplete；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；toughness:pre-shield-damage-inputs-incomplete；trigger-frame-missing；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved |
 | star-combo | 是 | applied |  |
-| ultimate | 是 | applied-with-residual-gaps | base-function-unverified；effect-combine-semantics-unresolved；effect-target-unresolved；effect-trigger-frame-missing；hp:damage-formula-inputs-incomplete；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；sp-formula-not-literal-function-5；toughness:pre-shield-damage-inputs-incomplete；trigger-frame-missing；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved；tuning-mark-relation-elementDataList-unresolved；tuning-mark-relation-notDelElementDataList-unresolved |
+| ultimate | 是 | applied-with-residual-gaps | base-function-unverified；effect-combine-semantics-unresolved；hp:damage-formula-inputs-incomplete；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；sp-formula-not-literal-function-5；toughness:pre-shield-damage-inputs-incomplete；trigger-frame-missing；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved；tuning-mark-relation-elementDataList-unresolved；tuning-mark-relation-notDelElementDataList-unresolved |
 | star-carry | 是 | applied |  |
-| limit-counter | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
+| limit-counter | 是 | applied |  |
 | perfect-parry | 是 | applied |  |
 
 > 本报告由 owner contract 生成；描述只用于发现与命名，运行状态以 control、资源事务、派生窗口和效果绑定为准。

@@ -44,7 +44,7 @@ describe('verified combat mechanics package', () => {
         appliedHitBindingCount: 3450,
         appliedEffectBindingCount: 1815,
         verifiedZeroEffectBindingCount: 12,
-        unresolvedEffectBindingCount: 1961,
+        unresolvedEffectBindingCount: 1333,
         actionVariantSupportControlBindingCount: 56,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,

@@ -2762,6 +2762,12 @@ function classifyUnresolvedImpactClassification(
   { recipe, actionTransitionCoverage } = {}
 ) {
   if (record.status === 'not-applicable') return 'not-applicable';
+  const recipeOverride = (recipe.unresolvedRecords ?? []).find(
+    item =>
+      item.status === 'not-applicable' &&
+      String(item.identity ?? '') === String(record.recordIdentity ?? '')
+  );
+  if (recipeOverride) return 'not-applicable';
   const reasons = new Set(record.reasons ?? []);
   if (
     reasons.has('system-or-movement-control-is-not-public-action') ||

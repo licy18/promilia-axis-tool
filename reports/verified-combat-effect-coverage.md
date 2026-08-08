@@ -55,10 +55,10 @@
 
 ## 原始边审计
 
-- 效果绑定：3787
+- 效果绑定：3159
 - 可计算：1814
 - 明确零：12
-- 未解析：1961
+- 未解析：1333
 
 ## 元素类型
 
@@ -84,12 +84,12 @@
 - runtime-trigger-projectile-collision-frame: 68
 - shield-formula-not-literal-function-5: 2
 - sp-formula-not-literal-function-5: 37
-- tuning-consume-current-packet-not-in-candidate-map: 47
-- tuning-consume-judgment-missing: 47
-- tuning-consume-mark-identity-ambiguous: 47
-- tuning-consume-success-branch-unresolved: 47
+- tuning-consume-current-packet-not-in-candidate-map: 39
+- tuning-consume-judgment-missing: 39
+- tuning-consume-mark-identity-ambiguous: 39
+- tuning-consume-success-branch-unresolved: 39
 - tuning-mark-relation-elementDataList-unresolved: 2
-- tuning-mark-relation-notDelElementDataList-unresolved: 13
+- tuning-mark-relation-notDelElementDataList-unresolved: 12
 - tuning-mark-relation-triggerEffectList-unresolved: 1
 - wrapper-condition-semantics-unresolved: 279
 

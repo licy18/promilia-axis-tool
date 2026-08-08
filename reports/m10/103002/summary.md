@@ -2,7 +2,7 @@
 
 - Owner: `103002`
 - Profile: `actor:103002:character-combat-profile:v1`
-- Hash: `9d0698e62ef93fb07d9168f8a8a316b02ca296da7f04fa9746b810d1a72e5862`
+- Hash: `8532a2ade8682abdc97f53123f3dfef271541d0bc0e57c67b6fc74df33b38f00`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -11,7 +11,7 @@
 - 可达 control：27
 - 窗口：1
 - Hit：124
-- 来源 identity：2015
+- 来源 identity：1894
 - 战斗图：238 nodes / 401 edges
 - 描述覆盖：18
 - Runtime ready 动作：10/10
@@ -37,9 +37,9 @@
 | cooldowns | applied | 27 | 0 | 27 |
 | personalResources | applied | 43 | 0 | 43 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | static-evidence-gap | 16 | 48 | 64 |
+| buffsAndDebuffs | static-evidence-gap | 16 | 31 | 47 |
 | passives | applied | 1 | 0 | 1 |
-| dynamicProperties | static-evidence-gap | 7 | 6 | 13 |
+| dynamicProperties | applied | 7 | 0 | 7 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
 | stateMachines | not-applicable | 0 | 0 | 0 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |
@@ -49,6 +49,6 @@
 ## 未闭环
 
 - runtime-evidence-required: 4
-- static-evidence-gap: 402
+- static-evidence-gap: 342
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

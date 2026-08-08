@@ -383,10 +383,7 @@ function executeVisualScenario({
 
 function inspectCriticalMatrix(ownerId, first, second) {
   const prefix = String(ownerId) + '-critical-';
-  const boundary =
-    Number(ownerId) === 109001
-      ? { low: 799, threshold: 800 }
-      : { low: 499, threshold: 500 };
+  const boundary = { low: 499, threshold: 500 };
   const findHit = suffix =>
     (first.trace?.damage ?? []).find(
       event =>

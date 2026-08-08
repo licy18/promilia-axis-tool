@@ -291,6 +291,26 @@ const PRODUCT_CONFIRMED_DEAD_BRANCHES = Object.freeze([
   },
 ]);
 
+const PRODUCT_CONFIRMED_DEAD_VARIANTS = Object.freeze([
+  {
+    controlSkillId: 10900101,
+    subSkillIndex: 1,
+    decision: 'client-unwired-alternate-form-not-modeled',
+    decisionSource:
+      'user-directive-2026-08-08-disassemble-brilliant-normal-attack-variants: skill_control_10900101#skillPlayers[1] (playerSkillId 109001011, Skill0_6, 230F) has no selector condition, no external reference from any 109001 control, no outgoing combo bridge and no text support; hits reuse limit-counter element 109001251 (leveled by 10900125); crystal attack element family 109001122-124/318/325 has zero references in the 109001 control closure; see work/m12-b3/e20-2-109001/m6-sub1-orphan-evidence.md',
+  },
+]);
+
+function resolveProductConfirmedDeadVariant(controlSkillId, subSkillIndex) {
+  return (
+    PRODUCT_CONFIRMED_DEAD_VARIANTS.find(
+      row =>
+        Number(row.controlSkillId) === Number(controlSkillId) &&
+        Number(row.subSkillIndex) === Number(subSkillIndex)
+    ) ?? null
+  );
+}
+
 function resolveProductConfirmedDeadBranch(elementId, pathId) {
   return (
     PRODUCT_CONFIRMED_DEAD_BRANCHES.find(
@@ -6716,7 +6736,14 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
   const bindings = effectGraph.flatMap(root => {
     const presence = triggerPresence.get(root.graphIdentity);
     if (
-      kiboZeroDistancePolicy &&
+      resolveProductConfirmedDeadVariant(
+        control.controlSkillId ?? control.skillId,
+        root.mapIndex
+      )
+    ) {
+      return [];
+    }
+    if (
       presence &&
       presence.static.length === 0 &&
       presence.scenario.length === 0 &&
@@ -8979,6 +9006,12 @@ function createPackage({
       decision: row.decision,
       decisionSource: row.decisionSource,
     })),
+    excludedDeadVariants: PRODUCT_CONFIRMED_DEAD_VARIANTS.map(row => ({
+      controlSkillId: Number(row.controlSkillId),
+      subSkillIndex: Number(row.subSkillIndex),
+      decision: row.decision,
+      decisionSource: row.decisionSource,
+    })),
     policy: {
       uniqueSourceRequired: true,
       completeFormulaInputsRequired: true,
@@ -9162,6 +9195,10 @@ function createControlRuntimeHits(control) {
   return (control?.elements ?? [])
     .filter(
       element =>
+        !resolveProductConfirmedDeadVariant(
+          control.controlSkillId,
+          element.mapIndex
+        ) &&
         (element.classification === 'applied' ||
           element.scenarioClassification === 'applied') &&
         Number(element.damage?.damageType) !== 5

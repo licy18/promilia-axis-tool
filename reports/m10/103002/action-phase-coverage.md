@@ -34,13 +34,13 @@
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
 | normal-attack | 是 | applied-with-residual-gaps | normal-attack-input-segment-duration-unresolved；trigger-frame-missing |
-| charged-attack | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
+| charged-attack | 是 | applied |  |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | plunging-attack | 是 | applied |  |
-| star-skill | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；verified-action-effective-occupancy-window-unresolved |
+| star-skill | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | star-combo | 是 | applied |  |
-| ultimate | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing；nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved |
-| star-carry | 是 | applied-with-residual-gaps | effect-target-unresolved；effect-trigger-frame-missing |
+| ultimate | 是 | applied-with-residual-gaps | nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved |
+| star-carry | 是 | applied |  |
 | limit-counter | 是 | applied |  |
 | perfect-parry | 是 | applied |  |
 

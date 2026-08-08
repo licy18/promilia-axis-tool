@@ -2054,6 +2054,18 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 
 下一阶段任务：M12-C 前置验收（视觉签收/optimization-ready）待用户参与。
 
+### M12-B3-E20-2-109001 S1 已完成：源头账本清零 + 被动1 暴击回退（2026-08-08）
+
+按“先实现功能、验收通过后再统一跑测试/审计”的节奏（用户指令），完成 M12-C 前置工程第一阶段：
+
+- sync 级：hero 控制不再为“无触发帧且已被同 map 其他根作为子元素覆盖”的根生成运行时效果绑定（原仅奇波零距离策略生效；根保留，Ruby 弹药 42 条资源操作计数不变）；新增 `PRODUCT_CONFIRMED_DEAD_VARIANTS`（10900101/sub1），命中与效果绑定从包中移除并写入 `excludedDeadVariants`。
+- pipeline 级：`recipe.unresolvedRecords` 可按 recordIdentity 把具体 effect 记录强制 N/A（仅限 status=not-applicable 条目）。
+- 109001 源头账本 gameplay-impacting 16→0；验收源头缺口 16→0；阻断账本 185→166（剩余全部为 acceptance 场景缺口：97 coverage-missing + 69 selector-unavailable）。
+- 被动1 暴击增加（M20）按用户口径回退：109001296-298 全 109001 控制图 0 引用、文案只描述超限伤害；recipe 移除 attr7+300，仅保留 109001316 超限（attr21+5400 tags[307]）；109001 暴击阈值边界恢复 500（fixture 499/500，`inspectCriticalMatrix` 移除特例）。
+- 包 hash `546e2ae1…`（文件 sha `ca829d76…`）；fixture/FROZEN/验收报告已同步；测试与审计按用户指令延后到最终验收通过后统一重基线。
+
+下一阶段任务：S2/S3 消除 109001 的 166 条 acceptance 场景缺口（扩展 golden/验收场景与选择器）→ 矩阵全绿 → 统一测试/审计/提交。
+
 ### M12-B3-E18 sub3 已完成：500213 SpacialProperty 按战斗属性闭合，目标 signature 行清零（2026-08-07）
 
 二进制/数据证据链：dump.cs `ESpecialPropertyType`（1=ALL_PROPERTY_SHOOTDMGUP 全属性伤害增幅 / 2=ALL_PROPERTY_DEFENSE 全属性受伤减免）；changeType=2 全库仅 5 个元素（520012001/540074/53201902/53201903/53110406），均携带战斗 attributeID（26=PHYSICAL_SUFFERDMGDOWN、62=FIRE_DEFENSE）与 specialPropertyType；census 被动侧 520012 神圣之躯（changeType=2、attr26、+20%）早已按战斗属性解析为 `equipped-kibo-self-property-effect` 并进入运行时被动生成。据此修正 sync `classifyBattleEffectNode`：changeType=2 且 specialPropertyType ∈ {1,2} 不再推 `property-change-type-not-battle-property`，`propertyChange` 契约携带 `specialPropertyType`/`specialPropertyTypeName`（changeType=1 玩家属性仍保持非战斗门禁）。540074（全元素抗性下降 -0.91%/16s）因此从 unresolved 转 applied。结果：**50021301 菇噜噜 signature 行 evidence-closed，目标 signature 开放 1→0；publicActionClosure 360/6/0→361/5/0；appliedNodeCount 971→972 / unresolvedNodeCount 1865→1864；semanticAppliedEffectCount 961→962**；资格缺口保持 35（kibo 0）、视觉 253/254（kibo 43/43）不变。包 hash `1478862f…`（内部 packageHash `807f0104…`），Machine Axis 标准哈希 `5585c6fb / 3284ab09 / 08c9cc8c / 0b410dc9`，cycle `c44ef286 / c0c07d89 / ed68ea5f / 13fc3bf3 / 1f2e8b1e`，资格哈希 `d53c8c1b / 9cc0bdd8 / f4e8a71e / fe44f482 / 63a4de45 / cbbf175e`。同步更新：FROZEN_B3_SOURCE_HASHES.verifiedMechanics、7 个 fixture、m11 集成基线、cycle/资格/验收报告、迁移/回放/包/覆盖/Workbench/canonical/census/cycle 测试锁定。验证：全套 Vitest 1427/1428（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。**奇波侧缺口全部清零（资格 byObjectKind kibo=0、视觉 kibo 43/43、census 目标 signature 0、被动 520059 已闭合）；剩余为非奇波/非 roster 项：set-skill:3:4 视觉阻断（C14 来源冲突，需产品决策或新证据）与 3 条非 roster 被动（520004/520005/520006）**。每完成一个子阶段即更新本手册并单独提交。

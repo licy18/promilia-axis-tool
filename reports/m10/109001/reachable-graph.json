@@ -8,7 +8,7 @@
       "nodeKind": "passive-listener",
       "skillId": 10900161,
       "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001316.asset/MonoBehaviour/ast_109001316__-2193895459641539428.json#elementConfigId=109001316|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001296.asset/MonoBehaviour/ast_109001296__586698730667078251.json#elementConfigId=109001296|hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]|Battle/Element/ast_109001296.asset#被动1加暴击"
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001316.asset/MonoBehaviour/ast_109001316__-2193895459641539428.json#elementConfigId=109001316|hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]"
     },
     {
       "nodeIdentity": "actor|109001|10900101|0|10900103|normal-attack",
@@ -532,30 +532,6 @@
       "frame": 13,
       "status": "applied",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4052262175632216603"
-    },
-    {
-      "nodeIdentity": "hit:10900101|1|elements|0|-5633710717881758712|13|1",
-      "nodeKind": "hit",
-      "controlSkillId": 10900101,
-      "frame": 13,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-5633710717881758712"
-    },
-    {
-      "nodeIdentity": "hit:10900101|1|elements|0|-5633710717881758712|16|2",
-      "nodeKind": "hit",
-      "controlSkillId": 10900101,
-      "frame": 16,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-5633710717881758712"
-    },
-    {
-      "nodeIdentity": "hit:10900101|1|elements|0|-5633710717881758712|19|3",
-      "nodeKind": "hit",
-      "controlSkillId": 10900101,
-      "frame": 19,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900101.asset/MonoBehaviour/skill_control_10900101__-2033047303768548289.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-5633710717881758712"
     },
     {
       "nodeIdentity": "hit:10900102|0|elements|2|-1935126778876515862|10|2",
@@ -1380,24 +1356,6 @@
       "relation": "emits-hit"
     },
     {
-      "edgeIdentity": "control:10900101:sub:1->emits-hit->hit:10900101|1|elements|0|-5633710717881758712|13|1",
-      "from": "control:10900101:sub:1",
-      "to": "hit:10900101|1|elements|0|-5633710717881758712|13|1",
-      "relation": "emits-hit"
-    },
-    {
-      "edgeIdentity": "control:10900101:sub:1->emits-hit->hit:10900101|1|elements|0|-5633710717881758712|16|2",
-      "from": "control:10900101:sub:1",
-      "to": "hit:10900101|1|elements|0|-5633710717881758712|16|2",
-      "relation": "emits-hit"
-    },
-    {
-      "edgeIdentity": "control:10900101:sub:1->emits-hit->hit:10900101|1|elements|0|-5633710717881758712|19|3",
-      "from": "control:10900101:sub:1",
-      "to": "hit:10900101|1|elements|0|-5633710717881758712|19|3",
-      "relation": "emits-hit"
-    },
-    {
       "edgeIdentity": "control:10900102->has-subskill->control:10900102:sub:0",
       "from": "control:10900102",
       "to": "control:10900102:sub:0",
@@ -2087,8 +2045,8 @@
     }
   ],
   "summary": {
-    "nodeCount": 151,
-    "edgeCount": 141,
+    "nodeCount": 148,
+    "edgeCount": 138,
     "controlCount": 23,
     "exclusionCount": 8,
     "nodeKindCounts": {
@@ -2096,7 +2054,7 @@
       "conditional-hit-group": 2,
       "control": 23,
       "control-variant": 25,
-      "hit": 78,
+      "hit": 75,
       "passive-listener": 1,
       "public-action": 10,
       "switch-trigger": 1,
@@ -2105,7 +2063,7 @@
     "edgeRelationCounts": {
       "conditions-hit-group": 2,
       "derives-star-carry": 1,
-      "emits-hit": 78,
+      "emits-hit": 75,
       "executes-control": 20,
       "has-form": 10,
       "has-subskill": 25,
@@ -2114,5 +2072,5 @@
       "triggers-passive": 1
     }
   },
-  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
+  "profileHash": "3d0cea8c7d3c18fd6c45a68d20ec4d3cc7bdef1a1412ee9bf328a70be1e542ef"
 }

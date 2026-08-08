@@ -1032,7 +1032,7 @@
     "executionFormCount": 24,
     "verifiedWindowCount": 1,
     "hitCount": 124,
-    "semanticEffectCount": 63,
+    "semanticEffectCount": 46,
     "excludedControlCount": 6
   },
   "runtimeCoverageSummary": {
@@ -1041,8 +1041,8 @@
     "executionFormCount": 24,
     "controlCount": 27,
     "hitCount": 124,
-    "rawEffectCount": 215,
-    "semanticEffectCount": 63,
+    "rawEffectCount": 154,
+    "semanticEffectCount": 46,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 42,
     "thresholdTransitionCount": 0,
@@ -1053,9 +1053,9 @@
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
-      "applied": 11,
+      "applied": 12,
       "not-applicable": 2,
-      "static-evidence-gap": 7
+      "static-evidence-gap": 6
     }
   },
   "summary": {
@@ -1066,5 +1066,5 @@
       "m11-d-103002-visual-acceptance": 30
     }
   },
-  "coverageHash": "51126f5151e4587d"
+  "coverageHash": "a0152310ed2e29b7"
 }

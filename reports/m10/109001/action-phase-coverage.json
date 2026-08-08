@@ -84,7 +84,6 @@
       "runtimeReady": true,
       "classification": "applied",
       "residualReasons": [
-        "effect-trigger-frame-missing",
         "nested-effect-wrapper-semantics-unresolved"
       ],
       "status": "applied-with-residual-gaps"
@@ -133,8 +132,6 @@
       "classification": "applied",
       "residualReasons": [
         "base-function-unverified",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -172,12 +169,9 @@
       "sourceSkillId": 10900121,
       "runtimeReady": true,
       "classification": "applied",
-      "residualReasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
-      ],
-      "status": "applied-with-residual-gaps"
+      "residualReasons": [],
+      "status": "applied"
     }
   ],
-  "profileHash": "1b1be4db456200ae55509cab88344210e3b148201dee96ee163d21e9ad5f46f8"
+  "profileHash": "3d0cea8c7d3c18fd6c45a68d20ec4d3cc7bdef1a1412ee9bf328a70be1e542ef"
 }

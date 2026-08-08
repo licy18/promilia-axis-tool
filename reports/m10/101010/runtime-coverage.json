@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 101010,
-  "sourcePackageHash": "040475c3e712cbb9ee0874342d6ec47f5a23ee26c91acb0ae15bf91d720c75eb",
+  "sourcePackageHash": "9aa0cef255f37faeb4b2676e13ca57f8b7c2c43bb58c6fc97116aaeb46dbc4e1",
   "actionRows": [
     {
       "actionIdentity": "actor|101010|10101001|0|10101003|normal-attack",
@@ -510,8 +510,6 @@
         }
       },
       "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
         "trigger-frame-missing"
       ]
@@ -721,8 +719,6 @@
       },
       "reasons": [
         "base-function-unverified",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -878,8 +874,6 @@
       "reasons": [
         "base-function-unverified",
         "effect-combine-semantics-unresolved",
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "nested-damage-trigger-lifecycle-not-expanded",
         "nested-effect-wrapper-semantics-unresolved",
@@ -1032,10 +1026,7 @@
           "unresolved": 4
         }
       },
-      "reasons": [
-        "effect-target-unresolved",
-        "effect-trigger-frame-missing"
-      ]
+      "reasons": []
     },
     {
       "actionIdentity": "actor|101010|10101021|2|10101027|perfect-parry",
@@ -1107,8 +1098,8 @@
     "executionFormCount": 21,
     "controlCount": 20,
     "hitCount": 107,
-    "rawEffectCount": 273,
-    "semanticEffectCount": 125,
+    "rawEffectCount": 177,
+    "semanticEffectCount": 96,
     "resourceProfileCount": 1,
     "resourceTransactionCount": 30,
     "thresholdTransitionCount": 1,
@@ -1119,10 +1110,10 @@
     "passiveCount": 1,
     "switchTriggerCount": 1,
     "coverageStatusCounts": {
-      "applied": 11,
+      "applied": 12,
       "not-applicable": 1,
-      "static-evidence-gap": 8
+      "static-evidence-gap": 7
     }
   },
-  "profileHash": "64ca11ad9f64ab9a896d04d8abf33e47751bd018a8da2f172ec55f907f67f11d"
+  "profileHash": "777c6dfa76c9c005c36617f1f4003d32ea46d06c57dcb6e792f1176f3a0120fc"
 }

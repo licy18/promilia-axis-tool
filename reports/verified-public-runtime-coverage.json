@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "8f21567a6716d92063599b3ad3064a4b0cf97f119d13cdd202be6901c2c5d8d2",
+  "packageHash": "546e2ae14ec5e1430451b5b7231718c35b5cd635b7496427caa38f02b02df5b3",
   "fixedProductDenominator": {
     "publicActionCount": 645,
     "actorOwnerCount": 20,
@@ -75,36 +75,36 @@
     "effectDimensions": {
       "damage": {
         "applied": 199,
-        "unresolved": 329,
-        "verified-zero": 3259
+        "unresolved": 241,
+        "verified-zero": 2719
       },
       "toughness": {
-        "verified-zero": 3787
+        "verified-zero": 3159
       },
       "sp": {
         "applied": 34,
-        "unresolved": 78,
-        "verified-zero": 3675
+        "unresolved": 54,
+        "verified-zero": 3071
       },
       "hp": {
         "applied": 38,
-        "unresolved": 14,
-        "verified-zero": 3735
+        "unresolved": 4,
+        "verified-zero": 3117
       },
       "shield": {
         "applied": 13,
         "unresolved": 2,
-        "verified-zero": 3772
+        "verified-zero": 3144
       },
       "dynamicProperty": {
         "applied": 704,
-        "unresolved": 432,
-        "verified-zero": 2651
+        "unresolved": 117,
+        "verified-zero": 2338
       },
       "mark": {
-        "applied": 235,
-        "unresolved": 116,
-        "verified-zero": 3436
+        "applied": 226,
+        "unresolved": 83,
+        "verified-zero": 2850
       }
     },
     "semanticEffects": {
@@ -647,26 +647,25 @@
           "applied": 7
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 13
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 11
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 12
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 6,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -759,26 +758,25 @@
           "verified-zero": 7
         },
         "healing": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 3,
           "verified-zero": 8
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 13
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -822,11 +820,7 @@
           }
         ]
       },
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=4]"
     },
     {
@@ -879,25 +873,24 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 64
+          "verified-zero": 63
         },
         "shield": {
-          "verified-zero": 64
+          "verified-zero": 63
         },
         "dynamicProperty": {
           "applied": 30,
-          "unresolved": 1,
           "verified-zero": 33
         },
         "tuningMark": {
-          "verified-zero": 64
+          "verified-zero": 63
         }
       },
       "semanticEffects": {
-        "total": 31,
+        "total": 30,
         "applied": 30,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -1021,25 +1014,25 @@
           "verified-zero": 6
         },
         "healing": {
-          "verified-zero": 29
+          "verified-zero": 28
         },
         "shield": {
-          "verified-zero": 29
+          "verified-zero": 28
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "unresolved": 1,
           "verified-zero": 27
         },
         "tuningMark": {
           "unresolved": 9,
-          "verified-zero": 20
+          "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 20,
+        "total": 19,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 20
+        "unresolved": 19
       },
       "settlement": null,
       "reasons": [
@@ -1047,9 +1040,7 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=4]"
     },
@@ -1101,26 +1092,25 @@
           "applied": 44
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 4
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 5,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -1450,24 +1440,24 @@
           "applied": 8
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "dynamicProperty": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "tuningMark": {
-          "applied": 3,
-          "verified-zero": 4
+          "applied": 2,
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 4,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 3
       },
       "settlement": {
         "required": true,
@@ -1522,9 +1512,7 @@
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=3]"
     },
@@ -1578,27 +1566,25 @@
           "verified-zero": 12
         },
         "healing": {
-          "verified-zero": 56
+          "verified-zero": 39
         },
         "shield": {
-          "verified-zero": 56
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
-          "verified-zero": 52
+          "verified-zero": 37
         },
         "tuningMark": {
-          "applied": 16,
-          "unresolved": 1,
-          "verified-zero": 39
+          "applied": 14,
+          "verified-zero": 25
         }
       },
       "semanticEffects": {
-        "total": 41,
+        "total": 31,
         "applied": 10,
         "verifiedZero": 1,
-        "unresolved": 30
+        "unresolved": 20
       },
       "settlement": {
         "required": true,
@@ -1659,8 +1645,6 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
@@ -1717,27 +1701,25 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "tuningMark": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 7
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 4,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [],
@@ -1793,31 +1775,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 19
+          "verified-zero": 15
         },
         "shield": {
-          "verified-zero": 19
+          "verified-zero": 15
         },
         "dynamicProperty": {
           "applied": 7,
-          "unresolved": 2,
-          "verified-zero": 10
+          "verified-zero": 8
         },
         "tuningMark": {
-          "verified-zero": 19
+          "verified-zero": 15
         }
       },
       "semanticEffects": {
-        "total": 11,
+        "total": 8,
         "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -1870,33 +1848,28 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 16
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 16
         },
         "dynamicProperty": {
           "applied": 4,
-          "unresolved": 4,
-          "verified-zero": 16
+          "verified-zero": 12
         },
         "tuningMark": {
           "applied": 3,
-          "unresolved": 1,
-          "verified-zero": 20
+          "verified-zero": 13
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
     {
@@ -1949,25 +1922,24 @@
           "applied": 46
         },
         "healing": {
-          "verified-zero": 12
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 12
+          "verified-zero": 7
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 10
+          "verified-zero": 6
         },
         "tuningMark": {
-          "verified-zero": 12
+          "verified-zero": 7
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -2498,26 +2470,25 @@
           "applied": 7
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 6
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 8
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 3,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -2562,8 +2533,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
@@ -2618,26 +2587,25 @@
           "verified-zero": 25
         },
         "healing": {
-          "verified-zero": 25
+          "verified-zero": 20
         },
         "shield": {
-          "verified-zero": 25
+          "verified-zero": 20
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "tuningMark": {
           "applied": 6,
-          "verified-zero": 19
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 13,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 8
       },
       "settlement": {
         "required": true,
@@ -2700,8 +2668,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -2840,27 +2806,26 @@
           "unresolved": 23
         },
         "healing": {
-          "verified-zero": 52
+          "verified-zero": 42
         },
         "shield": {
-          "verified-zero": 52
+          "verified-zero": 42
         },
         "dynamicProperty": {
           "applied": 4,
-          "unresolved": 4,
-          "verified-zero": 44
+          "verified-zero": 38
         },
         "tuningMark": {
-          "applied": 4,
+          "applied": 3,
           "unresolved": 10,
-          "verified-zero": 38
+          "verified-zero": 29
         }
       },
       "semanticEffects": {
-        "total": 34,
+        "total": 30,
         "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 25
+        "unresolved": 21
       },
       "settlement": null,
       "reasons": [
@@ -2869,10 +2834,10 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=3]"
     },
@@ -2928,36 +2893,33 @@
           "verified-zero": 6
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 21
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 21
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 20
         },
         "tuningMark": {
           "applied": 1,
           "unresolved": 6,
-          "verified-zero": 15
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 15,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 13
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=4]"
     },
@@ -3011,25 +2973,24 @@
           "unresolved": 3
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -3089,34 +3050,32 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 16
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 16
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 8,
-          "verified-zero": 13
+          "unresolved": 3,
+          "verified-zero": 12
         },
         "tuningMark": {
           "applied": 4,
           "unresolved": 1,
-          "verified-zero": 17
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 15,
+        "total": 12,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -3180,31 +3139,28 @@
         },
         "healing": {
           "applied": 7,
-          "unresolved": 2,
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "dynamicProperty": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 14
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 12,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=4]"
     },
@@ -3258,26 +3214,26 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 294
+          "verified-zero": 97
         },
         "shield": {
-          "verified-zero": 294
+          "verified-zero": 97
         },
         "dynamicProperty": {
           "applied": 21,
-          "unresolved": 116,
-          "verified-zero": 157
+          "unresolved": 19,
+          "verified-zero": 57
         },
         "tuningMark": {
-          "unresolved": 18,
-          "verified-zero": 276
+          "unresolved": 9,
+          "verified-zero": 88
         }
       },
       "semanticEffects": {
-        "total": 102,
+        "total": 51,
         "applied": 32,
         "verifiedZero": 0,
-        "unresolved": 70
+        "unresolved": 19
       },
       "settlement": null,
       "reasons": [
@@ -3409,33 +3365,31 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 23
+          "verified-zero": 15
         },
         "shield": {
-          "verified-zero": 23
+          "verified-zero": 15
         },
         "dynamicProperty": {
-          "unresolved": 11,
-          "verified-zero": 12
+          "unresolved": 5,
+          "verified-zero": 10
         },
         "tuningMark": {
           "applied": 3,
           "unresolved": 1,
-          "verified-zero": 19
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -3495,25 +3449,24 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 5,
+        "total": 3,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [],
@@ -3571,26 +3524,25 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 14
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 14
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 3,
-          "verified-zero": 18
+          "verified-zero": 11
         },
         "tuningMark": {
-          "applied": 4,
-          "verified-zero": 20
+          "applied": 3,
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 17,
+        "total": 11,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -3598,8 +3550,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -3660,33 +3610,30 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 3,
           "verified-zero": 16
         },
         "tuningMark": {
           "applied": 4,
-          "verified-zero": 18
+          "verified-zero": 15
         }
       },
       "semanticEffects": {
-        "total": 17,
+        "total": 14,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -3808,31 +3755,27 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -3887,26 +3830,26 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 18
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 18
+          "verified-zero": 13
         },
         "dynamicProperty": {
-          "unresolved": 8,
-          "verified-zero": 10
+          "unresolved": 4,
+          "verified-zero": 9
         },
         "tuningMark": {
           "applied": 4,
           "unresolved": 1,
-          "verified-zero": 13
+          "verified-zero": 8
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -3914,14 +3857,13 @@
         "projectile-impact-frame-runtime-dependent",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=4]"
     },
@@ -4039,31 +3981,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -4403,27 +4341,25 @@
           "applied": 9
         },
         "healing": {
-          "verified-zero": 13
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 13
+          "verified-zero": 7
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 4,
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "tuningMark": {
           "applied": 2,
-          "unresolved": 1,
-          "verified-zero": 10
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 6,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -4618,24 +4554,24 @@
           "verified-zero": 12
         },
         "healing": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "shield": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "dynamicProperty": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "tuningMark": {
-          "applied": 4,
-          "verified-zero": 11
+          "applied": 3,
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 7,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -4695,9 +4631,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=4]"
     },
@@ -4751,26 +4685,25 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 6
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -4828,31 +4761,27 @@
           "unresolved": 9
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 6
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -4905,31 +4834,28 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 10
+          "verified-zero": 9
         },
         "shield": {
-          "verified-zero": 10
+          "verified-zero": 9
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 8
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 8
+          "verified-zero": 7
         }
       },
       "semanticEffects": {
-        "total": 8,
+        "total": 7,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
@@ -4984,25 +4910,24 @@
           "unresolved": 3
         },
         "healing": {
-          "verified-zero": 21
+          "verified-zero": 20
         },
         "shield": {
-          "verified-zero": 21
+          "verified-zero": 20
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 18
         },
         "tuningMark": {
-          "verified-zero": 21
+          "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [],
@@ -5060,31 +4985,27 @@
           "unresolved": 9
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=111001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -5137,32 +5058,30 @@
           "verified-zero": 5
         },
         "healing": {
-          "verified-zero": 13
+          "verified-zero": 12
         },
         "shield": {
-          "verified-zero": 13
+          "verified-zero": 12
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "unresolved": 1,
           "verified-zero": 11
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 10
+          "verified-zero": 9
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 9,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -5287,32 +5206,28 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 4,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -5365,32 +5280,30 @@
           "verified-zero": 4
         },
         "healing": {
-          "verified-zero": 26
+          "verified-zero": 23
         },
         "shield": {
-          "verified-zero": 26
+          "verified-zero": 23
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 13,
+          "unresolved": 10,
           "verified-zero": 10
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 23
+          "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 23,
+        "total": 20,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 18
+        "unresolved": 15
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -5617,34 +5530,31 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 20
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 23
+          "verified-zero": 18
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 4,
-          "verified-zero": 18
+          "unresolved": 3,
+          "verified-zero": 14
         },
         "tuningMark": {
           "applied": 3,
           "unresolved": 1,
-          "verified-zero": 19
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -5770,31 +5680,27 @@
           "unresolved": 11
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 5,
           "verified-zero": 12
         },
         "tuningMark": {
-          "verified-zero": 22
+          "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -5849,34 +5755,29 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 75
+          "verified-zero": 38
         },
         "shield": {
-          "verified-zero": 79
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 9,
-          "unresolved": 16,
-          "verified-zero": 54
+          "verified-zero": 30
         },
         "tuningMark": {
           "applied": 9,
-          "unresolved": 9,
-          "verified-zero": 61
+          "verified-zero": 30
         }
       },
       "semanticEffects": {
-        "total": 58,
+        "total": 29,
         "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 29
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=4]"
     },
@@ -5994,31 +5895,27 @@
           "unresolved": 11
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 5,
           "verified-zero": 12
         },
         "tuningMark": {
-          "verified-zero": 22
+          "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -6073,34 +5970,29 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 75
+          "verified-zero": 38
         },
         "shield": {
-          "verified-zero": 79
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 9,
-          "unresolved": 16,
-          "verified-zero": 54
+          "verified-zero": 30
         },
         "tuningMark": {
           "applied": 9,
-          "unresolved": 9,
-          "verified-zero": 61
+          "verified-zero": 30
         }
       },
       "semanticEffects": {
-        "total": 58,
+        "total": 29,
         "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 29
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=4]"
     },
@@ -6291,26 +6183,26 @@
           "verified-zero": 4
         },
         "healing": {
-          "verified-zero": 18
-        },
-        "shield": {
-          "verified-zero": 18
-        },
-        "dynamicProperty": {
-          "unresolved": 9,
           "verified-zero": 9
         },
+        "shield": {
+          "verified-zero": 9
+        },
+        "dynamicProperty": {
+          "unresolved": 3,
+          "verified-zero": 6
+        },
         "tuningMark": {
-          "applied": 3,
+          "applied": 2,
           "unresolved": 1,
-          "verified-zero": 14
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
-        "total": 12,
+        "total": 7,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
@@ -6321,8 +6213,6 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -36416,26 +36306,25 @@
           "applied": 7
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 13
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 11
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 12
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 6,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -36623,26 +36512,25 @@
           "verified-zero": 7
         },
         "healing": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 3,
           "verified-zero": 8
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 13
+          "verified-zero": 10
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -36686,11 +36574,7 @@
           }
         ]
       },
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
-        "property-formula-not-literal-function-5"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101003].skillSlots[group=ground,slot=4]"
     },
     {
@@ -36739,26 +36623,25 @@
           "verified-zero": 5
         },
         "healing": {
-          "verified-zero": 8
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 8
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 3,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 7
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 8,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -36801,8 +36684,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=101003].skillSlots[skillId=10100322]"
@@ -36952,25 +36833,24 @@
           "applied": 5
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -37065,25 +36945,24 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 64
+          "verified-zero": 63
         },
         "shield": {
-          "verified-zero": 64
+          "verified-zero": 63
         },
         "dynamicProperty": {
           "applied": 30,
-          "unresolved": 1,
           "verified-zero": 33
         },
         "tuningMark": {
-          "verified-zero": 64
+          "verified-zero": 63
         }
       },
       "semanticEffects": {
-        "total": 31,
+        "total": 30,
         "applied": 30,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -37407,29 +37286,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "shield": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "dynamicProperty": {
-          "unresolved": 2
+          "unresolved": 1
         },
         "tuningMark": {
-          "verified-zero": 2
+          "verified-zero": 1
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=208]"
     },
@@ -37483,25 +37360,25 @@
           "verified-zero": 6
         },
         "healing": {
-          "verified-zero": 29
+          "verified-zero": 28
         },
         "shield": {
-          "verified-zero": 29
+          "verified-zero": 28
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "unresolved": 1,
           "verified-zero": 27
         },
         "tuningMark": {
           "unresolved": 9,
-          "verified-zero": 20
+          "verified-zero": 19
         }
       },
       "semanticEffects": {
-        "total": 20,
+        "total": 19,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 20
+        "unresolved": 19
       },
       "settlement": null,
       "reasons": [
@@ -37509,9 +37386,7 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=4]"
     },
@@ -37631,29 +37506,27 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "shield": {
-          "verified-zero": 2
+          "verified-zero": 1
         },
         "dynamicProperty": {
-          "unresolved": 2
+          "unresolved": 1
         },
         "tuningMark": {
-          "verified-zero": 2
+          "verified-zero": 1
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "property-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=207]"
     },
@@ -37703,31 +37576,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101007].skillSlots[group=ground,slot=209]"
     },
     {
@@ -37778,26 +37647,25 @@
           "applied": 44
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 4
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 5,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 2
       },
       "settlement": {
         "required": true,
@@ -38129,23 +37997,23 @@
           "applied": 19
         },
         "healing": {
-          "verified-zero": 27
+          "verified-zero": 24
         },
         "shield": {
-          "verified-zero": 27
+          "verified-zero": 24
         },
         "dynamicProperty": {
-          "verified-zero": 27
+          "verified-zero": 24
         },
         "tuningMark": {
-          "verified-zero": 27
+          "verified-zero": 24
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 0,
         "verifiedZero": 1,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -38315,9 +38183,7 @@
       },
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=2]"
     },
@@ -38573,24 +38439,24 @@
           "applied": 8
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "dynamicProperty": {
-          "verified-zero": 7
+          "verified-zero": 4
         },
         "tuningMark": {
-          "applied": 3,
-          "verified-zero": 4
+          "applied": 2,
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 4,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 6
+        "unresolved": 3
       },
       "settlement": {
         "required": true,
@@ -38645,9 +38511,7 @@
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=3]"
     },
@@ -38798,27 +38662,25 @@
           "verified-zero": 12
         },
         "healing": {
-          "verified-zero": 56
+          "verified-zero": 39
         },
         "shield": {
-          "verified-zero": 56
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
-          "verified-zero": 52
+          "verified-zero": 37
         },
         "tuningMark": {
-          "applied": 16,
-          "unresolved": 1,
-          "verified-zero": 39
+          "applied": 14,
+          "verified-zero": 25
         }
       },
       "semanticEffects": {
-        "total": 41,
+        "total": 31,
         "applied": 10,
         "verifiedZero": 1,
-        "unresolved": 30
+        "unresolved": 20
       },
       "settlement": {
         "required": true,
@@ -38879,8 +38741,6 @@
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "effect-combine-semantics-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
         "tuning-mark-relation-notDelElementDataList-unresolved"
@@ -38935,25 +38795,25 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 27
+          "verified-zero": 12
         },
         "shield": {
-          "verified-zero": 27
+          "verified-zero": 12
         },
         "dynamicProperty": {
-          "verified-zero": 27
+          "verified-zero": 12
         },
         "tuningMark": {
-          "applied": 5,
+          "applied": 3,
           "unresolved": 1,
-          "verified-zero": 21
+          "verified-zero": 8
         }
       },
       "semanticEffects": {
-        "total": 15,
+        "total": 9,
         "applied": 0,
         "verifiedZero": 1,
-        "unresolved": 14
+        "unresolved": 8
       },
       "settlement": {
         "required": true,
@@ -39043,16 +38903,16 @@
           "applied": 8
         },
         "healing": {
-          "verified-zero": 17
+          "verified-zero": 16
         },
         "shield": {
-          "verified-zero": 17
+          "verified-zero": 16
         },
         "dynamicProperty": {
-          "verified-zero": 17
+          "verified-zero": 16
         },
         "tuningMark": {
-          "verified-zero": 17
+          "verified-zero": 16
         }
       },
       "semanticEffects": {
@@ -39104,10 +38964,7 @@
           }
         ]
       },
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=101010].skillSlots[group=ground,slot=207]"
     },
     {
@@ -39158,25 +39015,24 @@
           "applied": 2
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -39268,27 +39124,25 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "tuningMark": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 7
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 7,
+        "total": 4,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [],
@@ -39544,31 +39398,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 19
+          "verified-zero": 15
         },
         "shield": {
-          "verified-zero": 19
+          "verified-zero": 15
         },
         "dynamicProperty": {
           "applied": 7,
-          "unresolved": 2,
-          "verified-zero": 10
+          "verified-zero": 8
         },
         "tuningMark": {
-          "verified-zero": 19
+          "verified-zero": 15
         }
       },
       "semanticEffects": {
-        "total": 11,
+        "total": 8,
         "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -39685,33 +39535,28 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 16
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 16
         },
         "dynamicProperty": {
           "applied": 4,
-          "unresolved": 4,
-          "verified-zero": 16
+          "verified-zero": 12
         },
         "tuningMark": {
           "applied": 3,
-          "unresolved": 1,
-          "verified-zero": 20
+          "verified-zero": 13
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
     },
     {
@@ -39824,31 +39669,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -39901,25 +39742,24 @@
           "applied": 46
         },
         "healing": {
-          "verified-zero": 12
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 12
+          "verified-zero": 7
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 10
+          "verified-zero": 6
         },
         "tuningMark": {
-          "verified-zero": 12
+          "verified-zero": 7
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -40656,26 +40496,25 @@
           "applied": 7
         },
         "healing": {
-          "verified-zero": 9
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 9
+          "verified-zero": 6
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 8
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 3,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -40720,8 +40559,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
@@ -40875,26 +40712,25 @@
           "verified-zero": 25
         },
         "healing": {
-          "verified-zero": 25
+          "verified-zero": 20
         },
         "shield": {
-          "verified-zero": 25
+          "verified-zero": 20
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "tuningMark": {
           "applied": 6,
-          "verified-zero": 19
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 13,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 8
       },
       "settlement": {
         "required": true,
@@ -40957,8 +40793,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -41018,26 +40852,25 @@
           "verified-zero": 5
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 4,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -41079,10 +40912,7 @@
           }
         ]
       },
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=103002].skillSlots[skillId=10300221]"
     },
     {
@@ -41240,25 +41070,24 @@
           "applied": 3
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -41638,27 +41467,26 @@
           "unresolved": 23
         },
         "healing": {
-          "verified-zero": 52
+          "verified-zero": 42
         },
         "shield": {
-          "verified-zero": 52
+          "verified-zero": 42
         },
         "dynamicProperty": {
           "applied": 4,
-          "unresolved": 4,
-          "verified-zero": 44
+          "verified-zero": 38
         },
         "tuningMark": {
-          "applied": 4,
+          "applied": 3,
           "unresolved": 10,
-          "verified-zero": 38
+          "verified-zero": 29
         }
       },
       "semanticEffects": {
-        "total": 34,
+        "total": 30,
         "applied": 9,
         "verifiedZero": 0,
-        "unresolved": 25
+        "unresolved": 21
       },
       "settlement": null,
       "reasons": [
@@ -41667,10 +41495,10 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-elementDataList-unresolved",
-        "tuning-mark-relation-notDelElementDataList-unresolved"
+        "tuning-mark-relation-notDelElementDataList-unresolved",
+        "effect-trigger-frame-missing",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=3]"
     },
@@ -41792,36 +41620,33 @@
           "verified-zero": 6
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 21
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 21
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 20
         },
         "tuningMark": {
           "applied": 1,
           "unresolved": 6,
-          "verified-zero": 15
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 16,
+        "total": 15,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 13
+        "unresolved": 12
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "judgment-condition-semantics-evidence-gap",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=4]"
     },
@@ -42019,31 +41844,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -42096,25 +41917,24 @@
           "unresolved": 3
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -42172,31 +41992,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=2]"
     },
     {
@@ -42390,34 +42206,32 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 16
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 16
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 8,
-          "verified-zero": 13
+          "unresolved": 3,
+          "verified-zero": 12
         },
         "tuningMark": {
           "applied": 4,
           "unresolved": 1,
-          "verified-zero": 17
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 15,
+        "total": 12,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 10
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -42545,31 +42359,28 @@
         },
         "healing": {
           "applied": 7,
-          "unresolved": 2,
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "dynamicProperty": {
-          "verified-zero": 16
+          "verified-zero": 13
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 14
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 12,
+        "total": 11,
         "applied": 11,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=107002].skillSlots[group=ground,slot=4]"
     },
@@ -42819,26 +42630,26 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 294
+          "verified-zero": 97
         },
         "shield": {
-          "verified-zero": 294
+          "verified-zero": 97
         },
         "dynamicProperty": {
           "applied": 21,
-          "unresolved": 116,
-          "verified-zero": 157
+          "unresolved": 19,
+          "verified-zero": 57
         },
         "tuningMark": {
-          "unresolved": 18,
-          "verified-zero": 276
+          "unresolved": 9,
+          "verified-zero": 88
         }
       },
       "semanticEffects": {
-        "total": 102,
+        "total": 51,
         "applied": 32,
         "verifiedZero": 0,
-        "unresolved": 70
+        "unresolved": 19
       },
       "settlement": null,
       "reasons": [
@@ -42896,31 +42707,27 @@
           "unresolved": 7
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 12
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 12
         },
         "dynamicProperty": {
           "applied": 8,
-          "unresolved": 2,
           "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 14
+          "verified-zero": 12
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 8,
         "applied": 8,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=2]"
     },
     {
@@ -43247,33 +43054,31 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 23
+          "verified-zero": 15
         },
         "shield": {
-          "verified-zero": 23
+          "verified-zero": 15
         },
         "dynamicProperty": {
-          "unresolved": 11,
-          "verified-zero": 12
+          "unresolved": 5,
+          "verified-zero": 10
         },
         "tuningMark": {
           "applied": 3,
           "unresolved": 1,
-          "verified-zero": 19
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -43457,31 +43262,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=107003].skillSlots[group=ground,slot=209]"
     },
     {
@@ -43534,25 +43335,24 @@
           "unresolved": 5
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 5,
+        "total": 3,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [],
@@ -43802,26 +43602,25 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 24
+          "verified-zero": 14
         },
         "shield": {
-          "verified-zero": 24
+          "verified-zero": 14
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 3,
-          "verified-zero": 18
+          "verified-zero": 11
         },
         "tuningMark": {
-          "applied": 4,
-          "verified-zero": 20
+          "applied": 3,
+          "verified-zero": 11
         }
       },
       "semanticEffects": {
-        "total": 17,
+        "total": 11,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -43829,8 +43628,6 @@
         "trigger-frame-missing",
         "hp:damage-formula-inputs-incomplete",
         "toughness:pre-shield-damage-inputs-incomplete",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -43955,33 +43752,30 @@
           "verified-zero": 2
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 19
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 3,
           "verified-zero": 16
         },
         "tuningMark": {
           "applied": 4,
-          "verified-zero": 18
+          "verified-zero": 15
         }
       },
       "semanticEffects": {
-        "total": 17,
+        "total": 14,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 12
+        "unresolved": 9
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -44041,31 +43835,28 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 5,
+        "total": 3,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 3
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=108001].skillSlots[skillId=10800121]"
     },
@@ -44179,31 +43970,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -44525,31 +44312,27 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -44668,26 +44451,26 @@
           "verified-zero": 1
         },
         "healing": {
-          "verified-zero": 18
+          "verified-zero": 13
         },
         "shield": {
-          "verified-zero": 18
+          "verified-zero": 13
         },
         "dynamicProperty": {
-          "unresolved": 8,
-          "verified-zero": 10
+          "unresolved": 4,
+          "verified-zero": 9
         },
         "tuningMark": {
           "applied": 4,
           "unresolved": 1,
-          "verified-zero": 13
+          "verified-zero": 8
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 5
       },
       "settlement": null,
       "reasons": [
@@ -44695,14 +44478,13 @@
         "projectile-impact-frame-runtime-dependent",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
         "nested-damage-trigger-lifecycle-evidence-gap",
-        "property-formula-not-literal-function-5"
+        "property-formula-not-literal-function-5",
+        "effect-target-unresolved"
       ],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=4]"
     },
@@ -44880,31 +44662,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -45218,31 +44996,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=3]"
     },
     {
@@ -45438,33 +45212,30 @@
           "unresolved": 3
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 4,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "projectile-impact-frame-runtime-dependent"
       ],
       "sourceIdentity": "characters.items[id=108003].skillSlots[skillId=10800322]"
     },
@@ -45578,31 +45349,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=209]"
     },
     {
@@ -45715,31 +45482,27 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 14
+          "verified-zero": 9
         },
         "shield": {
-          "verified-zero": 14
+          "verified-zero": 9
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
-          "verified-zero": 11
+          "verified-zero": 7
         },
         "tuningMark": {
-          "verified-zero": 14
+          "verified-zero": 9
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=2]"
     },
     {
@@ -46273,31 +46036,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108005].skillSlots[group=ground,slot=209]"
     },
     {
@@ -46346,27 +46105,25 @@
           "applied": 9
         },
         "healing": {
-          "verified-zero": 13
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 13
+          "verified-zero": 7
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 4,
-          "verified-zero": 7
+          "verified-zero": 5
         },
         "tuningMark": {
           "applied": 2,
-          "unresolved": 1,
-          "verified-zero": 10
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 6,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 1
       },
       "settlement": {
         "required": true,
@@ -46461,24 +46218,24 @@
           "applied": 3
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "dynamicProperty": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 3,
         "applied": 0,
         "verifiedZero": 0,
-        "unresolved": 4
+        "unresolved": 3
       },
       "settlement": {
         "required": true,
@@ -46519,8 +46276,7 @@
         ]
       },
       "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "effect-trigger-frame-missing"
+        "nested-effect-wrapper-semantics-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=2]"
     },
@@ -46963,24 +46719,24 @@
           "verified-zero": 12
         },
         "healing": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "shield": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "dynamicProperty": {
-          "verified-zero": 15
+          "verified-zero": 8
         },
         "tuningMark": {
-          "applied": 4,
-          "verified-zero": 11
+          "applied": 3,
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 7,
         "applied": 3,
         "verifiedZero": 0,
-        "unresolved": 7
+        "unresolved": 4
       },
       "settlement": {
         "required": true,
@@ -47040,9 +46796,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
         "tuning-consume-current-packet-not-in-candidate-map",
-        "sp-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "sp-formula-not-literal-function-5"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=4]"
     },
@@ -47297,26 +47051,25 @@
           "unresolved": 1
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -47355,8 +47108,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "public-action-damage-settlement-evidence-missing"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=209]"
@@ -47411,26 +47162,25 @@
           "unresolved": 2
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 6
+          "verified-zero": 5
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
@@ -47696,31 +47446,27 @@
           "unresolved": 9
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 6
+          "verified-zero": 4
         }
       },
       "semanticEffects": {
-        "total": 4,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -47837,31 +47583,28 @@
           "verified-zero": 3
         },
         "healing": {
-          "verified-zero": 10
+          "verified-zero": 9
         },
         "shield": {
-          "verified-zero": 10
+          "verified-zero": 9
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 8
         },
         "tuningMark": {
           "applied": 2,
-          "verified-zero": 8
+          "verified-zero": 7
         }
       },
       "semanticEffects": {
-        "total": 8,
+        "total": 7,
         "applied": 6,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-mark-relation-triggerEffectList-unresolved"
       ],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=4]"
@@ -48040,31 +47783,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=109002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -48117,25 +47856,24 @@
           "unresolved": 3
         },
         "healing": {
-          "verified-zero": 21
+          "verified-zero": 20
         },
         "shield": {
-          "verified-zero": 21
+          "verified-zero": 20
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 18
         },
         "tuningMark": {
-          "verified-zero": 21
+          "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [],
@@ -48393,31 +48131,27 @@
           "unresolved": 9
         },
         "healing": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "shield": {
-          "verified-zero": 3
+          "verified-zero": 2
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 1
         },
         "tuningMark": {
-          "verified-zero": 3
+          "verified-zero": 2
         }
       },
       "semanticEffects": {
-        "total": 2,
+        "total": 1,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=111001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -48534,32 +48268,30 @@
           "verified-zero": 5
         },
         "healing": {
-          "verified-zero": 13
+          "verified-zero": 12
         },
         "shield": {
-          "verified-zero": 13
+          "verified-zero": 12
         },
         "dynamicProperty": {
-          "unresolved": 2,
+          "unresolved": 1,
           "verified-zero": 11
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 10
+          "verified-zero": 9
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 9,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 8
+        "unresolved": 7
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -48754,31 +48486,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=111001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -49095,32 +48823,28 @@
           "unresolved": 8
         },
         "healing": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 6
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 2,
           "verified-zero": 2
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 4,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -49237,32 +48961,30 @@
           "verified-zero": 4
         },
         "healing": {
-          "verified-zero": 26
+          "verified-zero": 23
         },
         "shield": {
-          "verified-zero": 26
+          "verified-zero": 23
         },
         "dynamicProperty": {
           "applied": 3,
-          "unresolved": 13,
+          "unresolved": 10,
           "verified-zero": 10
         },
         "tuningMark": {
           "applied": 3,
-          "verified-zero": 23
+          "verified-zero": 20
         }
       },
       "semanticEffects": {
-        "total": 23,
+        "total": 20,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 18
+        "unresolved": 15
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -49447,31 +49169,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -49960,34 +49678,31 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 2,
-          "verified-zero": 20
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 23
+          "verified-zero": 18
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 4,
-          "verified-zero": 18
+          "unresolved": 3,
+          "verified-zero": 14
         },
         "tuningMark": {
           "applied": 3,
           "unresolved": 1,
-          "verified-zero": 19
+          "verified-zero": 14
         }
       },
       "semanticEffects": {
-        "total": 14,
+        "total": 11,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 9
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
         "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "tuning-consume-judgment-missing",
@@ -50045,32 +49760,28 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 8
+          "verified-zero": 7
         },
         "shield": {
-          "verified-zero": 8
+          "verified-zero": 7
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 5
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 7
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
-        "total": 6,
+        "total": 5,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 2
+        "unresolved": 1
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=112002].skillSlots[skillId=11200222]"
     },
     {
@@ -50182,31 +49893,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=112002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -50523,31 +50230,27 @@
           "unresolved": 11
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 5,
           "verified-zero": 12
         },
         "tuningMark": {
-          "verified-zero": 22
+          "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=3]"
     },
     {
@@ -50666,34 +50369,29 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 75
+          "verified-zero": 38
         },
         "shield": {
-          "verified-zero": 79
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 9,
-          "unresolved": 16,
-          "verified-zero": 54
+          "verified-zero": 30
         },
         "tuningMark": {
           "applied": 9,
-          "unresolved": 9,
-          "verified-zero": 61
+          "verified-zero": 30
         }
       },
       "semanticEffects": {
-        "total": 58,
+        "total": 29,
         "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 29
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=4]"
     },
@@ -50807,31 +50505,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=209]"
     },
     {
@@ -51148,31 +50842,27 @@
           "unresolved": 11
         },
         "healing": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "shield": {
-          "verified-zero": 22
+          "verified-zero": 17
         },
         "dynamicProperty": {
           "applied": 5,
-          "unresolved": 5,
           "verified-zero": 12
         },
         "tuningMark": {
-          "verified-zero": 22
+          "verified-zero": 17
         }
       },
       "semanticEffects": {
-        "total": 10,
+        "total": 5,
         "applied": 5,
         "verifiedZero": 0,
-        "unresolved": 5
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -51291,34 +50981,29 @@
         },
         "healing": {
           "applied": 1,
-          "unresolved": 3,
-          "verified-zero": 75
+          "verified-zero": 38
         },
         "shield": {
-          "verified-zero": 79
+          "verified-zero": 39
         },
         "dynamicProperty": {
           "applied": 9,
-          "unresolved": 16,
-          "verified-zero": 54
+          "verified-zero": 30
         },
         "tuningMark": {
           "applied": 9,
-          "unresolved": 9,
-          "verified-zero": 61
+          "verified-zero": 30
         }
       },
       "semanticEffects": {
-        "total": 58,
+        "total": 29,
         "applied": 29,
         "verifiedZero": 0,
-        "unresolved": 29
+        "unresolved": 0
       },
       "settlement": null,
       "reasons": [
-        "trigger-frame-missing",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
+        "trigger-frame-missing"
       ],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=4]"
     },
@@ -51432,31 +51117,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 4
+          "verified-zero": 3
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 2
         },
         "tuningMark": {
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199002].skillSlots[group=ground,slot=209]"
     },
     {
@@ -51908,26 +51589,26 @@
           "verified-zero": 4
         },
         "healing": {
-          "verified-zero": 18
-        },
-        "shield": {
-          "verified-zero": 18
-        },
-        "dynamicProperty": {
-          "unresolved": 9,
           "verified-zero": 9
         },
+        "shield": {
+          "verified-zero": 9
+        },
+        "dynamicProperty": {
+          "unresolved": 3,
+          "verified-zero": 6
+        },
         "tuningMark": {
-          "applied": 3,
+          "applied": 2,
           "unresolved": 1,
-          "verified-zero": 14
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
-        "total": 12,
+        "total": 7,
         "applied": 1,
         "verifiedZero": 0,
-        "unresolved": 11
+        "unresolved": 6
       },
       "settlement": null,
       "reasons": [
@@ -51938,8 +51619,6 @@
         "judgment-condition-semantics-evidence-gap",
         "nested-effect-wrapper-semantics-unresolved",
         "property-formula-not-literal-function-5",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "tuning-consume-judgment-missing",
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved",
@@ -52122,31 +51801,27 @@
           "unresolved": 4
         },
         "healing": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "shield": {
-          "verified-zero": 7
+          "verified-zero": 6
         },
         "dynamicProperty": {
           "applied": 2,
-          "unresolved": 1,
           "verified-zero": 4
         },
         "tuningMark": {
-          "verified-zero": 7
+          "verified-zero": 6
         }
       },
       "semanticEffects": {
-        "total": 5,
+        "total": 4,
         "applied": 4,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": null,
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=199003].skillSlots[group=ground,slot=209]"
     },
     {
@@ -81696,16 +81371,16 @@
           "unresolved": 19
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "dynamicProperty": {
-          "verified-zero": 5
+          "verified-zero": 3
         },
         "tuningMark": {
-          "verified-zero": 5
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
@@ -81720,10 +81395,7 @@
         "hitCount": 0,
         "publicForms": []
       },
-      "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
     }
   ],
@@ -82288,26 +81960,25 @@
           "unresolved": 1
         },
         "healing": {
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "shield": {
-          "verified-zero": 5
+          "verified-zero": 4
         },
         "dynamicProperty": {
           "applied": 1,
-          "unresolved": 1,
           "verified-zero": 3
         },
         "tuningMark": {
           "applied": 1,
-          "verified-zero": 4
+          "verified-zero": 3
         }
       },
       "semanticEffects": {
-        "total": 3,
+        "total": 2,
         "applied": 2,
         "verifiedZero": 0,
-        "unresolved": 1
+        "unresolved": 0
       },
       "settlement": {
         "required": true,
@@ -82346,8 +82017,6 @@
         ]
       },
       "reasons": [
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved",
         "public-action-damage-settlement-evidence-missing"
       ],
       "sourceIdentity": "characters.items[id=109001].skillSlots[group=ground,slot=209]"

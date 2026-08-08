@@ -364,6 +364,52 @@
 1. 提交 R12（文档 + 证据文件）。
 2. M12-C 前置验收（视觉签收/optimization-ready）待用户参与。
 
+## R13 进度（2026-08-08，源头账本清零：重复定义根抑制 + 已覆盖效果 N/A + 死分支变体）
+
+### 已实现（sync/pipeline 级，全局受益）
+
+- **hero 控制“covered-as-child 重复定义根”抑制**：`createControlRuntimeEffects` 不再为“无触发帧且其元素已被同 map 其他根作为子元素覆盖”的根生成运行时效果绑定（原仅奇波零距离策略生效）。修复 10900105 elements 8/9/10（250/251/252/253 原始资源定义）、10900110 elements|3、10900127 elements|1、10900113 elements 9/11/12 等重复账本；根保留在 effectGraph，资源操作计数不受影响（Ruby 103002047 42 条校验保持）。
+- **product-confirmed dead variant**：新增 `PRODUCT_CONFIRMED_DEAD_VARIANTS`（10900101/sub1），其命中从包中移除、效果绑定不生成，并写入包 `excludedDeadVariants`。
+- **recipe 可对具体 effect 记录做 N/A 覆盖**：`classifyUnresolvedImpactClassification` 支持 `recipe.unresolvedRecords` 按 recordIdentity 强制 not-applicable（限 status=not-applicable 条目）。
+
+### 109001 效果
+
+- m10 源头账本 gameplay-impacting 16→0；验收源头缺口 16→0；阻断账本 185→166（剩余全部为 acceptance 场景缺口）。
+- 5 条 N/A 覆盖：极限反击/追击璀璨注入（已由 targetStateTransaction 运行时应用）、109001361 消耗判断（已由 consume 契约运行时应用）、600050 空注入壳、109001172 空 buff 模板。
+- sub1（10900101/sub1）：命中与效果从包中移除，R12 死分支变体登记生效。
+
+### 下一步
+
+1. S2/S3：消除 166 条 acceptance 场景缺口（97 coverage-missing + 69 selector-unavailable）。
+2. 测试/审计统一放到最终验收通过后执行（用户 2026-08-08 指令）。
+
+## R14 结论（2026-08-08，被动1 暴击增加按用户口径回退为孤儿）
+
+### 用户判断
+
+用户指出“被动1的暴击增加也是死分支”。复核后确认正确：
+
+- 被动控制 `skill_control_10900161.asset` 资源图只引用 109001316（超限伤害+54%，M19，保留）。
+- 109001296/297/298（被动1加暴击 / buff标记 / 增加暴击）在全部 109001 控制资源图中 **0 引用**（pathId 586698730667078251 / 3240270085966930613 / -1642918681258151641）。
+- 官方 skillDescribe 只写“末音造成的超限伤害增加54%”，未提暴击；等级表显示的“暴击率 3%”是孤儿子树展示，无战斗接线。
+
+### 回退内容
+
+- recipe passiveEffects：sourceElementIds 移除 109001296，删除 attr7+300 modifier，仅保留 109001316（attr21+5400 tags[307]）。
+- 109001 暴击阈值边界恢复 500：fixture 109001-visual sampled roll 799/800 → 499/500；`inspectCriticalMatrix` 移除 109001 特例。
+- 单测 `verifiedActionVariantRuntime` 移除 attr7+300 断言，保留 attr21+5400。
+
+### 机制矩阵更新（M20）
+
+| 已实现并验证 | M19 超限伤害+54%（109001316，attr21+5400 tags[307]） |
+|---|---|
+| 客户端孤儿（未接线，登记不建模） | M20 暴击率+3%（109001296-298，见 R14） |
+
+### 下一步
+
+1. S2/S3 场景覆盖继续（166 条 acceptance 缺口）。
+2. 测试/审计统一到验收通过后执行。
+
 ## 关键事实
 
 - 109001 末音：element=4（雷），position 详见 characters.json；普攻=10900101 哈库茵剑舞、星鸣=10900112 涌雷动之跃、星决=10900113 绽华章之舞、星携=10900121 凝飓风之旋（203 入场型）、被动=10900161 哈库茵之耀 + 10900162 无名第二被动（按 10101062/10300262 先例 N/A）

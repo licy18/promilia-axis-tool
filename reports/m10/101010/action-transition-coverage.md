@@ -29,7 +29,7 @@
 | plunging-attack | 10101011/sub0 | 0/0 | 0 | 0 | not-applicable |
 | star-skill | 10101012/sub0 | 0/0 | 0 | 0 | not-applicable |
 | star-combo | 10101026/sub0 | 0/0 | 0 | 0 | not-applicable |
-| ultimate | 10101013/sub0 | 1/1 | 3 | 3 | applied |
+| ultimate | 10101013/sub0 | 1/1 | 3 | 2 | applied |
 | star-carry | 10101021/sub0 | 0/0 | 0 | 0 | not-applicable |
 | limit-counter | 10101025/sub0 | 0/0 | 8 | 0 | applied |
 | perfect-parry | 10101027/sub0 | 0/0 | 0 | 0 | not-applicable |
