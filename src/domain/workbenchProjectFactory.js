@@ -323,14 +323,14 @@ export function createWorkbenchActionDraft({
     ...(autoCast
       ? {
           autoCast: true,
-          ...(autoCastRule ? { autoCastRule: cloneAutoCastRule(autoCastRule) } : {}),
+          ...(autoCastRule
+            ? { autoCastRule: cloneAutoCastRule(autoCastRule) }
+            : {}),
         }
       : {}),
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
-    ...(contextActionId
-      ? { contextActionId: String(contextActionId) }
-      : {}),
+    ...(contextActionId ? { contextActionId: String(contextActionId) } : {}),
     ...(sourceSequence ?? {}),
     ...normalizeAttackInputActionFields({ id: actionId, ...attackInputFields }),
     ...(statusGeneration
@@ -357,9 +357,7 @@ export function normalizeDraftSourceSequence({
   const path =
     Array.isArray(sourceSequencePath) && sourceSequencePath.length > 0
       ? sourceSequencePath.map(entry =>
-          entry == null || entry === ''
-            ? null
-            : nonNegativeIntegerOrNull(entry)
+          entry == null || entry === '' ? null : nonNegativeIntegerOrNull(entry)
         )
       : null;
   const normalizedPath =
@@ -566,11 +564,7 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     ...(source.soulessenceStar == null
       ? {}
       : {
-          soulessenceStar: optionalClampedInteger(
-            source.soulessenceStar,
-            1,
-            5
-          ),
+          soulessenceStar: optionalClampedInteger(source.soulessenceStar, 1, 5),
         }),
     ...(source.soulessenceCultivation == null
       ? {}
@@ -787,6 +781,7 @@ export function createWorkbenchProject(selection = {}, actionPatch = {}) {
     toughnessMultiplier: enemyConfig.toughnessMultiplier,
     initialToughnessRatio: enemyConfig.initialToughnessRatio,
     elementDefenseOverrides: enemyConfig.elementDefenseOverrides,
+    profile: enemyConfig.profile,
   });
   const titleAction = actionDrafts[0];
   const firstSkill = titleAction
@@ -968,6 +963,9 @@ export function normalizeWorkbenchEnemyConfig(config = {}) {
     elementDefenseOverrides: normalizeElementDefenseOverrides(
       source.elementDefenseOverrides
     ),
+    ...(source.profile == null
+      ? {}
+      : { profile: structuredClone(source.profile) }),
   };
 }
 
@@ -1101,11 +1099,11 @@ export function normalizeWorkbenchActionDrafts(
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-          sourceSequenceIndex: draft.sourceSequenceIndex,
-          sourceSequencePath: draft.sourceSequencePath,
-          sourceSequenceSource: draft.sourceSequenceSource,
-          contextActionId: draft.contextActionId,
-          hitOverrides: draft.hitOverrides,
+        sourceSequenceIndex: draft.sourceSequenceIndex,
+        sourceSequencePath: draft.sourceSequencePath,
+        sourceSequenceSource: draft.sourceSequenceSource,
+        contextActionId: draft.contextActionId,
+        hitOverrides: draft.hitOverrides,
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
@@ -1247,11 +1245,11 @@ function createProjectActionFromDraft(
       controlSubSkillIndex: draft.controlSubSkillIndex,
       variantInputSelection: draft.variantInputSelection,
       actionScheduling: draft.actionScheduling,
-          sourceEvidenceStatus: draft.sourceEvidenceStatus,
-          scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-          autoCast: draft.autoCast === true,
-          autoCastRule: draft.autoCastRule,
-          hitOverrides: draft.hitOverrides,
+      sourceEvidenceStatus: draft.sourceEvidenceStatus,
+      scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      autoCast: draft.autoCast === true,
+      autoCastRule: draft.autoCastRule,
+      hitOverrides: draft.hitOverrides,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
       effectCommands,
@@ -1287,7 +1285,8 @@ function createProjectActionFromDraft(
       actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
       damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
       note:
-        draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+        draft.note ||
+        '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
       insertion: draft.insertion,
       generationBatch: draft.generationBatch,
       attackInputFields: {

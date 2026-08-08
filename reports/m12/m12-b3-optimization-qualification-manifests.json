@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "d258a6f8327a6722",
+  "rosterHash": "693a2f5ddb9adeed",
   "records": [
     {
       "objectKind": "character",
@@ -6618,7 +6618,7 @@
               "reason": "m12c-zero-distance-passive-boss-out-of-scope",
               "bossAttacks": false,
               "policyId": "m12c-zero-distance-passive-boss-v1",
-              "policyHash": "c241492911786b34",
+              "policyHash": "8af1aefabb228acf",
               "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
               "rosterHash": "760e59dac2c7c1c5",
               "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario",
@@ -6933,11 +6933,11 @@
           "runtimeGaps": [],
           "sourceIdentityConflict": null,
           "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/skill_control_19998005__-2339022120750825272.json|NewTable/accessory_set.rows[id=3].skill[4#19998005]|NewTable/skill.rows[id=19998005]|ResourcesLang/*/lang_skill[id=85890777460246016]|SkillControl/19998005|BattleElement/199999022/023/043/044/086|full-current-SkillList-reverse-reference-census|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-5874771271388107138__-5874771271388107138.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-7665508558900367746__-7665508558900367746.json|elementDataList[1]|battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086|battle-element-assets.jsonl#path_id=-5654239168115731000;elementId=199999086|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-4955137497584177538__-4955137497584177538.json|behaviorlineControl[0].behaviorList[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19998005.asset/MonoBehaviour/MonoBehaviour_-7993432668986282370__-7993432668986282370.json|elementDataList[0]|battle-element-assets.jsonl#path_id=1357144959877628400;elementId=199999043|GameAssembly.dll#InjectToOwnElementBehavior.Start/GetInjectTargets/End+ChangePropertyElement.Parse/Combine|dump.cs#EDirectInjectTargetType.Self/ECombineType.Cover/EElementInheritType.None/EElementTriggerEventType.UnloadSkill|battle-element-assets.jsonl#path_id=-3122175980655525000;elementId=199999022|battle-element-assets.jsonl#path_id=-2059155062252145200;elementId=199999023",
-          "mechanicsHash": "e3a09c95e2867b5f"
+          "mechanicsHash": "02b509cfe1f93052"
         },
         "visualAcceptanceManifestHash": "4b0e9d2730f3fa58"
       },
-      "manifestHash": "e451b64b5e0d9254"
+      "manifestHash": "c863257ff1614feb"
     },
     {
       "objectKind": "set-skill",
@@ -30916,5 +30916,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "ef9763c902841fdf"
+  "manifestsHash": "5bf8736d03b925e0"
 }

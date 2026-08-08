@@ -335,11 +335,11 @@ describe('verified combat mechanics runtime', () => {
     expect(damageTotals).toEqual({
       'verified-han-star-skill': { hitCount: 7, hp: 224, toughness: 157 },
       'verified-muyin-charged': { hitCount: 3, hp: 191, toughness: 188 },
-    'verified-wind-kibo-active': {
-      hitCount: 1,
-      hp: 105,
-      toughness: 21,
-    },
+      'verified-wind-kibo-active': {
+        hitCount: 1,
+        hp: 105,
+        toughness: 21,
+      },
     });
     expect(
       result.verifiedCombatRuntime.damageEvents
@@ -367,6 +367,19 @@ describe('verified combat mechanics runtime', () => {
       tuningMechanics: true,
       profileKey: 'fire',
       markCount: 1,
+      requestedHpDamage: expect.any(Number),
+      effectiveHpDamage: expect.any(Number),
+      overkill: 0,
+      inBreakForHpDamage: false,
+      hpDamageMultiplier: 1,
+      toughnessBefore: expect.any(Number),
+      toughnessAfter: expect.any(Number),
+      breakTriggered: false,
+      deathTriggered: false,
+      settlementCursor: {
+        runtimePhase: 'post-hit-resource',
+        cursorIdentity: expect.any(String),
+      },
     });
     const hanActorRecovery = result.verifiedCombatRuntime.resourceEvents.filter(
       event =>
@@ -1422,11 +1435,11 @@ describe('verified combat mechanics runtime', () => {
 
     for (const runtime of [full, projection]) {
       const recovery = runtime.resourceEvents.find(
-          event =>
-            event.actionId === 'pangpang-recovery-parity-normal' &&
-            event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
-            event.payload.reason === 'verified-hit-sp-recovery'
-        )?.payload;
+        event =>
+          event.actionId === 'pangpang-recovery-parity-normal' &&
+          event.actorId === `actor-${PANGPANG_CHARACTER_ID}` &&
+          event.payload.reason === 'verified-hit-sp-recovery'
+      )?.payload;
       expect(recovery).toMatchObject({ afterValue: 100 });
       expect(recovery.beforeValue).toBeGreaterThanOrEqual(99);
       expect(recovery.beforeValue).toBeLessThan(100);
@@ -2017,6 +2030,263 @@ describe('verified combat mechanics runtime', () => {
     expect(() =>
       JSON.stringify(valueShielded.verifiedCombatRuntime.finalState)
     ).not.toThrow();
+  });
+
+  it('settles the breaking packet before Break and a later same-frame packet after Break', () => {
+    const runtime = rerunPangpangEnemySettlement({
+      durationMs: 300,
+      hitFrames: [5, 5],
+      initialEnemy: {
+        hp: { currentValue: 8628, maxValue: 8628 },
+        toughness: { currentValue: 1, maxValue: 6667 },
+      },
+      targetPolicy: {
+        hpMode: 'infinite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'disabled',
+      },
+    });
+    const hits = runtime.damageEvents.filter(
+      event => event.type === 'VERIFIED_COMBAT_HIT'
+    );
+
+    expect(hits).toHaveLength(2);
+    expect(hits[0].payload).toMatchObject({
+      inBreakForHpDamage: false,
+      hpDamageMultiplier: 1,
+      toughnessBefore: 1,
+      toughnessAfter: 0,
+      breakTriggered: true,
+      deathTriggered: false,
+      breakState: {
+        triggered: true,
+        inBreak: true,
+        inBreakForHpDamage: false,
+      },
+    });
+    expect(hits[1].payload).toMatchObject({
+      inBreakForHpDamage: true,
+      hpDamageMultiplier: 2,
+      toughnessBefore: 0,
+      toughnessAfter: 0,
+      breakTriggered: false,
+      deathTriggered: false,
+      breakState: {
+        triggered: false,
+        inBreak: true,
+        inBreakForHpDamage: true,
+      },
+    });
+    expect(hits[1].payload.effectiveHpDamage).toBe(
+      hits[0].payload.effectiveHpDamage * 2
+    );
+    expect(hits[0].payload.settlementCursor).toMatchObject({
+      absoluteFrame: 5,
+      runtimePhase: 'combat-hit',
+      sourceSequence: expect.any(Number),
+      cursorIdentity: expect.any(String),
+    });
+    expect(hits[1].payload.settlementCursor.cursorIdentity).not.toBe(
+      hits[0].payload.settlementCursor.cursorIdentity
+    );
+  });
+
+  it('treats the Break exit frame as right-open and ticks state before its hit', () => {
+    const runtime = rerunPangpangEnemySettlement({
+      durationMs: 300,
+      hitFrames: [5, 6],
+      initialEnemy: {
+        hp: { currentValue: 8628, maxValue: 8628 },
+        toughness: { currentValue: 6667, maxValue: 6667 },
+        inBreak: true,
+        breakElapsedMs: 11900,
+      },
+      targetPolicy: {
+        hpMode: 'infinite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'disabled',
+      },
+    });
+    const hits = runtime.damageEvents.filter(
+      event => event.type === 'VERIFIED_COMBAT_HIT'
+    );
+    const exit = runtime.damageEvents.find(
+      event => event.payload.stateEventKind === 'break-exit'
+    );
+
+    expect(hits).toHaveLength(2);
+    expect(hits[0]).toMatchObject({
+      absoluteFrame: 5,
+      payload: { inBreakForHpDamage: true, hpDamageMultiplier: 2 },
+    });
+    expect(exit).toMatchObject({ timeMs: 100, absoluteFrame: 6 });
+    expect(hits[1]).toMatchObject({
+      absoluteFrame: 6,
+      payload: { inBreakForHpDamage: false, hpDamageMultiplier: 1 },
+    });
+    expect(exit.runtimeSequenceIndex).toBeLessThan(
+      hits[1].runtimeSequenceIndex
+    );
+  });
+
+  it('settles two complete packet-ordered Break cycles without carrying a favorable phase', () => {
+    const runtime = rerunPangpangEnemySettlement({
+      durationMs: 400,
+      hitFrames: [5, 5, 12, 12],
+      initialEnemy: {
+        hp: { currentValue: 8628, maxValue: 8628 },
+        toughness: { currentValue: 1, maxValue: 1 },
+      },
+      enemyProfile: {
+        enemyId: 300032,
+        profileId: 'test-two-complete-break-cycles',
+        profileHash: 'test-two-complete-break-cycles-hash',
+        source: { identity: 'verified-runtime-regression', hash: 'test' },
+        attributes: { maxToughness: 1 },
+        breakRules: {
+          recoveryDelayMs: 0,
+          recoveryRateBasisPoints: 10000,
+          breakTimeMs: 100,
+          breakEndTimeMs: 0,
+          breakDamageUpBasisPoints: 10000,
+          weaknessDamageMaximum: 1,
+          weaknessDamageMinimum: 1,
+          typeMultipliersBasisPoints: {},
+          elementMultipliersBasisPoints: {},
+        },
+      },
+      targetPolicy: {
+        hpMode: 'infinite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'disabled',
+      },
+    });
+    const hits = runtime.damageEvents.filter(
+      event => event.type === 'VERIFIED_COMBAT_HIT'
+    );
+    const breakExits = runtime.damageEvents.filter(
+      event => event.payload.stateEventKind === 'break-exit'
+    );
+
+    expect(hits).toHaveLength(4);
+    expect(
+      hits.map(event => ({
+        frame: event.absoluteFrame,
+        multiplier: event.payload.hpDamageMultiplier,
+        toughnessBefore: event.payload.toughnessBefore,
+        toughnessAfter: event.payload.toughnessAfter,
+        triggered: event.payload.breakTriggered,
+      }))
+    ).toEqual([
+      {
+        frame: 5,
+        multiplier: 1,
+        toughnessBefore: 1,
+        toughnessAfter: 0,
+        triggered: true,
+      },
+      {
+        frame: 5,
+        multiplier: 2,
+        toughnessBefore: 0,
+        toughnessAfter: 0,
+        triggered: false,
+      },
+      {
+        frame: 12,
+        multiplier: 1,
+        toughnessBefore: 1,
+        toughnessAfter: 0,
+        triggered: true,
+      },
+      {
+        frame: 12,
+        multiplier: 2,
+        toughnessBefore: 0,
+        toughnessAfter: 0,
+        triggered: false,
+      },
+    ]);
+    expect(breakExits).toHaveLength(2);
+    expect(runtime.finalState.enemy).toMatchObject({
+      toughness: 1,
+      maxToughness: 1,
+      inBreak: false,
+      breakElapsedMs: 0,
+    });
+  });
+
+  it('truncates all later enemy settlement after the first finite-HP lethal packet', () => {
+    const runtime = rerunPangpangEnemySettlement({
+      durationMs: 300,
+      hitFrames: [5, 5],
+      initialEnemy: {
+        hp: { currentValue: 1, maxValue: 8628 },
+        toughness: { currentValue: 6667, maxValue: 6667 },
+      },
+      enemyProfile: {
+        enemyId: 300032,
+        profileId: 'test-finite-death-truncation',
+        profileHash: 'test-finite-death-truncation-hash',
+        source: { identity: 'verified-runtime-regression', hash: 'test' },
+        attributes: { maxToughness: 6667 },
+        breakRules: {
+          recoveryDelayMs: 100,
+          recoveryRateBasisPoints: 1000,
+          breakTimeMs: 10000,
+          breakEndTimeMs: 2000,
+          breakDamageUpBasisPoints: 10000,
+          weaknessDamageMaximum: 6667,
+          weaknessDamageMinimum: 1,
+          typeMultipliersBasisPoints: {},
+          elementMultipliersBasisPoints: {},
+        },
+      },
+      targetPolicy: {
+        hpMode: 'finite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'enabled',
+      },
+    });
+    const hits = runtime.damageEvents.filter(
+      event => event.type === 'VERIFIED_COMBAT_HIT'
+    );
+    const truncatedHits = runtime.eventLog.filter(
+      event =>
+        event.type === 'VERIFIED_ENEMY_SETTLEMENT_TRUNCATED' &&
+        event.payload.descriptorKind === 'hit'
+    );
+
+    expect(hits).toHaveLength(1);
+    expect(hits[0].payload).toMatchObject({
+      effectiveHpDamage: 1,
+      deathTriggered: true,
+      deathState: { before: 1, after: 0, triggered: true },
+    });
+    expect(hits[0].payload.requestedHpDamage).toBeGreaterThan(1);
+    expect(hits[0].payload.overkill).toBe(
+      hits[0].payload.requestedHpDamage - 1
+    );
+    expect(truncatedHits).toHaveLength(1);
+    expect(truncatedHits[0].payload).toMatchObject({
+      reason: 'finite-enemy-already-defeated',
+      enemyHp: 0,
+      enemyToughness: hits[0].payload.toughnessAfter,
+      settlementCursor: {
+        absoluteFrame: 5,
+        runtimePhase: 'combat-hit',
+        cursorIdentity: expect.any(String),
+      },
+    });
+    expect(runtime.finalState.enemy).toMatchObject({
+      hp: 0,
+      toughness: hits[0].payload.toughnessAfter,
+    });
+    expect(runtime.summary.enemySettlementTruncatedCount).toBeGreaterThan(1);
   });
 
   it('runs the verified Break linear recovery, end wait and exit lifecycle', () => {
@@ -2718,6 +2988,74 @@ function simulateVerifiedAcceptanceScenario({
   return simulateScenario(scenario);
 }
 
+function rerunPangpangEnemySettlement({
+  durationMs,
+  hitFrames,
+  initialEnemy,
+  enemyProfile = null,
+  targetPolicy,
+}) {
+  const prepared = simulateVerifiedAcceptanceScenario({
+    includeKibo: false,
+    durationMs: 600,
+  });
+  const scenario = structuredClone(prepared.effectiveActionTimeline.scenario);
+  scenario.durationMs = durationMs;
+  if (enemyProfile != null) {
+    scenario.enemy.profile = structuredClone(enemyProfile);
+    scenario.enemy.stats = {
+      ...(scenario.enemy.stats ?? {}),
+      initialToughness: Number(enemyProfile.attributes?.maxToughness),
+      maxToughness: Number(enemyProfile.attributes?.maxToughness),
+    };
+  }
+  scenario.initialRuntimeState = {
+    ...(scenario.initialRuntimeState ?? {}),
+    enemy: structuredClone(initialEnemy),
+  };
+  scenario.combatScenario = {
+    ...(scenario.combatScenario ?? {}),
+    target: structuredClone(targetPolicy),
+  };
+  const action = scenario.actions.find(
+    entry => entry.id === 'verified-pangpang-normal'
+  );
+  const sourceResolution =
+    prepared.verifiedActionVariantRuntime.actionResolutionById.get(action.id);
+  const sourceHit = sourceResolution.hits[0];
+  const resolution = structuredClone(sourceResolution);
+  resolution.hits = hitFrames.map((startFrame, index) => ({
+    ...structuredClone(sourceHit),
+    hitIndex: index + 1,
+    trigger: {
+      ...structuredClone(sourceHit.trigger),
+      startFrame,
+    },
+  }));
+  const actionVariantRuntime = {
+    ...prepared.verifiedActionVariantRuntime,
+    actionResolutionById: new Map([[action.id, resolution]]),
+    actionResolutions: [resolution],
+    executionBlocks: [],
+    eventLog: [],
+  };
+
+  return createVerifiedCombatRuntime({
+    scenario,
+    actionExecutionPlan: prepared.actionExecutionPlan,
+    controlledActorTimeline: prepared.controlledActorTimeline,
+    effectGeneration: prepared.verifiedBattleEffectGeneration,
+    tuningGeneration: null,
+    damageEventGeneration: null,
+    effectTimeline: prepared.effectTimeline,
+    actionVariantRuntime,
+    kiboPassiveGeneration: null,
+    criticalRandomSource: createDeterministicCriticalRandomSource({
+      seed: 'enemy-settlement-test-seed',
+    }),
+  });
+}
+
 function createNonDamageExecutionProjection(result, overrides = {}) {
   return createVerifiedCombatRuntime({
     scenario: result.effectiveActionTimeline.scenario,
@@ -2740,8 +3078,7 @@ function simulatePangpangHitRecoveryParityScenario() {
     DEFAULT_WORKBENCH_SELECTION
   ).map(config => ({
     ...config,
-    initialSp:
-      Number(config.characterId) === PANGPANG_CHARACTER_ID ? 99 : 0,
+    initialSp: Number(config.characterId) === PANGPANG_CHARACTER_ID ? 99 : 0,
   }));
   const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     durationMs: 2200,
@@ -2795,10 +3132,7 @@ function createPangpangHitRecoveryParityPair({
     actionResolutionById.get('pangpang-recovery-parity-normal')
   );
   mutateResolution?.(normalResolution);
-  actionResolutionById.set(
-    'pangpang-recovery-parity-normal',
-    normalResolution
-  );
+  actionResolutionById.set('pangpang-recovery-parity-normal', normalResolution);
   const actionVariantRuntime = {
     ...prepared.verifiedActionVariantRuntime,
     actionResolutionById,

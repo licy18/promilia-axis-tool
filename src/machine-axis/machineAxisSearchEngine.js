@@ -21,11 +21,26 @@ import {
   normalizeSeeds,
 } from './machineAxisBatchEvaluator';
 import { COMBAT_CRITICAL_POLICIES } from '../domain/combatCriticalPolicy';
+import {
+  MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
+  MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+  MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+  createMachineAxisObjectiveContract,
+} from './machineAxisObjectiveContract';
+import { createFastestKillProof } from './machineAxisKillEvaluator';
+import {
+  MACHINE_AXIS_CYCLE_CONTRACT_NAME,
+  MACHINE_AXIS_CYCLE_KIND,
+  MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
+} from './machineAxisCycleEvaluator';
 
 export const MACHINE_AXIS_SEARCH_ENGINE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_ENGINE_CONTRACT = 'AzPrMachineAxisSearch';
 
-const OBJECTIVES = new Set(['damage', 'burst', 'toughness']);
+const OBJECTIVES = new Set([
+  ...MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
+  ...MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
+]);
 const DEFAULT_SEARCH_OPTIONS = Object.freeze({
   beamWidth: 8,
   topN: 5,
@@ -35,7 +50,7 @@ const DEFAULT_SEARCH_OPTIONS = Object.freeze({
   includeKibo: true,
   includeSwitch: true,
   includeNormalAttacks: true,
-  objective: 'damage',
+  objective: MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
   burstWindowMs: DEFAULT_BURST_WINDOW_MS,
   maxDamagePerMsBound: 10,
   jobs: 4,
@@ -143,6 +158,7 @@ export function createMachineAxisSearchEngine({
           chain: [...child.parent.chain, child.next],
           parentLabel: child.parent.axis.scenario?.name,
         });
+        issues.push(...(entry.objectiveIssues ?? []));
         evaluated.push(entry);
         addCompletedEntries(completed, [entry], stats);
       }
@@ -173,6 +189,7 @@ export function createMachineAxisSearchEngine({
             chain: [...child.parent.chain, child.next],
             parentLabel: child.parent.axis.scenario?.name,
           });
+          issues.push(...(entry.objectiveIssues ?? []));
           evaluated.push(entry);
           addCompletedEntries(completed, [entry], stats);
         } catch (error) {
@@ -192,8 +209,11 @@ export function createMachineAxisSearchEngine({
       for (const entry of merged) {
         if (entry.terminal) continue;
         if (
+          MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS.includes(
+            settings.objective
+          ) &&
           shouldPrune({
-            score: entry.score,
+            score: entry.heuristicScore,
             remainingFrames: entry.remainingFrames,
             maxDamagePerFrame:
               settings.maxDamagePerMsBound *
@@ -208,7 +228,9 @@ export function createMachineAxisSearchEngine({
       }
       frontier = pruned
         .sort((left, right) => {
-          if (right.score !== left.score) return right.score - left.score;
+          if (right.heuristicScore !== left.heuristicScore) {
+            return right.heuristicScore - left.heuristicScore;
+          }
           if (left.currentFrame !== right.currentFrame) {
             return left.currentFrame - right.currentFrame;
           }
@@ -299,7 +321,15 @@ export function createMachineAxisSearchEngine({
     );
     const metrics = aggregateSearchMetrics(sampleMetrics);
     const contributions = aggregateSearchContributions(sampleContributions);
-    const score = scoreMetrics(metrics, settings.objective);
+    const objectiveEvaluation = await evaluateSearchObjective({
+      axis: runs[0].axis,
+      run: runs[0].run,
+      metrics,
+      settings,
+      nodeFrame: resolvedNodeFrame,
+      service,
+    });
+    const score = objectiveEvaluation.score;
     const state = {
       ...snapshots[0],
       ...(snapshots.length > 1
@@ -314,6 +344,11 @@ export function createMachineAxisSearchEngine({
       metrics,
       contributions,
       score,
+      heuristicScore: objectiveEvaluation.heuristicScore,
+      scoreDirection: objectiveEvaluation.scoreDirection,
+      finalScoreEligible: objectiveEvaluation.finalScoreEligible,
+      objectiveProof: objectiveEvaluation.proof,
+      objectiveIssues: objectiveEvaluation.issues,
       sampling:
         runs.length > 1 || settings.seeds?.length
           ? {
@@ -324,7 +359,17 @@ export function createMachineAxisSearchEngine({
               samples: runs.map((sample, index) => ({
                 seed: sample.seed,
                 hashes: sample.run.hashes,
-                score: scoreMetrics(sampleMetrics[index], settings.objective),
+                score: MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(
+                  settings.objective
+                )
+                  ? null
+                  : scoreMetrics(sampleMetrics[index], settings.objective),
+                scoreClassification:
+                  MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(
+                    settings.objective
+                  )
+                    ? 'proof-required-no-sample-final-score'
+                    : 'legacy-diagnostic',
                 metrics: sampleMetrics[index],
                 contributions: sampleContributions[index],
               })),
@@ -346,9 +391,13 @@ export function normalizeSearchOptions(options = {}) {
   const topN = positiveInteger(options.topN) ?? DEFAULT_SEARCH_OPTIONS.topN;
   const maxDepth =
     positiveInteger(options.maxDepth) ?? DEFAULT_SEARCH_OPTIONS.maxDepth;
-  const objective = OBJECTIVES.has(String(options.objective))
-    ? String(options.objective)
-    : DEFAULT_SEARCH_OPTIONS.objective;
+  const requestedObjective =
+    options.objective == null || options.objective === ''
+      ? DEFAULT_SEARCH_OPTIONS.objective
+      : String(options.objective);
+  const objective = OBJECTIVES.has(requestedObjective)
+    ? requestedObjective
+    : null;
   return {
     beamWidth,
     topN,
@@ -367,6 +416,9 @@ export function normalizeSearchOptions(options = {}) {
       positiveInteger(options.maxWaitCandidates) ??
       DEFAULT_SEARCH_OPTIONS.maxWaitCandidates,
     objective,
+    objectiveContract:
+      objective == null ? null : createMachineAxisObjectiveContract(objective),
+    allowUnverifiedRuntimeTiming: options.allowUnverifiedRuntimeTiming === true,
     burstWindowMs:
       positiveNumber(options.burstWindowMs) ??
       DEFAULT_SEARCH_OPTIONS.burstWindowMs,
@@ -381,9 +433,14 @@ export function normalizeSearchOptions(options = {}) {
 
 export function scoreCandidate(
   run,
-  objective = 'damage',
+  objective = MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
   burstWindowMs = DEFAULT_BURST_WINDOW_MS
 ) {
+  if (MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(String(objective))) {
+    throw new TypeError(
+      `Primary objective ${objective} requires a cycle or kill proof`
+    );
+  }
   return scoreMetrics(
     createRunMetrics(run, run?.contract ?? {}, { burstWindowMs }),
     objective
@@ -437,7 +494,19 @@ export function mergeEquivalentCandidates(entries, stats = null) {
 export function selectTopN(entries, topN = 5) {
   return [...entries]
     .sort((left, right) => {
-      if (right.score !== left.score) return right.score - left.score;
+      if (
+        left.scoreDirection === 'minimize' ||
+        right.scoreDirection === 'minimize'
+      ) {
+        const leftFeasible = left.finalScoreEligible === true;
+        const rightFeasible = right.finalScoreEligible === true;
+        if (leftFeasible !== rightFeasible) return leftFeasible ? -1 : 1;
+        if (leftFeasible && Number(left.score) !== Number(right.score)) {
+          return Number(left.score) - Number(right.score);
+        }
+      } else if (Number(right.score) !== Number(left.score)) {
+        return Number(right.score) - Number(left.score);
+      }
       if (left.currentFrame !== right.currentFrame) {
         return left.currentFrame - right.currentFrame;
       }
@@ -459,6 +528,11 @@ function createCandidateEntry({
   metrics,
   contributions,
   score,
+  heuristicScore,
+  scoreDirection,
+  finalScoreEligible,
+  objectiveProof,
+  objectiveIssues,
   sampling,
   chain,
   parentLabel,
@@ -480,12 +554,19 @@ function createCandidateEntry({
     chain,
     parentLabel,
     score,
+    heuristicScore,
+    scoreDirection,
+    finalScoreEligible,
+    objectiveProof,
+    objectiveIssues,
     metrics,
     contributions,
     sampling,
     currentFrame,
     remainingFrames,
-    terminal,
+    terminal:
+      terminal ||
+      (scoreDirection === 'minimize' && finalScoreEligible === true),
     mergedCount: 0,
     invalidActionCount: countInvalidActions(run),
     warnings: run?.trace?.diagnostics?.actionRules?.summary?.warningCount ?? 0,
@@ -724,6 +805,19 @@ function aggregateSearchMetrics(rows) {
       hitCount: mean(row => row.burst?.hitCount),
       byActor: averageNumericRecords(rows.map(row => row.burst?.byActor)),
     },
+    healing: {
+      requestedHealing: mean(row => row.healing?.requestedHealing),
+      effectiveHealing: mean(row => row.healing?.effectiveHealing),
+      overhealing: mean(row => row.healing?.overhealing),
+      effectiveHps: mean(row => row.healing?.effectiveHps),
+      settlementCount: mean(row => row.healing?.settlementCount),
+      bySourceActor: averageContributionRows(
+        rows.map(row => row.healing?.bySourceActor)
+      ),
+      bySourceAction: averageContributionRows(
+        rows.map(row => row.healing?.bySourceAction)
+      ),
+    },
     unresolvedActionCount: mean(row => row.unresolvedActionCount),
   };
 }
@@ -745,6 +839,12 @@ function aggregateSearchContributions(rows) {
     byActor: averageContributionRows(rows.map(row => row.byActor)),
     byAction: averageContributionRows(rows.map(row => row.byAction)),
     byHit: averageContributionRows(rows.map(row => row.byHit)),
+    healingBySourceActor: averageContributionRows(
+      rows.map(row => row.healingBySourceActor)
+    ),
+    healingBySourceAction: averageContributionRows(
+      rows.map(row => row.healingBySourceAction)
+    ),
   };
 }
 
@@ -813,6 +913,15 @@ function createEmptyMetrics() {
     skippedActionCount: 0,
     selfEnergyDelta: 0,
     burst: { windowMs: DEFAULT_BURST_WINDOW_MS, hpDamage: 0, hitCount: 0 },
+    healing: {
+      requestedHealing: 0,
+      effectiveHealing: 0,
+      overhealing: 0,
+      effectiveHps: 0,
+      settlementCount: 0,
+      bySourceActor: [],
+      bySourceAction: [],
+    },
     resourceSurplus: null,
     idle: null,
     nonExecutableActions: [],
@@ -828,6 +937,103 @@ function scoreMetrics(metrics, objective) {
   return numberOrZero(metrics?.hpDamage);
 }
 
+async function evaluateSearchObjective({
+  axis,
+  run,
+  metrics,
+  settings,
+  nodeFrame,
+  service,
+}) {
+  const objectiveId = settings.objective;
+  if (MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS.includes(objectiveId)) {
+    const score = scoreMetrics(metrics, objectiveId);
+    return {
+      score,
+      heuristicScore: score,
+      scoreDirection: 'maximize',
+      finalScoreEligible: true,
+      proof: {
+        status: 'legacy-diagnostic',
+        formalEligible: false,
+        objectiveId,
+      },
+      issues: [],
+    };
+  }
+  if (objectiveId === 'fastest-kill') {
+    const proof = createFastestKillProof(run, axis, {
+      objectiveContract: settings.objectiveContract,
+      allowUnverifiedRuntimeTiming:
+        settings.allowUnverifiedRuntimeTiming === true,
+    });
+    const enemy = run?.trace?.state?.final?.enemy ?? {};
+    const progress = Math.max(
+      0,
+      Number(enemy.maxHp ?? 0) - Number(enemy.hp ?? enemy.maxHp ?? 0)
+    );
+    return {
+      score:
+        proof.valid === true && proof.formalScore != null
+          ? Number(proof.formalScore)
+          : null,
+      heuristicScore: progress,
+      scoreDirection: 'minimize',
+      finalScoreEligible: proof.valid === true && proof.formalScore != null,
+      proof,
+      issues: proof.issues ?? [],
+    };
+  }
+  const elapsedSeconds = Math.max(
+    1 / Number(axis.scenario?.fps ?? 60),
+    Number(nodeFrame ?? 0) / Number(axis.scenario?.fps ?? 60)
+  );
+  const heuristicScore = numberOrZero(metrics?.hpDamage) / elapsedSeconds;
+  if (!(Number(nodeFrame) > 0)) {
+    return {
+      score: null,
+      heuristicScore,
+      scoreDirection: 'maximize',
+      finalScoreEligible: false,
+      proof: null,
+      issues: [],
+    };
+  }
+  const proof = service.evaluateCycle(
+    {
+      schemaVersion: MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
+      contractName: MACHINE_AXIS_CYCLE_CONTRACT_NAME,
+      kind: MACHINE_AXIS_CYCLE_KIND,
+      contract: axis,
+      loop: { startFrame: 0, endFrame: Number(nodeFrame) },
+      options: {
+        objective: objectiveId,
+        criticalPolicy:
+          settings.criticalPolicy ??
+          axis.scenario?.critical?.policy ??
+          'expected',
+        ...(settings.seeds?.length ? { seeds: settings.seeds } : {}),
+      },
+    },
+    {
+      objectiveContract: settings.objectiveContract,
+      allowUnverifiedRuntimeTiming:
+        settings.allowUnverifiedRuntimeTiming === true,
+    }
+  );
+  return {
+    score:
+      proof.valid === true && proof.formalScore != null
+        ? Number(proof.formalScore)
+        : null,
+    heuristicScore,
+    scoreDirection: 'maximize',
+    finalScoreEligible: proof.valid === true && proof.formalScore != null,
+    proof,
+    issues: proof.issues ?? [],
+  };
+}
+
 function addCompletedEntries(completed, entries, stats) {
   for (const entry of entries) {
     if (
@@ -837,6 +1043,7 @@ function addCompletedEntries(completed, entries, stats) {
     ) {
       continue;
     }
+    if (entry.finalScoreEligible !== true) continue;
     const identity = entry.run?.hashes?.input ?? entry.stateHash;
     const existingIndex = completed.findIndex(
       candidate =>
@@ -891,8 +1098,12 @@ class SearchCandidateEvaluationError extends Error {
 }
 
 function keepBetterRepresentative(existing, candidate) {
-  if (candidate.score > existing.score) return candidate;
-  if (candidate.score === existing.score) {
+  const existingValue = Number(existing.heuristicScore ?? existing.score ?? 0);
+  const candidateValue = Number(
+    candidate.heuristicScore ?? candidate.score ?? 0
+  );
+  if (candidateValue > existingValue) return candidate;
+  if (candidateValue === existingValue) {
     if (candidate.currentFrame < existing.currentFrame) return candidate;
     if (
       candidate.currentFrame === existing.currentFrame &&
@@ -906,7 +1117,9 @@ function keepBetterRepresentative(existing, candidate) {
 
 function computeKthBest(completed, topN) {
   if (completed.length < topN) return Number.NEGATIVE_INFINITY;
-  const scores = completed.map(entry => entry.score).sort((a, b) => b - a);
+  const scores = completed
+    .map(entry => Number(entry.heuristicScore ?? entry.score ?? 0))
+    .sort((a, b) => b - a);
   return scores[topN - 1];
 }
 

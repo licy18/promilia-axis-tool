@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://azpr.local/schemas/azpr-machine-axis-fastest-kill-v1.schema.json",
+  "title": "Azur Promilia Machine Axis Fastest Kill",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contractName",
+    "kind",
+    "contract",
+    "objectiveContract"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contractName": { "const": "AzPrMachineAxisFastestKill" },
+    "kind": { "const": "azpr-machine-axis-fastest-kill" },
+    "contract": { "$ref": "./azpr-machine-axis-v1.schema.json" },
+    "objectiveContract": { "type": "object" }
+  }
+}

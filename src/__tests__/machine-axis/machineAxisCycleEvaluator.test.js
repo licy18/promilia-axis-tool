@@ -9,9 +9,51 @@ import {
   validateMachineAxisCycleEnvelope,
 } from '../../machine-axis/machineAxisCycleEvaluator';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import { createMachineAxisEnemyProfile } from '../../machine-axis/machineAxisEnemyProfileContract';
 
 function createNormalAttackCycleEnvelope() {
   return structuredClone(cycleFixture);
+}
+
+function createResolvedCycleEnemyProfile(
+  defense,
+  {
+    maxToughness = 6667,
+    recoveryDelayMs = 100,
+    recoveryRateBasisPoints = 1000,
+    breakTimeMs = 10000,
+    breakEndTimeMs = 2000,
+  } = {}
+) {
+  return createMachineAxisEnemyProfile({
+    profileId: `enemy:300032:level:1:defense:${defense}`,
+    enemyId: 300032,
+    level: 1,
+    source: {
+      status: 'authoritative-resolved',
+      kind: 'enemy-level-pipeline',
+      identity: `feature/m12-b3-enemy-level#enemy:300032:level:1:defense:${defense}`,
+      hash: `enemy-level-output-${defense}`,
+    },
+    attributes: {
+      maxHp: 8628,
+      physicalDefense: defense,
+      magicalDefense: defense,
+      maxToughness,
+      elementDefenses: {},
+    },
+    breakRules: {
+      recoveryDelayMs,
+      recoveryRateBasisPoints,
+      breakTimeMs,
+      breakEndTimeMs,
+      breakDamageUpBasisPoints: 10000,
+      weaknessDamageMaximum: maxToughness,
+      weaknessDamageMinimum: 1,
+      typeMultipliersBasisPoints: {},
+      elementMultipliersBasisPoints: {},
+    },
+  });
 }
 
 function createStarSkillCooldownEnvelope() {
@@ -359,6 +401,66 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         }),
       ])
     );
+  });
+
+  it('rejects every enemy toughness and Break phase drift at a cycle boundary', () => {
+    const createBoundary = () => ({
+      activeActorId: 'actor-1',
+      actors: [],
+      kibos: [],
+      actorVitals: [],
+      kiboVitals: [],
+      specialResources: [],
+      cooldowns: [],
+      effects: [],
+      pendingEvents: [],
+      tuningMarks: [],
+      enemy: {
+        hp: 1000,
+        maxHp: 1000,
+        toughness: 100,
+        maxToughness: 100,
+        inBreak: false,
+        breakPhase: 'normal',
+        breakElapsedMs: 0,
+        recoveryDelayRemainingMs: 0,
+        defeated: false,
+        profileSourceIdentity: 'enemy-profile-hash',
+      },
+    });
+    for (const mutate of [
+      enemy => {
+        enemy.toughness = 99;
+      },
+      enemy => {
+        enemy.inBreak = true;
+      },
+      enemy => {
+        enemy.breakPhase = 'linear_recovery';
+      },
+      enemy => {
+        enemy.breakElapsedMs = 100;
+      },
+      enemy => {
+        enemy.recoveryDelayRemainingMs = 100;
+      },
+      enemy => {
+        enemy.profileSourceIdentity = 'other-enemy-profile-hash';
+      },
+    ]) {
+      const start = createBoundary();
+      const end = createBoundary();
+      mutate(end.enemy);
+      expect(compareCycleBoundaryStates(start, end)).toMatchObject({
+        closed: false,
+        issues: [
+          expect.objectContaining({
+            code: 'machine-axis-cycle-state-not-closed',
+            dimension: 'enemy',
+          }),
+        ],
+      });
+    }
   });
 
   it('accepts an exact zero-frame loop boundary without including later frames', () => {
@@ -994,6 +1096,16 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.samples[0].secondCycle.hpDamage).toBe(
       report.metrics.loopHpDamage
     );
+    expect(
+      report.samples[0].firstCycle.enemySettlementPackets.every(
+        packet =>
+          packet.toughnessDamage === 0 &&
+          packet.breakTriggered === false &&
+          packet.inBreakForHpDamage === false &&
+          packet.hpDamageMultiplier === 1
+      )
+    ).toBe(true);
+    expect(report.samples[0].firstCycle.enemyStateTransitions).toEqual([]);
     expect(report.samples[0].loopPlan.replayHorizonFrame).toBe(
       cycleFixture.contract.scenario.durationFrames
     );
@@ -1021,6 +1133,124 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
   }, 30_000);
 
+  it('scores settled post-defense cycle damage while the action packets stay fixed', () => {
+    const service = createMachineAxisService();
+    const lowDefense = createNormalAttackCycleEnvelope();
+    const highDefense = createNormalAttackCycleEnvelope();
+    lowDefense.contract.scenario.enemy.profile =
+      createResolvedCycleEnemyProfile(0);
+    highDefense.contract.scenario.enemy.profile =
+      createResolvedCycleEnemyProfile(5000);
+
+    const lowReport = service.evaluateCycle(lowDefense);
+    const highReport = service.evaluateCycle(highDefense);
+
+    expect(lowReport.valid).toBe(true);
+    expect(highReport.valid).toBe(true);
+    expect(highReport.loop).toEqual(lowReport.loop);
+    expect(highReport.metrics.loopHpDamage).toBeLessThan(
+      lowReport.metrics.loopHpDamage
+    );
+    expect(highReport.metrics.cycleDps).toBeLessThan(
+      lowReport.metrics.cycleDps
+    );
+    expect(
+      highReport.samples[0].firstCycle.enemySettlementPackets.map(
+        packet => packet.preDefenseHpDamage
+      )
+    ).toEqual(
+      lowReport.samples[0].firstCycle.enemySettlementPackets.map(
+        packet => packet.preDefenseHpDamage
+      )
+    );
+    expect(
+      highReport.samples[0].firstCycle.enemySettlementPackets.map(
+        packet => packet.effectiveHpDamage
+      )
+    ).not.toEqual(
+      lowReport.samples[0].firstCycle.enemySettlementPackets.map(
+        packet => packet.effectiveHpDamage
+      )
+    );
+    expect(highReport.hashes.data).not.toBe(lowReport.hashes.data);
+    expect(highReport.hashes.build).not.toBe(lowReport.hashes.build);
+  }, 30_000);
+
+  it('diagnoses a closed toughness loop packet-by-packet but withholds its formal score', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.options.objective = 'cycle-dps-with-toughness';
+    envelope.contract.scenario.enemy.profile = createResolvedCycleEnemyProfile(
+      0,
+      {
+        maxToughness: 1,
+        recoveryDelayMs: 0,
+        recoveryRateBasisPoints: 10000,
+        breakTimeMs: 100,
+        breakEndTimeMs: 0,
+      }
+    );
+    const report = createMachineAxisService().evaluateCycle(envelope, {
+      allowUnverifiedRuntimeTiming: true,
+    });
+    const highDefenseEnvelope = structuredClone(envelope);
+    highDefenseEnvelope.contract.scenario.enemy.profile =
+      createResolvedCycleEnemyProfile(5000, {
+        maxToughness: 1,
+        recoveryDelayMs: 0,
+        recoveryRateBasisPoints: 10000,
+        breakTimeMs: 100,
+        breakEndTimeMs: 0,
+      });
+    const highDefenseReport = createMachineAxisService().evaluateCycle(
+      highDefenseEnvelope,
+      { allowUnverifiedRuntimeTiming: true }
+    );
+
+    expect(report.valid).toBe(true);
+    expect(highDefenseReport.valid).toBe(true);
+    expect(highDefenseReport.metrics.cycleDps).toBeLessThan(
+      report.metrics.cycleDps
+    );
+    expect(report.formalScore).toBeNull();
+    expect(report.formalStatus).toBe('blocked-runtime-semantics-evidence-open');
+    expect(report.enemySettlementTiming).toMatchObject({
+      semantics: {
+        breakingPacketHpDamagePhase: 'pre-break',
+        breakIntervalEnd: 'right-open',
+      },
+      evidence: { formalReady: false },
+    });
+    const packets = report.samples[0].firstCycle.enemySettlementPackets;
+    const breakingPackets = packets.filter(packet => packet.breakTriggered);
+    expect(breakingPackets.length).toBeGreaterThanOrEqual(2);
+    expect(
+      breakingPackets.every(
+        packet =>
+          packet.inBreakForHpDamage === false &&
+          packet.hpDamageMultiplier === 1 &&
+          packet.toughnessBefore === 1 &&
+          packet.toughnessAfter === 0
+      )
+    ).toBe(true);
+    expect(
+      packets.filter(
+        packet =>
+          packet.inBreakForHpDamage === true && packet.hpDamageMultiplier === 2
+      ).length
+    ).toBeGreaterThanOrEqual(1);
+    const breakExits =
+      report.samples[0].firstCycle.enemyStateTransitions.filter(
+        event => event.stateEventKind === 'break-exit'
+      );
+    expect(breakExits).toHaveLength(breakingPackets.length);
+    expect(report.stateClosure[0].start.enemy).toEqual(
+      report.stateClosure[0].firstEnd.enemy
+    );
+    expect(report.stateClosure[0].firstEnd.enemy).toEqual(
+      report.stateClosure[0].secondEnd.enemy
+    );
+  }, 30_000);
+
   it('aggregates explicit sampled seeds without losing contribution conservation', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.options = {
@@ -1043,12 +1273,36 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       expect(sample.hashes.trace).toMatch(/^[0-9a-f]{16}$/);
       expect(sample.replayProof.stable).toBe(true);
     }
-    for (const rows of Object.values(report.contributions)) {
+    for (const rows of [
+      report.contributions.byActor,
+      report.contributions.byAction,
+      report.contributions.byHit,
+    ]) {
       expect(rows.reduce((sum, row) => sum + row.hpDamage, 0)).toBeCloseTo(
         report.metrics.loopHpDamage,
         8
       );
     }
+    expect(report.metrics.healing).toMatchObject({
+      requestedHealing: 0,
+      effectiveHealing: 0,
+      overhealing: 0,
+      effectiveHps: 0,
+    });
+    expect(report.sampleStatistics.healingContributionConservation).toEqual({
+      healingBySourceActor: {
+        sampleMean: 0,
+        contributionMean: 0,
+        difference: 0,
+        conserved: true,
+      },
+      healingBySourceAction: {
+        sampleMean: 0,
+        contributionMean: 0,
+        difference: 0,
+        conserved: true,
+      },
+    });
     expect(report.hashes.input).toMatch(/^[0-9a-f]{16}$/);
     expect(report.hashes.cycle).toMatch(/^[0-9a-f]{16}$/);
   }, 30_000);
@@ -1120,11 +1374,11 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.metrics.loopHpDamage).toBe(22.59375);
     expect(report.metrics.cycleDps).toBe(4.51875);
     expect(report.hashes).toMatchObject({
-      input: '454cdc895a0f94e7',
-      data: '6c7f28204359187d',
-      trace: 'a739eac81e97149c',
+      input: '09d6db226f366620',
+      data: '0bb48bf126cd34bd',
+      trace: '34f38555b620b518',
       evaluation: '13fc3bf3db5aeb9d',
-      cycle: 'd701768842e81bc7',
+      cycle: '78ea247934ac5229',
     });
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {

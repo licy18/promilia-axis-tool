@@ -215,6 +215,11 @@ export function createEnemyFromData(enemy, options = {}) {
     throw new Error('createEnemyFromData requires an enemy');
   }
 
+  const profileAttributes = options.profile?.attributes ?? null;
+  const baseAttributes = applyResolvedEnemyProfileAttributes(
+    enemy.property?.baseAttributes ?? [],
+    profileAttributes
+  );
   return {
     id: options.enemyInstanceId ?? `enemy-${enemy.id}`,
     enemyId: enemy.id,
@@ -223,13 +228,42 @@ export function createEnemyFromData(enemy, options = {}) {
     level: options.level ?? 80,
     elementIds: enemy.elementIds ?? [],
     propertyId: enemy.property?.id ?? null,
-    baseAttributes: enemy.property?.baseAttributes ?? [],
+    baseAttributes,
     hpMultiplier: options.hpMultiplier ?? 1,
     defenseMultiplier: options.defenseMultiplier ?? 1,
     toughnessMultiplier: options.toughnessMultiplier ?? 1,
     initialToughnessRatio: options.initialToughnessRatio ?? 1,
-    elementDefenseOverrides: { ...(options.elementDefenseOverrides ?? {}) },
+    elementDefenseOverrides: {
+      ...(options.elementDefenseOverrides ?? {}),
+      ...(profileAttributes?.elementDefenses ?? {}),
+    },
+    ...(options.profile == null
+      ? {}
+      : { profile: structuredClone(options.profile) }),
   };
+}
+
+function applyResolvedEnemyProfileAttributes(baseAttributes, profile) {
+  if (!profile) return baseAttributes;
+  const values = {
+    MAXHP: profile.maxHp,
+    DEF: profile.physicalDefense,
+    MDEF: profile.magicalDefense,
+    WEAKNESS_POINT_MAX: profile.maxToughness,
+  };
+  const seen = new Set();
+  const rows = (baseAttributes ?? []).map(attribute => {
+    const value = values[attribute.key];
+    if (!Number.isFinite(Number(value))) return attribute;
+    seen.add(attribute.key);
+    return { ...attribute, value: Number(value) };
+  });
+  for (const [key, value] of Object.entries(values)) {
+    if (!seen.has(key) && Number.isFinite(Number(value))) {
+      rows.push({ key, value: Number(value) });
+    }
+  }
+  return rows;
 }
 
 export function createLoadout({
@@ -264,9 +298,7 @@ export function createLoadout({
     ...(soulessenceCultivation == null
       ? {}
       : {
-          soulessenceCultivation: structuredClone(
-            soulessenceCultivation
-          ),
+          soulessenceCultivation: structuredClone(soulessenceCultivation),
         }),
     equipmentLevels: {
       weapon: equipmentLevels.weapon ?? null,
@@ -356,8 +388,10 @@ export function createSkillAction({
     id: actionId,
     ...(attackInputFields ?? {}),
   });
-  const verifiedCatalogDeclaration =
-    resolveVerifiedCatalogActionDeclaration(selectedActionVariant, skill);
+  const verifiedCatalogDeclaration = resolveVerifiedCatalogActionDeclaration(
+    selectedActionVariant,
+    skill
+  );
 
   return {
     id: actionId,

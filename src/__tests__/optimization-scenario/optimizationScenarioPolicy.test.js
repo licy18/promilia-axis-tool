@@ -5,9 +5,13 @@ import {
   OPTIMIZATION_SCENARIO_POLICY_REASON,
   classifyOptimizationCandidateCharacter,
   classifyOptimizationScenarioActionKind,
+  createOptimizationObjectivePolicyBinding,
   createOptimizationScenarioPolicyBinding,
   getOptimizationCandidateRosterPolicy,
+  getOptimizationObjectiveContract,
+  getOptimizationObjectivePolicy,
   getOptimizationScenarioPolicy,
+  validateOptimizationObjectivePolicyBinding,
   validateOptimizationScenarioPolicy,
   validateOptimizationScenarioPolicyBinding,
 } from '../../optimization-scenario/optimizationScenarioPolicy.js';
@@ -43,6 +47,26 @@ describe('frozen M12-C optimization scenario policy', () => {
         deathTruncation: 'disabled',
       },
     });
+    expect(getOptimizationObjectivePolicy()).toMatchObject({
+      policyId: 'm12-primary-objectives-v1',
+      defaultPrimaryObjectiveId: 'cycle-dps-no-toughness',
+      primaryObjectiveIds: [
+        'cycle-dps-no-toughness',
+        'cycle-dps-with-toughness',
+        'fastest-kill',
+      ],
+      legacyDiagnosticObjectiveIds: ['damage', 'burst', 'toughness'],
+    });
+    expect(
+      validateOptimizationObjectivePolicyBinding(
+        createOptimizationObjectivePolicyBinding()
+      )
+    ).toEqual(
+      expect.objectContaining({
+        valid: true,
+        issues: [],
+      })
+    );
     expect(roster.formalDenominator).toBe(9);
     expect(roster.formalOptimizationObjectIds).toEqual([
       '101010',
@@ -66,6 +90,90 @@ describe('frozen M12-C optimization scenario policy', () => {
           depth: 0,
           startFrame: 90,
         }),
+      ])
+    );
+  });
+
+  it('indexes all objective target policies without changing the passive scenario', () => {
+    expect(
+      getOptimizationObjectiveContract('cycle-dps-no-toughness')
+    ).toMatchObject({
+      classification: 'primary',
+      formalEligible: true,
+      targetPolicy: {
+        hpMode: 'infinite',
+        toughnessMode: 'disabled',
+        breakMode: 'disabled',
+        deathTruncation: 'disabled',
+      },
+    });
+    expect(
+      getOptimizationObjectiveContract('cycle-dps-with-toughness')
+    ).toMatchObject({
+      classification: 'primary',
+      formalEligible: true,
+      targetPolicy: {
+        hpMode: 'infinite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'disabled',
+      },
+    });
+    expect(getOptimizationObjectiveContract('fastest-kill')).toMatchObject({
+      classification: 'primary',
+      formalEligible: true,
+      targetPolicy: {
+        hpMode: 'finite',
+        toughnessMode: 'enabled',
+        breakMode: 'enabled',
+        deathTruncation: 'enabled',
+      },
+    });
+    expect(getOptimizationObjectiveContract('damage')).toMatchObject({
+      classification: 'legacy-diagnostic',
+      formalEligible: false,
+    });
+    expect(getOptimizationObjectiveContract('not-an-objective')).toBeNull();
+
+    const policy = getOptimizationScenarioPolicy();
+    expect(policy.assumptions).toMatchObject({
+      actorTargetInitialDistance: 0,
+      actorTargetDistanceMode: 'fixed-zero',
+      projectileImpactPolicy: 'zero-distance-immediate-hit',
+      enemyBehavior: 'passive-static-target',
+      enemyActiveAttacks: false,
+      enemyReactionStimuli: false,
+    });
+    expect(policy.optimizationSurface.excludedActionKinds).toEqual([
+      'dodge-attack',
+      'limit-counter',
+      'perfect-parry',
+      'plunging-attack',
+    ]);
+  });
+
+  it('rejects objective policy binding field renames and nested hash drift', () => {
+    const renamed = createOptimizationObjectivePolicyBinding();
+    renamed.objectiveHash = renamed.objectivePolicyHash;
+    delete renamed.objectivePolicyHash;
+    expect(validateOptimizationObjectivePolicyBinding(renamed).valid).toBe(
+      false
+    );
+    expect(
+      validateOptimizationObjectivePolicyBinding(renamed).issues.map(
+        issue => issue.code
+      )
+    ).toContain('optimization-objective-policy-binding-shape-invalid');
+
+    const drifted = structuredClone(getOptimizationScenarioPolicy());
+    drifted.objectivePolicy.objectivesById.fastestKill =
+      drifted.objectivePolicy.objectivesById['fastest-kill'];
+    delete drifted.objectivePolicy.objectivesById['fastest-kill'];
+    expect(validateOptimizationScenarioPolicy(drifted).valid).toBe(false);
+    expect(validateOptimizationScenarioPolicy(drifted).issues).toEqual(
+      expect.arrayContaining([
+        'optimization-scenario-machine-axis-objective-field-missing',
+        'optimization-scenario-machine-axis-objective-additional-property',
       ])
     );
   });

@@ -334,6 +334,14 @@ export function createVerifiedCombatRuntime({
     ) {
       continue;
     }
+    if (shouldTruncateEnemySettlement({ descriptor, state })) {
+      appendRuntimeEvent(
+        eventLog,
+        createEnemySettlementTruncatedEvent({ descriptor, state }),
+        state
+      );
+      continue;
+    }
     if (descriptor.kind === 'manual-resource') {
       applyManualResourceDescriptor({ descriptor, state, resourceEvents });
       continue;
@@ -478,9 +486,7 @@ export function createVerifiedCombatRuntime({
       continue;
     }
     if (descriptor.kind === 'passive-derived-periodic-contract-unresolved') {
-      const event = createKiboPassiveDerivedPeriodicUnresolvedEvent(
-        descriptor
-      );
+      const event = createKiboPassiveDerivedPeriodicUnresolvedEvent(descriptor);
       appendRuntimeEvent(vitalEvents, event, state);
       eventLog.push(event);
       continue;
@@ -667,6 +673,9 @@ export function createVerifiedCombatRuntime({
       ).length,
       shieldedHitCount: damageEvents.filter(
         event => event.payload.shieldState?.absorbed > 0
+      ).length,
+      enemySettlementTruncatedCount: eventLog.filter(
+        event => event.type === 'VERIFIED_ENEMY_SETTLEMENT_TRUNCATED'
       ).length,
       resourceBlockedActionCount: executionBlocks.length,
       specialResourceEventCount:
@@ -1328,6 +1337,43 @@ function resolveVitalMutationDescriptorTarget({
   return null;
 }
 
+function createExplicitEnemyRuntimeProfile(profile) {
+  if (!profile || typeof profile !== 'object') return null;
+  const rules = profile.breakRules ?? {};
+  const attributes = profile.attributes ?? {};
+  return {
+    applied: true,
+    enemyId: Number(profile.enemyId),
+    maxWeakness: Number(attributes.maxToughness),
+    recoveryDelayMs: Number(rules.recoveryDelayMs),
+    recoveryRateBasisPoints: Number(rules.recoveryRateBasisPoints),
+    breakTimeMs: Number(rules.breakTimeMs),
+    breakEndTimeMs: Number(rules.breakEndTimeMs),
+    breakDamageUpBasisPoints: Number(rules.breakDamageUpBasisPoints),
+    weaknessDamageMaximum:
+      rules.weaknessDamageMaximum == null
+        ? null
+        : Number(rules.weaknessDamageMaximum),
+    weaknessDamageMinimum:
+      rules.weaknessDamageMinimum == null
+        ? null
+        : Number(rules.weaknessDamageMinimum),
+    typeMultipliersBasisPoints: structuredClone(
+      rules.typeMultipliersBasisPoints ?? {}
+    ),
+    elementMultipliersBasisPoints: structuredClone(
+      rules.elementMultipliersBasisPoints ?? {}
+    ),
+    sourceIdentity: {
+      contractName: profile.contractName ?? null,
+      profileId: profile.profileId ?? null,
+      profileHash: profile.profileHash ?? null,
+      sourceIdentity: profile.source?.identity ?? null,
+      sourceHash: profile.source?.hash ?? null,
+    },
+  };
+}
+
 function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
   const attributeDefinitionById = new Map(
     (mechanicsPackage.staticPropertyCatalog?.attributeDefinitions ?? []).map(
@@ -1442,9 +1488,11 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
   const inheritedEnemy = scenario?.initialRuntimeState?.enemy ?? null;
   const targetPolicy = resolveCombatTargetPolicy(scenario);
   const enemyId = Number(scenario?.enemy?.enemyId ?? scenario?.enemy?.id);
-  const enemyProfile = (mechanicsPackage.ownerProfiles?.enemy ?? []).find(
-    profile => Number(profile.enemyId) === enemyId
-  );
+  const enemyProfile =
+    createExplicitEnemyRuntimeProfile(scenario?.enemy?.profile) ??
+    (mechanicsPackage.ownerProfiles?.enemy ?? []).find(
+      profile => Number(profile.enemyId) === enemyId
+    );
   const configuredEnemyMaxHp = Math.max(
     0,
     Number(scenario?.enemy?.stats?.maxHp ?? 0) *
@@ -1553,6 +1601,9 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     nextRuntimeSequenceIndex: 0,
     enemy: {
       targetPolicy,
+      deathTruncationArmed:
+        targetPolicy.deathTruncation === 'enabled' &&
+        scenario?.enemy?.profile != null,
       enemyId: Number.isInteger(enemyId) ? enemyId : null,
       profile: enemyProfile ?? null,
       hp: enemyHp,
@@ -3159,7 +3210,8 @@ function applyKiboPassiveRetaliationHitDescriptor({
   const enemyProfile = enemy.profile;
   let inputIssue = null;
   if (!sourceAttribute.ready || sourceAttribute.value == null) {
-    inputIssue = sourceAttribute.status ?? 'verified-retaliation-source-missing';
+    inputIssue =
+      sourceAttribute.status ?? 'verified-retaliation-source-missing';
   } else if (!enemyProfile?.applied) {
     inputIssue = 'verified-enemy-break-profile-missing';
   } else if (ratioBasisPoints == null) {
@@ -3252,8 +3304,7 @@ function applyKiboPassiveRetaliationHitDescriptor({
     typeMultiplier: 1,
     elementMultiplier: 1,
     weaknessSkillDamageUp: 1,
-    weakBreakDamageRateBasisPoints:
-      hit.damage?.weakBreakDamageRateBasisPoints,
+    weakBreakDamageRateBasisPoints: hit.damage?.weakBreakDamageRateBasisPoints,
     maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
     minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
   });
@@ -3362,7 +3413,7 @@ function applyKiboPassiveDerivedDotDescriptor({ descriptor, state }) {
     tickIndex: descriptor.tickIndex,
     thresholdMs: descriptor.thresholdMs,
   };
-  const createEvent = (payload) =>
+  const createEvent = payload =>
     createKiboPassiveDerivedDotEvent({ descriptor, schedule, payload });
   if (!dot) {
     return createEvent({
@@ -3498,7 +3549,7 @@ function applyKiboPassiveDerivedSelfHealDescriptor({ descriptor, state }) {
     tickIndex: descriptor.tickIndex,
     thresholdMs: descriptor.thresholdMs,
   };
-  const createEvent = (payload) =>
+  const createEvent = payload =>
     createKiboPassiveDerivedSelfHealEvent({ descriptor, schedule, payload });
   if (!heal) {
     return createEvent({
@@ -3676,6 +3727,61 @@ function isNonDamageProjectionDescriptor(descriptor) {
     'passive-derived-self-heal',
     'passive-derived-periodic-contract-unresolved',
   ].includes(descriptor?.kind);
+}
+
+function shouldTruncateEnemySettlement({ descriptor, state }) {
+  if (
+    state?.enemy?.deathTruncationArmed !== true ||
+    state?.enemy?.targetPolicy?.hpMode === 'infinite' ||
+    state?.enemy?.targetPolicy?.deathTruncation === 'disabled' ||
+    Number(state?.enemy?.hp) > 0
+  ) {
+    return false;
+  }
+  if (
+    descriptor?.kind === 'tuning-combat' &&
+    ['periodic-heal', 'overlimit-direct-sp', 'conditional-direct-sp'].includes(
+      descriptor.tuningEvent?.kind
+    )
+  ) {
+    return false;
+  }
+  if (descriptor?.kind === 'direct-heal') {
+    return descriptor.directEvent?.target?.kind === EFFECT_TARGET_KINDS.ENEMY;
+  }
+  return [
+    'weakness-state-tick',
+    'hit',
+    'passive-derived-hit',
+    'passive-derived-dot',
+    'passive-retaliation-hit',
+    'tuning-combat',
+  ].includes(descriptor?.kind);
+}
+
+function createEnemySettlementTruncatedEvent({ descriptor, state }) {
+  return {
+    type: 'VERIFIED_ENEMY_SETTLEMENT_TRUNCATED',
+    timeMs: roundValue(descriptor.timeMs),
+    absoluteFrame: descriptor.absoluteFrame,
+    runtimePhase: descriptor.runtimePhase,
+    runtimePhasePriority: descriptor.runtimePhasePriority,
+    runtimePriority: descriptor.runtimePriority,
+    actionId: descriptor.action?.id ?? descriptor.tuningEvent?.actionId ?? null,
+    actorId:
+      descriptor.action?.actorId ?? descriptor.tuningEvent?.actorId ?? null,
+    targetId: state.enemy.enemyId,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
+    payload: {
+      reason: 'finite-enemy-already-defeated',
+      descriptorKind: descriptor.kind,
+      enemyHp: roundValue(state.enemy.hp),
+      enemyToughness: roundValue(state.enemy.toughness),
+      targetPolicy: projectCombatTargetPolicy(state.enemy.targetPolicy),
+      settlementCursor: createEnemySettlementCursor(descriptor),
+      appliedToCalculators: false,
+    },
+  };
 }
 
 function resolveFriendlyVitalState(state, target) {
@@ -3937,6 +4043,7 @@ function applyTuningCombatDescriptor({
   const enemy = state.enemy;
   const enemyProfile = enemy.profile;
   const stateBefore = createEnemyStateSnapshot(enemy);
+  const inBreakForHpDamage = enemy.inBreak === true;
   const realDamage = ['held-true-damage', 'overlimit-true-damage'].includes(
     tuningEvent.kind
   );
@@ -3979,7 +4086,7 @@ function applyTuningCombatDescriptor({
     levelPressure: 1,
     restraintDelta: 0,
     miscellaneous: 1,
-    inWeakState: enemy.inBreak,
+    inWeakState: inBreakForHpDamage,
     breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
     outputType: template.damageType,
     outputElement: template.elementalType,
@@ -3998,11 +4105,18 @@ function applyTuningCombatDescriptor({
       })
     : calculateStackOverLimitDamage(commonInput);
   updateShieldState(enemy, damageResult, commonInput);
+  const requestedHpDamage = resolveRequestedHpDamage(damageResult);
   const infiniteHp = enemy.targetPolicy?.hpMode === 'infinite';
   const toughnessDisabled = enemy.targetPolicy?.toughnessMode === 'disabled';
   const hpDamage = infiniteHp
     ? Math.max(0, Number(damageResult.value))
     : Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
+  const effectiveHpDamage = hpDamage;
+  const overkill = Math.max(0, requestedHpDamage - effectiveHpDamage);
+  const hpDamageMultiplier = resolveHpDamageMultiplier({
+    inBreakForHpDamage,
+    enemyProfile,
+  });
   const toughnessBefore = enemy.toughness;
   const weaknessResult = calculateWeaknessDamage({
     pure: false,
@@ -4010,7 +4124,7 @@ function applyTuningCombatDescriptor({
     ratioBasisPoints: template.coefficientRaw,
     outputDamageRaw: damageResult.preShieldRaw ?? damageResult.raw,
     outputType: template.damageType,
-    inWeakState: enemy.inBreak,
+    inWeakState: inBreakForHpDamage,
     worldEventConflictPer: 1,
     typeMultiplier: resolveRuntimeWeaknessTypeMultiplier({
       enemyProfile,
@@ -4061,6 +4175,8 @@ function applyTuningCombatDescriptor({
       tuningEvent.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
   }
   const stateAfter = createEnemyStateSnapshot(enemy);
+  const deathTriggered =
+    !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
   const hitKey = `verified-${tuningEvent.eventIdentity}`;
   return {
     damageEvent: {
@@ -4088,7 +4204,17 @@ function applyTuningCombatDescriptor({
           target: [],
         },
         rawDamage: hpDamage,
+        requestedHpDamage,
+        effectiveHpDamage,
+        overkill,
+        inBreakForHpDamage,
+        hpDamageMultiplier,
         toughnessDamage,
+        toughnessBefore,
+        toughnessAfter: enemy.toughness,
+        breakTriggered,
+        deathTriggered,
+        settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
         formulaVersion: 'azpr-verified-q16.16-20260718',
@@ -4120,6 +4246,13 @@ function applyTuningCombatDescriptor({
           maximum: enemy.maxToughness,
           triggered: breakTriggered,
           inBreak: enemy.inBreak,
+          inBreakForHpDamage,
+          hpDamageMultiplier,
+        },
+        deathState: {
+          before: stateBefore.hp,
+          after: stateAfter.hp,
+          triggered: deathTriggered,
         },
         stateTransaction: {
           before: stateBefore,
@@ -4298,6 +4431,7 @@ function applyHitDescriptor({
     };
   }
   const stateBefore = createEnemyStateSnapshot(enemy);
+  const inBreakForHpDamage = enemy.inBreak === true;
   const damageInput = {
     attack: source.attack,
     ratioBasisPoints,
@@ -4342,7 +4476,7 @@ function applyHitDescriptor({
     levelPressure: 1,
     restraintDelta: 0,
     miscellaneous: 1,
-    inWeakState: enemy.inBreak,
+    inWeakState: inBreakForHpDamage,
     breakDamageUp: basisPoints(enemyProfile.breakDamageUpBasisPoints),
     outputType: hit.damage.damageType,
     outputElement: hit.damage.elementalType,
@@ -4368,11 +4502,18 @@ function applyHitDescriptor({
   }
   const damageResult = damageResolution.result;
   updateShieldState(enemy, damageResult, damageInput);
+  const requestedHpDamage = resolveRequestedHpDamage(damageResult);
   const infiniteHp = enemy.targetPolicy?.hpMode === 'infinite';
   const toughnessDisabled = enemy.targetPolicy?.toughnessMode === 'disabled';
   const hpDamage = infiniteHp
     ? Math.max(0, Number(damageResult.value))
     : Math.min(enemy.hp, Math.max(0, Number(damageResult.value)));
+  const effectiveHpDamage = hpDamage;
+  const overkill = Math.max(0, requestedHpDamage - effectiveHpDamage);
+  const hpDamageMultiplier = resolveHpDamageMultiplier({
+    inBreakForHpDamage,
+    enemyProfile,
+  });
   const toughnessBefore = enemy.toughness;
   const preShieldHpDamageRaw = damageResult.preShieldRaw ?? damageResult.raw;
   const weaknessTypeMultiplier = resolveRuntimeWeaknessTypeMultiplier({
@@ -4400,7 +4541,7 @@ function applyHitDescriptor({
     ratioBasisPoints,
     outputDamageRaw: preShieldHpDamageRaw,
     outputType: damageType,
-    inWeakState: enemy.inBreak,
+    inWeakState: inBreakForHpDamage,
     worldEventConflictPer: 1,
     typeMultiplier: weaknessTypeMultiplier,
     elementMultiplier: weaknessElementMultiplier,
@@ -4440,6 +4581,8 @@ function applyHitDescriptor({
       descriptor.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
   }
   const stateAfter = createEnemyStateSnapshot(enemy);
+  const deathTriggered =
+    !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
   const passiveDerivedDamageCommand =
     descriptor.passiveDerivedDamageCommand ?? null;
   const hitKey = createVerifiedCombatHitKey(descriptor);
@@ -4507,7 +4650,17 @@ function applyHitDescriptor({
         damageEventContext:
           descriptor.damageEventTransaction?.beforeEvent?.eventContext ?? null,
         rawDamage: hpDamage,
+        requestedHpDamage,
+        effectiveHpDamage,
+        overkill,
+        inBreakForHpDamage,
+        hpDamageMultiplier,
         toughnessDamage,
+        toughnessBefore,
+        toughnessAfter: enemy.toughness,
+        breakTriggered,
+        deathTriggered,
+        settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
         formulaVersion: 'azpr-verified-q16.16-20260718',
@@ -4572,6 +4725,13 @@ function applyHitDescriptor({
           maximum: enemy.maxToughness,
           triggered: breakTriggered,
           inBreak: enemy.inBreak,
+          inBreakForHpDamage,
+          hpDamageMultiplier,
+        },
+        deathState: {
+          before: stateBefore.hp,
+          after: stateAfter.hp,
+          triggered: deathTriggered,
         },
         shieldState: {
           absorbed: roundValue(shieldAbsorbed),
@@ -6054,6 +6214,9 @@ function createFinalState(state, timeMs = 0) {
       toughness: roundValue(state.enemy.toughness),
       maxToughness: roundValue(state.enemy.maxToughness),
       inBreak: state.enemy.inBreak,
+      breakPhase:
+        state.enemy.breakPhase ??
+        (state.enemy.inBreak ? 'linear_recovery' : 'normal'),
       breakElapsedMs:
         state.enemy.inBreak && state.enemy.breakStartedAtMs != null
           ? roundValue(
@@ -6161,6 +6324,7 @@ function createUnavailableRuntime({ enabled, reason }) {
       kiboPassiveVitalDamageSuppressedEventCount: 0,
       breakTriggerCount: 0,
       shieldedHitCount: 0,
+      enemySettlementTruncatedCount: 0,
       resourceBlockedActionCount: 0,
       applied: false,
     },
@@ -6333,6 +6497,60 @@ function resolveEventAbsoluteFrame(event) {
   return Number.isInteger(event.absoluteFrame)
     ? event.absoluteFrame
     : timeToFrame(event.timeMs);
+}
+
+function createEnemySettlementCursor(descriptor) {
+  const sourceSequencePath = Array.isArray(descriptor?.sourceSequencePath)
+    ? [...descriptor.sourceSequencePath]
+    : null;
+  const absoluteFrame = Number.isInteger(descriptor?.absoluteFrame)
+    ? descriptor.absoluteFrame
+    : timeToFrame(descriptor?.timeMs);
+  const runtimePhasePriority = Number(descriptor?.runtimePhasePriority ?? 0);
+  const runtimePriority = Number(descriptor?.runtimePriority ?? 0);
+  const sourceSequence = Number.isInteger(descriptor?.sourceSequence)
+    ? descriptor.sourceSequence
+    : null;
+  return {
+    absoluteFrame,
+    timeMs: roundValue(descriptor?.timeMs),
+    runtimePhase: descriptor?.runtimePhase ?? null,
+    runtimePhasePriority,
+    runtimePriority,
+    sourceSequencePath,
+    sourceSequence,
+    descriptorKind: descriptor?.kind ?? null,
+    cursorIdentity: [
+      absoluteFrame,
+      runtimePhasePriority,
+      runtimePriority,
+      sourceSequencePath?.join('.') ?? 'unresolved',
+      sourceSequence ?? 'unresolved',
+    ].join('|'),
+  };
+}
+
+function resolveRequestedHpDamage(damageResult) {
+  const trace = Array.isArray(damageResult?.trace) ? damageResult.trace : [];
+  const protectionIndex = trace.findIndex(
+    step => step?.name === 'minimum_hp_protection'
+  );
+  if (protectionIndex > 0) {
+    const beforeProtectionRaw = trace[protectionIndex - 1]?.raw;
+    if (beforeProtectionRaw != null) {
+      return Math.max(
+        0,
+        Number(runtimeIntegerize(BigInt(beforeProtectionRaw)))
+      );
+    }
+  }
+  return Math.max(0, Number(damageResult?.value) || 0);
+}
+
+function resolveHpDamageMultiplier({ inBreakForHpDamage, enemyProfile }) {
+  return inBreakForHpDamage
+    ? roundValue(1 + basisPoints(enemyProfile?.breakDamageUpBasisPoints))
+    : 1;
 }
 
 function timeToFrame(timeMs, frameRate = FRAME_RATE) {

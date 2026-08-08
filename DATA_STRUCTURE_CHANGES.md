@@ -27790,3 +27790,15 @@ Old projects without `combatScenario.critical` normalize to explicit `non-critic
 暴击分支在命中时读取来源 `CRI` 与目标属性 102 `CRI_DEFENSE`，并按 `clamp(CRI - CRI_DEFENSE, 0, 10000)` 生成 `criticalThreshold`。分支 trace 保留 `sourceCriticalRate`、`sourceCriticalRateBasisPoints`、`targetCriticalRateDefense`、`targetCriticalRateDefenseBasisPoints`、`criticalThreshold`、roll 与 stream index，便于重放和解释命中时动态属性变化。
 
 Workbench 分析报告复现通过 `WORKBENCH_HEADLESS_COMBAT_CORE` 重建并保存 canonical input/trace hash、暴击 policy 与 seed，不再直接调用底层 `compileProject` 或 `simulateScenario`。报告的 action source bindings 只冻结带 `actionId` 的动作交易；自动回能等系统交易仍完整保留在 canonical trace，避免把系统事件错误归入某个动作来源。
+
+## 457. Machine Axis primary objective / enemy profile / healing contracts
+
+Machine Axis 新增严格、版本化的 `AzPrMachineAxisObjectiveContract` 与 `AzPrMachineAxisObjectivePolicy`。每个 objective 保存 `objectiveId/classification/formalEligible/scoring/proofRequirements/targetPolicy/objectiveHash`；三项 primary 与 `damage/burst/toughness` 三项 legacy-diagnostic 的定义、默认值和目标政策进入 scenario policy 与 canonical input/data/trace/build hash。Search report 用 `formalScore/formalStatus/objectiveProof/objectiveIssues` 区分正式分数、诊断分数和拒绝原因。
+
+`scenario.enemy.profile` 新增严格 `AzPrEnemyProfile` consumer contract：身份层保存 enemyId、level、profileHash；provenance 保存 source identity/hash/status；actual attributes 保存 maxHp、DEF/MDEF、maxToughness、元素防御；break rules 保存恢复延迟/速率、破韧时长/结束段和伤害增幅。profile hash 绑定全部字段。本结构不计算等级成长，未来 enemy-level 分支只需输出同形状权威 profile 即可无损接入 Project、Machine Axis、Workbench 与 kill evaluator。
+
+`AzPrMachineAxisFastestKill` v1 输出首次致死 proof：`lethalFrame/timeMs/cursor/sourceActorId/sourceActionId/hitIdentity/requestedHpDamage/effectiveHpDamage/overkill`，并验证致死后不存在 HP/toughness settlement。未击杀输出 `killed=false/formalScore=null`，搜索启发式不写入正式 TTK。
+
+canonical damage event 新增 `preDefenseValue/requestedHpDamage/effectiveHpDamage/overkill/inBreakForHpDamage/hpDamageMultiplier/toughnessBefore/toughnessAfter/breakTriggered/deathTriggered/deathState/settlementCursor`。Cycle loop report 保存 `enemySettlementPackets[]`、`enemyStateTransitions[]`；敌人边界包含当前/最大 HP 与韧性、defeated、break phase/elapsed、恢复延迟和 profile 来源身份。
+
+batch/search/cycle/kill 的 `metrics.healing` 统一为 `requestedHealing/effectiveHealing/overhealing/effectiveHps/settlementCount/bySourceActor[]/bySourceAction[]`。聚合器只白名单 direct、Kibo periodic、tuning periodic 与 Kibo derived self-heal；shield、suppressed 和 vital damage 明确排除。full run 使用完整时长，cycle 使用 `[startFrame,endFrame)`，kill 使用完整 `(absoluteFrame,runtimePhasePriority,runtimePriority,runtimeSequenceIndex)` cursor 截止。旧项目仍可显式走 legacy 诊断，但正式目标、formal qualification 和 fastest-kill 必须 fail closed，不生成占位属性或旧默认。

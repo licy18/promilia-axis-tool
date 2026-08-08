@@ -2146,3 +2146,11 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 真实机制闭合：`251` 调谐伤害、`252` 每层暴击率、`253` 每层暴击伤害已由 250 印记运行时消费；印记 `0→2→4→5`、封顶刷新 `5→5`、同帧当前包、5 秒伤害冷却及右开到期均由真实 trace 证明。critical 0%/100%、不可暴击拒绝、hit 前属性变化和主动追击窗口内外边界均由 canonical 结算断言，而非手写 facts。
 - 产品/来源 N/A：`102001093` 属被排除的完美招架反击；`battle-element:799` 仍为 M23 客户端孤儿，其 `10900113/map0/frame183` 可达根之 judgment/消费成功分支不可解析且无原生消费者，未生成投影、未实现假逻辑。旧 11 个唯一 gap 曾展开成 28 个 blocked matrix rows，是同一 selector 在 golden、Machine Axis、source/requirement 维度重复绑定所致；政策重算先得到 required `156`、pass `133`、N/A `56`、blocked rows `23`、unique gap `10`，再经真实机制/协议闭环达到上述 `142/142/70/0`。
 - 当前 optimization qualification 由生成器重算为 `9/43/62/137/12`，source snapshot `39acb167dbcf7801`、roster `130c9cd5f5192ad6`、manifests `44f387f512518c29`、ledger `9e046d2a3c1f56fa`、binding matrix `7f2ea0c47f0b6845`、catalog `68996d22cce80720`，阻断 18，formal admission 仍锁定。Kibo DNA 继续规范为 `[]`；不进入下个角色、E20-3、M12-C 或正式搜索。
+
+### M12 优化器主指标合同已重构，正式时序证据继续阻断（2026-08-08）
+
+- `AzPrMachineAxisObjectiveContract` v1 把默认正式目标改为 `cycle-dps-no-toughness`，另有 `cycle-dps-with-toughness` 与 `fastest-kill`；旧 `damage/burst/toughness` 明确降为 `legacy-diagnostic`，只能显式选择，不能进入 formal admission、trial release 或 M12-C。
+- cycle 最终排名只消费 accepted loop proof；fastest kill 只排名真实首次致死，未击杀候选只有剪枝进度、没有正式 TTK score。`AzPrEnemyProfile` 是与 `feature/m12-b3-enemy-level` 的整合边界：本分支要求权威来源和实际属性，但不实现等级成长。
+- 当前 runtime 的破韧发生包 1x、后续 broken 包 2x、恢复区间右开和死亡后截断均可逐包审计；客户端原生包序/恢复帧证据仍 open，因此有韧 cycle 与 fastest kill 正式模式 fail closed，诊断模式必须显式 opt-in 且 `formalScore=null`。
+- 报告统一增加实际治疗 `requestedHealing/effectiveHealing/overhealing/effectiveHps`、settlement 数和 source actor/action 贡献；盾量保持独立。旧报告仍保留固定时长总 HP 伤害、滑窗爆发、原始与净韧性伤害诊断。
+- 全局场景 policy hash 为 `8af1aefabb228acf`、objective policy hash 为 `39c76b98388b81e5`。qualification 重生后 `m12cLocked=true`、catalog hash `1949fdcb838eee88`；本批不运行正式优化。

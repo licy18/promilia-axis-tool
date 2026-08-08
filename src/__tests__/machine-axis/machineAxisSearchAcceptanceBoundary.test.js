@@ -104,6 +104,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
       const result = await engine.search({
         contract: cloneFixture(),
         options: {
+          objective: 'damage',
           beamWidth: 1,
           topN: 1,
           maxDepth,
@@ -177,6 +178,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     }).search({
       contract: axis,
       options: {
+        objective: 'damage',
         beamWidth: 1,
         topN: 1,
         maxDepth: 4,
@@ -237,7 +239,12 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     const engine = createMachineAxisSearchEngine({ service, generator });
     const result = await engine.search({
       contract: cloneFixture(),
-      options: { beamWidth: 1, topN: 1, maxDepth: 4 },
+      options: {
+        objective: 'damage',
+        beamWidth: 1,
+        topN: 1,
+        maxDepth: 4,
+      },
     });
     expect(result.results).toHaveLength(1);
     expect(result.results[0].axis.actions).toHaveLength(1);
@@ -251,6 +258,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
         {
           contract: axis,
           options: {
+            objective: 'damage',
             beamWidth: 1,
             topN: 1,
             maxDepth: 1,
@@ -279,6 +287,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     const result = await engine.search({
       contract: cloneFixture({ durationFrames: 3600 }),
       options: {
+        objective: 'damage',
         beamWidth: 6,
         topN: 6,
         maxDepth: 3,
@@ -315,6 +324,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     const result = await engine.search({
       contract: axis,
       options: {
+        objective: 'damage',
         beamWidth: 8,
         topN: 8,
         maxDepth: 2,
@@ -373,6 +383,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
     }).search({
       contract: axis,
       options: {
+        objective: 'damage',
         beamWidth: 8,
         topN: 8,
         maxDepth: 2,
@@ -504,6 +515,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
           },
         },
         options: {
+          objective: 'damage',
           beamWidth: 1,
           topN: 1,
           maxDepth: 1,
@@ -520,6 +532,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
       const sampled = await engine.search({
         contract: cloneFixture(),
         options: {
+          objective: 'damage',
           beamWidth: 1,
           topN: 1,
           maxDepth: 1,
@@ -620,6 +633,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
         },
       ],
       options: {
+        objective: 'damage',
         beamWidth: 1,
         topN: 2,
         maxDepth: 1,

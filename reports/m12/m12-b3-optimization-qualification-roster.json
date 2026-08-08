@@ -3849,7 +3849,7 @@
       },
       "setThreeSourceIdentityEvidence": {
         "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
-        "sha256": "1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8",
+        "sha256": "fbeb8944c2ddb02bc350c15886c04907a036f8c4cd1fd915fe37c8fb0215f4b8",
         "bytes": 13883,
         "value": {
           "schemaVersion": 1,
@@ -4204,7 +4204,7 @@
                 "reason": "m12c-zero-distance-passive-boss-out-of-scope",
                 "bossAttacks": false,
                 "policyId": "m12c-zero-distance-passive-boss-v1",
-                "policyHash": "c241492911786b34",
+                "policyHash": "8af1aefabb228acf",
                 "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
                 "rosterHash": "760e59dac2c7c1c5",
                 "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario"
@@ -4240,11 +4240,11 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "935fb9f83e33f81d"
+    "sourceSnapshotHash": "1c79ad7f41b89e6d"
   },
   "filterContract": {
     "optimizationScenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
-    "optimizationScenarioPolicyHash": "c241492911786b34",
+    "optimizationScenarioPolicyHash": "8af1aefabb228acf",
     "candidateRosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
     "candidateRosterHash": "760e59dac2c7c1c5",
     "formalCharacterOptimizationObjectIds": [
@@ -4340,6 +4340,185 @@
         "trace",
         "build"
       ],
+      "objectivePolicy": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisObjectivePolicy",
+        "policyId": "m12-primary-objectives-v1",
+        "defaultPrimaryObjectiveId": "cycle-dps-no-toughness",
+        "primaryObjectiveIds": [
+          "cycle-dps-no-toughness",
+          "cycle-dps-with-toughness",
+          "fastest-kill"
+        ],
+        "legacyDiagnosticObjectiveIds": [
+          "damage",
+          "burst",
+          "toughness"
+        ],
+        "objectivesById": {
+          "cycle-dps-no-toughness": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "cycle-dps-no-toughness",
+            "classification": "primary",
+            "formalEligible": true,
+            "targetPolicy": {
+              "hpMode": "infinite",
+              "toughnessMode": "disabled",
+              "breakMode": "disabled",
+              "deathTruncation": "disabled"
+            },
+            "scoring": {
+              "metric": "closed-cycle-hp-dps",
+              "direction": "maximize",
+              "damageBasis": "settled-post-defense-hp-damage",
+              "formula": "loopHpDamage / loopDurationSeconds",
+              "finalRankingEligibility": "accepted-loop-proof-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "strict-half-open-replayable-loop",
+              "actorBoundary": "non-degrading-and-next-loop-ready",
+              "enemyBoundary": "defense-and-level-inputs-stable",
+              "toughnessSettlement": "disabled",
+              "killRequired": false,
+              "enemyProfile": "resolved-defense-and-level-inputs"
+            },
+            "objectiveHash": "c8d9866a1bf9431b"
+          },
+          "cycle-dps-with-toughness": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "cycle-dps-with-toughness",
+            "classification": "primary",
+            "formalEligible": true,
+            "targetPolicy": {
+              "hpMode": "infinite",
+              "toughnessMode": "enabled",
+              "breakMode": "enabled",
+              "deathTruncation": "disabled"
+            },
+            "scoring": {
+              "metric": "closed-cycle-hp-dps",
+              "direction": "maximize",
+              "damageBasis": "settled-post-defense-hp-damage",
+              "formula": "loopHpDamage / loopDurationSeconds",
+              "finalRankingEligibility": "accepted-loop-proof-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "strict-half-open-replayable-loop",
+              "actorBoundary": "non-degrading-and-next-loop-ready",
+              "enemyBoundary": "toughness-break-state-and-recovery-phase-closed",
+              "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+              "killRequired": false,
+              "enemyProfile": "resolved-defense-level-and-toughness-inputs"
+            },
+            "objectiveHash": "4b2fc336ea871db4"
+          },
+          "fastest-kill": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "fastest-kill",
+            "classification": "primary",
+            "formalEligible": true,
+            "targetPolicy": {
+              "hpMode": "finite",
+              "toughnessMode": "enabled",
+              "breakMode": "enabled",
+              "deathTruncation": "enabled"
+            },
+            "scoring": {
+              "metric": "first-lethal-settlement-time",
+              "direction": "minimize",
+              "damageBasis": "settled-post-defense-hp-damage",
+              "formula": "firstLethalFrameThenTimeMs",
+              "finalRankingEligibility": "real-kill-candidate-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "not-applicable",
+              "actorBoundary": "runtime-legality-through-lethal-settlement",
+              "enemyBoundary": "first-lethal-settlement-and-post-death-truncation",
+              "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+              "killRequired": true,
+              "enemyProfile": "fully-resolved-hp-defense-level-and-toughness-profile"
+            },
+            "objectiveHash": "a27579630c82bd6e"
+          },
+          "damage": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "damage",
+            "classification": "legacy-diagnostic",
+            "formalEligible": false,
+            "targetPolicy": null,
+            "scoring": {
+              "metric": "fixed-duration-total-hp-damage",
+              "direction": "maximize",
+              "damageBasis": "settled-hp-damage-diagnostic",
+              "formula": "totalHpDamage",
+              "finalRankingEligibility": "diagnostic-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "not-required",
+              "actorBoundary": "runtime-legality-only",
+              "enemyBoundary": "scenario-defined",
+              "toughnessSettlement": "diagnostic-only",
+              "killRequired": false,
+              "enemyProfile": "diagnostic-scenario-inputs"
+            },
+            "objectiveHash": "960fda03ac9269cc"
+          },
+          "burst": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "burst",
+            "classification": "legacy-diagnostic",
+            "formalEligible": false,
+            "targetPolicy": null,
+            "scoring": {
+              "metric": "sliding-window-hp-damage",
+              "direction": "maximize",
+              "damageBasis": "settled-hp-damage-diagnostic",
+              "formula": "maxWindowHpDamage",
+              "finalRankingEligibility": "diagnostic-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "not-required",
+              "actorBoundary": "runtime-legality-only",
+              "enemyBoundary": "scenario-defined",
+              "toughnessSettlement": "diagnostic-only",
+              "killRequired": false,
+              "enemyProfile": "diagnostic-scenario-inputs"
+            },
+            "objectiveHash": "9f7d605250d119f8"
+          },
+          "toughness": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "toughness",
+            "classification": "legacy-diagnostic",
+            "formalEligible": false,
+            "targetPolicy": null,
+            "scoring": {
+              "metric": "raw-toughness-damage",
+              "direction": "maximize",
+              "damageBasis": "raw-toughness-damage-diagnostic",
+              "formula": "totalToughnessDamage",
+              "finalRankingEligibility": "diagnostic-only",
+              "companionMetric": "net-toughness-damage"
+            },
+            "proofRequirements": {
+              "loopBoundary": "not-required",
+              "actorBoundary": "runtime-legality-only",
+              "enemyBoundary": "scenario-defined",
+              "toughnessSettlement": "diagnostic-only",
+              "killRequired": false,
+              "enemyProfile": "diagnostic-scenario-inputs"
+            },
+            "objectiveHash": "de4c6ac05f2ab3ec"
+          }
+        },
+        "objectivePolicyHash": "39c76b98388b81e5"
+      },
       "candidateRoster": {
         "schemaVersion": 1,
         "contractName": "AzPrOptimizationCandidateRosterPolicy",
@@ -4934,7 +5113,7 @@
         ],
         "rosterHash": "760e59dac2c7c1c5"
       },
-      "policyHash": "c241492911786b34"
+      "policyHash": "8af1aefabb228acf"
     },
     "characterRoster": {
       "schemaVersion": 1,
@@ -30770,5 +30949,5 @@
       ]
     }
   },
-  "rosterHash": "d258a6f8327a6722"
+  "rosterHash": "693a2f5ddb9adeed"
 }

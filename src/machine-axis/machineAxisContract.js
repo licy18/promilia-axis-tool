@@ -1,6 +1,11 @@
 export { MACHINE_AXIS_TRANSPORT_METADATA_KEY } from './machineAxisTransport';
 import { validateRawMachineAxisSchema } from './machineAxisSchemaValidation';
 import { normalizeOptimizationScenarioPolicyBinding } from '../optimization-scenario/optimizationScenarioPolicy';
+import {
+  normalizeMachineAxisEnemyProfile,
+  validateMachineAxisEnemyProfile,
+} from './machineAxisEnemyProfileContract';
+import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
 
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
@@ -74,6 +79,9 @@ export function normalizeMachineAxisContract(value = {}) {
                 scenario.optimizationScenarioPolicy
               ),
           }),
+      ...(scenario.objectiveContract == null
+        ? {}
+        : { objectiveContract: structuredClone(scenario.objectiveContract) }),
       ...(scenario.optimizationQualification == null
         ? {}
         : {
@@ -433,6 +441,9 @@ function normalizeEnemy(value) {
     elementDefenseOverrides: normalizePlainRecord(
       source.elementDefenseOverrides
     ),
+    ...(source.profile == null
+      ? {}
+      : { profile: normalizeMachineAxisEnemyProfile(source.profile) }),
   };
 }
 
@@ -477,9 +488,7 @@ function normalizeCultivationProfile(value) {
       kibo: {
         ...actor.kibo,
         dnaFactors:
-          actor.kibo.dnaFactors === undefined
-            ? []
-            : actor.kibo.dnaFactors,
+          actor.kibo.dnaFactors === undefined ? [] : actor.kibo.dnaFactors,
       },
     };
   });
@@ -593,6 +602,25 @@ function validateScenario(value, issues) {
         'scenario.enemy.enemyId',
         'enemyId is required'
       )
+    );
+  }
+  if (value.enemy.profile != null) {
+    issues.push(
+      ...validateMachineAxisEnemyProfile(value.enemy.profile, {
+        scenarioEnemy: value.enemy,
+      }).issues
+    );
+  }
+  if (value.objectiveContract != null) {
+    issues.push(
+      ...validateMachineAxisObjectiveContract(
+        value.objectiveContract
+      ).issues.map(entry => ({
+        severity: 'error',
+        code: entry.code,
+        path: `scenario.objectiveContract${entry.field ? `.${entry.field}` : ''}`,
+        message: entry.message,
+      }))
     );
   }
   if (!SCENARIO_CRITICAL_POLICIES.has(value.critical.policy)) {

@@ -11,6 +11,7 @@
     "scenario",
     "dataIdentity",
     "objective",
+    "objectiveContract",
     "summary",
     "results"
   ],
@@ -21,8 +22,16 @@
     "scenario": { "$ref": "#/$defs/scenarioAssumptions" },
     "dataIdentity": { "type": "object" },
     "objective": {
-      "enum": ["damage", "burst", "toughness"]
+      "enum": [
+        "cycle-dps-no-toughness",
+        "cycle-dps-with-toughness",
+        "fastest-kill",
+        "damage",
+        "burst",
+        "toughness"
+      ]
     },
+    "objectiveContract": { "type": "object" },
     "summary": { "$ref": "#/$defs/searchSummary" },
     "results": {
       "type": "array",
@@ -73,7 +82,16 @@
         "completedCandidates": { "type": "integer" },
         "beamWidth": { "type": "integer" },
         "topN": { "type": "integer" },
-        "objective": { "enum": ["damage", "burst", "toughness"] },
+        "objective": {
+          "enum": [
+            "cycle-dps-no-toughness",
+            "cycle-dps-with-toughness",
+            "fastest-kill",
+            "damage",
+            "burst",
+            "toughness"
+          ]
+        },
         "horizonFrames": { "type": "integer" },
         "teamCandidatesEvaluated": { "type": "integer", "minimum": 1 },
         "teamCandidateSuccessCount": { "type": "integer", "minimum": 0 },
@@ -93,6 +111,9 @@
         "rank",
         "teamCandidateId",
         "score",
+        "scoreDirection",
+        "finalScoreEligible",
+        "heuristic",
         "team",
         "axis",
         "hashes",
@@ -106,6 +127,9 @@
         "rank": { "type": "integer", "minimum": 1 },
         "teamCandidateId": { "type": "string", "minLength": 1 },
         "score": { "type": "number" },
+        "scoreDirection": { "enum": ["maximize", "minimize"] },
+        "finalScoreEligible": { "const": true },
+        "heuristic": { "type": "object" },
         "deltaVsRank1": { "type": "number" },
         "team": {
           "type": "array",
@@ -146,6 +170,8 @@
         },
         "criticalPolicy": { "type": "object" },
         "sampling": { "type": ["object", "null"] },
+        "objectiveProof": { "type": ["object", "null"] },
+        "objectiveIssues": { "type": "array" },
         "boundariesConsumed": { "type": "array" },
         "coverageTrust": { "type": "object" },
         "metrics": { "type": "object" },

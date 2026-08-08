@@ -5,10 +5,12 @@ import { createWorkbenchDraftSnapshot } from '../../domain/workbenchDraftStorage
 import { createWorkbenchProject } from '../../domain/workbenchProjectFactory';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../../features/workbench/workbenchHeadlessCombatCore';
 import { runMachineAxisCli } from '../../machine-axis/machineAxisCli';
+import { createMachineAxisEnemyProfile } from '../../machine-axis/machineAxisEnemyProfileContract';
 import {
   MachineAxisValidationError,
   createMachineAxisService,
 } from '../../machine-axis/machineAxisService';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import {
   createWorkbenchDraftFromMachineAxisImport,
   createWorkbenchMachineAxisAdapter,
@@ -148,6 +150,64 @@ describe('Workbench Machine Axis adapter', () => {
     expect(restoredRun.trace).toEqual(originalRun.trace);
   }, 30_000);
 
+  it('round-trips the formal objective and structured enemy profile without defaulting', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const contract = structuredClone(fixture);
+    const objectiveContract = createMachineAxisObjectiveContract(
+      'cycle-dps-no-toughness'
+    );
+    const enemyProfile = createMachineAxisEnemyProfile({
+      profileId: 'enemy:300032:level:1:workbench-round-trip',
+      enemyId: 300032,
+      level: 1,
+      source: {
+        status: 'authoritative-resolved',
+        kind: 'enemy-level-pipeline',
+        identity: 'feature/m12-b3-enemy-level#enemy:300032:level:1',
+        hash: 'workbench-enemy-level-source-hash',
+      },
+      attributes: {
+        maxHp: 8628,
+        physicalDefense: 101,
+        magicalDefense: 101,
+        maxToughness: 6667,
+        elementDefenses: {},
+      },
+      breakRules: {
+        recoveryDelayMs: 1000,
+        recoveryRateBasisPoints: 1000,
+        breakTimeMs: 10000,
+        breakEndTimeMs: 2000,
+        breakDamageUpBasisPoints: 10000,
+        weaknessDamageMaximum: 100,
+        weaknessDamageMinimum: 1,
+        typeMultipliersBasisPoints: {},
+        elementMultipliersBasisPoints: {},
+      },
+    });
+    contract.scenario.objectiveContract = objectiveContract;
+    contract.scenario.target = structuredClone(objectiveContract.targetPolicy);
+    contract.scenario.enemy.profile = enemyProfile;
+
+    const imported = adapter.importContract(contract);
+    const exported = adapter.exportProject(imported.project);
+    const restored = adapter.importContract(
+      JSON.parse(JSON.stringify(exported))
+    );
+
+    expect(imported.project.combatScenario.objectiveContract).toEqual(
+      objectiveContract
+    );
+    expect(imported.project.enemy.profile).toEqual(enemyProfile);
+    expect(exported.scenario.objectiveContract).toEqual(objectiveContract);
+    expect(exported.scenario.enemy.profile).toEqual(enemyProfile);
+    expect(restored.project.combatScenario.objectiveContract).toEqual(
+      objectiveContract
+    );
+    expect(restored.project.enemy.profile).toEqual(enemyProfile);
+  }, 30_000);
+
   it('rejects non-60 FPS on import and export', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
@@ -259,5 +319,5 @@ describe('Workbench Machine Axis adapter', () => {
         })
       );
     }
-  });
+  }, 30_000);
 });

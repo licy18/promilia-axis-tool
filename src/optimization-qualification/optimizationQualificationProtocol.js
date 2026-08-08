@@ -11,6 +11,9 @@ import {
   isOptimizationScenarioActionKindInScope,
   validateOptimizationScenarioPolicyBinding,
 } from '../optimization-scenario/optimizationScenarioPolicy';
+import { validateMachineAxisObjectiveContract } from '../machine-axis/machineAxisObjectiveContract';
+import { validateMachineAxisEnemyProfile } from '../machine-axis/machineAxisEnemyProfileContract';
+import { getMachineAxisEnemySettlementFormalReadiness } from '../machine-axis/machineAxisEnemySettlementContract';
 
 export const OPTIMIZATION_QUALIFICATION_SCHEMA_VERSION = 1;
 export const OPTIMIZATION_QUALIFICATION_CATALOG_CONTRACT_NAME =
@@ -40,8 +43,7 @@ export function validateOptimizationQualificationCatalog(
     issues.push('optimization-qualification-catalog-schema-version-invalid');
   }
   if (
-    catalog?.contractName !==
-    OPTIMIZATION_QUALIFICATION_CATALOG_CONTRACT_NAME
+    catalog?.contractName !== OPTIMIZATION_QUALIFICATION_CATALOG_CONTRACT_NAME
   ) {
     issues.push('optimization-qualification-catalog-contract-name-invalid');
   }
@@ -70,12 +72,19 @@ export function validateOptimizationQualificationCatalog(
     equipment: readyIds(catalog, 'equipment').map(Number),
     setSkills: readyIds(catalog, 'set-skill'),
   };
-  if (hashCanonicalValue(catalog?.admission ?? {}) !== hashCanonicalValue(expectedAdmission)) {
+  if (
+    hashCanonicalValue(catalog?.admission ?? {}) !==
+    hashCanonicalValue(expectedAdmission)
+  ) {
     issues.push('optimization-qualification-catalog-admission-mismatch');
   }
   const stageGate = deriveOptimizationQualificationStageGate(catalog);
   for (const reasonCode of stageGate.reasonCodes) {
-    if (!reasonCode.startsWith('optimization-qualification-object-kind-incomplete:')) {
+    if (
+      !reasonCode.startsWith(
+        'optimization-qualification-object-kind-incomplete:'
+      )
+    ) {
       issues.push(reasonCode);
     }
   }
@@ -83,12 +92,15 @@ export function validateOptimizationQualificationCatalog(
     issues.push('optimization-qualification-binding-matrix-hash-mismatch');
   }
   const expectedReadyCounts = Object.fromEntries(
-    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(kind => [
-      kind,
-      (catalog?.records ?? []).filter(
-        record => record.objectKind === kind && record.optimizationReady === true
-      ).length,
-    ])
+    ['character', 'kibo', 'soul-essence', 'equipment', 'set-skill'].map(
+      kind => [
+        kind,
+        (catalog?.records ?? []).filter(
+          record =>
+            record.objectKind === kind && record.optimizationReady === true
+        ).length,
+      ]
+    )
   );
   if (
     hashCanonicalValue(catalog?.summary?.optimizationReadyCounts ?? {}) !==
@@ -139,7 +151,9 @@ export function validateOptimizationQualificationCatalog(
     Number(catalog?.cultivation?.kibo?.initialEffectiveBondLevel) !== 1 ||
     Number(bondLevelOne?.inheritanceBasisPoints) !== 900
   ) {
-    issues.push('optimization-qualification-kibo-initial-bond-contract-invalid');
+    issues.push(
+      'optimization-qualification-kibo-initial-bond-contract-invalid'
+    );
   }
   for (const attributeId of KIBO_TALENT_ATTRIBUTE_IDS) {
     const levelTen = catalog?.cultivation?.kibo?.talentValues?.[
@@ -185,9 +199,7 @@ export function validateOptimizationQualificationCatalog(
       );
     })
   ) {
-    issues.push(
-      'optimization-qualification-soulessence-star-catalog-invalid'
-    );
+    issues.push('optimization-qualification-soulessence-star-catalog-invalid');
   }
   const equipmentCultivation = catalog?.cultivation?.equipment;
   const normalInstance = equipmentCultivation?.instanceTiers?.find(
@@ -206,7 +218,9 @@ export function validateOptimizationQualificationCatalog(
     starbornInstance?.bGoldSide !== true ||
     Number(starbornInstance?.maximum) !== 110
   ) {
-    issues.push('optimization-qualification-equipment-instance-catalog-invalid');
+    issues.push(
+      'optimization-qualification-equipment-instance-catalog-invalid'
+    );
   }
   if (catalog && typeof catalog === 'object') {
     const copy = structuredClone(catalog);
@@ -220,10 +234,7 @@ export function validateOptimizationQualificationCatalog(
 
 export function resolveOptimizationCultivationProfile(
   profile,
-  {
-    team = [],
-    catalog = generatedQualificationCatalog,
-  } = {}
+  { team = [], catalog = generatedQualificationCatalog } = {}
 ) {
   const validation = validateOptimizationCultivationProfile(profile, {
     team,
@@ -237,9 +248,7 @@ export function resolveOptimizationCultivationProfile(
       profileHash: null,
     };
   }
-  const teamBySlot = new Map(
-    team.map(slot => [String(slot.slotId), slot])
-  );
+  const teamBySlot = new Map(team.map(slot => [String(slot.slotId), slot]));
   const soulEssenceProfileById = new Map(
     (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
       Number(source.soulEssenceId),
@@ -395,9 +404,7 @@ export function projectResolvedOptimizationCultivationActor(
         soulessenceRank: Number(resolvedActor.soulEssence.rank),
         soulessenceStar: Number(resolvedActor.soulEssence.star),
         soulessenceCultivation: {
-          effectSkill: structuredClone(
-            resolvedActor.soulEssence.effectSkill
-          ),
+          effectSkill: structuredClone(resolvedActor.soulEssence.effectSkill),
         },
         equipmentLevels,
         equipmentCultivation,
@@ -412,10 +419,11 @@ export function projectResolvedOptimizationCultivationActor(
       schemaVersion: 1,
       contractName: 'AzPrOptimizationCultivationApplication',
       status:
-        unresolvedDimensions.length === 0 ? 'fully-applied' : 'partially-applied',
+        unresolvedDimensions.length === 0
+          ? 'fully-applied'
+          : 'partially-applied',
       profileHash,
-      qualificationCatalogHash:
-        catalog.catalogHash,
+      qualificationCatalogHash: catalog.catalogHash,
       appliedDimensions,
       unresolvedDimensions,
     },
@@ -424,10 +432,7 @@ export function projectResolvedOptimizationCultivationActor(
 
 export function validateOptimizationCultivationProfile(
   profile,
-  {
-    team = [],
-    catalog = generatedQualificationCatalog,
-  } = {}
+  { team = [], catalog = generatedQualificationCatalog } = {}
 ) {
   const issues = [];
   const catalogValidation = validateOptimizationQualificationCatalog(catalog);
@@ -470,9 +475,7 @@ export function validateOptimizationCultivationProfile(
     );
     return { valid: false, issues };
   }
-  const teamBySlot = new Map(
-    team.map(slot => [String(slot.slotId), slot])
-  );
+  const teamBySlot = new Map(team.map(slot => [String(slot.slotId), slot]));
   const teamSlots = new Set(teamBySlot.keys());
   const soulEssenceProfileById = new Map(
     (catalog.cultivation.soulEssence.profiles ?? []).map(source => [
@@ -555,9 +558,7 @@ export function validateOptimizationCultivationProfile(
       actor.character.starGiftNodeIds.every(isPositiveInteger) &&
       new Set(actor.character.starGiftNodeIds).size ===
         actor.character.starGiftNodeIds.length;
-    if (
-      !starGiftNodeIdsValid
-    ) {
+    if (!starGiftNodeIdsValid) {
       issues.push(
         createIssue(
           'machine-axis-cultivation-star-gift-nodes-invalid',
@@ -642,12 +643,8 @@ export function validateOptimizationCultivationProfile(
       'machine-axis-cultivation-soulessence-star-invalid',
       issues
     );
-    const selectedSoulEssenceId = Number(
-      teamSlot?.loadout?.soulessenceId
-    );
-    const soulEssenceSource = soulEssenceProfileById.get(
-      selectedSoulEssenceId
-    );
+    const selectedSoulEssenceId = Number(teamSlot?.loadout?.soulessenceId);
+    const soulEssenceSource = soulEssenceProfileById.get(selectedSoulEssenceId);
     if (teamSlot && !soulEssenceSource) {
       issues.push(
         createIssue(
@@ -745,20 +742,29 @@ export function createOptimizationQualificationIssuesForContract(
   }
   if (qualification?.mode !== 'formal') return issues;
   const scenarioPolicy = getOptimizationScenarioPolicy();
+  const objectiveValidation = validateMachineAxisObjectiveContract(
+    contract?.scenario?.objectiveContract,
+    { formal: true }
+  );
+  for (const objectiveIssue of objectiveValidation.issues) {
+    issues.push(
+      createIssue(
+        objectiveIssue.code,
+        `scenario.objectiveContract${objectiveIssue.field ? `.${objectiveIssue.field}` : ''}`,
+        { message: objectiveIssue.message }
+      )
+    );
+  }
   const policyBinding = validateOptimizationScenarioPolicyBinding(
     contract?.scenario?.optimizationScenarioPolicy
   );
   for (const issue of policyBinding.issues) {
     issues.push(
-      createIssue(
-        issue.code,
-        'scenario.optimizationScenarioPolicy',
-        {
-          expected: issue.expected,
-          actual: issue.actual,
-          reason: scenarioPolicy.reason,
-        }
-      )
+      createIssue(issue.code, 'scenario.optimizationScenarioPolicy', {
+        expected: issue.expected,
+        actual: issue.actual,
+        reason: scenarioPolicy.reason,
+      })
     );
   }
   (contract?.scenario?.team ?? []).forEach((slot, index) => {
@@ -797,7 +803,7 @@ export function createOptimizationQualificationIssuesForContract(
       )
     );
   }
-  const expectedTarget = scenarioPolicy.assumptions.targetPolicy;
+  const expectedTarget = objectiveValidation.contract?.targetPolicy ?? null;
   const actualTarget = contract?.scenario?.target ?? null;
   if (hashCanonicalValue(actualTarget) !== hashCanonicalValue(expectedTarget)) {
     issues.push(
@@ -811,6 +817,44 @@ export function createOptimizationQualificationIssuesForContract(
         }
       )
     );
+  }
+  if (objectiveValidation.contract?.objectiveId === 'fastest-kill') {
+    const enemyProfileValidation = validateMachineAxisEnemyProfile(
+      contract?.scenario?.enemy?.profile,
+      { scenarioEnemy: contract?.scenario?.enemy }
+    );
+    for (const profileIssue of enemyProfileValidation.issues) {
+      issues.push(
+        createIssue(profileIssue.code, profileIssue.path, profileIssue)
+      );
+    }
+    if (
+      enemyProfileValidation.valid === true &&
+      enemyProfileValidation.normalized.source.status !==
+        'authoritative-resolved'
+    ) {
+      issues.push(
+        createIssue(
+          'machine-axis-fastest-kill-enemy-profile-not-authoritative',
+          'scenario.enemy.profile.source.status',
+          {
+            actual: enemyProfileValidation.normalized.source.status,
+          }
+        )
+      );
+    }
+  }
+  if (
+    ['cycle-dps-with-toughness', 'fastest-kill'].includes(
+      objectiveValidation.contract?.objectiveId
+    )
+  ) {
+    for (const settlementIssue of getMachineAxisEnemySettlementFormalReadiness()
+      .issues) {
+      issues.push(
+        createIssue(settlementIssue.code, settlementIssue.path, settlementIssue)
+      );
+    }
   }
   contract.actions.forEach((action, index) => {
     const actionKind = action?.intent?.actionKind;
@@ -1111,9 +1155,7 @@ function resolveCharacterCultivation(value, sourceProfile) {
         })),
       levelBreakthroughAttributeSources: [],
       levelBreakthroughSelection: levelBreakthroughSources
-        .filter(
-          row => Number(row.rank) === Number(value.levelBreakthroughRank)
-        )
+        .filter(row => Number(row.rank) === Number(value.levelBreakthroughRank))
         .map(row => ({
           kind: row.kind,
           sourceId: row.sourceId,
@@ -1174,7 +1216,9 @@ export function resolveStarGiftSkillIndexToSkillId(character, skillIndex) {
     candidate =>
       candidate.group === group && Number(candidate.slot) === Number(slot)
   );
-  return Number.isInteger(Number(match?.skillId)) ? Number(match.skillId) : null;
+  return Number.isInteger(Number(match?.skillId))
+    ? Number(match.skillId)
+    : null;
 }
 
 export function resolveStarGiftSkillLevelBonusesBySkillId({
@@ -1188,7 +1232,10 @@ export function resolveStarGiftSkillLevelBonusesBySkillId({
       entry.skillIndex
     );
     if (skillId == null) continue;
-    bonuses.set(skillId, (bonuses.get(skillId) ?? 0) + Number(entry.level ?? 0));
+    bonuses.set(
+      skillId,
+      (bonuses.get(skillId) ?? 0) + Number(entry.level ?? 0)
+    );
   }
   return Object.fromEntries([...bonuses.entries()].sort((a, b) => a[0] - b[0]));
 }
@@ -1240,13 +1287,21 @@ function validateKiboTalents(value, basePath, catalog, issues) {
     );
     return;
   }
-  const ids = value.map(entry => Number(entry.attributeId)).sort((a, b) => a - b);
-  if (ids.join(',') !== [...KIBO_TALENT_ATTRIBUTE_IDS].sort((a, b) => a - b).join(',')) {
+  const ids = value
+    .map(entry => Number(entry.attributeId))
+    .sort((a, b) => a - b);
+  if (
+    ids.join(',') !==
+    [...KIBO_TALENT_ATTRIBUTE_IDS].sort((a, b) => a - b).join(',')
+  ) {
     issues.push(
       createIssue(
         'machine-axis-cultivation-kibo-talent-attributes-invalid',
         `${basePath}.kibo.talents`,
-        { expectedAttributeIds: [...KIBO_TALENT_ATTRIBUTE_IDS], actualAttributeIds: ids }
+        {
+          expectedAttributeIds: [...KIBO_TALENT_ATTRIBUTE_IDS],
+          actualAttributeIds: ids,
+        }
       )
     );
   }
@@ -1288,9 +1343,13 @@ function validateEquipment(
     const itemPath = `${basePath}.equipment.${slot}`;
     if (!isRecord(item)) {
       issues.push(
-        createIssue('machine-axis-cultivation-equipment-slot-required', itemPath, {
-          equipmentSlot: slot,
-        })
+        createIssue(
+          'machine-axis-cultivation-equipment-slot-required',
+          itemPath,
+          {
+            equipmentSlot: slot,
+          }
+        )
       );
       continue;
     }
@@ -1367,7 +1426,11 @@ function validateEquipment(
       'machine-axis-cultivation-equipment-enhancement-invalid',
       issues
     );
-    if (!Number.isInteger(item.tuningScore) || item.tuningScore < 0 || item.tuningScore > 110) {
+    if (
+      !Number.isInteger(item.tuningScore) ||
+      item.tuningScore < 0 ||
+      item.tuningScore > 110
+    ) {
       issues.push(
         createIssue(
           'machine-axis-cultivation-equipment-tuning-score-invalid',

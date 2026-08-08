@@ -115,6 +115,36 @@
       "severity": "warning"
     }
   ],
+  "objectiveContract": {
+    "schemaVersion": 1,
+    "contractName": "AzPrMachineAxisObjectiveContract",
+    "objectiveId": "cycle-dps-no-toughness",
+    "classification": "primary",
+    "formalEligible": true,
+    "targetPolicy": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "scoring": {
+      "metric": "closed-cycle-hp-dps",
+      "direction": "maximize",
+      "damageBasis": "settled-post-defense-hp-damage",
+      "formula": "loopHpDamage / loopDurationSeconds",
+      "finalRankingEligibility": "accepted-loop-proof-only"
+    },
+    "proofRequirements": {
+      "loopBoundary": "strict-half-open-replayable-loop",
+      "actorBoundary": "non-degrading-and-next-loop-ready",
+      "enemyBoundary": "defense-and-level-inputs-stable",
+      "toughnessSettlement": "disabled",
+      "killRequired": false,
+      "enemyProfile": "resolved-defense-and-level-inputs"
+    },
+    "objectiveHash": "c8d9866a1bf9431b"
+  },
+  "enemySettlementTiming": null,
   "assumptions": {
     "enemyHp": "infinite",
     "toughness": "disabled",
@@ -150,8 +180,17 @@
   "metrics": {
     "loopHpDamage": 22.44996643,
     "cycleDps": 4.48999329,
-    "combatHitCount": 4
+    "combatHitCount": 4,
+    "healing": {
+      "requestedHealing": 0,
+      "effectiveHealing": 0,
+      "overhealing": 0,
+      "effectiveHps": 0,
+      "settlementCount": 0
+    }
   },
+  "formalScore": 4.48999329,
+  "formalStatus": "formal-score-ready",
   "sampleStatistics": {
     "sampleCount": 1,
     "loopHpDamage": {
@@ -182,6 +221,64 @@
         "p95": 4.48999329
       }
     },
+    "healing": {
+      "requestedHealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "effectiveHealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "overhealing": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      },
+      "effectiveHps": {
+        "count": 1,
+        "mean": 0,
+        "variance": 0,
+        "min": 0,
+        "max": 0,
+        "quantiles": {
+          "p5": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 0,
+          "p95": 0
+        }
+      }
+    },
     "contributionConservation": {
       "byActor": {
         "sampleMean": 22.44996643,
@@ -198,6 +295,20 @@
       "byHit": {
         "sampleMean": 22.44996643,
         "contributionMean": 22.44996643,
+        "difference": 0,
+        "conserved": true
+      }
+    },
+    "healingContributionConservation": {
+      "healingBySourceActor": {
+        "sampleMean": 0,
+        "contributionMean": 0,
+        "difference": 0,
+        "conserved": true
+      },
+      "healingBySourceAction": {
+        "sampleMean": 0,
+        "contributionMean": 0,
         "difference": 0,
         "conserved": true
       }
@@ -284,7 +395,9 @@
         "lastFrame": 116,
         "sampleCount": 1
       }
-    ]
+    ],
+    "healingBySourceActor": [],
+    "healingBySourceAction": []
   },
   "replayProof": {
     "stable": true,
@@ -429,6 +542,34 @@
           "equal": true,
           "start": [],
           "end": []
+        },
+        {
+          "dimension": "enemy",
+          "equal": true,
+          "start": {
+            "hp": 8628,
+            "maxHp": 8628,
+            "toughness": 6667,
+            "maxToughness": 6667,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          },
+          "end": {
+            "hp": 8628,
+            "maxHp": 8628,
+            "toughness": 6667,
+            "maxToughness": 6667,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          }
         },
         {
           "dimension": "shields",
@@ -578,6 +719,34 @@
           "equal": true,
           "start": [],
           "end": []
+        },
+        {
+          "dimension": "enemy",
+          "equal": true,
+          "start": {
+            "hp": 8628,
+            "maxHp": 8628,
+            "toughness": 6667,
+            "maxToughness": 6667,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          },
+          "end": {
+            "hp": 8628,
+            "maxHp": 8628,
+            "toughness": 6667,
+            "maxToughness": 6667,
+            "inBreak": false,
+            "breakPhase": "normal",
+            "breakElapsedMs": 0,
+            "recoveryDelayRemainingMs": 0,
+            "defeated": false,
+            "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+          }
         },
         {
           "dimension": "shields",
@@ -764,9 +933,11 @@
           "toughness": 6667,
           "maxToughness": 6667,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]",
           "valueShields": [],
           "hitCountShields": []
         },
@@ -908,9 +1079,11 @@
           "toughness": 6667,
           "maxToughness": 6667,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]",
           "valueShields": [],
           "hitCountShields": []
         },
@@ -1052,9 +1225,11 @@
           "toughness": 6667,
           "maxToughness": 6667,
           "inBreak": false,
+          "breakPhase": "normal",
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
           "defeated": false,
+          "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]",
           "valueShields": [],
           "hitCountShields": []
         },
@@ -1134,17 +1309,19 @@
       "issues": [],
       "hashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
-        "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
-        "evaluation": "412605349bbf2fe3"
+        "input": "cc53bc2acd1f0f31",
+        "data": "9eb958f868556074",
+        "trace": "4df35bdf55f39489",
+        "evaluation": "412605349bbf2fe3",
+        "build": "44924dca0014425b"
       },
       "proofHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
-        "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
-        "evaluation": "412605349bbf2fe3"
+        "input": "cc53bc2acd1f0f31",
+        "data": "9eb958f868556074",
+        "trace": "4df35bdf55f39489",
+        "evaluation": "412605349bbf2fe3",
+        "build": "44924dca0014425b"
       },
       "firstCycle": {
         "interval": "[start,end)",
@@ -1224,7 +1401,103 @@
             "firstFrame": 116,
             "lastFrame": 116
           }
-        ]
+        ],
+        "enemySettlementPackets": [
+          {
+            "absoluteFrame": 71,
+            "timeMs": 1183.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 55,
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "preDefenseHpDamage": 69.75999450683594,
+            "requestedHpDamage": 4.0999908447265625,
+            "effectiveHpDamage": 4.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 88,
+            "timeMs": 1466.666667,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 76,
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "preDefenseHpDamage": 113.3599853515625,
+            "requestedHpDamage": 6.149993896484375,
+            "effectiveHpDamage": 6.149993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 116,
+            "timeMs": 1933.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 107,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 6.0999908447265625,
+            "effectiveHpDamage": 6.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 121,
+            "timeMs": 2016.666666,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 118,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 6.0999908447265625,
+            "effectiveHpDamage": 6.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          }
+        ],
+        "enemyStateTransitions": [],
+        "healing": {
+          "requestedHealing": 0,
+          "effectiveHealing": 0,
+          "overhealing": 0,
+          "effectiveHps": 0,
+          "settlementCount": 0,
+          "bySourceActor": [],
+          "bySourceAction": []
+        }
       },
       "secondCycle": {
         "interval": "[start,end)",
@@ -1304,7 +1577,103 @@
             "firstFrame": 416,
             "lastFrame": 416
           }
-        ]
+        ],
+        "enemySettlementPackets": [
+          {
+            "absoluteFrame": 371,
+            "timeMs": 6183.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 324,
+            "actionId": "cycle-ruby-a1",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+            "preDefenseHpDamage": 69.75999450683594,
+            "requestedHpDamage": 4.0999908447265625,
+            "effectiveHpDamage": 4.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 388,
+            "timeMs": 6466.666667,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 340,
+            "actionId": "cycle-ruby-a2",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+            "preDefenseHpDamage": 113.3599853515625,
+            "requestedHpDamage": 6.149993896484375,
+            "effectiveHpDamage": 6.149993896484375,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 416,
+            "timeMs": 6933.333333,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 366,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 6.0999908447265625,
+            "effectiveHpDamage": 6.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          },
+          {
+            "absoluteFrame": 421,
+            "timeMs": 7016.666666,
+            "runtimePhasePriority": 0,
+            "runtimePriority": 0,
+            "runtimeSequenceIndex": 372,
+            "actionId": "cycle-ruby-a3",
+            "actorId": "actor-103002",
+            "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+            "preDefenseHpDamage": 104.63999938964844,
+            "requestedHpDamage": 6.0999908447265625,
+            "effectiveHpDamage": 6.0999908447265625,
+            "overkill": 0,
+            "inBreakForHpDamage": false,
+            "hpDamageMultiplier": 1,
+            "toughnessBefore": 6667,
+            "toughnessAfter": 6667,
+            "toughnessDamage": 0,
+            "breakTriggered": false,
+            "deathTriggered": false
+          }
+        ],
+        "enemyStateTransitions": [],
+        "healing": {
+          "requestedHealing": 0,
+          "effectiveHealing": 0,
+          "overhealing": 0,
+          "effectiveHps": 0,
+          "settlementCount": 0,
+          "bySourceActor": [],
+          "bySourceAction": []
+        }
       },
       "replayProof": {
         "stable": true,
@@ -1449,6 +1818,34 @@
               "equal": true,
               "start": [],
               "end": []
+            },
+            {
+              "dimension": "enemy",
+              "equal": true,
+              "start": {
+                "hp": 8628,
+                "maxHp": 8628,
+                "toughness": 6667,
+                "maxToughness": 6667,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+              },
+              "end": {
+                "hp": 8628,
+                "maxHp": 8628,
+                "toughness": 6667,
+                "maxToughness": 6667,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+              }
             },
             {
               "dimension": "shields",
@@ -1598,6 +1995,34 @@
               "equal": true,
               "start": [],
               "end": []
+            },
+            {
+              "dimension": "enemy",
+              "equal": true,
+              "start": {
+                "hp": 8628,
+                "maxHp": 8628,
+                "toughness": 6667,
+                "maxToughness": 6667,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+              },
+              "end": {
+                "hp": 8628,
+                "maxHp": 8628,
+                "toughness": 6667,
+                "maxToughness": 6667,
+                "inBreak": false,
+                "breakPhase": "normal",
+                "breakElapsedMs": 0,
+                "recoveryDelayRemainingMs": 0,
+                "defeated": false,
+                "profileSourceIdentity": "outputs/combat-enemy-break-profiles-20260718.json#enemyId=300032|NewTable/template_value.rows[id=300032].baseAttribute[201-221]"
+              }
             },
             {
               "dimension": "shields",
@@ -2099,10 +2524,11 @@
     ]
   },
   "hashes": {
-    "input": "c549265f73e6d6c1",
-    "data": "cda8554f0862b7dd",
-    "trace": "04faed684dbc0687",
+    "input": "cc53bc2acd1f0f31",
+    "data": "9eb958f868556074",
+    "trace": "4df35bdf55f39489",
     "evaluation": "412605349bbf2fe3",
-    "cycle": "1a4b67534ae2debb"
+    "cycle": "205d9e0fd454843c",
+    "build": "44924dca0014425b"
   }
 }

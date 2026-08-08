@@ -33,6 +33,9 @@ export function normalizeCombatScenario(value = null) {
               value.optimizationScenarioPolicy
             ),
         }),
+    ...(value?.objectiveContract == null
+      ? {}
+      : { objectiveContract: structuredClone(value.objectiveContract) }),
     ...(value?.target == null
       ? {}
       : { target: normalizeCombatTargetPolicy(value.target) }),

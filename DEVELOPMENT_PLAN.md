@@ -1083,3 +1083,12 @@ npm run test -- --run
 - 套装 N/A 不使用独立硬编码：证据、灵子/套装生成器和资格门禁共同绑定 scenario policy `c241492911786b34` 与 roster policy `760e59dac2c7c1c5`，政策漂移即 fail-closed。证据文件 `set-three-source-identity-evidence.json` 为 13,883B，SHA-256 `1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8`。
 - 生成资格现为套装技能 `12/12 optimization-ready`、视觉目录 `254/254`；套装阻断清零。全局剩余 16 个唯一阻断均属于角色（1 个静态 profile、6 个验收未发布、9 个角色未 optimization-ready），因此 M12-C 与正式搜索仍锁定。
 - E21 已完成；M12-C 前不再有套装机制任务。下一步仍是末音产品视觉签收、其余 5 名正式角色、STARBORN 统一对象、绑定矩阵与 trial-release/循环重放总门禁。
+
+## 12. M12 优化器正式主指标合同重构（2026-08-08）
+
+- 正式主指标固定为 `cycle-dps-no-toughness`、`cycle-dps-with-toughness`、`fastest-kill`，默认值为 `cycle-dps-no-toughness`。`damage`、`burst`、`toughness` 仅保留为 `legacy-diagnostic` 兼容入口和贡献诊断；formal admission、trial release 与 M12-C 必须在模拟前拒绝 legacy objective，未知、重命名、缺字段、额外字段、hash 或定义漂移同样 fail closed。
+- 两个 cycle 指标只接受严格 `[startFrame,endFrame)`、可重放且连续两轮稳定的 loop proof。无韧性目标使用无限 HP、实际等级/防御，关闭韧性/破韧/死亡截断；有韧性目标使用无限 HP、实际最大韧性及恢复/破韧规则，并把当前韧性、broken/normal phase、破韧与恢复剩余时间、敌人未来伤害相关状态纳入边界。正式 score 均为 `loopHpDamage / loopDurationSeconds`，固定时长 damage 不得冒充循环分数。
+- `fastest-kill` 只消费带来源身份/hash/status 的严格 `AzPrEnemyProfile`，要求实际 HP、等级、DEF/MDEF、元素防御、最大韧性和破韧规则全部解析；最终排名先比较真实 kill 可行性，再按首次致死 frame、timeMs 和完整 runtime cursor 排序。报告保留 requested/effective HP damage、overkill、致死 action/hit，首死后截断后续生命伤害和削韧。等级成长公式仍由 `feature/m12-b3-enemy-level` 单独负责，本批只提供统一消费边界。
+- 当前 runtime 逐包语义已锁为：破韧发生包按入包前 unbroken 状态结算 HP（1x），同帧后续包按 canonical source sequence 看见 broken 后结算（2x）；破韧结束区间右开，weakness state tick 先于同帧 combat hit，因此退出帧命中为 1x。客户端原生同帧/恢复顺序证据尚未闭合，所以 `m12-enemy-settlement-runtime-v1` 明确 `formalReady=false`；有韧 cycle 与 fastest kill 正式模式以 `machine-axis-enemy-settlement-client-order-open` 阻断，显式诊断 proof 的 `formalScore` 仍为 null。
+- batch/search/cycle/kill 统一报告 `requestedHealing`、`effectiveHealing`、`overhealing`、`effectiveHps`、`settlementCount` 及按 source actor/action 的稳定贡献行。统计只消费 canonical 实际治疗 settlement；满血直接治疗计 requested/overheal 且 effective=0，护盾与 suppressed 事件不混入。cycle 按半开区间、kill 按完整 runtime cursor 截断。
+- 共同场景仍为 `m12c-zero-distance-passive-boss-v1`：距离 0、投射物立即命中、敌人静止且不攻击，不产生闪避/格挡/反击刺激；排除动作在搜索前拒绝。objective、target policy、enemy profile 与结算时序合同进入 canonical input/data/trace/build hash。M12-C、formal search 与正式优化运行继续锁定，本批不解锁也不执行正式优化。

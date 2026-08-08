@@ -1,4 +1,9 @@
 import generatedPolicy from '../data/generated/optimization-scenario-policy.json' with { type: 'json' };
+import {
+  MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
+  getMachineAxisObjectiveContract,
+  validateMachineAxisObjectivePolicy,
+} from '../machine-axis/machineAxisObjectiveContract.js';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
 
 export const OPTIMIZATION_SCENARIO_POLICY_SCHEMA_VERSION = 1;
@@ -32,6 +37,18 @@ export function getOptimizationCandidateRosterPolicy() {
   return generatedPolicy.candidateRoster;
 }
 
+export function getOptimizationObjectivePolicy() {
+  return generatedPolicy.objectivePolicy;
+}
+
+export function getOptimizationObjectiveContract(
+  objectiveId = MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE
+) {
+  const contract =
+    generatedPolicy.objectivePolicy?.objectivesById?.[objectiveId];
+  return contract == null ? null : structuredClone(contract);
+}
+
 export function validateOptimizationScenarioPolicy(policy = generatedPolicy) {
   const copy = structuredClone(policy);
   const policyHash = copy.policyHash;
@@ -48,6 +65,25 @@ export function validateOptimizationScenarioPolicy(policy = generatedPolicy) {
   }
   if (policy.reason !== OPTIMIZATION_SCENARIO_POLICY_REASON) {
     issues.push('optimization-scenario-policy-reason-invalid');
+  }
+  const objectivePolicyValidation = validateMachineAxisObjectivePolicy(
+    policy.objectivePolicy
+  );
+  if (!objectivePolicyValidation.valid) {
+    issues.push(
+      ...objectivePolicyValidation.issues.map(
+        issue => `optimization-scenario-${issue.code}`
+      )
+    );
+  }
+  const defaultObjective = getMachineAxisObjectiveContract(
+    MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE
+  );
+  if (
+    hashCanonicalValue(policy.assumptions?.targetPolicy) !==
+    hashCanonicalValue(defaultObjective?.targetPolicy)
+  ) {
+    issues.push('optimization-scenario-default-target-policy-mismatch');
   }
   if (rosterHash !== hashCanonicalValue(rosterCopy)) {
     issues.push('optimization-candidate-roster-hash-mismatch');
@@ -71,6 +107,58 @@ export function createOptimizationScenarioPolicyBinding() {
     rosterPolicyId: generatedPolicy.candidateRoster.rosterPolicyId,
     rosterHash: generatedPolicy.candidateRoster.rosterHash,
   };
+}
+
+export function createOptimizationObjectivePolicyBinding() {
+  return {
+    policyId: generatedPolicy.objectivePolicy.policyId,
+    objectivePolicyHash: generatedPolicy.objectivePolicy.objectivePolicyHash,
+    defaultPrimaryObjectiveId:
+      generatedPolicy.objectivePolicy.defaultPrimaryObjectiveId,
+  };
+}
+
+export function validateOptimizationObjectivePolicyBinding(value) {
+  const expected = createOptimizationObjectivePolicyBinding();
+  const issueCodes = {
+    policyId: 'optimization-objective-policy-id-mismatch',
+    objectivePolicyHash: 'optimization-objective-policy-hash-mismatch',
+    defaultPrimaryObjectiveId:
+      'optimization-objective-policy-default-primary-objective-mismatch',
+  };
+  const actual = isRecord(value)
+    ? {
+        policyId: textOrNull(value.policyId),
+        objectivePolicyHash: textOrNull(value.objectivePolicyHash),
+        defaultPrimaryObjectiveId: textOrNull(value.defaultPrimaryObjectiveId),
+      }
+    : {
+        policyId: null,
+        objectivePolicyHash: null,
+        defaultPrimaryObjectiveId: null,
+      };
+  const issues = [];
+  for (const key of Object.keys(expected)) {
+    if (actual[key] !== expected[key]) {
+      issues.push({
+        code: issueCodes[key],
+        expected: expected[key],
+        actual: actual[key],
+      });
+    }
+  }
+  if (
+    !isRecord(value) ||
+    Object.keys(value).sort().join('|') !==
+      Object.keys(expected).sort().join('|')
+  ) {
+    issues.push({
+      code: 'optimization-objective-policy-binding-shape-invalid',
+      expected: Object.keys(expected).sort(),
+      actual: isRecord(value) ? Object.keys(value).sort() : [],
+    });
+  }
+  return { valid: issues.length === 0, issues, actual, expected };
 }
 
 export function normalizeOptimizationScenarioPolicyBinding(value = null) {
@@ -136,7 +224,9 @@ export function isOptimizationCandidateCharacterInScope(characterId) {
 
 export function classifyOptimizationCandidateCharacter(characterId) {
   const normalizedCharacterId = Number(characterId);
-  const inScope = isOptimizationCandidateCharacterInScope(normalizedCharacterId);
+  const inScope = isOptimizationCandidateCharacterInScope(
+    normalizedCharacterId
+  );
   return {
     rosterPolicyId: generatedPolicy.candidateRoster.rosterPolicyId,
     rosterHash: generatedPolicy.candidateRoster.rosterHash,
@@ -242,10 +332,12 @@ export function createOptimizationScenarioRequirementClassifier(profile) {
 
 function collectActionControlIds(actions) {
   return new Set(
-    actions.flatMap(action => [
-      Number(action.controlSkillId),
-      ...collectIdentityControlIds(action),
-    ]).filter(Number.isInteger)
+    actions
+      .flatMap(action => [
+        Number(action.controlSkillId),
+        ...collectIdentityControlIds(action),
+      ])
+      .filter(Number.isInteger)
   );
 }
 
@@ -273,4 +365,8 @@ function uniqueIntegers(values) {
 function textOrNull(value) {
   const text = String(value ?? '').trim();
   return text || null;
+}
+
+function isRecord(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }

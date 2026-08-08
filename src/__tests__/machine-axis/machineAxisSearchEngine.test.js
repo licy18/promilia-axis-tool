@@ -46,7 +46,7 @@ describe('Machine Axis search engine', () => {
       beamWidth: 8,
       topN: 5,
       maxDepth: 24,
-      objective: 'damage',
+      objective: 'cycle-dps-no-toughness',
       maxDamagePerMsBound: 10,
       includeSwitch: true,
     });
@@ -167,6 +167,7 @@ describe('Machine Axis search engine', () => {
       maxActionsPerOwner: 2,
       maxKiboActions: 1,
       includeSwitch: false,
+      objective: 'damage',
     };
     const first = await engine.search({ contract: axis, options });
     expect(first.kind).toBe('azpr-machine-axis-search');
