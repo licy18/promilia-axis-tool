@@ -2146,3 +2146,20 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 真实机制闭合：`251` 调谐伤害、`252` 每层暴击率、`253` 每层暴击伤害已由 250 印记运行时消费；印记 `0→2→4→5`、封顶刷新 `5→5`、同帧当前包、5 秒伤害冷却及右开到期均由真实 trace 证明。critical 0%/100%、不可暴击拒绝、hit 前属性变化和主动追击窗口内外边界均由 canonical 结算断言，而非手写 facts。
 - 产品/来源 N/A：`102001093` 属被排除的完美招架反击；`battle-element:799` 仍为 M23 客户端孤儿，其 `10900113/map0/frame183` 可达根之 judgment/消费成功分支不可解析且无原生消费者，未生成投影、未实现假逻辑。旧 11 个唯一 gap 曾展开成 28 个 blocked matrix rows，是同一 selector 在 golden、Machine Axis、source/requirement 维度重复绑定所致；政策重算先得到 required `156`、pass `133`、N/A `56`、blocked rows `23`、unique gap `10`，再经真实机制/协议闭环达到上述 `142/142/70/0`。
 - 当前 optimization qualification 由生成器重算为 `9/43/62/137/12`，source snapshot `39acb167dbcf7801`、roster `130c9cd5f5192ad6`、manifests `44f387f512518c29`、ledger `9e046d2a3c1f56fa`、binding matrix `7f2ea0c47f0b6845`、catalog `68996d22cce80720`，阻断 18，formal admission 仍锁定。Kibo DNA 继续规范为 `[]`；不进入下个角色、E20-3、M12-C 或正式搜索。
+
+### M12-B3 敌人等级数值闭环（2026-08-08）
+
+本阶段只修复通用敌人数值构造，不进入 M12-C 正式搜索，也不改变末音/米蒂机制。`蓝原数据机制导论.docx` 仅用于提出检索假设；最终实现只采用 NewTable 与当前客户端 GameAssembly 消费链共同证明的语义。
+
+- 等级来源：`EntityLevelUtility.GetLevel`（RVA `0x1877DD0`）按 `WorldDifficult / Fix / Dungeon / Task` 策略得到 `CreateMonsterData.lv`。世界/副本难度在这里选择等级；`DataPropertyUtility.InitMonsterData` 不读取独立 difficulty 倍率。
+- 曲线选择：`DataPropertyUtility.InitMonsterData`（RVA `0x16B6880`）读取 `TDEnemy / TDUnitProperty / TDEnemyPack`。`enemy_pack.templateID > 0` 时使用该 template，等于 0 才回退 `enemy.enemyType`；等级模板值 ID 为 `(3000 + selector) * 1000 + level`。
+- 属性结算：`FormulaUtility.CalculateAttribute`（RVA `0x187C460`）逐项执行基础模板值乘等级模板系数。属性 ID `1/3/4/5/201/229` 除以 `10000`；因此 `ATK / MAXHP / DEF / MDEF / WEAKNESS_POINT_MAX` 均为 `base * coefficient / 10000`。元素抗性 ID `61..70` 除数为 `1`，当前等级行系数均为 `1`，所以保留基础模板值。
+- 后处理边界：场景 `injectAttrs` 可覆盖已结算属性，随后 `attScale / 10000` 统一缩放。Workbench 没有这两项场景输入，明确标记为未配置，不猜 Boss、怪物类型或世界/副本独立倍率。`template_difficulty` 仅作交叉索引；本客户端活跃链直接构造 `TDTemplateValue` ID，未找到旧 `Template_difficulty.GetDifficulty` 包装器的直接调用引用。
+- 伤害等级解耦：属性成长只在 `resolveEnemyLevelStats` 发生；伤害运行时仍单独把 `scenario.enemy.level` 作为 `targetLevel`，用于防御因子 `5 * (targetLevel + 100)` 与 `template_levelpressure[1000 + targetLevel - attackerLevel]`。两者不得互相替代或重复应用。
+- 默认反例：迅狼 `300032` 的原始模板为 `ATK=10668 / MAXHP=8628 / DEF=MDEF=9000 / WEAKNESS_POINT_MAX=6667`；`enemy_pack 300032` 选 template 1，Lv80 行 `3001080` 系数为 `14033 / 100578 / 900 / 900 / 40231`。有效 Lv80 基线因此为 `ATK=14970.4044 / MAXHP=86778.6984 / DEF=MDEF=810 / WEAKNESS_POINT_MAX=26822.0077`，原始 `8628` 不再冒充最终生命。
+- 实现合同：`enemy-level-profiles.json` 由原始表确定性生成，compiler、headless、Machine Axis、cycle 与 Workbench 共用同一纯解析器；切换敌人或等级会重新解析。`hpMultiplier / defenseMultiplier / toughnessMultiplier` 仅在等级成长后作为最终用户倍率。缺默认 pack、缺 template、缺精确等级行均 fail-closed，不插值、不外推、不套用角色成长公式。
+- 显示与 M12-C 边界：Workbench 显示有效最终面板与来源状态；缺证据时显示“暂无有效值”。既有静态无限 HP / 不因死亡截断的试点政策不变，但运行状态的 `maxHp` 使用真实等级成长值，以保证百分比、曲线和面板正确。
+- 生成与守门：11 个 profile 共 1,180 条精确等级行；208 个可用敌人中 172 个可解析，36 个因无默认 enemy pack 明确 fail-closed。敌人数值聚焦、canonical/Machine Axis/草稿回放、cycle 与 Workbench 回归均通过，生产构建和 Machine Axis CLI 构建通过，production import / Workbench data / action status / applied source binding 审计 clean。
+- 隔离边界：完整 `audit:verified-combat` 已证明新链进入角色权威运行时，但旧角色 golden 仍锁定原始敌人模板结果（首个反例 101003：总 HP 伤害期望 `78149`，新链 `160349`）。本分支不重写末音、米蒂或其他角色机制/golden，留待上游在合并敌人数值后统一重基线。包体守门在基线已超预算，本阶段没有提高预算；Workbench gzip `533194→564225`，总 JS gzip `1064031→1095318`，作为发布边界单列。
+
+结构化证据与 RVA、属性 ID、默认数值反例、排除路径见 `reports/m12/m12-b3-enemy-level-evidence-20260808.json`；生成资料见 `src/data/generated/enemy-level-profiles.json`。

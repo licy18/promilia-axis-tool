@@ -652,7 +652,7 @@ describe('Workbench view', () => {
     ).toBe('12,461');
     expect(
       wrapper.find('[data-testid="workbench-runtime-enemy-hp-state"]').text()
-    ).toBe('剩余 0');
+    ).toBe('剩余 74,318');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-delta"]')
@@ -662,7 +662,7 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 6,667');
+    ).toBe('剩余 26,822 / 26,822');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-count"]').text()
     ).toBe('1 日志');
@@ -747,8 +747,10 @@ describe('Workbench view', () => {
     );
     expect(runtimeCurvePoints[0].attributes('data-value')).toBe('12461');
     expect(runtimeCurvePoints[0].attributes('data-curve-mode')).toBe('delta');
-    expect(runtimeCurvePoints[0].attributes('data-state-value')).toBe('0');
-    expect(runtimeCurvePoints[0].attributes('data-overrun')).toBe('3833');
+    expect(runtimeCurvePoints[0].attributes('data-state-value')).toBe(
+      '74317.698'
+    );
+    expect(runtimeCurvePoints[0].attributes('data-overrun')).toBe('0');
 
     await wrapper
       .find(
@@ -768,10 +770,10 @@ describe('Workbench view', () => {
       '[data-testid="workbench-runtime-resource-chart-point"][data-track-key="enemyHpDamage"]'
     );
     expect(stateModeHpPoint.attributes('data-curve-mode')).toBe('state');
-    expect(stateModeHpPoint.attributes('data-value')).toBe('0');
+    expect(stateModeHpPoint.attributes('data-value')).toBe('74317.698');
     expect(stateModeHpPoint.attributes('data-cumulative')).toBe('12461');
-    expect(stateModeHpPoint.attributes('data-state-value')).toBe('0');
-    expect(stateModeHpPoint.attributes('data-overrun')).toBe('3833');
+    expect(stateModeHpPoint.attributes('data-state-value')).toBe('74317.698');
+    expect(stateModeHpPoint.attributes('data-overrun')).toBe('0');
     const stateModeSeriesRows = wrapper.findAll(
       '[data-testid="workbench-runtime-resource-chart-series"]'
     );
@@ -779,7 +781,7 @@ describe('Workbench view', () => {
       stateModeSeriesRows
         .find(row => row.attributes('data-series-key') === 'enemy-hp')
         ?.text()
-    ).toContain('剩余 0 / 溢出 3,833');
+    ).toContain('剩余 74,318');
     expect(
       stateModeSeriesRows
         .filter(row => row.attributes('data-track-key') === 'selfEnergyChange')
@@ -808,7 +810,7 @@ describe('Workbench view', () => {
     ).toHaveLength(1);
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-row"]').text()
-    ).toContain('普通攻击 · HP -8,628 · 韧性 0 · SP 0');
+    ).toContain('普通攻击 · HP -12,461 · 韧性 0 · SP 0');
     expect(
       wrapper.find('[data-testid="workbench-runtime-sim-log-detail"]').text()
     ).toContain('action-0001|applied-frame-0-point-0');
@@ -1456,7 +1458,7 @@ describe('Workbench view', () => {
     expect(actionResultDetailRows.delta.text()).toBe('Delta12,461');
     expect(actionResultDetailRows.cumulative.text()).toBe('累计12,461');
     expect(actionResultDetailRows['state-status'].text()).toBe(
-      '剩余 / 状态0 · raw-hp-projection'
+      '剩余 / 状态74,317.698 · raw-hp-projection'
     );
     const actionContributionPanel = wrapper.find(
       '[data-testid="workbench-action-contribution-panel"]'
@@ -6155,12 +6157,12 @@ describe('Workbench view', () => {
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-state-value"]')
         .text()
-    ).toBe('0');
+    ).toBe('74,318');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-selected-detail-overrun"]')
-        .text()
-    ).toBe('3,833');
+        .exists()
+    ).toBe(false);
     expect(
       wrapper
         .find(
@@ -7280,7 +7282,7 @@ describe('Workbench view', () => {
           '[data-testid="workbench-runtime-resource-chart-selection-primary-state"]'
         )
         .text()
-    ).toBe('累计 12,461 · 剩余 0 · 溢出 3,833');
+    ).toBe('累计 12,461 · 剩余 74,318');
     const runtimeCurveSelectionRows = Object.fromEntries(
       runtimeCurveSelection
         .findAll(
@@ -7893,15 +7895,15 @@ describe('Workbench view', () => {
     const toughnessStat = wrapper.find(
       '[data-testid="workbench-enemy-toughness-stat"]'
     );
-    expect(toughnessStat.text()).toContain('6,667 / 6,667');
+    expect(toughnessStat.text()).toContain('26,822 / 26,822');
     expect(toughnessStat.attributes('data-toughness-source-status')).toBe(
-      'toughness-config-derived-from-enemy-base-attribute'
+      'toughness-config-derived-from-client-level-growth'
     );
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 6,667');
+    ).toBe('剩余 26,822 / 26,822');
 
     await wrapper
       .find('[data-testid="workbench-enemy-toughness-multiplier-input"]')
@@ -7911,12 +7913,12 @@ describe('Workbench view', () => {
       .setValue('50');
     await nextTick();
 
-    expect(toughnessStat.text()).toContain('6,667 / 13,334');
+    expect(toughnessStat.text()).toContain('26,822 / 53,644');
     expect(
       wrapper
         .find('[data-testid="workbench-runtime-enemy-toughness-state"]')
         .text()
-    ).toBe('剩余 6,667 / 13,334');
+    ).toBe('剩余 26,822 / 53,644');
 
     await wrapper.find('[data-testid="workbench-save-draft"]').trigger('click');
     expect(
@@ -7958,7 +7960,7 @@ describe('Workbench view', () => {
     expect(fireRow().text()).toContain('火');
     expect(fireRow().text()).toContain('0%');
     expect(fireRow().attributes('data-source-status')).toBe(
-      'azpr-enemy-base-attribute'
+      'azpr-client-level-grown-attribute'
     );
     expect(fireInput().element.value).toBe('');
 
@@ -8307,11 +8309,7 @@ describe('Workbench view', () => {
       {
         selection,
         teamSlots,
-        actorConfigs: normalizeWorkbenchActorConfigs(
-          [],
-          selection,
-          teamSlots
-        ),
+        actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
         mechanicsProfileSelection:
           createVerifiedWorkbenchMechanicsProfileSelection(),
         actionDrafts: [
@@ -8356,9 +8354,11 @@ describe('Workbench view', () => {
       .trigger('click');
     await settleWorkbenchAsyncPanels();
     if (
-      wrapper.find(
-        '[data-testid="workbench-side-inspector-tab"][data-inspector-panel="properties"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-side-inspector-tab"][data-inspector-panel="properties"]'
+        )
+        .exists()
     ) {
       await selectSideInspectorPanel(wrapper, 'properties');
     }
@@ -8376,16 +8376,15 @@ describe('Workbench view', () => {
     const savedSwitch = savedDraft.actionDrafts.find(
       action => action.id === 'switch-to-xiaoyu-hit-edit'
     );
-    const terminalHitIdentity =
-      verifiedCombatMechanicsPackage.controlBindings
-        .find(binding => Number(binding.controlSkillId) === 10101021)
-        .hits.find(hit => Number(hit.elementId) === 101010177).hitIdentity;
+    const terminalHitIdentity = verifiedCombatMechanicsPackage.controlBindings
+      .find(binding => Number(binding.controlSkillId) === 10101021)
+      .hits.find(hit => Number(hit.elementId) === 101010177).hitIdentity;
     expect(savedSwitch.hitOverrides).toEqual({
       [terminalHitIdentity]: { willHit: false },
     });
-    expect(
-      savedDraft.actionDrafts.some(action => action.id === childId)
-    ).toBe(false);
+    expect(savedDraft.actionDrafts.some(action => action.id === childId)).toBe(
+      false
+    );
   }, 30000);
 
   it('keeps the Jade charged intent while projecting the A5-derived special form and occupancy', async () => {
@@ -8818,9 +8817,7 @@ describe('Workbench view', () => {
     );
     expect(sourceAction).toBeTruthy();
     expect(chargedAction).toBeTruthy();
-    expect(
-      msToFrame(chargedAction.startMs - sourceAction.startMs)
-    ).toBe(120);
+    expect(msToFrame(chargedAction.startMs - sourceAction.startMs)).toBe(120);
 
     const setupState = wrapper.vm.$.setupState;
     const readSetupValue = value => value?.value ?? value;
@@ -8868,9 +8865,9 @@ describe('Workbench view', () => {
     const operationMarker = wrapper.get(
       `[data-testid="workbench-timeline-operation-marker"][data-action-id="${chargedAction.id}"]`
     );
-    expect(
-      msToFrame(Number(operationMarker.attributes('data-start-ms')))
-    ).toBe(msToFrame(sourceAction.startMs) + 119);
+    expect(msToFrame(Number(operationMarker.attributes('data-start-ms')))).toBe(
+      msToFrame(sourceAction.startMs) + 119
+    );
     expect(
       msToFrame(Number(operationMarker.attributes('data-execution-start-ms')))
     ).toBe(msToFrame(sourceAction.startMs) + 119);
@@ -8878,9 +8875,11 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     await settleWorkbenchAsyncPanels();
     expect(
-      wrapper.find(
-        `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
-      ).exists()
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
+        )
+        .exists()
     ).toBe(false);
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
     await settleWorkbenchAsyncPanels();
@@ -10364,7 +10363,9 @@ describe('Workbench view', () => {
     ).toBe('3383.333333');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。');
+    ).toContain(
+      '自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。'
+    );
     expect(
       wrapper
         .find(
@@ -11289,11 +11290,9 @@ describe('Workbench view', () => {
     });
     await settleWorkbenchAsyncPanels();
     expect(
-      restored
-        .get(
-          `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
-        )
-        .element.value
+      restored.get(
+        `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
+      ).element.value
     ).toBe('6');
     expect(
       restored
@@ -12527,7 +12526,9 @@ describe('Workbench view', () => {
     await settleWorkbenchAsyncPanels();
     resetWorkbenchPerformanceCounters();
 
-    await wrapper.get('[data-testid="workbench-open-machine-axis"]').trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-open-machine-axis"]')
+      .trigger('click');
     await settleWorkbenchAsyncPanels();
     expect(getWorkbenchPerformanceCounters()).toMatchObject({
       authoritativeCompile: 0,
@@ -12541,7 +12542,7 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': '43a686bc858877ba',
+          'data-canonical-trace-hash': '8f4c419b42fce4e4',
           'data-canonical-trace-action-count': '44',
           'data-machine-axis-import-active': 'true',
         });
@@ -12550,24 +12551,28 @@ describe('Workbench view', () => {
     );
     await settleWorkbenchAsyncPanels();
 
-    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '机器输入 42'
-    );
-    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '实际执行 44'
-    );
+    expect(
+      wrapper.get('[data-testid="machine-axis-summary"]').text()
+    ).toContain('机器输入 42');
+    expect(
+      wrapper.get('[data-testid="machine-axis-summary"]').text()
+    ).toContain('实际执行 44');
     expect(wrapper.get('[data-testid="machine-axis-status"]').text()).toContain(
       '已载入 M11-B 120 秒验收轴'
     );
     expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-action"][data-action-id="xunlang-signature"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="xunlang-signature"]'
+        )
+        .exists()
     ).toBe(true);
     expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
+        )
+        .exists()
     ).toBe(true);
 
     await wrapper
@@ -12589,7 +12594,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('43a686bc858877ba');
+    expect(inspector.attributes('data-trace-hash')).toBe('8f4c419b42fce4e4');
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12608,9 +12613,8 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(
-          wrapper
-            .get('[data-testid="canonical-trace-hit-landed"]')
-            .element.value
+          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element
+            .value
         ).toBe('miss');
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
@@ -12628,9 +12632,10 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('43a686bc858877ba');
+        ).toBe('8f4c419b42fce4e4');
         expect(
-          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
+          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element
+            .value
         ).toBe('hit');
       },
       { timeout: 30_000 }

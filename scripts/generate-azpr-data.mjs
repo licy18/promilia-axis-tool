@@ -88,6 +88,22 @@ const sourceFiles = {
     'NewTable',
     'enemy.json'
   ),
+  enemyPack: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'enemy_pack.json'
+  ),
+  templateDifficulty: path.join(
+    sourceRoot,
+    'Assets',
+    'ResourcesAssets',
+    'Config',
+    'NewTable',
+    'template_difficulty.json'
+  ),
   enemyLang: path.join(
     sourceRoot,
     'Assets',
@@ -341,6 +357,24 @@ const ROLE_PANEL_DESIRED_ATTR_NAMES = [
 ];
 
 const NORMALIZED_BASE_ATTRIBUTE_IDS = new Set([1, 3, 4, 5, 35, 229]);
+const ENEMY_LEVEL_NORMALIZED_ATTRIBUTE_IDS = new Set([1, 3, 4, 5, 201, 229]);
+const ENEMY_LEVEL_ATTRIBUTE_KEYS = Object.freeze([
+  'ATK',
+  'MAXHP',
+  'DEF',
+  'MDEF',
+  'WEAKNESS_POINT_MAX',
+  'NORMAL_DEFENSE',
+  'FIRE_DEFENSE',
+  'WIND_DEFENSE',
+  'EARTH_DEFENSE',
+  'WOOD_DEFENSE',
+  'ICE_DEFENSE',
+  'WATER_DEFENSE',
+  'ELEC_DEFENSE',
+  'LIGHT_DEFENSE',
+  'DARK_DEFENSE',
+]);
 const ENEMY_BASE_DEFENSE_ATTRIBUTE_KEYS = Object.freeze(['DEF', 'MDEF']);
 const ELEMENT_DEFENSE_ATTRIBUTE_KEYS = Object.freeze([
   'NORMAL_DEFENSE',
@@ -703,6 +737,8 @@ const [
   equipmentForms,
   soulessenceForms,
   enemyTable,
+  enemyPackTable,
+  templateDifficultyTable,
   enemyLangTable,
   skillLevelTable,
   skillLevelLangTable,
@@ -732,6 +768,8 @@ const [
   readJson(sourceFiles.equipment),
   readJson(sourceFiles.soulessences),
   readJson(sourceFiles.enemies),
+  readJson(sourceFiles.enemyPack),
+  readJson(sourceFiles.templateDifficulty),
   readJson(sourceFiles.enemyLang),
   readJson(sourceFiles.skillLevel),
   readJson(sourceFiles.skillLevelLang),
@@ -786,6 +824,12 @@ const templateValues = new Map(
   templateValueTable.rows.map(row => [Number(row.id), row])
 );
 const enemyLang = mapRowsById(enemyLangTable.rows);
+const enemyLevelProfiles = buildEnemyLevelProfiles({
+  enemyPackTable,
+  templateDifficultyTable,
+  templateValues,
+  attributeInfoById,
+});
 
 const heroes = await loadHeroModules(sourceFiles.heroModules);
 const elements = mapElements(elementSystem);
@@ -800,7 +844,9 @@ const enemies = mapEnemies(
   enemyLang,
   attributeInfoById,
   unitProperties,
-  templateValues
+  templateValues,
+  enemyPackTable,
+  enemyLevelProfiles
 );
 const kiboSkillControlTimings =
   await buildKiboSkillControlTimingIndex(petTable);
@@ -873,12 +919,14 @@ const firstVerticalSlice = buildFirstVerticalSliceData({
   characters,
   skills,
   enemies,
+  enemyLevelProfiles,
   characterAttributePanelByCharacterId,
 });
 const workbenchSeed = buildWorkbenchSeedData({
   characters,
   skills,
   enemies,
+  enemyLevelProfiles,
   elements,
   equipment,
   kibos,
@@ -940,6 +988,7 @@ await Promise.all([
   writeJson('characters.json', wrapItems(characters, sourceFiles.heroModules)),
   writeJson('skills.json', wrapItems(skills, sourceFiles.heroModules)),
   writeJson('enemies.json', wrapItems(enemies, sourceFiles.enemies)),
+  writeJson('enemy-level-profiles.json', enemyLevelProfiles),
   writeJson('kibos.json', wrapItems(kibos, sourceFiles.kibos)),
   writeJson('equipment.json', wrapItems(equipment, sourceFiles.equipment)),
   writeJson(
@@ -1019,6 +1068,7 @@ function buildManifest(validationReport) {
       characters: 'characters.json',
       skills: 'skills.json',
       enemies: 'enemies.json',
+      enemyLevelProfiles: 'enemy-level-profiles.json',
       kibos: 'kibos.json',
       equipment: 'equipment.json',
       soulessences: 'soulessences.json',
@@ -1045,6 +1095,7 @@ function buildFirstVerticalSliceData({
   characters,
   skills,
   enemies,
+  enemyLevelProfiles,
   characterAttributePanelByCharacterId,
 }) {
   const characterId = 109001;
@@ -1080,6 +1131,9 @@ function buildFirstVerticalSliceData({
       ],
       skills: [skill],
       enemies: [enemy],
+      enemyLevelProfiles: enemyLevelProfiles.profiles.filter(
+        profile => profile.profileId === enemy.levelProfile?.profileId
+      ),
     },
   };
 }
@@ -1113,6 +1167,8 @@ function buildWorkbenchSeedData({
       characters: sourceFiles.heroModules,
       skills: sourceFiles.heroModules,
       enemies: sourceFiles.enemies,
+      enemyPacks: sourceFiles.enemyPack,
+      enemyLevelProfiles: sourceFiles.templateValue,
       elements: sourceFiles.elementSystem,
       equipment: sourceFiles.equipment,
       kibos: sourceFiles.kibos,
@@ -1201,6 +1257,7 @@ function compactEnemy(enemy) {
     name: enemy.name,
     elementIds: enemy.elementIds,
     enemyType: enemy.enemyType,
+    levelProfile: enemy.levelProfile,
     property: {
       id: enemy.property.id,
       exists: enemy.property.exists,
@@ -7944,44 +8001,208 @@ function mapEnemies(
   enemyLang,
   attributeInfoById,
   unitProperties,
-  templateValues
+  templateValues,
+  enemyPackTable,
+  enemyLevelProfiles
 ) {
+  const defaultEnemyPackByEnemyId = new Map(
+    (enemyPackTable.rows ?? [])
+      .filter(row => Number(row.id) === Number(row.enemyId))
+      .map(row => [Number(row.enemyId), row])
+  );
+  const profileByTemplateId = new Map(
+    enemyLevelProfiles.profiles.map(profile => [profile.templateId, profile])
+  );
   return enemyTable.rows
     .filter(enemy => enemy.isUsable === 1)
-    .map(enemy => ({
-      id: Number(enemy.id),
-      name: enemyLang.get(String(enemy.name))?.value ?? String(enemy.name),
-      description: cleanMarkup(enemyLang.get(String(enemy.desc))?.value ?? ''),
-      unitId: numberOrNull(enemy.unitId),
-      enemyType: numberOrNull(enemy.enemyType),
-      elementIds: parseNumberList(enemy.element),
-      hpBarType: numberOrNull(enemy.hpBarType),
-      hpBarWeakness: Boolean(enemy.hpBarWeakness),
-      property: mapProperty(
-        enemy.propertyId,
-        attributeInfoById,
-        unitProperties,
-        templateValues
-      ),
-      worldProperty: mapProperty(
-        enemy.worldPropertyId,
-        attributeInfoById,
-        unitProperties,
-        templateValues
-      ),
-      skillIds: parseSkillSlotList(enemy.skillList, 'enemy').map(
-        item => item.skillId
-      ),
-      passiveSkillIds: parseNumberList(enemy.passiveSkillList),
-      skillAssetPaths: parseAssetPathList(enemy.skillBytesPath),
-      icon: assetFileName(enemy.avatarTexture),
-      petId: numberOrNull(enemy.petId),
-      collisionType: numberOrNull(enemy.collisionType),
-      source: {
-        table: normalizePath(sourceFiles.enemies),
-      },
-    }))
+    .map(enemy => {
+      const enemyId = Number(enemy.id);
+      const enemyPack = defaultEnemyPackByEnemyId.get(enemyId) ?? null;
+      const configuredTemplateId = numberOrNull(enemyPack?.templateID);
+      const fallbackEnemyType = numberOrNull(enemy.enemyType);
+      const templateId =
+        configuredTemplateId && configuredTemplateId > 0
+          ? configuredTemplateId
+          : fallbackEnemyType;
+      const profile = profileByTemplateId.get(Number(templateId)) ?? null;
+      const levelProfile = !enemyPack
+        ? {
+            schemaVersion: 1,
+            status: 'missing-default-enemy-pack',
+            enemyPackId: null,
+            templateId: null,
+            templateIdSource: null,
+            fallbackEnemyType,
+          }
+        : !profile
+          ? {
+              schemaVersion: 1,
+              status: 'missing-enemy-level-template-profile',
+              enemyPackId: Number(enemyPack.id),
+              templateId,
+              templateIdSource:
+                configuredTemplateId && configuredTemplateId > 0
+                  ? 'enemy-pack-template-id'
+                  : 'enemy-type-fallback',
+              fallbackEnemyType,
+            }
+          : {
+              schemaVersion: 1,
+              status: 'ready',
+              enemyPackId: Number(enemyPack.id),
+              templateId,
+              profileId: profile.profileId,
+              templateIdSource:
+                configuredTemplateId && configuredTemplateId > 0
+                  ? 'enemy-pack-template-id'
+                  : 'enemy-type-fallback',
+              fallbackEnemyType,
+              levelPolicy: numberOrNull(enemyPack.levelPolicy),
+              levelParameter: numberOrNull(enemyPack.levelParameter),
+              levelPressureType: numberOrNull(enemyPack.levelpressureType),
+            };
+
+      return {
+        id: enemyId,
+        name: enemyLang.get(String(enemy.name))?.value ?? String(enemy.name),
+        description: cleanMarkup(
+          enemyLang.get(String(enemy.desc))?.value ?? ''
+        ),
+        unitId: numberOrNull(enemy.unitId),
+        enemyType: fallbackEnemyType,
+        levelProfile,
+        elementIds: parseNumberList(enemy.element),
+        hpBarType: numberOrNull(enemy.hpBarType),
+        hpBarWeakness: Boolean(enemy.hpBarWeakness),
+        property: mapProperty(
+          enemy.propertyId,
+          attributeInfoById,
+          unitProperties,
+          templateValues
+        ),
+        worldProperty: mapProperty(
+          enemy.worldPropertyId,
+          attributeInfoById,
+          unitProperties,
+          templateValues
+        ),
+        skillIds: parseSkillSlotList(enemy.skillList, 'enemy').map(
+          item => item.skillId
+        ),
+        passiveSkillIds: parseNumberList(enemy.passiveSkillList),
+        skillAssetPaths: parseAssetPathList(enemy.skillBytesPath),
+        icon: assetFileName(enemy.avatarTexture),
+        petId: numberOrNull(enemy.petId),
+        collisionType: numberOrNull(enemy.collisionType),
+        source: {
+          table: normalizePath(sourceFiles.enemies),
+          enemyPackTable: normalizePath(sourceFiles.enemyPack),
+          templateValueTable: normalizePath(sourceFiles.templateValue),
+        },
+      };
+    })
     .sort(compareById);
+}
+
+function buildEnemyLevelProfiles({
+  enemyPackTable,
+  templateDifficultyTable,
+  templateValues,
+  attributeInfoById,
+}) {
+  const relevantAttributeIds = new Set(
+    [...attributeInfoById.values()]
+      .filter(attribute => ENEMY_LEVEL_ATTRIBUTE_KEYS.includes(attribute.key))
+      .map(attribute => Number(attribute.id))
+  );
+  const attributeDefinitions = [...attributeInfoById.values()]
+    .filter(attribute => relevantAttributeIds.has(Number(attribute.id)))
+    .sort((left, right) => Number(left.id) - Number(right.id))
+    .map(attribute => ({
+      key: attribute.key,
+      attributeId: Number(attribute.id),
+      divisor: ENEMY_LEVEL_NORMALIZED_ATTRIBUTE_IDS.has(Number(attribute.id))
+        ? 10000
+        : 1,
+    }));
+  const templateIds = [
+    ...new Set(
+      (enemyPackTable.rows ?? [])
+        .map(row => Number(row.templateID))
+        .filter(value => Number.isInteger(value) && value > 0)
+    ),
+  ].sort((left, right) => left - right);
+  const templateDifficultyLinks = (templateDifficultyTable.rows ?? []).map(
+    row => ({
+      id: Number(row.id),
+      difficulty: Number(row.difficulty),
+      type: Number(row.type),
+      level: Number(row.level),
+      baseAttributeId: Number(row.baseAttribute),
+    })
+  );
+
+  const profiles = templateIds.map(templateId => {
+    const levels = [];
+    for (let level = 1; level <= 999; level += 1) {
+      const templateValueId = (3000 + templateId) * 1000 + level;
+      const row = templateValues.get(templateValueId);
+      if (!row) {
+        continue;
+      }
+      const attributes = parseAttributePairs(row.baseAttribute);
+      levels.push({
+        level,
+        templateValueId,
+        coefficients: attributeDefinitions.map(definition =>
+          attributes.has(definition.attributeId)
+            ? attributes.get(definition.attributeId)
+            : null
+        ),
+      });
+    }
+    return {
+      schemaVersion: 1,
+      profileId: `azpr-enemy-level-template-${templateId}`,
+      templateId,
+      templateValueIdFormula: `(3000 + ${templateId}) * 1000 + level`,
+      attributeDefinitions,
+      supportedLevels: levels.map(row => row.level),
+      levels,
+    };
+  });
+
+  return {
+    schemaVersion: 1,
+    kind: 'azpr-enemy-level-profile-catalog',
+    generatedAt,
+    status: 'client-runtime-chain-verified',
+    normalizedAttributeIds: [...ENEMY_LEVEL_NORMALIZED_ATTRIBUTE_IDS],
+    sources: {
+      enemyPack: normalizePath(sourceFiles.enemyPack),
+      templateValue: normalizePath(sourceFiles.templateValue),
+      templateDifficultyCrossCheck: normalizePath(
+        sourceFiles.templateDifficulty
+      ),
+      runtimeMethod:
+        'GameAssembly.dll DataPropertyUtility.InitMonsterData RVA 0x16B6880',
+      calculationMethod:
+        'GameAssembly.dll FormulaUtility.CalculateAttribute RVA 0x187C460',
+    },
+    runtimePolicy: {
+      templateSelection:
+        'enemy_pack.templateID when > 0, otherwise enemy.enemyType',
+      templateValueId: '(3000 + selectedTemplateId) * 1000 + enemyLevel',
+      coefficientApplication:
+        'baseValue * levelCoefficient / divisor; divisor is 10000 only for normalizedAttributeIds',
+      injectAttributeOrder:
+        'level-growth -> injectAttrs override -> attScale / 10000',
+      worldAndDungeonDifficulty:
+        'select enemy level through levelPolicy; no separate difficulty read in InitMonsterData',
+    },
+    templateDifficultyLinks,
+    profiles,
+  };
 }
 
 function mapKibos(kiboForms, petTable, skillControlTimings = new Map()) {
@@ -7994,10 +8215,9 @@ function mapKibos(kiboForms, petTable, skillControlTimings = new Map()) {
       const id = numberOrNull(fields.get('id') ?? form.main?.localId);
       const petRow = petRowsById.get(Number(id));
       const actionSpecs = createKiboActionSpecs(petRow);
-      const hasSlot2 = parseSkillSlotList(
-        petRow?.skillList,
-        'skillList'
-      ).some(entry => entry.slot === 2);
+      const hasSlot2 = parseSkillSlotList(petRow?.skillList, 'skillList').some(
+        entry => entry.slot === 2
+      );
       const formSkillPrefixByGroup = {
         signature: '固定技能',
         'normal-attack': hasSlot2 ? '技能2' : '技能1',

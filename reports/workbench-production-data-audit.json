@@ -1,8 +1,9 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "kind": "workbench-production-data-audit",
   "status": {
     "seedProjectionMatches": true,
+    "enemyLevelProfilesMatch": true,
     "kiboActionCatalogMatches": true,
     "loadoutDetailCatalogMatches": true,
     "skillCoreProjectionMatches": true,
@@ -29,6 +30,21 @@
       "equipment": 137,
       "kibos": 122,
       "soulessences": 62
+    }
+  },
+  "enemyLevelProfileAudit": {
+    "checks": {
+      "schemaVersionCurrent": true,
+      "catalogKindCurrent": true,
+      "profilesHaveExactRows": true,
+      "readyEnemyReferencesResolve": true,
+      "unavailableEnemyReferencesFailClosed": true
+    },
+    "counts": {
+      "profiles": 11,
+      "levelRows": 1180,
+      "readyEnemies": 172,
+      "unavailableEnemies": 36
     }
   },
   "skillRuntimeAudit": {
@@ -59,12 +75,13 @@
     "workbenchSkillCoreRegistered": true,
     "workbenchSkillDiagnosticsRegistered": true,
     "workbenchKiboActionCatalogRegistered": true,
-    "workbenchLoadoutDetailCatalogRegistered": true
+    "workbenchLoadoutDetailCatalogRegistered": true,
+    "enemyLevelProfilesRegistered": true
   },
   "gameCatalogSize": {
-    "fullBytes": 5136613,
-    "projectionBytes": 1343056,
-    "savedBytes": 3793557,
-    "reductionPercent": 73.85
+    "fullBytes": 5761776,
+    "projectionBytes": 1929043,
+    "savedBytes": 3832733,
+    "reductionPercent": 66.52
   }
 }

@@ -148,56 +148,56 @@
     ]
   },
   "metrics": {
-    "loopHpDamage": 22.44996643,
-    "cycleDps": 4.48999329,
+    "loopHpDamage": 212.19998169,
+    "cycleDps": 42.43999634,
     "combatHitCount": 4
   },
   "sampleStatistics": {
     "sampleCount": 1,
     "loopHpDamage": {
       "count": 1,
-      "mean": 22.44996643,
+      "mean": 212.19998169,
       "variance": 0,
-      "min": 22.44996643,
-      "max": 22.44996643,
+      "min": 212.19998169,
+      "max": 212.19998169,
       "quantiles": {
-        "p5": 22.44996643,
-        "p25": 22.44996643,
-        "p50": 22.44996643,
-        "p75": 22.44996643,
-        "p95": 22.44996643
+        "p5": 212.19998169,
+        "p25": 212.19998169,
+        "p50": 212.19998169,
+        "p75": 212.19998169,
+        "p95": 212.19998169
       }
     },
     "cycleDps": {
       "count": 1,
-      "mean": 4.48999329,
+      "mean": 42.43999634,
       "variance": 0,
-      "min": 4.48999329,
-      "max": 4.48999329,
+      "min": 42.43999634,
+      "max": 42.43999634,
       "quantiles": {
-        "p5": 4.48999329,
-        "p25": 4.48999329,
-        "p50": 4.48999329,
-        "p75": 4.48999329,
-        "p95": 4.48999329
+        "p5": 42.43999634,
+        "p25": 42.43999634,
+        "p50": 42.43999634,
+        "p75": 42.43999634,
+        "p95": 42.43999634
       }
     },
     "contributionConservation": {
       "byActor": {
-        "sampleMean": 22.44996643,
-        "contributionMean": 22.44996643,
+        "sampleMean": 212.19998169,
+        "contributionMean": 212.19998169,
         "difference": 0,
         "conserved": true
       },
       "byAction": {
-        "sampleMean": 22.44996643,
-        "contributionMean": 22.44996643,
+        "sampleMean": 212.19998169,
+        "contributionMean": 212.19998169,
         "difference": 0,
         "conserved": true
       },
       "byHit": {
-        "sampleMean": 22.44996643,
-        "contributionMean": 22.44996643,
+        "sampleMean": 212.19998169,
+        "contributionMean": 212.19998169,
         "difference": 0,
         "conserved": true
       }
@@ -208,7 +208,7 @@
       {
         "identity": "actor-103002",
         "actorId": "actor-103002",
-        "hpDamage": 22.44996643,
+        "hpDamage": 212.19998169,
         "combatHitCount": 4,
         "sampleCount": 1
       }
@@ -218,7 +218,7 @@
         "identity": "cycle-ruby-a1",
         "actionId": "cycle-ruby-a1",
         "actorId": "actor-103002",
-        "hpDamage": 4.09999084,
+        "hpDamage": 37.8999939,
         "combatHitCount": 1,
         "sampleCount": 1
       },
@@ -226,7 +226,7 @@
         "identity": "cycle-ruby-a2",
         "actionId": "cycle-ruby-a2",
         "actorId": "actor-103002",
-        "hpDamage": 6.1499939,
+        "hpDamage": 61.5,
         "combatHitCount": 1,
         "sampleCount": 1
       },
@@ -234,7 +234,7 @@
         "identity": "cycle-ruby-a3",
         "actionId": "cycle-ruby-a3",
         "actorId": "actor-103002",
-        "hpDamage": 12.19998169,
+        "hpDamage": 112.79998779,
         "combatHitCount": 2,
         "sampleCount": 1
       }
@@ -245,7 +245,7 @@
         "actionId": "cycle-ruby-a1",
         "actorId": "actor-103002",
         "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
-        "hpDamage": 4.09999084,
+        "hpDamage": 37.8999939,
         "combatHitCount": 1,
         "firstFrame": 71,
         "lastFrame": 71,
@@ -256,7 +256,7 @@
         "actionId": "cycle-ruby-a2",
         "actorId": "actor-103002",
         "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
-        "hpDamage": 6.1499939,
+        "hpDamage": 61.5,
         "combatHitCount": 1,
         "firstFrame": 88,
         "lastFrame": 88,
@@ -267,7 +267,7 @@
         "actionId": "cycle-ruby-a3",
         "actorId": "actor-103002",
         "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
-        "hpDamage": 6.09999084,
+        "hpDamage": 56.3999939,
         "combatHitCount": 1,
         "firstFrame": 121,
         "lastFrame": 121,
@@ -278,7 +278,7 @@
         "actionId": "cycle-ruby-a3",
         "actorId": "actor-103002",
         "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
-        "hpDamage": 6.09999085,
+        "hpDamage": 56.39999389,
         "combatHitCount": 1,
         "firstFrame": 116,
         "lastFrame": 116,
@@ -677,13 +677,13 @@
     "cycles": [
       {
         "index": 1,
-        "hpDamage": 22.44996643,
+        "hpDamage": 212.19998169,
         "combatHitCount": 4,
         "runnable": true
       },
       {
         "index": 2,
-        "hpDamage": 22.44996643,
+        "hpDamage": 212.19998169,
         "combatHitCount": 4,
         "runnable": true
       }
@@ -759,10 +759,10 @@
         ],
         "pendingEvents": [],
         "enemy": {
-          "hp": 8628,
-          "maxHp": 8628,
-          "toughness": 6667,
-          "maxToughness": 6667,
+          "hp": 690.24,
+          "maxHp": 690.24,
+          "toughness": 213.344,
+          "maxToughness": 213.344,
           "inBreak": false,
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
@@ -903,10 +903,10 @@
         ],
         "pendingEvents": [],
         "enemy": {
-          "hp": 8628,
-          "maxHp": 8628,
-          "toughness": 6667,
-          "maxToughness": 6667,
+          "hp": 690.24,
+          "maxHp": 690.24,
+          "toughness": 213.344,
+          "maxToughness": 213.344,
           "inBreak": false,
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
@@ -915,7 +915,7 @@
           "hitCountShields": []
         },
         "damage": {
-          "hpDamage": 22.449966430664062,
+          "hpDamage": 212.19998168945312,
           "toughnessDamage": 0,
           "combatHitCount": 4,
           "stateEventCount": 0
@@ -1047,10 +1047,10 @@
         ],
         "pendingEvents": [],
         "enemy": {
-          "hp": 8628,
-          "maxHp": 8628,
-          "toughness": 6667,
-          "maxToughness": 6667,
+          "hp": 690.24,
+          "maxHp": 690.24,
+          "toughness": 213.344,
+          "maxToughness": 213.344,
           "inBreak": false,
           "breakElapsedMs": 0,
           "recoveryDelayRemainingMs": 0,
@@ -1059,7 +1059,7 @@
           "hitCountShields": []
         },
         "damage": {
-          "hpDamage": 44.899932861328125,
+          "hpDamage": 424.39996337890625,
           "toughnessDamage": 0,
           "combatHitCount": 8,
           "stateEventCount": 0
@@ -1134,29 +1134,29 @@
       "issues": [],
       "hashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
+        "input": "3dcdc3beaccb12e8",
         "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
-        "evaluation": "412605349bbf2fe3"
+        "trace": "ee1e62ce76568739",
+        "evaluation": "6eafa465898dbceb"
       },
       "proofHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c549265f73e6d6c1",
+        "input": "3dcdc3beaccb12e8",
         "data": "cda8554f0862b7dd",
-        "trace": "04faed684dbc0687",
-        "evaluation": "412605349bbf2fe3"
+        "trace": "ee1e62ce76568739",
+        "evaluation": "6eafa465898dbceb"
       },
       "firstCycle": {
         "interval": "[start,end)",
         "startFrame": 60,
         "endFrame": 360,
-        "hpDamage": 22.44996643,
+        "hpDamage": 212.19998169,
         "combatHitCount": 4,
         "byActor": [
           {
             "identity": "actor-103002",
             "actorId": "actor-103002",
-            "hpDamage": 22.44996643,
+            "hpDamage": 212.19998169,
             "combatHitCount": 4
           }
         ],
@@ -1165,21 +1165,21 @@
             "identity": "cycle-ruby-a1",
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
-            "hpDamage": 4.09999084,
+            "hpDamage": 37.8999939,
             "combatHitCount": 1
           },
           {
             "identity": "cycle-ruby-a2",
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
-            "hpDamage": 6.1499939,
+            "hpDamage": 61.5,
             "combatHitCount": 1
           },
           {
             "identity": "cycle-ruby-a3",
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
-            "hpDamage": 12.19998169,
+            "hpDamage": 112.79998779,
             "combatHitCount": 2
           }
         ],
@@ -1189,7 +1189,7 @@
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
             "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
-            "hpDamage": 4.09999084,
+            "hpDamage": 37.8999939,
             "combatHitCount": 1,
             "firstFrame": 71,
             "lastFrame": 71
@@ -1199,7 +1199,7 @@
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
             "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
-            "hpDamage": 6.1499939,
+            "hpDamage": 61.5,
             "combatHitCount": 1,
             "firstFrame": 88,
             "lastFrame": 88
@@ -1209,7 +1209,7 @@
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
-            "hpDamage": 6.09999084,
+            "hpDamage": 56.3999939,
             "combatHitCount": 1,
             "firstFrame": 121,
             "lastFrame": 121
@@ -1219,7 +1219,7 @@
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
-            "hpDamage": 6.09999084,
+            "hpDamage": 56.3999939,
             "combatHitCount": 1,
             "firstFrame": 116,
             "lastFrame": 116
@@ -1230,13 +1230,13 @@
         "interval": "[start,end)",
         "startFrame": 360,
         "endFrame": 660,
-        "hpDamage": 22.44996643,
+        "hpDamage": 212.19998169,
         "combatHitCount": 4,
         "byActor": [
           {
             "identity": "actor-103002",
             "actorId": "actor-103002",
-            "hpDamage": 22.44996643,
+            "hpDamage": 212.19998169,
             "combatHitCount": 4
           }
         ],
@@ -1245,21 +1245,21 @@
             "identity": "cycle-ruby-a1",
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
-            "hpDamage": 4.09999084,
+            "hpDamage": 37.8999939,
             "combatHitCount": 1
           },
           {
             "identity": "cycle-ruby-a2",
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
-            "hpDamage": 6.1499939,
+            "hpDamage": 61.5,
             "combatHitCount": 1
           },
           {
             "identity": "cycle-ruby-a3",
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
-            "hpDamage": 12.19998169,
+            "hpDamage": 112.79998779,
             "combatHitCount": 2
           }
         ],
@@ -1269,7 +1269,7 @@
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
             "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
-            "hpDamage": 4.09999084,
+            "hpDamage": 37.8999939,
             "combatHitCount": 1,
             "firstFrame": 371,
             "lastFrame": 371
@@ -1279,7 +1279,7 @@
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
             "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
-            "hpDamage": 6.1499939,
+            "hpDamage": 61.5,
             "combatHitCount": 1,
             "firstFrame": 388,
             "lastFrame": 388
@@ -1289,7 +1289,7 @@
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
-            "hpDamage": 6.09999084,
+            "hpDamage": 56.3999939,
             "combatHitCount": 1,
             "firstFrame": 421,
             "lastFrame": 421
@@ -1299,7 +1299,7 @@
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
-            "hpDamage": 6.09999084,
+            "hpDamage": 56.3999939,
             "combatHitCount": 1,
             "firstFrame": 416,
             "lastFrame": 416
@@ -1697,13 +1697,13 @@
         "cycles": [
           {
             "index": 1,
-            "hpDamage": 22.44996643,
+            "hpDamage": 212.19998169,
             "combatHitCount": 4,
             "runnable": true
           },
           {
             "index": 2,
-            "hpDamage": 22.44996643,
+            "hpDamage": 212.19998169,
             "combatHitCount": 4,
             "runnable": true
           }
@@ -2099,10 +2099,10 @@
     ]
   },
   "hashes": {
-    "input": "c549265f73e6d6c1",
+    "input": "3dcdc3beaccb12e8",
     "data": "cda8554f0862b7dd",
-    "trace": "04faed684dbc0687",
-    "evaluation": "412605349bbf2fe3",
-    "cycle": "1a4b67534ae2debb"
+    "trace": "ee1e62ce76568739",
+    "evaluation": "6eafa465898dbceb",
+    "cycle": "dc292d979a3a70fd"
   }
 }

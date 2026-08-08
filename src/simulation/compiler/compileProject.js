@@ -17,6 +17,7 @@ import {
   resolveThreeValueMechanicsProfileCatalogSelection,
 } from '../mechanics/threeValueMechanicsProfileCatalog';
 import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
+import { resolveEnemyLevelStats } from '../mechanics/enemyLevelStats';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -47,7 +48,12 @@ export function compileProject(
   const actorsById = new Map(
     project.actors.map(actor => [actor.id, compileActor(actor, charactersById)])
   );
-  const enemy = compileEnemy(project.enemy, enemiesById, elementsById);
+  const enemy = compileEnemy(
+    project.enemy,
+    enemiesById,
+    elementsById,
+    gameData.enemyLevelProfiles
+  );
   const actors = [...actorsById.values()];
   const baseProfileCatalog =
     threeValueMechanicsProfileCatalog ??
@@ -196,9 +202,10 @@ export function compileProject(
   const derivedActions = switchTriggerGeneration.actions.map(action =>
     compileAction(action, actorsById, enemy, skillsById)
   );
-  const actions = sortActionsByStartAndSourceSequence(
-    [...baseActionsWithSwitchBindings, ...derivedActions]
-  );
+  const actions = sortActionsByStartAndSourceSequence([
+    ...baseActionsWithSwitchBindings,
+    ...derivedActions,
+  ]);
 
   return {
     schemaVersion: 1,
@@ -396,15 +403,22 @@ function compileActor(actor, charactersById) {
   };
 }
 
-function compileEnemy(enemy, enemiesById, elementsById) {
+function compileEnemy(
+  enemy,
+  enemiesById,
+  elementsById,
+  enemyLevelProfiles = []
+) {
   const sourceEnemy = enemiesById.get(Number(enemy.enemyId));
+  const levelScaling = resolveEnemyLevelStats({
+    enemy,
+    sourceEnemy,
+    profiles: enemyLevelProfiles,
+  });
   const elementDefenses = ENEMY_ELEMENT_DEFENSE_DEFINITIONS.map(definition =>
-    compileEnemyElementDefense(enemy, definition, elementsById)
+    compileEnemyElementDefense(enemy, definition, elementsById, levelScaling)
   );
-  const toughnessBase = getOptionalAttributeValue(
-    enemy.baseAttributes,
-    'WEAKNESS_POINT_MAX'
-  );
+  const toughnessBase = levelScaling.stats.maxToughness;
   const toughnessMultiplier = positiveNumberOrDefault(
     enemy.toughnessMultiplier,
     1
@@ -421,26 +435,41 @@ function compileEnemy(enemy, enemiesById, elementsById) {
   const initialToughness = Number.isFinite(maxToughness)
     ? roundRuntimeConfigValue(maxToughness * initialToughnessRatio)
     : null;
+  const hpMultiplier = positiveNumberOrDefault(enemy.hpMultiplier, 1);
+  const defenseMultiplier = positiveNumberOrDefault(enemy.defenseMultiplier, 1);
+  const stats = {
+    attack: levelScaling.stats.attack,
+    maxHp: levelScaling.stats.maxHp,
+    physicalDefense: levelScaling.stats.physicalDefense,
+    magicalDefense: levelScaling.stats.magicalDefense,
+    maxToughness,
+    initialToughness,
+  };
 
   return {
     ...enemy,
     source: {
       enemy: sourceEnemy,
     },
-    stats: {
-      attack: getAttributeValue(enemy.baseAttributes, 'ATK'),
-      maxHp: getAttributeValue(enemy.baseAttributes, 'MAXHP'),
-      physicalDefense: getAttributeValue(enemy.baseAttributes, 'DEF'),
-      magicalDefense: getAttributeValue(enemy.baseAttributes, 'MDEF'),
+    stats,
+    effectiveStats: {
+      attack: stats.attack,
+      maxHp: multiplyOptional(stats.maxHp, hpMultiplier),
+      physicalDefense: multiplyOptional(
+        stats.physicalDefense,
+        defenseMultiplier
+      ),
+      magicalDefense: multiplyOptional(stats.magicalDefense, defenseMultiplier),
       maxToughness,
       initialToughness,
     },
+    levelScaling,
     toughness: {
-      sourceKind: 'azpr-enemy-WEAKNESS_POINT_MAX',
+      sourceKind: 'azpr-client-level-grown-WEAKNESS_POINT_MAX',
       sourceStatus: Number.isFinite(toughnessBase)
-        ? 'toughness-config-derived-from-enemy-base-attribute'
-        : 'toughness-config-pending-missing-WEAKNESS_POINT_MAX',
-      sourcePath: 'project.enemy.baseAttributes[WEAKNESS_POINT_MAX]',
+        ? 'toughness-config-derived-from-client-level-growth'
+        : `toughness-config-pending-${levelScaling.status}`,
+      sourcePath: 'scenario.enemy.levelScaling.stats.maxToughness',
       baseMax: toughnessBase,
       maxMultiplier: toughnessMultiplier,
       initialRatio: initialToughnessRatio,
@@ -450,11 +479,11 @@ function compileEnemy(enemy, enemiesById, elementsById) {
     },
     elementDefenses,
     elementDefenseConfig: {
-      sourceKind: 'azpr-enemy-element-defense-base-attributes',
+      sourceKind: 'azpr-client-level-grown-element-defense-attributes',
       sourceStatus: elementDefenses.every(row => row.baseValue != null)
-        ? 'element-defense-config-derived-from-enemy-base-attributes'
-        : 'element-defense-config-partial-missing-base-attributes',
-      sourcePath: 'project.enemy.baseAttributes[*_DEFENSE]',
+        ? 'element-defense-config-derived-from-client-level-growth'
+        : `element-defense-config-pending-${levelScaling.status}`,
+      sourcePath: 'scenario.enemy.levelScaling.attributes[*_DEFENSE]',
       overrideCount: elementDefenses.filter(row => row.overrideValue != null)
         .length,
       formulaStatus: 'project-config-only',
@@ -463,12 +492,23 @@ function compileEnemy(enemy, enemiesById, elementsById) {
   };
 }
 
-function compileEnemyElementDefense(enemy, definition, elementsById) {
+function compileEnemyElementDefense(
+  enemy,
+  definition,
+  elementsById,
+  levelScaling
+) {
   const attribute = (enemy.baseAttributes ?? []).find(
     item => item.key === definition.attributeKey
   );
   const element = elementsById.get(definition.elementId);
-  const baseValue = Number.isFinite(attribute?.value) ? attribute.value : null;
+  const levelAttribute = levelScaling.attributes?.[definition.attributeKey];
+  const rawTemplateValue = Number.isFinite(attribute?.value)
+    ? attribute.value
+    : null;
+  const baseValue = Number.isFinite(levelAttribute?.effectiveValue)
+    ? levelAttribute.effectiveValue
+    : null;
   const configuredOverride =
     enemy.elementDefenseOverrides?.[definition.attributeKey];
   const overrideValue = Number.isFinite(configuredOverride)
@@ -484,6 +524,9 @@ function compileEnemyElementDefense(enemy, definition, elementsById) {
     attributeKey: definition.attributeKey,
     attributeName: attribute?.name ?? `${definition.fallbackName}伤害减免`,
     isRatio: attribute?.isRatio ?? true,
+    rawTemplateValue,
+    levelCoefficient: levelAttribute?.coefficient ?? null,
+    levelCoefficientDivisor: levelAttribute?.divisor ?? null,
     baseValue,
     overrideValue,
     effectiveValue: overrideValue ?? baseValue,
@@ -491,8 +534,8 @@ function compileEnemyElementDefense(enemy, definition, elementsById) {
       overrideValue != null
         ? 'user-override'
         : baseValue != null
-          ? 'azpr-enemy-base-attribute'
-          : 'missing-enemy-base-attribute',
+          ? 'azpr-client-level-grown-attribute'
+          : `missing-level-grown-attribute-${levelScaling.status}`,
     appliedToDamage: false,
   };
 }
@@ -685,14 +728,15 @@ function getAttributeValue(baseAttributes, key) {
   return Number.isFinite(attribute?.value) ? attribute.value : 0;
 }
 
-function getOptionalAttributeValue(baseAttributes, key) {
-  const attribute = (baseAttributes ?? []).find(item => item.key === key);
-  return Number.isFinite(attribute?.value) ? attribute.value : null;
-}
-
 function positiveNumberOrDefault(value, fallback) {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : fallback;
+}
+
+function multiplyOptional(value, multiplier) {
+  return Number.isFinite(value)
+    ? roundRuntimeConfigValue(value * multiplier)
+    : null;
 }
 
 function clampNumber(value, min, max, fallback) {

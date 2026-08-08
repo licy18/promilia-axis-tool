@@ -1,4 +1,7 @@
-import { getAzprWorkbenchSeed } from '../data/azprGenerated';
+import {
+  getAzprEnemyLevelProfiles,
+  getAzprWorkbenchSeed,
+} from '../data/azprGenerated';
 import { attachActionSourceSequence } from './actionSourceSequence';
 import { WORKBENCH_FRAME_MS, msToFrame, snapMsToFrame } from './timebase';
 import {
@@ -61,6 +64,7 @@ export {
 } from './skillDamageSegments';
 
 const workbenchSeed = getAzprWorkbenchSeed();
+const enemyLevelProfileCatalog = getAzprEnemyLevelProfiles();
 
 const DEFAULT_SECONDARY_CHARACTER_ID =
   workbenchSeed.gameData.characters.find(
@@ -96,7 +100,10 @@ const WORKBENCH_EQUIPMENT = workbenchSeed.gameData.equipment;
 const WORKBENCH_ENEMIES = workbenchSeed.gameData.enemies;
 const WORKBENCH_KIBOS = workbenchSeed.gameData.kibos;
 const WORKBENCH_SOULESSENCES = workbenchSeed.gameData.soulessences;
-const WORKBENCH_GAME_DATA = Object.freeze(workbenchSeed.gameData);
+const WORKBENCH_GAME_DATA = Object.freeze({
+  ...workbenchSeed.gameData,
+  enemyLevelProfiles: enemyLevelProfileCatalog.profiles,
+});
 const WORKBENCH_EQUIPMENT_SLOT_TYPES = Object.freeze({
   weapon: '武器',
   top: '上装',
@@ -144,7 +151,10 @@ export const DEFAULT_WORKBENCH_CULTIVATION = Object.freeze({
 export const DEFAULT_WORKBENCH_ACTION_ID = 'action-0001';
 
 export function getWorkbenchSeed() {
-  return workbenchSeed;
+  return {
+    ...workbenchSeed,
+    gameData: WORKBENCH_GAME_DATA,
+  };
 }
 
 export function getWorkbenchGameData() {
@@ -323,14 +333,14 @@ export function createWorkbenchActionDraft({
     ...(autoCast
       ? {
           autoCast: true,
-          ...(autoCastRule ? { autoCastRule: cloneAutoCastRule(autoCastRule) } : {}),
+          ...(autoCastRule
+            ? { autoCastRule: cloneAutoCastRule(autoCastRule) }
+            : {}),
         }
       : {}),
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
-    ...(contextActionId
-      ? { contextActionId: String(contextActionId) }
-      : {}),
+    ...(contextActionId ? { contextActionId: String(contextActionId) } : {}),
     ...(sourceSequence ?? {}),
     ...normalizeAttackInputActionFields({ id: actionId, ...attackInputFields }),
     ...(statusGeneration
@@ -357,9 +367,7 @@ export function normalizeDraftSourceSequence({
   const path =
     Array.isArray(sourceSequencePath) && sourceSequencePath.length > 0
       ? sourceSequencePath.map(entry =>
-          entry == null || entry === ''
-            ? null
-            : nonNegativeIntegerOrNull(entry)
+          entry == null || entry === '' ? null : nonNegativeIntegerOrNull(entry)
         )
       : null;
   const normalizedPath =
@@ -566,11 +574,7 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     ...(source.soulessenceStar == null
       ? {}
       : {
-          soulessenceStar: optionalClampedInteger(
-            source.soulessenceStar,
-            1,
-            5
-          ),
+          soulessenceStar: optionalClampedInteger(source.soulessenceStar, 1, 5),
         }),
     ...(source.soulessenceCultivation == null
       ? {}
@@ -1101,11 +1105,11 @@ export function normalizeWorkbenchActionDrafts(
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-          sourceSequenceIndex: draft.sourceSequenceIndex,
-          sourceSequencePath: draft.sourceSequencePath,
-          sourceSequenceSource: draft.sourceSequenceSource,
-          contextActionId: draft.contextActionId,
-          hitOverrides: draft.hitOverrides,
+        sourceSequenceIndex: draft.sourceSequenceIndex,
+        sourceSequencePath: draft.sourceSequencePath,
+        sourceSequenceSource: draft.sourceSequenceSource,
+        contextActionId: draft.contextActionId,
+        hitOverrides: draft.hitOverrides,
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
@@ -1247,11 +1251,11 @@ function createProjectActionFromDraft(
       controlSubSkillIndex: draft.controlSubSkillIndex,
       variantInputSelection: draft.variantInputSelection,
       actionScheduling: draft.actionScheduling,
-          sourceEvidenceStatus: draft.sourceEvidenceStatus,
-          scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-          autoCast: draft.autoCast === true,
-          autoCastRule: draft.autoCastRule,
-          hitOverrides: draft.hitOverrides,
+      sourceEvidenceStatus: draft.sourceEvidenceStatus,
+      scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      autoCast: draft.autoCast === true,
+      autoCastRule: draft.autoCastRule,
+      hitOverrides: draft.hitOverrides,
       note: draft.note || '奇波事件标记',
       insertion: draft.insertion,
       effectCommands,
@@ -1287,7 +1291,8 @@ function createProjectActionFromDraft(
       actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
       damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
       note:
-        draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+        draft.note ||
+        '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
       insertion: draft.insertion,
       generationBatch: draft.generationBatch,
       attackInputFields: {

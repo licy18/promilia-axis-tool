@@ -4,6 +4,7 @@ import characters from './generated/characters.json';
 import combatFormulaEvidence from './generated/combat-formula-evidence.json';
 import elements from './generated/elements.json';
 import enemies from './generated/enemies.json';
+import enemyLevelProfiles from './generated/enemy-level-profiles.json';
 import equipment from './generated/equipment.json';
 import kibos from './generated/kibos.json';
 import manifest from './generated/manifest.json';
@@ -41,6 +42,7 @@ export const azprGeneratedData = Object.freeze({
   valueParamIndex,
   workbenchSeed,
   workbenchSkillCore,
+  enemyLevelProfiles,
   tables: generatedTables,
 });
 
@@ -122,6 +124,10 @@ export function getAzprSkillsByCharacterId(characterId) {
 
 export function getAzprEnemies() {
   return enemies.items;
+}
+
+export function getAzprEnemyLevelProfiles() {
+  return enemyLevelProfiles;
 }
 
 export function getAzprEnemyById(id) {

@@ -6,6 +6,7 @@ import {
   getAzprCombatFormulaEvidence,
   getAzprElements,
   getAzprEnemies,
+  getAzprEnemyLevelProfiles,
   getAzprEquipment,
   getAzprGeneratedManifest,
   getAzprKibos,
@@ -52,6 +53,7 @@ describe('generated AzPr data', () => {
   it('keeps the Workbench production projection aligned with full catalogs', () => {
     const manifest = getAzprGeneratedManifest();
     const seed = getAzprWorkbenchSeed();
+    const enemyLevelProfiles = getAzprEnemyLevelProfiles();
     const skillCore = getAzprWorkbenchSkillCore();
     const enemies = getAzprEnemies();
     const elements = getAzprElements();
@@ -122,6 +124,19 @@ describe('generated AzPr data', () => {
     expect(manifest.files.workbenchSkillDiagnostics).toBe(
       'workbench-skill-diagnostics.json'
     );
+    expect(manifest.files.enemyLevelProfiles).toBe('enemy-level-profiles.json');
+    expect(enemyLevelProfiles).toMatchObject({
+      schemaVersion: 1,
+      kind: 'azpr-enemy-level-profile-catalog',
+      status: 'client-runtime-chain-verified',
+    });
+    expect(enemyLevelProfiles.profiles).toHaveLength(11);
+    expect(
+      enemyLevelProfiles.profiles.reduce(
+        (sum, profile) => sum + profile.levels.length,
+        0
+      )
+    ).toBe(1180);
     expect(seed.counts).toMatchObject({
       enemies: enemies.length,
       elements: elements.length,
@@ -187,6 +202,15 @@ describe('generated AzPr data', () => {
         enemyAttributeKeys.has(attribute.key)
       )
     );
+    expect(projectedDefaultEnemy.levelProfile).toEqual(
+      defaultEnemy.levelProfile
+    );
+    expect(projectedDefaultEnemy.levelProfile).toMatchObject({
+      status: 'ready',
+      enemyPackId: 300032,
+      templateId: 1,
+      profileId: 'azpr-enemy-level-template-1',
+    });
   });
 
   it('keeps validation findings explicit for the next reconstruction stage', () => {

@@ -37,6 +37,7 @@ const files = await loadGeneratedFiles([
   'characters.json',
   'elements.json',
   'enemies.json',
+  'enemy-level-profiles.json',
   'equipment.json',
   'kibos.json',
   'manifest.json',
@@ -76,6 +77,7 @@ const skillDiagnosticsProjectionMatches = deepEqual(
   expectedSkillDiagnosticsProjection
 );
 const seedAudit = auditWorkbenchSeed(files);
+const enemyLevelProfileAudit = auditEnemyLevelProfiles(files);
 const kiboActionCatalogMatches = auditKiboActionCatalog(files);
 const loadoutDetailCatalogMatches = auditLoadoutDetailCatalog(files);
 const manifestAudit = {
@@ -93,11 +95,15 @@ const manifestAudit = {
   workbenchLoadoutDetailCatalogRegistered:
     files['manifest.json'].data.files?.workbenchLoadoutDetailCatalog ===
     'workbench-loadout-detail-catalog.json',
+  enemyLevelProfilesRegistered:
+    files['manifest.json'].data.files?.enemyLevelProfiles ===
+    'enemy-level-profiles.json',
 };
 const fullGameCatalogBytes = sumFileBytes(files, [
   'characters.json',
   'skills.json',
   'enemies.json',
+  'enemy-level-profiles.json',
   'elements.json',
   'equipment.json',
   'kibos.json',
@@ -111,6 +117,9 @@ const fullSkillRuntimeBytes = sumFileBytes(files, [
 ]);
 const status = {
   seedProjectionMatches: Object.values(seedAudit.checks).every(Boolean),
+  enemyLevelProfilesMatch: Object.values(enemyLevelProfileAudit.checks).every(
+    Boolean
+  ),
   kiboActionCatalogMatches,
   loadoutDetailCatalogMatches,
   skillCoreProjectionMatches,
@@ -118,10 +127,11 @@ const status = {
   manifestMatches: Object.values(manifestAudit).every(Boolean),
 };
 const report = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   kind: 'workbench-production-data-audit',
   status,
   seedAudit,
+  enemyLevelProfileAudit,
   skillRuntimeAudit: {
     checks: {
       coreProjectionMatchesFullData: skillCoreProjectionMatches,
@@ -144,7 +154,8 @@ const report = {
   gameCatalogSize: createSizeSummary(
     fullGameCatalogBytes,
     files['workbench-seed.json'].bytes +
-      files['workbench-kibo-action-catalog.json'].bytes
+      files['workbench-kibo-action-catalog.json'].bytes +
+      files['enemy-level-profiles.json'].bytes
   ),
 };
 
@@ -157,6 +168,7 @@ console.log(
       output: toRepositoryPath(outputPath),
       status,
       seedCounts: seedAudit.counts,
+      enemyLevelProfileCounts: enemyLevelProfileAudit.counts,
       skillRuntimeCounts: report.skillRuntimeAudit.counts,
       gameCatalogSize: report.gameCatalogSize,
       skillRuntimeSize: report.skillRuntimeAudit.size,
@@ -187,6 +199,7 @@ function auditWorkbenchSeed(loadedFiles) {
     name: enemy.name,
     elementIds: enemy.elementIds,
     enemyType: enemy.enemyType,
+    levelProfile: enemy.levelProfile,
     property: {
       id: enemy.property.id,
       exists: enemy.property.exists,
@@ -252,6 +265,57 @@ function auditWorkbenchSeed(loadedFiles) {
       ),
     },
     counts,
+  };
+}
+
+function auditEnemyLevelProfiles(loadedFiles) {
+  const catalog = loadedFiles['enemy-level-profiles.json'].data;
+  const enemies = loadedFiles['enemies.json'].data.items ?? [];
+  const profiles = catalog.profiles ?? [];
+  const profileById = new Map(
+    profiles.map(profile => [profile.profileId, profile])
+  );
+  const readyEnemies = enemies.filter(
+    enemy => enemy.levelProfile?.status === 'ready'
+  );
+  const unavailableEnemies = enemies.filter(
+    enemy => enemy.levelProfile?.status !== 'ready'
+  );
+
+  return {
+    checks: {
+      schemaVersionCurrent: catalog.schemaVersion === 1,
+      catalogKindCurrent: catalog.kind === 'azpr-enemy-level-profile-catalog',
+      profilesHaveExactRows: profiles.every(
+        profile =>
+          profile.profileId &&
+          profile.attributeDefinitions?.length > 0 &&
+          profile.levels?.length > 0 &&
+          deepEqual(
+            profile.supportedLevels,
+            profile.levels.map(row => row.level)
+          )
+      ),
+      readyEnemyReferencesResolve: readyEnemies.every(enemy => {
+        const profile = profileById.get(enemy.levelProfile.profileId);
+        return (
+          profile &&
+          Number(profile.templateId) === Number(enemy.levelProfile.templateId)
+        );
+      }),
+      unavailableEnemyReferencesFailClosed: unavailableEnemies.every(
+        enemy => !enemy.levelProfile?.profileId
+      ),
+    },
+    counts: {
+      profiles: profiles.length,
+      levelRows: profiles.reduce(
+        (sum, profile) => sum + (profile.levels?.length ?? 0),
+        0
+      ),
+      readyEnemies: readyEnemies.length,
+      unavailableEnemies: unavailableEnemies.length,
+    },
   };
 }
 
