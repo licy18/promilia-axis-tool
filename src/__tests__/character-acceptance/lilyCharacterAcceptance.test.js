@@ -1,0 +1,238 @@
+import { describe, expect, it } from 'vitest';
+import fixture from '../../../fixtures/character-acceptance/102001-visual.json';
+import manifest from '../../../reports/m11/character-acceptance/102001/manifest.json';
+import { validateCharacterAcceptanceManifest } from '../../character-acceptance/characterAcceptanceProtocol';
+
+const SCENARIO_POLICY = 'm12c-zero-distance-passive-boss-v1';
+
+describe('Lily M12-B3 owner character acceptance', () => {
+  it('publishes a complete owner-only matrix at the pending visual gate', () => {
+    expect(
+      validateCharacterAcceptanceManifest(manifest, {
+        checkPublication: false,
+      })
+    ).toMatchObject({ valid: true, issues: [] });
+    expect(manifest.owner).toMatchObject({
+      ownerId: 102001,
+      ownerName: '莉莉',
+    });
+    expect(manifest.requirementInventory.summary).toMatchObject({
+      recordCount: 260,
+      appliedCount: 128,
+      gapCount: 0,
+      notApplicableCount: 132,
+    });
+    expect(manifest.matrix.summary).toMatchObject({
+      requiredCount: 128,
+      passedCount: 128,
+      blockedCount: 0,
+      notApplicableCount: 132,
+    });
+    expect(manifest.sourceGapInventory.summary).toMatchObject({
+      blockingCount: 0,
+      nonBlockingCount: 33,
+    });
+    expect(manifest.ledger.summary).toMatchObject({
+      uniqueBlockingCount: 0,
+      sourceGapCount: 0,
+      acceptanceGapCount: 0,
+    });
+    expect(manifest.maturity).toMatchObject({
+      currentState: 'runtime-integrated',
+      optimizationReady: false,
+      gates: {
+        extracted: true,
+        runtimeIntegrated: true,
+        visuallyAccepted: false,
+        optimizationReady: false,
+      },
+      blockers: ['acceptance-product-visual-signoff-pending'],
+    });
+    expect(manifest.evidence.productVisualAcceptance).toMatchObject({
+      status: 'pending',
+      acceptanceCommit: null,
+      bindingStatus: 'not-requested',
+      automatedEvidence: [],
+    });
+  }, 15000);
+
+  it('locks landed-hit cardinality, interruption, gates, and exact lifecycles to real traces', () => {
+    const scenario = manifest.evidence.machineScenarios[0];
+    expect(scenario).toMatchObject({
+      status: 'passed',
+      stableReplay: true,
+      workbenchRoundTrip: 'passed',
+      assertionSummary: { failedCount: 0 },
+    });
+    expect(scenario.assertionSummary.passedCount).toBe(
+      scenario.assertionSummary.assertionCount
+    );
+
+    const probes = new Map(
+      scenario.probeResults.map(result => [result.identity, result])
+    );
+    expect(probes.get('probe:trace-query:star-five-direct-sp')).toMatchObject({
+      passed: true,
+      actual: {
+        count: 5,
+        rows: [
+          { absoluteFrame: 2032, change: 0.5 },
+          { absoluteFrame: 2037, change: 0.5 },
+          { absoluteFrame: 2042, change: 0.5 },
+          { absoluteFrame: 2048, change: 0.5 },
+          { absoluteFrame: 2054, change: 0.5 },
+        ],
+      },
+    });
+    expect(
+      probes.get('probe:trace-query:ultimate-three-wind-marks')
+    ).toMatchObject({
+      passed: true,
+      actual: {
+        count: 3,
+        rows: [
+          { frameIndex: 1861, before: 0, after: 1 },
+          { frameIndex: 1866, before: 1, after: 2 },
+          { frameIndex: 1870, before: 2, after: 3 },
+        ],
+      },
+    });
+    expect(
+      probes.get('probe:trace-duration:will-exact-seven-second-duration')
+    ).toMatchObject({ passed: true, actual: { durationMs: 7000 } });
+    expect(
+      probes.get('probe:trace-query:star-carry-level-one-guard')
+    ).toMatchObject({
+      passed: true,
+      actual: {
+        rows: [
+          { absoluteFrame: 2851, 'modifiers.0.valueRaw': 1900 },
+          { absoluteFrame: 3211, 'modifiers.0.valueRaw': 1900 },
+        ],
+      },
+    });
+    expect(
+      probes.get('probe:trace-query:star-carry-level-twelve-guard')
+    ).toMatchObject({
+      passed: true,
+      actual: {
+        rows: [
+          { absoluteFrame: 4351, 'modifiers.0.valueRaw': 3000 },
+          { absoluteFrame: 4711, 'modifiers.0.valueRaw': 3000 },
+        ],
+      },
+    });
+
+    expect(
+      scenario.mechanismProbes.negativeActionCases.every(
+        result => result.passed
+      )
+    ).toBe(true);
+    const actionLevels = new Map(
+      scenario.mechanismProbes.actionLevelCases.map(result => [
+        result.identity,
+        result,
+      ])
+    );
+    expect([...actionLevels.values()].every(result => result.passed)).toBe(
+      true
+    );
+    expect(
+      actionLevels.get('action-level:canonical-level-twelve')
+    ).toMatchObject({
+      actual: {
+        resolution: {
+          level: 12,
+          source: 'action.level',
+          legacyFallback: false,
+        },
+        failure: null,
+      },
+    });
+    expect(
+      actionLevels.get('action-level:canonical-legacy-conflict')
+    ).toMatchObject({
+      actual: {
+        resolution: null,
+        failure: { code: 'verified-action-level-conflict' },
+      },
+    });
+    expect(
+      actionLevels.get('action-level:invalid-canonical-does-not-fallback')
+    ).toMatchObject({
+      actual: {
+        resolution: null,
+        failure: { code: 'verified-action-level-invalid' },
+      },
+    });
+    expect(
+      scenario.mechanismProbes.isolatedActionCases.map(result => [
+        result.identity,
+        result.passed,
+      ])
+    ).toEqual([
+      ['isolated:ultimate-last-mark-only', true],
+      ['isolated:ultimate-all-mark-hits-miss', true],
+      ['isolated:star-at-sp-cap', true],
+    ]);
+    expect(
+      scenario.mechanismProbes.runtimeInterruptionCases.map(result => ({
+        identity: result.identity,
+        passed: result.passed,
+        directSpCount: result.actual.directSpCount,
+        remainingTuningMarkFrames: result.actual.remainingTuningMarkFrames,
+      }))
+    ).toEqual([
+      {
+        identity: 'runtime-interruption:star-skill-interrupted-at-44f',
+        passed: true,
+        directSpCount: 3,
+        remainingTuningMarkFrames: [],
+      },
+      {
+        identity: 'runtime-interruption:ultimate-interrupted-at-218f',
+        passed: true,
+        directSpCount: 0,
+        remainingTuningMarkFrames: [211, 216],
+      },
+    ]);
+    expect(
+      scenario.mechanismProbes.runtimeInterruptionCases[0].actual
+        .targetStateChangeCountByIdentityAndOperation
+    ).toEqual({
+      'lily-will:gain': 1,
+      'lily-will:expire': 1,
+    });
+  });
+
+  it('retains enemy-driven sources as structured N/A without Boss stimuli', () => {
+    expect(fixture.scenario.projectile).toEqual({
+      targetDistance: 0,
+      defaultWillHit: true,
+    });
+    expect(fixture.actions.every(action => action.owner.kind === 'actor')).toBe(
+      true
+    );
+    const scenarioScoped = manifest.notApplicableRecords.filter(
+      record => record.scenarioScope?.policyIdentity === SCENARIO_POLICY
+    );
+    for (const reason of [
+      'enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario',
+      'perfect-defense-state-required-not-applicable-in-passive-boss-scenario',
+      'passive-boss-does-not-produce-received-damage-events',
+      'passive-boss-does-not-produce-required-defense-events',
+    ]) {
+      const matching = scenarioScoped.filter(record =>
+        record.reason.includes(reason)
+      );
+      expect(matching.length).toBeGreaterThan(0);
+      expect(
+        matching.every(
+          record =>
+            record.status === 'not-applicable' &&
+            record.sourceIdentities.length > 0
+        )
+      ).toBe(true);
+    }
+  });
+});

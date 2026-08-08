@@ -46,19 +46,25 @@ export function createCharacterAcceptanceManifest({
   goldens,
   visualScenario,
 }) {
+  const sourceGapRecords = applyCharacterAcceptanceSourceGapDispositions(
+    unresolvedLedger?.records ?? [],
+    recipe.sourceGapDispositions ?? [],
+    recipe.scenarioScope
+  );
   const goldenEvidence = goldens.map(({ path, report }) =>
     createGoldenEvidence(path, report)
   );
   const requirementInventory = {
     records: createCharacterAcceptanceRequirementSources({
       profile,
-      sourceGapRecords: unresolvedLedger?.records ?? [],
+      sourceGapRecords,
       sourceNotApplicableControlSubskills:
         recipe.sourceNotApplicableControlSubskills ?? [],
+      recipe,
     }),
   };
   const sourceGapInventory = {
-    records: structuredClone(unresolvedLedger?.records ?? []),
+    records: sourceGapRecords,
   };
   const scenarioCases = {
     records: createCharacterAcceptanceScenarioCaseSources({
@@ -151,6 +157,7 @@ export function createCharacterAcceptanceRequirementSources({
   profile,
   sourceGapRecords = [],
   sourceNotApplicableControlSubskills = [],
+  recipe = {},
 }) {
   const ownerId = Number(profile.owner?.ownerId);
   const requirements = [];
@@ -163,6 +170,9 @@ export function createCharacterAcceptanceRequirementSources({
       profile,
       boundaries: sourceNotApplicableControlSubskills,
     });
+  const classifyScenarioScope = createScenarioScopeRequirementClassifier(
+    recipe.scenarioScope
+  );
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
@@ -171,6 +181,9 @@ export function createCharacterAcceptanceRequirementSources({
     records.forEach((record, index) => {
       const subjectIdentity = resolveContractIdentity(record, dimension, index);
       const optimizationScenario = classifyOptimizationScope(record);
+      const scenarioScope =
+        createDeclaredScenarioScopeDisposition(record) ??
+        classifyScenarioScope(record);
       const sourceGapDisposition = classifyNonBlockingSourceRecord(record);
       const sourceNotApplicableControlSubskill =
         classifySourceNotApplicableControlSubskill(record, dimension);
@@ -188,6 +201,7 @@ export function createCharacterAcceptanceRequirementSources({
         isNotApplicableRecord(record) ||
         isUnwiredControlWindowRequirement(record, dimension, profile) ||
         optimizationScenario != null ||
+        scenarioScope != null ||
         sourceGapDisposition != null ||
         sourceNotApplicableControlSubskill != null ||
         aggregateStatDependency;
@@ -214,6 +228,7 @@ export function createCharacterAcceptanceRequirementSources({
           sourceNotApplicableControlSubskill?.sourceIdentity,
         ]),
         ...(optimizationScenario == null ? {} : { optimizationScenario }),
+        ...(scenarioScope == null ? {} : { scenarioScope }),
         ...(sourceGapDisposition == null ? {} : { sourceGapDisposition }),
         ...(sourceNotApplicableControlSubskill == null
           ? {}
@@ -224,6 +239,7 @@ export function createCharacterAcceptanceRequirementSources({
               ...(optimizationScenario?.reason
                 ? [optimizationScenario.reason]
                 : []),
+              ...(scenarioScope?.reason ? [scenarioScope.reason] : []),
               ...(sourceGapDisposition?.reasons ?? []),
               ...(sourceNotApplicableControlSubskill?.reasons ?? []),
               ...(aggregateStatDependency
@@ -249,10 +265,187 @@ export function createCharacterAcceptanceRequirementSources({
         requirement,
       ])
     ).values(),
-    ...createProtocolRequirementSources(ownerId),
+    ...createProtocolRequirementSources(
+      ownerId,
+      recipe.protocolRequirementDispositions ?? []
+    ),
   ].sort((left, right) =>
     left.requirementIdentity.localeCompare(right.requirementIdentity)
   );
+}
+
+export function applyCharacterAcceptanceSourceGapDispositions(
+  records,
+  dispositions = [],
+  scenarioScope = null
+) {
+  const byIdentity = indexDeclaredDispositions(
+    dispositions,
+    'recordIdentity',
+    'source-gap'
+  );
+  const matched = new Set();
+  const projected = (records ?? []).map(record => {
+    const identity = String(record?.recordIdentity ?? '');
+    const disposition = byIdentity.get(identity);
+    const inheritedScenarioScope = createSourceGapScenarioScope(
+      record,
+      scenarioScope
+    );
+    if (!disposition) {
+      return {
+        ...structuredClone(record),
+        ...(inheritedScenarioScope == null
+          ? {}
+          : { scenarioScope: inheritedScenarioScope }),
+      };
+    }
+    matched.add(identity);
+    if (disposition.status !== 'not-applicable') {
+      throw new Error(
+        'Character acceptance source-gap disposition must be not-applicable: ' +
+          identity
+      );
+    }
+    return {
+      ...structuredClone(record),
+      status: 'not-applicable',
+      impactClassification: 'not-applicable',
+      sourceIdentities: uniqueStrings([
+        ...(record?.sourceIdentities ?? []),
+        disposition.sourceIdentity,
+      ]),
+      reasons: uniqueStrings([
+        ...(record?.reasons ?? []),
+        record?.reason,
+        disposition.reason,
+      ]),
+      acceptanceDisposition: {
+        status: 'not-applicable',
+        policyIdentity: String(disposition.policyIdentity),
+        reason: String(disposition.reason),
+        sourceIdentity: String(disposition.sourceIdentity),
+        originalStatus: record?.status ?? null,
+        originalImpactClassification: record?.impactClassification ?? null,
+      },
+      scenarioScope: {
+        disposition: 'not-applicable',
+        policyIdentity: String(disposition.policyIdentity),
+        reason: String(disposition.reason),
+        sourceIdentity: String(disposition.sourceIdentity),
+      },
+    };
+  });
+  assertEveryDispositionMatched(byIdentity, matched, 'source-gap');
+  return projected;
+}
+
+function createSourceGapScenarioScope(record, scenarioScope) {
+  if (scenarioScope == null || record?.status !== 'not-applicable') {
+    return null;
+  }
+  const reasons = uniqueStrings([...(record?.reasons ?? []), record?.reason]);
+  const scenarioReason = reasons.find(
+    reason =>
+      reason !== 'scenario-out-of-scope-not-applicable' &&
+      (reason.includes('passive-boss') || reason.includes('not-applicable-in-'))
+  );
+  if (!scenarioReason) return null;
+  return {
+    disposition: 'not-applicable',
+    policyIdentity: requireNonEmptyString(
+      scenarioScope.policyIdentity,
+      'source-gap-scenario-scope-policy-identity'
+    ),
+    reason: scenarioReason,
+    sourceIdentity:
+      uniqueStrings([
+        record?.sourceIdentity,
+        ...(record?.sourceIdentities ?? []),
+        scenarioScope.sourceIdentity,
+      ])[0] ??
+      requireNonEmptyString(
+        scenarioScope.sourceIdentity,
+        'source-gap-scenario-scope-source-identity'
+      ),
+  };
+}
+
+function createScenarioScopeRequirementClassifier(scope) {
+  if (scope == null) return () => null;
+  const policyIdentity = requireNonEmptyString(
+    scope.policyIdentity,
+    'scenario-scope-policy-identity'
+  );
+  const reason = requireNonEmptyString(scope.reason, 'scenario-scope-reason');
+  const sourceIdentity = requireNonEmptyString(
+    scope.sourceIdentity,
+    'scenario-scope-source-identity'
+  );
+  const included = new Set(
+    (scope.includedControlSubskills ?? []).map((entry, index) => {
+      const controlSkillId = Number(entry?.controlSkillId);
+      const subSkillIndex = Number(entry?.subSkillIndex ?? 0);
+      if (
+        !Number.isInteger(controlSkillId) ||
+        !Number.isInteger(subSkillIndex)
+      ) {
+        throw new Error(
+          'Character acceptance scenario scope control invalid at index ' +
+            index
+        );
+      }
+      return controlSkillId + '|' + subSkillIndex;
+    })
+  );
+  if (included.size === 0) {
+    throw new Error('Character acceptance scenario scope is empty');
+  }
+  return record => {
+    const controlSkillId = firstInteger(
+      record?.executionControlSkillId,
+      record?.controlSkillId,
+      record?.sourceControlSkillId,
+      record?.publicControlSkillId
+    );
+    if (controlSkillId == null) return null;
+    const subSkillIndex =
+      firstInteger(
+        record?.executionSubSkillIndex,
+        record?.subSkillIndex,
+        record?.sourceSubSkillIndex,
+        record?.selectedSubSkillIndex,
+        record?.mapIndex
+      ) ?? 0;
+    const controlSubskillIdentity = controlSkillId + '|' + subSkillIndex;
+    if (included.has(controlSubskillIdentity)) return null;
+    return {
+      disposition: 'not-applicable',
+      policyIdentity,
+      reason,
+      sourceIdentity,
+      controlSkillId,
+      subSkillIndex,
+    };
+  };
+}
+
+function createDeclaredScenarioScopeDisposition(record) {
+  const declared = record?.scenarioOutOfScope;
+  if (
+    declared?.status !== 'scenario-out-of-scope-not-applicable' &&
+    record?.bindingKind !== 'scenario-out-of-scope'
+  ) {
+    return null;
+  }
+  return {
+    disposition: 'not-applicable',
+    policyIdentity: String(declared?.policyIdentity ?? ''),
+    reason: String(
+      declared?.reason ?? 'declared-scenario-out-of-scope-not-applicable'
+    ),
+    sourceIdentity: String(declared?.sourceIdentity ?? record?.sourceIdentity),
+  };
 }
 
 export function createCharacterAcceptanceScenarioCaseSources({
@@ -815,10 +1008,16 @@ function toPublicVisualScenarioEvidence(scenario) {
     executedActionCount: scenario.executedActionCount,
     traceIndex: scenario.traceIndex,
     assertionSummary: scenario.assertionSummary,
+    mechanismProbes: toJsonCompatible(scenario.mechanismProbes ?? {}),
+    probeResults: toJsonCompatible(scenario.probeResults ?? []),
   };
 }
 
-function createProtocolRequirementSources(ownerId) {
+function toJsonCompatible(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function createProtocolRequirementSources(ownerId, dispositions = []) {
   const sourceIdentity =
     'protocol:m11-d-character-acceptance-v1:owner:' + ownerId;
   const definitions = [
@@ -985,17 +1184,59 @@ function createProtocolRequirementSources(ownerId) {
       'critical-non-crittable-negative-scenario-missing',
     ],
   ];
-  return definitions.map(([identity, dimension, selector, reason]) => ({
-    requirementIdentity: 'protocol:' + ownerId + ':' + identity,
-    dimension,
-    subjectIdentity: identity,
-    sourceDisposition: 'applied',
-    contractStatus: 'protocol-required',
-    impactClassification: 'gameplay-impacting',
-    coverageSelector: selector,
-    sourceIdentities: [sourceIdentity],
-    reasons: [reason],
-  }));
+  const byIdentity = indexDeclaredDispositions(
+    dispositions,
+    'subjectIdentity',
+    'protocol-requirement'
+  );
+  const matched = new Set();
+  const requirements = definitions.map(
+    ([identity, dimension, selector, reason]) => {
+      const disposition = byIdentity.get(identity);
+      if (!disposition) {
+        return {
+          requirementIdentity: 'protocol:' + ownerId + ':' + identity,
+          dimension,
+          subjectIdentity: identity,
+          sourceDisposition: 'applied',
+          contractStatus: 'protocol-required',
+          impactClassification: 'gameplay-impacting',
+          coverageSelector: selector,
+          sourceIdentities: [sourceIdentity],
+          reasons: [reason],
+        };
+      }
+      matched.add(identity);
+      if (disposition.status !== 'not-applicable') {
+        throw new Error(
+          'Character acceptance protocol disposition must be not-applicable: ' +
+            identity
+        );
+      }
+      return {
+        requirementIdentity: 'protocol:' + ownerId + ':' + identity,
+        dimension,
+        subjectIdentity: identity,
+        sourceDisposition: 'not-applicable',
+        contractStatus: 'scenario-out-of-scope',
+        impactClassification: 'not-applicable',
+        coverageSelector: selector,
+        sourceIdentities: uniqueStrings([
+          sourceIdentity,
+          disposition.sourceIdentity,
+        ]),
+        scenarioScope: {
+          disposition: 'not-applicable',
+          policyIdentity: String(disposition.policyIdentity),
+          reason: String(disposition.reason),
+          sourceIdentity: String(disposition.sourceIdentity),
+        },
+        reasons: [String(disposition.reason)],
+      };
+    }
+  );
+  assertEveryDispositionMatched(byIdentity, matched, 'protocol-requirement');
+  return requirements;
 }
 
 function createContractCoverageSelector({ record, dimension, ownerId }) {
@@ -1025,6 +1266,26 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
   }
   if (dimension === 'hit' && record.hitIdentity) {
     return { kind: 'hit', hitIdentity: String(record.hitIdentity) };
+  }
+  if (
+    dimension === 'action-effect-binding' &&
+    record.landedHitActivationCondition?.hitIdentity
+  ) {
+    return {
+      kind: 'hit',
+      hitIdentity: String(record.landedHitActivationCondition.hitIdentity),
+    };
+  }
+  if (
+    dimension === 'attack-input-chain' &&
+    Number.isInteger(Number(record.segments?.[0]?.controlSkillId))
+  ) {
+    return {
+      kind: 'action-form',
+      ownerId,
+      controlSkillId: Number(record.segments[0].controlSkillId),
+      subSkillIndex: Number(record.segments[0].subSkillIndex ?? 0),
+    };
   }
   if (
     ['effect', 'action-effect-binding', 'runtime-effect-binding'].includes(
@@ -1413,7 +1674,10 @@ function isAppliedRecord(record) {
 function isNotApplicableRecord(record) {
   return (
     record.status === 'not-applicable' ||
-    record.impactClassification === 'not-applicable'
+    record.impactClassification === 'not-applicable' ||
+    record.scenarioOutOfScope?.status ===
+      'scenario-out-of-scope-not-applicable' ||
+    record.bindingKind === 'scenario-out-of-scope'
   );
 }
 
@@ -1455,14 +1719,67 @@ function isUnwiredControlWindowRequirement(record, dimension, profile) {
 }
 
 function normalizeReasons(record) {
-  return uniqueStrings([...(record.reasons ?? []), record.reason]);
+  return uniqueStrings([
+    ...(record.reasons ?? []),
+    record.reason,
+    record.scenarioOutOfScope?.reason,
+  ]);
 }
 
 function collectSourceIdentities(record) {
   return uniqueStrings([
     ...(record.sourceIdentities ?? []),
     record.sourceIdentity,
+    record.scenarioOutOfScope?.sourceIdentity,
   ]);
+}
+
+function indexDeclaredDispositions(dispositions, identityKey, label) {
+  const result = new Map();
+  for (const disposition of dispositions ?? []) {
+    const identity = requireNonEmptyString(
+      disposition?.[identityKey],
+      label + '-' + identityKey
+    );
+    if (result.has(identity)) {
+      throw new Error(
+        'Character acceptance ' + label + ' disposition duplicated: ' + identity
+      );
+    }
+    requireNonEmptyString(
+      disposition?.policyIdentity,
+      label + '-policy-identity'
+    );
+    requireNonEmptyString(disposition?.reason, label + '-reason');
+    requireNonEmptyString(
+      disposition?.sourceIdentity,
+      label + '-source-identity'
+    );
+    result.set(identity, disposition);
+  }
+  return result;
+}
+
+function assertEveryDispositionMatched(byIdentity, matched, label) {
+  const unknown = [...byIdentity.keys()].filter(
+    identity => !matched.has(identity)
+  );
+  if (unknown.length > 0) {
+    throw new Error(
+      'Character acceptance ' +
+        label +
+        ' disposition did not match source: ' +
+        unknown.join(', ')
+    );
+  }
+}
+
+function requireNonEmptyString(value, label) {
+  const normalized = String(value ?? '').trim();
+  if (!normalized) {
+    throw new Error('Character acceptance ' + label + ' is required');
+  }
+  return normalized;
 }
 
 function firstInteger(...values) {

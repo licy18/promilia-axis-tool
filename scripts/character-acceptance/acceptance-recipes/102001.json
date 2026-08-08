@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "ownerId": 102001,
+  "fixturePath": "fixtures/character-acceptance/102001-visual.json",
+  "goldenReports": ["reports/m10/102001/golden-trace.json"],
+  "runtimeProfileOverlay": true,
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
+    "automatedEvidence": []
+  },
+  "scenarioScope": {
+    "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+    "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+    "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+    "includedControlSubskills": [
+      { "controlSkillId": 10200101, "subSkillIndex": 0 },
+      { "controlSkillId": 10200102, "subSkillIndex": 0 },
+      { "controlSkillId": 10200103, "subSkillIndex": 0 },
+      { "controlSkillId": 10200104, "subSkillIndex": 0 },
+      { "controlSkillId": 10200105, "subSkillIndex": 0 },
+      { "controlSkillId": 10200110, "subSkillIndex": 0 },
+      { "controlSkillId": 10200112, "subSkillIndex": 0 },
+      { "controlSkillId": 10200113, "subSkillIndex": 0 },
+      { "controlSkillId": 10200122, "subSkillIndex": 0 },
+      { "controlSkillId": 10200126, "subSkillIndex": 0 }
+    ]
+  },
+  "sourceGapDispositions": [
+    {
+      "recordIdentity": "semantic-gap:09e2bc2156e672ab0d93",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:2a13694dea86b77f11c8",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:3f81ca5b0649abac8ad2",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:56b8aeecbc8f47bcefb2",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31"
+    },
+    {
+      "recordIdentity": "semantic-gap:6ecd90343274663298ea",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2"
+    },
+    {
+      "recordIdentity": "semantic-gap:72324888f112a800b714",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0"
+    },
+    {
+      "recordIdentity": "semantic-gap:7980a8333b1f6799cbf3",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2"
+    },
+    {
+      "recordIdentity": "semantic-gap:81b8c47e16f0f7b71880",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:8732cb2ece25292c0d9c",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:89de3afab3de80f4fe9f",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0"
+    },
+    {
+      "recordIdentity": "semantic-gap:9d308aec5af25e2de95a",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:ad897dca63bdba406cf1",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:d99d705208fd38c3c7d8",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "perfect-defense-counter-requires-passive-boss-attack-event",
+      "sourceIdentity": "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0"
+    },
+    {
+      "recordIdentity": "semantic-gap:da6fcc1f887d71e311de",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32"
+    },
+    {
+      "recordIdentity": "semantic-gap:f81d3a28e18f695f5ef8",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "declared-control-subskill-outside-frozen-active-surface",
+      "sourceIdentity": "battle-effect:10200142:0:-1431178473602126937:6721561265250368687:32"
+    }
+  ],
+  "protocolRequirementDispositions": [
+    {
+      "subjectIdentity": "input-window-inside-outside-boundaries",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "frozen-active-surface-has-no-contextual-variant-selection-boundary",
+      "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory"
+    },
+    {
+      "subjectIdentity": "critical-pre-hit-attribute-change",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "frozen-active-surface-has-no-critical-attribute-mutating-effect",
+      "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#基础属性依赖"
+    },
+    {
+      "subjectIdentity": "critical-non-crittable-rejection",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "frozen-active-surface-has-no-non-crittable-damage-component",
+      "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#基础属性依赖"
+    }
+  ],
+  "negativeActionCases": [
+    {
+      "identity": "star-skill-cooldown-blocked",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "negative-star-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "lily-star-cooldown-blocked",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 200 }
+        }
+      ],
+      "action": {
+        "id": "lily-star-cooldown-blocked",
+        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "intent": {
+          "kind": "public-action",
+          "publicActionId": 10200112,
+          "actionKind": "star-skill",
+          "level": 1
+        },
+        "schedule": { "mode": "absolute", "frame": 2200 }
+      },
+      "expectedIssue": {
+        "actionId": "lily-star-cooldown-blocked",
+        "code": "machine-axis-action-not-executable",
+        "violationCode": "skill-cooldown-active"
+      }
+    },
+    {
+      "identity": "star-combo-kibo-required",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "lily-star-combo",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200112,
+            "actionKind": "star-combo",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "action": {
+        "id": "lily-star-combo",
+        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "intent": {
+          "kind": "public-action",
+          "publicActionId": 10200112,
+          "actionKind": "star-combo",
+          "level": 1
+        },
+        "schedule": { "mode": "absolute", "frame": 3100 }
+      },
+      "expectedIssue": {
+        "actionId": "lily-star-combo",
+        "code": "machine-axis-action-not-executable",
+        "violationCode": "joint-attack-kibo-required"
+      }
+    },
+    {
+      "identity": "ultimate-cooldown-blocked",
+      "durationFrames": 1000,
+      "actions": [
+        {
+          "id": "negative-ultimate-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "lily-ultimate-cooldown-blocked",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 300 }
+        }
+      ],
+      "action": {
+        "id": "lily-ultimate-cooldown-blocked",
+        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "intent": {
+          "kind": "public-action",
+          "publicActionId": 10200113,
+          "actionKind": "ultimate",
+          "level": 1
+        },
+        "schedule": { "mode": "absolute", "frame": 54800 }
+      },
+      "expectedIssue": {
+        "actionId": "lily-ultimate-cooldown-blocked",
+        "code": "machine-axis-action-not-executable",
+        "violationCode": "skill-cooldown-active"
+      }
+    },
+    {
+      "identity": "ultimate-resource-blocked",
+      "durationFrames": 1500,
+      "actions": [
+        {
+          "id": "negative-resource-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "lily-ultimate-resource-blocked",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 700 }
+        }
+      ],
+      "action": {
+        "id": "lily-ultimate-resource-blocked",
+        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "intent": {
+          "kind": "public-action",
+          "publicActionId": 10200113,
+          "actionKind": "ultimate",
+          "level": 1
+        },
+        "schedule": { "mode": "absolute", "frame": 55500 }
+      },
+      "expectedIssue": {
+        "actionId": "lily-ultimate-resource-blocked",
+        "code": "machine-axis-action-resource-insufficient"
+      }
+    }
+  ],
+  "actionLevelCases": [
+    {
+      "identity": "canonical-level-one",
+      "action": { "level": 1 },
+      "expectedResult": {
+        "level": 1,
+        "source": "action.level",
+        "legacyFallback": false
+      }
+    },
+    {
+      "identity": "canonical-level-twelve",
+      "action": { "level": 12 },
+      "expectedResult": {
+        "level": 12,
+        "source": "action.level",
+        "legacyFallback": false
+      }
+    },
+    {
+      "identity": "legacy-fallback-level-twelve",
+      "action": { "skillLevel": 12 },
+      "expectedResult": {
+        "level": 12,
+        "source": "action.skillLevel",
+        "legacyFallback": true
+      }
+    },
+    {
+      "identity": "matching-canonical-and-legacy",
+      "action": { "level": 12, "skillLevel": 12 },
+      "expectedResult": {
+        "level": 12,
+        "source": "action.level",
+        "legacyFallback": false,
+        "legacyLevelStatus": "consistent"
+      }
+    },
+    {
+      "identity": "missing-defaults-level-one",
+      "action": {},
+      "expectedResult": {
+        "level": 1,
+        "source": "verified-action-level-default",
+        "legacyFallback": false
+      }
+    },
+    {
+      "identity": "canonical-legacy-conflict",
+      "action": { "level": 12, "skillLevel": 1 },
+      "expectedErrorCode": "verified-action-level-conflict"
+    },
+    {
+      "identity": "invalid-canonical-does-not-fallback",
+      "action": { "level": 0, "skillLevel": 12 },
+      "expectedErrorCode": "verified-action-level-invalid"
+    },
+    {
+      "identity": "invalid-legacy",
+      "action": { "skillLevel": 0 },
+      "expectedErrorCode": "verified-action-level-invalid"
+    }
+  ],
+  "runtimeInterruptionCases": [
+    {
+      "identity": "star-skill-interrupted-at-44f",
+      "controlSkillId": 10200112,
+      "subSkillIndex": 0,
+      "effectiveEndFrame": 44,
+      "durationFrames": 600,
+      "expectation": {
+        "directSpCount": 3,
+        "effectCommandCountById": {
+          "battle-element:102001119": 3,
+          "battle-element:102001135": 1
+        },
+        "targetStateChangeCountByIdentityAndOperation": {
+          "lily-will:expire": 1,
+          "lily-will:gain": 1
+        },
+        "remainingTuningMarkFrames": [],
+        "conditionResults": [],
+        "landedHitRuntimeMisses": [
+          {
+            "bindingIdentity": "lily-star-skill-per-landed-hit-attack",
+            "triggerFrame": 48,
+            "withinOccupancy": false
+          },
+          {
+            "bindingIdentity": "lily-star-skill-per-landed-hit-sp",
+            "triggerFrame": 48,
+            "withinOccupancy": false
+          },
+          {
+            "bindingIdentity": "lily-star-skill-per-landed-hit-attack",
+            "triggerFrame": 54,
+            "withinOccupancy": false
+          },
+          {
+            "bindingIdentity": "lily-star-skill-per-landed-hit-sp",
+            "triggerFrame": 54,
+            "withinOccupancy": false
+          }
+        ]
+      }
+    },
+    {
+      "identity": "ultimate-interrupted-at-218f",
+      "controlSkillId": 10200113,
+      "subSkillIndex": 0,
+      "effectiveEndFrame": 218,
+      "durationFrames": 600,
+      "effectSelection": "tuning-mark",
+      "expectation": {
+        "directSpCount": 0,
+        "effectCommandCountById": {},
+        "remainingTuningMarkFrames": [211, 216],
+        "conditionResults": [
+          {
+            "triggerFrame": 211,
+            "applied": true,
+            "reason": "same-action-hit-landed"
+          },
+          {
+            "triggerFrame": 216,
+            "applied": true,
+            "reason": "same-action-hit-landed"
+          },
+          {
+            "triggerFrame": 220,
+            "applied": false,
+            "reason": "same-action-hit-outside-effective-occupancy"
+          }
+        ],
+        "landedHitRuntimeMisses": []
+      }
+    }
+  ],
+  "isolatedActionCases": [
+    {
+      "identity": "ultimate-last-mark-only",
+      "durationFrames": 600,
+      "actions": [
+        {
+          "id": "isolated-ultimate-last-only",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "10200113|0|elements|6|8236903294079356132|211|6": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            },
+            "10200113|0|elements|6|8236903294079356132|216|7": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "isolated-ultimate-last-mark-only",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-ultimate-last-only",
+            "markId": 750,
+            "kind": "acquire"
+          },
+          "expectation": {
+            "count": 1,
+            "orderedValues": { "frameIndex": [220] }
+          },
+          "select": ["before", "after", "frameIndex", "sourceSequencePath"]
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-all-mark-hits-miss",
+      "durationFrames": 600,
+      "actions": [
+        {
+          "id": "isolated-ultimate-all-miss",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "10200113|0|elements|6|8236903294079356132|211|6": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            },
+            "10200113|0|elements|6|8236903294079356132|216|7": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            },
+            "10200113|0|elements|6|8236903294079356132|220|8": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "isolated-ultimate-all-mark-hits-miss",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-ultimate-all-miss",
+            "markId": 750,
+            "kind": "acquire"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "star-at-sp-cap",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "isolated-star-at-cap",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10200112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "isolated-star-at-cap-no-overflow-transaction",
+          "path": "resources.actors",
+          "where": {
+            "actionId": "isolated-star-at-cap",
+            "reason": "verified-direct-sp"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "isolated-star-at-cap-five-landed-hits",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-star-at-cap",
+            "eventType": "VERIFIED_COMBAT_HIT"
+          },
+          "expectation": { "count": 5 }
+        }
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "lily-star-all-land",
+      "controlSkillId": 10200112,
+      "subSkillIndex": 0
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "lily-ultimate-all-land",
+      "controlSkillId": 10200113,
+      "subSkillIndex": 0
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "lily-star-carry-level-12",
+      "controlSkillId": 10200122,
+      "subSkillIndex": 0
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-attack-buff-lifecycle",
+      "assertionIdentity": "buff-apply-refresh-stack-expire",
+      "path": "effects.events",
+      "where": {
+        "effectId": "battle-element:102001119",
+        "targetId": "actor-102001"
+      },
+      "expectation": {
+        "minCount": 7,
+        "contains": [{ "operation": "apply" }, { "operation": "expire" }]
+      },
+      "select": ["actionId", "absoluteFrame", "operation"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-five-landed-hit-frames",
+      "path": "damage",
+      "where": {
+        "actionId": "lily-star-all-land",
+        "eventType": "VERIFIED_COMBAT_HIT"
+      },
+      "expectation": {
+        "count": 5,
+        "orderedValues": {
+          "absoluteFrame": [2032, 2037, 2042, 2048, 2054]
+        }
+      },
+      "select": ["hitIdentity", "sourceSequencePath"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-five-attack-refreshes",
+      "path": "effects.events",
+      "where": {
+        "actionId": "lily-star-all-land",
+        "effectId": "battle-element:102001119",
+        "operation": "apply"
+      },
+      "expectation": {
+        "count": 5,
+        "orderedValues": {
+          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
+          "modifiers.0.valueRaw": [400, 400, 400, 400, 400]
+        },
+        "every": {
+          "modifiers.0.attributeId": 1,
+          "modifiers.0.bucket": "dynamicPercent"
+        }
+      },
+      "select": ["expiresAtMs", "targetId"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-five-direct-sp",
+      "path": "resources.actors",
+      "where": {
+        "actionId": "lily-star-all-land",
+        "reason": "verified-direct-sp"
+      },
+      "expectation": {
+        "count": 5,
+        "orderedValues": {
+          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
+          "change": [0.5, 0.5, 0.5, 0.5, 0.5]
+        }
+      },
+      "select": ["beforeValue", "afterValue"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-last-hit-only-sp",
+      "path": "resources.actors",
+      "where": {
+        "actionId": "lily-star-last-only",
+        "reason": "verified-direct-sp"
+      },
+      "expectation": {
+        "count": 1,
+        "orderedValues": {
+          "absoluteFrame": [3754],
+          "change": [0.5]
+        }
+      },
+      "select": ["beforeValue", "afterValue"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-all-miss-no-sp",
+      "path": "resources.actors",
+      "where": {
+        "actionId": "lily-star-all-miss",
+        "reason": "verified-direct-sp"
+      },
+      "expectation": { "count": 0 }
+    },
+    {
+      "kind": "trace-query",
+      "identity": "ultimate-three-wind-marks",
+      "path": "resources.tuningMarks",
+      "where": {
+        "actionId": "lily-ultimate-all-land",
+        "markId": 750,
+        "kind": "acquire"
+      },
+      "expectation": {
+        "count": 3,
+        "orderedValues": {
+          "frameIndex": [1861, 1866, 1870],
+          "before": [0, 1, 2],
+          "after": [1, 2, 3]
+        }
+      },
+      "select": ["frameIndex", "sourceSequencePath"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "ultimate-first-mark-same-frame-order",
+      "path": "resources.tuningMarks",
+      "where": {
+        "actionId": "lily-ultimate-all-land",
+        "markId": 750,
+        "frameIndex": 1861
+      },
+      "expectation": {
+        "count": 2,
+        "orderedValues": {
+          "kind": ["acquire", "held-trigger"]
+        }
+      },
+      "select": ["before", "after", "sourceSequencePath"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "will-final-gain",
+      "path": "state.targetEvents",
+      "where": {
+        "actionId": "lily-star-expiry-boundary",
+        "type": "VERIFIED_TARGET_STATE_CHANGE",
+        "payload.stateIdentity": "lily-will",
+        "payload.operation": "gain"
+      },
+      "expectation": {
+        "count": 1
+      },
+      "select": ["timeMs", "payload.beforeValue", "payload.afterValue"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "will-exact-seven-second-expiry",
+      "path": "state.targetEvents",
+      "where": {
+        "type": "VERIFIED_TARGET_STATE_CHANGE",
+        "payload.stateIdentity": "lily-will",
+        "payload.operation": "expire"
+      },
+      "expectation": { "count": 4 },
+      "select": [
+        "actionId",
+        "timeMs",
+        "payload.beforeValue",
+        "payload.afterValue"
+      ]
+    },
+    {
+      "kind": "trace-duration",
+      "identity": "will-exact-seven-second-duration",
+      "path": "state.targetEvents",
+      "startSelection": "last",
+      "startWhere": {
+        "actionId": "lily-star-expiry-boundary",
+        "type": "VERIFIED_TARGET_STATE_CHANGE",
+        "payload.stateIdentity": "lily-will",
+        "payload.operation": "gain"
+      },
+      "endWhere": {
+        "type": "VERIFIED_TARGET_STATE_CHANGE",
+        "payload.stateIdentity": "lily-will",
+        "payload.operation": "expire"
+      },
+      "timePath": "timeMs",
+      "expectedDurationMs": 7000
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-carry-eighty-one-frame-occupancy",
+      "path": "variants.selections",
+      "where": { "actionId": "lily-star-carry-level-12" },
+      "expectation": {
+        "count": 1,
+        "orderedValues": { "actualDurationFrames": [81] }
+      },
+      "select": ["controlSkillId", "subSkillIndex"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-carry-level-one-guard",
+      "path": "effects.events",
+      "where": {
+        "actionId": "lily-switch-out--on-exit--actor-102001--star-carry",
+        "effectId": "battle-element:480122004"
+      },
+      "expectation": {
+        "count": 2,
+        "orderedValues": {
+          "operation": ["apply", "expire"],
+          "absoluteFrame": [2851, 3211],
+          "modifiers.0.valueRaw": [1900, 1900],
+          "targetId": ["actor-101010", "actor-101010"]
+        }
+      },
+      "select": ["expiresAtMs"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-carry-level-twelve-guard",
+      "path": "effects.events",
+      "where": {
+        "actionId": "lily-star-carry-level-12",
+        "effectId": "battle-element:480122004"
+      },
+      "expectation": {
+        "count": 2,
+        "orderedValues": {
+          "operation": ["apply", "expire"],
+          "absoluteFrame": [4351, 4711],
+          "modifiers.0.valueRaw": [3000, 3000],
+          "targetId": ["actor-102001", "actor-102001"]
+        }
+      },
+      "select": ["expiresAtMs"]
+    },
+    {
+      "kind": "trace-query",
+      "identity": "star-attack-buff-exact-six-second-expiry",
+      "path": "effects.events",
+      "where": {
+        "actionId": "lily-star-expiry-boundary",
+        "effectId": "battle-element:102001119"
+      },
+      "expectation": {
+        "count": 6,
+        "orderedValues": {
+          "operation": ["apply", "apply", "apply", "apply", "apply", "expire"],
+          "absoluteFrame": [6732, 6737, 6742, 6748, 6754, 7114]
+        }
+      },
+      "select": ["modifiers.0.valueRaw", "targetId"]
+    }
+  ]
+}

@@ -85,9 +85,12 @@ try {
   const traceIndexModule = await vite.ssrLoadModule(
     '/src/features/workbench/canonicalTraceViewIndex.js'
   );
-  packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
-  const service = serviceModule.createMachineAxisService();
-  const adapter = adapterModule.createWorkbenchMachineAxisAdapter({ service });
+  const targetStateRuntimeModule = await vite.ssrLoadModule(
+    '/src/simulation/mechanics/verifiedTargetStateRuntime.js'
+  );
+  const verifiedActionLevelModule = await vite.ssrLoadModule(
+    '/src/domain/verifiedActionLevel.js'
+  );
   const manifests = [];
   const visualRuns = [];
 
@@ -137,22 +140,45 @@ try {
       path: reportPath,
       report: goldenReports[index],
     }));
+    const runtimePackage = recipe.runtimeProfileOverlay
+      ? createRuntimeProfileOverlay(mechanicsPackage, profile)
+      : mechanicsPackage;
+    const packageValidation =
+      packageModule.validateVerifiedCombatMechanicsPackage(runtimePackage);
+    if (!packageValidation.valid) {
+      throw new Error(
+        'Character acceptance runtime package invalid for ' +
+          ownerId +
+          ': ' +
+          packageValidation.issues.join(', ')
+      );
+    }
+    packageModule.installVerifiedCombatMechanicsPackage(runtimePackage);
+    const service = serviceModule.createMachineAxisService();
+    const adapter = adapterModule.createWorkbenchMachineAxisAdapter({
+      service,
+    });
     const visualScenario = executeVisualScenario({
       recipe,
       fixture,
       service,
       adapter,
       traceIndexModule,
+      targetStateRuntimeModule,
+      verifiedActionLevelModule,
       profile,
+      runtimePackage,
     });
-    const manifest = createCharacterAcceptanceManifest({
-      recipe,
-      profile,
-      runtimeCoverage,
-      unresolvedLedger,
-      goldens,
-      visualScenario,
-    });
+    const manifest = toJsonCompatible(
+      createCharacterAcceptanceManifest({
+        recipe,
+        profile,
+        runtimeCoverage,
+        unresolvedLedger,
+        goldens,
+        visualScenario,
+      })
+    );
     const validation = validateCharacterAcceptanceManifest(manifest, {
       checkPublication: false,
     });
@@ -261,13 +287,131 @@ function createOwnerAcceptanceResult(manifests, visualRuns) {
   };
 }
 
+function createRuntimeProfileOverlay(basePackage, profile) {
+  const result = structuredClone(basePackage);
+  result.actionMappings = upsertRows(
+    result.actionMappings,
+    profile.contracts?.publicActions,
+    row =>
+      [
+        row?.ownerKind ?? 'actor',
+        Number(row?.ownerId),
+        Number(row?.sourceSkillId),
+        Number(row?.controlSkillId),
+        Number(row?.subSkillIndex ?? row?.selectedSubSkillIndex ?? 0),
+        String(row?.actionKind ?? ''),
+      ].join('|')
+  );
+  result.summary.candidateActionCount = result.actionMappings.length;
+  result.controlBindings = upsertRows(
+    result.controlBindings,
+    profile.contracts?.controls,
+    row =>
+      [
+        row?.ownerKind ?? 'actor',
+        Number(row?.ownerId ?? profile.owner?.ownerId),
+        Number(row?.controlSkillId),
+      ].join('|')
+  );
+  const graph = result.actionVariantGraph;
+  graph.runtimeEffectBindings = upsertRows(
+    graph.runtimeEffectBindings,
+    profile.contracts?.runtimeEffectBindings,
+    row => String(row?.bindingIdentity ?? '')
+  );
+  graph.targetStateProfiles = upsertRows(
+    graph.targetStateProfiles,
+    profile.contracts?.targetStateProfiles,
+    row => String(row?.stateIdentity ?? '')
+  );
+  graph.targetStateTransactions = upsertRows(
+    graph.targetStateTransactions,
+    profile.contracts?.targetStateTransactions,
+    row => String(row?.transactionIdentity ?? '')
+  );
+  graph.conditionalHitGroups = upsertRows(
+    graph.conditionalHitGroups,
+    profile.contracts?.conditionalHitGroups,
+    row => String(row?.groupIdentity ?? '')
+  );
+  result.switchTriggerCatalog.profiles = upsertRows(
+    result.switchTriggerCatalog.profiles,
+    profile.contracts?.switchTriggers,
+    row => String(row?.profileIdentity ?? '')
+  );
+  const switchProfiles = result.switchTriggerCatalog.profiles;
+  const appliedSwitchProfiles = switchProfiles.filter(
+    row => row.applied === true
+  );
+  const onEnterSwitchProfiles = switchProfiles.filter(
+    row => row.triggerPhase === 'on-enter'
+  );
+  const onExitSwitchProfiles = switchProfiles.filter(
+    row => row.triggerPhase === 'on-exit'
+  );
+  result.switchTriggerCatalog.summary = {
+    profileCount: switchProfiles.length,
+    appliedProfileCount: appliedSwitchProfiles.length,
+    unresolvedProfileCount:
+      switchProfiles.length - appliedSwitchProfiles.length,
+    onEnterProfileCount: onEnterSwitchProfiles.length,
+    onExitProfileCount: onExitSwitchProfiles.length,
+    appliedOnEnterProfileCount: onEnterSwitchProfiles.filter(
+      row => row.applied === true
+    ).length,
+    appliedOnExitProfileCount: onExitSwitchProfiles.filter(
+      row => row.applied === true
+    ).length,
+    switchTriggeredOnlyCount: switchProfiles.filter(
+      row => row.manualReleaseStatus === 'switch-trigger-only'
+    ).length,
+    reasonCounts: countValues(switchProfiles.flatMap(row => row.reasons ?? [])),
+  };
+  result.summary.switchTriggerProfileCount = switchProfiles.length;
+  result.summary.appliedSwitchTriggerProfileCount =
+    appliedSwitchProfiles.length;
+  result.summary.unresolvedSwitchTriggerProfileCount =
+    switchProfiles.length - appliedSwitchProfiles.length;
+  return result;
+}
+
+function upsertRows(existing = [], additions = [], identity) {
+  const result = structuredClone(existing ?? []);
+  const indexByIdentity = new Map(
+    result.map((row, index) => [identity(row), index])
+  );
+  for (const row of additions ?? []) {
+    const key = identity(row);
+    const previousIndex = indexByIdentity.get(key);
+    if (previousIndex == null) {
+      indexByIdentity.set(key, result.length);
+      result.push(structuredClone(row));
+    } else {
+      result[previousIndex] = structuredClone(row);
+    }
+  }
+  return result;
+}
+
+function countValues(values) {
+  return Object.fromEntries(
+    [...(values ?? [])].sort().reduce((counts, value) => {
+      counts.set(value, (counts.get(value) ?? 0) + 1);
+      return counts;
+    }, new Map())
+  );
+}
+
 function executeVisualScenario({
   recipe,
   fixture,
   service,
   adapter,
   traceIndexModule,
+  targetStateRuntimeModule,
+  verifiedActionLevelModule,
   profile,
+  runtimePackage,
 }) {
   const validation = service.validate(fixture);
   if (!validation.valid) {
@@ -314,6 +458,25 @@ function executeVisualScenario({
     Number(recipe.ownerId) === 108003
       ? inspectMitiForegroundBackgroundSwitch(first)
       : null;
+  const negativeActionCases = (recipe.negativeActionCases ?? []).map(
+    negativeCase => inspectNegativeActionCase(service, fixture, negativeCase)
+  );
+  const isolatedActionCases = (recipe.isolatedActionCases ?? []).map(
+    isolatedCase => inspectIsolatedActionCase(service, fixture, isolatedCase)
+  );
+  const runtimeInterruptionCases = (recipe.runtimeInterruptionCases ?? []).map(
+    interruptionCase =>
+      inspectRuntimeInterruptionCase({
+        interruptionCase,
+        fixture,
+        profile,
+        runtimePackage,
+        targetStateRuntimeModule,
+      })
+  );
+  const actionLevelCases = (recipe.actionLevelCases ?? []).map(levelCase =>
+    inspectActionLevelCase(verifiedActionLevelModule, levelCase)
+  );
   const probeResults = recipe.probes.map(probe =>
     inspectRecipeProbe(first, probe)
   );
@@ -343,7 +506,10 @@ function executeVisualScenario({
   );
   const sourceHitAliases = projectSourceHitAliases(first, fixture.scenario.id);
   const assertionResults = [
-    { identity: 'machine-axis-validation', passed: validation.valid },
+    {
+      identity: 'machine-axis-validation',
+      passed: validation.valid,
+    },
     { identity: 'canonical-same-input-replay', passed: stableReplay },
     {
       identity: 'workbench-import-export-round-trip',
@@ -389,10 +555,19 @@ function executeVisualScenario({
           },
         ]
       : []),
+    ...negativeActionCases,
+    ...isolatedActionCases,
+    ...runtimeInterruptionCases,
+    ...actionLevelCases,
     ...probeResults,
   ];
   const failed = assertionResults.filter(result => !result.passed);
   const selectionRows = first.trace?.variants?.selections ?? [];
+  const runtimeEffectEvidence = projectCharacterRuntimeEffectEvidence(
+    first,
+    profile,
+    fixture.scenario.id
+  );
   const profileRows = createScenarioProfileProjectionRows({
     profile,
     exercisedControls: collectRuntimeExercisedControls(first),
@@ -407,6 +582,7 @@ function executeVisualScenario({
       ...tuningComponentEffects.map(event => event.effectIdentity),
       ...verifiedDirectEffectSources.map(event => event.effectIdentity),
       ...tuningMarkResourceEffects.map(event => event.effectIdentity),
+      ...runtimeEffectEvidence.map(event => event.effectIdentity),
     ],
     scenarioId: fixture.scenario?.id,
     prefix: 'machine',
@@ -442,6 +618,10 @@ function executeVisualScenario({
       thunderLifecycle,
       inputWindowBoundaries,
       foregroundBackgroundSwitch,
+      negativeActionCases,
+      isolatedActionCases,
+      runtimeInterruptionCases,
+      actionLevelCases,
     },
     probeResults,
     assertionResults: assertionResults.map(result => ({
@@ -480,20 +660,26 @@ function executeVisualScenario({
             actionId: event.actionId ?? null,
             hitIdentity: event.hitIdentity,
             frame: event.frame ?? null,
+            absoluteFrame: event.absoluteFrame ?? null,
+            sourceSequencePath: event.sourceSequencePath ?? null,
           })),
         ...sourceHitAliases,
       ],
-      resources: (first.trace?.variants?.resourceEvents ?? []).map(
-        (event, index) => ({
-          projectionIdentity:
-            'machine-resource:' + fixture.scenario.id + ':' + index,
-          actionId: event.actionId ?? null,
-          resourceIdentity: event.payload?.resourceIdentity ?? null,
-          operation: event.payload?.operation ?? event.type ?? null,
-          beforeValue: event.payload?.beforeValue ?? null,
-          afterValue: event.payload?.afterValue ?? null,
-        })
-      ),
+      resources: [
+        ...(first.trace?.variants?.resourceEvents ?? []).map(
+          (event, index) => ({
+            projectionIdentity:
+              'machine-resource:' + fixture.scenario.id + ':' + index,
+            actionId: event.actionId ?? null,
+            resourceIdentity: event.payload?.resourceIdentity ?? null,
+            operation: event.payload?.operation ?? event.type ?? null,
+            absoluteFrame: event.absoluteFrame ?? null,
+            beforeValue: event.payload?.beforeValue ?? null,
+            change: event.payload?.change ?? null,
+            afterValue: event.payload?.afterValue ?? null,
+          })
+        ),
+      ],
       states: (first.trace?.state?.targetEvents ?? []).map((event, index) => ({
         projectionIdentity:
           'machine-state:' + fixture.scenario.id + ':' + index,
@@ -501,6 +687,8 @@ function executeVisualScenario({
         stateIdentity:
           event.payload?.stateIdentity ?? event.stateIdentity ?? null,
         operation: event.payload?.operation ?? event.type ?? null,
+        absoluteFrame: event.absoluteFrame ?? event.frameIndex ?? null,
+        payload: structuredClone(event.payload ?? {}),
       })),
       effects: [
         ...(first.trace?.effects?.events ?? []).map((event, index) => ({
@@ -510,6 +698,10 @@ function executeVisualScenario({
           effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
           operation: event.operation ?? null,
           targetId: event.targetId ?? null,
+          absoluteFrame: event.absoluteFrame ?? null,
+          timeMs: event.timeMs ?? null,
+          expiresAtMs: event.expiresAtMs ?? null,
+          modifiers: structuredClone(event.modifiers ?? []),
         })),
         ...(first.trace?.damage ?? [])
           .filter(event => Number.isInteger(Number(event.elementId)))
@@ -529,6 +721,7 @@ function executeVisualScenario({
         ...appliedEffectSourceElements,
         ...verifiedDirectEffectSources,
         ...tuningMarkResourceEffects,
+        ...runtimeEffectEvidence,
       ],
       diagnostics: [
         ...(first.trace?.diagnostics?.validationWarnings ?? []),
@@ -1261,6 +1454,50 @@ function projectAppliedEffectSourceElements(run, scenarioId) {
   return rows;
 }
 
+function projectCharacterRuntimeEffectEvidence(run, profile, scenarioId) {
+  const selectionsByActionId = new Map(
+    (run.trace?.variants?.selections ?? []).map(selection => [
+      selection.actionId,
+      selection,
+    ])
+  );
+  const directSpTransactions = (run.trace?.resources?.actors ?? []).filter(
+    event => event.reason === 'verified-direct-sp'
+  );
+  const rows = [];
+  for (const binding of profile.contracts?.runtimeEffectBindings ?? []) {
+    if (!binding.directSp || !binding.effectId) continue;
+    for (const [index, event] of directSpTransactions.entries()) {
+      const selection = selectionsByActionId.get(event.actionId);
+      if (
+        Number(selection?.controlSkillId) !== Number(binding.controlSkillId) ||
+        Number(selection?.subSkillIndex) !== Number(binding.subSkillIndex)
+      ) {
+        continue;
+      }
+      rows.push({
+        projectionIdentity:
+          'machine-runtime-direct-sp-effect:' +
+          scenarioId +
+          ':' +
+          binding.bindingIdentity +
+          ':' +
+          index,
+        actionId: event.actionId,
+        effectIdentity: binding.effectId,
+        operation: event.reason,
+        targetId: event.actorId ?? null,
+        value: event.change ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        beforeValue: event.beforeValue ?? null,
+        afterValue: event.afterValue ?? null,
+        sourceIdentity: binding.sourceIdentity ?? null,
+      });
+    }
+  }
+  return rows;
+}
+
 function projectVerifiedDirectEffectSources(run, scenarioId) {
   const rows = [];
   for (const [eventIndex, event] of (run.trace?.events ?? []).entries()) {
@@ -1512,6 +1749,92 @@ function inspectRecipeProbe(run, probe) {
       actual: group ?? null,
     };
   }
+  if (probe.kind === 'trace-query') {
+    const collection = readPath(run.trace, probe.path);
+    const matches = Array.isArray(collection)
+      ? collection.filter(row => matchesProbeWhere(row, probe.where ?? {}))
+      : [];
+    const expectation = probe.expectation ?? {};
+    const countPassed =
+      (expectation.count == null ||
+        matches.length === Number(expectation.count)) &&
+      (expectation.minCount == null ||
+        matches.length >= Number(expectation.minCount)) &&
+      (expectation.maxCount == null ||
+        matches.length <= Number(expectation.maxCount));
+    const orderedValuesPassed = Object.entries(
+      expectation.orderedValues ?? {}
+    ).every(
+      ([valuePath, expected]) =>
+        JSON.stringify(matches.map(row => readPath(row, valuePath))) ===
+        JSON.stringify(expected)
+    );
+    const everyPassed =
+      expectation.every == null ||
+      matches.every(row => matchesProbeWhere(row, expectation.every));
+    const containsPassed = (expectation.contains ?? []).every(expected =>
+      matches.some(row => matchesProbeWhere(row, expected))
+    );
+    const selectedPaths = uniqueStrings([
+      ...(probe.select ?? []),
+      ...Object.keys(probe.where ?? {}),
+      ...Object.keys(expectation.orderedValues ?? {}),
+    ]);
+    return {
+      identity:
+        probe.assertionIdentity ??
+        'probe:trace-query:' + String(probe.identity),
+      passed:
+        countPassed && orderedValuesPassed && everyPassed && containsPassed,
+      actual: {
+        count: matches.length,
+        rows: matches.map(row =>
+          Object.fromEntries(
+            selectedPaths.map(valuePath => [
+              valuePath,
+              readPath(row, valuePath) ?? null,
+            ])
+          )
+        ),
+      },
+    };
+  }
+  if (probe.kind === 'trace-duration') {
+    const collection = readPath(run.trace, probe.path);
+    const rows = Array.isArray(collection) ? collection : [];
+    const starts = rows.filter(row =>
+      matchesProbeWhere(row, probe.startWhere ?? {})
+    );
+    const ends = rows.filter(row =>
+      matchesProbeWhere(row, probe.endWhere ?? {})
+    );
+    const start = probe.startSelection === 'last' ? starts.at(-1) : starts[0];
+    const timePath = probe.timePath ?? 'timeMs';
+    const startTime = Number(readPath(start, timePath));
+    const end = ends.find(row => {
+      const endTime = Number(readPath(row, timePath));
+      return Number.isFinite(endTime) && endTime >= startTime;
+    });
+    const endTime = Number(readPath(end, timePath));
+    const actualDurationMs = endTime - startTime;
+    return {
+      identity:
+        probe.assertionIdentity ??
+        'probe:trace-duration:' + String(probe.identity),
+      passed:
+        starts.length > 0 &&
+        Boolean(end) &&
+        Number.isFinite(actualDurationMs) &&
+        actualDurationMs === Number(probe.expectedDurationMs),
+      actual: {
+        startMatchCount: starts.length,
+        endMatchCount: ends.length,
+        startTimeMs: Number.isFinite(startTime) ? startTime : null,
+        endTimeMs: Number.isFinite(endTime) ? endTime : null,
+        durationMs: Number.isFinite(actualDurationMs) ? actualDurationMs : null,
+      },
+    };
+  }
   return {
     identity: 'probe:unsupported:' + String(probe.kind),
     passed: false,
@@ -1618,7 +1941,13 @@ function createAcceptanceReport(manifests, visualRuns, catalog, manifestIndex) {
   return value;
 }
 
-function createOutputs(manifests, catalog, manifestIndex, report) {
+function createOutputs(
+  manifests,
+  catalog,
+  manifestIndex,
+  report,
+  { ownerOnly = false } = {}
+) {
   const outputs = new Map();
   outputs.set(generatedCatalogPath, jsonText(catalog));
   outputs.set(generatedManifestIndexPath, jsonText(manifestIndex));
@@ -1696,11 +2025,335 @@ async function assertOutputsClean(outputs) {
     );
 }
 
-async function loadRecipes() {
+async function loadRecipes(ownerId = null) {
   const names = (await fs.readdir(recipeRoot))
     .filter(name => name.endsWith('.json'))
     .sort();
-  return Promise.all(names.map(name => readJson(path.join(recipeRoot, name))));
+  const recipes = await Promise.all(
+    names.map(name => readJson(path.join(recipeRoot, name)))
+  );
+  const selected =
+    ownerId == null
+      ? recipes
+      : recipes.filter(recipe => Number(recipe.ownerId) === ownerId);
+  if (ownerId != null && selected.length !== 1) {
+    throw new Error(
+      'Character acceptance owner recipe must match exactly once: ' + ownerId
+    );
+  }
+  return selected;
+}
+
+function inspectNegativeActionCase(service, fixture, negativeCase) {
+  const contract = structuredClone(fixture);
+  if (Array.isArray(negativeCase.actions)) {
+    contract.actions = structuredClone(negativeCase.actions);
+  } else {
+    contract.actions.push(structuredClone(negativeCase.action));
+  }
+  if (Number.isInteger(Number(negativeCase.durationFrames))) {
+    contract.scenario.durationFrames = Number(negativeCase.durationFrames);
+  }
+  contract.scenario.id += '--negative--' + String(negativeCase.identity);
+  const validation = service.validate(contract);
+  const expected = negativeCase.expectedIssue ?? {};
+  const issue = (validation.issues ?? []).find(actual =>
+    Object.entries(expected).every(([key, value]) => {
+      if (key === 'violationCode') {
+        return (actual.violationCodes ?? []).includes(value);
+      }
+      return Object.is(actual[key], value);
+    })
+  );
+  return {
+    identity: 'negative:' + String(negativeCase.identity),
+    passed:
+      validation.valid === false &&
+      Boolean(issue) &&
+      validation.hashes?.trace != null,
+    actual: {
+      issue: issue ?? null,
+      canonicalHashes: validation.hashes,
+      classification: validation.classification,
+    },
+  };
+}
+
+function inspectIsolatedActionCase(service, fixture, isolatedCase) {
+  const contract = structuredClone(fixture);
+  contract.actions = structuredClone(isolatedCase.actions ?? []);
+  contract.scenario.id += '--isolated--' + String(isolatedCase.identity);
+  contract.scenario.durationFrames = Number(
+    isolatedCase.durationFrames ?? fixture.scenario.durationFrames
+  );
+  const validation = service.validate(contract);
+  if (!validation.valid) {
+    return {
+      identity: 'isolated:' + String(isolatedCase.identity),
+      passed: false,
+      actual: { validation },
+    };
+  }
+  const first = service.simulate(contract);
+  const second = service.simulate(contract);
+  const probeResults = (isolatedCase.probes ?? []).map(probe =>
+    inspectRecipeProbe(first, probe)
+  );
+  return {
+    identity: 'isolated:' + String(isolatedCase.identity),
+    passed:
+      sameHashes(first.hashes, second.hashes) &&
+      probeResults.every(result => result.passed),
+    actual: {
+      canonicalHashes: first.hashes,
+      stableReplay: sameHashes(first.hashes, second.hashes),
+      probeResults,
+    },
+  };
+}
+
+function inspectActionLevelCase(verifiedActionLevelModule, levelCase) {
+  let resolution = null;
+  let failure = null;
+  try {
+    resolution = verifiedActionLevelModule.resolveVerifiedActionLevel(
+      structuredClone(levelCase.action ?? {})
+    );
+  } catch (error) {
+    failure = {
+      name: error?.name ?? null,
+      code: error?.code ?? null,
+      details: error?.details ?? null,
+    };
+  }
+  const expectedResult = levelCase.expectedResult ?? null;
+  const expectedErrorCode = levelCase.expectedErrorCode ?? null;
+  const passed = expectedErrorCode
+    ? failure?.code === expectedErrorCode && resolution == null
+    : failure == null &&
+      expectedResult != null &&
+      Object.entries(expectedResult).every(([key, value]) =>
+        Object.is(resolution?.[key], value)
+      );
+  return {
+    identity: 'action-level:' + String(levelCase.identity),
+    passed,
+    actual: {
+      action: structuredClone(levelCase.action ?? {}),
+      resolution,
+      failure,
+    },
+  };
+}
+
+function inspectRuntimeInterruptionCase({
+  interruptionCase,
+  fixture,
+  profile,
+  runtimePackage,
+  targetStateRuntimeModule,
+}) {
+  const ownerId = Number(profile.owner?.ownerId);
+  const controlSkillId = Number(interruptionCase.controlSkillId);
+  const subSkillIndex = Number(interruptionCase.subSkillIndex ?? 0);
+  const frameRate = Number(interruptionCase.frameRate ?? 60);
+  const effectiveEndFrame = Number(interruptionCase.effectiveEndFrame);
+  const control = (profile.contracts?.controls ?? []).find(
+    candidate => Number(candidate.controlSkillId) === controlSkillId
+  );
+  if (
+    !control ||
+    !Number.isInteger(effectiveEndFrame) ||
+    effectiveEndFrame < 0
+  ) {
+    return {
+      identity: 'runtime-interruption:' + String(interruptionCase.identity),
+      passed: false,
+      actual: { reason: 'runtime-interruption-case-invalid' },
+    };
+  }
+  const actionId = 'runtime-interruption--' + interruptionCase.identity;
+  const actorId = String(interruptionCase.actorId ?? `actor-${ownerId}`);
+  const actor = {
+    id: actorId,
+    characterId: ownerId,
+    name: profile.owner?.name ?? String(ownerId),
+  };
+  const hits = (control.hits ?? []).filter(
+    hit =>
+      Number(hit.mapIndex) === subSkillIndex ||
+      (hit.trigger?.subSkillIndexes ?? []).some(
+        value => Number(value) === subSkillIndex
+      )
+  );
+  const effects = (control.effects ?? []).filter(effect => {
+    if (Number(effect.mapIndex) !== subSkillIndex) return false;
+    if (interruptionCase.effectSelection === 'tuning-mark') {
+      return effect.tuningMark?.applied === true;
+    }
+    if (interruptionCase.effectSelection === 'landed-hit-conditioned') {
+      return effect.landedHitActivationCondition?.applied === true;
+    }
+    return false;
+  });
+  const action = {
+    id: actionId,
+    name: actionId,
+    startMs: 0,
+    sourceSequenceIndex: 0,
+    sourceSequencePath: [0],
+    actorId,
+    actor,
+    contextualEffectiveEndMs: (effectiveEndFrame * 1000) / frameRate,
+  };
+  const actionResolutionById = new Map([
+    [
+      actionId,
+      {
+        ready: true,
+        packageId: runtimePackage.packageId,
+        actionBinding: {
+          identity: `runtime-interruption-${controlSkillId}-${subSkillIndex}`,
+          controlSkillId,
+          selectedSubSkillIndex: subSkillIndex,
+        },
+        controlBinding: { frameRate },
+        hits: structuredClone(hits),
+        effects: structuredClone(effects),
+      },
+    ],
+  ]);
+  const runtime = targetStateRuntimeModule.applyVerifiedTargetStateRuntime({
+    scenario: {
+      time: {
+        durationMs:
+          (Number(interruptionCase.durationFrames ?? 600) * 1000) / frameRate,
+      },
+      policy: {
+        defaultWillHit: fixture.scenario?.projectile?.defaultWillHit !== false,
+      },
+      actors: [actor],
+      enemy: { id: 'enemy-1', name: 'Passive Boss' },
+      actions: [action],
+    },
+    actionResolutionById,
+    mechanicsPackage: runtimePackage,
+  });
+  const resolved = runtime.actionResolutionById.get(actionId);
+  const effectCommandCountById = countValues(
+    runtime.effectCommands.map(command => command.effectId)
+  );
+  const targetStateChangeCountByIdentityAndOperation = countValues(
+    runtime.events
+      .filter(event => event.type === 'VERIFIED_TARGET_STATE_CHANGE')
+      .map(
+        event =>
+          String(event.payload?.stateIdentity) +
+          ':' +
+          String(event.payload?.operation)
+      )
+  );
+  const actual = {
+    effectiveEndFrame,
+    directSpCount: runtime.directSpEvents.length,
+    effectCommandCountById,
+    targetStateChangeCountByIdentityAndOperation,
+    remainingTuningMarkFrames: (resolved?.effects ?? [])
+      .filter(effect => effect.tuningMark?.applied === true)
+      .map(effect => Number(effect.trigger?.startFrame))
+      .sort((left, right) => left - right),
+    conditionResults: runtime.actionHitActivationResults.map(result => ({
+      triggerFrame: Number(result.condition?.triggerFrame),
+      applied: result.applied,
+      reason: result.reason,
+    })),
+    landedHitRuntimeMisses: runtime.events
+      .filter(
+        event =>
+          event.type === 'VERIFIED_RUNTIME_EFFECT_LANDED_HIT_CONDITION_NOT_MET'
+      )
+      .map(event => ({
+        bindingIdentity: event.payload?.bindingIdentity,
+        triggerFrame: Number(event.payload?.triggerFrame),
+        withinOccupancy: event.payload?.withinOccupancy,
+      })),
+    trace: {
+      events: runtime.events
+        .filter(event => event.actionId === actionId)
+        .map(event => ({
+          type: event.type,
+          timeMs: event.timeMs,
+          actionId: event.actionId,
+          payload: {
+            bindingIdentity: event.payload?.bindingIdentity ?? null,
+            effectIdentity: event.payload?.effectIdentity ?? null,
+            stateIdentity: event.payload?.stateIdentity ?? null,
+            operation: event.payload?.operation ?? null,
+            hitIdentity: event.payload?.hitIdentity ?? null,
+            triggerFrame: event.payload?.triggerFrame ?? null,
+            withinOccupancy: event.payload?.withinOccupancy ?? null,
+            beforeValue: event.payload?.beforeValue ?? null,
+            afterValue: event.payload?.afterValue ?? null,
+            reason: event.payload?.reason ?? null,
+            applied: event.payload?.applied ?? null,
+          },
+        })),
+      directSpEvents: runtime.directSpEvents.map(event => ({
+        timeMs: event.timeMs,
+        actionId: event.actionId,
+        triggerHitIdentity: event.triggerHitIdentity,
+        triggerHitIndex: event.triggerHitIndex,
+        value: event.value,
+        sourceSequencePath: event.sourceSequencePath,
+      })),
+      effectCommands: runtime.effectCommands.map(command => ({
+        sourceActionId: command.sourceActionId,
+        effectId: command.effectId,
+        operation: command.operation,
+        timeMs: command.timeMs,
+        durationMs: command.durationMs,
+        modifiers: command.modifiers,
+      })),
+    },
+  };
+  const expectation = interruptionCase.expectation ?? {};
+  const passed = Object.entries(expectation).every(([key, value]) =>
+    Array.isArray(value) || (value && typeof value === 'object')
+      ? JSON.stringify(actual[key]) === JSON.stringify(value)
+      : Object.is(actual[key], value)
+  );
+  return {
+    identity: 'runtime-interruption:' + String(interruptionCase.identity),
+    passed,
+    actual,
+  };
+}
+
+function matchesProbeWhere(value, where) {
+  return Object.entries(where ?? {}).every(([valuePath, expected]) => {
+    const actual = readPath(value, valuePath);
+    if (expected && typeof expected === 'object' && !Array.isArray(expected)) {
+      if ('$in' in expected) {
+        return expected.$in.some(candidate => Object.is(actual, candidate));
+      }
+      if ('$not' in expected) return !Object.is(actual, expected.$not);
+    }
+    return Object.is(actual, expected);
+  });
+}
+
+function readPath(value, valuePath) {
+  return String(valuePath ?? '')
+    .split('.')
+    .filter(Boolean)
+    .reduce(
+      (current, segment) => (current == null ? undefined : current[segment]),
+      value
+    );
+}
+
+function uniqueStrings(values) {
+  return [...new Set((values ?? []).map(String))].sort();
 }
 
 function readRequestedOwnerId(args) {
@@ -1739,6 +2392,10 @@ function sameHashes(left, right) {
   return ['input', 'data', 'trace', 'evaluation'].every(
     key => left?.[key] === right?.[key]
   );
+}
+
+function toJsonCompatible(value) {
+  return JSON.parse(JSON.stringify(value));
 }
 
 function jsonText(value) {

@@ -787,11 +787,9 @@ export function applyCharacterCombatActionEffectBindings({
     const matchedEffect = matches[0];
     const activationDescendants =
       binding.activationConditionScope === 'matched-effect-subtree'
-        ? (control.effects ?? []).filter(
-            effect =>
-              effect !== matchedEffect &&
-              effect.graphIdentity === matchedEffect.graphIdentity &&
-              Number(effect.depth) >= Number(matchedEffect.depth)
+        ? (control.effects ?? []).filter(effect =>
+            isMatchedEffectSubtreeDescendant(effect, matchedEffect) ||
+            isMatchedTuningConsumeCandidate(effect, matchedEffect, binding)
           )
         : [];
     if (binding.bindingKind === 'projection-only') {
@@ -947,6 +945,47 @@ export function applyCharacterCombatRawDirectEffectBindings({
     }
   }
   return controls;
+}
+
+function isMatchedEffectSubtreeDescendant(effect, matchedEffect) {
+  if (
+    effect === matchedEffect ||
+    effect.graphIdentity !== matchedEffect.graphIdentity ||
+    Number(effect.depth) <= Number(matchedEffect.depth)
+  ) {
+    return false;
+  }
+  const matchedTriggerIndex = Number(matchedEffect.sourceOrder?.triggerIndex);
+  const effectTriggerIndex = Number(effect.sourceOrder?.triggerIndex);
+  if (
+    Number.isInteger(matchedTriggerIndex) &&
+    Number.isInteger(effectTriggerIndex) &&
+    matchedTriggerIndex !== effectTriggerIndex
+  ) {
+    return false;
+  }
+  const matchedPathId = String(matchedEffect.pathId ?? '').trim();
+  const relationAtMatchedDepth =
+    effect.relationPath?.[Number(matchedEffect.depth)] ?? null;
+  return (
+    !matchedPathId ||
+    relationAtMatchedDepth?.from === `element:${matchedPathId}`
+  );
+}
+
+function isMatchedTuningConsumeCandidate(effect, matchedEffect, binding) {
+  if (binding.bindingKind !== 'tuning-consume' || effect === matchedEffect) {
+    return false;
+  }
+  const matchedJudgmentGroupIdentity = String(
+    matchedEffect.tuningOverlimit?.judgmentGroupIdentity ?? ''
+  );
+  return (
+    matchedJudgmentGroupIdentity.length > 0 &&
+    effect.graphIdentity === matchedEffect.graphIdentity &&
+    String(effect.tuningOverlimit?.judgmentGroupIdentity ?? '') ===
+      matchedJudgmentGroupIdentity
+  );
 }
 
 export function applyCharacterCombatAttackInputPhaseMappings({

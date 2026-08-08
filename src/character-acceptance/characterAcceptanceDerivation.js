@@ -80,6 +80,11 @@ export function finalizeRequirementInventory(records = []) {
                 record.optimizationScenario
               ),
             }),
+        ...(record?.scenarioScope == null
+          ? {}
+          : {
+              scenarioScope: structuredClone(record.scenarioScope),
+            }),
         ...(record?.sourceGapDisposition == null
           ? {}
           : {
@@ -165,6 +170,18 @@ export function finalizeSourceGapInventory(records = []) {
         ? 'not-applicable'
         : 'gameplay-impacting',
       blocking: !nonGameplay,
+      ...(record?.acceptanceDisposition == null
+        ? {}
+        : {
+            acceptanceDisposition: structuredClone(
+              record.acceptanceDisposition
+            ),
+          }),
+      ...(record?.scenarioScope == null
+        ? {}
+        : {
+            scenarioScope: structuredClone(record.scenarioScope),
+          }),
     };
     return { ...base, sourceRecordHash: hashCanonicalValue(base) };
   });
@@ -326,16 +343,17 @@ export function deriveAcceptanceMatrix(requirementInventory, coverage) {
       ...(source.optimizationScenario == null
         ? {}
         : {
-            optimizationScenario: structuredClone(
-              source.optimizationScenario
-            ),
+            optimizationScenario: structuredClone(source.optimizationScenario),
+          }),
+      ...(source.scenarioScope == null
+        ? {}
+        : {
+            scenarioScope: structuredClone(source.scenarioScope),
           }),
       ...(source.sourceGapDisposition == null
         ? {}
         : {
-            sourceGapDisposition: structuredClone(
-              source.sourceGapDisposition
-            ),
+            sourceGapDisposition: structuredClone(source.sourceGapDisposition),
           }),
       reasons: notApplicable
         ? source.reasons.length
@@ -461,16 +479,17 @@ export function deriveNotApplicableRecords(
       ...(record.optimizationScenario == null
         ? {}
         : {
-            optimizationScenario: structuredClone(
-              record.optimizationScenario
-            ),
+            optimizationScenario: structuredClone(record.optimizationScenario),
+          }),
+      ...(record.scenarioScope == null
+        ? {}
+        : {
+            scenarioScope: structuredClone(record.scenarioScope),
           }),
       ...(record.sourceGapDisposition == null
         ? {}
         : {
-            sourceGapDisposition: structuredClone(
-              record.sourceGapDisposition
-            ),
+            sourceGapDisposition: structuredClone(record.sourceGapDisposition),
           }),
     }));
   const sourceRecords = sourceGapInventory.records
@@ -482,6 +501,18 @@ export function deriveNotApplicableRecords(
       sourceKind: record.sourceKind,
       sourceIdentities: record.sourceIdentities,
       sourceRecordHash: record.sourceRecordHash,
+      ...(record.acceptanceDisposition == null
+        ? {}
+        : {
+            acceptanceDisposition: structuredClone(
+              record.acceptanceDisposition
+            ),
+          }),
+      ...(record.scenarioScope == null
+        ? {}
+        : {
+            scenarioScope: structuredClone(record.scenarioScope),
+          }),
     }));
   return dedupeBy(
     [...requirementRecords, ...sourceRecords],

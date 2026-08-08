@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-102001-zero-distance-acceptance",
+    "name": "M12-B3 102001 莉莉零距离被动 Boss 验收轴",
+    "fps": 60,
+    "durationFrames": 8000,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 102001,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "specialResourcesByActor": [],
+      "activeEffects": [
+        {
+          "instanceKey": "protocol:102001:critical-rate-boundary-source:actor-102001",
+          "effectId": "protocol:102001:critical-rate-boundary-source",
+          "effectName": "临界率边界源属性",
+          "sourceActorId": "actor-102001",
+          "targetKind": "actor",
+          "targetId": "actor-102001",
+          "remainingDurationMs": 20000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 9500,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:102001:critical-rate-boundary-source",
+            "effectIdentity": "protocol:102001:critical-rate-boundary-source"
+          },
+          "appliedToCalculators": true
+        },
+        {
+          "instanceKey": "protocol:102001:critical-rate-zero-offset:actor-102001",
+          "effectId": "protocol:102001:critical-rate-zero-offset",
+          "effectName": "临界率零点偏移",
+          "sourceActorId": "actor-102001",
+          "targetKind": "actor",
+          "targetId": "actor-102001",
+          "remainingDurationMs": 10000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": -10000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:102001:critical-rate-zero-offset",
+            "effectIdentity": "protocol:102001:critical-rate-zero-offset"
+          },
+          "appliedToCalculators": true
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-102001-zero-distance-critical"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "optimizationScenarioPolicy": {
+      "policyId": "m12c-zero-distance-passive-boss-v1",
+      "policyHash": "967b0667f315db5b",
+      "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+      "rosterHash": "a690b860f0967e3d"
+    }
+  },
+  "actions": [
+    {
+      "id": "102001-critical-rate-zero",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 0 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 0
+        }
+      }
+    },
+    {
+      "id": "102001-critical-rate-one-hundred",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 650 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 9999
+        }
+      }
+    },
+    {
+      "id": "102001-critical-sampled-low",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1250 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 499
+        }
+      }
+    },
+    {
+      "id": "102001-critical-sampled-boundary",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1300 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 500
+        }
+      }
+    },
+    {
+      "id": "102001-critical-expected",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1350 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "expected"
+        }
+      }
+    },
+    {
+      "id": "102001-critical-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1400 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "102001-critical-non-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1450 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "hit",
+          "criticalMode": "non-critical"
+        }
+      }
+    },
+    {
+      "id": "102001-critical-miss-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1500 },
+      "hitOverrides": {
+        "10200101|0|elements|0|4440419441106789472|6|1": {
+          "landed": "miss",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "lily-ultimate-all-land",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200113,
+        "actionKind": "ultimate",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1650 }
+    },
+    {
+      "id": "lily-star-all-land",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2000 }
+    },
+    {
+      "id": "lily-normal-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "lily-normal" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2300 }
+    },
+    {
+      "id": "lily-normal-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "lily-normal" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2400 }
+    },
+    {
+      "id": "lily-normal-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "lily-normal" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2500 }
+    },
+    {
+      "id": "lily-normal-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "lily-normal" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2600 }
+    },
+    {
+      "id": "lily-charged",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2700 }
+    },
+    {
+      "id": "lily-switch-out",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "switch", "targetSlotId": "slot-2" },
+      "schedule": { "mode": "absolute", "frame": 2800 }
+    },
+    {
+      "id": "lily-switch-back",
+      "owner": { "kind": "actor", "slotId": "slot-2" },
+      "intent": { "kind": "switch", "targetSlotId": "slot-1" },
+      "schedule": { "mode": "absolute", "frame": 2900 }
+    },
+    {
+      "id": "lily-star-last-only",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3700 },
+      "hitOverrides": {
+        "10200112|0|elements|4|1596977191652035373|32|1": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|37|2": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|42|3": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|48|4": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "lily-star-carry-level-12",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200122,
+        "actionKind": "star-carry",
+        "level": 12
+      },
+      "schedule": { "mode": "absolute", "frame": 4300 }
+    },
+    {
+      "id": "lily-star-all-miss",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5200 },
+      "hitOverrides": {
+        "10200112|0|elements|4|1596977191652035373|32|1": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|37|2": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|42|3": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|4|1596977191652035373|48|4": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10200112|0|elements|8|609786774220013544|54|5": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "lily-star-expiry-boundary",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 6700 }
+    }
+  ],
+  "metadata": {
+    "title": "102001 莉莉冻结零距离被动 Boss 角色验收",
+    "notes": "只刺激主动可达动作；敌击、精准防御与受伤消费守护分支保留来源并由 recipe 结构化为 N/A。",
+    "tags": [
+      "m12-b3",
+      "102001",
+      "m12c-zero-distance-passive-boss-v1",
+      "pending-product-visual"
+    ]
+  }
+}

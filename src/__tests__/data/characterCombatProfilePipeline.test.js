@@ -13,6 +13,7 @@ import runtimeCoverage from '../../../reports/m10/101010/runtime-coverage.json';
 import sourceManifest from '../../../reports/m10/101010/source-manifest.json';
 import unresolvedLedger from '../../../reports/m10/101010/unresolved-ledger.json';
 import {
+  applyCharacterCombatActionEffectBindings,
   applyCharacterCombatActionHitBindings,
   applyCharacterCombatResourceOperationBindings,
   compileElementInheritance,
@@ -63,6 +64,197 @@ afterEach(() => {
 });
 
 describe('M10 character combat profile pipeline', () => {
+  it('keeps matched-effect-subtree activation conditions isolated by trigger branch', () => {
+    const createEffect = ({
+      elementId,
+      pathId,
+      depth,
+      triggerFrame,
+      triggerIndex,
+      relationPath = [],
+    }) => ({
+      controlSkillId: 42424001,
+      mapIndex: 0,
+      elementId,
+      pathId,
+      depth,
+      graphIdentity: 'fixture:shared-effect-graph',
+      relationPath,
+      trigger: { startFrame: triggerFrame },
+      sourceOrder: { triggerIndex },
+      sourceIdentity: `fixture:${pathId}:${triggerFrame}`,
+      target: { kind: 'source-owner' },
+    });
+    const rootPathId = 'fixture-root-path';
+    const controls = [
+      {
+        controlSkillId: 42424001,
+        effects: [
+          createEffect({
+            elementId: 42424002,
+            pathId: rootPathId,
+            depth: 0,
+            triggerFrame: 10,
+            triggerIndex: 0,
+          }),
+          createEffect({
+            elementId: 42424002,
+            pathId: rootPathId,
+            depth: 0,
+            triggerFrame: 20,
+            triggerIndex: 1,
+          }),
+          createEffect({
+            elementId: 42424003,
+            pathId: 'fixture-child-path',
+            depth: 1,
+            triggerFrame: 10,
+            triggerIndex: 0,
+            relationPath: [
+              {
+                from: `element:${rootPathId}`,
+                to: 'element:fixture-child-path',
+              },
+            ],
+          }),
+          createEffect({
+            elementId: 42424003,
+            pathId: 'fixture-child-path',
+            depth: 1,
+            triggerFrame: 20,
+            triggerIndex: 1,
+            relationPath: [
+              {
+                from: `element:${rootPathId}`,
+                to: 'element:fixture-child-path',
+              },
+            ],
+          }),
+        ],
+      },
+    ];
+    const conditionA = { kind: 'same-action-hit-landed', hitIdentity: 'hit-a' };
+    const conditionB = { kind: 'same-action-hit-landed', hitIdentity: 'hit-b' };
+
+    applyCharacterCombatActionEffectBindings({
+      controls,
+      compilations: [
+        {
+          contracts: {
+            actionEffectBindings: [
+              {
+                ownerId: 42424,
+                bindingIdentity: 'fixture-branch-a',
+                bindingKind: 'activation-condition',
+                controlSkillId: 42424001,
+                mapIndex: 0,
+                elementId: 42424002,
+                triggerFrame: 10,
+                frameCount: 1,
+                activationConditionScope: 'matched-effect-subtree',
+                landedHitActivationCondition: conditionA,
+                sourceIdentity: 'fixture:branch-a',
+              },
+              {
+                ownerId: 42424,
+                bindingIdentity: 'fixture-branch-b',
+                bindingKind: 'activation-condition',
+                controlSkillId: 42424001,
+                mapIndex: 0,
+                elementId: 42424002,
+                triggerFrame: 20,
+                frameCount: 1,
+                activationConditionScope: 'matched-effect-subtree',
+                landedHitActivationCondition: conditionB,
+                sourceIdentity: 'fixture:branch-b',
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(
+      controls[0].effects.map(
+        effect => effect.landedHitActivationCondition?.hitIdentity ?? null
+      )
+    ).toEqual(['hit-a', 'hit-b', 'hit-a', 'hit-b']);
+  });
+
+  it('keeps sibling tuning-consume candidates in the same source judgment', () => {
+    const judgmentGroupIdentity = 'fixture:tuning-consume-judgment';
+    const controls = [
+      {
+        controlSkillId: 42424001,
+        effects: [
+          {
+            controlSkillId: 42424001,
+            mapIndex: 0,
+            elementId: 599,
+            pathId: 'fixture-wood-packet',
+            depth: 1,
+            graphIdentity: 'fixture:tuning-consume-graph',
+            relationPath: [],
+            trigger: { startFrame: 82 },
+            sourceOrder: { triggerIndex: 0 },
+            sourceIdentity: 'fixture:wood-packet',
+            target: { kind: 'enemy' },
+            tuningOverlimit: { judgmentGroupIdentity },
+          },
+          {
+            controlSkillId: 42424001,
+            mapIndex: 0,
+            elementId: 799,
+            pathId: 'fixture-wind-packet',
+            depth: 1,
+            graphIdentity: 'fixture:tuning-consume-graph',
+            relationPath: [],
+            trigger: { startFrame: 82 },
+            sourceOrder: { triggerIndex: 0 },
+            sourceIdentity: 'fixture:wind-packet',
+            target: { kind: 'enemy' },
+            tuningOverlimit: { judgmentGroupIdentity },
+          },
+        ],
+      },
+    ];
+    const successEffect = {
+      effectId: 'battle-element:42424002',
+      status: 'verified-tuning-consume-success-effect-ready',
+    };
+
+    applyCharacterCombatActionEffectBindings({
+      controls,
+      compilations: [
+        {
+          contracts: {
+            actionEffectBindings: [
+              {
+                ownerId: 42424,
+                bindingIdentity: 'fixture-priority-consume',
+                bindingKind: 'tuning-consume',
+                controlSkillId: 42424001,
+                mapIndex: 0,
+                elementId: 599,
+                triggerFrame: 82,
+                frameCount: 1,
+                activationConditionScope: 'matched-effect-subtree',
+                tuningConsumeSuccessEffect: successEffect,
+                sourceIdentity: 'fixture:priority-consume',
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    expect(
+      controls[0].effects.map(
+        effect => effect.tuningOverlimit?.successEffect ?? null
+      )
+    ).toEqual([successEffect, successEffect]);
+  });
+
   it('uses inheritType rather than the team-element flag for controlled-actor transfer', () => {
     const createAsset = ({ teamElement, inheritType }) => ({
       elementId: 424200 + inheritType + (teamElement ? 10 : 0),

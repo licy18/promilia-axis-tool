@@ -1,9 +1,70 @@
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import xiaoyuRuntimeCoverage from '../../../reports/m10/101010/runtime-coverage.json';
 import xiaoyuGolden from '../../../reports/m10/101010/golden-trace.json';
-import { createCharacterAcceptanceMatrix } from '../../../scripts/character-acceptance/character-acceptance-generation.mjs';
+import {
+  applyCharacterAcceptanceSourceGapDispositions,
+  createCharacterAcceptanceMatrix,
+} from '../../../scripts/character-acceptance/character-acceptance-generation.mjs';
+import { finalizeSourceGapInventory } from '../../character-acceptance/characterAcceptanceDerivation';
 
 describe('character acceptance scenario derivation', () => {
+  it('preserves source-backed passive-scenario N/A as structured scope', () => {
+    const [projected] = applyCharacterAcceptanceSourceGapDispositions(
+      [
+        {
+          recordIdentity: 'fixture:passive-scenario-gap',
+          status: 'not-applicable',
+          impactClassification: 'not-applicable',
+          reasons: [
+            'passive-boss-does-not-produce-required-defense-events',
+            'scenario-out-of-scope-not-applicable',
+          ],
+          sourceIdentity: 'fixture:defense-source',
+        },
+      ],
+      [],
+      {
+        policyIdentity: 'fixture-passive-boss-v1',
+        sourceIdentity: 'fixture:scenario-policy',
+      }
+    );
+    const inventory = finalizeSourceGapInventory([projected]);
+
+    expect(inventory.records[0]).toMatchObject({
+      status: 'not-applicable',
+      blocking: false,
+      scenarioScope: {
+        disposition: 'not-applicable',
+        policyIdentity: 'fixture-passive-boss-v1',
+        reason: 'passive-boss-does-not-produce-required-defense-events',
+        sourceIdentity: 'fixture:defense-source',
+      },
+    });
+  });
+
+  it('fails closed for an unmatched declared source-gap disposition', () => {
+    expect(() =>
+      applyCharacterAcceptanceSourceGapDispositions(
+        [],
+        [
+          {
+            recordIdentity: 'fixture:missing-gap',
+            status: 'not-applicable',
+            policyIdentity: 'fixture-passive-boss-v1',
+            reason: 'fixture-out-of-scope',
+            sourceIdentity: 'fixture:source',
+          },
+        ],
+        {
+          policyIdentity: 'fixture-passive-boss-v1',
+          sourceIdentity: 'fixture:scenario-policy',
+        }
+      )
+    ).toThrow(
+      'Character acceptance source-gap disposition did not match source'
+    );
+  });
+
   it('derives a formerly hardcoded critical gate from an executed scenario assertion', () => {
     const scenarioIdentity = 'synthetic-critical-zero-rate';
     const matrix = createCharacterAcceptanceMatrix({

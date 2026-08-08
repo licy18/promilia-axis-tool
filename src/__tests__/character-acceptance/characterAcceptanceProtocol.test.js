@@ -278,10 +278,24 @@ describe('character acceptance protocol', () => {
       ])
     );
 
-    const visualGapInput = createManifestInput();
-    visualGapInput.evidence.productVisualAcceptance.automatedEvidence = [];
-    const visualGap = finalizeCharacterAcceptanceManifest(visualGapInput);
-    expect(visualGap.validation.issues).toContain(
+    const pendingVisualInput = createManifestInput({
+      productVisualStatus: 'pending',
+    });
+    pendingVisualInput.evidence.productVisualAcceptance.automatedEvidence = [];
+    const pendingVisual =
+      finalizeCharacterAcceptanceManifest(pendingVisualInput);
+    expect(pendingVisual.validation.issues).not.toContain(
+      'character-acceptance-visual-evidence-missing:synthetic-scenario'
+    );
+    expect(pendingVisual.maturity.optimizationReady).toBe(false);
+
+    const acceptedVisualGapInput = createManifestInput();
+    acceptedVisualGapInput.evidence.productVisualAcceptance.automatedEvidence =
+      [];
+    const acceptedVisualGap = finalizeCharacterAcceptanceManifest(
+      acceptedVisualGapInput
+    );
+    expect(acceptedVisualGap.validation.issues).toContain(
       'character-acceptance-visual-evidence-missing:synthetic-scenario'
     );
   });
