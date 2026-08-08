@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "3f1ad0ad5f380ad3",
-  "manifestsHash": "aff51f72a51a1ff3",
-  "gapLedgerHash": "a0a49abf7e301296",
-  "bindingMatrixHash": "0ca17643ccc30d33",
-  "sourceSnapshotHash": "da2700ab821c3f9a",
+  "rosterHash": "8b5e19938067c7ac",
+  "manifestsHash": "9550b3fdcd0a7ff3",
+  "gapLedgerHash": "e7ab8f3a7f7b1b66",
+  "bindingMatrixHash": "9b03e2407f71df6e",
+  "sourceSnapshotHash": "2eb1b945c1f963e9",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -80,10 +80,8 @@
       "displayName": "米蒂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "b6d92d8c7b987691"
+      "blockerCodes": [],
+      "manifestHash": "808d15cdede36171"
     },
     {
       "objectKind": "character",
@@ -91,10 +89,8 @@
       "displayName": "末音",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "e951f3e9e00c2d60"
+      "blockerCodes": [],
+      "manifestHash": "6f1401337003c88d"
     },
     {
       "objectKind": "character",
@@ -2634,7 +2630,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "3f1ad0ad5f380ad3",
+    "rosterHash": "8b5e19938067c7ac",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20606,7 +20602,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "0ca17643ccc30d33"
+    "bindingMatrixHash": "9b03e2407f71df6e"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38213,7 +38209,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 14,
+    "gameplayBlockingGapCount": 12,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38295,5 +38291,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "187d4ba9ac714ca2"
+  "catalogHash": "9395a1542d3ecca5"
 }

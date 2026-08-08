@@ -995,11 +995,9 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1040,7 +1038,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "ce63c76e3cee9523",
+      "manifestHash": "816a2e366a1f0359",
       "sourceOfTruthHash": "0ec63ec3e2f60d0c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1054,11 +1052,9 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1098,7 +1094,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "ef1108ce7d50922d",
+      "manifestHash": "ea6592a52701d591",
       "sourceOfTruthHash": "048450e320da07ff",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1110,15 +1106,15 @@
       }
     }
   ],
-  "catalogHash": "2fe970af2facb647",
-  "manifestIndexHash": "a1693f598bda2b9c",
+  "catalogHash": "b1254fa067f850e2",
+  "manifestIndexHash": "b3d145f9f2a054e9",
   "summary": {
     "ownerCount": 6,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 6,
-    "visuallyAcceptedCount": 0,
-    "optimizationReadyCount": 0,
+    "visuallyAcceptedCount": 2,
+    "optimizationReadyCount": 2,
     "machineScenarioPassCount": 6,
     "workbenchRoundTripPassCount": 6,
     "sourceGapCount": 219,

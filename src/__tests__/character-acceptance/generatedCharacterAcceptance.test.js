@@ -71,9 +71,10 @@ describe('generated character acceptance manifests', () => {
     expect(generatedCatalog.summary).toMatchObject({
       ownerCount: 6,
       maturityCounts: {
-        'runtime-integrated': 6,
+        'runtime-integrated': 4,
+        'optimization-ready': 2,
       },
-      optimizationReadyCount: 0,
+      optimizationReadyCount: 2,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -146,7 +147,9 @@ describe('generated character acceptance manifests', () => {
         valid: true,
         issues: [],
       });
-      const acceptanceCommit = null;
+      const acceptanceCommit = [108003, 109001].includes(ownerId)
+        ? '2b3fcd3e1f287a7b26e144f6646efb3991b76bbe'
+        : null;
       const productAccepted = acceptanceCommit !== null;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
@@ -185,10 +188,6 @@ describe('generated character acceptance manifests', () => {
       ]);
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
-      } else if ([108003, 109001].includes(ownerId)) {
-        expect(manifest.maturity.blockers).toEqual([
-          'acceptance-product-visual-signoff-pending',
-        ]);
       } else {
         expect(manifest.maturity.blockers).toEqual(
           expect.arrayContaining([

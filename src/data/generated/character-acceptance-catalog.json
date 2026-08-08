@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "a1693f598bda2b9c",
+  "manifestIndexHash": "b3d145f9f2a054e9",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -826,19 +826,19 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 139,
       "matrixPassedCount": 139,
-      "manifestHash": "ce63c76e3cee9523",
+      "manifestHash": "816a2e366a1f0359",
       "qualificationSubjectHash": "15fe77accb1b7686",
       "sourceOfTruthHash": "0ec63ec3e2f60d0c",
       "profileHash": "4ee7d3c91187edb53ec38bfae44f574bca89142df500c0611075550c51fabf3e",
@@ -849,19 +849,19 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 138,
       "matrixPassedCount": 138,
-      "manifestHash": "ef1108ce7d50922d",
+      "manifestHash": "ea6592a52701d591",
       "qualificationSubjectHash": "d6d44e84f7391d2a",
       "sourceOfTruthHash": "048450e320da07ff",
       "profileHash": "c2a926a3c3f58b9cdfddcbe77c2563cb1f6df6d0ce858399bf92336212002500",
@@ -875,9 +875,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "runtime-integrated": 6
+      "optimization-ready": 2,
+      "runtime-integrated": 4
     },
-    "optimizationReadyCount": 0
+    "optimizationReadyCount": 2
   },
-  "catalogHash": "2fe970af2facb647"
+  "catalogHash": "b1254fa067f850e2"
 }
