@@ -49,11 +49,11 @@ const CONTRACT_PAYLOAD = deepFreeze({
         kind: 'client-static-evidence-report',
         identity:
           'reports/m12/m12-b3-enemy-toughness-settlement-evidence-20260808.json',
-        bytes: 19027,
+        bytes: 19799,
         sha256:
-          'd771cc427b9b4a3d4b41e4a916d91ffbb14c3d61d867dd88385ea072d878ccfd',
+          'c2c746bd9462838e626c68dc533e9ac47dbfc84d4770a42d177dc009a35946cc',
         reportHash:
-          'ace9c36b6b51b9c8dae60cc2edb412729c75799054f9fb069df2aeb3763bfe21',
+          '54336a6032a07777838313fe3d8991d77b3d11aa34d2fc3ed778cd68c8d07487',
         closes: [
           'single-packet-break-multiplier-order',
           'break-damage-up-property-source-and-route-scope',

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER } from '../../src/simulation/mechanics/verifiedEnemyDamagePacketSettlementOrder.js';
 
 export const ENEMY_TOUGHNESS_SETTLEMENT_EVIDENCE_RELATIVE_PATH =
   'scripts/machine-axis/evidence/enemy-toughness-settlement-runtime-evidence.json';
@@ -424,6 +425,27 @@ const REQUIRED_LEAVES_OPEN = Object.freeze([
   'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
 ]);
 
+const REQUIRED_RUNTIME_COMPARISON = Object.freeze({
+  settlementOrder: [...VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER],
+  matches: [
+    'breaking-packet-hp-output-uses-pre-break-state',
+    'profile-break-damage-up-is-data-driven',
+    'pure-toughness-packets-do-not-become-hp-damage',
+    'break-end-boundary-is-right-open-within-the-local-state-machine',
+    'ordinary-hit-and-tuning-packet-mutate-toughness-and-break-before-hp-settlement',
+  ],
+  corrected: [
+    'ordinary-hit-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
+    'tuning-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
+  ],
+  differs: [
+    'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v1-uses-fixed-100ms-ticks',
+  ],
+  pendingControlledCapture: [...REQUIRED_LEAVES_OPEN],
+  correctionStatus:
+    'single-packet-runtime-order-corrected-controlled-capture-required-for-open-cross-packet-frame-lethal-and-authoritative-path-boundaries',
+});
+
 export async function readEnemyToughnessSettlementEvidenceSource({
   sourcePath,
   gameAssemblyPath,
@@ -585,6 +607,12 @@ export function validateEnemyToughnessSettlementEvidence(value, observations) {
       JSON.stringify(REQUIRED_LEAVES_OPEN)
   ) {
     fail('conclusion-drift');
+  }
+  if (
+    JSON.stringify(value.conclusion?.runtimeComparison) !==
+    JSON.stringify(REQUIRED_RUNTIME_COMPARISON)
+  ) {
+    fail('runtime-comparison-drift');
   }
   if (
     value.captureRequirement?.manifestId !==

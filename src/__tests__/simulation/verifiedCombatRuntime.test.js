@@ -18,7 +18,11 @@ import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAtt
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { createActionExecutionPlan } from '../../simulation/engine/actionExecutionPlan';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
-import { createVerifiedCombatRuntime } from '../../simulation/mechanics/verifiedCombatRuntime';
+import {
+  VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
+  createVerifiedCombatRuntime,
+  settleVerifiedEnemyDamagePacket,
+} from '../../simulation/mechanics/verifiedCombatRuntime';
 import { createActionRuleDiagnostics } from '../../simulation/runtime/actionRuleDiagnostics';
 import { createControlledActorTimeline } from '../../simulation/runtime/controlledActorTimeline';
 import { createDeterministicCriticalRandomSource } from '../../simulation/runtime/criticalRandomSource';
@@ -376,6 +380,7 @@ describe('verified combat mechanics runtime', () => {
       toughnessAfter: expect.any(Number),
       breakTriggered: false,
       deathTriggered: false,
+      settlementOrder: VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
       settlementCursor: {
         runtimePhase: 'post-hit-resource',
         cursorIdentity: expect.any(String),
@@ -2032,6 +2037,62 @@ describe('verified combat mechanics runtime', () => {
     ).not.toThrow();
   });
 
+  it('executes the shared finite-HP packet mutation in toughness-break-HP order', () => {
+    const writes = [];
+    const enemy = new Proxy(
+      {
+        hp: 100,
+        maxHp: 100,
+        toughness: 1,
+        maxToughness: 1,
+        inBreak: false,
+        targetPolicy: {
+          explicit: true,
+          hpMode: 'finite',
+          toughnessMode: 'enabled',
+          breakMode: 'enabled',
+          deathTruncation: 'enabled',
+        },
+        valueShields: [],
+        hitCountShields: [],
+      },
+      {
+        set(target, property, value) {
+          if (['toughness', 'inBreak', 'hp'].includes(property)) {
+            writes.push(property);
+          }
+          return Reflect.set(target, property, value);
+        },
+      }
+    );
+
+    const settled = settleVerifiedEnemyDamagePacket({
+      enemy,
+      stateBefore: { hp: 100 },
+      hpDamage: 100,
+      toughnessDamage: 1,
+      toughnessDisabled: false,
+      infiniteHp: false,
+      timeMs: 100,
+      recoveryDelayMs: 0,
+      sourceActionId: 'order-probe',
+      sourceActorId: 'actor-order-probe',
+      sourceBindingIdentity: 'binding-order-probe',
+    });
+
+    expect(writes).toEqual(['toughness', 'inBreak', 'hp']);
+    expect(settled).toMatchObject({
+      breakTriggered: true,
+      deathTriggered: true,
+      settlementOrder: VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
+      stateAfter: {
+        hp: 0,
+        toughness: 0,
+        inBreak: true,
+      },
+    });
+  });
+
   it('settles the breaking packet before Break and a later same-frame packet after Break', () => {
     const runtime = rerunPangpangEnemySettlement({
       durationMs: 300,
@@ -2059,12 +2120,7 @@ describe('verified combat mechanics runtime', () => {
       toughnessAfter: 0,
       breakTriggered: true,
       deathTriggered: false,
-      settlementOrder: [
-        'hp-output-calculated-from-pre-break-state',
-        'toughness-settled',
-        'break-state-transitioned',
-        'hp-settled',
-      ],
+      settlementOrder: VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
       breakState: {
         triggered: true,
         inBreak: true,
@@ -2340,12 +2396,7 @@ describe('verified combat mechanics runtime', () => {
       breakTriggered: true,
       deathTriggered: true,
       deathState: { before: 1, after: 0, triggered: true },
-      settlementOrder: [
-        'hp-output-calculated-from-pre-break-state',
-        'toughness-settled',
-        'break-state-transitioned',
-        'hp-settled',
-      ],
+      settlementOrder: VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
     });
     expect(hits[0].payload.requestedHpDamage).toBeGreaterThan(1);
     expect(hits[0].payload.overkill).toBe(

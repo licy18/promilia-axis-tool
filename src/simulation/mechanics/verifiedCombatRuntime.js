@@ -40,6 +40,9 @@ import {
   matchesVerifiedBattlePropertyTags,
   resolveVerifiedBattlePropertyTagsForHit,
 } from './verifiedBattlePropertyTags';
+import { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER } from './verifiedEnemyDamagePacketSettlementOrder';
+
+export { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER };
 
 export const VERIFIED_COMBAT_MECHANICS_PROFILE_ID =
   'azpr-three-value-verified-tc-20260718';
@@ -51,12 +54,64 @@ const DERIVED_DOT_SELF_HEAL_MECHANISM_FAMILY =
 
 const FIXED_STEP_MS = 100;
 const FRAME_RATE = 60;
-const VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER = Object.freeze([
-  'hp-output-calculated-from-pre-break-state',
-  'toughness-settled',
-  'break-state-transitioned',
-  'hp-settled',
-]);
+
+export function settleVerifiedEnemyDamagePacket({
+  enemy,
+  stateBefore,
+  hpDamage,
+  toughnessDamage,
+  toughnessDisabled,
+  infiniteHp,
+  timeMs,
+  recoveryDelayMs,
+  sourceActionId,
+  sourceActorId,
+  sourceBindingIdentity,
+}) {
+  const settlementOrder = [
+    VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[0],
+  ];
+  const toughnessBefore = enemy.toughness;
+  if (!toughnessDisabled) {
+    enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
+  }
+  settlementOrder.push(VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[1]);
+
+  const breakTriggered =
+    !toughnessDisabled &&
+    enemy.targetPolicy?.breakMode === 'enabled' &&
+    !enemy.inBreak &&
+    toughnessBefore > 0 &&
+    enemy.toughness <= 0;
+  if (toughnessDamage > 0) {
+    enemy.lastToughnessSourceActionId = sourceActionId;
+    enemy.lastToughnessSourceActorId = sourceActorId;
+    enemy.lastToughnessBindingIdentity = sourceBindingIdentity;
+  }
+  if (breakTriggered) {
+    enemy.inBreak = true;
+    enemy.breakStartedAtMs = timeMs;
+    enemy.breakPhase = 'linear_recovery';
+    enemy.normalRecoveryEligibleAtMs = null;
+  } else if (!enemy.inBreak && toughnessDamage > 0) {
+    enemy.normalRecoveryEligibleAtMs =
+      timeMs + nonNegativeNumber(recoveryDelayMs);
+  }
+  settlementOrder.push(VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[2]);
+
+  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
+  settlementOrder.push(VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[3]);
+  const stateAfter = createEnemyStateSnapshot(enemy);
+  const deathTriggered =
+    !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
+  return {
+    toughnessBefore,
+    breakTriggered,
+    stateAfter,
+    deathTriggered,
+    settlementOrder,
+  };
+}
 const ELEMENT_DAMAGE_ATTRIBUTE_ID_BY_TYPE = Object.freeze({
   0: 51,
   1: 52,
@@ -4172,7 +4227,6 @@ function applyTuningCombatDescriptor({
     inBreakForHpDamage,
     enemyProfile,
   });
-  const toughnessBefore = enemy.toughness;
   const weaknessResult = calculateWeaknessDamage({
     pure: false,
     attack: source.attack,
@@ -4205,33 +4259,25 @@ function applyTuningCombatDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  if (!toughnessDisabled) {
-    enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
-  }
-  const breakTriggered =
-    !toughnessDisabled &&
-    enemy.targetPolicy?.breakMode === 'enabled' &&
-    !enemy.inBreak &&
-    toughnessBefore > 0 &&
-    enemy.toughness <= 0;
-  if (toughnessDamage > 0) {
-    enemy.lastToughnessSourceActionId = action.id;
-    enemy.lastToughnessSourceActorId = action.actorId;
-    enemy.lastToughnessBindingIdentity = resolution.actionBinding.identity;
-  }
-  if (breakTriggered) {
-    enemy.inBreak = true;
-    enemy.breakStartedAtMs = tuningEvent.timeMs;
-    enemy.breakPhase = 'linear_recovery';
-    enemy.normalRecoveryEligibleAtMs = null;
-  } else if (!enemy.inBreak && toughnessDamage > 0) {
-    enemy.normalRecoveryEligibleAtMs =
-      tuningEvent.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
-  }
-  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
-  const stateAfter = createEnemyStateSnapshot(enemy);
-  const deathTriggered =
-    !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
+  const {
+    toughnessBefore,
+    breakTriggered,
+    stateAfter,
+    deathTriggered,
+    settlementOrder,
+  } = settleVerifiedEnemyDamagePacket({
+    enemy,
+    stateBefore,
+    hpDamage,
+    toughnessDamage,
+    toughnessDisabled,
+    infiniteHp,
+    timeMs: tuningEvent.timeMs,
+    recoveryDelayMs: enemyProfile.recoveryDelayMs,
+    sourceActionId: action.id,
+    sourceActorId: action.actorId,
+    sourceBindingIdentity: resolution.actionBinding.identity,
+  });
   const hitKey = `verified-${tuningEvent.eventIdentity}`;
   return {
     damageEvent: {
@@ -4274,7 +4320,7 @@ function applyTuningCombatDescriptor({
         toughnessAfter: enemy.toughness,
         breakTriggered,
         deathTriggered,
-        settlementOrder: [...VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER],
+        settlementOrder,
         settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),
@@ -4575,7 +4621,6 @@ function applyHitDescriptor({
     inBreakForHpDamage,
     enemyProfile,
   });
-  const toughnessBefore = enemy.toughness;
   const preShieldHpDamageRaw = damageResult.preShieldRaw ?? damageResult.raw;
   const weaknessTypeMultiplier = resolveRuntimeWeaknessTypeMultiplier({
     enemyProfile,
@@ -4617,33 +4662,25 @@ function applyHitDescriptor({
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
-  if (!toughnessDisabled) {
-    enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
-  }
-  const breakTriggered =
-    !toughnessDisabled &&
-    enemy.targetPolicy?.breakMode === 'enabled' &&
-    !enemy.inBreak &&
-    toughnessBefore > 0 &&
-    enemy.toughness <= 0;
-  if (toughnessDamage > 0) {
-    enemy.lastToughnessSourceActionId = action.id;
-    enemy.lastToughnessSourceActorId = action.actorId;
-    enemy.lastToughnessBindingIdentity = resolution.actionBinding.identity;
-  }
-  if (breakTriggered) {
-    enemy.inBreak = true;
-    enemy.breakStartedAtMs = descriptor.timeMs;
-    enemy.breakPhase = 'linear_recovery';
-    enemy.normalRecoveryEligibleAtMs = null;
-  } else if (!enemy.inBreak && toughnessDamage > 0) {
-    enemy.normalRecoveryEligibleAtMs =
-      descriptor.timeMs + nonNegativeNumber(enemyProfile.recoveryDelayMs);
-  }
-  if (!infiniteHp) enemy.hp = roundValue(enemy.hp - hpDamage);
-  const stateAfter = createEnemyStateSnapshot(enemy);
-  const deathTriggered =
-    !infiniteHp && Number(stateBefore.hp) > 0 && Number(stateAfter.hp) <= 0;
+  const {
+    toughnessBefore,
+    breakTriggered,
+    stateAfter,
+    deathTriggered,
+    settlementOrder,
+  } = settleVerifiedEnemyDamagePacket({
+    enemy,
+    stateBefore,
+    hpDamage,
+    toughnessDamage,
+    toughnessDisabled,
+    infiniteHp,
+    timeMs: descriptor.timeMs,
+    recoveryDelayMs: enemyProfile.recoveryDelayMs,
+    sourceActionId: action.id,
+    sourceActorId: action.actorId,
+    sourceBindingIdentity: resolution.actionBinding.identity,
+  });
   const passiveDerivedDamageCommand =
     descriptor.passiveDerivedDamageCommand ?? null;
   const hitKey = createVerifiedCombatHitKey(descriptor);
@@ -4730,7 +4767,7 @@ function applyHitDescriptor({
         toughnessAfter: enemy.toughness,
         breakTriggered,
         deathTriggered,
-        settlementOrder: [...VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER],
+        settlementOrder,
         settlementCursor: createEnemySettlementCursor(descriptor),
         hpLossPercent: ratioOrZero(hpDamage, enemy.maxHp),
         toughnessLossPercent: ratioOrZero(toughnessDamage, enemy.maxToughness),

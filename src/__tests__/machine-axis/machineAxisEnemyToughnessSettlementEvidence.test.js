@@ -3,6 +3,7 @@ import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createHash } from 'node:crypto';
 import { getMachineAxisEnemySettlementContract } from '../../machine-axis/machineAxisEnemySettlementContract';
+import { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER } from '../../simulation/mechanics/verifiedCombatRuntime';
 import {
   ENEMY_TOUGHNESS_SETTLEMENT_EVIDENCE_RELATIVE_PATH,
   ENEMY_TOUGHNESS_SETTLEMENT_REPORT_RELATIVE_PATH,
@@ -14,6 +15,7 @@ import {
 
 const PROJECT_ROOT = path.resolve('.');
 let source;
+let runtimeSource;
 
 beforeAll(async () => {
   source = await readEnemyToughnessSettlementEvidenceSource({
@@ -33,6 +35,13 @@ beforeAll(async () => {
     ),
     projectRoot: PROJECT_ROOT,
   });
+  runtimeSource = await fs.readFile(
+    path.join(
+      PROJECT_ROOT,
+      'src/simulation/mechanics/verifiedCombatRuntime.js'
+    ),
+    'utf8'
+  );
 }, 30_000);
 
 describe('Machine Axis native enemy toughness settlement evidence', () => {
@@ -65,8 +74,38 @@ describe('Machine Axis native enemy toughness settlement evidence', () => {
           'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
           'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
         ]),
+        runtimeComparison: {
+          settlementOrder: VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER,
+          matches: expect.arrayContaining([
+            'ordinary-hit-and-tuning-packet-mutate-toughness-and-break-before-hp-settlement',
+          ]),
+          corrected: [
+            'ordinary-hit-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
+            'tuning-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
+          ],
+          differs: [
+            'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v1-uses-fixed-100ms-ticks',
+          ],
+          pendingControlledCapture: expect.any(Array),
+          correctionStatus:
+            'single-packet-runtime-order-corrected-controlled-capture-required-for-open-cross-packet-frame-lethal-and-authoritative-path-boundaries',
+        },
       },
     });
+    expect(
+      source.report.conclusion.runtimeComparison.pendingControlledCapture
+    ).toEqual(source.report.conclusion.leavesOpen);
+  });
+
+  it('binds ordinary hit and tuning mutation paths to the executable shared settlement', () => {
+    for (const [start, end] of [
+      ['function applyTuningCombatDescriptor({', 'function applyTuningPeriodicHeal({'],
+      ['function applyHitDescriptor({', 'function createVerifiedCombatHitKey('],
+    ]) {
+      const body = extractRuntimeFunction(runtimeSource, start, end);
+      expect(body.match(/settleVerifiedEnemyDamagePacket\(\{/g)).toHaveLength(1);
+      expect(body).not.toMatch(/enemy\.(?:hp|toughness)\s*=/);
+    }
   });
 
   it.each([
@@ -115,6 +154,13 @@ describe('Machine Axis native enemy toughness settlement evidence', () => {
         value.conclusion.closes[0] = 'breaking-packet-post-break';
       },
       'conclusion-drift',
+    ],
+    [
+      'runtime comparison',
+      value => {
+        value.conclusion.runtimeComparison.corrected = [];
+      },
+      'runtime-comparison-drift',
     ],
     [
       'capture manifest',
@@ -204,4 +250,12 @@ function createEvidenceReference(value) {
     il2CppScriptBytes: value.value.reviewedIl2CppScript.bytes,
     il2CppScriptSha256: value.value.reviewedIl2CppScript.sha256,
   };
+}
+
+function extractRuntimeFunction(sourceText, startMarker, endMarker) {
+  const start = sourceText.indexOf(startMarker);
+  const end = sourceText.indexOf(endMarker, start + startMarker.length);
+  expect(start).toBeGreaterThanOrEqual(0);
+  expect(end).toBeGreaterThan(start);
+  return sourceText.slice(start, end);
 }
