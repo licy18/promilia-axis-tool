@@ -30,6 +30,7 @@ const NEAR_MATCH_PATH_IDS = Object.freeze([
   '6898765742999894817',
   '-4495644276298113682',
 ]);
+const REVERSE_SCAN_CONCURRENCY = 32;
 
 const REQUIRED_OLD_GRAPH = Object.freeze([
   {
@@ -562,27 +563,31 @@ async function runReverseReferenceScan(roots) {
     } else if (root.package === 'static_package') {
       scannedStaticPackageFileCount += files.length;
     }
-    for (const filePath of files) {
-      const text = await fs.readFile(filePath, 'utf8');
-      const oldHits = OLD_GRAPH_PATH_IDS.filter(pathId =>
-        text.includes(`\"m_PathID\": ${pathId}`)
-      );
-      const nearHits = NEAR_MATCH_PATH_IDS.filter(pathId =>
-        text.includes(`\"m_PathID\": ${pathId}`)
-      );
-      if (oldHits.length) {
-        oldGraphMatches.push({
-          suffix: normalizeMatchSuffix(filePath),
-          pathIds: oldHits,
-        });
+    await forEachWithConcurrency(
+      files,
+      REVERSE_SCAN_CONCURRENCY,
+      async filePath => {
+        const text = await fs.readFile(filePath, 'utf8');
+        const oldHits = OLD_GRAPH_PATH_IDS.filter(pathId =>
+          text.includes(`\"m_PathID\": ${pathId}`)
+        );
+        const nearHits = NEAR_MATCH_PATH_IDS.filter(pathId =>
+          text.includes(`\"m_PathID\": ${pathId}`)
+        );
+        if (oldHits.length) {
+          oldGraphMatches.push({
+            suffix: normalizeMatchSuffix(filePath),
+            pathIds: oldHits,
+          });
+        }
+        if (nearHits.length) {
+          nearMatchGraphMatches.push({
+            suffix: normalizeMatchSuffix(filePath),
+            pathIds: nearHits,
+          });
+        }
       }
-      if (nearHits.length) {
-        nearMatchGraphMatches.push({
-          suffix: normalizeMatchSuffix(filePath),
-          pathIds: nearHits,
-        });
-      }
-    }
+    );
   }
   return {
     scannedDefaultPackageFileCount,
@@ -590,6 +595,20 @@ async function runReverseReferenceScan(roots) {
     oldGraphMatches: oldGraphMatches.sort(compareMatchRows),
     nearMatchGraphMatches: nearMatchGraphMatches.sort(compareMatchRows),
   };
+}
+
+async function forEachWithConcurrency(values, concurrency, visit) {
+  let nextIndex = 0;
+  const workerCount = Math.min(concurrency, values.length);
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (nextIndex < values.length) {
+        const value = values[nextIndex];
+        nextIndex += 1;
+        await visit(value);
+      }
+    })
+  );
 }
 
 async function projectPackageCensus(extractedUnityRoot) {

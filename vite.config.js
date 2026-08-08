@@ -1,6 +1,25 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { availableParallelism } from 'node:os';
 import { resolve } from 'path';
+
+const TEST_INCLUDE = ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'];
+const DOM_TEST_INCLUDE = [
+  'src/__tests__/features/**/*.{test,spec}.{js,jsx,ts,tsx}',
+  'src/__tests__/views/**/*.{test,spec}.{js,jsx,ts,tsx}',
+  'src/__tests__/domain/workbenchAnalysisReportPng.test.js',
+  'src/__tests__/domain/workbenchProjectFileReceiver.test.js',
+];
+
+function resolveVitestWorkerCount() {
+  const configured = Number(process.env.VITEST_MAX_WORKERS);
+  // Large generated combat catalogs consume several GB per active worker.
+  return Number.isInteger(configured) && configured > 0
+    ? configured
+    : Math.max(1, Math.min(2, availableParallelism() - 1));
+}
+
+const vitestWorkerCount = resolveVitestWorkerCount();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -117,8 +136,32 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     globals: true,
-    environment: 'jsdom',
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'core',
+          include: TEST_INCLUDE,
+          exclude: DOM_TEST_INCLUDE,
+          environment: 'node',
+          pool: 'threads',
+          maxWorkers: vitestWorkerCount,
+          sequence: { groupOrder: 0 },
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'dom',
+          include: DOM_TEST_INCLUDE,
+          environment: 'jsdom',
+          pool: 'forks',
+          maxWorkers: vitestWorkerCount,
+          // Keep jsdom module state and memory out of the core worker pool.
+          sequence: { groupOrder: 1 },
+        },
+      },
+    ],
   },
 });
