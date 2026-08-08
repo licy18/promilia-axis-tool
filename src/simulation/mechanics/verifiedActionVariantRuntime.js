@@ -26,6 +26,7 @@ import {
 } from '../../domain/actionSourceSequence';
 import { msToFrame } from '../../domain/timebase';
 import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
+import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -2861,7 +2862,7 @@ function isSwitchConditionSatisfied(binding, state) {
 }
 
 function resolveOperationAmount(operation, action) {
-  const level = Math.max(1, Math.min(12, Number(action.skillLevel) || 1));
+  const level = resolveVerifiedActionLevelValue(action);
   return Number(
     operation.amountByLevel?.[level] ?? operation.amountByLevel?.[1] ?? 0
   );

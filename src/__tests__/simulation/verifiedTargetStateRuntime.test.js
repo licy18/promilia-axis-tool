@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import {
+  VerifiedActionLevelContractError,
+  resolveVerifiedActionLevel,
+} from '../../domain/verifiedActionLevel';
 import { applyVerifiedTargetStateRuntime } from '../../simulation/mechanics/verifiedTargetStateRuntime';
 
 describe('verified target-state runtime', () => {
@@ -659,11 +663,11 @@ describe('verified target-state runtime', () => {
     ];
     const levelOne = {
       ...createAction('level-one', 0, 0),
-      skillLevel: 1,
+      level: 1,
     };
     const levelTwelve = {
       ...createAction('level-twelve', 1000, 1),
-      skillLevel: 12,
+      level: 12,
     };
     const actionResolutionById = new Map(
       ['level-one', 'level-twelve'].map(actionId => [
@@ -882,6 +886,52 @@ describe('verified target-state runtime', () => {
         applied: false,
       },
     });
+  });
+
+  it('uses canonical action.level, documents the legacy fallback, and fails closed on explicit invalid or conflicting levels', () => {
+    expect(resolveVerifiedActionLevel({ level: 12 })).toEqual({
+      level: 12,
+      source: 'action.level',
+      legacyFallback: false,
+    });
+    expect(resolveVerifiedActionLevel({ skillLevel: 12 })).toEqual({
+      level: 12,
+      source: 'action.skillLevel',
+      legacyFallback: true,
+    });
+    expect(resolveVerifiedActionLevel({})).toEqual({
+      level: 1,
+      source: 'verified-action-level-default',
+      legacyFallback: false,
+    });
+    expect(resolveVerifiedActionLevel({ level: 12, skillLevel: 12 })).toEqual({
+      level: 12,
+      source: 'action.level',
+      legacyFallback: false,
+      legacyLevelStatus: 'consistent',
+    });
+
+    for (const [action, code] of [
+      [{ level: 12, skillLevel: 1 }, 'verified-action-level-conflict'],
+      [{ level: 0 }, 'verified-action-level-invalid'],
+      [{ level: 13 }, 'verified-action-level-invalid'],
+      [{ level: 'invalid' }, 'verified-action-level-invalid'],
+      [{ level: '12' }, 'verified-action-level-invalid'],
+      [{ level: '' }, 'verified-action-level-invalid'],
+      [{ level: true }, 'verified-action-level-invalid'],
+      [{ level: 1.5 }, 'verified-action-level-invalid'],
+      [{ level: 0, skillLevel: 12 }, 'verified-action-level-invalid'],
+      [{ skillLevel: 0 }, 'verified-action-level-invalid'],
+    ]) {
+      let failure = null;
+      try {
+        resolveVerifiedActionLevel(action);
+      } catch (error) {
+        failure = error;
+      }
+      expect(failure).toBeInstanceOf(VerifiedActionLevelContractError);
+      expect(failure).toMatchObject({ code });
+    }
   });
 });
 

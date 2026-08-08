@@ -354,6 +354,7 @@ export function createSkillAction({
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
+  verifiedDeclaredPublicActionIntent = null,
   hitOverrides = null,
   note = '',
   insertion = null,
@@ -435,6 +436,14 @@ export function createSkillAction({
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
     scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
+    ...(verifiedDeclaredPublicActionIntent
+      ? {
+          verifiedDeclaredPublicActionIntent:
+            normalizeVerifiedDeclaredPublicActionIntent(
+              verifiedDeclaredPublicActionIntent
+            ),
+        }
+      : {}),
     hitOverrides: normalizeActionHitOverrides(hitOverrides),
     cooldownMs: skill.cooldownMs,
     spCost: skill.spCost,
@@ -462,6 +471,11 @@ export function createSkillAction({
     ...normalizedAttackInputFields,
     ...createActionEffectCommandsField(resolvedEffectCommands),
   };
+}
+
+function normalizeVerifiedDeclaredPublicActionIntent(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return structuredClone(value);
 }
 
 export function createSwitchAction({

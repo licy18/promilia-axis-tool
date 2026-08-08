@@ -9,6 +9,7 @@ import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEff
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import {
   getVerifiedCombatActionMapping,
+  getVerifiedCombatActionMappingByIdentity,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
@@ -186,7 +187,8 @@ function createStandaloneStarCarryDiagnostics(actions) {
       action =>
         action.type === ACTION_TYPES.SKILL &&
         action.actionKind === 'star-carry' &&
-        !isSwitchTriggeredDerivedAction(action)
+        !isSwitchTriggeredDerivedAction(action) &&
+        !isVerifiedDeclaredPublicAction(action)
     )
     .map(action => ({
       schemaVersion: 1,
@@ -216,6 +218,29 @@ function createStandaloneStarCarryDiagnostics(actions) {
       },
       appliedToSimulationResults: true,
     }));
+}
+
+function isVerifiedDeclaredPublicAction(action) {
+  const intent = action?.verifiedDeclaredPublicActionIntent;
+  if (
+    intent?.schemaVersion !== 1 ||
+    intent?.contractName !== 'AzPrVerifiedDeclaredPublicAction' ||
+    String(intent.actionId ?? '') !== String(action?.id ?? '')
+  ) {
+    return false;
+  }
+  const mapping = getVerifiedCombatActionMappingByIdentity(
+    intent.mappingIdentity
+  );
+  return Boolean(
+    mapping?.schedulable === true &&
+    mapping.catalogDeclaration &&
+    String(mapping.identity) === String(intent.mappingIdentity) &&
+    Number(mapping.ownerId) === Number(intent.ownerId) &&
+    Number(mapping.ownerId) === Number(action?.actor?.characterId) &&
+    Number(mapping.sourceSkillId) === Number(action?.skillId) &&
+    String(mapping.actionKind) === String(action?.actionKind)
+  );
 }
 
 function createJointAttackDiagnostics(actions, actors, fps = 60) {

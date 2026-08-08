@@ -140,6 +140,66 @@ describe('verified action variant and special resource runtime', () => {
     );
   });
 
+  it('uses the canonical action.level for level-scaled special resource gains', () => {
+    const scaledPackage = structuredClone(mechanicsPackage);
+    const scaledOperations =
+      scaledPackage.specialResourceCatalog.operationBindings.filter(
+        operation =>
+          operation.applied === true &&
+          operation.ownerId === JADE_ID &&
+          operation.controlSkillId === 10101010 &&
+          operation.operation === 'gain' &&
+          operation.triggerFrame === 43
+      );
+    expect(scaledOperations).toHaveLength(2);
+    for (const scaledOperation of scaledOperations) {
+      scaledOperation.amountByLevel = {
+        ...scaledOperation.amountByLevel,
+        1: 5,
+        12: 11,
+      };
+    }
+    installVerifiedCombatMechanicsPackage(scaledPackage);
+
+    const levelOne = createActorAction({
+      id: 'jade-level-one-resource-gain',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      level: 1,
+    });
+    const levelTwelve = createActorAction({
+      id: 'jade-level-twelve-resource-gain',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      level: 12,
+    });
+
+    expect(
+      readResourceGainAtFrame(
+        runVariantRuntime({
+          actors: [levelOne.actor],
+          actions: [levelOne],
+          durationMs: 2000,
+        }),
+        levelOne.id,
+        43
+      )
+    ).toMatchObject({ beforeValue: 0, change: 5, afterValue: 5 });
+    expect(
+      readResourceGainAtFrame(
+        runVariantRuntime({
+          actors: [levelTwelve.actor],
+          actions: [levelTwelve],
+          durationMs: 2000,
+        }),
+        levelTwelve.id,
+        43
+      )
+    ).toMatchObject({ beforeValue: 0, change: 11, afterValue: 11 });
+  });
+
   it('uses Ruby source frames and preserves the explicit attack phase', () => {
     const ultimate = createActorAction({
       id: 'ruby-ultimate',
@@ -2411,6 +2471,7 @@ function createActorAction({
   id,
   characterId,
   skillId,
+  level = 1,
   actionVariantIndex = 0,
   startMs = 0,
   attackInput = null,
@@ -2430,7 +2491,7 @@ function createActorAction({
     actorId: actor.id,
     actor,
     skillId,
-    skillLevel: 1,
+    level,
     actionVariantIndex,
     startMs,
     durationMs: 1000,
@@ -2445,6 +2506,15 @@ function createActorAction({
         }
       : {}),
   };
+}
+
+function readResourceGainAtFrame(runtime, actionId, frame) {
+  return runtime.resourceEvents.find(
+    event =>
+      event.actionId === actionId &&
+      event.timeMs === frameTime(frame) &&
+      event.payload.operation === 'gain'
+  )?.payload;
 }
 
 function createPublicNormalAttackIntent() {

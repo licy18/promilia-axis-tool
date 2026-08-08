@@ -1362,6 +1362,22 @@ function createActorActionTemplate({
       Number(entry.skillId) === Number(action.intent.publicActionId) &&
       (!action.intent.actionKind || entry.kind === action.intent.actionKind)
   );
+  const declaredMapping =
+    catalogCandidates.length === 0 && action.intent.actionKind
+      ? getVerifiedCombatActionMapping({
+          type: ACTION_TYPES.SKILL,
+          skillId: action.intent.publicActionId,
+          actionKind: action.intent.actionKind,
+          actor: { characterId: ownerSlot.characterId },
+        })
+      : null;
+  const declaredEntry =
+    declaredMapping?.schedulable === true &&
+    declaredMapping.catalogDeclaration &&
+    declaredMapping.actionKind === action.intent.actionKind
+      ? createDeclaredActorActionEntry(declaredMapping)
+      : null;
+  if (declaredEntry) catalogCandidates.push(declaredEntry);
   if (catalogCandidates.length !== 1) {
     issues.push(
       createMachineAxisDiagnostic(
@@ -1396,12 +1412,16 @@ function createActorActionTemplate({
     );
     return null;
   }
-  const mapping = getVerifiedCombatActionMapping({
-    type: ACTION_TYPES.SKILL,
-    skillId: entry.skillId,
-    actionVariantIndex: entry.actionVariantIndex,
-    actor: { characterId: ownerSlot.characterId },
-  });
+  const mapping =
+    declaredEntry === entry
+      ? declaredMapping
+      : getVerifiedCombatActionMapping({
+          type: ACTION_TYPES.SKILL,
+          skillId: entry.skillId,
+          actionKind: entry.kind,
+          actionVariantIndex: entry.actionVariantIndex,
+          actor: { characterId: ownerSlot.characterId },
+        });
   if (!mapping) {
     issues.push(
       createMachineAxisDiagnostic(
@@ -1520,6 +1540,16 @@ function createActorActionTemplate({
         null,
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
       scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
+      verifiedDeclaredPublicActionIntent:
+        declaredEntry === entry
+          ? {
+              schemaVersion: 1,
+              contractName: 'AzPrVerifiedDeclaredPublicAction',
+              actionId: action.id,
+              ownerId: Number(ownerSlot.characterId),
+              mappingIdentity: mapping.identity,
+            }
+          : null,
       hitOverrides: toProjectHitOverrides(action.hitOverrides),
       note: action.note,
       ...attackInputFields,
@@ -1546,6 +1576,20 @@ function createActorActionTemplate({
       ].sort((left, right) => left.localeCompare(right, 'en')),
       semanticVariant,
     },
+  };
+}
+
+function createDeclaredActorActionEntry(mapping) {
+  return {
+    id: mapping.identity,
+    kind: mapping.actionKind,
+    label:
+      mapping.catalogDeclaration?.catalogLabel ??
+      mapping.catalogDeclaration?.label ??
+      mapping.actionVariantLabel ??
+      mapping.actionKind,
+    skillId: Number(mapping.sourceSkillId),
+    actionVariantIndex: Number(mapping.actionVariantIndex) || 0,
   };
 }
 

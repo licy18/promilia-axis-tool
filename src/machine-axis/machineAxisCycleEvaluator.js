@@ -9,6 +9,10 @@ import {
   validateMachineAxisContract,
 } from './machineAxisContract';
 import { createSearchStateSnapshot } from './machineAxisSearchState';
+import {
+  normalizeEffectModifiers,
+  projectActiveEffectStates,
+} from './machineAxisEffectState';
 import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
 import {
   MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
@@ -2314,12 +2318,11 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
     valueShields: structuredClone(finalState.enemy?.valueShields ?? []),
     hitCountShields: structuredClone(finalState.enemy?.hitCountShields ?? []),
   };
-  snapshot.effects = (boundaryRun.trace?.effects?.intervals ?? [])
-    .filter(
-      row =>
-        Number(row.startMs) <= boundaryTimeMs &&
-        Number(row.endMs) > boundaryTimeMs
-    )
+  snapshot.effects = projectActiveEffectStates({
+    intervals: boundaryRun.trace?.effects?.intervals ?? [],
+    effectEvents: boundaryRun.trace?.effects?.events ?? [],
+    timeMs: boundaryTimeMs,
+  })
     .map(row => ({
       effectId: row.effectId ?? null,
       ownerId: row.ownerId ?? null,
@@ -2331,6 +2334,7 @@ function projectCanonicalBoundaryState({ snapshot, boundaryRun, frame }) {
         msToFrame(Number(row.endMs) - boundaryTimeMs)
       ),
       sourceIdentityHash: hashCanonicalValue(row.sourceIdentity ?? null),
+      modifiers: row.modifiers,
     }))
     .filter(row => row.effectId && row.remainingFrames > 0)
     .sort(compareCanonicalRows);
@@ -2463,6 +2467,7 @@ function normalizeEffectState(snapshot) {
         integerOrNull(row.remainingFrames) ??
         Math.max(0, msToFrame(Number(row.endMs) - timeMs)),
       sourceIdentityHash: row.sourceIdentityHash ?? null,
+      modifiers: normalizeEffectModifiers(row.modifiers),
     }))
     .filter(row => row.remainingFrames > 0)
     .sort(compareCanonicalRows);

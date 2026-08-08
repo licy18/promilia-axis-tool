@@ -87,9 +87,19 @@
 - 通用正例：不同角色 ID 的合成合同可使用同一 landed-hit 与等级缩放 runtime。
 - 通用反例：miss 不产生效果/SP；超出动作有效占用的 hit 不产生；未在场景 roster 中的 owner 合同不泄漏；只有与公开 action form 的同一 execution control/subskill 匹配的 runtime binding 才能让零 hit 动作就绪。
 
+## R1 正式动作等级合同
+
+- 正式来源字段固定为 Machine Axis `actions[].intent.level`；Workbench draft 与 canonical core 均保存为 `action.level`。通用 `resolveVerifiedActionLevel` 由 target-state 和 action-variant 两个 runtime 共用，优先读取 `action.level`；只有 canonical 字段缺失时才允许 legacy `action.skillLevel` fallback，并返回明确的来源状态。
+- 两字段同时存在且数值冲突时以 `verified-action-level-conflict` fail closed；显式非整数、非 number 或超出 `1..12` 时以 `verified-action-level-invalid` fail closed；两字段都缺失或 canonical 为 `null` 时按既有合同默认 1 级。
+- 正式 Machine Axis / Workbench / canonical / service 正例使用同一 scenario ID，仅改变 `intent.level`：1 级守护为 `1900`，12 级为 `3000`；输入 hash、120F active-effect search hash 与 cycle effect boundary 都能区分两级，JSON export/import 后 hash 与数值保持一致。测试不向核心动作手工注入 `skillLevel`。
+- search/cycle 在 canonical effect intervals 缺席时从事件重建“有明确到期时间”的 active effect，并把归一化 modifiers 纳入状态；无到期时间的持久效果继续使用既有专用 boundary-state 路径，本线不改其全局 acceptance/hash 语义。
+- owner golden 继续锁定离场派生的 1 级守护：`2051F` 施加到入场小玉，`2411F` 到期，值为 `1900` 且持续精确 `360F = 6000ms`。12 级 `3000` 由独立正式 Machine Axis service E2E 锁定，不改 owner profile hash，也不要求支线刷新全局 integrated baseline。
+- 通用 action-variant 反例把同一资源操作的 `amountByLevel[1/12]` 设为 `5/11`，核心动作仅使用 `action.level` 即分别结算 `5/11`，锁定两个 verified runtime 不再出现等级语义分叉。
+
 ## 验收与集成边界
 
 - 角色聚焦验收：`src/__tests__/machine-axis/lilyQualification.test.js`。
+- 正式等级链验收：`src/__tests__/machine-axis/lilyActionLevelIntegration.test.js`。
 - 通用 runtime 验收：`src/__tests__/simulation/verifiedTargetStateRuntime.test.js`。
 - 通用边界/反例：`src/__tests__/data/characterCombatProductBoundaries.test.js`、`characterCombatProductionOrchestrator.test.js`、`verifiedCombatMechanicsPackage.test.js`。
 - 本支线不提交全局 verified package/catalog/qualification/binding matrix/summary/index。中央集成线 cherry-pick 后需按顺序统一重生：`data:sync-verified-combat` -> `data:sync-character-combat -- --all` -> `data:generate-optimization-scenario-policy` -> `data:generate-character-acceptance` -> `data:generate-optimization-qualification` -> `data:generate-visual-acceptance`。

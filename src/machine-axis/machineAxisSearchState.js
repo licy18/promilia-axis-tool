@@ -1,6 +1,7 @@
 import { msToFrame } from '../domain/timebase';
 import { getVerifiedActionVariantGraph } from '../data/verifiedCombatMechanicsPackage';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { projectActiveEffectStates } from './machineAxisEffectState';
 
 export const MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_STATE_CONTRACT = 'AzPrMachineAxisSearchState';
@@ -43,7 +44,11 @@ export function createSearchStateSnapshot({
     chargeCooldowns: normalizeChargeCooldownStates(
       trace.readiness?.cooldownState ?? []
     ),
-    effects: normalizeEffectIntervals(trace.effects?.intervals ?? [], timeMs),
+    effects: normalizeEffectIntervals(
+      trace.effects?.intervals ?? [],
+      trace.effects?.events ?? [],
+      timeMs
+    ),
     tuningMarks: normalizeTuningMarkStacks(trace.resources?.tuningMarks ?? []),
     specialResources: normalizeSpecialResources({
       events: trace.resources?.special ?? [],
@@ -706,19 +711,21 @@ function normalizeChargeCooldownStates(rows) {
     });
 }
 
-function normalizeEffectIntervals(rows, timeMs) {
-  return rows
+function normalizeEffectIntervals(rows, effectEvents, timeMs) {
+  return projectActiveEffectStates({
+    intervals: rows,
+    effectEvents,
+    timeMs,
+  })
     .map(entry => ({
-      effectId: entry.effectId ?? null,
-      targetId: entry.targetId ?? null,
-      stacks: numberOrZero(
-        entry.stacks ?? entry.stackCount ?? entry.stackAfter
-      ),
+      effectId: entry.effectId,
+      targetId: entry.targetId,
+      stacks: numberOrZero(entry.stacks),
       startMs: roundMetric(numberOrZero(entry.startMs)),
       endMs: roundMetric(numberOrZero(entry.endMs)),
-      active: Number(entry.startMs) <= timeMs && Number(entry.endMs) > timeMs,
+      modifiers: entry.modifiers,
+      active: true,
     }))
-    .filter(entry => entry.active && entry.effectId)
     .sort((left, right) => {
       const effectOrder = String(left.effectId).localeCompare(
         String(right.effectId),

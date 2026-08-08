@@ -497,8 +497,8 @@ describe('Lily M12-B3 active-surface qualification', () => {
       binding => binding.bindingIdentity === 'lily-star-carry-guard'
     );
     const actions = [
-      createAction('guard-level-1', 0, 0, { skillLevel: 1 }),
-      createAction('guard-level-12', 1000, 1, { skillLevel: 12 }),
+      createAction('guard-level-1', 0, 0, { level: 1 }),
+      createAction('guard-level-12', 1000, 1, { level: 12 }),
     ];
     const result = applyVerifiedTargetStateRuntime({
       scenario: createScenario(actions, [

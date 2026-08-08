@@ -1,6 +1,7 @@
 export { MACHINE_AXIS_TRANSPORT_METADATA_KEY } from './machineAxisTransport';
 import { validateRawMachineAxisSchema } from './machineAxisSchemaValidation';
 import { normalizeOptimizationScenarioPolicyBinding } from '../optimization-scenario/optimizationScenarioPolicy';
+import { VERIFIED_ACTION_LEVEL_MAXIMUM } from '../domain/verifiedActionLevel';
 import {
   normalizeMachineAxisEnemyProfile,
   validateMachineAxisEnemyProfile,
@@ -11,6 +12,8 @@ export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
 export const MACHINE_AXIS_KIND = 'azpr-machine-axis';
 export const MACHINE_AXIS_SUPPORTED_FPS = 60;
+export const MACHINE_AXIS_PUBLIC_ACTION_MAX_LEVEL =
+  VERIFIED_ACTION_LEVEL_MAXIMUM;
 
 export const MACHINE_AXIS_SCHEDULE_MODES = Object.freeze([
   'absolute',
@@ -694,6 +697,24 @@ function validateIntent(action, index, issues) {
         `${path}.publicActionId`,
         'publicActionId is required for public actions',
         { actionId: action.id }
+      )
+    );
+  }
+  if (
+    action.intent.kind === 'public-action' &&
+    action.intent.level != null &&
+    action.intent.level > MACHINE_AXIS_PUBLIC_ACTION_MAX_LEVEL
+  ) {
+    issues.push(
+      diagnostic(
+        'machine-axis-public-action-level-out-of-range',
+        `${path}.level`,
+        `public action level must not exceed ${MACHINE_AXIS_PUBLIC_ACTION_MAX_LEVEL}`,
+        {
+          actionId: action.id,
+          level: action.intent.level,
+          maximum: MACHINE_AXIS_PUBLIC_ACTION_MAX_LEVEL,
+        }
       )
     );
   }

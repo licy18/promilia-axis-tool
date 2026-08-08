@@ -209,6 +209,7 @@ export function createWorkbenchActionDraft({
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
+  verifiedDeclaredPublicActionIntent = null,
   sourceSequenceIndex = null,
   sourceSequencePath = null,
   sourceSequenceSource = null,
@@ -302,6 +303,14 @@ export function createWorkbenchActionDraft({
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),
     scenarioRuntimeStatus: textOrNull(scenarioRuntimeStatus),
+    ...(verifiedDeclaredPublicActionIntent
+      ? {
+          verifiedDeclaredPublicActionIntent:
+            cloneVerifiedDeclaredPublicActionIntent(
+              verifiedDeclaredPublicActionIntent
+            ),
+        }
+      : {}),
     hitOverrides: normalizeActionHitOverrides(hitOverrides),
     ...(isSwitchAction
       ? {
@@ -1051,6 +1060,8 @@ export function normalizeWorkbenchActionDrafts(
           actionScheduling: draft.actionScheduling,
           sourceEvidenceStatus: draft.sourceEvidenceStatus,
           scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+          verifiedDeclaredPublicActionIntent:
+            draft.verifiedDeclaredPublicActionIntent,
           sourceSequenceIndex: draft.sourceSequenceIndex,
           sourceSequencePath: draft.sourceSequencePath,
           sourceSequenceSource: draft.sourceSequenceSource,
@@ -1109,6 +1120,8 @@ export function normalizeWorkbenchActionDrafts(
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+        verifiedDeclaredPublicActionIntent:
+          draft.verifiedDeclaredPublicActionIntent,
         sourceSequenceIndex: draft.sourceSequenceIndex,
         sourceSequencePath: draft.sourceSequencePath,
         sourceSequenceSource: draft.sourceSequenceSource,
@@ -1257,6 +1270,8 @@ function createProjectActionFromDraft(
       actionScheduling: draft.actionScheduling,
       sourceEvidenceStatus: draft.sourceEvidenceStatus,
       scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      verifiedDeclaredPublicActionIntent:
+        draft.verifiedDeclaredPublicActionIntent,
       autoCast: draft.autoCast === true,
       autoCastRule: draft.autoCastRule,
       hitOverrides: draft.hitOverrides,
@@ -1290,6 +1305,8 @@ function createProjectActionFromDraft(
       actionScheduling: draft.actionScheduling,
       sourceEvidenceStatus: draft.sourceEvidenceStatus,
       scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      verifiedDeclaredPublicActionIntent:
+        draft.verifiedDeclaredPublicActionIntent,
       hitOverrides: draft.hitOverrides,
       level: draft.level,
       actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
@@ -1491,6 +1508,11 @@ function normalizeWorkbenchGenerationBatch(generationBatch) {
 function cloneAutoCastRule(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
   return { ...value };
+}
+
+function cloneVerifiedDeclaredPublicActionIntent(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return structuredClone(value);
 }
 
 function createSkillLevelsForCharacter(skillDrafts, characterId) {

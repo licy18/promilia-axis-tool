@@ -12,6 +12,7 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
+import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
 
 export const VERIFIED_TARGET_STATE_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedTargetStateRuntime';
@@ -1452,7 +1453,7 @@ function emitRuntimeBinding({
 }
 
 function resolveRuntimeBindingModifier(modifier, action) {
-  const level = Math.max(1, Math.min(12, Number(action?.skillLevel) || 1));
+  const level = resolveVerifiedActionLevelValue(action);
   const levelValue = Number(modifier?.valueRawByLevel?.[level]);
   return {
     ...modifier,
