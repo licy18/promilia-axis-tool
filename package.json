@@ -43,6 +43,7 @@
     "data:generate-machine-axis-enemy-settlement-evidence": "node scripts/generate-machine-axis-enemy-settlement-evidence.mjs",
     "audit:machine-axis-enemy-settlement-evidence": "node scripts/generate-machine-axis-enemy-settlement-evidence.mjs --assert-clean",
     "runtime-capture:capture": "python scripts/capture-azpr-runtime.py",
+    "runtime-capture:preflight": "python scripts/capture-azpr-runtime.py --preflight",
     "runtime-capture:plan": "node scripts/prepare-runtime-capture-plan.mjs",
     "runtime-capture:normalize": "node scripts/normalize-runtime-capture.mjs",
     "runtime-capture:self-test": "python scripts/capture-azpr-runtime.py --self-test",

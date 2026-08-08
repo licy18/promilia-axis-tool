@@ -27864,3 +27864,24 @@ settlementOrder = [
 ```
 
 该数组进入 canonical damage、cycle settlement packet、kill proof 与对应 hash。普通和调谐伤害都先以 packet 前 weak state 计算 HP output，再结算韧性/破韧状态，最后结算 HP，匹配已闭合的客户端单包调用顺序。`m12-enemy-settlement-runtime-v1` 仍保持 `formalReady=false`：同帧跨 DamageElement 可见性、break 结束同帧 update/hit、致死尾包以及正式 passive boss 的 local/remote 路径仍需真实受控 capture。
+
+## 460. Enemy toughness controlled capture integrity / preflight
+
+`runtime-capture` 的 toughness 记录增加三层稳定关联：全会话单调 `captureSequence`，每个 `DamageElement.Execute` 的 `eventIdentity / damagePacketSequence / sourceSequencePath`，以及每次 native hook 调用的 `hookInvocationIdentity / hookMethodKey`。每条事件同时保存客户端 `clientFrameCount / clientDeltaTimeSeconds / threadId`，从而可以区分同帧跨包顺序、嵌套调用、线程切换和状态机 update。
+
+JSONL 会话以唯一 `capture-session-end` 结束：
+
+```text
+capture-session-end
+  status = capture-complete
+  agentEmittedEventCount / hostReceivedEventCount
+  finalCaptureSequence
+  damagePacketCount / hookInvocationCount
+  openThreadStateCount
+  diagnosticCount / diagnostics[]
+  completedAt
+```
+
+Workbench production audit 对 toughness capture 强制检查 sequence 从 1 连续、frame/delta/thread 完整、hook invocation entry/exit 成对且无重复、同 packet/invocation 不跨线程、agent/host 数量一致、无未清栈与 agent diagnostic。缺失结束记录、丢包、重复 hook、线程漂移或帧号缺失均 fail closed。normalizer v3 移除非确定性生成时间、本机 PID、模块路径/基址和输入绝对路径，重复运行逐字节一致；结果按原始 bytes 绑定精确大小与 SHA-256。synthetic/self-test 只可验证工具，不可成为客户端证据。
+
+`runtime-capture:preflight` 仅核对 manifest、GameAssembly/dump/script 身份并枚举可附加进程，不启动或附加客户端。其 blocked 报告明确保留四条 `leavesOpen`、112001 所需观察接口和最小 operator steps；在真实受控会话记录闭合前，`formalReady=false`、`formalScore=null` 与 `machine-axis-enemy-settlement-client-order-open` 不变。

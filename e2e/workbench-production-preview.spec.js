@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 import { execFile } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { expect, test } from '@playwright/test';
 import {
@@ -1460,11 +1460,9 @@ test('[six-resource-capture-import] packages, imports, and replays six owner-spe
   });
   const normalizedEnvelope = JSON.parse(await readFile(normalizedPath, 'utf8'));
   expect(normalizedEnvelope).toMatchObject({
-    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v3',
     sourceFiles: expect.arrayContaining(
-      inputPaths.map(path =>
-        expect.objectContaining({ path: path.replaceAll('\\', '/') })
-      )
+      inputPaths.map(path => expect.objectContaining({ path: basename(path) }))
     ),
   });
   expect(normalizedEnvelope.captures).toHaveLength(6);
@@ -9214,9 +9212,7 @@ test('[m11-d-character-acceptance-visual-import] imports each owner acceptance f
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({
       path:
-        'reports/m11-d-character-acceptance-' +
-        entry.ownerId +
-        '-desktop.png',
+        'reports/m11-d-character-acceptance-' + entry.ownerId + '-desktop.png',
     });
     await page.getByTestId('workbench-close-side-inspector').click();
     await expect(page.getByTestId('workbench-side-inspector')).toHaveCount(0);

@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -21,6 +22,11 @@ describe('runtime capture normalize CLI', () => {
     temporaryDirectories.push(directory);
     const inputPath = join(directory, 'capture.jsonl');
     const outputPath = join(directory, 'capture.normalized.json');
+    const repeatOutputPath = join(directory, 'capture.repeat.normalized.json');
+    const tamperedOutputPath = join(
+      directory,
+      'capture.tampered.normalized.json'
+    );
     const capture = createRecoverSpRuntimeSampleFixture();
     const jsonl = [
       JSON.stringify({
@@ -30,6 +36,15 @@ describe('runtime capture normalize CLI', () => {
         clientBuild: 'fixture-build',
         source: capture.source,
         captureKind: 'role-sp',
+        processId: 12345,
+        module: {
+          name: 'GameAssembly.dll',
+          path: 'C:/private/local/GameAssembly.dll',
+          base: '0x7ff600000000',
+          size: 222485544,
+          sha256:
+            'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b',
+        },
         binding: {
           actionId: 'action-0001',
           actorId: 'actor-109001',
@@ -71,6 +86,49 @@ describe('runtime capture normalize CLI', () => {
         }),
       ],
     });
+    expect(output.sourceFile).toMatchObject({
+      path: 'capture.jsonl',
+      size: Buffer.byteLength(jsonl, 'utf8'),
+      sha256: createHash('sha256').update(jsonl).digest('hex'),
+    });
+    expect(output.normalizedAt).toBeUndefined();
+    expect(output.normalizedBy).toBe(
+      'promilia-axis-tool/runtime-capture-normalizer-v3'
+    );
+    expect(output.captures[0]).not.toHaveProperty('processId');
+    expect(output.captures[0].module).toMatchObject({
+      name: 'GameAssembly.dll',
+      size: 222485544,
+    });
+    expect(output.captures[0].module).not.toHaveProperty('path');
+    expect(output.captures[0].module).not.toHaveProperty('base');
+
+    const repeatRun = spawnSync(
+      process.execPath,
+      [scriptPath, '--input', inputPath, '--output', repeatOutputPath],
+      { encoding: 'utf8' }
+    );
+    expect(repeatRun.status).toBe(0);
+    expect(await readFile(repeatOutputPath, 'utf8')).toBe(
+      await readFile(outputPath, 'utf8')
+    );
+
+    const tamperedJsonl = `${jsonl}\n`;
+    await writeFile(inputPath, tamperedJsonl, 'utf8');
+    const tamperedRun = spawnSync(
+      process.execPath,
+      [scriptPath, '--input', inputPath, '--output', tamperedOutputPath],
+      { encoding: 'utf8' }
+    );
+    expect(tamperedRun.status).toBe(0);
+    const tamperedOutput = JSON.parse(
+      await readFile(tamperedOutputPath, 'utf8')
+    );
+    expect(tamperedOutput.captures).toEqual(output.captures);
+    expect(tamperedOutput.sourceFile.sha256).toBe(
+      createHash('sha256').update(tamperedJsonl).digest('hex')
+    );
+    expect(tamperedOutput.sourceFile.sha256).not.toBe(output.sourceFile.sha256);
 
     const productionRun = spawnSync(
       process.execPath,
@@ -123,7 +181,7 @@ describe('runtime capture normalize CLI', () => {
     const output = JSON.parse(await readFile(outputPath, 'utf8'));
     expect(output).toMatchObject({
       type: 'runtime-sample-captures',
-      normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+      normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v3',
       summary: {
         captureCount: 2,
         eventCount: 12,

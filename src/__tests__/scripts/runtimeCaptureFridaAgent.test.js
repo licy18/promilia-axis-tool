@@ -71,6 +71,11 @@ describe('controlled Frida runtime capture agent', () => {
     expect(agentSource).toContain('captureSequence');
     expect(agentSource).toContain('clientFrameCount');
     expect(agentSource).toContain('clientDeltaTimeSeconds');
+    expect(agentSource).toContain('eventIdentity');
+    expect(agentSource).toContain('sourceSequencePath');
+    expect(agentSource).toContain('hookInvocationIdentity');
+    expect(agentSource).toContain('finalCaptureSequence');
+    expect(agentSource).toContain('openThreadStateCount');
     expect(agentSource).toContain('FormulaUtility.GetOutputDamage');
     expect(agentSource).toContain('ControlProperty.SetWeakState');
     expect(agentSource).toContain('UpdateWeakBreakEnd');

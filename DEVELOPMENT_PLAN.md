@@ -1121,3 +1121,12 @@ npm run test -- --run
 - 通用 runtime 已把普通/调谐 packet 修为“pre-break 计算 HP output → 韧性/破韧状态 → HP”，并将顺序投影到 canonical/cycle/kill hash。没有 enemyId/actionId 特判；无韧目标仍完全不产生 toughness/broken 状态。
 - `runtime-capture` v3 已准备同帧单调序列与状态前后 hook。当前环境没有运行中的获准客户端进程，且工具禁止自动启动/附加/绕过反作弊，所以没有伪造 capture。
 - blocker 未解除：同帧多 DamageElement 的刚破韧状态可见性、break 结束帧 state update/hit phase、致死包后同队列尾包以及正式场景 authoritative execution path 仍为 `leavesOpen`。`cycle-dps-with-toughness` 与 `fastest-kill` 的 `formalScore` 继续为 null；M12-C/formal search 保持锁定。
+
+## 15. M12-B3-OPT-T3 有韧敌人 controlled capture 预检（2026-08-09）
+
+- 本机绑定 TC GameAssembly/dump/script 的 bytes 与 SHA-256 全部匹配 manifest v3，但预检未发现运行中的 `AzurPromilia.exe`。capture policy 禁止自动启动、自动附加或绕过反作弊，因此未生成、补写或推断任何客户端记录。冻结 blocked preflight 为 `reports/m12/m12-b3-enemy-toughness-controlled-capture-preflight-20260809.json`（4,732 bytes，SHA-256 `ac6c3b9014540668a83c06d162139227ee1f9d6c776983c21ea84f45d0f757bb`）。
+- capture agent/host 现为每个 DamageElement、嵌套来源路径和每次 hook 调用生成稳定 identity，并记录全局单调 sequence、客户端 frame/deltaTime/thread。唯一 session-end 汇总 agent/host 数量、最终 sequence、未清线程栈和 diagnostics。
+- production audit 对丢包、重复 hook、entry/exit 不完整、线程切换、帧号缺失、缺 session-end 或 agent diagnostic 全部 fail closed；normalizer v3 输出逐字节可重复、移除本机 PID/模块路径/加载基址与输入绝对路径，并绑定原始 JSONL 精确 bytes/hash。self-test 与 synthetic fixture 只能验证工具，不能关闭客户端 blocker。
+- 112001 消费接口要求同一 eventIdentity/sourceSequencePath 下观测 damage/overlimit 单包顺序、191F wrapper、128F watcher、权威 break cursor 与 observer-active-at-break；没有真实动作时只接受带等价调用链证明的探针。目前这些观察均未执行。
+- 下一步需要 operator 手动启动并登录绑定 TC 客户端、进入 0 距离静止不攻击 Boss 场景、准备 112001 或有调用链证明的等价 probe，再提供 PID 并显式确认本次受控 attach。随后执行破韧、同帧后续包、break-end 边界和有限 HP 致死尾包探针。
+- 四条动态 `leavesOpen` 尚未闭合，`formalReady=false`、`formalScore=null`、`machine-axis-enemy-settlement-client-order-open`、M12-C 与正式搜索锁保持不变。

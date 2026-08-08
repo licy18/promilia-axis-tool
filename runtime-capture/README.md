@@ -41,6 +41,14 @@ npm run audit:runtime-capture-manifest
 
 ## 受控采集端
 
+先做只读 preflight；它只核对 manifest/客户端哈希并通过 Frida 枚举进程，不启动、不附加客户端：
+
+```powershell
+npm run runtime-capture:preflight -- --output C:\path\enemy-toughness-preflight.json
+```
+
+若返回 `blocked-source-game-process-required`，操作者需要手工启动并登录已绑定 TC 客户端、进入 0 距离且敌人静止不攻击的场景、准备 112001 或有等价调用链证据的探针，然后提供 `AzurPromilia.exe` PID 并明确确认本次 controlled attach。工具不会代替操作者启动游戏或执行战斗。
+
 先在本地测试进程验证 Frida transport，不接触游戏：
 
 ```powershell
@@ -215,6 +223,10 @@ recover-sp-share-rebroadcast
 
 削韧采样必须覆盖 `toughness-packet-execution / toughness-weak-state-read / toughness-break-property-read / toughness-hp-output-calculated / toughness-damage-applied / toughness-weak-state-write / toughness-hp-change-dispatch / toughness-hp-applied / toughness-state-update`。同帧顺序以 `captureSequence` 为唯一单调序，`clientFrameCount` 用于分帧；没有真实受控会话记录时，不能用 hook 自测或 runtime 输出关闭客户端顺序 blocker。
 
+每个 toughness packet 事件还必须带 `eventIdentity / sourceSequencePath / damagePacketSequence / hookInvocationIdentity / hookMethodKey / threadId / clientDeltaTimeSeconds`。采集结束时 host 写入唯一 `capture-session-end`，绑定 agent emitted count、host received count、最终 sequence、未退出线程状态和诊断数量。生产审计对 sequence 缺口、重复 hook row、同 packet 或同 invocation 的线程切换、缺失客户端帧/delta、未闭合 entry/exit、缺失 session-end、计数不守恒或 agent diagnostic 全部 fail closed。
+
+112001 探针消费相同关联字段，必须从真实记录回答：damage/overlimit 单包 HP/韧性/break 顺序、191F wrapper 是否作用本包、128F watcher 与同包 break 的先后、权威 break cursor、以及 `observer-active-at-break`。等价探针只有在另有来源证明调用链和 phase 相同后才可采用；字段名称或动作名称本身不构成等价证据。
+
 奇波就绪采样必须包含 `pet-ultimate-cooldown-observed`，并同时记录实际 `petEntityId`、`petEntityPointer`、`kiboId`、`slotId`、`actorId`、`cdTime` 与 `totalTime`。运行时以 `totalTime - clamp(cdTime, 0, totalTime)` 作为同轴就绪展示值；这只是对已观测冷却的显示变换，不进入 calculator，也不推断未观测区间。
 
 ## 规范化
@@ -254,6 +266,10 @@ production audit 要求：
 - 实际事件族必须与 `captureKind` 一致，混入其他资源事件会拒绝整份会话。
 - 所需事件序列完整，RecoverSP 事件保持调用先后顺序。
 - 每个事件有帧或毫秒时间以及 DamageElement/PathID 来源。
+- toughness 会话的 `captureSequence` 从 1 连续递增，client frame/delta/thread、packet identity/path 和 hook invocation 完整。
+- toughness 会话有完整 `capture-session-end`，agent/host 事件数量与最终 sequence 守恒，且无 stack/read/transport diagnostics。
+- normalizer v3 不写入运行时生成时间，重复规范化同一输入得到逐字节相同的文件；`sourceFile/sourceFiles.path` 只保留文件名，capture metadata 删除本机 PID、模块绝对路径与加载基址。
+- 规范化文件在 `sourceFile/sourceFiles` 中按原始 bytes 保留精确字节数与 SHA-256；即使只增加一个空行也会改变绑定哈希，tamper-negative 不依赖解析后的 JSON 语义。
 
 规范化成功后可直接使用 Workbench 的“导入项目”入口导入 `.json`、`.jsonl` 或 `.ndjson`。
 

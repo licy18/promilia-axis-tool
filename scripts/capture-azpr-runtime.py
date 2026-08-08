@@ -30,8 +30,12 @@ AGENT_PATH = (
     / "runtime-capture/frida/azpr-runtime-capture-agent.js"
 )
 CAPTURE_TOOL_NAME = "promilia-axis-controlled-frida-capture"
-CAPTURE_TOOL_VERSION = "1.1.0"
+CAPTURE_TOOL_VERSION = "1.2.0"
 CAPTURE_KINDS = ("all", "role-sp", "kibo-energy", "toughness")
+ENEMY_SETTLEMENT_EVIDENCE_PATH = (
+    PROJECT_ROOT
+    / "scripts/machine-axis/evidence/enemy-toughness-settlement-runtime-evidence.json"
+)
 
 
 class JsonLinesWriter:
@@ -45,6 +49,7 @@ class JsonLinesWriter:
         self.handle = output_path.open("w", encoding="utf-8", newline="\n")
         self.event_count = 0
         self.event_received = threading.Event()
+        self.diagnostics: list[dict[str, Any]] = []
 
     def write(self, record: dict[str, Any]) -> None:
         self.handle.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")))
@@ -56,6 +61,9 @@ class JsonLinesWriter:
 
     def close(self) -> None:
         self.handle.close()
+
+    def add_diagnostic(self, diagnostic: dict[str, Any]) -> None:
+        self.diagnostics.append(diagnostic)
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -77,11 +85,14 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--confirm-controlled-session", action="store_true")
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--preflight", action="store_true")
     return parser.parse_args()
 
 
 def main() -> int:
     options = parse_arguments()
+    if options.preflight:
+        return run_capture_preflight(options)
     if options.self_test:
         return run_self_test(options)
     validate_capture_options(options)
@@ -119,6 +130,156 @@ def validate_capture_options(options: argparse.Namespace) -> None:
         )
 
 
+def run_capture_preflight(options: argparse.Namespace) -> int:
+    manifest_path = options.manifest.resolve()
+    manifest = read_json(manifest_path)
+    validate_manifest(manifest)
+    evidence = read_json(ENEMY_SETTLEMENT_EVIDENCE_PATH)
+    client_sources = [
+        ("gameAssembly", evidence["reviewedBinary"]),
+        ("il2CppDump", evidence["reviewedIl2CppDump"]),
+        ("il2CppScript", evidence["reviewedIl2CppScript"]),
+    ]
+    client_identities = []
+    for kind, expected in client_sources:
+        source_path = Path(expected["path"])
+        exists = source_path.is_file()
+        actual_size = source_path.stat().st_size if exists else None
+        actual_sha256 = sha256_file(source_path) if exists else None
+        client_identities.append(
+            {
+                "kind": kind,
+                "path": str(source_path).replace("\\", "/"),
+                "exists": exists,
+                "expectedBytes": expected["bytes"],
+                "actualBytes": actual_size,
+                "expectedSha256": expected["sha256"],
+                "actualSha256": actual_sha256,
+                "matches": bool(
+                    exists
+                    and actual_size == expected["bytes"]
+                    and actual_sha256 == expected["sha256"]
+                ),
+            }
+        )
+
+    process_candidates = []
+    for process in frida.get_local_device().enumerate_processes(scope="full"):
+        parameters = process.parameters or {}
+        process_path = str(parameters.get("path") or "").replace("\\", "/")
+        if process.name.lower() == "azurpromilia.exe" or process_path.lower().endswith(
+            "/azurpromilia.exe"
+        ):
+            process_candidates.append(
+                {
+                    "pid": process.pid,
+                    "name": process.name,
+                    "path": process_path or None,
+                }
+            )
+
+    identities_match = all(row["matches"] for row in client_identities)
+    source_process_detected = len(process_candidates) > 0
+    if not identities_match:
+        status = "blocked-client-identity-mismatch"
+        blocker = "machine-axis-controlled-capture-client-identity-mismatch"
+    elif not source_process_detected:
+        status = "blocked-source-game-process-required"
+        blocker = "machine-axis-controlled-capture-source-game-process-required"
+    else:
+        status = "blocked-formal-scenario-and-explicit-attach-confirmation-required"
+        blocker = "machine-axis-controlled-capture-formal-scenario-unverified"
+
+    report = {
+        "schemaVersion": 1,
+        "reportName": "AzPrMachineAxisEnemyToughnessControlledCapturePreflight",
+        "phase": "M12-B3-OPT-T3",
+        "checkedAt": datetime.now(UTC).isoformat(),
+        "status": status,
+        "blockerCode": blocker,
+        "realCaptureClaimAllowed": False,
+        "attachAttempted": False,
+        "automaticLaunchAttempted": False,
+        "antiCheatBypassAttempted": False,
+        "manifest": {
+            "path": str(manifest_path).replace("\\", "/"),
+            "manifestId": manifest["manifestId"],
+            "bytes": manifest_path.stat().st_size,
+            "sha256": sha256_file(manifest_path),
+        },
+        "clientIdentities": client_identities,
+        "tooling": {
+            "captureToolName": CAPTURE_TOOL_NAME,
+            "captureToolVersion": CAPTURE_TOOL_VERSION,
+            "fridaVersion": getattr(frida, "__version__", "unknown"),
+            "captureHostSha256": sha256_file(Path(__file__).resolve()),
+            "agentSha256": sha256_file(AGENT_PATH),
+        },
+        "processProbe": {
+            "kind": "frida-local-device-full-enumeration-no-attach",
+            "sourceGameProcessDetected": source_process_detected,
+            "candidates": process_candidates,
+        },
+        "scenarioProbe": {
+            "policyId": "m12c-zero-distance-passive-boss-v1",
+            "required": {
+                "distance": 0,
+                "enemyStationary": True,
+                "enemyDoesNotAttack": True,
+                "reactiveStimuliDisabled": True,
+            },
+            "verified": False,
+            "reason": "source client process and operator-controlled formal scenario are not available to this preflight",
+        },
+        "captureRequirements": {
+            "captureKind": "toughness",
+            "controlledSessionConfirmationRequired": True,
+            "operatorExecutesCombat": True,
+            "leavesOpen": evidence["conclusion"]["leavesOpen"],
+            "requiredCorrelation": [
+                "eventIdentity",
+                "sourceSequencePath",
+                "captureSequence",
+                "clientFrameCount",
+                "threadId",
+                "clientDeltaTimeSeconds",
+                "hookInvocationIdentity",
+            ],
+        },
+        "character112001Probe": {
+            "status": "blocked-no-real-controlled-action-executed",
+            "requiredObservations": [
+                "single-packet-damage-or-overlimit-hp-toughness-break-order",
+                "191f-wrapper-applies-to-current-packet-or-not",
+                "128f-watcher-order-relative-to-same-packet-break",
+                "authoritative-break-event-and-cursor",
+                "observer-active-at-break",
+            ],
+            "equivalentProbeAllowed": True,
+            "equivalentCallChainProofRequired": True,
+        },
+        "formalGate": {
+            "formalReady": False,
+            "formalScore": None,
+            "blockerCode": "machine-axis-enemy-settlement-client-order-open",
+        },
+        "requiredOperatorSteps": [
+            "Launch the bound TC client manually and complete login without disabling or bypassing anti-cheat.",
+            "Enter the zero-distance stationary non-attacking boss scenario and prepare 112001 or a proven equivalent consumer probe.",
+            "Provide the AzurPromilia.exe PID and explicitly confirm the controlled Frida attach for this one session.",
+            "Execute identifiable breaking, same-frame follow-up, break-end boundary, and finite-HP lethal-tail probes while capture is running.",
+        ],
+    }
+    serialized = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if options.output:
+        output_path = options.output.resolve()
+        assert_output_available(output_path, options.overwrite)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(serialized, encoding="utf-8", newline="\n")
+    print(serialized, end="")
+    return 0
+
+
 def run_game_capture(options: argparse.Namespace) -> int:
     manifest_path = options.manifest.resolve()
     manifest = read_json(manifest_path)
@@ -130,6 +291,7 @@ def run_game_capture(options: argparse.Namespace) -> int:
     writer: JsonLinesWriter | None = None
     session = None
     script = None
+    stop_result: dict[str, Any] | None = None
 
     try:
         session = frida.attach(options.pid)
@@ -174,10 +336,21 @@ def run_game_capture(options: argparse.Namespace) -> int:
     except KeyboardInterrupt:
         if script is not None:
             try:
-                script.exports_sync.stopcapture()
+                stop_result = script.exports_sync.stopcapture()
             except frida.InvalidOperationError:
                 pass
     finally:
+        if writer is not None and stop_result is not None:
+            wait_for_event_delivery(
+                writer, int(stop_result.get("emittedEventCount", 0))
+            )
+            writer.write(
+                create_capture_end_record(
+                    session_id=session_id,
+                    writer=writer,
+                    stop_result=stop_result,
+                )
+            )
         if script is not None:
             try:
                 script.unload()
@@ -264,6 +437,14 @@ def run_self_test(options: argparse.Namespace) -> int:
             raise RuntimeError(
                 f"Frida self-test captured {writer.event_count} events; expected at least 3"
             )
+        wait_for_event_delivery(writer, int(stop_result.get("emittedEventCount", 0)))
+        writer.write(
+            create_capture_end_record(
+                session_id=session_id,
+                writer=writer,
+                stop_result=stop_result,
+            )
+        )
         child.stdin.write("STOP\n")
         child.stdin.flush()
         child.wait(timeout=10)
@@ -305,8 +486,19 @@ def create_message_handler(writer: JsonLinesWriter):
             if payload.get("channel") == "capture-event":
                 writer.write(payload["record"])
             else:
+                status = payload.get("status", "unknown")
+                if status != "capture-agent-started":
+                    writer.add_diagnostic(
+                        {
+                            "kind": "agent-status",
+                            "status": status,
+                        }
+                    )
                 print(json.dumps(payload, ensure_ascii=False), file=sys.stderr)
             return
+        writer.add_diagnostic(
+            {"kind": "frida-message", "type": message.get("type", "unknown")}
+        )
         print(json.dumps(message, ensure_ascii=False), file=sys.stderr)
 
     return on_message
@@ -357,6 +549,38 @@ def create_capture_binding(options: argparse.Namespace) -> dict[str, Any]:
         "kiboId": options.kibo_id,
         "sourceElementConfigId": options.source_element_config_id,
     }
+
+
+def create_capture_end_record(
+    *,
+    session_id: str,
+    writer: JsonLinesWriter,
+    stop_result: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "recordType": "capture-session-end",
+        "schemaVersion": 1,
+        "captureSessionId": session_id,
+        "status": "capture-complete",
+        "agentEmittedEventCount": int(stop_result.get("emittedEventCount", -1)),
+        "hostReceivedEventCount": writer.event_count,
+        "finalCaptureSequence": int(stop_result.get("finalCaptureSequence", -1)),
+        "damagePacketCount": int(stop_result.get("damagePacketCount", 0)),
+        "hookInvocationCount": int(stop_result.get("hookInvocationCount", 0)),
+        "openThreadStateCount": int(stop_result.get("openThreadStateCount", -1)),
+        "diagnosticCount": len(writer.diagnostics),
+        "diagnostics": list(writer.diagnostics),
+        "completedAt": datetime.now(UTC).isoformat(),
+    }
+
+
+def wait_for_event_delivery(
+    writer: JsonLinesWriter, expected_event_count: int, timeout: float = 2.0
+) -> None:
+    deadline = time.monotonic() + timeout
+    while writer.event_count < expected_event_count and time.monotonic() < deadline:
+        writer.event_received.wait(0.05)
+        writer.event_received.clear()
 
 
 def verify_loaded_module(

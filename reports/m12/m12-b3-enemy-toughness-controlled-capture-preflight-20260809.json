@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "reportName": "AzPrMachineAxisEnemyToughnessControlledCapturePreflight",
+  "phase": "M12-B3-OPT-T3",
+  "checkedAt": "2026-08-08T16:56:10.186004+00:00",
+  "status": "blocked-source-game-process-required",
+  "blockerCode": "machine-axis-controlled-capture-source-game-process-required",
+  "realCaptureClaimAllowed": false,
+  "attachAttempted": false,
+  "automaticLaunchAttempted": false,
+  "antiCheatBypassAttempted": false,
+  "manifest": {
+    "path": "C:/Codex/AzPr Axis/.worktrees/promilia-m12-optimizer-objectives/src/data/generated/runtime-capture-hook-manifest.json",
+    "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v3",
+    "bytes": 30088,
+    "sha256": "3724588d3c94f620095820181ddf008f10896963d9663590d9818b92d8587ea4"
+  },
+  "clientIdentities": [
+    {
+      "kind": "gameAssembly",
+      "path": "C:/AP/AzurPromilia_TC/AzurPromilia_game/GameAssembly.dll",
+      "exists": true,
+      "expectedBytes": 222485544,
+      "actualBytes": 222485544,
+      "expectedSha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "actualSha256": "c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b",
+      "matches": true
+    },
+    {
+      "kind": "il2CppDump",
+      "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs",
+      "exists": true,
+      "expectedBytes": 97428254,
+      "actualBytes": 97428254,
+      "expectedSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "actualSha256": "0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a",
+      "matches": true
+    },
+    {
+      "kind": "il2CppScript",
+      "path": "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/script.json",
+      "exists": true,
+      "expectedBytes": 368815582,
+      "actualBytes": 368815582,
+      "expectedSha256": "604394cf001aea1e3acee698a145392b0e808db7e0ff917ca337cf92ef876c0b",
+      "actualSha256": "604394cf001aea1e3acee698a145392b0e808db7e0ff917ca337cf92ef876c0b",
+      "matches": true
+    }
+  ],
+  "tooling": {
+    "captureToolName": "promilia-axis-controlled-frida-capture",
+    "captureToolVersion": "1.2.0",
+    "fridaVersion": "17.15.3",
+    "captureHostSha256": "7b15cd6835003311106f0276584cbeb924c56ad5928d342a7368369d773233ff",
+    "agentSha256": "f47a4a2efcf9d806fb780d298d9c6a878189e64267d5a069164bd082c27613cf"
+  },
+  "processProbe": {
+    "kind": "frida-local-device-full-enumeration-no-attach",
+    "sourceGameProcessDetected": false,
+    "candidates": []
+  },
+  "scenarioProbe": {
+    "policyId": "m12c-zero-distance-passive-boss-v1",
+    "required": {
+      "distance": 0,
+      "enemyStationary": true,
+      "enemyDoesNotAttack": true,
+      "reactiveStimuliDisabled": true
+    },
+    "verified": false,
+    "reason": "source client process and operator-controlled formal scenario are not available to this preflight"
+  },
+  "captureRequirements": {
+    "captureKind": "toughness",
+    "controlledSessionConfirmationRequired": true,
+    "operatorExecutesCombat": true,
+    "leavesOpen": [
+      "same-frame-damage-element-queue-order-and-immediate-weak-state-visibility",
+      "break-end-state-update-versus-hit-order-in-the-same-client-frame",
+      "finite-hp-lethal-packet-and-post-death-tail-packet-disposition",
+      "authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario"
+    ],
+    "requiredCorrelation": [
+      "eventIdentity",
+      "sourceSequencePath",
+      "captureSequence",
+      "clientFrameCount",
+      "threadId",
+      "clientDeltaTimeSeconds",
+      "hookInvocationIdentity"
+    ]
+  },
+  "character112001Probe": {
+    "status": "blocked-no-real-controlled-action-executed",
+    "requiredObservations": [
+      "single-packet-damage-or-overlimit-hp-toughness-break-order",
+      "191f-wrapper-applies-to-current-packet-or-not",
+      "128f-watcher-order-relative-to-same-packet-break",
+      "authoritative-break-event-and-cursor",
+      "observer-active-at-break"
+    ],
+    "equivalentProbeAllowed": true,
+    "equivalentCallChainProofRequired": true
+  },
+  "formalGate": {
+    "formalReady": false,
+    "formalScore": null,
+    "blockerCode": "machine-axis-enemy-settlement-client-order-open"
+  },
+  "requiredOperatorSteps": [
+    "Launch the bound TC client manually and complete login without disabling or bypassing anti-cheat.",
+    "Enter the zero-distance stationary non-attacking boss scenario and prepare 112001 or a proven equivalent consumer probe.",
+    "Provide the AzurPromilia.exe PID and explicitly confirm the controlled Frida attach for this one session.",
+    "Execute identifiable breaking, same-frame follow-up, break-end boundary, and finite-HP lethal-tail probes while capture is running."
+  ]
+}

@@ -13,7 +13,31 @@ const RECOVER_SP_REQUIRED_EVENT_TYPES = [
   'recover-sp-applied',
   'recover-sp-share-rebroadcast',
 ];
-const TOUGHNESS_REQUIRED_EVENT_TYPES = ['toughness-damage-applied'];
+const TOUGHNESS_REQUIRED_EVENT_TYPES = [
+  'toughness-packet-execution',
+  'toughness-weak-state-read',
+  'toughness-break-property-read',
+  'toughness-damage-applied',
+  'toughness-weak-state-write',
+  'toughness-hp-change-dispatch',
+  'toughness-hp-applied',
+  'toughness-state-update',
+];
+const TOUGHNESS_OUTPUT_EVENT_TYPES = new Set([
+  'toughness-hp-output-calculated',
+  'toughness-real-output-calculated',
+  'toughness-output-calculated',
+]);
+const TOUGHNESS_PACKET_CORRELATED_EVENT_TYPES = new Set([
+  'toughness-packet-execution',
+  'toughness-hp-output-calculated',
+  'toughness-real-output-calculated',
+  'toughness-output-calculated',
+  'toughness-break-property-read',
+  'toughness-damage-applied',
+  'toughness-hp-change-dispatch',
+  'toughness-hp-applied',
+]);
 const KIBO_ENERGY_REQUIRED_EVENT_TYPES = ['pet-ultimate-cooldown-observed'];
 const ISOLATED_CAPTURE_KINDS = new Set(['role-sp', 'kibo-energy', 'toughness']);
 const NON_PRODUCTION_SOURCE_PATTERN =
@@ -652,6 +676,7 @@ function parseJsonLinesValue(value) {
   }
 
   const sessionMetadataById = new Map();
+  const sessionIntegrityById = new Map();
   const eventsBySessionId = new Map();
   const sessionOrder = [];
 
@@ -671,6 +696,23 @@ function parseJsonLinesValue(value) {
       delete metadata.events;
       metadata.captureSessionId = captureSessionId;
       sessionMetadataById.set(captureSessionId, metadata);
+      if (!eventsBySessionId.has(captureSessionId)) {
+        eventsBySessionId.set(captureSessionId, []);
+        sessionOrder.push(captureSessionId);
+      }
+      continue;
+    }
+    if (record.recordType === 'capture-session-end') {
+      const captureSessionId = stringOrNull(
+        record.captureSessionId ?? record.sessionId
+      );
+      if (!captureSessionId || sessionIntegrityById.has(captureSessionId)) {
+        return null;
+      }
+      const integrity = { ...record };
+      delete integrity.recordType;
+      integrity.captureSessionId = captureSessionId;
+      sessionIntegrityById.set(captureSessionId, integrity);
       if (!eventsBySessionId.has(captureSessionId)) {
         eventsBySessionId.set(captureSessionId, []);
         sessionOrder.push(captureSessionId);
@@ -710,6 +752,9 @@ function parseJsonLinesValue(value) {
     captures: sessionOrder.map(captureSessionId => ({
       ...(sessionMetadataById.get(captureSessionId) ?? {}),
       captureSessionId,
+      ...(sessionIntegrityById.has(captureSessionId)
+        ? { captureIntegrity: sessionIntegrityById.get(captureSessionId) }
+        : {}),
       events: eventsBySessionId.get(captureSessionId) ?? [],
     })),
   };
@@ -742,6 +787,12 @@ function createProductionCaptureAudit(capture) {
   const missingEventTypes = requiredEventTypes.filter(
     eventType => !eventTypes.includes(eventType)
   );
+  const hasToughnessOutputEvent = eventTypes.some(eventType =>
+    TOUGHNESS_OUTPUT_EVENT_TYPES.has(eventType)
+  );
+  if (hasToughnessEvents && !hasToughnessOutputEvent) {
+    missingEventTypes.push('toughness-*-output-calculated');
+  }
   const recoverSpSequenceOrdered =
     !hasRecoverSpEvents ||
     containsOrderedEventTypes(
@@ -753,6 +804,13 @@ function createProductionCaptureAudit(capture) {
       numberOrNull(event.frameIndex) != null ||
       numberOrNull(event.timeMs) != null
   );
+  const toughnessEvents = capture.events.filter(event =>
+    event.eventType.startsWith('toughness-')
+  );
+  const toughnessSequenceAudit = createToughnessSequenceAudit({
+    capture,
+    events: toughnessEvents,
+  });
   const sourceIdentityComplete = capture.events.every(event => {
     if (event.eventType === 'pet-ultimate-cooldown-observed') {
       return Boolean(
@@ -761,6 +819,30 @@ function createProductionCaptureAudit(capture) {
         positiveIntegerOrNull(event.kiboId) &&
         positiveIntegerOrNull(event.petEntityId) &&
         stringOrNull(event.petEntityPointer)
+      );
+    }
+    if (event.eventType === 'toughness-state-update') {
+      return Boolean(
+        stringOrNull(event.methodKey) &&
+        stringOrNull(event.eventIdentity) &&
+        stringOrNull(event.hookInvocationIdentity)
+      );
+    }
+    if (event.eventType.startsWith('toughness-')) {
+      const correlationComplete = Boolean(
+        stringOrNull(event.eventIdentity) &&
+        Array.isArray(event.sourceSequencePath) &&
+        stringOrNull(event.hookInvocationIdentity)
+      );
+      if (!correlationComplete) return false;
+      if (!TOUGHNESS_PACKET_CORRELATED_EVENT_TYPES.has(event.eventType)) {
+        return true;
+      }
+      return Boolean(
+        numberOrNull(event.sourceElementConfigId ?? event.elementConfigId) !=
+          null &&
+        stringOrNull(event.damageElementPointer) &&
+        event.sourceSequencePath.length > 0
       );
     }
     return Boolean(
@@ -781,7 +863,7 @@ function createProductionCaptureAudit(capture) {
       totalTime != null &&
       totalTime > 0 &&
       typeof event.ready === 'boolean' &&
-      event.ready === (cdTime <= 0)
+      event.ready === cdTime <= 0
     );
   });
   const captureToolComplete = Boolean(
@@ -836,6 +918,18 @@ function createProductionCaptureAudit(capture) {
     eventTimingComplete: timingComplete,
     eventSourceIdentityComplete: sourceIdentityComplete,
     eventValuesComplete,
+    toughnessCaptureSequenceComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.captureSequenceComplete,
+    toughnessFrameClockComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.frameClockComplete,
+    toughnessHookInvocationComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.hookInvocationComplete,
+    toughnessSourceCorrelationComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.sourceCorrelationComplete,
+    toughnessThreadConsistencyComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.threadConsistencyComplete,
+    toughnessSessionIntegrityComplete:
+      !hasToughnessEvents || toughnessSequenceAudit.sessionIntegrityComplete,
   };
   const productionEligible = Object.values(checks).every(Boolean);
 
@@ -853,9 +947,185 @@ function createProductionCaptureAudit(capture) {
     requiredEventTypes,
     missingEventTypes,
     recoverSpSequenceOrdered,
+    toughnessSequenceAudit,
     checks,
     productionEligible,
   };
+}
+
+function createToughnessSequenceAudit({ capture, events }) {
+  const captureSequences = events.map(event =>
+    positiveIntegerOrNull(event.captureSequence)
+  );
+  const captureSequenceComplete =
+    events.length > 0 &&
+    captureSequences.every(Boolean) &&
+    captureSequences.every((value, index) => value === index + 1);
+  const frameClockComplete = events.every(
+    event =>
+      nonNegativeIntegerOrNull(event.clientFrameCount) != null &&
+      nonNegativeNumberOrNull(event.clientDeltaTimeSeconds) != null &&
+      positiveIntegerOrNull(event.threadId) != null
+  );
+
+  const invocationGroups = groupEventsBy(events, event =>
+    stringOrNull(event.hookInvocationIdentity)
+  );
+  const eventGroups = groupEventsBy(
+    events.filter(event => event.eventType !== 'toughness-state-update'),
+    event => stringOrNull(event.eventIdentity)
+  );
+  const hookInvocationIdentitiesComplete = events.every(event =>
+    Boolean(
+      stringOrNull(event.hookInvocationIdentity) &&
+      stringOrNull(event.hookMethodKey)
+    )
+  );
+  const hookInvocationRowsUnique = invocationGroups.every(group => {
+    const rowKeys = group.map(event =>
+      [event.eventType, event.phase ?? null, event.methodKey ?? null].join('|')
+    );
+    return new Set(rowKeys).size === rowKeys.length;
+  });
+  const hookInvocationMethodsConsistent = invocationGroups.every(
+    group =>
+      new Set(group.map(event => stringOrNull(event.hookMethodKey))).size === 1
+  );
+  const hookInvocationPhasesComplete = invocationGroups.every(group => {
+    const phases = group
+      .map(event => normalizeHookPhase(event.phase))
+      .filter(Boolean);
+    if (phases.length === 0) return group.length === 1;
+    return (
+      phases.length === group.length &&
+      phases.filter(phase => phase === 'entry').length === 1 &&
+      phases.filter(phase => phase === 'exit').length === 1 &&
+      phases.length === 2
+    );
+  });
+  const hookInvocationComplete =
+    events.length > 0 &&
+    hookInvocationIdentitiesComplete &&
+    hookInvocationRowsUnique &&
+    hookInvocationMethodsConsistent &&
+    hookInvocationPhasesComplete;
+  const sourceCorrelationComplete = eventGroups.every(group => {
+    const sourcePaths = group.map(event =>
+      JSON.stringify(event.sourceSequencePath ?? null)
+    );
+    const packetSequences = group.map(event =>
+      positiveIntegerOrNull(event.damagePacketSequence)
+    );
+    const sourcePath = group[0]?.sourceSequencePath;
+    const packetSequence = packetSequences[0];
+    const requiresPacketCorrelation = group.some(event =>
+      TOUGHNESS_PACKET_CORRELATED_EVENT_TYPES.has(event.eventType)
+    );
+    if (!requiresPacketCorrelation && packetSequence == null) {
+      return Boolean(
+        Array.isArray(sourcePath) &&
+        sourcePath.length === 0 &&
+        new Set(sourcePaths).size === 1 &&
+        packetSequences.every(value => value == null)
+      );
+    }
+    return Boolean(
+      Array.isArray(sourcePath) &&
+      sourcePath.length > 0 &&
+      packetSequence != null &&
+      sourcePath.at(-1) === packetSequence &&
+      new Set(sourcePaths).size === 1 &&
+      new Set(packetSequences).size === 1
+    );
+  });
+  const threadConsistencyComplete = [...invocationGroups, ...eventGroups].every(
+    group =>
+      new Set(group.map(event => positiveIntegerOrNull(event.threadId)))
+        .size === 1
+  );
+
+  const integrity = capture.captureIntegrity ?? {};
+  const finalSequence = captureSequences.at(-1) ?? null;
+  const observedDamagePacketCount = new Set(
+    events
+      .filter(
+        event =>
+          event.eventType === 'toughness-packet-execution' &&
+          normalizeHookPhase(event.phase) === 'entry'
+      )
+      .map(event => stringOrNull(event.eventIdentity))
+      .filter(Boolean)
+  ).size;
+  const observedHookInvocationCount = invocationGroups.length;
+  const sessionIntegrityComplete = Boolean(
+    integrity.status === 'capture-complete' &&
+    nonNegativeIntegerOrNull(integrity.agentEmittedEventCount) ===
+      events.length &&
+    nonNegativeIntegerOrNull(integrity.hostReceivedEventCount) ===
+      events.length &&
+    positiveIntegerOrNull(integrity.finalCaptureSequence) === finalSequence &&
+    nonNegativeIntegerOrNull(integrity.damagePacketCount) ===
+      observedDamagePacketCount &&
+    nonNegativeIntegerOrNull(integrity.hookInvocationCount) >=
+      observedHookInvocationCount &&
+    nonNegativeIntegerOrNull(integrity.openThreadStateCount) === 0 &&
+    nonNegativeIntegerOrNull(integrity.diagnosticCount) === 0 &&
+    Array.isArray(integrity.diagnostics) &&
+    integrity.diagnostics.length === 0 &&
+    stringOrNull(integrity.completedAt)
+  );
+
+  return {
+    captureSequenceComplete,
+    frameClockComplete,
+    hookInvocationComplete,
+    hookInvocationRowsUnique,
+    hookInvocationMethodsConsistent,
+    hookInvocationPhasesComplete,
+    sourceCorrelationComplete,
+    threadConsistencyComplete,
+    sessionIntegrityComplete,
+    observedFinalCaptureSequence: finalSequence,
+    observedDamagePacketCount,
+    observedHookInvocationCount,
+    agentEmittedEventCount: nonNegativeIntegerOrNull(
+      integrity.agentEmittedEventCount
+    ),
+    hostReceivedEventCount: nonNegativeIntegerOrNull(
+      integrity.hostReceivedEventCount
+    ),
+    agentDamagePacketCount: nonNegativeIntegerOrNull(
+      integrity.damagePacketCount
+    ),
+    agentHookInvocationCount: nonNegativeIntegerOrNull(
+      integrity.hookInvocationCount
+    ),
+    openThreadStateCount: nonNegativeIntegerOrNull(
+      integrity.openThreadStateCount
+    ),
+    diagnosticCount: nonNegativeIntegerOrNull(integrity.diagnosticCount),
+  };
+}
+
+function normalizeHookPhase(value) {
+  const phase = stringOrNull(value);
+  if (!phase) return null;
+  if (phase === 'entry' || phase.endsWith('-entry')) return 'entry';
+  if (phase === 'exit' || phase.endsWith('-exit')) return 'exit';
+  return null;
+}
+
+function groupEventsBy(events, identitySelector) {
+  const groups = new Map();
+  let missingIdentityIndex = 0;
+  for (const event of events) {
+    const identity = identitySelector(event);
+    const groupIdentity = identity ?? `__missing__${missingIdentityIndex++}`;
+    const group = groups.get(groupIdentity) ?? [];
+    group.push(event);
+    groups.set(groupIdentity, group);
+  }
+  return [...groups.values()];
 }
 
 function containsOrderedEventTypes(eventTypes, requiredEventTypes) {
@@ -899,6 +1169,16 @@ function positiveIntegerOrDefault(value, fallback) {
 function positiveIntegerOrNull(value) {
   const numeric = numberOrNull(value);
   return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
+}
+
+function nonNegativeIntegerOrNull(value) {
+  const numeric = numberOrNull(value);
+  return Number.isInteger(numeric) && numeric >= 0 ? numeric : null;
+}
+
+function nonNegativeNumberOrNull(value) {
+  const numeric = numberOrNull(value);
+  return numeric != null && numeric >= 0 ? numeric : null;
 }
 
 function uniqueStrings(values) {

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat, writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { readFile, writeFile } from 'node:fs/promises';
+import { basename, resolve } from 'node:path';
 import {
   createRuntimeSampleCaptureProductionAudit,
   parseWorkbenchRuntimeSampleCaptureFile,
@@ -23,22 +23,24 @@ async function main() {
   const parsedInputs = [];
   const sourceFiles = [];
   for (const inputPath of inputPaths) {
-    const sourceText = await readFile(inputPath, 'utf8');
+    const sourceBytes = await readFile(inputPath);
+    const sourceText = sourceBytes.toString('utf8');
     const parsed = parseWorkbenchRuntimeSampleCaptureFile(sourceText);
     if (!parsed) {
       throw new Error(`Runtime capture input is invalid: ${inputPath}`);
     }
-    const inputStat = await stat(inputPath);
     parsedInputs.push(parsed);
     sourceFiles.push({
-      path: normalizePath(inputPath),
-      size: inputStat.size,
-      sha256: createHash('sha256').update(sourceText).digest('hex'),
+      path: basename(inputPath),
+      size: sourceBytes.length,
+      sha256: createHash('sha256').update(sourceBytes).digest('hex'),
     });
   }
 
   const captureSessionIds = new Set();
-  const captures = parsedInputs.flatMap(parsed => parsed.captures);
+  const captures = parsedInputs
+    .flatMap(parsed => parsed.captures)
+    .map(redactPortableCaptureMetadata);
   for (const capture of captures) {
     if (captureSessionIds.has(capture.captureSessionId)) {
       throw new Error(
@@ -58,8 +60,7 @@ async function main() {
   );
   const normalized = {
     ...parsed,
-    normalizedAt: new Date().toISOString(),
-    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v2',
+    normalizedBy: 'promilia-axis-tool/runtime-capture-normalizer-v3',
     ...(sourceFiles.length === 1 ? { sourceFile: sourceFiles[0] } : {}),
     sourceFiles,
     provenanceAudit,
@@ -114,8 +115,17 @@ function parseArguments(args) {
   return options;
 }
 
-function normalizePath(value) {
-  return String(value).replaceAll('\\', '/');
+function redactPortableCaptureMetadata(capture) {
+  const portableCapture = { ...capture };
+  const { module } = portableCapture;
+  delete portableCapture.processId;
+  if (!module || typeof module !== 'object' || Array.isArray(module)) {
+    return portableCapture;
+  }
+  portableCapture.module = { ...module };
+  delete portableCapture.module.path;
+  delete portableCapture.module.base;
+  return portableCapture;
 }
 
 await main();

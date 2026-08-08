@@ -37,7 +37,7 @@ describe('controlled Frida runtime capture host', () => {
       source: 'controlled-frida-self-test',
       captureTool: {
         name: 'promilia-axis-controlled-frida-capture',
-        version: '1.1.0',
+        version: '1.2.0',
         fridaVersion: expect.any(String),
       },
     });
@@ -46,6 +46,15 @@ describe('controlled Frida runtime capture host', () => {
         record => record.eventType === 'capture-agent-self-test-probe'
       )
     ).toHaveLength(4);
+    expect(records.at(-1)).toMatchObject({
+      recordType: 'capture-session-end',
+      status: 'capture-complete',
+      agentEmittedEventCount: 4,
+      hostReceivedEventCount: 4,
+      finalCaptureSequence: 4,
+      diagnosticCount: 0,
+      diagnostics: [],
+    });
 
     const normalizer = resolve('scripts/normalize-runtime-capture.mjs');
     const productionRun = spawnSync(
@@ -84,6 +93,46 @@ describe('controlled Frida runtime capture host', () => {
       'Refusing to attach without --confirm-controlled-session'
     );
   });
+
+  it('performs a no-attach client preflight and preserves the formal blocker', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'promilia-preflight-'));
+    temporaryDirectories.push(directory);
+    const outputPath = join(directory, 'preflight.json');
+    const hostScript = resolve('scripts/capture-azpr-runtime.py');
+    const preflightRun = spawnSync(
+      'python',
+      [hostScript, '--preflight', '--output', outputPath],
+      { encoding: 'utf8', timeout: 30_000 }
+    );
+
+    expect(preflightRun.status).toBe(0);
+    const report = JSON.parse(await readFile(outputPath, 'utf8'));
+    expect(report).toMatchObject({
+      reportName: 'AzPrMachineAxisEnemyToughnessControlledCapturePreflight',
+      phase: 'M12-B3-OPT-T3',
+      realCaptureClaimAllowed: false,
+      attachAttempted: false,
+      automaticLaunchAttempted: false,
+      antiCheatBypassAttempted: false,
+      manifest: {
+        manifestId: 'azpr-tc-20260709-three-value-runtime-capture-v3',
+      },
+      processProbe: {
+        kind: 'frida-local-device-full-enumeration-no-attach',
+      },
+      character112001Probe: {
+        status: 'blocked-no-real-controlled-action-executed',
+        equivalentCallChainProofRequired: true,
+      },
+      formalGate: {
+        formalReady: false,
+        formalScore: null,
+        blockerCode: 'machine-axis-enemy-settlement-client-order-open',
+      },
+    });
+    expect(report.clientIdentities).toHaveLength(3);
+    expect(report.clientIdentities.every(row => row.matches)).toBe(true);
+  }, 30_000);
 
   it('validates isolated capture scopes before attempting an attach', () => {
     const hostScript = resolve('scripts/capture-azpr-runtime.py');

@@ -138,7 +138,7 @@ describe('workbench runtime sample capture', () => {
         expect.objectContaining({
           productionEligible: true,
           missingEventTypes: [],
-          checks: {
+          checks: expect.objectContaining({
             sourceDeclared: true,
             sourceLooksProduction: true,
             clientRegionDeclared: true,
@@ -151,7 +151,7 @@ describe('workbench runtime sample capture', () => {
             eventTimingComplete: true,
             eventSourceIdentityComplete: true,
             eventValuesComplete: true,
-          },
+          }),
         }),
       ],
     });
@@ -192,6 +192,145 @@ describe('workbench runtime sample capture', () => {
         }),
       ],
     });
+  });
+
+  it('fails toughness production provenance on loss, duplicates, thread switches, missing frames or incomplete session end', () => {
+    const capture = createProductionToughnessCapture();
+    expect(createRuntimeSampleCaptureProductionAudit([capture])).toMatchObject({
+      status: 'production-runtime-captures-ready',
+      realCaptureClaimAllowed: true,
+      captureAudits: [
+        expect.objectContaining({
+          productionEligible: true,
+          missingEventTypes: [],
+          toughnessSequenceAudit: expect.objectContaining({
+            captureSequenceComplete: true,
+            frameClockComplete: true,
+            hookInvocationComplete: true,
+            sourceCorrelationComplete: true,
+            threadConsistencyComplete: true,
+            sessionIntegrityComplete: true,
+          }),
+        }),
+      ],
+    });
+
+    const breakEndStateWriteCapture = structuredClone(capture);
+    for (const event of breakEndStateWriteCapture.events.filter(
+      row => row.eventType === 'toughness-weak-state-write'
+    )) {
+      event.eventIdentity = `${capture.captureSessionId}|hook-event|${event.hookInvocationIdentity}`;
+      event.sourceSequencePath = [];
+      event.damagePacketSequence = null;
+      event.damageElementPointer = null;
+      event.sourceElementConfigId = null;
+    }
+    expect(
+      createRuntimeSampleCaptureProductionAudit([breakEndStateWriteCapture])
+    ).toMatchObject({
+      realCaptureClaimAllowed: true,
+      captureAudits: [
+        expect.objectContaining({
+          checks: expect.objectContaining({
+            toughnessSourceCorrelationComplete: true,
+          }),
+        }),
+      ],
+    });
+
+    const cases = [
+      {
+        name: 'lost capture sequence',
+        mutate(value) {
+          value.events[4].captureSequence += 1;
+        },
+        check: 'toughnessCaptureSequenceComplete',
+      },
+      {
+        name: 'duplicate hook row',
+        mutate(value) {
+          value.events[5] = {
+            ...value.events[4],
+            captureSequence: value.events[5].captureSequence,
+          };
+        },
+        check: 'toughnessHookInvocationComplete',
+      },
+      {
+        name: 'packet thread switch',
+        mutate(value) {
+          value.events[8].threadId = 12;
+        },
+        check: 'toughnessThreadConsistencyComplete',
+      },
+      {
+        name: 'packet source path drift',
+        mutate(value) {
+          value.events[8].sourceSequencePath = [99];
+        },
+        check: 'toughnessSourceCorrelationComplete',
+      },
+      {
+        name: 'hook method identity drift',
+        mutate(value) {
+          value.events[4].hookMethodKey = 'FormulaUtility.GetOutputRealDamage';
+        },
+        check: 'toughnessHookInvocationComplete',
+      },
+      {
+        name: 'missing client frame',
+        mutate(value) {
+          value.events[3].clientFrameCount = null;
+        },
+        check: 'toughnessFrameClockComplete',
+      },
+      {
+        name: 'missing session end',
+        mutate(value) {
+          delete value.captureIntegrity;
+        },
+        check: 'toughnessSessionIntegrityComplete',
+      },
+      {
+        name: 'agent diagnostic',
+        mutate(value) {
+          value.captureIntegrity.diagnosticCount = 1;
+          value.captureIntegrity.diagnostics = [
+            { kind: 'agent-status', status: 'capture-agent-stack-mismatch' },
+          ];
+        },
+        check: 'toughnessSessionIntegrityComplete',
+      },
+      {
+        name: 'agent damage packet count mismatch',
+        mutate(value) {
+          value.captureIntegrity.damagePacketCount = 2;
+        },
+        check: 'toughnessSessionIntegrityComplete',
+      },
+      {
+        name: 'agent hook invocation count underflow',
+        mutate(value) {
+          value.captureIntegrity.hookInvocationCount = 8;
+        },
+        check: 'toughnessSessionIntegrityComplete',
+      },
+    ];
+
+    for (const { name, mutate, check } of cases) {
+      const tampered = structuredClone(capture);
+      mutate(tampered);
+      const audit = createRuntimeSampleCaptureProductionAudit([tampered]);
+      expect(audit, name).toMatchObject({
+        realCaptureClaimAllowed: false,
+        captureAudits: [
+          expect.objectContaining({
+            productionEligible: false,
+            checks: expect.objectContaining({ [check]: false }),
+          }),
+        ],
+      });
+    }
   });
 
   it('accepts an exactly owned kibo readiness observation as a production capture', () => {
@@ -713,3 +852,190 @@ describe('workbench runtime sample capture', () => {
     ).toBe(20);
   });
 });
+
+function createProductionToughnessCapture() {
+  const captureSessionId = 'controlled-toughness-session-1';
+  const packetIdentity = `${captureSessionId}|damage-element|1|9001`;
+  const packetBase = {
+    captureSessionId,
+    timeMs: 100,
+    actionId: 'controlled-toughness-probe',
+    actorId: 'actor-112001',
+    targetId: 'enemy-300032',
+    sourceElementConfigId: 112001081,
+    damageElementPointer: '0x12345678',
+    eventIdentity: packetIdentity,
+    sourceSequencePath: [1],
+    damagePacketSequence: 1,
+    clientFrameCount: 600,
+    clientDeltaTimeSeconds: 1 / 60,
+    threadId: 11,
+  };
+  const events = [];
+  const addPacketEvent = (
+    eventType,
+    hookNumber,
+    hookMethodKey,
+    phase = null,
+    extra = {}
+  ) => {
+    events.push({
+      ...packetBase,
+      eventType,
+      hookInvocationIdentity: `${captureSessionId}|hook|${hookNumber}`,
+      hookMethodKey,
+      ...(phase ? { phase } : {}),
+      ...extra,
+    });
+  };
+  addPacketEvent(
+    'toughness-packet-execution',
+    1,
+    'DamageElement.Execute',
+    'entry'
+  );
+  addPacketEvent(
+    'toughness-weak-state-read',
+    2,
+    'ControlProperty.get_inWeakState',
+    null,
+    { inWeakState: false }
+  );
+  addPacketEvent(
+    'toughness-break-property-read',
+    3,
+    'AliveProperty.get_breakDmgUp',
+    null,
+    { propertyId: 221, floatValue: 1 }
+  );
+  addPacketEvent(
+    'toughness-hp-output-calculated',
+    4,
+    'FormulaUtility.GetOutputDamage',
+    'entry'
+  );
+  addPacketEvent(
+    'toughness-hp-output-calculated',
+    4,
+    'FormulaUtility.GetOutputDamage',
+    'exit',
+    { outputDamage: 100 }
+  );
+  addPacketEvent(
+    'toughness-damage-applied',
+    5,
+    'AliveProperty.SetWeaknessPoint',
+    'set-weakness-point-entry',
+    { toughnessBefore: 1 }
+  );
+  addPacketEvent(
+    'toughness-damage-applied',
+    5,
+    'AliveProperty.SetWeaknessPoint',
+    'set-weakness-point-exit',
+    { toughnessBefore: 1, toughnessAfter: 0, toughnessDeltaApplied: 1 }
+  );
+  addPacketEvent(
+    'toughness-weak-state-write',
+    6,
+    'ControlProperty.SetWeakState',
+    'entry',
+    { weakStateBefore: 0, requestedWeakState: 1 }
+  );
+  addPacketEvent(
+    'toughness-weak-state-write',
+    6,
+    'ControlProperty.SetWeakState',
+    'exit',
+    { weakStateBefore: 0, weakStateAfter: 1 }
+  );
+  addPacketEvent(
+    'toughness-hp-change-dispatch',
+    7,
+    'FormulaUtility.ChangeHP',
+    'entry',
+    { requestedHpChange: -100 }
+  );
+  addPacketEvent(
+    'toughness-hp-change-dispatch',
+    7,
+    'FormulaUtility.ChangeHP',
+    'exit',
+    { changed: true, requestedHpChange: -100 }
+  );
+  addPacketEvent(
+    'toughness-hp-applied',
+    8,
+    'AliveProperty.SetHpByHurt',
+    'set-hp-by-hurt-entry',
+    { hpBefore: 1000, requestedHpAfter: 900 }
+  );
+  addPacketEvent(
+    'toughness-hp-applied',
+    8,
+    'AliveProperty.SetHpByHurt',
+    'set-hp-by-hurt-exit',
+    { hpBefore: 1000, hpAfter: 900, hpDeltaApplied: 100 }
+  );
+  events.push({
+    ...packetBase,
+    eventType: 'toughness-state-update',
+    methodKey: 'WeakBreakSystem.OnUpdate_LocalControlled',
+    phase: 'entry',
+    eventIdentity: `${captureSessionId}|state-update|9`,
+    sourceSequencePath: [],
+    damageElementPointer: null,
+    sourceElementConfigId: null,
+    hookInvocationIdentity: `${captureSessionId}|hook|9`,
+    hookMethodKey: 'WeakBreakSystem.OnUpdate_LocalControlled',
+  });
+  events.push({
+    ...events.at(-1),
+    phase: 'exit',
+  });
+  addPacketEvent(
+    'toughness-packet-execution',
+    1,
+    'DamageElement.Execute',
+    'exit'
+  );
+  events.forEach((event, index) => {
+    event.captureSequence = index + 1;
+  });
+
+  return {
+    schemaVersion: 1,
+    captureSessionId,
+    source: 'source-game-runtime-frida-controlled-session',
+    clientRegion: 'TW',
+    clientBuild: 'il2cpp-tc-catch-20260709:c60d13795629',
+    captureKind: 'toughness',
+    binding: {
+      actionId: 'controlled-toughness-probe',
+      actorId: 'actor-112001',
+      targetId: 'enemy-300032',
+      slotId: null,
+      kiboId: null,
+      sourceElementConfigId: 112001081,
+    },
+    captureTool: {
+      name: 'promilia-axis-controlled-frida-capture',
+      version: '1.2.0',
+      hookManifestId: 'azpr-tc-20260709-three-value-runtime-capture-v3',
+    },
+    captureIntegrity: {
+      captureSessionId,
+      status: 'capture-complete',
+      agentEmittedEventCount: events.length,
+      hostReceivedEventCount: events.length,
+      finalCaptureSequence: events.length,
+      damagePacketCount: 1,
+      hookInvocationCount: 9,
+      openThreadStateCount: 0,
+      diagnosticCount: 0,
+      diagnostics: [],
+      completedAt: '2026-08-09T00:00:00.000Z',
+    },
+    events,
+  };
+}

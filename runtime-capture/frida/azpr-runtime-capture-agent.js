@@ -9,6 +9,8 @@ let fieldOffsetByKey = new Map();
 let captureStartedAt = 0;
 let emittedEventCount = 0;
 let captureSequence = 0;
+let damagePacketSequence = 0;
+let hookInvocationSequence = 0;
 let frameCountFunction = null;
 let deltaTimeFunction = null;
 
@@ -52,6 +54,8 @@ rpc.exports = {
     captureStartedAt = Date.now();
     emittedEventCount = 0;
     captureSequence = 0;
+    damagePacketSequence = 0;
+    hookInvocationSequence = 0;
     frameCountFunction = createManifestNativeFunction(
       'UnityEngine.Time.get_frameCount',
       'int',
@@ -97,6 +101,8 @@ rpc.exports = {
     captureStartedAt = Date.now();
     emittedEventCount = 0;
     captureSequence = 0;
+    damagePacketSequence = 0;
+    hookInvocationSequence = 0;
     const kernel32 = Process.getModuleByName('kernel32.dll');
     const sleepAddress = kernel32.getExportByName('Sleep');
     listeners.push(
@@ -365,6 +371,21 @@ function installToughnessHooks() {
     onEnter(args) {
       const state = getThreadState();
       const source = readDamageElementSource(args[0]);
+      damagePacketSequence += 1;
+      const parentPacket = peek(state.damagePackets);
+      source.damagePacketSequence = damagePacketSequence;
+      source.sourceSequencePath = [
+        ...(parentPacket?.sourceSequencePath ?? []),
+        damagePacketSequence,
+      ];
+      source.eventIdentity = [
+        captureConfig.captureSessionId,
+        'damage-element',
+        damagePacketSequence,
+        source.sourceElementUniqueId ??
+          source.uuid ??
+          source.damageElementPointer,
+      ].join('|');
       state.damagePackets.push(source);
       this.damagePacket = source;
       emitCaptureEvent('toughness-packet-execution', source, {
@@ -873,6 +894,7 @@ function readRecoverSpArgs(argsPointer) {
 }
 
 function emitCaptureEvent(eventType, source, extra = {}) {
+  const invocation = peek(getThreadState().hookInvocations);
   emitRecord({
     recordType: 'event',
     captureSessionId: captureConfig.captureSessionId,
@@ -884,6 +906,15 @@ function emitCaptureEvent(eventType, source, extra = {}) {
     sourceElementConfigId: source.sourceElementConfigId,
     sourceSkillId: source.sourceSkillId,
     sourceElementUniqueId: source.sourceElementUniqueId,
+    eventIdentity:
+      source.eventIdentity ??
+      [
+        captureConfig.captureSessionId,
+        'hook-event',
+        invocation?.identity ?? 'unattributed',
+      ].join('|'),
+    sourceSequencePath: source.sourceSequencePath ?? [],
+    damagePacketSequence: source.damagePacketSequence,
     sourceId: source.sourceId,
     attackerEntityId: source.attackerEntityId,
     executeEntityId: source.executeEntityId,
@@ -895,6 +926,7 @@ function emitCaptureEvent(eventType, source, extra = {}) {
 }
 
 function emitToughnessStateUpdate(methodKey, phase, extra = {}) {
+  const invocation = peek(getThreadState().hookInvocations);
   emitRecord({
     recordType: 'event',
     captureSessionId: captureConfig.captureSessionId,
@@ -905,18 +937,27 @@ function emitToughnessStateUpdate(methodKey, phase, extra = {}) {
     targetId: captureConfig.targetId,
     methodKey,
     phase,
+    eventIdentity: [
+      captureConfig.captureSessionId,
+      'state-update',
+      invocation?.identity ?? 'unattributed',
+    ].join('|'),
+    sourceSequencePath: [],
     threadId: Process.getCurrentThreadId(),
     ...extra,
   });
 }
 
 function emitRecord(record) {
+  const invocation = peek(getThreadState().hookInvocations);
   emittedEventCount += 1;
   captureSequence += 1;
   send({
     channel: 'capture-event',
     record: {
       ...record,
+      hookInvocationIdentity: invocation?.identity ?? null,
+      hookMethodKey: invocation?.methodKey ?? null,
       captureSequence,
       clientFrameCount: safeNativeCall(frameCountFunction),
       clientDeltaTimeSeconds: roundNumber(safeNativeCall(deltaTimeFunction)),
@@ -934,7 +975,32 @@ function attachMethod(methodKey, callbacks) {
     throw new Error(`Hook manifest method missing: ${methodKey}`);
   }
   const address = captureModule.base.add(parseHex(method.rva));
-  listeners.push(Interceptor.attach(address, callbacks));
+  listeners.push(
+    Interceptor.attach(address, {
+      onEnter(args) {
+        const state = getThreadState();
+        hookInvocationSequence += 1;
+        const invocation = {
+          identity: `${captureConfig.captureSessionId}|hook|${hookInvocationSequence}`,
+          methodKey,
+          threadId: state.threadId,
+        };
+        state.hookInvocations.push(invocation);
+        this.captureHookInvocation = invocation;
+        callbacks.onEnter?.call(this, args);
+      },
+      onLeave(retval) {
+        const invocation = this.captureHookInvocation;
+        try {
+          callbacks.onLeave?.call(this, retval);
+        } finally {
+          const state = getThreadState();
+          popExpected(state.hookInvocations, invocation);
+          releaseThreadStateIfEmpty(state);
+        }
+      },
+    })
+  );
 }
 
 function createManifestNativeFunction(methodKey, returnType, argumentTypes) {
@@ -968,6 +1034,7 @@ function getThreadState() {
       weaknessCalculations: [],
       damagePackets: [],
       hpChanges: [],
+      hookInvocations: [],
     };
     threadStates.set(threadId, state);
   }
@@ -981,7 +1048,8 @@ function releaseThreadStateIfEmpty(state) {
     state.spRecoveries.length === 0 &&
     state.weaknessCalculations.length === 0 &&
     state.damagePackets.length === 0 &&
-    state.hpChanges.length === 0
+    state.hpChanges.length === 0 &&
+    state.hookInvocations.length === 0
   ) {
     threadStates.delete(state.threadId);
   }
@@ -1177,11 +1245,15 @@ function stopCapture() {
   while (listeners.length > 0) {
     listeners.pop().detach();
   }
-  threadStates.clear();
   const result = {
     status: 'capture-agent-stopped',
     emittedEventCount,
+    finalCaptureSequence: captureSequence,
+    damagePacketCount: damagePacketSequence,
+    hookInvocationCount: hookInvocationSequence,
+    openThreadStateCount: threadStates.size,
   };
+  threadStates.clear();
   captureConfig = null;
   captureModule = null;
   methodByKey = new Map();
