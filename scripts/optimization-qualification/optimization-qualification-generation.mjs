@@ -156,7 +156,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   elementFormula:
     'ebbdb6b9bd8117015f596be3055674d32963a68f3abe0a8865fef4373012515e',
   setThreeSourceIdentityEvidence:
-    '9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418',
+    '1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8',
 });
 
 export const FROZEN_B3_DENOMINATORS = Object.freeze({
@@ -609,8 +609,7 @@ export async function createOptimizationQualificationArtifacts({
     sources.persistentLoadoutPropertyRuntimeEvidence
   );
   assertPeriodicPersistentPropertyRuntimeEvidenceReference(
-    acceptanceReport?.sourceClosure
-      ?.periodicPersistentPropertyRuntimeEvidence,
+    acceptanceReport?.sourceClosure?.periodicPersistentPropertyRuntimeEvidence,
     sources.periodicPersistentPropertyRuntimeEvidence
   );
   assertFourPieceSetStackRuntimeEvidenceReference(
@@ -630,7 +629,8 @@ export async function createOptimizationQualificationArtifacts({
     sources.soulessenceAfterDamageEmptyConditionRuntimeEvidence
   );
   assertActivationConditionRuntimeEvidenceReference(
-    acceptanceReport?.sourceClosure?.soulessenceActivationConditionRuntimeEvidence,
+    acceptanceReport?.sourceClosure
+      ?.soulessenceActivationConditionRuntimeEvidence,
     sources.soulessenceActivationConditionRuntimeEvidence
   );
   assertSetThreeSourceIdentityEvidenceReference(
@@ -891,7 +891,8 @@ export async function createOptimizationQualificationArtifacts({
         candidateRosterHash:
           optimizationScenarioPolicy.candidateRoster.rosterHash,
         formalCharacterOptimizationObjectIds:
-          optimizationScenarioPolicy.candidateRoster.formalOptimizationObjectIds,
+          optimizationScenarioPolicy.candidateRoster
+            .formalOptimizationObjectIds,
         characterFilter:
           'frozen-candidate-roster-policy-instead-of-element-only-filter',
         kiboElements: ['风', '雷'],
@@ -1592,8 +1593,7 @@ function createCultivationCatalog({
         levelTemplateIncludesBreakthroughAttributes: 'not-applicable',
         applicationMode: 'not-applicable',
         attributeApplicationStatus: 'not-applicable',
-        skillUnlockMode:
-          'not-applicable',
+        skillUnlockMode: 'not-applicable',
         productDecision: HERO_RANK_PRODUCT_DECISION,
         sourceIdentity:
           'NewTable/hero_rank.rankLevelLimit|attribute|skill|scripts/optimization-qualification/evidence/hero-rank-runtime-evidence.json',
@@ -1925,10 +1925,7 @@ function createSummary({
 
 function createLevelBreakthroughRanks(
   rows,
-  {
-    productBoundaryByOwnerSkillId,
-    characterPassiveSkillIds,
-  }
+  { productBoundaryByOwnerSkillId, characterPassiveSkillIds }
 ) {
   return rows.map((row, index) => {
     const unlockedSkillId = positiveIntegerOrNull(row.skill);
@@ -2391,7 +2388,7 @@ function createMarkdownSummary(summary, catalog) {
   const ready = summary.optimizationReadyCounts;
   const gapCounts = summary.gapCounts.byCategory;
   return (
-    '# M12-B3-E16 PVE Passive Evidence And Receive-Damage Channel\n\n' +
+    '# M12-B3-E16 Qualification Baseline With Set Closure\n\n' +
     `- Status: \`${summary.status}\`\n` +
     `- Source snapshot: \`${summary.sourceSnapshotHash}\`\n` +
     `- Roster: \`${summary.rosterHash}\`\n` +
@@ -2400,7 +2397,7 @@ function createMarkdownSummary(summary, catalog) {
     `- Optimization ready: characters ${ready.character}, Kibo ${ready.kibo}, soul essence ${ready['soul-essence']}, equipment ${ready.equipment}, set skills ${ready['set-skill']}\n` +
     `- Blocking gaps: not implemented ${gapCounts['not-implemented'] ?? 0}, evidence insufficient ${gapCounts['evidence-insufficient'] ?? 0}\n` +
     '- Implemented baseline capabilities: frozen source drift gate, STARBORN alias normalization, strict cultivation schema/hash, completed star-gift static projection, hero_rank closed as unimplemented dead config (no cultivation state/value effect; optimizer input not required), Kibo talent/bond with canonical empty-only DNA, soul-essence star skill-level resolution, source-backed normal/starborn equipment instances, segmented tuning formula, duplicate-Kibo slot identity, formal whole-stage rejection, and the first source-closed hit-after-damage loadout effect family.\n' +
-    '- Dynamic loadout batches: C2-C14 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, and set-three source-conflict contracts. C15 adds a source-driven periodic persistent-root family with native time-loop cadence, condition re-evaluation, finite Cover leaves, right-open expiry, unload provenance, and cycle phase state. Soul essences 10084, 10152, and 10197 are runtime-applied; 10078 remains evidence-insufficient because native multi-PropertyTag matching for tags 302/303 is not closed. E11 registers the product-confirmed dead tuning-intensity branch (element 19003206) of soul 10095 as excluded, closes 10095 as runtime-applied with the single team-attack leaf 19003203, and leaves no runtime-unresolved souls (62/62). E12 gates soul effect activation by character profession: the cultivation catalog carries character position and soul profession, the runtime emits no effect commands for profession-mismatched loadouts while static level/rank growth still applies, formal binding edges remain profession-aware (103 match / 198 universal / 381 mismatch), and the Workbench picker marks mismatched souls as stat-only. E13 publishes the M12-B3 visual acceptance pipeline: per-object manifests with icon asset evidence, display/effect binding, deterministic requirement matrix and blocking ledger for 62 soul essences, 137 equipment contracts and 12 set skills; 210 objects reach optimization-ready (62 souls / 137 equipment / 11 set skills), set-skill:3:4 remains blocked by its dynamic-unapplied evidence, and blocking gaps drop from 335 to 125. E14 implements the Kibo static-attribute inheritance audit (all 122 Workbench Kibos verified against the combat mechanics package: 83 species attributes, 100 growth rows, 9 hobbies, 10 intimacy levels, 54 comprehension grades) and publishes visual acceptance manifests for all 43 target Kibos; Kibos remain blocked only by action closure, fixed-skill classification and PVE passive runtime evidence (43 + 4 gaps), and the qualification gate now distinguishes published-but-blocked Kibo manifests (kibo-visual-acceptance-evidence-blocked). E15 closes the fixed-skill slot semantics: 505/506/507/508 are SystemConst.systemEnum pet decoration/release/feed/box, 602/603 are KiBoVersusCommonSkill slots, and 50206 is a four-occurrence PetPuzzleBlink-consistent anomaly; all 172 unique fixed skills become evidence-closed with slot semantics, and the maturity matrix removes the fixed-skill classification gate (105 Kibos left with action-closure-only gaps, 17 with action-closure plus PVE passive). E16 closes the first PVE passive evidence and adds the receive-damage runtime channel: 520013/520015/520018 become evidence-closed and runtime-ready (AfterReceiveDamage self-property family + skillResourceMaps static injection), the runtime derives Kibo vital damage events from the preflight combat run and dispatches after-receive-damage commands, kibo-passive-static-evidence-gap drops from 4 to 3 (500231 cleared), and blocking gaps drop from 125 to 124.\n' +
+    '- Dynamic loadout batches: C2-C16 retain their accepted trigger, transaction, ordering, healing, persistent-root, four-piece, target-debuff, periodic-root, and PVE passive contracts. E21 resolves set-skill:3:4 against the current executable graph: the permanent MAXHP +2% root is runtime-applied, the every-five-received-hits MAXHP +5% branch is retained as a sourced scenario N/A for the passive-Boss trial, and all 12/12 set skills are optimization-ready.\n' +
     `- STARBORN alias mechanism hash: \`${catalog.records.find(record => record.objectId === 'STARBORN')?.manifestHash ?? 'missing'}\` (source aliases 199001/199002 are one optimization object)\n` +
     '- Duplicate Kibo species across different actor slots: allowed; runtime owner is `actorSlotId+kiboId`.\n' +
     '- M12-C remains locked. This baseline does not run team, loadout, or axis search.\n'
@@ -2775,7 +2772,12 @@ function createSoulEffectTriggerContract({
     [6, 'AfterSkill', 'action-end', '释放技能后'],
     [9, 'BeforeGetElement', 'element-before-acquire', '获取元素前'],
     [10, 'AfterGetElement', 'element-after-acquire', '获取元素后'],
-    [25, 'BeforeCriticalDamage', 'hit-before-critical-damage', '造成暴击伤害前'],
+    [
+      25,
+      'BeforeCriticalDamage',
+      'hit-before-critical-damage',
+      '造成暴击伤害前',
+    ],
     [34, 'SwitchEnter', 'switch-enter', '切入'],
     [36, 'UnloadSkill', 'loadout-uninstall', '卸载技能'],
     [32, 'KillEvent', 'kill-event', '击杀事件'],
@@ -3040,9 +3042,11 @@ export function validateBattlePropertyTagMatchingRuntimeEvidence(
       declaration: 'public void SetValue(int tag, MyFloat value) { }',
     },
     {
-      identity: 'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.GetPropertyValue',
+      identity:
+        'Lens.Gameplay.Modules.BigWorld.BattlePropertyData.GetPropertyValue',
       rva: '0x12BE540',
-      declaration: 'public MyFloat GetPropertyValue(bool isRatio, List<int> tags) { }',
+      declaration:
+        'public MyFloat GetPropertyValue(bool isRatio, List<int> tags) { }',
     },
   ];
   if (
@@ -3100,8 +3104,7 @@ export function assertBattlePropertyTagMatchingRuntimeEvidenceReference(
     Number(reference?.il2CppDumpBytes) !==
       Number(source.value.reviewedIl2CppDump?.bytes) ||
     reference?.il2CppDumpSha256 !== source.value.reviewedIl2CppDump?.sha256 ||
-    Number(reference?.rangeCount) !==
-      (source.value.binaryRanges ?? []).length
+    Number(reference?.rangeCount) !== (source.value.binaryRanges ?? []).length
   ) {
     throw new Error(
       'optimization-qualification-property-tag-matching-evidence-report-reference-drift'
@@ -3264,8 +3267,7 @@ export function assertSoulEffectKillCriticalEventRuntimeEvidenceReference(
     Number(reference?.il2CppDumpBytes) !==
       Number(source.value.reviewedIl2CppDump?.bytes) ||
     reference?.il2CppDumpSha256 !== source.value.reviewedIl2CppDump?.sha256 ||
-    Number(reference?.rangeCount) !==
-      (source.value.binaryRanges ?? []).length
+    Number(reference?.rangeCount) !== (source.value.binaryRanges ?? []).length
   ) {
     throw new Error(
       'optimization-qualification-kill-critical-event-evidence-report-reference-drift'
@@ -3315,7 +3317,9 @@ function attachSoulEffectKillCriticalEventRuntimeEvidence(
         evidence.semantics.beforeCriticalDamage
       ),
       killEvent: structuredClone(evidence.semantics.killEvent),
-      emptyConditionEvents: [...(evidence.semantics.emptyConditionEvents ?? [])],
+      emptyConditionEvents: [
+        ...(evidence.semantics.emptyConditionEvents ?? []),
+      ],
       consumer: structuredClone(evidence.consumer ?? null),
       sourceIdentity: evidence.conclusion.sourceIdentity,
     },
@@ -3549,8 +3553,8 @@ async function readHeroRankRuntimeEvidenceSource(
     if (
       value.conclusion?.attributeApplicationStatus !== 'not-applicable' ||
       value.conclusion?.applicationMode !== 'not-applicable' ||
-      value.conclusion?.staticClosureBoundary
-        ?.adjacentRankCaptureRequired !== false ||
+      value.conclusion?.staticClosureBoundary?.adjacentRankCaptureRequired !==
+        false ||
       value.conclusion?.clientSemantics?.productDecision !==
         'unimplemented-dead-config'
     ) {
@@ -3621,9 +3625,7 @@ export function validateHeroRankAdjacentRankCaptureComparisons(evidence) {
     ])
   );
   for (const comparison of capture.comparisons) {
-    const expected = expectedBySource.get(
-      Number(comparison.sourceCharacterId)
-    );
+    const expected = expectedBySource.get(Number(comparison.sourceCharacterId));
     if (
       !expected ||
       Number(comparison.level) !== 80 ||
@@ -4034,8 +4036,7 @@ export function validateSoulEffectNonDamageRuntimeEvidence(
     value.onGotShield?.zeroValueDispatch !== false ||
     value.onGotShield?.inheritedStateDispatch !== false ||
     value.onGotShield?.failedOrRejectedDispatch !== false ||
-    value.onGotShield?.refreshReplacementSemantics !==
-      'applied' ||
+    value.onGotShield?.refreshReplacementSemantics !== 'applied' ||
     value.onGotShield?.emptyShieldListGate?.consumer !==
       'Lens.Gameplay.Modules.BigWorld.ShieldElement.Execute' ||
     value.onGotShield?.emptyShieldListGate?.field !==

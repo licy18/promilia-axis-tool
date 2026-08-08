@@ -12,6 +12,7 @@ import {
   validateSetThreeSourceIdentityEvidence,
 } from '../../../scripts/optimization-qualification/set-three-source-identity-evidence.mjs';
 import { createOptimizationQualificationArtifacts } from '../../../scripts/optimization-qualification/optimization-qualification-generation.mjs';
+import { createOptimizationScenarioPolicy } from '../../../scripts/optimization-scenario/optimization-scenario-policy-source.mjs';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -93,7 +94,7 @@ function createReadOptions(overrides = {}) {
   };
 }
 
-describe('set-skill:3:4 source identity conflict evidence', () => {
+describe('set-skill:3:4 executable graph product resolution', () => {
   let source;
   let report;
 
@@ -114,7 +115,7 @@ describe('set-skill:3:4 source identity conflict evidence', () => {
     ]);
   }, 30_000);
 
-  it('keeps the formal text and uniquely reachable old graph as an unresolved conflict', () => {
+  it('keeps stale formal text as evidence while applying the current executable graph within the passive-boss scenario', () => {
     expect(source.value).toMatchObject({
       contractName: 'AzPrSetThreeSourceIdentityEvidence',
       formalEntry: {
@@ -144,19 +145,48 @@ describe('set-skill:3:4 source identity conflict evidence', () => {
         },
       },
       sourceConflict: {
-        whichSourceIsStale: 'unresolved',
-        safeRuntimeDisposition: 'do-not-apply-either-graph',
+        whichSourceIsStale: 'formal-localization',
+        safeRuntimeDisposition:
+          'apply-current-executable-graph-with-passive-boss-scenario-boundary',
+      },
+      runtimeContract: {
+        staticRoot: {
+          elementId: 199999086,
+          attributeId: 5,
+          sourceRawA: 200,
+        },
+        scenarioExcludedReactiveBranch: {
+          triggerElementId: 199999022,
+          propertyElementId: 199999023,
+          scenarioBoundary: {
+            disposition: 'scenario-out-of-scope',
+            reason: 'm12c-zero-distance-passive-boss-out-of-scope',
+            bossAttacks: false,
+          },
+        },
       },
       conclusion: {
-        status: 'evidence-insufficient',
-        runtimeApplied: false,
+        status: 'product-resolved',
+        runtimeApplied: true,
         setSkillIdentity: 'set-skill:3:4',
-        gapCode: 'set-skill-source-identity-conflict-evidence-gap',
+        authority: 'current-client-executable-graph',
+        staleSource: 'formal-localization',
+        gapCode: null,
       },
     });
     expect(source.value.reachableGraph.map(row => row.elementId)).toEqual([
       199999022, 199999023, 199999086, 199999043, 199999044,
     ]);
+    const scenarioPolicy = createOptimizationScenarioPolicy();
+    expect(
+      source.value.runtimeContract.scenarioExcludedReactiveBranch
+        .scenarioBoundary
+    ).toMatchObject({
+      policyId: scenarioPolicy.policyId,
+      policyHash: scenarioPolicy.policyHash,
+      rosterPolicyId: scenarioPolicy.candidateRoster.rosterPolicyId,
+      rosterHash: scenarioPolicy.candidateRoster.rosterHash,
+    });
     expect(() =>
       assertSetThreeSourceIdentityEvidenceReference(
         report.sourceClosure.setThreeSourceIdentityEvidence,
@@ -192,10 +222,13 @@ describe('set-skill:3:4 source identity conflict evidence', () => {
         value.packageCensus.expectedMechanismGraphFound = true;
       },
       value => {
-        value.sourceConflict.whichSourceIsStale = 'localization';
+        value.sourceConflict.whichSourceIsStale = 'unresolved';
       },
       value => {
-        value.conclusion.runtimeApplied = true;
+        value.runtimeContract.staticRoot.sourceRawA = 100;
+      },
+      value => {
+        value.conclusion.runtimeApplied = false;
       },
     ];
     for (const mutate of mutations) {

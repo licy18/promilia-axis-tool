@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import soulEssenceEffectCatalog from '../../data/generated/soulessence-effect-mechanics.json';
 import {
   OPTIMIZATION_ROSTER_EXCLUSION_REASON,
   OPTIMIZATION_SCENARIO_POLICY_REASON,
@@ -24,9 +25,11 @@ describe('frozen M12-C optimization scenario policy', () => {
       valid: true,
       issues: [],
     });
-    expect(validateOptimizationScenarioPolicyBinding(
-      createOptimizationScenarioPolicyBinding()
-    ).valid).toBe(true);
+    expect(
+      validateOptimizationScenarioPolicyBinding(
+        createOptimizationScenarioPolicyBinding()
+      ).valid
+    ).toBe(true);
     expect(policy.assumptions).toMatchObject({
       actorTargetInitialDistance: 0,
       actorTargetDistanceMode: 'fixed-zero',
@@ -81,6 +84,26 @@ describe('frozen M12-C optimization scenario policy', () => {
     });
   });
 
+  it('drives the set-three receive-damage N/A from the same frozen policy binding', () => {
+    const definition = soulEssenceEffectCatalog.setSkillDefinitions.find(
+      entry => entry.setId === 3 && entry.pieces === 4
+    );
+    const policyBinding = createOptimizationScenarioPolicyBinding();
+
+    expect(definition.runtimeStatus).toBe('runtime-applied');
+    expect(definition.scenarioBoundaries).toEqual([
+      expect.objectContaining({
+        disposition: 'scenario-out-of-scope',
+        reason: OPTIMIZATION_SCENARIO_POLICY_REASON,
+        bossAttacks: false,
+        ...policyBinding,
+        eventName: 'AfterReceiveDamage',
+        triggerElementId: 199999022,
+        propertyElementId: 199999023,
+      }),
+    ]);
+  });
+
   it('rejects excluded reactive actions and characters before formal search', () => {
     expect(classifyOptimizationScenarioActionKind('perfect-parry')).toEqual(
       expect.objectContaining({
@@ -95,8 +118,7 @@ describe('frozen M12-C optimization scenario policy', () => {
           team: [{ characterId: 108001 }],
           projectile: { targetDistance: 0, defaultWillHit: true },
           target: getOptimizationScenarioPolicy().assumptions.targetPolicy,
-          optimizationScenarioPolicy:
-            createOptimizationScenarioPolicyBinding(),
+          optimizationScenarioPolicy: createOptimizationScenarioPolicyBinding(),
           optimizationQualification: {
             mode: 'formal',
             catalogHash: catalog.catalogHash,

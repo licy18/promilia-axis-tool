@@ -296,20 +296,21 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       },
       runtimeGaps: [],
     });
-    for (const setId of [3]) {
-      expect(definitions.get(`${setId}:4`)).toMatchObject({
-        runtimeStatus: 'source-indexed-runtime-unapplied',
-        thresholdActivation: { appliedToRuntimeEffect: false },
-      });
-    }
+    expect(definitions.get('3:4')).toMatchObject({
+      runtimeStatus: 'runtime-applied',
+      mechanismFamily:
+        'set-skill-persistent-property-with-scenario-excluded-reactive-branch',
+      thresholdActivation: { appliedToRuntimeEffect: true },
+      runtimeGaps: [],
+    });
   });
 
   it('indexes the complete 62 soul and 12 set-skill denominators from source closures', () => {
     expect(census.summary).toMatchObject({
       soulEssenceCount: 62,
       setSkillCount: 12,
-      runtimeAppliedCount: 73,
-      runtimeUnappliedCount: 1,
+      runtimeAppliedCount: 74,
+      runtimeUnappliedCount: 0,
     });
     expect(soulCatalog.sourceSnapshot.setSkillControlClosure).toMatchObject({
       skillCount: 12,
@@ -1212,29 +1213,25 @@ describe('M12-B3-C dynamic loadout effect census', () => {
       )
     ).toBe(true);
     expect(
-      fourPiece
-        .filter(definition => [1, 2, 4, 5, 6].includes(definition.setId))
-        .every(
-          definition =>
-            definition.thresholdActivation.status === 'runtime-applied' &&
-            definition.thresholdActivation.appliedToRuntimeEffect === true &&
-            definition.runtimeStatus === 'runtime-applied' &&
-            definition.runtimeGaps.length === 0
-        )
+      fourPiece.every(
+        definition =>
+          definition.thresholdActivation.status === 'runtime-applied' &&
+          definition.thresholdActivation.appliedToRuntimeEffect === true &&
+          definition.runtimeStatus === 'runtime-applied' &&
+          definition.runtimeGaps.length === 0
+      )
     ).toBe(true);
-    expect(
-      fourPiece.find(definition => definition.setId === 3)
-    ).toMatchObject({
+    expect(fourPiece.find(definition => definition.setId === 3)).toMatchObject({
       thresholdActivation: {
-        status: 'source-indexed',
-        appliedToRuntimeEffect: false,
+        status: 'runtime-applied',
+        appliedToRuntimeEffect: true,
       },
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: ['set-skill-source-identity-conflict-evidence-gap'],
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
     });
     expect(soulCatalog.summary).toMatchObject({
       setSkillThresholdIndexedCount: 12,
-      setSkillRuntimeAppliedCount: 11,
+      setSkillRuntimeAppliedCount: 12,
     });
   });
 
@@ -1299,18 +1296,36 @@ describe('M12-B3-C dynamic loadout effect census', () => {
         record => record.objectKind === 'set-skill' && record.objectId === '3:4'
       )
     ).toMatchObject({
-      mechanismFamily: 'set-skill-source-identity-conflict',
-      evidenceStatus: 'evidence-insufficient',
-      runtimeStatus: 'source-indexed-runtime-unapplied',
-      runtimeGaps: ['set-skill-source-identity-conflict-evidence-gap'],
-      sourceIdentityConflict: {
-        formalTextSemantics:
-          'normal-attack-hit-self-attack-plus-one-percent-twelve-seconds-max-ten',
-        reachableGraphSemantics:
-          'after-receive-damage-every-five-max-hp-plus-two-and-five-percent',
-        whichSourceIsStale: 'unresolved',
-        safeRuntimeDisposition: 'do-not-apply-either-graph',
+      mechanismFamily:
+        'set-skill-persistent-property-with-scenario-excluded-reactive-branch',
+      evidenceStatus: 'runtime-applied',
+      runtimeStatus: 'runtime-applied',
+      runtimeGaps: [],
+      persistentRoot: {
+        activationMode: 'scenario-start-permanent',
+        effects: [
+          expect.objectContaining({
+            elementId: 199999086,
+            attributeId: 5,
+            sourceRawA: 200,
+          }),
+        ],
       },
+      sourceIdentityConflict: null,
+      sourceIdentityResolution: {
+        status: 'product-resolved',
+        authority: 'current-client-executable-graph',
+        staleSource: 'formal-localization',
+      },
+      scenarioBoundaries: [
+        expect.objectContaining({
+          disposition: 'scenario-out-of-scope',
+          reason: 'm12c-zero-distance-passive-boss-out-of-scope',
+          bossAttacks: false,
+          triggerElementId: 199999022,
+          propertyElementId: 199999023,
+        }),
+      ],
     });
   });
 

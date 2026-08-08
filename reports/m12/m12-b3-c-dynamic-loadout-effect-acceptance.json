@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 25,
-  "phase": "M12-B3-E16",
-  "status": "b3-e16-implemented",
-  "baseCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
+  "schemaVersion": 26,
+  "phase": "M12-B3-E21",
+  "status": "product-accepted-set-skill-closure",
+  "baseCommit": "d26c4c5e",
   "reviewedC7Commit": "5647f1a74d74cb63b763ed06367ac8198084cab1",
   "reviewedC7R1Commit": "8760b14b448ff22290895736a6f7b19c077fe589",
   "reviewedC7R2Commit": "bea37f42b273e57e11ca248fbd37764babfcc98d",
@@ -20,7 +20,7 @@
   "acceptedC14Commit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
   "acceptedC15Commit": "aafb6aa6c645b7b7490fdba0f71b8941da311f6e",
   "implementationCommit": "git-self",
-  "nextStage": "b3-e16-implemented-awaiting-product-acceptance",
+  "nextStage": "set-skill-closure-complete-awaiting-b3-integration",
   "acceptedPredecessor": {
     "phase": "M12-B3-C14",
     "productionMechanicsCommit": "a5434a1e0b01c2d70db1832064e34f63fb44e279",
@@ -36,10 +36,7 @@
       "set-skill:5:4",
       "set-skill:6:4"
     ],
-    "c10RuntimeIntegratedSetKeys": [
-      "set-skill:2:4",
-      "set-skill:4:4"
-    ],
+    "c10RuntimeIntegratedSetKeys": ["set-skill:2:4", "set-skill:4:4"],
     "guardedFacts": {
       "setSkillDenominator": 12,
       "runtimeAppliedSetSkillCount": 8,
@@ -91,11 +88,7 @@
       "mainPetShareType": 0,
       "petShareType": 0,
       "sourceKiboDirectEventCount": 0,
-      "actorChanges": [
-        16,
-        16,
-        16
-      ]
+      "actorChanges": [16, 16, 16]
     },
     "contracts": [
       "actor-target direct SP always gives the target/source actor its actor value and routes other actors only through shareType",
@@ -107,20 +100,9 @@
   },
   "scope": {
     "batch": "periodic-persistent-property-root-with-finite-leaf",
-    "soulEssenceIds": [
-      10078,
-      10084,
-      10152,
-      10197
-    ],
-    "runtimeAppliedSoulEssenceIds": [
-      10084,
-      10152,
-      10197
-    ],
-    "evidenceBlockedSoulEssenceIds": [
-      10078
-    ],
+    "soulEssenceIds": [10078, 10084, 10152, 10197],
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
     "setSkillIds": [],
     "runtimeAppliedSetSkillIds": [],
     "evidenceBlockedSetSkillIds": [],
@@ -289,13 +271,13 @@
     },
     "setThreeSourceIdentityEvidence": {
       "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
-      "bytes": 12455,
-      "sha256": "9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418",
+      "bytes": 13883,
+      "sha256": "1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8",
       "battleElementAssetsSha256": "059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346",
       "battleElementBundleSha256": "96c54123ae7409448b59ec60afdd5d6b40804dd52d6dd32aa350d34c72c3c3fa",
       "skillControlBundleSha256": "8667f7ab0bce65a600a1fcf50027a755829d873e1a7d84f39077c0cf1d650d8e",
-      "conclusionStatus": "evidence-insufficient",
-      "gapCode": "set-skill-source-identity-conflict-evidence-gap"
+      "conclusionStatus": "product-resolved",
+      "gapCode": null
     },
     "soulControlClosure": {
       "skillCount": 62,
@@ -404,51 +386,15 @@
     "eventSource": "verified tuning-mark acquisition publishes the acquired StackElement container identity and native types",
     "markContainerCount": 9,
     "markContainers": {
-      "150": [
-        31,
-        41,
-        1001
-      ],
-      "250": [
-        37,
-        41,
-        1001
-      ],
-      "350": [
-        35,
-        41,
-        1001
-      ],
-      "450": [
-        32,
-        41,
-        1001
-      ],
-      "550": [
-        34,
-        41,
-        1001
-      ],
-      "650": [
-        33,
-        41,
-        1001
-      ],
-      "750": [
-        32,
-        41,
-        1001
-      ],
-      "850": [
-        32,
-        41,
-        1001
-      ],
-      "950": [
-        38,
-        41,
-        1001
-      ]
+      "150": [31, 41, 1001],
+      "250": [37, 41, 1001],
+      "350": [35, 41, 1001],
+      "450": [32, 41, 1001],
+      "550": [34, 41, 1001],
+      "650": [33, 41, 1001],
+      "750": [32, 41, 1001],
+      "850": [32, 41, 1001],
+      "950": [38, 41, 1001]
     },
     "windElementSeparation": {
       "750": "StackElement acquisition source; publishes one paired BeforeGetElement/AfterGetElement transaction",
@@ -473,16 +419,8 @@
       "phase",
       "targetSequenceIndex"
     ],
-    "phaseOrder": [
-      "before",
-      "settlement",
-      "after"
-    ],
-    "coveredDirectEffectKinds": [
-      "direct-sp",
-      "direct-heal",
-      "direct-shield"
-    ],
+    "phaseOrder": ["before", "settlement", "after"],
+    "coveredDirectEffectKinds": ["direct-sp", "direct-heal", "direct-shield"],
     "descriptorArrayOrdinalAffectsSemantics": false,
     "legacyMissingPath": "fail-closed with VERIFIED_DIRECT_EFFECT_SOURCE_SEQUENCE_UNRESOLVED",
     "classificationBoundary": "source-order readiness is expressed only by its namespaced status and cannot mark a gameplay effect applied",
@@ -490,10 +428,7 @@
       "generatedHealBeforeAcquire": 100,
       "generatedHealAfterAcquire": 111,
       "outOfHorizonDescriptorCount": 30,
-      "resultsAfterDescriptorInsertion": [
-        100,
-        111
-      ],
+      "resultsAfterDescriptorInsertion": [100, 111],
       "directSpProvenanceStable": true,
       "directShieldProvenanceStable": true
     }
@@ -501,18 +436,8 @@
   "c9PersistentLoadoutPropertyContract": {
     "nativeEvidence": "InjectToOwnElementBehavior.Start/GetInjectTargets installs frame-zero Self elements; ChangePropertyElement.Parse/Combine binds time=-1 and Cover; explicit UnloadSkill(36) removal closes the lifetime",
     "runtimeAppliedSoulEssenceIds": [
-      10033,
-      10034,
-      10047,
-      10050,
-      10056,
-      10057,
-      10058,
-      10059,
-      10061,
-      10062,
-      10133,
-      10156
+      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062,
+      10133, 10156
     ],
     "conditionalOrFiniteOutliers": {
       "10078": "conditional wrapper and finite 1100ms property leaf",
@@ -536,14 +461,8 @@
     "sourceSequence": "actor character, loadout kind, soul/set identity, threshold, skill/control graph path and leaf element",
     "dualLeafSoulEssence": {
       "soulEssenceId": 10133,
-      "leafElementIds": [
-        19004401,
-        19004403
-      ],
-      "attributeIds": [
-        105,
-        23
-      ]
+      "leafElementIds": [19004401, 19004403],
+      "attributeIds": [105, 23]
     },
     "numericConsequences": {
       "windDamage": "10056 increases a real wind hit and remains actor-isolated",
@@ -557,26 +476,12 @@
     "nativeEvidence": "SkillPlayer UpdateElements calls TriggerElement.OnUpdate, which evaluates periodic roots at frame 1 and then on strict greater-than interval boundaries; TriggerEffect injects a finite ChangePropertyElement leaf whose Cover lifecycle remains independent from the persistent root",
     "rootInstallation": "one source-driven root per equipped actor/loadout/control/map/root identity; changing loadout removes the root and prevents later refreshes",
     "periodicCadence": {
-      "1000ms": [
-        1,
-        61,
-        121
-      ],
-      "2000ms": [
-        1,
-        121,
-        241
-      ],
+      "1000ms": [1, 61, 121],
+      "2000ms": [1, 121, 241],
       "failedConditionConsumesCurrentPeriod": true
     },
-    "runtimeAppliedSoulEssenceIds": [
-      10084,
-      10152,
-      10197
-    ],
-    "evidenceBlockedSoulEssenceIds": [
-      10078
-    ],
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
     "contracts": {
       "10078": "root 19004600 and 1100ms attr21 leaf 19004601 are indexed, but defaultPropertyTags [302,303] remain fail-closed because native multi-tag match semantics are not source-closed",
       "10084": "root 19006000 periodically refreshes finite leaf 19006001 on Self; attr8 affects verified critical damage only while the 1100ms right-open leaf is active",
@@ -669,12 +574,7 @@
       "effectTarget": "Target(1), the actual healed actor",
       "attributeId": 5,
       "bucket": "dynamicPercent",
-      "valuesByStarRaw": [
-        1460,
-        1940,
-        2430,
-        2910
-      ],
+      "valuesByStarRaw": [1460, 1940, 2430, 2910],
       "durationMs": 15000,
       "combineType": 5,
       "stackMode": "block",
@@ -764,10 +664,7 @@
       "skillId": 19998008,
       "triggerElementId": 199999063,
       "wrapperElementId": 199999071,
-      "propertyElementIds": [
-        199999064,
-        199999070
-      ],
+      "propertyElementIds": [199999064, 199999070],
       "threshold": "at least four valid same-set equipment slots; one runtime installation at four or five pieces",
       "trigger": "AfterDamage(2), Self observer, NormalAttack(1) OR WhackAttack(2), landed verified transaction only",
       "effectTarget": "native event target enemy",
@@ -789,8 +686,8 @@
     ],
     "remainingSetSkillConflict": {
       "setSkillId": "set-skill:3:4",
-      "status": "source-indexed-runtime-unapplied",
-      "reason": "accessory_set text describes normal-attack attack stacking while the reachable resource graph identifies Iron-Mane Overlord, five received-hit state and maximum-HP semantics; reserved for independent C14 evidence closure"
+      "status": "runtime-applied-with-scenario-boundary",
+      "reason": "the current executable graph is authoritative: its persistent MAXHP +2% root is applied, while the every-five-received-hits MAXHP +5% branch is source-closed but scenario-out-of-scope for the zero-distance passive-Boss trial"
     },
     "runtimeBranchesBySetSkillId": false
   },
@@ -800,12 +697,8 @@
     "reverseReferenceCensus": {
       "defaultPackageSkillListJsonFiles": 212053,
       "staticPackageSkillListJsonFiles": 0,
-      "oldGraphControlSkillIds": [
-        19998005
-      ],
-      "nearMatchControlSkillIds": [
-        19998003
-      ]
+      "oldGraphControlSkillIds": [19998005],
+      "nearMatchControlSkillIds": [19998003]
     },
     "signatureSearch": {
       "battleElementRows": 14781,
@@ -813,9 +706,32 @@
       "expectedAttr1A100Duration12000Overlying10Matches": 0,
       "nearMatch": "199999018/019 is NormalAttack attr1 A100 but 24000ms/max7 and is uniquely bound to skill_control_19998003"
     },
-    "conclusion": "Current evidence cannot identify whether formal localization or the uniquely reachable graph is stale. Neither graph is applied to set-skill:3:4; the object remains evidence-insufficient.",
-    "runtimeLogicChanged": false,
-    "gapCode": "set-skill-source-identity-conflict-evidence-gap"
+    "productResolution": {
+      "authority": "current-client-executable-graph",
+      "staleSource": "formal-localization",
+      "decisionSource": "user-directive-2026-08-08",
+      "staticRoot": {
+        "elementId": 199999086,
+        "attributeId": 5,
+        "valueRaw": 200,
+        "effect": "self MAXHP +2% while the four-piece set remains equipped",
+        "runtimeDisposition": "runtime-applied"
+      },
+      "reactiveBranch": {
+        "triggerElementId": 199999022,
+        "propertyElementId": 199999023,
+        "event": "AfterReceiveDamage",
+        "triggerIntervalTimes": 5,
+        "attributeId": 5,
+        "valueRaw": 500,
+        "effect": "self MAXHP +5%",
+        "runtimeDisposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope"
+      }
+    },
+    "conclusion": "The current executable graph is authoritative and the duplicated normal-hit attack localization is stale. set-skill:3:4 applies its persistent MAXHP +2% root; its receive-damage branch is retained as a sourced scenario N/A for the passive-Boss trial.",
+    "runtimeLogicChanged": true,
+    "gapCode": null
   },
   "definitions": {
     "10048": {
@@ -827,12 +743,7 @@
       "attributeId": 1,
       "durationMs": 8000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        400,
-        500,
-        600,
-        700
-      ]
+      "valuesByStarRaw": [400, 500, 600, 700]
     },
     "10052": {
       "name": "小小木雕",
@@ -846,12 +757,7 @@
       "triggerIntervalMs": 10,
       "stackMode": "refresh",
       "maxStacks": 1,
-      "valuesByStarRaw": [
-        1070,
-        1340,
-        1600,
-        1870
-      ]
+      "valuesByStarRaw": [1070, 1340, 1600, 1870]
     },
     "10169": {
       "name": "软软棉花肉",
@@ -861,12 +767,7 @@
       "attributeId": 229,
       "durationMs": 20000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        375000,
-        500000,
-        625000,
-        750000
-      ],
+      "valuesByStarRaw": [375000, 500000, 625000, 750000],
       "blockingReason": "effect-shield-refresh-replacement-semantics-evidence-gap"
     },
     "10175": {
@@ -878,12 +779,7 @@
       "attributeId": 1,
       "durationMs": 2000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        900,
-        1200,
-        1500,
-        1800
-      ]
+      "valuesByStarRaw": [900, 1200, 1500, 1800]
     },
     "10176": {
       "name": "温柔的照护",
@@ -897,12 +793,7 @@
       "combineNumber": -1,
       "stackMode": "block",
       "activeDuplicateRefreshes": false,
-      "valuesByStarRaw": [
-        1460,
-        1940,
-        2430,
-        2910
-      ]
+      "valuesByStarRaw": [1460, 1940, 2430, 2910]
     }
   },
   "runtimeMatrix": {
@@ -957,11 +848,7 @@
       "landed-hit-kibo-sp-recovery",
       "overlimit-direct-sp"
     ],
-    "vitalSettlements": [
-      "direct-heal",
-      "direct-shield",
-      "periodic-heal"
-    ],
+    "vitalSettlements": ["direct-heal", "direct-shield", "periodic-heal"],
     "negativeGates": [
       "actor-resource-insufficient",
       "kibo-resource-insufficient",
@@ -1038,17 +925,13 @@
   "batchResults": {
     "runtimeAppliedSoulEssenceCount": 62,
     "runtimeUnappliedSoulEssenceCount": 0,
-    "runtimeAppliedSetSkillCount": 11,
-    "runtimeUnappliedSetSkillCount": 1,
-    "newlyAppliedSoulEssenceIds": [
-      10095
-    ],
-    "newlyAppliedSetSkillIds": [],
+    "runtimeAppliedSetSkillCount": 12,
+    "runtimeUnappliedSetSkillCount": 0,
+    "newlyAppliedSoulEssenceIds": [10095],
+    "newlyAppliedSetSkillIds": ["set-skill:3:4"],
     "preservedRuntimeAppliedSoulEssenceCount": 61,
     "preservedRuntimeAppliedSetSkillCount": 11,
-    "remainingBlockedFourPieceSetSkillIds": [
-      "set-skill:3:4"
-    ]
+    "remainingBlockedFourPieceSetSkillIds": []
   },
   "qualification": {
     "denominators": {
@@ -1058,29 +941,28 @@
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 18,
+    "blockingUniqueGapCount": 16,
     "blockingByCategory": {
-      "not-implemented": 17,
-      "evidence-insufficient": 1
+      "not-implemented": 16
     },
     "formalAdmissions": {
       "characters": 0,
       "kibos": 0,
       "soulEssences": 62,
       "equipment": 137,
-      "setSkills": 11
+      "setSkills": 12
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "39acb167dbcf7801",
-    "rosterHash": "130c9cd5f5192ad6",
-    "manifestsHash": "44f387f512518c29",
-    "ledgerHash": "9e046d2a3c1f56fa",
-    "bindingMatrixHash": "7f2ea0c47f0b6845",
-    "qualificationCatalogHash": "68996d22cce80720",
-    "dynamicLoadoutEffectCensusHash": "8215e5cfd59ddb44",
-    "soulEssenceEffectCatalogHash": "075ffd76e4e7cc55",
-    "soulEssenceSourceSnapshotHash": "c45c2e01a48684d7",
+    "sourceSnapshotHash": "935fb9f83e33f81d",
+    "rosterHash": "d258a6f8327a6722",
+    "manifestsHash": "ef9763c902841fdf",
+    "ledgerHash": "bc98f1cfc5c3c2c8",
+    "bindingMatrixHash": "0ed198377d31931f",
+    "qualificationCatalogHash": "da0adf6361505a7a",
+    "dynamicLoadoutEffectCensusHash": "6e632ad989a07f61",
+    "soulEssenceEffectCatalogHash": "a14c2fb2986edb7c",
+    "soulEssenceSourceSnapshotHash": "1b98895a236eea65",
     "battlePropertyTagContractHash": "fc3806b1efc60e56",
     "soulEssenceTriggerContractHash": "a91689fc08ebd4c2",
     "verifiedMechanicsPackageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86",
@@ -1093,7 +975,7 @@
     }
   },
   "canonicalIdentityImpact": {
-    "reason": "C15 adds a source-driven periodic-root runtime family for equipped 10084/10152/10197 and leaves 10078 fail-closed. Scenarios without these loadouts retain existing numeric semantics; catalog/profile metadata is regenerated from the new qualification state.",
+    "reason": "E21 resolves set-skill:3:4 against the current executable graph, applies the persistent MAXHP +2% root, and records the receive-damage branch as scenario-out-of-scope for the zero-distance passive-Boss trial. No other set, soul, equipment, Kibo or character mechanics change.",
     "machineAxisCanonicalHashDrift": 0,
     "machineAxisTraceMetadataHash": "59d9fe10be08c342",
     "machineAxisEvaluationHashDrift": 0,
@@ -1108,7 +990,7 @@
     "c12BeforeSkillCompositeRegression": 0,
     "c12R1DirectSpRoutingRegression": 0,
     "c13AfterDamageTargetDebuffRegression": 0,
-    "c14SetThreeRuntimeApplicationCount": 0,
+    "c14SetThreeRuntimeApplicationCount": 1,
     "c15NewRuntimeAppliedSoulEssenceCount": 3,
     "c15EvidenceBlockedSoulEssenceCount": 1
   },

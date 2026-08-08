@@ -2,6 +2,10 @@ import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 
+import {
+  createOptimizationScenarioPolicy,
+  M12C_OPTIMIZATION_SCENARIO_POLICY_REASON,
+} from '../optimization-scenario/optimization-scenario-policy-source.mjs';
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 
 const PROPERTY_BUCKET_BY_CALCULATE_TYPE = Object.freeze({
@@ -13,6 +17,10 @@ const PROPERTY_BUCKET_BY_CALCULATE_TYPE = Object.freeze({
 const TRIGGER_EVENT_BY_ID = Object.freeze({
   1: { name: 'BeforeDamage', frameAnchor: 'hit-before-damage' },
   2: { name: 'AfterDamage', frameAnchor: 'hit-after-damage' },
+  4: {
+    name: 'AfterReceiveDamage',
+    frameAnchor: 'receive-damage-after-settlement',
+  },
   5: { name: 'BeforeSkill', frameAnchor: 'action-start' },
   6: { name: 'AfterSkill', frameAnchor: 'action-end' },
   9: { name: 'BeforeGetElement', frameAnchor: 'element-before-acquire' },
@@ -29,6 +37,7 @@ const SUPPORTED_FRAME_ANCHORS = new Set([
   'hit-before-damage',
   'hit-after-damage',
   'hit-before-critical-damage',
+  'receive-damage-after-settlement',
   'kill-event',
   'element-before-acquire',
   'element-after-acquire',
@@ -80,6 +89,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   activationConditionRuntimeEvidence = null,
   elementFormulaRows = [],
   setThreeSourceIdentityEvidence = null,
+  optimizationScenarioPolicy = createOptimizationScenarioPolicy(),
 } = {}) {
   if (
     propertyTagContract?.sourceKind !== 'il2cpp-battle-property-tag-contract' ||
@@ -142,11 +152,12 @@ export async function createSoulEssenceEffectMechanicsCatalog({
   if (
     setThreeSourceIdentityEvidence?.contractName !==
       'AzPrSetThreeSourceIdentityEvidence' ||
-    setThreeSourceIdentityEvidence?.conclusion?.status !==
-      'evidence-insufficient'
+    setThreeSourceIdentityEvidence?.conclusion?.status !== 'product-resolved' ||
+    setThreeSourceIdentityEvidence?.conclusion?.runtimeApplied !== true
   ) {
     throw new Error('soulessence-set-three-source-identity-evidence-missing');
   }
+  assertSetThreeOptimizationScenarioPolicy(optimizationScenarioPolicy);
   const tuningMechanicsHash = hashCanonicalValue(tuningMechanicsCatalog);
   const definitionBySoulId = new Map(
     (soulDefinitionRows ?? []).map(row => [Number(row.id), row])
@@ -241,6 +252,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
       beforeSkillCompositeRuntimeEvidence,
       afterDamageTargetPropertyRuntimeEvidence,
       setThreeSourceIdentityEvidence,
+      optimizationScenarioPolicy,
     })
   );
   const value = {
@@ -293,6 +305,9 @@ export async function createSoulEssenceEffectMechanicsCatalog({
           setThreeSourceIdentityEvidence.conclusion.sourceIdentity,
         contractHash: hashCanonicalValue(setThreeSourceIdentityEvidence),
       },
+      optimizationScenarioPolicy: createOptimizationScenarioPolicyBinding(
+        optimizationScenarioPolicy
+      ),
       sourceSnapshotHash: hashCanonicalValue({
         battleElements: battleSource.metadata,
         controlClosure: controlSource.metadata,
@@ -315,6 +330,7 @@ export async function createSoulEssenceEffectMechanicsCatalog({
         setThreeSourceIdentityEvidenceHash: hashCanonicalValue(
           setThreeSourceIdentityEvidence
         ),
+        optimizationScenarioPolicyHash: optimizationScenarioPolicy.policyHash,
       }),
     },
     policy: {
@@ -435,6 +451,8 @@ export function createDynamicLoadoutEffectCensus(catalog) {
       runtimeStatus: definition.runtimeStatus,
       runtimeGaps: definition.runtimeGaps,
       sourceIdentityConflict: definition.sourceIdentityConflict ?? null,
+      sourceIdentityResolution: definition.sourceIdentityResolution ?? null,
+      scenarioBoundaries: definition.scenarioBoundaries ?? [],
       sourceIdentity: definition.sourceIdentity,
     })),
   ].sort(
@@ -486,6 +504,7 @@ function compileSetSkillEffectDefinition({
   beforeSkillCompositeRuntimeEvidence,
   afterDamageTargetPropertyRuntimeEvidence,
   setThreeSourceIdentityEvidence,
+  optimizationScenarioPolicy,
 }) {
   const resourcePathIds = uniqueNumbers(control?.resourcePathIds ?? []);
   const missingPathIds = resourcePathIds.filter(
@@ -591,11 +610,28 @@ function compileSetSkillEffectDefinition({
       tuningMechanicsCatalog,
       afterDamageTargetPropertyRuntimeEvidence,
     });
+  const scenarioBoundExecutableGraph =
+    compileSetThreeScenarioBoundExecutableGraph({
+      setSkill,
+      control,
+      closure,
+      activeTriggerRows,
+      triggerRows,
+      propertyRows,
+      damageRows,
+      battleElementsByPathId,
+      propertyTagContract,
+      persistentLoadoutPropertyRuntimeEvidence,
+      setThreeSourceIdentityEvidence,
+      optimizationScenarioPolicy,
+    });
   const compiledDynamicEffect =
     beforeDamageStack ??
     afterHealProperty ??
     beforeSkillComposite ??
     afterDamageTargetProperty;
+  const effectivePersistentRoot =
+    persistentRoot ?? scenarioBoundExecutableGraph?.persistentRoot ?? null;
   const sourceIdentityConflict = resolveSetSkillSourceIdentityConflict({
     setSkill,
     evidence: setThreeSourceIdentityEvidence,
@@ -620,13 +656,15 @@ function compileSetSkillEffectDefinition({
   const runtimeGaps = uniqueStrings(
     persistentCandidate
       ? [...evidenceGaps, ...(persistentRoot?.runtimeGaps ?? [])]
-      : compiledDynamicEffect != null
-        ? [...evidenceGaps, ...(compiledDynamicEffect.runtimeGaps ?? [])]
-        : [
-            ...evidenceGaps,
-            sourceIdentityConflict?.gapCode ??
-              'set-skill-runtime-operator-not-implemented',
-          ]
+      : scenarioBoundExecutableGraph != null
+        ? [...evidenceGaps, ...(scenarioBoundExecutableGraph.runtimeGaps ?? [])]
+        : compiledDynamicEffect != null
+          ? [...evidenceGaps, ...(compiledDynamicEffect.runtimeGaps ?? [])]
+          : [
+              ...evidenceGaps,
+              sourceIdentityConflict?.gapCode ??
+                'set-skill-runtime-operator-not-implemented',
+            ]
   );
   const runtimeStatus = runtimeGaps.length
     ? 'source-indexed-runtime-unapplied'
@@ -647,9 +685,11 @@ function compileSetSkillEffectDefinition({
     },
     mechanismFamily:
       runtimeStatus === 'runtime-applied'
-        ? compiledDynamicEffect != null
-          ? compiledDynamicEffect.mechanismFamily
-          : 'set-skill-persistent-property'
+        ? scenarioBoundExecutableGraph != null
+          ? scenarioBoundExecutableGraph.mechanismFamily
+          : compiledDynamicEffect != null
+            ? compiledDynamicEffect.mechanismFamily
+            : 'set-skill-persistent-property'
         : sourceIdentityConflict != null
           ? 'set-skill-source-identity-conflict'
           : mechanismFamilies.length === 1
@@ -660,6 +700,9 @@ function compileSetSkillEffectDefinition({
     trigger: compiledDynamicEffect?.trigger ?? null,
     effect: compiledDynamicEffect?.effect ?? null,
     immediateEffects: compiledDynamicEffect?.immediateEffects ?? [],
+    scenarioBoundaries: scenarioBoundExecutableGraph?.scenarioBoundaries ?? [],
+    sourceIdentityResolution:
+      scenarioBoundExecutableGraph?.sourceIdentityResolution ?? null,
     activationPrerequisites: closure.rows
       .filter(
         row =>
@@ -693,9 +736,9 @@ function compileSetSkillEffectDefinition({
       ),
     },
     persistentRoot:
-      persistentRoot == null
+      effectivePersistentRoot == null
         ? null
-        : { ...persistentRoot, status: runtimeStatus },
+        : { ...effectivePersistentRoot, status: runtimeStatus },
     resourceTransactions: resourceRows.map(row => ({
       elementId: Number(row.typetree?.elementConfigId),
       recoverType: numberOrNull(row.typetree?.recoverType),
@@ -734,7 +777,9 @@ function compileSetSkillEffectDefinition({
         runtimeStatus === 'runtime-applied'
           ? compiledDynamicEffect != null
             ? 'canonical-effect-timeline-applied'
-            : 'canonical-static-loadout-applied'
+            : effectivePersistentRoot != null
+              ? 'canonical-static-loadout-applied'
+              : 'canonical-runtime-applied'
           : 'runtime-unapplied',
       reason:
         runtimeStatus === 'runtime-applied'
@@ -750,9 +795,11 @@ function compileSetSkillEffectDefinition({
       elementIds: closure.rows.map(row =>
         Number(row.typetree?.elementConfigId)
       ),
-      propertyElementIds: propertyRows.map(row =>
-        Number(row.typetree?.elementConfigId)
-      ),
+      propertyElementIds:
+        scenarioBoundExecutableGraph?.appliedPropertyElementIds ??
+        propertyRows.map(row => Number(row.typetree?.elementConfigId)),
+      scenarioExcludedPropertyElementIds:
+        scenarioBoundExecutableGraph?.scenarioExcludedPropertyElementIds ?? [],
       timelineInjections: structuredClone(control?.timelineInjections ?? []),
     },
     evidenceStatus:
@@ -771,11 +818,186 @@ function compileSetSkillEffectDefinition({
     sourceIdentityConflict,
     sourceIdentity: [setSkill.sourceIdentity, control?.sourceIdentity]
       .concat(compiledDynamicEffect?.sourceIdentity ?? [])
+      .concat(scenarioBoundExecutableGraph?.sourceIdentity ?? [])
       .concat(sourceIdentityConflict?.sourceIdentity ?? [])
       .filter(Boolean)
       .join('|'),
   };
   return { ...value, mechanicsHash: hashCanonicalValue(value) };
+}
+
+function compileSetThreeScenarioBoundExecutableGraph({
+  setSkill,
+  control,
+  closure,
+  activeTriggerRows,
+  triggerRows,
+  propertyRows,
+  damageRows,
+  battleElementsByPathId,
+  propertyTagContract,
+  persistentLoadoutPropertyRuntimeEvidence,
+  setThreeSourceIdentityEvidence,
+  optimizationScenarioPolicy,
+}) {
+  const conclusion = setThreeSourceIdentityEvidence?.conclusion;
+  const runtimeContract = setThreeSourceIdentityEvidence?.runtimeContract;
+  const expectedIdentity = `set-skill:${Number(setSkill.setId)}:${Number(
+    setSkill.pieces
+  )}`;
+  if (
+    conclusion?.status !== 'product-resolved' ||
+    conclusion?.runtimeApplied !== true ||
+    conclusion?.setSkillIdentity !== expectedIdentity ||
+    Number(conclusion?.skillId) !== Number(setSkill.skillId)
+  ) {
+    return null;
+  }
+
+  const staticElementId = Number(runtimeContract?.staticRoot?.elementId);
+  const reactiveTriggerElementId = Number(
+    runtimeContract?.scenarioExcludedReactiveBranch?.triggerElementId
+  );
+  const reactivePropertyElementId = Number(
+    runtimeContract?.scenarioExcludedReactiveBranch?.propertyElementId
+  );
+  const staticPropertyRows = propertyRows.filter(
+    row => Number(row.typetree?.elementConfigId) === staticElementId
+  );
+  const reactivePropertyRows = propertyRows.filter(
+    row => Number(row.typetree?.elementConfigId) === reactivePropertyElementId
+  );
+  const reactiveTriggerRows = activeTriggerRows.filter(
+    row => Number(row.typetree?.elementConfigId) === reactiveTriggerElementId
+  );
+  const persistentRoot = compilePersistentPropertyRoot({
+    ownerKind: 'set-skill',
+    ownerId: `${setSkill.setId}:${setSkill.pieces}`,
+    skillId: Number(setSkill.skillId),
+    control,
+    closure,
+    propertyRows: staticPropertyRows,
+    unloadTriggers: triggerRows.filter(
+      row => Number(row.typetree?.triggerParam1) === 36
+    ),
+    damageRows,
+    battleElementsByPathId,
+    propertyTagContract,
+    persistentLoadoutPropertyRuntimeEvidence,
+    resolveValues: () => [],
+  });
+  const runtimeGaps = [...persistentRoot.runtimeGaps];
+  if (staticPropertyRows.length !== 1) {
+    runtimeGaps.push('set-three-static-property-root-not-unique');
+  }
+  if (reactiveTriggerRows.length !== 1 || reactivePropertyRows.length !== 1) {
+    runtimeGaps.push('set-three-reactive-source-branch-not-unique');
+  }
+  if (
+    Number(persistentRoot.effects?.[0]?.attributeId) !==
+      Number(runtimeContract?.staticRoot?.attributeId) ||
+    Number(persistentRoot.effects?.[0]?.sourceRawA) !==
+      Number(runtimeContract?.staticRoot?.sourceRawA)
+  ) {
+    runtimeGaps.push('set-three-static-property-contract-drift');
+  }
+  const scenarioBoundary =
+    runtimeContract?.scenarioExcludedReactiveBranch?.scenarioBoundary;
+  const scenarioPolicyBinding = createOptimizationScenarioPolicyBinding(
+    optimizationScenarioPolicy
+  );
+  if (
+    scenarioBoundary?.disposition !== 'scenario-out-of-scope' ||
+    scenarioBoundary?.reason !== M12C_OPTIMIZATION_SCENARIO_POLICY_REASON ||
+    scenarioBoundary?.bossAttacks !==
+      optimizationScenarioPolicy.assumptions.enemyActiveAttacks ||
+    scenarioBoundary?.policyId !== scenarioPolicyBinding.policyId ||
+    scenarioBoundary?.policyHash !== scenarioPolicyBinding.policyHash ||
+    scenarioBoundary?.rosterPolicyId !== scenarioPolicyBinding.rosterPolicyId ||
+    scenarioBoundary?.rosterHash !== scenarioPolicyBinding.rosterHash
+  ) {
+    runtimeGaps.push('set-three-scenario-boundary-contract-drift');
+  }
+
+  return {
+    mechanismFamily:
+      'set-skill-persistent-property-with-scenario-excluded-reactive-branch',
+    persistentRoot,
+    appliedPropertyElementIds: [staticElementId],
+    scenarioExcludedPropertyElementIds: [reactivePropertyElementId],
+    scenarioBoundaries: [
+      {
+        ...structuredClone(scenarioBoundary),
+        eventName: 'AfterReceiveDamage',
+        triggerElementId: reactiveTriggerElementId,
+        propertyElementId: reactivePropertyElementId,
+        triggerIntervalTimes: Number(
+          runtimeContract?.scenarioExcludedReactiveBranch?.triggerIntervalTimes
+        ),
+        sourceIdentity: [
+          reactiveTriggerRows[0]
+            ? createElementIdentity(reactiveTriggerRows[0])
+            : null,
+          reactivePropertyRows[0]
+            ? createElementIdentity(reactivePropertyRows[0])
+            : null,
+          conclusion.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+      },
+    ],
+    sourceIdentityResolution: {
+      status: conclusion.status,
+      authority: conclusion.authority,
+      staleSource: conclusion.staleSource,
+      decisionSource: conclusion.decisionSource,
+      sourceIdentity: conclusion.sourceIdentity,
+    },
+    runtimeGaps: uniqueStrings(runtimeGaps),
+    sourceIdentity: [
+      conclusion.sourceIdentity,
+      persistentRoot.sourceIdentity,
+      reactiveTriggerRows[0]
+        ? createElementIdentity(reactiveTriggerRows[0])
+        : null,
+      reactivePropertyRows[0]
+        ? createElementIdentity(reactivePropertyRows[0])
+        : null,
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function assertSetThreeOptimizationScenarioPolicy(policy) {
+  const policyCopy = structuredClone(policy);
+  const policyHash = policyCopy.policyHash;
+  delete policyCopy.policyHash;
+  const rosterCopy = structuredClone(policy.candidateRoster);
+  const rosterHash = rosterCopy.rosterHash;
+  delete rosterCopy.rosterHash;
+  if (
+    policy?.contractName !== 'AzPrOptimizationScenarioPolicy' ||
+    policy?.reason !== M12C_OPTIMIZATION_SCENARIO_POLICY_REASON ||
+    policy?.assumptions?.enemyActiveAttacks !== false ||
+    !policy?.optimizationSurface?.excludedTriggerFamilies?.includes(
+      'player-receive-damage'
+    ) ||
+    policyHash !== hashCanonicalValue(policyCopy) ||
+    rosterHash !== hashCanonicalValue(rosterCopy)
+  ) {
+    throw new Error('soulessence-optimization-scenario-policy-drift');
+  }
+}
+
+function createOptimizationScenarioPolicyBinding(policy) {
+  return {
+    policyId: policy.policyId,
+    policyHash: policy.policyHash,
+    rosterPolicyId: policy.candidateRoster.rosterPolicyId,
+    rosterHash: policy.candidateRoster.rosterHash,
+  };
 }
 
 function resolveSetSkillSourceIdentityConflict({ setSkill, evidence }) {
@@ -2184,13 +2406,13 @@ function compileTriggerCondition({
   ).includes(triggerEventId)
     ? triggerContract.nonDamageRuntime?.sourceIdentity
     : (triggerContract.soulEventRuntime?.emptyConditionEvents ?? []).includes(
-        triggerEventId
-      )
+          triggerEventId
+        )
       ? triggerContract.soulEventRuntime?.sourceIdentity
-    : emptyConditionEvidence?.status === 'applied' &&
-        Number(emptyConditionEvidence?.eventId) === triggerEventId
-      ? emptyConditionEvidence.sourceIdentity
-      : null;
+      : emptyConditionEvidence?.status === 'applied' &&
+          Number(emptyConditionEvidence?.eventId) === triggerEventId
+        ? emptyConditionEvidence.sourceIdentity
+        : null;
   if (
     compiledConditions.length === 0 &&
     logicBinding &&
@@ -2396,49 +2618,51 @@ function compileActivationConditions({
       ? tree.functionParams
       : [];
     const rowIdentity = createElementIdentity(row);
-    return (tree.triggerConditionList ?? []).map((condition, conditionIndex) => {
-      const conditionType = Number(condition?.conditionParam1);
-      const sourceIdentity = `${rowIdentity}.triggerConditionList[${conditionIndex}]`;
-      if (conditionType !== 10000) {
-        return {
-          kind: 'unsupported-condition-type',
-          conditionType,
-          status: 'static-evidence-gap',
-          sourceIdentity,
+    return (tree.triggerConditionList ?? []).map(
+      (condition, conditionIndex) => {
+        const conditionType = Number(condition?.conditionParam1);
+        const sourceIdentity = `${rowIdentity}.triggerConditionList[${conditionIndex}]`;
+        if (conditionType !== 10000) {
+          return {
+            kind: 'unsupported-condition-type',
+            conditionType,
+            status: 'static-evidence-gap',
+            sourceIdentity,
+          };
+        }
+        const formulaId = Number(condition?.conditionParam2);
+        const formula = formulaById.get(formulaId);
+        const match = String(formula?.functionOutput ?? '').match(
+          /^IF\(self\.ELEMENT_LAYERS\[([A-Z])\]>([A-Z]),([A-Z]),0\)$/u
+        );
+        const resolveVariable = letter => {
+          const index = letter.charCodeAt(0) - 65;
+          const raw = functionParams[index];
+          return Number.isFinite(Number(raw)) ? Number(raw) : null;
         };
-      }
-      const formulaId = Number(condition?.conditionParam2);
-      const formula = formulaById.get(formulaId);
-      const match = String(formula?.functionOutput ?? '').match(
-        /^IF\(self\.ELEMENT_LAYERS\[([A-Z])\]>([A-Z]),([A-Z]),0\)$/u
-      );
-      const resolveVariable = letter => {
-        const index = letter.charCodeAt(0) - 65;
-        const raw = functionParams[index];
-        return Number.isFinite(Number(raw)) ? Number(raw) : null;
-      };
-      const markId = match ? resolveVariable(match[1]) : null;
-      const minLayers = match ? resolveVariable(match[2]) : null;
-      const valueRaw = match ? resolveVariable(match[3]) : null;
-      if (!supported || !match || markId == null || minLayers == null) {
+        const markId = match ? resolveVariable(match[1]) : null;
+        const minLayers = match ? resolveVariable(match[2]) : null;
+        const valueRaw = match ? resolveVariable(match[3]) : null;
+        if (!supported || !match || markId == null || minLayers == null) {
+          return {
+            kind: 'element-formula-layer-gt',
+            formulaId,
+            status: 'static-evidence-gap',
+            sourceIdentity,
+          };
+        }
         return {
           kind: 'element-formula-layer-gt',
           formulaId,
-          status: 'static-evidence-gap',
-          sourceIdentity,
+          markId,
+          minLayers,
+          valueRaw,
+          formula: formula.functionOutput,
+          status: 'applied',
+          sourceIdentity: `${sourceIdentity}|NewTable/element_formula.json#rows[id=${formulaId}]|${activationConditionRuntimeEvidence.conclusion.sourceIdentity}`,
         };
       }
-      return {
-        kind: 'element-formula-layer-gt',
-        formulaId,
-        markId,
-        minLayers,
-        valueRaw,
-        formula: formula.functionOutput,
-        status: 'applied',
-        sourceIdentity: `${sourceIdentity}|NewTable/element_formula.json#rows[id=${formulaId}]|${activationConditionRuntimeEvidence.conclusion.sourceIdentity}`,
-      };
-    });
+    );
   });
 }
 
@@ -2484,8 +2708,7 @@ function buildSoulTriggerEntry({
           beforeDamageEmptyConditionRuntimeEvidence?.conclusion?.status ===
             'applied'
         ? {
-            status:
-              beforeDamageEmptyConditionRuntimeEvidence.conclusion.status,
+            status: beforeDamageEmptyConditionRuntimeEvidence.conclusion.status,
             eventId: 1,
             sourceIdentity:
               beforeDamageEmptyConditionRuntimeEvidence.conclusion
@@ -2517,9 +2740,7 @@ function buildSoulTriggerEntry({
         Number(triggerRow.path_id),
         closure.edges,
         battleElementsByPathId
-      ).filter(row =>
-        candidates.some(item => item.path_id === row.path_id)
-      )
+      ).filter(row => candidates.some(item => item.path_id === row.path_id))
     : [];
   const triggerEffectRows = Array.isArray(tree.triggerEffectList)
     ? tree.triggerEffectList
@@ -2546,11 +2767,11 @@ function buildSoulTriggerEntry({
             Number(triggerEffectRows[0]?.effectRow?.targetType)
         ) ?? null)
       : null;
-  const rowTargetBindings = triggerEffectRows.map(row =>
-    triggerContract.targetBindings.find(
-      binding =>
-        Number(binding.value) === Number(row.effectRow?.targetType)
-    ) ?? null
+  const rowTargetBindings = triggerEffectRows.map(
+    row =>
+      triggerContract.targetBindings.find(
+        binding => Number(binding.value) === Number(row.effectRow?.targetType)
+      ) ?? null
   );
   const sharedLeaf =
     property != null &&
@@ -2563,8 +2784,7 @@ function buildSoulTriggerEntry({
     rowTargetBindings.length > 0 &&
     rowTargetBindings.every(binding => binding != null) &&
     (!requiresLeaf || reachableEffectRows.length > 0);
-  const valid =
-    role === 'arm' ? baseValid : baseValid && sharedLeaf;
+  const valid = role === 'arm' ? baseValid : baseValid && sharedLeaf;
   return {
     valid,
     baseValid,
@@ -2572,8 +2792,7 @@ function buildSoulTriggerEntry({
       leafPathIds: reachableEffectRows.map(row => Number(row.path_id)),
       role,
       relayElementId: relayElementId == null ? null : Number(relayElementId),
-      requiresRelayArmed:
-        role === 'application' && relayElementId != null,
+      requiresRelayArmed: role === 'application' && relayElementId != null,
       elementId: Number(tree.elementConfigId),
       pathId: Number(triggerRow.path_id),
       eventId: Number(tree.triggerParam1),
@@ -2602,7 +2821,9 @@ function buildSoulTriggerEntry({
               effectTargetTypeName: targetBinding.enumName,
               effectListIndex: triggerEffectRows[0]?.effectListIndex ?? null,
               targetElementPathId: triggerEffectRows[0]
-                ? Number(triggerEffectRows[0]?.effectRow?.targetElement?.m_PathID)
+                ? Number(
+                    triggerEffectRows[0]?.effectRow?.targetElement?.m_PathID
+                  )
                 : null,
               sourceIdentity: triggerEffectRows[0]
                 ? `${createElementIdentity(triggerRow)}.triggerEffectList[${triggerEffectRows[0].effectListIndex}].targetType|${targetBinding.sourceIdentity}`
@@ -2726,11 +2947,7 @@ function compileSoulEffectLeaf({
         commonExpression: commonFunctionId === 1 ? 'G/10000' : null,
         baseFunctionId,
         baseExpression:
-          baseFunctionId === 3
-            ? 'A/10000'
-            : baseFunctionId === 5
-              ? 'A'
-              : null,
+          baseFunctionId === 3 ? 'A/10000' : baseFunctionId === 5 ? 'A' : null,
         commonRatioRaw,
         sourceParameterEncoding: 'battle-element-raw-a',
         family: formulaFamily,
@@ -2932,11 +3149,8 @@ function compileSoulImmediateEffectRows({
       const targetPathId = Number(effectRow?.targetElement?.m_PathID);
       const reached = immediateEffectRows.find(
         row =>
-          findElementPath(
-            targetPathId,
-            Number(row.path_id),
-            closure.edges
-          ) != null
+          findElementPath(targetPathId, Number(row.path_id), closure.edges) !=
+          null
       );
       if (!reached) continue;
       const binding = triggerContract.targetBindings.find(
@@ -2981,9 +3195,7 @@ function compileSoulImmediateEffectRows({
       continue;
     }
     const isSp = Object.hasOwn(tree, 'recoverType');
-    const baseExpression = isSp
-      ? 'A'
-      : '(target.MAXHP[0]*A)/10000';
+    const baseExpression = isSp ? 'A' : '(target.MAXHP[0]*A)/10000';
     immediateEffects.push({
       kind: isSp ? 'direct-sp' : 'direct-heal',
       effectIndex: target.effectListIndex,
@@ -3075,8 +3287,7 @@ function compileSoulEffectDefinition({
       tree.formulaParams?.function_2 ?? tree.baseIntParams?.[1]
     );
     return (
-      Number.isInteger(Number(tree.damageType)) &&
-      [104, 108].includes(base)
+      Number.isInteger(Number(tree.damageType)) && [104, 108].includes(base)
     );
   });
   const damageRows = closure.rows.filter(
@@ -3093,9 +3304,7 @@ function compileSoulEffectDefinition({
   );
   const knownElementTypes = new Set(
     [...battleElementsByPathId.values()].flatMap(row =>
-      Array.isArray(row.typetree?.types)
-        ? row.typetree.types.map(Number)
-      : []
+      Array.isArray(row.typetree?.types) ? row.typetree.types.map(Number) : []
     )
   );
   const primaryTriggerRow = activeTriggers[0] ?? null;
@@ -3298,11 +3507,11 @@ function compileSoulEffectDefinition({
             Number(triggerEffectRows[0]?.effectRow?.targetType)
         ) ?? null)
       : null;
-  const rowTargetBindings = triggerEffectRows.map(row =>
-    triggerContract.targetBindings.find(
-      binding =>
-        Number(binding.value) === Number(row.effectRow?.targetType)
-    ) ?? null
+  const rowTargetBindings = triggerEffectRows.map(
+    row =>
+      triggerContract.targetBindings.find(
+        binding => Number(binding.value) === Number(row.effectRow?.targetType)
+      ) ?? null
   );
   const formulaFamily = resolveFormulaFamily({
     commonFunctionId,
@@ -3360,9 +3569,7 @@ function compileSoulEffectDefinition({
   const leafRows = [...leafRowsByPathId.values()];
   const multiLeaf =
     leafRows.length > 1 ||
-    triggerEntries.some(
-      entry => (entry.value.leafPathIds ?? []).length > 1
-    );
+    triggerEntries.some(entry => (entry.value.leafPathIds ?? []).length > 1);
   if (multiLeaf) {
     const compiledLeaves = leafRows.map(leafRow =>
       compileSoulEffectLeaf({
@@ -3377,8 +3584,7 @@ function compileSoulEffectDefinition({
       })
     );
     const leafValid =
-      compiledLeaves.length > 0 &&
-      compiledLeaves.every(leaf => leaf.valid);
+      compiledLeaves.length > 0 && compiledLeaves.every(leaf => leaf.valid);
     const compiledLeafPathIds = new Set(
       compiledLeaves.map(leaf => Number(leaf.effect.pathId))
     );
@@ -3441,13 +3647,15 @@ function compileSoulEffectDefinition({
         elementId: Number(row.typetree?.elementConfigId),
         pathId: Number(row.path_id),
         triggerType: Number(row.typetree?.triggerType),
-        conditions: (row.typetree?.triggerConditionList ?? []).map(condition => ({
-          conditionType: Number(condition?.conditionParam1),
-          conditionValue: Number(condition?.conditionParam2),
-          conditionExtra: Number.isFinite(Number(condition?.conditionParam3))
-            ? Number(condition.conditionParam3)
-            : null,
-        })),
+        conditions: (row.typetree?.triggerConditionList ?? []).map(
+          condition => ({
+            conditionType: Number(condition?.conditionParam1),
+            conditionValue: Number(condition?.conditionParam2),
+            conditionExtra: Number.isFinite(Number(condition?.conditionParam3))
+              ? Number(condition.conditionParam3)
+              : null,
+          })
+        ),
         sourceIdentity: createElementIdentity(row),
       })),
       activationConditions: compileActivationConditions({
@@ -3482,8 +3690,8 @@ function compileSoulEffectDefinition({
         effectPathElementIds: leafRows.map(row =>
           Number(row.typetree?.elementConfigId)
         ),
-        removalPaths: compiledLeaves.flatMap(leaf =>
-          leaf.effect.lifecycle?.removalPaths ?? []
+        removalPaths: compiledLeaves.flatMap(
+          leaf => leaf.effect.lifecycle?.removalPaths ?? []
         ),
         damageElementIds: damageRows.map(row =>
           Number(row.typetree?.elementConfigId)
@@ -3648,9 +3856,7 @@ function compileSoulEffectDefinition({
     activationConditions,
     trigger: triggerEntries[0]?.value ?? null,
     triggers:
-      activeTriggers.length > 1
-        ? triggerEntries.map(entry => entry.value)
-        : [],
+      activeTriggers.length > 1 ? triggerEntries.map(entry => entry.value) : [],
     effect:
       property == null
         ? null
@@ -3813,8 +4019,7 @@ function compilePersistentSoulEffectDefinition({
     runtimeStatus,
     mechanismFamily:
       runtimeStatus === 'runtime-applied'
-        ? persistentRoot.activationMode ===
-          'periodic-conditional-finite-leaf'
+        ? persistentRoot.activationMode === 'periodic-conditional-finite-leaf'
           ? 'equipped-loadout-periodic-conditional-property-root'
           : 'equipped-actor-persistent-property-root'
         : 'source-indexed-composite-effect',
@@ -4033,7 +4238,7 @@ function compilePersistentPropertyRoot({
     }
     if (
       effect.combineType !== 3 ||
-      (!periodicRoot && effect.combineNumber !== -1) ||
+      (!periodicRoot && ![-1, 0].includes(effect.combineNumber)) ||
       (periodicRoot && ![0, -1].includes(effect.combineNumber)) ||
       effect.executeTargetType !== 0 ||
       effect.inheritType !== 0
@@ -4053,11 +4258,7 @@ function compilePersistentPropertyRoot({
     const multiTagApplied =
       propertyTagContract?.matchSemantics?.multipleModifierTags ===
       'any-overlap-event-driven';
-    if (
-      effect.propertyTags.length > 1 &&
-      periodicRoot &&
-      !multiTagApplied
-    ) {
+    if (effect.propertyTags.length > 1 && periodicRoot && !multiTagApplied) {
       runtimeGaps.push(
         'effect-periodic-root-multi-property-tag-semantics-evidence-gap'
       );
@@ -4079,8 +4280,8 @@ function compilePersistentPropertyRoot({
     persistentLoadoutPropertyRuntimeEvidence?.conclusion?.sourceIdentity ??
     'persistent-loadout-property-native-evidence-unresolved';
   const periodicEvidenceSourceIdentity = periodicRoot
-    ? (periodicPersistentPropertyRuntimeEvidence?.conclusion
-        ?.sourceIdentity ?? 'periodic-persistent-property-evidence-unresolved')
+    ? (periodicPersistentPropertyRuntimeEvidence?.conclusion?.sourceIdentity ??
+      'periodic-persistent-property-evidence-unresolved')
     : null;
   return {
     status: runtimeGaps.length
@@ -4137,7 +4338,9 @@ function compilePersistentPropertyRoot({
             Number(rootRow?.typetree?.triggerConditionType) === 0
               ? 'and'
               : 'unresolved',
-          conditions: structuredClone(periodicEvidenceContract?.conditions ?? []),
+          conditions: structuredClone(
+            periodicEvidenceContract?.conditions ?? []
+          ),
           conditionFailureConsumesPeriod: true,
           firstTick: 'first-positive-runtime-update',
           subsequentTickBoundary:

@@ -40,9 +40,9 @@
   "summary": {
     "total": 254,
     "published": 254,
-    "accepted": 253,
-    "optimizationReady": 253,
-    "blockingLedgerCount": 1,
+    "accepted": 254,
+    "optimizationReady": 254,
+    "blockingLedgerCount": 0,
     "byObjectKind": {
       "soul-essence": {
         "total": 62,
@@ -61,8 +61,8 @@
       },
       "set-skill": {
         "total": 12,
-        "accepted": 11,
-        "optimizationReady": 11
+        "accepted": 12,
+        "optimizationReady": 12
       }
     }
   },
@@ -6966,25 +6966,23 @@
       "objectKind": "set-skill",
       "objectId": "3:4",
       "displayName": "套装 3 4件",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty",
-        "acceptance-product-visual-signoff-pending"
-      ],
-      "manifestHash": "102089592efaf6b2",
+      "optimizationReady": true,
+      "blockers": [],
+      "manifestHash": "4b0e9d2730f3fa58",
       "evidence": {
         "iconSha256": null,
         "binding": {
           "setId": 3,
           "pieces": 4,
           "skillId": 19998005,
-          "runtimeStatus": "source-indexed-runtime-unapplied"
+          "runtimeStatus": "runtime-applied"
         }
       }
     },
@@ -7133,5 +7131,5 @@
       }
     }
   ],
-  "catalogHash": "080ae2ee71ebf524"
+  "catalogHash": "0448ac0ee7832c25"
 }

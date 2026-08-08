@@ -293,20 +293,57 @@
   "sourceConflict": {
     "formalTextSemantics": "normal-attack-hit-self-attack-plus-one-percent-twelve-seconds-max-ten",
     "reachableGraphSemantics": "after-receive-damage-every-five-max-hp-plus-two-and-five-percent",
-    "whichSourceIsStale": "unresolved",
-    "safeRuntimeDisposition": "do-not-apply-either-graph",
+    "whichSourceIsStale": "formal-localization",
+    "safeRuntimeDisposition": "apply-current-executable-graph-with-passive-boss-scenario-boundary",
     "missingEvidence": [
       "current executable graph matching attr1 A100 duration12000 Overlying10",
-      "formal 19998005 binding to that graph",
-      "runtime capture resolving whether localization or reachable graph is current gameplay"
+      "formal 19998005 binding to that graph"
     ]
   },
+  "runtimeContract": {
+    "authority": "current-client-executable-skill-control-and-reachable-battle-element-graph",
+    "staticRoot": {
+      "elementId": 199999086,
+      "attributeId": 5,
+      "sourceRawA": 200,
+      "durationMs": -1,
+      "combineType": 3,
+      "combineNumber": 0,
+      "installation": "scenario-start-self-actor",
+      "unloadElementIds": [199999043, 199999044]
+    },
+    "scenarioExcludedReactiveBranch": {
+      "triggerElementId": 199999022,
+      "triggerEventId": 4,
+      "triggerEventName": "AfterReceiveDamage",
+      "triggerIntervalTimes": 5,
+      "propertyElementId": 199999023,
+      "attributeId": 5,
+      "sourceRawA": 500,
+      "durationMs": -1,
+      "combineType": 3,
+      "combineNumber": 0,
+      "scenarioBoundary": {
+        "disposition": "scenario-out-of-scope",
+        "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+        "bossAttacks": false,
+        "policyId": "m12c-zero-distance-passive-boss-v1",
+        "policyHash": "c241492911786b34",
+        "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+        "rosterHash": "760e59dac2c7c1c5",
+        "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario"
+      }
+    }
+  },
   "conclusion": {
-    "status": "evidence-insufficient",
-    "runtimeApplied": false,
+    "status": "product-resolved",
+    "runtimeApplied": true,
     "setSkillIdentity": "set-skill:3:4",
     "skillId": 19998005,
-    "gapCode": "set-skill-source-identity-conflict-evidence-gap",
+    "authority": "current-client-executable-graph",
+    "staleSource": "formal-localization",
+    "decisionSource": "user-directive-2026-08-08: executable graph is authoritative; duplicated normal-hit attack text is stale; passive-boss reactive branch is scenario-out-of-scope",
+    "gapCode": null,
     "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill[4#19998005]|NewTable/skill.rows[id=19998005]|ResourcesLang/*/lang_skill[id=85890777460246016]|SkillControl/19998005|BattleElement/199999022/023/043/044/086|full-current-SkillList-reverse-reference-census"
   }
 }

@@ -186,8 +186,8 @@ describe('M12-B3 optimization qualification generation', () => {
     expect(artifacts.catalog.admission.kibos).toEqual([]);
     expect(artifacts.catalog.admission.soulEssences).toHaveLength(62);
     expect(artifacts.catalog.admission.equipment).toHaveLength(137);
-    expect(artifacts.catalog.admission.setSkills).toHaveLength(11);
-    expect(artifacts.catalog.admission.setSkills).not.toContain('3:4');
+    expect(artifacts.catalog.admission.setSkills).toHaveLength(12);
+    expect(artifacts.catalog.admission.setSkills).toContain('3:4');
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'soulessence-effect-skill-dynamic-unapplied'
@@ -210,15 +210,7 @@ describe('M12-B3 optimization qualification generation', () => {
     const unappliedSetSkillGaps = artifacts.gaps.records.filter(
       record => record.code === 'set-skill-dynamic-unapplied'
     );
-    expect(
-      unappliedSetSkillGaps.map(record => `set-skill:${record.objectId}`).sort()
-    ).toEqual(['set-skill:3:4']);
-    expect(unappliedSetSkillGaps[0]).toMatchObject({
-      category: 'evidence-insufficient',
-      details: {
-        reasons: ['set-skill-source-identity-conflict-evidence-gap'],
-      },
-    });
+    expect(unappliedSetSkillGaps).toEqual([]);
     const setSkillManifests = artifacts.manifests.records.filter(
       record => record.objectKind === 'set-skill'
     );
@@ -226,15 +218,19 @@ describe('M12-B3 optimization qualification generation', () => {
       setSkillManifests.filter(
         record => record.maturityState === 'runtime-integrated'
       )
-    ).toHaveLength(1);
+    ).toHaveLength(0);
     expect(
       setSkillManifests.filter(
         record => record.maturityState === 'optimization-ready'
       )
-    ).toHaveLength(11);
+    ).toHaveLength(12);
     const mechanismFamilyBySetSkillId = new Map([
       ['1:4', 'set-skill-before-skill-composite-immediate'],
       ['2:4', 'set-skill-before-damage-stacking-property'],
+      [
+        '3:4',
+        'set-skill-persistent-property-with-scenario-excluded-reactive-branch',
+      ],
       ['4:4', 'set-skill-before-damage-stacking-property'],
       ['5:4', 'set-skill-after-heal-source-to-target-property'],
       ['6:4', 'set-skill-after-damage-target-property'],
@@ -267,10 +263,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 18,
+      blockingUniqueGapCount: 16,
       byCategory: {
-        'not-implemented': 17,
-        'evidence-insufficient': 1,
+        'not-implemented': 16,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
@@ -278,12 +273,11 @@ describe('M12-B3 optimization qualification generation', () => {
       kibo: 0,
       'soul-essence': 62,
       equipment: 137,
-      'set-skill': 11,
+      'set-skill': 12,
     });
     expect(
       artifacts.gaps.records.filter(
-        record =>
-          record.code === 'soulessence-visual-acceptance-not-published'
+        record => record.code === 'soulessence-visual-acceptance-not-published'
       )
     ).toHaveLength(0);
     expect(
@@ -295,7 +289,7 @@ describe('M12-B3 optimization qualification generation', () => {
       artifacts.gaps.records.filter(
         record => record.code === 'acceptance-product-visual-signoff-pending'
       )
-    ).toHaveLength(1);
+    ).toHaveLength(0);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-visual-acceptance-not-published'
@@ -1472,7 +1466,8 @@ describe('M12-B3 strict cultivation profile', () => {
   });
 
   it('exposes character position and soul profession in the cultivation catalog', () => {
-    const characterProfiles = qualificationCatalog.cultivation.character.profiles;
+    const characterProfiles =
+      qualificationCatalog.cultivation.character.profiles;
     const soulProfiles = qualificationCatalog.cultivation.soulEssence.profiles;
 
     expect(characterProfiles).toHaveLength(10);
@@ -1497,12 +1492,14 @@ describe('M12-B3 strict cultivation profile', () => {
     );
     expect(soul95.profession).toBe('增幅');
     const starbornProfile = characterProfiles.find(
-      profile => profile.characterId === 199001 || profile.characterId === 199002
+      profile =>
+        profile.characterId === 199001 || profile.characterId === 199002
     );
     expect(starbornProfile.position).toBe('增幅');
-    const soul95Edges = qualificationCatalog.bindingMatrix.actorSoulEssence.filter(
-      edge => Number(edge.soulEssenceId) === 10095
-    );
+    const soul95Edges =
+      qualificationCatalog.bindingMatrix.actorSoulEssence.filter(
+        edge => Number(edge.soulEssenceId) === 10095
+      );
     expect(
       soul95Edges.find(edge => edge.actorObjectId === 'STARBORN')?.compatible
     ).toBe(true);

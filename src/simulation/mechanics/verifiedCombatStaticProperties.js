@@ -1148,7 +1148,7 @@ export function validatePersistentLoadoutPropertyRoot(
       !['dynamicExtra', 'dynamicPercent'].includes(effect?.bucket) ||
       Number(effect?.durationMs) !== -1 ||
       Number(effect?.combineType) !== 3 ||
-      Number(effect?.combineNumber) !== -1 ||
+      ![-1, 0].includes(Number(effect?.combineNumber)) ||
       Number(effect?.executeTargetType) !== 0 ||
       Number(effect?.inheritType) !== 0 ||
       !String(effect?.sourceIdentity ?? '').length

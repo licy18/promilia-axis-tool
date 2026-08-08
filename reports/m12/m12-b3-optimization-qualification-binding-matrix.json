@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationBindingMatrix",
   "kind": "azpr-optimization-qualification-binding-matrix",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "130c9cd5f5192ad6",
+  "rosterHash": "d258a6f8327a6722",
   "policy": {
     "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
     "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -17768,7 +17768,7 @@
       "setId": 3,
       "pieces": 4,
       "skillId": 19998005,
-      "qualificationReady": false,
+      "qualificationReady": true,
       "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
     },
     {
@@ -17972,8 +17972,8 @@
     "actorEquipmentEdgeCount": 1233,
     "actorEquipmentQualifiedEdgeCount": 0,
     "setSkillThresholdCount": 12,
-    "setSkillThresholdQualifiedCount": 11,
+    "setSkillThresholdQualifiedCount": 12,
     "equipmentSlotCount": 5
   },
-  "bindingMatrixHash": "7f2ea0c47f0b6845"
+  "bindingMatrixHash": "0ed198377d31931f"
 }

@@ -38,8 +38,8 @@
       },
       "visualAcceptance": {
         "path": "src/data/generated/m12-b3-visual-acceptance-catalog.json",
-        "sha256": "5e6a48a361ff7c8cedb6e2a71ca5858e6ef29432e6a37c51ec55f21fd9f4dcf4",
-        "bytes": 201556
+        "sha256": "2ae299fbb6dbf5f5683f58aaee554a2c4e7fe41021e6e27f0425f2827a49659a",
+        "bytes": 201441
       },
       "kiboPassives": {
         "path": "src/data/generated/kibo-passive-mechanics.json",
@@ -3849,8 +3849,8 @@
       },
       "setThreeSourceIdentityEvidence": {
         "path": "scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json",
-        "sha256": "9e8e92d38a1924293aea7b772f7ba2c704913a27db8c5b22df2bb04f76c29418",
-        "bytes": 12455,
+        "sha256": "1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8",
+        "bytes": 13883,
         "value": {
           "schemaVersion": 1,
           "contractName": "AzPrSetThreeSourceIdentityEvidence",
@@ -4166,20 +4166,60 @@
           "sourceConflict": {
             "formalTextSemantics": "normal-attack-hit-self-attack-plus-one-percent-twelve-seconds-max-ten",
             "reachableGraphSemantics": "after-receive-damage-every-five-max-hp-plus-two-and-five-percent",
-            "whichSourceIsStale": "unresolved",
-            "safeRuntimeDisposition": "do-not-apply-either-graph",
+            "whichSourceIsStale": "formal-localization",
+            "safeRuntimeDisposition": "apply-current-executable-graph-with-passive-boss-scenario-boundary",
             "missingEvidence": [
               "current executable graph matching attr1 A100 duration12000 Overlying10",
-              "formal 19998005 binding to that graph",
-              "runtime capture resolving whether localization or reachable graph is current gameplay"
+              "formal 19998005 binding to that graph"
             ]
           },
+          "runtimeContract": {
+            "authority": "current-client-executable-skill-control-and-reachable-battle-element-graph",
+            "staticRoot": {
+              "elementId": 199999086,
+              "attributeId": 5,
+              "sourceRawA": 200,
+              "durationMs": -1,
+              "combineType": 3,
+              "combineNumber": 0,
+              "installation": "scenario-start-self-actor",
+              "unloadElementIds": [
+                199999043,
+                199999044
+              ]
+            },
+            "scenarioExcludedReactiveBranch": {
+              "triggerElementId": 199999022,
+              "triggerEventId": 4,
+              "triggerEventName": "AfterReceiveDamage",
+              "triggerIntervalTimes": 5,
+              "propertyElementId": 199999023,
+              "attributeId": 5,
+              "sourceRawA": 500,
+              "durationMs": -1,
+              "combineType": 3,
+              "combineNumber": 0,
+              "scenarioBoundary": {
+                "disposition": "scenario-out-of-scope",
+                "reason": "m12c-zero-distance-passive-boss-out-of-scope",
+                "bossAttacks": false,
+                "policyId": "m12c-zero-distance-passive-boss-v1",
+                "policyHash": "c241492911786b34",
+                "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+                "rosterHash": "760e59dac2c7c1c5",
+                "mechanismReality": "source-closed-runtime-not-required-for-first-optimization-scenario"
+              }
+            }
+          },
           "conclusion": {
-            "status": "evidence-insufficient",
-            "runtimeApplied": false,
+            "status": "product-resolved",
+            "runtimeApplied": true,
             "setSkillIdentity": "set-skill:3:4",
             "skillId": 19998005,
-            "gapCode": "set-skill-source-identity-conflict-evidence-gap",
+            "authority": "current-client-executable-graph",
+            "staleSource": "formal-localization",
+            "decisionSource": "user-directive-2026-08-08: executable graph is authoritative; duplicated normal-hit attack text is stale; passive-boss reactive branch is scenario-out-of-scope",
+            "gapCode": null,
             "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill[4#19998005]|NewTable/skill.rows[id=19998005]|ResourcesLang/*/lang_skill[id=85890777460246016]|SkillControl/19998005|BattleElement/199999022/023/043/044/086|full-current-SkillList-reverse-reference-census"
           }
         }
@@ -4200,7 +4240,7 @@
         "bytes": 95734
       }
     },
-    "sourceSnapshotHash": "39acb167dbcf7801"
+    "sourceSnapshotHash": "935fb9f83e33f81d"
   },
   "filterContract": {
     "optimizationScenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
@@ -30730,5 +30770,5 @@
       ]
     }
   },
-  "rosterHash": "130c9cd5f5192ad6"
+  "rosterHash": "d258a6f8327a6722"
 }

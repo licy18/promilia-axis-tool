@@ -219,3 +219,11 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - Kibo DNA 固定 `[]`；奇波/灵子/装备/套装分母不变。下一步只完成末音产品签收，不开始下一角色或 E20-3。
 - 109001 已达到 required/pass/N/A/blocked=`142/142/70/0`，source/acceptance gap=`0/0`，仅 `acceptance-product-visual-signoff-pending`。产品视觉签收不由实现侧代签。
 - 最终审计：Vitest `191/191` 文件、`1451/1451` 用例；verified-combat、character-combat、scenario-policy、character-acceptance、optimization-qualification、visual-acceptance、production-imports、Workbench data、action-status、applied-source-bindings 均 clean；production build 与 `git diff --check` 通过。额外 bundle budget 检查仍为分支 HEAD 已存在的 `workbenchWithinBudget=false / totalJavaScriptWithinBudget=false`（本阶段没有新增门状态跃迁），按禁止纯性能优化的边界不在 S3 展开。
+
+## M12-B3-E21 套装技能收口（2026-08-08，当前最新）
+
+- 产品裁决：`set-skill:3:4` 本地化的“普攻叠攻击”是旧文本；唯一可达执行图为权威来源。全量反查 212,053 份 SkillList 与 14,779 个战斗元素，没有替代 `19998005` 绑定或 ATK +1% / 12s / 10 层签名。
+- 实际效果：两件套自身 MAXHP +6.2%；四件套常驻自身 MAXHP +2%；每 5 次受击后自身 MAXHP +5%（Cover）。常驻分支已 runtime-applied；受击分支来源闭合，但在被动 Boss 试点中按 `m12c-zero-distance-passive-boss-out-of-scope` 记 N/A。
+- 场景边界绑定 `m12c-zero-distance-passive-boss-v1 / c241492911786b34` 与 roster `m12c-wind-thunder-mark-producer-roster-v1 / 760e59dac2c7c1c5`；证据 13,883B / `1a9a46c725b369635f4a2c9a6830564982cc331a77b2657fed3307865f326cf8`。
+- 当前资格：`9/43/62/137/12`；soul/equipment/set optimization-ready=`62/137/12`；set blocker=0；全局 blocker=16，全部为 character/not-implemented。qualification hashes：source `935fb9f83e33f81d`、roster `d258a6f8327a6722`、manifests `ef9763c902841fdf`、ledger `bc98f1cfc5c3c2c8`、binding `0ed198377d31931f`、catalog `da0adf6361505a7a`。
+- E21 closed。M12-C/formal search 仍锁定；下一步只处理角色视觉/资格、STARBORN、绑定矩阵和总门禁，不再追加套装机制批次。

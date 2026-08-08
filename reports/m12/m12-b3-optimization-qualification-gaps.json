@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "130c9cd5f5192ad6",
+  "rosterHash": "d258a6f8327a6722",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "39acb167dbcf7801",
-        "130c9cd5f5192ad6"
+        "935fb9f83e33f81d",
+        "d258a6f8327a6722"
       ]
     },
     {
@@ -349,65 +349,21 @@
       ],
       "details": {},
       "gapHash": "99917fe501cdc33c"
-    },
-    {
-      "gapIdentity": "set-skill:3:4:set-skill-dynamic-unapplied",
-      "objectKind": "set-skill",
-      "objectId": "3:4",
-      "code": "set-skill-dynamic-unapplied",
-      "category": "evidence-insufficient",
-      "blocking": true,
-      "message": "The accessory set skill is tracked but not applied by the dynamic runtime.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
-      ],
-      "details": {
-        "skillId": 19998005,
-        "reasons": [
-          "set-skill-source-identity-conflict-evidence-gap"
-        ]
-      },
-      "gapHash": "3ee2a6574ed4e9f6"
-    },
-    {
-      "gapIdentity": "set-skill:3:4:acceptance-product-visual-signoff-pending",
-      "objectKind": "set-skill",
-      "objectId": "3:4",
-      "code": "acceptance-product-visual-signoff-pending",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Visual acceptance manifest is published but product signoff or blocking evidence remains.",
-      "sourceIdentities": [
-        "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
-      ],
-      "details": {
-        "manifestHash": "102089592efaf6b2",
-        "manifestBlockers": [
-          "acceptance-required-matrix-incomplete",
-          "acceptance-blocking-ledger-not-empty",
-          "acceptance-product-visual-signoff-pending"
-        ]
-      },
-      "gapHash": "6970d31975a8317f"
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 18,
+    "blockingUniqueGapCount": 16,
     "byCategory": {
-      "evidence-insufficient": 1,
-      "not-implemented": 17
+      "not-implemented": 16
     },
     "byCode": {
-      "acceptance-product-visual-signoff-pending": 1,
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 6,
-      "character-not-optimization-ready": 9,
-      "set-skill-dynamic-unapplied": 1
+      "character-not-optimization-ready": 9
     },
     "byObjectKind": {
-      "character": 16,
-      "set-skill": 2
+      "character": 16
     }
   },
-  "ledgerHash": "9e046d2a3c1f56fa"
+  "ledgerHash": "bc98f1cfc5c3c2c8"
 }

@@ -409,6 +409,68 @@ describe('verified static combat properties', () => {
     }
   });
 
+  it('applies set three four-piece MAXHP +2% once while leaving its receive-damage branch scenario-excluded', () => {
+    const compileWithEquipment = equipment =>
+      compileVerifiedStaticActorProperties({
+        actor: {
+          characterId: 101007,
+          level: 80,
+          cultivation: { starGiftRank: 0, favorabilityLevel: 0 },
+          loadout: { equipment },
+        },
+      });
+    const threePieces = compileWithEquipment({
+      weapon: 1210121,
+      top: 1220121,
+      bottom: 1230121,
+    });
+    const fourPieces = compileWithEquipment({
+      weapon: 1210121,
+      top: 1220121,
+      bottom: 1230121,
+      earring: 1240121,
+    });
+    const fivePieces = compileWithEquipment({
+      weapon: 1210121,
+      top: 1220121,
+      bottom: 1230121,
+      earring: 1240121,
+      ring: 1250121,
+    });
+    const setSources = result =>
+      result.sources.filter(
+        source => source.kind === 'accessory-set-persistent-property'
+      );
+
+    expect(setSources(fourPieces)).toEqual([
+      expect.objectContaining({
+        sourceId: '3:2:199999032',
+        attributes: [{ id: 1005, value: 620 }],
+      }),
+      expect.objectContaining({
+        sourceId: '3:4:199999086',
+        attributes: [{ id: 1005, value: 200 }],
+      }),
+    ]);
+    expect(setSources(fivePieces)).toEqual(setSources(fourPieces));
+    expect(
+      fourPieces.setSkillActivations.find(
+        activation => activation.setId === 3 && activation.pieces === 4
+      )
+    ).toMatchObject({
+      selectedPieceCount: 4,
+      thresholdMet: true,
+      runtimeEffectStatus: 'runtime-applied',
+      appliedToCalculators: true,
+      appliedToRuntimeEffect: false,
+    });
+    expect(
+      fourPieces.unapplied.some(
+        source => source.kind === 'accessory-set-skill' && source.setId === 3
+      )
+    ).toBe(false);
+  });
+
   it('fails closed when a persistent root loses formula, target, unload, graph path, or a 10133 leaf', () => {
     const definition = soulEssenceEffectCatalog.definitions.find(
       entry => entry.soulEssenceId === 10133
@@ -429,6 +491,9 @@ describe('verified static combat properties', () => {
         root.effects[0].executeTargetType = 15;
       },
       root => {
+        root.effects[0].combineNumber = 1;
+      },
+      root => {
         root.unload.removalPaths = [];
       },
       root => {
@@ -437,6 +502,12 @@ describe('verified static combat properties', () => {
     ];
 
     expect(validate(structuredClone(definition.persistentRoot))).toEqual({
+      valid: true,
+      issueCodes: [],
+    });
+    const nativeCoverZero = structuredClone(definition.persistentRoot);
+    nativeCoverZero.effects[0].combineNumber = 0;
+    expect(validate(nativeCoverZero)).toEqual({
       valid: true,
       issueCodes: [],
     });

@@ -2,6 +2,12 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+import {
+  createOptimizationScenarioPolicy,
+  M12C_OPTIMIZATION_SCENARIO_POLICY_REASON,
+} from '../optimization-scenario/optimization-scenario-policy-source.mjs';
+import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
+
 export const SET_THREE_SOURCE_IDENTITY_EVIDENCE_RELATIVE_PATH =
   'scripts/optimization-qualification/evidence/set-three-source-identity-evidence.json';
 
@@ -141,6 +147,49 @@ const REQUIRED_REVERSE_REFERENCE_CENSUS = Object.freeze({
   ],
 });
 
+const OPTIMIZATION_SCENARIO_POLICY = createOptimizationScenarioPolicy();
+const OPTIMIZATION_SCENARIO_POLICY_BINDING = Object.freeze({
+  policyId: OPTIMIZATION_SCENARIO_POLICY.policyId,
+  policyHash: OPTIMIZATION_SCENARIO_POLICY.policyHash,
+  rosterPolicyId: OPTIMIZATION_SCENARIO_POLICY.candidateRoster.rosterPolicyId,
+  rosterHash: OPTIMIZATION_SCENARIO_POLICY.candidateRoster.rosterHash,
+});
+
+const REQUIRED_RUNTIME_CONTRACT = Object.freeze({
+  authority:
+    'current-client-executable-skill-control-and-reachable-battle-element-graph',
+  staticRoot: {
+    elementId: 199999086,
+    attributeId: 5,
+    sourceRawA: 200,
+    durationMs: -1,
+    combineType: 3,
+    combineNumber: 0,
+    installation: 'scenario-start-self-actor',
+    unloadElementIds: [199999043, 199999044],
+  },
+  scenarioExcludedReactiveBranch: {
+    triggerElementId: 199999022,
+    triggerEventId: 4,
+    triggerEventName: 'AfterReceiveDamage',
+    triggerIntervalTimes: 5,
+    propertyElementId: 199999023,
+    attributeId: 5,
+    sourceRawA: 500,
+    durationMs: -1,
+    combineType: 3,
+    combineNumber: 0,
+    scenarioBoundary: {
+      disposition: 'scenario-out-of-scope',
+      reason: M12C_OPTIMIZATION_SCENARIO_POLICY_REASON,
+      bossAttacks: OPTIMIZATION_SCENARIO_POLICY.assumptions.enemyActiveAttacks,
+      ...OPTIMIZATION_SCENARIO_POLICY_BINDING,
+      mechanismReality:
+        'source-closed-runtime-not-required-for-first-optimization-scenario',
+    },
+  },
+});
+
 const scanCache = new Map();
 
 export async function readSetThreeSourceIdentityEvidenceSource({
@@ -261,10 +310,11 @@ export function validateSetThreeSourceIdentityEvidence(
   if (
     Number(value?.schemaVersion) !== 1 ||
     value?.contractName !== 'AzPrSetThreeSourceIdentityEvidence' ||
-    value?.conclusion?.status !== 'evidence-insufficient' ||
-    value?.conclusion?.runtimeApplied !== false ||
-    value?.conclusion?.gapCode !==
-      'set-skill-source-identity-conflict-evidence-gap'
+    value?.conclusion?.status !== 'product-resolved' ||
+    value?.conclusion?.runtimeApplied !== true ||
+    value?.conclusion?.authority !== 'current-client-executable-graph' ||
+    value?.conclusion?.staleSource !== 'formal-localization' ||
+    value?.conclusion?.gapCode !== null
   ) {
     fail('contract-invalid');
   }
@@ -414,12 +464,57 @@ export function validateSetThreeSourceIdentityEvidence(
       'normal-attack-hit-self-attack-plus-one-percent-twelve-seconds-max-ten' ||
     value.sourceConflict?.reachableGraphSemantics !==
       'after-receive-damage-every-five-max-hp-plus-two-and-five-percent' ||
-    value.sourceConflict?.whichSourceIsStale !== 'unresolved' ||
-    value.sourceConflict?.safeRuntimeDisposition !== 'do-not-apply-either-graph'
+    value.sourceConflict?.whichSourceIsStale !== 'formal-localization' ||
+    value.sourceConflict?.safeRuntimeDisposition !==
+      'apply-current-executable-graph-with-passive-boss-scenario-boundary'
   ) {
     fail('source-conflict-disposition-drift');
   }
+  assertCanonicalEqual(
+    value.runtimeContract,
+    REQUIRED_RUNTIME_CONTRACT,
+    'runtime-contract-drift'
+  );
+  validateSetThreeOptimizationScenarioPolicy(
+    value.runtimeContract?.scenarioExcludedReactiveBranch?.scenarioBoundary
+  );
+  if (
+    !String(value.conclusion?.decisionSource ?? '').startsWith(
+      'user-directive-2026-08-08:'
+    )
+  ) {
+    fail('product-decision-source-drift');
+  }
   return true;
+}
+
+function validateSetThreeOptimizationScenarioPolicy(scenarioBoundary) {
+  const policy = structuredClone(OPTIMIZATION_SCENARIO_POLICY);
+  const policyHash = policy.policyHash;
+  delete policy.policyHash;
+  const roster = structuredClone(OPTIMIZATION_SCENARIO_POLICY.candidateRoster);
+  const rosterHash = roster.rosterHash;
+  delete roster.rosterHash;
+  if (
+    policyHash !== hashCanonicalValue(policy) ||
+    rosterHash !== hashCanonicalValue(roster) ||
+    OPTIMIZATION_SCENARIO_POLICY.reason !==
+      M12C_OPTIMIZATION_SCENARIO_POLICY_REASON ||
+    OPTIMIZATION_SCENARIO_POLICY.assumptions?.enemyActiveAttacks !== false ||
+    !OPTIMIZATION_SCENARIO_POLICY.optimizationSurface?.excludedTriggerFamilies?.includes(
+      'player-receive-damage'
+    ) ||
+    scenarioBoundary?.policyId !==
+      OPTIMIZATION_SCENARIO_POLICY_BINDING.policyId ||
+    scenarioBoundary?.policyHash !==
+      OPTIMIZATION_SCENARIO_POLICY_BINDING.policyHash ||
+    scenarioBoundary?.rosterPolicyId !==
+      OPTIMIZATION_SCENARIO_POLICY_BINDING.rosterPolicyId ||
+    scenarioBoundary?.rosterHash !==
+      OPTIMIZATION_SCENARIO_POLICY_BINDING.rosterHash
+  ) {
+    fail('optimization-scenario-policy-drift');
+  }
 }
 
 export async function scanSetThreeSkillListReverseReferences(roots) {

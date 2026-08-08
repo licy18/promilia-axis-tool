@@ -20,7 +20,7 @@
       "setId": 3,
       "pieces": 4,
       "skillId": 19998005,
-      "runtimeStatus": "source-indexed-runtime-unapplied"
+      "runtimeStatus": "runtime-applied"
     },
     "automatedVisualEvidence": [
       {
@@ -61,11 +61,11 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "pending",
-      "decisionSource": null,
-      "acceptanceMode": null,
-      "bindingStatus": "pending",
-      "acceptanceIdentity": null
+      "status": "accepted",
+      "decisionSource": "user-directive-2026-08-05-continue-remaining-visual-acceptance",
+      "acceptanceMode": "automated-icon-and-display-evidence",
+      "bindingStatus": "verified",
+      "acceptanceIdentity": "c525e66dddda04a1"
     }
   },
   "matrix": {
@@ -91,50 +91,36 @@
       {
         "requirementIdentity": "set-skill-effect-runtime-applied",
         "dimension": "runtime",
-        "status": "blocked",
+        "status": "passed",
         "sourceIdentities": [
           "NewTable/skill.rows[id=19998005]",
           "src/data/generated/soulessence-effect-mechanics.json#setSkillDefinitions[3:4]"
         ],
-        "passed": false
+        "passed": true
       }
     ],
     "requiredCount": 3,
-    "passedCount": 2,
-    "complete": false
+    "passedCount": 3,
+    "complete": true
   },
   "ledger": {
-    "records": [
-      {
-        "uniqueGapIdentity": "set-skill-dynamic-unapplied",
-        "status": "blocking",
-        "reason": "set-skill-source-identity-conflict-evidence-gap",
-        "blocking": true,
-        "sourceIdentity": "NewTable/accessory_set.rows[id=3].skill|NewTable/skill.rows[id=19998005].skillType"
-      }
-    ],
-    "blockingCount": 1
+    "records": [],
+    "blockingCount": 0
   },
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
-    "blockers": [
-      "acceptance-required-matrix-incomplete",
-      "acceptance-blocking-ledger-not-empty",
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "optimizationReady": true,
+    "blockers": []
   },
   "validation": {
-    "status": "m12-b3-visual-acceptance-manifest-blocked",
-    "issues": [
-      "acceptance-required-matrix-incomplete",
-      "acceptance-blocking-ledger-not-empty",
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "status": "m12-b3-visual-acceptance-manifest-valid",
+    "issues": []
   },
-  "manifestHash": "102089592efaf6b2"
+  "manifestHash": "4b0e9d2730f3fa58"
 }
