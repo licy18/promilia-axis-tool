@@ -25,6 +25,7 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import { msToFrame } from '../../domain/timebase';
+import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -90,6 +91,7 @@ export function createVerifiedActionVariantRuntime({
           },
         ])
       ),
+      activeThresholdEffects: new Map(),
     });
   }
   const variantActorStateById = new Map(
@@ -110,6 +112,7 @@ export function createVerifiedActionVariantRuntime({
           initialValue: 0,
           current: 0,
           activeStates: new Map(),
+          activeThresholdEffects: new Map(),
         },
       ];
     })
@@ -209,6 +212,10 @@ export function createVerifiedActionVariantRuntime({
   const variantEvents = [];
   const effectCommands = [];
   const tuningMarkTransactions = [];
+  const resourceGateEvents = [];
+  const companionEvents = [];
+  const companionAttackTransactions = [];
+  const companionStateByActorId = new Map();
   const executionBlocks = [];
   const lastResolvedActionByActorId = new Map();
   let runtimeSequenceIndex = 0;
@@ -284,6 +291,12 @@ export function createVerifiedActionVariantRuntime({
         applySwitchWindow(event);
       } else if (event.kind === 'state-expire') {
         applyStateExpiration(event);
+      } else if (event.kind === 'companion-attack') {
+        applyCompanionAttack(event);
+      } else if (event.kind === 'companion-expire') {
+        applyCompanionExpiration(event);
+      } else if (event.kind === 'companion-despawn') {
+        applyCompanionDespawn(event);
       }
       pendingEvents.sort(comparePendingEvents);
     }
@@ -431,6 +444,31 @@ export function createVerifiedActionVariantRuntime({
     const state = actorStateById.get(descriptor.action.actorId);
     if (!state) return;
     const operation = descriptor.binding;
+    const gateResult = resolveResourceOperationHitGate({
+      operation,
+      action: descriptor.action,
+      resolution: descriptor.resolution,
+      scenario,
+    });
+    if (operation.hitGate) {
+      resourceGateEvents.push({
+        type: 'VERIFIED_SPECIAL_RESOURCE_HIT_GATE',
+        timeMs: descriptor.timeMs,
+        actionId: descriptor.action.id,
+        actorId: descriptor.action.actorId,
+        runtimeSequenceIndex: runtimeSequenceIndex++,
+        payload: {
+          operationIdentity: operation.operationIdentity,
+          gate: operation.hitGate,
+          candidateCount: gateResult.candidateCount,
+          landedCount: gateResult.landedCount,
+          passed: gateResult.landedCount > 0,
+          sourceIdentity: operation.sourceIdentity,
+          appliedToActionVariantRuntime: true,
+        },
+      });
+    }
+    if (gateResult.landedCount <= 0) return;
     const transition = thresholdTransitionByOwnerId.get(
       Number(state.profile.ownerId)
     );
@@ -445,7 +483,9 @@ export function createVerifiedActionVariantRuntime({
     let afterValue = beforeValue;
     if (operation.operation === 'gain') {
       afterValue = clamp(
-        beforeValue + resolveOperationAmount(operation, descriptor.action),
+        beforeValue +
+          resolveOperationAmount(operation, descriptor.action) *
+            gateResult.landedCount,
         0,
         state.profile.capacity
       );
@@ -472,12 +512,34 @@ export function createVerifiedActionVariantRuntime({
       });
       return;
     } else if (operation.operation === 'transform-remove') {
+      const removedState = state.activeStates.get(
+        Number(operation.stateElementId)
+      );
       state.activeStates.delete(Number(operation.stateElementId));
       removeStateSwitchWindows({
         windows: activeSwitchWindows,
         actorId: descriptor.action.actorId,
         stateElementId: operation.stateElementId,
       });
+      if (removedState) {
+        effectCommands.push(
+          createStateEffectCommand({
+            mechanicsPackage,
+            actorState: state,
+            actorId: descriptor.action.actorId,
+            sourceActionId: descriptor.action.id,
+            timeMs: descriptor.timeMs,
+            durationMs: null,
+            transition: transition ?? {
+              stateElementId: Number(operation.stateElementId),
+              stateName: operation.stateName ?? removedState.name,
+              sourceIdentity: operation.sourceIdentity,
+            },
+            sourceIdentity: operation.sourceIdentity,
+            operation: EFFECT_OPERATIONS.REMOVE,
+          })
+        );
+      }
     }
     state.current = afterValue;
     emitResourceChange({
@@ -556,6 +618,41 @@ export function createVerifiedActionVariantRuntime({
           applied: true,
         });
       }
+      for (const grant of transition.effectGrants ?? []) {
+        if (grant.applied !== true) continue;
+        const previousUntil = Number(
+          state.activeThresholdEffects.get(grant.effectId) ??
+            Number.NEGATIVE_INFINITY
+        );
+        const operation =
+          descriptor.timeMs < previousUntil
+            ? EFFECT_OPERATIONS.REFRESH
+            : EFFECT_OPERATIONS.APPLY;
+        state.activeThresholdEffects.set(
+          grant.effectId,
+          descriptor.timeMs + Number(grant.durationMs)
+        );
+        effectCommands.push(
+          createThresholdEffectGrantCommand({
+            mechanicsPackage,
+            actorState: state,
+            action: descriptor.action,
+            timeMs: descriptor.timeMs,
+            transition,
+            grant,
+            operation,
+          })
+        );
+      }
+      if (transition.companionProfile?.applied === true) {
+        enterOrRefreshCompanion({
+          actorState: state,
+          action: descriptor.action,
+          timeMs: descriptor.timeMs,
+          profile: transition.companionProfile,
+          sourceIdentity: transition.sourceIdentity,
+        });
+      }
     }
   };
 
@@ -628,6 +725,316 @@ export function createVerifiedActionVariantRuntime({
     resourceEvents.push(event);
   };
 
+  const enterOrRefreshCompanion = ({
+    actorState,
+    action,
+    timeMs,
+    profile,
+    sourceIdentity,
+  }) => {
+    const actorId = action?.actorId ?? actorState.actor.id;
+    const previous = companionStateByActorId.get(actorId);
+    const previousActive =
+      previous?.active === true && Number(timeMs) < Number(previous.endsAtMs);
+    const revision = Number(previous?.revision ?? 0) + 1;
+    const companion = {
+      actorId,
+      ownerId: Number(actorState.profile.ownerId),
+      profile,
+      revision,
+      periodicRevision: Number(previous?.periodicRevision ?? 0) + 1,
+      startsAtMs: Number(timeMs),
+      endsAtMs: Number(timeMs) + Number(profile.durationMs),
+      sourceActionId: action?.id ?? null,
+      sourceIdentity,
+      active: true,
+    };
+    companionStateByActorId.set(actorId, companion);
+    companionEvents.push(
+      createCompanionEvent({
+        kind: previousActive ? 'refresh' : 'summon',
+        timeMs,
+        action,
+        companion,
+        sourceIdentity,
+      })
+    );
+    pendingEvents.push({
+      kind: 'companion-expire',
+      timeMs: companion.endsAtMs,
+      actorId,
+      revision,
+      sourceActionId: action?.id ?? null,
+      sourceIdentity,
+      priority: 0,
+    });
+    const periodic = profile.periodicAttack;
+    if (
+      periodic?.applied !== false &&
+      Number(periodic.initialDelayMs) > 0 &&
+      Number(periodic.cadenceMs) > 0
+    ) {
+      pendingEvents.push({
+        kind: 'companion-attack',
+        attackKind: 'periodic',
+        timeMs: Number(timeMs) + Number(periodic.initialDelayMs),
+        actorId,
+        revision,
+        periodicRevision: companion.periodicRevision,
+        action,
+        resolution: null,
+        attackProfile: periodic,
+        priority: 3,
+      });
+    }
+  };
+
+  const scheduleCompanionResponses = ({
+    action,
+    resolution,
+    executionControlSkillId,
+    selectedSubSkillIndex,
+  }) => {
+    const companion = companionStateByActorId.get(action.actorId);
+    if (
+      companion?.active !== true ||
+      Number(action.startMs) >= Number(companion.endsAtMs)
+    ) {
+      return;
+    }
+    const responses = (companion.profile.actionResponses ?? []).filter(
+      response =>
+        Number(response.sourceControlSkillId) ===
+          Number(executionControlSkillId) &&
+        Number(response.sourceSubSkillIndex) === Number(selectedSubSkillIndex)
+    );
+    for (const response of responses) {
+      if (response.cancelPeriodicOnStart) {
+        companion.periodicRevision += 1;
+      }
+      const group = response.conditionalDamageGroup;
+      let hitIndex = 0;
+      for (const triggerFrame of group.triggerFrames ?? []) {
+        for (const hitDelayMs of group.hitDelaysMs ?? [0]) {
+          hitIndex += 1;
+          pendingEvents.push({
+            kind: 'companion-attack',
+            attackKind: 'action-response',
+            timeMs:
+              Number(action.startMs) +
+              framesToMs(triggerFrame, group.frameRate) +
+              Number(hitDelayMs),
+            actorId: action.actorId,
+            revision: companion.revision,
+            periodicRevision: companion.periodicRevision,
+            action,
+            resolution,
+            attackProfile: response,
+            hitIndex,
+            triggerFrame,
+            hitDelayMs,
+            priority: 3,
+          });
+        }
+      }
+      if (
+        response.endsCompanionAtFrame != null &&
+        Number.isInteger(Number(response.endsCompanionAtFrame))
+      ) {
+        pendingEvents.push({
+          kind: 'companion-despawn',
+          timeMs:
+            Number(action.startMs) +
+            framesToMs(response.endsCompanionAtFrame, group.frameRate),
+          actorId: action.actorId,
+          revision: companion.revision,
+          sourceActionId: action.id,
+          sourceIdentity: response.sourceIdentity,
+          reason: 'action-response-complete',
+          priority: 0,
+        });
+      }
+    }
+  };
+
+  const applyCompanionAttack = descriptor => {
+    const companion = companionStateByActorId.get(descriptor.actorId);
+    if (
+      companion?.active !== true ||
+      companion.revision !== descriptor.revision ||
+      Number(descriptor.timeMs) >= Number(companion.endsAtMs) ||
+      (descriptor.attackKind === 'periodic' &&
+        companion.periodicRevision !== descriptor.periodicRevision)
+    ) {
+      return;
+    }
+    const group = descriptor.attackProfile.conditionalDamageGroup;
+    const hitDescriptors = [];
+    if (descriptor.attackKind === 'periodic') {
+      let hitIndex = 0;
+      for (const triggerFrame of group.triggerFrames ?? []) {
+        for (const hitDelayMs of group.hitDelaysMs ?? [0]) {
+          hitIndex += 1;
+          hitDescriptors.push({
+            hitIndex,
+            timeMs:
+              Number(descriptor.timeMs) +
+              framesToMs(triggerFrame, group.frameRate) +
+              Number(hitDelayMs),
+            triggerFrame,
+            hitDelayMs,
+          });
+        }
+      }
+    } else {
+      hitDescriptors.push({
+        hitIndex: descriptor.hitIndex,
+        timeMs: Number(descriptor.timeMs),
+        triggerFrame: descriptor.triggerFrame,
+        hitDelayMs: descriptor.hitDelayMs,
+      });
+    }
+    for (const hit of hitDescriptors) {
+      companionAttackTransactions.push({
+        transactionIdentity: [
+          companion.profile.companionIdentity,
+          companion.revision,
+          descriptor.attackProfile.attackIdentity,
+          hit.hitIndex,
+          hit.timeMs,
+        ].join('|'),
+        kind: 'companion-conditional-damage',
+        attackKind: descriptor.attackKind,
+        timeMs: hit.timeMs,
+        action: descriptor.action,
+        actionId: descriptor.action?.id ?? companion.sourceActionId,
+        actorId: descriptor.actorId,
+        ownerId: companion.ownerId,
+        companionUnitId: companion.profile.unitId,
+        companionIdentity: companion.profile.companionIdentity,
+        companionRevision: companion.revision,
+        attackProfile: descriptor.attackProfile,
+        conditionalDamageGroup: group,
+        hitIndex: hit.hitIndex,
+        triggerFrame: hit.triggerFrame,
+        hitDelayMs: hit.hitDelayMs,
+        resolution: descriptor.resolution,
+        targetKind: companion.profile.targetKind,
+        ownership: companion.profile.ownership,
+        sourceIdentity: descriptor.attackProfile.sourceIdentity,
+        status: 'verified-companion-attack-transaction-ready',
+        applied: true,
+      });
+    }
+    companionEvents.push(
+      createCompanionEvent({
+        kind: descriptor.attackKind,
+        timeMs: descriptor.timeMs,
+        action: descriptor.action,
+        companion,
+        sourceIdentity: descriptor.attackProfile.sourceIdentity,
+        attackIdentity: descriptor.attackProfile.attackIdentity,
+        attackCount: hitDescriptors.length,
+      })
+    );
+    if (descriptor.attackKind === 'periodic') {
+      const nextTimeMs =
+        Number(descriptor.timeMs) + Number(descriptor.attackProfile.cadenceMs);
+      if (nextTimeMs < Number(companion.endsAtMs)) {
+        pendingEvents.push({
+          ...descriptor,
+          timeMs: nextTimeMs,
+          priority: 3,
+        });
+      }
+    }
+  };
+
+  const applyCompanionExpiration = descriptor => {
+    const companion = companionStateByActorId.get(descriptor.actorId);
+    if (
+      companion?.active !== true ||
+      companion.revision !== descriptor.revision ||
+      companion.endsAtMs !== descriptor.timeMs
+    ) {
+      return;
+    }
+    despawnCompanion({
+      actorId: descriptor.actorId,
+      timeMs: descriptor.timeMs,
+      sourceActionId: descriptor.sourceActionId,
+      sourceIdentity: descriptor.sourceIdentity,
+      reason: 'duration-expired',
+    });
+  };
+
+  const applyCompanionDespawn = descriptor => {
+    const companion = companionStateByActorId.get(descriptor.actorId);
+    if (
+      companion?.active !== true ||
+      companion.revision !== descriptor.revision
+    ) {
+      return;
+    }
+    despawnCompanion({
+      actorId: descriptor.actorId,
+      timeMs: descriptor.timeMs,
+      sourceActionId: descriptor.sourceActionId,
+      sourceIdentity: descriptor.sourceIdentity,
+      reason: descriptor.reason,
+    });
+  };
+
+  const despawnCompanion = ({
+    actorId,
+    timeMs,
+    sourceActionId,
+    sourceIdentity,
+    reason,
+  }) => {
+    const companion = companionStateByActorId.get(actorId);
+    if (companion?.active !== true) return;
+    companion.active = false;
+    companion.periodicRevision += 1;
+    companionEvents.push(
+      createCompanionEvent({
+        kind: 'despawn',
+        timeMs,
+        action: sourceActionId ? { id: sourceActionId, actorId } : null,
+        companion,
+        sourceIdentity,
+        reason,
+      })
+    );
+  };
+
+  for (const [actorId, actorState] of actorStateById) {
+    const transition = thresholdTransitionByOwnerId.get(
+      Number(actorState.profile.ownerId)
+    );
+    const inheritedState = transition
+      ? actorState.activeStates.get(Number(transition.stateElementId))
+      : null;
+    if (inheritedState && transition.companionProfile?.applied === true) {
+      enterOrRefreshCompanion({
+        actorState,
+        action: {
+          id: inheritedState.sourceActionId,
+          actorId,
+        },
+        timeMs: 0,
+        profile: {
+          ...transition.companionProfile,
+          durationMs:
+            inheritedState.expiresAtMs ??
+            transition.companionProfile.durationMs,
+        },
+        sourceIdentity:
+          inheritedState.sourceIdentity ?? transition.sourceIdentity,
+      });
+    }
+  }
+
   for (const [actorId, actorState] of variantActorStateById) {
     const characterId = Number(
       actorState?.actor?.characterId ?? actorState?.profile?.ownerId
@@ -659,16 +1066,28 @@ export function createVerifiedActionVariantRuntime({
     flushPending(actionTimeMs);
     removeExpiredSwitchWindows(activeSwitchWindows, actionTimeMs);
     if (action.type === ACTION_TYPES.SWITCH) {
+      for (const [actorId, companion] of companionStateByActorId) {
+        if (
+          companion.active === true &&
+          companion.profile.dieWithChangeHero === true &&
+          (action.actorId == null || String(action.actorId) === String(actorId))
+        ) {
+          despawnCompanion({
+            actorId,
+            timeMs: actionTimeMs,
+            sourceActionId: action.id,
+            sourceIdentity: companion.profile.sourceIdentity,
+            reason: 'controlled-character-switched',
+          });
+        }
+      }
       lastResolvedActionByActorId.clear();
       removeAttackChainContinuityWindows(activeSwitchWindows);
       continue;
     }
     const mapping = getVerifiedCombatActionMapping(action);
     if (mapping?.actionKind !== 'normal-attack') {
-      removeAttackChainContinuityWindows(
-        activeSwitchWindows,
-        action.actorId
-      );
+      removeAttackChainContinuityWindows(activeSwitchWindows, action.actorId);
     }
     const actorState = variantActorStateById.get(action.actorId);
     const scenarioActor = actorById.get(String(action.actorId));
@@ -909,10 +1328,10 @@ export function createVerifiedActionVariantRuntime({
           activeSelection.binding.targetSubSkillIndex
         );
         selectionSource = {
-          sourceKind: 'verified-active-switch-skill-index-window-derived-control',
+          sourceKind:
+            'verified-active-switch-skill-index-window-derived-control',
           sourceIdentity: activeSelection.binding.sourceIdentity,
-          decisionFrame:
-            activeSelection.binding.activationFrame ?? 0,
+          decisionFrame: activeSelection.binding.activationFrame ?? 0,
           semanticName: activeSelection.binding.semanticName ?? null,
         };
       }
@@ -978,13 +1397,13 @@ export function createVerifiedActionVariantRuntime({
                       sourceIdentity: `${action.id}|controlSubSkillIndex=${explicitSubSkillIndex}`,
                       decisionFrame: 0,
                     }
-                : defaultSelection
-                  ? {
-                      sourceKind: 'verified-client-default-subskill-index',
-                      sourceIdentity: defaultSelection.sourceIdentity,
-                      decisionFrame: defaultSelection.decisionFrame,
-                    }
-                  : null;
+                  : defaultSelection
+                    ? {
+                        sourceKind: 'verified-client-default-subskill-index',
+                        sourceIdentity: defaultSelection.sourceIdentity,
+                        decisionFrame: defaultSelection.decisionFrame,
+                      }
+                    : null;
       const semanticForm = resolvePublicActionForm({
         publicActionForms,
         ownerId: characterId,
@@ -1034,9 +1453,7 @@ export function createVerifiedActionVariantRuntime({
               Number(binding.controlSkillId) ===
               Number(chaseWindow.targetControlSkillId)
           );
-          const chaseVariant = (
-            chaseControlBinding?.variants ?? []
-          ).find(
+          const chaseVariant = (chaseControlBinding?.variants ?? []).find(
             variant =>
               Number(variant.subSkillIndex) ===
               Number(chaseWindow.targetSubSkillIndex)
@@ -1051,14 +1468,12 @@ export function createVerifiedActionVariantRuntime({
           );
           const predecessorStartMs = Number(sourceAction?.startMs) || 0;
           const inputFrame = msToFrame(actionTimeMs);
-          const inputOffsetFrame =
-            inputFrame - msToFrame(predecessorStartMs);
+          const inputOffsetFrame = inputFrame - msToFrame(predecessorStartMs);
           executionControlSkillId = Number(chaseWindow.targetControlSkillId);
-          selectedSubSkillIndex = Number(
-            chaseWindow.targetSubSkillIndex
-          );
+          selectedSubSkillIndex = Number(chaseWindow.targetSubSkillIndex);
           selectionSource = {
-            sourceKind: 'verified-active-switch-skill-index-window-derived-control',
+            sourceKind:
+              'verified-active-switch-skill-index-window-derived-control',
             sourceIdentity: chaseWindow.sourceIdentity,
             decisionFrame: chaseWindow.activationFrame ?? 0,
             semanticName: chaseWindow.semanticName ?? null,
@@ -1073,8 +1488,7 @@ export function createVerifiedActionVariantRuntime({
                 frameRate: FRAME_RATE,
                 sourceKind: 'verified-derived-control-frame-count',
                 sourceIdentity:
-                  chaseControlBinding?.sourcePath ??
-                  chaseWindow.sourceIdentity,
+                  chaseControlBinding?.sourcePath ?? chaseWindow.sourceIdentity,
               },
               animation: {
                 status: 'applied',
@@ -1083,8 +1497,7 @@ export function createVerifiedActionVariantRuntime({
                 durationFrames: chaseFrames,
                 frameRate: FRAME_RATE,
                 sourceIdentity:
-                  chaseControlBinding?.sourcePath ??
-                  chaseWindow.sourceIdentity,
+                  chaseControlBinding?.sourcePath ?? chaseWindow.sourceIdentity,
               },
               input: null,
               status: 'applied',
@@ -1136,13 +1549,9 @@ export function createVerifiedActionVariantRuntime({
           ...chainHits.map(hit => Number(hit.trigger?.startFrame) || 0)
         );
         const currentDuration = Number(
-          resolution.actionBinding?.actionTiming?.occupancy
-            ?.durationFrames ?? 0
+          resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ?? 0
         );
-        const effectiveDuration = Math.max(
-          currentDuration,
-          maxChainFrame + 1
-        );
+        const effectiveDuration = Math.max(currentDuration, maxChainFrame + 1);
         resolution.hits = [...(resolution.hits ?? []), ...chainHits];
         resolution.actionBinding = {
           ...resolution.actionBinding,
@@ -1246,6 +1655,13 @@ export function createVerifiedActionVariantRuntime({
       continue;
     }
 
+    scheduleCompanionResponses({
+      action,
+      resolution,
+      executionControlSkillId,
+      selectedSubSkillIndex,
+    });
+
     for (const operation of selectedOperations) {
       if (
         !isActionFrameWithinContextualOccupancy(
@@ -1262,6 +1678,7 @@ export function createVerifiedActionVariantRuntime({
           actionTimeMs +
           framesToMs(operation.triggerFrame, operation.frameRate),
         action,
+        resolution,
         binding: operation,
         priority: operation.operation.startsWith('transform') ? 1 : 0,
       });
@@ -1366,9 +1783,17 @@ export function createVerifiedActionVariantRuntime({
     controlledActorTimeline,
   });
   effectCommands.push(...targetStateRuntime.effectCommands);
+  for (const event of companionEvents) {
+    if (event.runtimeSequenceIndex == null) {
+      event.runtimeSequenceIndex = runtimeSequenceIndex++;
+    }
+  }
   resourceEvents.sort(compareRuntimeEvents);
+  resourceGateEvents.sort(compareRuntimeEvents);
   stateEvents.sort(compareRuntimeEvents);
   variantEvents.sort(compareRuntimeEvents);
+  companionEvents.sort(compareRuntimeEvents);
+  companionAttackTransactions.sort(compareRuntimeEvents);
   const curves = createSpecialResourceCurves({
     actorStateById,
     resourceEvents,
@@ -1386,16 +1811,21 @@ export function createVerifiedActionVariantRuntime({
     selectionByActionId,
     selections: [...selectionByActionId.values()],
     resourceEvents,
+    resourceGateEvents,
     stateEvents,
     variantEvents,
     effectCommands,
     tuningMarkTransactions,
+    companionEvents,
+    companionAttackTransactions,
     directSpEvents: targetStateRuntime.directSpEvents,
     targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
     eventLog: [
       ...resourceEvents,
+      ...resourceGateEvents,
       ...variantEvents,
+      ...companionEvents,
       ...targetStateRuntime.events,
     ].sort(compareRuntimeEvents),
     executionBlocks,
@@ -1416,6 +1846,16 @@ export function createVerifiedActionVariantRuntime({
       activeStates: [
         ...(actorStateById.get(curve.actorId)?.activeStates.values() ?? []),
       ],
+      companion: companionStateByActorId.get(curve.actorId)
+        ? {
+            companionIdentity: companionStateByActorId.get(curve.actorId)
+              .profile.companionIdentity,
+            unitId: companionStateByActorId.get(curve.actorId).profile.unitId,
+            active: companionStateByActorId.get(curve.actorId).active === true,
+            revision: companionStateByActorId.get(curve.actorId).revision,
+            endsAtMs: companionStateByActorId.get(curve.actorId).endsAtMs,
+          }
+        : null,
     })),
     summary: {
       profileCount: curves.length,
@@ -1424,9 +1864,12 @@ export function createVerifiedActionVariantRuntime({
         resolution => resolution.variantSelection?.changed
       ).length,
       resourceEventCount: resourceEvents.length,
+      resourceGateEventCount: resourceGateEvents.length,
       stateEventCount: stateEvents.length,
       effectCommandCount: effectCommands.length,
       tuningMarkTransactionCount: tuningMarkTransactions.length,
+      companionEventCount: companionEvents.length,
+      companionAttackTransactionCount: companionAttackTransactions.length,
       targetStateEventCount: targetStateRuntime.events.length,
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
@@ -1505,8 +1948,7 @@ function resolveAttackInputChainAction({
     }
     const derivedEntries = matchingChains
       .filter(
-        candidate =>
-          candidate.entryPolicy?.kind === 'derived-or-quick-entry'
+        candidate => candidate.entryPolicy?.kind === 'derived-or-quick-entry'
       )
       .map(candidate =>
         resolveRuntimeDerivedAttackChainEntry({
@@ -1596,17 +2038,20 @@ function resolveRuntimeDerivedAttackChainEntry({
   previous,
   timeMs,
 }) {
-  if (!chain.segments?.length || !hasAttackChainEntryResource(chain, actorState)) {
+  if (
+    !chain.segments?.length ||
+    !hasAttackChainEntryResource(chain, actorState)
+  ) {
     return null;
   }
   const quickEntries = (activeSwitchWindows ?? [])
     .filter(
       window =>
-      (window.compilerBindingIdentity != null ||
-        window.relationType === 'attack-chain-continuity-window') &&
-      String(window.actorId) === String(actorState.actor.id) &&
-      Number(window.startsAtMs) <= Number(timeMs) &&
-      Number(timeMs) < Number(window.endsAtMs)
+        (window.compilerBindingIdentity != null ||
+          window.relationType === 'attack-chain-continuity-window') &&
+        String(window.actorId) === String(actorState.actor.id) &&
+        Number(window.startsAtMs) <= Number(timeMs) &&
+        Number(timeMs) < Number(window.endsAtMs)
     )
     .map(window => {
       const segment = chain.segments.find(
@@ -2422,6 +2867,132 @@ function resolveOperationAmount(operation, action) {
   );
 }
 
+function resolveResourceOperationHitGate({
+  operation,
+  action,
+  resolution,
+  scenario,
+}) {
+  const gate = operation.hitGate;
+  if (!gate) return { candidateCount: 1, landedCount: 1 };
+  if (gate.kind !== 'landed-action-hit') {
+    return { candidateCount: 0, landedCount: 0 };
+  }
+  const candidates = (resolution?.hits ?? []).filter(
+    hit =>
+      Number(hit.elementId) === Number(gate.elementId) &&
+      Number(hit.trigger?.startFrame) === Number(gate.triggerFrame) &&
+      (!gate.behaviorPathId ||
+        hit.trigger?.behaviorPathId === gate.behaviorPathId)
+  );
+  const defaultWillHit =
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false;
+  const landedCount = candidates
+    .slice(0, Number(gate.maximumMatches) || 1)
+    .filter(hit =>
+      resolveActionHitWillHit(
+        action,
+        resolveRuntimeHitIdentity(hit),
+        defaultWillHit
+      )
+    ).length;
+  return { candidateCount: candidates.length, landedCount };
+}
+
+function resolveRuntimeHitIdentity(hit) {
+  return String(
+    hit?.identity ??
+      hit?.hitIdentity ??
+      hit?.sourceIdentity ??
+      `${hit?.elementId ?? 'element'}|${hit?.hitIndex ?? 'hit'}`
+  );
+}
+
+function createThresholdEffectGrantCommand({
+  mechanicsPackage,
+  actorState,
+  action,
+  timeMs,
+  transition,
+  grant,
+  operation,
+}) {
+  return {
+    id: `verified-threshold-effect|${action.id}|${grant.effectId}|${timeMs}`,
+    sourceActionId: action.id,
+    sourceActionName: action.name,
+    sourceActorId: action.actorId,
+    sourceActorName: action.actor?.name ?? actorState.actor.name,
+    effectId: grant.effectId,
+    effectName: grant.name,
+    operation,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: String(action.actorId),
+    targetName: action.actor?.name ?? actorState.actor.name,
+    timeMs,
+    durationMs: grant.durationMs,
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: 1,
+    maxStacks: 1,
+    tags: ['special-resource-threshold', `state:${transition.stateElementId}`],
+    sourceStatus: 'verified-threshold-effect-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: mechanicsPackage.packageId,
+      packageHash: mechanicsPackage.packageHash,
+      actionBindingIdentity: transition.transitionIdentity,
+      effectIdentity: grant.effectId,
+      sourceIdentity: grant.sourceIdentity,
+    },
+    modifiers: (grant.modifiers ?? []).map(modifier => ({
+      kind: 'battle-property',
+      attributeId: modifier.attributeId,
+      bucket: modifier.bucket,
+      valueRaw: modifier.valueRaw,
+      propertyTags: modifier.propertyTags ?? [],
+      sourceIdentity: modifier.sourceIdentity,
+    })),
+    appliedToCalculators: true,
+    generatedVerified: true,
+  };
+}
+
+function createCompanionEvent({
+  kind,
+  timeMs,
+  action,
+  companion,
+  sourceIdentity,
+  reason = null,
+  attackIdentity = null,
+  attackCount = null,
+}) {
+  return {
+    type: `VERIFIED_COMPANION_${String(kind).toUpperCase().replaceAll('-', '_')}`,
+    kind,
+    timeMs: Number(timeMs),
+    actionId: action?.id ?? null,
+    actorId: companion.actorId,
+    payload: {
+      companionIdentity: companion.profile.companionIdentity,
+      companionUnitId: companion.profile.unitId,
+      companionRevision: companion.revision,
+      ownerId: companion.ownerId,
+      ownership: companion.profile.ownership,
+      targetKind: companion.profile.targetKind,
+      startsAtMs: companion.startsAtMs,
+      endsAtMs: companion.endsAtMs,
+      attackIdentity,
+      attackCount,
+      reason,
+      sourceIdentity,
+      appliedToActionVariantRuntime: true,
+    },
+  };
+}
+
 function createResourceExecutionBlock({
   action,
   actorState,
@@ -2537,8 +3108,7 @@ function createExecutionPrerequisiteBlock({
     controlSkillId: publicControlSkillId,
     executionControlSkillId:
       directExecutionForm?.executionControlSkillId ?? null,
-    selectedSubSkillIndex:
-      directExecutionForm?.executionSubSkillIndex ?? null,
+    selectedSubSkillIndex: directExecutionForm?.executionSubSkillIndex ?? null,
     resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
     resourceName: actorState?.profile?.name ?? null,
     requiredEventType: prerequisite?.eventType ?? null,
@@ -2661,10 +3231,13 @@ function createUnavailableRuntime(reason) {
     selectionByActionId: new Map(),
     selections: [],
     resourceEvents: [],
+    resourceGateEvents: [],
     stateEvents: [],
     variantEvents: [],
     effectCommands: [],
     tuningMarkTransactions: [],
+    companionEvents: [],
+    companionAttackTransactions: [],
     directSpEvents: [],
     targetStateRuntime: null,
     eventLog: [],
@@ -2675,9 +3248,12 @@ function createUnavailableRuntime(reason) {
       selectionCount: 0,
       changedVariantCount: 0,
       resourceEventCount: 0,
+      resourceGateEventCount: 0,
       stateEventCount: 0,
       effectCommandCount: 0,
       tuningMarkTransactionCount: 0,
+      companionEventCount: 0,
+      companionAttackTransactionCount: 0,
       targetStateEventCount: 0,
       conditionalHitGroupCount: 0,
       directSpEventCount: 0,

@@ -4,6 +4,7 @@ import {
   applyCharacterCombatAttackInputPhaseMappings,
   applyCharacterCombatActionEffectBindings,
   applyCharacterCombatActionHitBindings,
+  applyCharacterCombatResourceOperationBindings,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
   mergeCharacterCombatOwnerCompilations,
@@ -66,9 +67,9 @@ export function createCharacterCombatControlPolicyIndex(recipes) {
     const ownerId = Number(recipe.ownerId);
     const defaultPolicy = recipe.runtimePolicies?.defaultControlPolicy ?? null;
     if (defaultPolicy) {
-      for (const controlSkillId of collectCharacterCombatRequiredControlSkillIds([
-        recipe,
-      ])) {
+      for (const controlSkillId of collectCharacterCombatRequiredControlSkillIds(
+        [recipe]
+      )) {
         if (policies.has(controlSkillId)) {
           throw new Error(
             `duplicate character combat control policy: ${controlSkillId}`
@@ -262,9 +263,9 @@ export async function createCharacterCombatProductionBuild({
     specialResourceCatalog,
     compilations: ownerCompilations,
   });
-  const unresolvedContextEdges = (
-    actionVariantGraph.contextEdges ?? []
-  ).filter(edge => edge.applied !== true);
+  const unresolvedContextEdges = (actionVariantGraph.contextEdges ?? []).filter(
+    edge => edge.applied !== true
+  );
   if (unresolvedContextEdges.length > 0) {
     throw new Error(
       `character combat context edge compilation incomplete: ${unresolvedContextEdges
@@ -283,6 +284,10 @@ export async function createCharacterCombatProductionBuild({
     compilations: ownerCompilations,
   });
   applyCharacterCombatActionEffectBindings({
+    controls: compilerEvidence?.controls ?? [],
+    compilations: ownerCompilations,
+  });
+  applyCharacterCombatResourceOperationBindings({
     controls: compilerEvidence?.controls ?? [],
     compilations: ownerCompilations,
   });
@@ -331,8 +336,7 @@ export async function createCharacterCombatProductionBuild({
       compilation,
       publicActions: (mechanicsPackage.actionMappings ?? []).filter(
         mapping =>
-          mapping.ownerKind === 'actor' &&
-          Number(mapping.ownerId) === ownerId
+          mapping.ownerKind === 'actor' && Number(mapping.ownerId) === ownerId
       ),
       controls: ownerControls,
       variantEdges: (actionVariantGraph.edges ?? []).filter(
@@ -471,10 +475,7 @@ function collectNamedControlSkillIds(value, output, key = '') {
   }
 }
 
-function collectOwnerControls({
-  mechanicsPackage,
-  reachableControlSkillIds,
-}) {
+function collectOwnerControls({ mechanicsPackage, reachableControlSkillIds }) {
   const reachable = new Set((reachableControlSkillIds ?? []).map(Number));
   return [
     ...(mechanicsPackage.controlBindings ?? []),
@@ -494,8 +495,7 @@ function collectOwnerSemanticEffects({
   ).filter(effect =>
     (effect.owners ?? []).some(
       owner =>
-        owner.ownerKind === 'actor' &&
-        Number(owner.ownerId) === Number(ownerId)
+        owner.ownerKind === 'actor' && Number(owner.ownerId) === Number(ownerId)
     )
   );
 }

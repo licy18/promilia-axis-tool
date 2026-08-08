@@ -455,6 +455,9 @@ export function createCharacterCombatOwnerArtifacts({
   const conditionalHitGroups = sortByIdentity(
     compiledContracts.conditionalHitGroups ?? []
   );
+  const tuningMarkConditionalDamageGroups = sortByIdentity(
+    compiledContracts.tuningMarkConditionalDamageGroups ?? []
+  );
   const runtimeEffectBindings = sortByIdentity(
     compiledContracts.runtimeEffectBindings ?? []
   );
@@ -518,6 +521,7 @@ export function createCharacterCombatOwnerArtifacts({
     occupancyAudit,
     recipe,
     actionTransitionCoverage,
+    tuningMarkConditionalDamageGroups,
   });
   const unresolvedRecords = unresolvedLedger.records;
   const coverage = createCoverage({
@@ -536,6 +540,7 @@ export function createCharacterCombatOwnerArtifacts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     passives,
     switchTriggers,
@@ -563,6 +568,7 @@ export function createCharacterCombatOwnerArtifacts({
       targetStateProfiles,
       targetStateTransactions,
       conditionalHitGroups,
+      tuningMarkConditionalDamageGroups,
       runtimeEffectBindings,
       passives,
       switchTriggers,
@@ -583,6 +589,7 @@ export function createCharacterCombatOwnerArtifacts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     passives,
     switchTriggers,
@@ -604,6 +611,7 @@ export function createCharacterCombatOwnerArtifacts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     passives,
     switchTriggers,
@@ -625,6 +633,7 @@ export function createCharacterCombatOwnerArtifacts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     passives,
     switchTriggers,
@@ -677,6 +686,7 @@ export function createCharacterCombatOwnerArtifacts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     effects: {
       raw: rawEffects,
@@ -1240,6 +1250,7 @@ function createCoverage(input) {
         ...input.targetStateProfiles,
         ...input.targetStateTransactions,
         ...input.conditionalHitGroups,
+        ...input.tuningMarkConditionalDamageGroups,
       ],
       item => item.applied === true,
       item => item.reasons
@@ -1397,6 +1408,7 @@ function createReachableGraph({
   targetStateProfiles,
   targetStateTransactions,
   conditionalHitGroups,
+  tuningMarkConditionalDamageGroups,
   runtimeEffectBindings,
   passives,
   switchTriggers,
@@ -1592,6 +1604,25 @@ function createReachableGraph({
       }
     );
   }
+  for (const group of tuningMarkConditionalDamageGroups) {
+    const groupIdentity = `tuning-mark-conditional-damage-group:${group.groupIdentity}`;
+    addNode(groupIdentity, 'tuning-mark-conditional-damage-group', {
+      triggerFrames: group.triggerFrames,
+      minimumStacks: group.minimumStacks,
+      tuningMarkProfileKey: group.tuningMarkProfileKey,
+      status: mapClassification(group.applied),
+      sourceIdentity: group.sourceIdentity,
+    });
+    addEdge(
+      `control:${group.controlSkillId}:sub:${group.subSkillIndex}`,
+      groupIdentity,
+      'materializes-tuning-mark-conditional-damage',
+      {
+        status: mapClassification(group.applied),
+        sourceIdentity: group.sourceIdentity,
+      }
+    );
+  }
   for (const binding of runtimeEffectBindings) {
     const effectIdentity = `runtime-effect:${binding.bindingIdentity}`;
     addNode(effectIdentity, 'runtime-effect', {
@@ -1668,6 +1699,7 @@ function createDescriptionCoverage({
   actionForms,
   ownerContextEdges,
   hits,
+  tuningMarkConditionalDamageGroups,
   specialResourceProfiles,
   resourceTransactions,
   thresholdTransitions,
@@ -1707,6 +1739,7 @@ function createDescriptionCoverage({
             action,
             actionForms,
             hits,
+            tuningMarkConditionalDamageGroups,
             recipe,
           })
         );
@@ -1778,9 +1811,11 @@ function createDescriptionCoverage({
         publicFormSettlements.length > 0
           ? settlementStatuses.every(status => status === 'applied')
             ? 'applied'
-            : settlementStatuses.includes('runtime-evidence-required')
-              ? 'runtime-evidence-required'
-              : 'static-evidence-gap'
+            : settlementStatuses.every(status => status === 'not-applicable')
+              ? 'not-applicable'
+              : settlementStatuses.includes('runtime-evidence-required')
+                ? 'runtime-evidence-required'
+                : 'static-evidence-gap'
           : null;
       const status = notApplicable
         ? 'not-applicable'
@@ -1802,7 +1837,7 @@ function createDescriptionCoverage({
         publicFormSettlements,
         reasons: notApplicable
           ? [notApplicable.reason]
-          : status === 'applied'
+          : ['applied', 'not-applicable'].includes(status)
             ? []
             : [
                 ...new Set(
@@ -1836,7 +1871,13 @@ function createDescriptionCoverage({
   };
 }
 
-function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
+function createPublicFormSettlementRows({
+  action,
+  actionForms,
+  hits,
+  tuningMarkConditionalDamageGroups,
+  recipe,
+}) {
   const forms = actionForms.filter(
     form =>
       String(form.formIdentity ?? '').startsWith(`${action.identity}:`) ||
@@ -1890,6 +1931,24 @@ function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
       ),
       hit => hit.hitIdentity
     );
+    const formConditionalDamageGroups = dedupeBy(
+      tuningMarkConditionalDamageGroups.filter(group =>
+        controlSelectors.some(
+          selector =>
+            Number(group.controlSkillId) === selector.controlSkillId &&
+            (selector.subSkillIndex == null ||
+              Number(group.subSkillIndex) === selector.subSkillIndex)
+        )
+      ),
+      group => group.groupIdentity
+    );
+    const conditionalHitCount = formConditionalDamageGroups.reduce(
+      (sum, group) =>
+        sum +
+        Math.max(1, group.triggerFrames?.length ?? 0) *
+          Math.max(1, group.hitDelaysMs?.length ?? 0),
+      0
+    );
     const gap = (recipe.unresolvedRecords ?? []).find(
       item =>
         item.sourceKind === 'public-form-settlement' &&
@@ -1902,8 +1961,13 @@ function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
                 Number(form.executionSubSkillIndex))))
     );
     const status =
-      formHits.length > 0 ? 'applied' : (gap?.status ?? 'static-evidence-gap');
-    const dimensionSummary = createPublicFormHitDimensionSummary(formHits);
+      formHits.length + conditionalHitCount > 0
+        ? 'applied'
+        : (gap?.status ?? 'static-evidence-gap');
+    const dimensionSummary = createPublicFormHitDimensionSummary(
+      formHits,
+      formConditionalDamageGroups
+    );
     return {
       actionIdentity: action.identity,
       publicFormId: form.formIdentity,
@@ -1915,8 +1979,13 @@ function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
       executionSubSkillIndex: normalizeOptionalInteger(
         form.executionSubSkillIndex ?? form.subSkillIndex
       ),
-      hitCount: formHits.length,
-      settlementEvidence: formHits.map(hit => `hit:${hit.hitIdentity}`).sort(),
+      hitCount: formHits.length + conditionalHitCount,
+      settlementEvidence: [
+        ...formHits.map(hit => `hit:${hit.hitIdentity}`),
+        ...formConditionalDamageGroups.map(
+          group => `tuning-mark-conditional-damage-group:${group.groupIdentity}`
+        ),
+      ].sort(),
       dimensionSummary,
       status,
       reasons:
@@ -1937,8 +2006,18 @@ function createPublicFormSettlementRows({ action, actionForms, hits, recipe }) {
   });
 }
 
-function createPublicFormHitDimensionSummary(hits) {
-  if (hits.length === 0) {
+function createPublicFormHitDimensionSummary(
+  hits,
+  tuningMarkConditionalDamageGroups = []
+) {
+  const conditionalHitCount = tuningMarkConditionalDamageGroups.reduce(
+    (sum, group) =>
+      sum +
+      Math.max(1, group.triggerFrames?.length ?? 0) *
+        Math.max(1, group.hitDelaysMs?.length ?? 0),
+    0
+  );
+  if (hits.length === 0 && conditionalHitCount === 0) {
     return Object.fromEntries(
       ['hp', 'toughness', 'actorSp', 'kiboSp'].map(dimension => [
         dimension,
@@ -1952,7 +2031,7 @@ function createPublicFormHitDimensionSummary(hits) {
       : Number(value) === 0
         ? 'verified-zero'
         : 'applied';
-  return {
+  const summary = {
     hp: countBy(hits, hit =>
       hit.formula && hit.damage ? 'applied' : 'unresolved'
     ),
@@ -1962,6 +2041,16 @@ function createPublicFormHitDimensionSummary(hits) {
     actorSp: countBy(hits, hit => statusForValue(hit.energy?.recoverSp)),
     kiboSp: countBy(hits, hit => statusForValue(hit.energy?.petRecoverSp)),
   };
+  if (conditionalHitCount > 0) {
+    summary.hp.applied = Number(summary.hp.applied ?? 0) + conditionalHitCount;
+    summary.toughness.applied =
+      Number(summary.toughness.applied ?? 0) + conditionalHitCount;
+    summary.actorSp.unresolved =
+      Number(summary.actorSp.unresolved ?? 0) + conditionalHitCount;
+    summary.kiboSp.unresolved =
+      Number(summary.kiboSp.unresolved ?? 0) + conditionalHitCount;
+  }
+  return summary;
 }
 
 function normalizeOptionalInteger(value) {
@@ -2041,6 +2130,7 @@ function createRuntimeCoverage({
   targetStateProfiles,
   targetStateTransactions,
   conditionalHitGroups,
+  tuningMarkConditionalDamageGroups,
   runtimeEffectBindings,
   passives,
   switchTriggers,
@@ -2057,6 +2147,10 @@ function createRuntimeCoverage({
     const actionHits = hits.filter(hit =>
       actionControlIds.has(Number(hit.controlSkillId))
     );
+    const actionConditionalDamageGroups =
+      tuningMarkConditionalDamageGroups.filter(group =>
+        actionControlIds.has(Number(group.controlSkillId))
+      );
     const settlementClauses = (descriptionCoverage?.entries ?? []).filter(
       entry =>
         entry.mechanicKinds?.includes('action-settlement') &&
@@ -2076,14 +2170,19 @@ function createRuntimeCoverage({
     const settlementStatus = requiresDamageSettlement
       ? publicFormSettlements.every(row => row.status === 'applied')
         ? 'applied'
-        : publicFormSettlements.some(
-              row => row.status === 'runtime-evidence-required'
-            )
-          ? 'runtime-evidence-required'
-          : 'static-evidence-gap'
+        : publicFormSettlements.every(row => row.status === 'not-applicable')
+          ? 'not-applicable'
+          : publicFormSettlements.some(
+                row => row.status === 'runtime-evidence-required'
+              )
+            ? 'runtime-evidence-required'
+            : 'static-evidence-gap'
       : 'not-required';
+    const sourceDrivenConditionalDamageReady =
+      actionConditionalDamageGroups.length > 0 &&
+      actionConditionalDamageGroups.every(group => group.applied === true);
     const runtimeReady =
-      action.runtimeReady === true &&
+      (action.runtimeReady === true || sourceDrivenConditionalDamageReady) &&
       (!requiresDamageSettlement || settlementStatus === 'applied');
     return {
       actionIdentity: action.identity,
@@ -2097,7 +2196,9 @@ function createRuntimeCoverage({
         ? (action.scenarioRuntimeStatus ?? 'applied')
         : settlementStatus,
       rawRuntimeReady: action.runtimeReady === true,
+      sourceDrivenConditionalDamageReady,
       runtimeReady,
+      notApplicable: settlementStatus === 'not-applicable',
       hitCount:
         publicFormSettlements.length > 0
           ? publicFormSettlements.reduce(
@@ -2112,7 +2213,9 @@ function createRuntimeCoverage({
       reasons: [
         ...new Set([
           ...(action.reasons ?? []),
-          ...(!runtimeReady && requiresDamageSettlement
+          ...(!runtimeReady &&
+          requiresDamageSettlement &&
+          settlementStatus !== 'not-applicable'
             ? ['public-action-damage-settlement-evidence-missing']
             : []),
         ]),
@@ -2140,6 +2243,8 @@ function createRuntimeCoverage({
       targetStateProfileCount: targetStateProfiles.length,
       targetStateTransactionCount: targetStateTransactions.length,
       conditionalHitGroupCount: conditionalHitGroups.length,
+      tuningMarkConditionalDamageGroupCount:
+        tuningMarkConditionalDamageGroups.length,
       runtimeEffectBindingCount: runtimeEffectBindings.length,
       passiveCount: passives.length,
       switchTriggerCount: switchTriggers.length,
@@ -2266,11 +2371,23 @@ function deriveCharacterCombatSimulationScopes({
   const requiredPassivesApplied = requiredPassiveIdentities.every(
     identity => passiveByIdentity.get(identity)?.applied === true
   );
+  const notApplicableActionIdentities = new Set(
+    (runtimeCoverage?.actionRows ?? [])
+      .filter(action => action.notApplicable === true)
+      .map(action => action.actionIdentity)
+  );
+  const scenarioTransitionGameplayGapCount = (
+    actionTransitionCoverage?.publicActionCoverage ?? []
+  ).filter(
+    action =>
+      !['applied', 'not-applicable'].includes(action.status) &&
+      !notApplicableActionIdentities.has(action.publicActionIdentity)
+  ).length;
   const semanticTransitionClosureComplete =
     Number(actionTransitionCoverage?.summary?.semanticTransitionCount) > 0 &&
     Number(actionTransitionCoverage?.summary?.appliedTransitionCount) ===
       Number(actionTransitionCoverage?.summary?.semanticTransitionCount) &&
-    Number(actionTransitionCoverage?.summary?.gameplayGapCount) === 0;
+    scenarioTransitionGameplayGapCount === 0;
   const zeroDistanceBlockingCaptureCount = Number(
     capturePlan?.summary?.zeroDistanceBlockingCaptureCount ??
       capturePlan?.entries?.filter(
@@ -2300,8 +2417,14 @@ function deriveCharacterCombatSimulationScopes({
         action.classification === 'verified-zero' ||
         action.notApplicable === true
     ),
-    actionFormsApplied: actionForms.every(form =>
-      ['applied', 'not-applicable'].includes(form.status)
+    actionFormsApplied: actionForms.every(
+      form =>
+        ['applied', 'not-applicable'].includes(form.status) ||
+        [...notApplicableActionIdentities].some(identity =>
+          String(
+            form.formIdentity ?? form.publicActionIdentity ?? ''
+          ).startsWith(identity)
+        )
     ),
     semanticTransitionClosureComplete,
     requiredResourcesApplied,
@@ -2382,6 +2505,11 @@ function createRuntimeCompilation({
       'actionVariantGraph.edges',
       contracts.variantEdges,
       'state-and-resource-variant-selection'
+    ),
+    createRuntimeOutputBinding(
+      'actionVariantGraph.tuningMarkConditionalDamageGroups',
+      contracts.tuningMarkConditionalDamageGroups,
+      'tuning-mark-conditional-damage'
     ),
     createRuntimeOutputBinding(
       'actionVariantGraph.attackInputChains',
@@ -2479,6 +2607,7 @@ function createUnresolvedLedger({
   occupancyAudit,
   recipe,
   actionTransitionCoverage,
+  tuningMarkConditionalDamageGroups,
 }) {
   const records = [];
   const append = ({
@@ -2666,6 +2795,7 @@ function createUnresolvedLedger({
       {
         recipe,
         actionTransitionCoverage,
+        tuningMarkConditionalDamageGroups,
       }
     );
     const canonicalKey = createUnresolvedCanonicalKey(
@@ -2759,7 +2889,11 @@ function createUnresolvedLedger({
 
 function classifyUnresolvedImpactClassification(
   record,
-  { recipe, actionTransitionCoverage } = {}
+  {
+    recipe,
+    actionTransitionCoverage,
+    tuningMarkConditionalDamageGroups = [],
+  } = {}
 ) {
   if (record.status === 'not-applicable') return 'not-applicable';
   const recipeOverride = (recipe.unresolvedRecords ?? []).find(
@@ -2769,6 +2903,22 @@ function classifyUnresolvedImpactClassification(
   );
   if (recipeOverride) return 'not-applicable';
   const reasons = new Set(record.reasons ?? []);
+  if (
+    record.sourceKind === 'effect' &&
+    [...reasons].some(reason => /^source-driven-/i.test(reason))
+  ) {
+    return 'wrapper-or-duplicate';
+  }
+  if (
+    record.sourceKind === 'effect' &&
+    reasons.has('judgment-condition-runtime-unimplemented') &&
+    isEffectCoveredByTuningMarkConditionalDamageGroup(
+      record,
+      tuningMarkConditionalDamageGroups
+    )
+  ) {
+    return 'wrapper-or-duplicate';
+  }
   if (
     reasons.has('system-or-movement-control-is-not-public-action') ||
     reasons.has('window-does-not-select-an-action-control')
@@ -2799,6 +2949,20 @@ function classifyUnresolvedImpactClassification(
     return 'superseded-by-semantic-transition-closure';
   }
   return 'gameplay-impacting';
+}
+
+function isEffectCoveredByTuningMarkConditionalDamageGroup(record, groups) {
+  const match = String(record.recordIdentity ?? '').match(
+    /^effect:(\d+)\|(\d+)\|/
+  );
+  if (!match) return false;
+  const controlSkillId = Number(match[1]);
+  const subSkillIndex = Number(match[2]);
+  return groups.some(
+    group =>
+      Number(group.controlSkillId) === controlSkillId &&
+      Number(group.subSkillIndex) === subSkillIndex
+  );
 }
 
 function createUnresolvedCanonicalKey(record, impactClassification) {

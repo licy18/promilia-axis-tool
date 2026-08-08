@@ -1,0 +1,839 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 107001,
+  "targetPipelineMaturity": "profile-compiled",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": ["actor:107001:element:107001006"],
+      "requiredActionEffectBindingIdentities": [
+        "sifliya-star-first-hit-wind-mark",
+        "sifliya-ultimate-first-hit-wind-mark"
+      ],
+      "requiredPassiveIdentities": ["actor:107001:passive:10700161"]
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 107001,
+    "normalAttackSkillId": 10700101,
+    "reloadControlSkillId": 10700110,
+    "starSkillControlSkillId": 10700112,
+    "ultimateControlSkillId": 10700113,
+    "passiveSkillIds": [10700161, 10700162]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:107001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10700101, 10700102, 10700103, 10700110, 10700112, 10700113, 10700121,
+      10700126, 10700161, 10700162, 48005601, 48005602, 48005603, 48005604
+    ],
+    "contextInputEdges": [],
+    "publicActionDeclarations": [],
+    "publicActionForms": [],
+    "attackInputChains": [
+      {
+        "chainIdentity": "sifliya-normal-three-inputs",
+        "sourceSkillId": 10700101,
+        "semanticNamePrefix": "普通攻击",
+        "segmentLabelPrefix": "A",
+        "entryPolicy": {
+          "kind": "default",
+          "sourceIdentity": "hero-module:107001#skill:10700101#三段普通攻击；命中箭矢分别为1/2/3"
+        },
+        "condition": {
+          "kind": "always"
+        },
+        "segments": [
+          {
+            "controlSkillId": 10700101,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10700102
+          },
+          {
+            "controlSkillId": 10700102,
+            "subSkillIndex": 4,
+            "nextControlSkillId": 10700103
+          },
+          {
+            "controlSkillId": 10700103,
+            "subSkillIndex": 4
+          }
+        ]
+      }
+    ],
+    "inputVariantSelectors": [],
+    "variantWindowBindings": [],
+    "targetStateProfiles": [],
+    "targetStateTransactions": [],
+    "conditionalHitGroups": [],
+    "runtimeEffectBindings": [],
+    "actionHitBindings": [
+      {
+        "bindingIdentity": "sifliya-star-carry-arrow-1",
+        "controlSkillId": 10700121,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700121,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001209,
+        "triggerFrames": [60],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=1|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209"
+      },
+      {
+        "bindingIdentity": "sifliya-star-carry-arrow-2",
+        "controlSkillId": 10700121,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700121,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001209,
+        "triggerFrames": [60],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=2|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209"
+      },
+      {
+        "bindingIdentity": "sifliya-star-carry-arrow-3",
+        "controlSkillId": 10700121,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700121,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001209,
+        "triggerFrames": [60],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700121.asset#MonoBehaviour_-2567277590965607248#shoot107001154@60F#bulletCount=3#arrow=3|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209"
+      },
+      {
+        "bindingIdentity": "sifliya-star-carry-arrow-4",
+        "controlSkillId": 10700121,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700121,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001209,
+        "triggerFrames": [60],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700121.asset#MonoBehaviour_-1306913445979315024#shoot107001154@60F#bulletCount=1#arrow=4|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209"
+      },
+      {
+        "bindingIdentity": "sifliya-star-carry-arrow-5",
+        "controlSkillId": 10700121,
+        "subSkillIndex": 0,
+        "sourceControlSkillId": 10700121,
+        "sourceSubSkillIndex": 0,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001209,
+        "triggerFrames": [60],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700121.asset#MonoBehaviour_7087024298710443184#shoot107001154@60F#bulletCount=1#arrow=5|Bullet/ast_bullet_107001154.asset#enemyCollisionElement=107001209"
+      },
+      {
+        "bindingIdentity": "sifliya-a3-arrow-1",
+        "controlSkillId": 10700103,
+        "subSkillIndex": 4,
+        "sourceControlSkillId": 10700103,
+        "sourceSubSkillIndex": 4,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001009,
+        "triggerFrames": [31],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#collisionElement=107001009"
+      },
+      {
+        "bindingIdentity": "sifliya-a3-arrow-2",
+        "controlSkillId": 10700103,
+        "subSkillIndex": 4,
+        "sourceControlSkillId": 10700103,
+        "sourceSubSkillIndex": 4,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001009,
+        "triggerFrames": [31],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=2"
+      },
+      {
+        "bindingIdentity": "sifliya-a3-arrow-3",
+        "controlSkillId": 10700103,
+        "subSkillIndex": 4,
+        "sourceControlSkillId": 10700103,
+        "sourceSubSkillIndex": 4,
+        "sourceReferenceKind": "bulletElements",
+        "elementId": 107001009,
+        "triggerFrames": [31],
+        "frameCount": 1,
+        "targetKind": "enemy",
+        "sourceIdentity": "skill_control_10700103.asset#sub4:bullet=107001031@31F|Bullet/ast_bullet_107001031.asset#bulletCount=3#arrow=3"
+      }
+    ],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "sifliya-star-first-hit-wind-mark",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 750,
+        "triggerFrame": 10,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "wind",
+        "stackDelta": 1,
+        "hitGate": {
+          "kind": "conditional-damage-group-hit",
+          "groupIdentity": "sifliya-star-hit-1",
+          "hitIndex": 1,
+          "sourceIdentity": "skill_control_10700112.asset#107001218-and-element750@10F"
+        },
+        "sourceIdentity": "skill_control_10700112.asset#elementConfigId=750@10F"
+      },
+      {
+        "bindingIdentity": "sifliya-ultimate-first-hit-wind-mark",
+        "controlSkillId": 10700113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 750,
+        "triggerFrame": 133,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "wind",
+        "stackDelta": 1,
+        "hitGate": {
+          "kind": "conditional-damage-group-hit",
+          "groupIdentity": "sifliya-ultimate-hit-1",
+          "hitIndex": 1,
+          "sourceIdentity": "skill_control_10700113.asset#107001149-and-element750@133F"
+        },
+        "sourceIdentity": "skill_control_10700113.asset#elementConfigId=750@133F"
+      }
+    ],
+    "tuningMarkConditionalDamageGroups": [
+      {
+        "groupIdentity": "sifliya-star-hit-1",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001218,
+        "baseElementId": 107001170,
+        "enhancedElementId": 107001219,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [10],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700112.asset#judgment107001218@10F"
+      },
+      {
+        "groupIdentity": "sifliya-star-hit-2",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001220,
+        "baseElementId": 107001078,
+        "enhancedElementId": 107001221,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [21],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700112.asset#judgment107001220@21F"
+      },
+      {
+        "groupIdentity": "sifliya-star-hit-3",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001222,
+        "baseElementId": 107001182,
+        "enhancedElementId": 107001223,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [39],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700112.asset#judgment107001222@39F"
+      },
+      {
+        "groupIdentity": "sifliya-star-hit-4",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001224,
+        "baseElementId": 107001179,
+        "enhancedElementId": 107001225,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [57],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700112.asset#judgment107001224@57F"
+      },
+      {
+        "groupIdentity": "sifliya-star-final-projectiles",
+        "controlSkillId": 10700112,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001226,
+        "baseElementId": 107001188,
+        "enhancedElementId": 107001227,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [90],
+        "hitDelaysMs": [0, 15, 30],
+        "sourceIdentity": "skill_control_10700112.asset#bullet107001153@90F#delayTime=0|15|30;collisionJudgment=107001226"
+      },
+      {
+        "groupIdentity": "sifliya-ultimate-hit-1",
+        "controlSkillId": 10700113,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001149,
+        "baseElementId": 107001023,
+        "enhancedElementId": 107001150,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [133],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700113.asset#judgment107001149-and-element750@133F"
+      },
+      {
+        "groupIdentity": "sifliya-ultimate-hits-2-to-5",
+        "controlSkillId": 10700113,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001204,
+        "baseElementId": 107001205,
+        "enhancedElementId": 107001206,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [141, 147, 153, 159],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700113.asset#judgment107001204@141|147|153|159F"
+      },
+      {
+        "groupIdentity": "sifliya-ultimate-hit-6",
+        "controlSkillId": 10700113,
+        "subSkillIndex": 0,
+        "judgmentElementId": 107001152,
+        "baseElementId": 107001024,
+        "enhancedElementId": 107001151,
+        "tuningMarkProfileKey": "wind",
+        "triggerFrames": [165],
+        "hitDelaysMs": [0],
+        "sourceIdentity": "skill_control_10700113.asset#judgment107001152@165F"
+      }
+    ],
+    "specialResources": [
+      {
+        "resourceElementId": 107001006,
+        "expectedCapacity": 10,
+        "assetDeclaredProfile": {
+          "name": "风语",
+          "displayLabel": "风语",
+          "expectedCombineType": 4,
+          "stateElements": [
+            {
+              "elementId": 107001133,
+              "name": "Lumi在场/风语免疫",
+              "expectedDurationMs": 12000,
+              "expectedCombineType": 1,
+              "sourceIdentity": "Battle/Element/ast_107001133.asset#time=12000"
+            }
+          ],
+          "sourceIdentity": "Battle/Element/ast_107001006.asset#combineType=4;combineNumber=10;types[53]"
+        },
+        "initialStatePolicy": {
+          "kind": "scenario-configurable-initial-state",
+          "defaultValue": 0,
+          "inputStep": 1,
+          "sourceIdentity": "AzPrCombatScenario#initialRuntimeState.specialResourcesByActor"
+        },
+        "operationDeclarations": [
+          {
+            "operationIdentity": "sifliya-a1-wind-word-arrow-1",
+            "controlSkillId": 10700101,
+            "subSkillIndex": 0,
+            "operation": "gain",
+            "triggerFrame": 12,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001001,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001001,
+              "triggerFrame": 12,
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700101.asset#projectile10700101@12F;collisionElement=107001001|hero-module:107001#每支命中箭矢+1风语"
+          },
+          {
+            "operationIdentity": "sifliya-a2-wind-word-arrow-1",
+            "controlSkillId": 10700102,
+            "subSkillIndex": 4,
+            "operation": "gain",
+            "triggerFrame": 7,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001010,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001010,
+              "triggerFrame": 7,
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700102.asset#sub4:projectile10700102@7F;collisionElement=107001010"
+          },
+          {
+            "operationIdentity": "sifliya-a2-wind-word-arrow-2",
+            "controlSkillId": 10700102,
+            "subSkillIndex": 4,
+            "operation": "gain",
+            "triggerFrame": 17,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001010,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001010,
+              "triggerFrame": 17,
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700102.asset#sub4:projectile10700102@17F;collisionElement=107001010"
+          },
+          {
+            "operationIdentity": "sifliya-a3-wind-word-arrow-1",
+            "controlSkillId": 10700103,
+            "subSkillIndex": 4,
+            "operation": "gain",
+            "triggerFrame": 31,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001009,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001009,
+              "triggerFrame": 31,
+              "behaviorPathId": "character-combat:sifliya-a3-arrow-1:1",
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700103.asset#sub4:bulletCount=3@31F#arrow=1"
+          },
+          {
+            "operationIdentity": "sifliya-a3-wind-word-arrow-2",
+            "controlSkillId": 10700103,
+            "subSkillIndex": 4,
+            "operation": "gain",
+            "triggerFrame": 31,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001009,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001009,
+              "triggerFrame": 31,
+              "behaviorPathId": "character-combat:sifliya-a3-arrow-2:1",
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700103.asset#sub4:bulletCount=3@31F#arrow=2"
+          },
+          {
+            "operationIdentity": "sifliya-a3-wind-word-arrow-3",
+            "controlSkillId": 10700103,
+            "subSkillIndex": 4,
+            "operation": "gain",
+            "triggerFrame": 31,
+            "frameRate": 60,
+            "amount": 1,
+            "sourceElementId": 107001009,
+            "hitGate": {
+              "kind": "landed-action-hit",
+              "elementId": 107001009,
+              "triggerFrame": 31,
+              "behaviorPathId": "character-combat:sifliya-a3-arrow-3:1",
+              "maximumMatches": 1
+            },
+            "sourceIdentity": "skill_control_10700103.asset#sub4:bulletCount=3@31F#arrow=3"
+          },
+          {
+            "operationIdentity": "sifliya-star-clear-wind-word-immunity",
+            "controlSkillId": 10700112,
+            "subSkillIndex": 0,
+            "operation": "transform-remove",
+            "triggerFrame": 53,
+            "frameRate": 60,
+            "amount": 0,
+            "stateElementId": 107001133,
+            "stateName": "Lumi在场/风语免疫",
+            "sourceElementId": 107001134,
+            "sourceIdentity": "skill_control_10700112.asset#element107001134@53F|Battle/Element/ast_107001134.asset#清除免疫叠层"
+          }
+        ],
+        "expectedOperationCounts": {
+          "total": 7,
+          "applied": 7,
+          "notApplicable": 0,
+          "unresolved": 0
+        }
+      }
+    ],
+    "thresholdTransitions": [
+      {
+        "resourceElementId": 107001006,
+        "comparison": "at-least",
+        "resourceOperation": "clear",
+        "stateElementId": 107001133,
+        "suppressGainWhileStateActive": true,
+        "suppressedOperationSelectors": [],
+        "tuningMarkGrants": [
+          {
+            "profileKey": "wind",
+            "sourceField": "notDelElementDataList",
+            "expectedMultiplicity": 1,
+            "sourceIdentity": "Battle/Element/ast_107001133.asset#notDelElementDataList includes ast_750 once"
+          }
+        ],
+        "effectGrants": [
+          {
+            "elementId": 107001262,
+            "sourceField": "notDelElementDataList",
+            "expectedMultiplicity": 1,
+            "expectedDurationMs": 24000,
+            "expectedAttributeId": 21,
+            "expectedBucket": "dynamicExtra",
+            "expectedValueRaw": 3000,
+            "expectedPropertyTags": [301],
+            "sourceIdentity": "Battle/Element/ast_107001262.asset#attributeID=21;function_2=5;value=3000;defaultPropertyTags[301];time=24000"
+          }
+        ],
+        "companionProfile": {
+          "companionIdentity": "sifliya-lumi",
+          "summonElementId": 107001100,
+          "unitId": 480056,
+          "expectedBornParam": "bornSkillSlot#4",
+          "periodicAttack": {
+            "attackIdentity": "sifliya-lumi-periodic-volley",
+            "skillId": 48005601,
+            "subSkillIndex": 0,
+            "initialDelayMs": 5000,
+            "cadenceMs": 5000,
+            "triggerFrames": [24, 29, 34],
+            "hitDelaysMs": [0],
+            "conditionalDamageGroup": {
+              "groupIdentity": "sifliya-lumi-periodic-volley-damage",
+              "judgmentElementId": 107001154,
+              "baseElementId": 107001099,
+              "enhancedElementId": 107001155,
+              "tuningMarkProfileKey": "wind"
+            },
+            "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=48005601]#aiToken=1;aiTokenResetCD=5;aiTokenType=1|skill_control_48005601.asset#bullets@24|29|34F"
+          },
+          "actionResponses": [
+            {
+              "attackIdentity": "sifliya-lumi-charged-response",
+              "skillId": 48005602,
+              "subSkillIndex": 0,
+              "sourceControlSkillId": 10700110,
+              "sourceSubSkillIndex": 0,
+              "triggerFrames": [23],
+              "hitDelaysMs": [0, 100, 200, 300, 400],
+              "conditionalDamageGroup": {
+                "groupIdentity": "sifliya-lumi-charged-response-damage",
+                "judgmentElementId": 107001156,
+                "baseElementId": 107001137,
+                "enhancedElementId": 107001157,
+                "tuningMarkProfileKey": "wind"
+              },
+              "sourceIdentity": "skill_control_48005602.asset#sub0:bullet48005602@23F#delay=0|100|200|300|400ms"
+            },
+            {
+              "attackIdentity": "sifliya-lumi-star-response",
+              "skillId": 48005603,
+              "subSkillIndex": 0,
+              "sourceControlSkillId": 10700112,
+              "sourceSubSkillIndex": 0,
+              "triggerFrames": [80, 85, 90, 95, 100],
+              "hitDelaysMs": [0],
+              "cancelPeriodicOnStart": true,
+              "endsCompanionAtFrame": 105,
+              "conditionalDamageGroup": {
+                "groupIdentity": "sifliya-lumi-star-response-damage",
+                "judgmentElementId": 107001158,
+                "baseElementId": 107001138,
+                "enhancedElementId": 107001159,
+                "tuningMarkProfileKey": "wind"
+              },
+              "sourceIdentity": "skill_control_48005603.asset#area-hits@80|85|90|95|100F;duration=105F"
+            }
+          ],
+          "sourceIdentity": "Battle/Element/ast_107001100.asset#summonUnitId=480056;life=12000;dieWithOwner=1;dieWithChangeHero=1|NewTable/battlefield_item.rows[id=480056]"
+        },
+        "runtimeSourceIdentity": "hero-module:107001#十层风语召唤Lumi持续12秒并提升重击24秒|Battle/Element/ast_107001006.asset|ast_107001100.asset|ast_107001133.asset"
+      }
+    ],
+    "passiveEffects": [
+      {
+        "skillId": 10700161,
+        "runtimeGenerationMode": "tuning-mark-threshold-property-runtime",
+        "tuningMarkProfileKey": "wind",
+        "minimumStacks": 3,
+        "propertyElementId": 107001162,
+        "expectedDurationMs": -1,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicPercent",
+        "expectedValueRaw": 1600,
+        "sourceIdentity": "hero-module:107001#skill:10700161#风印记不少于3层时攻击力提高16%|Battle/Element/ast_107001162.asset"
+      }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "actor|107001|10700101|6|10700115|dodge-attack",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-dodge-input-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=204,skillId=10700115]"
+    },
+    {
+      "identity": "scenario-oos:107001:dodge-attack-settlement",
+      "sourceKind": "public-form-settlement",
+      "sourceSkillId": 10700101,
+      "actionKind": "dodge-attack",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-dodge-input-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "characters.items[id=107001].skillSlots[group=ground,slot=204,skillId=10700115]"
+    },
+    {
+      "identity": "actor|107001|10700101|7|10700111|plunging-attack",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "characters.items[id=107001].skillSlots[group=aerial,slot=301,skillId=10700111]"
+    },
+    {
+      "identity": "scenario-oos:107001:plunging-attack-settlement",
+      "sourceKind": "public-form-settlement",
+      "sourceSkillId": 10700101,
+      "actionKind": "plunging-attack",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-jump-or-fall-input-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "characters.items[id=107001].skillSlots[group=aerial,slot=301,skillId=10700111]"
+    },
+    {
+      "identity": "actor|107001|10700121|2|10700125|limit-counter",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[2]|characters.items[id=107001].skillSlots[group=ground,slot=207,skillId=10700125]"
+    },
+    {
+      "identity": "scenario-oos:107001:limit-counter-settlement",
+      "sourceKind": "public-form-settlement",
+      "sourceSkillId": 10700121,
+      "actionKind": "limit-counter",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[2]|characters.items[id=107001].skillSlots[group=ground,slot=207,skillId=10700125]"
+    },
+    {
+      "identity": "actor|107001|10700121|4|10700127|perfect-parry",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[4]|characters.items[id=107001].skillSlots[group=ground,slot=209,skillId=10700127]"
+    },
+    {
+      "identity": "scenario-oos:107001:perfect-parry-settlement",
+      "sourceKind": "public-form-settlement",
+      "sourceSkillId": 10700121,
+      "actionKind": "perfect-parry",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-perfect-dodge-or-parry-boss-attack-event-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "workbench-seed.gameData.skills[id=10700121].level.labels[4]|characters.items[id=107001].skillSlots[group=ground,slot=209,skillId=10700127]"
+    },
+    {
+      "identity": "scenario-oos:107001:move-attack-extra-arrow",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "simultaneous-move-and-normal-attack-input-not-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "hero-module:107001#skill:10700101#移动同时普攻额外发射箭矢"
+    },
+    {
+      "identity": "scenario-oos:107001:reactive-and-air-actions",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope",
+        "requires-dodge-jump-fall-or-boss-attack-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#闪击/闪避/跃击/跳跃/下落/完美闪避/格挡/招架/极限反击"
+    },
+    {
+      "identity": "boundary:107001:hero-rank",
+      "sourceKind": "configuration",
+      "status": "not-applicable",
+      "reasons": ["unimplemented-dead-configuration", "must-not-enter-runtime"],
+      "sourceIdentity": "NewTable/hero_rank.json#owner=107001"
+    },
+    {
+      "identity": "boundary:107001:passive-10700162",
+      "sourceKind": "passive",
+      "status": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-boundary",
+        "no-runtime-description-or-applied-effect"
+      ],
+      "sourceIdentity": "hero-module:107001#skill:10700162"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [107001, 101010, 103002],
+    "initialControlledCharacterId": 107001,
+    "initialActorSp": {
+      "107001": 100,
+      "101010": 0,
+      "103002": 0
+    },
+    "kiboByCharacterId": {},
+    "initialKiboSp": {},
+    "initialTuningMarks": [
+      {
+        "profileKey": "wind",
+        "layerCount": 2,
+        "remainingDurationMs": 20000
+      }
+    ],
+    "loadoutByCharacterId": {},
+    "actions": [
+      {
+        "actionKey": "sifliya-a1-cycle-1",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0,
+        "attackInputControlSkillId": 10700101,
+        "attackSequenceIndex": 1
+      },
+      {
+        "actionKey": "sifliya-a2-cycle-1",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 4,
+        "startFrame": 100,
+        "attackInputControlSkillId": 10700102,
+        "attackSequenceIndex": 2
+      },
+      {
+        "actionKey": "sifliya-a3-cycle-1",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 4,
+        "startFrame": 200,
+        "attackInputControlSkillId": 10700103,
+        "attackSequenceIndex": 3
+      },
+      {
+        "actionKey": "sifliya-a1-cycle-2",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 400,
+        "attackInputControlSkillId": 10700101,
+        "attackSequenceIndex": 1
+      },
+      {
+        "actionKey": "sifliya-a2-cycle-2",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 4,
+        "startFrame": 500,
+        "attackInputControlSkillId": 10700102,
+        "attackSequenceIndex": 2
+      },
+      {
+        "actionKey": "sifliya-a3-cycle-2",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 4,
+        "startFrame": 600,
+        "attackInputControlSkillId": 10700103,
+        "attackSequenceIndex": 3
+      },
+      {
+        "actionKey": "sifliya-charged-with-lumi",
+        "actorCharacterId": 107001,
+        "skillId": 10700101,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 4,
+        "controlSubSkillIndex": 0,
+        "startFrame": 700
+      },
+      {
+        "actionKey": "sifliya-star-first-hit-three-marks",
+        "actorCharacterId": 107001,
+        "skillId": 10700112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 900
+      },
+      {
+        "actionKey": "sifliya-ultimate",
+        "actorCharacterId": 107001,
+        "skillId": 10700113,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1200
+      }
+    ],
+    "comparison": {},
+    "traceSelectors": {
+      "passiveEffectIds": ["battle-element:107001162"],
+      "stateEffectIds": ["battle-element:107001133", "battle-element:107001262"]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000
+      }
+    }
+  }
+}

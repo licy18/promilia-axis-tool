@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "automatedEvidence": []
+  },
+  "ownerId": 107001,
+  "fixturePath": "fixtures/character-acceptance/107001-visual.json",
+  "goldenReports": ["reports/m10/107001/golden-trace.json"],
+  "unnamedSecondaryPassiveSkillId": 10700162,
+  "probes": [
+    {
+      "kind": "special-resource-change",
+      "actionId": "107001-critical-sampled-low",
+      "resourceIdentity": "actor:107001:element:107001006",
+      "beforeValue": 0,
+      "afterValue": 1,
+      "change": 1
+    },
+    {
+      "kind": "special-resource-change",
+      "actionId": "sifliya-a3-cycle-1",
+      "resourceIdentity": "actor:107001:element:107001006",
+      "beforeValue": 9,
+      "afterValue": 10,
+      "change": 1
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "sifliya-a2-cycle-1",
+      "controlSkillId": 10700102,
+      "subSkillIndex": 4,
+      "semanticName": "普通攻击 A2"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "sifliya-a3-cycle-1",
+      "controlSkillId": 10700103,
+      "subSkillIndex": 4,
+      "semanticName": "普通攻击 A3"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "sifliya-charged-with-lumi",
+      "controlSkillId": 10700110,
+      "subSkillIndex": 0,
+      "semanticName": "重击"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "sifliya-star-response",
+      "controlSkillId": 10700112,
+      "subSkillIndex": 0,
+      "semanticName": "星鸣技"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "sifliya-ultimate-three-marks",
+      "controlSkillId": 10700113,
+      "subSkillIndex": 0,
+      "semanticName": "星决技"
+    }
+  ]
+}

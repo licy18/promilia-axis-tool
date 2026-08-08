@@ -14,6 +14,7 @@ import sourceManifest from '../../../reports/m10/101010/source-manifest.json';
 import unresolvedLedger from '../../../reports/m10/101010/unresolved-ledger.json';
 import {
   applyCharacterCombatActionHitBindings,
+  applyCharacterCombatResourceOperationBindings,
   compileElementInheritance,
   compileCharacterCombatRecipeContracts,
   createCharacterCombatOwnerRuntimeContracts,
@@ -1176,6 +1177,147 @@ describe('M10 character combat profile pipeline', () => {
         ],
       }),
     ]);
+  });
+
+  it('lets a sourced transform-remove operation own its removed state subtree only', () => {
+    const ownerId = 424246;
+    const controlSkillId = 42424612;
+    const sourceElementId = 424246134;
+    const stateElementId = 424246133;
+    const statePathId = '-424246133';
+    const createEffect = ({
+      elementId,
+      pathId,
+      relationPath,
+      triggerFrame = 53,
+      rootElementId = sourceElementId,
+    }) => ({
+      effectIdentity: `effect:${elementId}`,
+      controlSkillId,
+      mapIndex: 0,
+      rootElementId,
+      elementId,
+      pathId,
+      trigger: { startFrame: triggerFrame },
+      relationPath,
+      classification: 'applied',
+      scenarioClassification: 'applied',
+      status: 'verified-action-effect-binding-applied',
+      confidence: 'high',
+      applied: true,
+      reasons: [],
+    });
+    const removedState = createEffect({
+      elementId: stateElementId,
+      pathId: statePathId,
+      relationPath: [
+        {
+          from: `element:${sourceElementId}`,
+          to: `element:${statePathId}`,
+          relation: 'elementDataList',
+        },
+      ],
+    });
+    const persistentDescendant = createEffect({
+      elementId: 424246262,
+      pathId: '-424246262',
+      relationPath: [
+        {
+          from: `element:${sourceElementId}`,
+          to: `element:${statePathId}`,
+          relation: 'elementDataList',
+        },
+        {
+          from: `element:${statePathId}`,
+          to: 'element:-424246262',
+          relation: 'notDelElementDataList',
+        },
+      ],
+    });
+    const unrelatedSibling = createEffect({
+      elementId: 424246999,
+      pathId: '-424246999',
+      relationPath: [
+        {
+          from: `element:${sourceElementId}`,
+          to: 'element:-424246999',
+          relation: 'injectElementDataList',
+        },
+      ],
+    });
+    const controls = [
+      {
+        controlSkillId,
+        effects: [removedState, persistentDescendant, unrelatedSibling],
+      },
+    ];
+    const transformRemoveCompilation = {
+      contracts: {
+        resourceTransactions: [
+          {
+            ownerId,
+            operationIdentity: 'synthetic-transform-remove',
+            operation: 'transform-remove',
+            controlSkillId,
+            subSkillIndex: 0,
+            triggerFrame: 53,
+            sourceElementId,
+            stateElementId,
+            sourceIdentity: 'fixture:synthetic-transform-remove',
+            applied: true,
+          },
+        ],
+      },
+    };
+
+    applyCharacterCombatResourceOperationBindings({
+      controls,
+      compilations: [transformRemoveCompilation],
+    });
+
+    expect(controls[0].effects).toEqual([
+      expect.objectContaining({
+        elementId: stateElementId,
+        applied: false,
+        status: 'not-applicable',
+        sourceDrivenResourceOperation: expect.objectContaining({
+          operationIdentity: 'synthetic-transform-remove',
+        }),
+      }),
+      expect.objectContaining({
+        elementId: 424246262,
+        applied: false,
+        status: 'not-applicable',
+      }),
+      expect.objectContaining({
+        elementId: 424246999,
+        applied: true,
+        status: 'verified-action-effect-binding-applied',
+      }),
+    ]);
+
+    const gainControls = [
+      {
+        controlSkillId,
+        effects: [structuredClone(removedState)],
+      },
+    ];
+    applyCharacterCombatResourceOperationBindings({
+      controls: gainControls,
+      compilations: [
+        {
+          contracts: {
+            resourceTransactions: [
+              {
+                ...transformRemoveCompilation.contracts.resourceTransactions[0],
+                operation: 'gain',
+              },
+            ],
+          },
+        },
+      ],
+    });
+    expect(gainControls[0].effects[0]).toEqual(removedState);
   });
 
   it('compiles a reusable attack-chain continuity rule from sourced control windows', () => {

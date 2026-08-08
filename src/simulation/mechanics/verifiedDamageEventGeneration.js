@@ -95,8 +95,10 @@ export function createVerifiedDamageEventGeneration({
   }
 
   for (const tuningEvent of tuningGeneration?.combatEvents ?? []) {
+    const conditionalDamage = tuningEvent.kind === 'conditional-damage';
     if (
-      !DAMAGE_TUNING_EVENT_KINDS.has(tuningEvent.kind) ||
+      (!DAMAGE_TUNING_EVENT_KINDS.has(tuningEvent.kind) &&
+        !conditionalDamage) ||
       tuningEvent.eventContext?.landed !== true ||
       executionByActionId.get(tuningEvent.actionId)?.execute !== true
     ) {
@@ -117,7 +119,7 @@ export function createVerifiedDamageEventGeneration({
     });
     transactions.push(
       createDamageTransaction({
-        sourceKind: 'tuning-damage',
+        sourceKind: conditionalDamage ? 'conditional-hit' : 'tuning-damage',
         action,
         resolution,
         hit: tuningEvent.sourceHit ?? null,
@@ -179,6 +181,9 @@ export function createVerifiedDamageEventGeneration({
       tuningDamageTransactionCount: transactions.filter(
         transaction => transaction.sourceKind === 'tuning-damage'
       ).length,
+      conditionalHitTransactionCount: transactions.filter(
+        transaction => transaction.sourceKind === 'conditional-hit'
+      ).length,
       beforeDamageEventCount: transactions.length,
       afterDamageEventCount: transactions.length,
     },
@@ -206,7 +211,7 @@ function createDamageTransaction({
     tuningEvent?.eventContext?.sourceHitIdentity ??
     (hit == null ? null : resolveHitIdentity(hit));
   const transactionIdentity =
-    sourceKind === 'tuning-damage'
+    sourceKind === 'tuning-damage' || sourceKind === 'conditional-hit'
       ? `damage|tuning|${tuningEvent.eventIdentity}`
       : `damage|hit|${action.id}|${sourceHitIdentity}`;
   const settlementSourceSequencePath = [...baseSourceSequencePath, 1];

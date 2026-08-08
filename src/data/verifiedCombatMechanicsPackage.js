@@ -985,7 +985,9 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       profile =>
         profile.applied !== true ||
         !Array.isArray(profile.triggerBindings) ||
-        profile.triggerBindings.length === 0 ||
+        (profile.triggerBindings.length === 0 &&
+          profile.runtimeGenerationMode !==
+            'tuning-mark-threshold-property-runtime') ||
         !Array.isArray(profile.modifiers) ||
         profile.modifiers.length === 0
     )
@@ -1214,10 +1216,7 @@ function findActionMappings(action, owner = resolveActionOwner(action)) {
     mapping.identity.startsWith(prefix)
   );
   const requestedKind = String(
-    action.actionKind ??
-      action.eventType ??
-      action.intent?.actionKind ??
-      ''
+    action.actionKind ?? action.eventType ?? action.intent?.actionKind ?? ''
   ).trim();
   if (!requestedKind || matches.length <= 1) {
     return matches;

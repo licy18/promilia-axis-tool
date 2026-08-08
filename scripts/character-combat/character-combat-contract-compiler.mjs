@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-export const CHARACTER_COMBAT_COMPILER_VERSION = 4;
+export const CHARACTER_COMBAT_COMPILER_VERSION = 5;
 const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
 const SELF_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 102100;
 const ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES = new Map([
@@ -47,9 +47,9 @@ export function compileCharacterCombatRecipeContracts({
   const resourceProfiles = (evidence?.specialResourceProfiles ?? []).filter(
     profile => Number(profile.ownerId) === ownerId
   );
-  const resourceOperations = (
-    evidence?.specialResourceOperations ?? []
-  ).filter(operation => Number(operation.ownerId) === ownerId);
+  const resourceOperations = (evidence?.specialResourceOperations ?? []).filter(
+    operation => Number(operation.ownerId) === ownerId
+  );
   const managesResourceContracts = Array.isArray(
     compilerRecipe.specialResources
   );
@@ -58,19 +58,40 @@ export function compileCharacterCombatRecipeContracts({
     definitions: compilerRecipe.specialResources ?? [],
     resourceProfiles,
     resourceOperations,
+    operators: normalizedOperators,
   });
+  const managedResourceElementIds = new Set(
+    (compilerRecipe.specialResources ?? []).map(definition =>
+      Number(definition.resourceElementId)
+    )
+  );
+  const compiledResourceProfiles = [
+    ...resourceProfiles.filter(
+      profile => !managedResourceElementIds.has(Number(profile.elementId))
+    ),
+    ...specialResourceContracts.profiles,
+  ];
+  const compiledResourceOperations = [
+    ...resourceOperations.filter(operation => {
+      const profile = resourceProfiles.find(
+        item => item.resourceIdentity === operation.resourceIdentity
+      );
+      return !managedResourceElementIds.has(Number(profile?.elementId));
+    }),
+    ...specialResourceContracts.operations,
+  ];
   const contextEdges = compileContextInputEdges({
     ownerId,
     definitions: compilerRecipe.contextInputEdges ?? [],
     controlBySkillId,
-    resourceProfiles,
+    resourceProfiles: compiledResourceProfiles,
     operators: normalizedOperators,
   });
   const publicActionForms = compilePublicActionForms({
     ownerId,
     definitions: compilerRecipe.publicActionForms ?? [],
     controlBySkillId,
-    resourceProfiles,
+    resourceProfiles: compiledResourceProfiles,
     contextEdges,
     operators: normalizedOperators,
   });
@@ -78,7 +99,7 @@ export function compileCharacterCombatRecipeContracts({
     ownerId,
     definitions: compilerRecipe.attackInputChains ?? [],
     controlBySkillId,
-    resourceProfiles,
+    resourceProfiles: compiledResourceProfiles,
     operators: normalizedOperators,
   });
   const inputVariantSelectors = compileInputVariantSelectors({
@@ -97,7 +118,7 @@ export function compileCharacterCombatRecipeContracts({
     ownerId,
     definitions: compilerRecipe.variantWindowBindings ?? [],
     controlBySkillId,
-    resourceProfiles,
+    resourceProfiles: compiledResourceProfiles,
     operators: normalizedOperators,
   });
   const targetStateProfiles = compileTargetStateProfiles({
@@ -121,6 +142,14 @@ export function compileCharacterCombatRecipeContracts({
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     operators: normalizedOperators,
   });
+  const tuningMarkConditionalDamageGroups =
+    compileTuningMarkConditionalDamageGroups({
+      ownerId,
+      definitions: compilerRecipe.tuningMarkConditionalDamageGroups ?? [],
+      controlBySkillId,
+      tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+      operators: normalizedOperators,
+    });
   const actionHitBindings = compileActionHitBindings({
     ownerId,
     definitions: [
@@ -133,11 +162,16 @@ export function compileCharacterCombatRecipeContracts({
     ownerId,
     definitions: compilerRecipe.actionEffectBindings ?? [],
     controlBySkillId,
-    resourceProfiles,
+    resourceProfiles: compiledResourceProfiles,
     targetStateProfiles,
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     actionHitBindings,
     operators: normalizedOperators,
+  });
+  validateActionEffectHitGates({
+    ownerId,
+    actionEffectBindings,
+    tuningMarkConditionalDamageGroups,
   });
   const runtimeEffectBindings = compileRuntimeEffectBindings({
     ownerId,
@@ -150,9 +184,10 @@ export function compileCharacterCombatRecipeContracts({
   const thresholdTransitions = compileThresholdTransitions({
     ownerId,
     definitions: compilerRecipe.thresholdTransitions ?? [],
-    resourceProfiles,
-    resourceOperations,
+    resourceProfiles: compiledResourceProfiles,
+    resourceOperations: compiledResourceOperations,
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+    controlBySkillId,
     operators: normalizedOperators,
   });
   const passiveEffects = compilePassiveEffects({
@@ -163,6 +198,7 @@ export function compileCharacterCombatRecipeContracts({
     skills: evidence?.skills ?? [],
     targetStateTransactions,
     runtimeEffectBindings,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     operators: normalizedOperators,
   });
   const contracts = {
@@ -177,6 +213,7 @@ export function compileCharacterCombatRecipeContracts({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
     resourceProfiles: specialResourceContracts.profiles,
     resourceTransactions: specialResourceContracts.operations,
@@ -200,9 +237,9 @@ export function compileCharacterCombatRecipeContracts({
     compilerVersion: CHARACTER_COMBAT_COMPILER_VERSION,
     ownerId,
     ownerName: character.name ?? null,
-    recipeIdentity: `actor:${ownerId}:character-combat-recipe:v${Number(
-      recipe.schemaVersion
-    ) || 1}`,
+    recipeIdentity: `actor:${ownerId}:character-combat-recipe:v${
+      Number(recipe.schemaVersion) || 1
+    }`,
     recipeHash: sha256Json(recipe),
     compilerInputHash: sha256Json(compilerInput),
     timingPolicy: compilerRecipe.timingPolicy ?? 'standalone-animation',
@@ -222,14 +259,15 @@ export function compileCharacterCombatRecipeContracts({
       publicActionFormCount: contracts.publicActionForms.length,
       attackInputChainCount: contracts.attackInputChains.length,
       inputVariantSelectorCount: contracts.inputVariantSelectors.length,
-      controlTransitionWindowCount:
-        contracts.controlTransitionWindows.length,
+      controlTransitionWindowCount: contracts.controlTransitionWindows.length,
       variantWindowBindingCount: contracts.variantWindowBindings.length,
       actionEffectBindingCount: contracts.actionEffectBindings.length,
       actionHitBindingCount: contracts.actionHitBindings.length,
       targetStateProfileCount: contracts.targetStateProfiles.length,
       targetStateTransactionCount: contracts.targetStateTransactions.length,
       conditionalHitGroupCount: contracts.conditionalHitGroups.length,
+      tuningMarkConditionalDamageGroupCount:
+        contracts.tuningMarkConditionalDamageGroups.length,
       runtimeEffectBindingCount: contracts.runtimeEffectBindings.length,
       resourceProfileCount: contracts.resourceProfiles.length,
       resourceTransactionCount: contracts.resourceTransactions.length,
@@ -252,11 +290,10 @@ export function mergeCharacterCombatOwnerCompilations({
   compilations,
 }) {
   const ownerIds = new Set(compilations.map(item => Number(item.ownerId)));
-  const replaceOwnerRecords = (records, additions) =>
-    [
-      ...(records ?? []).filter(record => !ownerIds.has(Number(record.ownerId))),
-      ...additions,
-    ];
+  const replaceOwnerRecords = (records, additions) => [
+    ...(records ?? []).filter(record => !ownerIds.has(Number(record.ownerId))),
+    ...additions,
+  ];
   const contextEdges = replaceOwnerRecords(
     actionVariantGraph.contextEdges,
     compilations.flatMap(item => item.contracts.contextEdges)
@@ -287,13 +324,17 @@ export function mergeCharacterCombatOwnerCompilations({
   );
   const targetStateTransactions = replaceOwnerRecords(
     actionVariantGraph.targetStateTransactions,
-    compilations.flatMap(
-      item => item.contracts.targetStateTransactions ?? []
-    )
+    compilations.flatMap(item => item.contracts.targetStateTransactions ?? [])
   );
   const conditionalHitGroups = replaceOwnerRecords(
     actionVariantGraph.conditionalHitGroups,
     compilations.flatMap(item => item.contracts.conditionalHitGroups ?? [])
+  );
+  const tuningMarkConditionalDamageGroups = replaceOwnerRecords(
+    actionVariantGraph.tuningMarkConditionalDamageGroups,
+    compilations.flatMap(
+      item => item.contracts.tuningMarkConditionalDamageGroups ?? []
+    )
   );
   const runtimeEffectBindings = replaceOwnerRecords(
     actionVariantGraph.runtimeEffectBindings,
@@ -337,6 +378,8 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.targetStateProfiles = targetStateProfiles;
   actionVariantGraph.targetStateTransactions = targetStateTransactions;
   actionVariantGraph.conditionalHitGroups = conditionalHitGroups;
+  actionVariantGraph.tuningMarkConditionalDamageGroups =
+    tuningMarkConditionalDamageGroups;
   actionVariantGraph.runtimeEffectBindings = runtimeEffectBindings;
   actionVariantGraph.derivedControlContracts =
     applyCompiledInputVariantSelectors({
@@ -360,6 +403,8 @@ export function mergeCharacterCombatOwnerCompilations({
     targetStateProfileCount: targetStateProfiles.length,
     targetStateTransactionCount: targetStateTransactions.length,
     conditionalHitGroupCount: conditionalHitGroups.length,
+    tuningMarkConditionalDamageGroupCount:
+      tuningMarkConditionalDamageGroups.length,
     runtimeEffectBindingCount: runtimeEffectBindings.length,
   };
   specialResourceCatalog.thresholdTransitions = thresholdTransitions;
@@ -394,6 +439,7 @@ export function mergeCharacterCombatOwnerCompilations({
     targetStateProfiles,
     targetStateTransactions,
     conditionalHitGroups,
+    tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
   };
 }
@@ -485,8 +531,7 @@ export function applyCharacterCombatActionHitBindings({
       targetKind: binding.targetKind,
       targetSourceField: 'character-combat-verified-hit-binding',
       sourceIdentity: binding.sourceIdentity,
-      conditionalGroupIdentity:
-        binding.conditionalGroupIdentity ?? null,
+      conditionalGroupIdentity: binding.conditionalGroupIdentity ?? null,
       runtimeCondition: binding.runtimeCondition ?? null,
       sourceBindingIdentity: binding.bindingIdentity,
       hitActivation: binding.hitActivation ?? null,
@@ -522,15 +567,14 @@ export function applyCharacterCombatActionHitBindings({
       sourceIdentity: [element.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
+      conditionalGroupIdentity: binding.conditionalGroupIdentity ?? null,
+      runtimeCondition: binding.runtimeCondition ?? null,
     };
   }
   return controls;
 }
 
-function normalizeConditionalHitElement({
-  element,
-  formulaNormalization,
-}) {
+function normalizeConditionalHitElement({ element, formulaNormalization }) {
   const damageType = Number(element.damage?.damageType);
   const weakBreakDamageRate = Number(
     element.damage?.weakBreakDamageRateBasisPoints
@@ -634,6 +678,78 @@ export function applyCharacterCombatActionEffectBindings({
   return controls;
 }
 
+export function applyCharacterCombatResourceOperationBindings({
+  controls,
+  compilations,
+}) {
+  const operations = (compilations ?? [])
+    .flatMap(compilation => compilation.contracts.resourceTransactions ?? [])
+    .filter(
+      operation =>
+        operation.applied === true &&
+        operation.operation === 'transform-remove' &&
+        Number.isInteger(Number(operation.sourceElementId)) &&
+        Number.isInteger(Number(operation.stateElementId))
+    );
+  for (const operation of operations) {
+    const control = (controls ?? []).find(
+      item => Number(item.controlSkillId) === Number(operation.controlSkillId)
+    );
+    if (!control) {
+      throw new Error(
+        `character combat resource operation control missing: ${operation.ownerId}/${operation.controlSkillId}`
+      );
+    }
+    const candidates = (control.effects ?? []).filter(
+      effect =>
+        Number(effect.mapIndex) === Number(operation.subSkillIndex) &&
+        Number(effect.rootElementId) === Number(operation.sourceElementId) &&
+        Number(effect.trigger?.startFrame) === Number(operation.triggerFrame)
+    );
+    const removedStatePathIds = new Set(
+      candidates
+        .filter(
+          effect =>
+            Number(effect.elementId) === Number(operation.stateElementId)
+        )
+        .map(effect => String(effect.pathId))
+    );
+    if (removedStatePathIds.size === 0) continue;
+    control.effects = (control.effects ?? []).map(effect => {
+      if (!candidates.includes(effect)) return effect;
+      const isRemovedState = removedStatePathIds.has(String(effect.pathId));
+      const isRemovedStateDescendant = (effect.relationPath ?? []).some(edge =>
+        [...removedStatePathIds].some(
+          pathId => edge.from === `element:${pathId}`
+        )
+      );
+      if (!isRemovedState && !isRemovedStateDescendant) return effect;
+      return {
+        ...effect,
+        classification: 'not-applicable',
+        scenarioClassification: 'not-applicable',
+        status: 'not-applicable',
+        confidence: 'high',
+        applied: false,
+        reasons: [
+          ...new Set([
+            ...(effect.reasons ?? []),
+            'source-driven-transform-remove-handles-state-subtree',
+          ]),
+        ],
+        sourceDrivenResourceOperation: {
+          operationIdentity: operation.operationIdentity,
+          operation: operation.operation,
+          sourceElementId: Number(operation.sourceElementId),
+          stateElementId: Number(operation.stateElementId),
+          sourceIdentity: operation.sourceIdentity,
+        },
+      };
+    });
+  }
+  return controls;
+}
+
 export function applyCharacterCombatAttackInputPhaseMappings({
   mechanicsPackage,
   compilations,
@@ -661,51 +777,45 @@ export function applyCharacterCombatAttackInputPhaseMappings({
           mapping.attackInputSegments ??
           []),
       ];
-      const projectedSegments = (chain.segments ?? []).map(
-        (segment, index) => {
-          const source = sourceSegments.find(candidate => {
-            if (
-              Number(candidate.controlSkillId) !==
-              Number(segment.controlSkillId)
-            ) {
-              return false;
-            }
-            const candidateSubSkillIndex = Number(
-              candidate.selectedSubSkillIndex ??
-                candidate.subSkillIndex ??
-                0
-            );
-            return (
-              candidateSubSkillIndex === Number(segment.subSkillIndex) ||
-              candidateSubSkillIndex === 0
-            );
-          });
-          if (!source) {
-            throw new Error(
-              `character combat default attack phase source segment missing: ${compilation.ownerId}/${chain.chainIdentity}/${segment.controlSkillId}/sub${segment.subSkillIndex}`
-            );
+      const projectedSegments = (chain.segments ?? []).map((segment, index) => {
+        const source = sourceSegments.find(candidate => {
+          if (
+            Number(candidate.controlSkillId) !== Number(segment.controlSkillId)
+          ) {
+            return false;
           }
-          const sequenceIndex = index + 1;
-          return {
-            ...source,
-            sequenceIndex,
-            sequenceTotal: chain.segments.length,
-            label: segment.label ?? `A${sequenceIndex}`,
-            semanticName:
-              segment.semanticName ??
-              source.semanticName ??
-              `普通攻击 A${sequenceIndex}`,
-            selectedSubSkillIndex: Number(segment.subSkillIndex),
-            effectiveDurationFrames: Number(segment.durationFrames),
-            durationFrames: Number(segment.durationFrames),
-            durationStatus:
-              segment.applied === false ? 'unresolved' : 'applied',
-            durationBasis: 'character-combat-default-attack-phase',
-            durationSourceIdentity: segment.sourceIdentity,
-            attackInputChainIdentity: chain.chainIdentity,
-          };
+          const candidateSubSkillIndex = Number(
+            candidate.selectedSubSkillIndex ?? candidate.subSkillIndex ?? 0
+          );
+          return (
+            candidateSubSkillIndex === Number(segment.subSkillIndex) ||
+            candidateSubSkillIndex === 0
+          );
+        });
+        if (!source) {
+          throw new Error(
+            `character combat default attack phase source segment missing: ${compilation.ownerId}/${chain.chainIdentity}/${segment.controlSkillId}/sub${segment.subSkillIndex}`
+          );
         }
-      );
+        const sequenceIndex = index + 1;
+        return {
+          ...source,
+          sequenceIndex,
+          sequenceTotal: chain.segments.length,
+          label: segment.label ?? `A${sequenceIndex}`,
+          semanticName:
+            segment.semanticName ??
+            source.semanticName ??
+            `普通攻击 A${sequenceIndex}`,
+          selectedSubSkillIndex: Number(segment.subSkillIndex),
+          effectiveDurationFrames: Number(segment.durationFrames),
+          durationFrames: Number(segment.durationFrames),
+          durationStatus: segment.applied === false ? 'unresolved' : 'applied',
+          durationBasis: 'character-combat-default-attack-phase',
+          durationSourceIdentity: segment.sourceIdentity,
+          attackInputChainIdentity: chain.chainIdentity,
+        };
+      });
       mapping.attackInputSourceSegments = sourceSegments;
       mapping.attackInputSegments = projectedSegments;
       mapping.attackInputChainIdentity = chain.chainIdentity;
@@ -747,8 +857,7 @@ export function applyCharacterCombatAttackInputPhaseMappings({
           Number(form.executionControlSkillId)
       );
       const hits = (executionControl?.hits ?? []).filter(
-        hit =>
-          Number(hit.mapIndex) === Number(form.executionSubSkillIndex)
+        hit => Number(hit.mapIndex) === Number(form.executionSubSkillIndex)
       );
       const effects = (executionControl?.effects ?? []).filter(
         effect =>
@@ -828,9 +937,7 @@ function applyVariantWindowBindings({ edges, bindings }) {
     }
     const indexes = output
       .map((edge, index) => ({ edge, index }))
-      .filter(({ edge }) =>
-        matchesVariantWindowBinding(edge, binding)
-      )
+      .filter(({ edge }) => matchesVariantWindowBinding(edge, binding))
       .map(item => item.index);
     if (indexes.length < 1) {
       throw new Error(
@@ -916,9 +1023,7 @@ function applyActionEffectBinding(effect, binding) {
       lifecycle: {
         ...(effect.lifecycle ?? {}),
         durationMs:
-          binding.durationMsOverride ??
-          effect.lifecycle?.durationMs ??
-          null,
+          binding.durationMsOverride ?? effect.lifecycle?.durationMs ?? null,
         stackDelta: binding.lifecycleStackDelta,
         maxStacks:
           binding.lifecycleMaxStacks ??
@@ -976,6 +1081,7 @@ function applyActionEffectBinding(effect, binding) {
       sourceIdentity: binding.sourceIdentity,
     },
     tuningMark: binding.tuningMark,
+    hitGate: binding.hitGate ?? null,
     targetStateActivationCondition:
       binding.targetStateActivationCondition ?? null,
     hitActivation: binding.hitActivation ?? null,
@@ -1002,14 +1108,22 @@ function compileSpecialResourceContracts({
   definitions,
   resourceProfiles,
   resourceOperations,
+  operators,
 }) {
   const profiles = [];
   const operations = [];
   for (const definition of definitions) {
     const elementId = Number(definition.resourceElementId);
-    const profile = resourceProfiles.find(
+    const discoveredProfile = resourceProfiles.find(
       item => Number(item.elementId) === elementId
     );
+    const profile =
+      discoveredProfile ??
+      compileAssetDeclaredResourceProfile({
+        ownerId,
+        definition,
+        operators,
+      });
     if (!profile) {
       throw new Error(
         `character combat resource profile missing: ${ownerId}/${elementId}`
@@ -1054,7 +1168,8 @@ function compileSpecialResourceContracts({
     const notApplicableCount = normalized.filter(
       item => item.status === 'not-applicable'
     ).length;
-    const unresolvedCount = normalized.length - appliedCount - notApplicableCount;
+    const unresolvedCount =
+      normalized.length - appliedCount - notApplicableCount;
     const expected = definition.expectedOperationCounts ?? {};
     for (const [key, actual] of Object.entries({
       total: normalized.length,
@@ -1073,6 +1188,94 @@ function compileSpecialResourceContracts({
   return {
     profiles: sortByIdentity(profiles),
     operations: sortByIdentity(operations),
+  };
+}
+
+function compileAssetDeclaredResourceProfile({
+  ownerId,
+  definition,
+  operators,
+}) {
+  const declaration = definition.assetDeclaredProfile;
+  if (!declaration || typeof declaration !== 'object') return null;
+  const elementId = Number(definition.resourceElementId);
+  const asset = operators.readElementAsset(elementId);
+  const tree = asset?.tree;
+  const capacity = Number(tree?.combineNumber);
+  const combineType = Number(tree?.combineType);
+  const expectedCombineType = Number(
+    declaration.expectedCombineType ?? combineType
+  );
+  if (
+    !asset ||
+    Number(tree?.elementConfigId) !== elementId ||
+    combineType !== expectedCombineType ||
+    !Number.isInteger(capacity) ||
+    capacity <= 0
+  ) {
+    throw new Error(
+      `character combat asset-declared resource profile invalid: ${ownerId}/${elementId}`
+    );
+  }
+  const stateElements = (declaration.stateElements ?? []).map(state => {
+    const stateElementId = Number(state.elementId);
+    const stateAsset = operators.readElementAsset(stateElementId);
+    const durationMs = Number(stateAsset?.tree?.time);
+    if (
+      !stateAsset ||
+      Number(stateAsset.tree?.elementConfigId) !== stateElementId ||
+      (state.expectedDurationMs != null &&
+        durationMs !== Number(state.expectedDurationMs)) ||
+      (state.expectedCombineType != null &&
+        Number(stateAsset.tree?.combineType) !==
+          Number(state.expectedCombineType))
+    ) {
+      throw new Error(
+        `character combat asset-declared resource state invalid: ${ownerId}/${elementId}/${stateElementId}`
+      );
+    }
+    return {
+      elementId: stateElementId,
+      pathId: String(stateAsset.pathId),
+      name: state.name ?? stateAsset.tree?.elementName ?? null,
+      displayLabel:
+        state.displayLabel ??
+        state.name ??
+        stateAsset.tree?.elementName ??
+        null,
+      sourceNameStatus: stateAsset.tree?.elementName
+        ? 'source-name-ready'
+        : 'source-name-missing',
+      durationMs: Number.isFinite(durationMs) ? durationMs : null,
+      combineType: Number(stateAsset.tree?.combineType),
+      sourceIdentity: [stateAsset.sourceIdentity, state.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-special-resource-state-ready',
+      applied: true,
+    };
+  });
+  return {
+    ownerId,
+    elementId,
+    pathId: String(asset.pathId),
+    resourceIdentity: `actor:${ownerId}:element:${elementId}`,
+    name: declaration.name ?? tree.elementName ?? `资源 ${elementId}`,
+    displayLabel:
+      declaration.displayLabel ?? declaration.name ?? tree.elementName ?? null,
+    rawSourceName: tree.elementName ?? null,
+    sourceNameStatus: tree.elementName
+      ? 'source-name-ready'
+      : 'source-name-missing',
+    capacity,
+    combineType,
+    stateElements,
+    sourceIdentity: [asset.sourceIdentity, declaration.sourceIdentity]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-special-resource-profile-ready',
+    reasons: [],
+    applied: true,
   };
 }
 
@@ -1126,11 +1329,7 @@ function compileSpecialResourceInitialStatePolicy({
   };
 }
 
-function compileDeclaredResourceOperations({
-  ownerId,
-  profile,
-  declarations,
-}) {
+function compileDeclaredResourceOperations({ ownerId, profile, declarations }) {
   return declarations.map(declaration => {
     const triggerFrame = Number(declaration.triggerFrame);
     const frameRate = Number(declaration.frameRate) || 60;
@@ -1139,9 +1338,14 @@ function compileDeclaredResourceOperations({
       !declaration.operationIdentity ||
       !Number.isInteger(Number(declaration.controlSkillId)) ||
       !Number.isInteger(Number(declaration.subSkillIndex)) ||
-      !['gain', 'consume', 'clear', 'transform', 'set-to-capacity'].includes(
-        declaration.operation
-      ) ||
+      ![
+        'gain',
+        'consume',
+        'clear',
+        'transform',
+        'transform-remove',
+        'set-to-capacity',
+      ].includes(declaration.operation) ||
       !Number.isInteger(triggerFrame) ||
       triggerFrame < 0 ||
       !Number.isFinite(amount)
@@ -1180,6 +1384,7 @@ function compileDeclaredResourceOperations({
           : Number(declaration.sourceElementId),
       sourcePathId: declaration.sourcePathId ?? null,
       sourceIdentity: declaration.sourceIdentity,
+      hitGate: compileActionHitGate(declaration.hitGate),
       status: 'verified-special-resource-operation-ready',
       reasons: [],
       impactClassification: 'gameplay-resource-transaction',
@@ -1189,6 +1394,77 @@ function compileDeclaredResourceOperations({
   });
 }
 
+function compileActionHitGate(definition) {
+  if (definition == null) return null;
+  if (!definition || typeof definition !== 'object') {
+    throw new Error('character combat action hit gate is invalid');
+  }
+  if (definition.kind === 'landed-action-hit') {
+    const elementId = Number(definition.elementId);
+    const triggerFrame = Number(definition.triggerFrame);
+    const maximumMatches = Number(definition.maximumMatches ?? 1);
+    if (
+      !Number.isInteger(elementId) ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !Number.isInteger(maximumMatches) ||
+      maximumMatches <= 0
+    ) {
+      throw new Error('character combat landed action hit gate is invalid');
+    }
+    return {
+      kind: 'landed-action-hit',
+      elementId,
+      triggerFrame,
+      behaviorPathId: definition.behaviorPathId ?? null,
+      maximumMatches,
+      sourceIdentity: definition.sourceIdentity ?? null,
+    };
+  }
+  if (definition.kind === 'conditional-damage-group-hit') {
+    const hitIndex = Number(definition.hitIndex ?? 1);
+    if (
+      !definition.groupIdentity ||
+      !Number.isInteger(hitIndex) ||
+      hitIndex <= 0
+    ) {
+      throw new Error(
+        'character combat conditional damage action hit gate is invalid'
+      );
+    }
+    return {
+      kind: 'conditional-damage-group-hit',
+      groupIdentity: String(definition.groupIdentity),
+      hitIndex,
+      sourceIdentity: definition.sourceIdentity ?? null,
+    };
+  }
+  throw new Error(
+    `character combat action hit gate kind unsupported: ${definition.kind}`
+  );
+}
+
+function validateActionEffectHitGates({
+  ownerId,
+  actionEffectBindings,
+  tuningMarkConditionalDamageGroups,
+}) {
+  const groupIdentities = new Set(
+    (tuningMarkConditionalDamageGroups ?? []).map(group => group.groupIdentity)
+  );
+  for (const binding of actionEffectBindings ?? []) {
+    const gate = binding.hitGate;
+    if (
+      gate?.kind === 'conditional-damage-group-hit' &&
+      !groupIdentities.has(gate.groupIdentity)
+    ) {
+      throw new Error(
+        `character combat action effect hit gate group missing: ${ownerId}/${binding.bindingIdentity}/${gate.groupIdentity}`
+      );
+    }
+  }
+}
+
 function classifyResourceOperation(operation, rules) {
   const rule = rules.find(candidate =>
     matchesResourceOperationRule(operation, candidate.match ?? {})
@@ -1196,13 +1472,19 @@ function classifyResourceOperation(operation, rules) {
   if (!rule) return operation;
   if (rule.status === 'applied') {
     const triggerFrame = Number(rule.triggerFrame);
-    const frameRate = Number(rule.frameRate) || Number(operation.frameRate) || 60;
+    const frameRate =
+      Number(rule.frameRate) || Number(operation.frameRate) || 60;
     if (
       !Number.isInteger(triggerFrame) ||
       triggerFrame < 0 ||
-      !['gain', 'consume', 'clear', 'transform', 'set-to-capacity'].includes(
-        rule.operation ?? operation.operation
-      )
+      ![
+        'gain',
+        'consume',
+        'clear',
+        'transform',
+        'transform-remove',
+        'set-to-capacity',
+      ].includes(rule.operation ?? operation.operation)
     ) {
       throw new Error(
         `invalid applied character combat resource operation rule: ${operation.operationIdentity}`
@@ -1239,8 +1521,7 @@ function classifyResourceOperation(operation, rules) {
     rawReasons: [...(operation.reasons ?? [])],
     status: 'not-applicable',
     reasons: [rule.reason ?? 'structural-resource-reference'],
-    impactClassification:
-      rule.impactClassification ?? 'wrapper-or-duplicate',
+    impactClassification: rule.impactClassification ?? 'wrapper-or-duplicate',
     classificationSourceIdentity:
       rule.sourceIdentity ?? operation.sourceIdentity ?? null,
     applied: false,
@@ -1305,14 +1586,15 @@ export function createCharacterCombatOwnerRuntimeContracts({
     timingInputEdges: compilation.contracts.contextEdges,
     variantEdges: sortByIdentity(variantEdges ?? []),
     attackInputChains: compilation.contracts.attackInputChains,
-    controlTransitionWindows:
-      compilation.contracts.controlTransitionWindows,
+    controlTransitionWindows: compilation.contracts.controlTransitionWindows,
     variantWindowBindings: compilation.contracts.variantWindowBindings,
     actionEffectBindings: compilation.contracts.actionEffectBindings,
     actionHitBindings: compilation.contracts.actionHitBindings,
     targetStateProfiles: compilation.contracts.targetStateProfiles,
     targetStateTransactions: compilation.contracts.targetStateTransactions,
     conditionalHitGroups: compilation.contracts.conditionalHitGroups,
+    tuningMarkConditionalDamageGroups:
+      compilation.contracts.tuningMarkConditionalDamageGroups,
     runtimeEffectBindings: compilation.contracts.runtimeEffectBindings,
     hits: sortByIdentity(hits ?? []),
     resourceProfiles: sortByIdentity(resourceProfiles ?? []),
@@ -1385,8 +1667,7 @@ export function createCharacterCombatStatDependencies({
           sourceKind: 'verified-actor-sp-profile',
           characterId: Number(ownerId),
           sourceIdentity:
-            actorSp.sourceIdentity ??
-            `verified-owner-profile:actor:${ownerId}`,
+            actorSp.sourceIdentity ?? `verified-owner-profile:actor:${ownerId}`,
           status: 'applied',
         }
       : null,
@@ -1423,8 +1704,7 @@ export function createCompiledActionForms({
       executionSubSkillIndex: segment.subSkillIndex,
       sequenceIndex: segment.sequenceIndex,
       sequenceTotal: segment.sequenceTotal,
-      semanticName:
-        `${chain.semanticNamePrefix ?? '普通攻击'} A${segment.sequenceIndex}`,
+      semanticName: `${chain.semanticNamePrefix ?? '普通攻击'} A${segment.sequenceIndex}`,
       executionTiming: segment.executionTiming,
       sourceIdentity: segment.sourceIdentity,
       status: segment.applied ? 'applied' : 'static-evidence-gap',
@@ -1515,8 +1795,7 @@ function compileContextInputEdges({
           bridgeType: definition.inputWindow.bridgeType ?? null,
           continuousAttackType:
             definition.inputWindow.continuousAttackType ?? null,
-          interruptBehavior:
-            definition.inputWindow.interruptBehavior ?? null,
+          interruptBehavior: definition.inputWindow.interruptBehavior ?? null,
           baseOnInput: definition.inputWindow.baseOnInput ?? null,
           inputToIndex: definition.inputWindow.inputToIndex ?? null,
           sourceIdentity: definition.sourceIdentity,
@@ -1742,10 +2021,7 @@ function compilePublicActionForms({
       condition,
       executionPrerequisite,
       executionTiming: toRuntimeExecutionTiming(timing),
-      sourceIdentity: [
-        ...definitionSources,
-        timing?.sourceIdentity,
-      ]
+      sourceIdentity: [...definitionSources, timing?.sourceIdentity]
         .filter(Boolean)
         .join('|'),
       status: applied
@@ -1767,9 +2043,7 @@ function applyDeclaredExecutionOccupancy({
   const durationFrames = Number(declaration.durationFrames);
   const frameRate =
     Number(declaration.frameRate) || Number(timing?.frameRate) || 60;
-  const animationDurationFrames = Number(
-    timing?.animation?.durationFrames
-  );
+  const animationDurationFrames = Number(timing?.animation?.durationFrames);
   if (
     !Number.isInteger(durationFrames) ||
     durationFrames <= 0 ||
@@ -1787,8 +2061,7 @@ function applyDeclaredExecutionOccupancy({
     durationFrames,
     frameRate,
     status: 'applied',
-    sourceKind:
-      declaration.sourceKind ?? 'declared-verified-input-occupancy',
+    sourceKind: declaration.sourceKind ?? 'declared-verified-input-occupancy',
     sourceIdentity: declaration.sourceIdentity,
     conversion: `${durationFrames} source frames at ${frameRate}fps`,
     reasons: [],
@@ -1798,10 +2071,7 @@ function applyDeclaredExecutionOccupancy({
     occupancy,
     status: 'applied',
     sourceKind: occupancy.sourceKind,
-    sourceIdentity: [
-      timing?.sourceIdentity,
-      declaration.sourceIdentity,
-    ]
+    sourceIdentity: [timing?.sourceIdentity, declaration.sourceIdentity]
       .filter(Boolean)
       .join('|'),
     reasons: (timing?.reasons ?? []).filter(
@@ -1843,9 +2113,7 @@ function compileInputVariantSelectors({
         identity: option.selectorIdentity,
       });
       const publicVariantIndex = Number(option.publicVariantIndex);
-      const executionSubSkillIndex = Number(
-        option.executionSubSkillIndex
-      );
+      const executionSubSkillIndex = Number(option.executionSubSkillIndex);
       if (
         !option.selectorIdentity ||
         !Number.isInteger(publicVariantIndex) ||
@@ -1867,17 +2135,13 @@ function compileInputVariantSelectors({
         subSkillIndex: executionSubSkillIndex,
         playerSkillId:
           executionControl.variants?.find(
-            variant =>
-              Number(variant.subSkillIndex) === executionSubSkillIndex
+            variant => Number(variant.subSkillIndex) === executionSubSkillIndex
           )?.playerSkillId ?? null,
         durationFrames: executionTiming.occupancy.durationFrames,
         chargeTier:
           option.chargeTier == null ? null : Number(option.chargeTier),
         executionTiming: toRuntimeExecutionTiming(executionTiming),
-        sourceIdentity: [
-          option.sourceIdentity,
-          executionTiming.sourceIdentity,
-        ]
+        sourceIdentity: [option.sourceIdentity, executionTiming.sourceIdentity]
           .filter(Boolean)
           .join('|'),
         resolutionStatus: 'applied',
@@ -1935,8 +2199,7 @@ function applyCompiledInputVariantSelectors({ contracts, bindings }) {
     const index = nextContracts.findIndex(
       contract =>
         Number(contract.ownerId) === Number(binding.ownerId) &&
-        Number(contract.controlSkillId) ===
-          Number(binding.publicControlSkillId)
+        Number(contract.controlSkillId) === Number(binding.publicControlSkillId)
     );
     const current = index >= 0 ? nextContracts[index] : null;
     const next = {
@@ -2193,12 +2456,8 @@ function compileAttackChainContinuityRules({
     return {
       ruleIdentity: definition.ruleIdentity,
       ownerId,
-      intermediaryControlSkillId: Number(
-        definition.intermediaryControlSkillId
-      ),
-      intermediarySubSkillIndex: Number(
-        definition.intermediarySubSkillIndex
-      ),
+      intermediaryControlSkillId: Number(definition.intermediaryControlSkillId),
+      intermediarySubSkillIndex: Number(definition.intermediarySubSkillIndex),
       requiredActiveTargetControlSkillId: Number(
         definition.requiredActiveTargetControlSkillId
       ),
@@ -2259,10 +2518,7 @@ function compileAttackInputSegmentLimit({
     resourceIdentity: profile.resourceIdentity,
     costPerSegment,
     maximum: Math.min(maximum, Number(profile.capacity)),
-    sourceIdentity: [
-      profile.sourceIdentity,
-      definition.sourceIdentity,
-    ]
+    sourceIdentity: [profile.sourceIdentity, definition.sourceIdentity]
       .filter(Boolean)
       .join('|'),
   };
@@ -2337,15 +2593,11 @@ function compileVariantWindowBindings({
         resourceProfiles,
         operators
       ),
-      sourceIdentity: [
-        sourceElement.sourceIdentity,
-        definition.sourceIdentity,
-      ]
+      sourceIdentity: [sourceElement.sourceIdentity, definition.sourceIdentity]
         .filter(Boolean)
         .join('|'),
       verification:
-        definition.verification &&
-        typeof definition.verification === 'object'
+        definition.verification && typeof definition.verification === 'object'
           ? { ...definition.verification }
           : null,
       status: 'applied',
@@ -2418,9 +2670,7 @@ function compileControlTransitionWindows({
           continuousAttackType: nonNegativeIntegerOrNull(
             window.continuousAttackType
           ),
-          interruptBehavior: nonNegativeIntegerOrNull(
-            window.interruptBehavior
-          ),
+          interruptBehavior: nonNegativeIntegerOrNull(window.interruptBehavior),
           frameIndex: nonNegativeIntegerOrNull(window.frameIndex),
           behaviorLineName: window.behaviorLineName ?? null,
           sourceIdentity: window.sourceIdentity ?? control.sourcePath ?? null,
@@ -2548,10 +2798,7 @@ function compileActionEffectBindings({
   operators,
 }) {
   const targetStateProfileByIdentity = new Map(
-    (targetStateProfiles ?? []).map(profile => [
-      profile.stateIdentity,
-      profile,
-    ])
+    (targetStateProfiles ?? []).map(profile => [profile.stateIdentity, profile])
   );
   return definitions.map(definition => {
     const control = requireControl(
@@ -2573,12 +2820,9 @@ function compileActionEffectBindings({
             definition.tuningMarkProfileKey
         )
       : null;
-    const lifecycleStackDelta = Number(
-      definition.lifecycleStackDelta
-    );
+    const lifecycleStackDelta = Number(definition.lifecycleStackDelta);
     const lifecycleBinding =
-      Number.isFinite(lifecycleStackDelta) &&
-      lifecycleStackDelta > 0;
+      Number.isFinite(lifecycleStackDelta) && lifecycleStackDelta > 0;
     const targetStateActivationCondition =
       compileActionEffectTargetStateActivationCondition({
         ownerId,
@@ -2637,9 +2881,7 @@ function compileActionEffectBindings({
             applied: true,
           }
         : null,
-      lifecycleStackDelta: lifecycleBinding
-        ? lifecycleStackDelta
-        : null,
+      lifecycleStackDelta: lifecycleBinding ? lifecycleStackDelta : null,
       lifecycleMaxStacks:
         definition.lifecycleMaxStacks == null
           ? null
@@ -2652,6 +2894,7 @@ function compileActionEffectBindings({
       targetStateActivationCondition,
       hitActivation,
       sourceReferenceKind: definition.sourceReferenceKind ?? null,
+      hitGate: compileActionHitGate(definition.hitGate),
       activationConditionScope:
         definition.activationConditionScope ?? 'matched-effect',
       inheritance,
@@ -2695,8 +2938,7 @@ function compileActionEffectHitActivation({
       element =>
         Number(element.mapIndex) === Number(subSkillIndex) &&
         Number(element.elementId) === elementId &&
-        (!sourceReferenceKind ||
-          element.referenceKind === sourceReferenceKind)
+        (!sourceReferenceKind || element.referenceKind === sourceReferenceKind)
     )
     .flatMap(element =>
       [...(element.scenarioTriggers ?? []), ...(element.triggers ?? [])].map(
@@ -2786,9 +3028,8 @@ function compileActionEffectTargetStateActivationCondition({
   const parameters =
     tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
   const commonFunctionId = Number(tree?.formulaParams?.function_1);
-  const family = ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES.get(
-    commonFunctionId
-  );
+  const family =
+    ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES.get(commonFunctionId);
   const stateElementId = Number(parameters[12]);
   const threshold = Number(parameters[8]);
   const trueValue = Number(parameters[19]);
@@ -2926,8 +3167,7 @@ function compileTargetStateTransactions({
         ? null
         : (control.elements ?? []).find(
             element =>
-              Number(element.mapIndex) ===
-                Number(definition.subSkillIndex) &&
+              Number(element.mapIndex) === Number(definition.subSkillIndex) &&
               Number(element.elementId) === hitElementId &&
               (element.triggers ?? []).some(
                 trigger => Number(trigger.startFrame) === triggerFrame
@@ -3004,8 +3244,7 @@ function compileConditionalHitGroups({
     const profile = profileByIdentity.get(String(definition.stateIdentity));
     const sourceElement = (sourceControl.elements ?? []).find(
       element =>
-        Number(element.mapIndex) ===
-          Number(definition.sourceSubSkillIndex) &&
+        Number(element.mapIndex) === Number(definition.sourceSubSkillIndex) &&
         Number(element.elementId) === Number(definition.elementId) &&
         (!definition.sourceReferenceKind ||
           element.referenceKind === definition.sourceReferenceKind)
@@ -3014,10 +3253,7 @@ function compileConditionalHitGroups({
       resolveTargetStateConditionalFormulaNormalization({
         sourceElement,
         profile,
-        minimumStacks: Math.max(
-          1,
-          Number(definition.minimumStacks) || 1
-        ),
+        minimumStacks: Math.max(1, Number(definition.minimumStacks) || 1),
         operators,
       });
     const decisionFrame = Number(definition.decisionFrame);
@@ -3041,10 +3277,7 @@ function compileConditionalHitGroups({
         minimumStacks,
         amount,
         sourceElementId: Number(band.sourceElementId),
-        sourceIdentity: [
-          asset.sourceIdentity,
-          band.sourceIdentity,
-        ]
+        sourceIdentity: [asset.sourceIdentity, band.sourceIdentity]
           .filter(Boolean)
           .join('|'),
         status: 'verified-target-state-consume-band-ready',
@@ -3107,10 +3340,7 @@ function compileConditionalHitGroups({
       decisionFrame,
       frameRate: Number(targetControl.frameRate) || 60,
       stateIdentity: profile.stateIdentity,
-      minimumStacks: Math.max(
-        1,
-        Number(definition.minimumStacks) || 1
-      ),
+      minimumStacks: Math.max(1, Number(definition.minimumStacks) || 1),
       consumePolicy: definition.consumePolicy ?? 'consume-band-or-all',
       consumeBands: consumeBands.sort(
         (left, right) => right.minimumStacks - left.minimumStacks
@@ -3132,8 +3362,7 @@ function compileConditionalHitGroups({
             applied: true,
           }
         : null,
-      tuningMarkPerLandedHit:
-        definition.tuningMarkPerLandedHit === true,
+      tuningMarkPerLandedHit: definition.tuningMarkPerLandedHit === true,
       tuningMarkHitElementId:
         definition.tuningMarkHitElementId == null
           ? null
@@ -3177,9 +3406,7 @@ function resolveTargetStateConditionalFormulaNormalization({
   const trueValue = Number(parameters[19]);
   const falseValue = Number(parameters[5]);
   const expectedMinimumStacks = threshold + 1;
-  const ratioAtLevelOne = Number(
-    sourceElement.formula?.ratiosByLevel?.[1]
-  );
+  const ratioAtLevelOne = Number(sourceElement.formula?.ratiosByLevel?.[1]);
   if (
     Number(tree?.formulaParams?.function_1) !==
       TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID ||
@@ -3194,8 +3421,7 @@ function resolveTargetStateConditionalFormulaNormalization({
   }
   return {
     kind: 'target-state-condition-to-unity-common-factor',
-    originalCommonFunctionId:
-      TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
+    originalCommonFunctionId: TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
     normalizedCommonFunctionId: 1,
     stateIdentity: profile.stateIdentity,
     stateElementId,
@@ -3266,14 +3492,13 @@ function compileRuntimeEffectBindings({
       'action-hit-landed',
       'action-periodic',
     ];
-    const control =
-      actionTriggerKinds.includes(triggerKind)
-        ? requireControl(
-            controlBySkillId,
-            definition.controlSkillId,
-            'runtime effect binding'
-          )
-        : null;
+    const control = actionTriggerKinds.includes(triggerKind)
+      ? requireControl(
+          controlBySkillId,
+          definition.controlSkillId,
+          'runtime effect binding'
+        )
+      : null;
     const triggerFrame = Number(
       definition.triggerFrame ?? group?.decisionFrame
     );
@@ -3356,8 +3581,7 @@ function compileRuntimeEffectBindings({
             asset: periodicAsset,
             expectedDurationMs: definition.expectedPeriodicDurationMs,
             expectedIntervalMs: definition.expectedPeriodicIntervalMs,
-            expectedTimeExeFirstFrame:
-              definition.expectedTimeExeFirstFrame,
+            expectedTimeExeFirstFrame: definition.expectedTimeExeFirstFrame,
             firstTickFrameOffset: definition.firstTickFrameOffset,
           })
         : null;
@@ -3400,21 +3624,16 @@ function compileRuntimeEffectBindings({
           ? stateProfile.stateIdentity
           : null,
       stateName:
-        triggerKind === 'action-frame-with-state'
-          ? stateProfile.name
-          : null,
+        triggerKind === 'action-frame-with-state' ? stateProfile.name : null,
       minimumStacks,
-      controlSkillId:
-        actionTriggerKinds.includes(triggerKind)
-          ? Number(definition.controlSkillId)
-          : group.controlSkillId,
-      subSkillIndex:
-        actionTriggerKinds.includes(triggerKind)
-          ? Number(definition.subSkillIndex)
-          : group.subSkillIndex,
+      controlSkillId: actionTriggerKinds.includes(triggerKind)
+        ? Number(definition.controlSkillId)
+        : group.controlSkillId,
+      subSkillIndex: actionTriggerKinds.includes(triggerKind)
+        ? Number(definition.subSkillIndex)
+        : group.subSkillIndex,
       triggerFrame,
-      frameRate:
-        Number(control?.frameRate ?? group?.frameRate) || 60,
+      frameRate: Number(control?.frameRate ?? group?.frameRate) || 60,
       targetKind: definition.targetKind,
       effectId:
         definition.effectId ??
@@ -3426,9 +3645,7 @@ function compileRuntimeEffectBindings({
         propertyAsset?.tree?.elementName ??
         directSpAsset?.tree?.elementName ??
         definition.bindingIdentity,
-      durationMs: modifier
-        ? durationMs
-        : periodic?.durationMs ?? null,
+      durationMs: modifier ? durationMs : (periodic?.durationMs ?? null),
       stackMode: definition.stackMode ?? 'refresh',
       stackDelta: Math.max(1, Number(definition.stackDelta) || 1),
       maxStacks: Math.max(1, Number(definition.maxStacks) || 1),
@@ -3522,8 +3739,7 @@ function compileRuntimePropertyModifier({
     (expectedAttributeId != null &&
       attributeId !== Number(expectedAttributeId)) ||
     (expectedBucket != null && bucket !== expectedBucket) ||
-    (expectedValueRaw != null &&
-      valueRaw !== Number(expectedValueRaw))
+    (expectedValueRaw != null && valueRaw !== Number(expectedValueRaw))
   ) {
     throw new Error(
       `character combat runtime property evidence mismatch: ${asset.elementId}`
@@ -3539,11 +3755,7 @@ function compileRuntimePropertyModifier({
   };
 }
 
-function compileRuntimeDirectSp({
-  asset,
-  expectedValue,
-  expectedShareType,
-}) {
+function compileRuntimeDirectSp({ asset, expectedValue, expectedShareType }) {
   const rawValue = Number(asset.tree?.functionParams?.[0]);
   const baseFunctionId = Number(asset.tree?.formulaParams?.function_2);
   const value =
@@ -3557,8 +3769,7 @@ function compileRuntimeDirectSp({
   if (
     !Number.isFinite(value) ||
     (expectedValue != null && value !== Number(expectedValue)) ||
-    (expectedShareType != null &&
-      shareType !== Number(expectedShareType))
+    (expectedShareType != null && shareType !== Number(expectedShareType))
   ) {
     throw new Error(
       `character combat runtime direct SP evidence mismatch: ${asset.elementId}`
@@ -3590,10 +3801,8 @@ function compileRuntimePeriodicTrigger({
     !(intervalMs > 0) ||
     !Number.isInteger(resolvedFirstTickFrameOffset) ||
     resolvedFirstTickFrameOffset < 0 ||
-    (expectedDurationMs != null &&
-      durationMs !== Number(expectedDurationMs)) ||
-    (expectedIntervalMs != null &&
-      intervalMs !== Number(expectedIntervalMs)) ||
+    (expectedDurationMs != null && durationMs !== Number(expectedDurationMs)) ||
+    (expectedIntervalMs != null && intervalMs !== Number(expectedIntervalMs)) ||
     (expectedTimeExeFirstFrame != null &&
       timeExeFirstFrame !== Boolean(expectedTimeExeFirstFrame))
   ) {
@@ -3613,11 +3822,7 @@ function compileRuntimePeriodicTrigger({
   };
 }
 
-function compileActionHitBindings({
-  ownerId,
-  definitions,
-  controlBySkillId,
-}) {
+function compileActionHitBindings({ ownerId, definitions, controlBySkillId }) {
   const bindings = definitions.map(definition => {
     requireControl(
       controlBySkillId,
@@ -3649,9 +3854,7 @@ function compileActionHitBindings({
     if (
       matches.length !== 1 ||
       triggerFrames.length === 0 ||
-      triggerFrames.some(
-        frame => !Number.isInteger(frame) || frame < 0
-      ) ||
+      triggerFrames.some(frame => !Number.isInteger(frame) || frame < 0) ||
       (!Object.values(sourceElement?.dimensions ?? {}).some(
         dimension => dimension.status === 'applied'
       ) &&
@@ -3698,15 +3901,11 @@ function compileActionHitBindings({
       frameCount: Math.max(1, Number(definition.frameCount) || 1),
       targetCode: Number(definition.targetCode) || 0,
       targetKind: definition.targetKind ?? 'enemy',
-      conditionalGroupIdentity:
-        definition.conditionalGroupIdentity ?? null,
+      conditionalGroupIdentity: definition.conditionalGroupIdentity ?? null,
       runtimeCondition: definition.runtimeCondition ?? null,
       hitActivation: null,
       formulaNormalization: definition.formulaNormalization ?? null,
-      sourceIdentity: [
-        sourceElement.sourceIdentity,
-        definition.sourceIdentity,
-      ]
+      sourceIdentity: [sourceElement.sourceIdentity, definition.sourceIdentity]
         .filter(Boolean)
         .join('|'),
       status: 'applied',
@@ -3733,8 +3932,7 @@ function compileActionHitBindings({
       control,
       subSkillIndex: definition.subSkillIndex,
       actionHitBindings: bindings,
-      sourceReferenceKind:
-        definition.hitActivation.sourceReferenceKind ?? null,
+      sourceReferenceKind: definition.hitActivation.sourceReferenceKind ?? null,
     });
     return {
       ...binding,
@@ -3746,12 +3944,173 @@ function compileActionHitBindings({
   });
 }
 
+function compileTuningMarkConditionalDamageGroups({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  tuningMarkProfiles,
+  operators,
+}) {
+  return definitions.map(definition =>
+    compileTuningMarkConditionalDamageGroup({
+      ownerId,
+      definition,
+      controlBySkillId,
+      tuningMarkProfiles,
+      operators,
+      requireSourceControl: true,
+    })
+  );
+}
+
+function compileTuningMarkConditionalDamageGroup({
+  ownerId,
+  definition,
+  controlBySkillId,
+  tuningMarkProfiles,
+  operators,
+  requireSourceControl,
+}) {
+  const groupIdentity = String(definition.groupIdentity ?? '').trim();
+  const controlSkillId = Number(definition.controlSkillId);
+  const subSkillIndex = Number(definition.subSkillIndex);
+  if (requireSourceControl) {
+    requireControl(
+      controlBySkillId,
+      controlSkillId,
+      'tuning mark conditional damage group'
+    );
+  }
+  const profile = (tuningMarkProfiles ?? []).find(
+    candidate =>
+      (candidate.profileKey ?? candidate.key) ===
+      definition.tuningMarkProfileKey
+  );
+  const judgment = operators.readElementAsset(definition.judgmentElementId);
+  const base = operators.readElementAsset(definition.baseElementId);
+  const enhanced = operators.readElementAsset(definition.enhancedElementId);
+  const triggerFrames = [
+    ...new Set((definition.triggerFrames ?? []).map(Number)),
+  ].sort((left, right) => left - right);
+  const hitDelaysMs = (definition.hitDelaysMs ?? [0]).map(Number);
+  const markId = Number(profile?.markId);
+  const minimumStacks = Number(judgment?.tree?.consumeLayerNum);
+  const basePathIds = readElementPathIds(
+    judgment?.tree?.injectElementDataList_1
+  );
+  const enhancedPathIds = readElementPathIds(
+    judgment?.tree?.injectElementDataList_2
+  );
+  if (
+    !groupIdentity ||
+    !Number.isInteger(controlSkillId) ||
+    !Number.isInteger(subSkillIndex) ||
+    subSkillIndex < 0 ||
+    !profile?.applied ||
+    !judgment ||
+    !base ||
+    !enhanced ||
+    Number(judgment.tree?.judgmentType) !== 5 ||
+    !Array.isArray(judgment.tree?.elementArr) ||
+    !judgment.tree.elementArr.map(Number).includes(markId) ||
+    !Number.isInteger(minimumStacks) ||
+    minimumStacks <= 0 ||
+    Number(judgment.tree?.canConsume) !== 0 ||
+    !basePathIds.includes(String(base.pathId)) ||
+    !enhancedPathIds.includes(String(enhanced.pathId)) ||
+    triggerFrames.length === 0 ||
+    triggerFrames.some(frame => !Number.isInteger(frame) || frame < 0) ||
+    hitDelaysMs.length === 0 ||
+    hitDelaysMs.some(delay => !Number.isFinite(delay) || delay < 0)
+  ) {
+    throw new Error(
+      `character combat tuning mark conditional damage evidence missing: ${ownerId}/${groupIdentity || definition.judgmentElementId}`
+    );
+  }
+  return {
+    groupIdentity,
+    ownerId,
+    controlSkillId,
+    subSkillIndex,
+    triggerFrames,
+    hitDelaysMs,
+    frameRate: Number(definition.frameRate) || 60,
+    targetKind: definition.targetKind ?? 'enemy',
+    judgmentElementId: Number(definition.judgmentElementId),
+    tuningMarkProfileKey: profile.profileKey ?? profile.key,
+    markId,
+    minimumStacks,
+    consumesStacks: false,
+    baseTemplate: compileConditionalDamageTemplate(base),
+    enhancedTemplate: compileConditionalDamageTemplate(enhanced),
+    sourceIdentity: [
+      judgment.sourceIdentity,
+      base.sourceIdentity,
+      enhanced.sourceIdentity,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-tuning-mark-conditional-damage-group-ready',
+    applied: true,
+  };
+}
+
+function compileConditionalDamageTemplate(asset) {
+  const tree = asset.tree ?? {};
+  const formulaValues =
+    tree.formulaParams?.formulaParamValues ?? tree.functionParams ?? [];
+  const coefficientRaw = Number(formulaValues[1]);
+  if (!Number.isInteger(coefficientRaw) || coefficientRaw < 0) {
+    throw new Error(
+      `character combat conditional damage coefficient invalid: ${asset.elementId}`
+    );
+  }
+  return {
+    elementConfigId: Number(asset.elementId),
+    pathId: String(asset.pathId),
+    name: tree.elementName ?? null,
+    damageType: Number(tree.damageType),
+    elementalType: Number(tree.damageElementalType),
+    coefficientRaw,
+    weakBreakDamageRateBasisPoints: finiteNumberOrNull(
+      tree.weakBreakDamageRate
+    ),
+    physicalPenetrationBasisPoints: finiteNumberOrNull(tree.armerPenetration),
+    magicPenetrationBasisPoints: finiteNumberOrNull(tree.magicPenetration),
+    elementCalculationFactorBasisPoints: finiteNumberOrNull(
+      tree.elementCalFactor
+    ),
+    physicalRatioBasisPoints: finiteNumberOrNull(tree.physicalRatio),
+    magicRatioBasisPoints: finiteNumberOrNull(tree.magicRatio),
+    propertyTags: (tree.defaultPropertyTags ?? [])
+      .map(Number)
+      .filter(Number.isInteger),
+    elementTypes: [...new Set((tree.types ?? []).map(Number))]
+      .filter(Number.isInteger)
+      .sort((left, right) => left - right),
+    sourceIdentity: asset.sourceIdentity,
+  };
+}
+
+function readElementPathIds(entries) {
+  return (entries ?? [])
+    .map(entry => String(entry?.m_PathID ?? ''))
+    .filter(value => /^-?\d+$/.test(value));
+}
+
+function finiteNumberOrNull(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 function compileThresholdTransitions({
   ownerId,
   definitions,
   resourceProfiles,
   resourceOperations,
   tuningMarkProfiles,
+  controlBySkillId,
   operators,
 }) {
   return definitions.map(definition => {
@@ -3783,9 +4142,7 @@ function compileThresholdTransitions({
       )
       .map(operation => operation.operationIdentity)
       .sort();
-    const tuningMarkGrants = (
-      definition.tuningMarkGrants ?? []
-    ).map(grant => {
+    const tuningMarkGrants = (definition.tuningMarkGrants ?? []).map(grant => {
       const profile = tuningMarkProfiles.find(
         item => item.key === grant.profileKey
       );
@@ -3831,6 +4188,24 @@ function compileThresholdTransitions({
         applied: true,
       };
     });
+    const effectGrants = (definition.effectGrants ?? []).map(grant =>
+      compileThresholdEffectGrant({
+        ownerId,
+        stateAsset,
+        grant,
+        operators,
+      })
+    );
+    const companionProfile = definition.companionProfile
+      ? compileThresholdCompanionProfile({
+          ownerId,
+          definition: definition.companionProfile,
+          stateDurationMs: state.durationMs,
+          controlBySkillId,
+          tuningMarkProfiles,
+          operators,
+        })
+      : null;
     return {
       transitionIdentity: [
         profile.resourceIdentity,
@@ -3850,6 +4225,8 @@ function compileThresholdTransitions({
       stateName: state.name,
       stateDurationMs: state.durationMs,
       tuningMarkGrants,
+      effectGrants,
+      companionProfile,
       sourceIdentity: [
         resourceAsset.sourceIdentity,
         `${resourceAsset.sourceIdentity}#combineType=${resourceAsset.tree?.combineType};combineNumber=${resourceAsset.tree?.combineNumber}`,
@@ -3857,6 +4234,8 @@ function compileThresholdTransitions({
         `${stateAsset.sourceIdentity}#time=${stateAsset.tree?.time}`,
         definition.runtimeSourceIdentity,
         ...tuningMarkGrants.map(grant => grant.sourceIdentity),
+        ...effectGrants.map(grant => grant.sourceIdentity),
+        companionProfile?.sourceIdentity,
       ]
         .filter(Boolean)
         .join('|'),
@@ -3864,6 +4243,243 @@ function compileThresholdTransitions({
       applied: true,
     };
   });
+}
+
+function compileThresholdEffectGrant({
+  ownerId,
+  stateAsset,
+  grant,
+  operators,
+}) {
+  const asset = operators.readElementAsset(grant.elementId);
+  const sourceEntries = stateAsset.tree?.[grant.sourceField];
+  const sourcePathIds = readElementPathIds(sourceEntries);
+  const multiplicity = asset
+    ? sourcePathIds.filter(pathId => pathId === String(asset.pathId)).length
+    : 0;
+  const tree = asset?.tree;
+  const formulaId = Number(tree?.formulaParams?.function_2);
+  const bucket =
+    {
+      3: 'dynamicPercent',
+      5: 'dynamicExtra',
+    }[formulaId] ?? null;
+  const valueRaw = Number(
+    tree?.formulaParams?.formulaParamValues?.[0] ?? tree?.functionParams?.[0]
+  );
+  const propertyTags = (tree?.defaultPropertyTags ?? [])
+    .map(Number)
+    .filter(Number.isInteger);
+  if (
+    !asset ||
+    !Array.isArray(sourceEntries) ||
+    multiplicity <= 0 ||
+    (grant.expectedMultiplicity != null &&
+      multiplicity !== Number(grant.expectedMultiplicity)) ||
+    (grant.expectedDurationMs != null &&
+      Number(tree.time) !== Number(grant.expectedDurationMs)) ||
+    (grant.expectedAttributeId != null &&
+      Number(tree.attributeID) !== Number(grant.expectedAttributeId)) ||
+    (grant.expectedBucket != null && bucket !== grant.expectedBucket) ||
+    (grant.expectedValueRaw != null &&
+      valueRaw !== Number(grant.expectedValueRaw)) ||
+    (grant.expectedPropertyTags != null &&
+      JSON.stringify(propertyTags) !==
+        JSON.stringify(grant.expectedPropertyTags.map(Number)))
+  ) {
+    throw new Error(
+      `character combat threshold effect grant evidence missing: ${ownerId}/${grant.elementId}`
+    );
+  }
+  return {
+    effectId: `battle-element:${Number(grant.elementId)}`,
+    elementId: Number(grant.elementId),
+    pathId: String(asset.pathId),
+    name: tree.elementName ?? null,
+    durationMs: Number(tree.time),
+    stackMode: 'refresh',
+    maxStacks: 1,
+    sourceField: grant.sourceField,
+    multiplicity,
+    modifiers: [
+      {
+        kind: 'battle-property',
+        attributeId: Number(tree.attributeID),
+        bucket,
+        valueRaw,
+        propertyTags,
+        sourceIdentity: asset.sourceIdentity,
+      },
+    ],
+    sourceIdentity: [
+      `${stateAsset.sourceIdentity}#${grant.sourceField}[m_PathID=${asset.pathId}]x${multiplicity}`,
+      asset.sourceIdentity,
+      grant.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-threshold-effect-grant-ready',
+    applied: true,
+  };
+}
+
+function compileThresholdCompanionProfile({
+  ownerId,
+  definition,
+  stateDurationMs,
+  controlBySkillId,
+  tuningMarkProfiles,
+  operators,
+}) {
+  if (typeof operators.readNewTableRows !== 'function') {
+    throw new Error('character combat companion NewTable operator missing');
+  }
+  const summon = operators.readElementAsset(definition.summonElementId);
+  const unitId = Number(definition.unitId);
+  const unitRows = operators.readNewTableRows('battlefield_item', 'id', unitId);
+  const unitRow = unitRows.length === 1 ? unitRows[0] : null;
+  const skillIds = String(unitRow?.skillList ?? '')
+    .split('|')
+    .map(entry => Number(entry.split('#')[1]))
+    .filter(Number.isInteger);
+  const periodicDefinition = definition.periodicAttack;
+  const periodicSkillId = Number(periodicDefinition?.skillId);
+  const periodicLogicRows = operators.readNewTableRows(
+    'skillsub_logic',
+    'skillId',
+    periodicSkillId
+  );
+  const periodicLogic =
+    periodicLogicRows.length === 1 ? periodicLogicRows[0] : null;
+  const cadenceMs = Number(periodicLogic?.aiTokenResetCD) * 1000;
+  const periodicAttack = compileCompanionAttackProfile({
+    ownerId,
+    definition: periodicDefinition,
+    controlBySkillId,
+    tuningMarkProfiles,
+    operators,
+    cadenceMs,
+  });
+  const actionResponses = (definition.actionResponses ?? []).map(response =>
+    compileCompanionAttackProfile({
+      ownerId,
+      definition: response,
+      controlBySkillId,
+      tuningMarkProfiles,
+      operators,
+      cadenceMs: null,
+    })
+  );
+  const tree = summon?.tree;
+  if (
+    !summon ||
+    Number(tree?.summonUnitId) !== unitId ||
+    Number(tree?.summonLifeTime) !== Number(stateDurationMs) ||
+    Number(tree?.summonCount) !== 1 ||
+    Number(tree?.summonTotalMaxCount) !== 1 ||
+    !unitRow ||
+    unitRow.param !== definition.expectedBornParam ||
+    !skillIds.includes(periodicSkillId) ||
+    !periodicLogic ||
+    Number(periodicLogic.aiToken) !== 1 ||
+    Number(periodicLogic.aiTokenType) !== 1 ||
+    cadenceMs !== Number(periodicDefinition.cadenceMs) ||
+    Number(periodicDefinition.initialDelayMs) !== cadenceMs
+  ) {
+    throw new Error(
+      `character combat threshold companion evidence missing: ${ownerId}/${definition.companionIdentity}`
+    );
+  }
+  return {
+    companionIdentity: String(definition.companionIdentity),
+    ownerId,
+    summonElementId: Number(definition.summonElementId),
+    unitId,
+    durationMs: Number(tree.summonLifeTime),
+    maximumCount: Number(tree.summonTotalMaxCount),
+    dieWithOwner: Number(tree.dieWithOwner) === 1,
+    dieWithChangeHero: Number(tree.dieWithChangeHero) === 1,
+    dieWithOutBattle: Number(tree.dieWithOutBattle) === 1,
+    ownership: 'summoning-actor',
+    targetKind: 'enemy',
+    periodicAttack,
+    actionResponses,
+    sourceIdentity: [
+      summon.sourceIdentity,
+      `NewTable/battlefield_item.rows[id=${unitId}]#param=${unitRow.param};skillList=${unitRow.skillList}`,
+      `NewTable/skillsub_logic.rows[skillId=${periodicSkillId}]#aiToken=${periodicLogic.aiToken};aiTokenResetCD=${periodicLogic.aiTokenResetCD};aiTokenType=${periodicLogic.aiTokenType}`,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-threshold-companion-profile-ready',
+    applied: true,
+  };
+}
+
+function compileCompanionAttackProfile({
+  ownerId,
+  definition,
+  controlBySkillId,
+  tuningMarkProfiles,
+  operators,
+  cadenceMs,
+}) {
+  const skillId = Number(definition.skillId);
+  requireControl(controlBySkillId, skillId, 'companion attack profile');
+  if (definition.sourceControlSkillId != null) {
+    requireControl(
+      controlBySkillId,
+      definition.sourceControlSkillId,
+      'companion response source'
+    );
+  }
+  const conditionalDamageGroup = compileTuningMarkConditionalDamageGroup({
+    ownerId,
+    definition: {
+      ...definition.conditionalDamageGroup,
+      controlSkillId: skillId,
+      subSkillIndex: Number(definition.subSkillIndex),
+      triggerFrames: definition.triggerFrames,
+      hitDelaysMs: definition.hitDelaysMs,
+    },
+    controlBySkillId,
+    tuningMarkProfiles,
+    operators,
+    requireSourceControl: true,
+  });
+  return {
+    attackIdentity: String(definition.attackIdentity),
+    skillId,
+    subSkillIndex: Number(definition.subSkillIndex),
+    sourceControlSkillId:
+      definition.sourceControlSkillId == null
+        ? null
+        : Number(definition.sourceControlSkillId),
+    sourceSubSkillIndex:
+      definition.sourceSubSkillIndex == null
+        ? null
+        : Number(definition.sourceSubSkillIndex),
+    initialDelayMs:
+      definition.initialDelayMs == null
+        ? null
+        : Number(definition.initialDelayMs),
+    cadenceMs,
+    cancelPeriodicOnStart: definition.cancelPeriodicOnStart === true,
+    endsCompanionAtFrame:
+      definition.endsCompanionAtFrame == null
+        ? null
+        : Number(definition.endsCompanionAtFrame),
+    conditionalDamageGroup,
+    sourceIdentity: [
+      conditionalDamageGroup.sourceIdentity,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-companion-attack-profile-ready',
+    applied: true,
+  };
 }
 
 function compilePassiveEffects({
@@ -3874,9 +4490,23 @@ function compilePassiveEffects({
   skills,
   targetStateTransactions,
   runtimeEffectBindings,
+  tuningMarkProfiles,
   operators,
 }) {
   return definitions.map(definition => {
+    if (
+      definition.runtimeGenerationMode ===
+      'tuning-mark-threshold-property-runtime'
+    ) {
+      return compileTuningMarkThresholdPassiveEffect({
+        ownerId,
+        definition,
+        controlBySkillId,
+        skills,
+        tuningMarkProfiles,
+        operators,
+      });
+    }
     if (definition.runtimeGenerationMode === 'target-state-runtime') {
       return compileTargetStateRuntimePassiveEffect({
         ownerId,
@@ -3898,10 +4528,9 @@ function compilePassiveEffects({
       });
     }
     if (
-      [
-        'semantic-effect-catalog',
-        'action-variant-runtime',
-      ].includes(definition.runtimeGenerationMode)
+      ['semantic-effect-catalog', 'action-variant-runtime'].includes(
+        definition.runtimeGenerationMode
+      )
     ) {
       return compileSemanticCatalogPassiveEffect({
         ownerId,
@@ -3918,7 +4547,8 @@ function compilePassiveEffects({
     const property = operators.readElementAsset(definition.propertyElementId);
     const directTriggers = [];
     for (const control of controls) {
-      if (Number(operators.resolveControlOwnerId(control)) !== ownerId) continue;
+      if (Number(operators.resolveControlOwnerId(control)) !== ownerId)
+        continue;
       for (const root of control.effectGraph ?? []) {
         const node = root.nodes?.find(
           item => Number(item.elementId) === Number(definition.wrapperElementId)
@@ -3980,8 +4610,7 @@ function compilePassiveEffects({
     ).map(alias => {
       const runtimeTrigger = directTriggers.find(
         trigger =>
-          Number(trigger.controlSkillId) ===
-          Number(alias.runtimeControlSkillId)
+          Number(trigger.controlSkillId) === Number(alias.runtimeControlSkillId)
       );
       return {
         triggerIdentity: [
@@ -4003,16 +4632,13 @@ function compilePassiveEffects({
         applied: false,
       };
     });
-    const modifiers = (
-      property?.tree?.changePeopertyConditionArrayDatas ?? []
-    )
+    const modifiers = (property?.tree?.changePeopertyConditionArrayDatas ?? [])
       .map(entry => entry?.changeProperty)
       .filter(Boolean)
       .map(change => ({
         attributeId: Number(change.attributeID),
         bucket:
-          Number(change.calculateType) === 2 &&
-          Number(change.functionId) === 3
+          Number(change.calculateType) === 2 && Number(change.functionId) === 3
             ? 'dynamicPercent'
             : null,
         valueRaw: Number(change.functionParams?.[0]),
@@ -4085,6 +4711,104 @@ function compilePassiveEffects({
   });
 }
 
+function compileTuningMarkThresholdPassiveEffect({
+  ownerId,
+  definition,
+  controlBySkillId,
+  skills,
+  tuningMarkProfiles,
+  operators,
+}) {
+  const passiveControl = controlBySkillId.get(Number(definition.skillId));
+  const profile = (tuningMarkProfiles ?? []).find(
+    candidate =>
+      (candidate.profileKey ?? candidate.key) ===
+      definition.tuningMarkProfileKey
+  );
+  const property = operators.readElementAsset(definition.propertyElementId);
+  const tree = property?.tree;
+  const formulaId = Number(tree?.formulaParams?.function_2);
+  const bucket =
+    {
+      3: 'dynamicPercent',
+      5: 'dynamicExtra',
+    }[formulaId] ?? null;
+  const valueRaw = Number(
+    tree?.formulaParams?.formulaParamValues?.[0] ?? tree?.functionParams?.[0]
+  );
+  const minimumStacks = Number(definition.minimumStacks);
+  const propertyTags = (tree?.defaultPropertyTags ?? [])
+    .map(Number)
+    .filter(Number.isInteger);
+  const applied =
+    passiveControl != null &&
+    profile?.applied === true &&
+    property != null &&
+    Number.isInteger(minimumStacks) &&
+    minimumStacks > 0 &&
+    minimumStacks <= Number(profile.maxStacks) &&
+    (definition.expectedDurationMs == null ||
+      Number(tree.time) === Number(definition.expectedDurationMs)) &&
+    (definition.expectedAttributeId == null ||
+      Number(tree.attributeID) === Number(definition.expectedAttributeId)) &&
+    (definition.expectedBucket == null ||
+      bucket === definition.expectedBucket) &&
+    (definition.expectedValueRaw == null ||
+      valueRaw === Number(definition.expectedValueRaw));
+  return {
+    passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
+    ownerId,
+    skillId: Number(definition.skillId),
+    name:
+      skills.find(skill => Number(skill.id) === Number(definition.skillId))
+        ?.name ?? `被动 ${definition.skillId}`,
+    effectId: `battle-element:${Number(definition.propertyElementId)}`,
+    effectElementId: Number(definition.propertyElementId),
+    markerElementId: Number(profile?.markId) || null,
+    propertyElementId: Number(definition.propertyElementId),
+    durationMs: null,
+    stackMode: 'refresh',
+    maxStacks: 1,
+    stackDelta: 1,
+    runtimeGenerationMode: 'tuning-mark-threshold-property-runtime',
+    tuningMarkProfileKey: profile?.profileKey ?? profile?.key ?? null,
+    markId: Number(profile?.markId) || null,
+    minimumStacks,
+    triggerBindings: [],
+    unresolvedTriggerBindings: [],
+    modifiers: property
+      ? [
+          {
+            kind: 'battle-property',
+            attributeId: Number(tree.attributeID),
+            bucket,
+            valueRaw,
+            propertyTags,
+            sourceIdentity: property.sourceIdentity,
+          },
+        ]
+      : [],
+    sourceIdentity: [
+      passiveControl?.sourcePath,
+      profile?.sourceIdentity,
+      property?.sourceIdentity,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: applied
+      ? 'verified-tuning-mark-threshold-passive-profile-ready'
+      : 'unresolved-tuning-mark-threshold-passive-profile',
+    reasons: [
+      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(profile?.applied ? [] : ['passive-tuning-mark-profile-missing']),
+      ...(property ? [] : ['passive-property-element-missing']),
+      ...(applied ? [] : ['passive-threshold-property-evidence-mismatch']),
+    ],
+    applied,
+  };
+}
+
 function compileTargetStateRuntimePassiveEffect({
   ownerId,
   definition,
@@ -4105,9 +4829,7 @@ function compileTargetStateRuntimePassiveEffect({
   const selectedRuntimeBindings = (
     definition.runtimeBindingIdentities ?? []
   ).map(identity =>
-    runtimeEffectBindings.find(
-      binding => binding.bindingIdentity === identity
-    )
+    runtimeEffectBindings.find(binding => binding.bindingIdentity === identity)
   );
   const selectedTransactions = (
     definition.targetStateTransactionIdentities ?? []
@@ -4186,8 +4908,7 @@ function compileTargetStateRuntimePassiveEffect({
     sourceAssets.every(Boolean) &&
     selectedRuntimeBindings.filter(Boolean).length ===
       expectedRuntimeBindingCount &&
-    selectedTransactions.filter(Boolean).length ===
-      expectedTransactionCount &&
+    selectedTransactions.filter(Boolean).length === expectedTransactionCount &&
     triggerBindings.length > 0 &&
     modifiers.length > 0;
   return {
@@ -4308,9 +5029,7 @@ function compilePersistentPropertyPassiveEffect({
       functionId: Number(effect.propertyChange.functionId ?? 5),
       propertyTags: effect.propertyChange.defaultPropertyTags ?? [],
       sourceIdentity:
-        effect.sourceIdentity ??
-        effect.propertyChange.sourceIdentity ??
-        null,
+        effect.sourceIdentity ?? effect.propertyChange.sourceIdentity ?? null,
     }));
   const declaredModifiers = (definition.modifiers ?? []).map(modifier => ({
     attributeId: Number(modifier.attributeId),
@@ -4320,7 +5039,9 @@ function compilePersistentPropertyPassiveEffect({
       modifier.calculateType == null ? null : Number(modifier.calculateType),
     functionId:
       modifier.functionId == null ? null : Number(modifier.functionId),
-    propertyTags: (modifier.propertyTags ?? []).map(Number).filter(Number.isInteger),
+    propertyTags: (modifier.propertyTags ?? [])
+      .map(Number)
+      .filter(Number.isInteger),
     sourceIdentity: modifier.sourceIdentity ?? null,
   }));
   const modifiers = dedupeBy(
@@ -4392,9 +5113,7 @@ function compilePersistentPropertyPassiveEffect({
       ...(sourceElementIds.length > 0 && sourceAssets.every(Boolean)
         ? []
         : ['passive-source-element-missing']),
-      ...(modifiers.length > 0
-        ? []
-        : ['passive-persistent-modifier-missing']),
+      ...(modifiers.length > 0 ? [] : ['passive-persistent-modifier-missing']),
     ],
     applied,
   };
@@ -4417,7 +5136,8 @@ function compileSemanticCatalogPassiveEffect({
       .filter(
         effect =>
           Number(effect.elementId) === Number(definition.propertyElementId) &&
-          Number(effect.rootElementId) === Number(definition.wrapperElementId) &&
+          Number(effect.rootElementId) ===
+            Number(definition.wrapperElementId) &&
           Number.isInteger(Number(effect.trigger?.startFrame))
       )
       .map(effect => ({ control, effect }))
@@ -4438,69 +5158,63 @@ function compileSemanticCatalogPassiveEffect({
       sourceElementId: Number(effect.rootElementId),
       sourcePathId: String(effect.rootPathId),
       semanticEffectElementId: Number(effect.elementId),
-      sourceIdentity: [
-        effect.sourceIdentity,
-        effect.trigger?.sourceIdentity,
-      ]
+      sourceIdentity: [effect.sourceIdentity, effect.trigger?.sourceIdentity]
         .filter(Boolean)
         .join('|'),
       status: 'verified-semantic-passive-trigger-binding-ready',
       applied: true,
     })
   );
-  const declaredTriggerBindings = (
-    definition.triggerOverrides ?? []
-  ).map(trigger => {
-    requireControl(
-      controlBySkillId,
-      trigger.controlSkillId,
-      'passive trigger override'
-    );
-    const sourceElement = operators.readElementAsset(
-      trigger.sourceElementId ?? definition.wrapperElementId
-    );
-    if (
-      !sourceElement ||
-      !Number.isInteger(Number(trigger.subSkillIndex)) ||
-      !Number.isInteger(Number(trigger.triggerFrame)) ||
-      Number(trigger.triggerFrame) < 0 ||
-      !Number.isFinite(Number(trigger.stackDelta)) ||
-      Number(trigger.stackDelta) <= 0
-    ) {
-      throw new Error(
-        `character combat passive trigger override invalid: ${ownerId}/${definition.skillId}/${trigger.triggerIdentity ?? trigger.controlSkillId}`
+  const declaredTriggerBindings = (definition.triggerOverrides ?? []).map(
+    trigger => {
+      requireControl(
+        controlBySkillId,
+        trigger.controlSkillId,
+        'passive trigger override'
       );
-    }
-    return {
-      triggerIdentity:
-        trigger.triggerIdentity ??
-        [
-          definition.skillId,
-          trigger.controlSkillId,
-          trigger.subSkillIndex,
-          trigger.triggerFrame,
-          'declared',
-        ].join('|'),
-      controlSkillId: Number(trigger.controlSkillId),
-      subSkillIndex: Number(trigger.subSkillIndex),
-      triggerFrame: Number(trigger.triggerFrame),
-      frameRate: Number(trigger.frameRate) || 60,
-      stackDelta: Number(trigger.stackDelta),
-      sourceElementId: Number(
+      const sourceElement = operators.readElementAsset(
         trigger.sourceElementId ?? definition.wrapperElementId
-      ),
-      sourcePathId: sourceElement.pathId ?? null,
-      semanticEffectElementId: Number(definition.propertyElementId),
-      sourceIdentity: [
-        sourceElement.sourceIdentity,
-        trigger.sourceIdentity,
-      ]
-        .filter(Boolean)
-        .join('|'),
-      status: 'verified-declared-passive-trigger-binding-ready',
-      applied: true,
-    };
-  });
+      );
+      if (
+        !sourceElement ||
+        !Number.isInteger(Number(trigger.subSkillIndex)) ||
+        !Number.isInteger(Number(trigger.triggerFrame)) ||
+        Number(trigger.triggerFrame) < 0 ||
+        !Number.isFinite(Number(trigger.stackDelta)) ||
+        Number(trigger.stackDelta) <= 0
+      ) {
+        throw new Error(
+          `character combat passive trigger override invalid: ${ownerId}/${definition.skillId}/${trigger.triggerIdentity ?? trigger.controlSkillId}`
+        );
+      }
+      return {
+        triggerIdentity:
+          trigger.triggerIdentity ??
+          [
+            definition.skillId,
+            trigger.controlSkillId,
+            trigger.subSkillIndex,
+            trigger.triggerFrame,
+            'declared',
+          ].join('|'),
+        controlSkillId: Number(trigger.controlSkillId),
+        subSkillIndex: Number(trigger.subSkillIndex),
+        triggerFrame: Number(trigger.triggerFrame),
+        frameRate: Number(trigger.frameRate) || 60,
+        stackDelta: Number(trigger.stackDelta),
+        sourceElementId: Number(
+          trigger.sourceElementId ?? definition.wrapperElementId
+        ),
+        sourcePathId: sourceElement.pathId ?? null,
+        semanticEffectElementId: Number(definition.propertyElementId),
+        sourceIdentity: [sourceElement.sourceIdentity, trigger.sourceIdentity]
+          .filter(Boolean)
+          .join('|'),
+        status: 'verified-declared-passive-trigger-binding-ready',
+        applied: true,
+      };
+    }
+  );
   const triggerBindings = dedupeBy(
     [...discoveredTriggerBindings, ...declaredTriggerBindings],
     item => item.triggerIdentity
@@ -4524,16 +5238,14 @@ function compileSemanticCatalogPassiveEffect({
         ({ effect }) => effect.propertyChange === change
       )?.effect?.sourceIdentity,
     }));
-  const modifiers = dedupeBy(
-    modifierCandidates,
-    modifier =>
-      [
-        modifier.attributeId,
-        modifier.bucket,
-        modifier.valueRaw,
-        modifier.calculateType,
-        modifier.functionId,
-      ].join('|')
+  const modifiers = dedupeBy(modifierCandidates, modifier =>
+    [
+      modifier.attributeId,
+      modifier.bucket,
+      modifier.valueRaw,
+      modifier.calculateType,
+      modifier.functionId,
+    ].join('|')
   );
   const applied =
     passiveControl != null &&
@@ -4606,9 +5318,7 @@ function compileCondition(definition, ownerId, resourceProfiles, operators) {
   const profile = resourceProfiles.find(
     item => Number(item.elementId) === Number(definition.resourceElementId)
   );
-  if (
-    ['resource-at-least', 'resource-below'].includes(definition.kind)
-  ) {
+  if (['resource-at-least', 'resource-below'].includes(definition.kind)) {
     const value = Number(definition.value);
     if (!profile || !Number.isFinite(value)) {
       throw new Error(

@@ -119,6 +119,14 @@ export function createVerifiedCombatRuntime({
         transaction,
       ])
   );
+  const conditionalDamageTransactionByIdentity = new Map(
+    (damageEventGeneration?.transactions ?? [])
+      .filter(transaction => transaction.sourceKind === 'conditional-hit')
+      .map(transaction => [
+        String(transaction.sourceTuningEventIdentity),
+        transaction,
+      ])
+  );
   const descriptors = [];
   for (const action of scenario?.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -209,6 +217,20 @@ export function createVerifiedCombatRuntime({
     });
   }
   for (const tuningEvent of tuningGeneration?.combatEvents ?? []) {
+    if (tuningEvent.kind === 'conditional-damage') {
+      descriptors.push({
+        kind: 'hit',
+        timeMs: tuningEvent.timeMs,
+        action: tuningEvent.action,
+        resolution: tuningEvent.resolution,
+        hit: tuningEvent.sourceHit,
+        conditionalDamageEvent: tuningEvent,
+        damageEventTransaction: conditionalDamageTransactionByIdentity.get(
+          String(tuningEvent.eventIdentity)
+        ),
+      });
+      continue;
+    }
     descriptors.push({
       kind: 'tuning-combat',
       timeMs: tuningEvent.timeMs,
@@ -4615,6 +4637,15 @@ function applyHitDescriptor({
       hitSkillId: resolution.actionBinding.controlSkillId,
       payload: {
         verifiedCombat: true,
+        tuningConditionalDamage: descriptor.conditionalDamageEvent != null,
+        tuningConditionalDamageEventIdentity:
+          descriptor.conditionalDamageEvent?.eventIdentity ?? null,
+        tuningConditionalDamageBranch:
+          descriptor.conditionalDamageEvent?.eventContext?.selectedBranch ??
+          null,
+        tuningConditionalDamageMarkCount:
+          descriptor.conditionalDamageEvent?.eventContext
+            ?.markCountAtJudgment ?? null,
         kiboPassiveDerivedDamage: passiveDerivedDamageCommand != null,
         passiveSkillId: passiveDerivedDamageCommand?.passiveSkillId ?? null,
         sourceKiboId: passiveDerivedDamageCommand?.sourceKiboId ?? null,
@@ -4764,6 +4795,9 @@ function applyHitDescriptor({
 }
 
 function createVerifiedCombatHitKey(descriptor) {
+  if (descriptor?.conditionalDamageEvent?.eventIdentity) {
+    return `verified-${descriptor.conditionalDamageEvent.eventIdentity}`;
+  }
   const passiveDerivedDamageCommand =
     descriptor?.passiveDerivedDamageCommand ?? null;
   if (passiveDerivedDamageCommand) {
@@ -6072,7 +6106,11 @@ function resolveHitRatio(hit, action) {
     1,
     12
   );
-  return numberOrNull(hit.formula?.ratiosByLevel?.[level]);
+  return numberOrNull(
+    hit.formula?.ratiosByLevel?.[level] ??
+      hit.formula?.coefficientRaw ??
+      hit.damage?.coefficientRaw
+  );
 }
 
 function findKiboStateByAction(state, action) {

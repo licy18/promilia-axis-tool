@@ -338,8 +338,8 @@ function resolveElementFormulaInputs(tree) {
       ? integerOrNull(formulaParams.function_2)
       : integerOrNull(tree?.baseIntParams?.[1]),
     values: hasFormulaParams
-      ? formulaParams.formulaParamValues ?? []
-      : tree?.functionParams ?? [],
+      ? (formulaParams.formulaParamValues ?? [])
+      : (tree?.functionParams ?? []),
   };
 }
 const BATTLE_MECHANIC_SCRIPT_PATH_IDS = Object.freeze({
@@ -413,9 +413,7 @@ export async function createVerifiedCombatMechanicsBuild({
         Number(passive.skillId)
       ),
       ...(recipe.compiler?.runtimeEffectBindings ?? []).flatMap(binding => {
-        const match = String(binding.sourceIdentity ?? '').match(
-          /skill:(\d+)/
-        );
+        const match = String(binding.sourceIdentity ?? '').match(/skill:(\d+)/);
         return match ? [Number(match[1])] : [];
       }),
     ])
@@ -554,17 +552,17 @@ export async function createVerifiedCombatMechanicsBuild({
   );
   const controlBindings = applyHeroParryRuntimeChainMerge(
     controls.map(control =>
-    createControlBinding({
-      control,
-      indexedElements,
-      indexedElementsById,
-      allIndexedElements,
-      allIndexedElementsById,
-      formulas,
-      overridesBySkillAndElement,
-      skillLogicById,
-      tuningMechanicsCatalog,
-    })
+      createControlBinding({
+        control,
+        indexedElements,
+        indexedElementsById,
+        allIndexedElements,
+        allIndexedElementsById,
+        formulas,
+        overridesBySkillAndElement,
+        skillLogicById,
+        tuningMechanicsCatalog,
+      })
     )
   );
   const publicControlBindings = controlBindings.filter(binding =>
@@ -638,6 +636,7 @@ export async function createVerifiedCombatMechanicsBuild({
       };
     },
     readElementAsset: readBattleElementAsset,
+    readNewTableRows: readNewTableRowsByField,
     createSemanticRootTriggers: createSemanticRootTriggerContracts,
     resolveControlOwnerId(control) {
       return resolveControlOwnerId(control?.controlSkillId, publicCharacterIds);
@@ -1514,6 +1513,20 @@ function readBattleElementAsset(elementId) {
     sha256: sha256File(filePath),
     bytes: fs.statSync(filePath).size,
   };
+}
+
+function readNewTableRowsByField(tableName, fieldName, expectedValue) {
+  if (
+    !/^[a-z0-9_]+$/i.test(String(tableName)) ||
+    !/^[a-z0-9_]+$/i.test(String(fieldName))
+  ) {
+    return [];
+  }
+  const filePath = path.join(NEW_TABLE_ROOT, `${tableName}.json`);
+  if (!fs.existsSync(filePath)) return [];
+  return (readJson(filePath).rows ?? []).filter(
+    row => String(row?.[fieldName]) === String(expectedValue)
+  );
 }
 
 function registerEvidenceSource(target, asset) {
@@ -3716,9 +3729,9 @@ function resolveKiboControlVariantSource(petRow, action) {
   );
   const selected =
     action.kind === 'normal-attack'
-      ? matches.find(entry => entry.slot === 1) ?? matches.at(0)
+      ? (matches.find(entry => entry.slot === 1) ?? matches.at(0))
       : action.kind === 'active'
-        ? matches.find(entry => entry.slot === 2) ?? matches.at(-1)
+        ? (matches.find(entry => entry.slot === 2) ?? matches.at(-1))
         : matches.at(0);
   return {
     skillLevel: integerOrNull(selected?.skillLevel),
@@ -4498,9 +4511,8 @@ function createExternalGameplayObjectFileIndex() {
   if (externalGameplayObjectFileIndexCache) {
     return externalGameplayObjectFileIndexCache;
   }
-  externalGameplayObjectFileIndexCache = collectSubSkillObjectIndex(
-    HERO_SUBSKILL_ROOT
-  );
+  externalGameplayObjectFileIndexCache =
+    collectSubSkillObjectIndex(HERO_SUBSKILL_ROOT);
   return externalGameplayObjectFileIndexCache;
 }
 
@@ -4508,9 +4520,8 @@ function createPetExternalGameplayObjectFileIndex() {
   if (petExternalGameplayObjectFileIndexCache) {
     return petExternalGameplayObjectFileIndexCache;
   }
-  petExternalGameplayObjectFileIndexCache = collectSubSkillObjectIndex(
-    PET_SUBSKILL_ROOT
-  );
+  petExternalGameplayObjectFileIndexCache =
+    collectSubSkillObjectIndex(PET_SUBSKILL_ROOT);
   return petExternalGameplayObjectFileIndexCache;
 }
 
@@ -4659,7 +4670,7 @@ function collectGameplayBehaviorSourceFiles(directory, mainFilePath, graph) {
     if (mainHash != null && sha256File(filePath) === mainHash) continue;
     const contentHash = sha256File(filePath);
     const current = byContent.get(contentHash);
-    const score = (candidate) =>
+    const score = candidate =>
       path.basename(candidate).endsWith('.json') &&
       /__\d+\.json$/.test(path.basename(candidate))
         ? 1
@@ -4790,8 +4801,8 @@ function createBehaviorTarget(code, sourceField) {
     code,
     kind:
       sourceField === 'directInjectTargetType'
-        ? directInjectKinds[code] ?? 'unresolved'
-        : targetTypeKinds[code] ?? 'unresolved',
+        ? (directInjectKinds[code] ?? 'unresolved')
+        : (targetTypeKinds[code] ?? 'unresolved'),
     sourceField,
   };
 }
@@ -5372,18 +5383,14 @@ function applyHeroParryRuntimeChainMerge(controlBindings) {
   // 将 10900149/sub1 的 applied 效果与命中并入 10900127/sub0，使完美招架
   // action resolution 同时携带基础反击与 109001362 璀璨超限消耗链。
   const bySkillId = new Map(
-    controlBindings.map(binding => [
-      Number(binding.controlSkillId),
-      binding,
-    ])
+    controlBindings.map(binding => [Number(binding.controlSkillId), binding])
   );
   const parryPublic = bySkillId.get(10900127);
   const parryRuntime = bySkillId.get(10900149);
   if (!parryPublic || !parryRuntime) return controlBindings;
   const runtimeEffects = (parryRuntime.effects ?? []).filter(
     effect =>
-      effect.classification === 'applied' &&
-      Number(effect.mapIndex) === 1
+      effect.classification === 'applied' && Number(effect.mapIndex) === 1
   );
   const runtimeHits = createControlRuntimeHits(parryRuntime).filter(
     hit => Number(hit.mapIndex) === 1
@@ -5461,10 +5468,9 @@ function createControlBinding({
       value => `${value.behaviorPathId}|${value.startFrame}`
     ).filter(trigger => Number.isInteger(trigger.startFrame));
     const elementId = Number(tree?.elementConfigId);
-    const kiboZeroDistancePolicy =
-      String(control.runtimePolicy?.sourceIdentity ?? '').startsWith(
-        'm12-b3-kibo-zero-distance-profile'
-      );
+    const kiboZeroDistancePolicy = String(
+      control.runtimePolicy?.sourceIdentity ?? ''
+    ).startsWith('m12-b3-kibo-zero-distance-profile');
     const scenarioTriggers =
       Number.isInteger(elementId) &&
       (ref.referenceKind === 'bulletElements' || kiboZeroDistancePolicy)
@@ -5693,8 +5699,7 @@ function createControlBinding({
             const current = byElement.get(key);
             if (
               !current ||
-              kiboElementBindingRank(element) >
-                kiboElementBindingRank(current)
+              kiboElementBindingRank(element) > kiboElementBindingRank(current)
             ) {
               byElement.set(key, element);
             }
@@ -5818,7 +5823,13 @@ function createControlEffectGraph({
       ).length,
     };
 
-    function visit(record, parentIdentity, relation, depth, layerActivation = null) {
+    function visit(
+      record,
+      parentIdentity,
+      relation,
+      depth,
+      layerActivation = null
+    ) {
       const nodeIdentity = `element:${record.pathId}`;
       if (parentIdentity) {
         edges.push({
@@ -6262,9 +6273,7 @@ function createBattleEffectGraphNode({
             packetElementId: tuningProfile.overlimitPacket.elementId,
             sourceIdentity: tuningProfile.overlimitPacket.sourceIdentity,
           }
-        : kind === 'judgment' &&
-            Number(tree.consume) === 1 &&
-            tuningProfile
+        : kind === 'judgment' && Number(tree.consume) === 1 && tuningProfile
           ? {
               profileKey: tuningProfile.key,
               element: tuningProfile.element,
@@ -6272,7 +6281,7 @@ function createBattleEffectGraphNode({
               packetElementId: tuningProfile.overlimitPacket.elementId,
               sourceIdentity: tuningProfile.overlimitPacket.sourceIdentity,
             }
-        : null,
+          : null,
     judgment:
       kind === 'judgment'
         ? {
@@ -6459,7 +6468,9 @@ function classifyBattleEffectNode({
       reasons.push('property-calculate-type-not-dynamic-bucket');
     }
     if (propertyConditionResult.unsupported.length > 0) {
-      reasons.push('property-condition-element-state-runtime-evidence-required');
+      reasons.push(
+        'property-condition-element-state-runtime-evidence-required'
+      );
     }
     if (![null, 0].includes(integerOrNull(tree.frequencyType))) {
       reasons.push('property-frequency-not-single-application');
@@ -6550,9 +6561,8 @@ function classifyBattleEffectNode({
       'elementConfigId|notDelElementDataList'
     );
   } else if (kind === 'pack') {
-    const childReferenceCount = collectBattleElementChildReferences(
-      tree
-    ).length;
+    const childReferenceCount =
+      collectBattleElementChildReferences(tree).length;
     if (childReferenceCount > 0) {
       dimensions.wrapper = createDimensionClassification(
         'applied',
@@ -6608,9 +6618,8 @@ function classifyBattleEffectNode({
       );
     }
   } else if (kind === 'inject') {
-    const childReferenceCount = collectBattleElementChildReferences(
-      tree
-    ).length;
+    const childReferenceCount =
+      collectBattleElementChildReferences(tree).length;
     if (childReferenceCount > 0) {
       dimensions.wrapper = createDimensionClassification(
         'applied',
@@ -6667,7 +6676,7 @@ function parsePropertyChangeActivationConditions(tree = {}) {
                 ? 'HasElementTag'
                 : conditionType === 4
                   ? 'HasElementId'
-              : 'CurSkillTag',
+                  : 'CurSkillTag',
         entityElementalType: integerOrNull(condition.entityElementalType) ?? 0,
         skillId: integerOrNull(condition.skillId) ?? 0,
         skillTag: integerOrNull(condition.skillTag) ?? 0,
@@ -6681,8 +6690,7 @@ function parsePropertyChangeActivationConditions(tree = {}) {
     } else {
       unsupported.push({
         conditionType,
-        conditionTypeName:
-          `Unknown-${conditionType}`,
+        conditionTypeName: `Unknown-${conditionType}`,
         elementTag: integerOrNull(condition.elementTag) ?? 0,
         elementId: integerOrNull(condition.elementId) ?? 0,
         subConditionType:
@@ -6794,19 +6802,17 @@ function createControlRuntimeEffects({ effectGraph, control, elements = [] }) {
   // `bulletElements`; after the zero-distance scenario triggers are shared,
   // both refs resolve to the same runtime effect. Emit one binding per
   // element/node/trigger so the runtime does not apply the element twice.
-  return dedupeBy(
-    bindings,
-    effect =>
-      [
-        effect.mapIndex,
-        effect.elementId,
-        effect.pathId,
-        effect.kind,
-        effect.depth,
-        effect.trigger?.startFrame ?? 'unresolved-frame',
-        effect.sourceOrder?.triggerIndex ?? 0,
-        effect.target?.kind ?? 'unresolved',
-      ].join('|')
+  return dedupeBy(bindings, effect =>
+    [
+      effect.mapIndex,
+      effect.elementId,
+      effect.pathId,
+      effect.kind,
+      effect.depth,
+      effect.trigger?.startFrame ?? 'unresolved-frame',
+      effect.sourceOrder?.triggerIndex ?? 0,
+      effect.target?.kind ?? 'unresolved',
+    ].join('|')
   );
 }
 
@@ -6842,19 +6848,21 @@ function createControlRuntimeEffectBinding({
           sourceIdentity: trigger?.sourceIdentity ?? null,
         });
   const reasons = [
-    ...node.reasons.filter(
-      reason =>
-        !tuningBinding ||
-        ![
-          'stack-lifecycle-runtime-unimplemented',
-          'inject-wrapper-classified-through-child-edges',
-        ].includes(reason)
-    ).filter(
-      reason =>
-        node.kind !== 'inject' ||
-        node.classification === 'applied' ||
-        reason !== 'inject-wrapper-classified-through-child-edges'
-    ),
+    ...node.reasons
+      .filter(
+        reason =>
+          !tuningBinding ||
+          ![
+            'stack-lifecycle-runtime-unimplemented',
+            'inject-wrapper-classified-through-child-edges',
+          ].includes(reason)
+      )
+      .filter(
+        reason =>
+          node.kind !== 'inject' ||
+          node.classification === 'applied' ||
+          reason !== 'inject-wrapper-classified-through-child-edges'
+      ),
     ...(tuningBinding?.reasons ?? []),
   ];
   if (!trigger || !Number.isInteger(trigger.startFrame)) {
@@ -6938,10 +6946,9 @@ function createControlRuntimeEffectBinding({
   );
   const baseApplied =
     node.classification === 'applied' && tuningBinding?.applied !== false;
-  const classification =
-    deadBranch
-      ? 'verified-zero'
-      : baseApplied && blockingReasons.length === 0
+  const classification = deadBranch
+    ? 'verified-zero'
+    : baseApplied && blockingReasons.length === 0
       ? 'applied'
       : node.classification === 'verified-zero' && blockingReasons.length === 0
         ? 'verified-zero'
@@ -6950,10 +6957,9 @@ function createControlRuntimeEffectBinding({
     ? Object.fromEntries(
         Object.keys(node.dimensions).map(key => [
           key,
-          createDimensionClassification(
-            'verified-zero',
-            [`product-confirmed-dead-branch-does-not-write-${key}`]
-          ),
+          createDimensionClassification('verified-zero', [
+            `product-confirmed-dead-branch-does-not-write-${key}`,
+          ]),
         ])
       )
     : Object.fromEntries(
@@ -7209,9 +7215,7 @@ function resolveTuningEffectBindingContract({
             node.tuningOverlimit.sourceIdentity ?? node.pathId ?? ''
           ),
           packetSourceIdentity:
-            node.tuningOverlimit.sourceIdentity ??
-            node.sourceIdentity ??
-            null,
+            node.tuningOverlimit.sourceIdentity ?? node.sourceIdentity ?? null,
         })),
       },
       reasons: [],
@@ -8822,18 +8826,16 @@ function createPackage({
   const actionBindings = actionMappings.flatMap(mapping => {
     const isActorNormalAttack =
       mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo';
-    const runtimeBindings =
-      isActorNormalAttack
-        ? (mapping.attackInputSegments ?? []).filter(
-            segment => segment.classification === 'applied'
-          )
-        : mapping.classification === 'applied'
-          ? [mapping]
-          : [];
+    const runtimeBindings = isActorNormalAttack
+      ? (mapping.attackInputSegments ?? []).filter(
+          segment => segment.classification === 'applied'
+        )
+      : mapping.classification === 'applied'
+        ? [mapping]
+        : [];
     return runtimeBindings.map(binding => ({
       identity: binding.identity,
-      aggregateIdentity:
-        isActorNormalAttack ? mapping.identity : null,
+      aggregateIdentity: isActorNormalAttack ? mapping.identity : null,
       ownerKind: mapping.ownerKind,
       ownerId: mapping.ownerId,
       ownerName: mapping.ownerName,
@@ -8844,10 +8846,9 @@ function createPackage({
       actionKind: mapping.actionKind,
       controlSkillId: binding.controlSkillId,
       selectedSubSkillIndex: binding.selectedSubSkillIndex,
-      bindingKind:
-        isActorNormalAttack
-          ? 'hero-normal-attack-input-control'
-          : mapping.bindingKind,
+      bindingKind: isActorNormalAttack
+        ? 'hero-normal-attack-input-control'
+        : mapping.bindingKind,
       bindingSourceIdentity:
         binding.sourceIdentity ?? mapping.bindingSourceIdentity,
       controlVariantSkillLevel:
@@ -9136,8 +9137,7 @@ function createPackage({
       ).length,
       attackInputChainCount: actionMappings.filter(
         mapping =>
-          mapping.actionKind === 'normal-attack' &&
-          mapping.ownerKind !== 'kibo'
+          mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo'
       ).length,
       attackInputSegmentCount: actionMappings.reduce(
         (sum, mapping) => sum + (mapping.attackInputSegments?.length ?? 0),
@@ -9764,8 +9764,8 @@ function createSemanticEffectCandidate({
       condition => JSON.stringify(condition)
     ),
     propertyConditionStatus:
-      rawEffects.find(effect => effect.propertyConditionStatus)?.propertyConditionStatus ??
-      null,
+      rawEffects.find(effect => effect.propertyConditionStatus)
+        ?.propertyConditionStatus ?? null,
     propertyChange: node.propertyChange && {
       ...node.propertyChange,
       bucket:
@@ -9833,10 +9833,7 @@ function classifySemanticEffectRole(node, root) {
 
 function createSemanticFormulaRuntimeContract(
   node,
-  {
-    verifiedCharacterBinding = false,
-    verifiedTuningRuntimeBinding = null,
-  } = {}
+  { verifiedCharacterBinding = false, verifiedTuningRuntimeBinding = null } = {}
 ) {
   const commonFunctionId = Number(node.formula?.commonFunctionId);
   const baseFunctionId = Number(node.formula?.baseFunctionId);
@@ -9902,9 +9899,7 @@ function createSemanticFormulaRuntimeContract(
       registry: 'AzPrVerifiedBattleEffectFormulaRegistry',
       family: 'verified-tuning-state-formula',
       evaluator: 'verified-tuning-mark-runtime',
-      status: verifiedTuningRuntimeBinding
-        ? 'delegated-applied'
-        : 'delegated',
+      status: verifiedTuningRuntimeBinding ? 'delegated-applied' : 'delegated',
       applied: false,
       delegatedApplied: Boolean(verifiedTuningRuntimeBinding),
       delegation: verifiedTuningRuntimeBinding,
@@ -12995,8 +12990,7 @@ function createActionCoverageReport({
       mapping =>
         !['applied', 'verified-zero'].includes(mapping.sourceEvidenceStatus) &&
         !(
-          mapping.scenarioRuntimeStatus ===
-            'scenario-assumed-zero-distance' &&
+          mapping.scenarioRuntimeStatus === 'scenario-assumed-zero-distance' &&
           (mapping.reasons ?? []).length === 0
         )
     )
@@ -13159,8 +13153,7 @@ function createActionCoverageReport({
   const attackInputChains = packageValue.actionMappings
     .filter(
       mapping =>
-        mapping.actionKind === 'normal-attack' &&
-        mapping.ownerKind !== 'kibo'
+        mapping.actionKind === 'normal-attack' && mapping.ownerKind !== 'kibo'
     )
     .map(mapping => {
       const segments = getAuditAttackInputSegments(mapping);
@@ -14033,12 +14026,15 @@ function createPublicRuntimeCoverageReport({
       ? 'runnable'
       : mapping.classification === 'verified-zero'
         ? 'verified-zero'
-        : characterRuntimeCoverage?.settlementStatus ===
-            'runtime-evidence-required'
-          ? 'runtime-evidence-required'
-          : characterRuntimeCoverage?.settlementStatus === 'static-evidence-gap'
-            ? 'static-evidence-gap'
-            : gapResolution.status;
+        : characterRuntimeCoverage?.notApplicable === true
+          ? 'not-applicable'
+          : characterRuntimeCoverage?.settlementStatus ===
+              'runtime-evidence-required'
+            ? 'runtime-evidence-required'
+            : characterRuntimeCoverage?.settlementStatus ===
+                'static-evidence-gap'
+              ? 'static-evidence-gap'
+              : gapResolution.status;
     const resourceProfile = resourceProfileByOwner.get(Number(mapping.ownerId));
     const settlementDimensions =
       characterRuntimeCoverage?.requiresDamageSettlement === true
@@ -14166,7 +14162,9 @@ function createPublicRuntimeCoverageReport({
     [...expectedKiboActionKindsByOwner.entries()].every(
       ([kiboId, expectedKinds]) => {
         const actualKinds = new Set(
-          (kiboActionsByOwner.get(kiboId) ?? []).map(action => action.actionKind)
+          (kiboActionsByOwner.get(kiboId) ?? []).map(
+            action => action.actionKind
+          )
         );
         return (
           actualKinds.size === expectedKinds.size &&
@@ -14252,7 +14250,9 @@ function createPublicRuntimeCoverageReport({
     const kiboMismatches = [...expectedKiboActionKindsByOwner.entries()]
       .map(([kiboId, expectedKinds]) => {
         const actualKinds = new Set(
-          (kiboActionsByOwner.get(kiboId) ?? []).map(action => action.actionKind)
+          (kiboActionsByOwner.get(kiboId) ?? []).map(
+            action => action.actionKind
+          )
         );
         return {
           kiboId,
@@ -14275,23 +14275,23 @@ function createPublicRuntimeCoverageReport({
         .filter(([, passed]) => !passed)
         .map(([name]) => name)
         .join(', ')} [actions=${actions.length}/expected=${
-          M9_PRODUCT_DENOMINATOR.publicActionCount
-        }, actorOwners=${actorOwnerCount}, kiboOwners=${
-          kiboActionsByOwner.size
-        }/${M9_PRODUCT_DENOMINATOR.kiboOwnerCount}, kiboKinds=${
-          kiboActionsByOwner.size
-            ? JSON.stringify(
-                [...kiboActionsByOwner.entries()]
-                  .slice(0, 5)
-                  .map(([ownerId, rows]) => ({
-                    ownerId,
-                    kinds: [...new Set(rows.map(row => row.actionKind))].sort(),
-                  }))
-              )
-            : 'none'
-        }, kiboMismatches=${JSON.stringify(kiboMismatches.slice(0, 8))}]${
-          unclassifiedSummary ? ` [${unclassifiedSummary}]` : ''
-        }`
+        M9_PRODUCT_DENOMINATOR.publicActionCount
+      }, actorOwners=${actorOwnerCount}, kiboOwners=${
+        kiboActionsByOwner.size
+      }/${M9_PRODUCT_DENOMINATOR.kiboOwnerCount}, kiboKinds=${
+        kiboActionsByOwner.size
+          ? JSON.stringify(
+              [...kiboActionsByOwner.entries()]
+                .slice(0, 5)
+                .map(([ownerId, rows]) => ({
+                  ownerId,
+                  kinds: [...new Set(rows.map(row => row.actionKind))].sort(),
+                }))
+            )
+          : 'none'
+      }, kiboMismatches=${JSON.stringify(kiboMismatches.slice(0, 8))}]${
+        unclassifiedSummary ? ` [${unclassifiedSummary}]` : ''
+      }`
     );
   }
   return {
@@ -14340,8 +14340,7 @@ function createPublicRuntimeCoverageReport({
         : 0,
       kiboCoreRunnableCount: kiboActionsByOwner.size
         ? [...kiboActionsByOwner.values()].reduce(
-            (sum, rows) =>
-              sum + rows.filter(action => action.runnable).length,
+            (sum, rows) => sum + rows.filter(action => action.runnable).length,
             0
           )
         : 0,

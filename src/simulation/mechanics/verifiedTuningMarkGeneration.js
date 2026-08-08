@@ -62,6 +62,8 @@ export function createVerifiedTuningMarkGeneration({
   const getElementEvents = [];
   const effectCommands = [];
   const combatEvents = [];
+  const acquisitionGateResults = [];
+  const conditionalDamageResults = [];
   const unresolved = [];
   let sequence = 0;
 
@@ -77,6 +79,56 @@ export function createVerifiedTuningMarkGeneration({
     effectCommands,
     mechanicsPackage,
   });
+
+  const thresholdPassiveProfiles = (
+    mechanicsPackage.specialResourceCatalog?.passiveEffects ?? []
+  ).filter(
+    profile =>
+      profile.applied === true &&
+      profile.runtimeGenerationMode === 'tuning-mark-threshold-property-runtime'
+  );
+  const emitThresholdPassiveCommands = ({
+    profile,
+    before,
+    after,
+    timeMs,
+    descriptor = null,
+  }) => {
+    for (const passive of thresholdPassiveProfiles) {
+      if (Number(passive.markId) !== Number(profile.markId)) continue;
+      const wasActive = Number(before) >= Number(passive.minimumStacks);
+      const isActive = Number(after) >= Number(passive.minimumStacks);
+      if (wasActive === isActive) continue;
+      const actor = (scenario.actors ?? []).find(
+        candidate => Number(candidate.characterId) === Number(passive.ownerId)
+      );
+      if (!actor) continue;
+      effectCommands.push(
+        createTuningMarkThresholdPassiveCommand({
+          mechanicsPackage,
+          passive,
+          actor,
+          timeMs,
+          descriptor,
+          operation: isActive
+            ? EFFECT_OPERATIONS.APPLY
+            : EFFECT_OPERATIONS.REMOVE,
+        })
+      );
+    }
+  };
+  for (const state of stateByMarkId.values()) {
+    emitThresholdPassiveCommands({
+      profile: state.profile,
+      before: 0,
+      after: state.layers.length,
+      timeMs: 0,
+    });
+  }
+
+  const tuningMarkConditionalDamageGroups = (
+    mechanicsPackage.actionVariantGraph?.tuningMarkConditionalDamageGroups ?? []
+  ).filter(group => group.applied === true);
 
   for (const transaction of actionVariantRuntime?.tuningMarkTransactions ??
     []) {
@@ -120,6 +172,7 @@ export function createVerifiedTuningMarkGeneration({
       continue;
     }
     const resolution =
+      actionVariantRuntime?.actionResolutionById?.get(action.id) ??
       effectGeneration?.actionResolutionById?.get(action.id) ??
       resolveVerifiedCombatActionMechanics(action, {
         combatScenario: scenario.combatScenario,
@@ -198,6 +251,51 @@ export function createVerifiedTuningMarkGeneration({
         });
       }
     }
+    const controlSkillId = Number(resolution.actionBinding?.controlSkillId);
+    const subSkillIndex = Number(
+      resolution.actionBinding?.selectedSubSkillIndex ??
+        resolution.controlBinding?.selectedSubSkillIndex
+    );
+    for (const group of tuningMarkConditionalDamageGroups) {
+      if (
+        Number(group.controlSkillId) !== controlSkillId ||
+        Number(group.subSkillIndex) !== subSkillIndex
+      ) {
+        continue;
+      }
+      let hitIndex = 0;
+      for (const triggerFrame of group.triggerFrames ?? []) {
+        if (
+          !isActionFrameWithinContextualOccupancy(
+            action,
+            triggerFrame,
+            group.frameRate ?? FRAME_RATE
+          )
+        ) {
+          continue;
+        }
+        for (const hitDelayMs of group.hitDelaysMs ?? [0]) {
+          hitIndex += 1;
+          enqueue({
+            kind: 'conditional-damage',
+            timeMs: roundValue(
+              Number(action.startMs) +
+                (Number(triggerFrame) * 1000) /
+                  (Number(group.frameRate) || FRAME_RATE) +
+                Number(hitDelayMs)
+            ),
+            action,
+            resolution,
+            group,
+            profile: profileByMarkId.get(Number(group.markId)),
+            hitIndex,
+            triggerFrame,
+            hitDelayMs,
+            sourceKind: 'owner-action',
+          });
+        }
+      }
+    }
     for (const hit of resolution.hits ?? []) {
       const frameRate = positiveNumber(
         resolution.controlBinding?.frameRate,
@@ -225,6 +323,40 @@ export function createVerifiedTuningMarkGeneration({
     }
   }
 
+  for (const transaction of actionVariantRuntime?.companionAttackTransactions ??
+    []) {
+    if (transaction.applied !== true) continue;
+    const action =
+      transaction.action ??
+      (scenario.actions ?? []).find(
+        candidate => candidate.id === transaction.actionId
+      );
+    const resolution =
+      transaction.resolution ??
+      actionVariantRuntime?.actionResolutionById?.get(action?.id) ??
+      effectGeneration?.actionResolutionById?.get(action?.id) ??
+      null;
+    const group = transaction.conditionalDamageGroup;
+    const profile = profileByMarkId.get(Number(group?.markId));
+    if (!action || !resolution?.ready || !group || !profile) continue;
+    enqueue({
+      kind: 'conditional-damage',
+      timeMs: Number(transaction.timeMs),
+      action,
+      resolution: createCompanionDamageResolution({
+        resolution,
+        transaction,
+      }),
+      group,
+      profile,
+      hitIndex: Number(transaction.hitIndex),
+      triggerFrame: Number(transaction.triggerFrame),
+      hitDelayMs: Number(transaction.hitDelayMs),
+      sourceKind: 'companion',
+      companionTransaction: transaction,
+    });
+  }
+
   while (queue.length > 0) {
     const descriptor = queue.shift();
     if (descriptor.timeMs > durationMs) continue;
@@ -237,6 +369,7 @@ export function createVerifiedTuningMarkGeneration({
         mechanicsPackage,
         scenario,
         enqueue,
+        emitThresholdPassiveCommands,
       });
     } else if (descriptor.kind === 'acquire') {
       applyLayerAcquisition({
@@ -248,6 +381,9 @@ export function createVerifiedTuningMarkGeneration({
         mechanicsPackage,
         scenario,
         enqueue,
+        acquisitionGateResults,
+        conditionalDamageGroups: tuningMarkConditionalDamageGroups,
+        emitThresholdPassiveCommands,
       });
     } else if (descriptor.kind === 'consume') {
       applyMarkConsumption({
@@ -260,6 +396,7 @@ export function createVerifiedTuningMarkGeneration({
         mechanicsPackage,
         scenario,
         enqueue,
+        emitThresholdPassiveCommands,
       });
     } else if (descriptor.kind === 'direct-sp-presence') {
       applyDirectSpPresence({
@@ -284,6 +421,14 @@ export function createVerifiedTuningMarkGeneration({
         combatEvents,
         effectCommands,
         mechanicsPackage,
+        scenario,
+      });
+    } else if (descriptor.kind === 'conditional-damage') {
+      applyTuningMarkConditionalDamage({
+        descriptor,
+        stateByMarkId,
+        combatEvents,
+        conditionalDamageResults,
         scenario,
       });
     } else if (descriptor.kind === 'combat') {
@@ -311,6 +456,8 @@ export function createVerifiedTuningMarkGeneration({
     getElementEvents,
     effectCommands,
     combatEvents,
+    acquisitionGateResults,
+    conditionalDamageResults,
     unresolved,
     initialState: createInitialTuningState(scenario, catalog),
     finalState: createPublishedTuningState(stateByMarkId, durationMs),
@@ -336,6 +483,8 @@ export function createVerifiedTuningMarkGeneration({
       expireEventCount: events.filter(event => event.kind === 'expire').length,
       effectCommandCount: effectCommands.length,
       combatEventCount: combatEvents.length,
+      acquisitionGateResultCount: acquisitionGateResults.length,
+      conditionalDamageResultCount: conditionalDamageResults.length,
       unresolvedCount: unresolved.length,
       finalLayerCount: [...stateByMarkId.values()].reduce(
         (sum, state) => sum + state.layers.length,
@@ -464,9 +613,21 @@ function applyLayerAcquisition({
   mechanicsPackage,
   scenario,
   enqueue,
+  acquisitionGateResults,
+  conditionalDamageGroups,
+  emitThresholdPassiveCommands,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (!state) return;
+  const gateResult = resolveTuningAcquisitionHitGate({
+    descriptor,
+    conditionalDamageGroups,
+    scenario,
+  });
+  if (descriptor.effect?.hitGate) {
+    acquisitionGateResults.push(gateResult);
+  }
+  if (!gateResult.passed) return;
   const before = state.layers.length;
   const requestedLayerCount = positiveInteger(
     descriptor.effect?.tuningMark?.stackDelta,
@@ -558,6 +719,320 @@ function applyLayerAcquisition({
       })
     );
   }
+  emitThresholdPassiveCommands({
+    profile: state.profile,
+    before,
+    after,
+    timeMs: descriptor.timeMs,
+    descriptor,
+  });
+}
+
+function resolveTuningAcquisitionHitGate({
+  descriptor,
+  conditionalDamageGroups,
+  scenario,
+}) {
+  const gate = descriptor.effect?.hitGate;
+  if (!gate) {
+    return {
+      actionId: descriptor.action?.id ?? null,
+      effectIdentity: descriptor.effect?.effectIdentity ?? null,
+      timeMs: descriptor.timeMs,
+      gate: null,
+      candidateCount: 1,
+      landedCount: 1,
+      passed: true,
+    };
+  }
+  const defaultWillHit =
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false;
+  let hitIdentities = [];
+  if (gate.kind === 'conditional-damage-group-hit') {
+    const group = (conditionalDamageGroups ?? []).find(
+      candidate => candidate.groupIdentity === gate.groupIdentity
+    );
+    if (group) {
+      hitIdentities = [
+        createConditionalDamageHitIdentity({
+          group,
+          hitIndex: gate.hitIndex,
+        }),
+      ];
+    }
+  } else if (gate.kind === 'landed-action-hit') {
+    hitIdentities = (descriptor.resolution?.hits ?? [])
+      .filter(
+        hit =>
+          Number(hit.elementId) === Number(gate.elementId) &&
+          Number(hit.trigger?.startFrame) === Number(gate.triggerFrame) &&
+          (!gate.behaviorPathId ||
+            hit.trigger?.behaviorPathId === gate.behaviorPathId)
+      )
+      .slice(0, Number(gate.maximumMatches) || 1)
+      .map(resolveTuningSourceHitIdentityFromHit);
+  }
+  const landedCount = hitIdentities.filter(identity =>
+    resolveActionHitWillHit(descriptor.action, identity, defaultWillHit)
+  ).length;
+  return {
+    actionId: descriptor.action?.id ?? null,
+    effectIdentity: descriptor.effect?.effectIdentity ?? null,
+    timeMs: descriptor.timeMs,
+    gate,
+    hitIdentities,
+    candidateCount: hitIdentities.length,
+    landedCount,
+    passed: landedCount > 0,
+    sourceIdentity: descriptor.effect?.sourceIdentity ?? null,
+  };
+}
+
+function applyTuningMarkConditionalDamage({
+  descriptor,
+  stateByMarkId,
+  combatEvents,
+  conditionalDamageResults,
+  scenario,
+}) {
+  const state = stateByMarkId.get(Number(descriptor.profile?.markId));
+  if (!state) return;
+  const group = descriptor.group;
+  const markCountAtJudgment = state.layers.length;
+  const enhanced = markCountAtJudgment >= Number(group.minimumStacks);
+  const template = enhanced ? group.enhancedTemplate : group.baseTemplate;
+  const sourceHitIdentity = createConditionalDamageHitIdentity({
+    group,
+    hitIndex: descriptor.hitIndex,
+    companionTransaction: descriptor.companionTransaction,
+  });
+  const defaultWillHit =
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false;
+  const landed = resolveActionHitWillHit(
+    descriptor.action,
+    sourceHitIdentity,
+    defaultWillHit
+  );
+  const eventIdentity = [
+    'conditional-damage',
+    group.groupIdentity,
+    descriptor.action?.id,
+    descriptor.hitIndex,
+    descriptor.timeMs,
+    descriptor.companionTransaction?.transactionIdentity ?? '',
+  ].join('|');
+  const sourceSequencePath = createTuningSourceSequencePath({
+    descriptor,
+    localKind: 'conditional-damage',
+    localIdentity: descriptor.hitIndex,
+  });
+  const sourceHit = createConditionalDamageRuntimeHit({
+    descriptor,
+    template,
+    sourceHitIdentity,
+  });
+  const result = {
+    groupIdentity: group.groupIdentity,
+    actionId: descriptor.action?.id ?? null,
+    actorId: descriptor.action?.actorId ?? null,
+    timeMs: descriptor.timeMs,
+    hitIndex: descriptor.hitIndex,
+    sourceKind: descriptor.sourceKind,
+    sourceHitIdentity,
+    markId: state.profile.markId,
+    markCountAtJudgment,
+    minimumStacks: group.minimumStacks,
+    selectedBranch: enhanced ? 'enhanced' : 'base',
+    selectedElementId: template.elementConfigId,
+    landed,
+    companionUnitId: descriptor.companionTransaction?.companionUnitId ?? null,
+    ownership: descriptor.companionTransaction?.ownership ?? null,
+    sourceIdentity: group.sourceIdentity,
+    status: landed
+      ? 'verified-tuning-mark-conditional-damage-landed'
+      : 'verified-tuning-mark-conditional-damage-missed',
+    applied: landed,
+  };
+  conditionalDamageResults.push(result);
+  combatEvents.push({
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-tuning-conditional-damage-event',
+    status: 'verified-tuning-conditional-damage-ready',
+    kind: 'conditional-damage',
+    eventIdentity,
+    timeMs: roundValue(descriptor.timeMs),
+    absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+    action: descriptor.action,
+    actionId: descriptor.action?.id ?? null,
+    actorId: descriptor.action?.actorId ?? null,
+    resolution: descriptor.resolution,
+    sourceHit,
+    profile: state.profile,
+    markCount: 1,
+    template,
+    eventContext: {
+      eventIdentity,
+      eventKind: 'conditional-damage',
+      timeMs: roundValue(descriptor.timeMs),
+      absoluteFrame: Math.round((descriptor.timeMs * FRAME_RATE) / 1000),
+      sourceSequencePath,
+      elementId: Number(template.elementConfigId),
+      elementTypes: [...(template.elementTypes ?? [])],
+      targetElementIds: [],
+      heldElementIds: [],
+      markId: Number(state.profile.markId),
+      profileKey: state.profile.key,
+      sourceActionId: descriptor.action?.id ?? null,
+      sourceActorId: descriptor.action?.actorId ?? null,
+      sourceHitIdentity,
+      skillTagIds: [],
+      landed,
+      judgmentGroupIdentity: group.groupIdentity,
+      selectedPriorityCandidate: null,
+      selectedBranch: result.selectedBranch,
+      markCountAtJudgment,
+      minimumStacks: group.minimumStacks,
+      propertyTags: [...(template.propertyTags ?? [])],
+      companionUnitId: result.companionUnitId,
+      ownership: result.ownership,
+    },
+    sourceIdentity: template.sourceIdentity ?? group.sourceIdentity,
+    appliedToCalculators: landed,
+    applied: true,
+  });
+}
+
+function createConditionalDamageHitIdentity({
+  group,
+  hitIndex,
+  companionTransaction = null,
+}) {
+  return companionTransaction
+    ? `conditional-damage:${group.groupIdentity}:${companionTransaction.transactionIdentity}`
+    : `conditional-damage:${group.groupIdentity}:${Number(hitIndex) || 1}`;
+}
+
+function createConditionalDamageRuntimeHit({
+  descriptor,
+  template,
+  sourceHitIdentity,
+}) {
+  return {
+    identity: sourceHitIdentity,
+    hitIdentity: sourceHitIdentity,
+    hitIndex: Number(descriptor.hitIndex) || 1,
+    elementId: Number(template.elementConfigId),
+    pathId: template.pathId ?? null,
+    name: template.name ?? `条件伤害 ${template.elementConfigId}`,
+    displayLabel: template.name ?? `条件伤害 ${template.elementConfigId}`,
+    referenceKind: 'conditional-damage',
+    trigger: {
+      startFrame: Number(descriptor.triggerFrame) || 0,
+      frameCount: 1,
+      behaviorPathId: sourceHitIdentity,
+      targetKind: 'enemy',
+    },
+    formula: {
+      coefficientRaw: Number(template.coefficientRaw),
+    },
+    damage: { ...template },
+    energy: {
+      recoverSp: 0,
+      petRecoverSp: 0,
+      recoverIntervalMs: 0,
+    },
+    sourceIdentity: template.sourceIdentity,
+    applied: true,
+  };
+}
+
+function createCompanionDamageResolution({ resolution, transaction }) {
+  const attackProfile = transaction.attackProfile;
+  return {
+    ...resolution,
+    actionBinding: {
+      ...(resolution.actionBinding ?? {}),
+      identity: `companion:${transaction.companionIdentity}:${attackProfile.attackIdentity}`,
+      controlSkillId: Number(attackProfile.skillId),
+      selectedSubSkillIndex: Number(attackProfile.subSkillIndex),
+      actionKind: 'companion-attack',
+    },
+    controlBinding: {
+      ...(resolution.controlBinding ?? {}),
+      controlSkillId: Number(attackProfile.skillId),
+      selectedSubSkillIndex: Number(attackProfile.subSkillIndex),
+      frameRate:
+        Number(attackProfile.conditionalDamageGroup?.frameRate) || FRAME_RATE,
+      logic: {
+        ...(resolution.controlBinding?.logic ?? {}),
+        skillTag: '0',
+        skillTagId: 0,
+        sourceIdentity: attackProfile.sourceIdentity,
+      },
+    },
+  };
+}
+
+function createTuningMarkThresholdPassiveCommand({
+  mechanicsPackage,
+  passive,
+  actor,
+  timeMs,
+  descriptor,
+  operation,
+}) {
+  return {
+    id: `verified-tuning-threshold-passive|${passive.passiveIdentity}|${timeMs}|${operation}`,
+    sourceActionId: descriptor?.action?.id ?? null,
+    sourceActionName: descriptor?.action?.name ?? null,
+    sourceActorId: actor.id,
+    sourceActorName: actor.name,
+    effectId: passive.effectId,
+    effectName: passive.name,
+    operation,
+    targetKind: EFFECT_TARGET_KINDS.ACTOR,
+    targetId: String(actor.id),
+    targetName: actor.name,
+    timeMs: Number(timeMs),
+    durationMs: null,
+    stackMode: EFFECT_STACK_MODES.REFRESH,
+    stackDelta: 1,
+    maxStacks: 1,
+    tags: ['passive', 'tuning-mark-threshold', `passive:${passive.skillId}`],
+    sourceStatus: 'verified-tuning-threshold-passive-generated',
+    confidence: 'high',
+    trackingStatus: 'applied',
+    sourceIdentity: {
+      packageId: mechanicsPackage.packageId,
+      packageHash: mechanicsPackage.packageHash,
+      actionBindingIdentity:
+        descriptor?.resolution?.actionBinding?.identity ??
+        'inherited-tuning-state',
+      effectIdentity: passive.passiveIdentity,
+      sourceIdentity: passive.sourceIdentity,
+    },
+    modifiers: (passive.modifiers ?? []).map(modifier => ({
+      kind: 'battle-property',
+      attributeId: modifier.attributeId,
+      bucket: modifier.bucket,
+      valueRaw: modifier.valueRaw,
+      propertyTags: modifier.propertyTags ?? [],
+      sourceIdentity: modifier.sourceIdentity,
+    })),
+    appliedToCalculators: true,
+    generatedVerified: true,
+  };
+}
+
+function resolveTuningSourceHitIdentityFromHit(hit) {
+  return String(
+    hit?.identity ??
+      hit?.hitIdentity ??
+      hit?.sourceIdentity ??
+      `${hit?.elementId ?? 'element'}|${hit?.hitIndex ?? 'hit'}`
+  );
 }
 
 function applyLayerExpiry({
@@ -568,6 +1043,7 @@ function applyLayerExpiry({
   mechanicsPackage,
   scenario,
   enqueue,
+  emitThresholdPassiveCommands,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (
@@ -618,6 +1094,13 @@ function applyLayerExpiry({
       },
     })
   );
+  emitThresholdPassiveCommands({
+    profile: state.profile,
+    before,
+    after: state.layers.length,
+    timeMs: descriptor.timeMs,
+    descriptor: { ...descriptor, layer: expired },
+  });
 }
 
 function applyMarkConsumption({
@@ -630,6 +1113,7 @@ function applyMarkConsumption({
   mechanicsPackage,
   scenario,
   enqueue,
+  emitThresholdPassiveCommands,
 }) {
   let descriptor = originalDescriptor;
   if (Array.isArray(descriptor.priorityCandidates)) {
@@ -709,10 +1193,7 @@ function applyMarkConsumption({
     return;
   }
   const maximum = positiveIntegerOrNull(contract.maximumStacks);
-  const consumedCount = Math.min(
-    state.layers.length,
-    maximum ?? minimum
-  );
+  const consumedCount = Math.min(state.layers.length, maximum ?? minimum);
   const before = state.layers.length;
   sortLayers(state.layers);
   const consumedLayers = state.layers.splice(0, consumedCount);
@@ -749,6 +1230,13 @@ function applyMarkConsumption({
       source,
     })
   );
+  emitThresholdPassiveCommands({
+    profile: state.profile,
+    before,
+    after: state.layers.length,
+    timeMs: descriptor.timeMs,
+    descriptor,
+  });
   combatEvents.push(
     createCombatEvent({
       kind: 'overlimit-damage',
@@ -1511,6 +1999,7 @@ function createTuningSourceSequencePath({
     acquire: 20,
     'get-element-after': 21,
     consume: 30,
+    'conditional-damage': 35,
     'held-trigger': 40,
     'held-damage': 50,
     'held-true-damage': 51,
@@ -1679,6 +2168,7 @@ function compareGenerationDescriptors(left, right) {
     acquire: 1,
     consume: 2,
     periodic: 3,
+    'conditional-damage': 4,
     hit: 4,
     combat: 5,
   };
@@ -1712,6 +2202,8 @@ function createUnavailableGeneration(reason) {
     getElementEvents: [],
     effectCommands: [],
     combatEvents: [],
+    acquisitionGateResults: [],
+    conditionalDamageResults: [],
     unresolved: [],
     initialState: [],
     finalState: [],
@@ -1720,6 +2212,8 @@ function createUnavailableGeneration(reason) {
       markEventCount: 0,
       effectCommandCount: 0,
       combatEventCount: 0,
+      acquisitionGateResultCount: 0,
+      conditionalDamageResultCount: 0,
       unresolvedCount: 0,
       applied: false,
     },
