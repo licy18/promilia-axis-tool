@@ -41,14 +41,14 @@ describe('verified combat mechanics package', () => {
         candidateActionCount: 645,
         classifiedActionCount: 645,
         appliedActionBindingCount: 693,
-        appliedHitBindingCount: 3449,
-        appliedEffectBindingCount: 1816,
+        appliedHitBindingCount: 3464,
+        appliedEffectBindingCount: 1817,
         verifiedZeroEffectBindingCount: 12,
-        unresolvedEffectBindingCount: 1332,
-        actionVariantSupportControlBindingCount: 56,
+        unresolvedEffectBindingCount: 1331,
+        actionVariantSupportControlBindingCount: 69,
         specialResourceProfileCount: 2,
         specialResourceOperationCount: 46,
-        actionVariantNodeCount: 699,
+        actionVariantNodeCount: 713,
         actionVariantEdgeCount: 64,
         switchTriggerProfileCount: 20,
         appliedSwitchTriggerProfileCount: 17,
@@ -72,7 +72,7 @@ describe('verified combat mechanics package', () => {
         semanticEffectCount: 3479,
         semanticGameplayEffectCount: 1892,
         semanticAppliedEffectCount: 1088,
-        characterCombatProfileCount: 4,
+        characterCombatProfileCount: 5,
         characterCombatUiVerifiedProfileCount: 0,
       },
       excludedDeadBranches: expect.arrayContaining([
@@ -160,7 +160,7 @@ describe('verified combat mechanics package', () => {
         profileSchema: 'azpr://schemas/character-combat-profile/v1',
         summary: {
           publicCharacterCount: 20,
-          compiledProfileCount: 4,
+          compiledProfileCount: 5,
           uiVerifiedProfileCount: 0,
         },
       },
@@ -205,9 +205,9 @@ describe('verified combat mechanics package', () => {
         'static-resolved': 1340,
       },
       effectBindingCount: 3159,
-      appliedEffectBindingCount: 1815,
+      appliedEffectBindingCount: 1816,
       verifiedZeroEffectBindingCount: 12,
-      unresolvedEffectBindingCount: 1332,
+      unresolvedEffectBindingCount: 1331,
       bindingKindCounts: {
         damage: 482,
         inject: 1311,
@@ -306,7 +306,7 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 699,
+        nodeCount: 713,
         edgeCount: 346,
         appliedEdgeCount: 64,
         unresolvedEdgeCount: 286,
@@ -540,12 +540,12 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 634,
-        unresolvedActionCount: 11,
+        appliedActionCount: 633,
+        unresolvedActionCount: 12,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 707,
-        sourceAnimationPlanningDurationCount: 27,
+        exactSelectedVariantOccupancyCount: 703,
+        sourceAnimationPlanningDurationCount: 28,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
         oneFrameCount: 0,
@@ -673,7 +673,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 699,
+      nodeCount: 713,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 216,
       conditionDiscoveryStatusCounts: {
@@ -1546,6 +1546,86 @@ describe('verified combat mechanics package', () => {
     expect(
       mixedOverride.hits.some(hit => hit.hitIdentity === projectile.hitIdentity)
     ).toBe(false);
+  });
+
+  it('suppresses Miti spawned orb streams when their parent arrow misses', () => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    const chargedMapping = mechanicsPackage.actionMappings.find(
+      mapping =>
+        mapping.ownerId === 108003 &&
+        mapping.sourceSkillId === 10800301 &&
+        mapping.actionKind === 'charged-attack'
+    );
+    const derivedControl = mechanicsPackage.actionVariantGraph.derivedControlContracts.find(
+      contract =>
+        contract.ownerId === 108003 && contract.controlSkillId === 10800310
+    );
+    const fullCharge = derivedControl.inputSelector.options.find(
+      option => option.selectorIdentity === 'miti-charged-full'
+    );
+    const control = mechanicsPackage.actionVariantControlBindings.find(
+      binding => binding.controlSkillId === fullCharge.executionControlSkillId
+    );
+    const arrows = control.hits.filter(hit => hit.elementId === 108003126);
+    const resolveFullCharge = hitOverrides =>
+      resolveVerifiedCombatActionMechanics(
+        {
+          id: 'miti-full-charge-hit-activation',
+          type: 'skill',
+          skillId: chargedMapping.sourceSkillId,
+          actionVariantIndex: chargedMapping.actionVariantIndex,
+          actor: { characterId: 108003 },
+          hitOverrides,
+        },
+        {
+          selectedControlSkillId: fullCharge.executionControlSkillId,
+          selectedSubSkillIndex: fullCharge.executionSubSkillIndex,
+          selectionSource: {
+            ...fullCharge,
+            sourceKind: 'verified-action-variant-runtime',
+          },
+        }
+      );
+
+    const baseline = resolveFullCharge({});
+    expect(baseline.hits.filter(hit => hit.elementId === 108003126)).toHaveLength(
+      3
+    );
+    expect(baseline.hits.filter(hit => hit.elementId === 108003129)).toHaveLength(
+      36
+    );
+
+    const firstExtraArrow = arrows.find(
+      hit =>
+        hit.sourceBindingIdentity ===
+        'conditional-hit-group:miti-electrified-full-charge-extra-arrows'
+    );
+    const partialMiss = resolveFullCharge({
+      [firstExtraArrow.hitIdentity]: { willHit: false },
+    });
+    expect(
+      partialMiss.hits.filter(hit => hit.elementId === 108003126)
+    ).toHaveLength(2);
+    expect(
+      partialMiss.hits.filter(hit => hit.elementId === 108003129)
+    ).toHaveLength(24);
+    expect(partialMiss.hitActivationSuppressedHitIdentities).toHaveLength(12);
+
+    const allMiss = resolveFullCharge(
+      Object.fromEntries(
+        arrows.map(hit => [hit.hitIdentity, { willHit: false }])
+      )
+    );
+    expect(allMiss.hits).toEqual([]);
+    expect(allMiss.disabledHitIdentities).toHaveLength(3);
+    expect(allMiss.hitActivationSuppressedHitIdentities).toHaveLength(36);
+    expect(
+      allMiss.hitActivationEvaluations.every(
+        evaluation =>
+          evaluation.applied === false &&
+          evaluation.reason === 'required-source-hit-not-landed'
+      )
+    ).toBe(true);
   });
 
   it('hydrates deduplicated semantic effects for the selected action variant', () => {

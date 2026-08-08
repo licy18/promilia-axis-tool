@@ -547,12 +547,15 @@
       "sourceDisposition": "applied",
       "contractStatus": "verified-attack-input-chain-ready",
       "impactClassification": "gameplay-impacting",
-      "coverageSelector": null,
+      "coverageSelector": {
+        "chainIdentity": "han-normal-five-inputs",
+        "kind": "attack-input-chain"
+      },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_7765764241533702659__7765764241533702659.json#behaviorlineControl[0].behaviorList[pathId=5305701981963162115]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_5305701981963162115__5305701981963162115.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_1357598574432023696__1357598574432023696.json#behaviorlineControl[0].behaviorList[pathId=2093885213480907920]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_2093885213480907920__2093885213480907920.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1399648220630438031__1399648220630438031.json#behaviorlineControl[0].behaviorList[pathId=1121532120759685263]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1121532120759685263__1121532120759685263.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_9116679090060427562__9116679090060427562.json#behaviorlineControl[0].behaviorList[pathId=7367241230325547306]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_7367241230325547306__7367241230325547306.json"
       ],
       "reasons": [],
-      "sourceRecordHash": "b1c3d50abf2a6d40"
+      "sourceRecordHash": "279afb3332e99fdf"
     },
     {
       "requirementIdentity": "contract:conditional-hit-group:han-charged-stage-one-firework-explosion",
@@ -5079,5 +5082,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "7214d6de98ad8094"
+  "inventoryHash": "88802899a6d21c7e"
 }

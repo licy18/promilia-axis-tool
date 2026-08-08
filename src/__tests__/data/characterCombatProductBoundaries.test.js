@@ -39,6 +39,8 @@ describe('character combat product boundaries', () => {
       summary: {
         publicCharacterCount: 20,
         matchedCharacterCount: 20,
+        implementedCharacterCount: 0,
+        notApplicableCharacterCount: 20,
         unresolvedCharacterCount: 0,
       },
     });
@@ -62,6 +64,57 @@ describe('character combat product boundaries', () => {
           entry.runtimeContractPolicy.captureRequirement === false
       )
     ).toBe(true);
+  });
+
+  it('retains a source-closed secondary passive as an auditable runtime contract', () => {
+    const report = discoverUnnamedSecondaryPassiveBoundaries({
+      characterCatalog: characters,
+      skills: workbenchSeed.gameData.skills,
+      implementedPassiveSkillIds: new Set([10800362]),
+    });
+    const implemented = report.entries.find(entry => entry.skillId === 10800362);
+
+    expect(report.summary).toMatchObject({
+      implementedCharacterCount: 1,
+      notApplicableCharacterCount: 19,
+    });
+    expect(implemented).toMatchObject({
+      ownerId: 108003,
+      classification: 'implemented',
+      reason: null,
+      runtimeContractPolicy: {
+        passiveProfile: true,
+        listener: false,
+        effectBinding: true,
+        captureRequirement: true,
+        gameplayImpactingGap: false,
+      },
+    });
+    expect(() =>
+      assertUnnamedSecondaryPassiveRuntimeIsolation({
+        recipes: [
+          {
+            ownerId: 108003,
+            compiler: { passiveEffects: [{ skillId: 10800362 }] },
+          },
+        ],
+        ownerCompilations: [
+          {
+            ownerId: 108003,
+            contracts: {
+              passiveEffects: [{ skillId: 10800362 }],
+              targetStateTransactions: [],
+            },
+          },
+        ],
+        mechanicsPackage: {
+          specialResourceCatalog: {
+            passiveEffects: [{ ownerId: 108003, skillId: 10800362 }],
+          },
+        },
+        boundaryReport: report,
+      })
+    ).not.toThrow();
   });
 
   it('removes an unnamed secondary passive from compilation and gap inputs while retaining its audit record', () => {

@@ -9,16 +9,16 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "bb14836067d2dee7",
-  "rosterHash": "42d85964ffd402b4",
-  "manifestsHash": "726dec2e22a3577d",
-  "ledgerHash": "96e3367a9ab6adef",
-  "bindingMatrixHash": "5f73e56a48591121",
-  "catalogHash": "b26e4d9379d9a95d",
+  "sourceSnapshotHash": "a05fb6ac9d69ef39",
+  "rosterHash": "3cefe94ad6cdfc51",
+  "manifestsHash": "d8b13f84544c3a6b",
+  "ledgerHash": "e6a38a3d3698941e",
+  "bindingMatrixHash": "347fd814cbf4bf3f",
+  "catalogHash": "f0d43745d05e1472",
   "maturityCounts": {
-    "extracted": 21,
+    "extracted": 20,
     "optimization-ready": 211,
-    "runtime-integrated": 31
+    "runtime-integrated": 32
   },
   "optimizationReadyCounts": {
     "character": 0,
@@ -28,17 +28,17 @@
     "set-skill": 12
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 16,
+    "blockingUniqueGapCount": 14,
     "byCategory": {
-      "not-implemented": 16
+      "not-implemented": 14
     },
     "byCode": {
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 6,
-      "character-not-optimization-ready": 9
+      "character-acceptance-not-published": 5,
+      "character-not-optimization-ready": 8
     },
     "byObjectKind": {
-      "character": 16
+      "character": 14
     }
   },
   "m12cLocked": true

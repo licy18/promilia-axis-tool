@@ -1708,6 +1708,59 @@ describe('verified tuning mark runtime', () => {
     expect(consumed.getElementEvents).toEqual([]);
     expect(expired.getElementEvents).toEqual([]);
   });
+
+  it('keeps source-proven same-frame occurrences while still deduping alias references', () => {
+    const sourceProven = createDirectTuningGeneration({
+      durationMs: 1_000,
+      effects: [
+        {
+          ...createDirectAcquireEffect('base-arrow', 250, 3, 0),
+          tuningMark: {
+            applied: true,
+            markId: 250,
+            stackDelta: 1,
+            occurrenceIdentity: 'arrow-occurrence:base',
+          },
+        },
+        {
+          ...createDirectAcquireEffect('conditional-arrows', 250, 3, 0),
+          tuningMark: {
+            applied: true,
+            markId: 250,
+            stackDelta: 2,
+            occurrenceIdentity: 'arrow-occurrence:conditional-pair',
+          },
+        },
+      ],
+    });
+    const aliasReferences = createDirectTuningGeneration({
+      durationMs: 1_000,
+      effects: [
+        {
+          ...createDirectAcquireEffect('elements-alias', 250, 3, 0),
+          tuningMark: { applied: true, markId: 250, stackDelta: 1 },
+        },
+        {
+          ...createDirectAcquireEffect('bullet-elements-consumer', 250, 3, 0),
+          tuningMark: { applied: true, markId: 250, stackDelta: 2 },
+        },
+      ],
+    });
+
+    expect(
+      sourceProven.events
+        .filter(event => event.kind === 'acquire')
+        .map(event => [event.before, event.delta, event.after])
+    ).toEqual([
+      [0, 1, 1],
+      [1, 2, 3],
+    ]);
+    expect(
+      aliasReferences.events
+        .filter(event => event.kind === 'acquire')
+        .map(event => [event.before, event.delta, event.after])
+    ).toEqual([[0, 2, 2]]);
+  });
 });
 
 function createPangpangAttack(id, startMs) {

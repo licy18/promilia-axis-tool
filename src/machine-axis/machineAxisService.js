@@ -1418,9 +1418,25 @@ function createActorActionTemplate({
       ? resolveAttackInputSegment(action, mapping, index, issues)
       : null;
   if (mapping.actionKind === 'normal-attack' && !segment) return null;
+  const semanticVariantResolution = resolveSemanticVariantSelection({
+    action,
+    entry,
+    mapping,
+    ownerId: ownerSlot.characterId,
+    index,
+    issues,
+  });
+  if (action.intent.semanticVariant && !semanticVariantResolution) return null;
+  const semanticVariant = semanticVariantResolution?.selection ?? null;
+  const selectedVariant = semanticVariantResolution?.selectedOption ?? null;
+  const selectedVariantOccupancy = selectedVariant?.executionTiming?.occupancy;
+  const selectedVariantHitIdentities =
+    collectSelectedVariantHitIdentities(selectedVariant);
   const durationFrames =
     positiveIntegerOrNull(segment?.effectiveDurationFrames) ??
     positiveIntegerOrNull(segment?.durationFrames) ??
+    positiveIntegerOrNull(selectedVariant?.durationFrames) ??
+    positiveIntegerOrNull(selectedVariantOccupancy?.durationFrames) ??
     positiveIntegerOrNull(mapping.actionTiming?.occupancy?.durationFrames) ??
     positiveIntegerOrNull(mapping.actionScheduling?.durationFrames);
   if (durationFrames == null) {
@@ -1434,20 +1450,33 @@ function createActorActionTemplate({
     );
     return null;
   }
+  const selectedVariantScheduling = selectedVariant
+    ? {
+        status: 'exact',
+        kind: 'exact-selected-variant-occupancy',
+        durationFrames,
+        planningDurationFrames: null,
+        selectedSubSkillIndex:
+          selectedVariant.executionSubSkillIndex ??
+          selectedVariant.subSkillIndex ??
+          null,
+        sourceIdentity:
+          selectedVariantOccupancy?.sourceIdentity ??
+          selectedVariant.sourceIdentity ??
+          mapping.bindingSourceIdentity,
+        sourceStatus: 'verified-input-occupancy',
+        variantModelStatus: 'resolved',
+        reasons: [],
+      }
+    : null;
   const scheduling = resolveWorkbenchActionScheduling({
     timingStatus: 'applied',
     durationFrames,
-    actionScheduling: segment?.actionScheduling ?? mapping.actionScheduling,
+    actionScheduling:
+      segment?.actionScheduling ??
+      selectedVariantScheduling ??
+      mapping.actionScheduling,
   });
-  const semanticVariant = resolveSemanticVariantSelection({
-    action,
-    entry,
-    mapping,
-    ownerId: ownerSlot.characterId,
-    index,
-    issues,
-  });
-  if (action.intent.semanticVariant && !semanticVariant) return null;
   const attackInputFields = segment
     ? createAttackInputFields(action, mapping, segment)
     : {};
@@ -1467,20 +1496,28 @@ function createActorActionTemplate({
       durationFrames,
       timingSource:
         segment?.durationBasis ??
+        selectedVariantOccupancy?.sourceKind ??
         mapping.actionTiming?.occupancy?.sourceKind ??
         'verified-machine-axis',
       timingStatus: 'applied',
       timingReasons: [],
       timingSourceIdentity:
         segment?.durationSourceIdentity ??
+        selectedVariantOccupancy?.sourceIdentity ??
         mapping.actionTiming?.occupancy?.sourceIdentity ??
         mapping.bindingSourceIdentity,
       needsTimingData: false,
       controlSubSkillIndex:
-        segment?.selectedSubSkillIndex ?? mapping.selectedSubSkillIndex,
+        segment?.selectedSubSkillIndex ??
+        selectedVariant?.executionSubSkillIndex ??
+        selectedVariant?.subSkillIndex ??
+        mapping.selectedSubSkillIndex,
       variantInputSelection: semanticVariant,
       actionScheduling:
-        segment?.actionScheduling ?? mapping.actionScheduling ?? null,
+        segment?.actionScheduling ??
+        selectedVariantScheduling ??
+        mapping.actionScheduling ??
+        null,
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
       scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
       hitOverrides: toProjectHitOverrides(action.hitOverrides),
@@ -1501,7 +1538,12 @@ function createActorActionTemplate({
       mappingIdentity: mapping.identity,
       sourceEvidenceStatus: mapping.sourceEvidenceStatus,
       scenarioRuntimeStatus: mapping.scenarioRuntimeStatus,
-      availableHitIdentities: collectMappingHitIdentities(mapping, segment),
+      availableHitIdentities: [
+        ...new Set([
+          ...collectMappingHitIdentities(mapping, segment),
+          ...selectedVariantHitIdentities,
+        ]),
+      ].sort((left, right) => left.localeCompare(right, 'en')),
       semanticVariant,
     },
   };
@@ -1780,6 +1822,34 @@ function collectMappingHitIdentities(mapping, segment = null) {
   ].sort((left, right) => left.localeCompare(right, 'en'));
 }
 
+function collectSelectedVariantHitIdentities(selectedVariant) {
+  const controlSkillId = Number(selectedVariant?.executionControlSkillId);
+  if (!Number.isInteger(controlSkillId)) return [];
+  const mechanicsPackage = requireMechanicsPackage();
+  const selectedSubSkillIndex = Number(
+    selectedVariant.executionSubSkillIndex ?? selectedVariant.subSkillIndex ?? 0
+  );
+  return [
+    ...new Set(
+      [
+        ...(mechanicsPackage.controlBindings ?? []),
+        ...(mechanicsPackage.actionVariantControlBindings ?? []),
+      ]
+        .filter(binding => Number(binding.controlSkillId) === controlSkillId)
+        .flatMap(binding =>
+          (binding.hits ?? [])
+            .filter(
+              hit =>
+                hit.subSkillIndex == null ||
+                Number(hit.subSkillIndex) === selectedSubSkillIndex
+            )
+            .map(hit => hit.hitIdentity)
+        )
+        .filter(Boolean)
+    ),
+  ].sort((left, right) => left.localeCompare(right, 'en'));
+}
+
 function resolveSemanticVariantSelection({
   action,
   entry,
@@ -1848,25 +1918,28 @@ function resolveSemanticVariantSelection({
     return null;
   }
   return {
-    ...requested,
-    selectorIdentity: selected.selectorIdentity,
-    selectorKind:
-      requested.selectorKind ??
-      contracts.find(contract =>
-        (contract.inputSelector?.options ?? []).includes(selected)
-      )?.inputSelector?.kind ??
-      'input-controlled',
-    publicVariantIndex:
-      requested.publicVariantIndex ?? selected.publicVariantIndex ?? null,
-    chargeTier: requested.chargeTier ?? selected.chargeTier ?? null,
-    mode:
-      requested.mode ??
-      contracts.find(contract =>
-        (contract.inputSelector?.options ?? []).includes(selected)
-      )?.inputSelector?.mode ??
-      null,
-    sourceIdentity: selected.sourceIdentity ?? null,
-    resolutionStatus: selected.resolutionStatus ?? null,
+    selection: {
+      ...requested,
+      selectorIdentity: selected.selectorIdentity,
+      selectorKind:
+        requested.selectorKind ??
+        contracts.find(contract =>
+          (contract.inputSelector?.options ?? []).includes(selected)
+        )?.inputSelector?.kind ??
+        'input-controlled',
+      publicVariantIndex:
+        requested.publicVariantIndex ?? selected.publicVariantIndex ?? null,
+      chargeTier: requested.chargeTier ?? selected.chargeTier ?? null,
+      mode:
+        requested.mode ??
+        contracts.find(contract =>
+          (contract.inputSelector?.options ?? []).includes(selected)
+        )?.inputSelector?.mode ??
+        null,
+      sourceIdentity: selected.sourceIdentity ?? null,
+      resolutionStatus: selected.resolutionStatus ?? null,
+    },
+    selectedOption: selected,
   };
 }
 

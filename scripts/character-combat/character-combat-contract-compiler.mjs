@@ -105,15 +105,6 @@ export function compileCharacterCombatRecipeContracts({
     definitions: compilerRecipe.targetStateProfiles ?? [],
     operators: normalizedOperators,
   });
-  const actionEffectBindings = compileActionEffectBindings({
-    ownerId,
-    definitions: compilerRecipe.actionEffectBindings ?? [],
-    controlBySkillId,
-    resourceProfiles,
-    targetStateProfiles,
-    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
-    operators: normalizedOperators,
-  });
   const targetStateTransactions = compileTargetStateTransactions({
     ownerId,
     definitions: compilerRecipe.targetStateTransactions ?? [],
@@ -137,6 +128,16 @@ export function compileCharacterCombatRecipeContracts({
       ...conditionalHitGroups.map(createConditionalGroupHitBinding),
     ],
     controlBySkillId,
+  });
+  const actionEffectBindings = compileActionEffectBindings({
+    ownerId,
+    definitions: compilerRecipe.actionEffectBindings ?? [],
+    controlBySkillId,
+    resourceProfiles,
+    targetStateProfiles,
+    tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+    actionHitBindings,
+    operators: normalizedOperators,
   });
   const runtimeEffectBindings = compileRuntimeEffectBindings({
     ownerId,
@@ -487,6 +488,8 @@ export function applyCharacterCombatActionHitBindings({
       conditionalGroupIdentity:
         binding.conditionalGroupIdentity ?? null,
       runtimeCondition: binding.runtimeCondition ?? null,
+      sourceBindingIdentity: binding.bindingIdentity,
+      hitActivation: binding.hitActivation ?? null,
     }));
     control.elements[index] = {
       ...normalizedElement,
@@ -519,9 +522,6 @@ export function applyCharacterCombatActionHitBindings({
       sourceIdentity: [element.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
-      conditionalGroupIdentity:
-        binding.conditionalGroupIdentity ?? null,
-      runtimeCondition: binding.runtimeCondition ?? null,
     };
   }
   return controls;
@@ -592,7 +592,9 @@ export function applyCharacterCombatActionEffectBindings({
     const elementMatches = (control.effects ?? []).filter(
       effect =>
         Number(effect.mapIndex) === Number(binding.mapIndex) &&
-        Number(effect.elementId) === Number(binding.elementId)
+        Number(effect.elementId) === Number(binding.elementId) &&
+        (!binding.sourceReferenceKind ||
+          effect.sourceOrder?.referenceKind === binding.sourceReferenceKind)
     );
     const triggerMatches = elementMatches.filter(
       effect =>
@@ -976,6 +978,7 @@ function applyActionEffectBinding(effect, binding) {
     tuningMark: binding.tuningMark,
     targetStateActivationCondition:
       binding.targetStateActivationCondition ?? null,
+    hitActivation: binding.hitActivation ?? null,
     sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
       .filter(Boolean)
       .join('|'),
@@ -2541,6 +2544,7 @@ function compileActionEffectBindings({
   resourceProfiles,
   targetStateProfiles,
   tuningMarkProfiles,
+  actionHitBindings,
   operators,
 }) {
   const targetStateProfileByIdentity = new Map(
@@ -2550,7 +2554,7 @@ function compileActionEffectBindings({
     ])
   );
   return definitions.map(definition => {
-    requireControl(
+    const control = requireControl(
       controlBySkillId,
       definition.controlSkillId,
       'action effect binding'
@@ -2582,6 +2586,14 @@ function compileActionEffectBindings({
         targetStateProfileByIdentity,
         operators,
       });
+    const hitActivation = compileActionEffectHitActivation({
+      ownerId,
+      definition: definition.hitActivation,
+      control,
+      subSkillIndex: definition.subSkillIndex,
+      actionHitBindings,
+      sourceReferenceKind: definition.sourceReferenceKind,
+    });
     if (
       !element ||
       !Number.isInteger(triggerFrame) ||
@@ -2606,6 +2618,7 @@ function compileActionEffectBindings({
       sourceIdentity: [
         element.sourceIdentity,
         targetStateActivationCondition?.sourceIdentity,
+        hitActivation?.sourceIdentity,
         definition.sourceIdentity,
       ]
         .filter(Boolean)
@@ -2620,6 +2633,7 @@ function compileActionEffectBindings({
             ...tuningProfile,
             profileKey: tuningProfile.profileKey ?? tuningProfile.key,
             stackDelta: Number(definition.stackDelta) || 1,
+            occurrenceIdentity: `action-effect-binding:${definition.bindingIdentity}`,
             applied: true,
           }
         : null,
@@ -2636,6 +2650,8 @@ function compileActionEffectBindings({
           : Number(definition.durationMsOverride),
       targetKindOverride: definition.targetKindOverride ?? null,
       targetStateActivationCondition,
+      hitActivation,
+      sourceReferenceKind: definition.sourceReferenceKind ?? null,
       activationConditionScope:
         definition.activationConditionScope ?? 'matched-effect',
       inheritance,
@@ -2643,6 +2659,115 @@ function compileActionEffectBindings({
       applied: true,
     };
   });
+}
+
+function compileActionEffectHitActivation({
+  ownerId,
+  definition,
+  control,
+  subSkillIndex,
+  actionHitBindings,
+  sourceReferenceKind,
+}) {
+  if (!definition) return null;
+  const elementId = Number(definition.elementId);
+  const triggerFrames = [
+    ...new Set((definition.triggerFrames ?? []).map(Number)),
+  ].sort((left, right) => left - right);
+  const syntheticHits = (actionHitBindings ?? [])
+    .filter(
+      binding =>
+        Number(binding.controlSkillId) === Number(control?.controlSkillId) &&
+        Number(binding.subSkillIndex) === Number(subSkillIndex)
+    )
+    .flatMap(binding =>
+      binding.triggerFrames.map(frame => ({
+        sourceBindingIdentity: binding.bindingIdentity,
+        elementId: binding.elementId,
+        mapIndex: binding.subSkillIndex,
+        conditionalGroupIdentity: binding.conditionalGroupIdentity,
+        trigger: { startFrame: frame },
+        sourceIdentity: binding.sourceIdentity,
+      }))
+    );
+  const sourceElementHits = (control?.elements ?? [])
+    .filter(
+      element =>
+        Number(element.mapIndex) === Number(subSkillIndex) &&
+        Number(element.elementId) === elementId &&
+        (!sourceReferenceKind ||
+          element.referenceKind === sourceReferenceKind)
+    )
+    .flatMap(element =>
+      [...(element.scenarioTriggers ?? []), ...(element.triggers ?? [])].map(
+        trigger => ({
+          elementId: element.elementId,
+          mapIndex: element.mapIndex,
+          conditionalGroupIdentity: trigger.conditionalGroupIdentity ?? null,
+          trigger: { startFrame: trigger.startFrame },
+          sourceIdentity: [element.sourceIdentity, trigger.sourceIdentity]
+            .filter(Boolean)
+            .join('|'),
+        })
+      )
+    );
+  const matchingHits = [
+    ...(control?.hits ?? []),
+    ...sourceElementHits,
+    ...syntheticHits,
+  ].filter(
+    hit =>
+      Number(hit.mapIndex) === Number(subSkillIndex) &&
+      Number(hit.elementId) === elementId &&
+      (triggerFrames.length === 0 ||
+        triggerFrames.includes(Number(hit.trigger?.startFrame))) &&
+      (definition.includeConditionalHits !== false ||
+        !hit.conditionalGroupIdentity) &&
+      (definition.conditionalGroupIdentity == null ||
+        hit.conditionalGroupIdentity === definition.conditionalGroupIdentity) &&
+      (definition.sourceBindingIdentity == null ||
+        hit.sourceBindingIdentity === definition.sourceBindingIdentity)
+  );
+  const minimumLandedCount = Math.max(
+    1,
+    Number(definition.minimumLandedCount) || 1
+  );
+  const stackDeltaMode = definition.stackDeltaMode ?? 'fixed';
+  if (
+    !Number.isInteger(elementId) ||
+    matchingHits.length < minimumLandedCount ||
+    !['fixed', 'per-landed-hit'].includes(stackDeltaMode)
+  ) {
+    throw new Error(
+      `character combat action effect hit activation evidence missing: ${ownerId}/${elementId}`
+    );
+  }
+  return {
+    kind: 'landed-hit-cardinality',
+    elementId,
+    triggerFrames,
+    includeConditionalHits: definition.includeConditionalHits !== false,
+    conditionalGroupIdentity: definition.conditionalGroupIdentity ?? null,
+    sourceBindingIdentity: definition.sourceBindingIdentity ?? null,
+    minimumLandedCount,
+    maximumLandedCount:
+      definition.maximumLandedCount == null
+        ? null
+        : Math.max(1, Number(definition.maximumLandedCount) || 1),
+    stackDeltaMode,
+    perLandedHitStackDelta: Math.max(
+      1,
+      Number(definition.perLandedHitStackDelta) || 1
+    ),
+    sourceIdentity: [
+      ...matchingHits.map(hit => hit.sourceIdentity),
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-action-effect-hit-activation-ready',
+    applied: true,
+  };
 }
 
 function compileActionEffectTargetStateActivationCondition({
@@ -2881,7 +3006,9 @@ function compileConditionalHitGroups({
       element =>
         Number(element.mapIndex) ===
           Number(definition.sourceSubSkillIndex) &&
-        Number(element.elementId) === Number(definition.elementId)
+        Number(element.elementId) === Number(definition.elementId) &&
+        (!definition.sourceReferenceKind ||
+          element.referenceKind === definition.sourceReferenceKind)
     );
     const formulaNormalization =
       resolveTargetStateConditionalFormulaNormalization({
@@ -2974,6 +3101,7 @@ function compileConditionalHitGroups({
       subSkillIndex: Number(definition.subSkillIndex),
       sourceControlSkillId: Number(definition.sourceControlSkillId),
       sourceSubSkillIndex: Number(definition.sourceSubSkillIndex),
+      sourceReferenceKind: definition.sourceReferenceKind ?? null,
       elementId: Number(definition.elementId),
       triggerFrames: triggerFrames.sort((left, right) => left - right),
       decisionFrame,
@@ -2997,12 +3125,19 @@ function compileConditionalHitGroups({
               1,
               Number(definition.tuningMarkStackDelta) || 1
             ),
+            occurrenceIdentity: `conditional-hit-group:${definition.groupIdentity}`,
             triggerFrame: Number(
               definition.tuningMarkTriggerFrame ?? decisionFrame
             ),
             applied: true,
           }
         : null,
+      tuningMarkPerLandedHit:
+        definition.tuningMarkPerLandedHit === true,
+      tuningMarkHitElementId:
+        definition.tuningMarkHitElementId == null
+          ? null
+          : Number(definition.tuningMarkHitElementId),
       semanticName:
         definition.semanticName ??
         sourceElement.name ??
@@ -3087,6 +3222,7 @@ function createConditionalGroupHitBinding(group) {
     subSkillIndex: group.subSkillIndex,
     sourceControlSkillId: group.sourceControlSkillId,
     sourceSubSkillIndex: group.sourceSubSkillIndex,
+    sourceReferenceKind: group.sourceReferenceKind,
     elementId: group.elementId,
     triggerFrames: group.triggerFrames,
     frameCount: 1,
@@ -3124,8 +3260,14 @@ function compileRuntimeEffectBindings({
       triggerKind === 'conditional-hit-group-applied'
         ? groupByIdentity.get(String(definition.conditionalGroupIdentity))
         : null;
+    const actionTriggerKinds = [
+      'action-frame',
+      'action-frame-with-state',
+      'action-hit-landed',
+      'action-periodic',
+    ];
     const control =
-      ['action-frame', 'action-frame-with-state'].includes(triggerKind)
+      actionTriggerKinds.includes(triggerKind)
         ? requireControl(
             controlBySkillId,
             definition.controlSkillId,
@@ -3168,8 +3310,57 @@ function compileRuntimeEffectBindings({
       ? compileRuntimeDirectSp({
           asset: directSpAsset,
           expectedValue: definition.expectedDirectSpValue,
+          expectedShareType: definition.expectedShareType,
         })
       : null;
+    const requiredHitElementId =
+      definition.requiresHitElementId == null
+        ? null
+        : Number(definition.requiresHitElementId);
+    const requiredHitFrame =
+      definition.requiresHitFrame == null
+        ? null
+        : Number(definition.requiresHitFrame);
+    const runtimeHitEvidence = [
+      ...(control?.hits ?? []),
+      ...(control?.elements ?? []).flatMap(element =>
+        [...(element.scenarioTriggers ?? []), ...(element.triggers ?? [])].map(
+          trigger => ({
+            elementId: element.elementId,
+            mapIndex: element.mapIndex,
+            trigger,
+            sourceIdentity: [element.sourceIdentity, trigger.sourceIdentity]
+              .filter(Boolean)
+              .join('|'),
+          })
+        )
+      ),
+    ];
+    const hitEvidence =
+      triggerKind !== 'action-hit-landed'
+        ? null
+        : runtimeHitEvidence.filter(
+            hit =>
+              Number(hit.mapIndex) === Number(definition.subSkillIndex) &&
+              Number(hit.elementId) === requiredHitElementId &&
+              (requiredHitFrame == null ||
+                Number(hit.trigger?.startFrame) === requiredHitFrame)
+          );
+    const periodicAsset =
+      definition.periodicElementId == null
+        ? null
+        : operators.readElementAsset(definition.periodicElementId);
+    const periodic =
+      triggerKind === 'action-periodic' && periodicAsset
+        ? compileRuntimePeriodicTrigger({
+            asset: periodicAsset,
+            expectedDurationMs: definition.expectedPeriodicDurationMs,
+            expectedIntervalMs: definition.expectedPeriodicIntervalMs,
+            expectedTimeExeFirstFrame:
+              definition.expectedTimeExeFirstFrame,
+            firstTickFrameOffset: definition.firstTickFrameOffset,
+          })
+        : null;
     const durationMs = Number(
       definition.durationMs ?? durationAsset?.tree?.time
     );
@@ -3178,11 +3369,18 @@ function compileRuntimeEffectBindings({
         'conditional-hit-group-applied',
         'action-frame',
         'action-frame-with-state',
+        'action-hit-landed',
+        'action-periodic',
       ].includes(triggerKind) ||
       (triggerKind === 'conditional-hit-group-applied' && !group) ||
       (triggerKind === 'action-frame' && !control) ||
       (triggerKind === 'action-frame-with-state' &&
         (!control || !stateProfile || !(minimumStacks > 0))) ||
+      (triggerKind === 'action-hit-landed' &&
+        (!control ||
+          !Number.isInteger(requiredHitElementId) ||
+          hitEvidence.length === 0)) ||
+      (triggerKind === 'action-periodic' && (!control || !periodic)) ||
       !Number.isInteger(triggerFrame) ||
       triggerFrame < 0 ||
       (!modifier && !directSp) ||
@@ -3207,17 +3405,13 @@ function compileRuntimeEffectBindings({
           : null,
       minimumStacks,
       controlSkillId:
-        triggerKind === 'action-frame'
+        actionTriggerKinds.includes(triggerKind)
           ? Number(definition.controlSkillId)
-          : triggerKind === 'action-frame-with-state'
-            ? Number(definition.controlSkillId)
-            : group.controlSkillId,
+          : group.controlSkillId,
       subSkillIndex:
-        triggerKind === 'action-frame'
+        actionTriggerKinds.includes(triggerKind)
           ? Number(definition.subSkillIndex)
-          : triggerKind === 'action-frame-with-state'
-            ? Number(definition.subSkillIndex)
-            : group.subSkillIndex,
+          : group.subSkillIndex,
       triggerFrame,
       frameRate:
         Number(control?.frameRate ?? group?.frameRate) || 60,
@@ -3232,16 +3426,23 @@ function compileRuntimeEffectBindings({
         propertyAsset?.tree?.elementName ??
         directSpAsset?.tree?.elementName ??
         definition.bindingIdentity,
-      durationMs: modifier ? durationMs : null,
+      durationMs: modifier
+        ? durationMs
+        : periodic?.durationMs ?? null,
       stackMode: definition.stackMode ?? 'refresh',
       stackDelta: Math.max(1, Number(definition.stackDelta) || 1),
       maxStacks: Math.max(1, Number(definition.maxStacks) || 1),
       modifiers: modifier ? [modifier] : [],
       directSp,
+      requiredHitElementId,
+      requiredHitFrame,
+      periodic,
       inheritance,
       sourceIdentity: [
         propertyAsset?.sourceIdentity,
         directSpAsset?.sourceIdentity,
+        periodicAsset?.sourceIdentity,
+        ...(hitEvidence ?? []).map(hit => hit.sourceIdentity),
         durationAsset?.sourceIdentity,
         definition.sourceIdentity,
       ]
@@ -3338,12 +3539,26 @@ function compileRuntimePropertyModifier({
   };
 }
 
-function compileRuntimeDirectSp({ asset, expectedValue }) {
+function compileRuntimeDirectSp({
+  asset,
+  expectedValue,
+  expectedShareType,
+}) {
   const rawValue = Number(asset.tree?.functionParams?.[0]);
-  const value = rawValue / 10_000;
+  const baseFunctionId = Number(asset.tree?.formulaParams?.function_2);
+  const value =
+    baseFunctionId === 3
+      ? rawValue / 10_000
+      : baseFunctionId === 5
+        ? rawValue
+        : Number.NaN;
+  const shareType = Number(asset.tree?.shareType ?? 0);
+  const stopSharing = Number(asset.tree?.stopSharing ?? 0);
   if (
     !Number.isFinite(value) ||
-    (expectedValue != null && value !== Number(expectedValue))
+    (expectedValue != null && value !== Number(expectedValue)) ||
+    (expectedShareType != null &&
+      shareType !== Number(expectedShareType))
   ) {
     throw new Error(
       `character combat runtime direct SP evidence mismatch: ${asset.elementId}`
@@ -3353,8 +3568,48 @@ function compileRuntimeDirectSp({ asset, expectedValue }) {
     elementId: Number(asset.elementId),
     value,
     enhanceable: false,
-    shareType: 0,
-    sourceIdentity: `${asset.sourceIdentity}#A=${rawValue}/10000`,
+    shareType,
+    stopSharing: stopSharing === 1,
+    sourceIdentity: `${asset.sourceIdentity}#function_2=${baseFunctionId};A=${rawValue};shareType=${shareType};stopSharing=${stopSharing}`,
+  };
+}
+
+function compileRuntimePeriodicTrigger({
+  asset,
+  expectedDurationMs,
+  expectedIntervalMs,
+  expectedTimeExeFirstFrame,
+  firstTickFrameOffset,
+}) {
+  const durationMs = Number(asset.tree?.duration ?? asset.tree?.time);
+  const intervalMs = Number(asset.tree?.triggerParam2);
+  const timeExeFirstFrame = Number(asset.tree?.timeExeFirstFrame) === 1;
+  const resolvedFirstTickFrameOffset = Number(firstTickFrameOffset ?? 1);
+  if (
+    !(durationMs > 0) ||
+    !(intervalMs > 0) ||
+    !Number.isInteger(resolvedFirstTickFrameOffset) ||
+    resolvedFirstTickFrameOffset < 0 ||
+    (expectedDurationMs != null &&
+      durationMs !== Number(expectedDurationMs)) ||
+    (expectedIntervalMs != null &&
+      intervalMs !== Number(expectedIntervalMs)) ||
+    (expectedTimeExeFirstFrame != null &&
+      timeExeFirstFrame !== Boolean(expectedTimeExeFirstFrame))
+  ) {
+    throw new Error(
+      `character combat runtime periodic evidence mismatch: ${asset.elementId}`
+    );
+  }
+  return {
+    elementId: Number(asset.elementId),
+    durationMs,
+    intervalMs,
+    timeExeFirstFrame,
+    firstTickFrameOffset: resolvedFirstTickFrameOffset,
+    sourceIdentity: `${asset.sourceIdentity}#duration=${durationMs};triggerParam2=${intervalMs};timeExeFirstFrame=${Number(timeExeFirstFrame)}`,
+    status: 'verified-runtime-periodic-trigger-ready',
+    applied: true,
   };
 }
 
@@ -3363,7 +3618,7 @@ function compileActionHitBindings({
   definitions,
   controlBySkillId,
 }) {
-  return definitions.map(definition => {
+  const bindings = definitions.map(definition => {
     requireControl(
       controlBySkillId,
       definition.controlSkillId,
@@ -3446,6 +3701,7 @@ function compileActionHitBindings({
       conditionalGroupIdentity:
         definition.conditionalGroupIdentity ?? null,
       runtimeCondition: definition.runtimeCondition ?? null,
+      hitActivation: null,
       formulaNormalization: definition.formulaNormalization ?? null,
       sourceIdentity: [
         sourceElement.sourceIdentity,
@@ -3455,6 +3711,37 @@ function compileActionHitBindings({
         .join('|'),
       status: 'applied',
       applied: true,
+    };
+  });
+  return bindings.map((binding, index) => {
+    const definition = definitions[index];
+    if (!definition.hitActivation) return binding;
+    const control = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'action hit activation binding'
+    );
+    const hitActivation = compileActionEffectHitActivation({
+      ownerId,
+      definition: {
+        ...definition.hitActivation,
+        elementId: Number(
+          definition.hitActivation.elementId ??
+            definition.hitActivation.sourceElementId
+        ),
+      },
+      control,
+      subSkillIndex: definition.subSkillIndex,
+      actionHitBindings: bindings,
+      sourceReferenceKind:
+        definition.hitActivation.sourceReferenceKind ?? null,
+    });
+    return {
+      ...binding,
+      hitActivation,
+      sourceIdentity: [binding.sourceIdentity, hitActivation?.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
     };
   });
 }
@@ -3808,6 +4095,10 @@ function compileTargetStateRuntimePassiveEffect({
   operators,
 }) {
   const passiveControl = controlBySkillId.get(Number(definition.skillId));
+  const sourceOnlyPassiveEvidence =
+    !passiveControl && typeof definition.sourceOnlyPassiveEvidence === 'string'
+      ? definition.sourceOnlyPassiveEvidence.trim()
+      : '';
   const sourceAssets = (definition.sourceElementIds ?? []).map(elementId =>
     operators.readElementAsset(Number(elementId))
   );
@@ -3854,6 +4145,15 @@ function compileTargetStateRuntimePassiveEffect({
       ...selectedRuntimeBindings
         .filter(Boolean)
         .flatMap(binding => binding.modifiers ?? []),
+      ...selectedRuntimeBindings
+        .filter(binding => binding?.directSp)
+        .map(binding => ({
+          kind: 'direct-sp',
+          value: Number(binding.directSp.value),
+          shareType: Number(binding.directSp.shareType),
+          stopSharing: binding.directSp.stopSharing === true,
+          sourceIdentity: binding.directSp.sourceIdentity,
+        })),
       ...selectedTransactions.filter(Boolean).map(transaction => ({
         kind: 'target-state',
         stateIdentity: transaction.stateIdentity,
@@ -3881,7 +4181,7 @@ function compileTargetStateRuntimePassiveEffect({
     definition.targetStateTransactionIdentities ?? []
   ).length;
   const applied =
-    passiveControl != null &&
+    (passiveControl != null || Boolean(sourceOnlyPassiveEvidence)) &&
     sourceAssets.length > 0 &&
     sourceAssets.every(Boolean) &&
     selectedRuntimeBindings.filter(Boolean).length ===
@@ -3930,6 +4230,7 @@ function compileTargetStateRuntimePassiveEffect({
     modifiers,
     sourceIdentity: [
       passiveControl?.sourcePath,
+      sourceOnlyPassiveEvidence,
       ...sourceAssets.filter(Boolean).map(asset => asset.sourceIdentity),
       ...triggerBindings.map(trigger => trigger.sourceIdentity),
       definition.sourceIdentity,
@@ -3940,7 +4241,9 @@ function compileTargetStateRuntimePassiveEffect({
       ? 'verified-target-state-runtime-passive-profile-ready'
       : 'unresolved-target-state-runtime-passive-profile',
     reasons: [
-      ...(passiveControl ? [] : ['passive-skill-control-missing']),
+      ...(passiveControl || sourceOnlyPassiveEvidence
+        ? []
+        : ['passive-skill-control-missing']),
       ...(sourceAssets.length > 0 && sourceAssets.every(Boolean)
         ? []
         : ['passive-source-element-missing']),

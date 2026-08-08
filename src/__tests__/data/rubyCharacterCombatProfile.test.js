@@ -998,15 +998,15 @@ describe('M10-B1 Ruby character combat profile', () => {
           'ruby-star-skill': {
             hitCount: 7,
             frames: [1887, 1894, 1899, 1904, 1909, 1914, 1919],
-            totalHpDamage: 664,
-            totalToughnessDamage: 464,
+            totalHpDamage: 3839,
+            totalToughnessDamage: 2688,
           },
         },
-        ownerTotalHpDamage: 164422,
-        ownerTotalToughnessDamage: 2220,
+        ownerTotalHpDamage: 218014,
+        ownerTotalToughnessDamage: 6063,
         enemy: {
-          initialHp: 862800,
-          finalHp: 698284,
+          initialHp: 8677869.84,
+          finalHp: 8459311.84,
         },
       },
       effects: {
@@ -1028,9 +1028,9 @@ describe('M10-B1 Ruby character combat profile', () => {
         ]),
       },
       comparison: {
-        primaryDamage: 297,
-        baselineDamage: 126,
-        damageDelta: 171,
+        primaryDamage: 1716,
+        baselineDamage: 723,
+        damageDelta: 993,
       },
     });
     expect(

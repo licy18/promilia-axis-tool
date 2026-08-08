@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "42d85964ffd402b4",
-  "manifestsHash": "726dec2e22a3577d",
-  "gapLedgerHash": "96e3367a9ab6adef",
-  "bindingMatrixHash": "5f73e56a48591121",
-  "sourceSnapshotHash": "bb14836067d2dee7",
+  "rosterHash": "3cefe94ad6cdfc51",
+  "manifestsHash": "d8b13f84544c3a6b",
+  "gapLedgerHash": "e6a38a3d3698941e",
+  "bindingMatrixHash": "347fd814cbf4bf3f",
+  "sourceSnapshotHash": "a05fb6ac9d69ef39",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "4fb933c530097bfa"
+      "manifestHash": "27e249bbbacedd75"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "27e16041b42634f0"
+      "manifestHash": "144c2883dbd1d0db"
     },
     {
       "objectKind": "character",
@@ -79,13 +79,12 @@
       "objectKind": "character",
       "objectId": "108003",
       "displayName": "米蒂",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-acceptance-not-published",
         "character-not-optimization-ready"
       ],
-      "manifestHash": "de8fb7fd1a6710f3"
+      "manifestHash": "c975a179a9dc98d4"
     },
     {
       "objectKind": "character",
@@ -93,10 +92,8 @@
       "displayName": "末音",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "7494c797f22405de"
+      "blockerCodes": [],
+      "manifestHash": "f7233fe8808b7ad6"
     },
     {
       "objectKind": "character",
@@ -2636,7 +2633,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "42d85964ffd402b4",
+    "rosterHash": "3cefe94ad6cdfc51",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20608,7 +20605,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "5f73e56a48591121"
+    "bindingMatrixHash": "347fd814cbf4bf3f"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -27565,8 +27562,8 @@
                 "declarationStatus": "source-indexed-table-declaration",
                 "availabilityStatus": "not-applicable",
                 "effectRuntimeStatus": "not-applicable",
-                "reason": "unnamed-secondary-passive-not-implemented-current-client",
-                "productBoundaryIdentity": "actor:108003:skill:10800362:product-boundary",
+                "reason": null,
+                "productBoundaryIdentity": "actor:108003:skill:10800362:implemented",
                 "productDecision": "unimplemented-dead-config"
               },
               "runtimeApplicationStatus": "not-applicable-unimplemented-dead-config",
@@ -38203,9 +38200,9 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 21,
+      "extracted": 20,
       "optimization-ready": 211,
-      "runtime-integrated": 31
+      "runtime-integrated": 32
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -38215,7 +38212,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 16,
+    "gameplayBlockingGapCount": 14,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38297,5 +38294,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "b26e4d9379d9a95d"
+  "catalogHash": "f0d43745d05e1472"
 }

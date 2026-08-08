@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
 import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
@@ -138,6 +139,112 @@ describe('Machine Axis service', () => {
       data: expect.any(String),
       trace: expect.any(String),
       evaluation: expect.any(String),
+    });
+  }, 30_000);
+
+  it('gates Miti spawned lightning-orb packets on each landed parent arrow', () => {
+    const run = createMachineAxisService().simulate(mitiFixture);
+    const damageCounts = actionId =>
+      run.trace.damage
+        .filter(event => event.actionId === actionId)
+        .reduce((counts, event) => {
+          const elementId = Number(event.elementId);
+          counts[elementId] = (counts[elementId] ?? 0) + 1;
+          return counts;
+        }, {});
+
+    expect(damageCounts('miti-short-charge-state-on')).toMatchObject({
+      108003125: 1,
+      108003127: 6,
+    });
+    expect(damageCounts('miti-full-charge-expiry-boundary')).toMatchObject({
+      108003126: 1,
+      108003129: 12,
+    });
+    expect(damageCounts('miti-full-charge-state-on')).toMatchObject({
+      108003126: 3,
+      108003129: 36,
+    });
+    expect(damageCounts('miti-short-charge-all-miss')).toEqual({});
+    expect(damageCounts('miti-full-charge-state-on-all-miss')).toEqual({});
+    expect(damageCounts('miti-ultimate-all-miss')).toEqual({});
+
+    const secondStarPeriodic = run.trace.resources.actors.filter(
+      event =>
+        event.actionId === 'miti-star-2-exact-cooldown' &&
+        Number(event.elementId) === 108003164
+    );
+    expect(secondStarPeriodic).toHaveLength(30);
+    for (const actorId of [
+      'actor-108003',
+      'actor-101010',
+      'actor-103002',
+    ]) {
+      expect(
+        secondStarPeriodic
+          .filter(event => event.actorId === actorId)
+          .map(event => [event.absoluteFrame, event.change, event.reason])
+      ).toEqual(
+        Array.from({ length: 10 }, (_, index) => [
+          3391 + index * 60,
+          2,
+          actorId === 'actor-108003'
+            ? 'verified-direct-sp'
+            : 'verified-direct-sp-shared',
+        ])
+      );
+    }
+
+    const finalHitSp = run.trace.resources.actors.filter(
+      event => Number(event.elementId) === 108003147
+    );
+    expect(
+      finalHitSp.map(event => [
+        event.actionId,
+        event.actorId,
+        event.absoluteFrame,
+        event.change,
+      ])
+    ).toEqual([
+      ['miti-star-1', 'actor-108003', 2068, 5],
+      ['miti-star-2-exact-cooldown', 'actor-108003', 3508, 5],
+    ]);
+    expect(
+      finalHitSp.some(event => event.actionId === 'miti-star-3-final-miss')
+    ).toBe(false);
+
+    const attackBuffEvents = run.trace.effects.events.filter(
+      event => event.effectId === 'battle-element:108003143'
+    );
+    expect(
+      attackBuffEvents
+        .filter(
+          event =>
+            event.actionId === 'miti-star-2-exact-cooldown' &&
+            event.operation === 'apply'
+        )
+        .map(event => event.targetId)
+        .sort()
+    ).toEqual(['actor-101010', 'actor-103002', 'actor-108003']);
+    expect(
+      attackBuffEvents
+        .filter(event => event.timeMs === 56516.667)
+        .map(event => [event.actionId, event.operation])
+        .sort()
+    ).toEqual([
+      ['miti-star-1', 'expire'],
+      ['miti-star-1', 'expire'],
+      ['miti-star-1', 'expire'],
+      ['miti-star-2-exact-cooldown', 'apply'],
+      ['miti-star-2-exact-cooldown', 'apply'],
+      ['miti-star-2-exact-cooldown', 'apply'],
+    ]);
+    expect(run.hashes).toMatchObject({
+      input: 'ff0e5cfeb6204398',
+      data: '9e1c2699347eea59',
+      trace: '9f2b9badd29cf1f2',
+      evaluation: '3c2fb1d6fda5e7b9',
+      build: '320ddf8446ee4c92',
     });
   }, 30_000);
 

@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "42d85964ffd402b4",
+  "rosterHash": "3cefe94ad6cdfc51",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "bb14836067d2dee7",
-        "42d85964ffd402b4"
+        "a05fb6ac9d69ef39",
+        "3cefe94ad6cdfc51"
       ]
     },
     {
@@ -236,20 +236,6 @@
       "gapHash": "c99a421e56f2b5e4"
     },
     {
-      "gapIdentity": "character:108003:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "108003",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=108003]"
-      ],
-      "details": {},
-      "gapHash": "fe2af641ab0451f2"
-    },
-    {
       "gapIdentity": "character:108003:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "108003",
@@ -262,20 +248,6 @@
       ],
       "details": {},
       "gapHash": "f9a74417015fe730"
-    },
-    {
-      "gapIdentity": "character:109001:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "109001",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=109001]"
-      ],
-      "details": {},
-      "gapHash": "8b52f0586fe42981"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -352,18 +324,18 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 16,
+    "blockingUniqueGapCount": 14,
     "byCategory": {
-      "not-implemented": 16
+      "not-implemented": 14
     },
     "byCode": {
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 6,
-      "character-not-optimization-ready": 9
+      "character-acceptance-not-published": 5,
+      "character-not-optimization-ready": 8
     },
     "byObjectKind": {
-      "character": 16
+      "character": 14
     }
   },
-  "ledgerHash": "96e3367a9ab6adef"
+  "ledgerHash": "e6a38a3d3698941e"
 }

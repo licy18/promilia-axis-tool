@@ -352,6 +352,7 @@ function dedupeTuningRuntimeEffects(effects) {
     ...new Map(
       effects.map(effect => {
         const tuning = effect.tuningMark ?? effect.tuningOverlimit;
+        const occurrenceIdentity = effect.tuningMark?.occurrenceIdentity ?? null;
         return [
           tuning
             ? [
@@ -360,6 +361,7 @@ function dedupeTuningRuntimeEffects(effects) {
                 tuning.packetElementId ?? tuning.stackElementId ?? '',
                 effect.mapIndex,
                 effect.trigger?.startFrame ?? '',
+                occurrenceIdentity ?? '',
               ].join('|')
             : effect.effectIdentity,
           effect,

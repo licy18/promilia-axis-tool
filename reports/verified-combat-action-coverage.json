@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "226b60bec7c3b9e701b0a5483ec71685c71530bbec65f1df632362a30f588a4b",
+  "packageHash": "72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
@@ -24,43 +24,43 @@
     "sourceAppliedActionCount": 459,
     "sourceRuntimeDependentActionCount": 173,
     "sourceStaticEvidenceGapActionCount": 13,
-    "scenarioResolvedActionCount": 586,
+    "scenarioResolvedActionCount": 584,
     "verifiedZeroActionCount": 0,
     "unresolvedActionCount": 13,
-    "hitNodeCount": 3214,
+    "hitNodeCount": 3229,
     "dimensions": {
       "hp": {
-        "nonzero": 894,
+        "nonzero": 895,
         "verified-zero": 0,
         "unresolved": 2053
       },
       "toughness": {
-        "nonzero": 868,
+        "nonzero": 869,
         "verified-zero": 26,
         "unresolved": 2053
       },
       "actorSp": {
         "nonzero": 267,
-        "verified-zero": 644,
+        "verified-zero": 645,
         "unresolved": 2036
       },
       "kiboSp": {
         "nonzero": 267,
-        "verified-zero": 644,
+        "verified-zero": 645,
         "unresolved": 2036
       }
     },
-    "controlVariantCount": 1066,
-    "unresolvedControlVariantCount": 558,
+    "controlVariantCount": 1082,
+    "unresolvedControlVariantCount": 574,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 464,
     "scenarioResolvedNonzeroRecoveryElementCount": 212,
     "scenarioResolvedProjectileHitCount": 3540,
     "disabledScenarioHitCount": 0,
-    "unresolvedProjectileLaunchCount": 70,
+    "unresolvedProjectileLaunchCount": 69,
     "unresolvedProjectileFormulaCount": 7,
     "unresolvedProjectileTargetCount": 0,
-    "unresolvedReferenceCount": 2394,
+    "unresolvedReferenceCount": 2393,
     "publicVariantCount": 675,
     "unresolvedPublicVariantCount": 43,
     "attackInputChainCount": 20,
@@ -306,26 +306,26 @@
       "scenarioResolvedActionCount": 12,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 2,
-      "hitNodeCount": 74,
+      "hitNodeCount": 85,
       "dimensions": {
         "hp": {
-          "nonzero": 40,
+          "nonzero": 41,
           "verified-zero": 0,
           "unresolved": 72
         },
         "toughness": {
-          "nonzero": 39,
+          "nonzero": 40,
           "verified-zero": 1,
           "unresolved": 72
         },
         "actorSp": {
           "nonzero": 2,
-          "verified-zero": 40,
+          "verified-zero": 41,
           "unresolved": 70
         },
         "kiboSp": {
           "nonzero": 2,
-          "verified-zero": 40,
+          "verified-zero": 41,
           "unresolved": 70
         }
       }
@@ -377,7 +377,7 @@
       "sourceAppliedActionCount": 20,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 17,
+      "scenarioResolvedActionCount": 16,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
       "hitNodeCount": 140,
@@ -414,10 +414,10 @@
       "sourceAppliedActionCount": 20,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
-      "scenarioResolvedActionCount": 17,
+      "scenarioResolvedActionCount": 16,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 139,
+      "hitNodeCount": 143,
       "dimensions": {
         "hp": {
           "nonzero": 71,
@@ -1099,29 +1099,29 @@
       "sourceAppliedActionCount": 8,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 2,
-      "scenarioResolvedActionCount": 6,
+      "scenarioResolvedActionCount": 4,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 2,
-      "hitNodeCount": 23,
+      "hitNodeCount": 38,
       "dimensions": {
         "hp": {
-          "nonzero": 15,
+          "nonzero": 16,
           "verified-zero": 0,
           "unresolved": 30
         },
         "toughness": {
-          "nonzero": 15,
+          "nonzero": 16,
           "verified-zero": 0,
           "unresolved": 30
         },
         "actorSp": {
           "nonzero": 11,
-          "verified-zero": 4,
+          "verified-zero": 5,
           "unresolved": 30
         },
         "kiboSp": {
           "nonzero": 11,
-          "verified-zero": 4,
+          "verified-zero": 5,
           "unresolved": 30
         }
       },
@@ -7274,7 +7274,8 @@
         }
       ],
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "selected-control-variant-has-no-runnable-hit",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceEvidenceStatus": "static-evidence-gap",
       "scenarioRuntimeStatus": "scenario-runtime-unresolved"
@@ -20339,23 +20340,6 @@
         "trigger-frame-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=1989064214947210537"
-    },
-    {
-      "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "actionKind": "ultimate",
-      "controlSkillId": 10800313,
-      "subSkillIndex": 0,
-      "pathId": "-7191705908045289161",
-      "elementId": 108003136,
-      "referenceKind": "bulletElements",
-      "threeValueRelevant": true,
-      "scenarioClassification": "unresolved",
-      "reasons": [
-        "projectile-impact-frame-runtime-dependent"
-      ],
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003136"
     },
     {
       "actionIdentity": "actor|108003|10800313|0|10800313|ultimate",
@@ -58944,7 +58928,8 @@
       "selected": true,
       "classification": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "selected-control-variant-has-no-runnable-hit",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]"
     },
@@ -59043,12 +59028,7 @@
       "publicVariantLabel": "星决技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800313].level.labels[0]"
     },
     {
@@ -59061,10 +59041,7 @@
       "publicVariantLabel": "星携技",
       "selected": true,
       "classification": "applied",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
+      "reasons": [],
       "sourceIdentity": "workbench-seed.gameData.skills[id=10800322].level.labels[0]"
     },
     {
@@ -68479,7 +68456,8 @@
       ],
       "classification": "unresolved",
       "reasons": [
-        "selected-control-variant-has-no-runnable-hit"
+        "selected-control-variant-has-no-runnable-hit",
+        "verified-action-effective-occupancy-window-unresolved"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
@@ -68561,12 +68539,7 @@
         "actor|108003|10800313|0|10800313|ultimate"
       ],
       "classification": "applied",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent",
-        "effect-trigger-frame-missing",
-        "effect-target-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -68579,10 +68552,7 @@
         "actor|108003|10800322|0|10800322|star-carry"
       ],
       "classification": "applied",
-      "reasons": [
-        "trigger-frame-missing",
-        "projectile-impact-frame-runtime-dependent"
-      ],
+      "reasons": [],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
@@ -80372,6 +80342,188 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300261.asset/MonoBehaviour/skill_control_10300261__-7174706712401575073.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
+      "controlSkillId": 10800314,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800314,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800314.asset/MonoBehaviour/skill_control_10800314__3813097606992382080.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800316,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800316,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800316.asset/MonoBehaviour/skill_control_10800316__-3281635663569585397.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800321,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800321,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800321.asset/MonoBehaviour/skill_control_10800321__-5923613903897586158.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800324,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800324,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800324.asset/MonoBehaviour/skill_control_10800324__-3299476249837324132.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800331,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800331,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800331.asset/MonoBehaviour/skill_control_10800331__5857522727279607263.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800341,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800341,
+      "elementCount": 5,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800342,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800342,
+      "elementCount": 15,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800343,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800343.asset/MonoBehaviour/skill_control_10800343__483074889796922005.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800344,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800344.asset/MonoBehaviour/skill_control_10800344__5406864594063957611.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800349,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 4,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/skill_control_10800349__-685124570974849031.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800349,
+      "subSkillIndex": 1,
+      "playerSkillId": 2,
+      "elementCount": 11,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800349.asset/MonoBehaviour/skill_control_10800349__-685124570974849031.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 10800360,
+      "subSkillIndex": 0,
+      "playerSkillId": 10800360,
+      "elementCount": 2,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800360.asset/MonoBehaviour/skill_control_10800360__-6071338577207234867.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800361,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800361.asset/MonoBehaviour/skill_control_10800361__2497020576681518102.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 10800362,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800362.asset/MonoBehaviour/skill_control_10800362__6363458441922261763.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
       "controlSkillId": 10900114,
       "subSkillIndex": 0,
       "playerSkillId": 10900114,
@@ -80526,6 +80678,32 @@
         "public-action-variant-association-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48006001.asset/MonoBehaviour/skill_control_48006001__2237447054001274573.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 48006201,
+      "subSkillIndex": 0,
+      "playerSkillId": 48006201,
+      "elementCount": 1,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48006201.asset/MonoBehaviour/skill_control_48006201__-2839859547597768152.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 48006201,
+      "subSkillIndex": 1,
+      "playerSkillId": 480062011,
+      "elementCount": 1,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48006201.asset/MonoBehaviour/skill_control_48006201__-2839859547597768152.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
     },
     {
       "controlSkillId": 48012401,

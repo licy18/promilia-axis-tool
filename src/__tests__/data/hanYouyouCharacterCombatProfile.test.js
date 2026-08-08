@@ -389,7 +389,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       failedCount: 0,
     });
     expect(goldenTrace.actual.resources.targetStateSummary).toMatchObject({
-      profileCount: 2,
+      profileCount: 3,
       eventCount: 9,
       appliedGroupCount: 2,
       skippedGroupCount: 0,
@@ -470,7 +470,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       maxExtraRawByAttributeId: { 229: 1055.9066162109375 },
     });
     expect(goldenTrace.actual.comparison).toMatchObject({
-      damageDelta: 2051,
+      damageDelta: 6968,
     });
 
     const tampered = structuredClone(goldenTrace.actual);

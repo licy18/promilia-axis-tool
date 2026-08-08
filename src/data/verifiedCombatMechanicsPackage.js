@@ -354,7 +354,7 @@ export function resolveVerifiedCombatActionMechanics(
       hit.scenarioRuntimeStatus !== 'scenario-assumed-zero-distance' ||
       normalizedScenario.projectile.targetDistance === 0
   );
-  const hits = scenarioEligibleHits.filter(hit =>
+  const directlyEnabledHits = scenarioEligibleHits.filter(hit =>
     resolveActionHitWillHit(
       action,
       hit.hitIdentity,
@@ -363,6 +363,14 @@ export function resolveVerifiedCombatActionMechanics(
         : true
     )
   );
+  const {
+    hits,
+    evaluations: hitActivationEvaluations,
+    suppressedHitIdentities: hitActivationSuppressedHitIdentities,
+  } = resolveHitActivatedHits({
+    scenarioEligibleHits,
+    directlyEnabledHits,
+  });
   const scenarioUnavailableHitIdentities = allHits
     .filter(hit => !scenarioEligibleHits.includes(hit))
     .map(hit => hit.hitIdentity);
@@ -381,6 +389,7 @@ export function resolveVerifiedCombatActionMechanics(
   const suppressedHitIdentities = new Set([
     ...disabledHitIdentities,
     ...scenarioUnavailableHitIdentities,
+    ...hitActivationSuppressedHitIdentities,
   ]);
   const suppressedHits = allHits.filter(hit =>
     suppressedHitIdentities.has(hit.hitIdentity)
@@ -420,6 +429,8 @@ export function resolveVerifiedCombatActionMechanics(
     allHits,
     disabledHitIdentities,
     scenarioUnavailableHitIdentities,
+    hitActivationSuppressedHitIdentities,
+    hitActivationEvaluations,
     effects,
     semanticEffects,
     complete: true,
@@ -428,6 +439,132 @@ export function resolveVerifiedCombatActionMechanics(
     ready: true,
     applied: true,
     variantSelection: actionBinding.variantSelection ?? null,
+  };
+}
+
+function resolveHitActivatedHits({ scenarioEligibleHits, directlyEnabledHits }) {
+  let activeHits = [...directlyEnabledHits];
+  let evaluations = [];
+  for (let pass = 0; pass <= scenarioEligibleHits.length; pass += 1) {
+    const activeHitIdentities = new Set(
+      activeHits.map(hit => String(hit.hitIdentity))
+    );
+    const nextEvaluations = directlyEnabledHits
+      .filter(hit => hit.hitActivation?.applied)
+      .map(hit =>
+        evaluateHitActivation({
+          hit,
+          scenarioEligibleHits,
+          activeHitIdentities,
+        })
+      );
+    const appliedByIdentity = new Map(
+      nextEvaluations.map(evaluation => [
+        evaluation.hitIdentity,
+        evaluation.applied,
+      ])
+    );
+    const nextActiveHits = directlyEnabledHits.filter(
+      hit => appliedByIdentity.get(String(hit.hitIdentity)) !== false
+    );
+    evaluations = nextEvaluations;
+    if (
+      nextActiveHits.length === activeHits.length &&
+      nextActiveHits.every(
+        (hit, index) => hit.hitIdentity === activeHits[index]?.hitIdentity
+      )
+    ) {
+      activeHits = nextActiveHits;
+      break;
+    }
+    activeHits = nextActiveHits;
+  }
+  const activeHitIdentities = new Set(
+    activeHits.map(hit => String(hit.hitIdentity))
+  );
+  evaluations = directlyEnabledHits
+    .filter(hit => hit.hitActivation?.applied)
+    .map(hit =>
+      evaluateHitActivation({
+        hit,
+        scenarioEligibleHits,
+        activeHitIdentities,
+      })
+    );
+  return {
+    hits: activeHits,
+    evaluations,
+    suppressedHitIdentities: evaluations
+      .filter(evaluation => !evaluation.applied)
+      .map(evaluation => evaluation.hitIdentity),
+  };
+}
+
+function evaluateHitActivation({
+  hit,
+  scenarioEligibleHits,
+  activeHitIdentities,
+}) {
+  const condition = hit.hitActivation;
+  const matchingHits = scenarioEligibleHits.filter(sourceHit => {
+    if (Number(sourceHit.elementId) !== Number(condition.elementId)) {
+      return false;
+    }
+    if (
+      condition.triggerFrames?.length > 0 &&
+      !condition.triggerFrames.includes(Number(sourceHit.trigger?.startFrame))
+    ) {
+      return false;
+    }
+    if (
+      condition.includeConditionalHits === false &&
+      sourceHit.conditionalGroupIdentity
+    ) {
+      return false;
+    }
+    if (
+      condition.conditionalGroupIdentity != null &&
+      sourceHit.conditionalGroupIdentity !== condition.conditionalGroupIdentity
+    ) {
+      return false;
+    }
+    if (
+      condition.sourceBindingIdentity != null &&
+      sourceHit.sourceBindingIdentity !== condition.sourceBindingIdentity
+    ) {
+      return false;
+    }
+    return true;
+  });
+  const landedHits = matchingHits.filter(sourceHit =>
+    activeHitIdentities.has(String(sourceHit.hitIdentity))
+  );
+  const boundedLandedCount = Math.min(
+    landedHits.length,
+    condition.maximumLandedCount ?? Number.POSITIVE_INFINITY
+  );
+  const applied = boundedLandedCount >= condition.minimumLandedCount;
+  return {
+    hitIdentity: String(hit.hitIdentity),
+    sourceBindingIdentity: hit.sourceBindingIdentity ?? null,
+    conditionKind: condition.kind,
+    matchingHitIdentities: matchingHits.map(sourceHit =>
+      String(sourceHit.hitIdentity)
+    ),
+    landedHitIdentities: landedHits.map(sourceHit =>
+      String(sourceHit.hitIdentity)
+    ),
+    matchingHitCount: matchingHits.length,
+    landedHitCount: landedHits.length,
+    boundedLandedCount,
+    reason: applied
+      ? 'required-source-hit-landed'
+      : 'required-source-hit-not-landed',
+    sourceIdentity: condition.sourceIdentity ?? null,
+    status: applied
+      ? 'verified-action-hit-activation-applied'
+      : 'verified-action-hit-activation-suppressed',
+    applied,
   };
 }
 

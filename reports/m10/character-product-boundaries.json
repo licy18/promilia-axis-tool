@@ -321,7 +321,7 @@
       }
     },
     {
-      "boundaryIdentity": "actor:108003:skill:10800362:product-boundary",
+      "boundaryIdentity": "actor:108003:skill:10800362:implemented",
       "ownerId": 108003,
       "ownerName": "米蒂",
       "passiveSlotIndex": 1,
@@ -337,17 +337,17 @@
         "skillId": 10800361,
         "name": "破穹之翼"
       },
-      "classification": "not-applicable",
-      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "classification": "implemented",
+      "reason": null,
       "sourceIdentities": [
         "characters.items[id=108003].skillSlots[group=passive,index=1,skillId=10800362]",
         "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/108003.hero-module.local.json"
       ],
       "runtimeContractPolicy": {
-        "passiveProfile": false,
+        "passiveProfile": true,
         "listener": false,
-        "effectBinding": false,
-        "captureRequirement": false,
+        "effectBinding": true,
+        "captureRequirement": true,
         "gameplayImpactingGap": false
       }
     },
@@ -635,6 +635,8 @@
   "summary": {
     "publicCharacterCount": 20,
     "matchedCharacterCount": 20,
+    "implementedCharacterCount": 1,
+    "notApplicableCharacterCount": 19,
     "unresolvedCharacterCount": 0,
     "matchedSkillIds": [
       10100362,

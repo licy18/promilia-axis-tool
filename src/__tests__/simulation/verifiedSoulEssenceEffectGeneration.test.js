@@ -1449,14 +1449,30 @@ describe('verified soul essence effect generation', () => {
         teamSlots,
         actorConfigs,
         enemyConfig: {
-          hpMultiplier: 0.00001,
-          defenseMultiplier: 0,
+          level: 1,
+          // Two real 69-damage packets land on an exact finite-HP boundary.
+          hpMultiplier: 138 / 690.24,
+          defenseMultiplier: 0.1,
+        },
+        combatScenario: {
+          target: {
+            hpMode: 'finite',
+            toughnessMode: 'disabled',
+            breakMode: 'disabled',
+            deathTruncation: 'enabled',
+          },
         },
         actions: [
           createRealSoulActionDraft({
             id: 'soul-10063-kill',
             actionKind: 'charged-attack',
             startFrame: 0,
+            actorCharacterId: OWNER_ID,
+          }),
+          createRealSoulActionDraft({
+            id: 'soul-10063-kill-confirm',
+            actionKind: 'charged-attack',
+            startFrame: 300,
             actorCharacterId: OWNER_ID,
           }),
         ],

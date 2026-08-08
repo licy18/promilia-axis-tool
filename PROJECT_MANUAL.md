@@ -2164,3 +2164,16 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 破韧发生包、同帧后续包与恢复帧的客户端原生排序证据仍 open；因此有韧循环和最快击杀暂不具备 formal score，诊断结果不得冒充正式准入。
 - 治疗统计已加入 batch/search/cycle/kill 报告，包含 requested/effective/overheal/HPS 与 source actor/action 聚合；护盾和 suppressed 事件保持独立。
 - 合并不解锁 M12-C 或正式搜索；Kibo DNA 继续固定 `[]`。
+
+### M12-B3-E20-2-108003-S1 米蒂完整缩减动作面闭合（2026-08-09，等待产品视觉签收）
+
+- 本阶段起始基线为 `140eefcd233cd9c1d136728f1c94b91aff632278`。用户对米蒂的下发已由生成器同步成 109001 S3-R1 产品接受记录：末音 `qualificationSubjectHash=c369c5382ad3b812`，required/pass=`138/138`，maturity=`optimization-ready`；该同步绑定 `4a5030a52bd51a118f579957bc449efa0c38cf3b`，未绕过验收合同。
+- 米蒂来源清单共 `510` 个 identity（battle-element 25、client-code 3、NewTable 50、other 54、runtime-contract 25、skill-control 353）。完整 requirement=`225`，required/pass/N/A/blocked=`139/139/86/0`，source/acceptance gap=`0/0`，2 个场景及 `1035/1035` assertions 通过。原始 ledger 的剩余行全部为 non-blocking unreachable/not-applicable；反应、位移、空中和 Boss 攻击依赖分支保留来源，按 frozen scenario policy 结构化 N/A。
+- 通用 compiler/runtime 新增稳定 `sourceBindingIdentity` 与来源驱动 `hitActivation`。米蒂派生球只在对应父箭 landed 后生成：短蓄 `1` 箭 + `6` pulse，普通满蓄 `1+12`，蓄电满蓄 `3+36`；任一父箭 miss 只抑制自己的流，全 miss 为零。该能力由 canonical、Machine Axis 与 Workbench 共用，没有 108003 ID 特判。
+- 星决的 250 根在 142F 只应用一次 `+2`，没有把 `bulletElements/elements` 的同一 PathID 双算；零距离单 Boss golden 实际只有 `5` 个 packet（frame `642/646/653/663/674`），不按文本“最多 18 次”乘算。离场星携 formal 分支为 `11` 击、`12F` cadence，37F 250 根只应用一次；反击/闪避分支保持 N/A。
+- 蓄电由星鸣/星决给予并按 10 秒右开刷新/到期；合法重击执行后一次消费，blocked/miss 前置不伪造状态事务。250 印记在 golden 中 `0→2→3→5`，满层重施只刷新，随后按 20 秒共享计时 `5→4→3→2→1→0`。
+- 10800361 每次合法星鸣向三名队员各发 10 个 1 秒、每次 `+2 SP` 的事务；第二次星鸣的 30 个事件严格位于 `3391+60*n`。攻击 Buff 对三名 actor 独立维持 24 秒，精确边界先到期旧实例再应用新实例。10800362 只在最后一击 landed 后给 source actor `+5 SP`：frame `2068/3508` 为正例，最后一击 miss 无事务。
+- critical 0/100%、整数阈值、不可暴击拒绝、pre-hit 属性变化、miss、主动输入窗和同帧星结合击均使用真实 settlement。星结合击中奇波偏移 1F 会以 `joint-attack-frame-mismatch` 在正式候选校验前拒绝。Workbench 只展示 applied transaction，suppressed 与 policy N/A 单列。
+- 108003 当前 package/profile/recipe/golden replay=`72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287/54a68a920749a851ef5bf7466b8dffad74e861e4fd8f86af08b4a13d628e6b14/91c364d081ed4e4e955db984746e28133c09dfbe40b97c1e91264cd1529faa8f/2b5f91377e4252ff2d451b4a92507eef4712aab918a81f0d7880ec1659b472c1`；qualificationSubject/scenarioSet/manifest=`c5b361402a77ce3e/f96b380402aee6c1/7370660a0e36e669`。
+- 全局资格重算为 blocker=`14`（全部 character/not-implemented），分母仍 `9/43/62/137/12`；M12-C/formal search 锁定。一次 bounded full test 报告 `1511 passed / 16 failed` 后，10 个失败文件均以聚焦测试最终 `242/242` 通过；未重复跑 full。相关审计、Workbench E2E、production build `1885 modules` 与 `git diff --check` 通过。
+- 米蒂尚未产品视觉签收，maturity 保持 `runtime-integrated`，唯一 blocker=`acceptance-product-visual-signoff-pending`。实现侧在此停止，不开始 102001/107001/107002/112001/STARBORN、E20-3、M12-C 或正式搜索。

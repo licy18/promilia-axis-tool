@@ -341,7 +341,22 @@ function createNonBlockingSourceRecordClassifier(records) {
     }
   }
   return record => {
-    const rawIdentities = uniqueStrings(record?.rawEffectIdentities ?? []);
+    const directIdentities = uniqueStrings([
+      record?.identity,
+      record?.actionIdentity,
+      record?.publicActionIdentity,
+      record?.formIdentity,
+      record?.hitIdentity,
+      record?.windowIdentity,
+      ...(record?.hitIdentity ? [`hit:${record.hitIdentity}`] : []),
+      ...(String(record?.formIdentity ?? '').endsWith(':default')
+        ? [String(record.formIdentity).slice(0, -':default'.length)]
+        : []),
+    ]);
+    const rawIdentities = uniqueStrings([
+      ...(record?.rawEffectIdentities ?? []),
+      ...directIdentities,
+    ]);
     const controlAndElementKeys = uniqueStrings(
       [
         ...rawIdentities.flatMap(identity => {
@@ -411,8 +426,9 @@ export function createScenarioProfileProjectionRows({
   );
   const observed = new Set((observedEffectIds ?? []).map(String));
   const contracts = profile?.contracts ?? {};
-  const index = { controlWindows: 0, variantEdges: 0, variantWindows: 0, conditionalHitGroups: 0, passives: 0, switchTriggers: 0 };
+  const index = { attackInputChains: 0, controlWindows: 0, variantEdges: 0, variantWindows: 0, conditionalHitGroups: 0, passives: 0, switchTriggers: 0 };
   const rows = {
+    attackInputChains: [],
     controlWindows: [],
     variantEdges: [],
     variantWindows: [],
@@ -428,6 +444,22 @@ export function createScenarioProfileProjectionRows({
         `${prefix}-${collection}-${scenarioId}-${sequence}`,
     });
   };
+  for (const chain of contracts.attackInputChains ?? []) {
+    const segments = chain.segments ?? [];
+    if (
+      segments.length > 0 &&
+      segments.every(segment =>
+        exercised.has(`${segment.controlSkillId}|${segment.subSkillIndex}`)
+      )
+    ) {
+      add('attackInputChains', {
+        chainIdentity: chain.chainIdentity,
+        ownerId: chain.ownerId,
+        segmentCount: segments.length,
+        controlSkillIds: segments.map(segment => segment.controlSkillId),
+      });
+    }
+  }
   for (const window of contracts.controlTransitionWindows ?? []) {
     if (
       exercised.has(
@@ -876,6 +908,12 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
   ) {
     return { kind: 'state', stateIdentity: String(record.stateIdentity) };
   }
+  if (dimension === 'attack-input-chain' && record.chainIdentity) {
+    return {
+      kind: 'attack-input-chain',
+      chainIdentity: String(record.chainIdentity),
+    };
+  }
   if (dimension === 'control-window' && record.windowIdentity) {
     return {
       kind: 'control-window',
@@ -1029,8 +1067,8 @@ function createGoldenTraceProjection(report) {
       (row.autoRecovery ?? []).map(event => event.reason)
     )
   );
-  const hasSwitch = selections.some(([actionId]) =>
-    actionId.startsWith('switch-')
+  const hasSwitch = (report.actual?.actions?.executedActionIds ?? []).some(
+    actionId => String(actionId).includes('switch')
   );
   return {
     actionForms: selections.map(([actionId, selection]) => ({

@@ -79,10 +79,10 @@ export function discoverUnnamedSecondaryPassiveBoundaries({
             `workbench-seed.gameData.skills[id=${secondary.skill.id}]`,
         ],
         runtimeContractPolicy: {
-          passiveProfile: false,
+          passiveProfile: true,
           listener: false,
           effectBinding: true,
-          captureRequirement: false,
+          captureRequirement: true,
           gameplayImpactingGap: false,
         },
       });
@@ -144,6 +144,12 @@ export function discoverUnnamedSecondaryPassiveBoundaries({
     summary: {
       publicCharacterCount: characters.length,
       matchedCharacterCount: entries.length,
+      implementedCharacterCount: entries.filter(
+        entry => entry.classification === 'implemented'
+      ).length,
+      notApplicableCharacterCount: entries.filter(
+        entry => entry.classification !== 'implemented'
+      ).length,
       unresolvedCharacterCount: unresolved.length,
       matchedSkillIds: entries.map(entry => entry.skillId),
     },
@@ -253,7 +259,9 @@ export function assertUnnamedSecondaryPassiveRuntimeIsolation({
   boundaryReport,
 }) {
   const excludedSkillIds = new Set(
-    (boundaryReport?.entries ?? []).map(entry => Number(entry.skillId))
+    (boundaryReport?.entries ?? [])
+      .filter(entry => entry.classification !== 'implemented')
+      .map(entry => Number(entry.skillId))
   );
   const violations = [];
   for (const recipe of recipes ?? []) {
@@ -299,6 +307,8 @@ export function createCharacterCombatProductBoundaryMarkdown(report) {
     '',
     `- 公开角色：${report.summary.publicCharacterCount}`,
     `- 无名第二被动：${report.summary.matchedCharacterCount}`,
+    `- 来源闭合并实现：${report.summary.implementedCharacterCount}`,
+    `- 产品边界 N/A：${report.summary.notApplicableCharacterCount}`,
     `- 未决角色：${report.summary.unresolvedCharacterCount}`,
     `- 统一口径：\`${UNNAMED_SECONDARY_PASSIVE_REASON}\``,
     '',
@@ -309,7 +319,7 @@ export function createCharacterCombatProductBoundaryMarkdown(report) {
         `| ${entry.ownerName} (${entry.ownerId}) | ${entry.primaryPassive.name} (${entry.primaryPassive.skillId}) | ${entry.skillId} | ${entry.classification === 'implemented' ? 'implemented' : 'not-applicable'} |`
     ),
     '',
-    '> 识别依据为角色专属被动槽顺序与本地化名称缺失。技能描述和来源仍保留供审计，但不生成监听、效果、capture 或玩法缺口。',
+    '> 识别依据为角色专属被动槽顺序与本地化名称缺失。默认边界不生成监听、效果、capture 或玩法缺口；只有同时具备可达来源图和已验证 runtime 的条目才可标记 implemented。',
     '',
   ];
   return lines.join('\n');

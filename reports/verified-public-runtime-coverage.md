@@ -2,20 +2,20 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 固定产品分母：645 个公开动作 / 20 名角色 / 122 只奇波
-- 场景可运行：631
+- 场景可运行：630
 - 来源静态可应用：459
 - 来源运行时依赖：173
-- 零距离场景补全：586
+- 零距离场景补全：584
 - 来源静态证据缺口：13
 - 明确零：0
-- 未解析：14（未分类 0）
+- 未解析：15（未分类 0）
 - 角色核心动作：59/60 可运行
 - 奇波 active / break / signature：448/448 可运行
 
 ## 未解析边界
 
-- runtime-and-evidence-gap: 9
-- static-evidence-gap: 5
+- runtime-and-evidence-gap: 8
+- static-evidence-gap: 7
 
 ## 非零命中回能元素
 
@@ -29,10 +29,10 @@
 | Owner | 动作类型 | 分母 | 可运行 | 运行时依赖 | 证据缺口 | 混合缺口 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
 | actor | charged-attack | 20 | 15 | 0 | 3 | 2 |
-| actor | dodge-attack | 20 | 16 | 0 | 0 | 4 |
+| actor | dodge-attack | 20 | 16 | 0 | 1 | 3 |
 | actor | limit-counter | 20 | 19 | 0 | 0 | 1 |
 | actor | normal-attack | 20 | 19 | 0 | 0 | 1 |
-| actor | perfect-parry | 20 | 19 | 0 | 1 | 0 |
+| actor | perfect-parry | 20 | 18 | 0 | 2 | 0 |
 | actor | plunging-attack | 20 | 20 | 0 | 0 | 0 |
 | actor | star-carry | 17 | 15 | 0 | 1 | 1 |
 | actor | star-combo | 20 | 20 | 0 | 0 | 0 |

@@ -23,9 +23,9 @@
 
 ## 全量分类
 
-- generic-occupancy-inside-window: 1200
-- unresolved: 9
-- window-after-generic-occupancy: 75
-- window-before-generic-occupancy: 279
-- window-end-equals-generic-occupancy: 49
-- window-start-equals-generic-occupancy: 123
+- generic-occupancy-inside-window: 1193
+- unresolved: 16
+- window-after-generic-occupancy: 79
+- window-before-generic-occupancy: 269
+- window-end-equals-generic-occupancy: 48
+- window-start-equals-generic-occupancy: 130

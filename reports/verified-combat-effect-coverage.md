@@ -56,9 +56,9 @@
 ## 原始边审计
 
 - 效果绑定：3159
-- 可计算：1815
+- 可计算：1816
 - 明确零：12
-- 未解析：1332
+- 未解析：1331
 
 ## 元素类型
 
@@ -74,7 +74,7 @@
 
 ## 未解析原因
 
-- effect-target-static-evidence-gap: 457
+- effect-target-static-evidence-gap: 456
 - effect-trigger-frame-static-evidence-gap: 404
 - nested-damage-runtime-family-unimplemented: 160
 - property-duration-zero-unresolved: 5

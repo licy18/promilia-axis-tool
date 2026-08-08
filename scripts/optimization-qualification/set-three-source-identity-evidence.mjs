@@ -909,7 +909,7 @@ function assertIdentity(expected, observed, code) {
 }
 
 function assertCanonicalEqual(actual, expected, code) {
-  if (JSON.stringify(actual) !== JSON.stringify(expected)) fail(code);
+  if (hashCanonicalValue(actual) !== hashCanonicalValue(expected)) fail(code);
 }
 
 function assertExactProperties(actual, expected, code) {

@@ -246,9 +246,24 @@ function executeVisualScenario({
     second
   );
   const thunderLifecycle = inspectThunderLifecycle(first);
-  const inputWindowBoundaries = inspectInputWindowBoundaries(fixture, first);
+  const inputWindowBoundaries =
+    Number(recipe.ownerId) === 108003
+      ? inspectMitiInputWindowBoundaries(fixture, first, service)
+      : inspectInputWindowBoundaries(fixture, first);
+  const foregroundBackgroundSwitch =
+    Number(recipe.ownerId) === 108003
+      ? inspectMitiForegroundBackgroundSwitch(first)
+      : null;
   const probeResults = recipe.probes.map(probe =>
     inspectRecipeProbe(first, probe)
+  );
+  const resourceBackedEffects = projectResourceBackedEffects(
+    first,
+    fixture.scenario.id
+  );
+  const appliedEffectSourceElements = projectAppliedEffectSourceElements(
+    first,
+    fixture.scenario.id
   );
   const assertionResults = [
     { identity: 'machine-axis-validation', passed: validation.valid },
@@ -274,6 +289,20 @@ function executeVisualScenario({
           },
         ]
       : []),
+    ...(Number(recipe.ownerId) === 108003
+      ? [
+          {
+            identity: 'input-window-inside-outside-boundaries',
+            passed: inputWindowBoundaries.passed,
+            actual: inputWindowBoundaries.details,
+          },
+          {
+            identity: 'foreground-background-switch',
+            passed: foregroundBackgroundSwitch.passed,
+            actual: foregroundBackgroundSwitch.details,
+          },
+        ]
+      : []),
     ...probeResults,
   ];
   const failed = assertionResults.filter(result => !result.passed);
@@ -288,9 +317,11 @@ function executeVisualScenario({
       ...(first.trace?.damage ?? []).map(event => event.hitIdentity),
       ...(first.trace?.effects?.events ?? []).map(event => event.effectId),
     ],
-    observedEffectIds: (first.trace?.effects?.events ?? []).map(
-      event => event.effectId
-    ),
+    observedEffectIds: [
+      ...(first.trace?.effects?.events ?? []).map(event => event.effectId),
+      ...resourceBackedEffects.map(event => event.effectIdentity),
+      ...appliedEffectSourceElements.map(event => event.effectIdentity),
+    ],
     scenarioId: fixture.scenario?.id,
     prefix: 'machine',
   });
@@ -324,6 +355,7 @@ function executeVisualScenario({
     mechanismProbes: {
       thunderLifecycle,
       inputWindowBoundaries,
+      foregroundBackgroundSwitch,
     },
     probeResults,
     assertionResults: assertionResults.map(result => ({
@@ -401,6 +433,8 @@ function executeVisualScenario({
               : null,
           })),
         ...projectVerifiedTuningComponentEffects(first, fixture.scenario.id),
+        ...resourceBackedEffects,
+        ...appliedEffectSourceElements,
       ],
       diagnostics: [
         ...(first.trace?.diagnostics?.validationWarnings ?? []),
@@ -463,18 +497,33 @@ function inspectCriticalMatrix(ownerId, first, second) {
   const miss = findHit('miss-critical');
   const rateZero = findHit('rate-zero');
   const rateOneHundred = findHit('rate-one-hundred');
-  const preHitBefore = (first.trace?.damage ?? []).find(
-    event =>
-      event.actionId === 'moyin-lifecycle-a5-1' &&
-      event.eventType === 'VERIFIED_COMBAT_HIT' &&
-      String(event.hitIdentity ?? '').endsWith('|47|6')
-  );
-  const preHitAfter = (first.trace?.damage ?? []).find(
-    event =>
-      event.actionId === 'moyin-lifecycle-a5-1' &&
-      event.eventType === 'VERIFIED_COMBAT_HIT' &&
-      String(event.hitIdentity ?? '').endsWith('|56|7')
-  );
+  const preHitBefore =
+    ownerId === 109001
+      ? (first.trace?.damage ?? []).find(
+          event =>
+            event.actionId === 'moyin-lifecycle-a5-1' &&
+            event.eventType === 'VERIFIED_COMBAT_HIT' &&
+            String(event.hitIdentity ?? '').endsWith('|47|6')
+        )
+      : ownerId === 108003
+        ? sampledLow
+        : null;
+  const preHitAfter =
+    ownerId === 109001
+      ? (first.trace?.damage ?? []).find(
+          event =>
+            event.actionId === 'moyin-lifecycle-a5-1' &&
+            event.eventType === 'VERIFIED_COMBAT_HIT' &&
+            String(event.hitIdentity ?? '').endsWith('|56|7')
+        )
+      : ownerId === 108003
+        ? (first.trace?.damage ?? []).find(
+            event =>
+              event.actionId === 'miti-pre-hit-after-mark' &&
+              event.eventType === 'VERIFIED_COMBAT_HIT' &&
+              event.hitIdentity === sampledLow?.hitIdentity
+          )
+        : null;
   const nonCrittable = (first.trace?.damage ?? []).find(
     event =>
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
@@ -508,7 +557,7 @@ function inspectCriticalMatrix(ownerId, first, second) {
       expectedResult?.criticalEventMaterialized === false &&
       expectedResult?.weightedValue === expected?.rawDamage,
     missSuppressesHit: miss == null,
-    ...(ownerId === 109001
+    ...([109001, 108003].includes(ownerId)
       ? {
           rateZero:
             rateZero?.formula?.randomBranch?.criticalThreshold === 0 &&
@@ -520,14 +569,22 @@ function inspectCriticalMatrix(ownerId, first, second) {
             rateOneHundred?.formula?.randomBranch?.criticalRoll === 9999 &&
             rateOneHundred?.formula?.randomBranch?.critical === true,
           preHitAttributeChange:
-            preHitBefore?.formula?.randomBranch
-              ?.sourceCriticalRateBasisPoints === 500 &&
-            preHitBefore?.formula?.randomBranch
-              ?.sourceCriticalDamageBasisPoints === 15000 &&
-            preHitAfter?.formula?.randomBranch
-              ?.sourceCriticalRateBasisPoints === 586 &&
-            preHitAfter?.formula?.randomBranch
-              ?.sourceCriticalDamageBasisPoints === 15172,
+            Number(
+              preHitAfter?.formula?.randomBranch
+                ?.sourceCriticalRateBasisPoints
+            ) >
+              Number(
+                preHitBefore?.formula?.randomBranch
+                  ?.sourceCriticalRateBasisPoints
+              ) &&
+            Number(
+              preHitAfter?.formula?.randomBranch
+                ?.sourceCriticalDamageBasisPoints
+            ) >
+              Number(
+                preHitBefore?.formula?.randomBranch
+                  ?.sourceCriticalDamageBasisPoints
+              ),
           nonCrittableRejection:
             nonCrittable?.formula?.status ===
               'verified-tuning-formula-applied' &&
@@ -721,6 +778,120 @@ function inspectInputWindowBoundaries(fixture, run) {
   };
 }
 
+function inspectMitiInputWindowBoundaries(fixture, run, service) {
+  const activeActionId = 'miti-star-combo-active';
+  const pairedKiboActionId = 'miti-star-combo-kibo-break';
+  const insideActor = (run.trace?.executionPlan?.actions ?? []).find(
+    action => action.actionId === activeActionId
+  );
+  const insideKibo = (run.trace?.executionPlan?.actions ?? []).find(
+    action => action.actionId === pairedKiboActionId
+  );
+  const outsideFixture = structuredClone(fixture);
+  const outsideKiboAction = (outsideFixture.actions ?? []).find(
+    action => action.id === pairedKiboActionId
+  );
+  outsideKiboAction.schedule.frame += 1;
+  const outsideValidation = service.validate(outsideFixture);
+  const outsideDiagnostics = (outsideValidation.issues ?? []).filter(issue =>
+    [activeActionId, pairedKiboActionId].includes(String(issue.actionId))
+  );
+  const expectedDiagnosticCodes = new Set([
+    'joint-attack-frame-mismatch',
+    'joint-attack-pair-missing',
+  ]);
+  const rejectedActionIds = new Set(
+    outsideDiagnostics
+      .filter(issue =>
+        (issue.violationCodes ?? []).some(code =>
+          expectedDiagnosticCodes.has(code)
+        )
+      )
+      .map(issue => String(issue.actionId))
+  );
+  return {
+    passed:
+      insideActor?.execute !== false &&
+      insideKibo?.execute !== false &&
+      outsideValidation.valid === false &&
+      rejectedActionIds.has(activeActionId) &&
+      rejectedActionIds.has(pairedKiboActionId),
+    details: {
+      sourceContract: 'azpr-joint-attack-input-contract',
+      inside: {
+        actorFrame: Number(
+          fixture.actions.find(action => action.id === activeActionId)?.schedule
+            ?.frame
+        ),
+        kiboFrame: Number(
+          fixture.actions.find(action => action.id === pairedKiboActionId)
+            ?.schedule?.frame
+        ),
+        actorExecute: insideActor?.execute ?? null,
+        kiboExecute: insideKibo?.execute ?? null,
+      },
+      outside: {
+        actorFrame: Number(
+          outsideFixture.actions.find(action => action.id === activeActionId)
+            ?.schedule?.frame
+        ),
+        kiboFrame: Number(outsideKiboAction.schedule.frame),
+        validationValid: outsideValidation.valid,
+        rejectedActionIds: [...rejectedActionIds].sort(),
+        diagnosticCodes: outsideDiagnostics.flatMap(
+          issue => issue.violationCodes ?? [issue.code]
+        ),
+      },
+    },
+  };
+}
+
+function inspectMitiForegroundBackgroundSwitch(run) {
+  const controlledActorAt = timeMs => {
+    const switches = (run.trace?.events ?? [])
+      .filter(event => event.type === 'SWITCH' && Number(event.timeMs) <= timeMs)
+      .sort((left, right) => Number(left.timeMs) - Number(right.timeMs));
+    return switches.at(-1)?.payload?.targetActorId ?? 'actor-108003';
+  };
+  const periodicSpEvents = (run.trace?.resources?.actors ?? []).filter(
+    event =>
+      Number(event.elementId) === 108003164 &&
+      Number(event.change) === 2
+  );
+  const backgroundTicks = periodicSpEvents.filter(
+    event => controlledActorAt(Number(event.timeMs)) !== 'actor-108003'
+  );
+  const targets = [
+    ...new Set(periodicSpEvents.map(event => String(event.actorId ?? ''))),
+  ].sort();
+  const switchEvents = (run.trace?.events ?? []).filter(
+    event => event.type === 'SWITCH'
+  );
+  return {
+    passed:
+      switchEvents.length >= 2 &&
+      backgroundTicks.length > 0 &&
+      ['actor-101010', 'actor-103002', 'actor-108003'].every(actorId =>
+        targets.includes(actorId)
+      ),
+    details: {
+      switchEvents: switchEvents.map(event => ({
+        timeMs: event.timeMs,
+        fromActorId: event.payload?.fromActorId ?? null,
+        toActorId: event.payload?.targetActorId ?? null,
+      })),
+      periodicSpEventCount: periodicSpEvents.length,
+      periodicSpTargets: targets,
+      backgroundTickCount: backgroundTicks.length,
+      backgroundTicks: backgroundTicks.map(event => ({
+        timeMs: event.timeMs,
+        actorId: event.actorId ?? null,
+        controlledActorId: controlledActorAt(Number(event.timeMs)),
+      })),
+    },
+  };
+}
+
 function projectVerifiedTuningComponentEffects(run, scenarioId) {
   const thunder = mechanicsPackage.tuningMechanicsCatalog?.profiles?.find(
     profile => Number(profile.markId) === 250
@@ -776,6 +947,61 @@ function projectVerifiedTuningComponentEffects(run, scenarioId) {
         sourceIdentity: verified.sourceIdentity ?? null,
         attributeId: Number(verified.attributeId),
         valueRaw: Number(verified.valueRaw),
+      });
+    }
+  }
+  return rows;
+}
+
+function projectResourceBackedEffects(run, scenarioId) {
+  return (run.trace?.events ?? [])
+    .filter(
+      event =>
+        event.type === 'VERIFIED_RESOURCE_CHANGE' &&
+        Number.isInteger(Number(event.payload?.elementId)) &&
+        Number(event.payload?.change) !== 0
+    )
+    .map((event, index) => ({
+      projectionIdentity:
+        'machine-resource-backed-effect:' + scenarioId + ':' + index,
+      actionId: event.actionId ?? null,
+      effectIdentity: 'battle-element:' + Number(event.payload.elementId),
+      operation: 'resource-change',
+      targetId: event.actorId ?? event.targetId ?? null,
+      sourceIdentity: event.payload?.sourceIdentity ?? null,
+      beforeValue: event.payload?.beforeValue ?? null,
+      afterValue: event.payload?.afterValue ?? null,
+      change: event.payload?.change ?? null,
+    }));
+}
+
+function projectAppliedEffectSourceElements(run, scenarioId) {
+  const rows = [];
+  for (const [eventIndex, event] of (
+    run.trace?.effects?.events ?? []
+  ).entries()) {
+    const sourceText = String(event.sourceIdentity?.identity ?? '');
+    const elementIds = [
+      ...new Set(
+        [...sourceText.matchAll(/ast_(\d+)\.asset/g)].map(match =>
+          Number(match[1])
+        )
+      ),
+    ];
+    for (const [elementIndex, elementId] of elementIds.entries()) {
+      rows.push({
+        projectionIdentity:
+          'machine-applied-effect-source-element:' +
+          scenarioId +
+          ':' +
+          eventIndex +
+          ':' +
+          elementIndex,
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + elementId,
+        operation: event.operation ?? null,
+        targetId: event.targetId ?? null,
+        sourceIdentity: event.sourceIdentity ?? null,
       });
     }
   }

@@ -2,6 +2,7 @@ import xiaoyuFixture from '../../../fixtures/character-acceptance/101010-visual.
 import rubyFixture from '../../../fixtures/character-acceptance/103002-visual.json';
 import hanFixture from '../../../fixtures/character-acceptance/101003-visual.json';
 import moyinFixture from '../../../fixtures/character-acceptance/109001-visual.json';
+import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -13,40 +14,50 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: '72250cb23f351447',
-      data: '2f78bc4d910210af',
-      trace: '00bc0f912b467cda',
-      evaluation: 'adc4612197816c14',
+      input: '6e8afd481301cf39',
+      data: '86b1d47a61cdb8ef',
+      trace: 'd33ad1730e8f7c44',
+      evaluation: '204c04b2ab3f5fb4',
     },
   },
   {
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: 'de9c4af1ba6994e4',
-      data: 'b9b7d46052e649d9',
-      trace: 'a58dd129d3398a81',
-      evaluation: 'b06186eaa569be69',
+      input: '07ea755071a4731e',
+      data: '5a3cc0d119e02f31',
+      trace: 'cf42eb60e1ed9b0b',
+      evaluation: '208849308c4ec837',
     },
   },
   {
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: 'a0f040218b6d711e',
-      data: '82f85ddcb0c6dc97',
-      trace: '84bcf3470d8fec44',
-      evaluation: '920e7363ae12290d',
+      input: 'e049701ffea7e7a0',
+      data: '2af026303af3482b',
+      trace: '2142fb12428cdbff',
+      evaluation: '53eb57b729f3a7e6',
     },
   },
   {
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: 'd4c2ef7c14cfdf35',
-      data: 'e43a71a0c2a1b1f8',
-      trace: '71c98ddca9ae3207',
-      evaluation: '132029f4e682f2be',
+      input: 'ed8232da24ac81fb',
+      data: '1407195353ed817b',
+      trace: '81cc6e489621707b',
+      evaluation: '855dd5b0926bf110',
+    },
+  },
+  {
+    ownerId: 108003,
+    fixture: mitiFixture,
+    hashes: {
+      input: 'ff0e5cfeb6204398',
+      data: '9e1c2699347eea59',
+      trace: '9f2b9badd29cf1f2',
+      evaluation: '3c2fb1d6fda5e7b9',
     },
   },
 ];

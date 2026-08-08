@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "productVisualAcceptance": {
+    "status": "pending",
+    "scenarioIdentities": [
+      "m12-b3-e20-2-108003-s1-visual-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-108003-desktop.png",
+        "screenshotSha256": "3b346bbb606b74878c5011fdf18293d7a23879b672d83337aa574206c5342292"
+      }
+    ]
+  },
+  "ownerId": 108003,
+  "fixturePath": "fixtures/character-acceptance/108003-visual.json",
+  "goldenReports": [
+    "reports/m10/108003/golden-trace.json"
+  ],
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "miti-short-charge-state-on",
+      "controlSkillId": 10800341,
+      "subSkillIndex": 0,
+      "semanticName": "重击短蓄力"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "miti-full-charge-state-on",
+      "controlSkillId": 10800342,
+      "subSkillIndex": 0,
+      "semanticName": "重击满蓄力"
+    }
+  ]
+}

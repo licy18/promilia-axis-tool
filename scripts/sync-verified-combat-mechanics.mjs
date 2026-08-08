@@ -9278,6 +9278,9 @@ function createControlRuntimeHits(control) {
           null,
         runtimeCondition:
           element.trigger?.runtimeCondition ?? element.runtimeCondition ?? null,
+        sourceBindingIdentity:
+          element.trigger?.sourceBindingIdentity ?? null,
+        hitActivation: element.trigger?.hitActivation ?? null,
         hitIndex,
         hitIdentity,
       };

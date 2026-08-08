@@ -3,7 +3,7 @@
   "kind": "azpr-verified-derived-control-coverage",
   "status": "verified-derived-control-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "226b60bec7c3b9e701b0a5483ec71685c71530bbec65f1df632362a30f588a4b",
+  "packageHash": "72301ce690c866fdcff7fc8df4d375333f810ff22e372c1eecd33a963fe2b287",
   "sourceDenominator": {
     "kind": "current-client-public-actor-derived-control-candidates",
     "actorOwnerCount": 20,
@@ -25,13 +25,13 @@
       "state-controlled": 8
     },
     "resolutionStatusCounts": {
-      "applied": 6,
-      "not-yet-modeled": 30,
+      "applied": 7,
+      "not-yet-modeled": 29,
       "partially-resolved": 99,
       "static-evidence-gap": 3
     },
     "inputSelectorCount": 23,
-    "appliedInputSelectorCount": 6,
+    "appliedInputSelectorCount": 7,
     "resourceControlledCount": 4,
     "stateControlledCount": 8,
     "automaticFollowUpCount": 0,
@@ -675,7 +675,7 @@
         "input-controlled": 1
       },
       "resolutionStatusCounts": {
-        "not-yet-modeled": 1
+        "applied": 1
       }
     },
     {
@@ -15777,68 +15777,113 @@
       ],
       "decisionFrame": 0,
       "inputSelector": {
+        "selectorIdentity": "miti-charged-stage-selector",
         "kind": "charge-tier",
         "mode": "hold",
         "holdRange": {
-          "minimumHoldMs": 250,
-          "maximumHoldMs": null,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-          "resolutionStatus": "partially-resolved"
+          "minimumFrames": 25,
+          "maximumFrames": 52,
+          "frameRate": 60,
+          "sourceIdentity": "skill_control_10800310.asset#transition[25F]->10800341;transition[52F]->10800342"
         },
         "options": [
           {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
-            "label": "重击",
-            "publicVariantIndex": 1,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 1,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
-            "resolutionStatus": "not-yet-modeled"
-          },
-          {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+            "selectorIdentity": "miti-charged-short",
             "label": "重击短蓄力",
             "publicVariantIndex": 2,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 2,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
-            "resolutionStatus": "not-yet-modeled"
+            "executionControlSkillId": 10800341,
+            "executionSubSkillIndex": 0,
+            "subSkillIndex": 0,
+            "playerSkillId": 10800341,
+            "durationFrames": 25,
+            "chargeTier": 1,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "press",
+                "pressFrame": 0,
+                "holdDurationMs": null,
+                "holdFrames": null,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800341].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 25,
+                "durationFrames": 25,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "declared-verified-input-reopen-occupancy",
+                "sourceIdentity": "skill_control_10800341.asset#attack-reopen-window-start=25F",
+                "conversion": "25 source frames at 60fps",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 88,
+                "durationFrames": 88,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "88 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
+            },
+            "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F",
+            "resolutionStatus": "applied"
           },
           {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
+            "selectorIdentity": "miti-charged-full",
             "label": "重击满蓄力",
             "publicVariantIndex": 4,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 3,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-            "resolutionStatus": "not-yet-modeled"
+            "executionControlSkillId": 10800342,
+            "executionSubSkillIndex": 0,
+            "subSkillIndex": 0,
+            "playerSkillId": 10800342,
+            "durationFrames": 25,
+            "chargeTier": 2,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "press",
+                "pressFrame": 0,
+                "holdDurationMs": null,
+                "holdFrames": null,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800342].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800342].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 25,
+                "durationFrames": 25,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "declared-verified-input-reopen-occupancy",
+                "sourceIdentity": "skill_control_10800342.asset#attack-reopen-window-start=25F",
+                "conversion": "25 source frames at 60fps",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 112,
+                "durationFrames": 112,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "112 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
+            },
+            "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
+            "resolutionStatus": "applied"
           }
         ],
-        "eventBridgeRelations": [
-          {
-            "sourceSubSkillIndex": 0,
-            "targetControlSkillId": 10800310,
-            "targetSubSkillIndex": null,
-            "startFrame": 0,
-            "endFrame": 29,
-            "baseOnInput": false,
-            "inputToIndex": false,
-            "bridgeType": 4,
-            "continuousAttackType": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-          }
-        ],
-        "sourceIdentity": [
-          "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-        ],
-        "resolutionStatus": "not-yet-modeled"
+        "sourceIdentity": "skill_control_10800310.asset#hold-selector-25F-short-52F-full|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json|hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F|hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
+        "resolutionStatus": "applied"
       },
       "inputRelations": [
         {
@@ -15855,44 +15900,105 @@
         }
       ],
       "holdRange": {
-        "minimumHoldMs": 250,
-        "maximumHoldMs": null,
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-        "resolutionStatus": "partially-resolved"
+        "minimumFrames": 25,
+        "maximumFrames": 52,
+        "frameRate": 60,
+        "sourceIdentity": "skill_control_10800310.asset#transition[25F]->10800341;transition[52F]->10800342"
       },
       "chargeTier": [
         {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
-          "label": "重击",
-          "publicVariantIndex": 1,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 1,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
-          "resolutionStatus": "not-yet-modeled"
-        },
-        {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+          "selectorIdentity": "miti-charged-short",
           "label": "重击短蓄力",
           "publicVariantIndex": 2,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 2,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
-          "resolutionStatus": "not-yet-modeled"
+          "executionControlSkillId": 10800341,
+          "executionSubSkillIndex": 0,
+          "subSkillIndex": 0,
+          "playerSkillId": 10800341,
+          "durationFrames": 25,
+          "chargeTier": 1,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "press",
+              "pressFrame": 0,
+              "holdDurationMs": null,
+              "holdFrames": null,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800341].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 25,
+              "durationFrames": 25,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10800341.asset#attack-reopen-window-start=25F",
+              "conversion": "25 source frames at 60fps",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 88,
+              "durationFrames": 88,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "88 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
+          },
+          "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F",
+          "resolutionStatus": "applied"
         },
         {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
+          "selectorIdentity": "miti-charged-full",
           "label": "重击满蓄力",
           "publicVariantIndex": 4,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 3,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-          "resolutionStatus": "not-yet-modeled"
+          "executionControlSkillId": 10800342,
+          "executionSubSkillIndex": 0,
+          "subSkillIndex": 0,
+          "playerSkillId": 10800342,
+          "durationFrames": 25,
+          "chargeTier": 2,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "press",
+              "pressFrame": 0,
+              "holdDurationMs": null,
+              "holdFrames": null,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800342].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800342].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 25,
+              "durationFrames": 25,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "declared-verified-input-reopen-occupancy",
+              "sourceIdentity": "skill_control_10800342.asset#attack-reopen-window-start=25F",
+              "conversion": "25 source frames at 60fps",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 112,
+              "durationFrames": 112,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "112 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
+          },
+          "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
+          "resolutionStatus": "applied"
         }
       ],
       "resourceCondition": [],
@@ -15911,16 +16017,18 @@
       },
       "variants": [
         {
+          "executionControlSkillId": 10800341,
           "subSkillIndex": 0,
-          "playerSkillId": 0,
-          "durationFrames": 209,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          "playerSkillId": 10800341,
+          "durationFrames": 25,
+          "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
         },
         {
-          "subSkillIndex": 1,
-          "playerSkillId": 1,
-          "durationFrames": 86,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+          "executionControlSkillId": 10800342,
+          "subSkillIndex": 0,
+          "playerSkillId": 10800342,
+          "durationFrames": 25,
+          "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
         }
       ],
       "sourceIdentity": [
@@ -15929,13 +16037,11 @@
         "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
         "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
         "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json",
+        "skill_control_10800310.asset#hold-selector-25F-short-52F-full|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json|hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F|hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
       ],
-      "resolutionStatus": "not-yet-modeled",
-      "reasons": [
-        "variant-condition-source-families-audited-not-yet-modeled",
-        "input-selector-to-subskill-relation-not-yet-modeled"
-      ]
+      "resolutionStatus": "applied",
+      "reasons": []
     },
     {
       "contractIdentity": "actor:108005|control:10800501|derived-control",
@@ -35939,207 +36045,6 @@
       "resolutionStatus": "partially-resolved",
       "reasons": [
         "event-bridge-input-semantics-partially-modeled"
-      ]
-    },
-    {
-      "contractIdentity": "actor:108003|control:10800310|derived-control",
-      "ownerKind": "actor",
-      "ownerId": 108003,
-      "controlSkillId": 10800310,
-      "actionKinds": [
-        "charged-attack"
-      ],
-      "publicActions": [
-        {
-          "ownerKind": "actor",
-          "ownerId": 108003,
-          "sourceSkillId": 10800301,
-          "actionKind": "charged-attack",
-          "actionVariantIndex": 1,
-          "publicVariants": [
-            {
-              "index": 1,
-              "label": "重击",
-              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]"
-            },
-            {
-              "index": 2,
-              "label": "重击短蓄力",
-              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]"
-            },
-            {
-              "index": 4,
-              "label": "重击满蓄力",
-              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]"
-            }
-          ],
-          "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=2]"
-        }
-      ],
-      "controlSource": "input-controlled",
-      "candidateControlSources": [
-        "input-controlled"
-      ],
-      "decisionFrame": 0,
-      "inputSelector": {
-        "kind": "charge-tier",
-        "mode": "hold",
-        "holdRange": {
-          "minimumHoldMs": 250,
-          "maximumHoldMs": null,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-          "resolutionStatus": "partially-resolved"
-        },
-        "options": [
-          {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
-            "label": "重击",
-            "publicVariantIndex": 1,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 1,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
-            "resolutionStatus": "not-yet-modeled"
-          },
-          {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
-            "label": "重击短蓄力",
-            "publicVariantIndex": 2,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 2,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
-            "resolutionStatus": "not-yet-modeled"
-          },
-          {
-            "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
-            "label": "重击满蓄力",
-            "publicVariantIndex": 4,
-            "subSkillIndex": null,
-            "playerSkillId": null,
-            "durationFrames": null,
-            "chargeTier": 3,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-            "resolutionStatus": "not-yet-modeled"
-          }
-        ],
-        "eventBridgeRelations": [
-          {
-            "sourceSubSkillIndex": 0,
-            "targetControlSkillId": 10800310,
-            "targetSubSkillIndex": null,
-            "startFrame": 0,
-            "endFrame": 29,
-            "baseOnInput": false,
-            "inputToIndex": false,
-            "bridgeType": 4,
-            "continuousAttackType": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-          }
-        ],
-        "sourceIdentity": [
-          "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-        ],
-        "resolutionStatus": "not-yet-modeled"
-      },
-      "inputRelations": [
-        {
-          "sourceSubSkillIndex": 0,
-          "targetControlSkillId": 10800310,
-          "targetSubSkillIndex": null,
-          "startFrame": 0,
-          "endFrame": 29,
-          "baseOnInput": false,
-          "inputToIndex": false,
-          "bridgeType": 4,
-          "continuousAttackType": 0,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-        }
-      ],
-      "holdRange": {
-        "minimumHoldMs": 250,
-        "maximumHoldMs": null,
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
-        "resolutionStatus": "partially-resolved"
-      },
-      "chargeTier": [
-        {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
-          "label": "重击",
-          "publicVariantIndex": 1,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 1,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
-          "resolutionStatus": "not-yet-modeled"
-        },
-        {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
-          "label": "重击短蓄力",
-          "publicVariantIndex": 2,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 2,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
-          "resolutionStatus": "not-yet-modeled"
-        },
-        {
-          "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
-          "label": "重击满蓄力",
-          "publicVariantIndex": 4,
-          "subSkillIndex": null,
-          "playerSkillId": null,
-          "durationFrames": null,
-          "chargeTier": 3,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-          "resolutionStatus": "not-yet-modeled"
-        }
-      ],
-      "resourceCondition": [],
-      "resourceCost": [],
-      "stateCondition": [],
-      "automaticFollowUps": [],
-      "selectedSubSkillIndex": null,
-      "defaultSelection": {
-        "ownerId": 108003,
-        "controlSkillId": 10800310,
-        "subSkillIndex": 0,
-        "decisionFrame": 0,
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|client-skill-sub-index-default=0",
-        "status": "verified-default-subskill-selection-ready",
-        "applied": true
-      },
-      "variants": [
-        {
-          "subSkillIndex": 0,
-          "playerSkillId": 0,
-          "durationFrames": 209,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
-        },
-        {
-          "subSkillIndex": 1,
-          "playerSkillId": 1,
-          "durationFrames": 86,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
-        }
-      ],
-      "sourceIdentity": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json",
-        "NewTable/skillsub_logic.rows[skillId=10800310]",
-        "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
-        "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
-        "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
-      ],
-      "resolutionStatus": "not-yet-modeled",
-      "reasons": [
-        "variant-condition-source-families-audited-not-yet-modeled",
-        "input-selector-to-subskill-relation-not-yet-modeled"
       ]
     },
     {

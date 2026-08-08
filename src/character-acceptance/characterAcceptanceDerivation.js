@@ -566,7 +566,11 @@ function finalizeScenarioCase(record, index) {
 
 function createProjectionAssertionDefinitions(projection) {
   const definitions = [];
+  const selectorKeys = new Set();
   const add = (assertionIdentity, selector) => {
+    const selectorKey = JSON.stringify(selector);
+    if (selectorKeys.has(selectorKey)) return;
+    selectorKeys.add(selectorKey);
     definitions.push({
       assertionIdentity,
       selector,
@@ -611,6 +615,12 @@ function createProjectionAssertionDefinitions(projection) {
       stateIdentity: row.stateIdentity,
       actionId: row.actionId,
       operation: row.operation,
+    });
+  }
+  for (const row of projection.attackInputChains) {
+    add('trace-attack-input-chain:' + row.projectionIdentity, {
+      kind: 'attack-input-chain',
+      chainIdentity: row.chainIdentity,
     });
   }
   for (const row of projection.controlWindows) {
@@ -685,6 +695,7 @@ function normalizeTraceProjection(projection = {}) {
     effects: normalizeProjectionRows(projection.effects),
     resources: normalizeProjectionRows(projection.resources),
     states: normalizeProjectionRows(projection.states),
+    attackInputChains: normalizeProjectionRows(projection.attackInputChains),
     controlWindows: normalizeProjectionRows(projection.controlWindows),
     variantEdges: normalizeProjectionRows(projection.variantEdges),
     variantWindows: normalizeProjectionRows(projection.variantWindows),
@@ -738,6 +749,7 @@ function resolveSelectorMatches(projection, selector) {
     effect: 'effects',
     resource: 'resources',
     state: 'states',
+    'attack-input-chain': 'attackInputChains',
     'control-window': 'controlWindows',
     'variant-edge': 'variantEdges',
     'variant-window': 'variantWindows',

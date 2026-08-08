@@ -6,14 +6,14 @@
 - 场景可运行：632
 - 来源静态可应用：459
 - 来源运行时依赖：173
-- 零距离场景补全：586
+- 零距离场景补全：584
 - 来源静态证据缺口：13
 - 明确零：0
 - 未解析：13
-- 真实命中节点：3214
+- 真实命中节点：3229
 - 公开动作变体：675（未解析 43）
 - 非零回能元素：667（未关联 464）
-- 零距离投射物命中：3540（仍缺发射帧 70、仍缺公式 7、仍缺目标 0）
+- 零距离投射物命中：3540（仍缺发射帧 69、仍缺公式 7、仍缺目标 0）
 - 普攻输入链：20 条 / 95 个输入段（可运行 80，未解析 15）
 - 普攻输入时序：已确认 78，未确认 17
 
@@ -52,10 +52,10 @@
 | actor | normal-attack | 20 | 20 | 19 | 0 | 1 | 93 |
 | actor | perfect-parry | 20 | 20 | 20 | 0 | 0 | 10 |
 | actor | plunging-attack | 20 | 20 | 20 | 0 | 0 | 22 |
-| actor | star-carry | 17 | 17 | 15 | 0 | 2 | 74 |
+| actor | star-carry | 17 | 17 | 15 | 0 | 2 | 85 |
 | actor | star-combo | 20 | 20 | 20 | 0 | 0 | 20 |
 | actor | star-skill | 20 | 20 | 20 | 0 | 0 | 140 |
-| actor | ultimate | 20 | 20 | 20 | 0 | 0 | 139 |
+| actor | ultimate | 20 | 20 | 20 | 0 | 0 | 143 |
 | kibo | active | 82 | 82 | 82 | 0 | 0 | 842 |
 | kibo | break | 122 | 122 | 122 | 0 | 0 | 124 |
 | kibo | normal-attack | 122 | 122 | 122 | 0 | 0 | 857 |
@@ -76,7 +76,7 @@
 - `actor|108002|10800201|1|10800210|charged-attack` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108002|10800201|4|10800215|dodge-attack` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing
 - `actor|108002|10800222|0|10800222|star-carry` 璐璐卡 / star-carry / 幽浪之声: selected-control-variant-has-no-runnable-hit
-- `actor|108003|10800301|1|10800310|charged-attack` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit
+- `actor|108003|10800301|1|10800310|charged-attack` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit, verified-action-effective-occupancy-window-unresolved
 - `actor|108003|10800301|6|10800315|dodge-attack` 米蒂 / dodge-attack / 破空箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|0|11200203|normal-attack` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|1|11200210|charged-attack` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent

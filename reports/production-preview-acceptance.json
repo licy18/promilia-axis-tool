@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "production-preview-acceptance",
-  "generatedAt": "2026-08-07T10:52:29.066Z",
+  "generatedAt": "2026-08-08T17:52:12.718Z",
   "environment": {
     "platform": "win32-x64",
     "node": "v24.16.0",
@@ -23,7 +23,7 @@
     "testCount": 1,
     "passedTestCount": 1,
     "playwrightStatus": "passed",
-    "durationMs": 8437
+    "durationMs": 9642
   },
   "capabilities": [
     {
@@ -242,7 +242,7 @@
       "capability": "m11-d-character-acceptance-visual-import",
       "title": "[m11-d-character-acceptance-visual-import] imports each owner acceptance fixture through the public Workbench file entry",
       "status": "passed",
-      "durationMs": 5816,
+      "durationMs": 7001,
       "retry": 0,
       "errors": []
     }

@@ -2,10 +2,12 @@ import xiaoyuManifest from '../../../reports/m11/character-acceptance/101010/man
 import rubyManifest from '../../../reports/m11/character-acceptance/103002/manifest.json';
 import hanManifest from '../../../reports/m11/character-acceptance/101003/manifest.json';
 import moyinManifest from '../../../reports/m11/character-acceptance/109001/manifest.json';
+import mitiManifest from '../../../reports/m11/character-acceptance/108003/manifest.json';
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import rubyProfile from '../../data/generated/character-combat-profiles/103002.json';
 import hanProfile from '../../data/generated/character-combat-profiles/101003.json';
 import moyinProfile from '../../data/generated/character-combat-profiles/109001.json';
+import mitiProfile from '../../data/generated/character-combat-profiles/108003.json';
 import generatedCatalog from '../../data/generated/character-acceptance-catalog.json';
 import generatedManifestIndex from '../../data/generated/character-acceptance-manifest-index.json';
 import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
@@ -39,6 +41,13 @@ const owners = [
     profile: hanProfile,
   },
   {
+    ownerId: 108003,
+    passiveId: 10800362,
+    manifest: mitiManifest,
+    profile: mitiProfile,
+    unnamedSecondaryPassiveBoundary: false,
+  },
+  {
     ownerId: 109001,
     passiveId: 10900162,
     manifest: moyinManifest,
@@ -47,20 +56,23 @@ const owners = [
 ];
 
 describe('generated character acceptance manifests', () => {
-  it('publishes exactly the four M11-D owners with a valid hashed catalog', () => {
+  it('publishes exactly the five qualified owners with a valid hashed catalog', () => {
     expect(generatedCatalog.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 109001,
+      101003, 101010, 103002, 108003, 109001,
     ]);
     expect(generatedCatalog.summary).toMatchObject({
-      ownerCount: 4,
-      maturityCounts: { 'runtime-integrated': 4 },
-      optimizationReadyCount: 0,
+      ownerCount: 5,
+      maturityCounts: {
+        'runtime-integrated': 4,
+        'optimization-ready': 1,
+      },
+      optimizationReadyCount: 1,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
     );
     expect(generatedManifestIndex.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 109001,
+      101003, 101010, 103002, 108003, 109001,
     ]);
     for (const entry of generatedCatalog.entries) {
       const indexed = generatedManifestIndex.entries.find(
@@ -121,27 +133,39 @@ describe('generated character acceptance manifests', () => {
   });
 
   it.each(owners)(
-    'derives $ownerId as runtime-integrated pending merged-baseline review',
+    'derives $ownerId from the current product acceptance record',
     ({ ownerId, manifest }) => {
       expect(validateCharacterAcceptanceManifest(manifest)).toMatchObject({
         valid: true,
         issues: [],
       });
+      const productAccepted = ownerId === 109001;
       expect(manifest.maturity).toMatchObject({
-        currentState: 'runtime-integrated',
-        optimizationReady: false,
+        currentState: productAccepted
+          ? 'optimization-ready'
+          : 'runtime-integrated',
+        optimizationReady: productAccepted,
         gates: {
           extracted: true,
           runtimeIntegrated: true,
-          visuallyAccepted: false,
-          optimizationReady: false,
+          visuallyAccepted: productAccepted,
+          optimizationReady: productAccepted,
         },
       });
-      expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-        status: 'pending',
-        acceptanceCommit: null,
-        bindingStatus: 'not-requested',
-      });
+      expect(manifest.evidence.productVisualAcceptance).toMatchObject(
+        productAccepted
+          ? {
+              status: 'accepted',
+              acceptanceCommit:
+                '4a5030a52bd51a118f579957bc449efa0c38cf3b',
+              bindingStatus: 'verified',
+            }
+          : {
+              status: 'pending',
+              acceptanceCommit: null,
+              bindingStatus: 'not-requested',
+            }
+      );
       expect(
         manifest.evidence.productVisualAcceptance.automatedEvidence
       ).toEqual([
@@ -152,7 +176,9 @@ describe('generated character acceptance manifests', () => {
           screenshotSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
         }),
       ]);
-      if (ownerId === 109001) {
+      if (productAccepted) {
+        expect(manifest.maturity.blockers).toEqual([]);
+      } else if (ownerId === 108003) {
         expect(manifest.maturity.blockers).toEqual([
           'acceptance-product-visual-signoff-pending',
         ]);
@@ -164,12 +190,16 @@ describe('generated character acceptance manifests', () => {
           ])
         );
       }
-      expect(manifest.maturity.blockers).toContain(
-        'acceptance-product-visual-signoff-pending'
-      );
-      expect(() => assertCharacterIsOptimizationReady(ownerId)).toThrow(
-        'character-not-optimization-ready'
-      );
+      if (productAccepted) {
+        expect(() => assertCharacterIsOptimizationReady(ownerId)).not.toThrow();
+      } else {
+        expect(manifest.maturity.blockers).toContain(
+          'acceptance-product-visual-signoff-pending'
+        );
+        expect(() => assertCharacterIsOptimizationReady(ownerId)).toThrow(
+          'character-not-optimization-ready'
+        );
+      }
     }
   );
 
@@ -267,7 +297,9 @@ describe('generated character acceptance manifests', () => {
     );
   });
 
-  it.each(owners)(
+  it.each(
+    owners.filter(owner => owner.unnamedSecondaryPassiveBoundary !== false)
+  )(
     'keeps unnamed secondary passive $passiveId auditable but non-blocking',
     ({ passiveId, manifest, implemented = false }) => {
       const passiveToken = String(passiveId);

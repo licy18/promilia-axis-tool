@@ -1424,9 +1424,13 @@ describe('verified kibo passive generation', () => {
     expect(sumDamage(withPassive, action.id)).toBeGreaterThan(
       sumDamage(withDefenseRootsOnly, action.id)
     );
-    expect(sumDamage(withDefenseRootsOnly, action.id)).toBe(
+    expect(sumDamage(withDefenseRootsOnly, action.id)).toBeGreaterThan(
       sumDamage(withoutPassive, action.id)
     );
+    expect(
+      sumDamage(withDefenseRootsOnly, action.id) -
+        sumDamage(withoutPassive, action.id)
+    ).toBe(3);
     expect(
       resolveActiveEffectsAt(effectTimeline, scenario.time.durationMs, {
         targetKind: 'enemy',

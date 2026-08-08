@@ -136,8 +136,8 @@ describe('M10 character combat profile pipeline', () => {
       status: 'character-combat-profile-catalog-ready',
       summary: {
         publicCharacterCount: 20,
-        compiledProfileCount: 4,
-        runtimeAppliedProfileCount: 4,
+        compiledProfileCount: 5,
+        runtimeAppliedProfileCount: 5,
         uiVerifiedProfileCount: 0,
         characterCompleteCount: 0,
       },
@@ -284,7 +284,10 @@ describe('M10 character combat profile pipeline', () => {
         {
           elementId: 9004,
           sourceIdentity: 'fixture:element:9004',
-          tree: { functionParams: [20000] },
+          tree: {
+            functionParams: [20000],
+            formulaParams: { function_2: 3 },
+          },
         },
       ],
       [
@@ -1440,11 +1443,11 @@ describe('M10 character combat profile pipeline', () => {
         damageEventCount: 522,
         ownerDamageEventCount: 345,
         ownerHitEventCount: 115,
-        ownerHitTotalHpDamage: 9822,
-        ownerHitTotalToughnessDamage: 1093,
-        ownerTotalHpDamage: 648551,
+        ownerHitTotalHpDamage: 69107,
+        ownerHitTotalToughnessDamage: 6299,
+        ownerTotalHpDamage: 775993,
         ownerTotalToughnessDamage: 0,
-        enemy: { initialHp: 862800, finalHp: 0 },
+        enemy: { initialHp: 8677869.84, finalHp: 7662743.84 },
       },
       resources: {
         thresholdClearCount: 1,
@@ -1476,9 +1479,9 @@ describe('M10 character combat profile pipeline', () => {
         },
       },
       comparison: {
-        primaryDamage: 5613,
-        baselineDamage: 2366,
-        damageDelta: 3247,
+        primaryDamage: 6558,
+        baselineDamage: 2766,
+        damageDelta: 3792,
       },
     });
     expect(
@@ -1520,8 +1523,8 @@ describe('M10 character combat profile pipeline', () => {
       tamperedValidation.assertions.find(item => !item.passed)
     ).toMatchObject({
       jsonPath: 'combat.ownerTotalHpDamage',
-      expected: 648552,
-      actual: 648551,
+      expected: 775994,
+      actual: 775993,
     });
   });
 

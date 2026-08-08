@@ -435,6 +435,181 @@ describe('verified target-state runtime', () => {
       [null, 'expire', 11083.333333, 1, 0],
     ]);
   });
+
+  it('runs periodic direct effects without target-state profiles and truncates the old interval on refresh', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles = [];
+    mechanicsPackage.actionVariantGraph.targetStateTransactions = [];
+    mechanicsPackage.actionVariantGraph.conditionalHitGroups = [];
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings = [
+      {
+        ownerId: 424242,
+        bindingIdentity: 'synthetic-periodic-sp',
+        triggerKind: 'action-periodic',
+        controlSkillId: 424204,
+        subSkillIndex: 0,
+        triggerFrame: 0,
+        frameRate: 60,
+        targetKind: 'source-actor',
+        effectId: 'battle-element:9010',
+        effectName: 'Synthetic Periodic SP',
+        durationMs: 10000,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+        modifiers: [],
+        directSp: {
+          elementId: 9010,
+          value: 2,
+          enhanceable: false,
+          shareType: 2,
+          stopSharing: false,
+          sourceIdentity: 'fixture:synthetic-periodic-sp',
+        },
+        periodic: {
+          durationMs: 10000,
+          intervalMs: 1000,
+          firstTickFrameOffset: 1,
+          applied: true,
+        },
+        sourceIdentity: 'fixture:synthetic-periodic-sp',
+        applied: true,
+      },
+    ];
+    const actionResolutionById = new Map([
+      ['periodic-first', createResolution({ controlSkillId: 424204, hits: [] })],
+      ['periodic-refresh', createResolution({ controlSkillId: 424204, hits: [] })],
+    ]);
+    const first = createAction('periodic-first', 0);
+    const refresh = createAction('periodic-refresh', 5000);
+    first.sourceSequencePath = [0];
+    refresh.sourceSequencePath = [1];
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 16000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [first, refresh],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(result.status).toBe('verified-target-state-runtime-ready');
+    expect(result.summary.profileCount).toBe(0);
+    expect(result.directSpEvents).toHaveLength(15);
+    expect(
+      result.directSpEvents.map(event => [
+        event.actionId,
+        event.timeMs,
+        event.value,
+      ])
+    ).toEqual([
+      ['periodic-first', 16.666667, 2],
+      ['periodic-first', 1016.666667, 2],
+      ['periodic-first', 2016.666667, 2],
+      ['periodic-first', 3016.666667, 2],
+      ['periodic-first', 4016.666667, 2],
+      ['periodic-refresh', 5016.666667, 2],
+      ['periodic-refresh', 6016.666667, 2],
+      ['periodic-refresh', 7016.666667, 2],
+      ['periodic-refresh', 8016.666667, 2],
+      ['periodic-refresh', 9016.666667, 2],
+      ['periodic-refresh', 10016.666667, 2],
+      ['periodic-refresh', 11016.666667, 2],
+      ['periodic-refresh', 12016.666667, 2],
+      ['periodic-refresh', 13016.666667, 2],
+      ['periodic-refresh', 14016.666667, 2],
+    ]);
+    expect(new Set(result.directSpEvents.map(event => event.eventIdentity)).size).toBe(15);
+    expect(result.directSpEvents.every(event => event.appliedToCalculators)).toBe(true);
+  });
+
+  it('emits a hit-gated direct effect only for the landed source hit', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles = [];
+    mechanicsPackage.actionVariantGraph.targetStateTransactions = [];
+    mechanicsPackage.actionVariantGraph.conditionalHitGroups = [];
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings = [
+      {
+        ownerId: 424242,
+        bindingIdentity: 'synthetic-final-hit-sp',
+        triggerKind: 'action-hit-landed',
+        controlSkillId: 424205,
+        subSkillIndex: 0,
+        triggerFrame: 118,
+        frameRate: 60,
+        targetKind: 'source-actor',
+        effectId: 'battle-element:9011',
+        effectName: 'Synthetic Final Hit SP',
+        durationMs: null,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+        modifiers: [],
+        directSp: {
+          elementId: 9011,
+          value: 5,
+          enhanceable: false,
+          shareType: 0,
+          stopSharing: true,
+          sourceIdentity: 'fixture:synthetic-final-hit-sp',
+        },
+        requiredHitElementId: 9003,
+        requiredHitFrame: 118,
+        sourceIdentity: 'fixture:synthetic-final-hit-sp',
+        applied: true,
+      },
+    ];
+    const landedHit = {
+      ...createHit(9003, 118),
+      hitIdentity: 'synthetic-final-hit',
+    };
+    const actionResolutionById = new Map([
+      ['landed', createResolution({ controlSkillId: 424205, hits: [landedHit] })],
+      ['missed', createResolution({ controlSkillId: 424205, hits: [landedHit] })],
+    ]);
+    const landed = createAction('landed', 0);
+    const missed = createAction('missed', 3000);
+    landed.sourceSequencePath = [0];
+    missed.sourceSequencePath = [1];
+    missed.hitOverrides = { 'synthetic-final-hit': { willHit: false } };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 6000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [landed, missed],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(result.directSpEvents).toEqual([
+      expect.objectContaining({
+        actionId: 'landed',
+        timeMs: 1966.666667,
+        value: 5,
+        appliedToCalculators: true,
+      }),
+    ]);
+    expect(
+      result.events.find(
+        event =>
+          event.type === 'VERIFIED_RUNTIME_EFFECT_HIT_CONDITION_NOT_MET'
+      )
+    ).toMatchObject({
+      actionId: 'missed',
+      payload: {
+        requiredHitElementId: 9003,
+        requiredHitFrame: 118,
+        reason: 'required-source-hit-not-landed',
+        applied: false,
+      },
+    });
+  });
 });
 
 function createMechanicsPackage() {

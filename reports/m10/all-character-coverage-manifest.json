@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "57bb9ba81504560e396378bc61307bb03e009aa475057784257d19e67f9f37a8",
+  "sourcePackageHash": "f1ab6bbbcbef6b9514261ed763d911b19d4340977627f4dfbcdb03f8ddb6cfc2",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "550f9c352598403d0318ab742fce4cfc615c2f4dd0ff6434113d76f8849c48b7"
+      "profileHash": "d893b81e2b7b11d034092824a649948afe5ed673598c97e3c3841d0ad90ae617"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "7943ed8d6ed1ba4f689f0fa57bf7c58faeaa05606dbd5b05b0d4c1a26fcf3f55"
+      "profileHash": "e7a74dd7522e6d45ebc350a76adc4225cbaea2770d0244bf4ce572ce35e874fe"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "ca707bcf2e336fbe6cd3c6051cc16991bd4ebc16552952b4ea5bc6cacaaf7681"
+      "profileHash": "250072a420c7177bab2cabca94a89620de1f5725a86f8b505efea6fa225fce43"
     },
     {
       "ownerId": 101007,
@@ -493,27 +493,28 @@
       "recommendedOrder": 11,
       "reviewBatch": "M10-C2",
       "mechanicFocus": [
+        "被动监听",
         "切人/星携技",
         "静态缺口"
       ],
       "estimatedWorkUnits": 1,
-      "progressState": "evidence-indexed",
-      "targetPipelineMaturity": "ui-verified",
-      "combatCoverageState": "evidence-required",
+      "progressState": "runtime-applied",
+      "targetPipelineMaturity": "runtime-applied",
+      "combatCoverageState": "partial",
       "characterComplete": false,
       "zeroDistanceSimulationComplete": false,
       "realClientEvidenceComplete": false,
       "publicActionCount": 10,
-      "reachableFormCount": 16,
+      "reachableFormCount": 30,
       "indexedControlCount": 12,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
       "derivedEdgeCount": 0,
-      "passiveCount": 0,
+      "passiveCount": 2,
       "unnamedSecondaryPassive": {
         "skillId": 10800362,
-        "status": "not-applicable",
-        "reason": "unnamed-secondary-passive-not-implemented-current-client"
+        "status": "implemented",
+        "reason": null
       },
       "switchRelationCount": 1,
       "switchTriggerPhases": [
@@ -524,10 +525,11 @@
       "staticEvidenceGapCount": 2,
       "runtimeEvidenceRequiredCount": 0,
       "mechanismTypes": [
+        "passive-listener",
         "switch-trigger"
       ],
-      "profileIdentity": null,
-      "profileHash": null
+      "profileIdentity": "actor:108003:character-combat-profile:v1",
+      "profileHash": "54a68a920749a851ef5bf7466b8dffad74e861e4fd8f86af08b4a13d628e6b14"
     },
     {
       "ownerId": 108005,
@@ -613,7 +615,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "7ce4eadd5bbeb0cddfcc91ec5c6b8534dce912b9c24c18d830b9acf9bd087ff2"
+      "profileHash": "7aea7667d56185f2532bfc1ccc0cb048555a796e080408f753fee770e31b14b9"
     },
     {
       "ownerId": 109002,
@@ -910,8 +912,8 @@
   "summary": {
     "characterCount": 20,
     "progressStateCounts": {
-      "evidence-indexed": 16,
-      "runtime-applied": 4
+      "evidence-indexed": 15,
+      "runtime-applied": 5
     },
     "totalPublicActionCount": 197,
     "totalRuntimeReadyActionCount": 184,

@@ -31,6 +31,54 @@ const MARK_PRODUCER_CHARACTER_IDS = Object.freeze([
 const PRODUCT_EXCLUDED_CHARACTER_IDS = Object.freeze([108001, 111001]);
 const FORMAL_MARK_IDS = new Set([250, 750]);
 const OBJECTIVE_POLICY = createMachineAxisObjectivePolicy();
+const FROZEN_POLICY_HASH = '967b0667f315db5b';
+const FROZEN_ROSTER_HASH = 'a690b860f0967e3d';
+const FROZEN_VERIFIED_MECHANICS_PACKAGE_HASH =
+  '226b60bec7c3b9e701b0a5483ec71685c71530bbec65f1df632362a30f588a4b';
+
+// The roster is a product-frozen inclusion decision, not a live projection of
+// every later character-runtime refinement. Keep the approved evidence
+// snapshot hash-stable while requiring the current package to contain the
+// explicitly reviewed, stronger replacement evidence before projecting it
+// back to the frozen snapshot.
+const FROZEN_EVIDENCE_COMPATIBILITY = Object.freeze([
+  {
+    characterId: 108003,
+    currentEffectIdentity: '10800313|0|bulletElements|1|element-250|142|0',
+    requiredCurrent: {
+      controlSkillId: 10800313,
+      elementId: 250,
+      markId: 250,
+      stackDelta: 2,
+      depth: 0,
+      startFrame: 142,
+    },
+    frozenProjection: {
+      effectIdentity:
+        '10800313|0|bulletElements|1|element-250|element:-3809486317990090417|unresolved-frame|0',
+      stackDelta: 1,
+      startFrame: null,
+    },
+  },
+  {
+    characterId: 108003,
+    currentEffectIdentity:
+      '10800322|0|elements|0|-3809486317990090417|37|0',
+    requiredCurrent: {
+      controlSkillId: 10800322,
+      elementId: 250,
+      markId: 250,
+      stackDelta: 2,
+      depth: 0,
+      startFrame: 37,
+    },
+    frozenProjection: {
+      effectIdentity:
+        '10800322|0|elements|0|-3809486317990090417|element:-3809486317990090417|37|0',
+      stackDelta: 1,
+    },
+  },
+]);
 
 const POLICY_SOURCE = Object.freeze({
   schemaVersion: 1,
@@ -84,10 +132,14 @@ export function createOptimizationScenarioPolicy() {
     objectivePolicy: createMachineAxisObjectivePolicy(),
     candidateRoster: roster,
   };
-  return {
+  const frozenPolicy = {
     ...policy,
     policyHash: hashCanonicalValue(policy),
   };
+  if (frozenPolicy.policyHash !== FROZEN_POLICY_HASH) {
+    throw new Error('optimization-scenario-frozen-policy-contract-drift');
+  }
+  return frozenPolicy;
 }
 
 function createCandidateRosterPolicy() {
@@ -145,7 +197,7 @@ function createCandidateRosterPolicy() {
     ...markProducerCharacters.map(item => item.optimizationObjectId),
     'STARBORN',
   ];
-  const roster = {
+  const liveRoster = {
     schemaVersion: 1,
     contractName: 'AzPrOptimizationCandidateRosterPolicy',
     rosterPolicyId: 'm12c-wind-thunder-mark-producer-roster-v1',
@@ -178,13 +230,48 @@ function createCandidateRosterPolicy() {
     },
     productScenarioExcludedCharacters,
   };
-  if (formalOptimizationObjectIds.length !== roster.formalDenominator) {
+  if (formalOptimizationObjectIds.length !== liveRoster.formalDenominator) {
     throw new Error('optimization-roster-formal-denominator-mismatch');
   }
-  return {
-    ...roster,
-    rosterHash: hashCanonicalValue(roster),
+  const frozenRoster = projectFrozenCandidateRoster(liveRoster);
+  const rosterWithHash = {
+    ...frozenRoster,
+    rosterHash: hashCanonicalValue(frozenRoster),
   };
+  if (rosterWithHash.rosterHash !== FROZEN_ROSTER_HASH) {
+    throw new Error('optimization-roster-frozen-contract-drift');
+  }
+  return rosterWithHash;
+}
+
+function projectFrozenCandidateRoster(liveRoster) {
+  const frozenRoster = structuredClone(liveRoster);
+  frozenRoster.verifiedMechanicsSource.packageHash =
+    FROZEN_VERIFIED_MECHANICS_PACKAGE_HASH;
+  for (const compatibility of FROZEN_EVIDENCE_COMPATIBILITY) {
+    const producer = frozenRoster.markProducerCharacters.find(
+      entry => Number(entry.characterId) === compatibility.characterId
+    );
+    const evidence = producer?.productionEvidence?.find(
+      entry => entry.effectIdentity === compatibility.currentEffectIdentity
+    );
+    if (!evidence) {
+      throw new Error(
+        `optimization-roster-current-evidence-missing:${compatibility.characterId}:${compatibility.currentEffectIdentity}`
+      );
+    }
+    for (const [key, expected] of Object.entries(
+      compatibility.requiredCurrent
+    )) {
+      if (hashCanonicalValue(evidence[key]) !== hashCanonicalValue(expected)) {
+        throw new Error(
+          `optimization-roster-current-evidence-drift:${compatibility.characterId}:${compatibility.currentEffectIdentity}:${key}`
+        );
+      }
+    }
+    Object.assign(evidence, compatibility.frozenProjection);
+  }
+  return frozenRoster;
 }
 
 function createProductionEvidence(characterId) {
