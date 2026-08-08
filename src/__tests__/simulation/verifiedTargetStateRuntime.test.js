@@ -232,6 +232,65 @@ describe('verified target-state runtime', () => {
     ]);
   });
 
+  it('does not leak unrelated owner profiles or runtime bindings into the active roster', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles.push({
+      ownerId: 999999,
+      stateIdentity: 'enemy:unrelated-owner-state',
+      name: 'Unrelated Owner State',
+      targetKind: 'enemy',
+      durationMs: 10000,
+      maxStacks: 1,
+      runtimeOwnerScope: 'scenario-roster',
+      applied: true,
+    });
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings.push({
+      ...mechanicsPackage.actionVariantGraph.runtimeEffectBindings[0],
+      ownerId: 999999,
+      bindingIdentity: 'unrelated-owner-runtime-binding',
+      triggerKind: 'action-frame',
+      conditionalGroupIdentity: null,
+      controlSkillId: 424201,
+      subSkillIndex: 0,
+      triggerFrame: 5,
+      runtimeOwnerScope: 'scenario-roster',
+      effectId: 'battle-element:999999',
+      sourceIdentity: 'fixture:unrelated-owner-runtime-binding',
+    });
+    const actionResolutionById = new Map([
+      [
+        'gain',
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ],
+    ]);
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 1000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [createAction('gain', 0)],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(result.summary.profileCount).toBe(1);
+    expect(
+      result.finalState.some(
+        state => state.stateIdentity === 'enemy:unrelated-owner-state'
+      )
+    ).toBe(false);
+    expect(
+      result.effectCommands.some(
+        command => command.effectId === 'battle-element:999999'
+      )
+    ).toBe(false);
+  });
+
   it('expires layers independently and omits a disabled required hit', () => {
     const mechanicsPackage = createMechanicsPackage();
     const scenario = {
@@ -436,6 +495,205 @@ describe('verified target-state runtime', () => {
     ]);
   });
 
+  it('emits generic landed-hit direct SP once per landed hit and rejects misses or interrupted hits', () => {
+    const mechanicsPackage = createLandedHitMechanicsPackage();
+    const actionResolutionById = new Map(
+      ['all-land', 'last-only', 'all-miss', 'interrupted'].map(actionId => [
+        actionId,
+        createResolution({
+          controlSkillId: 424204,
+          hits: [
+            createVerifiedHit('synthetic-hit-1', 9101, 1, 5),
+            createVerifiedHit('synthetic-hit-2', 9102, 2, 10),
+          ],
+        }),
+      ])
+    );
+    const allLand = createAction('all-land', 0, 0);
+    const lastOnly = {
+      ...createAction('last-only', 1000, 1),
+      hitOverrides: {
+        'synthetic-hit-1': { willHit: false },
+      },
+    };
+    const allMiss = {
+      ...createAction('all-miss', 2000, 2),
+      hitOverrides: {
+        'synthetic-hit-1': { willHit: false },
+        'synthetic-hit-2': { willHit: false },
+      },
+    };
+    const interrupted = {
+      ...createAction('interrupted', 3000, 3),
+      contextualEffectiveEndMs: 3100,
+    };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 5000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [allLand, lastOnly, allMiss, interrupted],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.directSpEvents.map(event => [
+        event.actionId,
+        event.triggerHitIdentity,
+        event.value,
+        event.sourceSequencePath,
+      ])
+    ).toEqual([
+      ['all-land', 'synthetic-hit-1', 0.5, [0, 1, 30, 0, 0]],
+      ['all-land', 'synthetic-hit-2', 0.5, [0, 2, 30, 0, 0]],
+      ['last-only', 'synthetic-hit-2', 0.5, [1, 2, 30, 0, 0]],
+      ['interrupted', 'synthetic-hit-1', 0.5, [3, 1, 30, 0, 0]],
+    ]);
+    expect(
+      result.events
+        .filter(
+          event =>
+            event.type ===
+            'VERIFIED_RUNTIME_EFFECT_LANDED_HIT_CONDITION_NOT_MET'
+        )
+        .map(event => [
+          event.actionId,
+          event.payload.hitIdentity,
+          event.payload.withinOccupancy,
+        ])
+    ).toEqual([
+      ['last-only', 'synthetic-hit-1', true],
+      ['all-miss', 'synthetic-hit-1', true],
+      ['all-miss', 'synthetic-hit-2', true],
+      ['interrupted', 'synthetic-hit-2', false],
+    ]);
+    expect(result.summary.directSpEventCount).toBe(4);
+  });
+
+  it('gates action effects on the exact same-action landed hit without owner-specific logic', () => {
+    const mechanicsPackage = createLandedHitMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings = [];
+    const condition = createLandedHitCondition('synthetic-hit-1', 9101, 1, 5);
+    const actionResolutionById = new Map(
+      ['landed', 'missed', 'interrupted'].map(actionId => [
+        actionId,
+        createResolution({
+          controlSkillId: 424204,
+          hits: [createVerifiedHit('synthetic-hit-1', 9101, 1, 5)],
+          effects: [createLandedHitConditionedEffect(actionId, condition)],
+        }),
+      ])
+    );
+    const landed = createAction('landed', 0, 0);
+    const missed = {
+      ...createAction('missed', 1000, 1),
+      hitOverrides: { 'synthetic-hit-1': { willHit: false } },
+    };
+    const interrupted = {
+      ...createAction('interrupted', 2000, 2),
+      contextualEffectiveEndMs: 2050,
+    };
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 3000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [landed, missed, interrupted],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(actionResolutionById.get('landed').effects).toHaveLength(1);
+    expect(actionResolutionById.get('missed').effects).toEqual([]);
+    expect(actionResolutionById.get('interrupted').effects).toEqual([]);
+    expect(
+      result.actionHitActivationResults.map(entry => [
+        entry.actionId,
+        entry.applied,
+        entry.reason,
+      ])
+    ).toEqual([
+      ['landed', true, 'same-action-hit-landed'],
+      ['missed', false, 'same-action-hit-missed'],
+      ['interrupted', false, 'same-action-hit-outside-effective-occupancy'],
+    ]);
+  });
+
+  it('selects a generic runtime property value from the action skill level', () => {
+    const mechanicsPackage = createLandedHitMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings = [
+      {
+        ownerId: 424242,
+        bindingIdentity: 'synthetic-level-scaled-property',
+        triggerKind: 'action-frame',
+        controlSkillId: 424205,
+        subSkillIndex: 0,
+        triggerFrame: 1,
+        frameRate: 60,
+        targetKind: 'source-actor',
+        effectId: 'battle-element:9120',
+        effectName: 'Synthetic Level-scaled Property',
+        durationMs: 6000,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+        modifiers: [
+          {
+            kind: 'battle-property',
+            attributeId: 22,
+            bucket: 'dynamicExtra',
+            valueRaw: 1900,
+            valueRawByLevel: { 1: 1900, 12: 3000 },
+            propertyTags: [],
+          },
+        ],
+        directSp: null,
+        sourceIdentity: 'fixture:synthetic-level-scaled-property',
+        applied: true,
+      },
+    ];
+    const levelOne = {
+      ...createAction('level-one', 0, 0),
+      skillLevel: 1,
+    };
+    const levelTwelve = {
+      ...createAction('level-twelve', 1000, 1),
+      skillLevel: 12,
+    };
+    const actionResolutionById = new Map(
+      ['level-one', 'level-twelve'].map(actionId => [
+        actionId,
+        createResolution({ controlSkillId: 424205, hits: [] }),
+      ])
+    );
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 8000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [levelOne, levelTwelve],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.effectCommands.map(command => [
+        command.sourceActionId,
+        command.modifiers[0].valueRaw,
+      ])
+    ).toEqual([
+      ['level-one', 1900],
+      ['level-twelve', 3000],
+    ]);
+  });
+
   it('runs periodic direct effects without target-state profiles and truncates the old interval on refresh', () => {
     const mechanicsPackage = createMechanicsPackage();
     mechanicsPackage.actionVariantGraph.targetStateProfiles = [];
@@ -477,8 +735,14 @@ describe('verified target-state runtime', () => {
       },
     ];
     const actionResolutionById = new Map([
-      ['periodic-first', createResolution({ controlSkillId: 424204, hits: [] })],
-      ['periodic-refresh', createResolution({ controlSkillId: 424204, hits: [] })],
+      [
+        'periodic-first',
+        createResolution({ controlSkillId: 424204, hits: [] }),
+      ],
+      [
+        'periodic-refresh',
+        createResolution({ controlSkillId: 424204, hits: [] }),
+      ],
     ]);
     const first = createAction('periodic-first', 0);
     const refresh = createAction('periodic-refresh', 5000);
@@ -522,8 +786,12 @@ describe('verified target-state runtime', () => {
       ['periodic-refresh', 13016.666667, 2],
       ['periodic-refresh', 14016.666667, 2],
     ]);
-    expect(new Set(result.directSpEvents.map(event => event.eventIdentity)).size).toBe(15);
-    expect(result.directSpEvents.every(event => event.appliedToCalculators)).toBe(true);
+    expect(
+      new Set(result.directSpEvents.map(event => event.eventIdentity)).size
+    ).toBe(15);
+    expect(
+      result.directSpEvents.every(event => event.appliedToCalculators)
+    ).toBe(true);
   });
 
   it('emits a hit-gated direct effect only for the landed source hit', () => {
@@ -567,8 +835,14 @@ describe('verified target-state runtime', () => {
       hitIdentity: 'synthetic-final-hit',
     };
     const actionResolutionById = new Map([
-      ['landed', createResolution({ controlSkillId: 424205, hits: [landedHit] })],
-      ['missed', createResolution({ controlSkillId: 424205, hits: [landedHit] })],
+      [
+        'landed',
+        createResolution({ controlSkillId: 424205, hits: [landedHit] }),
+      ],
+      [
+        'missed',
+        createResolution({ controlSkillId: 424205, hits: [landedHit] }),
+      ],
     ]);
     const landed = createAction('landed', 0);
     const missed = createAction('missed', 3000);
@@ -597,8 +871,7 @@ describe('verified target-state runtime', () => {
     ]);
     expect(
       result.events.find(
-        event =>
-          event.type === 'VERIFIED_RUNTIME_EFFECT_HIT_CONDITION_NOT_MET'
+        event => event.type === 'VERIFIED_RUNTIME_EFFECT_HIT_CONDITION_NOT_MET'
       )
     ).toMatchObject({
       actionId: 'missed',
@@ -728,6 +1001,51 @@ function createMechanicsPackage() {
   };
 }
 
+function createLandedHitMechanicsPackage() {
+  return {
+    packageId: 'synthetic-landed-hit-package',
+    packageHash: 'synthetic-landed-hit-hash',
+    actionVariantGraph: {
+      targetStateProfiles: [],
+      targetStateTransactions: [],
+      conditionalHitGroups: [],
+      runtimeEffectBindings: [
+        {
+          ownerId: 424242,
+          bindingIdentity: 'synthetic-landed-hit-sp',
+          triggerKind: 'landed-hit',
+          controlSkillId: 424204,
+          subSkillIndex: 0,
+          triggerFrame: 5,
+          frameRate: 60,
+          hitBindings: [
+            createLandedHitBinding('synthetic-hit-1', 9101, 1, 5),
+            createLandedHitBinding('synthetic-hit-2', 9102, 2, 10),
+          ],
+          targetKind: 'source-actor',
+          effectId: 'skill-value:424262',
+          effectName: 'Synthetic Per-hit SP',
+          durationMs: null,
+          stackMode: 'refresh',
+          stackDelta: 1,
+          maxStacks: 1,
+          modifiers: [],
+          directSp: {
+            elementId: null,
+            value: 0.5,
+            enhanceable: false,
+            shareType: 0,
+            sourceSkillId: 424262,
+            sourceIdentity: 'fixture:skill:424262:value:0.5',
+          },
+          sourceIdentity: 'fixture:synthetic-landed-hit-sp',
+          applied: true,
+        },
+      ],
+    },
+  };
+}
+
 function createResolution({ controlSkillId, hits, effects = [] }) {
   return {
     ready: true,
@@ -753,6 +1071,38 @@ function createConditionedEffect(effectIdentity, condition) {
   };
 }
 
+function createLandedHitConditionedEffect(effectIdentity, condition) {
+  return {
+    effectIdentity,
+    elementId: 9110,
+    trigger: { startFrame: 5 },
+    landedHitActivationCondition: condition,
+    classification: 'applied',
+    applied: true,
+  };
+}
+
+function createLandedHitCondition(hitIdentity, elementId, hitIndex, frame) {
+  return {
+    kind: 'same-action-hit-landed',
+    hitIdentity,
+    elementId,
+    pathId: `synthetic-path-${hitIndex}`,
+    hitIndex,
+    triggerFrame: frame,
+    behaviorPathId: `synthetic-behavior-${hitIndex}`,
+    sourceIdentity: `fixture:${hitIdentity}:landed-condition`,
+    applied: true,
+  };
+}
+
+function createLandedHitBinding(hitIdentity, elementId, hitIndex, frame) {
+  return {
+    ...createLandedHitCondition(hitIdentity, elementId, hitIndex, frame),
+    status: 'verified-runtime-landed-hit-selector-ready',
+  };
+}
+
 function createHit(elementId, startFrame, conditionalGroupIdentity = null) {
   return {
     elementId,
@@ -763,11 +1113,30 @@ function createHit(elementId, startFrame, conditionalGroupIdentity = null) {
   };
 }
 
-function createAction(id, startMs) {
+function createVerifiedHit(hitIdentity, elementId, hitIndex, startFrame) {
+  return {
+    hitIdentity,
+    hitIndex,
+    elementId,
+    pathId: `synthetic-path-${hitIndex}`,
+    trigger: {
+      startFrame,
+      behaviorPathId: `synthetic-behavior-${hitIndex}`,
+    },
+  };
+}
+
+function createAction(id, startMs, sourceSequenceIndex = null) {
   return {
     id,
     name: id,
     startMs,
+    ...(sourceSequenceIndex == null
+      ? {}
+      : {
+          sourceSequenceIndex,
+          sourceSequencePath: [sourceSequenceIndex],
+        }),
     actorId: 'actor-1',
     actor: {
       id: 'actor-1',

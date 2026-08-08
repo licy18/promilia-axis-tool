@@ -127,8 +127,7 @@ describe('character combat production orchestration', () => {
 
     expect(mechanicsPackage.actionMappings[0]).toMatchObject({
       attackInputChainIdentity: 'fixture-default-two-inputs',
-      attackInputPhaseStatus:
-        'character-combat-default-attack-phase-applied',
+      attackInputPhaseStatus: 'character-combat-default-attack-phase-applied',
     });
     expect(
       mechanicsPackage.actionMappings[0].attackInputSegments.map(segment => [
@@ -224,6 +223,81 @@ describe('character combat production orchestration', () => {
     });
   });
 
+  it('accepts a runtime-effect-only public action form and rejects an unrelated binding', () => {
+    const createMechanicsPackage = () => ({
+      actionMappings: [
+        {
+          ownerId: 990001,
+          controlSkillId: 99000122,
+          actionKind: 'star-carry',
+          runtimeReady: false,
+        },
+      ],
+      controlBindings: [
+        {
+          controlSkillId: 99000122,
+          hits: [],
+          effects: [],
+        },
+      ],
+      actionVariantControlBindings: [],
+    });
+    const createCompilation = subSkillIndex => ({
+      ownerId: 990001,
+      contracts: {
+        attackInputChains: [],
+        runtimeEffectBindings: [
+          {
+            bindingIdentity: 'fixture-runtime-only-effect',
+            controlSkillId: 99000122,
+            subSkillIndex,
+            applied: true,
+          },
+        ],
+        publicActionForms: [
+          {
+            formIdentity: 'fixture-runtime-only-public-form',
+            publicControlSkillId: 99000122,
+            publicActionKind: 'star-carry',
+            executionControlSkillId: 99000122,
+            executionSubSkillIndex: 0,
+            selectionKind: 'single-control-verified-occupancy',
+            executionTiming: {
+              occupancy: {
+                durationFrames: 81,
+                status: 'applied',
+              },
+              animation: null,
+            },
+            sourceIdentity: 'fixture:runtime-only:occupancy',
+            applied: true,
+          },
+        ],
+      },
+    });
+    const mechanicsPackage = createMechanicsPackage();
+
+    applyCharacterCombatAttackInputPhaseMappings({
+      mechanicsPackage,
+      compilations: [createCompilation(0)],
+    });
+
+    expect(mechanicsPackage.actionMappings[0]).toMatchObject({
+      runtimeReady: true,
+      runtimeHitCount: 0,
+      runtimeEffectCount: 1,
+      actionScheduling: {
+        durationFrames: 81,
+      },
+    });
+    expect(() =>
+      applyCharacterCombatAttackInputPhaseMappings({
+        mechanicsPackage: createMechanicsPackage(),
+        compilations: [createCompilation(1)],
+      })
+    ).toThrow('character combat public execution form runtime missing');
+  });
+
   it('discovers and compiles two non-empty recipes through package, runtime, profile, and catalog', async () => {
     const recipeRoot = createTemporaryRoot();
     const ownerA = 101010;
@@ -285,10 +359,9 @@ describe('character combat production orchestration', () => {
         item => item.ownerId
       )
     ).toEqual([ownerA, ownerB]);
-    expect(build.pipelineArtifacts.profiles.map(item => item.owner.ownerId)).toEqual([
-      ownerA,
-      ownerB,
-    ]);
+    expect(
+      build.pipelineArtifacts.profiles.map(item => item.owner.ownerId)
+    ).toEqual([ownerA, ownerB]);
     expect(
       build.pipelineArtifacts.catalog.profiles.map(item => item.ownerId)
     ).toEqual([ownerA, ownerB]);
@@ -342,7 +415,11 @@ describe('character combat production orchestration', () => {
       generatedRoot,
       `${ownerId}-stale-owner-contract.json`
     );
-    fs.writeFileSync(staleContractPath, '{"contractHash":"tampered"}\n', 'utf8');
+    fs.writeFileSync(
+      staleContractPath,
+      '{"contractHash":"tampered"}\n',
+      'utf8'
+    );
     const second = await compile();
 
     expect(second.ownerCompilations[0].contractHash).toBe(

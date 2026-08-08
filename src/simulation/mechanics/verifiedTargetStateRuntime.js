@@ -8,8 +8,10 @@ import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { resolveControlledActorAt } from '../runtime/controlledActorTimeline';
 import {
   compareActionSourceSequence,
+  compareSourceSequencePaths,
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
+import { isActionFrameWithinContextualOccupancy } from './actionEffectiveTimeline';
 
 export const VERIFIED_TARGET_STATE_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedTargetStateRuntime';
@@ -21,24 +23,43 @@ export function applyVerifiedTargetStateRuntime({
   controlledActorTimeline = null,
 } = {}) {
   const graph = mechanicsPackage?.actionVariantGraph;
+  const relevantOwnerIds = collectRelevantRuntimeOwnerIds(scenario);
   const profiles = (graph?.targetStateProfiles ?? []).filter(
-    profile => profile.applied
+    profile =>
+      profile.applied &&
+      isRuntimeContractOwnerRelevant(profile, relevantOwnerIds)
   );
   const runtimeBindings = (graph?.runtimeEffectBindings ?? []).filter(
-    binding => binding.applied
+    binding =>
+      binding.applied &&
+      isRuntimeContractOwnerRelevant(binding, relevantOwnerIds)
   );
-  if (profiles.length === 0 && runtimeBindings.length === 0) {
+  const hasActionEffectActivationConditions = [
+    ...actionResolutionById.values(),
+  ].some(resolution =>
+    (resolution?.effects ?? []).some(
+      effect =>
+        effect.targetStateActivationCondition?.applied ||
+        effect.hitActivation?.applied ||
+        effect.landedHitActivationCondition?.applied
+    )
+  );
+  if (
+    profiles.length === 0 &&
+    runtimeBindings.length === 0 &&
+    !hasActionEffectActivationConditions
+  ) {
     return createEmptyResult(actionResolutionById);
   }
 
   const profileByIdentity = new Map(
     profiles.map(profile => [profile.stateIdentity, profile])
   );
-  const transactions = (graph.targetStateTransactions ?? []).filter(
+  const transactions = (graph?.targetStateTransactions ?? []).filter(
     transaction =>
       transaction.applied && profileByIdentity.has(transaction.stateIdentity)
   );
-  const groups = (graph.conditionalHitGroups ?? []).filter(
+  const groups = (graph?.conditionalHitGroups ?? []).filter(
     group => group.applied && profileByIdentity.has(group.stateIdentity)
   );
   const stateByIdentity = new Map(
@@ -60,6 +81,7 @@ export function applyVerifiedTargetStateRuntime({
   const groupResults = [];
   const actionEffectActivationResults = [];
   const periodicActivations = [];
+  const actionHitActivationResults = [];
   let eventSequence = 0;
 
   for (const [actionId, resolution] of actionResolutionById) {
@@ -74,7 +96,12 @@ export function applyVerifiedTargetStateRuntime({
       if (
         Number(transaction.controlSkillId) !== controlSkillId ||
         Number(transaction.subSkillIndex) !== subSkillIndex ||
-        !hasRequiredHit(resolution, transaction, action, scenario)
+        !hasRequiredHit(resolution, transaction, action, scenario) ||
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          transaction.triggerFrame,
+          transaction.frameRate
+        )
       ) {
         continue;
       }
@@ -94,7 +121,12 @@ export function applyVerifiedTargetStateRuntime({
     for (const group of groups) {
       if (
         Number(group.controlSkillId) !== controlSkillId ||
-        Number(group.subSkillIndex) !== subSkillIndex
+        Number(group.subSkillIndex) !== subSkillIndex ||
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          group.decisionFrame,
+          group.frameRate
+        )
       ) {
         continue;
       }
@@ -108,10 +140,10 @@ export function applyVerifiedTargetStateRuntime({
       });
     }
     for (const effect of resolution.effects ?? []) {
-      const condition = effect.targetStateActivationCondition;
+      const stateCondition = effect.targetStateActivationCondition;
       if (
-        condition?.applied &&
-        profileByIdentity.has(condition.stateIdentity)
+        stateCondition?.applied &&
+        profileByIdentity.has(stateCondition.stateIdentity)
       ) {
         pending.push({
           kind: 'action-effect-state-condition',
@@ -124,7 +156,7 @@ export function applyVerifiedTargetStateRuntime({
           action,
           resolution,
           effect,
-          condition,
+          condition: stateCondition,
         });
       }
       if (effect.hitActivation?.applied) {
@@ -142,11 +174,67 @@ export function applyVerifiedTargetStateRuntime({
           condition: effect.hitActivation,
         });
       }
+      const hitCondition = effect.landedHitActivationCondition;
+      if (hitCondition?.applied) {
+        pending.push({
+          kind: 'action-effect-landed-hit-condition',
+          timeMs: actionFrameToMs(
+            action,
+            hitCondition.triggerFrame,
+            resolution.controlBinding?.frameRate ?? 60
+          ),
+          priority: 51,
+          action,
+          resolution,
+          effect,
+          condition: hitCondition,
+        });
+      }
     }
     for (const [bindingSequenceIndex, binding] of runtimeBindings.entries()) {
       if (
         Number(binding.controlSkillId) !== controlSkillId ||
         Number(binding.subSkillIndex) !== subSkillIndex
+      ) {
+        continue;
+      }
+      if (binding.triggerKind === 'landed-hit') {
+        for (const hitBinding of binding.hitBindings ?? []) {
+          const hit = (resolution.hits ?? []).find(
+            candidate =>
+              String(candidate.hitIdentity) === String(hitBinding.hitIdentity)
+          );
+          if (!hit) continue;
+          pending.push({
+            kind: 'runtime-effect-landed-hit',
+            timeMs: actionFrameToMs(
+              action,
+              hitBinding.triggerFrame,
+              binding.frameRate
+            ),
+            priority: 200,
+            action,
+            resolution,
+            binding,
+            bindingSequenceIndex,
+            hit,
+            hitBinding,
+          });
+        }
+        continue;
+      }
+      if (
+        ![
+          'action-frame',
+          'action-frame-with-state',
+          'action-hit-landed',
+          'action-periodic',
+        ].includes(binding.triggerKind) ||
+        !isActionFrameWithinContextualOccupancy(
+          action,
+          binding.triggerFrame,
+          binding.frameRate
+        )
       ) {
         continue;
       }
@@ -189,7 +277,7 @@ export function applyVerifiedTargetStateRuntime({
             : binding.triggerKind === 'action-hit-landed' &&
                 landedHits.length === 0
               ? 'runtime-effect-hit-not-landed'
-            : 'runtime-effect',
+              : 'runtime-effect',
         timeMs: actionFrameToMs(
           action,
           binding.triggerFrame,
@@ -249,6 +337,17 @@ export function applyVerifiedTargetStateRuntime({
     if (descriptor.kind === 'action-effect-hit-condition') {
       actionEffectActivationResults.push(
         applyActionEffectHitActivationCondition({
+          descriptor,
+          scenario,
+          events,
+          nextSequence: () => eventSequence++,
+        })
+      );
+      continue;
+    }
+    if (descriptor.kind === 'action-effect-landed-hit-condition') {
+      actionHitActivationResults.push(
+        applyActionEffectLandedHitActivationCondition({
           descriptor,
           scenario,
           events,
@@ -353,6 +452,53 @@ export function applyVerifiedTargetStateRuntime({
       });
       continue;
     }
+    if (descriptor.kind === 'runtime-effect-landed-hit') {
+      const withinOccupancy = isActionFrameWithinContextualOccupancy(
+        descriptor.action,
+        descriptor.hitBinding.triggerFrame,
+        descriptor.binding.frameRate
+      );
+      const landed =
+        withinOccupancy &&
+        resolveActionHitWillHit(
+          descriptor.action,
+          descriptor.hitBinding.hitIdentity,
+          resolveScenarioDefaultWillHit(scenario)
+        );
+      if (!landed) {
+        events.push({
+          ...createActionSourceSequenceFields(descriptor.action),
+          type: 'VERIFIED_RUNTIME_EFFECT_LANDED_HIT_CONDITION_NOT_MET',
+          timeMs: descriptor.timeMs,
+          actionId: descriptor.action?.id ?? null,
+          actorId: descriptor.action?.actorId ?? null,
+          runtimeSequenceIndex: eventSequence++,
+          payload: {
+            bindingIdentity: descriptor.binding.bindingIdentity,
+            hitIdentity: descriptor.hitBinding.hitIdentity,
+            triggerFrame: descriptor.hitBinding.triggerFrame,
+            withinOccupancy,
+            landed: false,
+            applied: false,
+          },
+        });
+        continue;
+      }
+      emitRuntimeBinding({
+        binding: descriptor.binding,
+        action: descriptor.action,
+        resolution: descriptor.resolution,
+        timeMs: descriptor.timeMs,
+        scenario,
+        controlledActorTimeline,
+        mechanicsPackage,
+        effectCommands,
+        directSpEvents,
+        bindingSequenceIndex: descriptor.bindingSequenceIndex,
+        triggerHit: descriptor.hit,
+      });
+      continue;
+    }
     emitRuntimeBinding({
       binding: descriptor.binding,
       action: descriptor.action,
@@ -401,6 +547,15 @@ export function applyVerifiedTargetStateRuntime({
     }
     actionEffectActivationResultsByKey.get(key).push(result);
   }
+  const actionHitActivationResultByKey = new Map(
+    actionHitActivationResults.map(result => [
+      createActionEffectActivationResultKey(
+        result.actionId,
+        result.effectIdentity
+      ),
+      result,
+    ])
+  );
   for (const [actionId, resolution] of actionResolutionById) {
     const actionGroupResults = groupResults.filter(
       result => String(result.actionId) === String(actionId)
@@ -411,24 +566,28 @@ export function applyVerifiedTargetStateRuntime({
         appliedGroupKeys.has(`${actionId}|${hit.conditionalGroupIdentity}`)
     );
     const originalEffects = resolution?.effects ?? [];
-    const actionEffectResults = actionEffectActivationResults.filter(
-      result => String(result.actionId) === String(actionId)
-    );
+    const actionEffectResults = [
+      ...actionEffectActivationResults,
+      ...actionHitActivationResults,
+    ].filter(result => String(result.actionId) === String(actionId));
     const effects = originalEffects.flatMap(effect => {
-      const results = actionEffectActivationResultsByKey.get(
-        createActionEffectActivationResultKey(
-          actionId,
-          effect.effectIdentity
-        )
-      ) ?? [];
-      if (results.some(result => result.applied === false)) return [];
+      const results =
+        actionEffectActivationResultsByKey.get(
+          createActionEffectActivationResultKey(actionId, effect.effectIdentity)
+        ) ?? [];
+      const exactHitResult = actionHitActivationResultByKey.get(
+        createActionEffectActivationResultKey(actionId, effect.effectIdentity)
+      );
+      if (
+        results.some(result => result.applied === false) ||
+        exactHitResult?.applied === false
+      ) {
+        return [];
+      }
       const hitResult = results.find(
         result => result.conditionKind === 'landed-hit-cardinality'
       );
-      if (
-        hitResult?.adjustedStackDelta != null &&
-        effect.tuningMark?.applied
-      ) {
+      if (hitResult?.adjustedStackDelta != null && effect.tuningMark?.applied) {
         return [
           {
             ...effect,
@@ -467,6 +626,9 @@ export function applyVerifiedTargetStateRuntime({
       allEffects: originalEffects,
       suppressedEffects,
       actionEffectActivationResults: actionEffectResults,
+      actionHitActivationResults: actionHitActivationResults.filter(
+        result => String(result.actionId) === String(actionId)
+      ),
       conditionalHitGroupResults: actionGroupResults,
     });
   }
@@ -476,6 +638,10 @@ export function applyVerifiedTargetStateRuntime({
   directSpEvents.sort(
     (left, right) =>
       Number(left.timeMs) - Number(right.timeMs) ||
+      compareSourceSequencePaths(
+        left.sourceSequencePath,
+        right.sourceSequencePath
+      ) ||
       compareActionSourceSequence(left.action, right.action)
   );
   return {
@@ -489,6 +655,7 @@ export function applyVerifiedTargetStateRuntime({
     directSpEvents,
     groupResults,
     actionEffectActivationResults,
+    actionHitActivationResults,
     finalState: [...stateByIdentity.values()].map(state => ({
       stateIdentity: state.profile.stateIdentity,
       targetKind: state.profile.targetKind,
@@ -501,10 +668,17 @@ export function applyVerifiedTargetStateRuntime({
       eventCount: events.length,
       appliedGroupCount: groupResults.filter(result => result.applied).length,
       skippedGroupCount: groupResults.filter(result => !result.applied).length,
-      appliedActionEffectConditionCount:
-        actionEffectActivationResults.filter(result => result.applied).length,
+      appliedActionEffectConditionCount: actionEffectActivationResults.filter(
+        result => result.applied
+      ).length,
       suppressedActionEffectConditionCount:
         actionEffectActivationResults.filter(result => !result.applied).length,
+      appliedActionHitConditionCount: actionHitActivationResults.filter(
+        result => result.applied
+      ).length,
+      suppressedActionHitConditionCount: actionHitActivationResults.filter(
+        result => !result.applied
+      ).length,
       effectCommandCount: effectCommands.length,
       directSpEventCount: directSpEvents.length,
     },
@@ -525,6 +699,7 @@ function createEmptyResult(actionResolutionById) {
     directSpEvents: [],
     groupResults: [],
     actionEffectActivationResults: [],
+    actionHitActivationResults: [],
     finalState: [],
     summary: {
       profileCount: 0,
@@ -533,12 +708,43 @@ function createEmptyResult(actionResolutionById) {
       skippedGroupCount: 0,
       appliedActionEffectConditionCount: 0,
       suppressedActionEffectConditionCount: 0,
+      appliedActionHitConditionCount: 0,
+      suppressedActionHitConditionCount: 0,
       effectCommandCount: 0,
       directSpEventCount: 0,
     },
     ready: true,
     applied: true,
   };
+}
+
+function collectRelevantRuntimeOwnerIds(scenario) {
+  return new Set(
+    [
+      ...(scenario?.actors ?? []).flatMap(actor => [
+        actor?.characterId,
+        actor?.ownerId,
+      ]),
+      ...(scenario?.kibos ?? []).flatMap(kibo => [kibo?.kiboId, kibo?.ownerId]),
+      ...(scenario?.actions ?? []).flatMap(action => [
+        action?.actor?.characterId,
+        action?.actorCharacterId,
+        action?.ownerId,
+      ]),
+    ]
+      .map(Number)
+      .filter(value => Number.isInteger(value) && value > 0)
+  );
+}
+
+function isRuntimeContractOwnerRelevant(contract, relevantOwnerIds) {
+  if (contract?.runtimeOwnerScope !== 'scenario-roster') return true;
+  const normalizedOwnerId = Number(contract?.ownerId);
+  return (
+    !Number.isInteger(normalizedOwnerId) ||
+    relevantOwnerIds.size === 0 ||
+    relevantOwnerIds.has(normalizedOwnerId)
+  );
 }
 
 function hasRequiredHit(resolution, transaction, action, scenario) {
@@ -716,7 +922,10 @@ function applyActionEffectHitActivationCondition({
     ) {
       return false;
     }
-    if (condition.includeConditionalHits === false && hit.conditionalGroupIdentity) {
+    if (
+      condition.includeConditionalHits === false &&
+      hit.conditionalGroupIdentity
+    ) {
       return false;
     }
     if (
@@ -782,6 +991,77 @@ function applyActionEffectHitActivationCondition({
       reason,
       sourceIdentity: condition.sourceIdentity,
       applied,
+    },
+  });
+  return result;
+}
+
+function applyActionEffectLandedHitActivationCondition({
+  descriptor,
+  scenario,
+  events,
+  nextSequence,
+}) {
+  const condition = descriptor.condition;
+  const hit = (descriptor.resolution?.hits ?? []).find(
+    candidate => String(candidate.hitIdentity) === String(condition.hitIdentity)
+  );
+  const frameRate = Number(
+    descriptor.resolution?.controlBinding?.frameRate ?? 60
+  );
+  const withinOccupancy =
+    Boolean(hit) &&
+    isActionFrameWithinContextualOccupancy(
+      descriptor.action,
+      condition.triggerFrame,
+      frameRate
+    );
+  const landed =
+    withinOccupancy &&
+    resolveActionHitWillHit(
+      descriptor.action,
+      condition.hitIdentity,
+      resolveScenarioDefaultWillHit(scenario)
+    );
+  const reason = landed
+    ? 'same-action-hit-landed'
+    : withinOccupancy
+      ? 'same-action-hit-missed'
+      : 'same-action-hit-outside-effective-occupancy';
+  const result = {
+    actionId: descriptor.action.id,
+    effectIdentity: descriptor.effect.effectIdentity,
+    elementId: Number(descriptor.effect.elementId),
+    timeMs: descriptor.timeMs,
+    hitIdentity: condition.hitIdentity,
+    triggerFrame: condition.triggerFrame,
+    withinOccupancy,
+    landed,
+    condition,
+    reason,
+    sourceIdentity: condition.sourceIdentity,
+    status: landed
+      ? 'verified-action-effect-landed-hit-condition-applied'
+      : 'verified-action-effect-landed-hit-condition-suppressed',
+    applied: landed,
+  };
+  events.push({
+    ...createActionSourceSequenceFields(descriptor.action),
+    type: 'VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED',
+    timeMs: descriptor.timeMs,
+    actionId: descriptor.action.id,
+    actorId: descriptor.action.actorId ?? null,
+    runtimeSequenceIndex: nextSequence(),
+    payload: {
+      effectIdentity: descriptor.effect.effectIdentity,
+      elementId: Number(descriptor.effect.elementId),
+      hitIdentity: condition.hitIdentity,
+      triggerFrame: condition.triggerFrame,
+      withinOccupancy,
+      landed,
+      reason,
+      sourceIdentity: condition.sourceIdentity,
+      applied: landed,
     },
   });
   return result;
@@ -1085,7 +1365,10 @@ function emitRuntimeBinding({
   directSpEvents,
   bindingSequenceIndex,
   occurrenceIndex = 0,
+  triggerHit = null,
 }) {
+  const triggerIdentity =
+    triggerHit?.hitIdentity ?? `occurrence:${occurrenceIndex}`;
   const targets = resolveBindingTargets({
     binding,
     action,
@@ -1105,6 +1388,7 @@ function emitRuntimeBinding({
           bindingSequenceIndex,
           targetSequenceIndex,
           occurrenceIndex,
+          triggerHit,
         })
       );
     }
@@ -1113,7 +1397,7 @@ function emitRuntimeBinding({
   for (const target of targets) {
     effectCommands.push({
       ...createActionSourceSequenceFields(action),
-      id: `verified-runtime-effect|${action.id}|${binding.bindingIdentity}|occurrence:${occurrenceIndex}|${target.kind}:${target.id}`,
+      id: `verified-runtime-effect|${action.id}|${binding.bindingIdentity}|${triggerIdentity}|${target.kind}:${target.id}`,
       sourceActionId: action.id,
       sourceActionName: action.name,
       sourceActorId: action.actorId,
@@ -1151,20 +1435,31 @@ function emitRuntimeBinding({
       inheritType: binding.inheritance?.inheritType ?? null,
       inheritanceContainerElementId:
         binding.inheritance?.containerElementId ?? null,
-      inheritanceContainerPathId:
-        binding.inheritance?.containerPathId ?? null,
-      inheritanceSourceIdentity:
-        binding.inheritance?.sourceIdentity ?? null,
+      inheritanceContainerPathId: binding.inheritance?.containerPathId ?? null,
+      inheritanceSourceIdentity: binding.inheritance?.sourceIdentity ?? null,
       formulaSourceActorId: action.actorId,
       effectAdderActorId:
         binding.inheritance?.inheritType === 'self'
           ? String(target.id)
           : action.actorId,
-      modifiers: binding.modifiers.map(modifier => ({ ...modifier })),
+      modifiers: binding.modifiers.map(modifier =>
+        resolveRuntimeBindingModifier(modifier, action)
+      ),
       appliedToCalculators: true,
       generatedVerified: true,
     });
   }
+}
+
+function resolveRuntimeBindingModifier(modifier, action) {
+  const level = Math.max(1, Math.min(12, Number(action?.skillLevel) || 1));
+  const levelValue = Number(modifier?.valueRawByLevel?.[level]);
+  return {
+    ...modifier,
+    valueRaw: Number.isFinite(levelValue)
+      ? levelValue
+      : Number(modifier?.valueRaw),
+  };
 }
 
 function resolveBindingTargets({
@@ -1225,6 +1520,7 @@ function createDirectSpEvent({
   bindingSequenceIndex,
   targetSequenceIndex,
   occurrenceIndex = 0,
+  triggerHit = null,
 }) {
   const directSp = binding.directSp;
   const sourceSequencePath = createTargetStateDirectEffectSourceSequencePath({
@@ -1232,18 +1528,21 @@ function createDirectSpEvent({
     bindingSequenceIndex,
     targetSequenceIndex,
     occurrenceIndex,
+    hitIndex: triggerHit?.hitIndex ?? null,
   });
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-battle-direct-effect',
     status: 'verified-battle-direct-effect-ready',
-    eventIdentity: `direct-sp|${action.id}|${binding.bindingIdentity}|occurrence:${occurrenceIndex}|${target.kind}:${target.id}`,
+    eventIdentity: `direct-sp|${action.id}|${binding.bindingIdentity}|${triggerHit?.hitIdentity ?? `occurrence:${occurrenceIndex}`}|${target.kind}:${target.id}`,
     kind: 'direct-sp',
     timeMs,
     action,
     actionId: action.id,
     actorId: action.actorId,
     target,
+    triggerHitIdentity: triggerHit?.hitIdentity ?? null,
+    triggerHitIndex: triggerHit?.hitIndex ?? null,
     value: directSp.value,
     formulaResult: {
       family: 'verified-declarative-direct-sp',
@@ -1260,6 +1559,15 @@ function createDirectSpEvent({
         shareType: directSp.shareType,
         stopSharing: directSp.stopSharing === true,
       },
+      landedHitBinding:
+        triggerHit == null
+          ? null
+          : {
+              hitIdentity: triggerHit.hitIdentity,
+              hitIndex: triggerHit.hitIndex,
+              elementId: triggerHit.elementId,
+              triggerFrame: triggerHit.trigger?.startFrame ?? null,
+            },
     },
     resolution,
     sourceSequencePath,
@@ -1273,6 +1581,8 @@ function createDirectSpEvent({
       targetSequenceIndex,
       occurrenceIndex,
       bindingIdentity: binding.bindingIdentity,
+      triggerHitIdentity: triggerHit?.hitIdentity ?? null,
+      triggerHitIndex: triggerHit?.hitIndex ?? null,
     },
     sourceIdentity: binding.sourceIdentity,
     appliedToCalculators: Boolean(sourceSequencePath),
@@ -1285,11 +1595,13 @@ function createTargetStateDirectEffectSourceSequencePath({
   bindingSequenceIndex,
   targetSequenceIndex,
   occurrenceIndex = 0,
+  hitIndex = null,
 }) {
   const actionPath = getActionSourceSequencePath(action);
   const bindingIndex = Number(bindingSequenceIndex);
   const targetIndex = Number(targetSequenceIndex);
   const occurrence = Number(occurrenceIndex);
+  const resolvedHitIndex = hitIndex == null ? null : Number(hitIndex);
   if (
     !actionPath ||
     !Number.isInteger(bindingIndex) ||
@@ -1301,7 +1613,15 @@ function createTargetStateDirectEffectSourceSequencePath({
   ) {
     return null;
   }
-  return [...actionPath, 30, bindingIndex, occurrence, targetIndex];
+  if (
+    resolvedHitIndex != null &&
+    (!Number.isInteger(resolvedHitIndex) || resolvedHitIndex < 0)
+  ) {
+    return null;
+  }
+  return resolvedHitIndex == null
+    ? [...actionPath, 30, bindingIndex, occurrence, targetIndex]
+    : [...actionPath, resolvedHitIndex, 30, bindingIndex, targetIndex];
 }
 
 function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
@@ -1332,8 +1652,7 @@ function installPeriodicRuntimeDescriptors({ periodicActivations, pending }) {
         activation.binding.frameRate
       );
       for (
-        let occurrenceIndex = 0,
-          timeMs = firstTickTimeMs;
+        let occurrenceIndex = 0, timeMs = firstTickTimeMs;
         timeMs < effectiveEndMs;
         occurrenceIndex += 1, timeMs = roundValue(timeMs + periodic.intervalMs)
       ) {
@@ -1373,9 +1692,9 @@ function resolveRuntimeBindingLandedHits({
 
 function resolveScenarioDefaultWillHit(scenario) {
   return (
-    scenario?.combatScenario?.projectile?.defaultWillHit ??
-    scenario?.projectile?.defaultWillHit
-  ) !== false;
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false
+  );
 }
 
 function actionFrameToMs(action, frame, frameRate) {

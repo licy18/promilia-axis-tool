@@ -1,0 +1,1278 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-description-coverage",
+  "ownerId": 102001,
+  "policy": {
+    "descriptionIsDiscoveryAndCrossCheckOnly": true,
+    "descriptionNeverCreatesAppliedValues": true
+  },
+  "entries": [
+    {
+      "coverageIdentity": "actor:102001:skill:10200101:description:0:0",
+      "skillId": 10200101,
+      "skillName": "风翼枪术",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【普攻】进行至多五段的普通攻击，对敌方造成至多{0}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200101|0|10200103|normal-attack",
+        "hit:10200101|0|elements|0|4440419441106789472|6|1",
+        "hit:10200101|0|elements|3|-369431305194147167|11|2",
+        "hit:10200101|0|elements|3|-369431305194147167|16|3",
+        "hit:10200102|0|elements|0|7297906569544858235|11|2",
+        "hit:10200102|0|elements|0|7297906569544858235|15|3",
+        "hit:10200102|0|elements|0|7297906569544858235|8|1",
+        "hit:10200102|0|elements|3|6173262807410100647|24|4",
+        "hit:10200103|0|elements|0|-2043379081528650328|12|3",
+        "hit:10200103|0|elements|0|-2043379081528650328|16|4",
+        "hit:10200103|0|elements|0|-2043379081528650328|20|5",
+        "hit:10200103|0|elements|0|-2043379081528650328|4|1",
+        "hit:10200103|0|elements|0|-2043379081528650328|8|2",
+        "hit:10200103|0|elements|4|-663033376243657233|30|6",
+        "hit:10200104|0|elements|0|914458500054748921|13|1",
+        "hit:10200104|0|elements|3|-5167821627262400499|18|2",
+        "hit:10200104|0|elements|3|-5167821627262400499|23|3",
+        "hit:10200104|0|elements|3|-5167821627262400499|29|4",
+        "hit:10200104|0|elements|3|-5167821627262400499|34|5",
+        "hit:10200105|0|elements|0|-1417236436993196714|20|1",
+        "hit:10200105|0|elements|0|-1417236436993196714|28|3",
+        "hit:10200105|0|elements|0|-1417236436993196714|32|4",
+        "hit:10200105|0|elements|0|-1417236436993196714|36|5",
+        "hit:10200105|0|elements|6|-45565987477535368|24|2",
+        "lily-normal-five-inputs:segment:1",
+        "lily-normal-five-inputs:segment:2",
+        "lily-normal-five-inputs:segment:3",
+        "lily-normal-five-inputs:segment:4",
+        "lily-normal-five-inputs:segment:5",
+        "semantic-effect:10200105|0|-4529113272733101309|-4997239008310081901:20",
+        "semantic-effect:10200105|0|-8148787786042882084|-4997239008310081901:20",
+        "semantic-effect:10200105|0|1474042154774785480|-4997239008310081901:20",
+        "semantic-effect:10200105|0|1837964535882290130|-4997239008310081901:20",
+        "semantic-effect:10200105|0|7991633998808797407|-4997239008310081901:20"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200101|0|10200103|normal-attack",
+          "publicFormId": "lily-normal-five-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200101,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10200101|0|elements|0|4440419441106789472|6|1",
+            "hit:10200101|0|elements|3|-369431305194147167|11|2",
+            "hit:10200101|0|elements|3|-369431305194147167|16|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_2792792405275159127__2792792405275159127.json#behaviorlineControl[0].behaviorList[pathId=-7796386700476372393]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_-7796386700476372393__-7796386700476372393.json"
+        },
+        {
+          "actionIdentity": "actor|102001|10200101|0|10200103|normal-attack",
+          "publicFormId": "lily-normal-five-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200102,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:10200102|0|elements|0|7297906569544858235|11|2",
+            "hit:10200102|0|elements|0|7297906569544858235|15|3",
+            "hit:10200102|0|elements|0|7297906569544858235|8|1",
+            "hit:10200102|0|elements|3|6173262807410100647|24|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_-4233088112288081162__-4233088112288081162.json#behaviorlineControl[0].behaviorList[pathId=-8765836715921188106]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_-8765836715921188106__-8765836715921188106.json"
+        },
+        {
+          "actionIdentity": "actor|102001|10200101|0|10200103|normal-attack",
+          "publicFormId": "lily-normal-five-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200103,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:10200103|0|elements|0|-2043379081528650328|12|3",
+            "hit:10200103|0|elements|0|-2043379081528650328|16|4",
+            "hit:10200103|0|elements|0|-2043379081528650328|20|5",
+            "hit:10200103|0|elements|0|-2043379081528650328|4|1",
+            "hit:10200103|0|elements|0|-2043379081528650328|8|2",
+            "hit:10200103|0|elements|4|-663033376243657233|30|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_-7352852695859002345__-7352852695859002345.json#behaviorlineControl[0].behaviorList[pathId=6886500302036730903]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_6886500302036730903__6886500302036730903.json"
+        },
+        {
+          "actionIdentity": "actor|102001|10200101|0|10200103|normal-attack",
+          "publicFormId": "lily-normal-five-inputs:segment:4",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200104,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10200104|0|elements|0|914458500054748921|13|1",
+            "hit:10200104|0|elements|3|-5167821627262400499|18|2",
+            "hit:10200104|0|elements|3|-5167821627262400499|23|3",
+            "hit:10200104|0|elements|3|-5167821627262400499|29|4",
+            "hit:10200104|0|elements|3|-5167821627262400499|34|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_1286300476015793761__1286300476015793761.json#behaviorlineControl[0].behaviorList[pathId=4212556047487686241]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_4212556047487686241__4212556047487686241.json"
+        },
+        {
+          "actionIdentity": "actor|102001|10200101|0|10200103|normal-attack",
+          "publicFormId": "lily-normal-five-inputs:segment:5",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200105,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10200105|0|elements|0|-1417236436993196714|20|1",
+            "hit:10200105|0|elements|0|-1417236436993196714|28|3",
+            "hit:10200105|0|elements|0|-1417236436993196714|32|4",
+            "hit:10200105|0|elements|0|-1417236436993196714|36|5",
+            "hit:10200105|0|elements|6|-45565987477535368|24|2"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_-4795301347499260269__-4795301347499260269.json#behaviorlineControl[0].behaviorList[pathId=-4663582906126514541]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_-4663582906126514541__-4663582906126514541.json"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200101:description:0:1",
+      "skillId": 10200101,
+      "skillName": "风翼枪术",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "若处于精准防御后的霸体状态下，普攻最后一段命中后，获得1枚风属性调谐印记，且增加自身2点星决蓄能。",
+      "mechanicKinds": [
+        "action-form",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "lily-normal-five-inputs:segment:1",
+        "lily-normal-five-inputs:segment:2",
+        "lily-normal-five-inputs:segment:3",
+        "lily-normal-five-inputs:segment:4",
+        "lily-normal-five-inputs:segment:5",
+        "semantic-effect:10200105|0|-4529113272733101309|-4997239008310081901:20",
+        "semantic-effect:10200105|0|-8148787786042882084|-4997239008310081901:20",
+        "semantic-effect:10200105|0|1474042154774785480|-4997239008310081901:20",
+        "semantic-effect:10200105|0|1837964535882290130|-4997239008310081901:20",
+        "semantic-effect:10200105|0|7991633998808797407|-4997239008310081901:20",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200101:description:1:0",
+      "skillId": 10200101,
+      "skillName": "风翼枪术",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【重击】造成{1}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200101|1|10200110|charged-attack",
+        "actor|102001|10200101|1|10200110|charged-attack:default",
+        "hit:10200110|0|elements|2|-4490405702708115139|26|3",
+        "hit:10200110|0|elements|2|-4490405702708115139|30|4",
+        "hit:10200110|0|elements|2|-4490405702708115139|34|5",
+        "hit:10200110|0|elements|2|-4490405702708115139|5|1",
+        "hit:10200110|0|elements|4|8490251788084090943|22|2"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200101|1|10200110|charged-attack",
+          "publicFormId": "actor|102001|10200101|1|10200110|charged-attack:default",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200110,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10200110|0|elements|2|-4490405702708115139|26|3",
+            "hit:10200110|0|elements|2|-4490405702708115139|30|4",
+            "hit:10200110|0|elements|2|-4490405702708115139|34|5",
+            "hit:10200110|0|elements|2|-4490405702708115139|5|1",
+            "hit:10200110|0|elements|4|8490251788084090943|22|2"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=2]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200101:description:2:0",
+      "skillId": 10200101,
+      "skillName": "风翼枪术",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【闪击】造成{2}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200101|2|10200115|dodge-attack",
+        "actor|102001|10200101|2|10200115|dodge-attack:default",
+        "hit:10200115|0|elements|0|1251039096171794012|6|1"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200101|2|10200115|dodge-attack",
+          "publicFormId": "actor|102001|10200101|2|10200115|dodge-attack:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200115,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10200115|0|elements|0|1251039096171794012|6|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=204]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200101:description:3:0",
+      "skillId": 10200101,
+      "skillName": "风翼枪术",
+      "paragraphIndex": 3,
+      "clauseIndex": 0,
+      "text": "【跃击】造成{3}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200101|3|10200111|plunging-attack",
+        "actor|102001|10200101|3|10200111|plunging-attack:default",
+        "hit:10200111|0|elements|0|3063584347471985362|32|1",
+        "semantic-effect:10200111|0|2656940470186060328|-579672951247458919:31"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200101|3|10200111|plunging-attack",
+          "publicFormId": "actor|102001|10200101|3|10200111|plunging-attack:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 10200101,
+          "executionControlSkillId": 10200111,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10200111|0|elements|0|3063584347471985362|32|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=aerial,slot=301]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200112:description:0:0",
+      "skillId": 10200112,
+      "skillName": "不屈之心",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星鸣技】向敌方目标突进并造成{0}攻击力的风属性物理伤害，命中后增加自身4%攻击力（持续6秒）。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200112|0|10200112|star-skill",
+        "actor|102001|10200112|0|10200112|star-skill:default",
+        "hit:10200112|0|elements|4|1596977191652035373|32|1",
+        "hit:10200112|0|elements|4|1596977191652035373|37|2",
+        "hit:10200112|0|elements|4|1596977191652035373|42|3",
+        "hit:10200112|0|elements|4|1596977191652035373|48|4",
+        "hit:10200112|0|elements|8|609786774220013544|54|5",
+        "semantic-effect:10200112|0|-1376346479596612847|4184090208652367294:1",
+        "semantic-effect:10200112|0|-2035055823451510697|4184090208652367294:1",
+        "semantic-effect:10200112|0|1265593419004875038|-2647497593602370114:42",
+        "semantic-effect:10200112|0|1265593419004875038|-3535188980622617154:32",
+        "semantic-effect:10200112|0|1265593419004875038|-6626411584729639490:37",
+        "semantic-effect:10200112|0|1265593419004875038|-8795270998137760322:48",
+        "semantic-effect:10200112|0|1265593419004875038|7555307119572358590:54",
+        "semantic-effect:10200112|0|2293564681140075965|-2647497593602370114:42",
+        "semantic-effect:10200112|0|2293564681140075965|-3535188980622617154:32",
+        "semantic-effect:10200112|0|2293564681140075965|-6626411584729639490:37",
+        "semantic-effect:10200112|0|2293564681140075965|-8795270998137760322:48",
+        "semantic-effect:10200112|0|2293564681140075965|7555307119572358590:54",
+        "semantic-effect:10200112|0|3418108144318934934|4184090208652367294:1",
+        "semantic-effect:10200112|0|3453877457087294926|4184090208652367294:1"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200112|0|10200112|star-skill",
+          "publicFormId": "actor|102001|10200112|0|10200112|star-skill:default",
+          "actionKind": "star-skill",
+          "sourceSkillId": 10200112,
+          "executionControlSkillId": 10200112,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:10200112|0|elements|4|1596977191652035373|32|1",
+            "hit:10200112|0|elements|4|1596977191652035373|37|2",
+            "hit:10200112|0|elements|4|1596977191652035373|42|3",
+            "hit:10200112|0|elements|4|1596977191652035373|48|4",
+            "hit:10200112|0|elements|8|609786774220013544|54|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=3]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200112:description:0:1",
+      "skillId": 10200112,
+      "skillName": "不屈之心",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "星鸣技施放结束后，自身将附加「意志」状态（持续7秒），在此状态下即使被击中也会触发精准防御。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200112|0|10200112|star-skill:default",
+        "semantic-effect:10200112|0|-1376346479596612847|4184090208652367294:1",
+        "semantic-effect:10200112|0|-2035055823451510697|4184090208652367294:1",
+        "semantic-effect:10200112|0|1265593419004875038|-2647497593602370114:42",
+        "semantic-effect:10200112|0|1265593419004875038|-3535188980622617154:32",
+        "semantic-effect:10200112|0|1265593419004875038|-6626411584729639490:37",
+        "semantic-effect:10200112|0|1265593419004875038|-8795270998137760322:48",
+        "semantic-effect:10200112|0|1265593419004875038|7555307119572358590:54",
+        "semantic-effect:10200112|0|2293564681140075965|-2647497593602370114:42",
+        "semantic-effect:10200112|0|2293564681140075965|-3535188980622617154:32",
+        "semantic-effect:10200112|0|2293564681140075965|-6626411584729639490:37",
+        "semantic-effect:10200112|0|2293564681140075965|-8795270998137760322:48",
+        "semantic-effect:10200112|0|2293564681140075965|7555307119572358590:54",
+        "semantic-effect:10200112|0|3418108144318934934|4184090208652367294:1",
+        "semantic-effect:10200112|0|3453877457087294926|4184090208652367294:1"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200112:description:1:0",
+      "skillId": 10200112,
+      "skillName": "不屈之心",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【星结合击】造成{1}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200112|1|10200126|star-combo",
+        "actor|102001|10200112|1|10200126|star-combo:default",
+        "hit:10200126|0|elements|0|4694340540221271413|40|1"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200112|1|10200126|star-combo",
+          "publicFormId": "actor|102001|10200112|1|10200126|star-combo:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 10200112,
+          "executionControlSkillId": 10200126,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:10200126|0|elements|0|4694340540221271413|40|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=208]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200113:description:0:0",
+      "skillId": 10200113,
+      "skillName": "绝境高墙",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "对敌方发起连续攻击，造成{0}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200113|0|10200113|ultimate",
+        "actor|102001|10200113|0|10200113|ultimate:default",
+        "hit:10200113|0|elements|0|-5570588658121856648|150|1",
+        "hit:10200113|0|elements|0|-5570588658121856648|172|2",
+        "hit:10200113|0|elements|0|-5570588658121856648|182|3",
+        "hit:10200113|0|elements|0|-5570588658121856648|193|4",
+        "hit:10200113|0|elements|3|-8052801982576602540|206|5",
+        "hit:10200113|0|elements|6|8236903294079356132|211|6",
+        "hit:10200113|0|elements|6|8236903294079356132|216|7",
+        "hit:10200113|0|elements|6|8236903294079356132|220|8",
+        "hit:10200113|0|elements|6|8236903294079356132|226|9",
+        "hit:10200113|0|elements|6|8236903294079356132|230|10",
+        "hit:10200113|0|elements|6|8236903294079356132|236|11",
+        "hit:10200113|0|elements|6|8236903294079356132|241|12",
+        "semantic-effect:10200113|0|-1376346479596612847|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-2035055823451510697|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-4529113272733101309|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-4529113272733101309|1384799686497127083:216",
+        "semantic-effect:10200113|0|-4529113272733101309|5790785966890863275:211",
+        "semantic-effect:10200113|0|-8148787786042882084|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-8148787786042882084|1384799686497127083:216",
+        "semantic-effect:10200113|0|-8148787786042882084|5790785966890863275:211",
+        "semantic-effect:10200113|0|1318664144613157792|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1318664144613157792|1384799686497127083:216",
+        "semantic-effect:10200113|0|1318664144613157792|5790785966890863275:211",
+        "semantic-effect:10200113|0|1474042154774785480|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1474042154774785480|1384799686497127083:216",
+        "semantic-effect:10200113|0|1474042154774785480|5790785966890863275:211",
+        "semantic-effect:10200113|0|3418108144318934934|-9099779021348353365:243",
+        "semantic-effect:10200113|0|3453877457087294926|-9099779021348353365:243"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+          "publicFormId": "actor|102001|10200113|0|10200113|ultimate:default",
+          "actionKind": "ultimate",
+          "sourceSkillId": 10200113,
+          "executionControlSkillId": 10200113,
+          "executionSubSkillIndex": 0,
+          "hitCount": 12,
+          "settlementEvidence": [
+            "hit:10200113|0|elements|0|-5570588658121856648|150|1",
+            "hit:10200113|0|elements|0|-5570588658121856648|172|2",
+            "hit:10200113|0|elements|0|-5570588658121856648|182|3",
+            "hit:10200113|0|elements|0|-5570588658121856648|193|4",
+            "hit:10200113|0|elements|3|-8052801982576602540|206|5",
+            "hit:10200113|0|elements|6|8236903294079356132|211|6",
+            "hit:10200113|0|elements|6|8236903294079356132|216|7",
+            "hit:10200113|0|elements|6|8236903294079356132|220|8",
+            "hit:10200113|0|elements|6|8236903294079356132|226|9",
+            "hit:10200113|0|elements|6|8236903294079356132|230|10",
+            "hit:10200113|0|elements|6|8236903294079356132|236|11",
+            "hit:10200113|0|elements|6|8236903294079356132|241|12"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 12
+            },
+            "toughness": {
+              "applied": 12
+            },
+            "actorSp": {
+              "verified-zero": 12
+            },
+            "kiboSp": {
+              "verified-zero": 12
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200113:description:0:1",
+      "skillId": 10200113,
+      "skillName": "绝境高墙",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "挥出的风墙对敌方造成持续伤害，命中敌方后至多获得3枚风属性调谐印记。",
+      "mechanicKinds": [
+        "action-settlement",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200113|0|10200113|ultimate",
+        "actor|102001|10200113|0|10200113|ultimate:default",
+        "hit:10200113|0|elements|0|-5570588658121856648|150|1",
+        "hit:10200113|0|elements|0|-5570588658121856648|172|2",
+        "hit:10200113|0|elements|0|-5570588658121856648|182|3",
+        "hit:10200113|0|elements|0|-5570588658121856648|193|4",
+        "hit:10200113|0|elements|3|-8052801982576602540|206|5",
+        "hit:10200113|0|elements|6|8236903294079356132|211|6",
+        "hit:10200113|0|elements|6|8236903294079356132|216|7",
+        "hit:10200113|0|elements|6|8236903294079356132|220|8",
+        "hit:10200113|0|elements|6|8236903294079356132|226|9",
+        "hit:10200113|0|elements|6|8236903294079356132|230|10",
+        "hit:10200113|0|elements|6|8236903294079356132|236|11",
+        "hit:10200113|0|elements|6|8236903294079356132|241|12",
+        "semantic-effect:10200113|0|-1376346479596612847|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-2035055823451510697|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-4529113272733101309|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-4529113272733101309|1384799686497127083:216",
+        "semantic-effect:10200113|0|-4529113272733101309|5790785966890863275:211",
+        "semantic-effect:10200113|0|-8148787786042882084|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-8148787786042882084|1384799686497127083:216",
+        "semantic-effect:10200113|0|-8148787786042882084|5790785966890863275:211",
+        "semantic-effect:10200113|0|1318664144613157792|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1318664144613157792|1384799686497127083:216",
+        "semantic-effect:10200113|0|1318664144613157792|5790785966890863275:211",
+        "semantic-effect:10200113|0|1474042154774785480|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1474042154774785480|1384799686497127083:216",
+        "semantic-effect:10200113|0|1474042154774785480|5790785966890863275:211",
+        "semantic-effect:10200113|0|3418108144318934934|-9099779021348353365:243",
+        "semantic-effect:10200113|0|3453877457087294926|-9099779021348353365:243",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200113|0|10200113|ultimate",
+          "publicFormId": "actor|102001|10200113|0|10200113|ultimate:default",
+          "actionKind": "ultimate",
+          "sourceSkillId": 10200113,
+          "executionControlSkillId": 10200113,
+          "executionSubSkillIndex": 0,
+          "hitCount": 12,
+          "settlementEvidence": [
+            "hit:10200113|0|elements|0|-5570588658121856648|150|1",
+            "hit:10200113|0|elements|0|-5570588658121856648|172|2",
+            "hit:10200113|0|elements|0|-5570588658121856648|182|3",
+            "hit:10200113|0|elements|0|-5570588658121856648|193|4",
+            "hit:10200113|0|elements|3|-8052801982576602540|206|5",
+            "hit:10200113|0|elements|6|8236903294079356132|211|6",
+            "hit:10200113|0|elements|6|8236903294079356132|216|7",
+            "hit:10200113|0|elements|6|8236903294079356132|220|8",
+            "hit:10200113|0|elements|6|8236903294079356132|226|9",
+            "hit:10200113|0|elements|6|8236903294079356132|230|10",
+            "hit:10200113|0|elements|6|8236903294079356132|236|11",
+            "hit:10200113|0|elements|6|8236903294079356132|241|12"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 12
+            },
+            "toughness": {
+              "applied": 12
+            },
+            "actorSp": {
+              "verified-zero": 12
+            },
+            "kiboSp": {
+              "verified-zero": 12
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=4]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200113:description:0:2",
+      "skillId": 10200113,
+      "skillName": "绝境高墙",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "释放结束后，自身将附加「意志」状态，在此状态下即使被敌方命中也会触发精准防御的反击。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:10200113|0|-1376346479596612847|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-2035055823451510697|-9099779021348353365:243",
+        "semantic-effect:10200113|0|-4529113272733101309|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-4529113272733101309|1384799686497127083:216",
+        "semantic-effect:10200113|0|-4529113272733101309|5790785966890863275:211",
+        "semantic-effect:10200113|0|-8148787786042882084|-6639102421339288917:220",
+        "semantic-effect:10200113|0|-8148787786042882084|1384799686497127083:216",
+        "semantic-effect:10200113|0|-8148787786042882084|5790785966890863275:211",
+        "semantic-effect:10200113|0|1318664144613157792|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1318664144613157792|1384799686497127083:216",
+        "semantic-effect:10200113|0|1318664144613157792|5790785966890863275:211",
+        "semantic-effect:10200113|0|1474042154774785480|-6639102421339288917:220",
+        "semantic-effect:10200113|0|1474042154774785480|1384799686497127083:216",
+        "semantic-effect:10200113|0|1474042154774785480|5790785966890863275:211",
+        "semantic-effect:10200113|0|3418108144318934934|-9099779021348353365:243",
+        "semantic-effect:10200113|0|3453877457087294926|-9099779021348353365:243"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200122:description:0:0",
+      "skillId": 10200122,
+      "skillName": "骑士加护",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星携技】离场时触发",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [],
+      "publicFormSettlements": [],
+      "reasons": [
+        "description-executable-effect-not-linked-to-static-profile"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200122:description:0:1",
+      "skillId": 10200122,
+      "skillName": "骑士加护",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "给上场的队友附加「守护」状态（持续6秒），在该状态下，接下来受到的一次伤害将被削减{0}。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:102001:star-carry:lily-exit-star-carry",
+        "actor|102001|10200122|0|10200122|star-carry",
+        "actor|102001|10200122|1|10200125|limit-counter",
+        "actor|102001|10200122|1|10200125|limit-counter:default",
+        "actor|102001|10200122|2|10200127|perfect-parry",
+        "actor|102001|10200122|2|10200127|perfect-parry:default",
+        "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+        "hit:10200125|0|elements|3|-260743960222088104|25|2",
+        "hit:10200125|0|elements|6|8750564692029741003|29|3",
+        "semantic-effect:10200127|0|-2035055823451510697|-6288495101042901083:0",
+        "semantic-effect:10200127|0|3453877457087294926|-6288495101042901083:0",
+        "semantic-effect:10200127|0|8119560528469492373|-6288495101042901083:0"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200122|0|10200122|star-carry",
+          "publicFormId": "actor:102001:star-carry:lily-exit-star-carry",
+          "actionKind": "star-carry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200122,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "not-applicable": 1
+            },
+            "toughness": {
+              "not-applicable": 1
+            },
+            "actorSp": {
+              "not-applicable": 1
+            },
+            "kiboSp": {
+              "not-applicable": 1
+            }
+          },
+          "status": "not-applicable",
+          "reasons": [
+            "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+            "source-control-summons-guard-without-direct-hit"
+          ],
+          "sourceIdentity": "skill_control_10200122.asset#summonUnitId=480122@51F|battlefield_item[480122].skillList=48012201,48012202|Battle/Element/ast_480122002.asset->ast_480122004.asset"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|1|10200125|limit-counter",
+          "publicFormId": "actor|102001|10200122|1|10200125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+            "hit:10200125|0|elements|3|-260743960222088104|25|2",
+            "hit:10200125|0|elements|6|8750564692029741003|29|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=207]"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|2|10200127|perfect-parry",
+          "publicFormId": "actor|102001|10200122|2|10200127|perfect-parry:default",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200127,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=209]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing",
+        "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+        "source-control-summons-guard-without-direct-hit"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200122:description:1:0",
+      "skillId": 10200122,
+      "skillName": "骑士加护",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【极限反击】造成{1}攻击力的风属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|102001|10200122|1|10200125|limit-counter",
+        "actor|102001|10200122|1|10200125|limit-counter:default",
+        "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+        "hit:10200125|0|elements|3|-260743960222088104|25|2",
+        "hit:10200125|0|elements|6|8750564692029741003|29|3"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200122|1|10200125|limit-counter",
+          "publicFormId": "actor|102001|10200122|1|10200125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+            "hit:10200125|0|elements|3|-260743960222088104|25|2",
+            "hit:10200125|0|elements|6|8750564692029741003|29|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=207]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200122:description:2:0",
+      "skillId": 10200122,
+      "skillName": "骑士加护",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【精准防御】格挡敌方目标本次伤害，并且可以进行反击。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:102001:star-carry:lily-exit-star-carry",
+        "actor|102001|10200122|0|10200122|star-carry",
+        "actor|102001|10200122|1|10200125|limit-counter",
+        "actor|102001|10200122|1|10200125|limit-counter:default",
+        "actor|102001|10200122|2|10200127|perfect-parry",
+        "actor|102001|10200122|2|10200127|perfect-parry:default",
+        "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+        "hit:10200125|0|elements|3|-260743960222088104|25|2",
+        "hit:10200125|0|elements|6|8750564692029741003|29|3",
+        "semantic-effect:10200127|0|-2035055823451510697|-6288495101042901083:0",
+        "semantic-effect:10200127|0|3453877457087294926|-6288495101042901083:0",
+        "semantic-effect:10200127|0|8119560528469492373|-6288495101042901083:0"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200122|0|10200122|star-carry",
+          "publicFormId": "actor:102001:star-carry:lily-exit-star-carry",
+          "actionKind": "star-carry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200122,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "not-applicable": 1
+            },
+            "toughness": {
+              "not-applicable": 1
+            },
+            "actorSp": {
+              "not-applicable": 1
+            },
+            "kiboSp": {
+              "not-applicable": 1
+            }
+          },
+          "status": "not-applicable",
+          "reasons": [
+            "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+            "source-control-summons-guard-without-direct-hit"
+          ],
+          "sourceIdentity": "skill_control_10200122.asset#summonUnitId=480122@51F|battlefield_item[480122].skillList=48012201,48012202|Battle/Element/ast_480122002.asset->ast_480122004.asset"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|1|10200125|limit-counter",
+          "publicFormId": "actor|102001|10200122|1|10200125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+            "hit:10200125|0|elements|3|-260743960222088104|25|2",
+            "hit:10200125|0|elements|6|8750564692029741003|29|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=207]"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|2|10200127|perfect-parry",
+          "publicFormId": "actor|102001|10200122|2|10200127|perfect-parry:default",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200127,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=209]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing",
+        "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+        "source-control-summons-guard-without-direct-hit"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200122:description:2:1",
+      "skillId": 10200122,
+      "skillName": "骑士加护",
+      "paragraphIndex": 2,
+      "clauseIndex": 1,
+      "text": "命中后造成{2}攻击力的风属性物理伤害，格挡成功增加自身4%攻击力（持续6秒），同时自身获得霸体效果7秒。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:102001:star-carry:lily-exit-star-carry",
+        "actor|102001|10200122|0|10200122|star-carry",
+        "actor|102001|10200122|1|10200125|limit-counter",
+        "actor|102001|10200122|1|10200125|limit-counter:default",
+        "actor|102001|10200122|2|10200127|perfect-parry",
+        "actor|102001|10200122|2|10200127|perfect-parry:default",
+        "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+        "hit:10200125|0|elements|3|-260743960222088104|25|2",
+        "hit:10200125|0|elements|6|8750564692029741003|29|3",
+        "semantic-effect:10200127|0|-2035055823451510697|-6288495101042901083:0",
+        "semantic-effect:10200127|0|3453877457087294926|-6288495101042901083:0",
+        "semantic-effect:10200127|0|8119560528469492373|-6288495101042901083:0"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|102001|10200122|0|10200122|star-carry",
+          "publicFormId": "actor:102001:star-carry:lily-exit-star-carry",
+          "actionKind": "star-carry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200122,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "not-applicable": 1
+            },
+            "toughness": {
+              "not-applicable": 1
+            },
+            "actorSp": {
+              "not-applicable": 1
+            },
+            "kiboSp": {
+              "not-applicable": 1
+            }
+          },
+          "status": "not-applicable",
+          "reasons": [
+            "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+            "source-control-summons-guard-without-direct-hit"
+          ],
+          "sourceIdentity": "skill_control_10200122.asset#summonUnitId=480122@51F|battlefield_item[480122].skillList=48012201,48012202|Battle/Element/ast_480122002.asset->ast_480122004.asset"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|1|10200125|limit-counter",
+          "publicFormId": "actor|102001|10200122|1|10200125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:10200125|0|elements|0|-8699958861517660787|21|1",
+            "hit:10200125|0|elements|3|-260743960222088104|25|2",
+            "hit:10200125|0|elements|6|8750564692029741003|29|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=207]"
+        },
+        {
+          "actionIdentity": "actor|102001|10200122|2|10200127|perfect-parry",
+          "publicFormId": "actor|102001|10200122|2|10200127|perfect-parry:default",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 10200122,
+          "executionControlSkillId": 10200127,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=102001].skillSlots[group=ground,slot=209]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing",
+        "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement",
+        "source-control-summons-guard-without-direct-hit"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200161:description:0:0",
+      "skillId": 10200161,
+      "skillName": "精准命中",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "精准防御反击命中后，获得{0}枚风属性调谐印记。",
+      "mechanicKinds": [
+        "team-tuning-mark"
+      ],
+      "status": "not-applicable",
+      "coverageReferences": [
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [
+        "perfect-defense-counter-hit-required-not-applicable-in-m12c-zero-distance-passive-boss-v1"
+      ],
+      "sourceIdentity": "hero-module:102001#skill:10200161|skill_control_10200161.asset#element=102001131"
+    },
+    {
+      "coverageIdentity": "actor:102001:skill:10200162:description:0:0",
+      "skillId": 10200162,
+      "skillName": null,
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "星鸣技命中目标后，每下伤害再额外增加{0}点星决蓄能。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement",
+        "passive-listener"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:102001:passive:10200162",
+        "actor|102001|10200112|0|10200112|star-skill:default"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/102001.hero-module.local.json"
+    }
+  ],
+  "summary": {
+    "entryCount": 18,
+    "statusCounts": {
+      "applied": 13,
+      "not-applicable": 1,
+      "static-evidence-gap": 4
+    }
+  },
+  "profileHash": "7208fd9415c972b4fca66dac509bef7765b2b8b9c7057729a7edc70081969cf4"
+}

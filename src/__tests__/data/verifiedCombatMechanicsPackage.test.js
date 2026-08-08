@@ -1675,6 +1675,145 @@ describe('verified combat mechanics package', () => {
     );
   });
 
+  it('accepts only an exact declarative runtime binding as zero-hit action mechanics', () => {
+    const fixture = structuredClone(mechanicsPackage);
+    installVerifiedCombatMechanicsPackage(fixture);
+    const mapping = fixture.actionMappings.find(
+      candidate =>
+        candidate.ownerKind === 'actor' &&
+        candidate.actionKind === 'star-carry' &&
+        candidate.classification === 'applied' &&
+        candidate.selectedSubSkillIndex != null
+    );
+    expect(mapping).toBeTruthy();
+    const controlBinding = [
+      ...fixture.controlBindings,
+      ...fixture.actionVariantControlBindings,
+    ].find(candidate => candidate.controlSkillId === mapping.controlSkillId);
+    expect(controlBinding).toBeTruthy();
+    controlBinding.hits = [];
+    controlBinding.effects = [];
+    controlBinding.logic = {
+      ...(controlBinding.logic ?? {}),
+      spCost: 0,
+    };
+    mapping.selectedHitIdentities = [];
+    mapping.selectedEffectIdentities = [];
+    mapping.runtimeHitCount = 0;
+    mapping.runtimeEffectCount = 0;
+    fixture.specialResourceCatalog.operationBindings =
+      fixture.specialResourceCatalog.operationBindings.filter(
+        operation =>
+          !(
+            Number(operation.ownerId) === Number(mapping.ownerId) &&
+            Number(operation.controlSkillId) ===
+              Number(mapping.controlSkillId) &&
+            Number(operation.subSkillIndex) ===
+              Number(mapping.selectedSubSkillIndex)
+          )
+      );
+    const binding = {
+      ownerId: mapping.ownerId,
+      bindingIdentity: 'synthetic-zero-hit-runtime-effect',
+      triggerKind: 'action-frame',
+      controlSkillId: mapping.controlSkillId,
+      subSkillIndex: mapping.selectedSubSkillIndex,
+      triggerFrame: 1,
+      frameRate: 60,
+      targetKind: 'source-actor',
+      effectId: 'battle-element:990001',
+      durationMs: 1000,
+      modifiers: [],
+      directSp: null,
+      runtimeOwnerScope: 'scenario-roster',
+      applied: true,
+    };
+    fixture.actionVariantGraph.runtimeEffectBindings ??= [];
+    fixture.actionVariantGraph.runtimeEffectBindings.push(binding);
+    const action = {
+      id: 'synthetic-zero-hit-runtime-action',
+      type: 'skill',
+      skillId: mapping.sourceSkillId,
+      actionVariantIndex: mapping.actionVariantIndex,
+      actor: { characterId: mapping.ownerId },
+    };
+
+    expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+      status: 'verified-combat-action-mechanics-ready',
+      ready: true,
+      applied: true,
+      hits: [],
+      effects: [],
+      runtimeEffectBindingIdentities: ['synthetic-zero-hit-runtime-effect'],
+    });
+
+    binding.controlSkillId += 1;
+    expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+      status: 'verified-control-binding-missing',
+      ready: false,
+      applied: false,
+    });
+  });
+
+  it('validates switch-trigger summaries from their profiles instead of a frozen resolution count', () => {
+    const upgraded = structuredClone(mechanicsPackage);
+    const profiles = upgraded.switchTriggerCatalog.profiles;
+    const candidateIndex = profiles.findIndex(
+      profile => profile.applied !== true
+    );
+    expect(candidateIndex).toBeGreaterThanOrEqual(0);
+    profiles[candidateIndex] = {
+      ...profiles[candidateIndex],
+      starCarryActionIdentity: 'fixture:resolved-star-carry-action',
+      mechanicsClassification: 'applied',
+      mechanicsReasons: [],
+      resolutionStatus: 'applied',
+      reasons: [],
+      applied: true,
+    };
+    const appliedProfiles = profiles.filter(
+      profile => profile.applied === true
+    );
+    const unresolvedProfiles = profiles.filter(
+      profile => profile.applied !== true
+    );
+    const onEnterProfiles = profiles.filter(
+      profile => profile.triggerPhase === 'on-enter'
+    );
+    const onExitProfiles = profiles.filter(
+      profile => profile.triggerPhase === 'on-exit'
+    );
+    upgraded.switchTriggerCatalog.summary = {
+      ...upgraded.switchTriggerCatalog.summary,
+      profileCount: profiles.length,
+      appliedProfileCount: appliedProfiles.length,
+      unresolvedProfileCount: unresolvedProfiles.length,
+      onEnterProfileCount: onEnterProfiles.length,
+      onExitProfileCount: onExitProfiles.length,
+      appliedOnEnterProfileCount: onEnterProfiles.filter(
+        profile => profile.applied === true
+      ).length,
+      appliedOnExitProfileCount: onExitProfiles.filter(
+        profile => profile.applied === true
+      ).length,
+      switchTriggeredOnlyCount: profiles.filter(
+        profile => profile.manualReleaseStatus === 'switch-trigger-only'
+      ).length,
+    };
+
+    expect(validateVerifiedCombatMechanicsPackage(upgraded)).toMatchObject({
+      valid: true,
+      issues: [],
+    });
+
+    const inconsistent = structuredClone(upgraded);
+    inconsistent.switchTriggerCatalog.summary.appliedProfileCount -= 1;
+    expect(validateVerifiedCombatMechanicsPackage(inconsistent)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['switch-trigger-catalog-invalid']),
+    });
+  });
+
   it('loads the large catalog on demand and caches the installed package', async () => {
     let requestCount = 0;
     const fetchImpl = async () => {

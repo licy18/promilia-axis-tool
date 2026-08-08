@@ -358,7 +358,7 @@ const ACTOR_CONTROL_SLOT_BY_ACTION_KIND = Object.freeze({
   'perfect-parry': ['ground', 209],
 });
 const M9_PRODUCT_DENOMINATOR = Object.freeze({
-  publicActionCount: 645,
+  publicSourceActionCount: 644,
   actorOwnerCount: 20,
   kiboOwnerCount: 122,
 });
@@ -8763,6 +8763,9 @@ function createPackage({
     const mechanicsMapping = createActionMapping(candidate, control, {
       defaultSelection,
       resourceTransactions: specialResourceCatalog.operationBindings,
+      runtimeEffectBindings:
+        characterCombatCompilationByOwnerId.get(Number(candidate.ownerId))
+          ?.contracts?.runtimeEffectBindings ?? [],
       variantModelStatus: classifyActionVariantModelStatus({
         graph: actionVariantGraph,
         ownerId: candidate.ownerId,
@@ -9278,8 +9281,7 @@ function createControlRuntimeHits(control) {
           null,
         runtimeCondition:
           element.trigger?.runtimeCondition ?? element.runtimeCondition ?? null,
-        sourceBindingIdentity:
-          element.trigger?.sourceBindingIdentity ?? null,
+        sourceBindingIdentity: element.trigger?.sourceBindingIdentity ?? null,
         hitActivation: element.trigger?.hitActivation ?? null,
         hitIndex,
         hitIdentity,
@@ -10222,13 +10224,34 @@ function createPublicActionTimingContract({
   const selected = variantTimings.find(
     timing => timing.subSkillIndex === mapping.selectedSubSkillIndex
   );
+  const declaredForm = ownerCompilation?.contracts?.publicActionForms?.find(
+    form =>
+      form.applied === true &&
+      form.publicActionKind === candidate.actionKind &&
+      Number(form.publicControlSkillId) === Number(candidate.sourceSkillId) &&
+      Number(form.executionControlSkillId) ===
+        Number(candidate.controlSkillId) &&
+      Number(form.executionSubSkillIndex) ===
+        Number(mapping.selectedSubSkillIndex) &&
+      form.executionTiming?.occupancy?.status === 'applied'
+  );
   if (selected) {
+    const usesDeclaredOccupancy =
+      selected.occupancy.status !== 'applied' && Boolean(declaredForm);
+    const selectedTiming = !usesDeclaredOccupancy
+      ? selected
+      : {
+          ...selected,
+          occupancy: declaredForm.executionTiming.occupancy,
+        };
     return createSelectedActionTimingContract({
       actionKind: candidate.actionKind,
       control,
-      selected,
+      selected: selectedTiming,
       variantTimings,
-      sourceKind: 'selected-skill-control-player-variant',
+      sourceKind: usesDeclaredOccupancy
+        ? 'declared-public-action-form-occupancy'
+        : 'selected-skill-control-player-variant',
     });
   }
   const appliedVariants = variantTimings.filter(
@@ -11214,6 +11237,7 @@ function createActionMapping(
   {
     defaultSelection = null,
     resourceTransactions = [],
+    runtimeEffectBindings = [],
     variantModelStatus = 'resolved',
     variantConditionDiscovery = null,
   } = {}
@@ -11315,6 +11339,13 @@ function createActionMapping(
       Number(transaction.controlSkillId) === Number(candidate.controlSkillId) &&
       Number(transaction.subSkillIndex) === Number(selectedSubSkillIndex)
   );
+  const appliedRuntimeEffectBindings = runtimeEffectBindings.filter(
+    binding =>
+      binding.applied === true &&
+      Number(binding.ownerId) === Number(candidate.ownerId) &&
+      Number(binding.controlSkillId) === Number(candidate.controlSkillId) &&
+      Number(binding.subSkillIndex) === Number(selectedSubSkillIndex)
+  );
   const spCost = finiteNumberOrNull(control.logic?.spCost);
   const hasAppliedCost = spCost != null && spCost > 0;
   const hasAppliedResourceTransaction = appliedResourceTransactions.length > 0;
@@ -11335,6 +11366,7 @@ function createActionMapping(
     runtimeHits.length > 0 ||
     hasAppliedCost ||
     hasAppliedResourceTransaction ||
+    appliedRuntimeEffectBindings.length > 0 ||
     appliedEffects.length > 0
       ? 'applied'
       : allRelevantZero && spCost === 0
@@ -11344,6 +11376,7 @@ function createActionMapping(
     sourceRuntimeHits.length > 0 ||
     hasAppliedCost ||
     hasAppliedResourceTransaction ||
+    appliedRuntimeEffectBindings.length > 0 ||
     appliedEffects.length > 0
       ? 'applied'
       : allRelevantZero && spCost === 0
@@ -11372,16 +11405,20 @@ function createActionMapping(
     linked: true,
     runtimeReady: classification === 'applied',
     runtimeHitCount: runtimeHits.length,
-    runtimeEffectCount: appliedEffects.length,
+    runtimeEffectCount:
+      appliedEffects.length + appliedRuntimeEffectBindings.length,
     runtimeResourceTransactionCount: appliedResourceTransactions.length,
     selectedResourceTransactionIdentities: appliedResourceTransactions.map(
       transaction => transaction.operationIdentity
     ),
     selectedElementCount: selectedElements.length,
     selectedHitIdentities: runtimeHits.map(hit => hit.hitIdentity),
-    selectedEffectIdentities: runtimeEffects.map(
-      effect => effect.effectIdentity
-    ),
+    selectedEffectIdentities: [
+      ...runtimeEffects.map(effect => effect.effectIdentity),
+      ...appliedRuntimeEffectBindings.map(
+        binding => `runtime-effect:${binding.bindingIdentity}`
+      ),
+    ],
     classification,
     sourceEvidenceStatus:
       sourceClassification === 'applied'
@@ -13978,6 +14015,13 @@ function createPublicRuntimeCoverageReport({
   characterCombatArtifacts,
   kiboCatalog,
 }) {
+  const recipeDeclaredPublicActionCount = packageValue.actionMappings.filter(
+    mapping =>
+      mapping.bindingKind === 'character-combat-recipe-public-action-control'
+  ).length;
+  const expectedPublicActionCount =
+    M9_PRODUCT_DENOMINATOR.publicSourceActionCount +
+    recipeDeclaredPublicActionCount;
   const timingByAction = new Map(
     timingCoverage.actions.map(action => [action.identity, action])
   );
@@ -14224,8 +14268,7 @@ function createPublicRuntimeCoverageReport({
         left.actionKind.localeCompare(right.actionKind)
     );
   const gateChecks = {
-    publicActionDenominator:
-      actions.length === M9_PRODUCT_DENOMINATOR.publicActionCount,
+    publicActionDenominator: actions.length === expectedPublicActionCount,
     actorOwnerDenominator:
       actorOwnerCount === M9_PRODUCT_DENOMINATOR.actorOwnerCount,
     kiboOwnerDenominator:
@@ -14275,7 +14318,7 @@ function createPublicRuntimeCoverageReport({
         .filter(([, passed]) => !passed)
         .map(([name]) => name)
         .join(', ')} [actions=${actions.length}/expected=${
-        M9_PRODUCT_DENOMINATOR.publicActionCount
+        expectedPublicActionCount
       }, actorOwners=${actorOwnerCount}, kiboOwners=${
         kiboActionsByOwner.size
       }/${M9_PRODUCT_DENOMINATOR.kiboOwnerCount}, kiboKinds=${
@@ -14300,7 +14343,11 @@ function createPublicRuntimeCoverageReport({
     status: 'verified-public-runtime-coverage-ready',
     packageId: packageValue.packageId,
     packageHash: packageValue.packageHash,
-    fixedProductDenominator: M9_PRODUCT_DENOMINATOR,
+    fixedProductDenominator: {
+      ...M9_PRODUCT_DENOMINATOR,
+      recipeDeclaredPublicActionCount,
+      publicActionCount: expectedPublicActionCount,
+    },
     complete: gatePassed,
     gate: { passed: gatePassed, checks: gateChecks },
     summary: {

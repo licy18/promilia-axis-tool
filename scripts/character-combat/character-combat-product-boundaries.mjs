@@ -279,8 +279,8 @@ export function assertUnnamedSecondaryPassiveRuntimeIsolation({
         );
       }
     }
-    for (const transaction of compilation.contracts
-      ?.targetStateTransactions ?? []) {
+    for (const transaction of compilation.contracts?.targetStateTransactions ??
+      []) {
       if (excludedSkillIds.has(Number(transaction.passiveSkillId))) {
         violations.push(
           `compiled-transaction:${compilation.ownerId}/${transaction.transactionIdentity}`

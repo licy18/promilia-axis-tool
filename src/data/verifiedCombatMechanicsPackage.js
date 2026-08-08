@@ -295,6 +295,10 @@ export function resolveVerifiedCombatActionMechanics(
   const actionBinding = dynamicBinding.binding;
   const hasAppliedSpecialResourceOperation =
     hasVerifiedSpecialResourceOperation(actionBinding);
+  const appliedRuntimeEffectBindings =
+    getVerifiedRuntimeEffectBindings(actionBinding);
+  const hasAppliedRuntimeEffectBinding =
+    appliedRuntimeEffectBindings.length > 0;
   if (actionBinding?.classification !== 'applied') {
     const partialControlBinding = controlBindingBySkillId.get(
       actionBinding?.controlSkillId
@@ -302,12 +306,15 @@ export function resolveVerifiedCombatActionMechanics(
     if (
       actionBinding?.selectedSubSkillIndex != null &&
       (Number(partialControlBinding?.logic?.spCost) > 0 ||
-        hasAppliedSpecialResourceOperation)
+        hasAppliedSpecialResourceOperation ||
+        hasAppliedRuntimeEffectBinding)
     ) {
       return {
         schemaVersion: 1,
         sourceKind: 'azpr-verified-combat-action-mechanics-resolution',
-        status: 'verified-combat-action-mechanics-resource-only',
+        status: hasAppliedRuntimeEffectBinding
+          ? 'verified-combat-action-mechanics-declarative-runtime-only'
+          : 'verified-combat-action-mechanics-resource-only',
         packageId: installedPackage.packageId,
         packageHash: installedPackage.packageHash,
         owner,
@@ -317,6 +324,9 @@ export function resolveVerifiedCombatActionMechanics(
         hits: [],
         effects: resolveSelectedEffects(actionBinding, partialControlBinding),
         semanticEffects: resolveSelectedSemanticEffects(actionBinding),
+        runtimeEffectBindingIdentities: appliedRuntimeEffectBindings.map(
+          binding => binding.bindingIdentity
+        ),
         reasons: actionBinding.reasons ?? [],
         complete: false,
         ready: true,
@@ -407,7 +417,8 @@ export function resolveVerifiedCombatActionMechanics(
     (!allHits.length &&
       !hasAppliedCost &&
       !hasAppliedEffect &&
-      !hasAppliedSpecialResourceOperation)
+      !hasAppliedSpecialResourceOperation &&
+      !hasAppliedRuntimeEffectBinding)
   ) {
     return createUnresolvedActionMechanics(
       action,
@@ -433,6 +444,9 @@ export function resolveVerifiedCombatActionMechanics(
     hitActivationEvaluations,
     effects,
     semanticEffects,
+    runtimeEffectBindingIdentities: appliedRuntimeEffectBindings.map(
+      binding => binding.bindingIdentity
+    ),
     complete: true,
     effectCoverageComplete: actionBinding.complete !== false,
     reasons: actionBinding.reasons ?? [],
@@ -579,6 +593,28 @@ function hasVerifiedSpecialResourceOperation(actionBinding) {
         Number(operation.subSkillIndex) ===
           Number(actionBinding?.selectedSubSkillIndex)
     ) ?? false
+  );
+}
+
+function getVerifiedRuntimeEffectBindings(actionBinding) {
+  const ownerId = Number(actionBinding?.ownerId);
+  const controlSkillId = Number(actionBinding?.controlSkillId);
+  const subSkillIndex = Number(actionBinding?.selectedSubSkillIndex);
+  if (
+    !Number.isInteger(ownerId) ||
+    !Number.isInteger(controlSkillId) ||
+    !Number.isInteger(subSkillIndex)
+  ) {
+    return [];
+  }
+  return (
+    installedPackage?.actionVariantGraph?.runtimeEffectBindings ?? []
+  ).filter(
+    binding =>
+      binding.applied === true &&
+      Number(binding.ownerId) === ownerId &&
+      Number(binding.controlSkillId) === controlSkillId &&
+      Number(binding.subSkillIndex) === subSkillIndex
   );
 }
 
@@ -1012,28 +1048,7 @@ export function validateVerifiedCombatMechanicsPackage(value) {
   ) {
     issues.push('action-variant-graph-invalid');
   }
-  if (
-    value?.switchTriggerCatalog?.status !==
-      'verified-switch-trigger-catalog-ready' ||
-    !Array.isArray(value.switchTriggerCatalog.profiles) ||
-    value.switchTriggerCatalog.profiles.length !== 20 ||
-    value.switchTriggerCatalog.summary?.profileCount !== 20 ||
-    value.switchTriggerCatalog.summary?.appliedProfileCount !== 17 ||
-    value.switchTriggerCatalog.summary?.unresolvedProfileCount !== 3 ||
-    value.switchTriggerCatalog.summary?.onEnterProfileCount !== 11 ||
-    value.switchTriggerCatalog.summary?.onExitProfileCount !== 9 ||
-    value.switchTriggerCatalog.profiles.some(
-      profile =>
-        !['on-enter', 'on-exit'].includes(profile.triggerPhase) ||
-        ![201, 203].includes(Number(profile.skillSlot)) ||
-        !profile.sourceIdentity ||
-        !Array.isArray(profile.sourceIdentities) ||
-        profile.sourceIdentities.length < 3 ||
-        (profile.applied === true && !profile.starCarryActionIdentity) ||
-        (profile.applied !== true &&
-          profile.resolutionStatus !== 'static-evidence-gap')
-    )
-  ) {
+  if (!hasValidSwitchTriggerCatalog(value?.switchTriggerCatalog)) {
     issues.push('switch-trigger-catalog-invalid');
   }
   if (
@@ -1156,6 +1171,55 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       : 'verified-combat-mechanics-package-valid',
     issues,
   };
+}
+
+function hasValidSwitchTriggerCatalog(catalog) {
+  if (
+    catalog?.status !== 'verified-switch-trigger-catalog-ready' ||
+    !Array.isArray(catalog.profiles) ||
+    catalog.profiles.length !== 20
+  ) {
+    return false;
+  }
+  const profiles = catalog.profiles;
+  const appliedProfiles = profiles.filter(profile => profile.applied === true);
+  const unresolvedProfiles = profiles.filter(
+    profile => profile.applied !== true
+  );
+  const onEnterProfiles = profiles.filter(
+    profile => profile.triggerPhase === 'on-enter'
+  );
+  const onExitProfiles = profiles.filter(
+    profile => profile.triggerPhase === 'on-exit'
+  );
+  const summary = catalog.summary ?? {};
+  return (
+    summary.profileCount === profiles.length &&
+    summary.appliedProfileCount === appliedProfiles.length &&
+    summary.unresolvedProfileCount === unresolvedProfiles.length &&
+    summary.onEnterProfileCount === onEnterProfiles.length &&
+    summary.onExitProfileCount === onExitProfiles.length &&
+    summary.appliedOnEnterProfileCount ===
+      onEnterProfiles.filter(profile => profile.applied === true).length &&
+    summary.appliedOnExitProfileCount ===
+      onExitProfiles.filter(profile => profile.applied === true).length &&
+    summary.switchTriggeredOnlyCount ===
+      profiles.filter(
+        profile => profile.manualReleaseStatus === 'switch-trigger-only'
+      ).length &&
+    profiles.every(
+      profile =>
+        ['on-enter', 'on-exit'].includes(profile.triggerPhase) &&
+        [201, 203].includes(Number(profile.skillSlot)) &&
+        Boolean(profile.sourceIdentity) &&
+        Array.isArray(profile.sourceIdentities) &&
+        profile.sourceIdentities.length >= 3 &&
+        (profile.applied === true
+          ? Boolean(profile.starCarryActionIdentity) &&
+            profile.resolutionStatus === 'applied'
+          : profile.resolutionStatus === 'static-evidence-gap')
+    )
+  );
 }
 
 function hasSafePublishedSourceDisplayLabels(value) {

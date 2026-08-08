@@ -1,0 +1,751 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 102001,
+  "targetPipelineMaturity": "profile-compiled",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [],
+      "requiredActionEffectBindingIdentities": [
+        "lily-star-hit-1-attack-buff",
+        "lily-star-hit-2-attack-buff",
+        "lily-star-hit-3-attack-buff",
+        "lily-star-hit-4-attack-buff",
+        "lily-star-hit-5-attack-buff",
+        "lily-ultimate-wind-mark-1",
+        "lily-ultimate-wind-mark-2",
+        "lily-ultimate-wind-mark-3"
+      ],
+      "requiredPassiveIdentities": ["actor:102001:passive:10200162"]
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 102001,
+    "normalAttackSkillId": 10200101,
+    "reloadControlSkillId": 10200110,
+    "starSkillControlSkillId": 10200112,
+    "ultimateControlSkillId": 10200113,
+    "starCarryControlSkillId": 10200122,
+    "limitCounterControlSkillId": 10200125,
+    "perfectParryControlSkillId": 10200127,
+    "passiveSkillIds": [10200161, 10200162]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:102001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      10200101, 10200102, 10200103, 10200104, 10200105, 10200110, 10200111,
+      10200112, 10200113, 10200114, 10200115, 10200116, 10200117, 10200121,
+      10200122, 10200124, 10200125, 10200126, 10200127, 10200130, 10200131,
+      10200141, 10200142, 10200149, 10200160, 10200161, 10200162, 48012201,
+      48012202
+    ],
+    "contextInputEdges": [],
+    "publicActionDeclarations": [
+      {
+        "sourceSkillId": 10200122,
+        "actionVariantIndex": 0,
+        "actionKind": "star-carry",
+        "controlSkillId": 10200122,
+        "catalogLabel": "离场星携",
+        "actionVariantLabel": "星携技",
+        "sourceStatus": "verified-static-evidence",
+        "sourceIdentity": "characters.items[id=102001].skillSlots[slot=201,skillId=10200122]|skill_control_10200122.asset#summonUnitId=480122@51F"
+      }
+    ],
+    "publicActionForms": [
+      {
+        "publicActionKind": "star-carry",
+        "publicControlSkillId": 10200122,
+        "executionControlSkillId": 10200122,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "lily-exit-star-carry",
+        "semanticName": "离场星携",
+        "selectionKind": "single-control-verified-occupancy",
+        "executionOccupancy": {
+          "durationFrames": 81,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-animation-occupancy",
+          "sourceIdentity": "skill_control_10200122.asset#skillPlayers[0].frameCountDict[key=0]=81"
+        },
+        "condition": {
+          "kind": "always"
+        }
+      }
+    ],
+    "attackInputChains": [
+      {
+        "chainIdentity": "lily-normal-five-inputs",
+        "sourceSkillId": 10200101,
+        "semanticNamePrefix": "普通攻击",
+        "segmentLabelPrefix": "A",
+        "entryPolicy": {
+          "kind": "default",
+          "sourceIdentity": "NewTable/skill.rows[id=10200101]#普通攻击五次输入"
+        },
+        "condition": {
+          "kind": "always"
+        },
+        "segments": [
+          {
+            "controlSkillId": 10200101,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10200102
+          },
+          {
+            "controlSkillId": 10200102,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10200103
+          },
+          {
+            "controlSkillId": 10200103,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10200104
+          },
+          {
+            "controlSkillId": 10200104,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 10200105
+          },
+          {
+            "controlSkillId": 10200105,
+            "subSkillIndex": 0
+          }
+        ]
+      }
+    ],
+    "variantWindowBindings": [],
+    "targetStateProfiles": [
+      {
+        "stateIdentity": "lily-will",
+        "name": "意志",
+        "targetKind": "self",
+        "elementId": 102001135,
+        "capacityElementId": 102001135,
+        "runtimeOwnerScope": "scenario-roster",
+        "expectedDurationMs": 7000,
+        "expectedMaxStacks": 1,
+        "atCapacityPolicy": "refresh-oldest",
+        "sourceIdentity": "Battle/Element/ast_102001135.asset#time=7000;combineNumber=1|hero-module:102001#skills:10200112,10200113"
+      }
+    ],
+    "targetStateTransactions": [
+      {
+        "transactionIdentity": "lily-will-star-skill",
+        "stateIdentity": "lily-will",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "triggerFrame": 1,
+        "amount": 1,
+        "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_4184090208652367294__4184090208652367294.json#elementConfigId=102001135@1F"
+      },
+      {
+        "transactionIdentity": "lily-will-ultimate",
+        "stateIdentity": "lily-will",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "triggerFrame": 243,
+        "amount": 1,
+        "sourceIdentity": "skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_-9099779021348353365__-9099779021348353365.json#elementConfigId=102001135@243F"
+      }
+    ],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "lily-star-hit-1-attack-buff",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001137,
+        "triggerFrame": 32,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001043,
+          "pathId": "1596977191652035373",
+          "triggerFrame": 32,
+          "behaviorPathId": "-3535188980622617154",
+          "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-3535188980622617154__-3535188980622617154.json#elementBaseDatas+toOwnElementBaseDatas@32F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;value=400;time=6000"
+      },
+      {
+        "bindingIdentity": "lily-star-hit-2-attack-buff",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001137,
+        "triggerFrame": 37,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001043,
+          "pathId": "1596977191652035373",
+          "triggerFrame": 37,
+          "behaviorPathId": "-6626411584729639490",
+          "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-6626411584729639490__-6626411584729639490.json#elementBaseDatas+toOwnElementBaseDatas@37F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;value=400;time=6000"
+      },
+      {
+        "bindingIdentity": "lily-star-hit-3-attack-buff",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001137,
+        "triggerFrame": 42,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001043,
+          "pathId": "1596977191652035373",
+          "triggerFrame": 42,
+          "behaviorPathId": "-2647497593602370114",
+          "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-2647497593602370114__-2647497593602370114.json#elementBaseDatas+toOwnElementBaseDatas@42F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;value=400;time=6000"
+      },
+      {
+        "bindingIdentity": "lily-star-hit-4-attack-buff",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001137,
+        "triggerFrame": 48,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001043,
+          "pathId": "1596977191652035373",
+          "triggerFrame": 48,
+          "behaviorPathId": "-8795270998137760322",
+          "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-8795270998137760322__-8795270998137760322.json#elementBaseDatas+toOwnElementBaseDatas@48F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;value=400;time=6000"
+      },
+      {
+        "bindingIdentity": "lily-star-hit-5-attack-buff",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001137,
+        "triggerFrame": 54,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001115,
+          "pathId": "609786774220013544",
+          "triggerFrame": 54,
+          "behaviorPathId": "7555307119572358590",
+          "sourceIdentity": "skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_7555307119572358590__7555307119572358590.json#elementBaseDatas+toOwnElementBaseDatas@54F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;value=400;time=6000"
+      },
+      {
+        "bindingIdentity": "lily-ultimate-wind-mark-1",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001134,
+        "triggerFrame": 211,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001059,
+          "pathId": "8236903294079356132",
+          "triggerFrame": 211,
+          "behaviorPathId": "5790785966890863275",
+          "sourceIdentity": "skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_5790785966890863275__5790785966890863275.json#elementBaseDatas+toOwnElementBaseDatas@211F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001134.asset->ast_750.asset#one-stack-per-landed-wall-hit"
+      },
+      {
+        "bindingIdentity": "lily-ultimate-wind-mark-2",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001134,
+        "triggerFrame": 216,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001059,
+          "pathId": "8236903294079356132",
+          "triggerFrame": 216,
+          "behaviorPathId": "1384799686497127083",
+          "sourceIdentity": "skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_1384799686497127083__1384799686497127083.json#elementBaseDatas+toOwnElementBaseDatas@216F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001134.asset->ast_750.asset#one-stack-per-landed-wall-hit"
+      },
+      {
+        "bindingIdentity": "lily-ultimate-wind-mark-3",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001134,
+        "triggerFrame": 220,
+        "frameCount": 1,
+        "landedHitActivationCondition": {
+          "elementId": 102001059,
+          "pathId": "8236903294079356132",
+          "triggerFrame": 220,
+          "behaviorPathId": "-6639102421339288917",
+          "sourceIdentity": "skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_-6639102421339288917__-6639102421339288917.json#elementBaseDatas+toOwnElementBaseDatas@220F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001134.asset->ast_750.asset#one-stack-per-landed-wall-hit"
+      },
+      {
+        "bindingIdentity": "lily-a5-precision-defense-sp",
+        "controlSkillId": 10200105,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001005,
+        "triggerFrame": 20,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+          "sourceIdentity": "hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+        },
+        "sourceIdentity": "Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained"
+      },
+      {
+        "bindingIdentity": "lily-a5-precision-defense-wind-mark",
+        "controlSkillId": 10200105,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001131,
+        "triggerFrame": 20,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+          "sourceIdentity": "hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained"
+      },
+      {
+        "bindingIdentity": "lily-will-star-enemy-hit-branch",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001135,
+        "triggerFrame": 1,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+          "sourceIdentity": "Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately"
+      },
+      {
+        "bindingIdentity": "lily-will-ultimate-enemy-hit-branch",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 102001135,
+        "triggerFrame": 243,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+          "sourceIdentity": "Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately"
+      }
+    ],
+    "actionHitBindings": [],
+    "conditionalHitGroups": [],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "lily-star-skill-per-landed-hit-attack",
+        "triggerKind": "landed-hit",
+        "runtimeOwnerScope": "scenario-roster",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "hitSelectors": [
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 32,
+            "behaviorPathId": "-3535188980622617154"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 37,
+            "behaviorPathId": "-6626411584729639490"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 42,
+            "behaviorPathId": "-2647497593602370114"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 48,
+            "behaviorPathId": "-8795270998137760322"
+          },
+          {
+            "elementId": 102001115,
+            "pathId": "609786774220013544",
+            "triggerFrame": 54,
+            "behaviorPathId": "7555307119572358590"
+          }
+        ],
+        "targetKind": "source-actor",
+        "propertyElementId": 102001119,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicPercent",
+        "expectedValueRaw": 400,
+        "durationMs": 6000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "effectId": "battle-element:102001119",
+        "effectName": "星鸣技逐击攻击提升",
+        "sourceIdentity": "Battle/Element/ast_102001137.asset->ast_102001119.asset#attributeID=1;dynamicPercent=400;time=6000|skill_control_10200112.asset#five-hit-behavior-coupling"
+      },
+      {
+        "bindingIdentity": "lily-star-skill-per-landed-hit-sp",
+        "triggerKind": "landed-hit",
+        "runtimeOwnerScope": "scenario-roster",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "hitSelectors": [
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 32,
+            "behaviorPathId": "-3535188980622617154"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 37,
+            "behaviorPathId": "-6626411584729639490"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 42,
+            "behaviorPathId": "-2647497593602370114"
+          },
+          {
+            "elementId": 102001043,
+            "pathId": "1596977191652035373",
+            "triggerFrame": 48,
+            "behaviorPathId": "-8795270998137760322"
+          },
+          {
+            "elementId": 102001115,
+            "pathId": "609786774220013544",
+            "triggerFrame": 54,
+            "behaviorPathId": "7555307119572358590"
+          }
+        ],
+        "targetKind": "source-actor",
+        "directSpSkillValue": {
+          "skillId": 10200162,
+          "levelIndex": 0,
+          "valueIndex": 0
+        },
+        "expectedDirectSpValue": 0.5,
+        "effectId": "skill:10200162:per-landed-hit-sp",
+        "effectName": "星鸣技逐击星决蓄能",
+        "sourceIdentity": "hero-module:102001#skill:10200162#每下伤害额外0.5点星决蓄能"
+      },
+      {
+        "bindingIdentity": "lily-star-carry-guard",
+        "triggerKind": "action-frame",
+        "runtimeOwnerScope": "scenario-roster",
+        "controlSkillId": 10200122,
+        "subSkillIndex": 0,
+        "triggerFrame": 51,
+        "targetKind": "controlled-actor",
+        "propertyElementId": 480122004,
+        "expectedAttributeId": 22,
+        "expectedBucket": "dynamicExtra",
+        "expectedAssetValueRaw": 3000,
+        "propertySkillValues": {
+          "skillId": 10200122,
+          "valueIndex": 0,
+          "unit": "percent-basis-points"
+        },
+        "expectedLevelOneValueRaw": 1900,
+        "expectedLevelTwelveValueRaw": 3000,
+        "durationMs": 6000,
+        "stackMode": "refresh",
+        "stackDelta": 1,
+        "maxStacks": 1,
+        "effectId": "battle-element:480122004",
+        "effectName": "守护",
+        "sourceIdentity": "skill_control_10200122.asset/MonoBehaviour/MonoBehaviour_2283996348143473664__2283996348143473664.json#summonUnitId=480122@51F|battlefield_item[480122].skillList=48012201,48012202|Battle/Element/ast_480122002.asset->ast_480122004.asset|hero-module:102001#skill:10200122#duration=6000"
+      }
+    ],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": [
+      {
+        "skillId": 10200162,
+        "runtimeGenerationMode": "landed-hit-runtime",
+        "sourceElementIds": [102001043, 102001115],
+        "runtimeBindingIdentities": ["lily-star-skill-per-landed-hit-sp"],
+        "effectId": "skill:10200162:per-landed-hit-sp",
+        "sourceIdentity": "hero-module:102001#skill:10200162#description-and-level-value|skill_control_10200162.asset#empty-passive-container|skill_control_10200112.asset#five-source-hits"
+      }
+    ]
+  },
+  "notApplicableSkills": [
+    {
+      "skillId": 10200161,
+      "reason": "perfect-defense-counter-hit-required-not-applicable-in-m12c-zero-distance-passive-boss-v1",
+      "sourceIdentity": "hero-module:102001#skill:10200161|skill_control_10200161.asset#element=102001131"
+    }
+  ],
+  "unresolvedRecords": [
+    {
+      "identity": "actor:102001:public-form:exit-star-carry:no-direct-three-value-settlement",
+      "sourceKind": "public-form-settlement",
+      "status": "not-applicable",
+      "reasons": [
+        "source-control-summons-guard-without-direct-hit",
+        "received-damage-mitigation-is-runtime-effect-not-outgoing-damage-settlement"
+      ],
+      "publicActionIdentity": "actor|102001|10200122|0|10200122|star-carry",
+      "sourceIdentity": "skill_control_10200122.asset#summonUnitId=480122@51F|battlefield_item[480122].skillList=48012201,48012202|Battle/Element/ast_480122002.asset->ast_480122004.asset"
+    },
+    {
+      "identity": "actor:102001:star-carry:guard-next-damage-consumption",
+      "sourceKind": "scenario-boundary",
+      "status": "not-applicable",
+      "reasons": [
+        "passive-boss-does-not-produce-received-damage-events",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "Battle/Element/ast_480122005.asset#triggerType=1;triggerCondition=480122002;triggerSkill=48012202|skill_control_48012202.asset#ast_480122006@0F;event@95F|Battle/Element/ast_480122006.asset#elementDataList=480122002,480122004,480122005",
+      "metadata": {
+        "controlSkillIds": [48012201, 48012202],
+        "elementIds": [480122002, 480122004, 480122005, 480122006]
+      }
+    },
+    {
+      "identity": "actor:102001:scenario:dedicated-defense-and-movement-actions",
+      "sourceKind": "scenario-boundary",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope-not-applicable",
+        "passive-boss-does-not-produce-required-defense-events"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#dodge,plunge,perfect-defense,limit-counter-preserved-but-not-stimulated",
+      "metadata": {
+        "controlSkillIds": [10200111, 10200115, 10200125, 10200127, 10200161]
+      }
+    },
+    {
+      "identity": "actor:102001:hero-rank",
+      "sourceKind": "dead-configuration",
+      "status": "not-applicable",
+      "reasons": ["hero-rank-unimplemented-dead-configuration"],
+      "sourceIdentity": "M12-B3 frozen contract#hero_rank-is-unimplemented-dead-config"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m12-b3-102001:active-surface-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [102001, 101010, 103002],
+    "initialControlledCharacterId": 102001,
+    "initialActorSp": {
+      "102001": 100,
+      "101010": 0,
+      "103002": 0
+    },
+    "kiboByCharacterId": {
+      "102001": 500001,
+      "101010": 500003,
+      "103002": 500039
+    },
+    "initialKiboSp": {
+      "102001": 100,
+      "101010": 100,
+      "103002": 100
+    },
+    "initialTuningMarks": [],
+    "loadoutByCharacterId": {},
+    "actions": [
+      {
+        "actionKey": "lily-ultimate",
+        "actorCharacterId": 102001,
+        "skillId": 10200113,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 200
+      },
+      {
+        "actionKey": "lily-star-skill",
+        "actorCharacterId": 102001,
+        "skillId": 10200112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1800
+      },
+      {
+        "actionKey": "lily-star-skill-cd-blocked",
+        "actorCharacterId": 102001,
+        "skillId": 10200112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 100
+      },
+      {
+        "actionKey": "lily-ultimate-cd-blocked",
+        "actorCharacterId": 102001,
+        "skillId": 10200113,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 500
+      },
+      {
+        "actionKey": "lily-ultimate-resource-blocked",
+        "actorCharacterId": 102001,
+        "skillId": 10200113,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 801
+      },
+      {
+        "actionKey": "lily-a1",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "lily-normal-five-inputs",
+        "attackGroupId": "golden-lily-normal",
+        "startFrame": 1100,
+        "attackSequenceIndex": 1
+      },
+      {
+        "actionKey": "lily-a2",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "lily-normal-five-inputs",
+        "attackGroupId": "golden-lily-normal",
+        "startFrame": 1200,
+        "attackSequenceIndex": 2
+      },
+      {
+        "actionKey": "lily-a3",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "lily-normal-five-inputs",
+        "attackGroupId": "golden-lily-normal",
+        "startFrame": 1300,
+        "attackSequenceIndex": 3
+      },
+      {
+        "actionKey": "lily-a4",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "lily-normal-five-inputs",
+        "attackGroupId": "golden-lily-normal",
+        "startFrame": 1400,
+        "attackSequenceIndex": 4
+      },
+      {
+        "actionKey": "lily-a5",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInputChainIdentity": "lily-normal-five-inputs",
+        "attackGroupId": "golden-lily-normal",
+        "startFrame": 1500,
+        "attackSequenceIndex": 5
+      },
+      {
+        "actionKey": "lily-charged",
+        "actorCharacterId": 102001,
+        "skillId": 10200101,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1650
+      },
+      {
+        "actionKey": "switch-to-xiaoyu",
+        "type": "switch",
+        "actorCharacterId": 102001,
+        "targetCharacterId": 101010,
+        "startFrame": 2000
+      },
+      {
+        "actionKey": "switch-back-to-lily",
+        "type": "switch",
+        "actorCharacterId": 101010,
+        "targetCharacterId": 102001,
+        "startFrame": 2300
+      },
+      {
+        "actionKey": "lily-star-combo",
+        "actorCharacterId": 102001,
+        "skillId": 10200112,
+        "actionKind": "star-combo",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 2600
+      },
+      {
+        "actionKey": "lily-star-combo-kibo-break",
+        "type": "kiboEvent",
+        "kiboId": 500001,
+        "actorCharacterId": 102001,
+        "actionKind": "break",
+        "startFrame": 2600
+      },
+      {
+        "actionKey": "lily-star-skill-at-cap",
+        "actorCharacterId": 102001,
+        "skillId": 10200112,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0
+      }
+    ],
+    "comparison": {},
+    "traceSelectors": {
+      "stateEffectIds": ["battle-element:480122004"]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000
+      },
+      "greaterThan": {
+        "combat.ownerHitTotalHpDamage": 0
+      }
+    }
+  }
+}

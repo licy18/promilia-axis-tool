@@ -45,10 +45,9 @@ describe('character combat product boundaries', () => {
       },
     });
     expect(report.summary.matchedSkillIds).toEqual([
-      10100362, 10100762, 10101062, 10200162, 10300262, 10700162,
-      10700262, 10700362, 10800162, 10800262, 10800362, 10800562,
-      10900162, 10900262, 11100162, 11200162, 11200262, 19900162,
-      19900262, 19900362,
+      10100362, 10100762, 10101062, 10200162, 10300262, 10700162, 10700262,
+      10700362, 10800162, 10800262, 10800362, 10800562, 10900162, 10900262,
+      11100162, 11200162, 11200262, 19900162, 19900262, 19900362,
     ]);
     expect(
       report.entries.every(
@@ -132,13 +131,13 @@ describe('character combat product boundaries', () => {
           },
           compiler: {
             reachableControlSkillIds: [10300201, 10300261, 10300262],
-            passiveEffects: [
-              { skillId: 10300261 },
-              { skillId: 10300262 },
-            ],
+            passiveEffects: [{ skillId: 10300261 }, { skillId: 10300262 }],
             targetStateTransactions: [
               { transactionIdentity: 'implemented', passiveSkillId: 10300261 },
-              { transactionIdentity: 'not-implemented', passiveSkillId: 10300262 },
+              {
+                transactionIdentity: 'not-implemented',
+                passiveSkillId: 10300262,
+              },
             ],
           },
           runtimePolicies: {
@@ -198,5 +197,48 @@ describe('character combat product boundaries', () => {
         boundaryReport,
       })
     ).toThrow('unnamed secondary passive runtime isolation failed');
+  });
+
+  it('allows an explicitly implemented unnamed secondary passive while retaining isolation for excluded entries', () => {
+    const boundaryReport = {
+      entries: [
+        {
+          ownerId: 102001,
+          skillId: 10200162,
+          classification: 'implemented',
+        },
+        {
+          ownerId: 103002,
+          skillId: 10300262,
+          classification: 'not-applicable',
+        },
+      ],
+    };
+
+    expect(() =>
+      assertUnnamedSecondaryPassiveRuntimeIsolation({
+        recipes: [
+          {
+            ownerId: 102001,
+            compiler: { passiveEffects: [{ skillId: 10200162 }] },
+          },
+        ],
+        ownerCompilations: [
+          {
+            ownerId: 102001,
+            contracts: {
+              passiveEffects: [{ skillId: 10200162 }],
+              targetStateTransactions: [],
+            },
+          },
+        ],
+        mechanicsPackage: {
+          specialResourceCatalog: {
+            passiveEffects: [{ ownerId: 102001, skillId: 10200162 }],
+          },
+        },
+        boundaryReport,
+      })
+    ).not.toThrow();
   });
 });

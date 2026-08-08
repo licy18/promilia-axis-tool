@@ -1964,10 +1964,13 @@ function createPublicFormSettlementRows({
       formHits.length + conditionalHitCount > 0
         ? 'applied'
         : (gap?.status ?? 'static-evidence-gap');
-    const dimensionSummary = createPublicFormHitDimensionSummary(
-      formHits,
-      formConditionalDamageGroups
-    );
+    const dimensionSummary =
+      status === 'not-applicable'
+        ? createNotApplicablePublicFormDimensionSummary()
+        : createPublicFormHitDimensionSummary(
+            formHits,
+            formConditionalDamageGroups
+          );
     return {
       actionIdentity: action.identity,
       publicFormId: form.formIdentity,
@@ -1991,12 +1994,18 @@ function createPublicFormSettlementRows({
       reasons:
         status === 'applied'
           ? []
-          : [
-              ...new Set([
-                'public-action-damage-settlement-evidence-missing',
-                ...(gap?.reasons ?? []),
-              ]),
-            ].sort(),
+          : status === 'not-applicable'
+            ? [
+                ...new Set(
+                  gap?.reasons ?? ['scenario-out-of-scope-not-applicable']
+                ),
+              ].sort()
+            : [
+                ...new Set([
+                  'public-action-damage-settlement-evidence-missing',
+                  ...(gap?.reasons ?? []),
+                ]),
+              ].sort(),
       sourceIdentity:
         gap?.sourceIdentity ??
         form.sourceIdentity ??
@@ -2004,6 +2013,15 @@ function createPublicFormSettlementRows({
         null,
     };
   });
+}
+
+function createNotApplicablePublicFormDimensionSummary() {
+  return Object.fromEntries(
+    ['hp', 'toughness', 'actorSp', 'kiboSp'].map(dimension => [
+      dimension,
+      { 'not-applicable': 1 },
+    ])
+  );
 }
 
 function createPublicFormHitDimensionSummary(
@@ -2166,17 +2184,20 @@ function createRuntimeCoverage({
       ),
       row => row.publicFormId
     );
-    const requiresDamageSettlement = settlementClauses.length > 0;
+    const applicablePublicFormSettlements = publicFormSettlements.filter(
+      row => row.status !== 'not-applicable'
+    );
+    const requiresDamageSettlement =
+      settlementClauses.length > 0 &&
+      applicablePublicFormSettlements.length > 0;
     const settlementStatus = requiresDamageSettlement
-      ? publicFormSettlements.every(row => row.status === 'applied')
+      ? applicablePublicFormSettlements.every(row => row.status === 'applied')
         ? 'applied'
-        : publicFormSettlements.every(row => row.status === 'not-applicable')
-          ? 'not-applicable'
-          : publicFormSettlements.some(
-                row => row.status === 'runtime-evidence-required'
-              )
-            ? 'runtime-evidence-required'
-            : 'static-evidence-gap'
+        : applicablePublicFormSettlements.some(
+              row => row.status === 'runtime-evidence-required'
+            )
+          ? 'runtime-evidence-required'
+          : 'static-evidence-gap'
       : 'not-required';
     const sourceDrivenConditionalDamageReady =
       actionConditionalDamageGroups.length > 0 &&
