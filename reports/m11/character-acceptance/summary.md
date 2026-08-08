@@ -12,6 +12,7 @@
 | 涂山小玉 (101010) | runtime-integrated | 148/255 | 72 | 57 | 否 |
 | 红宝石 (103002) | runtime-integrated | 167/588 | 71 | 163 | 否 |
 | 西芙莉雅 (107001) | runtime-integrated | 39/127 | 63 | 46 | 否 |
+| 米砂 (107002) | extracted | 69/123 | 0 | 54 | 否 |
 | 米蒂 (108003) | optimization-ready | 139/139 | 0 | 0 | 是 |
 | 末音 (109001) | optimization-ready | 138/138 | 0 | 0 | 是 |
 

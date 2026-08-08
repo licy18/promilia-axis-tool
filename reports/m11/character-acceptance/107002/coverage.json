@@ -1,0 +1,1794 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-acceptance-coverage-edge-set",
+  "edges": [
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|49|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:39",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|49|1",
+        "kind": "hit"
+      },
+      "assertionHash": "c51af322dda9b228",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:07d952886ad28095"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|70|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:42",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|70|4",
+        "kind": "hit"
+      },
+      "assertionHash": "a6dd2fac190ddde3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:08c48b6e948d4f67"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:27",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
+        "kind": "hit"
+      },
+      "assertionHash": "381db0278ecacbf1",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0b0c0a05bded27b5"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:30",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
+        "kind": "hit"
+      },
+      "assertionHash": "e902a56de153c5ff",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:11dd376c8dbb9db3"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:7:a4a94f0ced19e80c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-2",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700203|sub:0|104-446|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_-8372311003881189779__-8372311003881189779.json#behaviorlineControl[0].behaviorList[pathId=5181928711023709805]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_5181928711023709805__5181928711023709805.json"
+      },
+      "assertionHash": "434ca74261595d80",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:12262805eb3c76a6"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:35",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "bb2c3da726d61e54",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:13849569ed161b0c"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:28",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
+        "kind": "hit"
+      },
+      "assertionHash": "875f7643ce865749",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:139009c4f14f5e75"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:2",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "4d2f4e793a2b3bda",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:144ae4ccb1976fc8"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700213|0|10700213|ultimate",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-ultimate",
+      "selector": {
+        "controlSkillId": 10700213,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "3f37c8ac5b58f659",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:146fadba51b37b42"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700201|0|10700203|normal-attack:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-a3",
+      "selector": {
+        "controlSkillId": 10700203,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "248fb7bb5c1d017b",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:14b28d9ac1a3925f"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:163",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "46ec26dc9d28e2d0",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:17638797a4bbe251"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-charged-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:8",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "be40647afc8bcfff",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:18bffbada8d2164a"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|76|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:24",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|76|5",
+        "kind": "hit"
+      },
+      "assertionHash": "0f86b313871208dc",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:193052395d3053e8"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:6:7ee1ba7e4101ef07",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-1",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700203|sub:0|0-113|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_-5565542970211152275__-5565542970211152275.json#behaviorlineControl[0].behaviorList[pathId=2617456694535802477]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_2617456694535802477__2617456694535802477.json"
+      },
+      "assertionHash": "e782a66d011c0074",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1bf1bfb19929c6d5"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|76|7",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:6",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|76|7",
+        "kind": "hit"
+      },
+      "assertionHash": "66e5f1a2431579bf",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:1c5d05853866030f"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:32",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
+        "kind": "hit"
+      },
+      "assertionHash": "bde5a6f1e6334885",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2512b60b80a88af9"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:173",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "27b2baf7b55afe51",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:28931bcc046ce3f0"
+    },
+    {
+      "requirementIdentity": "contract:target-state-profile:misa-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:2",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "6a08888832f2a7c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:29540a6e85946d5d"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|63|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:13",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|63|3",
+        "kind": "hit"
+      },
+      "assertionHash": "88427f6e5cac7297",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:29bec14d4ced1fdb"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|1|1159803510611510720|84|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:16",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|1|1159803510611510720|84|6",
+        "kind": "hit"
+      },
+      "assertionHash": "e19772584225d9ee",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2a49875fd59cd7e7"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:297",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "15d15e801991bf2f",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2c3077b45a8f14ea"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:243",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "88caa116f1f56577",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2d9b1d9817be2ab1"
+    },
+    {
+      "requirementIdentity": "protocol:107002:condition-insufficient-negative",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "scenario-fact:condition-insufficient-negative",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "condition-insufficient-negative",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "8dcbd8bfae14e266",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2f54862251f33e6a"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|88|9",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:49",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|88|9",
+        "kind": "hit"
+      },
+      "assertionHash": "6fc7fd1a7bd032e7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:306e73f9d3422657"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:25",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "49dc752578c68832",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:369f34000816bc67"
+    },
+    {
+      "requirementIdentity": "protocol:107002:normal-trigger-positive",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "scenario-fact:normal-trigger-positive",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "normal-trigger-positive",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "21786c93092c79ff",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3864c01a40d9fe2b"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:34",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
+        "kind": "hit"
+      },
+      "assertionHash": "49479df3228be01a",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3db56205e3ece696"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:56",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
+        "kind": "hit"
+      },
+      "assertionHash": "cac6109352ca7204",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:40ac55b5dd998d57"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-a4-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:0",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "cb6902df638d61a3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:40d86da9b1780199"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|76|7",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:47",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|76|7",
+        "kind": "hit"
+      },
+      "assertionHash": "41f2414731e9c6d8",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:41a06bcb4f70bca1"
+    },
+    {
+      "requirementIdentity": "protocol:107002:foreground-background-switch",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "scenario-fact:foreground-background-switch",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "foreground-background-switch",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "40d77802e738a442",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:43d43a63c3b4978d"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|102|9",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:19",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|102|9",
+        "kind": "hit"
+      },
+      "assertionHash": "c3003a3e743ba5a3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:441b056f49d9a35e"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700213|0|10700213|ultimate:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-ultimate",
+      "selector": {
+        "controlSkillId": 10700213,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "3f37c8ac5b58f659",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:479b3a6dc4e81ac0"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|82|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:55",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
+        "kind": "hit"
+      },
+      "assertionHash": "65986a1f8de201a0",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4a4f9423f67f3011"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "447c3acba7a92ef8",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4cba100622b6fded"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:155",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "446ad4528098d7b9",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4d380dc933978ecb"
+    },
+    {
+      "requirementIdentity": "contract:switch-trigger:actor:107002|switch-trigger:on-exit|skill:10700222",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-switch-trigger:golden-switchTriggers-m12-b3:107002:120s-reduced-action-surface-golden-1",
+      "selector": {
+        "kind": "switch-trigger",
+        "profileIdentity": "actor:107002|switch-trigger:on-exit|skill:10700222"
+      },
+      "assertionHash": "3b9f2186a06a3ac4",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:503fcec37d178fe1"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor:107002:star-skill:misa-star-main-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-no-consume-candidate",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "351b633a8cc61c49",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:568a2179db00f201"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-charged-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:25",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "386d2bfb1938a755",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:568b95c88ffec2ce"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "447c3acba7a92ef8",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:586f575161d1821b"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700212|1|10700226|star-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-no-consume-candidate",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "351b633a8cc61c49",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5874995c186904df"
+    },
+    {
+      "requirementIdentity": "protocol:107002:buff-apply-refresh-stack-expire",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "buff-apply-refresh-stack-expire",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "70ac503c6ac0d236",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:58fbfda86c2ee0de"
+    },
+    {
+      "requirementIdentity": "protocol:107002:resource-exact-and-insufficient",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "scenario-fact:resource-exact-and-insufficient",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "resource-exact-and-insufficient",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "2e3cbdabad081057",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5a6b39d5484ac96e"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|52|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:2",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|52|3",
+        "kind": "hit"
+      },
+      "assertionHash": "dd2c492fed8150d9",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5a7884c14bf1d69c"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:243",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "88caa116f1f56577",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5c984e48a6ef58b7"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|64|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:4",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|64|5",
+        "kind": "hit"
+      },
+      "assertionHash": "22d5ea13d320f9a6",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5dbaa151f9c7520a"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:12:7786b44ef226f4ff",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-7",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700210|sub:0|0-208|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_3462768335433949364__3462768335433949364.json#behaviorlineControl[0].behaviorList[pathId=-2675839698510880588]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-2675839698510880588__-2675839698510880588.json"
+      },
+      "assertionHash": "1307fcde3a72c8ed",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5dc654bc1e3ce8c2"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|100|11",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:10",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|100|11",
+        "kind": "hit"
+      },
+      "assertionHash": "2f94f2cd2a16797e",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:5ed34b36fc0fffd7"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700201|1|10700210|charged-attack:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-charged",
+      "selector": {
+        "controlSkillId": 10700210,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "96013bc0d50acb25",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:632dfbed7effbf35"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:29",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
+        "kind": "hit"
+      },
+      "assertionHash": "6a1ca0089a47ce9d",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6362481046e2f9d9"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|56|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:12",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|56|2",
+        "kind": "hit"
+      },
+      "assertionHash": "033afad9b0d63524",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:67fcdc4d55ed8aba"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700201|0|10700203|normal-attack",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-a3-pickup-hits-miss",
+      "selector": {
+        "controlSkillId": 10700203,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "a39dab71b2492628",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6af37d6f45c06003"
+    },
+    {
+      "requirementIdentity": "contract:target-state-profile:misa-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "dd70e5d78846c4c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7011c890628d9b45"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-charged-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:9",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "64f7a8531b562f10",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:703130df2e627c5d"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700212|1|10700226|star-combo:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "9ee31fab28bb6632",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:73c2aa091a173b16"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700212|1|10700226|star-combo:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-at-cooldown-boundary",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "23542e1e4a582913",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:76f3e16e3da883f2"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|82|8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:48",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|82|8",
+        "kind": "hit"
+      },
+      "assertionHash": "b3f44c4091947016",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7764eb3e35a1b987"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor:107002:star-skill:misa-star-main-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "9ee31fab28bb6632",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:78205bb628bfc444"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:13:47803e2804fca03d",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-8",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700210|sub:0|96-340|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-6823727149174431564__-6823727149174431564.json#behaviorlineControl[0].behaviorList[pathId=1445712293676572852]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_1445712293676572852__1445712293676572852.json"
+      },
+      "assertionHash": "13362d94c54e26fa",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:795c8afe64cd1cd6"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700222|0|10700222|star-carry:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:switch-away-from-misa--on-exit--actor-107002--star-carry",
+      "selector": {
+        "controlSkillId": 10700222,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b7f77d74cafdf118",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:79cafe8973d1f44c"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-charged-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:0",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "cb6902df638d61a3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7dd82bb91e0828d4"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|82|8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:7",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|82|8",
+        "kind": "hit"
+      },
+      "assertionHash": "c5e3ebc216ae31c7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8044b2642bb413fa"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:9:64da45c23eb9107f",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-4",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700204|sub:0|0-123|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-5678959423580107183__-5678959423580107183.json#behaviorlineControl[0].behaviorList[pathId=1439794779560906321]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_1439794779560906321__1439794779560906321.json"
+      },
+      "assertionHash": "a15ad8941c733d50",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:834f50c785ef0ad9"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|96|8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:18",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|96|8",
+        "kind": "hit"
+      },
+      "assertionHash": "28b96bc7db10c19a",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:842aeeb504de4073"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|96|8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:45",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|96|8",
+        "kind": "hit"
+      },
+      "assertionHash": "d892d70e6020ffdb",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:844b5b76368cab70"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:10:1d1cff0c89d5e91a",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-5",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700204|sub:0|85-208|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_1466893522427481681__1466893522427481681.json#behaviorlineControl[0].behaviorList[pathId=9152799218939694673]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_9152799218939694673__9152799218939694673.json"
+      },
+      "assertionHash": "b7d7005285a687c4",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8526043bdcf4adb0"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-a4-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "dd70e5d78846c4c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8909ba3fadd22ad4"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|90|7",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:44",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|90|7",
+        "kind": "hit"
+      },
+      "assertionHash": "532f005989bccfb0",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8e91114b445a7ad5"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:30:8bc27828040bfe0a",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-10",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700226|sub:0|0-113|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_8258725651783070232__8258725651783070232.json#behaviorlineControl[0].behaviorList[pathId=3771721699373265432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_3771721699373265432__3771721699373265432.json"
+      },
+      "assertionHash": "162ed0afa1bf99cc",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:91152906b8a6257c"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:38",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
+        "kind": "hit"
+      },
+      "assertionHash": "c1fd1dfa32523560",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:928e84c7d5c6de4d"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-a4-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:8",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "be40647afc8bcfff",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:92efd78d371e266b"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|77|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:15",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|77|5",
+        "kind": "hit"
+      },
+      "assertionHash": "8cfa2d0045a7f208",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9500955d8244143f"
+    },
+    {
+      "requirementIdentity": "contract:target-state-profile:misa-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:0",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "cb6902df638d61a3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:96a8851e4464a83a"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:26",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "8160388945bfcbaa",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9875d2f0de356474"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:31",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
+        "kind": "hit"
+      },
+      "assertionHash": "b5395677b7940670",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:99d6451af9abbb23"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|58|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:3",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|58|4",
+        "kind": "hit"
+      },
+      "assertionHash": "59b3e3d2859f895c",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9a9b5d8527e2c83f"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|69|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:23",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|69|4",
+        "kind": "hit"
+      },
+      "assertionHash": "00aec3ba5c717ebf",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9c439d504d866bfe"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:20:7e95ec81b1a05225",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-9",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700213|sub:0|216-319|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_5215929054372805091__5215929054372805091.json#behaviorlineControl[0].behaviorList[pathId=-6377107262215964189]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-6377107262215964189__-6377107262215964189.json"
+      },
+      "assertionHash": "432bd5f034de2ec3",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9ec69c9e12c79b47"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|90|7",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:26",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|90|7",
+        "kind": "hit"
+      },
+      "assertionHash": "82177e89ce506dbe",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9ed76b478e98507f"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:33",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
+        "kind": "hit"
+      },
+      "assertionHash": "0f3efe7a4b6f0e62",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9f360ab9bf88b472"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:58",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
+        "kind": "hit"
+      },
+      "assertionHash": "89c1c994c7c124e7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9fe15958adf0dda5"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|107|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:37",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
+        "kind": "hit"
+      },
+      "assertionHash": "ae78675ce07488c5",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a1c235f153ceaa28"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700212|1|10700226|star-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "9ee31fab28bb6632",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a232802676a0b4b4"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700201|0|10700203|normal-attack",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-a3",
+      "selector": {
+        "controlSkillId": 10700203,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "248fb7bb5c1d017b",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a26ec6197e9a2b2b"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor:107002:star-skill:misa-star-main-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-at-cooldown-boundary",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "23542e1e4a582913",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a29c6c912adcf690"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:164",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "28834a2f09b041ce",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a5a05dbeda7e32ce"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:173",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "27b2baf7b55afe51",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a6228e39b9821832"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:23",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "07123a190f5ce5ef",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a6546b4ffbb28367"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:34",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "827a241aa4490588",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a90c2e7fa198c2ee"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|46|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|46|2",
+        "kind": "hit"
+      },
+      "assertionHash": "79a972794edf73dd",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:aa3e072d80d65415"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|94|10",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:50",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|94|10",
+        "kind": "hit"
+      },
+      "assertionHash": "e700e093b101f82c",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b2766e9f6473d9fb"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|49|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:11",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|49|1",
+        "kind": "hit"
+      },
+      "assertionHash": "87448a6a4281afb5",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b49c84bf9a330794"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-a4-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:2",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "6a08888832f2a7c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b60d830f855b715c"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|83|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:25",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|83|6",
+        "kind": "hit"
+      },
+      "assertionHash": "db0a7d7ec1fdea39",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bedd526f328c7159"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700212|1|10700226|star-combo",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-at-cooldown-boundary",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "23542e1e4a582913",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c1261674d83860a8"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-charged-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:2",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "6a08888832f2a7c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c17a8a720e342707"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:163",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "46ec26dc9d28e2d0",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c1cd88fcfb8c16d7"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:8:3b57fab10fbb2a2f",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-3",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700203|sub:0|87-126|target:10700204/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_4485833625214275181__4485833625214275181.json#behaviorlineControl[0].behaviorList[pathId=8105045345158975085]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_8105045345158975085__8105045345158975085.json"
+      },
+      "assertionHash": "987d0e87e35928e7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c250c766375fdccc"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|90|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:35",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
+        "kind": "hit"
+      },
+      "assertionHash": "1112377dc64268a6",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c28370dbfd61106c"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|88|9",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:8",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|88|9",
+        "kind": "hit"
+      },
+      "assertionHash": "a9399288da3c818c",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c2d3e5c04fc46870"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:174",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "44cf5e9a3cb2872b",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c90de8320d5355a9"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|51|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:21",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|51|2",
+        "kind": "hit"
+      },
+      "assertionHash": "6210ac6494db02aa",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c9582753411ed3b3"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|90|7",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:17",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|90|7",
+        "kind": "hit"
+      },
+      "assertionHash": "28049bc4f140fe89",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c9cf7af492ec1171"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|40|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:0",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|40|1",
+        "kind": "hit"
+      },
+      "assertionHash": "b2cab2b66a0451a8",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c9d7d3f0f762fb58"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|94|10",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:9",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|94|10",
+        "kind": "hit"
+      },
+      "assertionHash": "fce3d2523ec797db",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ca0ef59874d11d39"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-a4-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:25",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "386d2bfb1938a755",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cc520faccc644aa7"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700201|0|10700203|normal-attack:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-a3-pickup-hits-miss",
+      "selector": {
+        "controlSkillId": 10700203,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "a39dab71b2492628",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ccf800f4eabe0ad7"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|100|11",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:51",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|100|11",
+        "kind": "hit"
+      },
+      "assertionHash": "b74d732902bc59eb",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cd53fbef149198f0"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|63|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:22",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|63|3",
+        "kind": "hit"
+      },
+      "assertionHash": "64bfd5ac93616274",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cd650257eccbe3af"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:36",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
+        "kind": "hit"
+      },
+      "assertionHash": "bc8df11245d9942c",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cd7e97022886f6b2"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|70|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:14",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|70|4",
+        "kind": "hit"
+      },
+      "assertionHash": "77eabd0114e6b6be",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ce4d7061fb10e231"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700203|0|elements|2|-1404469563182445209|70|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:5",
+      "selector": {
+        "hitIdentity": "10700203|0|elements|2|-1404469563182445209|70|6",
+        "kind": "hit"
+      },
+      "assertionHash": "e25a3f7a54291aa0",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d17902c4e168bd3e"
+    },
+    {
+      "requirementIdentity": "contract:target-state-transaction:misa-charged-hit-confirmed-def-down",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-state:golden-state:m12-b3:107002:120s-reduced-action-surface-golden:1",
+      "selector": {
+        "kind": "state",
+        "stateIdentity": "misa-def-down"
+      },
+      "assertionHash": "dd70e5d78846c4c2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d1b31a4aba388b5f"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:misa-a4-def-down-after-hit-order",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-effect:m12-b3:107002:120s-reduced-action-surface-golden:9",
+      "selector": {
+        "effectIdentity": "battle-element:107002256",
+        "kind": "effect"
+      },
+      "assertionHash": "64f7a8531b562f10",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d4f31ed9e9495cea"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:22",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "48a7ce714de94ac7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:d601e678a528cb09"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|56|2",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:40",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|56|2",
+        "kind": "hit"
+      },
+      "assertionHash": "edcbcac5340cb325",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:da1cac22cbca3b72"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|63|3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:41",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|63|3",
+        "kind": "hit"
+      },
+      "assertionHash": "c21052b5effd68d2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:dc05d8cc34feafb4"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700222|0|10700222|star-carry",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:switch-away-from-misa--on-exit--actor-107002--star-carry",
+      "selector": {
+        "controlSkillId": 10700222,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "b7f77d74cafdf118",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:dd1184709eb95616"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|99|4",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:57",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
+        "kind": "hit"
+      },
+      "assertionHash": "4082958c05b15ff2",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:dee9f48503429b1e"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700210|0|elements|2|-1211965369219084289|48|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:20",
+      "selector": {
+        "hitIdentity": "10700210|0|elements|2|-1211965369219084289|48|1",
+        "kind": "hit"
+      },
+      "assertionHash": "c78852873a83a5b9",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:df817ad929831412"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:11:b2f1d5de713c17b3",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-6",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700204|sub:0|96-311|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-3611797126667661743__-3611797126667661743.json#behaviorlineControl[0].behaviorList[pathId=-8054487118780002735]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-8054487118780002735__-8054487118780002735.json"
+      },
+      "assertionHash": "4a543955ae160dcf",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e2fceee37802f5b4"
+    },
+    {
+      "requirementIdentity": "contract:action-form:actor|107002|10700212|1|10700226|star-combo:default",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-star-no-consume-candidate",
+      "selector": {
+        "controlSkillId": 10700226,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "351b633a8cc61c49",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:eeda74e14fdbd9c5"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|102|9",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:46",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|102|9",
+        "kind": "hit"
+      },
+      "assertionHash": "d7102675cb45aa7c",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f17bb332d680f41e"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700204|0|elements|0|353925495509830930|77|5",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:43",
+      "selector": {
+        "hitIdentity": "10700204|0|elements|0|353925495509830930|77|5",
+        "kind": "hit"
+      },
+      "assertionHash": "06c82163b786117d",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f3aded840e88860e"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:34",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "827a241aa4490588",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f3e799437d56f270"
+    },
+    {
+      "requirementIdentity": "contract:public-action:actor|107002|10700201|1|10700210|charged-attack",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-action-form:golden-action-form:m12-b3:107002:120s-reduced-action-surface-golden:misa-charged",
+      "selector": {
+        "controlSkillId": 10700210,
+        "kind": "action-form",
+        "ownerId": 107002,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "96013bc0d50acb25",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f66d42df2165335f"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:31:595554c539def5bf",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-control-window:golden-controlWindows-m12-b3:107002:120s-reduced-action-surface-golden-11",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107002|control:10700226|sub:0|85-285|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_7275194593066660376__7275194593066660376.json#behaviorlineControl[0].behaviorList[pathId=6110312879469670936]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_6110312879469670936__6110312879469670936.json"
+      },
+      "assertionHash": "612389353a169564",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f77b325805d1f908"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:25",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "49dc752578c68832",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f80dbe7bd664c9e1"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|74|1",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:54",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
+        "kind": "hit"
+      },
+      "assertionHash": "cbec4348a1d354f8",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:fb843dbdf2da281f"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3:107002:120s-reduced-action-surface-golden:22",
+      "selector": {
+        "effectIdentity": "battle-element:552",
+        "kind": "effect"
+      },
+      "assertionHash": "48a7ce714de94ac7",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:fd2b0d8685604213"
+    },
+    {
+      "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|114|6",
+      "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
+      "assertionIdentity": "trace-hit:golden-hit:m12-b3:107002:120s-reduced-action-surface-golden:59",
+      "selector": {
+        "hitIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
+        "kind": "hit"
+      },
+      "assertionHash": "2bba8971f5affc3e",
+      "traceProjectionHash": "1d2d290c1a612949",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:fe0822c02c2aef8b"
+    }
+  ],
+  "denominator": {
+    "publicActionCount": 10,
+    "reachableControlCount": 15,
+    "executionFormCount": 10,
+    "verifiedWindowCount": 0,
+    "hitCount": 57,
+    "semanticEffectCount": 42,
+    "excludedControlCount": 9
+  },
+  "runtimeCoverageSummary": {
+    "actionCount": 10,
+    "runtimeReadyActionCount": 7,
+    "executionFormCount": 10,
+    "controlCount": 15,
+    "hitCount": 57,
+    "rawEffectCount": 56,
+    "semanticEffectCount": 42,
+    "resourceProfileCount": 0,
+    "resourceTransactionCount": 0,
+    "thresholdTransitionCount": 0,
+    "targetStateProfileCount": 1,
+    "targetStateTransactionCount": 2,
+    "conditionalHitGroupCount": 0,
+    "tuningMarkConditionalDamageGroupCount": 0,
+    "runtimeEffectBindingCount": 0,
+    "passiveCount": 0,
+    "switchTriggerCount": 1,
+    "coverageStatusCounts": {
+      "applied": 8,
+      "not-applicable": 3,
+      "runtime-evidence-required": 3,
+      "static-evidence-gap": 6
+    }
+  },
+  "summary": {
+    "edgeCount": 131,
+    "coveredRequirementCount": 69,
+    "scenarioCounts": {
+      "m12-b3:107002:120s-reduced-action-surface-golden": 131
+    }
+  },
+  "coverageHash": "9f2a42cf75c75b3c"
+}

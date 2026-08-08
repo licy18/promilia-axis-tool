@@ -4,12 +4,14 @@ import hanManifest from '../../../reports/m11/character-acceptance/101003/manife
 import sifliyaManifest from '../../../reports/m11/character-acceptance/107001/manifest.json';
 import moyinManifest from '../../../reports/m11/character-acceptance/109001/manifest.json';
 import mitiManifest from '../../../reports/m11/character-acceptance/108003/manifest.json';
+import misaManifest from '../../../reports/m11/character-acceptance/107002/manifest.json';
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import rubyProfile from '../../data/generated/character-combat-profiles/103002.json';
 import hanProfile from '../../data/generated/character-combat-profiles/101003.json';
 import sifliyaProfile from '../../data/generated/character-combat-profiles/107001.json';
 import moyinProfile from '../../data/generated/character-combat-profiles/109001.json';
 import mitiProfile from '../../data/generated/character-combat-profiles/108003.json';
+import misaProfile from '../../data/generated/character-combat-profiles/107002.json';
 import generatedCatalog from '../../data/generated/character-acceptance-catalog.json';
 import generatedManifestIndex from '../../data/generated/character-acceptance-manifest-index.json';
 import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
@@ -56,6 +58,13 @@ const owners = [
     unnamedSecondaryPassiveBoundary: false,
   },
   {
+    ownerId: 107002,
+    passiveId: 10700262,
+    manifest: misaManifest,
+    profile: misaProfile,
+    unnamedSecondaryPassiveBoundary: false,
+  },
+  {
     ownerId: 109001,
     passiveId: 10900162,
     manifest: moyinManifest,
@@ -64,13 +73,14 @@ const owners = [
 ];
 
 describe('generated character acceptance manifests', () => {
-  it('publishes exactly the six integrated owners with a valid hashed catalog', () => {
+  it('publishes exactly the seven integrated owners with a valid hashed catalog', () => {
     expect(generatedCatalog.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 107001, 108003, 109001,
+      101003, 101010, 103002, 107001, 107002, 108003, 109001,
     ]);
     expect(generatedCatalog.summary).toMatchObject({
-      ownerCount: 6,
+      ownerCount: 7,
       maturityCounts: {
+        extracted: 1,
         'runtime-integrated': 4,
         'optimization-ready': 2,
       },
@@ -80,7 +90,7 @@ describe('generated character acceptance manifests', () => {
       generatedManifestIndex.indexHash
     );
     expect(generatedManifestIndex.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 107001, 108003, 109001,
+      101003, 101010, 103002, 107001, 107002, 108003, 109001,
     ]);
     for (const entry of generatedCatalog.entries) {
       const indexed = generatedManifestIndex.entries.find(
@@ -148,17 +158,20 @@ describe('generated character acceptance manifests', () => {
         issues: [],
       });
       const acceptanceCommit = [108003, 109001].includes(ownerId)
-        ? '2b3fcd3e1f287a7b26e144f6646efb3991b76bbe'
+        ? '310a4bb50239572553456ee2db14f10bd2bbc494'
         : null;
       const productAccepted = acceptanceCommit !== null;
+      const runtimeIntegrated = ownerId !== 107002;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'
-          : 'runtime-integrated',
+          : runtimeIntegrated
+            ? 'runtime-integrated'
+            : 'extracted',
         optimizationReady: productAccepted,
         gates: {
           extracted: true,
-          runtimeIntegrated: true,
+          runtimeIntegrated,
           visuallyAccepted: productAccepted,
           optimizationReady: productAccepted,
         },

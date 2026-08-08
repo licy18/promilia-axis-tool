@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "8b5e19938067c7ac",
+  "rosterHash": "980ace9877d6bfa8",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "2eb1b945c1f963e9",
-        "8b5e19938067c7ac"
+        "0d0fe7e8e7551bc4",
+        "980ace9877d6bfa8"
       ]
     },
     {
@@ -194,20 +194,6 @@
       "gapHash": "e15d2ad8e5405433"
     },
     {
-      "gapIdentity": "character:107002:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "107002",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=107002]"
-      ],
-      "details": {},
-      "gapHash": "93be4fdddeacbc8e"
-    },
-    {
       "gapIdentity": "character:107002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "107002",
@@ -296,18 +282,18 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 12,
+    "blockingUniqueGapCount": 11,
     "byCategory": {
-      "not-implemented": 12
+      "not-implemented": 11
     },
     "byCode": {
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 4,
+      "character-acceptance-not-published": 3,
       "character-not-optimization-ready": 7
     },
     "byObjectKind": {
-      "character": 12
+      "character": 11
     }
   },
-  "ledgerHash": "e7ab8f3a7f7b1b66"
+  "ledgerHash": "e362b755919580ca"
 }

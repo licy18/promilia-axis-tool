@@ -3,6 +3,7 @@ import rubyFixture from '../../../fixtures/character-acceptance/103002-visual.js
 import hanFixture from '../../../fixtures/character-acceptance/101003-visual.json';
 import moyinFixture from '../../../fixtures/character-acceptance/109001-visual.json';
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
+import misaFixture from '../../../fixtures/character-acceptance/107002-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -14,9 +15,9 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: '702de892be758f4e',
-      data: '78ccf6a8ec2d95ce',
-      trace: 'c4c7bf31cf9a4b01',
+      input: '8dbee931c078f99a',
+      data: '2f57b3350617b6da',
+      trace: '77a5d0e81f883405',
       evaluation: '204c04b2ab3f5fb4',
     },
   },
@@ -24,9 +25,9 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: 'e825013a0a91d5c9',
-      data: '218778dd2ea1a318',
-      trace: '36a7e7a90d1b46a4',
+      input: '7686fbac77966cd9',
+      data: '08b15f6389fddeb4',
+      trace: '6fde765db0f80cac',
       evaluation: '208849308c4ec837',
     },
   },
@@ -34,9 +35,9 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: 'f6d99e71caa91145',
-      data: '93ccb4dbbd9e1e7a',
-      trace: 'd3c7f0eb34bf7102',
+      input: '50ecf1ff3e50bbe1',
+      data: '88857a6aa25cc856',
+      trace: 'ae0e9b9ee77d84e7',
       evaluation: '53eb57b729f3a7e6',
     },
   },
@@ -44,9 +45,9 @@ const cases = [
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: 'a1644119803dab1a',
-      data: 'f77ad812380f008a',
-      trace: '6c3f839106298912',
+      input: '6d4454102831a0fe',
+      data: 'bb46f832c8060706',
+      trace: '143277c1f0fd333c',
       evaluation: '855dd5b0926bf110',
     },
   },
@@ -54,10 +55,20 @@ const cases = [
     ownerId: 108003,
     fixture: mitiFixture,
     hashes: {
-      input: '6430e1e6a6873323',
-      data: '0054ef276ddc8580',
-      trace: '31ef176144e726db',
+      input: '0088d6b91e58aad3',
+      data: 'e281fe04fdbc2f6c',
+      trace: 'a8aa1cf4068a6d33',
       evaluation: '3c2fb1d6fda5e7b9',
+    },
+  },
+  {
+    ownerId: 107002,
+    fixture: misaFixture,
+    hashes: {
+      input: 'f317810a065b6cb2',
+      data: 'ab8fd1f7a9fe66fe',
+      trace: 'b92c8b853b49a902',
+      evaluation: '1bdc3d581a79c252',
     },
   },
 ];

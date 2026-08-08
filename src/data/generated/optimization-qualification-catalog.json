@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "8b5e19938067c7ac",
-  "manifestsHash": "9550b3fdcd0a7ff3",
-  "gapLedgerHash": "e7ab8f3a7f7b1b66",
-  "bindingMatrixHash": "9b03e2407f71df6e",
-  "sourceSnapshotHash": "2eb1b945c1f963e9",
+  "rosterHash": "980ace9877d6bfa8",
+  "manifestsHash": "c21a9f0a3b5d0e21",
+  "gapLedgerHash": "e362b755919580ca",
+  "bindingMatrixHash": "ba226860a3874dc5",
+  "sourceSnapshotHash": "0d0fe7e8e7551bc4",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "f796b26bb19a52af"
+      "manifestHash": "8997e8dab34f669a"
     },
     {
       "objectKind": "character",
@@ -49,7 +49,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "bcf862a5ca690402"
+      "manifestHash": "28bd1e9e2cc29087"
     },
     {
       "objectKind": "character",
@@ -60,19 +60,18 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "c5415e34ad579073"
+      "manifestHash": "0db0d08e5a94fc3c"
     },
     {
       "objectKind": "character",
       "objectId": "107002",
       "displayName": "米砂",
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [
-        "character-acceptance-not-published",
         "character-not-optimization-ready"
       ],
-      "manifestHash": "00a774693d93b141"
+      "manifestHash": "42a3eca842337901"
     },
     {
       "objectKind": "character",
@@ -81,7 +80,7 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [],
-      "manifestHash": "808d15cdede36171"
+      "manifestHash": "b3d0204f13052b23"
     },
     {
       "objectKind": "character",
@@ -90,7 +89,7 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockerCodes": [],
-      "manifestHash": "6f1401337003c88d"
+      "manifestHash": "cf6ba2bd0b17936a"
     },
     {
       "objectKind": "character",
@@ -2630,7 +2629,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "8b5e19938067c7ac",
+    "rosterHash": "980ace9877d6bfa8",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20602,7 +20601,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "9b03e2407f71df6e"
+    "bindingMatrixHash": "ba226860a3874dc5"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38197,9 +38196,9 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 19,
+      "extracted": 18,
       "optimization-ready": 211,
-      "runtime-integrated": 33
+      "runtime-integrated": 34
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -38209,7 +38208,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 12,
+    "gameplayBlockingGapCount": 11,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38291,5 +38290,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "9395a1542d3ecca5"
+  "catalogHash": "64cea27ad646f1e2"
 }
