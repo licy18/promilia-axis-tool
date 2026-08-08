@@ -202,6 +202,7 @@ export function createWorkbenchActionDraft({
   sourceSequenceIndex = null,
   sourceSequencePath = null,
   sourceSequenceSource = null,
+  contextActionId = null,
   hitOverrides = null,
   note = '',
   insertion = null,
@@ -327,6 +328,9 @@ export function createWorkbenchActionDraft({
       : {}),
     insertion: normalizeWorkbenchInsertion(insertion),
     generationBatch: normalizeWorkbenchGenerationBatch(generationBatch),
+    ...(contextActionId
+      ? { contextActionId: String(contextActionId) }
+      : {}),
     ...(sourceSequence ?? {}),
     ...normalizeAttackInputActionFields({ id: actionId, ...attackInputFields }),
     ...(statusGeneration
@@ -1042,6 +1046,7 @@ export function normalizeWorkbenchActionDrafts(
           sourceSequenceIndex: draft.sourceSequenceIndex,
           sourceSequencePath: draft.sourceSequencePath,
           sourceSequenceSource: draft.sourceSequenceSource,
+          contextActionId: draft.contextActionId,
           hitOverrides: draft.hitOverrides,
           note: draft.note,
           insertion: draft.insertion,
@@ -1096,10 +1101,11 @@ export function normalizeWorkbenchActionDrafts(
         actionScheduling: draft.actionScheduling,
         sourceEvidenceStatus: draft.sourceEvidenceStatus,
         scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-        sourceSequenceIndex: draft.sourceSequenceIndex,
-        sourceSequencePath: draft.sourceSequencePath,
-        sourceSequenceSource: draft.sourceSequenceSource,
-        hitOverrides: draft.hitOverrides,
+          sourceSequenceIndex: draft.sourceSequenceIndex,
+          sourceSequencePath: draft.sourceSequencePath,
+          sourceSequenceSource: draft.sourceSequenceSource,
+          contextActionId: draft.contextActionId,
+          hitOverrides: draft.hitOverrides,
         note: draft.note,
         insertion: draft.insertion,
         generationBatch: draft.generationBatch,
@@ -1257,38 +1263,43 @@ function createProjectActionFromDraft(
     sourceActor ??
     actorsByCharacterId.get(Number(skill.characterId)) ??
     primaryActor;
-  return createSkillAction({
-    id: draft.id,
-    actorId: actor.id,
-    skill,
-    targetId,
-    startMs: draft.startMs,
-    durationMs: draft.durationMs,
-    durationFrames: draft.durationFrames,
-    timingSource: draft.timingSource,
-    timingStatus: draft.timingStatus,
-    timingReasons: draft.timingReasons,
-    timingSourceIdentity: draft.timingSourceIdentity,
-    needsTimingData: draft.needsTimingData,
-    controlSubSkillIndex: draft.controlSubSkillIndex,
-    variantInputSelection: draft.variantInputSelection,
-    actionScheduling: draft.actionScheduling,
-    sourceEvidenceStatus: draft.sourceEvidenceStatus,
-    scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
-    hitOverrides: draft.hitOverrides,
-    level: draft.level,
-    actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
-    damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
-    note:
-      draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
-    insertion: draft.insertion,
-    generationBatch: draft.generationBatch,
-    attackInputFields: {
-      ...draft,
-      attackInputExpansionMode: null,
-    },
-    effectCommands,
-  });
+  return {
+    ...createSkillAction({
+      id: draft.id,
+      actorId: actor.id,
+      skill,
+      targetId,
+      startMs: draft.startMs,
+      durationMs: draft.durationMs,
+      durationFrames: draft.durationFrames,
+      timingSource: draft.timingSource,
+      timingStatus: draft.timingStatus,
+      timingReasons: draft.timingReasons,
+      timingSourceIdentity: draft.timingSourceIdentity,
+      needsTimingData: draft.needsTimingData,
+      controlSubSkillIndex: draft.controlSubSkillIndex,
+      variantInputSelection: draft.variantInputSelection,
+      actionScheduling: draft.actionScheduling,
+      sourceEvidenceStatus: draft.sourceEvidenceStatus,
+      scenarioRuntimeStatus: draft.scenarioRuntimeStatus,
+      hitOverrides: draft.hitOverrides,
+      level: draft.level,
+      actionVariantIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
+      damageSegmentIndex: draft.actionVariantIndex ?? draft.damageSegmentIndex,
+      note:
+        draft.note || '工作台可编辑动作；精确命中帧等待 asset 或运行时捕获补充。',
+      insertion: draft.insertion,
+      generationBatch: draft.generationBatch,
+      attackInputFields: {
+        ...draft,
+        attackInputExpansionMode: null,
+      },
+      effectCommands,
+    }),
+    ...(draft.contextActionId
+      ? { contextActionId: String(draft.contextActionId) }
+      : {}),
+  };
 }
 
 function resolveWorkbenchEffectCommandsForProject({

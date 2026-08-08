@@ -356,24 +356,157 @@
         "controlSubSkillIndex": 0,
         "startFrame": 1400
       },
-      {
-        "actionKey": "moyin-star-skill-3",
-        "actorCharacterId": 109001,
-        "skillId": 10900112,
-        "actionKind": "star-skill",
-        "actionVariantIndex": 0,
-        "controlSubSkillIndex": 0,
-        "startFrame": 1700
-      }
-    ],
+   {
+    "actionKey": "moyin-star-skill-3",
+    "actorCharacterId": 109001,
+    "skillId": 10900112,
+    "actionKind": "star-skill",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 1700
+   },
+   {
+    "actionKey": "moyin-star-skill-chase-input",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 1745,
+    "contextActionId": "moyin-star-skill-3",
+    "attackSequenceIndex": 1
+   },
+   {
+    "actionKey": "moyin-a1",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 2500,
+    "attackInputControlSkillId": 10900101,
+    "attackSequenceIndex": 1
+   },
+   {
+    "actionKey": "moyin-a4-brilliant",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 1000,
+    "attackInputControlSkillId": 10900104,
+    "attackSequenceIndex": 4
+   },
+   {
+    "actionKey": "moyin-a2",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 2700,
+    "attackInputControlSkillId": 10900102,
+    "attackSequenceIndex": 2
+   },
+   {
+    "actionKey": "moyin-a3",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 2900,
+    "attackInputControlSkillId": 10900103,
+    "attackSequenceIndex": 3
+   },
+   {
+    "actionKey": "moyin-a4",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "normal-attack",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 3100,
+    "attackInputControlSkillId": 10900104,
+    "attackSequenceIndex": 4
+   },
+   {
+    "actionKey": "moyin-dodge",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "dodge-attack",
+    "actionVariantIndex": 2,
+    "controlSubSkillIndex": 0,
+    "startFrame": 3300
+   },
+   {
+    "actionKey": "moyin-plunging",
+    "actorCharacterId": 109001,
+    "skillId": 10900101,
+    "actionKind": "plunging-attack",
+    "actionVariantIndex": 3,
+    "controlSubSkillIndex": 0,
+    "startFrame": 3500
+   },
+   {
+    "actionKey": "switch-to-xiaoyu",
+    "type": "switch",
+    "actorCharacterId": 109001,
+    "targetCharacterId": 101010,
+    "startFrame": 1900
+   },
+   {
+    "actionKey": "switch-back-to-moyin",
+    "type": "switch",
+    "actorCharacterId": 101010,
+    "targetCharacterId": 109001,
+    "startFrame": 2100
+   },
+   {
+    "actionKey": "moyin-star-combo",
+    "actorCharacterId": 109001,
+    "skillId": 10900112,
+    "actionKind": "star-combo",
+    "actionVariantIndex": 2,
+    "controlSubSkillIndex": 0,
+    "startFrame": 3700
+   },
+   {
+    "actionKey": "moyin-star-combo-kibo-break",
+    "type": "kiboEvent",
+    "kiboId": 500001,
+    "actorCharacterId": 109001,
+    "actionKind": "break",
+    "startFrame": 3700
+   },
+   {
+    "actionKey": "moyin-star-carry-direct",
+    "actorCharacterId": 109001,
+    "skillId": 10900121,
+    "actionKind": "star-carry",
+    "actionVariantIndex": 0,
+    "controlSubSkillIndex": 0,
+    "startFrame": 3900
+   },
+   {
+    "actionKey": "moyin-perfect-parry-2",
+    "actorCharacterId": 109001,
+    "skillId": 10900121,
+    "actionKind": "perfect-parry",
+    "actionVariantIndex": 3,
+    "controlSubSkillIndex": 0,
+    "startFrame": 1300
+   }
+  ],
     "comparison": {},
     "traceSelectors": {},
     "expectedRuntime": {
-      "exact": {
-        "project.durationMs": 120000,
-        "actions.executedActionIds.length": 8,
-        "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks": 1
-      },
+   "exact": {
+    "project.durationMs": 120000,
+    "actions.executedActionIds.length": 23,
+    "resources.tuningMarkConsumeByActionId.moyin-perfect-parry.consumedStacks": 1
+   },
       "greaterThan": {
         "combat.ownerHitTotalHpDamage": 0,
         "resources.ownerActorSpTransactionsByActionId.moyin-charged.totalChange": 3

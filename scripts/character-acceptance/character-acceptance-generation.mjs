@@ -56,6 +56,7 @@ export function createCharacterAcceptanceManifest({
     records: createCharacterAcceptanceScenarioCaseSources({
       goldens,
       visualScenario,
+      profile,
     }),
   };
   const evidence = {
@@ -123,6 +124,7 @@ export function createCharacterAcceptanceMatrix({
       records: createCharacterAcceptanceScenarioCaseSources({
         goldens,
         visualScenario,
+        profile,
       }),
     },
     denominator: profile.denominator ?? {},
@@ -140,7 +142,9 @@ export function createCharacterAcceptanceRequirementSources({ profile }) {
     );
     records.forEach((record, index) => {
       const subjectIdentity = resolveContractIdentity(record, dimension, index);
-      const notApplicable = isNotApplicableRecord(record);
+      const notApplicable =
+        isNotApplicableRecord(record) ||
+        isUnwiredControlWindowRequirement(record, dimension, profile);
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
         dimension,
@@ -161,9 +165,14 @@ export function createCharacterAcceptanceRequirementSources({ profile }) {
         }),
         sourceIdentities: collectSourceIdentities(record),
         reasons: notApplicable
-          ? normalizeReasons(record).length
-            ? normalizeReasons(record)
-            : ['source-confirmed-not-applicable']
+          ? [
+              ...(normalizeReasons(record).length
+                ? normalizeReasons(record)
+                : ['source-confirmed-not-applicable']),
+              ...(isUnwiredControlWindowRequirement(record, dimension, profile)
+                ? ['client-internal-unwired-control-window']
+                : []),
+            ]
           : isAppliedRecord(record)
             ? []
             : normalizeReasons(record),
@@ -186,11 +195,129 @@ export function createCharacterAcceptanceRequirementSources({ profile }) {
 export function createCharacterAcceptanceScenarioCaseSources({
   goldens,
   visualScenario,
+  profile,
 }) {
   return [
-    ...goldens.map(golden => createGoldenScenarioCaseSource(golden)),
+    ...goldens.map(golden =>
+      createGoldenScenarioCaseSource({ ...golden, profile })
+    ),
     createVisualScenarioCaseSource(visualScenario),
   ];
+}
+
+export function createScenarioProfileProjectionRows({
+  profile,
+  exercisedControls,
+  observedEffectIds,
+  exercisedFromHitAndEffectIdentities = [],
+  scenarioId,
+  prefix,
+}) {
+  const exercised = new Set(
+    [
+      ...(exercisedControls ?? []).map(
+        ([controlSkillId, subSkillIndex]) =>
+          `${controlSkillId}|${subSkillIndex}`
+      ),
+      ...(exercisedFromHitAndEffectIdentities ?? []).flatMap(identity => {
+        const match = String(identity ?? '').match(/^(\d+)\|(\d+)\|/);
+        return match ? [`${Number(match[1])}|${Number(match[2])}`] : [];
+      }),
+    ]
+  );
+  const observed = new Set((observedEffectIds ?? []).map(String));
+  const contracts = profile?.contracts ?? {};
+  const index = { controlWindows: 0, variantEdges: 0, variantWindows: 0, conditionalHitGroups: 0, passives: 0, switchTriggers: 0 };
+  const rows = {
+    controlWindows: [],
+    variantEdges: [],
+    variantWindows: [],
+    conditionalHitGroups: [],
+    passives: [],
+    switchTriggers: [],
+  };
+  const add = (collection, base) => {
+    const sequence = (index[collection] += 1);
+    rows[collection].push({
+      ...base,
+      projectionIdentity:
+        `${prefix}-${collection}-${scenarioId}-${sequence}`,
+    });
+  };
+  for (const window of contracts.controlTransitionWindows ?? []) {
+    if (
+      exercised.has(
+        `${window.sourceControlSkillId}|${window.sourceSubSkillIndex}`
+      )
+    ) {
+      add('controlWindows', {
+        controlSkillId: window.sourceControlSkillId,
+        subSkillIndex: window.sourceSubSkillIndex,
+        windowIdentity: window.windowIdentity,
+      });
+    }
+  }
+  for (const edge of contracts.variantEdges ?? []) {
+    if (
+      exercised.has(
+        `${edge.sourceControlSkillId}|${edge.sourceSubSkillIndex}`
+      )
+    ) {
+      add('variantEdges', {
+        sourceControlSkillId: edge.sourceControlSkillId,
+        sourceSubSkillIndex: edge.sourceSubSkillIndex,
+        edgeIdentity: edge.edgeIdentity,
+      });
+    }
+  }
+  for (const binding of contracts.variantWindowBindings ?? []) {
+    if (
+      exercised.has(
+        `${binding.sourceControlSkillId}|${binding.sourceSubSkillIndex}`
+      )
+    ) {
+      add('variantWindows', {
+        sourceControlSkillId: binding.sourceControlSkillId,
+        sourceSubSkillIndex: binding.sourceSubSkillIndex,
+        bindingIdentity: binding.bindingIdentity,
+      });
+    }
+  }
+  for (const group of contracts.conditionalHitGroups ?? []) {
+    if (exercised.has(`${group.controlSkillId}|${group.subSkillIndex}`)) {
+      add('conditionalHitGroups', {
+        controlSkillId: group.controlSkillId,
+        subSkillIndex: group.subSkillIndex,
+        groupIdentity: group.groupIdentity,
+      });
+    }
+  }
+  for (const passive of contracts.passives ?? []) {
+    if (passive.effectId && observed.has(String(passive.effectId))) {
+      add('passives', {
+        passiveIdentity: passive.passiveIdentity,
+        effectId: passive.effectId,
+      });
+    }
+  }
+  for (const trigger of contracts.switchTriggers ?? []) {
+    const exercisedControl = exercised.has(
+      `${trigger.controlSkillId}|${trigger.subSkillIndex ?? 0}`
+    );
+    const starCarryExercised =
+      trigger.starCarryActionIdentity &&
+      exercised.has(
+        `${trigger.sourceSkillId ?? trigger.controlSkillId}|0`
+      );
+    if (exercisedControl || starCarryExercised) {
+      add('switchTriggers', {
+        profileIdentity: trigger.profileIdentity,
+        triggerPhase: trigger.triggerPhase,
+        controlSkillId: trigger.controlSkillId,
+      });
+    }
+  }
+  return rows;
 }
 
 export function createCharacterAcceptanceManifestIndex(manifests) {
@@ -550,10 +677,66 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
   ) {
     return { kind: 'state', stateIdentity: String(record.stateIdentity) };
   }
+  if (dimension === 'control-window' && record.windowIdentity) {
+    return {
+      kind: 'control-window',
+      windowIdentity: String(record.windowIdentity),
+    };
+  }
+  if (dimension === 'variant-edge' && record.edgeIdentity) {
+    return {
+      kind: 'variant-edge',
+      edgeIdentity: String(record.edgeIdentity),
+    };
+  }
+  if (dimension === 'variant-window' && record.bindingIdentity) {
+    return {
+      kind: 'variant-window',
+      bindingIdentity: String(record.bindingIdentity),
+    };
+  }
+  if (dimension === 'conditional-hit-group' && record.groupIdentity) {
+    return {
+      kind: 'conditional-hit-group',
+      groupIdentity: String(record.groupIdentity),
+    };
+  }
+  if (dimension === 'passive' && record.passiveIdentity) {
+    return {
+      kind: 'passive',
+      passiveIdentity: String(record.passiveIdentity),
+    };
+  }
+  if (dimension === 'switch-trigger' && record.profileIdentity) {
+    return {
+      kind: 'switch-trigger',
+      profileIdentity: String(record.profileIdentity),
+    };
+  }
   return null;
 }
 
-function createGoldenScenarioCaseSource({ path, report }) {
+function createGoldenScenarioCaseSource({ path, report, profile }) {
+  const exercisedControls = Object.entries(
+    report.actual?.actions?.selectionByActionId ?? {}
+  ).map(([, selection]) => [
+    Number(selection.controlSkillId),
+    Number(selection.subSkillIndex),
+  ]);
+  const observedEffectIds = (report.actual?.trace?.effects ?? []).map(
+    effect => effect.effectId
+  );
+  const profileRows = createScenarioProfileProjectionRows({
+    profile,
+    exercisedControls,
+    observedEffectIds,
+    exercisedFromHitAndEffectIdentities: [
+      ...(report.actual?.trace?.damage ?? []).map(event => event.hitIdentity),
+      ...(report.actual?.trace?.effects ?? []).map(event => event.effectId),
+    ],
+    scenarioId: report.scenarioIdentity,
+    prefix: 'golden',
+  });
   return {
     scenarioIdentity: report.scenarioIdentity,
     runnerKind: 'canonical-character-golden',
@@ -576,12 +759,29 @@ function createGoldenScenarioCaseSource({ path, report }) {
         evaluation: null,
       },
     },
-    traceProjection: createGoldenTraceProjection(report),
+    traceProjection: {
+      ...createGoldenTraceProjection(report),
+      ...profileRows,
+    },
     assertionDefinitions: [],
   };
 }
 
 function createVisualScenarioCaseSource(visualScenario) {
+  const profileRowKeys = [
+    'controlWindows',
+    'variantEdges',
+    'variantWindows',
+    'conditionalHitGroups',
+    'passives',
+    'switchTriggers',
+  ];
+  const profileRows = Object.fromEntries(
+    profileRowKeys.map(key => [
+      key,
+      visualScenario.traceProjection?.[key] ?? [],
+    ])
+  );
   return {
     scenarioIdentity: visualScenario.scenarioIdentity,
     runnerKind: 'machine-axis',
@@ -598,7 +798,10 @@ function createVisualScenarioCaseSource(visualScenario) {
       workbenchRoundTrip: visualScenario.workbenchRoundTrip,
       canonicalHashes: visualScenario.canonicalHashes,
     },
-    traceProjection: createVisualTraceProjection(visualScenario),
+    traceProjection: {
+      ...createVisualTraceProjection(visualScenario),
+      ...profileRows,
+    },
     assertionDefinitions: structuredClone(
       visualScenario.assertionResults ?? []
     ),
@@ -611,7 +814,11 @@ function createGoldenTraceProjection(report) {
   );
   const effects = report.actual?.trace?.effects ?? [];
   const resourceEvents = report.actual?.trace?.specialResources ?? [];
+  const tuningMarkEvents = report.actual?.trace?.tuningMarks ?? [];
   const targetStates = report.actual?.trace?.targetStates ?? [];
+  const stateOperations = new Set(
+    targetStates.map(event => event.operation).filter(Boolean)
+  );
   const effectOperations = new Set(
     effects.map(effect => effect.operation).filter(Boolean)
   );
@@ -685,12 +892,14 @@ function createGoldenTraceProjection(report) {
       'condition-insufficient-negative':
         (report.actual?.actions?.blockedActionIds ?? []).length > 0,
       'resource-exact-and-insufficient':
-        resourceEvents.length > 0 &&
+        (resourceEvents.length > 0 || tuningMarkEvents.length > 0) &&
         (report.actual?.actions?.blockedActionIds ?? []).length > 0,
       'buff-apply-refresh-stack-expire':
-        effectOperations.has('apply') &&
-        effectOperations.has('expire') &&
-        (effectOperations.has('refresh') || effectOperations.has('stack')),
+        (effectOperations.has('apply') || stateOperations.has('gain')) &&
+        (effectOperations.has('expire') || stateOperations.has('expire')) &&
+        (effectOperations.has('refresh') ||
+          effectOperations.has('stack') ||
+          stateOperations.has('refresh')),
       'foreground-background-switch':
         hasSwitch &&
         autoRecoveryReasons.has('verified-auto-sp-background') &&
@@ -812,6 +1021,43 @@ function isNotApplicableRecord(record) {
   return (
     record.status === 'not-applicable' ||
     record.impactClassification === 'not-applicable'
+  );
+}
+
+function isUnwiredControlWindowRequirement(record, dimension, profile) {
+  if (dimension !== 'control-window') return false;
+  const controlSkillId = Number(
+    record.sourceControlSkillId ?? record.controlSkillId
+  );
+  const subSkillIndex = Number(
+    record.sourceSubSkillIndex ?? record.subSkillIndex
+  );
+  if (!Number.isInteger(controlSkillId)) return false;
+  const control = (profile?.contracts?.controls ?? []).find(
+    candidate => Number(candidate.controlSkillId) === controlSkillId
+  );
+  if (!control) return false;
+  const hasAppliedHit = (control.hits ?? []).some(
+    hit =>
+      Number(hit.mapIndex ?? hit.subSkillIndex) === subSkillIndex &&
+      ['applied', 'source-verified'].includes(hit.sourceEvidenceStatus)
+  );
+  const hasAppliedEffect = (control.effects ?? []).some(
+    effect =>
+      Number(effect.mapIndex ?? effect.subSkillIndex) === subSkillIndex &&
+      effect.classification === 'applied'
+  );
+  if (hasAppliedHit) return false;
+  const subEffects = (control.effects ?? []).filter(
+    effect =>
+      Number(effect.mapIndex ?? effect.subSkillIndex) === subSkillIndex &&
+      effect.classification === 'applied'
+  );
+  if (subEffects.length === 0) return true;
+  return subEffects.every(
+    effect =>
+      effect.kind === 'pack' &&
+      /基础触发器|基础.*触发/.test(String(effect.name ?? ''))
   );
 }
 

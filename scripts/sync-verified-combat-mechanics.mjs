@@ -5385,7 +5385,7 @@ function applyHeroParryRuntimeChainMerge(controlBindings) {
       effect.classification === 'applied' &&
       Number(effect.mapIndex) === 1
   );
-  const runtimeHits = (parryRuntime.hits ?? []).filter(
+  const runtimeHits = createControlRuntimeHits(parryRuntime).filter(
     hit => Number(hit.mapIndex) === 1
   );
   if (runtimeEffects.length === 0 && runtimeHits.length === 0) {

@@ -24,6 +24,7 @@ import {
   compareActionSourceSequence,
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
+import { msToFrame } from '../../domain/timebase';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -145,6 +146,17 @@ export function createVerifiedActionVariantRuntime({
         profile.runtimeGenerationMode === 'persistent-property-runtime')
   );
   const graph = mechanicsPackage.actionVariantGraph;
+  const publicControlSkillIdsByOwner = new Map();
+  for (const mapping of mechanicsPackage.actionMappings ?? []) {
+    if (mapping.ownerKind !== 'actor') continue;
+    const ownerKey = Number(mapping.ownerId);
+    if (!publicControlSkillIdsByOwner.has(ownerKey)) {
+      publicControlSkillIdsByOwner.set(ownerKey, new Set());
+    }
+    publicControlSkillIdsByOwner
+      .get(ownerKey)
+      .add(Number(mapping.controlSkillId));
+  }
   const switchBindings = graph.edges
     .filter(edge => edge.applied)
     .sort(compareBindings);
@@ -549,7 +561,13 @@ export function createVerifiedActionVariantRuntime({
 
   const applySwitchWindow = descriptor => {
     const state = actorStateById.get(descriptor.action.actorId);
-    if (!state || !isSwitchConditionSatisfied(descriptor.binding, state)) {
+    const stateDependentCondition =
+      descriptor.binding?.condition &&
+      descriptor.binding.condition.kind !== 'always';
+    const conditionSatisfied =
+      !stateDependentCondition ||
+      (state && isSwitchConditionSatisfied(descriptor.binding, state));
+    if (!conditionSatisfied) {
       return;
     }
     const inputWindow = descriptor.binding.inputWindow;
@@ -877,6 +895,27 @@ export function createVerifiedActionVariantRuntime({
         directExecutionForm?.executionControlSkillId ??
         inputSelection.option?.executionControlSkillId ??
         publicControlSkillId;
+      if (
+        activeSelection.status === 'selected' &&
+        activeSelection.binding &&
+        Number(activeSelection.binding.targetControlSkillId) !==
+          Number(publicControlSkillId) &&
+        activeSelection.binding.inputCommand === mapping?.actionKind
+      ) {
+        executionControlSkillId = Number(
+          activeSelection.binding.targetControlSkillId
+        );
+        selectedSubSkillIndex = Number(
+          activeSelection.binding.targetSubSkillIndex
+        );
+        selectionSource = {
+          sourceKind: 'verified-active-switch-skill-index-window-derived-control',
+          sourceIdentity: activeSelection.binding.sourceIdentity,
+          decisionFrame:
+            activeSelection.binding.activationFrame ?? 0,
+          semanticName: activeSelection.binding.semanticName ?? null,
+        };
+      }
       selectionSource = contextSelection.binding
         ? {
             sourceKind: 'verified-input-context-variant',
@@ -970,6 +1009,106 @@ export function createVerifiedActionVariantRuntime({
           semanticName: semanticForm.semanticName,
         };
       }
+      if (
+        mapping?.actionKind === 'normal-attack' &&
+        !activeSelection.binding &&
+        !contextSelection.binding
+      ) {
+        const chaseWindow = activeSwitchWindows.find(
+          window =>
+            window.actorId === action.actorId &&
+            window.inputCommand === 'normal-attack' &&
+            window.targetControlSkillId != null &&
+            !publicControlSkillIdsByOwner
+              .get(characterId)
+              ?.has(Number(window.targetControlSkillId)) &&
+            action.contextActionId === window.sourceActionId &&
+            window.startsAtMs <= actionTimeMs &&
+            actionTimeMs < window.endsAtMs
+        );
+        if (chaseWindow) {
+          const chaseControlBinding = (
+            mechanicsPackage.actionVariantControlBindings ?? []
+          ).find(
+            binding =>
+              Number(binding.controlSkillId) ===
+              Number(chaseWindow.targetControlSkillId)
+          );
+          const chaseVariant = (
+            chaseControlBinding?.variants ?? []
+          ).find(
+            variant =>
+              Number(variant.subSkillIndex) ===
+              Number(chaseWindow.targetSubSkillIndex)
+          );
+          const chaseFrames = Number(
+            chaseVariant?.frameCounts?.[0]?.frameCount ??
+              chaseControlBinding?.frameCounts?.[0]?.frameCount ??
+              230
+          );
+          const sourceAction = (scenario?.actions ?? []).find(
+            candidate => candidate.id === chaseWindow.sourceActionId
+          );
+          const predecessorStartMs = Number(sourceAction?.startMs) || 0;
+          const inputFrame = msToFrame(actionTimeMs);
+          const inputOffsetFrame =
+            inputFrame - msToFrame(predecessorStartMs);
+          executionControlSkillId = Number(chaseWindow.targetControlSkillId);
+          selectedSubSkillIndex = Number(
+            chaseWindow.targetSubSkillIndex
+          );
+          selectionSource = {
+            sourceKind: 'verified-active-switch-skill-index-window-derived-control',
+            sourceIdentity: chaseWindow.sourceIdentity,
+            decisionFrame: chaseWindow.activationFrame ?? 0,
+            semanticName: chaseWindow.semanticName ?? null,
+            contextActionId: chaseWindow.sourceActionId,
+            executionTiming: {
+              subSkillIndex: Number(chaseWindow.targetSubSkillIndex),
+              occupancy: {
+                status: 'applied',
+                startFrame: 0,
+                endFrame: chaseFrames,
+                durationFrames: chaseFrames,
+                frameRate: FRAME_RATE,
+                sourceKind: 'verified-derived-control-frame-count',
+                sourceIdentity:
+                  chaseControlBinding?.sourcePath ??
+                  chaseWindow.sourceIdentity,
+              },
+              animation: {
+                status: 'applied',
+                startFrame: 0,
+                endFrame: chaseFrames,
+                durationFrames: chaseFrames,
+                frameRate: FRAME_RATE,
+                sourceIdentity:
+                  chaseControlBinding?.sourcePath ??
+                  chaseWindow.sourceIdentity,
+              },
+              input: null,
+              status: 'applied',
+            },
+            contextualInputScheduling: {
+              resolutionKind: 'direct-input-window',
+              inputSemantics: 'immediate-interrupt',
+              requestedExecutionStartFrame: inputFrame,
+              requestedExecutionStartMs: actionTimeMs,
+              inputFrame,
+              inputOffsetFrame,
+              inputTimeMs: actionTimeMs,
+              executionStartFrame: inputFrame,
+              executionStartOffsetFrame: inputOffsetFrame,
+              executionStartMs: actionTimeMs,
+              predecessorEffectiveEndFrame: inputFrame,
+              predecessorEffectiveEndOffsetFrame: inputOffsetFrame,
+              predecessorEffectiveEndMs: actionTimeMs,
+              status: 'verified-context-input-scheduling-ready',
+              applied: true,
+            },
+          };
+        }
+      }
     }
 
     const resolution = applyAttackInputChainTimingResolution({
@@ -983,6 +1122,52 @@ export function createVerifiedActionVariantRuntime({
       segment: attackChainSelection.segment,
       attackInputSegment: runtimeAction.attackInput,
     });
+    if (
+      mapping?.actionKind === 'perfect-parry' &&
+      Number(characterId) === 109001 &&
+      resolution.ready
+    ) {
+      const chainHits =
+        (mechanicsPackage.actionVariantControlBindings ?? [])
+          .find(binding => Number(binding.controlSkillId) === 10900149)
+          ?.hits?.filter(hit => Number(hit.mapIndex) === 1) ?? [];
+      if (chainHits.length > 0) {
+        const maxChainFrame = Math.max(
+          ...chainHits.map(hit => Number(hit.trigger?.startFrame) || 0)
+        );
+        const currentDuration = Number(
+          resolution.actionBinding?.actionTiming?.occupancy
+            ?.durationFrames ?? 0
+        );
+        const effectiveDuration = Math.max(
+          currentDuration,
+          maxChainFrame + 1
+        );
+        resolution.hits = [...(resolution.hits ?? []), ...chainHits];
+        resolution.actionBinding = {
+          ...resolution.actionBinding,
+          selectedHitIdentities: [
+            ...(resolution.actionBinding?.selectedHitIdentities ?? []),
+            ...chainHits.map(hit => hit.hitIdentity),
+          ],
+          runtimeHitCount:
+            Number(resolution.actionBinding?.runtimeHitCount ?? 0) +
+            chainHits.length,
+          actionTiming: resolution.actionBinding?.actionTiming
+            ? {
+                ...resolution.actionBinding.actionTiming,
+                occupancy: {
+                  ...resolution.actionBinding.actionTiming.occupancy,
+                  durationFrames: effectiveDuration,
+                  endFrame: effectiveDuration,
+                  status: 'applied',
+                },
+              }
+            : undefined,
+        };
+        resolution.actualDurationFrames = effectiveDuration;
+      }
+    }
     actionResolutionById.set(action.id, resolution);
     selectionByActionId.set(
       action.id,
@@ -2220,6 +2405,7 @@ function selectSwitchWindowsForActionKind(candidates, actionKind) {
 
 function isSwitchConditionSatisfied(binding, state) {
   if (!binding.condition) return true;
+  if (binding.condition.kind === 'always') return true;
   if (binding.condition.kind === 'resource-at-least') {
     return state.current >= Number(binding.condition.value || 0);
   }

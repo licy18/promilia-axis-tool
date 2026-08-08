@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "0d7bd252df0bfd42",
+        "reportHash": "e3ad554a45a45cbe",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "c3c8579983caeb30",
-          "data": "927e937a9deaa71e",
-          "trace": "305ed8a58636ea25",
+          "input": "54dc7997e7805bd7",
+          "data": "3184384090197a27",
+          "trace": "06525be94a224aab",
           "evaluation": null
         }
       },
@@ -65,7 +65,104 @@
             "projectionIdentity": "golden-action-form:m10-b2-r1:101003:ultimate-controlled-buff-switch:xiaoyu-hit-during-buff"
           }
         ],
-        "hits": [],
+        "hits": [
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|176|1",
+            "frame": 236,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:0"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|184|2",
+            "frame": 244,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:1"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
+            "frame": 441,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:10"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
+            "frame": 455,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:11"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
+            "frame": 457,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
+            "frame": 509,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
+          },
+          {
+            "actionId": "xiaoyu-hit-during-buff",
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "frame": 762,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:14"
+          },
+          {
+            "actionId": "xiaoyu-hit-after-expiry",
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "frame": 1212,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:15"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|193|3",
+            "frame": 253,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:2"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|201|4",
+            "frame": 261,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|207|5",
+            "frame": 267,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:4"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|213|6",
+            "frame": 273,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:5"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|3|1898475899045787222|223|7",
+            "frame": 283,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:6"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
+            "frame": 429,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:7"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
+            "frame": 433,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:8"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
+            "frame": 437,
+            "projectionIdentity": "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
+          }
+        ],
         "effects": [
           {
             "actionId": "han-ultimate",
@@ -146,10 +243,38 @@
           },
           {
             "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19"
+          },
+          {
+            "actionId": "han-ultimate",
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101010",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2"
+          },
+          {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20"
+          },
+          {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
+          },
+          {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22"
           },
           {
             "actionId": "han-ultimate",
@@ -203,6 +328,38 @@
         ],
         "resources": [],
         "states": [],
+        "controlWindows": [
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|197-228|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_5181606134747078124__5181606134747078124.json#behaviorlineControl[0].behaviorList[pathId=-7545852354711020052]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7545852354711020052__-7545852354711020052.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-1"
+          },
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|228-241|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_3971459329204264428__3971459329204264428.json#behaviorlineControl[0].behaviorList[pathId=-1509657299112321556]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-1509657299112321556__-1509657299112321556.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-2"
+          },
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|241-290|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7146776232816763412__-7146776232816763412.json#behaviorlineControl[0].behaviorList[pathId=-6323540235944092180]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6323540235944092180__-6323540235944092180.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-3"
+          }
+        ],
+        "variantEdges": [],
+        "variantWindows": [],
+        "conditionalHitGroups": [],
+        "passives": [],
+        "switchTriggers": [
+          {
+            "profileIdentity": "actor:101003|switch-trigger:on-exit|skill:10100322",
+            "triggerPhase": "on-exit",
+            "controlSkillId": 10100322,
+            "projectionIdentity": "golden-switchTriggers-m10-b2-r1:101003:ultimate-controlled-buff-switch-1"
+          }
+        ],
         "diagnostics": [],
         "criticalDecisions": [],
         "facts": {
@@ -213,7 +370,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "47783e3e0c8c7a22",
+      "traceProjectionHash": "f235a23c368fcb51",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -394,6 +551,60 @@
           ],
           "reasons": [],
           "assertionHash": "82312be8c1b8f265"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-1",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|197-228|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_5181606134747078124__5181606134747078124.json#behaviorlineControl[0].behaviorList[pathId=-7545852354711020052]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7545852354711020052__-7545852354711020052.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-1"
+          ],
+          "reasons": [],
+          "assertionHash": "20926cf5209e146b"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-2",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|228-241|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_3971459329204264428__3971459329204264428.json#behaviorlineControl[0].behaviorList[pathId=-1509657299112321556]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-1509657299112321556__-1509657299112321556.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-2"
+          ],
+          "reasons": [],
+          "assertionHash": "493a5dd7dd285fea"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-3",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|241-290|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7146776232816763412__-7146776232816763412.json#behaviorlineControl[0].behaviorList[pathId=-6323540235944092180]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6323540235944092180__-6323540235944092180.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2-r1:101003:ultimate-controlled-buff-switch-3"
+          ],
+          "reasons": [],
+          "assertionHash": "72a63ebd6f684726"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
@@ -618,6 +829,26 @@
           "assertionHash": "954535ec970bd7f3"
         },
         {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
+          ],
+          "reasons": [],
+          "assertionHash": "f8d207e38c4a8ee9"
+        },
+        {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2",
           "selector": {
             "actionId": "han-ultimate",
@@ -636,6 +867,64 @@
           ],
           "reasons": [],
           "assertionHash": "f632b32edbe5e165"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
+          ],
+          "reasons": [],
+          "assertionHash": "1de56e2cee33a449"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20",
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
+          ],
+          "reasons": [],
+          "assertionHash": "cfe03e7bbddc5c64"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22"
+          ],
+          "reasons": [],
+          "assertionHash": "1575c5994ea7f38c"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3",
@@ -806,9 +1095,299 @@
           ],
           "reasons": [],
           "assertionHash": "a105b0c3214ea211"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|176|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:0"
+          ],
+          "reasons": [],
+          "assertionHash": "48b379c9ab997c37"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:1",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|184|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:1"
+          ],
+          "reasons": [],
+          "assertionHash": "9d62b7e6ff07773d"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:10",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:10"
+          ],
+          "reasons": [],
+          "assertionHash": "daf7da33ae20444c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:11",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:11"
+          ],
+          "reasons": [],
+          "assertionHash": "dd2e3d817513c8f6"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:12",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
+          ],
+          "reasons": [],
+          "assertionHash": "607a9ec9a258bb65"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:13",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
+          ],
+          "reasons": [],
+          "assertionHash": "15954b75182b2220"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:14",
+          "selector": {
+            "actionId": "xiaoyu-hit-during-buff",
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:14"
+          ],
+          "reasons": [],
+          "assertionHash": "39fab52696821932"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:15",
+          "selector": {
+            "actionId": "xiaoyu-hit-after-expiry",
+            "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:15"
+          ],
+          "reasons": [],
+          "assertionHash": "244e2dc932f41569"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:2",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|193|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:2"
+          ],
+          "reasons": [],
+          "assertionHash": "91defbfab94458c8"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:3",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|201|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
+          ],
+          "reasons": [],
+          "assertionHash": "ad35b88600b46c19"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:4",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|207|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:4"
+          ],
+          "reasons": [],
+          "assertionHash": "6ba0b21dba390f8e"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:5",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|213|6",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:5"
+          ],
+          "reasons": [],
+          "assertionHash": "7cb6073883bbdc1c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:6",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|3|1898475899045787222|223|7",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:6"
+          ],
+          "reasons": [],
+          "assertionHash": "06d804ddc8a06b67"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:7",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:7"
+          ],
+          "reasons": [],
+          "assertionHash": "616ad4ba9a97b48b"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:8",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:8"
+          ],
+          "reasons": [],
+          "assertionHash": "38bdc016d8b528bf"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:9",
+          "selector": {
+            "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
+          ],
+          "reasons": [],
+          "assertionHash": "432d5febc95eacb6"
+        },
+        {
+          "assertionIdentity": "trace-switch-trigger:golden-switchTriggers-m10-b2-r1:101003:ultimate-controlled-buff-switch-1",
+          "selector": {
+            "controlSkillId": 10100322,
+            "kind": "switch-trigger",
+            "profileIdentity": "actor:101003|switch-trigger:on-exit|skill:10100322",
+            "triggerPhase": "on-exit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-switchTriggers-m10-b2-r1:101003:ultimate-controlled-buff-switch-1"
+          ],
+          "reasons": [],
+          "assertionHash": "1be842279270d75b"
         }
       ],
-      "scenarioCaseHash": "8232005c1e7a1aff"
+      "scenarioCaseHash": "31a81ca3def32785"
     },
     {
       "schemaVersion": 1,
@@ -816,7 +1395,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "23e4aba91018e80c",
+        "reportHash": "e87f87885b162c7a",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -826,7 +1405,7 @@
         "canonicalHashes": {
           "input": "61a93b3529b800ab",
           "data": "1219ae706521d162",
-          "trace": "260ff399871f1fde",
+          "trace": "61aec679d0b2959d",
           "evaluation": null
         }
       },
@@ -945,7 +1524,416 @@
             "projectionIdentity": "golden-action-form:m10-b2:101003:120s-three-actor-golden:switch-away-from-han--on-exit--actor-101003--star-carry"
           }
         ],
-        "hits": [],
+        "hits": [
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|176|1",
+            "frame": 236,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:0"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|184|2",
+            "frame": 244,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:1"
+          },
+          {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:6010691194740274320|config:0|bullet:101003014:0:0|element:101003037:0",
+            "frame": 569,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:10"
+          },
+          {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:-5575632006342183792|config:0|bullet:101003014:0:0|element:101003037:0",
+            "frame": 572,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:11"
+          },
+          {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:3911383347357480080|config:0|bullet:101003014:0:0|element:101003037:0",
+            "frame": 575,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:12"
+          },
+          {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|0|94149154268017158|38|1",
+            "frame": 626,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:13"
+          },
+          {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|59|2",
+            "frame": 647,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:14"
+          },
+          {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|68|3",
+            "frame": 656,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:15"
+          },
+          {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|77|4",
+            "frame": 665,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:16"
+          },
+          {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|0|655406946032765735|50|1",
+            "frame": 689,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:17"
+          },
+          {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|65|2",
+            "frame": 704,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:18"
+          },
+          {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|74|3",
+            "frame": 713,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:19"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|193|3",
+            "frame": 253,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:2"
+          },
+          {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|83|4",
+            "frame": 722,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:20"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|61|1",
+            "frame": 1861,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:21"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|68|2",
+            "frame": 1868,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:22"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|73|3",
+            "frame": 1873,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:23"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|94|4",
+            "frame": 1894,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:24"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|99|5",
+            "frame": 1899,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:25"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|104|6",
+            "frame": 1904,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:26"
+          },
+          {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|109|7",
+            "frame": 1909,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:27"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|projectile|101003066|101003101|0|0|control:10100310|sub:0|behavior:-78150393795048980|config:0|bullet:101003101:0:0|element:101003066:0",
+            "frame": 2028,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:28"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|30|2",
+            "frame": 2030,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:29"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|201|4",
+            "frame": 261,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:3"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|31|3",
+            "frame": 2031,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:30"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|40|4",
+            "frame": 2040,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:31"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|51|5",
+            "frame": 2051,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:32"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|55|6",
+            "frame": 2055,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:33"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|58|7",
+            "frame": 2058,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:34"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|62|8",
+            "frame": 2062,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:35"
+          },
+          {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|65|9",
+            "frame": 2065,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:36"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|bulletElements|0|2408469058190259773|24|1",
+            "frame": 2174,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:37"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|27|2",
+            "frame": 2177,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:38"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|27|3",
+            "frame": 2177,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:39"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|207|5",
+            "frame": 267,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:4"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|35|4",
+            "frame": 2185,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:40"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|43|5",
+            "frame": 2193,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:41"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|51|6",
+            "frame": 2201,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:42"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|53|7",
+            "frame": 2203,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:43"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|54|8",
+            "frame": 2204,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:44"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|58|9",
+            "frame": 2208,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:45"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|61|10",
+            "frame": 2211,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:46"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|66|11",
+            "frame": 2216,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:47"
+          },
+          {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|44|1",
+            "frame": 2394,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:48"
+          },
+          {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|51|2",
+            "frame": 2401,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:49"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|213|6",
+            "frame": 273,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:5"
+          },
+          {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|58|3",
+            "frame": 2408,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:50"
+          },
+          {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|65|4",
+            "frame": 2415,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:51"
+          },
+          {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|73|5",
+            "frame": 2423,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:52"
+          },
+          {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:7675042512476526473|config:0|bullet:101003002:0:0|element:101003191:0",
+            "frame": 2617,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:53"
+          },
+          {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:4712639018698954633|config:0|bullet:101003002:0:0|element:101003191:0",
+            "frame": 2621,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:54"
+          },
+          {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:-7153878807886276727|config:0|bullet:101003002:0:0|element:101003191:0",
+            "frame": 2625,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:55"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
+            "frame": 2929,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:56"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
+            "frame": 2933,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:57"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
+            "frame": 2937,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:58"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
+            "frame": 2941,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:59"
+          },
+          {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|3|1898475899045787222|223|7",
+            "frame": 283,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:6"
+          },
+          {
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
+            "frame": 2955,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:60"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
+            "frame": 2957,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:61"
+          },
+          {
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
+            "frame": 3009,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:62"
+          },
+          {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|2|-6736157915999571924|27|1",
+            "frame": 3327,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:63"
+          },
+          {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|38|2",
+            "frame": 3338,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:64"
+          },
+          {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|49|3",
+            "frame": 3349,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:65"
+          },
+          {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|5|8963641323797659805|138|4",
+            "frame": 3438,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:66"
+          },
+          {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|5|8963641323797659805|142|5",
+            "frame": 3442,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:67"
+          },
+          {
+            "actionId": "han-normal-a1",
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "frame": 513,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:7"
+          },
+          {
+            "actionId": "han-normal-a2",
+            "hitIdentity": "10100302|0|projectile|101003046|101003012|0|0|control:10100302|sub:0|behavior:-2489218366535036413|config:0|bullet:101003012:0:0|element:101003046:0",
+            "frame": 539,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:8"
+          },
+          {
+            "actionId": "han-normal-a2",
+            "hitIdentity": "10100302|0|projectile|101003046|101003012|0|0|control:10100302|sub:0|behavior:2266798532694249987|config:0|bullet:101003012:0:0|element:101003046:0",
+            "frame": 546,
+            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:9"
+          }
+        ],
         "effects": [
           {
             "actionId": "han-ultimate",
@@ -1362,6 +2350,55 @@
           },
           {
             "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:62"
+          },
+          {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:63"
+          },
+          {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:65"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
+          },
+          {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": "actor-101003",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
+          },
+          {
+            "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
@@ -1457,6 +2494,237 @@
             "projectionIdentity": "golden-state:m10-b2:101003:120s-three-actor-golden:8"
           }
         ],
+        "controlWindows": [
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-1126751650670210077__-1126751650670210077.json#behaviorlineControl[0].behaviorList[pathId=4386047408647082979]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_4386047408647082979__4386047408647082979.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-1"
+          },
+          {
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|32-55|target:10100304/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_1357598574432023696__1357598574432023696.json#behaviorlineControl[0].behaviorList[pathId=2093885213480907920]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_2093885213480907920__2093885213480907920.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-10"
+          },
+          {
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|50-212|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-6136761643860691824__-6136761643860691824.json#behaviorlineControl[0].behaviorList[pathId=3362479165285004432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_3362479165285004432__3362479165285004432.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-11"
+          },
+          {
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_7042094605719589007__7042094605719589007.json#behaviorlineControl[0].behaviorList[pathId=-4960972030285033329]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_-4960972030285033329__-4960972030285033329.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-12"
+          },
+          {
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|51-183|target:10100305/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1399648220630438031__1399648220630438031.json#behaviorlineControl[0].behaviorList[pathId=1121532120759685263]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1121532120759685263__1121532120759685263.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-13"
+          },
+          {
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|74-196|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_-6400834075132079985__-6400834075132079985.json#behaviorlineControl[0].behaviorList[pathId=7128308749475401871]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_7128308749475401871__7128308749475401871.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-14"
+          },
+          {
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|0-99|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-8757759818089397974__-8757759818089397974.json#behaviorlineControl[0].behaviorList[pathId=-5631268870881902294]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-5631268870881902294__-5631268870881902294.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-15"
+          },
+          {
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|84-108|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_8375108249579061546__8375108249579061546.json#behaviorlineControl[0].behaviorList[pathId=-8602280256685440726]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-8602280256685440726__-8602280256685440726.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-16"
+          },
+          {
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|85-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_9116679090060427562__9116679090060427562.json#behaviorlineControl[0].behaviorList[pathId=7367241230325547306]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_7367241230325547306__7367241230325547306.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-17"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-18"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|61-188|target:10100341/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-19"
+          },
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|18-50|target:10100302/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-2"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|65-237|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-20"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|0-104|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-21"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|93-129|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-22"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|97-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-23"
+          },
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|197-228|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_5181606134747078124__5181606134747078124.json#behaviorlineControl[0].behaviorList[pathId=-7545852354711020052]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7545852354711020052__-7545852354711020052.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-24"
+          },
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|228-241|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_3971459329204264428__3971459329204264428.json#behaviorlineControl[0].behaviorList[pathId=-1509657299112321556]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-1509657299112321556__-1509657299112321556.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-25"
+          },
+          {
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|241-290|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7146776232816763412__-7146776232816763412.json#behaviorlineControl[0].behaviorList[pathId=-6323540235944092180]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6323540235944092180__-6323540235944092180.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-26"
+          },
+          {
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100325|sub:0|1-97|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_3116035440514455433__3116035440514455433.json#behaviorlineControl[0].behaviorList[pathId=-5679152032054618231]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_-5679152032054618231__-5679152032054618231.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-27"
+          },
+          {
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100325|sub:0|43-191|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_-7593549798923610231__-7593549798923610231.json#behaviorlineControl[0].behaviorList[pathId=3987290819601717129]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_3987290819601717129__3987290819601717129.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-28"
+          },
+          {
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|0-75|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_837089981325289854__837089981325289854.json#behaviorlineControl[0].behaviorList[pathId=5851637757235014014]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_5851637757235014014__5851637757235014014.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-29"
+          },
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|50-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_6786095191977858019__6786095191977858019.json#behaviorlineControl[0].behaviorList[pathId=3831082747140543459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_3831082747140543459__3831082747140543459.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-3"
+          },
+          {
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|65-85|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-7016284060932789890__-7016284060932789890.json#behaviorlineControl[0].behaviorList[pathId=-6319355615862281858]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-6319355615862281858__-6319355615862281858.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-30"
+          },
+          {
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|71-211|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-6124302542716163714__-6124302542716163714.json#behaviorlineControl[0].behaviorList[pathId=-8642576120664446594]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-8642576120664446594__-8642576120664446594.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-31"
+          },
+          {
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
+            "windowIdentity": "actor:101003|control:10100349|sub:1|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_3952153116993328725__3952153116993328725.json#behaviorlineControl[0].behaviorList[pathId=3732984561966716501]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_3732984561966716501__3732984561966716501.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-32"
+          },
+          {
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
+            "windowIdentity": "actor:101003|control:10100349|sub:1|60-200|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_-5696881101112273323__-5696881101112273323.json#behaviorlineControl[0].behaviorList[pathId=4229464481616893525]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_4229464481616893525__4229464481616893525.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-33"
+          },
+          {
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|0-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-2250149692702256637__-2250149692702256637.json#behaviorlineControl[0].behaviorList[pathId=2710245109651673603]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_2710245109651673603__2710245109651673603.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-4"
+          },
+          {
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|38-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-704846623719812605__-704846623719812605.json#behaviorlineControl[0].behaviorList[pathId=-5254623506022591997]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-5254623506022591997__-5254623506022591997.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-5"
+          },
+          {
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|38-55|target:10100303/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_7765764241533702659__7765764241533702659.json#behaviorlineControl[0].behaviorList[pathId=5305701981963162115]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_5305701981963162115__5305701981963162115.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-6"
+          },
+          {
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|55-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_3773975594404221443__3773975594404221443.json#behaviorlineControl[0].behaviorList[pathId=-7117141069155331581]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-7117141069155331581__-7117141069155331581.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-7"
+          },
+          {
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|0-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-3508671385872698224__-3508671385872698224.json#behaviorlineControl[0].behaviorList[pathId=-4584371141352295280]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-4584371141352295280__-4584371141352295280.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-8"
+          },
+          {
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|20-32|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-9027656714241575792__-9027656714241575792.json#behaviorlineControl[0].behaviorList[pathId=-7994558148084960112]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-7994558148084960112__-7994558148084960112.json",
+            "projectionIdentity": "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-9"
+          }
+        ],
+        "variantEdges": [],
+        "variantWindows": [],
+        "conditionalHitGroups": [
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "groupIdentity": "han-charged-stage-one-firework-explosion",
+            "projectionIdentity": "golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-1"
+          },
+          {
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "groupIdentity": "han-charged-stage-two-firework-explosion",
+            "projectionIdentity": "golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-2"
+          }
+        ],
+        "passives": [
+          {
+            "passiveIdentity": "actor:101003:passive:10100361",
+            "effectId": "battle-element:480124006",
+            "projectionIdentity": "golden-passives-m10-b2:101003:120s-three-actor-golden-1"
+          }
+        ],
+        "switchTriggers": [
+          {
+            "profileIdentity": "actor:101003|switch-trigger:on-exit|skill:10100322",
+            "triggerPhase": "on-exit",
+            "controlSkillId": 10100322,
+            "projectionIdentity": "golden-switchTriggers-m10-b2:101003:120s-three-actor-golden-1"
+          }
+        ],
         "diagnostics": [],
         "criticalDecisions": [],
         "facts": {
@@ -1467,7 +2735,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "5256e2fd32ddb822",
+      "traceProjectionHash": "a48c254d33d29c8e",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -1819,6 +3087,636 @@
           ],
           "reasons": [],
           "assertionHash": "71dc08562cf673b8"
+        },
+        {
+          "assertionIdentity": "trace-conditional-hit-group:golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-1",
+          "selector": {
+            "controlSkillId": 10100310,
+            "groupIdentity": "han-charged-stage-one-firework-explosion",
+            "kind": "conditional-hit-group",
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-1"
+          ],
+          "reasons": [],
+          "assertionHash": "13e2d8eca763c115"
+        },
+        {
+          "assertionIdentity": "trace-conditional-hit-group:golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-2",
+          "selector": {
+            "controlSkillId": 10100341,
+            "groupIdentity": "han-charged-stage-two-firework-explosion",
+            "kind": "conditional-hit-group",
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-conditionalHitGroups-m10-b2:101003:120s-three-actor-golden-2"
+          ],
+          "reasons": [],
+          "assertionHash": "04a7765d3849e5b3"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-1",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-1126751650670210077__-1126751650670210077.json#behaviorlineControl[0].behaviorList[pathId=4386047408647082979]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_4386047408647082979__4386047408647082979.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-1"
+          ],
+          "reasons": [],
+          "assertionHash": "07a0414688789634"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-10",
+          "selector": {
+            "controlSkillId": 10100303,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|32-55|target:10100304/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_1357598574432023696__1357598574432023696.json#behaviorlineControl[0].behaviorList[pathId=2093885213480907920]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_2093885213480907920__2093885213480907920.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-10"
+          ],
+          "reasons": [],
+          "assertionHash": "b228af303cb4e263"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-11",
+          "selector": {
+            "controlSkillId": 10100303,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|50-212|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-6136761643860691824__-6136761643860691824.json#behaviorlineControl[0].behaviorList[pathId=3362479165285004432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_3362479165285004432__3362479165285004432.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-11"
+          ],
+          "reasons": [],
+          "assertionHash": "9f91fe0d876d6051"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-12",
+          "selector": {
+            "controlSkillId": 10100304,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_7042094605719589007__7042094605719589007.json#behaviorlineControl[0].behaviorList[pathId=-4960972030285033329]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_-4960972030285033329__-4960972030285033329.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-12"
+          ],
+          "reasons": [],
+          "assertionHash": "192eb43f169f2197"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-13",
+          "selector": {
+            "controlSkillId": 10100304,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|51-183|target:10100305/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1399648220630438031__1399648220630438031.json#behaviorlineControl[0].behaviorList[pathId=1121532120759685263]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_1121532120759685263__1121532120759685263.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-13"
+          ],
+          "reasons": [],
+          "assertionHash": "4e96a827e658fa3a"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-14",
+          "selector": {
+            "controlSkillId": 10100304,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100304|sub:0|74-196|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_-6400834075132079985__-6400834075132079985.json#behaviorlineControl[0].behaviorList[pathId=7128308749475401871]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100304.asset/MonoBehaviour/MonoBehaviour_7128308749475401871__7128308749475401871.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-14"
+          ],
+          "reasons": [],
+          "assertionHash": "81c9eb5b0935b12e"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-15",
+          "selector": {
+            "controlSkillId": 10100305,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|0-99|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-8757759818089397974__-8757759818089397974.json#behaviorlineControl[0].behaviorList[pathId=-5631268870881902294]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-5631268870881902294__-5631268870881902294.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-15"
+          ],
+          "reasons": [],
+          "assertionHash": "8299ba5760b15e65"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-16",
+          "selector": {
+            "controlSkillId": 10100305,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|84-108|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_8375108249579061546__8375108249579061546.json#behaviorlineControl[0].behaviorList[pathId=-8602280256685440726]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_-8602280256685440726__-8602280256685440726.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-16"
+          ],
+          "reasons": [],
+          "assertionHash": "0839870df28f8f70"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-17",
+          "selector": {
+            "controlSkillId": 10100305,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100305|sub:0|85-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_9116679090060427562__9116679090060427562.json#behaviorlineControl[0].behaviorList[pathId=7367241230325547306]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100305.asset/MonoBehaviour/MonoBehaviour_7367241230325547306__7367241230325547306.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-17"
+          ],
+          "reasons": [],
+          "assertionHash": "d56f6247f02ef062"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-18",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-18"
+          ],
+          "reasons": [],
+          "assertionHash": "64e29b9125d51342"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-19",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|61-188|target:10100341/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-19"
+          ],
+          "reasons": [],
+          "assertionHash": "e006ce359f965533"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-2",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|18-50|target:10100302/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-2"
+          ],
+          "reasons": [],
+          "assertionHash": "08472009bdced4b5"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-20",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|65-237|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-20"
+          ],
+          "reasons": [],
+          "assertionHash": "7554fbc37b3d1f2e"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-21",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|0-104|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-21"
+          ],
+          "reasons": [],
+          "assertionHash": "0ff1cdb6c5ba0931"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-22",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|93-129|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-22"
+          ],
+          "reasons": [],
+          "assertionHash": "b323003ef4d8047b"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-23",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|97-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-23"
+          ],
+          "reasons": [],
+          "assertionHash": "9b57d1df9651b74d"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-24",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|197-228|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_5181606134747078124__5181606134747078124.json#behaviorlineControl[0].behaviorList[pathId=-7545852354711020052]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7545852354711020052__-7545852354711020052.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-24"
+          ],
+          "reasons": [],
+          "assertionHash": "4d9decd7d338c235"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-25",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|228-241|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_3971459329204264428__3971459329204264428.json#behaviorlineControl[0].behaviorList[pathId=-1509657299112321556]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-1509657299112321556__-1509657299112321556.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-25"
+          ],
+          "reasons": [],
+          "assertionHash": "a183f132008a21d8"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-26",
+          "selector": {
+            "controlSkillId": 10100313,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100313|sub:0|241-290|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-7146776232816763412__-7146776232816763412.json#behaviorlineControl[0].behaviorList[pathId=-6323540235944092180]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6323540235944092180__-6323540235944092180.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-26"
+          ],
+          "reasons": [],
+          "assertionHash": "469fa5b7854675b4"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-27",
+          "selector": {
+            "controlSkillId": 10100325,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100325|sub:0|1-97|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_3116035440514455433__3116035440514455433.json#behaviorlineControl[0].behaviorList[pathId=-5679152032054618231]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_-5679152032054618231__-5679152032054618231.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-27"
+          ],
+          "reasons": [],
+          "assertionHash": "b84f1f0f260fe80d"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-28",
+          "selector": {
+            "controlSkillId": 10100325,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100325|sub:0|43-191|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_-7593549798923610231__-7593549798923610231.json#behaviorlineControl[0].behaviorList[pathId=3987290819601717129]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100325.asset/MonoBehaviour/MonoBehaviour_3987290819601717129__3987290819601717129.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-28"
+          ],
+          "reasons": [],
+          "assertionHash": "045d70a270b35d6b"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-29",
+          "selector": {
+            "controlSkillId": 10100341,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|0-75|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_837089981325289854__837089981325289854.json#behaviorlineControl[0].behaviorList[pathId=5851637757235014014]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_5851637757235014014__5851637757235014014.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-29"
+          ],
+          "reasons": [],
+          "assertionHash": "7ace4d67640b07c3"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-3",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|50-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_6786095191977858019__6786095191977858019.json#behaviorlineControl[0].behaviorList[pathId=3831082747140543459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_3831082747140543459__3831082747140543459.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-3"
+          ],
+          "reasons": [],
+          "assertionHash": "198e0a2505b08045"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-30",
+          "selector": {
+            "controlSkillId": 10100341,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|65-85|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-7016284060932789890__-7016284060932789890.json#behaviorlineControl[0].behaviorList[pathId=-6319355615862281858]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-6319355615862281858__-6319355615862281858.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-30"
+          ],
+          "reasons": [],
+          "assertionHash": "b022eec48b79fb00"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-31",
+          "selector": {
+            "controlSkillId": 10100341,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100341|sub:0|71-211|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-6124302542716163714__-6124302542716163714.json#behaviorlineControl[0].behaviorList[pathId=-8642576120664446594]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100341.asset/MonoBehaviour/MonoBehaviour_-8642576120664446594__-8642576120664446594.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-31"
+          ],
+          "reasons": [],
+          "assertionHash": "c75a0431e1a0691f"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-32",
+          "selector": {
+            "controlSkillId": 10100349,
+            "kind": "control-window",
+            "subSkillIndex": 1,
+            "windowIdentity": "actor:101003|control:10100349|sub:1|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_3952153116993328725__3952153116993328725.json#behaviorlineControl[0].behaviorList[pathId=3732984561966716501]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_3732984561966716501__3732984561966716501.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-32"
+          ],
+          "reasons": [],
+          "assertionHash": "3016157264ab25b8"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-33",
+          "selector": {
+            "controlSkillId": 10100349,
+            "kind": "control-window",
+            "subSkillIndex": 1,
+            "windowIdentity": "actor:101003|control:10100349|sub:1|60-200|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_-5696881101112273323__-5696881101112273323.json#behaviorlineControl[0].behaviorList[pathId=4229464481616893525]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_4229464481616893525__4229464481616893525.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-33"
+          ],
+          "reasons": [],
+          "assertionHash": "273c04505d37215c"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-4",
+          "selector": {
+            "controlSkillId": 10100302,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|0-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-2250149692702256637__-2250149692702256637.json#behaviorlineControl[0].behaviorList[pathId=2710245109651673603]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_2710245109651673603__2710245109651673603.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-4"
+          ],
+          "reasons": [],
+          "assertionHash": "de837eb1d5839087"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-5",
+          "selector": {
+            "controlSkillId": 10100302,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|38-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-704846623719812605__-704846623719812605.json#behaviorlineControl[0].behaviorList[pathId=-5254623506022591997]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-5254623506022591997__-5254623506022591997.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-5"
+          ],
+          "reasons": [],
+          "assertionHash": "f95d6b48d19f93a5"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-6",
+          "selector": {
+            "controlSkillId": 10100302,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|38-55|target:10100303/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_7765764241533702659__7765764241533702659.json#behaviorlineControl[0].behaviorList[pathId=5305701981963162115]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_5305701981963162115__5305701981963162115.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-6"
+          ],
+          "reasons": [],
+          "assertionHash": "317d78e4220b73b5"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-7",
+          "selector": {
+            "controlSkillId": 10100302,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100302|sub:0|55-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_3773975594404221443__3773975594404221443.json#behaviorlineControl[0].behaviorList[pathId=-7117141069155331581]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100302.asset/MonoBehaviour/MonoBehaviour_-7117141069155331581__-7117141069155331581.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-7"
+          ],
+          "reasons": [],
+          "assertionHash": "276990baca6c9e6c"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-8",
+          "selector": {
+            "controlSkillId": 10100303,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|0-55|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-3508671385872698224__-3508671385872698224.json#behaviorlineControl[0].behaviorList[pathId=-4584371141352295280]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-4584371141352295280__-4584371141352295280.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-8"
+          ],
+          "reasons": [],
+          "assertionHash": "31658f6e97f72eb0"
+        },
+        {
+          "assertionIdentity": "trace-control-window:golden-controlWindows-m10-b2:101003:120s-three-actor-golden-9",
+          "selector": {
+            "controlSkillId": 10100303,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100303|sub:0|20-32|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-9027656714241575792__-9027656714241575792.json#behaviorlineControl[0].behaviorList[pathId=-7994558148084960112]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100303.asset/MonoBehaviour/MonoBehaviour_-7994558148084960112__-7994558148084960112.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-controlWindows-m10-b2:101003:120s-three-actor-golden-9"
+          ],
+          "reasons": [],
+          "assertionHash": "3350ec53e347d0a8"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:0",
@@ -3106,6 +5004,140 @@
           "assertionHash": "05a860a2ddc7b1c5"
         },
         {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:62",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:62",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:63",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
+          ],
+          "reasons": [],
+          "assertionHash": "ad94f2acfdd0d58f"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:63",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:62",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:63",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
+          ],
+          "reasons": [],
+          "assertionHash": "b5587716a467ab3a"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:64",
+          "selector": {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:62",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:63",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
+          ],
+          "reasons": [],
+          "assertionHash": "b527e9776abc7f89"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:65",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:65",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
+          ],
+          "reasons": [],
+          "assertionHash": "a6c6428e9251ae25"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:66",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:65",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
+          ],
+          "reasons": [],
+          "assertionHash": "c90f27e99af79042"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:67",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
+          ],
+          "reasons": [],
+          "assertionHash": "3df9396bd4537233"
+        },
+        {
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:68",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
+          ],
+          "reasons": [],
+          "assertionHash": "1d8f4ed0e4fc8bf2"
+        },
+        {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:7",
           "selector": {
             "actionId": "han-ultimate",
@@ -3191,6 +5223,1179 @@
           ],
           "reasons": [],
           "assertionHash": "f3493e9bc8836899"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:0",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|176|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:0"
+          ],
+          "reasons": [],
+          "assertionHash": "b6f7b090c78bceef"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:1",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|184|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:1"
+          ],
+          "reasons": [],
+          "assertionHash": "d0772d592bb4fb17"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:10",
+          "selector": {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:6010691194740274320|config:0|bullet:101003014:0:0|element:101003037:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:10"
+          ],
+          "reasons": [],
+          "assertionHash": "01c609cbe6f598dc"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:11",
+          "selector": {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:-5575632006342183792|config:0|bullet:101003014:0:0|element:101003037:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:11"
+          ],
+          "reasons": [],
+          "assertionHash": "28f0108acb24753d"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:12",
+          "selector": {
+            "actionId": "han-normal-a3",
+            "hitIdentity": "10100303|0|projectile|101003037|101003014|0|0|control:10100303|sub:0|behavior:3911383347357480080|config:0|bullet:101003014:0:0|element:101003037:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:12"
+          ],
+          "reasons": [],
+          "assertionHash": "1d8a881b84b26429"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:13",
+          "selector": {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|0|94149154268017158|38|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:13"
+          ],
+          "reasons": [],
+          "assertionHash": "af5f55cd57be6320"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:14",
+          "selector": {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|59|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:14"
+          ],
+          "reasons": [],
+          "assertionHash": "083713d408c8eaf6"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:15",
+          "selector": {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|68|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:15"
+          ],
+          "reasons": [],
+          "assertionHash": "53ff9e589235e863"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:16",
+          "selector": {
+            "actionId": "han-normal-a4",
+            "hitIdentity": "10100304|0|elements|1|-9088874381931379762|77|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:16"
+          ],
+          "reasons": [],
+          "assertionHash": "47f3db8802be2404"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:17",
+          "selector": {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|0|655406946032765735|50|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:17"
+          ],
+          "reasons": [],
+          "assertionHash": "a0fcaefed1f89016"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:18",
+          "selector": {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|65|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:18"
+          ],
+          "reasons": [],
+          "assertionHash": "1040a109607b8cdd"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:19",
+          "selector": {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|74|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:19"
+          ],
+          "reasons": [],
+          "assertionHash": "ef3b8135f769e5ce"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:2",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|193|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:2"
+          ],
+          "reasons": [],
+          "assertionHash": "d21671fab71728f8"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:20",
+          "selector": {
+            "actionId": "han-normal-a5",
+            "hitIdentity": "10100305|0|elements|1|2955168730265195435|83|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:20"
+          ],
+          "reasons": [],
+          "assertionHash": "74eb40ef24fbf321"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:21",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|61|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:21"
+          ],
+          "reasons": [],
+          "assertionHash": "151e8fc0d2a4426d"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:22",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|68|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:22"
+          ],
+          "reasons": [],
+          "assertionHash": "2d77e609fef4db01"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:23",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|0|8697618991190280668|73|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:23"
+          ],
+          "reasons": [],
+          "assertionHash": "12582462e80cf3b0"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:24",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|94|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:24"
+          ],
+          "reasons": [],
+          "assertionHash": "1f63f6d1410f3f69"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:25",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|99|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:25"
+          ],
+          "reasons": [],
+          "assertionHash": "0d866b3b2556cfdf"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:26",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|104|6",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:26"
+          ],
+          "reasons": [],
+          "assertionHash": "e2604bbc0aecb21f"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:27",
+          "selector": {
+            "actionId": "han-star-skill",
+            "hitIdentity": "10100312|0|elements|2|642115531928830562|109|7",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:27"
+          ],
+          "reasons": [],
+          "assertionHash": "9f451dca8ed94051"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:28",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|projectile|101003066|101003101|0|0|control:10100310|sub:0|behavior:-78150393795048980|config:0|bullet:101003101:0:0|element:101003066:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:28"
+          ],
+          "reasons": [],
+          "assertionHash": "af9cad809152bd6b"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:29",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|30|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:29"
+          ],
+          "reasons": [],
+          "assertionHash": "5568546141e4bfb3"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:3",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|201|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:3"
+          ],
+          "reasons": [],
+          "assertionHash": "6609aabd857a44bf"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:30",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|31|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:30"
+          ],
+          "reasons": [],
+          "assertionHash": "33b4a34aa5f1911a"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:31",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|40|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:31"
+          ],
+          "reasons": [],
+          "assertionHash": "99b9a33eedb34828"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:32",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|4|-7636687166603453292|51|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:32"
+          ],
+          "reasons": [],
+          "assertionHash": "218e3ac7a3ff2477"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:33",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|55|6",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:33"
+          ],
+          "reasons": [],
+          "assertionHash": "57f1de50b9554215"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:34",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|58|7",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:34"
+          ],
+          "reasons": [],
+          "assertionHash": "d94bf6ab3dbfab07"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:35",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|62|8",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:35"
+          ],
+          "reasons": [],
+          "assertionHash": "cf88be2c7c84be2d"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:36",
+          "selector": {
+            "actionId": "han-charged-stage-one",
+            "hitIdentity": "10100310|0|elements|0|-9168566004252254787|65|9",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:36"
+          ],
+          "reasons": [],
+          "assertionHash": "4429318f7649f629"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:37",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|bulletElements|0|2408469058190259773|24|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:37"
+          ],
+          "reasons": [],
+          "assertionHash": "36221111a5b9fc55"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:38",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|27|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:38"
+          ],
+          "reasons": [],
+          "assertionHash": "433a43e07bc5165e"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:39",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|27|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:39"
+          ],
+          "reasons": [],
+          "assertionHash": "bc66f39f5a154216"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:4",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|207|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:4"
+          ],
+          "reasons": [],
+          "assertionHash": "edd8fce7970aaace"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:40",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|35|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:40"
+          ],
+          "reasons": [],
+          "assertionHash": "11c4b9fb1c38ac45"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:41",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|43|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:41"
+          ],
+          "reasons": [],
+          "assertionHash": "a6601ce1aea660e5"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:42",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|51|6",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:42"
+          ],
+          "reasons": [],
+          "assertionHash": "7e892d9fa0dffe94"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:43",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|53|7",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:43"
+          ],
+          "reasons": [],
+          "assertionHash": "317989412ed76996"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:44",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|54|8",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:44"
+          ],
+          "reasons": [],
+          "assertionHash": "d91e318c9ccba2a9"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:45",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|58|9",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:45"
+          ],
+          "reasons": [],
+          "assertionHash": "3ab19c2c0aeb94bc"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:46",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|5|4954460886115009592|61|10",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:46"
+          ],
+          "reasons": [],
+          "assertionHash": "aae80d5043cb221c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:47",
+          "selector": {
+            "actionId": "han-charged-stage-two",
+            "hitIdentity": "10100341|0|elements|0|6205900832351659862|66|11",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:47"
+          ],
+          "reasons": [],
+          "assertionHash": "41817a62b0764411"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:48",
+          "selector": {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|44|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:48"
+          ],
+          "reasons": [],
+          "assertionHash": "8364c17f8b4a3e08"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:49",
+          "selector": {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|51|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:49"
+          ],
+          "reasons": [],
+          "assertionHash": "442ccc03425a22a1"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:5",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|0|2114308111398669772|213|6",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:5"
+          ],
+          "reasons": [],
+          "assertionHash": "0910f5bf5b6c1146"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:50",
+          "selector": {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|58|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:50"
+          ],
+          "reasons": [],
+          "assertionHash": "dd4cb1e0d54eb509"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:51",
+          "selector": {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|65|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:51"
+          ],
+          "reasons": [],
+          "assertionHash": "16df230c4c09695e"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:52",
+          "selector": {
+            "actionId": "han-perfect-parry",
+            "hitIdentity": "10100349|1|elements|2|5289435691496660442|73|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:52"
+          ],
+          "reasons": [],
+          "assertionHash": "d1b1b6b0e58b50b8"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:53",
+          "selector": {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:7675042512476526473|config:0|bullet:101003002:0:0|element:101003191:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:53"
+          ],
+          "reasons": [],
+          "assertionHash": "3739467d40355c93"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:54",
+          "selector": {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:4712639018698954633|config:0|bullet:101003002:0:0|element:101003191:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:54"
+          ],
+          "reasons": [],
+          "assertionHash": "2e5d8789893acdbc"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:55",
+          "selector": {
+            "actionId": "han-limit-counter",
+            "hitIdentity": "10100325|0|projectile|101003191|101003002|0|0|control:10100325|sub:0|behavior:-7153878807886276727|config:0|bullet:101003002:0:0|element:101003191:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:55"
+          ],
+          "reasons": [],
+          "assertionHash": "297b8b0b017c1c2c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:56",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:56"
+          ],
+          "reasons": [],
+          "assertionHash": "fa32e39898facabd"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:57",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:57"
+          ],
+          "reasons": [],
+          "assertionHash": "b86109731bf523f1"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:58",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:58"
+          ],
+          "reasons": [],
+          "assertionHash": "a33b97e2519318d8"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:59",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:59"
+          ],
+          "reasons": [],
+          "assertionHash": "b1f3fff1e2f13f4e"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:6",
+          "selector": {
+            "actionId": "han-ultimate",
+            "hitIdentity": "10100313|0|elements|3|1898475899045787222|223|7",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:6"
+          ],
+          "reasons": [],
+          "assertionHash": "e81f6b8ddd6761ff"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:60",
+          "selector": {
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:60"
+          ],
+          "reasons": [],
+          "assertionHash": "f2873f398823a9d4"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:61",
+          "selector": {
+            "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:61"
+          ],
+          "reasons": [],
+          "assertionHash": "8f00c33b318da7d9"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:62",
+          "selector": {
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:62"
+          ],
+          "reasons": [],
+          "assertionHash": "895cdc1574ca25f6"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:63",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|2|-6736157915999571924|27|1",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:63"
+          ],
+          "reasons": [],
+          "assertionHash": "3731ddf66371dec8"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:64",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|38|2",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:64"
+          ],
+          "reasons": [],
+          "assertionHash": "c382b28eb8372ab7"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:65",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|49|3",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:65"
+          ],
+          "reasons": [],
+          "assertionHash": "c392aef13d97379e"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:66",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|5|8963641323797659805|138|4",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:66"
+          ],
+          "reasons": [],
+          "assertionHash": "98e8511d17dc8f6c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:67",
+          "selector": {
+            "actionId": "han-kibo-signature",
+            "hitIdentity": "50046903|0|elements|5|8963641323797659805|142|5",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:67"
+          ],
+          "reasons": [],
+          "assertionHash": "3ce08db29e78805c"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:7",
+          "selector": {
+            "actionId": "han-normal-a1",
+            "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:7"
+          ],
+          "reasons": [],
+          "assertionHash": "8040fc2a3be07fcb"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:8",
+          "selector": {
+            "actionId": "han-normal-a2",
+            "hitIdentity": "10100302|0|projectile|101003046|101003012|0|0|control:10100302|sub:0|behavior:-2489218366535036413|config:0|bullet:101003012:0:0|element:101003046:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:8"
+          ],
+          "reasons": [],
+          "assertionHash": "d1d7d4733b89190b"
+        },
+        {
+          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:9",
+          "selector": {
+            "actionId": "han-normal-a2",
+            "hitIdentity": "10100302|0|projectile|101003046|101003012|0|0|control:10100302|sub:0|behavior:2266798532694249987|config:0|bullet:101003012:0:0|element:101003046:0",
+            "kind": "hit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-hit:m10-b2:101003:120s-three-actor-golden:9"
+          ],
+          "reasons": [],
+          "assertionHash": "c90f5295f2629dcb"
+        },
+        {
+          "assertionIdentity": "trace-passive:golden-passives-m10-b2:101003:120s-three-actor-golden-1",
+          "selector": {
+            "effectId": "battle-element:480124006",
+            "kind": "passive",
+            "passiveIdentity": "actor:101003:passive:10100361"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-passives-m10-b2:101003:120s-three-actor-golden-1"
+          ],
+          "reasons": [],
+          "assertionHash": "3ea5708252025238"
         },
         {
           "assertionIdentity": "trace-state:golden-state:m10-b2:101003:120s-three-actor-golden:0",
@@ -3395,9 +6600,27 @@
           ],
           "reasons": [],
           "assertionHash": "9b24a5aeab528c8e"
+        },
+        {
+          "assertionIdentity": "trace-switch-trigger:golden-switchTriggers-m10-b2:101003:120s-three-actor-golden-1",
+          "selector": {
+            "controlSkillId": 10100322,
+            "kind": "switch-trigger",
+            "profileIdentity": "actor:101003|switch-trigger:on-exit|skill:10100322",
+            "triggerPhase": "on-exit"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "golden-switchTriggers-m10-b2:101003:120s-three-actor-golden-1"
+          ],
+          "reasons": [],
+          "assertionHash": "14aedd3a456ce1ad"
         }
       ],
-      "scenarioCaseHash": "b1fcc961aaca1496"
+      "scenarioCaseHash": "db5b5d7379146c4b"
     },
     {
       "schemaVersion": 1,
@@ -3405,7 +6628,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "9e8c7c9980614f7a",
+        "inputHash": "4c5d6097c0f85bd5",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -3414,9 +6637,9 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "9e8c7c9980614f7a",
-          "data": "1bf1e04414cacafb",
-          "trace": "b0955c5e1097ce81",
+          "input": "4c5d6097c0f85bd5",
+          "data": "6d2259dd05baab32",
+          "trace": "1b5eae32ed5ed017",
           "evaluation": "920e7363ae12290d"
         }
       },
@@ -3892,6 +7115,80 @@
             "projectionIdentity": "machine-state:m11-d-101003-visual-acceptance:8"
           }
         ],
+        "controlWindows": [
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-1126751650670210077__-1126751650670210077.json#behaviorlineControl[0].behaviorList[pathId=4386047408647082979]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_4386047408647082979__4386047408647082979.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-1"
+          },
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|18-50|target:10100302/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-2"
+          },
+          {
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|50-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_6786095191977858019__6786095191977858019.json#behaviorlineControl[0].behaviorList[pathId=3831082747140543459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_3831082747140543459__3831082747140543459.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-3"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-4"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|61-188|target:10100341/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-5"
+          },
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|65-237|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-6"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|0-104|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-7"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|93-129|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-8"
+          },
+          {
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|97-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json",
+            "projectionIdentity": "machine-controlWindows-m11-d-101003-visual-acceptance-9"
+          }
+        ],
+        "variantEdges": [],
+        "variantWindows": [],
+        "conditionalHitGroups": [
+          {
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
+            "groupIdentity": "han-charged-stage-one-firework-explosion",
+            "projectionIdentity": "machine-conditionalHitGroups-m11-d-101003-visual-acceptance-1"
+          }
+        ],
+        "passives": [
+          {
+            "passiveIdentity": "actor:101003:passive:10100361",
+            "effectId": "battle-element:480124006",
+            "projectionIdentity": "machine-passives-m11-d-101003-visual-acceptance-1"
+          }
+        ],
+        "switchTriggers": [],
         "diagnostics": [
           {
             "actionId": "101003-critical-sampled-low",
@@ -4145,7 +7442,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "a065494da80b0f3a",
+      "traceProjectionHash": "4d13d948eb17d9ee",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -4587,6 +7884,186 @@
           ],
           "reasons": [],
           "assertionHash": "a5a1504a53724e14"
+        },
+        {
+          "assertionIdentity": "trace-conditional-hit-group:machine-conditionalHitGroups-m11-d-101003-visual-acceptance-1",
+          "selector": {
+            "controlSkillId": 10100310,
+            "groupIdentity": "han-charged-stage-one-firework-explosion",
+            "kind": "conditional-hit-group",
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-conditionalHitGroups-m11-d-101003-visual-acceptance-1"
+          ],
+          "reasons": [],
+          "assertionHash": "2f917034050e8fcd"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-1",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-1126751650670210077__-1126751650670210077.json#behaviorlineControl[0].behaviorList[pathId=4386047408647082979]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_4386047408647082979__4386047408647082979.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-1"
+          ],
+          "reasons": [],
+          "assertionHash": "fbd2a94d1d88816c"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-2",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|18-50|target:10100302/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-2"
+          ],
+          "reasons": [],
+          "assertionHash": "fc1acdbceadd7ae5"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-3",
+          "selector": {
+            "controlSkillId": 10100301,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100301|sub:0|50-159|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_6786095191977858019__6786095191977858019.json#behaviorlineControl[0].behaviorList[pathId=3831082747140543459]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_3831082747140543459__3831082747140543459.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-3"
+          ],
+          "reasons": [],
+          "assertionHash": "e174083cb3b2715d"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-4",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-4"
+          ],
+          "reasons": [],
+          "assertionHash": "e4de9e22e02a62ac"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-5",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|61-188|target:10100341/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-5"
+          ],
+          "reasons": [],
+          "assertionHash": "1f0625a3890f90e3"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-6",
+          "selector": {
+            "controlSkillId": 10100310,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100310|sub:0|65-237|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-6"
+          ],
+          "reasons": [],
+          "assertionHash": "552742d457f85a3a"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-7",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|0-104|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-7"
+          ],
+          "reasons": [],
+          "assertionHash": "331bab8d78ec67cb"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-8",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|93-129|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-8"
+          ],
+          "reasons": [],
+          "assertionHash": "62889b50ba3b8a0f"
+        },
+        {
+          "assertionIdentity": "trace-control-window:machine-controlWindows-m11-d-101003-visual-acceptance-9",
+          "selector": {
+            "controlSkillId": 10100312,
+            "kind": "control-window",
+            "subSkillIndex": 0,
+            "windowIdentity": "actor:101003|control:10100312|sub:0|97-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-controlWindows-m11-d-101003-visual-acceptance-9"
+          ],
+          "reasons": [],
+          "assertionHash": "4adf0680b75d2a17"
         },
         {
           "assertionIdentity": "trace-effect:machine-effect:m11-d-101003-visual-acceptance:0",
@@ -5618,6 +9095,23 @@
           "assertionHash": "408e463b2ed9ed1d"
         },
         {
+          "assertionIdentity": "trace-passive:machine-passives-m11-d-101003-visual-acceptance-1",
+          "selector": {
+            "effectId": "battle-element:480124006",
+            "kind": "passive",
+            "passiveIdentity": "actor:101003:passive:10100361"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-passives-m11-d-101003-visual-acceptance-1"
+          ],
+          "reasons": [],
+          "assertionHash": "0d47449c79bc8648"
+        },
+        {
           "assertionIdentity": "trace-state:machine-state:m11-d-101003-visual-acceptance:0",
           "selector": {
             "actionId": "han-star-skill",
@@ -5839,18 +9333,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "60e859fa8b6df06f"
+      "scenarioCaseHash": "0fdcc63d692b9c2c"
     }
   ],
   "summary": {
     "scenarioCount": 3,
     "executionPassedCount": 3,
-    "assertionCount": 205,
-    "assertionPassedCount": 199,
+    "assertionCount": 352,
+    "assertionPassedCount": 346,
     "runnerKindCounts": {
       "canonical-character-golden": 2,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "96f57d3ef250fd82"
+  "scenarioSetHash": "70955cd76167f9d9"
 }

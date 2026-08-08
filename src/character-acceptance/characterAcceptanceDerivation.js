@@ -563,6 +563,53 @@ function createProjectionAssertionDefinitions(projection) {
       operation: row.operation,
     });
   }
+  for (const row of projection.controlWindows) {
+    add('trace-control-window:' + row.projectionIdentity, {
+      kind: 'control-window',
+      windowIdentity: row.windowIdentity,
+      controlSkillId: row.controlSkillId,
+      subSkillIndex: row.subSkillIndex,
+    });
+  }
+  for (const row of projection.variantEdges) {
+    add('trace-variant-edge:' + row.projectionIdentity, {
+      kind: 'variant-edge',
+      edgeIdentity: row.edgeIdentity,
+      sourceControlSkillId: row.sourceControlSkillId,
+      sourceSubSkillIndex: row.sourceSubSkillIndex,
+    });
+  }
+  for (const row of projection.variantWindows) {
+    add('trace-variant-window:' + row.projectionIdentity, {
+      kind: 'variant-window',
+      bindingIdentity: row.bindingIdentity,
+      sourceControlSkillId: row.sourceControlSkillId,
+      sourceSubSkillIndex: row.sourceSubSkillIndex,
+    });
+  }
+  for (const row of projection.conditionalHitGroups) {
+    add('trace-conditional-hit-group:' + row.projectionIdentity, {
+      kind: 'conditional-hit-group',
+      groupIdentity: row.groupIdentity,
+      controlSkillId: row.controlSkillId,
+      subSkillIndex: row.subSkillIndex,
+    });
+  }
+  for (const row of projection.passives) {
+    add('trace-passive:' + row.projectionIdentity, {
+      kind: 'passive',
+      passiveIdentity: row.passiveIdentity,
+      effectId: row.effectId,
+    });
+  }
+  for (const row of projection.switchTriggers) {
+    add('trace-switch-trigger:' + row.projectionIdentity, {
+      kind: 'switch-trigger',
+      profileIdentity: row.profileIdentity,
+      triggerPhase: row.triggerPhase,
+      controlSkillId: row.controlSkillId,
+    });
+  }
   for (const [factIdentity] of Object.entries(projection.facts)) {
     add('scenario-fact:' + factIdentity, {
       kind: 'scenario-fact',
@@ -580,6 +627,14 @@ function normalizeTraceProjection(projection = {}) {
     effects: normalizeProjectionRows(projection.effects),
     resources: normalizeProjectionRows(projection.resources),
     states: normalizeProjectionRows(projection.states),
+    controlWindows: normalizeProjectionRows(projection.controlWindows),
+    variantEdges: normalizeProjectionRows(projection.variantEdges),
+    variantWindows: normalizeProjectionRows(projection.variantWindows),
+    conditionalHitGroups: normalizeProjectionRows(
+      projection.conditionalHitGroups
+    ),
+    passives: normalizeProjectionRows(projection.passives),
+    switchTriggers: normalizeProjectionRows(projection.switchTriggers),
     diagnostics: normalizeProjectionRows(projection.diagnostics),
     criticalDecisions: normalizeProjectionRows(projection.criticalDecisions),
     facts: Object.fromEntries(
@@ -625,6 +680,12 @@ function resolveSelectorMatches(projection, selector) {
     effect: 'effects',
     resource: 'resources',
     state: 'states',
+    'control-window': 'controlWindows',
+    'variant-edge': 'variantEdges',
+    'variant-window': 'variantWindows',
+    'conditional-hit-group': 'conditionalHitGroups',
+    passive: 'passives',
+    'switch-trigger': 'switchTriggers',
     diagnostic: 'diagnostics',
     'critical-effective-threshold': 'criticalDecisions',
   }[selector.kind];

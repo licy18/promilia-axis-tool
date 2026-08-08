@@ -7,6 +7,7 @@ import {
   createCharacterAcceptanceCatalog,
   createCharacterAcceptanceManifest,
   createCharacterAcceptanceManifestIndex,
+  createScenarioProfileProjectionRows,
   validateUnnamedSecondaryPassiveBoundary,
 } from './character-acceptance/character-acceptance-generation.mjs';
 import {
@@ -133,6 +134,7 @@ try {
       service,
       adapter,
       traceIndexModule,
+      profile,
     });
     const manifest = createCharacterAcceptanceManifest({
       recipe,
@@ -215,6 +217,7 @@ function executeVisualScenario({
   service,
   adapter,
   traceIndexModule,
+  profile,
 }) {
   const validation = service.validate(fixture);
   if (!validation.valid) {
@@ -259,6 +262,22 @@ function executeVisualScenario({
   ];
   const failed = assertionResults.filter(result => !result.passed);
   const selectionRows = first.trace?.variants?.selections ?? [];
+  const profileRows = createScenarioProfileProjectionRows({
+    profile,
+    exercisedControls: selectionRows.map(selection => [
+      Number(selection.controlSkillId),
+      Number(selection.subSkillIndex),
+    ]),
+    exercisedFromHitAndEffectIdentities: [
+      ...(first.trace?.damage ?? []).map(event => event.hitIdentity),
+      ...(first.trace?.effects?.events ?? []).map(event => event.effectId),
+    ],
+    observedEffectIds: (first.trace?.effects?.events ?? []).map(
+      event => event.effectId
+    ),
+    scenarioId: fixture.scenario?.id,
+    prefix: 'machine',
+  });
   return {
     scenarioIdentity: String(fixture.scenario?.id),
     fixturePath: recipe.fixturePath,
@@ -374,6 +393,7 @@ function executeVisualScenario({
           criticalRoll: event.formula.randomBranch.criticalRoll ?? null,
           critical: event.formula.randomBranch.critical ?? null,
         })),
+      ...profileRows,
       facts: Object.fromEntries(
         assertionResults.map(result => [result.identity, result.passed])
       ),

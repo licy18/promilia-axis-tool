@@ -4483,6 +4483,7 @@ function applyHitDescriptor({
         packageId: resolution.packageId,
         packageHash: resolution.packageHash,
         bindingIdentity: resolution.actionBinding.identity,
+        hitIdentity: resolveCriticalHitIdentity(hit),
         enemyProfileSourceIdentity: enemyProfile.sourceIdentity,
         controlSkillId: resolution.actionBinding.controlSkillId,
         elementId: hit.elementId,

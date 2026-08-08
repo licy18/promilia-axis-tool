@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b2-r1:101003:ultimate-controlled-buff-switch",
   "durationMs": 30000,
   "frameRate": 60,
-  "sourcePackageHash": "546e2ae14ec5e1430451b5b7231718c35b5cd635b7496427caa38f02b02df5b3",
+  "sourcePackageHash": "2c0b5dde7909e03c2b7b4ab6bcabec590c4e6027eaaf0eb3d374dd11fb747e86",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "c3c8579983caeb30",
-    "traceHash": "305ed8a58636ea25",
-    "dataHash": "927e937a9deaa71e",
+    "inputHash": "54dc7997e7805bd7",
+    "traceHash": "06525be94a224aab",
+    "dataHash": "3184384090197a27",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -36,6 +36,7 @@
         "xiaoyu-hit-during-buff"
       ],
       "blockedActionIds": [],
+      "blockedActionDetails": [],
       "selections": [
         {
           "actionId": "han-ultimate",
@@ -1339,7 +1340,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 236,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|176|1",
           "rawDamage": 137,
           "hpDamage": 137,
           "toughnessDamage": 96,
@@ -1351,7 +1352,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 244,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|184|2",
           "rawDamage": 137,
           "hpDamage": 137,
           "toughnessDamage": 96,
@@ -1363,7 +1364,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 253,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|193|3",
           "rawDamage": 137,
           "hpDamage": 137,
           "toughnessDamage": 96,
@@ -1387,7 +1388,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 261,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|201|4",
           "rawDamage": 138,
           "hpDamage": 138,
           "toughnessDamage": 97,
@@ -1399,7 +1400,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 267,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|207|5",
           "rawDamage": 139,
           "hpDamage": 139,
           "toughnessDamage": 97,
@@ -1411,7 +1412,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 273,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|0|2114308111398669772|213|6",
           "rawDamage": 139,
           "hpDamage": 139,
           "toughnessDamage": 97,
@@ -1423,7 +1424,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "han-ultimate",
           "frame": 283,
-          "hitIdentity": null,
+          "hitIdentity": "10100313|0|elements|3|1898475899045787222|223|7",
           "rawDamage": 522,
           "hpDamage": 522,
           "toughnessDamage": 365,
@@ -1435,7 +1436,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 429,
-          "hitIdentity": null,
+          "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
           "rawDamage": 28,
           "hpDamage": 28,
           "toughnessDamage": 20,
@@ -1447,7 +1448,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 433,
-          "hitIdentity": null,
+          "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
           "rawDamage": 28,
           "hpDamage": 28,
           "toughnessDamage": 20,
@@ -1459,7 +1460,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 437,
-          "hitIdentity": null,
+          "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
           "rawDamage": 28,
           "hpDamage": 28,
           "toughnessDamage": 20,
@@ -1471,7 +1472,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 441,
-          "hitIdentity": null,
+          "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
           "rawDamage": 28,
           "hpDamage": 28,
           "toughnessDamage": 20,
@@ -1483,7 +1484,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
           "frame": 455,
-          "hitIdentity": null,
+          "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
           "rawDamage": 48,
           "hpDamage": 48,
           "toughnessDamage": 33,
@@ -1495,7 +1496,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
           "frame": 457,
-          "hitIdentity": null,
+          "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
           "rawDamage": 84,
           "hpDamage": 84,
           "toughnessDamage": 59,
@@ -1507,7 +1508,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
           "frame": 509,
-          "hitIdentity": null,
+          "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
           "rawDamage": 52,
           "hpDamage": 52,
           "toughnessDamage": 36,
@@ -1519,7 +1520,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "xiaoyu-hit-during-buff",
           "frame": 762,
-          "hitIdentity": null,
+          "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
           "rawDamage": 32,
           "hpDamage": 32,
           "toughnessDamage": 23,
@@ -1543,7 +1544,7 @@
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "xiaoyu-hit-after-expiry",
           "frame": 1212,
-          "hitIdentity": null,
+          "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
           "rawDamage": 28,
           "hpDamage": 28,
           "toughnessDamage": 20,
@@ -3467,10 +3468,58 @@
               "formulaValue": null
             }
           ]
+        },
+        {
+          "eventId": "synthesized:mark-acquire:tuning-mark|150|acquire|4216.666667|2:253",
+          "actionId": "han-ultimate",
+          "frame": 253,
+          "effectId": "battle-element:250",
+          "runtimeEffectId": null,
+          "sourceElementId": 250,
+          "effectName": "雷属性共鸣",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "acquire"
+        },
+        {
+          "eventId": "synthesized:mark-acquire:tuning-mark|150|acquire|4450|0:267",
+          "actionId": "han-ultimate",
+          "frame": 267,
+          "effectId": "battle-element:250",
+          "runtimeEffectId": null,
+          "sourceElementId": 250,
+          "effectName": "雷属性共鸣",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "acquire"
+        },
+        {
+          "eventId": "synthesized:mark-acquire:tuning-mark|150|acquire|4716.666667|1:283",
+          "actionId": "han-ultimate",
+          "frame": 283,
+          "effectId": "battle-element:250",
+          "runtimeEffectId": null,
+          "sourceElementId": 250,
+          "effectName": "雷属性共鸣",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "acquire"
+        },
+        {
+          "eventId": "synthesized:mark-acquire:tuning-mark|150|acquire|7616.666667|10:457",
+          "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+          "frame": 457,
+          "effectId": "battle-element:250",
+          "runtimeEffectId": null,
+          "sourceElementId": 250,
+          "effectName": "雷属性共鸣",
+          "targetKind": "actor",
+          "targetId": "actor-101003",
+          "operation": "acquire"
         }
       ]
     },
-    "summaryHash": "f6c2c3369f3490c81f3b213dc94caf36798bc16af953f9e78a498887ca499aab"
+    "summaryHash": "31344a4cfa21a07ac4d700378ed5cb1745833ce9f9f2675d902c4e5da4a32c41"
   },
   "expected": {
     "exact": {
@@ -3825,5 +3874,5 @@
       }
     ]
   },
-  "replayHash": "c123b54f01765293871efa8e770e2236996f24914436fb91f44c1ec5f14decca"
+  "replayHash": "1cdb4c82ad75b173e11d596dbf76ba76f0187fe4f84a497a52a135596d11c706"
 }

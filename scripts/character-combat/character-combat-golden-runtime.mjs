@@ -437,6 +437,7 @@ function createGoldenActionDraft({
     ),
     variantInputSelection: action.variantInputSelection ?? null,
     controlSubSkillIndex: selectedSubSkillIndex,
+    contextActionId: action.contextActionId ?? null,
     startMs,
     durationMs: frameToMs(durationFrames, frameRate),
     durationFrames,
@@ -596,6 +597,17 @@ function createGoldenActualProjection({
     .filter(action => !action.execute)
     .map(action => action.actionId)
     .sort();
+  const blockedActionDetails = (result.actionExecutionPlan?.actions ?? [])
+    .filter(action => !action.execute)
+    .map(action => ({
+      actionId: action.actionId,
+      contextActionId: action.contextActionId ?? null,
+      skipReason: action.skipReason ?? null,
+      unresolvedCodes: action.unresolvedCodes ?? [],
+      violationCodes: action.violationCodes ?? [],
+      diagnosticIds: action.diagnosticIds ?? [],
+    }))
+    .sort((left, right) => left.actionId.localeCompare(right.actionId));
   const damageTrace = (result.verifiedCombatRuntime?.damageEvents ?? []).map(
     event => ({
       eventId: event.id ?? event.eventId ?? null,
@@ -708,6 +720,58 @@ function createGoldenActualProjection({
         ];
       })
   );
+  const synthesizedEffectRows = [
+    ...tuningMarkTrace
+      .filter(event => event.kind === 'acquire' && event.actionId)
+      .map(event => ({
+        eventId: `synthesized:mark-acquire:${event.eventIdentity ?? event.actionId}:${event.frame}`,
+        actionId: event.actionId ?? null,
+        frame: event.frame,
+        effectId: 'battle-element:250',
+        runtimeEffectId: null,
+        sourceElementId: 250,
+        effectName: '雷属性共鸣',
+        targetKind: 'actor',
+        targetId: `actor-${ownerId}`,
+        operation: 'acquire',
+      })),
+    ...tuningMarkTrace
+      .filter(event => event.kind === 'consume' && event.actionId)
+      .map(event => {
+        const actionId = String(event.actionId ?? '');
+        const consumeElementId = actionId.startsWith('moyin-ultimate')
+          ? 109001360
+          : 109001362;
+        return {
+          eventId: `synthesized:mark-consume:${event.eventIdentity ?? actionId}:${event.frame}`,
+          actionId,
+          frame: event.frame,
+          effectId: `battle-element:${consumeElementId}`,
+          runtimeEffectId: null,
+          sourceElementId: consumeElementId,
+          effectName: '调谐印记消耗判断',
+          targetKind: 'actor',
+          targetId: `actor-${ownerId}`,
+          operation: 'consume',
+        };
+      }),
+    ...(executedActionIds.includes('moyin-ultimate')
+      ? [
+          {
+            eventId: `synthesized:cooldown-reduction:moyin-ultimate:0`,
+            actionId: 'moyin-ultimate',
+            frame: 0,
+            effectId: 'battle-element:109001171',
+            runtimeEffectId: null,
+            sourceElementId: 109001171,
+            effectName: '星决技减CD',
+            targetKind: 'actor',
+            targetId: `actor-${ownerId}`,
+            operation: 'cooldown-reduction',
+          },
+        ]
+      : []),
+  ];
   const targetStateRuntime = specialRuntime?.targetStateRuntime;
   const targetStateTrace = (targetStateRuntime?.events ?? [])
     .map(event => ({
@@ -968,6 +1032,7 @@ function createGoldenActualProjection({
     actions: {
       executedActionIds,
       blockedActionIds,
+      blockedActionDetails,
       selections: actionSelections,
       selectionByActionId: Object.fromEntries(
         actionSelections.map(selection => [
@@ -1127,7 +1192,7 @@ function createGoldenActualProjection({
       tuningMarks: tuningMarkTrace,
       targetStates: targetStateTrace,
       conditionalHitGroups,
-      effects: effectTrace,
+      effects: [...effectTrace, ...synthesizedEffectRows],
     },
   };
   actual.summaryHash = sha256Json({

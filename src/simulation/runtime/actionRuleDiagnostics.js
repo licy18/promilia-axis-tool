@@ -1428,7 +1428,8 @@ function createActionRange(action) {
     actorName: action.actor?.name ?? action.actorId,
     startMs,
     endMs: startMs + durationMs,
-    contextActionId: action.runtimeContextActionId ?? null,
+    contextActionId:
+      action.runtimeContextActionId ?? action.contextActionId ?? null,
     sourceSequenceIndex: action.sourceSequenceIndex ?? null,
     sourceSequencePath: action.sourceSequencePath ?? null,
   };
