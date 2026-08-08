@@ -567,8 +567,6 @@ export function applyCharacterCombatActionHitBindings({
       sourceIdentity: [element.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
-      conditionalGroupIdentity: binding.conditionalGroupIdentity ?? null,
-      runtimeCondition: binding.runtimeCondition ?? null,
     };
   }
   return controls;

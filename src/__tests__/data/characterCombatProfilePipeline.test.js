@@ -1179,6 +1179,80 @@ describe('M10 character combat profile pipeline', () => {
     ]);
   });
 
+  it('keeps conditional metadata scoped to the bound trigger on a mixed hit element', () => {
+    const ownerId = 424248;
+    const controlSkillId = 42424810;
+    const elementId = 424248147;
+    const nativeTrigger = {
+      behaviorPathId: 'fixture:native-hit',
+      startFrame: 3,
+      frameCount: 1,
+      sourceIdentity: 'fixture:native-hit',
+    };
+    const controls = [
+      {
+        controlSkillId,
+        frameRate: 60,
+        variants: [{ subSkillIndex: 0 }],
+        elements: [
+          {
+            mapIndex: 0,
+            elementId,
+            pathId: 'fixture:mixed-hit-element',
+            sourceIdentity: 'fixture:mixed-hit-element',
+            triggers: [nativeTrigger],
+            dimensions: { damage: { status: 'applied' } },
+          },
+        ],
+      },
+    ];
+    const compilation = {
+      contracts: {
+        actionHitBindings: [
+          {
+            bindingIdentity: 'fixture:conditional-hit',
+            ownerId,
+            controlSkillId,
+            subSkillIndex: 0,
+            sourceControlSkillId: controlSkillId,
+            sourceSubSkillIndex: 0,
+            elementId,
+            triggerFrames: [3],
+            frameCount: 1,
+            targetCode: 0,
+            targetKind: 'enemy',
+            conditionalGroupIdentity: 'fixture:conditional-group',
+            runtimeCondition: { kind: 'fixture-condition' },
+            sourceIdentity: 'fixture:conditional-hit',
+          },
+        ],
+      },
+    };
+
+    applyCharacterCombatActionHitBindings({
+      controls,
+      compilations: [compilation],
+    });
+
+    const [element] = controls[0].elements;
+    expect(element).not.toHaveProperty('conditionalGroupIdentity');
+    expect(element).not.toHaveProperty('runtimeCondition');
+    const native = element.triggers.find(
+      trigger => trigger.behaviorPathId === 'fixture:native-hit'
+    );
+    expect(native).not.toHaveProperty('conditionalGroupIdentity');
+    expect(native).not.toHaveProperty('runtimeCondition');
+    expect(element.triggers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          behaviorPathId: 'character-combat:fixture:conditional-hit:1',
+          conditionalGroupIdentity: 'fixture:conditional-group',
+          runtimeCondition: { kind: 'fixture-condition' },
+        }),
+      ])
+    );
+  });
+
   it('lets a sourced transform-remove operation own its removed state subtree only', () => {
     const ownerId = 424246;
     const controlSkillId = 42424612;
