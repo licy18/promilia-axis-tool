@@ -2,24 +2,24 @@
 
 - Owner: `107001`
 - Profile: `actor:107001:character-combat-profile:v1`
-- Hash: `19d770aabee39258964c84b3d1a7df3ede5c6ca991267471f0f7ce7462792174`
+- Hash: `f1bd2904825b9b4c24f0feb04f4e3a4d6aa28d759e88b2475892956c48643b8b`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
 - 公开动作：10
 - 执行形态：12
 - 可达 control：9
-- 窗口：0
+- 窗口：1
 - Hit：37
-- 来源 identity：953
-- 战斗图：105 nodes / 112 edges
+- 来源 identity：956
+- 战斗图：105 nodes / 113 edges
 - 描述覆盖：25
 - Runtime ready 动作：9/10
-- Runtime capture：21
+- Runtime capture：0
 - 零距离模拟完整：no
 - 实机证据完整：no
 - 零距离阻断 capture：0
-- 实机证据 capture：21
+- 实机证据 capture：0
 
 ## 维度状态
 
@@ -27,7 +27,7 @@
 | --- | --- | ---: | ---: | ---: |
 | publicActions | runtime-evidence-required | 9 | 1 | 10 |
 | hiddenAndDerivedForms | runtime-evidence-required | 11 | 1 | 12 |
-| inputAndExecutionTiming | not-applicable | 0 | 0 | 0 |
+| inputAndExecutionTiming | applied | 1 | 0 | 1 |
 | effectiveOccupancy | runtime-evidence-required | 11 | 1 | 12 |
 | hitsAndProjectiles | static-evidence-gap | 16 | 21 | 37 |
 | hpDamage | static-evidence-gap | 33 | 77 | 110 |
@@ -48,7 +48,7 @@
 
 ## 未闭环
 
-- runtime-evidence-required: 21
-- static-evidence-gap: 83
+- source-closure-applied: 26
+- static-evidence-gap: 31
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

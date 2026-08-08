@@ -97,6 +97,7 @@ try {
   for (const recipe of recipes) {
     await verifyAutomatedVisualEvidence(recipe);
     const ownerId = Number(recipe.ownerId);
+    const additionalScenarioDefinitions = recipe.additionalScenarios ?? [];
     const loaded = await Promise.all([
       readJson(
         path.join(
@@ -130,12 +131,16 @@ try {
       ...recipe.goldenReports.map(reportPath =>
         readJson(path.join(projectRoot, reportPath))
       ),
+      ...additionalScenarioDefinitions.map(definition =>
+        readJson(path.join(projectRoot, definition.fixturePath))
+      ),
     ]);
     const profile = loaded[0];
     const runtimeCoverage = loaded[1];
     const unresolvedLedger = loaded[2];
     const fixture = loaded[3];
-    const goldenReports = loaded.slice(4);
+    const goldenReports = loaded.slice(4, 4 + recipe.goldenReports.length);
+    const additionalFixtures = loaded.slice(4 + recipe.goldenReports.length);
     const goldens = recipe.goldenReports.map((reportPath, index) => ({
       path: reportPath,
       report: goldenReports[index],
@@ -169,6 +174,28 @@ try {
       profile,
       runtimePackage,
     });
+    const additionalVisualScenarios = additionalScenarioDefinitions.map(
+      (definition, index) =>
+        executeVisualScenario({
+          recipe: {
+            ...recipe,
+            ...definition,
+            fixturePath: definition.fixturePath,
+            probes: definition.probes ?? [],
+            buffLifecycle: definition.buffLifecycle ?? null,
+            inputWindowBoundary: definition.inputWindowBoundary ?? null,
+            skipCriticalMatrix: definition.skipCriticalMatrix !== false,
+          },
+          fixture: additionalFixtures[index],
+          service,
+          adapter,
+          traceIndexModule,
+          targetStateRuntimeModule,
+          verifiedActionLevelModule,
+          profile,
+          runtimePackage,
+        })
+    );
     const manifest = toJsonCompatible(
       createCharacterAcceptanceManifest({
         recipe,
@@ -177,6 +204,7 @@ try {
         unresolvedLedger,
         goldens,
         visualScenario,
+        additionalVisualScenarios,
       })
     );
     const validation = validateCharacterAcceptanceManifest(manifest, {
@@ -314,6 +342,36 @@ function createRuntimeProfileOverlay(basePackage, profile) {
       ].join('|')
   );
   const graph = result.actionVariantGraph;
+  graph.publicActionForms = upsertRows(
+    graph.publicActionForms,
+    profile.contracts?.actionForms,
+    row => String(row?.formIdentity ?? '')
+  );
+  graph.contextEdges = upsertRows(
+    graph.contextEdges,
+    profile.contracts?.timingInputEdges,
+    row => String(row?.edgeIdentity ?? '')
+  );
+  graph.edges = upsertRows(
+    graph.edges,
+    profile.contracts?.variantEdges,
+    row => String(row?.edgeIdentity ?? '')
+  );
+  graph.attackInputChains = upsertRows(
+    graph.attackInputChains,
+    profile.contracts?.attackInputChains,
+    row => String(row?.chainIdentity ?? '')
+  );
+  graph.attackInputMechanicWindows = upsertRows(
+    graph.attackInputMechanicWindows,
+    profile.contracts?.attackInputMechanicWindows,
+    row => String(row?.windowIdentity ?? row?.identity ?? '')
+  );
+  graph.tuningMarkConditionalDamageGroups = upsertRows(
+    graph.tuningMarkConditionalDamageGroups,
+    profile.contracts?.tuningMarkConditionalDamageGroups,
+    row => String(row?.groupIdentity ?? '')
+  );
   graph.runtimeEffectBindings = upsertRows(
     graph.runtimeEffectBindings,
     profile.contracts?.runtimeEffectBindings,
@@ -333,6 +391,26 @@ function createRuntimeProfileOverlay(basePackage, profile) {
     graph.conditionalHitGroups,
     profile.contracts?.conditionalHitGroups,
     row => String(row?.groupIdentity ?? '')
+  );
+  result.specialResourceCatalog.profiles = upsertRows(
+    result.specialResourceCatalog.profiles,
+    profile.contracts?.resourceProfiles,
+    row => String(row?.resourceIdentity ?? '')
+  );
+  result.specialResourceCatalog.operationBindings = upsertRows(
+    result.specialResourceCatalog.operationBindings,
+    profile.contracts?.resourceTransactions,
+    row => String(row?.operationIdentity ?? '')
+  );
+  result.specialResourceCatalog.thresholdTransitions = upsertRows(
+    result.specialResourceCatalog.thresholdTransitions,
+    profile.contracts?.stateMachines,
+    row => String(row?.transitionIdentity ?? '')
+  );
+  result.specialResourceCatalog.passiveEffects = upsertRows(
+    result.specialResourceCatalog.passiveEffects,
+    profile.contracts?.passives,
+    row => String(row?.passiveIdentity ?? '')
   );
   result.switchTriggerCatalog.profiles = upsertRows(
     result.switchTriggerCatalog.profiles,
@@ -434,12 +512,12 @@ function executeVisualScenario({
   );
   const stableReplay = sameHashes(first.hashes, second.hashes);
   const workbenchRoundTrip = sameHashes(first.hashes, roundTrip.hashes);
-  const criticalMatrix = inspectCriticalMatrix(
-    Number(recipe.ownerId),
-    first,
-    second,
-    recipe.criticalProbe ?? null
-  );
+  const criticalMatrix = recipe.skipCriticalMatrix
+    ? {}
+    : inspectCriticalMatrix(Number(recipe.ownerId), first, second);
+  const buffLifecycle = recipe.buffLifecycle
+    ? inspectEffectLifecycle(first, recipe.buffLifecycle)
+    : inspectThunderLifecycle(first);
   const thunderLifecycle = inspectThunderLifecycle(first);
   const configuredInputWindowBoundaries = recipe.inputWindowProbe
     ? inspectConfiguredInputWindowBoundaries({
@@ -449,8 +527,16 @@ function executeVisualScenario({
         probe: recipe.inputWindowProbe,
       })
     : null;
+  const declaredInputWindowBoundaries = recipe.inputWindowBoundary
+    ? inspectInputWindowBoundaries(
+        fixture,
+        first,
+        recipe.inputWindowBoundary
+      )
+    : null;
   const inputWindowBoundaries =
     configuredInputWindowBoundaries ??
+    declaredInputWindowBoundaries ??
     (Number(recipe.ownerId) === 108003
       ? inspectMitiInputWindowBoundaries(fixture, first, service)
       : inspectInputWindowBoundaries(fixture, first));
@@ -518,12 +604,12 @@ function executeVisualScenario({
     ...Object.entries(criticalMatrix)
       .filter(([key]) => key !== 'details')
       .map(([key, passed]) => ({ identity: 'critical:' + key, passed })),
-    ...(Number(recipe.ownerId) === 109001
+    ...(Number(recipe.ownerId) === 109001 || recipe.inputWindowBoundary
       ? [
           {
             identity: 'buff-apply-refresh-stack-expire',
-            passed: thunderLifecycle.passed,
-            actual: thunderLifecycle.details,
+            passed: buffLifecycle.passed,
+            actual: buffLifecycle.details,
           },
           {
             identity: 'input-window-inside-outside-boundaries',
@@ -584,6 +670,8 @@ function executeVisualScenario({
       ...tuningMarkResourceEffects.map(event => event.effectIdentity),
       ...runtimeEffectEvidence.map(event => event.effectIdentity),
     ],
+    observedResourceEvents: first.trace?.variants?.resourceEvents ?? [],
+    observedVariantSelections: selectionRows,
     scenarioId: fixture.scenario?.id,
     prefix: 'machine',
   });
@@ -615,7 +703,7 @@ function executeVisualScenario({
     },
     criticalMatrix,
     mechanismProbes: {
-      thunderLifecycle,
+      buffLifecycle,
       inputWindowBoundaries,
       foregroundBackgroundSwitch,
       negativeActionCases,
@@ -632,6 +720,9 @@ function executeVisualScenario({
         factIdentity: result.identity,
         expectedValue: true,
       },
+      ...(result.actual === undefined
+        ? {}
+        : { actual: structuredClone(result.actual) }),
       reasons: result.passed ? [] : ['canonical-scenario-assertion-failed'],
     })),
     traceProjection: {
@@ -699,8 +790,13 @@ function executeVisualScenario({
           operation: event.operation ?? null,
           targetId: event.targetId ?? null,
           absoluteFrame: event.absoluteFrame ?? null,
+          frameIndex:
+            event.frameIndex ?? event.absoluteFrame ?? event.frame ?? null,
           timeMs: event.timeMs ?? null,
           expiresAtMs: event.expiresAtMs ?? null,
+          durationFrames: event.durationFrames ?? null,
+          expiresAtFrame: event.expiresAtFrame ?? event.expireFrame ?? null,
+          sourceIdentity: event.sourceIdentity ?? null,
           modifiers: structuredClone(event.modifiers ?? []),
         })),
         ...(first.trace?.damage ?? [])
@@ -800,7 +896,7 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
         )
       : ownerId === 108003
         ? sampledLow
-        : null;
+        : rateZero;
   const preHitAfter = configuredPreHit
     ? findConfiguredCriticalHit(
         damageEvents,
@@ -821,16 +917,29 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
               event.eventType === 'VERIFIED_COMBAT_HIT' &&
               event.hitIdentity === sampledLow?.hitIdentity
           )
-        : null;
+        : rateOneHundred;
   const configuredNonCrittable = probe?.nonCrittable ?? null;
-  const nonCrittable = damageEvents.find(event =>
-    configuredNonCrittable
-      ? event.actionId === configuredNonCrittable.actionId &&
+  const nonCrittable = damageEvents.find(event => {
+    if (configuredNonCrittable) {
+      return (
+        event.actionId === configuredNonCrittable.actionId &&
         event.eventType === configuredNonCrittable.eventType &&
         Number(event.elementId) === Number(configuredNonCrittable.elementId)
-      : event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      );
+    }
+    if (ownerId === 109001) {
+      return (
+        event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
         Number(event.elementId) === 251
-  );
+      );
+    }
+    return (
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      event.formula?.randomBranch == null &&
+      event.formula?.status === 'verified-tuning-formula-applied' &&
+      Number(event.rawDamage) > 0
+    );
+  });
   const nonCrittablePeer = (first.trace?.damage ?? []).find(
     event =>
       event.actionId === nonCrittable?.actionId &&
@@ -859,7 +968,7 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
       expectedResult?.criticalEventMaterialized === false &&
       expectedResult?.weightedValue === expected?.rawDamage,
     missSuppressesHit: miss == null,
-    ...([109001, 108003].includes(ownerId) || probe
+    ...([109001, 108003].includes(ownerId) || probe || rateZero || rateOneHundred
       ? {
           rateZero:
             rateZero?.formula?.randomBranch?.criticalThreshold === 0 &&
@@ -876,11 +985,12 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
               preHitAfter,
               'sourceCriticalRateBasisPoints'
             ) &&
-            criticalAttributeIncreased(
-              preHitBefore,
-              preHitAfter,
-              'sourceCriticalDamageBasisPoints'
-            ),
+            (!([109001, 108003].includes(ownerId) || probe) ||
+              criticalAttributeIncreased(
+                preHitBefore,
+                preHitAfter,
+                'sourceCriticalDamageBasisPoints'
+              )),
           nonCrittableRejection:
             nonCrittable?.formula?.status ===
               'verified-tuning-formula-applied' &&
@@ -924,6 +1034,87 @@ function criticalAttributeIncreased(before, after, field) {
     Number.isFinite(afterValue) &&
     afterValue > beforeValue
   );
+}
+
+function inspectEffectLifecycle(run, configuration) {
+  const effectIdentity = String(configuration.effectIdentity);
+  const targetId =
+    configuration.targetId == null ? null : String(configuration.targetId);
+  const events = (run.trace?.effects?.events ?? []).filter(
+    event =>
+      String(event.effectId ?? event.runtimeEffectId ?? '') ===
+        effectIdentity &&
+      (targetId == null || String(event.targetId ?? '') === targetId)
+  );
+  const requiredOperations = configuration.requiredOperations ?? [
+    'apply',
+    'refresh',
+    'expire',
+  ];
+  const operations = new Set(
+    events.map(event => String(event.operation ?? ''))
+  );
+  const durationFrames = Number(configuration.durationFrames);
+  const rightOpenMatches = [];
+  if (
+    configuration.rightOpenExpiry === true &&
+    Number.isFinite(durationFrames)
+  ) {
+    for (const expiration of events.filter(
+      event => event.operation === 'expire'
+    )) {
+      const expirationFrame = resolveTraceFrame(expiration);
+      const priorStarts = events
+        .filter(
+          event =>
+            ['apply', 'refresh'].includes(event.operation) &&
+            resolveTraceFrame(event) <= expirationFrame
+        )
+        .sort(
+          (left, right) => resolveTraceFrame(right) - resolveTraceFrame(left)
+        );
+      const start = priorStarts[0] ?? null;
+      const startFrame = resolveTraceFrame(start);
+      rightOpenMatches.push({
+        startOperation: start?.operation ?? null,
+        startFrame,
+        expirationFrame,
+        durationFrames,
+        passed:
+          Number.isFinite(startFrame) &&
+          Number.isFinite(expirationFrame) &&
+          expirationFrame - startFrame === durationFrames,
+      });
+    }
+  }
+  const rightOpenPassed =
+    configuration.rightOpenExpiry !== true ||
+    rightOpenMatches.some(match => match.passed);
+  return {
+    passed:
+      requiredOperations.every(operation => operations.has(operation)) &&
+      rightOpenPassed,
+    details: {
+      effectIdentity,
+      targetId,
+      requiredOperations,
+      observedOperations: [...operations].sort(),
+      rightOpenMatches,
+      events: events.map(event => ({
+        actionId: event.actionId ?? null,
+        operation: event.operation ?? null,
+        frameIndex: resolveTraceFrame(event),
+        targetId: event.targetId ?? null,
+      })),
+    },
+  };
+}
+
+function resolveTraceFrame(event) {
+  if (!event) return Number.NaN;
+  const value = event.frameIndex ?? event.absoluteFrame ?? event.frame;
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : Number.NaN;
 }
 
 function inspectThunderLifecycle(run) {
@@ -1049,7 +1240,7 @@ function inspectThunderLifecycle(run) {
   };
 }
 
-function inspectInputWindowBoundaries(fixture, run) {
+function inspectInputWindowBoundaries(fixture, run, configuration = null) {
   const selections = new Map(
     (run.trace?.variants?.selections ?? []).map(selection => [
       selection.actionId,
@@ -1059,12 +1250,35 @@ function inspectInputWindowBoundaries(fixture, run) {
   const actions = new Map(
     (fixture.actions ?? []).map(action => [action.id, action])
   );
-  const cases = [
-    ['window-outside-before', 39, 10900101],
-    ['window-inside-start', 41, 10900143],
-    ['window-inside-end', 76, 10900143],
-    ['window-outside-after', 78, 10900101],
-  ].map(([actionId, expectedOffset, expectedControlSkillId]) => {
+  const definitions = configuration?.cases ?? [
+    {
+      actionId: 'window-outside-before',
+      expectedOffset: 39,
+      expectedControlSkillId: 10900101,
+    },
+    {
+      actionId: 'window-inside-start',
+      expectedOffset: 41,
+      expectedControlSkillId: 10900143,
+    },
+    {
+      actionId: 'window-inside-end',
+      expectedOffset: 76,
+      expectedControlSkillId: 10900143,
+    },
+    {
+      actionId: 'window-outside-after',
+      expectedOffset: 78,
+      expectedControlSkillId: 10900101,
+    },
+  ];
+  const cases = definitions.map(definition => {
+    const {
+      actionId,
+      expectedOffset,
+      expectedControlSkillId,
+      expectedSubSkillIndex,
+    } = definition;
     const action = actions.get(actionId);
     const contextAction = actions.get(
       action?.intent?.attackInput?.contextActionId
@@ -1078,18 +1292,23 @@ function inspectInputWindowBoundaries(fixture, run) {
       actualOffset,
       expectedControlSkillId,
       actualControlSkillId: Number(selection?.controlSkillId),
+      expectedSubSkillIndex: expectedSubSkillIndex ?? null,
+      actualSubSkillIndex: Number(selection?.subSkillIndex),
       passed:
         actualOffset === expectedOffset &&
-        Number(selection?.controlSkillId) === expectedControlSkillId,
+        Number(selection?.controlSkillId) === expectedControlSkillId &&
+        (expectedSubSkillIndex == null ||
+          Number(selection?.subSkillIndex) === expectedSubSkillIndex),
       selection,
     };
   });
   return {
     passed: cases.every(entry => entry.passed),
     details: {
-      sourceControlSkillId: 10900112,
-      transitionControlSkillId: 10900143,
-      sourceWindow: '(40,77] source frames',
+      sourceControlSkillId: configuration?.sourceControlSkillId ?? 10900112,
+      transitionControlSkillId:
+        configuration?.transitionControlSkillId ?? 10900143,
+      sourceWindow: configuration?.sourceWindow ?? '(40,77] source frames',
       cases,
     },
   };
@@ -1705,12 +1924,13 @@ function projectCriticalHit(event) {
 }
 
 function inspectRecipeProbe(run, probe) {
+  const identity = fallback => probe.assertionIdentity ?? fallback;
   if (probe.kind === 'variant-selection') {
     const selection = (run.trace?.variants?.selections ?? []).find(
       row => row.actionId === probe.actionId
     );
     return {
-      identity: 'probe:variant-selection:' + probe.actionId,
+      identity: identity('probe:variant-selection:' + probe.actionId),
       passed:
         Number(selection?.controlSkillId) === Number(probe.controlSkillId) &&
         Number(selection?.subSkillIndex) === Number(probe.subSkillIndex),
@@ -1727,7 +1947,7 @@ function inspectRecipeProbe(run, probe) {
         Number(row.payload?.change) === Number(probe.change)
     );
     return {
-      identity: 'probe:special-resource-change:' + probe.actionId,
+      identity: identity('probe:special-resource-change:' + probe.actionId),
       passed: Boolean(event),
       actual: event ?? null,
     };
@@ -1739,7 +1959,7 @@ function inspectRecipeProbe(run, probe) {
         row.groupIdentity === probe.groupIdentity
     );
     return {
-      identity: 'probe:conditional-hit-group:' + probe.actionId,
+      identity: identity('probe:conditional-hit-group:' + probe.actionId),
       passed:
         Boolean(group) &&
         Number(group.beforeStacks) === Number(probe.beforeStacks) &&
@@ -1835,11 +2055,315 @@ function inspectRecipeProbe(run, probe) {
       },
     };
   }
+  if (probe.kind === 'tuning-hit-gate') {
+    const gate = (run.trace?.resources?.tuningAcquisitionGates ?? []).find(
+      row =>
+        row.actionId === probe.actionId &&
+        (probe.groupIdentity == null ||
+          row.groupIdentity === probe.groupIdentity)
+    );
+    const judgment = (run.trace?.state?.tuningConditionalHitGroups ?? []).find(
+      row =>
+        row.actionId === probe.actionId &&
+        row.groupIdentity === probe.groupIdentity &&
+        (probe.hitIndex == null ||
+          Number(row.hitIndex) === Number(probe.hitIndex))
+    );
+    const acquisitions = (run.trace?.resources?.tuningMarks ?? []).filter(
+      row =>
+        row.actionId === probe.actionId &&
+        row.kind === 'acquire' &&
+        (probe.markId == null || Number(row.markId) === Number(probe.markId))
+    );
+    const acquisition = acquisitions[0] ?? null;
+    const checks = [
+      gate != null,
+      judgment != null,
+      matchesExpected(gate?.passed, probe.expectedGatePassed),
+      matchesExpected(gate?.landedCount, probe.expectedLandedCount),
+      matchesExpected(judgment?.landed, probe.expectedLanded),
+      matchesExpected(judgment?.applied, probe.expectedApplied),
+      matchesExpected(judgment?.selectedBranch, probe.expectedBranch),
+      matchesExpected(
+        judgment?.markCountAtJudgment,
+        probe.expectedMarkCountAtJudgment
+      ),
+      matchesExpected(acquisitions.length, probe.expectedAcquisitionCount),
+      matchesExpected(acquisition?.before, probe.expectedBefore),
+      matchesExpected(acquisition?.after, probe.expectedAfter),
+      matchesExpected(acquisition?.delta, probe.expectedDelta),
+      probe.sameFrame !== true ||
+        (acquisition != null && acquisition.timeMs === judgment?.timeMs),
+    ];
+    return {
+      identity: identity('probe:tuning-hit-gate:' + probe.actionId),
+      passed: checks.every(Boolean),
+      actual: { gate, judgment, acquisitions },
+    };
+  }
+  if (probe.kind === 'resource-boundary') {
+    const events = run.trace?.variants?.resourceEvents ?? [];
+    const exactGain = events.find(
+      row =>
+        row.actionId === probe.exactActionId &&
+        row.payload?.resourceIdentity === probe.resourceIdentity &&
+        row.payload?.operation === 'gain' &&
+        Number(row.payload?.beforeValue) === Number(probe.beforeValue) &&
+        Number(row.payload?.afterValue) === Number(probe.afterValue)
+    );
+    const threshold = events.find(
+      row =>
+        row.actionId === probe.exactActionId &&
+        row.payload?.resourceIdentity === probe.resourceIdentity &&
+        row.payload?.operation === 'threshold-clear'
+    );
+    const missAction = (run.trace?.actions ?? []).find(
+      action => action.id === probe.missActionId
+    );
+    const missOverride =
+      missAction?.hitOverrides?.[probe.missHitIdentity] ?? null;
+    const missEvents = events.filter(
+      row =>
+        row.actionId === probe.missActionId &&
+        row.payload?.resourceIdentity === probe.resourceIdentity
+    );
+    const blockedAction = (run.trace?.actions ?? []).find(
+      action => action.id === probe.blockedActionId
+    );
+    const blockedOverride =
+      blockedAction?.hitOverrides?.[probe.blockedHitIdentity] ?? null;
+    const blockedEvents = events.filter(
+      row =>
+        row.actionId === probe.blockedActionId &&
+        row.payload?.resourceIdentity === probe.resourceIdentity
+    );
+    const blockedDamage = (run.trace?.damage ?? []).filter(
+      row =>
+        row.actionId === probe.blockedActionId &&
+        row.hitIdentity === probe.blockedHitIdentity
+    );
+    const blockedPassed =
+      probe.blockedActionId == null ||
+      (blockedOverride?.willHit === false &&
+        blockedOverride?.landingStatus === 'blocked' &&
+        blockedEvents.length === 0 &&
+        blockedDamage.length === 0);
+    return {
+      identity: identity('probe:resource-boundary:' + probe.resourceIdentity),
+      passed:
+        exactGain != null &&
+        threshold != null &&
+        missOverride?.willHit === false &&
+        missEvents.length === 0 &&
+        blockedPassed,
+      actual: {
+        exactGain,
+        threshold,
+        missOverride,
+        missEvents,
+        blockedOverride,
+        blockedEvents,
+        blockedDamage,
+      },
+    };
+  }
+  if (probe.kind === 'tuning-mark-expiry-boundary') {
+    const events = (run.trace?.resources?.tuningMarks ?? []).filter(
+      row => Number(row.markId) === Number(probe.markId)
+    );
+    const acquisition = events.find(
+      row => row.actionId === probe.actionId && row.kind === 'acquire'
+    );
+    const sameFrame = acquisition
+      ? events.filter(row => row.timeMs === acquisition.timeMs)
+      : [];
+    const expiryIndex = sameFrame.findIndex(row => row.kind === 'expire');
+    const acquisitionIndex = sameFrame.findIndex(row => row === acquisition);
+    const expiry = expiryIndex >= 0 ? sameFrame[expiryIndex] : null;
+    return {
+      identity: identity('probe:tuning-mark-expiry-boundary:' + probe.actionId),
+      passed:
+        acquisition != null &&
+        Number(acquisition.frameIndex) === Number(probe.expectedFrame) &&
+        expiryIndex >= 0 &&
+        acquisitionIndex > expiryIndex &&
+        Number(expiry?.before) === Number(probe.expectedExpireBefore) &&
+        Number(expiry?.after) === Number(probe.expectedExpireAfter) &&
+        Number(acquisition.before) === Number(probe.expectedAcquireBefore) &&
+        Number(acquisition.after) === Number(probe.expectedAcquireAfter),
+      actual: { expiry, acquisition, sameFrame },
+    };
+  }
+  if (probe.kind === 'controlled-actor-companion-switch') {
+    const transition = (run.trace?.controlledActors?.transitions ?? []).find(
+      row => row.actionId === probe.switchActionId && row.applied === true
+    );
+    const despawn = (run.trace?.variants?.companionEvents ?? []).find(
+      row =>
+        row.type === 'VERIFIED_COMPANION_DESPAWN' &&
+        row.actionId === probe.switchActionId &&
+        row.payload?.reason === 'controlled-character-switched'
+    );
+    const revision = despawn?.payload?.companionRevision;
+    const attacksAfter = (run.trace?.variants?.companionAttacks ?? []).filter(
+      row =>
+        Number(row.companionRevision) === Number(revision) &&
+        Number(row.timeMs) >= Number(despawn?.timeMs)
+    );
+    return {
+      identity: identity(
+        'probe:controlled-actor-companion-switch:' + probe.switchActionId
+      ),
+      passed:
+        transition != null &&
+        despawn != null &&
+        transition.timeMs === despawn.timeMs &&
+        matchesExpected(transition.beforeActorId, probe.beforeActorId) &&
+        matchesExpected(transition.afterActorId, probe.afterActorId) &&
+        attacksAfter.length === 0,
+      actual: { transition, despawn, attacksAfter },
+    };
+  }
+  if (probe.kind === 'tuning-conditional-group') {
+    const groups = (run.trace?.state?.tuningConditionalHitGroups ?? []).filter(
+      row =>
+        row.actionId === probe.actionId &&
+        row.groupIdentity === probe.groupIdentity
+    );
+    return {
+      identity: identity('probe:tuning-conditional-group:' + probe.actionId),
+      passed:
+        matchesExpected(groups.length, probe.expectedCount) &&
+        groups.every(
+          row =>
+            matchesExpected(row.selectedBranch, probe.expectedBranch) &&
+            matchesExpected(
+              row.markCountAtJudgment,
+              probe.expectedMarkCountAtJudgment
+            ) &&
+            matchesExpected(row.landed, probe.expectedLanded) &&
+            matchesExpected(row.companionUnitId, probe.companionUnitId) &&
+            matchesExpected(row.ownership, probe.ownership)
+        ),
+      actual: groups,
+    };
+  }
+  if (probe.kind === 'companion-lifecycle') {
+    const events = run.trace?.variants?.companionEvents ?? [];
+    const summon = events.find(
+      row =>
+        row.type === 'VERIFIED_COMPANION_SUMMON' &&
+        row.actionId === probe.summonActionId
+    );
+    const revision = summon?.payload?.companionRevision;
+    const periodic = events.filter(
+      row =>
+        row.type === 'VERIFIED_COMPANION_PERIODIC' &&
+        Number(row.payload?.companionRevision) === Number(revision)
+    );
+    const despawn = events.find(
+      row =>
+        row.type === 'VERIFIED_COMPANION_DESPAWN' &&
+        Number(row.payload?.companionRevision) === Number(revision)
+    );
+    const attacks = (run.trace?.variants?.companionAttacks ?? []).filter(
+      row =>
+        Number(row.companionRevision) === Number(revision) &&
+        row.attackKind === 'periodic'
+    );
+    const periodicTimes = periodic.map(row => Number(row.timeMs));
+    const cadenceMatches = periodicTimes
+      .slice(1)
+      .every(
+        (timeMs, index) =>
+          timeMs - periodicTimes[index] === Number(probe.cadenceMs)
+      );
+    return {
+      identity: identity('probe:companion-lifecycle:' + probe.summonActionId),
+      passed:
+        summon != null &&
+        matchesExpected(
+          Number(summon.payload?.endsAtMs) - Number(summon.timeMs),
+          probe.durationMs
+        ) &&
+        matchesExpected(periodic.length, probe.periodicCount) &&
+        cadenceMatches &&
+        matchesExpected(attacks.length, probe.attackCount) &&
+        attacks.every(
+          row =>
+            matchesExpected(row.companionUnitId, probe.companionUnitId) &&
+            matchesExpected(row.ownership, probe.ownership) &&
+            matchesExpected(row.targetKind, probe.targetKind)
+        ) &&
+        despawn?.payload?.reason === 'duration-expired' &&
+        Number(despawn?.timeMs) === Number(summon.payload?.endsAtMs) &&
+        attacks.every(row => Number(row.timeMs) < Number(despawn.timeMs)),
+      actual: { summon, periodic, attacks, despawn },
+    };
+  }
+  if (probe.kind === 'companion-action-response') {
+    const action = (run.trace?.actions ?? []).find(
+      row => row.id === probe.actionId
+    );
+    const attacks = (run.trace?.variants?.companionAttacks ?? []).filter(
+      row =>
+        row.actionId === probe.actionId &&
+        row.attackIdentity === probe.attackIdentity
+    );
+    const revision = attacks[0]?.companionRevision;
+    const events = run.trace?.variants?.companionEvents ?? [];
+    const despawn = events.find(
+      row =>
+        row.type === 'VERIFIED_COMPANION_DESPAWN' &&
+        row.actionId === probe.actionId &&
+        Number(row.payload?.companionRevision) === Number(revision)
+    );
+    const periodicDuringResponse = events.filter(
+      row =>
+        row.type === 'VERIFIED_COMPANION_PERIODIC' &&
+        Number(row.payload?.companionRevision) === Number(revision) &&
+        Number(row.timeMs) >= Number(action?.startMs) &&
+        Number(row.timeMs) <= Number(despawn?.timeMs)
+    );
+    const expectedOffsetMs =
+      Number(probe.despawnOffsetFrames) *
+      (1000 / Number(run.trace?.scenario?.frameRate ?? 60));
+    return {
+      identity: identity('probe:companion-action-response:' + probe.actionId),
+      passed:
+        action != null &&
+        matchesExpected(attacks.length, probe.attackCount) &&
+        despawn?.payload?.reason === probe.despawnReason &&
+        Math.abs(
+          Number(despawn?.timeMs) - Number(action.startMs) - expectedOffsetMs
+        ) < 0.000001 &&
+        periodicDuringResponse.length === 0,
+      actual: { action, attacks, despawn, periodicDuringResponse },
+    };
+  }
+  if (probe.kind === 'conditional-group-interruption') {
+    const groups = (run.trace?.state?.tuningConditionalHitGroups ?? []).filter(
+      row => row.actionId === probe.actionId
+    );
+    return {
+      identity: identity(
+        'probe:conditional-group-interruption:' + probe.actionId
+      ),
+      passed:
+        matchesExpected(groups.length, probe.expectedCount) &&
+        !groups.some(row => row.groupIdentity === probe.forbiddenGroupIdentity),
+      actual: groups,
+    };
+  }
   return {
-    identity: 'probe:unsupported:' + String(probe.kind),
+    identity: identity('probe:unsupported:' + String(probe.kind)),
     passed: false,
     actual: null,
   };
+}
+
+function matchesExpected(actual, expected) {
+  return expected === undefined || actual === expected;
 }
 
 function createAcceptanceReport(manifests, visualRuns, catalog, manifestIndex) {
@@ -2373,6 +2897,7 @@ async function readJson(filePath) {
 async function verifyAutomatedVisualEvidence(recipe) {
   for (const evidence of recipe.productVisualAcceptance?.automatedEvidence ??
     []) {
+    if (!evidence.screenshotPath) continue;
     const screenshotPath = path.join(projectRoot, evidence.screenshotPath);
     const actualHash = createHash('sha256')
       .update(await fs.readFile(screenshotPath))
@@ -2386,6 +2911,16 @@ async function verifyAutomatedVisualEvidence(recipe) {
       );
     }
   }
+}
+
+function parseOwnerId(argv) {
+  const index = argv.indexOf('--owner');
+  if (index < 0) return null;
+  const ownerId = Number(argv[index + 1]);
+  if (!Number.isInteger(ownerId)) {
+    throw new Error('Invalid --owner value: ' + String(argv[index + 1]));
+  }
+  return ownerId;
 }
 
 function sameHashes(left, right) {

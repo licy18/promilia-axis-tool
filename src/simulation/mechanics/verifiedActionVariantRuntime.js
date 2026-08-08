@@ -1345,6 +1345,7 @@ export function createVerifiedActionVariantRuntime({
             executionTiming: contextSelection.binding.executionTiming ?? null,
             semanticIdentity: contextSelection.binding.semanticIdentity ?? null,
             semanticName: contextSelection.binding.semanticName ?? null,
+            edgeIdentity: contextSelection.binding.edgeIdentity ?? null,
             contextualInputScheduling:
               action.contextualInputScheduling ??
               contextSelection.inputScheduling ??
@@ -2690,6 +2691,7 @@ function createVariantSelectionRecord({
       null,
     selectionReason:
       selectionSource?.sourceKind ?? inputSelection?.reason ?? null,
+    edgeIdentity: selectionSource?.edgeIdentity ?? null,
     contextActionId: selectionSource?.contextActionId ?? null,
     contextualInputScheduling:
       selectionSource?.contextualInputScheduling ?? null,

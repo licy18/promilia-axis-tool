@@ -92,6 +92,13 @@ export function finalizeRequirementInventory(records = []) {
                 record.sourceGapDisposition
               ),
             }),
+        ...(record?.unselectedControlVariant == null
+          ? {}
+          : {
+              unselectedControlVariant: structuredClone(
+                record.unselectedControlVariant
+              ),
+            }),
         ...(record?.productBoundaryEvidence == null
           ? {}
           : {
@@ -132,13 +139,23 @@ export function finalizeRequirementInventory(records = []) {
 
 export function finalizeSourceGapInventory(records = []) {
   const normalized = records.map((record, index) => {
-    const reasons = uniqueStrings([...(record?.reasons ?? []), record?.reason]);
+    const reasons = uniqueStrings([
+      ...(record?.sourceClosureReasons ?? []),
+      ...(record?.reasons ?? []),
+      record?.reason,
+    ]);
+    const sourceClosureDisposition = record?.sourceClosureDisposition ?? null;
+    const sourceClosureApplied = sourceClosureDisposition === 'applied';
     const nonGameplay =
+      sourceClosureDisposition === 'not-applicable' ||
+      sourceClosureApplied ||
       record?.impactClassification !== 'gameplay-impacting' ||
       reasons.some(reason => NON_GAMEPLAY_SOURCE_REASONS.has(reason));
-    const status = nonGameplay
-      ? 'not-applicable'
-      : normalizeBlockingStatus(record?.status, reasons);
+    const status = sourceClosureApplied
+      ? 'source-closure-applied'
+      : nonGameplay
+        ? 'not-applicable'
+        : normalizeBlockingStatus(record?.status, reasons);
     const sourceIdentities = uniqueStrings([
       ...(record?.sourceIdentities ?? []),
       record?.sourceIdentity,
@@ -151,6 +168,7 @@ export function finalizeSourceGapInventory(records = []) {
         reason: reasons.join('|') || 'source-evidence-gap',
         sourceKind: record?.sourceKind ?? null,
         sourceIdentities,
+        sourceClosureDisposition,
       });
     const base = {
       uniqueGapIdentity,
@@ -166,9 +184,20 @@ export function finalizeSourceGapInventory(records = []) {
       reason: reasons.join('|') || 'source-evidence-gap',
       sourceKind: record?.sourceKind ?? null,
       sourceIdentities,
-      impactClassification: nonGameplay
-        ? 'not-applicable'
-        : 'gameplay-impacting',
+      sourceClosureDisposition,
+      sourceClosurePolicyIdentities: uniqueStrings([
+        ...(record?.sourceClosurePolicyIdentities ?? []),
+        record?.sourceClosurePolicyIdentity,
+      ]),
+      sourceClosureSourceIdentities: uniqueStrings([
+        ...(record?.sourceClosureSourceIdentities ?? []),
+        record?.sourceClosureSourceIdentity,
+      ]),
+      impactClassification: sourceClosureApplied
+        ? 'source-runtime-resolved'
+        : nonGameplay
+          ? 'not-applicable'
+          : 'gameplay-impacting',
       blocking: !nonGameplay,
       ...(record?.acceptanceDisposition == null
         ? {}
@@ -435,12 +464,16 @@ export function deriveAcceptanceLedger(sourceGapInventory, matrix) {
     .map(record => ({
       recordIdentity: record.uniqueGapIdentity,
       uniqueGapIdentity: record.uniqueGapIdentity,
-      category: 'non-gameplay-source-record',
+      category:
+        record.sourceClosureDisposition === 'applied'
+          ? 'resolved-source-record'
+          : 'non-gameplay-source-record',
       status: record.status,
       reason: record.reason,
       sourceKind: record.sourceKind,
       sourceIdentities: record.sourceIdentities,
       sourceRecordIdentities: record.sourceRecordIdentities,
+      sourceClosureDisposition: record.sourceClosureDisposition,
       blocking: false,
     }));
   const value = {
@@ -493,7 +526,10 @@ export function deriveNotApplicableRecords(
           }),
     }));
   const sourceRecords = sourceGapInventory.records
-    .filter(record => !record.blocking)
+    .filter(
+      record =>
+        !record.blocking && record.sourceClosureDisposition !== 'applied'
+    )
     .map(record => ({
       recordIdentity: 'not-applicable:' + record.uniqueGapIdentity,
       status: 'not-applicable',
@@ -556,6 +592,9 @@ function finalizeScenarioCase(record, index) {
         actualProjectionIdentities: matches.map(
           match => match.projectionIdentity
         ),
+        ...(assertion?.actual === undefined
+          ? {}
+          : { actual: structuredClone(assertion.actual) }),
         reasons: passed
           ? []
           : uniqueStrings([
@@ -617,6 +656,12 @@ function createProjectionAssertionDefinitions(projection) {
       actionId: row.actionId,
     });
   }
+  for (const row of projection.attackInputChains) {
+    add('trace-attack-input-chain:' + row.projectionIdentity, {
+      kind: 'attack-input-chain',
+      chainIdentity: row.chainIdentity,
+    });
+  }
   for (const row of projection.hits) {
     add('trace-hit:' + row.projectionIdentity, {
       kind: 'hit',
@@ -652,6 +697,13 @@ function createProjectionAssertionDefinitions(projection) {
     add('trace-attack-input-chain:' + row.projectionIdentity, {
       kind: 'attack-input-chain',
       chainIdentity: row.chainIdentity,
+    });
+  }
+  for (const row of projection.stateMachines) {
+    add('trace-state-machine:' + row.projectionIdentity, {
+      kind: 'state-machine',
+      transitionIdentity: row.transitionIdentity,
+      resourceIdentity: row.resourceIdentity,
     });
   }
   for (const row of projection.controlWindows) {
@@ -709,7 +761,8 @@ function createProjectionAssertionDefinitions(projection) {
       hitIdentity: row.hitIdentity,
     });
   }
-  for (const [factIdentity] of Object.entries(projection.facts)) {
+  for (const [factIdentity, factValue] of Object.entries(projection.facts)) {
+    if (factValue !== true) continue;
     add('scenario-fact:' + factIdentity, {
       kind: 'scenario-fact',
       factIdentity,
@@ -722,11 +775,12 @@ function createProjectionAssertionDefinitions(projection) {
 function normalizeTraceProjection(projection = {}) {
   return {
     actionForms: normalizeProjectionRows(projection.actionForms),
+    attackInputChains: normalizeProjectionRows(projection.attackInputChains),
     hits: normalizeProjectionRows(projection.hits),
     effects: normalizeProjectionRows(projection.effects),
     resources: normalizeProjectionRows(projection.resources),
     states: normalizeProjectionRows(projection.states),
-    attackInputChains: normalizeProjectionRows(projection.attackInputChains),
+    stateMachines: normalizeProjectionRows(projection.stateMachines),
     controlWindows: normalizeProjectionRows(projection.controlWindows),
     variantEdges: normalizeProjectionRows(projection.variantEdges),
     variantWindows: normalizeProjectionRows(projection.variantWindows),
@@ -776,11 +830,12 @@ function resolveSelectorMatches(projection, selector) {
   }
   const collectionName = {
     'action-form': 'actionForms',
+    'attack-input-chain': 'attackInputChains',
     hit: 'hits',
     effect: 'effects',
     resource: 'resources',
     state: 'states',
-    'attack-input-chain': 'attackInputChains',
+    'state-machine': 'stateMachines',
     'control-window': 'controlWindows',
     'variant-edge': 'variantEdges',
     'variant-window': 'variantWindows',

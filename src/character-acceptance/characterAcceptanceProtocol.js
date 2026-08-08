@@ -10,6 +10,9 @@ export const CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY =
 export const CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION = 1;
 export const CHARACTER_ACCEPTANCE_MANIFEST_INDEX_CONTRACT_NAME =
   'AzPrCharacterAcceptanceManifestIndex';
+export const PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND =
+  'workbench-playwright-screenshot';
+export const MACHINE_TRACE_EVIDENCE_KIND = 'machine-axis-trace';
 
 export const CHARACTER_ACCEPTANCE_MATURITY_STATES = Object.freeze([
   'extracted',
@@ -404,35 +407,143 @@ function collectCharacterAcceptanceManifestIssues(
   }
 
   const productVisual = manifest.evidence?.productVisualAcceptance ?? {};
-  const scenarioIdentities = new Set(
-    (manifest.evidence?.machineScenarios ?? []).map(
-      scenario => scenario?.scenarioIdentity
-    )
+  const scenarioByIdentity = new Map(
+    (manifest.evidence?.machineScenarios ?? []).map(scenario => [
+      scenario?.scenarioIdentity,
+      scenario,
+    ])
   );
-  const automatedScenarioIdentities = new Set(
-    (productVisual.automatedEvidence ?? []).map(
-      evidence => evidence?.scenarioIdentity
-    )
+  const visualScenarioIdentities = new Set(
+    productVisual.scenarioIdentities ?? []
   );
-  for (const scenarioIdentity of scenarioIdentities) {
-    if (!automatedScenarioIdentities.has(scenarioIdentity)) {
+  const visualEvidenceCounts = new Map();
+  for (const evidence of productVisual.automatedEvidence ?? []) {
+    const identity = evidence?.scenarioIdentity;
+    visualEvidenceCounts.set(
+      identity,
+      (visualEvidenceCounts.get(identity) ?? 0) + 1
+    );
+  }
+  for (const scenarioIdentity of visualScenarioIdentities) {
+    if (!scenarioByIdentity.has(scenarioIdentity)) {
+      issues.push(
+        'character-acceptance-visual-scenario-unknown:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if ((visualEvidenceCounts.get(scenarioIdentity) ?? 0) === 0) {
       issues.push(
         'character-acceptance-visual-evidence-missing:' +
           String(scenarioIdentity ?? '')
       );
     }
+    if ((visualEvidenceCounts.get(scenarioIdentity) ?? 0) > 1) {
+      issues.push(
+        'character-acceptance-visual-evidence-duplicate:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
   }
   for (const evidence of productVisual.automatedEvidence ?? []) {
-    if (!scenarioIdentities.has(evidence?.scenarioIdentity)) {
+    const scenarioIdentity = evidence?.scenarioIdentity;
+    const scenario = scenarioByIdentity.get(scenarioIdentity);
+    if (!visualScenarioIdentities.has(scenarioIdentity)) {
+      issues.push(
+        'character-acceptance-visual-evidence-scenario-not-declared:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (!scenario) {
       issues.push(
         'character-acceptance-visual-evidence-scenario-unknown:' +
-          String(evidence?.scenarioIdentity ?? '')
+          String(scenarioIdentity ?? '')
+      );
+    }
+    const evidenceKind =
+      evidence?.evidenceKind ??
+      (evidence?.screenshotPath
+        ? PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND
+        : null);
+    if (evidenceKind !== PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND) {
+      issues.push(
+        'character-acceptance-visual-evidence-kind-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (evidence?.status !== 'automated-workbench-import-passed') {
+      issues.push(
+        'character-acceptance-visual-evidence-status-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (!evidence?.screenshotPath) {
+      issues.push(
+        'character-acceptance-visual-evidence-path-missing:' +
+          String(scenarioIdentity ?? '')
       );
     }
     if (!/^[0-9a-f]{64}$/.test(String(evidence?.screenshotSha256 ?? ''))) {
       issues.push(
         'character-acceptance-visual-evidence-hash-invalid:' +
-          String(evidence?.scenarioIdentity ?? '')
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (evidence?.traceSha256 != null) {
+      issues.push(
+        'character-acceptance-visual-evidence-trace-hash-forbidden:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    const fixtureBindingProvided =
+      evidence?.fixturePath != null || evidence?.fixtureSha256 != null;
+    if (
+      fixtureBindingProvided &&
+      (evidence?.fixturePath !== scenario?.fixturePath ||
+        !/^[0-9a-f]{64}$/.test(String(evidence?.fixtureSha256 ?? '')))
+    ) {
+      issues.push(
+        'character-acceptance-visual-evidence-fixture-binding-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (
+      evidence?.canonicalTraceHash != null &&
+      evidence.canonicalTraceHash !== scenario?.canonicalHashes?.trace
+    ) {
+      issues.push(
+        'character-acceptance-visual-evidence-trace-binding-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+  }
+  for (const evidence of manifest.evidence?.machineEvidence ?? []) {
+    const scenarioIdentity = evidence?.scenarioIdentity;
+    const scenario = scenarioByIdentity.get(scenarioIdentity);
+    if (!scenario) {
+      issues.push(
+        'character-acceptance-machine-evidence-scenario-unknown:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (evidence?.evidenceKind !== MACHINE_TRACE_EVIDENCE_KIND) {
+      issues.push(
+        'character-acceptance-machine-evidence-kind-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (evidence?.status !== 'automated-machine-axis-passed') {
+      issues.push(
+        'character-acceptance-machine-evidence-status-invalid:' +
+          String(scenarioIdentity ?? '')
+      );
+    }
+    if (
+      evidence?.canonicalTraceHash !== scenario?.canonicalHashes?.trace ||
+      !/^[0-9a-f]{64}$/.test(String(evidence?.traceSha256 ?? ''))
+    ) {
+      issues.push(
+        'character-acceptance-machine-evidence-trace-binding-invalid:' +
+          String(scenarioIdentity ?? '')
       );
     }
   }
@@ -559,12 +670,20 @@ function deriveProductVisualAcceptance({
 }) {
   const automatedEvidence = structuredClone(
     productVisualAcceptance.automatedEvidence ?? []
-  );
+  ).map(evidence => ({
+    ...evidence,
+    evidenceKind:
+      evidence?.evidenceKind ??
+      (evidence?.screenshotPath
+        ? PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND
+        : null),
+  }));
   const scenarioIdentities = [
     ...new Set(
-      automatedEvidence
-        .map(evidence => evidence?.scenarioIdentity)
-        .filter(Boolean)
+      (
+        productVisualAcceptance.scenarioIdentities ??
+        automatedEvidence.map(evidence => evidence?.scenarioIdentity)
+      ).filter(Boolean)
     ),
   ].sort();
   const scenarioSetHash = hashCanonicalValue(

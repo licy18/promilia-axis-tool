@@ -2835,9 +2835,9 @@ function createUnresolvedLedger({
       metadata: item.metadata,
     });
   }
-  const rawRecords = dedupeBy(records, record => record.recordIdentity).sort(
-    compareIdentity
-  );
+  const rawRecords = dedupeBy(records, record => record.recordIdentity)
+    .map(record => applyUnresolvedRecordPolicy(record, recipe))
+    .sort(compareIdentity);
   const semanticGroups = new Map();
   for (const record of rawRecords) {
     const impactClassification = classifyUnresolvedImpactClassification(
@@ -2855,6 +2855,19 @@ function createUnresolvedLedger({
     const existing = semanticGroups.get(canonicalKey);
     if (existing) {
       existing.rawRecordIdentities.push(record.recordIdentity);
+      if (record.sourceClosurePolicyIdentity) {
+        existing.sourceClosurePolicyIdentities.push(
+          record.sourceClosurePolicyIdentity
+        );
+      }
+      if (record.sourceClosureSourceIdentity) {
+        existing.sourceClosureSourceIdentities.push(
+          record.sourceClosureSourceIdentity
+        );
+      }
+      existing.sourceClosureReasons.push(
+        ...(record.sourceClosureReasons ?? [])
+      );
       if (record.sourceIdentity) {
         existing.sourceIdentities.push(record.sourceIdentity);
       }
@@ -2885,6 +2898,16 @@ function createUnresolvedLedger({
       scenarioRuntimeStatuses: record.scenarioRuntimeStatus
         ? [record.scenarioRuntimeStatus]
         : [],
+      sourceClosureDisposition: record.sourceClosureDisposition ?? null,
+      sourceClosurePolicyIdentity: record.sourceClosurePolicyIdentity ?? null,
+      sourceClosurePolicyIdentities: record.sourceClosurePolicyIdentity
+        ? [record.sourceClosurePolicyIdentity]
+        : [],
+      sourceClosureSourceIdentity: record.sourceClosureSourceIdentity ?? null,
+      sourceClosureSourceIdentities: record.sourceClosureSourceIdentity
+        ? [record.sourceClosureSourceIdentity]
+        : [],
+      sourceClosureReasons: [...(record.sourceClosureReasons ?? [])],
       metadata: record.metadata ?? null,
       rawRecordIdentities: [record.recordIdentity],
     });
@@ -2900,6 +2923,13 @@ function createUnresolvedLedger({
       scenarioRuntimeStatuses: [
         ...new Set(record.scenarioRuntimeStatuses),
       ].sort(),
+      sourceClosurePolicyIdentities: [
+        ...new Set(record.sourceClosurePolicyIdentities),
+      ].sort(),
+      sourceClosureSourceIdentities: [
+        ...new Set(record.sourceClosureSourceIdentities),
+      ].sort(),
+      sourceClosureReasons: [...new Set(record.sourceClosureReasons)].sort(),
       rawRecordIdentities: [...new Set(record.rawRecordIdentities)].sort(),
       rawRecordCount: new Set(record.rawRecordIdentities).size,
     }))
@@ -2933,8 +2963,129 @@ function createUnresolvedLedger({
       unreachableOrNotApplicableCount: semanticRecords.filter(record =>
         ['unreachable', 'not-applicable'].includes(record.impactClassification)
       ).length,
+      sourceClosureAppliedCount: semanticRecords.filter(
+        record => record.sourceClosureDisposition === 'applied'
+      ).length,
+      sourceClosureNotApplicableCount: semanticRecords.filter(
+        record => record.sourceClosureDisposition === 'not-applicable'
+      ).length,
     },
   };
+}
+
+function applyUnresolvedRecordPolicy(record, recipe = {}) {
+  const policy = (recipe.unresolvedRecordPolicies ?? []).find(candidate =>
+    unresolvedRecordPolicyMatches(candidate, record)
+  );
+  if (!policy) return record;
+  const disposition = String(policy.disposition ?? 'not-applicable');
+  return {
+    ...record,
+    status:
+      disposition === 'applied' ? 'source-closure-applied' : 'not-applicable',
+    sourceClosureDisposition: disposition,
+    sourceClosurePolicyIdentity: String(policy.policyIdentity),
+    sourceClosureSourceIdentity: String(policy.sourceIdentity),
+    sourceClosureReasons: [
+      ...new Set((policy.reasons ?? []).map(String)),
+    ].sort(),
+    sourceClosureImpactClassification: String(
+      policy.impactClassification ??
+        (disposition === 'applied'
+          ? 'source-runtime-resolved'
+          : 'not-applicable')
+    ),
+  };
+}
+
+function unresolvedRecordPolicyMatches(policy, record) {
+  if (!policy || !policy.policyIdentity || !policy.sourceIdentity) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.sourceKinds) &&
+    policy.sourceKinds.length > 0 &&
+    !policy.sourceKinds.includes(record.sourceKind)
+  ) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.statuses) &&
+    policy.statuses.length > 0 &&
+    !policy.statuses.includes(record.status)
+  ) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.scenarioRuntimeStatuses) &&
+    policy.scenarioRuntimeStatuses.length > 0 &&
+    !policy.scenarioRuntimeStatuses.includes(record.scenarioRuntimeStatus)
+  ) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.identityPrefixes) &&
+    policy.identityPrefixes.length > 0 &&
+    !policy.identityPrefixes.some(prefix =>
+      String(record.recordIdentity ?? '').startsWith(String(prefix))
+    )
+  ) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.reasonIncludes) &&
+    policy.reasonIncludes.length > 0 &&
+    !policy.reasonIncludes.every(reason =>
+      (record.reasons ?? []).includes(reason)
+    )
+  ) {
+    return false;
+  }
+  if (
+    Array.isArray(policy.controlVariants) &&
+    policy.controlVariants.length > 0
+  ) {
+    const coordinate = resolveUnresolvedRecordControlVariant(record);
+    if (!coordinate) return false;
+    return policy.controlVariants.some(candidate => {
+      if (Number(candidate.controlSkillId) !== coordinate.controlSkillId) {
+        return false;
+      }
+      const indexes = candidate.subSkillIndexes ?? [candidate.subSkillIndex];
+      return indexes.some(
+        subSkillIndex => Number(subSkillIndex) === coordinate.subSkillIndex
+      );
+    });
+  }
+  return true;
+}
+
+function resolveUnresolvedRecordControlVariant(record) {
+  for (const identity of [record.recordIdentity, record.sourceIdentity]) {
+    const value = String(identity ?? '');
+    const raw = value.match(/^(?:hit|effect):(\d+)\|(\d+)\|/);
+    if (raw) {
+      return {
+        controlSkillId: Number(raw[1]),
+        subSkillIndex: Number(raw[2]),
+      };
+    }
+    const edge = value.match(/\|control:(\d+)\|sub:(\d+)/);
+    if (edge) {
+      return {
+        controlSkillId: Number(edge[1]),
+        subSkillIndex: Number(edge[2]),
+      };
+    }
+    const effect = value.match(/^battle-effect:(\d+):(\d+):/);
+    if (effect) {
+      return {
+        controlSkillId: Number(effect[1]),
+        subSkillIndex: Number(effect[2]),
+      };
+    }
+  }
+  return null;
 }
 
 function classifyUnresolvedImpactClassification(
@@ -2945,6 +3096,9 @@ function classifyUnresolvedImpactClassification(
     tuningMarkConditionalDamageGroups = [],
   } = {}
 ) {
+  if (record.sourceClosureImpactClassification) {
+    return record.sourceClosureImpactClassification;
+  }
   if (record.status === 'not-applicable') return 'not-applicable';
   const recipeOverride = (recipe.unresolvedRecords ?? []).find(
     item =>
@@ -3031,6 +3185,7 @@ function createUnresolvedCanonicalKey(record, impactClassification) {
       semanticEffectIdentity,
       reasonKey,
       record.status,
+      record.sourceClosureDisposition ?? '',
     ].join('|');
   }
   return [
@@ -3040,12 +3195,17 @@ function createUnresolvedCanonicalKey(record, impactClassification) {
     record.recordIdentity,
     reasonKey,
     record.status,
+    record.sourceClosureDisposition ?? '',
   ].join('|');
 }
 
 function createRuntimeCapturePlan(records, ownerId) {
   const entries = records
-    .filter(record => record.status === 'runtime-evidence-required')
+    .filter(
+      record =>
+        record.status === 'runtime-evidence-required' &&
+        record.sourceClosureDisposition == null
+    )
     .map(record => {
       const zeroDistanceScenarioResolved =
         record.sourceKind === 'hit' &&

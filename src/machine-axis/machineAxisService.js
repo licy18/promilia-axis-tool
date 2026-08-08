@@ -1327,6 +1327,7 @@ function createActionTemplate({
     action,
     index,
     ownerSlot,
+    contract,
     gameData,
     issues,
     formalOptimization:
@@ -1338,6 +1339,7 @@ function createActorActionTemplate({
   action,
   index,
   ownerSlot,
+  contract,
   gameData,
   issues,
   formalOptimization,
@@ -1435,7 +1437,7 @@ function createActorActionTemplate({
   }
   const segment =
     mapping.actionKind === 'normal-attack'
-      ? resolveAttackInputSegment(action, mapping, index, issues)
+      ? resolveAttackInputSegment(action, mapping, contract, index, issues)
       : null;
   if (mapping.actionKind === 'normal-attack' && !segment) return null;
   const semanticVariantResolution = resolveSemanticVariantSelection({
@@ -1709,7 +1711,7 @@ function createKiboActionTemplate({
     },
   };
 }
-function resolveAttackInputSegment(action, mapping, index, issues) {
+function resolveAttackInputSegment(action, mapping, contract, index, issues) {
   const sequenceIndex = action.intent.attackInput?.sequenceIndex;
   if (!sequenceIndex) {
     issues.push(
@@ -1740,7 +1742,76 @@ function resolveAttackInputSegment(action, mapping, index, issues) {
     );
     return null;
   }
-  return candidates[0];
+  const requestedSegment = candidates[0];
+  const contextActionId = action.intent.attackInput?.contextActionId;
+  if (!contextActionId) return requestedSegment;
+  const contextAction = (contract.actions ?? []).find(
+    candidate => String(candidate.id) === String(contextActionId)
+  );
+  const contextSequenceIndex =
+    contextAction?.intent?.attackInput?.sequenceIndex;
+  const contextFrame = absoluteScheduleFrame(contextAction);
+  const actionFrame = absoluteScheduleFrame(action);
+  if (
+    !contextSequenceIndex ||
+    !Number.isFinite(contextFrame) ||
+    !Number.isFinite(actionFrame)
+  ) {
+    return requestedSegment;
+  }
+  const sourceSegment = (
+    mapping.attackInputSegments ??
+    mapping.attackInputSourceSegments ??
+    []
+  ).find(
+    segment => Number(segment.sequenceIndex) === Number(contextSequenceIndex)
+  );
+  const offsetFrames = actionFrame - contextFrame;
+  const matchingWindows = [
+    ...new Map(
+      [sourceSegment?.linkWindow, ...(sourceSegment?.linkWindows ?? [])]
+        .filter(
+          window =>
+            window &&
+            Number.isFinite(Number(window.startFrame)) &&
+            Number.isFinite(Number(window.endFrame)) &&
+            offsetFrames >= Number(window.startFrame) &&
+            offsetFrames < Number(window.endFrame) &&
+            (window.allowAttack === true ||
+              (window.allowedInputCommands ?? []).includes('normal-attack')) &&
+            Number.isInteger(Number(window.targetControlSkillId))
+        )
+        .map(window => [
+          [
+            window.startFrame,
+            window.endFrame,
+            window.targetControlSkillId,
+            window.targetSubSkillIndex ?? 0,
+            window.sourceIdentity ?? '',
+          ].join('|'),
+          window,
+        ])
+    ).values(),
+  ];
+  if (matchingWindows.length !== 1) return requestedSegment;
+  const window = matchingWindows[0];
+  const linked = (
+    mapping.attackInputSegments ??
+    mapping.attackInputSourceSegments ??
+    []
+  ).filter(
+    segment =>
+      Number(segment.controlSkillId) === Number(window.targetControlSkillId) &&
+      Number(segment.selectedSubSkillIndex) ===
+        Number(window.targetSubSkillIndex ?? 0)
+  );
+  return linked.length === 1 ? linked[0] : requestedSegment;
+}
+
+function absoluteScheduleFrame(action) {
+  if (action?.schedule?.mode !== 'absolute') return Number.NaN;
+  const frame = Number(action.schedule.frame);
+  return Number.isFinite(frame) ? frame : Number.NaN;
 }
 
 function createAttackInputFields(action, mapping, segment) {
@@ -1838,7 +1909,9 @@ function toProjectHitOverrides(overrides) {
           ? { willHit: true }
           : override.landed === 'miss'
             ? { willHit: false }
-            : {}),
+            : override.landed === 'blocked'
+              ? { willHit: false, landingStatus: 'blocked' }
+              : {}),
         ...(override.criticalMode !== 'inherit'
           ? { criticalPolicy: override.criticalMode }
           : {}),
@@ -1854,6 +1927,33 @@ function toProjectHitOverrides(overrides) {
 }
 
 function collectMappingHitIdentities(mapping, segment = null) {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const controlSkillId = Number(
+    segment?.controlSkillId ?? mapping.controlSkillId
+  );
+  const subSkillIndex = Number(
+    segment?.selectedSubSkillIndex ??
+      segment?.subSkillIndex ??
+      mapping.selectedSubSkillIndex
+  );
+  const conditionalHitIdentities = (
+    mechanicsPackage?.actionVariantGraph?.tuningMarkConditionalDamageGroups ??
+    []
+  ).flatMap(group => {
+    if (
+      Number(group.controlSkillId) !== controlSkillId ||
+      Number(group.subSkillIndex) !== subSkillIndex
+    ) {
+      return [];
+    }
+    const hitCount =
+      Math.max(1, group.triggerFrames?.length ?? 0) *
+      Math.max(1, group.hitDelaysMs?.length ?? 0);
+    return Array.from(
+      { length: hitCount },
+      (_, index) => `conditional-damage:${group.groupIdentity}:${index + 1}`
+    );
+  });
   return [
     ...new Set(
       [
@@ -1861,6 +1961,7 @@ function collectMappingHitIdentities(mapping, segment = null) {
         ...(segment?.actionTiming?.hits ?? []).map(hit => hit.hitIdentity),
         ...(mapping.selectedHitIdentities ?? []),
         ...(mapping.actionTiming?.hits ?? []).map(hit => hit.hitIdentity),
+        ...conditionalHitIdentities,
       ].filter(Boolean)
     ),
   ].sort((left, right) => left.localeCompare(right, 'en'));
@@ -2731,6 +2832,28 @@ function findInstalledHitByIdentity(hitIdentity) {
       entry => entry.hitIdentity === hitIdentity
     );
     if (hit) return hit;
+  }
+  const conditionalMatch = String(hitIdentity ?? '').match(
+    /^conditional-damage:(.+):(\d+)$/
+  );
+  if (conditionalMatch) {
+    const group = (
+      mechanicsPackage?.actionVariantGraph?.tuningMarkConditionalDamageGroups ??
+      []
+    ).find(candidate => candidate.groupIdentity === conditionalMatch[1]);
+    if (group) {
+      const hitCount =
+        Math.max(1, group.triggerFrames?.length ?? 0) *
+        Math.max(1, group.hitDelaysMs?.length ?? 0);
+      const hitIndex = Number(conditionalMatch[2]);
+      if (hitIndex >= 1 && hitIndex <= hitCount) {
+        return {
+          hitIdentity,
+          damage: group.baseTemplate ?? group.enhancedTemplate ?? null,
+          sourceIdentity: group.sourceIdentity ?? null,
+        };
+      }
+    }
   }
   return null;
 }

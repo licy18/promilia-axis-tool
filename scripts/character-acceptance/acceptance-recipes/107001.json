@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
+  "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "pending",
     "acceptanceCommit": null,
@@ -8,28 +9,78 @@
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "screenshotPath": "reports/m11-d-character-acceptance-107001-desktop.png",
         "screenshotSha256": "8a18a3bbd01961745f4470eed77cf9b5361a0c78a0805fae97b0d27a23f592c0"
       }
     ]
   },
+  "machineEvidence": [
+    {
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "evidenceKind": "machine-axis-trace",
+      "status": "automated-machine-axis-passed",
+      "traceHashSource": "machine-axis-canonical-trace"
+    }
+  ],
   "ownerId": 107001,
   "fixturePath": "fixtures/character-acceptance/107001-visual.json",
   "goldenReports": ["reports/m10/107001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10700162,
+  "requirementPolicies": {
+    "unselectedControlVariantsFromActionForms": true
+  },
+  "inputWindowBoundary": {
+    "sourceControlSkillId": 10700101,
+    "transitionControlSkillId": 10700102,
+    "sourceWindow": "[20,72) source frames",
+    "cases": [
+      {
+        "actionId": "window-outside-before",
+        "expectedOffset": 19,
+        "expectedControlSkillId": 10700101,
+        "expectedSubSkillIndex": 0
+      },
+      {
+        "actionId": "window-inside-start",
+        "expectedOffset": 20,
+        "expectedControlSkillId": 10700102,
+        "expectedSubSkillIndex": 4
+      },
+      {
+        "actionId": "window-inside-end",
+        "expectedOffset": 71,
+        "expectedControlSkillId": 10700102,
+        "expectedSubSkillIndex": 4
+      },
+      {
+        "actionId": "window-outside-after",
+        "expectedOffset": 72,
+        "expectedControlSkillId": 10700101,
+        "expectedSubSkillIndex": 0
+      }
+    ]
+  },
+  "buffLifecycle": {
+    "effectIdentity": "battle-element:107001262",
+    "targetId": "actor-107001",
+    "durationFrames": 1440,
+    "requiredOperations": ["apply", "refresh", "expire"],
+    "rightOpenExpiry": true
+  },
   "probes": [
     {
       "kind": "special-resource-change",
       "actionId": "107001-critical-sampled-low",
       "resourceIdentity": "actor:107001:element:107001006",
-      "beforeValue": 0,
-      "afterValue": 1,
+      "beforeValue": 2,
+      "afterValue": 3,
       "change": 1
     },
     {
       "kind": "special-resource-change",
-      "actionId": "sifliya-a3-cycle-1",
+      "actionId": "sifliya-threshold-arrow-10",
       "resourceIdentity": "actor:107001:element:107001006",
       "beforeValue": 9,
       "afterValue": 10,
@@ -58,7 +109,7 @@
     },
     {
       "kind": "variant-selection",
-      "actionId": "sifliya-star-response",
+      "actionId": "sifliya-star-response-missed-first-hit",
       "controlSkillId": 10700112,
       "subSkillIndex": 0,
       "semanticName": "星鸣技"
@@ -69,6 +120,163 @@
       "controlSkillId": 10700113,
       "subSkillIndex": 0,
       "semanticName": "星决技"
+    },
+    {
+      "kind": "tuning-hit-gate",
+      "assertionIdentity": "condition-insufficient-negative",
+      "actionId": "sifliya-star-response-missed-first-hit",
+      "groupIdentity": "sifliya-star-hit-1",
+      "hitIndex": 1,
+      "markId": 750,
+      "expectedGatePassed": false,
+      "expectedLandedCount": 0,
+      "expectedLanded": false,
+      "expectedApplied": false,
+      "expectedBranch": "base",
+      "expectedAcquisitionCount": 0
+    },
+    {
+      "kind": "resource-boundary",
+      "assertionIdentity": "resource-exact-and-insufficient",
+      "resourceIdentity": "actor:107001:element:107001006",
+      "exactActionId": "sifliya-threshold-arrow-10",
+      "beforeValue": 9,
+      "afterValue": 10,
+      "missActionId": "107001-critical-miss-critical",
+      "missHitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
+      "blockedActionId": "107001-blocked-arrow-negative",
+      "blockedHitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0"
+    },
+    {
+      "kind": "controlled-actor-companion-switch",
+      "assertionIdentity": "foreground-background-switch",
+      "switchActionId": "switch-away-from-third-lumi",
+      "beforeActorId": "actor-107001",
+      "afterActorId": "actor-101010"
+    },
+    {
+      "kind": "tuning-hit-gate",
+      "assertionIdentity": "star-first-hit-acquires-wind-mark-before-judgment",
+      "actionId": "sifliya-star-interrupted-at-90",
+      "groupIdentity": "sifliya-star-hit-1",
+      "hitIndex": 1,
+      "markId": 750,
+      "expectedGatePassed": true,
+      "expectedLandedCount": 1,
+      "expectedLanded": true,
+      "expectedApplied": true,
+      "expectedAcquisitionCount": 1,
+      "expectedDelta": 1,
+      "sameFrame": true
+    },
+    {
+      "kind": "tuning-hit-gate",
+      "assertionIdentity": "ultimate-first-hit-acquires-wind-mark-before-judgment",
+      "actionId": "sifliya-ultimate-three-marks",
+      "groupIdentity": "sifliya-ultimate-hit-1",
+      "hitIndex": 1,
+      "markId": 750,
+      "expectedGatePassed": true,
+      "expectedLandedCount": 1,
+      "expectedLanded": true,
+      "expectedApplied": true,
+      "expectedBranch": "enhanced",
+      "expectedMarkCountAtJudgment": 3,
+      "expectedAcquisitionCount": 1,
+      "expectedBefore": 2,
+      "expectedAfter": 3,
+      "expectedDelta": 1,
+      "sameFrame": true
+    },
+    {
+      "kind": "tuning-conditional-group",
+      "assertionIdentity": "lumi-charged-below-three-marks-base-branch",
+      "actionId": "sifliya-charged-with-lumi",
+      "groupIdentity": "sifliya-lumi-charged-response-damage",
+      "expectedCount": 5,
+      "expectedBranch": "base",
+      "expectedMarkCountAtJudgment": 2,
+      "expectedLanded": true,
+      "companionUnitId": 480056,
+      "ownership": "summoning-actor"
+    },
+    {
+      "kind": "tuning-conditional-group",
+      "assertionIdentity": "lumi-charged-at-three-marks-enhanced-branch",
+      "actionId": "sifliya-charged-with-three-marks",
+      "groupIdentity": "sifliya-lumi-charged-response-damage",
+      "expectedCount": 5,
+      "expectedBranch": "enhanced",
+      "expectedMarkCountAtJudgment": 3,
+      "expectedLanded": true,
+      "companionUnitId": 480056,
+      "ownership": "summoning-actor"
+    },
+    {
+      "kind": "companion-lifecycle",
+      "assertionIdentity": "lumi-twelve-second-two-volley-cadence-ownership-target",
+      "summonActionId": "window-outside-after",
+      "durationMs": 12000,
+      "cadenceMs": 5000,
+      "periodicCount": 2,
+      "attackCount": 6,
+      "companionUnitId": 480056,
+      "ownership": "summoning-actor",
+      "targetKind": "enemy"
+    },
+    {
+      "kind": "companion-action-response",
+      "assertionIdentity": "lumi-star-cancels-periodic-and-despawns-at-105f",
+      "actionId": "sifliya-star-response-missed-first-hit",
+      "attackIdentity": "sifliya-lumi-star-response",
+      "attackCount": 5,
+      "despawnOffsetFrames": 105,
+      "despawnReason": "action-response-complete"
+    },
+    {
+      "kind": "conditional-group-interruption",
+      "assertionIdentity": "star-interruption-drops-final-projectiles",
+      "actionId": "sifliya-star-interrupted-at-90",
+      "expectedCount": 4,
+      "forbiddenGroupIdentity": "sifliya-star-final-projectiles"
+    }
+  ],
+  "additionalScenarios": [
+    {
+      "fixturePath": "fixtures/character-acceptance/107001-wind-expiry-boundary.json",
+      "skipCriticalMatrix": true,
+      "probes": [
+        {
+          "kind": "tuning-mark-expiry-boundary",
+          "assertionIdentity": "wind-mark-expires-before-same-frame-acquisition",
+          "actionId": "sifliya-star-exact-expiry",
+          "markId": 750,
+          "expectedFrame": 1200,
+          "expectedExpireBefore": 3,
+          "expectedExpireAfter": 2,
+          "expectedAcquireBefore": 2,
+          "expectedAcquireAfter": 3
+        },
+        {
+          "kind": "tuning-hit-gate",
+          "assertionIdentity": "exact-expiry-acquisition-precedes-same-frame-judgment",
+          "actionId": "sifliya-star-exact-expiry",
+          "groupIdentity": "sifliya-star-hit-1",
+          "hitIndex": 1,
+          "markId": 750,
+          "expectedGatePassed": true,
+          "expectedLandedCount": 1,
+          "expectedLanded": true,
+          "expectedApplied": true,
+          "expectedBranch": "enhanced",
+          "expectedMarkCountAtJudgment": 3,
+          "expectedAcquisitionCount": 1,
+          "expectedBefore": 2,
+          "expectedAfter": 3,
+          "expectedDelta": 1,
+          "sameFrame": true
+        }
+      ]
     }
   ]
 }

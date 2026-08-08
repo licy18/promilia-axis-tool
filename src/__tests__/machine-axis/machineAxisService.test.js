@@ -488,9 +488,7 @@ describe('Machine Axis service', () => {
         }),
       })
     );
-    expect(run.hashes).toEqual(
-      integratedBaseline.machineAxis.canonicalHashes
-    );
+    expect(run.hashes).toEqual(integratedBaseline.machineAxis.canonicalHashes);
   });
 
   it('removes all real hit transactions when landed is miss', () => {
@@ -515,6 +513,31 @@ describe('Machine Axis service', () => {
     ).toHaveLength(0);
     expect(
       miss.trace.events.filter(
+        item =>
+          item.actionId === 'pangpang-a3' &&
+          ['hp', 'toughness', 'sp'].includes(item.payload?.resource)
+      )
+    ).toHaveLength(0);
+  });
+
+  it('keeps blocked distinct in the contract while suppressing hit transactions', () => {
+    const service = createMachineAxisService();
+    const blocked = service.simulate(
+      createAxis({
+        hitOverrides: {
+          [PANGPANG_A3_HIT]: {
+            landed: 'blocked',
+            criticalMode: 'inherit',
+          },
+        },
+      })
+    );
+
+    expect(
+      blocked.trace.damage.filter(item => item.actionId === 'pangpang-a3')
+    ).toHaveLength(0);
+    expect(
+      blocked.trace.events.filter(
         item =>
           item.actionId === 'pangpang-a3' &&
           ['hp', 'toughness', 'sp'].includes(item.payload?.resource)

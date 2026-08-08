@@ -1317,6 +1317,55 @@
       "relation": "has-subskill"
     },
     {
+      "edgeIdentity": "control:10700112:sub:0->context-input-derived->control:10700113:sub:0",
+      "from": "control:10700112:sub:0",
+      "to": "control:10700113:sub:0",
+      "relation": "context-input-derived",
+      "inputWindow": {
+        "startFrame": 62,
+        "endFrame": 135,
+        "frameRate": 60,
+        "bridgeType": 3,
+        "continuousAttackType": 0,
+        "interruptBehavior": 0,
+        "baseOnInput": null,
+        "inputToIndex": null,
+        "allowedInputCommands": [
+          "ultimate"
+        ],
+        "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate"
+      },
+      "inputScheduling": {
+        "schemaVersion": 1,
+        "kind": "verified-context-input-scheduling",
+        "status": "applied",
+        "inputSemantics": "immediate-interrupt",
+        "interval": "[start,end)",
+        "predecessorGenericEndFrame": 117,
+        "predecessorAnimationDurationFrames": 277,
+        "predecessorHitEnvelope": {
+          "firstFrame": null,
+          "lastFrame": null,
+          "status": "unresolved",
+          "sourceIdentities": []
+        },
+        "windowClassification": "generic-occupancy-inside-window",
+        "bufferUntilFrame": null,
+        "edgeIntent": {
+          "status": "applied",
+          "predecessorGenericEndFrame": 117,
+          "canonicalInputFrame": 117,
+          "canonicalExecutionStartFrame": 117,
+          "canonicalPredecessorEndFrame": 117,
+          "policy": "latest-verified-immediate-input-at-or-before-generic-edge"
+        },
+        "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update",
+        "reasons": []
+      },
+      "status": "applied",
+      "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
       "edgeIdentity": "control:10700112:sub:0->materializes-tuning-mark-conditional-damage->tuning-mark-conditional-damage-group:sifliya-star-final-projectiles",
       "from": "control:10700112:sub:0",
       "to": "tuning-mark-conditional-damage-group:sifliya-star-final-projectiles",
@@ -1616,7 +1665,7 @@
   ],
   "summary": {
     "nodeCount": 105,
-    "edgeCount": 112,
+    "edgeCount": 113,
     "controlCount": 9,
     "exclusionCount": 11,
     "nodeKindCounts": {
@@ -1632,6 +1681,7 @@
       "tuning-mark-conditional-damage-group": 8
     },
     "edgeRelationCounts": {
+      "context-input-derived": 1,
       "derives-star-carry": 1,
       "emits-hit": 37,
       "executes-control": 22,
@@ -1644,5 +1694,5 @@
       "threshold-transform": 1
     }
   },
-  "profileHash": "19d770aabee39258964c84b3d1a7df3ede5c6ca991267471f0f7ce7462792174"
+  "profileHash": "f1bd2904825b9b4c24f0feb04f4e3a4d6aa28d759e88b2475892956c48643b8b"
 }

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { hashCanonicalValue } from '../../src/simulation/headless/canonicalSerialization.js';
 import { deriveCharacterAcceptanceArtifacts } from '../../src/character-acceptance/characterAcceptanceDerivation.js';
 import {
@@ -11,6 +12,8 @@ import {
   CHARACTER_ACCEPTANCE_MANIFEST_INDEX_SCHEMA_VERSION,
   CHARACTER_ACCEPTANCE_PROTOCOL_IDENTITY,
   CHARACTER_ACCEPTANCE_SCHEMA_VERSION,
+  MACHINE_TRACE_EVIDENCE_KIND,
+  PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND,
   UNNAMED_SECONDARY_PASSIVE_REASON,
   finalizeCharacterAcceptanceManifest,
 } from '../../src/character-acceptance/characterAcceptanceProtocol.js';
@@ -45,6 +48,7 @@ export function createCharacterAcceptanceManifest({
   unresolvedLedger,
   goldens,
   visualScenario,
+  additionalVisualScenarios = [],
 }) {
   const sourceGapRecords = applyCharacterAcceptanceSourceGapDispositions(
     unresolvedLedger?.records ?? [],
@@ -53,6 +57,10 @@ export function createCharacterAcceptanceManifest({
   );
   const goldenEvidence = goldens.map(({ path, report }) =>
     createGoldenEvidence(path, report)
+  );
+  const visualScenarios = [visualScenario, ...additionalVisualScenarios];
+  const visualScenarioById = new Map(
+    visualScenarios.map(scenario => [scenario.scenarioIdentity, scenario])
   );
   const requirementInventory = {
     records: createCharacterAcceptanceRequirementSources({
@@ -70,12 +78,17 @@ export function createCharacterAcceptanceManifest({
     records: createCharacterAcceptanceScenarioCaseSources({
       goldens,
       visualScenario,
+      additionalVisualScenarios,
       profile,
     }),
   };
   const evidence = {
     canonicalGoldens: goldenEvidence,
-    machineScenarios: [toPublicVisualScenarioEvidence(visualScenario)],
+    machineScenarios: visualScenarios.map(toPublicVisualScenarioEvidence),
+    machineEvidence: createMachineEvidence(
+      recipe.machineEvidence ?? [],
+      visualScenarioById
+    ),
     productVisualAcceptance: {
       status: recipe.productVisualAcceptance?.status ?? 'pending',
       scenarioIdentities: [visualScenario.scenarioIdentity],
@@ -86,7 +99,13 @@ export function createCharacterAcceptanceManifest({
         recipe.productVisualAcceptance?.qualificationSubjectHash ?? null,
       scenarioSetHash: recipe.productVisualAcceptance?.scenarioSetHash ?? null,
       automatedEvidence: structuredClone(
-        recipe.productVisualAcceptance?.automatedEvidence ?? []
+        (recipe.productVisualAcceptance?.automatedEvidence ?? []).map(
+          evidence => ({
+            ...evidence,
+            evidenceKind:
+              evidence.evidenceKind ?? PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND,
+          })
+        )
       ),
     },
   };
@@ -173,6 +192,8 @@ export function createCharacterAcceptanceRequirementSources({
   const classifyScenarioScope = createScenarioScopeRequirementClassifier(
     recipe.scenarioScope
   );
+  const classifyUnselectedControlVariant =
+    createUnselectedControlVariantClassifier({ profile, recipe });
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
@@ -187,6 +208,10 @@ export function createCharacterAcceptanceRequirementSources({
       const sourceGapDisposition = classifyNonBlockingSourceRecord(record);
       const sourceNotApplicableControlSubskill =
         classifySourceNotApplicableControlSubskill(record, dimension);
+      const unselectedControlVariant = classifyUnselectedControlVariant(
+        record,
+        dimension
+      );
       const productBoundaryEvidence = createProductBoundaryEvidence({
         ownerId,
         profile,
@@ -202,8 +227,9 @@ export function createCharacterAcceptanceRequirementSources({
         isUnwiredControlWindowRequirement(record, dimension, profile) ||
         optimizationScenario != null ||
         scenarioScope != null ||
-        sourceGapDisposition != null ||
         sourceNotApplicableControlSubskill != null ||
+        sourceGapDisposition?.disposition === 'not-applicable' ||
+        unselectedControlVariant != null ||
         aggregateStatDependency;
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
@@ -211,13 +237,18 @@ export function createCharacterAcceptanceRequirementSources({
         subjectIdentity,
         sourceDisposition: notApplicable
           ? 'not-applicable'
-          : isAppliedRecord(record)
+          : sourceGapDisposition?.disposition === 'applied' ||
+              isAppliedRecord(record)
             ? 'applied'
             : 'gap',
         contractStatus: record.status ?? (record.applied ? 'applied' : null),
         impactClassification:
           record.impactClassification ??
-          (notApplicable ? 'not-applicable' : 'gameplay-impacting'),
+          (notApplicable
+            ? 'not-applicable'
+            : sourceGapDisposition?.disposition === 'applied'
+              ? 'source-runtime-resolved'
+              : 'gameplay-impacting'),
         coverageSelector: createContractCoverageSelector({
           record,
           dimension,
@@ -233,6 +264,9 @@ export function createCharacterAcceptanceRequirementSources({
         ...(sourceNotApplicableControlSubskill == null
           ? {}
           : { sourceNotApplicableControlSubskill }),
+        ...(unselectedControlVariant == null
+          ? {}
+          : { unselectedControlVariant }),
         ...(productBoundaryEvidence == null ? {} : { productBoundaryEvidence }),
         reasons: notApplicable
           ? [
@@ -242,6 +276,7 @@ export function createCharacterAcceptanceRequirementSources({
               ...(scenarioScope?.reason ? [scenarioScope.reason] : []),
               ...(sourceGapDisposition?.reasons ?? []),
               ...(sourceNotApplicableControlSubskill?.reasons ?? []),
+              ...(unselectedControlVariant?.reasons ?? []),
               ...(aggregateStatDependency
                 ? ['aggregate-stat-dependency-index-not-standalone-requirement']
                 : []),
@@ -451,6 +486,7 @@ function createDeclaredScenarioScopeDisposition(record) {
 export function createCharacterAcceptanceScenarioCaseSources({
   goldens,
   visualScenario,
+  additionalVisualScenarios = [],
   profile,
 }) {
   return [
@@ -458,6 +494,7 @@ export function createCharacterAcceptanceScenarioCaseSources({
       createGoldenScenarioCaseSource({ ...golden, profile })
     ),
     createVisualScenarioCaseSource(visualScenario),
+    ...additionalVisualScenarios.map(createVisualScenarioCaseSource),
   ];
 }
 
@@ -526,7 +563,12 @@ function createNonBlockingSourceRecordClassifier(records) {
   const byRawIdentity = new Map();
   const byControlAndElementPath = new Map();
   for (const source of records ?? []) {
-    if (source?.impactClassification === 'gameplay-impacting') continue;
+    if (
+      source?.impactClassification === 'gameplay-impacting' &&
+      source?.sourceClosureDisposition == null
+    ) {
+      continue;
+    }
     for (const rawIdentity of source?.rawRecordIdentities ?? []) {
       const rows = byRawIdentity.get(String(rawIdentity)) ?? [];
       rows.push(source);
@@ -552,13 +594,18 @@ function createNonBlockingSourceRecordClassifier(records) {
       record?.hitIdentity,
       record?.windowIdentity,
       ...(record?.hitIdentity ? [`hit:${record.hitIdentity}`] : []),
-      ...(String(record?.formIdentity ?? '').endsWith(':default')
-        ? [String(record.formIdentity).slice(0, -':default'.length)]
-        : []),
+      ...(record?.effectIdentity ? [`effect:${record.effectIdentity}`] : []),
+      record?.edgeIdentity,
+      record?.bindingIdentity,
+      record?.profileIdentity,
     ]);
     const rawIdentities = uniqueStrings([
       ...(record?.rawEffectIdentities ?? []),
-      ...directIdentities,
+      ...directIdentities.flatMap(identity =>
+        identity.endsWith(':default')
+          ? [identity, identity.slice(0, -':default'.length)]
+          : [identity]
+      ),
     ]);
     const controlAndElementKeys = uniqueStrings([
       ...rawIdentities.flatMap(identity => {
@@ -584,8 +631,14 @@ function createNonBlockingSourceRecordClassifier(records) {
       ).values(),
     ];
     if (matches.length === 0) return null;
+    const dispositions = uniqueStrings(
+      matches.map(source => source.sourceClosureDisposition)
+    );
+    const disposition = dispositions.includes('applied')
+      ? 'applied'
+      : 'not-applicable';
     return {
-      disposition: 'not-applicable',
+      disposition,
       sourceRecordIdentities: uniqueStrings(
         matches.map(source => source.recordIdentity)
       ),
@@ -596,7 +649,10 @@ function createNonBlockingSourceRecordClassifier(records) {
       ),
       reasons: uniqueStrings(
         matches.flatMap(source => [
-          'nonblocking-source-record-projection',
+          disposition === 'applied'
+            ? 'source-closure-applied-to-runtime-projection'
+            : 'nonblocking-source-record-projection',
+          ...(source.sourceClosureReasons ?? []),
           ...(source.reasons ?? []),
         ])
       ),
@@ -677,6 +733,72 @@ function createSourceNotApplicableControlSubskillClassifier({
   };
 }
 
+function createUnselectedControlVariantClassifier({ profile, recipe }) {
+  if (
+    recipe?.requirementPolicies?.unselectedControlVariantsFromActionForms !==
+    true
+  ) {
+    return () => null;
+  }
+  const selectedByControl = new Map();
+  for (const form of flattenContractRecords(
+    profile?.contracts?.actionForms,
+    'actionForms'
+  )) {
+    if (!isAppliedRecord(form)) continue;
+    const controlSkillId = firstInteger(
+      form.executionControlSkillId,
+      form.controlSkillId,
+      form.sourceControlSkillId
+    );
+    const subSkillIndex = firstInteger(
+      form.executionSubSkillIndex,
+      form.subSkillIndex,
+      form.selectedSubSkillIndex
+    );
+    if (controlSkillId == null || subSkillIndex == null) continue;
+    const selected = selectedByControl.get(controlSkillId) ?? new Set();
+    selected.add(subSkillIndex);
+    selectedByControl.set(controlSkillId, selected);
+  }
+  const eligibleDimensions = new Set([
+    'control-window',
+    'hit',
+    'effect',
+    'variant-edge',
+    'variant-window',
+  ]);
+  return (record, dimension) => {
+    if (!eligibleDimensions.has(dimension)) return null;
+    const controlSkillId = firstInteger(
+      record.controlSkillId,
+      record.sourceControlSkillId,
+      record.executionControlSkillId
+    );
+    const subSkillIndex = firstInteger(
+      record.subSkillIndex,
+      record.sourceSubSkillIndex,
+      record.executionSubSkillIndex,
+      ...(record.trigger?.subSkillIndexes ?? [])
+    );
+    const selected = selectedByControl.get(controlSkillId);
+    if (!selected || subSkillIndex == null || selected.has(subSkillIndex)) {
+      return null;
+    }
+    return {
+      disposition: 'not-applicable',
+      controlSkillId,
+      subSkillIndex,
+      selectedSubSkillIndexes: [...selected].sort(
+        (left, right) => left - right
+      ),
+      reasons: [
+        'source-verified-control-variant-not-selected-by-public-action-form',
+      ],
+    };
+  };
+}
+
 function collectRuntimeReachableControlSubskills(profile) {
   const pairs = new Set();
   const add = (controlSkillId, subSkillIndex) => {
@@ -742,6 +864,8 @@ export function createScenarioProfileProjectionRows({
   profile,
   exercisedControls,
   observedEffectIds,
+  observedResourceEvents = [],
+  observedVariantSelections = [],
   exercisedFromHitAndEffectIdentities = [],
   scenarioId,
   prefix,
@@ -759,6 +883,7 @@ export function createScenarioProfileProjectionRows({
   const contracts = profile?.contracts ?? {};
   const index = {
     attackInputChains: 0,
+    stateMachines: 0,
     controlWindows: 0,
     variantEdges: 0,
     variantWindows: 0,
@@ -768,6 +893,7 @@ export function createScenarioProfileProjectionRows({
   };
   const rows = {
     attackInputChains: [],
+    stateMachines: [],
     controlWindows: [],
     variantEdges: [],
     variantWindows: [],
@@ -798,6 +924,30 @@ export function createScenarioProfileProjectionRows({
       });
     }
   }
+  for (const machine of contracts.stateMachines ?? []) {
+    const thresholdObserved = observedResourceEvents.some(event => {
+      const resourceIdentity =
+        event.resourceIdentity ?? event.payload?.resourceIdentity;
+      const operation =
+        event.operation ?? event.payload?.operation ?? event.type;
+      return (
+        String(resourceIdentity ?? '') === String(machine.resourceIdentity) &&
+        ['threshold-clear', 'transform', 'transform-remove'].includes(
+          String(operation ?? '')
+        )
+      );
+    });
+    const stateObserved = observed.has(
+      `battle-element:${Number(machine.stateElementId)}`
+    );
+    if (thresholdObserved && stateObserved) {
+      add('stateMachines', {
+        transitionIdentity: machine.transitionIdentity,
+        resourceIdentity: machine.resourceIdentity,
+        threshold: machine.threshold,
+      });
+    }
+  }
   for (const window of contracts.controlTransitionWindows ?? []) {
     if (
       exercised.has(
@@ -821,6 +971,36 @@ export function createScenarioProfileProjectionRows({
         edgeIdentity: edge.edgeIdentity,
       });
     }
+  }
+  const observedTimingEdges = new Map(
+    (observedVariantSelections ?? [])
+      .filter(
+        selection =>
+          selection?.edgeIdentity &&
+          selection?.contextualInputScheduling?.applied === true
+      )
+      .map(selection => [String(selection.edgeIdentity), selection])
+  );
+  for (const edge of contracts.timingInputEdges ?? []) {
+    const observedSelection = observedTimingEdges.get(
+      String(edge.edgeIdentity)
+    );
+    if (!observedSelection) continue;
+    add('variantEdges', {
+      sourceControlSkillId: edge.sourceControlSkillId,
+      sourceSubSkillIndex: edge.sourceSubSkillIndex,
+      edgeIdentity: edge.edgeIdentity,
+      contextActionId: observedSelection.contextActionId ?? null,
+      actionId: observedSelection.actionId ?? null,
+      inputFrame:
+        observedSelection.contextualInputScheduling?.inputFrame ?? null,
+      executionStartFrame:
+        observedSelection.contextualInputScheduling?.executionStartFrame ??
+        null,
+      predecessorEffectiveEndFrame:
+        observedSelection.contextualInputScheduling
+          ?.predecessorEffectiveEndFrame ?? null,
+    });
   }
   for (const binding of contracts.variantWindowBindings ?? []) {
     if (
@@ -994,6 +1174,21 @@ function createGoldenEvidence(reportPath, report) {
     },
     assertionCount: Number(report.validation?.assertionCount ?? 0),
   };
+}
+
+function createMachineEvidence(records, scenarioByIdentity) {
+  return structuredClone(records).map(evidence => {
+    const scenario = scenarioByIdentity.get(evidence.scenarioIdentity);
+    const canonicalTraceHash = String(scenario?.canonicalHashes?.trace ?? '');
+    return {
+      ...evidence,
+      evidenceKind: evidence.evidenceKind ?? MACHINE_TRACE_EVIDENCE_KIND,
+      canonicalTraceHash,
+      traceSha256: createHash('sha256')
+        .update(canonicalTraceHash)
+        .digest('hex'),
+    };
+  });
 }
 
 function toPublicVisualScenarioEvidence(scenario) {
@@ -1253,6 +1448,24 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
     record.selectedSubSkillIndex
   );
   if (
+    dimension === 'public-action' &&
+    Array.isArray(record.attackInputSegments) &&
+    record.attackInputSegments.length > 0
+  ) {
+    const segment =
+      record.attackInputSegments.find(candidate =>
+        isAppliedRecord(candidate)
+      ) ?? record.attackInputSegments[0];
+    return {
+      kind: 'action-form',
+      ownerId,
+      controlSkillId: Number(segment.controlSkillId),
+      subSkillIndex: Number(
+        segment.selectedSubSkillIndex ?? segment.subSkillIndex
+      ),
+    };
+  }
+  if (
     ['public-action', 'action-form', 'switch-trigger'].includes(dimension) &&
     controlSkillId != null &&
     subSkillIndex != null
@@ -1266,6 +1479,23 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
   }
   if (dimension === 'hit' && record.hitIdentity) {
     return { kind: 'hit', hitIdentity: String(record.hitIdentity) };
+  }
+  if (dimension === 'attack-input-chain' && record.chainIdentity) {
+    return {
+      kind: 'attack-input-chain',
+      chainIdentity: String(record.chainIdentity),
+    };
+  }
+  if (
+    dimension === 'state-machine' &&
+    record.transitionIdentity &&
+    record.resourceIdentity
+  ) {
+    return {
+      kind: 'state-machine',
+      transitionIdentity: String(record.transitionIdentity),
+      resourceIdentity: String(record.resourceIdentity),
+    };
   }
   if (
     dimension === 'action-effect-binding' &&
@@ -1322,7 +1552,10 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
       windowIdentity: String(record.windowIdentity),
     };
   }
-  if (dimension === 'variant-edge' && record.edgeIdentity) {
+  if (
+    ['input-timing', 'variant-edge'].includes(dimension) &&
+    record.edgeIdentity
+  ) {
     return {
       kind: 'variant-edge',
       edgeIdentity: String(record.edgeIdentity),
@@ -1369,6 +1602,7 @@ function createGoldenScenarioCaseSource({ path, report, profile }) {
     profile,
     exercisedControls,
     observedEffectIds,
+    observedResourceEvents: report.actual?.trace?.specialResources ?? [],
     exercisedFromHitAndEffectIdentities: [
       ...(report.actual?.trace?.damage ?? []).map(event => event.hitIdentity),
       ...(report.actual?.trace?.effects ?? []).map(event => event.effectId),
@@ -1408,6 +1642,8 @@ function createGoldenScenarioCaseSource({ path, report, profile }) {
 
 function createVisualScenarioCaseSource(visualScenario) {
   const profileRowKeys = [
+    'attackInputChains',
+    'stateMachines',
     'controlWindows',
     'variantEdges',
     'variantWindows',

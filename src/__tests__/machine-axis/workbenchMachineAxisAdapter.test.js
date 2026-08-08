@@ -168,6 +168,30 @@ describe('Workbench Machine Axis adapter', () => {
     expect(restoredRun.trace).toEqual(originalRun.trace);
   }, 30_000);
 
+  it('round-trips a blocked hit outcome without collapsing it into miss', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const contract = structuredClone(fixture);
+    const action = contract.actions.find(item => item.id === 'a3-miss');
+    action.hitOverrides[PANGPANG_A3_HIT].landed = 'blocked';
+
+    const imported = adapter.importContract(contract);
+    const exported = adapter.exportProject(imported.project);
+    const restored = adapter.importContract(
+      JSON.parse(JSON.stringify(exported))
+    );
+
+    expect(
+      exported.actions.find(item => item.id === 'a3-miss').hitOverrides[
+        PANGPANG_A3_HIT
+      ]
+    ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
+    expect(
+      restored.contract.actions.find(item => item.id === 'a3-miss')
+        .hitOverrides[PANGPANG_A3_HIT]
+    ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
+  });
+
   it('round-trips the formal objective and structured enemy profile without defaulting', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });

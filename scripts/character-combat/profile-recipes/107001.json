@@ -38,7 +38,33 @@
       10700101, 10700102, 10700103, 10700110, 10700112, 10700113, 10700121,
       10700126, 10700161, 10700162, 48005601, 48005602, 48005603, 48005604
     ],
-    "contextInputEdges": [],
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 10700112,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "star-skill",
+        "sourceSemanticName": "星鸣技",
+        "publicActionKind": "ultimate",
+        "publicControlSkillId": 10700113,
+        "executionControlSkillId": 10700113,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "sifliya-star-to-ultimate-interrupt",
+        "semanticName": "星鸣技转星决技",
+        "inputCommand": "ultimate",
+        "condition": {
+          "kind": "always"
+        },
+        "inputWindow": {
+          "startFrame": 62,
+          "endFrame": 135,
+          "bridgeType": 3,
+          "continuousAttackType": 0,
+          "interruptBehavior": 0
+        },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate"
+      }
+    ],
     "publicActionDeclarations": [],
     "publicActionForms": [],
     "attackInputChains": [
@@ -707,6 +733,117 @@
         "no-runtime-description-or-applied-effect"
       ],
       "sourceIdentity": "hero-module:107001#skill:10700162"
+    }
+  ],
+  "unresolvedRecordPolicies": [
+    {
+      "policyIdentity": "sifliya-zero-distance-selected-projectile-hits",
+      "sourceKinds": ["hit"],
+      "statuses": ["runtime-evidence-required"],
+      "scenarioRuntimeStatuses": ["scenario-assumed-zero-distance"],
+      "controlVariants": [
+        { "controlSkillId": 10700101, "subSkillIndexes": [0] },
+        { "controlSkillId": 10700102, "subSkillIndexes": [4] },
+        { "controlSkillId": 10700110, "subSkillIndexes": [0] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "zero-distance-projectile-impact-is-immediate",
+        "selected-public-action-form-hit-is-canonical-trace-required"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:107001#selected-action-forms"
+    },
+    {
+      "policyIdentity": "sifliya-unselected-projectile-control-variants",
+      "sourceKinds": ["hit"],
+      "controlVariants": [
+        { "controlSkillId": 10700102, "subSkillIndexes": [0, 1, 2, 3] },
+        { "controlSkillId": 10700103, "subSkillIndexes": [0, 1, 2, 3] },
+        { "controlSkillId": 10700110, "subSkillIndexes": [1, 2, 3, 4] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "source-verified-control-variant-not-selected-by-public-action-form",
+        "unselected-client-resource-map-retained-without-runtime-synthesis"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#actionForms=A1:10700101/0,A2:10700102/4,A3:10700103/4,charged:10700110/0"
+    },
+    {
+      "policyIdentity": "sifliya-selected-arrow-source-driven-effects",
+      "sourceKinds": ["effect"],
+      "controlVariants": [
+        { "controlSkillId": 10700101, "subSkillIndexes": [0] },
+        { "controlSkillId": 10700102, "subSkillIndexes": [4] },
+        { "controlSkillId": 10700103, "subSkillIndexes": [4] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-wind-word-threshold-state-machine",
+        "source-driven-tuning-mark-and-threshold-effect-projection",
+        "selected-arrow-hit-canonical-trace-required"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#resourceTransactions|stateMachines|tuningMarkGrants|effectGrants"
+    },
+    {
+      "policyIdentity": "sifliya-unselected-normal-effect-variants",
+      "sourceKinds": ["effect"],
+      "controlVariants": [
+        { "controlSkillId": 10700102, "subSkillIndexes": [0, 1, 2, 3] },
+        { "controlSkillId": 10700103, "subSkillIndexes": [0, 1, 2, 3] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "source-verified-control-variant-not-selected-by-public-action-form",
+        "unselected-client-resource-map-retained-without-runtime-synthesis"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#attackInputChains[sifliya-normal-three-inputs]"
+    },
+    {
+      "policyIdentity": "sifliya-unselected-star-judgment-resource-map",
+      "sourceKinds": ["effect"],
+      "controlVariants": [
+        { "controlSkillId": 10700112, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "source-verified-control-variant-not-selected-by-public-action-form",
+        "selected-star-form-is-10700112-subskill-0"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#actionForms[star-skill:default]=10700112/0"
+    },
+    {
+      "policyIdentity": "sifliya-passive-raw-wrapper-superseded",
+      "sourceKinds": ["effect"],
+      "controlVariants": [
+        { "controlSkillId": 10700161, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "source-driven-passive-contract-supersedes-raw-wrapper",
+        "raw-wrapper-is-not-a-second-gameplay-effect"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#passives[actor:107001:passive:10700161]"
+    },
+    {
+      "policyIdentity": "sifliya-unselected-switch-wrapper-variants",
+      "sourceKinds": ["variant-edge"],
+      "controlVariants": [
+        { "controlSkillId": 10700113, "subSkillIndexes": [1] },
+        { "controlSkillId": 10700126, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "source-verified-control-variant-not-selected-by-public-action-form",
+        "unselected-switch-wrapper-retained-without-runtime-synthesis"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:107001#actionForms[ultimate:default]=10700113/0;actionForms[star-combo:default]=10700126/0"
     }
   ],
   "goldenScenario": {

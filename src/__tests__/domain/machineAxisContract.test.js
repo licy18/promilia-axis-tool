@@ -117,6 +117,37 @@ describe('Machine Axis contract', () => {
     );
   });
 
+  it('preserves blocked as a distinct non-landed hit outcome', () => {
+    const contract = createContract({
+      actions: [
+        {
+          id: 'blocked-hit',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10100701,
+          },
+          schedule: { mode: 'absolute', frame: 0 },
+          hitOverrides: {
+            'verified-hit': {
+              landed: 'blocked',
+              criticalMode: 'inherit',
+            },
+          },
+        },
+      ],
+    });
+
+    const result = validateMachineAxisContract(contract);
+
+    expect(result.valid).toBe(true);
+    expect(result.normalized.actions[0].hitOverrides['verified-hit']).toEqual({
+      landed: 'blocked',
+      criticalMode: 'inherit',
+      criticalRoll: null,
+    });
+  });
+
   it('preserves an explicit target evaluation policy without changing defaults', () => {
     const baseline = normalizeMachineAxisContract(createContract());
     expect(baseline.scenario).not.toHaveProperty('target');

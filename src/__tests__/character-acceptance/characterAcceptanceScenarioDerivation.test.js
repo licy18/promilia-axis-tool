@@ -6,7 +6,10 @@ import {
   createCharacterAcceptanceMatrix,
   hasRepeatedApplyRefreshLifecycle,
 } from '../../../scripts/character-acceptance/character-acceptance-generation.mjs';
-import { finalizeSourceGapInventory } from '../../character-acceptance/characterAcceptanceDerivation';
+import {
+  finalizeScenarioCases,
+  finalizeSourceGapInventory,
+} from '../../character-acceptance/characterAcceptanceDerivation';
 
 describe('character acceptance scenario derivation', () => {
   it('recognizes a same-effect repeated apply with extended expiry as a real refresh lifecycle', () => {
@@ -158,5 +161,32 @@ describe('character acceptance scenario derivation', () => {
       evidenceScenarioIds: [scenarioIdentity],
       reasons: [],
     });
+  });
+
+  it('does not turn an observed false scenario fact into a failing positive assertion', () => {
+    const cases = finalizeScenarioCases([
+      {
+        scenarioIdentity: 'synthetic-fact-projection',
+        status: 'passed',
+        traceProjection: {
+          facts: {
+            observed: true,
+            notObserved: false,
+          },
+        },
+      },
+    ]);
+
+    expect(cases.records[0].assertions).toMatchObject([
+      {
+        assertionIdentity: 'scenario-fact:observed',
+        status: 'passed',
+      },
+    ]);
+    expect(
+      cases.records[0].assertions.some(
+        assertion => assertion.assertionIdentity === 'scenario-fact:notObserved'
+      )
+    ).toBe(false);
   });
 });

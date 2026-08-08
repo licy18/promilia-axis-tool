@@ -502,7 +502,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "landed": { "enum": ["inherit", "hit", "miss"] },
+        "landed": { "enum": ["inherit", "hit", "miss", "blocked"] },
         "criticalMode": {
           "enum": ["inherit", "sampled", "expected", "critical", "non-critical"]
         },

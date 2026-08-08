@@ -4,10 +4,10 @@
   "ownerId": 107001,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "938f6c11203b6c4dc1719c824194c7c3a2d600ec2a47d73b38a100e76acf9fd1"
+    "packageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/107001.json",
-  "recipeHash": "b963349ffa0cdd82ddc98f8d192f8b9a6fb3988f20c8d389909b7f57ff412a8c",
+  "recipeHash": "7aefc15a89db135d734ecdefe14d9c4a6b0ce5ccbae863e49725637b02ae70e3",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -6900,6 +6900,27 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate",
+      "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate",
+      "identityHash": "7fa853500a2017e0864270ad91ff6ffe04f9deb10a86928f37cb13c597516ef5",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update",
+      "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update",
+      "identityHash": "293da9749b68e9584c18b8a301ac77d48952b0735b39cf98dda24769188a130a",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "identityHash": "9452416a21beba5bf951e8d7acdb27e6f396f9fec44a298a1cd2cea61be0d5d8",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "skill_control_10700113.asset#107001149-and-element750@133F",
       "sourceIdentity": "skill_control_10700113.asset#107001149-and-element750@133F",
       "identityHash": "93917a94e7c22899d24a6c91a411ab6e9477f468aa598306088682558ecdc8b5",
@@ -6992,7 +7013,7 @@
     }
   ],
   "summary": {
-    "identityCount": 953,
+    "identityCount": 956,
     "sourceKindCounts": {
       "battle-element": 77,
       "client-code": 4,
@@ -7000,8 +7021,8 @@
       "other": 122,
       "public-skill-description": 1,
       "runtime-contract": 9,
-      "skill-control": 700
+      "skill-control": 703
     }
   },
-  "profileHash": "19d770aabee39258964c84b3d1a7df3ede5c6ca991267471f0f7ce7462792174"
+  "profileHash": "f1bd2904825b9b4c24f0feb04f4e3a4d6aa28d759e88b2475892956c48643b8b"
 }

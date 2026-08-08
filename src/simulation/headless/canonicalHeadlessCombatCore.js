@@ -271,6 +271,11 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
         verifiedRuntime.tuningMarkRuntime?.events ??
         []
       ).map(projectTuningMarkEvent),
+      tuningAcquisitionGates: (
+        simulation.verifiedTuningMarkGeneration?.acquisitionGateResults ??
+        verifiedRuntime.tuningMarkRuntime?.acquisitionGateResults ??
+        []
+      ).map(projectTuningAcquisitionGate),
     },
     state: {
       initial: verifiedRuntime.initialState ?? null,
@@ -279,6 +284,11 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       conditionalHitGroups: (targetStateRuntime.groupResults ?? []).map(
         projectConditionalHitGroup
       ),
+      tuningConditionalHitGroups: (
+        simulation.verifiedTuningMarkGeneration?.conditionalDamageResults ??
+        verifiedRuntime.tuningMarkRuntime?.conditionalDamageResults ??
+        []
+      ).map(projectTuningConditionalHitGroup),
       ...(kiboPassiveRuntimeStates.length > 0
         ? {
             kiboPassives: kiboPassiveRuntimeStates.map(
@@ -305,6 +315,13 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       resourceEvents: (
         simulation.verifiedActionVariantRuntime?.resourceEvents ?? []
       ).map(projectRuntimeEvent),
+      companionEvents: (
+        simulation.verifiedActionVariantRuntime?.companionEvents ?? []
+      ).map(projectRuntimeEvent),
+      companionAttacks: (
+        simulation.verifiedActionVariantRuntime?.companionAttackTransactions ??
+        []
+      ).map(projectCompanionAttack),
     },
     summary: simulation.summary,
     diagnostics: projectDiagnostics(simulation),
@@ -527,6 +544,12 @@ function projectRuntimePayload(payload = null) {
     'sourceKiboId',
     'sourceSlotId',
     'sourcePosition',
+    'companionIdentity',
+    'companionUnitId',
+    'companionRevision',
+    'attackIdentity',
+    'attackCount',
+    'startsAtMs',
     'targetActorId',
     'targetKind',
     'targetKiboId',
@@ -789,6 +812,66 @@ function projectTuningMarkEvent(event = {}) {
   };
 }
 
+function projectTuningAcquisitionGate(result = {}) {
+  return {
+    actionId: result.actionId ?? null,
+    effectIdentity: result.effectIdentity ?? null,
+    timeMs: result.timeMs ?? null,
+    gateKind: result.gate?.kind ?? null,
+    groupIdentity: result.gate?.groupIdentity ?? null,
+    hitIndex: result.gate?.hitIndex ?? null,
+    hitIdentities: [...(result.hitIdentities ?? [])],
+    candidateCount: result.candidateCount ?? null,
+    landedCount: result.landedCount ?? null,
+    passed: result.passed === true,
+    sourceIdentity: projectSourceIdentity(result.sourceIdentity),
+  };
+}
+
+function projectTuningConditionalHitGroup(result = {}) {
+  return {
+    actionId: result.actionId ?? null,
+    actorId: result.actorId ?? null,
+    groupIdentity: result.groupIdentity ?? null,
+    timeMs: result.timeMs ?? null,
+    hitIndex: result.hitIndex ?? null,
+    sourceKind: result.sourceKind ?? null,
+    sourceHitIdentity: result.sourceHitIdentity ?? null,
+    markId: result.markId ?? null,
+    markCountAtJudgment: result.markCountAtJudgment ?? null,
+    minimumStacks: result.minimumStacks ?? null,
+    selectedBranch: result.selectedBranch ?? null,
+    selectedElementId: result.selectedElementId ?? null,
+    landed: result.landed === true,
+    applied: result.applied === true,
+    companionUnitId: result.companionUnitId ?? null,
+    ownership: result.ownership ?? null,
+    status: result.status ?? null,
+    sourceIdentity: projectSourceIdentity(result.sourceIdentity),
+  };
+}
+
+function projectCompanionAttack(transaction = {}) {
+  return {
+    transactionIdentity: transaction.transactionIdentity ?? null,
+    actionId: transaction.actionId ?? null,
+    actorId: transaction.actorId ?? null,
+    ownerId: transaction.ownerId ?? null,
+    timeMs: transaction.timeMs ?? null,
+    attackKind: transaction.attackKind ?? null,
+    attackIdentity: transaction.attackProfile?.attackIdentity ?? null,
+    companionIdentity: transaction.companionIdentity ?? null,
+    companionUnitId: transaction.companionUnitId ?? null,
+    companionRevision: transaction.companionRevision ?? null,
+    hitIndex: transaction.hitIndex ?? null,
+    targetKind: transaction.targetKind ?? null,
+    ownership: transaction.ownership ?? null,
+    status: transaction.status ?? null,
+    applied: transaction.applied === true,
+    sourceIdentity: projectSourceIdentity(transaction.sourceIdentity),
+  };
+}
+
 function projectKiboPassiveRuntimeState(state = {}) {
   return {
     stateIdentity: state.stateIdentity ?? null,
@@ -857,6 +940,39 @@ function projectVariantSelections(value) {
       selection?.executionControlSkillId ?? selection?.controlSkillId ?? null,
     subSkillIndex: selection?.selectedSubSkillIndex ?? null,
     actualDurationFrames: selection?.actualDurationFrames ?? null,
+    edgeIdentity: selection?.edgeIdentity ?? null,
+    contextActionId: selection?.contextActionId ?? null,
+    contextualInputScheduling: selection?.contextualInputScheduling
+      ? {
+          status: selection.contextualInputScheduling.status ?? null,
+          applied: selection.contextualInputScheduling.applied === true,
+          resolutionKind:
+            selection.contextualInputScheduling.resolutionKind ?? null,
+          inputSemantics:
+            selection.contextualInputScheduling.inputSemantics ?? null,
+          inputFrame: selection.contextualInputScheduling.inputFrame ?? null,
+          inputOffsetFrame:
+            selection.contextualInputScheduling.inputOffsetFrame ?? null,
+          executionStartFrame:
+            selection.contextualInputScheduling.executionStartFrame ?? null,
+          predecessorEffectiveEndFrame:
+            selection.contextualInputScheduling.predecessorEffectiveEndFrame ??
+            null,
+          inputWindow: selection.contextualInputScheduling.inputWindow
+            ? {
+                startFrame:
+                  selection.contextualInputScheduling.inputWindow.startFrame ??
+                  null,
+                endFrame:
+                  selection.contextualInputScheduling.inputWindow.endFrame ??
+                  null,
+                interval:
+                  selection.contextualInputScheduling.inputWindow.interval ??
+                  null,
+              }
+            : null,
+        }
+      : null,
     sourceKind: selection?.sourceKind ?? null,
     sourceIdentity: projectSourceIdentity(selection?.sourceIdentity),
   }));

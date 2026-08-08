@@ -35,6 +35,7 @@ export const MACHINE_AXIS_LANDED_MODES = Object.freeze([
   'inherit',
   'hit',
   'miss',
+  'blocked',
 ]);
 export const MACHINE_AXIS_CRITICAL_MODES = Object.freeze([
   'inherit',

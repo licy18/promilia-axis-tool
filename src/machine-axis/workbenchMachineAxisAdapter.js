@@ -512,11 +512,13 @@ function createMachineHitOverrides(value = {}) {
         hitIdentity,
         {
           landed:
-            override?.willHit === false
-              ? 'miss'
-              : override?.willHit === true
-                ? 'hit'
-                : 'inherit',
+            override?.landingStatus === 'blocked'
+              ? 'blocked'
+              : override?.willHit === false
+                ? 'miss'
+                : override?.willHit === true
+                  ? 'hit'
+                  : 'inherit',
           criticalMode: override?.criticalPolicy ?? 'inherit',
           criticalRoll:
             nonNegativeIntegerOrNull(override?.criticalRoll) ?? null,

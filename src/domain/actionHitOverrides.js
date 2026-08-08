@@ -17,12 +17,15 @@ export function normalizeActionHitOverrides(value = null) {
         const criticalRollUnit = normalizeCriticalRollUnit(
           override.criticalRollUnit
         );
+        const landingStatus =
+          override.landingStatus === 'blocked' ? 'blocked' : null;
         return [
           hitIdentity,
           {
             ...(override.willHit == null
               ? {}
               : { willHit: Boolean(override.willHit) }),
+            ...(landingStatus ? { landingStatus } : {}),
             ...(criticalPolicy ? { criticalPolicy } : {}),
             ...(criticalRoll != null ? { criticalRoll } : {}),
             ...(criticalRoll != null && criticalRollUnit
