@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,11 +18,19 @@ const codeExtensions = new Set([
   '.vue',
 ]);
 const resolvableExtensions = [...codeExtensions, '.json'];
+const assertClean = process.argv.includes('--assert-clean');
 const outputArgumentIndex = process.argv.indexOf('--output');
+const outputArgumentValue = process.argv[outputArgumentIndex + 1];
+if (
+  outputArgumentIndex >= 0 &&
+  (!outputArgumentValue || outputArgumentValue.startsWith('--'))
+) {
+  throw new Error('Missing value for --output');
+}
 const outputPath = path.resolve(
   repositoryRoot,
-  outputArgumentIndex >= 0 && process.argv[outputArgumentIndex + 1]
-    ? process.argv[outputArgumentIndex + 1]
+  outputArgumentIndex >= 0 && outputArgumentValue
+    ? outputArgumentValue
     : 'reports/production-import-audit.json'
 );
 
@@ -95,14 +104,40 @@ const report = {
   ],
 };
 
-await mkdir(path.dirname(outputPath), { recursive: true });
-await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+const expectedBytes = Buffer.from(`${JSON.stringify(report, null, 2)}\n`);
+const existingBytes = await readFileIfExists(outputPath);
+const reportMatches =
+  existingBytes != null && existingBytes.equals(expectedBytes);
+let outputChanged = false;
+
+if (assertClean && !reportMatches) {
+  const drift = {
+    status: 'production-import-audit-report-drift',
+    output: toRepositoryPath(outputPath),
+    reason:
+      existingBytes == null
+        ? 'production-import-audit-report-missing'
+        : 'production-import-audit-report-bytes-mismatch',
+    expectedBytes: expectedBytes.length,
+    expectedSha256: sha256(expectedBytes),
+    actualBytes: existingBytes?.length ?? null,
+    actualSha256: existingBytes ? sha256(existingBytes) : null,
+    assertCleanReadOnly: true,
+  };
+  process.stderr.write(`${JSON.stringify(drift, null, 2)}\n`);
+} else if (!assertClean && !reportMatches) {
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await writeFile(outputPath, expectedBytes);
+  outputChanged = true;
+}
 
 // eslint-disable-next-line no-console
 console.log(
   JSON.stringify(
     {
       output: toRepositoryPath(outputPath),
+      reportMatches: assertClean ? reportMatches : true,
+      outputChanged,
       ...report.summary,
     },
     null,
@@ -111,10 +146,25 @@ console.log(
 );
 
 if (
-  process.argv.includes('--assert-clean') &&
-  (unreferencedFiles.length || unexpectedTestOnlyFiles.length)
+  assertClean &&
+  (!reportMatches || unreferencedFiles.length || unexpectedTestOnlyFiles.length)
 ) {
   process.exitCode = 1;
+}
+
+async function readFileIfExists(filePath) {
+  try {
+    return await readFile(filePath);
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
+  }
+}
+
+function sha256(bytes) {
+  return createHash('sha256').update(bytes).digest('hex');
 }
 
 async function traceImports(entryFiles) {
