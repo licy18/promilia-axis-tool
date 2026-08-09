@@ -125,8 +125,12 @@
       "sourceSkillId": 10700212,
       "runtimeReady": true,
       "classification": "applied",
-      "residualReasons": [],
-      "status": "applied"
+      "residualReasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
+      ],
+      "status": "applied-with-residual-gaps"
     },
     {
       "publicActionIdentity": null,
@@ -167,5 +171,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "f6eec495783b56210902a5f3fbc804e712847b95a92d8f251d129b36c01cb1f2"
+  "profileHash": "ba5a3c9f366d53d52de6502fc088d8451d92ab367a400675879e043866fa8acc"
 }

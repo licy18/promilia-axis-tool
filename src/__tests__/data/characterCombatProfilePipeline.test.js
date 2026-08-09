@@ -329,8 +329,8 @@ describe('M10 character combat profile pipeline', () => {
       status: 'character-combat-profile-catalog-ready',
       summary: {
         publicCharacterCount: 20,
-        compiledProfileCount: 7,
-        runtimeAppliedProfileCount: 7,
+        compiledProfileCount: 8,
+        runtimeAppliedProfileCount: 8,
         uiVerifiedProfileCount: 0,
         characterCompleteCount: 0,
       },

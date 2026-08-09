@@ -25,7 +25,7 @@
 | dodge-attack | 否 | static-evidence-gap | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
 | plunging-attack | 是 | applied |  |
 | star-skill | 是 | applied |  |
-| star-combo | 是 | applied |  |
+| star-combo | 是 | applied-with-residual-gaps | nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；sp-formula-not-literal-function-5 |
 | ultimate | 是 | applied-with-residual-gaps | trigger-frame-missing |
 | star-carry | 是 | applied |  |
 | limit-counter | 是 | applied |  |

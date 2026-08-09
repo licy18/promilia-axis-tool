@@ -41,9 +41,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: 'f36808c67e6e82b0',
-      data: '381c147c15b3d590',
-      trace: '98facff5a52fd7de',
+      input: '04a3403fb285d620',
+      data: '0aded1e3190664b4',
+      trace: '5855a8ab4fb3d5ba',
       evaluation: '620d8da34c9edd60',
     });
     expect(second.hashes).toEqual(first.hashes);

@@ -6958,7 +6958,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 6,
-        "runtimeEffectCount": 11,
+        "runtimeEffectCount": 8,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 13,
@@ -6978,10 +6978,7 @@
           "10700212|0|elements|9|-6104701335743815286|element:6500867373616520947|82|0|projected:misa-star-wood-priority-consume",
           "10700212|0|elements|9|-6104701335743815286|element:4310270459467820517|82|0|projected:misa-star-wood-priority-consume",
           "10700212|0|elements|9|-6104701335743815286|element:7183943640740465629|82|0|projected:misa-star-wood-priority-consume",
-          "10700212|0|elements|9|-6104701335743815286|element:4731523060341306954|82|0|projected:misa-star-wood-priority-consume|bound:misa-star-wood-priority-consume",
-          "10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0|projected:misa-star-wood-priority-consume",
-          "10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0|projected:misa-star-wood-priority-consume",
-          "10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0|projected:misa-star-wood-priority-consume"
+          "10700212|0|elements|9|-6104701335743815286|element:4731523060341306954|82|0|projected:misa-star-wood-priority-consume|bound:misa-star-wood-priority-consume"
         ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
@@ -7764,7 +7761,7 @@
         "linked": true,
         "runtimeReady": true,
         "runtimeHitCount": 6,
-        "runtimeEffectCount": 11,
+        "runtimeEffectCount": 8,
         "runtimeResourceTransactionCount": 0,
         "selectedResourceTransactionIdentities": [],
         "selectedElementCount": 1,
@@ -7795,8 +7792,12 @@
         "scenarioResolvedHitCount": 0,
         "scenarioResolvedEffectCount": 0,
         "scenarioResolvedElementCount": 1,
-        "complete": true,
-        "reasons": [],
+        "complete": false,
+        "reasons": [
+          "nested-damage-trigger-lifecycle-not-expanded",
+          "nested-effect-wrapper-semantics-unresolved",
+          "sp-formula-not-literal-function-5"
+        ],
         "dimensionSummary": {
           "hp": {
             "applied": 1
@@ -18320,7 +18321,7 @@
               "commonExpression": "G/10000",
               "baseExpression": "source.CONSUME_PACK_ELEMENT_COUNT [M]*source.ATK[0]*A/10000"
             },
-            "sourceIdentity": "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+            "sourceIdentity": "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
             "dimensions": {
               "damage": {
                 "status": "unresolved",
@@ -18351,16 +18352,17 @@
                 "sourceField": null
               }
             },
-            "classification": "applied",
-            "reasons": [],
-            "status": "verified-action-effect-activation-condition-applied",
-            "confidence": "high",
-            "applied": true,
+            "classification": "unresolved",
+            "reasons": [
+              "nested-damage-trigger-lifecycle-not-expanded",
+              "nested-effect-wrapper-semantics-unresolved"
+            ],
+            "status": "verified-action-effect-binding-unresolved",
+            "confidence": "unresolved",
+            "applied": false,
             "projectedFromControlSkillId": 10700212,
             "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-            "hitSettlementOrder": "after-hit",
-            "targetStateActivationCondition": null,
-            "landedHitActivationCondition": null
+            "hitSettlementOrder": "after-hit"
           },
           {
             "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0|projected:misa-star-wood-priority-consume",
@@ -18450,7 +18452,7 @@
               "commonExpression": "G/10000",
               "baseExpression": null
             },
-            "sourceIdentity": "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+            "sourceIdentity": "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
             "dimensions": {
               "damage": {
                 "status": "verified-zero",
@@ -18485,16 +18487,16 @@
                 "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
               }
             },
-            "classification": "applied",
-            "reasons": [],
-            "status": "verified-action-effect-activation-condition-applied",
-            "confidence": "high",
-            "applied": true,
+            "classification": "unresolved",
+            "reasons": [
+              "nested-effect-wrapper-semantics-unresolved"
+            ],
+            "status": "verified-action-effect-binding-unresolved",
+            "confidence": "unresolved",
+            "applied": false,
             "projectedFromControlSkillId": 10700212,
             "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-            "hitSettlementOrder": "after-hit",
-            "targetStateActivationCondition": null,
-            "landedHitActivationCondition": null
+            "hitSettlementOrder": "after-hit"
           },
           {
             "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0|projected:misa-star-wood-priority-consume",
@@ -18614,7 +18616,7 @@
               "commonExpression": "G/10000",
               "baseExpression": "source.CONSUME_PACK_ELEMENT_COUNT [M]*I"
             },
-            "sourceIdentity": "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+            "sourceIdentity": "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
             "dimensions": {
               "damage": {
                 "status": "verified-zero",
@@ -18645,16 +18647,17 @@
                 "sourceField": null
               }
             },
-            "classification": "applied",
-            "reasons": [],
-            "status": "verified-action-effect-activation-condition-applied",
-            "confidence": "high",
-            "applied": true,
+            "classification": "unresolved",
+            "reasons": [
+              "sp-formula-not-literal-function-5",
+              "nested-effect-wrapper-semantics-unresolved"
+            ],
+            "status": "verified-action-effect-binding-unresolved",
+            "confidence": "unresolved",
+            "applied": false,
             "projectedFromControlSkillId": 10700212,
             "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-            "hitSettlementOrder": "after-hit",
-            "targetStateActivationCondition": null,
-            "landedHitActivationCondition": null
+            "hitSettlementOrder": "after-hit"
           }
         ],
         "effectGraph": [
@@ -31940,7 +31943,7 @@
             "commonExpression": "G/10000",
             "baseExpression": null
           },
-          "sourceIdentity": "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+          "sourceIdentity": "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -31975,16 +31978,16 @@
               "sourceField": "elementConfigId|sustainElement|elementDataList|injectElementDataList|triggerEffectList"
             }
           },
-          "classification": "applied",
-          "reasons": [],
-          "status": "verified-action-effect-activation-condition-applied",
-          "confidence": "high",
-          "applied": true,
+          "classification": "unresolved",
+          "reasons": [
+            "nested-effect-wrapper-semantics-unresolved"
+          ],
+          "status": "verified-action-effect-binding-unresolved",
+          "confidence": "unresolved",
+          "applied": false,
           "projectedFromControlSkillId": 10700212,
           "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-          "hitSettlementOrder": "after-hit",
-          "targetStateActivationCondition": null,
-          "landedHitActivationCondition": null
+          "hitSettlementOrder": "after-hit"
         },
         {
           "effectIdentity": "10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0",
@@ -32262,7 +32265,7 @@
             "commonExpression": "G/10000",
             "baseExpression": "source.CONSUME_PACK_ELEMENT_COUNT [M]*I"
           },
-          "sourceIdentity": "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+          "sourceIdentity": "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
           "dimensions": {
             "damage": {
               "status": "verified-zero",
@@ -32293,16 +32296,17 @@
               "sourceField": null
             }
           },
-          "classification": "applied",
-          "reasons": [],
-          "status": "verified-action-effect-activation-condition-applied",
-          "confidence": "high",
-          "applied": true,
+          "classification": "unresolved",
+          "reasons": [
+            "sp-formula-not-literal-function-5",
+            "nested-effect-wrapper-semantics-unresolved"
+          ],
+          "status": "verified-action-effect-binding-unresolved",
+          "confidence": "unresolved",
+          "applied": false,
           "projectedFromControlSkillId": 10700212,
           "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-          "hitSettlementOrder": "after-hit",
-          "targetStateActivationCondition": null,
-          "landedHitActivationCondition": null
+          "hitSettlementOrder": "after-hit"
         },
         {
           "effectIdentity": "10700212|0|elements|5|-2174275479014567856|element:-2174275479014567856|82|0",
@@ -33086,7 +33090,7 @@
             "commonExpression": "G/10000",
             "baseExpression": "source.CONSUME_PACK_ELEMENT_COUNT [M]*source.ATK[0]*A/10000"
           },
-          "sourceIdentity": "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+          "sourceIdentity": "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
           "dimensions": {
             "damage": {
               "status": "unresolved",
@@ -33117,16 +33121,17 @@
               "sourceField": null
             }
           },
-          "classification": "applied",
-          "reasons": [],
-          "status": "verified-action-effect-activation-condition-applied",
-          "confidence": "high",
-          "applied": true,
+          "classification": "unresolved",
+          "reasons": [
+            "nested-damage-trigger-lifecycle-not-expanded",
+            "nested-effect-wrapper-semantics-unresolved"
+          ],
+          "status": "verified-action-effect-binding-unresolved",
+          "confidence": "unresolved",
+          "applied": false,
           "projectedFromControlSkillId": 10700212,
           "projectedByBindingIdentity": "misa-star-wood-priority-consume",
-          "hitSettlementOrder": "after-hit",
-          "targetStateActivationCondition": null,
-          "landedHitActivationCondition": null
+          "hitSettlementOrder": "after-hit"
         },
         {
           "effectIdentity": "10700212|0|elements|3|1474042154774785480|element:-8148787786042882084|90|0",
@@ -46122,7 +46127,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=107002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=623176689467243005|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1913468686735845945"
     }
   },
-  "contractHash": "5b8afc75e84c5765151504106b7f78fcd962f7861843bf77f4586babb48d01a2",
+  "contractHash": "17bf93c5c9b9a5aeed83272e5aa73d1a8ccecb2f826b0d060973e0e4b031b930",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
