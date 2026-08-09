@@ -7,7 +7,7 @@ import { validateCharacterAcceptanceManifest } from '../../character-acceptance/
 const SCENARIO_POLICY = 'm12c-zero-distance-passive-boss-v1';
 
 describe('Lily M12-B3 owner character acceptance', () => {
-  it('publishes a complete owner-only matrix at the pending visual gate', () => {
+  it('publishes a complete accepted owner-only matrix', () => {
     expect(
       validateCharacterAcceptanceManifest(manifest, {
         checkPublication: false,
@@ -39,20 +39,20 @@ describe('Lily M12-B3 owner character acceptance', () => {
       acceptanceGapCount: 0,
     });
     expect(manifest.maturity).toMatchObject({
-      currentState: 'runtime-integrated',
-      optimizationReady: false,
+      currentState: 'optimization-ready',
+      optimizationReady: true,
       gates: {
         extracted: true,
         runtimeIntegrated: true,
-        visuallyAccepted: false,
-        optimizationReady: false,
+        visuallyAccepted: true,
+        optimizationReady: true,
       },
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      blockers: [],
     });
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: 'b0f6dcba70b710072079ed9ee79c26fe199bd913',
+      bindingStatus: 'verified',
       scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
       automatedEvidence: [
         {

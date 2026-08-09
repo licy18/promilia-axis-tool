@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "2874d96e5dec6511",
-  "manifestsHash": "dcadf46c0137b6ec",
-  "gapLedgerHash": "e12ce0d821dc19a0",
-  "bindingMatrixHash": "789c8c71acbc9a44",
-  "sourceSnapshotHash": "f2c0859c80eb3f83",
+  "rosterHash": "317990e3d1bd6d9c",
+  "manifestsHash": "cdb098f1489d12d4",
+  "gapLedgerHash": "30e6ed4ccc17a4bc",
+  "bindingMatrixHash": "577fcb82970d30cd",
+  "sourceSnapshotHash": "a9032b3602bd6ef7",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -34,10 +34,8 @@
       "displayName": "莉莉",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "d7dd2367ea82af46"
+      "blockerCodes": [],
+      "manifestHash": "2197bc090aa7f7f0"
     },
     {
       "objectKind": "character",
@@ -56,10 +54,8 @@
       "displayName": "西芙莉雅",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "fe83cfe11b182ef3"
+      "blockerCodes": [],
+      "manifestHash": "9b3cb405aac68f8f"
     },
     {
       "objectKind": "character",
@@ -67,10 +63,8 @@
       "displayName": "米砂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "888f4cdd03acfdaf"
+      "blockerCodes": [],
+      "manifestHash": "10dd5b4b1522b5bd"
     },
     {
       "objectKind": "character",
@@ -78,10 +72,8 @@
       "displayName": "米蒂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "fb24c9e3deaf5d8b"
+      "blockerCodes": [],
+      "manifestHash": "e000ffe1601f6213"
     },
     {
       "objectKind": "character",
@@ -89,10 +81,8 @@
       "displayName": "末音",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "72350d8466a5663a"
+      "blockerCodes": [],
+      "manifestHash": "a15e4af56118c4fc"
     },
     {
       "objectKind": "character",
@@ -2632,7 +2622,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "2874d96e5dec6511",
+    "rosterHash": "317990e3d1bd6d9c",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20604,7 +20594,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "789c8c71acbc9a44"
+    "bindingMatrixHash": "577fcb82970d30cd"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38211,7 +38201,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 12,
+    "gameplayBlockingGapCount": 7,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38293,5 +38283,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "fc39f18a01129835"
+  "catalogHash": "f09d608251069d2e"
 }

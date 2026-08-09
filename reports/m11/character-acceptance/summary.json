@@ -870,11 +870,9 @@
     {
       "ownerId": 102001,
       "ownerName": "莉莉",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -914,7 +912,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b0a02416fe41eee0",
+      "manifestHash": "4adaf3092255898f",
       "sourceOfTruthHash": "5892d8b1a434612b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -991,11 +989,9 @@
     {
       "ownerId": 107001,
       "ownerName": "西芙莉雅",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1037,7 +1033,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6c5bb282225b2668",
+      "manifestHash": "04686fb11162fc5f",
       "sourceOfTruthHash": "7f43f2864d89e57a",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1051,11 +1047,9 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1092,7 +1086,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6046877fc58ee489",
+      "manifestHash": "b9bb7e016ce8b939",
       "sourceOfTruthHash": "60d2fbb446ef0999",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1106,11 +1100,9 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1151,7 +1143,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "bfc9b577ff7fe659",
+      "manifestHash": "c447314345b856c1",
       "sourceOfTruthHash": "908652fdbc06691a",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1165,11 +1157,9 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1209,7 +1199,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "3a5c349848a02506",
+      "manifestHash": "9a4cc0e56eaf3135",
       "sourceOfTruthHash": "84de9d6788014d0f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1221,15 +1211,15 @@
       }
     }
   ],
-  "catalogHash": "25dbcb2e1ba192c4",
-  "manifestIndexHash": "99ab3266d2af0ccb",
+  "catalogHash": "df45d211d4bbe10f",
+  "manifestIndexHash": "6f9574d90bdb975d",
   "summary": {
     "ownerCount": 8,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 8,
-    "visuallyAcceptedCount": 0,
-    "optimizationReadyCount": 0,
+    "visuallyAcceptedCount": 5,
+    "optimizationReadyCount": 5,
     "machineScenarioPassCount": 8,
     "workbenchRoundTripPassCount": 8,
     "sourceGapCount": 156,

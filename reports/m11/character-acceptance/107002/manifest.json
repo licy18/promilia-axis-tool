@@ -221,17 +221,17 @@
     ],
     "machineEvidence": [],
     "productVisualAcceptance": {
-      "status": "pending",
+      "status": "accepted",
       "scenarioIdentities": [
         "m12-b3-107002-reduced-action-surface-acceptance"
       ],
-      "acceptanceCommit": null,
-      "recordIdentity": null,
-      "qualificationSubjectHash": null,
-      "scenarioSetHash": null,
-      "bindingStatus": "not-requested",
+      "acceptanceCommit": "b0f6dcba70b710072079ed9ee79c26fe199bd913",
+      "recordIdentity": "character-product-acceptance:107002:b0f6dcba70b710072079ed9ee79c26fe199bd913:ab4ca68811d1d9b4",
+      "qualificationSubjectHash": "ab4ca68811d1d9b4",
+      "scenarioSetHash": "5b6996dc909e27bc",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:107002::ab4ca68811d1d9b4",
+        "recordIdentity": "character-product-acceptance:107002:b0f6dcba70b710072079ed9ee79c26fe199bd913:ab4ca68811d1d9b4",
         "qualificationSubjectHash": "ab4ca68811d1d9b4",
         "scenarioSetHash": "5b6996dc909e27bc",
         "scenarioIdentities": [
@@ -91819,12 +91819,14 @@
   },
   "qualificationSubjectHash": "ab4ca68811d1d9b4",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
@@ -91834,7 +91836,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 111,
       "matrixPassedCount": 111,
       "matrixComplete": true,
@@ -91844,16 +91846,14 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "6046877fc58ee489"
+  "manifestHash": "b9bb7e016ce8b939"
 }

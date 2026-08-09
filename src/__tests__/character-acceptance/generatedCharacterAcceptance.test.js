@@ -1,6 +1,7 @@
 import xiaoyuManifest from '../../../reports/m11/character-acceptance/101010/manifest.json';
 import rubyManifest from '../../../reports/m11/character-acceptance/103002/manifest.json';
 import hanManifest from '../../../reports/m11/character-acceptance/101003/manifest.json';
+import lilyManifest from '../../../reports/m11/character-acceptance/102001/manifest.json';
 import sifliyaManifest from '../../../reports/m11/character-acceptance/107001/manifest.json';
 import moyinManifest from '../../../reports/m11/character-acceptance/109001/manifest.json';
 import mitiManifest from '../../../reports/m11/character-acceptance/108003/manifest.json';
@@ -8,6 +9,7 @@ import misaManifest from '../../../reports/m11/character-acceptance/107002/manif
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import rubyProfile from '../../data/generated/character-combat-profiles/103002.json';
 import hanProfile from '../../data/generated/character-combat-profiles/101003.json';
+import lilyProfile from '../../data/generated/character-combat-profiles/102001.json';
 import sifliyaProfile from '../../data/generated/character-combat-profiles/107001.json';
 import moyinProfile from '../../data/generated/character-combat-profiles/109001.json';
 import mitiProfile from '../../data/generated/character-combat-profiles/108003.json';
@@ -45,6 +47,13 @@ const owners = [
     profile: hanProfile,
   },
   {
+    ownerId: 102001,
+    passiveId: 10200162,
+    manifest: lilyManifest,
+    profile: lilyProfile,
+    unnamedSecondaryPassiveBoundary: false,
+  },
+  {
     ownerId: 107001,
     passiveId: 10700162,
     manifest: sifliyaManifest,
@@ -73,23 +82,23 @@ const owners = [
 ];
 
 describe('generated character acceptance manifests', () => {
-  it('publishes exactly the seven integrated owners with a valid hashed catalog', () => {
+  it('publishes exactly the eight integrated owners with a valid hashed catalog', () => {
     expect(generatedCatalog.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 107001, 107002, 108003, 109001,
+      101003, 101010, 102001, 103002, 107001, 107002, 108003, 109001,
     ]);
     expect(generatedCatalog.summary).toMatchObject({
-      ownerCount: 7,
+      ownerCount: 8,
       maturityCounts: {
-        'runtime-integrated': 4,
-        'optimization-ready': 3,
+        'runtime-integrated': 3,
+        'optimization-ready': 5,
       },
-      optimizationReadyCount: 3,
+      optimizationReadyCount: 5,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
     );
     expect(generatedManifestIndex.entries.map(entry => entry.ownerId)).toEqual([
-      101003, 101010, 103002, 107001, 107002, 108003, 109001,
+      101003, 101010, 102001, 103002, 107001, 107002, 108003, 109001,
     ]);
     for (const entry of generatedCatalog.entries) {
       const indexed = generatedManifestIndex.entries.find(
@@ -156,9 +165,11 @@ describe('generated character acceptance manifests', () => {
         valid: true,
         issues: [],
       });
-      const productAccepted = [107002, 108003, 109001].includes(ownerId);
+      const productAccepted = [102001, 107001, 107002, 108003, 109001].includes(
+        ownerId
+      );
       const acceptanceCommit = productAccepted
-        ? '968d5d0c5f4396aab1d9f8a1263b7586998b25c1'
+        ? 'b0f6dcba70b710072079ed9ee79c26fe199bd913'
         : null;
       const runtimeIntegrated = true;
       expect(manifest.maturity).toMatchObject({

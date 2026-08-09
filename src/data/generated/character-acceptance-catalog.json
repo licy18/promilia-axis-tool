@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "99ab3266d2af0ccb",
+  "manifestIndexHash": "6f9574d90bdb975d",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -776,19 +776,19 @@
     {
       "ownerId": 102001,
       "ownerName": "莉莉",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 128,
       "matrixPassedCount": 128,
-      "manifestHash": "b0a02416fe41eee0",
+      "manifestHash": "4adaf3092255898f",
       "qualificationSubjectHash": "14370431858c21f9",
       "sourceOfTruthHash": "5892d8b1a434612b",
       "profileHash": "f6bf3898f9d7eefa00dd2beceb8fc3ce71273ad051eb97e29a586ba190c31976",
@@ -824,19 +824,19 @@
     {
       "ownerId": 107001,
       "ownerName": "西芙莉雅",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 86,
       "matrixPassedCount": 86,
-      "manifestHash": "6c5bb282225b2668",
+      "manifestHash": "04686fb11162fc5f",
       "qualificationSubjectHash": "b06d38307df59095",
       "sourceOfTruthHash": "7f43f2864d89e57a",
       "profileHash": "f1bd2904825b9b4c24f0feb04f4e3a4d6aa28d759e88b2475892956c48643b8b",
@@ -847,19 +847,19 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 111,
       "matrixPassedCount": 111,
-      "manifestHash": "6046877fc58ee489",
+      "manifestHash": "b9bb7e016ce8b939",
       "qualificationSubjectHash": "ab4ca68811d1d9b4",
       "sourceOfTruthHash": "60d2fbb446ef0999",
       "profileHash": "161aa8252801c6bf89a2ec57991688c06c4439d6f49b955385c6afb8af3152b5",
@@ -870,19 +870,19 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 139,
       "matrixPassedCount": 139,
-      "manifestHash": "bfc9b577ff7fe659",
+      "manifestHash": "c447314345b856c1",
       "qualificationSubjectHash": "3c2258faf53d57e5",
       "sourceOfTruthHash": "908652fdbc06691a",
       "profileHash": "a912276c51b76fb3f1c19fadcb348c12869d921e27b1a330c8bb1d45057ca839",
@@ -893,19 +893,19 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 138,
       "matrixPassedCount": 138,
-      "manifestHash": "3a5c349848a02506",
+      "manifestHash": "9a4cc0e56eaf3135",
       "qualificationSubjectHash": "533f3fa22254a74a",
       "sourceOfTruthHash": "84de9d6788014d0f",
       "profileHash": "433f1fd414769d96c21fe3d370cd2313a8866b4502bda4fb375a818f5fca9422",
@@ -919,9 +919,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "runtime-integrated": 8
+      "optimization-ready": 5,
+      "runtime-integrated": 3
     },
-    "optimizationReadyCount": 0
+    "optimizationReadyCount": 5
   },
-  "catalogHash": "25dbcb2e1ba192c4"
+  "catalogHash": "df45d211d4bbe10f"
 }

@@ -104,7 +104,7 @@ describe('Sifliya 107001 acceptance closure', () => {
     });
   });
 
-  it('publishes only stable automated evidence without self-signing product acceptance', () => {
+  it('publishes stable visual and machine evidence for central product acceptance', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 3,
       executionPassedCount: 3,
@@ -128,7 +128,11 @@ describe('Sifliya 107001 acceptance closure', () => {
           scenario.assertionSummary.failedCount === 0
       )
     ).toBe(true);
-    expect(manifest.evidence.productVisualAcceptance.status).toBe('pending');
+    expect(manifest.evidence.productVisualAcceptance).toMatchObject({
+      status: 'accepted',
+      acceptanceCommit: 'b0f6dcba70b710072079ed9ee79c26fe199bd913',
+      bindingStatus: 'verified',
+    });
     expect(
       manifest.evidence.productVisualAcceptance.scenarioIdentities
     ).toEqual(['m12-b3-107001-focused-acceptance']);
@@ -157,11 +161,12 @@ describe('Sifliya 107001 acceptance closure', () => {
       }),
     ]);
     expect(manifest.maturity).toMatchObject({
-      optimizationReady: false,
+      optimizationReady: true,
       gates: {
-        visuallyAccepted: false,
-        optimizationReady: false,
+        visuallyAccepted: true,
+        optimizationReady: true,
       },
+      blockers: [],
     });
   });
 
