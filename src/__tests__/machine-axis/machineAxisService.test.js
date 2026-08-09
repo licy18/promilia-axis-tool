@@ -240,11 +240,11 @@ describe('Machine Axis service', () => {
       ['miti-star-2-exact-cooldown', 'apply'],
     ]);
     expect(run.hashes).toMatchObject({
-      input: '0088d6b91e58aad3',
-      data: 'e281fe04fdbc2f6c',
-      trace: 'a8aa1cf4068a6d33',
+      input: 'aff5191ffb37e196',
+      data: 'd4db176176ebd09b',
+      trace: 'aeccd313e0454208',
       evaluation: '3c2fb1d6fda5e7b9',
-      build: 'aef073acf58b042f',
+      build: '63de7bb1f05cfbb8',
     });
   }, 30_000);
 

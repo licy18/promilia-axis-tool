@@ -6,11 +6,11 @@
   "goldenReports": ["reports/m10/102001/golden-trace.json"],
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "accepted",
-    "acceptanceCommit": "064d481c18a8ec3155df67d8fd8b1f603d31a899",
-    "recordIdentity": "character-product-acceptance:102001:064d481c18a8ec3155df67d8fd8b1f603d31a899:8172b8ec7e6014f9",
-    "qualificationSubjectHash": "8172b8ec7e6014f9",
-    "scenarioSetHash": "68fdee10a5edb61c",
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
     "scenarioIdentities": [
       "m12-b3-102001-zero-distance-acceptance"
     ],
@@ -40,107 +40,123 @@
       { "controlSkillId": 10200126, "subSkillIndex": 0 }
     ]
   },
+  "sourceGapDispositionIdentityMigration": "verified-mechanics-package-e8249685f9bcbded",
   "sourceGapDispositions": [
     {
-      "recordIdentity": "semantic-gap:09e2bc2156e672ab0d93",
+      "recordIdentity": "semantic-gap:a021699cda3ea2c7f662",
+      "previousRecordIdentity": "semantic-gap:09e2bc2156e672ab0d93",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32"
     },
     {
-      "recordIdentity": "semantic-gap:2a13694dea86b77f11c8",
+      "recordIdentity": "semantic-gap:96786266c4e21ffb9627",
+      "previousRecordIdentity": "semantic-gap:2a13694dea86b77f11c8",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32"
     },
     {
-      "recordIdentity": "semantic-gap:3f81ca5b0649abac8ad2",
+      "recordIdentity": "semantic-gap:c4745610a738d1f33643",
+      "previousRecordIdentity": "semantic-gap:3f81ca5b0649abac8ad2",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32"
     },
     {
-      "recordIdentity": "semantic-gap:56b8aeecbc8f47bcefb2",
+      "recordIdentity": "semantic-gap:42cea2bf34ce3fabc2b1",
+      "previousRecordIdentity": "semantic-gap:56b8aeecbc8f47bcefb2",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31"
     },
     {
-      "recordIdentity": "semantic-gap:6ecd90343274663298ea",
+      "recordIdentity": "semantic-gap:a17e227082d5557fff15",
+      "previousRecordIdentity": "semantic-gap:6ecd90343274663298ea",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2"
     },
     {
-      "recordIdentity": "semantic-gap:72324888f112a800b714",
+      "recordIdentity": "semantic-gap:891540f9c8a04fd7cc37",
+      "previousRecordIdentity": "semantic-gap:72324888f112a800b714",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0"
     },
     {
-      "recordIdentity": "semantic-gap:7980a8333b1f6799cbf3",
+      "recordIdentity": "semantic-gap:3e3931ccc1647db203b7",
+      "previousRecordIdentity": "semantic-gap:7980a8333b1f6799cbf3",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2"
     },
     {
-      "recordIdentity": "semantic-gap:81b8c47e16f0f7b71880",
+      "recordIdentity": "semantic-gap:4292f4abce26f458b0b5",
+      "previousRecordIdentity": "semantic-gap:81b8c47e16f0f7b71880",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32"
     },
     {
-      "recordIdentity": "semantic-gap:8732cb2ece25292c0d9c",
+      "recordIdentity": "semantic-gap:8e5f6b494dd50bb5c6db",
+      "previousRecordIdentity": "semantic-gap:8732cb2ece25292c0d9c",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32"
     },
     {
-      "recordIdentity": "semantic-gap:89de3afab3de80f4fe9f",
+      "recordIdentity": "semantic-gap:7538f1426bff8a54a9b7",
+      "previousRecordIdentity": "semantic-gap:89de3afab3de80f4fe9f",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0"
     },
     {
-      "recordIdentity": "semantic-gap:9d308aec5af25e2de95a",
+      "recordIdentity": "semantic-gap:bf5166b3ff168f5dc4a3",
+      "previousRecordIdentity": "semantic-gap:9d308aec5af25e2de95a",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32"
     },
     {
-      "recordIdentity": "semantic-gap:ad897dca63bdba406cf1",
+      "recordIdentity": "semantic-gap:8de84a78d1458113b1b6",
+      "previousRecordIdentity": "semantic-gap:ad897dca63bdba406cf1",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32"
     },
     {
-      "recordIdentity": "semantic-gap:d99d705208fd38c3c7d8",
+      "recordIdentity": "semantic-gap:158181b88e5dc53ce176",
+      "previousRecordIdentity": "semantic-gap:d99d705208fd38c3c7d8",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "perfect-defense-counter-requires-passive-boss-attack-event",
       "sourceIdentity": "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0"
     },
     {
-      "recordIdentity": "semantic-gap:da6fcc1f887d71e311de",
+      "recordIdentity": "semantic-gap:b7e57b3b40f0b773dedc",
+      "previousRecordIdentity": "semantic-gap:da6fcc1f887d71e311de",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",
       "sourceIdentity": "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32"
     },
     {
-      "recordIdentity": "semantic-gap:f81d3a28e18f695f5ef8",
+      "recordIdentity": "semantic-gap:1576333ae7c6fe72c585",
+      "previousRecordIdentity": "semantic-gap:f81d3a28e18f695f5ef8",
       "status": "not-applicable",
       "policyIdentity": "m12c-zero-distance-passive-boss-v1",
       "reason": "declared-control-subskill-outside-frozen-active-surface",

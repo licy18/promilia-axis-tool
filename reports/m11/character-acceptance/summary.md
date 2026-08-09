@@ -9,12 +9,12 @@
 | 角色 | 成熟度 | 矩阵通过/必需 | source gap | acceptance gap | optimization-ready |
 |---|---:|---:|---:|---:|---:|
 | 寒悠悠 (101003) | runtime-integrated | 137/159 | 13 | 15 | 否 |
-| 涂山小玉 (101010) | runtime-integrated | 148/255 | 72 | 57 | 否 |
-| 莉莉 (102001) | optimization-ready | 128/128 | 0 | 0 | 是 |
-| 红宝石 (103002) | runtime-integrated | 170/588 | 71 | 160 | 否 |
-| 西芙莉雅 (107001) | runtime-integrated | 40/127 | 63 | 45 | 否 |
-| 米砂 (107002) | optimization-ready | 111/111 | 0 | 0 | 是 |
-| 米蒂 (108003) | optimization-ready | 139/139 | 0 | 0 | 是 |
-| 末音 (109001) | optimization-ready | 138/138 | 0 | 0 | 是 |
+| 涂山小玉 (101010) | runtime-integrated | 149/255 | 72 | 56 | 否 |
+| 莉莉 (102001) | runtime-integrated | 128/128 | 0 | 0 | 否 |
+| 红宝石 (103002) | runtime-integrated | 168/335 | 71 | 161 | 否 |
+| 西芙莉雅 (107001) | runtime-integrated | 86/86 | 0 | 0 | 否 |
+| 米砂 (107002) | runtime-integrated | 111/111 | 0 | 0 | 否 |
+| 米蒂 (108003) | runtime-integrated | 139/139 | 0 | 0 | 否 |
+| 末音 (109001) | runtime-integrated | 138/138 | 0 | 0 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

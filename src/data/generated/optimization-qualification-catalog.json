@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "dc3b4f59d3c7c4bb",
-  "manifestsHash": "6cb34851121b6bee",
-  "gapLedgerHash": "3ea908f620489b05",
-  "bindingMatrixHash": "3b512362c44b9c33",
-  "sourceSnapshotHash": "2e0b11092ebd754a",
+  "rosterHash": "2874d96e5dec6511",
+  "manifestsHash": "dcadf46c0137b6ec",
+  "gapLedgerHash": "e12ce0d821dc19a0",
+  "bindingMatrixHash": "789c8c71acbc9a44",
+  "sourceSnapshotHash": "f2c0859c80eb3f83",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "a17208f23a97ec51"
+      "manifestHash": "34cf78a04debfc72"
     },
     {
       "objectKind": "character",
@@ -34,8 +34,10 @@
       "displayName": "莉莉",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "3998839e03d0a795"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "d7dd2367ea82af46"
     },
     {
       "objectKind": "character",
@@ -46,7 +48,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "14166de8106c04f1"
+      "manifestHash": "5fd5fedfbbb4d61b"
     },
     {
       "objectKind": "character",
@@ -57,7 +59,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "0e8b05e784f06540"
+      "manifestHash": "fe83cfe11b182ef3"
     },
     {
       "objectKind": "character",
@@ -65,8 +67,10 @@
       "displayName": "米砂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "bf6b4fd24c968747"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "888f4cdd03acfdaf"
     },
     {
       "objectKind": "character",
@@ -74,8 +78,10 @@
       "displayName": "米蒂",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "5797c79961fd721a"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "fb24c9e3deaf5d8b"
     },
     {
       "objectKind": "character",
@@ -83,8 +89,10 @@
       "displayName": "末音",
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockerCodes": [],
-      "manifestHash": "09c69929020b229e"
+      "blockerCodes": [
+        "character-not-optimization-ready"
+      ],
+      "manifestHash": "72350d8466a5663a"
     },
     {
       "objectKind": "character",
@@ -2624,7 +2632,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "dc3b4f59d3c7c4bb",
+    "rosterHash": "2874d96e5dec6511",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20596,7 +20604,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "3b512362c44b9c33"
+    "bindingMatrixHash": "789c8c71acbc9a44"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38203,7 +38211,7 @@
       "set-skill": 12
     },
     "optimizationReadyTotal": 211,
-    "gameplayBlockingGapCount": 8,
+    "gameplayBlockingGapCount": 12,
     "bindingQualifiedEdgeCount": 12,
     "qualificationStage": {
       "schemaVersion": 1,
@@ -38285,5 +38293,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "c77efb80ee25f5df"
+  "catalogHash": "fc39f18a01129835"
 }

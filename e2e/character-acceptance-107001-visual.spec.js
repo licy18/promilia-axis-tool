@@ -4,8 +4,8 @@ import { expect, test } from '@playwright/test';
 
 const FIXTURE_PATH = 'fixtures/character-acceptance/107001-visual.json';
 const FIXTURE_SHA256 =
-  '9ce8ed82e0bf73b3632009c52229b1aa3307591603b194cbcbf71aded821a801';
-const TRACE_HASH = 'b0da221b401d90ce';
+  '4c0e55cc85c98f3d8d7765a9cbddd6c24e27d7fa6b490f8dd7fb665c1524ebd6';
+const TRACE_HASH = 'fea5d9b565c7fb42';
 const SCREENSHOT_PATH = 'reports/m12-b3-107001-workbench-visual-evidence.png';
 const SCREENSHOT_SHA256 =
   'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260';

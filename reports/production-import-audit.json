@@ -8,6 +8,7 @@
       "src/main.js"
     ],
     "tests": [
+      "e2e/character-acceptance-107001-visual.spec.js",
       "e2e/helpers/basic-workbench-draft.js",
       "e2e/helpers/six-resource-capture-fixture.js",
       "e2e/helpers/workbench-long-axis-fixture.js",
@@ -21,6 +22,9 @@
       "src/__tests__/character-acceptance/characterAcceptanceProtocol.test.js",
       "src/__tests__/character-acceptance/characterAcceptanceScenarioDerivation.test.js",
       "src/__tests__/character-acceptance/generatedCharacterAcceptance.test.js",
+      "src/__tests__/character-acceptance/lilyCharacterAcceptance.test.js",
+      "src/__tests__/character-acceptance/sifliya107001AcceptanceClosure.test.js",
+      "src/__tests__/character-acceptance/visualEvidenceVerification.test.js",
       "src/__tests__/data/azprGenerated.test.js",
       "src/__tests__/data/characterCombatHeadlessMigration.test.js",
       "src/__tests__/data/characterCombatProductBoundaries.test.js",

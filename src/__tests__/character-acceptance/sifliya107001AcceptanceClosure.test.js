@@ -138,7 +138,7 @@ describe('Sifliya 107001 acceptance closure', () => {
           scenarioIdentity: 'm12-b3-107001-focused-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
           fixturePath: 'fixtures/character-acceptance/107001-visual.json',
-          canonicalTraceHash: 'b0da221b401d90ce',
+          canonicalTraceHash: 'fea5d9b565c7fb42',
           screenshotPath: 'reports/m12-b3-107001-workbench-visual-evidence.png',
           screenshotSha256:
             'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260',
@@ -152,7 +152,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: '5471bde9be536b69',
+        canonicalTraceHash: '3293a240956b5a95',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

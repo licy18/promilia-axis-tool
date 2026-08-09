@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 109001,
-  "profileHash": "a76c5fb6dd41e6a9996f7acf715014bbae1190229261d1738a4e13e74539368f",
+  "profileHash": "433f1fd414769d96c21fe3d370cd2313a8866b4502bda4fb375a818f5fca9422",
   "summary": {
     "semanticRecordCount": 13,
     "rawRecordCount": 15,
@@ -21,11 +21,69 @@
     "gameplayImpactingCount": 0,
     "wrapperOrDuplicateCount": 7,
     "transitionCandidateSupersededCount": 0,
-    "unreachableOrNotApplicableCount": 6
+    "unreachableOrNotApplicableCount": 6,
+    "sourceClosureAppliedCount": 0,
+    "sourceClosureNotApplicableCount": 0
   },
   "records": [
     {
-      "recordIdentity": "semantic-gap:3f5403305014abda5a80",
+      "recordIdentity": "semantic-gap:1445a6af25752d0d57e4",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900111:0:-5256189934391760552:-3278714981477366908:36",
+      "sourceIdentities": [
+        "battle-effect:10900111:0:-5256189934391760552:-3278714981477366908:36"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900111|0|elements|3|-5256189934391760552|element:-5256189934391760552|36|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:2efc6976ec37a3b885b9",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900125:0:8949110464361487189:7308935574334620133:31",
+      "sourceIdentities": [
+        "battle-effect:10900125:0:8949110464361487189:7308935574334620133:31"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900125|0|elements|5|8949110464361487189|element:8949110464361487189|31|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:381ef143ed3ba8601bbb",
       "ownerId": 109001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
@@ -43,6 +101,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10900113|0|elements|8|6963696584413796673|element:6963696584413796673|183|0"
@@ -50,7 +114,121 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:4e385e97b66340bd72b8",
+      "recordIdentity": "semantic-gap:583f72bacc9ff088291d",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900149:0:-6692507629448266222:3646484109696496817:3",
+      "sourceIdentities": [
+        "battle-effect:10900149:0:-6692507629448266222:3646484109696496817:3"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900149|0|elements|2|-6692507629448266222|element:-6692507629448266222|3|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:62ea7d292addd3cf1fc3",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900143:0:-5022202969777715803:5854955834435011997:13",
+      "sourceIdentities": [
+        "battle-effect:10900143:0:-5022202969777715803:5854955834435011997:13"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900143|0|elements|3|-7506081561353179437|element:-5022202969777715803|13|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:7874aebce19b83f41cb2",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900113:0:-5022202969777715803:8524185735560706053:183",
+      "sourceIdentities": [
+        "battle-effect:10900113:0:-5022202969777715803:8524185735560706053:183"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900113|0|elements|6|4475751446751874795|element:-5022202969777715803|183|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:884e3f8ad5b42c76f64b",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900143:0:8949110464361487189:-6292682817961163363:10",
+      "sourceIdentities": [
+        "battle-effect:10900143:0:8949110464361487189:-6292682817961163363:10"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900143|0|elements|5|8949110464361487189|element:8949110464361487189|10|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:8de360a7ab7901bbd7de",
       "ownerId": 109001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
@@ -67,6 +245,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10900110|0|elements|2|8910682160033441487|element:5554021792138642848|20|2",
@@ -76,74 +260,7 @@
       "rawRecordCount": 3
     },
     {
-      "recordIdentity": "semantic-gap:737c5202b741cd411f69",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900111:0:-5256189934391760552:-3278714981477366908:36",
-      "sourceIdentities": [
-        "battle-effect:10900111:0:-5256189934391760552:-3278714981477366908:36"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900111|0|elements|3|-5256189934391760552|element:-5256189934391760552|36|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:869e412fe7241b6ee759",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900149:0:-6692507629448266222:3646484109696496817:3",
-      "sourceIdentities": [
-        "battle-effect:10900149:0:-6692507629448266222:3646484109696496817:3"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900149|0|elements|2|-6692507629448266222|element:-6692507629448266222|3|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:94a4d44b8fabf0800a19",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-effect-wrapper-semantics-unresolved",
-        "sp-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10900113:0:-1722401594839030113:8524185735560706053:183",
-      "sourceIdentities": [
-        "battle-effect:10900113:0:-1722401594839030113:8524185735560706053:183"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900113|0|elements|8|6963696584413796673|element:-1722401594839030113|183|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:98fd605fdf4bc7f20808",
+      "recordIdentity": "semantic-gap:8fa92e1f35153e4ba24f",
       "ownerId": 109001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
@@ -158,6 +275,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10900113|0|elements|8|6963696584413796673|element:-1085330686087474031|183|0"
@@ -165,120 +288,7 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:9bebad0f3371d68daaa3",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900149:1:-5022202969777715803:7463435849639967761:29",
-      "sourceIdentities": [
-        "battle-effect:10900149:1:-5022202969777715803:7463435849639967761:29"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900149|1|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:a5188bc8cebfb6afe126",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900143:0:-5022202969777715803:5854955834435011997:13",
-      "sourceIdentities": [
-        "battle-effect:10900143:0:-5022202969777715803:5854955834435011997:13"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900143|0|elements|3|-7506081561353179437|element:-5022202969777715803|13|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:abdc1b5c358f6c1ab41c",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900125:0:8949110464361487189:7308935574334620133:31",
-      "sourceIdentities": [
-        "battle-effect:10900125:0:8949110464361487189:7308935574334620133:31"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900125|0|elements|5|8949110464361487189|element:8949110464361487189|31|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:b916ea56b15e5cf8773b",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900143:0:8949110464361487189:-6292682817961163363:10",
-      "sourceIdentities": [
-        "battle-effect:10900143:0:8949110464361487189:-6292682817961163363:10"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900143|0|elements|5|8949110464361487189|element:8949110464361487189|10|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:d3b81d0452ced1d701f9",
-      "ownerId": 109001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "wrapper-or-duplicate",
-      "reasons": [
-        "nested-damage-trigger-lifecycle-not-expanded",
-        "nested-effect-wrapper-semantics-unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10900113:0:-5022202969777715803:8524185735560706053:183",
-      "sourceIdentities": [
-        "battle-effect:10900113:0:-5022202969777715803:8524185735560706053:183"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10900113|0|elements|6|4475751446751874795|element:-5022202969777715803|183|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:ee191fb82758a32ad985",
+      "recordIdentity": "semantic-gap:b98435241aded443b970",
       "ownerId": 109001,
       "sourceKind": "passive-or-skill",
       "status": "not-applicable",
@@ -293,6 +303,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "actor:109001:skill:10900162"
@@ -300,7 +316,7 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:ef05dcd69253985a2519",
+      "recordIdentity": "semantic-gap:db4c594097d658c2c950",
       "ownerId": 109001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
@@ -316,9 +332,73 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "effect:10900113|0|elements|8|6963696584413796673|element:-7412029037550756065|183|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:ecb507c529d6c4012bf1",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10900149:1:-5022202969777715803:7463435849639967761:29",
+      "sourceIdentities": [
+        "battle-effect:10900149:1:-5022202969777715803:7463435849639967761:29"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900149|1|elements|5|-6711007604037179960|element:-5022202969777715803|29|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:f68878f8cdea73871f65",
+      "ownerId": 109001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10900113:0:-1722401594839030113:8524185735560706053:183",
+      "sourceIdentities": [
+        "battle-effect:10900113:0:-1722401594839030113:8524185735560706053:183"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10900113|0|elements|8|6963696584413796673|element:-1722401594839030113|183|0"
       ],
       "rawRecordCount": 1
     }

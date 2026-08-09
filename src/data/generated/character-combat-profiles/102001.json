@@ -77,7 +77,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "938f6c11203b6c4dc1719c824194c7c3a2d600ec2a47d73b38a100e76acf9fd1",
+    "packageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -99204,31 +99204,93 @@
   ],
   "unresolvedRecords": [
     {
-      "recordIdentity": "semantic-gap:09e2bc2156e672ab0d93",
+      "recordIdentity": "semantic-gap:0354e5623e801bca3d8a",
+      "ownerId": 102001,
+      "sourceKind": "dead-configuration",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "hero-rank-unimplemented-dead-configuration"
+      ],
+      "sourceIdentity": "M12-B3 frozen contract#hero_rank-is-unimplemented-dead-config",
+      "sourceIdentities": [
+        "M12-B3 frozen contract#hero_rank-is-unimplemented-dead-config"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:102001:hero-rank"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:1576333ae7c6fe72c585",
       "ownerId": 102001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
       "impactClassification": "gameplay-impacting",
       "reasons": [
-        "stack-lifecycle-runtime-unimplemented"
+        "property-formula-not-literal-function-5"
       ],
-      "sourceIdentity": "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32",
+      "sourceIdentity": "battle-effect:10200142:0:-1431178473602126937:6721561265250368687:32",
       "sourceIdentities": [
-        "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32",
-        "battle-effect:10200142:1:-4539090972426934065:6795403234150960790:54"
+        "battle-effect:10200142:0:-1431178473602126937:-3154738711872734033:54",
+        "battle-effect:10200142:0:-1431178473602126937:6721561265250368687:32"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10200142|1|elements|5|2420913130100391591|element:-4539090972426934065|32|0",
-        "effect:10200142|1|elements|5|2420913130100391591|element:-4539090972426934065|54|1"
+        "effect:10200142|0|elements|5|2420913130100391591|element:-1431178473602126937|32|1",
+        "effect:10200142|0|elements|5|2420913130100391591|element:-1431178473602126937|54|0"
       ],
       "rawRecordCount": 2
     },
     {
-      "recordIdentity": "semantic-gap:09f8aa54383c5688bc07",
+      "recordIdentity": "semantic-gap:158181b88e5dc53ce176",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0",
+      "sourceIdentities": [
+        "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200161|0|elements|0|-4906639692846963732|element:-4906639692846963732|0|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:1a9cbc87614d886ec4fe",
       "ownerId": 102001,
       "sourceKind": "scenario-boundary",
       "status": "not-applicable",
@@ -99244,6 +99306,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": {
         "controlSkillIds": [
           48012201,
@@ -99262,659 +99330,7 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:2a13694dea86b77f11c8",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32",
-      "sourceIdentities": [
-        "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32",
-        "battle-effect:10200142:1:-1431178473602126937:6795403234150960790:54"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200142|1|elements|5|2420913130100391591|element:-1431178473602126937|32|0",
-        "effect:10200142|1|elements|5|2420913130100391591|element:-1431178473602126937|54|1"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:3f81ca5b0649abac8ad2",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "stack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32",
-      "sourceIdentities": [
-        "battle-effect:10200142:0:-4539090972426934065:-3154738711872734033:54",
-        "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200142|0|elements|5|2420913130100391591|element:-4539090972426934065|32|1",
-        "effect:10200142|0|elements|5|2420913130100391591|element:-4539090972426934065|54|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:48a59ad4bf359038feee",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:3453877457087294926:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200113:0:3453877457087294926:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200113|0|elements|11|3418108144318934934|element:3453877457087294926|243|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:49c83d5fd67c9db31bcf",
-      "ownerId": 102001,
-      "sourceKind": "dead-configuration",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "hero-rank-unimplemented-dead-configuration"
-      ],
-      "sourceIdentity": "M12-B3 frozen contract#hero_rank-is-unimplemented-dead-config",
-      "sourceIdentities": [
-        "M12-B3 frozen contract#hero_rank-is-unimplemented-dead-config"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "actor:102001:hero-rank"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:525e89099d4d6e23ee39",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:-8148787786042882084:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
-      "sourceIdentities": [
-        "battle-effect:10200105:0:-8148787786042882084:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200105|0|elements|3|7991633998808797407|element:-8148787786042882084|20|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:56836b8accd18d5cff75",
-      "ownerId": 102001,
-      "sourceKind": "scenario-boundary",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "passive-boss-does-not-produce-required-defense-events",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#dodge,plunge,perfect-defense,limit-counter-preserved-but-not-stimulated",
-      "sourceIdentities": [
-        "m12c-zero-distance-passive-boss-v1#dodge,plunge,perfect-defense,limit-counter-preserved-but-not-stimulated"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": {
-        "controlSkillIds": [
-          10200111,
-          10200115,
-          10200125,
-          10200127,
-          10200161
-        ]
-      },
-      "rawRecordIdentities": [
-        "actor:102001:scenario:dedicated-defense-and-movement-actions"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:56b8aeecbc8f47bcefb2",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31",
-      "sourceIdentities": [
-        "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200111|0|elements|3|2656940470186060328|element:2656940470186060328|31|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:6ecd90343274663298ea",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2",
-      "sourceIdentities": [
-        "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200149|0|elements|2|-6692507629448266222|element:-6692507629448266222|2|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:72324888f112a800b714",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0",
-      "sourceIdentities": [
-        "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200124|0|elements|0|932273171195257594|element:5425475631875380505|0|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:7980a8333b1f6799cbf3",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2",
-      "sourceIdentities": [
-        "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200149|2|elements|2|-6692507629448266222|element:-6692507629448266222|2|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:81b8c47e16f0f7b71880",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32",
-      "sourceIdentities": [
-        "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32",
-        "battle-effect:10200142:1:-2918223944459599332:6795403234150960790:54"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200142|1|elements|5|2420913130100391591|element:-2918223944459599332|32|0",
-        "effect:10200142|1|elements|5|2420913130100391591|element:-2918223944459599332|54|1"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:8732cb2ece25292c0d9c",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32",
-      "sourceIdentities": [
-        "battle-effect:10200110:2:-2918223944459599332:-523421723499752879:53",
-        "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200110|2|elements|5|2420913130100391591|element:-2918223944459599332|32|1",
-        "effect:10200110|2|elements|5|2420913130100391591|element:-2918223944459599332|53|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:89de3afab3de80f4fe9f",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0",
-      "sourceIdentities": [
-        "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200114|0|elements|1|932273171195257594|element:5425475631875380505|0|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:9a15f4816832a67112b5",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:1837964535882290130:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001005.asset/MonoBehaviour/ast_102001005__1837964535882290130.json#elementConfigId=102001005|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
-      "sourceIdentities": [
-        "battle-effect:10200105:0:1837964535882290130:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001005.asset/MonoBehaviour/ast_102001005__1837964535882290130.json#elementConfigId=102001005|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200105|0|elements|2|1837964535882290130|20|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:9d308aec5af25e2de95a",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32",
-      "sourceIdentities": [
-        "battle-effect:10200142:0:-2918223944459599332:-3154738711872734033:54",
-        "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200142|0|elements|5|2420913130100391591|element:-2918223944459599332|32|1",
-        "effect:10200142|0|elements|5|2420913130100391591|element:-2918223944459599332|54|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:a142d6e2e9af2bdcdbb4",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:-2035055823451510697:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200113:0:-2035055823451510697:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200113|0|elements|11|3418108144318934934|element:-2035055823451510697|243|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:a1d777b4df06093da8ba",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:1474042154774785480:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
-      "sourceIdentities": [
-        "battle-effect:10200105:0:1474042154774785480:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200105|0|elements|3|7991633998808797407|element:1474042154774785480|20|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:a28f4fd692f0f8a2596e",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:-4529113272733101309:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
-      "sourceIdentities": [
-        "battle-effect:10200105:0:-4529113272733101309:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200105|0|elements|3|7991633998808797407|element:-4529113272733101309|20|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:ad897dca63bdba406cf1",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "property-formula-not-literal-function-5"
-      ],
-      "sourceIdentity": "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32",
-      "sourceIdentities": [
-        "battle-effect:10200110:2:-1431178473602126937:-523421723499752879:53",
-        "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200110|2|elements|5|2420913130100391591|element:-1431178473602126937|32|1",
-        "effect:10200110|2|elements|5|2420913130100391591|element:-1431178473602126937|53|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:ae654809aa9d5e9cafde",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200112:0:-1376346479596612847:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200112:0:-1376346479596612847:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200112|0|elements|0|3418108144318934934|element:-1376346479596612847|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:c0ac01904ebbf1b427aa",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:3418108144318934934:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200113:0:3418108144318934934:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200113|0|elements|11|3418108144318934934|243|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:cc362e833c18c73b361b",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200112:0:3418108144318934934:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200112:0:3418108144318934934:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200112|0|elements|0|3418108144318934934|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:d73230adb168bcbb97db",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200105:0:7991633998808797407:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
-      "sourceIdentities": [
-        "battle-effect:10200105:0:7991633998808797407:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200105|0|elements|3|7991633998808797407|20|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:d99d705208fd38c3c7d8",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "unresolved"
-      ],
-      "sourceIdentity": "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0",
-      "sourceIdentities": [
-        "battle-effect:10200161:0:-4906639692846963732:-7098892905873826014:0"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200161|0|elements|0|-4906639692846963732|element:-4906639692846963732|0|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:da6fcc1f887d71e311de",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "static-evidence-gap",
-      "impactClassification": "gameplay-impacting",
-      "reasons": [
-        "stack-lifecycle-runtime-unimplemented"
-      ],
-      "sourceIdentity": "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32",
-      "sourceIdentities": [
-        "battle-effect:10200110:2:-4539090972426934065:-523421723499752879:53",
-        "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200110|2|elements|5|2420913130100391591|element:-4539090972426934065|32|1",
-        "effect:10200110|2|elements|5|2420913130100391591|element:-4539090972426934065|53|0"
-      ],
-      "rawRecordCount": 2
-    },
-    {
-      "recordIdentity": "semantic-gap:e34bd5b4834d0722c73b",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200112:0:3453877457087294926:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200112:0:3453877457087294926:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200112|0|elements|0|3418108144318934934|element:3453877457087294926|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:e9db618cee98615eb1e5",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200112:0:-2035055823451510697:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200112:0:-2035055823451510697:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200112|0|elements|0|3418108144318934934|element:-2035055823451510697|1|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:f24a7bd7521c92935087",
-      "ownerId": 102001,
-      "sourceKind": "effect",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
-        "scenario-out-of-scope-not-applicable"
-      ],
-      "sourceIdentity": "battle-effect:10200113:0:-1376346479596612847:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
-      "sourceIdentities": [
-        "battle-effect:10200113:0:-1376346479596612847:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "effect:10200113|0|elements|11|3418108144318934934|element:-1376346479596612847|243|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:f29c2ff1bc4952c9ac68",
+      "recordIdentity": "semantic-gap:25b38a5aa31ff409afcc",
       "ownerId": 102001,
       "sourceKind": "public-form-settlement",
       "status": "not-applicable",
@@ -99930,6 +99346,12 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "actor:102001:public-form:exit-star-carry:no-direct-three-value-settlement"
@@ -99937,7 +99359,35 @@
       "rawRecordCount": 1
     },
     {
-      "recordIdentity": "semantic-gap:f81d3a28e18f695f5ef8",
+      "recordIdentity": "semantic-gap:3e3931ccc1647db203b7",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2",
+      "sourceIdentities": [
+        "battle-effect:10200149:2:-6692507629448266222:-1233293849804381475:2"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200149|2|elements|2|-6692507629448266222|element:-6692507629448266222|2|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:4292f4abce26f458b0b5",
       "ownerId": 102001,
       "sourceKind": "effect",
       "status": "static-evidence-gap",
@@ -99945,23 +99395,620 @@
       "reasons": [
         "property-formula-not-literal-function-5"
       ],
-      "sourceIdentity": "battle-effect:10200142:0:-1431178473602126937:6721561265250368687:32",
+      "sourceIdentity": "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32",
       "sourceIdentities": [
-        "battle-effect:10200142:0:-1431178473602126937:-3154738711872734033:54",
-        "battle-effect:10200142:0:-1431178473602126937:6721561265250368687:32"
+        "battle-effect:10200142:1:-2918223944459599332:2425403009031392918:32",
+        "battle-effect:10200142:1:-2918223944459599332:6795403234150960790:54"
       ],
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
-        "effect:10200142|0|elements|5|2420913130100391591|element:-1431178473602126937|32|1",
-        "effect:10200142|0|elements|5|2420913130100391591|element:-1431178473602126937|54|0"
+        "effect:10200142|1|elements|5|2420913130100391591|element:-2918223944459599332|32|0",
+        "effect:10200142|1|elements|5|2420913130100391591|element:-2918223944459599332|54|1"
       ],
       "rawRecordCount": 2
     },
     {
-      "recordIdentity": "semantic-gap:f92b0902602b3d4201e3",
+      "recordIdentity": "semantic-gap:42cea2bf34ce3fabc2b1",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31",
+      "sourceIdentities": [
+        "battle-effect:10200111:0:2656940470186060328:-579672951247458919:31"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200111|0|elements|3|2656940470186060328|element:2656940470186060328|31|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:4d46a7890a0c2ac1c305",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200105:0:1837964535882290130:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001005.asset/MonoBehaviour/ast_102001005__1837964535882290130.json#elementConfigId=102001005|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
+      "sourceIdentities": [
+        "battle-effect:10200105:0:1837964535882290130:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001005.asset/MonoBehaviour/ast_102001005__1837964535882290130.json#elementConfigId=102001005|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200105|0|elements|2|1837964535882290130|20|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:52be23b7856c44f348e0",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200105:0:1474042154774785480:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
+      "sourceIdentities": [
+        "battle-effect:10200105:0:1474042154774785480:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200105|0|elements|3|7991633998808797407|element:1474042154774785480|20|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:58db0e695bd71b3fc35a",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200105:0:-4529113272733101309:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
+      "sourceIdentities": [
+        "battle-effect:10200105:0:-4529113272733101309:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200105|0|elements|3|7991633998808797407|element:-4529113272733101309|20|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:6f82d3687bb2443e62bf",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200105:0:7991633998808797407:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
+      "sourceIdentities": [
+        "battle-effect:10200105:0:7991633998808797407:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200105|0|elements|3|7991633998808797407|20|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:7538f1426bff8a54a9b7",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0",
+      "sourceIdentities": [
+        "battle-effect:10200114:0:5425475631875380505:-7820862648944242593:0"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200114|0|elements|1|932273171195257594|element:5425475631875380505|0|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:79758c7919971e48b518",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200113:0:3418108144318934934:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200113:0:3418108144318934934:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200113|0|elements|11|3418108144318934934|243|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:86193615d4c36ffcd1c4",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200113:0:-1376346479596612847:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200113:0:-1376346479596612847:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200113|0|elements|11|3418108144318934934|element:-1376346479596612847|243|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:891540f9c8a04fd7cc37",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0",
+      "sourceIdentities": [
+        "battle-effect:10200124:0:5425475631875380505:8167106927727813035:0"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200124|0|elements|0|932273171195257594|element:5425475631875380505|0|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:8b121cff18538f3865cc",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200113:0:3453877457087294926:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200113:0:3453877457087294926:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200113|0|elements|11|3418108144318934934|element:3453877457087294926|243|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:8de84a78d1458113b1b6",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32",
+      "sourceIdentities": [
+        "battle-effect:10200110:2:-1431178473602126937:-523421723499752879:53",
+        "battle-effect:10200110:2:-1431178473602126937:1071844546613940817:32"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200110|2|elements|5|2420913130100391591|element:-1431178473602126937|32|1",
+        "effect:10200110|2|elements|5|2420913130100391591|element:-1431178473602126937|53|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:8e5f6b494dd50bb5c6db",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32",
+      "sourceIdentities": [
+        "battle-effect:10200110:2:-2918223944459599332:-523421723499752879:53",
+        "battle-effect:10200110:2:-2918223944459599332:1071844546613940817:32"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200110|2|elements|5|2420913130100391591|element:-2918223944459599332|32|1",
+        "effect:10200110|2|elements|5|2420913130100391591|element:-2918223944459599332|53|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:96786266c4e21ffb9627",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32",
+      "sourceIdentities": [
+        "battle-effect:10200142:1:-1431178473602126937:2425403009031392918:32",
+        "battle-effect:10200142:1:-1431178473602126937:6795403234150960790:54"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200142|1|elements|5|2420913130100391591|element:-1431178473602126937|32|0",
+        "effect:10200142|1|elements|5|2420913130100391591|element:-1431178473602126937|54|1"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:a021699cda3ea2c7f662",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "stack-lifecycle-runtime-unimplemented"
+      ],
+      "sourceIdentity": "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32",
+      "sourceIdentities": [
+        "battle-effect:10200142:1:-4539090972426934065:2425403009031392918:32",
+        "battle-effect:10200142:1:-4539090972426934065:6795403234150960790:54"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200142|1|elements|5|2420913130100391591|element:-4539090972426934065|32|0",
+        "effect:10200142|1|elements|5|2420913130100391591|element:-4539090972426934065|54|1"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:a17e227082d5557fff15",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2",
+      "sourceIdentities": [
+        "battle-effect:10200149:0:-6692507629448266222:-8758344209231643942:2"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200149|0|elements|2|-6692507629448266222|element:-6692507629448266222|2|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:b7e57b3b40f0b773dedc",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "stack-lifecycle-runtime-unimplemented"
+      ],
+      "sourceIdentity": "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32",
+      "sourceIdentities": [
+        "battle-effect:10200110:2:-4539090972426934065:-523421723499752879:53",
+        "battle-effect:10200110:2:-4539090972426934065:1071844546613940817:32"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200110|2|elements|5|2420913130100391591|element:-4539090972426934065|32|1",
+        "effect:10200110|2|elements|5|2420913130100391591|element:-4539090972426934065|53|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:bf5166b3ff168f5dc4a3",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32",
+      "sourceIdentities": [
+        "battle-effect:10200142:0:-2918223944459599332:-3154738711872734033:54",
+        "battle-effect:10200142:0:-2918223944459599332:6721561265250368687:32"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200142|0|elements|5|2420913130100391591|element:-2918223944459599332|32|1",
+        "effect:10200142|0|elements|5|2420913130100391591|element:-2918223944459599332|54|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:c4745610a738d1f33643",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "static-evidence-gap",
+      "impactClassification": "gameplay-impacting",
+      "reasons": [
+        "stack-lifecycle-runtime-unimplemented"
+      ],
+      "sourceIdentity": "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32",
+      "sourceIdentities": [
+        "battle-effect:10200142:0:-4539090972426934065:-3154738711872734033:54",
+        "battle-effect:10200142:0:-4539090972426934065:6721561265250368687:32"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200142|0|elements|5|2420913130100391591|element:-4539090972426934065|32|1",
+        "effect:10200142|0|elements|5|2420913130100391591|element:-4539090972426934065|54|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:d1297f0dd577b231f8f1",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200112:0:3418108144318934934:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200112:0:3418108144318934934:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200112|0|elements|0|3418108144318934934|1|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:da5439578bbe1d8e7271",
+      "ownerId": 102001,
+      "sourceKind": "scenario-boundary",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "passive-boss-does-not-produce-required-defense-events",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#dodge,plunge,perfect-defense,limit-counter-preserved-but-not-stimulated",
+      "sourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#dodge,plunge,perfect-defense,limit-counter-preserved-but-not-stimulated"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": {
+        "controlSkillIds": [
+          10200111,
+          10200115,
+          10200125,
+          10200127,
+          10200161
+        ]
+      },
+      "rawRecordIdentities": [
+        "actor:102001:scenario:dedicated-defense-and-movement-actions"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:e6366d5feecfdf539a85",
       "ownerId": 102001,
       "sourceKind": "passive-or-skill",
       "status": "not-applicable",
@@ -99976,9 +100023,160 @@
       "referenceKinds": [],
       "sourceEvidenceStatuses": [],
       "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
       "metadata": null,
       "rawRecordIdentities": [
         "actor:102001:skill:10200161"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:e91d6c51165d833a0df3",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200112:0:-1376346479596612847:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200112:0:-1376346479596612847:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200112|0|elements|0|3418108144318934934|element:-1376346479596612847|1|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:e9b0c2b25c5c41f91f45",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "perfect-defense-state-required-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200105:0:-8148787786042882084:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite",
+      "sourceIdentities": [
+        "battle-effect:10200105:0:-8148787786042882084:-4997239008310081901:20|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200105|0|elements|3|7991633998808797407|element:-8148787786042882084|20|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:eef594a047cc39246c61",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200112:0:-2035055823451510697:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200112:0:-2035055823451510697:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200112|0|elements|0|3418108144318934934|element:-2035055823451510697|1|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:fbccd1d504bad18d6493",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200113:0:-2035055823451510697:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200113:0:-2035055823451510697:-9099779021348353365:243|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200113|0|elements|11|3418108144318934934|element:-2035055823451510697|243|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:fd31953622cfe8199dca",
+      "ownerId": 102001,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "enemy-hit-driven-perfect-defense-branch-not-applicable-in-passive-boss-scenario",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:10200112:0:3453877457087294926:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
+      "sourceIdentities": [
+        "battle-effect:10200112:0:3453877457087294926:4184090208652367294:1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:10200112|0|elements|0|3418108144318934934|element:3453877457087294926|1|0"
       ],
       "rawRecordCount": 1
     }
@@ -99986,7 +100184,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "d637292e87f207a26008c3884df91282d80aab187da7e3d529af008de99a501c"
+    "deterministicInputHash": "564d8c8fe8be7cc61998a51e12d1c444a5cdc5562cdb2ed1c61aabbddf73f889"
   },
-  "profileHash": "480be30bba208da604cda39529cb74582b1370e2b35a8e1a97032b5238a22074"
+  "profileHash": "f6bf3898f9d7eefa00dd2beceb8fc3ce71273ad051eb97e29a586ba190c31976"
 }

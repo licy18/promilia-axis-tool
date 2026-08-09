@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "dc3b4f59d3c7c4bb",
+  "rosterHash": "2874d96e5dec6511",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "812fbf721f9b896f"
+          "a196e798f64ad81b"
         ]
       },
-      "manifestHash": "a17208f23a97ec51"
+      "manifestHash": "34cf78a04debfc72"
     },
     {
       "objectKind": "character",
@@ -41,17 +41,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           102001
         ],
         "mechanismHash": "5b81beb6a20b273f",
         "characterAcceptanceManifestHashes": [
-          "00ed32876483fb1e"
+          "b0a02416fe41eee0"
         ]
       },
-      "manifestHash": "3998839e03d0a795"
+      "manifestHash": "d7dd2367ea82af46"
     },
     {
       "objectKind": "character",
@@ -75,10 +81,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "1cd23d86dd943df6"
+          "6bbdf6b15fbcc4ab"
         ]
       },
-      "manifestHash": "14166de8106c04f1"
+      "manifestHash": "5fd5fedfbbb4d61b"
     },
     {
       "objectKind": "character",
@@ -102,10 +108,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "9c428f06d9390fd3"
+          "6c5bb282225b2668"
         ]
       },
-      "manifestHash": "0e8b05e784f06540"
+      "manifestHash": "fe83cfe11b182ef3"
     },
     {
       "objectKind": "character",
@@ -116,17 +122,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           107002
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "6cae9c6f98f3edcf"
+          "6046877fc58ee489"
         ]
       },
-      "manifestHash": "bf6b4fd24c968747"
+      "manifestHash": "888f4cdd03acfdaf"
     },
     {
       "objectKind": "character",
@@ -137,17 +149,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           108003
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "9edddca050cb88dd"
+          "bfc9b577ff7fe659"
         ]
       },
-      "manifestHash": "5797c79961fd721a"
+      "manifestHash": "fb24c9e3deaf5d8b"
     },
     {
       "objectKind": "character",
@@ -158,17 +176,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           109001
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "aaaf661e1d50aa1b"
+          "3a5c349848a02506"
         ]
       },
-      "manifestHash": "09c69929020b229e"
+      "manifestHash": "72350d8466a5663a"
     },
     {
       "objectKind": "character",
@@ -30880,5 +30904,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "6cb34851121b6bee"
+  "manifestsHash": "dcadf46c0137b6ec"
 }

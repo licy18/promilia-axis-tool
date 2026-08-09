@@ -794,15 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "abf6ef4da2e1428e",
-      "sourceOfTruthHash": "9e173ef873bd6876",
+      "manifestHash": "e48869c74b7cefda",
+      "sourceOfTruthHash": "597813ca1590e929",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "b41d527f81ffc7c5",
-        "data": "1bda6b2d8b2ae1aa",
-        "trace": "ef8ae49f3575f873",
+        "input": "57b10936500878ee",
+        "data": "b440bc9b4b54b129",
+        "trace": "585e03009581cd25",
         "evaluation": "53eb57b729f3a7e6",
-        "build": "02a5adf9d3016b68"
+        "build": "de54117de767da8c"
       }
     },
     {
@@ -815,20 +815,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 129,
+      "blockingLedgerCount": 128,
       "sourceGapCount": 72,
-      "acceptanceGapCount": 57,
+      "acceptanceGapCount": 56,
       "nonBlockingSourceCount": 90,
       "matrix": {
         "requirementCount": 382,
         "requiredCount": 255,
-        "passedCount": 148,
-        "blockedCount": 107,
+        "passedCount": 149,
+        "blockedCount": 106,
         "notApplicableCount": 127,
         "statusCounts": {
-          "blocked": 107,
+          "blocked": 106,
           "not-applicable": 127,
-          "passed": 148
+          "passed": 149
         },
         "dimensionCounts": {
           "action-form": 21,
@@ -856,23 +856,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "812fbf721f9b896f",
-      "sourceOfTruthHash": "4d08d010c248edaa",
+      "manifestHash": "a196e798f64ad81b",
+      "sourceOfTruthHash": "9e2d18164edf42f3",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "4eff2ba18c8ae0ce",
-        "data": "ac061593f2df062e",
-        "trace": "02d02392f8c3f731",
+        "input": "f147e78096d4d20b",
+        "data": "3b8bb557372914b5",
+        "trace": "74b9d24b5c31017a",
         "evaluation": "204c04b2ab3f5fb4",
-        "build": "676136dd831bc1d9"
+        "build": "8ebacaa2ebddd168"
       }
     },
     {
       "ownerId": 102001,
       "ownerName": "莉莉",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -912,15 +914,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "00ed32876483fb1e",
-      "sourceOfTruthHash": "48b6acc0e24d32ce",
+      "manifestHash": "b0a02416fe41eee0",
+      "sourceOfTruthHash": "5892d8b1a434612b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "fec9db64f396e332",
-        "data": "db8ad0b36c763d27",
-        "trace": "b39eb87119696631",
+        "input": "9855ed5c17054ced",
+        "data": "832053fbd0b79614",
+        "trace": "b7c743e23f9fd15b",
         "evaluation": "f509878645099689",
-        "build": "b4e0a1ed87ab84df"
+        "build": "81992075fe892579"
       }
     },
     {
@@ -933,20 +935,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 231,
+      "blockingLedgerCount": 232,
       "sourceGapCount": 71,
-      "acceptanceGapCount": 160,
+      "acceptanceGapCount": 161,
       "nonBlockingSourceCount": 297,
       "matrix": {
         "requirementCount": 696,
-        "requiredCount": 588,
-        "passedCount": 170,
-        "blockedCount": 418,
-        "notApplicableCount": 108,
+        "requiredCount": 335,
+        "passedCount": 168,
+        "blockedCount": 167,
+        "notApplicableCount": 361,
         "statusCounts": {
-          "blocked": 418,
-          "not-applicable": 108,
-          "passed": 170
+          "blocked": 167,
+          "not-applicable": 361,
+          "passed": 168
         },
         "dimensionCounts": {
           "action-effect-binding": 3,
@@ -975,15 +977,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "1cd23d86dd943df6",
-      "sourceOfTruthHash": "d7ceeda3f7d683f2",
+      "manifestHash": "6bbdf6b15fbcc4ab",
+      "sourceOfTruthHash": "a64d6fffafd61acd",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "73e7970ab177b4f9",
-        "data": "0b1abd6249b310f8",
-        "trace": "0682c3e6c84edb94",
+        "input": "ea69464c7f73a0b4",
+        "data": "8877ff0d3b4793e3",
+        "trace": "29a4e607e16717b3",
         "evaluation": "208849308c4ec837",
-        "build": "ea8ebee0269ac9b9"
+        "build": "a5a95604d772815d"
       }
     },
     {
@@ -992,24 +994,21 @@
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
+        "acceptance-product-visual-signoff-pending"
       ],
-      "blockingLedgerCount": 108,
-      "sourceGapCount": 63,
-      "acceptanceGapCount": 45,
-      "nonBlockingSourceCount": 53,
+      "blockingLedgerCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "nonBlockingSourceCount": 116,
       "matrix": {
-        "requirementCount": 265,
-        "requiredCount": 127,
-        "passedCount": 40,
-        "blockedCount": 87,
-        "notApplicableCount": 138,
+        "requirementCount": 266,
+        "requiredCount": 86,
+        "passedCount": 86,
+        "blockedCount": 0,
+        "notApplicableCount": 180,
         "statusCounts": {
-          "blocked": 87,
-          "not-applicable": 138,
-          "passed": 40
+          "not-applicable": 180,
+          "passed": 86
         },
         "dimensionCounts": {
           "action-effect-binding": 2,
@@ -1022,6 +1021,7 @@
           "effect": 94,
           "hit": 37,
           "hit-override": 1,
+          "input-timing": 1,
           "passive": 1,
           "persistence-replay": 1,
           "public-action": 10,
@@ -1037,23 +1037,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9c428f06d9390fd3",
-      "sourceOfTruthHash": "0cd950e64d5c7c71",
+      "manifestHash": "6c5bb282225b2668",
+      "sourceOfTruthHash": "7f43f2864d89e57a",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "a7e500416367f1a2",
-        "data": "65e43de4a7e69424",
-        "trace": "d7ba6623ea11f42c",
-        "evaluation": "2cfbca381aa12bae",
-        "build": "9ed55171558ff5f4"
+        "input": "cc6d34edb146795e",
+        "data": "dc5a135a8f76f994",
+        "trace": "fea5d9b565c7fb42",
+        "evaluation": "2c0c08d984a44393",
+        "build": "81ea513bae697b02"
       }
     },
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1090,23 +1092,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6cae9c6f98f3edcf",
-      "sourceOfTruthHash": "78ff7d5a6c065bbc",
+      "manifestHash": "6046877fc58ee489",
+      "sourceOfTruthHash": "60d2fbb446ef0999",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "04a3403fb285d620",
-        "data": "0aded1e3190664b4",
-        "trace": "5855a8ab4fb3d5ba",
+        "input": "97373dec94e398af",
+        "data": "53a3caff8a4d6807",
+        "trace": "eb19cdb36f308850",
         "evaluation": "620d8da34c9edd60",
-        "build": "ae506f8da05bccf5"
+        "build": "b9dd3fc1a3fa1a5f"
       }
     },
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1147,23 +1151,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9edddca050cb88dd",
-      "sourceOfTruthHash": "91e0c60b2fbc3739",
+      "manifestHash": "bfc9b577ff7fe659",
+      "sourceOfTruthHash": "908652fdbc06691a",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "9f718baee33657d3",
-        "data": "1ad44128a8a5bd20",
-        "trace": "a75ad5e2bff422a3",
+        "input": "aff5191ffb37e196",
+        "data": "d4db176176ebd09b",
+        "trace": "aeccd313e0454208",
         "evaluation": "3c2fb1d6fda5e7b9",
-        "build": "454dcafa1444a828"
+        "build": "63de7bb1f05cfbb8"
       }
     },
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1203,33 +1209,33 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "aaaf661e1d50aa1b",
-      "sourceOfTruthHash": "75f95f50279203d2",
+      "manifestHash": "3a5c349848a02506",
+      "sourceOfTruthHash": "84de9d6788014d0f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "f12e0fa80af271ba",
-        "data": "aea5f24e5281c37a",
-        "trace": "413ff7733e747c50",
+        "input": "90dc587bb8e9a311",
+        "data": "8bda8706dd24d259",
+        "trace": "c757c39709a05c0d",
         "evaluation": "855dd5b0926bf110",
-        "build": "c5f9d705a71184a8"
+        "build": "70ea3b63075960f3"
       }
     }
   ],
-  "catalogHash": "a8035b08e2fd9e41",
-  "manifestIndexHash": "fa0526ab5e7e3bf7",
+  "catalogHash": "25dbcb2e1ba192c4",
+  "manifestIndexHash": "99ab3266d2af0ccb",
   "summary": {
     "ownerCount": 8,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 8,
-    "visuallyAcceptedCount": 4,
-    "optimizationReadyCount": 4,
+    "visuallyAcceptedCount": 0,
+    "optimizationReadyCount": 0,
     "machineScenarioPassCount": 8,
     "workbenchRoundTripPassCount": 8,
-    "sourceGapCount": 219,
-    "acceptanceGapCount": 277,
-    "nonBlockingSourceCount": 599,
-    "functionalBlockers": 496,
+    "sourceGapCount": 156,
+    "acceptanceGapCount": 232,
+    "nonBlockingSourceCount": 662,
+    "functionalBlockers": 388,
     "performanceAndBundleRisksBlocking": false
   }
 }
