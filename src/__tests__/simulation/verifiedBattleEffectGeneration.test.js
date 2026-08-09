@@ -756,6 +756,10 @@ function createFireKiboScenario() {
       }),
     ],
     initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${OWNER_CHARACTER_ID}`,
+        characterId: OWNER_CHARACTER_ID,
+      },
       kiboEnergyBySlot: [
         {
           slotId: 'team-slot-3',

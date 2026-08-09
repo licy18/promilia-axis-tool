@@ -1417,9 +1417,13 @@ describe('verified soul essence effect generation', () => {
     });
 
     const simulate = star => {
-      const teamSlots = createDefaultWorkbenchTeamSlots();
+      const selection = {
+        ...DEFAULT_WORKBENCH_SELECTION,
+        characterId: OWNER_ID,
+      };
+      const teamSlots = createDefaultWorkbenchTeamSlots(selection);
       const actorConfigs = createDefaultWorkbenchActorConfigs(
-        DEFAULT_WORKBENCH_SELECTION
+        selection
       ).map(config =>
         Number(config.characterId) === OWNER_ID
           ? {
@@ -1444,7 +1448,7 @@ describe('verified soul essence effect generation', () => {
             }
           : config
       );
-      const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      const project = createWorkbenchProject(selection, {
         durationMs: 12_000,
         teamSlots,
         actorConfigs,
@@ -1768,6 +1772,13 @@ describe('verified soul essence effect generation', () => {
         actionKind: 'ultimate',
         actorCharacterId: ownerCharacterId,
         startFrame: ultimateStartFrame,
+      },
+      {
+        id: 'switch-to-teammate-for-critical-check',
+        actionKind: 'switch',
+        sourceCharacterId: ownerCharacterId,
+        targetCharacterId: 101010,
+        startFrame: 400,
       },
       {
         id: 'teammate-critical-active',
@@ -4298,10 +4309,17 @@ describe('verified soul essence effect generation', () => {
       teamCharacterIds: [101010, 111001, 101003],
       actions: [
         {
+          id: 'c6-10150-switch-to-wrong-source',
+          actionKind: 'switch',
+          sourceCharacterId: 101010,
+          targetCharacterId: 111001,
+          startFrame: 30,
+        },
+        {
           id: 'c6-10150-wrong-source-wind-packet',
           actionKind: 'normal-attack',
           actorCharacterId: 111001,
-          startFrame: 60,
+          startFrame: 400,
           controlSubSkillIndex: 4,
         },
       ],
@@ -10698,12 +10716,13 @@ function createRealSoulScenario({
       ? Number(requested.startFrame)
       : startFrame;
     if (requested.actionKind === 'switch') {
-      const action = createSwitchAction({
+      const action = createWorkbenchActionDraft({
         id: requested.id,
-        actorId: `actor-${requested.sourceCharacterId}`,
-        targetActorId: `actor-${requested.targetCharacterId}`,
+        type: 'switch',
+        actorCharacterId: requested.sourceCharacterId,
         targetCharacterId: requested.targetCharacterId,
         startMs: frameToMs(requestedStartFrame),
+        durationMs: 0,
         hitOverrides: requested.hitOverrides ?? null,
       });
       startFrame = requestedStartFrame;
