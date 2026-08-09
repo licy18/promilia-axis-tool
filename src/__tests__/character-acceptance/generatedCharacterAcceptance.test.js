@@ -168,8 +168,11 @@ describe('generated character acceptance manifests', () => {
       const productAccepted = [102001, 107001, 108003, 109001].includes(
         ownerId
       );
+      const functionallyComplete =
+        manifest.matrix.summary.blockedCount === 0 &&
+        manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
-        ? '76339c4c55664ba3e686f307aa2ec5c351a16315'
+        ? 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
       const runtimeIntegrated = true;
       expect(manifest.maturity).toMatchObject({
@@ -211,7 +214,7 @@ describe('generated character acceptance manifests', () => {
       ]);
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
-      } else if ([103002, 107002].includes(ownerId)) {
+      } else if (functionallyComplete) {
         expect(manifest.maturity.blockers).toEqual([
           'acceptance-product-visual-signoff-pending',
         ]);
