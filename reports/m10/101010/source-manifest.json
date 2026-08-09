@@ -4,10 +4,10 @@
   "ownerId": 101010,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a"
+    "packageHash": "4382953b0c8852b4089ed2e144e4bf7d5442830d0346dd8b7a4da4779a0de63b"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/101010.json",
-  "recipeHash": "9760cff46461f907e8957d4926b05c14d0fa5a16636209f6087d9707c04310e3",
+  "recipeHash": "f644079497d16b0f5e2d1c6719292bbf0be866c6713565564ff906d59f0bdd75",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -324,6 +324,20 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/101010/SubSkill/ast_17351310762410000.asset/MonoBehaviour/ast_17351310762410000__-7028791948042892760.json#startFrame|directInjectTargetType",
       "identityHash": "bf63d65d8e9b3df65856220a8ad0d65d6bf40dce65b16e7b0771d051f25d39f7",
       "sourceKind": "other",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106#function_2=3;A=6000;shareType=1;stopSharing=0",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106#function_2=3;A=6000;shareType=1;stopSharing=0",
+      "identityHash": "0e8cdf8c0fa7fb8cdb7ba7cfabf106c4988a1a77029aa36e42c59cca5d864abf",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|skill_control_10101004.asset#skillResourceMaps[0].elements[0]=101010106;bulletElements[0]=101010106;bulletElements[1]=101010107|ast_bullet_101010001.asset#collision->summon101010002|ast_bullet_101010002.asset#collision->element101010107|ast_101010106.asset#formulaFunction2=3;A=6000;shareType=1",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|skill_control_10101004.asset#skillResourceMaps[0].elements[0]=101010106;bulletElements[0]=101010106;bulletElements[1]=101010107|ast_bullet_101010001.asset#collision->summon101010002|ast_bullet_101010002.asset#collision->element101010107|ast_101010106.asset#formulaFunction2=3;A=6000;shareType=1",
+      "identityHash": "6604e6956a94ae3cf74ff1fd82f628f9ee0727cf0f3b8eed80893c8f62506db2",
+      "sourceKind": "skill-control",
       "status": "evidence-indexed"
     },
     {
@@ -8027,6 +8041,13 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "characters.items[id=101010].skillSlots[slot=201,skillId=10101021]|skill_control_10101021.asset#skillPlayers[0];skillResourceMaps[0]",
+      "sourceIdentity": "characters.items[id=101010].skillSlots[slot=201,skillId=10101021]|skill_control_10101021.asset#skillPlayers[0];skillResourceMaps[0]",
+      "identityHash": "95f645eb01051ba75a8c8483ffd5c8613d781f0f50210a3f7e30539d163f7c15",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "characters.items[id=101010].skillSlots[slot=203,skillId=10101021]",
       "sourceIdentity": "characters.items[id=101010].skillSlots[slot=203,skillId=10101021]",
       "identityHash": "faeaff84b851b0e46d12115c1939d9681daef27820e83cc7efa100553c562ebb",
@@ -8161,15 +8182,15 @@
     }
   ],
   "summary": {
-    "identityCount": 1120,
+    "identityCount": 1123,
     "sourceKindCounts": {
-      "battle-element": 36,
+      "battle-element": 37,
       "client-code": 4,
       "new-table": 55,
       "other": 181,
       "runtime-contract": 20,
-      "skill-control": 824
+      "skill-control": 826
     }
   },
-  "profileHash": "7261dd17730c12cd343e042fc8342be10eebf51394c5b57e7442f12aecf995c1"
+  "profileHash": "2c1891b30f502e8f8da12476df19d7ae286f83e62ad227e412775d14b199981d"
 }

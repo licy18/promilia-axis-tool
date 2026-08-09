@@ -1142,6 +1142,65 @@ describe('verified action variant and special resource runtime', () => {
     });
   });
 
+  it('binds a contextual input to its explicit predecessor across an interleaved action and fails closed without the identity', () => {
+    const source = createActorAction({
+      id: 'context-source-charged',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: 0,
+    });
+    const interleaved = createActorAction({
+      id: 'context-interleaved-normal',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      startMs: frameTime(80),
+      attackInput: JADE_A1,
+    });
+    const explicit = createActorAction({
+      id: 'context-explicit-continuous',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(99),
+      contextActionId: source.id,
+    });
+    const selected = runVariantRuntime({
+      actors: [source.actor],
+      actions: [source, interleaved, explicit],
+      durationMs: 8000,
+    });
+
+    expect(selected.selectionByActionId.get(explicit.id)).toMatchObject({
+      controlSkillId: 10101010,
+      selectedSubSkillIndex: 1,
+      semanticName: '连续重击',
+      sourceKind: 'verified-input-context-variant',
+      contextActionId: source.id,
+      contextualInputScheduling: {
+        inputOffsetFrame: 99,
+      },
+    });
+
+    const implicit = createActorAction({
+      id: 'context-implicit-default',
+      characterId: JADE_ID,
+      skillId: 10101001,
+      actionVariantIndex: 2,
+      startMs: frameTime(99),
+    });
+    const rejected = runVariantRuntime({
+      actors: [source.actor],
+      actions: [source, interleaved, implicit],
+      durationMs: 8000,
+    });
+    expect(rejected.selectionByActionId.get(implicit.id)).toMatchObject({
+      controlSkillId: 10101010,
+      selectedSubSkillIndex: 0,
+      semanticName: '普通重击',
+    });
+  });
+
   it.each([
     {
       label: '普通重击',
@@ -2476,6 +2535,7 @@ function createActorAction({
   attackSequenceIndex = null,
   attackInputIntent = null,
   variantInputSelection = null,
+  contextActionId = null,
 }) {
   const actor = {
     id: `actor-${characterId}`,
@@ -2495,6 +2555,7 @@ function createActorAction({
     durationMs: 1000,
     attackInputIntent,
     variantInputSelection,
+    ...(contextActionId ? { contextActionId } : {}),
     ...(attackInput
       ? {
           attackGroupId: `${id}-group`,

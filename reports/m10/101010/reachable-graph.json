@@ -1402,6 +1402,14 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101049.asset/MonoBehaviour/skill_control_10101049__-5945960915407495316.json#skillResourceMaps[1].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=101010176"
     },
     {
+      "nodeIdentity": "runtime-effect:xiaoyu-a4-zero-distance-hit-sp",
+      "nodeKind": "runtime-effect",
+      "effectId": "battle-element:101010106",
+      "targetKind": "source-actor",
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|skill_control_10101004.asset#skillResourceMaps[0].elements[0]=101010106;bulletElements[0]=101010106;bulletElements[1]=101010107|ast_bullet_101010001.asset#collision->summon101010002|ast_bullet_101010002.asset#collision->element101010107|ast_101010106.asset#formulaFunction2=3;A=6000;shareType=1"
+    },
+    {
       "nodeIdentity": "state:101010129",
       "nodeKind": "state",
       "durationMs": 10000,
@@ -2006,6 +2014,15 @@
       "from": "control:10101004:sub:0",
       "to": "hit:10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:2649223868158596704|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0",
       "relation": "emits-hit"
+    },
+    {
+      "edgeIdentity": "control:10101004:sub:0->triggers-runtime-effect->runtime-effect:xiaoyu-a4-zero-distance-hit-sp",
+      "from": "control:10101004:sub:0",
+      "to": "runtime-effect:xiaoyu-a4-zero-distance-hit-sp",
+      "relation": "triggers-runtime-effect",
+      "triggerFrame": 10,
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101010106.asset/MonoBehaviour/ast_101010106__3408929118427374243.json#elementConfigId=101010106|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/skill_control_10101004__-6478750490406546168.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#elementConfigId=101010107|skill_control_10101004.asset#skillResourceMaps[0].elements[0]=101010106;bulletElements[0]=101010106;bulletElements[1]=101010107|ast_bullet_101010001.asset#collision->summon101010002|ast_bullet_101010002.asset#collision->element101010107|ast_101010106.asset#formulaFunction2=3;A=6000;shareType=1"
     },
     {
       "edgeIdentity": "control:10101004:sub:1->emits-hit->hit:10101004|1|elements|0|-7672362046032568081|13|2",
@@ -3241,8 +3258,8 @@
     }
   ],
   "summary": {
-    "nodeCount": 192,
-    "edgeCount": 218,
+    "nodeCount": 193,
+    "edgeCount": 219,
     "controlCount": 20,
     "exclusionCount": 6,
     "nodeKindCounts": {
@@ -3253,6 +3270,7 @@
       "passive-listener": 1,
       "personal-resource": 1,
       "public-action": 10,
+      "runtime-effect": 1,
       "state": 1,
       "switch-trigger": 1
     },
@@ -3269,8 +3287,9 @@
       "resource-transform": 2,
       "resource-transform-remove": 1,
       "threshold-transform": 1,
-      "triggers-passive": 8
+      "triggers-passive": 8,
+      "triggers-runtime-effect": 1
     }
   },
-  "profileHash": "7261dd17730c12cd343e042fc8342be10eebf51394c5b57e7442f12aecf995c1"
+  "profileHash": "2c1891b30f502e8f8da12476df19d7ae286f83e62ad227e412775d14b199981d"
 }

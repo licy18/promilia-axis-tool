@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-a:101010:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a",
+  "sourcePackageHash": "4382953b0c8852b4089ed2e144e4bf7d5442830d0346dd8b7a4da4779a0de63b",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "1cb0dc52e1e9d8eb",
-    "traceHash": "d3fb975ebbe19a2f",
-    "dataHash": "5d90dbc6e5ed73a6",
+    "inputHash": "a12375a3f5054134",
+    "traceHash": "b29e35a091e83882",
+    "dataHash": "5c3b728c03a9c977",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -828,9 +828,9 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 20.691101,
+          "currentValue": 21.891052,
           "maxValue": 100,
-          "eventCount": 1255,
+          "eventCount": 1259,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -1187,106 +1187,138 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 10.521499,
+              "change": 0.299988,
+              "afterValue": 10.821487
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.5215,
+              "beforeValue": 10.821487,
               "change": 0.125,
-              "afterValue": 10.6465
+              "afterValue": 10.946487
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 10.956894,
+              "change": 0.299988,
+              "afterValue": 11.256882
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.656906,
+              "beforeValue": 11.256882,
               "change": 0.125,
-              "afterValue": 10.781906
+              "afterValue": 11.381882
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 11.392288,
+              "change": 0.299988,
+              "afterValue": 11.692276
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.792313,
+              "beforeValue": 11.692276,
               "change": 0.125,
-              "afterValue": 10.917313
+              "afterValue": 11.817276
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 11.817276,
+              "change": 0.299988,
+              "afterValue": 12.117264
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.917313,
+              "beforeValue": 12.117264,
               "change": 0.125,
-              "afterValue": 11.042313
+              "afterValue": 12.242264
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.115158,
+              "beforeValue": 12.315109,
               "change": 0.074997,
-              "afterValue": 11.190155
+              "afterValue": 12.390106
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.376922,
+              "beforeValue": 12.576873,
               "change": 0.184998,
-              "afterValue": 11.56192
+              "afterValue": 12.761871
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.56192,
+              "beforeValue": 12.761871,
               "change": 0.184998,
-              "afterValue": 11.746918
+              "afterValue": 12.946869
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.00708,
+              "beforeValue": 13.207031,
               "change": 0.179993,
-              "afterValue": 12.187073
+              "afterValue": 13.387024
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.249511,
+              "beforeValue": 13.449463,
               "change": 0.179993,
-              "afterValue": 12.429504
+              "afterValue": 13.629456
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.637634,
+              "beforeValue": 13.837585,
               "change": 0.184998,
-              "afterValue": 12.822632
+              "afterValue": 14.022583
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.822631,
+              "beforeValue": 14.022583,
               "change": 0.184998,
-              "afterValue": 13.007629
+              "afterValue": 14.207581
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.288605,
+              "beforeValue": 14.488556,
               "change": 0.084991,
-              "afterValue": 13.373596
+              "afterValue": 14.573547
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.477662,
+              "beforeValue": 14.677613,
               "change": 0.084991,
-              "afterValue": 13.562653
+              "afterValue": 14.762604
             }
           ]
         },
@@ -1295,9 +1327,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 35.418732,
+          "currentValue": 37.818695,
           "maxValue": 100,
-          "eventCount": 1181,
+          "eventCount": 1185,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -1526,114 +1558,146 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 13.067306,
+              "change": 0.599991,
+              "afterValue": 13.667297
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.067307,
+              "beforeValue": 13.667297,
               "change": 0.25,
-              "afterValue": 13.317307
+              "afterValue": 13.917297
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 13.938125,
+              "change": 0.599991,
+              "afterValue": 14.538116
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.338135,
+              "beforeValue": 14.538116,
               "change": 0.25,
-              "afterValue": 13.588135
+              "afterValue": 14.788116
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 14.808945,
+              "change": 0.599991,
+              "afterValue": 15.408936
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.608963,
+              "beforeValue": 15.408936,
               "change": 0.25,
-              "afterValue": 13.858963
+              "afterValue": 15.658936
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 15.658935,
+              "change": 0.599991,
+              "afterValue": 16.258926
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.858963,
+              "beforeValue": 16.258926,
               "change": 0.25,
-              "afterValue": 14.108963
+              "afterValue": 16.508926
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.254761,
+              "beforeValue": 16.654724,
               "change": 0.149994,
-              "afterValue": 14.404755
+              "afterValue": 16.804718
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.778549,
+              "beforeValue": 17.178513,
               "change": 0.369995,
-              "afterValue": 15.148544
+              "afterValue": 17.548508
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 15.148544,
+              "beforeValue": 17.548508,
               "change": 0.369995,
-              "afterValue": 15.518539
+              "afterValue": 17.918503
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 15.518539,
+              "beforeValue": 17.918503,
               "change": 2,
-              "afterValue": 17.518539
+              "afterValue": 19.918503
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.039246,
+              "beforeValue": 20.439209,
               "change": 0.359985,
-              "afterValue": 18.399231
+              "afterValue": 20.799194
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.524201,
+              "beforeValue": 20.924164,
               "change": 0.359985,
-              "afterValue": 18.884186
+              "afterValue": 21.284149
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.300751,
+              "beforeValue": 21.700714,
               "change": 0.369995,
-              "afterValue": 19.670746
+              "afterValue": 22.070709
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.670746,
+              "beforeValue": 22.070709,
               "change": 0.369995,
-              "afterValue": 20.040741
+              "afterValue": 22.440704
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.603104,
+              "beforeValue": 23.003067,
               "change": 0.169998,
-              "afterValue": 20.773102
+              "afterValue": 23.173065
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.981384,
+              "beforeValue": 23.381348,
               "change": 0.169998,
-              "afterValue": 21.151382
+              "afterValue": 23.551346
             }
           ]
         },
@@ -1642,9 +1706,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 13.321472,
+          "currentValue": 14.521423,
           "maxValue": 100,
-          "eventCount": 952,
+          "eventCount": 956,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -1705,106 +1769,138 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
-              "reason": "verified-hit-sp-shared-recovery",
+              "reason": "verified-direct-sp-shared",
               "beforeValue": 3.151871,
+              "change": 0.299988,
+              "afterValue": 3.451859
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.451859,
               "change": 0.125,
-              "afterValue": 3.276871
+              "afterValue": 3.576859
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 3.587265,
+              "change": 0.299988,
+              "afterValue": 3.887253
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.287277,
+              "beforeValue": 3.887253,
               "change": 0.125,
-              "afterValue": 3.412277
+              "afterValue": 4.012253
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 4.022659,
+              "change": 0.299988,
+              "afterValue": 4.322647
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.422684,
+              "beforeValue": 4.322647,
               "change": 0.125,
-              "afterValue": 3.547684
+              "afterValue": 4.447647
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 4.447647,
+              "change": 0.299988,
+              "afterValue": 4.747635
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.547684,
+              "beforeValue": 4.747635,
               "change": 0.125,
-              "afterValue": 3.672684
+              "afterValue": 4.872635
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.745529,
+              "beforeValue": 4.94548,
               "change": 0.074997,
-              "afterValue": 3.820526
+              "afterValue": 5.020477
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.007293,
+              "beforeValue": 5.207244,
               "change": 0.184998,
-              "afterValue": 4.192291
+              "afterValue": 5.392242
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.192291,
+              "beforeValue": 5.392242,
               "change": 0.184998,
-              "afterValue": 4.377289
+              "afterValue": 5.57724
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.637451,
+              "beforeValue": 5.837402,
               "change": 0.179993,
-              "afterValue": 4.817444
+              "afterValue": 6.017395
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.879882,
+              "beforeValue": 6.079834,
               "change": 0.179993,
-              "afterValue": 5.059875
+              "afterValue": 6.259827
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.268005,
+              "beforeValue": 6.467956,
               "change": 0.184998,
-              "afterValue": 5.453003
+              "afterValue": 6.652954
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.453002,
+              "beforeValue": 6.652954,
               "change": 0.184998,
-              "afterValue": 5.638
+              "afterValue": 6.837952
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.918976,
+              "beforeValue": 7.118927,
               "change": 0.084991,
-              "afterValue": 6.003967
+              "afterValue": 7.203918
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 6.108033,
+              "beforeValue": 7.307984,
               "change": 0.084991,
-              "afterValue": 6.193024
+              "afterValue": 7.392975
             }
           ]
         }
@@ -2469,9 +2565,9 @@
           "actorId": "actor-101003",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 20.691101,
+          "currentValue": 21.891052,
           "maxValue": 100,
-          "eventCount": 1255,
+          "eventCount": 1259,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -2828,106 +2924,138 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 10.521499,
+              "change": 0.299988,
+              "afterValue": 10.821487
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.5215,
+              "beforeValue": 10.821487,
               "change": 0.125,
-              "afterValue": 10.6465
+              "afterValue": 10.946487
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 10.956894,
+              "change": 0.299988,
+              "afterValue": 11.256882
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.656906,
+              "beforeValue": 11.256882,
               "change": 0.125,
-              "afterValue": 10.781906
+              "afterValue": 11.381882
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 11.392288,
+              "change": 0.299988,
+              "afterValue": 11.692276
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.792313,
+              "beforeValue": 11.692276,
               "change": 0.125,
-              "afterValue": 10.917313
+              "afterValue": 11.817276
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 11.817276,
+              "change": 0.299988,
+              "afterValue": 12.117264
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 10.917313,
+              "beforeValue": 12.117264,
               "change": 0.125,
-              "afterValue": 11.042313
+              "afterValue": 12.242264
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.115158,
+              "beforeValue": 12.315109,
               "change": 0.074997,
-              "afterValue": 11.190155
+              "afterValue": 12.390106
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.376922,
+              "beforeValue": 12.576873,
               "change": 0.184998,
-              "afterValue": 11.56192
+              "afterValue": 12.761871
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 11.56192,
+              "beforeValue": 12.761871,
               "change": 0.184998,
-              "afterValue": 11.746918
+              "afterValue": 12.946869
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.00708,
+              "beforeValue": 13.207031,
               "change": 0.179993,
-              "afterValue": 12.187073
+              "afterValue": 13.387024
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.249511,
+              "beforeValue": 13.449463,
               "change": 0.179993,
-              "afterValue": 12.429504
+              "afterValue": 13.629456
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.637634,
+              "beforeValue": 13.837585,
               "change": 0.184998,
-              "afterValue": 12.822632
+              "afterValue": 14.022583
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 12.822631,
+              "beforeValue": 14.022583,
               "change": 0.184998,
-              "afterValue": 13.007629
+              "afterValue": 14.207581
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.288605,
+              "beforeValue": 14.488556,
               "change": 0.084991,
-              "afterValue": 13.373596
+              "afterValue": 14.573547
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 13.477662,
+              "beforeValue": 14.677613,
               "change": 0.084991,
-              "afterValue": 13.562653
+              "afterValue": 14.762604
             }
           ]
         },
@@ -2936,9 +3064,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 35.418732,
+          "currentValue": 37.818695,
           "maxValue": 100,
-          "eventCount": 1181,
+          "eventCount": 1185,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -3167,114 +3295,146 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 13.067306,
+              "change": 0.599991,
+              "afterValue": 13.667297
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.067307,
+              "beforeValue": 13.667297,
               "change": 0.25,
-              "afterValue": 13.317307
+              "afterValue": 13.917297
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 13.938125,
+              "change": 0.599991,
+              "afterValue": 14.538116
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.338135,
+              "beforeValue": 14.538116,
               "change": 0.25,
-              "afterValue": 13.588135
+              "afterValue": 14.788116
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 14.808945,
+              "change": 0.599991,
+              "afterValue": 15.408936
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.608963,
+              "beforeValue": 15.408936,
               "change": 0.25,
-              "afterValue": 13.858963
+              "afterValue": 15.658936
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp",
+              "beforeValue": 15.658935,
+              "change": 0.599991,
+              "afterValue": 16.258926
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 13.858963,
+              "beforeValue": 16.258926,
               "change": 0.25,
-              "afterValue": 14.108963
+              "afterValue": 16.508926
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.254761,
+              "beforeValue": 16.654724,
               "change": 0.149994,
-              "afterValue": 14.404755
+              "afterValue": 16.804718
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 14.778549,
+              "beforeValue": 17.178513,
               "change": 0.369995,
-              "afterValue": 15.148544
+              "afterValue": 17.548508
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 15.148544,
+              "beforeValue": 17.548508,
               "change": 0.369995,
-              "afterValue": 15.518539
+              "afterValue": 17.918503
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "tuning-overlimit-direct-sp",
-              "beforeValue": 15.518539,
+              "beforeValue": 17.918503,
               "change": 2,
-              "afterValue": 17.518539
+              "afterValue": 19.918503
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.039246,
+              "beforeValue": 20.439209,
               "change": 0.359985,
-              "afterValue": 18.399231
+              "afterValue": 20.799194
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 18.524201,
+              "beforeValue": 20.924164,
               "change": 0.359985,
-              "afterValue": 18.884186
+              "afterValue": 21.284149
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.300751,
+              "beforeValue": 21.700714,
               "change": 0.369995,
-              "afterValue": 19.670746
+              "afterValue": 22.070709
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 19.670746,
+              "beforeValue": 22.070709,
               "change": 0.369995,
-              "afterValue": 20.040741
+              "afterValue": 22.440704
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.603104,
+              "beforeValue": 23.003067,
               "change": 0.169998,
-              "afterValue": 20.773102
+              "afterValue": 23.173065
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 20.981384,
+              "beforeValue": 23.381348,
               "change": 0.169998,
-              "afterValue": 21.151382
+              "afterValue": 23.551346
             }
           ]
         },
@@ -3283,9 +3443,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 100,
-          "currentValue": 13.321472,
+          "currentValue": 14.521423,
           "maxValue": 100,
-          "eventCount": 952,
+          "eventCount": 956,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -3346,106 +3506,138 @@
             {
               "timeMs": 40200,
               "actionId": "normal-a4",
-              "reason": "verified-hit-sp-shared-recovery",
+              "reason": "verified-direct-sp-shared",
               "beforeValue": 3.151871,
+              "change": 0.299988,
+              "afterValue": 3.451859
+            },
+            {
+              "timeMs": 40200,
+              "actionId": "normal-a4",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 3.451859,
               "change": 0.125,
-              "afterValue": 3.276871
+              "afterValue": 3.576859
+            },
+            {
+              "timeMs": 40266.666667,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 3.587265,
+              "change": 0.299988,
+              "afterValue": 3.887253
             },
             {
               "timeMs": 40266.666666,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.287277,
+              "beforeValue": 3.887253,
               "change": 0.125,
-              "afterValue": 3.412277
+              "afterValue": 4.012253
+            },
+            {
+              "timeMs": 40333.333333,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 4.022659,
+              "change": 0.299988,
+              "afterValue": 4.322647
             },
             {
               "timeMs": 40333.333333,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.422684,
+              "beforeValue": 4.322647,
               "change": 0.125,
-              "afterValue": 3.547684
+              "afterValue": 4.447647
+            },
+            {
+              "timeMs": 40400,
+              "actionId": "normal-a4",
+              "reason": "verified-direct-sp-shared",
+              "beforeValue": 4.447647,
+              "change": 0.299988,
+              "afterValue": 4.747635
             },
             {
               "timeMs": 40400,
               "actionId": "normal-a4",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.547684,
+              "beforeValue": 4.747635,
               "change": 0.125,
-              "afterValue": 3.672684
+              "afterValue": 4.872635
             },
             {
               "timeMs": 41050,
               "actionId": "normal-a5",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 3.745529,
+              "beforeValue": 4.94548,
               "change": 0.074997,
-              "afterValue": 3.820526
+              "afterValue": 5.020477
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.007293,
+              "beforeValue": 5.207244,
               "change": 0.184998,
-              "afterValue": 4.192291
+              "afterValue": 5.392242
             },
             {
               "timeMs": 42750,
               "actionId": "normal-special-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.192291,
+              "beforeValue": 5.392242,
               "change": 0.184998,
-              "afterValue": 4.377289
+              "afterValue": 5.57724
             },
             {
               "timeMs": 45250,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.637451,
+              "beforeValue": 5.837402,
               "change": 0.179993,
-              "afterValue": 4.817444
+              "afterValue": 6.017395
             },
             {
               "timeMs": 45833.333333,
               "actionId": "jade-star-skill",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 4.879882,
+              "beforeValue": 6.079834,
               "change": 0.179993,
-              "afterValue": 5.059875
+              "afterValue": 6.259827
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.268005,
+              "beforeValue": 6.467956,
               "change": 0.184998,
-              "afterValue": 5.453003
+              "afterValue": 6.652954
             },
             {
               "timeMs": 47866.666666,
               "actionId": "jade-star-derived-charged",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.453002,
+              "beforeValue": 6.652954,
               "change": 0.184998,
-              "afterValue": 5.638
+              "afterValue": 6.837952
             },
             {
               "timeMs": 50516.666667,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 5.918976,
+              "beforeValue": 7.118927,
               "change": 0.084991,
-              "afterValue": 6.003967
+              "afterValue": 7.203918
             },
             {
               "timeMs": 51600,
               "actionId": "jade-perfect-parry",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 6.108033,
+              "beforeValue": 7.307984,
               "change": 0.084991,
-              "afterValue": 6.193024
+              "afterValue": 7.392975
             }
           ]
         }
@@ -4220,21 +4412,30 @@
           ]
         },
         "normal-a4": {
-          "eventCount": 4,
+          "eventCount": 8,
           "frames": [
             2412,
+            2412,
+            2416,
             2416,
             2420,
+            2420,
+            2424,
             2424
           ],
           "changes": [
+            0.599991,
             0.25,
+            0.599991,
             0.25,
+            0.599991,
             0.25,
+            0.599991,
             0.25
           ],
-          "totalChange": 1,
+          "totalChange": 3.399964,
           "reasons": [
+            "verified-direct-sp",
             "verified-hit-sp-recovery"
           ]
         },
@@ -4710,7 +4911,21 @@
           "reasons": []
         }
       },
-      "directSpSummaryByActionId": {},
+      "directSpSummaryByActionId": {
+        "normal-a4": {
+          "eventCount": 12,
+          "targetEventCount": 4,
+          "shareAllEventCount": 8,
+          "targetActorIds": [
+            "actor-101010"
+          ],
+          "sharedActorIds": [
+            "actor-101003",
+            "actor-103002"
+          ],
+          "totalChange": 4.799868
+        }
+      },
       "pickupSummary": {
         "profileCount": 4,
         "bindingCount": 12,
@@ -5424,11 +5639,11 @@
         "appliedActionHitConditionCount": 0,
         "suppressedActionHitConditionCount": 0,
         "effectCommandCount": 13,
-        "directSpEventCount": 0
+        "directSpEventCount": 4
       },
       "ownerDirectSp": {
-        "eventCount": 0,
-        "totalChange": 0
+        "eventCount": 4,
+        "totalChange": 2.399964
       },
       "thresholdClearCount": 1,
       "transformCount": 1,
@@ -16887,7 +17102,7 @@
         }
       ]
     },
-    "summaryHash": "958c452bb49ee3867f611aa182224034cbb180cf7d755e999ec86d59ccf47353"
+    "summaryHash": "58fdc14735eaabbe718655cb9bd84a72ae266ac46fef640a608a9d697a9bfc88"
   },
   "expected": {
     "exact": {
@@ -16967,7 +17182,7 @@
       "resources.tuningMarkAcquireByActionId.threshold-charged.eventCount": 1,
       "resources.tuningMarkAcquireByActionId.threshold-charged.totalDelta": 2,
       "resources.actorSpByActorId.actor-101010.initialValue": 100,
-      "resources.actorSpByActorId.actor-101010.currentValue": 35.418732,
+      "resources.actorSpByActorId.actor-101010.currentValue": 37.818695,
       "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
       "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
       "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
@@ -16982,14 +17197,18 @@
         2373
       ],
       "resources.ownerActorSpTransactionsByActionId.normal-a3.totalChange": 0.159897,
-      "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 4,
+      "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 8,
       "resources.ownerActorSpTransactionsByActionId.normal-a4.frames": [
         2412,
+        2412,
+        2416,
         2416,
         2420,
+        2420,
+        2424,
         2424
       ],
-      "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 1,
+      "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 3.399964,
       "resources.ownerActorSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
       "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
       "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.frames": [
@@ -17522,8 +17741,8 @@
       {
         "jsonPath": "resources.actorSpByActorId.actor-101010.currentValue",
         "operator": "exact",
-        "expected": 35.418732,
-        "actual": 35.418732,
+        "expected": 37.818695,
+        "actual": 37.818695,
         "passed": true
       },
       {
@@ -17617,8 +17836,8 @@
       {
         "jsonPath": "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount",
         "operator": "exact",
-        "expected": 4,
-        "actual": 4,
+        "expected": 8,
+        "actual": 8,
         "passed": true
       },
       {
@@ -17626,14 +17845,22 @@
         "operator": "exact",
         "expected": [
           2412,
+          2412,
+          2416,
           2416,
           2420,
+          2420,
+          2424,
           2424
         ],
         "actual": [
           2412,
+          2412,
+          2416,
           2416,
           2420,
+          2420,
+          2424,
           2424
         ],
         "passed": true
@@ -17641,8 +17868,8 @@
       {
         "jsonPath": "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange",
         "operator": "exact",
-        "expected": 1,
-        "actual": 1,
+        "expected": 3.399964,
+        "actual": 3.399964,
         "passed": true
       },
       {
@@ -17946,6 +18173,6 @@
       }
     ]
   },
-  "replayHash": "20cfd32817cdc3e7bba90430e03ef546fd1ab981a09eb53afc942adbcc81c08e",
-  "profileHash": "7261dd17730c12cd343e042fc8342be10eebf51394c5b57e7442f12aecf995c1"
+  "replayHash": "be6d996b76aa304acc2f8c7c67f24535d09f7af54dae92f4a402847ce2bf4186",
+  "profileHash": "2c1891b30f502e8f8da12476df19d7ae286f83e62ad227e412775d14b199981d"
 }

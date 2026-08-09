@@ -191,6 +191,18 @@
         "expectedWindowCount": 1
       }
     ],
+    "publicActionDeclarations": [
+      {
+        "sourceSkillId": 10101021,
+        "actionVariantIndex": 0,
+        "actionKind": "star-carry",
+        "controlSkillId": 10101021,
+        "catalogLabel": "星携技",
+        "actionVariantLabel": "星携技",
+        "sourceStatus": "verified-static-evidence",
+        "sourceIdentity": "characters.items[id=101010].skillSlots[slot=201,skillId=10101021]|skill_control_10101021.asset#skillPlayers[0];skillResourceMaps[0]"
+      }
+    ],
     "publicActionForms": [
       {
         "publicActionKind": "charged-attack",
@@ -399,6 +411,48 @@
         ]
       }
     ],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "xiaoyu-a4-zero-distance-hit-sp",
+        "triggerKind": "landed-hit",
+        "runtimeOwnerScope": "scenario-roster",
+        "controlSkillId": 10101004,
+        "subSkillIndex": 0,
+        "hitSelectors": [
+          {
+            "elementId": 101010107,
+            "pathId": "4348604233260138553",
+            "triggerFrame": 10,
+            "behaviorPathId": "-3875140846970907040"
+          },
+          {
+            "elementId": 101010107,
+            "pathId": "4348604233260138553",
+            "triggerFrame": 14,
+            "behaviorPathId": "-6677266917412350368"
+          },
+          {
+            "elementId": 101010107,
+            "pathId": "4348604233260138553",
+            "triggerFrame": 18,
+            "behaviorPathId": "-4003851066891217312"
+          },
+          {
+            "elementId": 101010107,
+            "pathId": "4348604233260138553",
+            "triggerFrame": 22,
+            "behaviorPathId": "2649223868158596704"
+          }
+        ],
+        "targetKind": "source-actor",
+        "directSpElementId": 101010106,
+        "expectedDirectSpValue": 0.6,
+        "expectedDirectSpShareType": 1,
+        "effectId": "battle-element:101010106",
+        "effectName": "普攻 A4 零距离命中回能",
+        "sourceIdentity": "skill_control_10101004.asset#skillResourceMaps[0].elements[0]=101010106;bulletElements[0]=101010106;bulletElements[1]=101010107|ast_bullet_101010001.asset#collision->summon101010002|ast_bullet_101010002.asset#collision->element101010107|ast_101010106.asset#formulaFunction2=3;A=6000;shareType=1"
+      }
+    ],
     "passiveEffects": [
       {
         "skillId": 10101061,
@@ -425,6 +479,235 @@
     "occupancyAudit": "reports/m9-r3-r2-xiaoyu-action-occupancy-audit.json",
     "hiddenInputAudit": "reports/m9-r3-r2-r2-xiaoyu-hidden-input-audit.json"
   },
+  "unresolvedRecordPolicies": [
+    {
+      "policyIdentity": "xiaoyu-burst-camera-client-visual-only",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:10101010|2|elements|3|-5197334707093895133"
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "client-camera-effect-is-product-visual-evidence-only",
+        "headless-settlement-must-not-synthesize-client-camera-behavior"
+      ],
+      "sourceIdentity": "skill_control_10101010.asset#skillResourceMaps[2].elements[3]|battle-element:101010211#camera-effect"
+    },
+    {
+      "policyIdentity": "xiaoyu-zero-distance-selected-projectile-hits",
+      "sourceKinds": ["hit"],
+      "statuses": ["runtime-evidence-required"],
+      "scenarioRuntimeStatuses": ["scenario-assumed-zero-distance"],
+      "controlVariants": [
+        { "controlSkillId": 10101003, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101004, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101021, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101042, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "zero-distance-projectile-impact-is-immediate",
+        "selected-public-action-form-hit-is-canonical-trace-required"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:101010#selected-action-forms"
+    },
+    {
+      "policyIdentity": "xiaoyu-reactive-projectile-hits-out-of-scope",
+      "sourceKinds": ["hit"],
+      "statuses": ["runtime-evidence-required"],
+      "controlVariants": [
+        { "controlSkillId": 10101049, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "perfect-parry-requires-enemy-attack-event",
+        "frozen-passive-boss-scenario-does-not-produce-reactive-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#boss=stationary-passive|hero:101010#perfect-parry-runtime-control=10101049/1"
+    },
+    {
+      "policyIdentity": "xiaoyu-selected-passive-property-effects",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["verified-zero"],
+      "controlVariants": [
+        { "controlSkillId": 10101010, "subSkillIndexes": [0, 1, 2] },
+        { "controlSkillId": 10101013, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101021, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101042, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-passive-wrapper-projects-property-modifiers",
+        "selected-action-passive-application-is-canonical-trace-required"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:101010#passives[actor:101010:passive:10101061]|battle-elements:101010205,101010206,101010207"
+    },
+    {
+      "policyIdentity": "xiaoyu-reactive-passive-property-effect-out-of-scope",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["verified-zero"],
+      "controlVariants": [
+        { "controlSkillId": 10101049, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "perfect-parry-passive-application-requires-enemy-attack-event",
+        "frozen-passive-boss-scenario-does-not-produce-reactive-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#boss=stationary-passive|character-combat-owner-contract:101010#passive-trigger-control=10101049/1"
+    },
+    {
+      "policyIdentity": "xiaoyu-selected-resource-state-and-passive-wrappers",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["unresolved"],
+      "controlVariants": [
+        { "controlSkillId": 10101010, "subSkillIndexes": [0, 1, 2] },
+        { "controlSkillId": 10101013, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101061, "subSkillIndexes": [0] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-special-resource-threshold-state-machine",
+        "source-driven-passive-contract-supersedes-raw-marker-wrapper"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:101010#specialResources|stateMachines|passives"
+    },
+    {
+      "policyIdentity": "xiaoyu-frozen-movement-and-reactive-wrappers",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["unresolved"],
+      "controlVariants": [
+        { "controlSkillId": 10101011, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101025, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101049, "subSkillIndexes": [0] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "movement-airborne-or-reactive-action-is-outside-frozen-action-surface",
+        "frozen-passive-boss-scenario-does-not-produce-required-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#movement=excluded;boss=stationary-passive|hero:101010#aerial,limit-counter,perfect-parry"
+    },
+    {
+      "policyIdentity": "xiaoyu-selected-tuning-consume-success-branches",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["tuning-consume-success-branch-unresolved"],
+      "controlVariants": [
+        { "controlSkillId": 10101012, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101013, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101021, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101042, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-tuning-mark-consume-gate",
+        "consume-success-injects-element-799-or-999-on-landed-hit"
+      ],
+      "sourceIdentity": "battle-elements:101010210,101010209#consume=1|battle-elements:799,999#success-branch|character-combat-owner-contract:101010#tuning-runtime"
+    },
+    {
+      "policyIdentity": "xiaoyu-reactive-tuning-consume-out-of-scope",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["tuning-consume-success-branch-unresolved"],
+      "controlVariants": [
+        { "controlSkillId": 10101049, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "perfect-parry-tuning-branch-requires-enemy-attack-event",
+        "frozen-passive-boss-scenario-does-not-produce-reactive-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#boss=stationary-passive|hero:101010#perfect-parry-runtime-control=10101049/1"
+    },
+    {
+      "policyIdentity": "xiaoyu-selected-zero-distance-effect-frames",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["effect-trigger-frame-missing"],
+      "controlVariants": [
+        { "controlSkillId": 10101004, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101021, "subSkillIndexes": [0] },
+        { "controlSkillId": 10101042, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "zero-distance-projectile-collision-provides-trigger-frame",
+        "selected-effect-frame-is-canonical-trace-required"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:101010#selected-action-forms"
+    },
+    {
+      "policyIdentity": "xiaoyu-reactive-effect-frame-out-of-scope",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["effect-trigger-frame-missing"],
+      "controlVariants": [
+        { "controlSkillId": 10101049, "subSkillIndexes": [1] }
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "perfect-parry-effect-frame-requires-enemy-attack-event",
+        "frozen-passive-boss-scenario-does-not-produce-reactive-event"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#boss=stationary-passive|hero:101010#perfect-parry-runtime-control=10101049/1"
+    },
+    {
+      "policyIdentity": "xiaoyu-resource-state-tuning-mark-relations",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["tuning-mark-relation-notDelElementDataList-unresolved"],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-threshold-transition-grants-two-wind-marks",
+        "state-refresh-preserves-declared-wind-mark-list"
+      ],
+      "sourceIdentity": "battle-element:101010129#notDelElementDataList=wind-mark-750x2|character-combat-owner-contract:101010#stateMachines.tuningMarkGrants"
+    },
+    {
+      "policyIdentity": "xiaoyu-resource-state-combine-semantics",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["effect-combine-semantics-unresolved"],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "resource-combine-type-four-uses-capacity-threshold",
+        "state-combine-type-five-refreshes-ten-second-lifecycle"
+      ],
+      "sourceIdentity": "battle-element:101010115#combineType=4;combineNumber=100|battle-element:101010129#combineType=5;time=10000"
+    },
+    {
+      "policyIdentity": "xiaoyu-raw-switch-edges-superseded-by-semantic-transitions",
+      "sourceKinds": ["variant-edge"],
+      "statuses": ["static-evidence-gap"],
+      "disposition": "not-applicable",
+      "impactClassification": "superseded-by-semantic-transition-closure",
+      "reasons": [
+        "raw-switch-wrapper-is-not-a-second-public-action-transition",
+        "canonical-context-input-edges-and-state-machine-own-transition-timing"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:101010#timingInputEdges|actionForms|stateMachines"
+    }
+  ],
   "goldenScenario": {
     "traceSelectors": {
       "passiveEffectIds": ["battle-element:101010206"],
@@ -803,7 +1086,7 @@
         "resources.tuningMarkAcquireByActionId.threshold-charged.eventCount": 1,
         "resources.tuningMarkAcquireByActionId.threshold-charged.totalDelta": 2,
         "resources.actorSpByActorId.actor-101010.initialValue": 100,
-        "resources.actorSpByActorId.actor-101010.currentValue": 35.418732,
+        "resources.actorSpByActorId.actor-101010.currentValue": 37.818695,
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.reason": "verified-auto-sp-background",
         "resources.actorSpByActorId.actor-101010.autoRecovery.0.totalChange": 1.904298,
         "resources.actorSpByActorId.actor-101010.autoRecovery.1.reason": "verified-auto-sp-foreground",
@@ -816,11 +1099,11 @@
         "resources.ownerActorSpTransactionsByActionId.normal-a3.eventCount": 1,
         "resources.ownerActorSpTransactionsByActionId.normal-a3.frames": [2373],
         "resources.ownerActorSpTransactionsByActionId.normal-a3.totalChange": 0.159897,
-        "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 4,
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.eventCount": 8,
         "resources.ownerActorSpTransactionsByActionId.normal-a4.frames": [
-          2412, 2416, 2420, 2424
+          2412, 2412, 2416, 2416, 2420, 2420, 2424, 2424
         ],
-        "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 1,
+        "resources.ownerActorSpTransactionsByActionId.normal-a4.totalChange": 3.399964,
         "resources.ownerActorSpTransactionsByActionId.switch-back-to-xiaoyu--on-enter--actor-101010--star-carry.eventCount": 0,
         "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.eventCount": 2,
         "resources.ownerActorSpTransactionsByActionId.jade-perfect-parry.frames": [

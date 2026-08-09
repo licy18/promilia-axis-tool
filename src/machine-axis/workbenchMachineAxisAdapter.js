@@ -218,6 +218,8 @@ function createContractFromProject(project, { service, metadata } = {}) {
     ]);
   }
   const preservedSchedules = resolvePreservedMachineAxisSchedules(project, fps);
+  const preservedActionIntents =
+    resolvePreservedMachineAxisActionIntents(project);
   const actions = (project.actions ?? [])
     .filter(action => action.autoCast !== true)
     .map((action, index) =>
@@ -226,6 +228,7 @@ function createContractFromProject(project, { service, metadata } = {}) {
         index,
         fps,
         preservedSchedules,
+        preservedIntent: preservedActionIntents.get(String(action.id)),
         slotsByActorId,
         slotsByCharacterId,
       })
@@ -326,6 +329,7 @@ function createMachineActionFromProject({
   index,
   fps,
   preservedSchedules,
+  preservedIntent,
   slotsByActorId,
   slotsByCharacterId,
 }) {
@@ -407,6 +411,10 @@ function createMachineActionFromProject({
   const attackInputIndex = positiveIntegerOrNull(
     action.attackSequenceIndex ?? action.attackInput?.sequenceIndex
   );
+  const preservedContextInput = resolvePreservedContextInput({
+    action,
+    preservedIntent,
+  });
   return {
     ...base,
     owner: {
@@ -439,8 +447,31 @@ function createMachineActionFromProject({
                 ? textOrNull(action.attackInputChainIdentity)
                 : null,
           }
-        : null,
+        : preservedContextInput,
     },
+  };
+}
+
+function resolvePreservedContextInput({ action, preservedIntent }) {
+  const contextActionId = textOrNull(
+    action.runtimeContextActionId ?? action.contextActionId
+  );
+  const preservedInput = preservedIntent?.attackInput;
+  if (
+    !contextActionId ||
+    positiveIntegerOrNull(preservedIntent?.publicActionId) !==
+      positiveIntegerOrNull(action.skillId) ||
+    textOrNull(preservedIntent?.actionKind) !==
+      (textOrNull(action.actionKind) ?? textOrNull(action.eventType))
+  ) {
+    return null;
+  }
+  const sequenceIndex = positiveIntegerOrNull(preservedInput?.sequenceIndex);
+  if (!sequenceIndex) return null;
+  return {
+    sequenceIndex,
+    groupId: textOrNull(preservedInput.groupId),
+    contextActionId,
   };
 }
 
@@ -453,6 +484,24 @@ function resolvePreservedMachineAxisSlotIds(project) {
         String(canonicalSlotId),
         String(machineSlotId),
       ]
+    )
+  );
+}
+
+function resolvePreservedMachineAxisActionIntents(project) {
+  const transport =
+    project.metadata?.transport?.[MACHINE_AXIS_TRANSPORT_METADATA_KEY];
+  if (
+    !transport ||
+    transport.schemaVersion !== WORKBENCH_MACHINE_AXIS_ADAPTER_SCHEMA_VERSION ||
+    !transport.actionIntentsByActionId ||
+    typeof transport.actionIntentsByActionId !== 'object'
+  ) {
+    return new Map();
+  }
+  return new Map(
+    Object.entries(transport.actionIntentsByActionId).map(
+      ([actionId, intent]) => [String(actionId), intent]
     )
   );
 }

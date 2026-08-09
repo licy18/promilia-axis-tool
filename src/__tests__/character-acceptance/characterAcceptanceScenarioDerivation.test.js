@@ -87,6 +87,75 @@ describe('character acceptance scenario derivation', () => {
     });
   });
 
+  it('classifies input timing by its source control while other dimensions use execution control', () => {
+    const sourceControlSkillId = 25;
+    const executionControlSkillId = 42;
+    const sourceIdentity = 'fixture:source-to-execution-input-edge';
+    const profile = {
+      owner: { ownerId: 999001 },
+      contracts: {
+        timingInputEdges: [
+          {
+            identity: 'fixture-input-edge',
+            sourceControlSkillId,
+            sourceSubSkillIndex: 0,
+            executionControlSkillId,
+            executionSubSkillIndex: 1,
+            sourceIdentity,
+            status: 'applied',
+            applied: true,
+          },
+        ],
+        variantEdges: [
+          {
+            identity: 'fixture-variant-edge',
+            sourceControlSkillId,
+            sourceSubSkillIndex: 0,
+            executionControlSkillId,
+            executionSubSkillIndex: 1,
+            sourceIdentity,
+            status: 'applied',
+            applied: true,
+          },
+        ],
+      },
+    };
+    const requirements = createCharacterAcceptanceRequirementSources({
+      profile,
+      recipe: {
+        scenarioScope: {
+          policyIdentity: 'fixture-source-control-scope',
+          reason: 'fixture-execution-control-is-derived',
+          sourceIdentity: 'fixture:scope-policy',
+          includedControlSubskills: [
+            { controlSkillId: sourceControlSkillId, subSkillIndex: 0 },
+          ],
+        },
+      },
+    });
+    const inputTiming = requirements.find(
+      requirement => requirement.dimension === 'input-timing'
+    );
+    const variantEdge = requirements.find(
+      requirement => requirement.dimension === 'variant-edge'
+    );
+
+    expect(inputTiming).toMatchObject({
+      sourceDisposition: 'applied',
+      contractStatus: 'applied',
+    });
+    expect(inputTiming).not.toHaveProperty('scenarioScope');
+    expect(variantEdge).toMatchObject({
+      sourceDisposition: 'not-applicable',
+      scenarioScope: {
+        disposition: 'not-applicable',
+        controlSkillId: executionControlSkillId,
+        subSkillIndex: 1,
+        policyIdentity: 'fixture-source-control-scope',
+      },
+    });
+  });
+
   it('fails closed for an unmatched declared source-gap disposition', () => {
     expect(() =>
       applyCharacterAcceptanceSourceGapDispositions(

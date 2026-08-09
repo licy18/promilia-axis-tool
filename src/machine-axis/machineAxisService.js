@@ -1190,6 +1190,12 @@ function createMachineAxisTransportMetadata({
         structuredClone(action.schedule),
       ])
     ),
+    actionIntentsByActionId: Object.fromEntries(
+      contract.actions.map(action => [
+        action.id,
+        structuredClone(action.intent),
+      ])
+    ),
     actionSnapshot: (project.actions ?? []).map(action => ({
       id: String(action.id),
       startFrame:
@@ -1502,6 +1508,7 @@ function createActorActionTemplate({
   const attackInputFields = segment
     ? createAttackInputFields(action, mapping, segment)
     : {};
+  const contextActionId = action.intent.attackInput?.contextActionId;
   return {
     actionId: action.id,
     index,
@@ -1554,6 +1561,7 @@ function createActorActionTemplate({
           : null,
       hitOverrides: toProjectHitOverrides(action.hitOverrides),
       note: action.note,
+      ...(contextActionId ? { contextActionId: String(contextActionId) } : {}),
       ...attackInputFields,
     },
     resolution: {

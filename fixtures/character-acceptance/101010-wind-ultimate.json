@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "2e49ddc37ba2f3852c0c166a2651fdeeab3af16ede0c53e463c65f49bc81abfc",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-101010-wind-ultimate",
+    "name": "M12-B3 涂山小玉星决技风印记消费机器边界",
+    "fps": 60,
+    "durationFrames": 600,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": { "kiboId": 500001 },
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 101003,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "tuningMarks": [
+        {
+          "markId": 750,
+          "profileKey": "wind",
+          "elementName": "风",
+          "decayRemainingMs": 20000,
+          "heldReadyRemainingMs": 0,
+          "layers": [
+            {
+              "sourceActionId": "initial-wind-1",
+              "sourceActorId": "actor-101010",
+              "sourceIdentity": "battle-element:750#layerDurationMs=20000;layer=1"
+            },
+            {
+              "sourceActionId": "initial-wind-2",
+              "sourceActorId": "actor-101010",
+              "sourceIdentity": "battle-element:750#layerDurationMs=20000;layer=2"
+            },
+            {
+              "sourceActionId": "initial-wind-3",
+              "sourceActorId": "actor-101010",
+              "sourceIdentity": "battle-element:750#layerDurationMs=20000;layer=3"
+            }
+          ]
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-101010-wind-ultimate"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    }
+  },
+  "actions": [
+    {
+      "id": "xiaoyu-wind-ultimate",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10101013,
+        "actionKind": "ultimate",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 0 }
+    }
+  ]
+}

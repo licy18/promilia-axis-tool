@@ -204,7 +204,7 @@ export function createCharacterAcceptanceRequirementSources({
       const optimizationScenario = classifyOptimizationScope(record);
       const scenarioScope =
         createDeclaredScenarioScopeDisposition(record) ??
-        classifyScenarioScope(record);
+        classifyScenarioScope(record, dimension);
       const sourceGapDisposition = classifyNonBlockingSourceRecord(record);
       const sourceNotApplicableControlSubskill =
         classifySourceNotApplicableControlSubskill(record, dimension);
@@ -436,22 +436,37 @@ function createScenarioScopeRequirementClassifier(scope) {
   if (included.size === 0) {
     throw new Error('Character acceptance scenario scope is empty');
   }
-  return record => {
-    const controlSkillId = firstInteger(
-      record?.executionControlSkillId,
-      record?.controlSkillId,
-      record?.sourceControlSkillId,
-      record?.publicControlSkillId
-    );
+  return (record, dimension) => {
+    const inputTiming = dimension === 'input-timing';
+    const controlSkillId = inputTiming
+      ? firstInteger(
+          record?.sourceControlSkillId,
+          record?.controlSkillId,
+          record?.publicControlSkillId,
+          record?.executionControlSkillId
+        )
+      : firstInteger(
+          record?.executionControlSkillId,
+          record?.controlSkillId,
+          record?.sourceControlSkillId,
+          record?.publicControlSkillId
+        );
     if (controlSkillId == null) return null;
-    const subSkillIndex =
-      firstInteger(
-        record?.executionSubSkillIndex,
-        record?.subSkillIndex,
-        record?.sourceSubSkillIndex,
-        record?.selectedSubSkillIndex,
-        record?.mapIndex
-      ) ?? 0;
+    const subSkillIndex = inputTiming
+      ? (firstInteger(
+          record?.sourceSubSkillIndex,
+          record?.subSkillIndex,
+          record?.selectedSubSkillIndex,
+          record?.executionSubSkillIndex,
+          record?.mapIndex
+        ) ?? 0)
+      : (firstInteger(
+          record?.executionSubSkillIndex,
+          record?.subSkillIndex,
+          record?.sourceSubSkillIndex,
+          record?.selectedSubSkillIndex,
+          record?.mapIndex
+        ) ?? 0);
     const controlSubskillIdentity = controlSkillId + '|' + subSkillIndex;
     const sourceIncluded = included.has(controlSubskillIdentity);
     const targetControlSkillId = firstInteger(record?.targetControlSkillId);

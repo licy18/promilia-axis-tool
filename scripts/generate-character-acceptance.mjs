@@ -726,6 +726,7 @@ function executeVisualScenario({
   );
   const tuningMarkResourceEffects = projectTuningMarkResourceEffects(
     first,
+    profile,
     fixture.scenario.id
   );
   const sourceActionBindingForms = projectSourceActionBindingForms(
@@ -1152,7 +1153,7 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
             nonCrittable?.formula?.status ===
               'verified-tuning-formula-applied' &&
             nonCrittable?.formula?.randomBranch == null &&
-            Number(nonCrittable?.rawDamage) > 0 &&
+            hasPositiveSettledDamage(nonCrittable) &&
             Boolean(nonCrittablePeer?.formula?.randomBranch),
         }
       : {}),
@@ -1172,6 +1173,10 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
   };
 }
 
+function hasPositiveSettledDamage(event) {
+  return Number(event?.rawDamage) > 0 || Number(event?.requestedHpDamage) > 0;
+}
+
 function criticalAttributeIncreased(before, after, field) {
   const beforeValue = Number(before?.formula?.randomBranch?.[field]);
   const afterValue = Number(after?.formula?.randomBranch?.[field]);
@@ -1183,14 +1188,23 @@ function criticalAttributeIncreased(before, after, field) {
 }
 
 function inspectEffectLifecycle(run, configuration) {
-  const effectIdentity = String(configuration.effectIdentity);
+  const eventPath = configuration.eventPath ?? 'effects.events';
+  const operationPath = configuration.operationPath ?? 'operation';
+  const timePath = configuration.timePath ?? null;
+  const effectIdentity =
+    configuration.effectIdentity == null
+      ? null
+      : String(configuration.effectIdentity);
   const targetId =
     configuration.targetId == null ? null : String(configuration.targetId);
-  const events = (run.trace?.effects?.events ?? []).filter(
+  const collection = readPath(run.trace, eventPath);
+  const events = (Array.isArray(collection) ? collection : []).filter(
     event =>
-      String(event.effectId ?? event.runtimeEffectId ?? '') ===
-        effectIdentity &&
-      (targetId == null || String(event.targetId ?? '') === targetId)
+      (effectIdentity == null ||
+        String(event.effectId ?? event.runtimeEffectId ?? '') ===
+          effectIdentity) &&
+      (targetId == null || String(event.targetId ?? '') === targetId) &&
+      matchesProbeWhere(event, configuration.where ?? {})
   );
   const requiredOperations = configuration.requiredOperations ?? [
     'apply',
@@ -1198,38 +1212,45 @@ function inspectEffectLifecycle(run, configuration) {
     'expire',
   ];
   const operations = new Set(
-    events.map(event => String(event.operation ?? ''))
+    events.map(event => String(readPath(event, operationPath) ?? ''))
   );
-  const durationFrames = Number(configuration.durationFrames);
+  const durationValue = Number(
+    timePath == null ? configuration.durationFrames : configuration.durationMs
+  );
+  const startOperations = configuration.startOperations ?? ['apply', 'refresh'];
+  const expirationOperation = configuration.expirationOperation ?? 'expire';
+  const resolvePosition = event =>
+    timePath == null
+      ? resolveTraceFrame(event)
+      : Number(readPath(event, timePath));
   const rightOpenMatches = [];
   if (
     configuration.rightOpenExpiry === true &&
-    Number.isFinite(durationFrames)
+    Number.isFinite(durationValue)
   ) {
     for (const [expirationIndex, expiration] of events.entries()) {
-      if (expiration.operation !== 'expire') continue;
-      const expirationFrame = resolveTraceFrame(expiration);
+      if (readPath(expiration, operationPath) !== expirationOperation) continue;
+      const expirationPosition = resolvePosition(expiration);
       const priorStarts = events
         .slice(0, expirationIndex)
         .filter(
           event =>
-            ['apply', 'refresh'].includes(event.operation) &&
-            resolveTraceFrame(event) <= expirationFrame
+            startOperations.includes(readPath(event, operationPath)) &&
+            resolvePosition(event) <= expirationPosition
         )
-        .sort(
-          (left, right) => resolveTraceFrame(right) - resolveTraceFrame(left)
-        );
+        .sort((left, right) => resolvePosition(right) - resolvePosition(left));
       const start = priorStarts[0] ?? null;
-      const startFrame = resolveTraceFrame(start);
+      const startPosition = resolvePosition(start);
       rightOpenMatches.push({
-        startOperation: start?.operation ?? null,
-        startFrame,
-        expirationFrame,
-        durationFrames,
+        startOperation: readPath(start, operationPath) ?? null,
+        startPosition,
+        expirationPosition,
+        duration: durationValue,
+        unit: timePath == null ? 'frame' : 'millisecond',
         passed:
-          Number.isFinite(startFrame) &&
-          Number.isFinite(expirationFrame) &&
-          expirationFrame - startFrame === durationFrames,
+          Number.isFinite(startPosition) &&
+          Number.isFinite(expirationPosition) &&
+          expirationPosition - startPosition === durationValue,
       });
     }
   }
@@ -1241,15 +1262,19 @@ function inspectEffectLifecycle(run, configuration) {
       requiredOperations.every(operation => operations.has(operation)) &&
       rightOpenPassed,
     details: {
+      eventPath,
+      operationPath,
+      timePath,
       effectIdentity,
       targetId,
+      where: structuredClone(configuration.where ?? {}),
       requiredOperations,
       observedOperations: [...operations].sort(),
       rightOpenMatches,
       events: events.map(event => ({
         actionId: event.actionId ?? null,
-        operation: event.operation ?? null,
-        frameIndex: resolveTraceFrame(event),
+        operation: readPath(event, operationPath) ?? null,
+        position: resolvePosition(event),
         targetId: event.targetId ?? null,
       })),
     },
@@ -1967,26 +1992,210 @@ function projectVerifiedDirectEffectSources(run, scenarioId) {
   return rows;
 }
 
-function projectTuningMarkResourceEffects(run, scenarioId) {
-  return (run.trace?.resources?.tuningMarks ?? [])
-    .filter(
-      event =>
-        ['acquire', 'consume'].includes(String(event.kind)) &&
-        Number.isInteger(Number(event.markId)) &&
-        Number(event.delta) !== 0
+function projectTuningMarkResourceEffects(run, profile, scenarioId) {
+  const profiles = mechanicsPackage.tuningMechanicsCatalog?.profiles ?? [];
+  const profileByMarkId = new Map(
+    profiles.map(tuningProfile => [Number(tuningProfile.markId), tuningProfile])
+  );
+  const sourceEffects = (profile.contracts?.controls ?? []).flatMap(control =>
+    (control.effects ?? []).filter(
+      effect =>
+        effect.tuningOverlimit?.maximumStacks != null &&
+        Number(effect.tuningOverlimit.maximumStacks) > 0
     )
-    .map((event, index) => ({
+  );
+  const tuningDamageEvents = (run.trace?.damage ?? []).filter(
+    event => event.eventType === 'VERIFIED_TUNING_DAMAGE'
+  );
+  const directSpEvents = (run.trace?.resources?.actors ?? []).filter(
+    event => event.reason === 'tuning-overlimit-direct-sp'
+  );
+  const rows = [];
+  for (const [index, event] of (
+    run.trace?.resources?.tuningMarks ?? []
+  ).entries()) {
+    const markId = Number(event.markId);
+    if (
+      !['acquire', 'consume'].includes(String(event.kind)) ||
+      !Number.isInteger(markId) ||
+      Number(event.delta) === 0 ||
+      event.applied === false
+    ) {
+      continue;
+    }
+    rows.push({
       projectionIdentity:
         'machine-tuning-mark-resource-effect:' + scenarioId + ':' + index,
       actionId: event.actionId ?? null,
-      effectIdentity: 'battle-element:' + Number(event.markId),
+      effectIdentity: 'battle-element:' + markId,
       operation: event.kind,
-      targetId: event.targetId ?? null,
+      targetId: event.targetId ?? event.actorId ?? null,
       sourceIdentity: event.sourceIdentity ?? null,
       beforeValue: event.before ?? null,
       afterValue: event.after ?? null,
       change: event.delta ?? null,
-    }));
+    });
+    if (event.kind !== 'consume' || Number(event.delta) >= 0) continue;
+
+    const tuningProfile = profileByMarkId.get(markId);
+    const eventSourceIdentity =
+      typeof event.sourceIdentity === 'string'
+        ? event.sourceIdentity
+        : (event.sourceIdentity?.identity ?? null);
+    const sourceEffect = sourceEffects.find(
+      effect =>
+        eventSourceIdentity != null &&
+        String(effect.sourceIdentity) === String(eventSourceIdentity) &&
+        Number(effect.tuningOverlimit?.markId) === markId
+    );
+    const overlimitDamageElementIds = new Set(
+      [
+        tuningProfile?.overlimitDamage?.primaryComponentId,
+        ...(tuningProfile?.overlimitDamage?.extraDamageComponentIds ?? []),
+      ]
+        .map(Number)
+        .filter(Number.isInteger)
+    );
+    const consumeFrame = resolveTraceFrame(event);
+    const matchingDamage = tuningDamageEvents.find(candidate => {
+      const damageFrame = resolveTraceFrame(candidate);
+      return (
+        Number.isFinite(consumeFrame) &&
+        Number.isFinite(damageFrame) &&
+        damageFrame === consumeFrame &&
+        String(candidate.actionId) === String(event.actionId) &&
+        overlimitDamageElementIds.has(Number(candidate.elementId)) &&
+        (Number(candidate.rawDamage) > 0 ||
+          Number(candidate.requestedHpDamage) > 0)
+      );
+    });
+    if (!tuningProfile || !sourceEffect || !matchingDamage) continue;
+
+    const sourceControlSkillId = Number(sourceEffect.controlSkillId);
+    const sourceSubSkillIndex = Number(
+      sourceEffect.subSkillIndex ??
+        sourceEffect.mapIndex ??
+        sourceEffect.trigger?.subSkillIndexes?.[0]
+    );
+    const sourceTriggerFrame = Number(sourceEffect.trigger?.startFrame);
+    const sourceBehaviorPathId = sourceEffect.trigger?.behaviorPathId;
+    const sourceCoordinate = {
+      ...(Number.isInteger(sourceControlSkillId)
+        ? { controlSkillId: sourceControlSkillId }
+        : {}),
+      ...(Number.isInteger(sourceSubSkillIndex)
+        ? { subSkillIndex: sourceSubSkillIndex }
+        : {}),
+      ...(Number.isInteger(sourceTriggerFrame)
+        ? { triggerFrame: sourceTriggerFrame }
+        : {}),
+      ...(sourceBehaviorPathId == null
+        ? {}
+        : { behaviorPathId: String(sourceBehaviorPathId) }),
+    };
+
+    const packetElementId = Number(
+      sourceEffect.tuningOverlimit?.packetElementId
+    );
+    if (Number.isInteger(packetElementId)) {
+      rows.push({
+        projectionIdentity:
+          'machine-tuning-consume-packet-effect:' +
+          scenarioId +
+          ':' +
+          index +
+          ':' +
+          packetElementId,
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + packetElementId,
+        operation: 'tuning-consume-packet',
+        targetId: matchingDamage.targetId ?? event.targetId ?? null,
+        sourceIdentity: [
+          event.sourceIdentity,
+          sourceEffect.sourceIdentity,
+          tuningProfile.overlimitPacket?.sourceIdentity,
+          matchingDamage.formula?.sourceIdentity?.identity ??
+            matchingDamage.formula?.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        beforeValue: event.before ?? null,
+        afterValue: event.after ?? null,
+        change: event.delta ?? null,
+        ...sourceCoordinate,
+      });
+    }
+
+    const judgmentElementId = Number(
+      sourceEffect.tuningOverlimit?.judgmentElementId
+    );
+    if (Number.isInteger(judgmentElementId)) {
+      rows.push({
+        projectionIdentity:
+          'machine-tuning-consume-judgment-effect:' +
+          scenarioId +
+          ':' +
+          index +
+          ':' +
+          judgmentElementId,
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + judgmentElementId,
+        operation: 'tuning-consume-judgment',
+        targetId: matchingDamage.targetId ?? event.targetId ?? null,
+        sourceIdentity: [
+          event.sourceIdentity,
+          sourceEffect.tuningOverlimit?.judgmentGroupIdentity,
+          sourceEffect.tuningOverlimit?.judgmentSourceIdentity,
+          matchingDamage.formula?.sourceIdentity?.identity ??
+            matchingDamage.formula?.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        beforeValue: event.before ?? null,
+        afterValue: event.after ?? null,
+        change: event.delta ?? null,
+        ...sourceCoordinate,
+      });
+    }
+
+    const extraComponentId = Number(tuningProfile.overlimitExtra?.componentId);
+    if (
+      tuningProfile.overlimitExtra?.kind === 'sp_recovery' &&
+      Number.isInteger(extraComponentId)
+    ) {
+      const matchingDirectSp = directSpEvents.find(
+        candidate =>
+          String(candidate.actionId) === String(event.actionId) &&
+          (Number.isFinite(Number(candidate.timeMs)) &&
+          Number.isFinite(Number(event.timeMs))
+            ? Number(candidate.timeMs) === Number(event.timeMs)
+            : Number(candidate.absoluteFrame) === Number(event.absoluteFrame))
+      );
+      if (matchingDirectSp) {
+        rows.push({
+          projectionIdentity:
+            'machine-tuning-consume-extra-effect:' +
+            scenarioId +
+            ':' +
+            index +
+            ':' +
+            extraComponentId,
+          actionId: event.actionId ?? null,
+          effectIdentity: 'battle-element:' + extraComponentId,
+          operation: matchingDirectSp.reason,
+          targetId: matchingDirectSp.actorId ?? event.actorId ?? null,
+          sourceIdentity:
+            matchingDirectSp.sourceIdentity ??
+            tuningProfile.sourceIdentity ??
+            null,
+          beforeValue: matchingDirectSp.beforeValue ?? null,
+          afterValue: matchingDirectSp.afterValue ?? null,
+          change: matchingDirectSp.change ?? null,
+        });
+      }
+    }
+  }
+  return rows;
 }
 
 function projectSourceActionBindingForms(run, scenarioId) {
@@ -2379,6 +2588,72 @@ function inspectRecipeProbe(run, probe) {
         blockedOverride,
         blockedEvents,
         blockedDamage,
+      },
+    };
+  }
+  if (probe.kind === 'special-resource-threshold-boundary') {
+    const events = run.trace?.variants?.resourceEvents ?? [];
+    const payloadOf = row => row?.payload ?? row ?? {};
+    const forAction = actionId =>
+      events.filter(row => {
+        const payload = payloadOf(row);
+        return (
+          row.actionId === actionId &&
+          payload.resourceIdentity === probe.resourceIdentity
+        );
+      });
+    const exactEvents = forAction(probe.exactActionId);
+    const exactGain = exactEvents.find(row => {
+      const payload = payloadOf(row);
+      return (
+        payload.operation === 'gain' &&
+        Number(payload.beforeValue) === Number(probe.beforeValue) &&
+        Number(payload.afterValue) === Number(probe.afterValue)
+      );
+    });
+    const threshold = exactEvents.find(
+      row => payloadOf(row).operation === 'threshold-clear'
+    );
+    const exactGainIndex = events.indexOf(exactGain);
+    const thresholdIndex = events.indexOf(threshold);
+    const exactSameFrame =
+      exactGain != null &&
+      threshold != null &&
+      Number(exactGain.timeMs) === Number(threshold.timeMs);
+    const insufficientEvents = forAction(probe.insufficientActionId);
+    const insufficientGains = insufficientEvents.filter(
+      row => payloadOf(row).operation === 'gain'
+    );
+    const insufficientThresholds = insufficientEvents.filter(
+      row => payloadOf(row).operation === 'threshold-clear'
+    );
+    const thresholdValue = Number(probe.thresholdValue ?? probe.afterValue);
+    const insufficientBelowThreshold =
+      insufficientGains.length > 0 &&
+      insufficientGains.every(
+        row => Number(payloadOf(row).afterValue) < thresholdValue
+      );
+    return {
+      identity: identity(
+        'probe:special-resource-threshold-boundary:' + probe.resourceIdentity
+      ),
+      passed:
+        exactGain != null &&
+        threshold != null &&
+        exactGainIndex >= 0 &&
+        thresholdIndex > exactGainIndex &&
+        exactSameFrame &&
+        insufficientBelowThreshold &&
+        insufficientThresholds.length === 0,
+      actual: {
+        exactGain,
+        threshold,
+        exactGainIndex,
+        thresholdIndex,
+        exactSameFrame,
+        insufficientGains,
+        insufficientThresholds,
+        thresholdValue,
       },
     };
   }

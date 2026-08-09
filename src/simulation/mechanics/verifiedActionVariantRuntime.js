@@ -219,6 +219,7 @@ export function createVerifiedActionVariantRuntime({
   const companionStateByActorId = new Map();
   const executionBlocks = [];
   const lastResolvedActionByActorId = new Map();
+  const resolvedActionContextById = new Map();
   let runtimeSequenceIndex = 0;
 
   for (const [actorId, state] of actorStateById) {
@@ -1087,6 +1088,7 @@ export function createVerifiedActionVariantRuntime({
         }
       }
       lastResolvedActionByActorId.clear();
+      resolvedActionContextById.clear();
       removeAttackChainContinuityWindows(activeSwitchWindows);
       continue;
     }
@@ -1227,7 +1229,11 @@ export function createVerifiedActionVariantRuntime({
       const contextSelection = actorState
         ? resolveContextVariantSelection({
             contextBindings,
-            previous: lastResolvedActionByActorId.get(action.actorId),
+            previous: resolveContextPredecessor({
+              action,
+              lastResolvedActionByActorId,
+              resolvedActionContextById,
+            }),
             actorState,
             controlSkillId: publicControlSkillId,
             timeMs: actionTimeMs,
@@ -1756,7 +1762,7 @@ export function createVerifiedActionVariantRuntime({
       runtimeSequenceIndex: runtimeSequenceIndex++,
       payload: selection,
     });
-    lastResolvedActionByActorId.set(action.actorId, {
+    const resolvedActionContext = {
       actionId: action.id,
       actorId: action.actorId,
       controlSkillId: executionControlSkillId,
@@ -1777,7 +1783,9 @@ export function createVerifiedActionVariantRuntime({
       attackSequenceIndex: attackChainSelection.sequenceIndex ?? null,
       attackChainSequenceIndex: attackChainSelection.sequenceIndex ?? null,
       ready: true,
-    });
+    };
+    lastResolvedActionByActorId.set(action.actorId, resolvedActionContext);
+    resolvedActionContextById.set(String(action.id), resolvedActionContext);
   }
 
   flushPending(Number(scenario?.time?.durationMs) || 0);
@@ -1883,6 +1891,19 @@ export function createVerifiedActionVariantRuntime({
     ready: true,
     applied: true,
   };
+}
+
+function resolveContextPredecessor({
+  action,
+  lastResolvedActionByActorId,
+  resolvedActionContextById,
+}) {
+  const contextActionId =
+    action?.runtimeContextActionId ?? action?.contextActionId ?? null;
+  if (contextActionId == null) {
+    return lastResolvedActionByActorId.get(action.actorId) ?? null;
+  }
+  return resolvedActionContextById.get(String(contextActionId)) ?? null;
 }
 
 function resolveAttackInputChainAction({

@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import characterCatalog from '../../data/generated/characters.json';
 import { applyCharacterCombatAttackInputPhaseMappings } from '../../../scripts/character-combat/character-combat-contract-compiler.mjs';
 import {
+  augmentCharacterCombatActionCandidates,
   createCharacterCombatControlPolicyIndex,
   createCharacterCombatProductionBuild,
   discoverCharacterCombatRecipes,
@@ -19,6 +20,107 @@ afterEach(() => {
 });
 
 describe('character combat production orchestration', () => {
+  it('merges a sourced public declaration into an existing undeclared candidate', () => {
+    const candidate = {
+      ownerKind: 'actor',
+      ownerId: 990001,
+      ownerName: 'Fixture',
+      sourceSkillId: 99000121,
+      sourceSkillName: 'Fixture Carry',
+      actionVariantIndex: 0,
+      actionVariantLabel: 'Carry',
+      actionKind: 'star-carry',
+      controlSkillId: 99000121,
+      bindingKind: 'hero-direct-public-skill-control',
+      bindingSourceIdentity: 'fixture:hero-slot',
+      bindingEligible: true,
+      catalogDeclaration: null,
+    };
+    const declaration = {
+      sourceSkillId: 99000121,
+      actionVariantIndex: 0,
+      actionKind: 'star-carry',
+      controlSkillId: 99000121,
+      catalogLabel: 'Declared carry',
+      sourceStatus: 'verified-static-evidence',
+      sourceIdentity: 'fixture:declared-carry',
+    };
+
+    const result = augmentCharacterCombatActionCandidates({
+      candidates: [candidate],
+      recipes: [
+        {
+          ownerId: 990001,
+          compiler: { publicActionDeclarations: [declaration] },
+        },
+      ],
+      characterCatalog: [{ id: 990001, name: 'Fixture' }],
+      skills: [
+        {
+          id: 99000121,
+          characterId: 990001,
+          name: 'Fixture Carry',
+          level: { labels: ['Carry'] },
+        },
+      ],
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toMatchObject({
+      bindingKind: 'hero-direct-public-skill-control',
+      bindingSourceIdentity: 'fixture:hero-slot',
+      catalogDeclaration: {
+        label: 'Declared carry',
+        sourceStatus: 'verified-static-evidence',
+        sourceIdentity: 'fixture:declared-carry',
+      },
+    });
+  });
+
+  it('rejects a sourced public declaration that conflicts with an existing candidate kind', () => {
+    expect(() =>
+      augmentCharacterCombatActionCandidates({
+        candidates: [
+          {
+            ownerKind: 'actor',
+            ownerId: 990001,
+            sourceSkillId: 99000121,
+            actionVariantIndex: 0,
+            actionKind: 'ultimate',
+            controlSkillId: 99000121,
+            catalogDeclaration: null,
+          },
+        ],
+        recipes: [
+          {
+            ownerId: 990001,
+            compiler: {
+              publicActionDeclarations: [
+                {
+                  sourceSkillId: 99000121,
+                  actionVariantIndex: 0,
+                  actionKind: 'star-carry',
+                  controlSkillId: 99000121,
+                  sourceIdentity: 'fixture:conflicting-declaration',
+                },
+              ],
+            },
+          },
+        ],
+        characterCatalog: [{ id: 990001, name: 'Fixture' }],
+        skills: [
+          {
+            id: 99000121,
+            characterId: 990001,
+            level: { labels: ['Carry'] },
+          },
+        ],
+      })
+    ).toThrow(
+      'character combat public action declaration conflicts candidate action kind'
+    );
+  });
+
   it('applies an owner default control policy and lets explicit controls extend it', () => {
     const policies = createCharacterCombatControlPolicyIndex([
       {

@@ -139,7 +139,9 @@ export function augmentCharacterCombatActionCandidates({
       Number(candidate.actionVariantIndex),
       Number(candidate.controlSkillId),
     ].join('|');
-  const seen = new Set(output.map(identityOf));
+  const indexByIdentity = new Map(
+    output.map((candidate, index) => [identityOf(candidate), index])
+  );
 
   for (const recipe of recipes ?? []) {
     const ownerId = Number(recipe.ownerId);
@@ -211,12 +213,26 @@ export function augmentCharacterCombatActionCandidates({
         },
       };
       const identity = identityOf(candidate);
-      if (seen.has(identity)) {
-        throw new Error(
-          `character combat public action declaration duplicates candidate: ${identity}`
-        );
+      const previousIndex = indexByIdentity.get(identity);
+      if (previousIndex != null) {
+        const previous = output[previousIndex];
+        if (String(previous.actionKind) !== String(candidate.actionKind)) {
+          throw new Error(
+            `character combat public action declaration conflicts candidate action kind: ${identity}/${previous.actionKind}/${candidate.actionKind}`
+          );
+        }
+        if (previous.catalogDeclaration != null) {
+          throw new Error(
+            `character combat public action declaration duplicates declared candidate: ${identity}`
+          );
+        }
+        output[previousIndex] = {
+          ...previous,
+          catalogDeclaration: candidate.catalogDeclaration,
+        };
+        continue;
       }
-      seen.add(identity);
+      indexByIdentity.set(identity, output.length);
       output.push(candidate);
     }
   }

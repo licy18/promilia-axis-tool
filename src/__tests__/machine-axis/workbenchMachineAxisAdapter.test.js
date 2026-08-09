@@ -192,6 +192,54 @@ describe('Workbench Machine Axis adapter', () => {
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
   });
 
+  it('round-trips contextual inputs without a projected attack segment and fails closed on stale intent metadata', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const contract = structuredClone(fixture);
+    const actionId = 'xiaoyu-charged';
+    const sourceAction = contract.actions.find(
+      action => action.id === actionId
+    );
+    sourceAction.intent.attackInput = {
+      sequenceIndex: 1,
+      groupId: 'fixture-context-input',
+      contextActionId: 'switch-to-xiaoyu',
+      chainIdentity: null,
+    };
+    const imported = adapter.importContract(contract);
+    const projectAction = imported.project.actions.find(
+      action => action.id === actionId
+    );
+    const exported = adapter.exportProject(imported.project);
+
+    expect(projectAction).toMatchObject({
+      contextActionId: 'switch-to-xiaoyu',
+    });
+    expect(projectAction).not.toHaveProperty('attackSequenceIndex');
+    expect(
+      exported.actions.find(action => action.id === actionId).intent.attackInput
+    ).toEqual(sourceAction.intent.attackInput);
+
+    const staleMetadataProject = structuredClone(imported.project);
+    staleMetadataProject.metadata.transport.machineAxis.actionIntentsByActionId[
+      actionId
+    ].actionKind = 'ultimate';
+    const staleExport = adapter.exportProject(staleMetadataProject);
+    expect(
+      staleExport.actions.find(action => action.id === actionId).intent
+        .attackInput
+    ).toBeNull();
+
+    const missingMetadataProject = structuredClone(imported.project);
+    delete missingMetadataProject.metadata.transport.machineAxis
+      .actionIntentsByActionId;
+    const missingExport = adapter.exportProject(missingMetadataProject);
+    expect(
+      missingExport.actions.find(action => action.id === actionId).intent
+        .attackInput
+    ).toBeNull();
+  }, 30_000);
+
   it('round-trips the formal objective and structured enemy profile without defaulting', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
