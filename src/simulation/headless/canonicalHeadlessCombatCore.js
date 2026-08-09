@@ -18,8 +18,12 @@ import {
   getCharacterAcceptanceCatalog,
   getCharacterAcceptanceEntry,
 } from '../../character-acceptance/characterAcceptanceCatalog';
-import { projectKiboAutoCastDerivationRegistry } from '../../domain/verifiedBackgroundActionDerivation';
+import {
+  isAuthoritativeKiboAutoCastDerivationRegistry,
+  projectKiboAutoCastDerivationRegistry,
+} from '../../domain/verifiedBackgroundActionDerivation';
 import { projectVerifiedSwitchExitTailPolicy } from '../generation/verifiedSwitchExitTailPolicy';
+import { isAuthoritativeSwitchTriggerGeneration } from '../generation/switchTriggeredActionGeneration';
 
 export const CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION = 1;
 export const CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT =
@@ -39,6 +43,7 @@ export function createCanonicalHeadlessCombatCore({
   simulateScenarioImpl = simulateScenario,
 } = {}) {
   assertGameData(gameData);
+  const authoritativeCompilations = new WeakSet();
 
   function catalog() {
     const value = createCatalogProjection(gameData);
@@ -53,7 +58,20 @@ export function createCanonicalHeadlessCombatCore({
   }
 
   function compile(input, options = {}) {
-    if (isCompilation(input)) return input;
+    if (isCompilation(input)) {
+      if (!authoritativeCompilations.has(input)) {
+        throw new CanonicalHeadlessCombatValidationError([
+          {
+            code: 'canonical-compilation-not-authoritative',
+            path: 'input.kind',
+            message:
+              'Compilation objects must be minted and remain unchanged inside this canonical core instance',
+          },
+        ]);
+      }
+      assertScenarioDerivationAuthority(input.scenario);
+      return input;
+    }
     const projectInput = input?.project ?? input;
     const criticalValidation = validateCombatCriticalScenario(
       resolveCoreCriticalInput(input),
@@ -74,6 +92,7 @@ export function createCanonicalHeadlessCombatCore({
       gameData,
       resolvedCompileOptions
     );
+    assertScenarioDerivationAuthority(scenario);
     const dataIdentity = createDataIdentity({ scenario, gameData });
     const kiboAutoCastDerivationAuthority =
       projectKiboAutoCastDerivationRegistry(
@@ -89,7 +108,7 @@ export function createCanonicalHeadlessCombatCore({
       kiboAutoCastDerivationAuthority,
       switchTriggerGenerationAuthority,
     });
-    return {
+    const compilation = {
       schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
       contractName: CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT,
       kind: CANONICAL_HEADLESS_COMBAT_COMPILATION_KIND,
@@ -104,6 +123,8 @@ export function createCanonicalHeadlessCombatCore({
       },
       dataIdentity,
     };
+    authoritativeCompilations.add(compilation);
+    return compilation;
   }
 
   function validate(input, options = {}) {
@@ -468,7 +489,7 @@ function projectActionDerivation(action) {
       catalogHash: rule.catalogHash ?? null,
       trigger: rule.trigger ?? null,
       triggerTag: rule.triggerTag ?? null,
-      priority: rule.priority ?? null,
+      arbitrationPolicy: rule.arbitrationPolicy ?? null,
       evidenceStatus: rule.evidenceStatus ?? null,
     };
   }
@@ -1609,6 +1630,37 @@ function normalizeValidationIssues(error) {
       message: String(error?.message ?? error),
     },
   ];
+}
+
+function assertScenarioDerivationAuthority(scenario) {
+  const issues = [];
+  if (
+    scenario?.kiboAutoCastDerivationRegistry != null &&
+    !isAuthoritativeKiboAutoCastDerivationRegistry(
+      scenario.kiboAutoCastDerivationRegistry
+    )
+  ) {
+    issues.push({
+      code: 'canonical-kibo-auto-cast-registry-not-authoritative',
+      path: 'scenario.kiboAutoCastDerivationRegistry',
+      message:
+        'Kibo background authority must be materialized by this compilation scheduler',
+    });
+  }
+  if (
+    scenario?.switchTriggerGeneration != null &&
+    !isAuthoritativeSwitchTriggerGeneration(scenario.switchTriggerGeneration)
+  ) {
+    issues.push({
+      code: 'canonical-switch-trigger-generation-not-authoritative',
+      path: 'scenario.switchTriggerGeneration',
+      message:
+        'Switch-derived authority must be materialized by the canonical compiler',
+    });
+  }
+  if (issues.length > 0) {
+    throw new CanonicalHeadlessCombatValidationError(issues);
+  }
 }
 
 function isCompilation(value) {

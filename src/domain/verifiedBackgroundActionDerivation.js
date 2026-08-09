@@ -8,6 +8,10 @@ import {
   getVerifiedCombatActionMapping,
 } from '../data/verifiedCombatMechanicsPackage';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import {
+  createCompiledProjectKiboAutoCastGeneration,
+  isAuthoritativeKiboAutoCastGeneration,
+} from '../machine-axis/kiboAutoCastScheduler';
 
 export const VERIFIED_BACKGROUND_ACTION_DERIVATION_SCHEMA_VERSION = 1;
 export const VERIFIED_BACKGROUND_ACTION_DERIVATION_CONTRACT =
@@ -130,7 +134,7 @@ export function createVerifiedKiboAutoCastDerivation({
     catalogHash: catalogHash == null ? null : String(catalogHash),
     trigger,
     triggerTag: triggerTag == null ? null : String(triggerTag),
-    priority: 'active-before-normal',
+    arbitrationPolicy: 'nodecanvas-token-priority-unresolved',
     evidenceStatus,
   };
   return {
@@ -147,7 +151,6 @@ export function createVerifiedKiboAutoCastDerivation({
  */
 export function materializeVerifiedKiboAutoCastDerivationRegistry({
   generation = null,
-  generationAuthoritative = false,
   actions = [],
   actors = [],
   team = null,
@@ -160,12 +163,36 @@ export function materializeVerifiedKiboAutoCastDerivationRegistry({
     return { valid: true, registry: null, issues: [] };
   }
   const issues = [];
-  if (generationAuthoritative !== true) {
+  if (!isAuthoritativeKiboAutoCastGeneration(generation)) {
     issues.push(
       registryIssue(
         'verified-kibo-auto-cast-generation-not-authoritative',
         'compileOptions.kiboAutoCastGeneration',
         'Kibo auto-cast declarations require this compilation scheduler generation'
+      )
+    );
+    return { valid: false, registry: null, issues };
+  }
+  const expectedGeneration = createCompiledProjectKiboAutoCastGeneration({
+    actions,
+    actors,
+    team,
+    initialRuntimeState,
+    time,
+  }).derivationGeneration;
+  if (
+    !isAuthoritativeKiboAutoCastGeneration(expectedGeneration) ||
+    generation.generationHash !== expectedGeneration.generationHash
+  ) {
+    issues.push(
+      registryIssue(
+        'verified-kibo-auto-cast-generation-compilation-mismatch',
+        'compileOptions.kiboAutoCastGeneration',
+        'Kibo auto-cast generation does not match a fresh scheduler projection of this compilation',
+        {
+          generationHash: generation.generationHash ?? null,
+          expectedGenerationHash: expectedGeneration.generationHash ?? null,
+        }
       )
     );
     return { valid: false, registry: null, issues };
@@ -386,23 +413,29 @@ export function materializeVerifiedKiboAutoCastDerivationRegistry({
   if (issues.length > 0) {
     return { valid: false, registry: null, issues };
   }
+  const evidenceClosed = generation.evidenceStatus === 'static-evidence-closed';
   const projection = {
     schemaVersion: 1,
     contractName: VERIFIED_KIBO_AUTO_CAST_REGISTRY_CONTRACT,
     sourceKind: 'azpr-compile-owned-kibo-auto-cast-derivation-registry',
-    status: 'verified-kibo-auto-cast-derivation-registry-ready',
-    evidenceClosed: generation.evidenceStatus === 'static-evidence-closed',
+    status: evidenceClosed
+      ? 'verified-kibo-auto-cast-derivation-registry-ready'
+      : 'verified-kibo-auto-cast-derivation-registry-ready-with-open-evidence',
+    evidenceClosed,
     sourceGenerationHash: generation.generationHash,
     schedulerInputHash: generation.schedulerInputHash,
     mechanicsPackage: clonePlain(generation.mechanicsPackage),
     catalog: clonePlain(generation.catalog),
     controlledTimeline: compiledTimeline.projection,
+    eligibilityContract: clonePlain(generation.eligibilityContract),
     entries: compiledEntries.sort(compareRegistryEntries),
     triggerExclusions: (generation.triggerExclusions ?? []).map(clonePlain),
+    scheduleExclusions: (generation.scheduleExclusions ?? []).map(clonePlain),
     summary: {
       entryCount: compiledEntries.length,
       controlledTransitionCount: compiledTimeline.transitions.length,
       triggerExclusionCount: generation.triggerExclusions?.length ?? 0,
+      scheduleExclusionCount: generation.scheduleExclusions?.length ?? 0,
     },
   };
   const registry = deepFreeze({
@@ -436,8 +469,10 @@ export function projectKiboAutoCastDerivationRegistry(value) {
     mechanicsPackage: value.mechanicsPackage ?? null,
     catalog: value.catalog ?? null,
     controlledTimeline: value.controlledTimeline ?? null,
+    eligibilityContract: value.eligibilityContract ?? null,
     entries: value.entries ?? [],
     triggerExclusions: value.triggerExclusions ?? [],
+    scheduleExclusions: value.scheduleExclusions ?? [],
     summary: value.summary ?? null,
     registryHash: value.registryHash ?? null,
   });

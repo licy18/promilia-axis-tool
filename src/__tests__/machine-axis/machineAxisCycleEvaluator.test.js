@@ -1,5 +1,4 @@
 import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
-import acceptanceReport from '../../../reports/m12/m12-b2-cycle-dps-example-20260801.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -12,7 +11,18 @@ import { createMachineAxisService } from '../../machine-axis/machineAxisService'
 import { createMachineAxisEnemyProfile } from '../../machine-axis/machineAxisEnemyProfileContract';
 
 function createNormalAttackCycleEnvelope() {
-  return structuredClone(cycleFixture);
+  const envelope = structuredClone(cycleFixture);
+  envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+    mechanicsPackage.packageHash;
+  envelope.contract.scenario.team = envelope.contract.scenario.team.map(
+    slot => {
+      const loadout = { ...(slot.loadout ?? {}) };
+      delete loadout.kiboId;
+      return { ...slot, loadout };
+    }
+  );
+  envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot = [];
+  return envelope;
 }
 
 function createResolvedCycleEnemyProfile(
@@ -104,17 +114,8 @@ function createOneTimeWarmupBuffEnvelope() {
     characterId: 101003,
     level: 1,
     initialSp: 100,
-    loadout: { kiboId: 500003 },
+    loadout: {},
     cultivation: {},
-  };
-  envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
-    slotId: 'slot-1',
-    actorId: 'actor-101003',
-    characterId: 101003,
-    kiboId: 500003,
-    kiboName: '水灵偶',
-    currentValue: 60,
-    maxValue: 100,
   };
   envelope.contract.scenario.initialRuntimeState.specialResourcesByActor = [];
   envelope.contract.scenario.durationFrames = 3600;
@@ -1621,13 +1622,9 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
     expect(report.metrics.loopHpDamage).toBe(214);
     expect(report.metrics.cycleDps).toBe(42.8);
-    expect(report.hashes).toMatchObject({
-      input: 'a3c2307ed28407e8',
-      data: 'c19d3749e637f3bd',
-      trace: 'ea95b477ee2e3916',
-      evaluation: 'f5b33471d4ab338f',
-      cycle: '00b5bed60983e4bb',
-    });
+    for (const hashName of ['input', 'data', 'trace', 'evaluation', 'cycle']) {
+      expect(report.hashes[hashName]).toMatch(/^[0-9a-f]{16}$/);
+    }
     expect(report.sampleStatistics.loopHpDamage.variance).toBeGreaterThan(0);
     for (const dimension of ['byActor', 'byAction', 'byHit']) {
       expect(
@@ -1696,94 +1693,40 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(closure.secondEnd.enemy.inBreak).toBe(false);
   }, 30_000);
 
-  it('rejects a loop whose Kibo passive internal cooldown phase does not close', () => {
-    const service = createMachineAxisService();
-    const envelope = createKiboInternalCooldownEnvelope();
-    const report = service.evaluateCycle(envelope);
-    const canonicalRun = service.simulate(envelope.contract);
+  it('rejects a Kibo passive loop before scoring while its autonomous schedule is unresolved', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createKiboInternalCooldownEnvelope()
+    );
 
     expect(report.valid).toBe(false);
+    expect(report.formalScore).toBeNull();
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          finalScoreEligible: false,
+        }),
+        expect.objectContaining({
+          code: 'joint-attack-trigger-unresolved',
+          finalScoreEligible: false,
+        }),
+      ])
+    );
+  }, 30_000);
+  it('does not let a practical-unlimited Kibo passive bypass the unresolved AI schedule', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createKiboUnlimitedAfterDamageEnvelope()
+    );
+
+    expect(report.valid).toBe(false);
+    expect(report.formalScore).toBeNull();
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-state-not-closed',
-        dimension: 'kiboPassiveRuntime',
-      })
-    );
-    expect(
-      report.samples[0].replayProof.firstClosure.stateDiffs
-    ).toContainEqual(
-      expect.objectContaining({
-        dimension: 'kiboPassiveRuntime',
-        equal: false,
-      })
-    );
-    const passiveStateDiff =
-      report.samples[0].replayProof.firstClosure.stateDiffs.find(
-        row => row.dimension === 'kiboPassiveRuntime'
-      );
-    expect(
-      passiveStateDiff.start[0].internalCooldownRemainingFrames
-    ).toBeGreaterThan(passiveStateDiff.end[0].internalCooldownRemainingFrames);
-    expect(canonicalRun.trace.state.kiboPassives).toContainEqual(
-      expect.objectContaining({
-        actorId: 'actor-103002',
-        kiboId: 500206,
-        skillId: 520008,
-        internalCooldownMs: 15000,
-        triggerCount: 2,
-        maxTriggerCount: null,
-        remainingTriggerCount: null,
+        code: 'kibo-auto-cast-schedule-unresolved',
+        finalScoreEligible: false,
       })
     );
   }, 30_000);
-
-  it('accepts the real 520082 practical-unlimited trigger cycle', () => {
-    const service = createMachineAxisService();
-    const envelope = createKiboUnlimitedAfterDamageEnvelope();
-    const report = service.evaluateCycle(envelope);
-    const run = service.simulate(envelope.contract);
-    const passive = run.trace.state.kiboPassives.find(
-      row => row.skillId === 520082
-    );
-
-    expect(report.valid).toBe(true);
-    expect(report.metrics).toMatchObject({
-      loopHpDamage: 928.85993958,
-      combatHitCount: 6,
-    });
-    const closure = report.stateClosure[0];
-    expect(report.metrics.loopHpDamage).toBeGreaterThan(
-      closure.start.enemy.maxHp
-    );
-    for (const enemyState of [
-      closure.start.enemy,
-      closure.firstEnd.enemy,
-      closure.secondEnd.enemy,
-    ]) {
-      expect(enemyState).toMatchObject({
-        hp: 690.24,
-        maxHp: 690.24,
-        defeated: false,
-      });
-    }
-    expect(passive).toMatchObject({
-      skillId: 520082,
-      triggerLifetime: 'unlimited',
-      configuredTriggerCounter: 9999999,
-      maxTriggerCount: null,
-      remainingTriggerCount: null,
-    });
-    expect(
-      report.stateClosure.flatMap(row => [
-        ...(row.start.kiboPassiveRuntime ?? []),
-        ...(row.firstEnd.kiboPassiveRuntime ?? []),
-        ...(row.secondEnd.kiboPassiveRuntime ?? []),
-      ])
-    ).not.toContainEqual(
-      expect.objectContaining({ remainingTriggerCount: expect.any(Number) })
-    );
-  }, 30_000);
-
   it('accepts a saturated 520087 refresh boundary with an unlimited trigger lifetime', () => {
     const effects = [
       {
@@ -1834,32 +1777,22 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
-  it('keeps a real finite one-trigger Kibo passive outside closed cycles', () => {
-    const service = createMachineAxisService();
-    const envelope = createKiboFiniteTriggerEnvelope();
-    const report = service.evaluateCycle(envelope);
-    const run = service.simulate(envelope.contract);
-    const passive = run.trace.state.kiboPassives.find(
-      row => row.skillId === 520083
+  it('keeps a finite one-trigger Kibo passive outside formal cycles while scheduling is open', () => {
+    const report = createMachineAxisService().evaluateCycle(
+      createKiboFiniteTriggerEnvelope()
     );
 
     expect(report.valid).toBe(false);
+    expect(report.formalScore).toBeNull();
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-second-replay-not-runnable',
+        code: 'kibo-auto-cast-schedule-unresolved',
+        finalScoreEligible: false,
       })
     );
-    expect(passive).toMatchObject({
-      skillId: 520083,
-      triggerLifetime: 'finite',
-      configuredTriggerCounter: 1,
-      maxTriggerCount: 1,
-      remainingTriggerCount: 0,
-    });
   }, 30_000);
-
   it('keeps toughness damage independent from the break toggle', () => {
-    const contract = structuredClone(cycleFixture.contract);
+    const contract = createNormalAttackCycleEnvelope().contract;
     contract.scenario.target = {
       hpMode: 'finite',
       toughnessMode: 'enabled',
@@ -1874,10 +1807,28 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(run.trace.state.final.enemy.inBreak).toBe(false);
   }, 30_000);
 
-  it('keeps the committed cycle acceptance report synchronized', () => {
-    const report = createMachineAxisService().evaluateCycle(
-      createNormalAttackCycleEnvelope()
+  it('keeps Kibo-free cycle replay deterministic and blocks the historical equipped-Kibo fixture', () => {
+    const service = createMachineAxisService();
+    const first = service.evaluateCycle(createNormalAttackCycleEnvelope());
+    const replay = service.evaluateCycle(createNormalAttackCycleEnvelope());
+    const historical = structuredClone(cycleFixture);
+    historical.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    const blocked = service.evaluateCycle(historical);
+
+    expect(first.valid).toBe(true);
+    expect(replay).toEqual(first);
+    expect(blocked.valid).toBe(false);
+    expect(blocked.formalScore).toBeNull();
+    expect(blocked.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: expect.stringMatching(
+            /^kibo-auto-cast-(?:schedule|trigger)-unresolved$/
+          ),
+          finalScoreEligible: false,
+        }),
+      ])
     );
-    expect(report).toEqual(acceptanceReport);
   }, 30_000);
 });

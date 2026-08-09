@@ -938,9 +938,21 @@ describe('action rule diagnostics', () => {
         actionIds: ['actor-combo', 'kibo-combo'],
         evidence: expect.objectContaining({
           formalEligible: false,
-          leavesOpen: [
-            'petCsEntity.data.existPetBreakTarget-authoritative-generation-chain',
-          ],
+          status: 'preweakbreak-static-predicate-partially-closed',
+          eligibilityEvidence: expect.objectContaining({
+            status: 'client-static-predicate-chain-partially-closed',
+            leavesOpen: expect.arrayContaining([
+              'controlled-entity-offset-0x40-field-identity',
+              'service-cannot-be-joint-strike-set-runtime-input',
+            ]),
+          }),
+          postCastEvidence: expect.objectContaining({
+            status: 'server-effect-and-weakness-cleanup-open',
+            leavesOpen: expect.arrayContaining([
+              'joint-strike-post-cast-effect-chain',
+              'server-authoritative-weakness-point-clear',
+            ]),
+          }),
         }),
       }),
     ]);

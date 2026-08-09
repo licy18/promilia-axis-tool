@@ -1647,6 +1647,8 @@ function createRejectedReport({
     objectiveContract,
     enemySettlementTiming: settlementContract,
     assumptions: createCycleAssumptions(objectiveContract),
+    formalScore: null,
+    formalStatus: 'formal-score-ineligible',
     critical,
     loop: isRecord(envelope?.loop)
       ? {

@@ -19,10 +19,7 @@ import {
 import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 import { resolveEnemyLevelStats } from '../mechanics/enemyLevelStats';
 import { materializeVerifiedKiboAutoCastDerivationRegistry } from '../../domain/verifiedBackgroundActionDerivation';
-import {
-  createCompiledProjectKiboAutoCastGeneration,
-  isAuthoritativeKiboAutoCastGeneration,
-} from '../../machine-axis/kiboAutoCastScheduler';
+import { createCompiledProjectKiboAutoCastGeneration } from '../../machine-axis/kiboAutoCastScheduler';
 import { attachVerifiedSwitchExitTailPolicies } from '../generation/verifiedSwitchExitTailPolicy';
 
 export class CompileProjectError extends Error {
@@ -211,15 +208,13 @@ export function compileProject(
   });
   const effectiveKiboAutoCastGeneration =
     compiledKiboAutoCastActions.length > 0 ||
-    (kiboAutoCastPlan.triggerExclusions ?? []).length > 0
+    (kiboAutoCastPlan.triggerExclusions ?? []).length > 0 ||
+    (kiboAutoCastPlan.scheduleExclusions ?? []).length > 0
       ? kiboAutoCastPlan.derivationGeneration
       : null;
   const kiboAutoCastRegistryResult =
     materializeVerifiedKiboAutoCastDerivationRegistry({
       generation: effectiveKiboAutoCastGeneration,
-      generationAuthoritative: isAuthoritativeKiboAutoCastGeneration(
-        effectiveKiboAutoCastGeneration
-      ),
       actions: baseActions,
       actors,
       team,

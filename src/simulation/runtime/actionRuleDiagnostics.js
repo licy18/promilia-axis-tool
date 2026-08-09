@@ -50,6 +50,7 @@ export const ACTION_RULE_CODES = Object.freeze({
     'controlled-actor-frame-input-conflict',
   BACKGROUND_DERIVATION_INVALID: 'background-action-derivation-invalid',
   KIBO_AUTO_CAST_TRIGGER_UNRESOLVED: 'kibo-auto-cast-trigger-unresolved',
+  KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED: 'kibo-auto-cast-schedule-unresolved',
   ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
   KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
   SWITCH_EXIT_TAIL_POLICY_INVALID: 'switch-exit-tail-policy-invalid',
@@ -95,6 +96,7 @@ export function createActionRuleDiagnostics({
     ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
     ...createSwitchExitTailDiagnostics(actions, scenario),
     ...createKiboAutoCastTriggerDiagnostics(scenario),
+    ...createKiboAutoCastScheduleDiagnostics(scenario),
     ...createBackgroundActionDerivationDiagnostics(actions, scenario),
     ...createStandaloneStarCarryDiagnostics(actions, scenario),
     ...createSkillSpPreconditionDiagnostics(
@@ -243,6 +245,10 @@ export function createActionRuleDiagnostics({
       ).length,
       backgroundDerivationDiagnosticCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID
+      ).length,
+      kiboAutoCastScheduleUnresolvedCount: diagnostics.filter(
+        item =>
+          item.code === ACTION_RULE_CODES.KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED
       ).length,
       cooldownViolationCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
@@ -1045,13 +1051,15 @@ function createJointAttackTriggerUnresolvedDiagnostic({
     kiboId: binding?.ownerId ?? kiboAction.kiboId ?? null,
     timeMs: Number(actorAction.startMs) || 0,
     message:
-      '合击动作映射与同帧配对已确认，但 existPetBreakTarget 的权威生成链尚未闭合',
+      '合击动作映射、PreWeakBreak 静态资格谓词与同帧配对已分层确认，但未命名运行时字段及释放后服务端效果仍未闭合',
     evidence,
     source: {
       sourceKind: 'azpr-joint-attack-trigger-contract',
       sourceStatus: evidence.status,
       fieldPaths: [
         'petCsEntity.data.existPetBreakTarget',
+        'PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720',
+        'PreWeakBreakSystem.UpdatePreBreakThreshold@0x13FCB20',
         'NewTable/pet.breakSkillList',
         'controlBinding.logic.skillTag',
       ],
@@ -1906,6 +1914,61 @@ function createKiboAutoCastTriggerDiagnostics(scenario) {
         sourceStatus: 'autonomous-trigger-fail-closed',
         fieldPaths: [
           'scenario.kiboAutoCastDerivationRegistry.triggerExclusions',
+        ],
+      },
+      appliedToSimulationResults: formal,
+    };
+  });
+}
+
+function createKiboAutoCastScheduleDiagnostics(scenario) {
+  const registry = scenario?.kiboAutoCastDerivationRegistry;
+  if (!isAuthoritativeKiboAutoCastDerivationRegistry(registry)) return [];
+  const formal = isFormalActionLegalityScenario(scenario);
+  const fps = Number(scenario?.time?.fps) || 60;
+  return (registry.scheduleExclusions ?? []).map((exclusion, index) => {
+    const status = formal
+      ? ACTION_RULE_STATUSES.VIOLATED
+      : ACTION_RULE_STATUSES.UNRESOLVED;
+    const startFrame = Number(exclusion.controlledIntervalStartFrame);
+    return {
+      schemaVersion: 1,
+      id: createDiagnosticId(
+        ACTION_RULE_CODES.KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED,
+        exclusion.ownerActorId,
+        exclusion.kiboId,
+        exclusion.publicActionId,
+        exclusion.controlledIntervalIdentity,
+        index
+      ),
+      code: ACTION_RULE_CODES.KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED,
+      ruleKey: 'verified-kibo-autonomous-schedule',
+      status,
+      severity: status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
+      actionId: null,
+      actionIds: [],
+      actorId: exclusion.ownerActorId ?? null,
+      timeMs:
+        Number.isInteger(startFrame) && startFrame >= 0
+          ? (startFrame * 1000) / fps
+          : 0,
+      reason: 'autonomous-nodecanvas-schedule-evidence-open',
+      sourceIdentity: registry.registryHash ?? null,
+      message: `Kibo ${exclusion.kiboId} action ${exclusion.publicActionId} is eligible only while its owner is controlled, but its NodeCanvas frame, arbitration priority, and cadence are unresolved`,
+      kiboId: exclusion.kiboId ?? null,
+      publicActionId: exclusion.publicActionId ?? null,
+      actionKind: exclusion.actionKind ?? null,
+      triggerTag: exclusion.triggerTag ?? null,
+      eligibilityStatus: exclusion.eligibilityStatus ?? null,
+      eligibilityContractHash: exclusion.eligibilityContractHash ?? null,
+      controlledIntervalIdentity: exclusion.controlledIntervalIdentity ?? null,
+      leavesOpen: (exclusion.leavesOpen ?? []).map(String),
+      source: {
+        sourceKind: 'azpr-controlled-kibo-auto-cast-scheduler',
+        sourceStatus: 'nodecanvas-schedule-fail-closed',
+        fieldPaths: [
+          'scenario.kiboAutoCastDerivationRegistry.eligibilityContract',
+          'scenario.kiboAutoCastDerivationRegistry.scheduleExclusions',
         ],
       },
       appliedToSimulationResults: formal,

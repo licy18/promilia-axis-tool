@@ -13,13 +13,14 @@ import {
   expandKiboAutoCastActions,
   isAuthoritativeKiboAutoCastGeneration,
 } from '../../machine-axis/kiboAutoCastScheduler';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import {
   createVerifiedKiboAutoCastDerivation,
+  materializeVerifiedKiboAutoCastDerivationRegistry,
   VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
   validateVerifiedKiboAutoCastDerivation,
 } from '../../domain/verifiedBackgroundActionDerivation';
 import { compileProject } from '../../simulation/compiler/compileProject';
-import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import {
   ACTION_RULE_CODES,
   createActionRuleDiagnostics,
@@ -83,18 +84,140 @@ describe('controlled Kibo auto-cast scheduler', () => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
   });
 
-  it('generates new autonomous casts only for the current controlled actor Kibo', () => {
+  it('does not invent tag-0 frame, priority, cadence, cooldown, or resource transactions without the NodeCanvas graph', () => {
     const result = generate(createContract({ durationFrames: 360 }));
 
-    expect(result.generatedActions.length).toBeGreaterThan(0);
+    expect(result.generatedActions).toEqual([]);
+    expect(result.scheduleExclusions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ownerSlotId: 'slot-a',
+          actionKind: 'normal-attack',
+          triggerTag: '0',
+          disposition: 'not-generated-without-nodecanvas-schedule',
+        }),
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ownerSlotId: 'slot-a',
+          actionKind: 'active',
+          triggerTag: '0',
+          disposition: 'not-generated-without-nodecanvas-schedule',
+        }),
+      ])
+    );
+    expect(result.derivationGeneration).toMatchObject({
+      evidenceStatus: 'scheduler-evidence-open',
+      summary: {
+        generatedActionCount: 0,
+        scheduleExclusionCount: expect.any(Number),
+      },
+    });
+  });
+
+  it('does not let a caller mint registry authority with generationAuthoritative=true', () => {
+    const generated = generate(
+      createContract({ actions: [], durationFrames: 0 })
+    ).derivationGeneration;
+    const forged = structuredClone(generated);
+    const source = createContract().scenario;
+    const actors = source.team.map(slot => ({
+      id: `actor-${slot.characterId}`,
+      characterId: slot.characterId,
+      loadout: structuredClone(slot.loadout),
+    }));
+    const team = {
+      slots: source.team.map(slot => ({
+        slotId: slot.slotId,
+        actorId: `actor-${slot.characterId}`,
+      })),
+    };
+
+    expect(isAuthoritativeKiboAutoCastGeneration(forged)).toBe(false);
     expect(
-      new Set(result.generatedActions.map(action => action.owner.slotId))
+      materializeVerifiedKiboAutoCastDerivationRegistry({
+        generation: forged,
+        generationAuthoritative: true,
+        actions: [],
+        actors,
+        team,
+        initialRuntimeState: source.initialRuntimeState,
+        time: { fps: 60, durationMs: 0 },
+      })
+    ).toMatchObject({
+      valid: false,
+      registry: null,
+      issues: [
+        expect.objectContaining({
+          code: 'verified-kibo-auto-cast-generation-not-authoritative',
+        }),
+      ],
+    });
+  });
+
+  it('rejects a scheduler-minted generation that does not match this compilation catalog', () => {
+    const source = createContract({ actions: [], durationFrames: 120 });
+    const foreignGeneration = createKiboAutoCastGeneration(source, {
+      kiboCatalogById: new Map(),
+      fps: 60,
+    }).derivationGeneration;
+    const actors = source.scenario.team.map(slot => ({
+      id: `actor-${slot.characterId}`,
+      characterId: slot.characterId,
+      loadout: structuredClone(slot.loadout),
+    }));
+    const team = {
+      slots: source.scenario.team.map(slot => ({
+        slotId: slot.slotId,
+        actorId: `actor-${slot.characterId}`,
+      })),
+    };
+
+    expect(isAuthoritativeKiboAutoCastGeneration(foreignGeneration)).toBe(true);
+    expect(
+      materializeVerifiedKiboAutoCastDerivationRegistry({
+        generation: foreignGeneration,
+        actions: [],
+        actors,
+        team,
+        initialRuntimeState: source.scenario.initialRuntimeState,
+        time: { fps: 60, durationMs: 2000 },
+      })
+    ).toMatchObject({
+      valid: false,
+      registry: null,
+      issues: [
+        expect.objectContaining({
+          code: 'verified-kibo-auto-cast-generation-compilation-mismatch',
+        }),
+      ],
+    });
+  });
+
+  it('records closed foreground eligibility without inventing autonomous casts', () => {
+    const result = generate(createContract({ durationFrames: 360 }));
+
+    expect(result.generatedActions).toEqual([]);
+    expect(
+      new Set(result.scheduleExclusions.map(entry => entry.ownerSlotId))
     ).toEqual(new Set(['slot-a']));
     expect(
-      result.generatedActions.every(action =>
-        ['normal-attack', 'active'].includes(action.intent.actionKind)
+      result.scheduleExclusions.every(
+        entry =>
+          entry.controlledIntervalStartFrame === 0 &&
+          entry.controlledIntervalEndFrame === 360 &&
+          entry.eligibilityStatus === 'foreground-owner-eligibility-closed'
       )
     ).toBe(true);
+    expect(result.derivationGeneration.eligibilityContract).toMatchObject({
+      status: 'foreground-kibo-eligibility-closed',
+      evidenceClosed: true,
+      requirements: {
+        ownerActorMustBeControlled: true,
+        controlledInterval: '[startFrame,endFrame)',
+      },
+      contractHash: expect.any(String),
+    });
     expect(result.controlledTimeline).toMatchObject({
       initialActorId: 'actor-101007',
       transitions: [],
@@ -109,7 +232,31 @@ describe('controlled Kibo auto-cast scheduler', () => {
     ).toBe(false);
   });
 
-  it('uses right-open controlled intervals across A to B and never schedules C', () => {
+  it('does not schedule a source-open auto cast for an explicitly dead controlled Kibo and hashes the vital boundary', () => {
+    const alive = createContract({ durationFrames: 360 });
+    const dead = structuredClone(alive);
+    dead.scenario.initialRuntimeState.kiboVitalsBySlot = [
+      {
+        slotId: 'slot-a',
+        actorId: 'actor-101007',
+        kiboId: 500001,
+        currentValue: 0,
+        maxValue: 100,
+      },
+    ];
+
+    const aliveResult = generate(alive);
+    const deadResult = generate(dead);
+
+    expect(deadResult.scheduleExclusions).toEqual([]);
+    expect(deadResult.triggerExclusions).toEqual([]);
+    expect(deadResult.generatedActions).toEqual([]);
+    expect(deadResult.derivationGeneration.schedulerInputHash).not.toBe(
+      aliveResult.derivationGeneration.schedulerInputHash
+    );
+  });
+
+  it('projects right-open foreground eligibility across A to B and never grants C', () => {
     const result = generate(
       createContract({
         actions: [
@@ -124,21 +271,36 @@ describe('controlled Kibo auto-cast scheduler', () => {
       })
     );
     const bySlot = Object.groupBy(
-      result.generatedActions,
-      action => action.owner.slotId
+      result.scheduleExclusions,
+      entry => entry.ownerSlotId
     );
 
-    expect(bySlot['slot-a'].every(action => action.schedule.frame < 180)).toBe(
-      true
+    expect(result.generatedActions).toEqual([]);
+    expect(bySlot['slot-a']).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          controlledIntervalStartFrame: 0,
+          controlledIntervalEndFrame: 180,
+        }),
+      ])
     );
-    expect(bySlot['slot-b'].every(action => action.schedule.frame >= 180)).toBe(
-      true
+    expect(
+      bySlot['slot-a'].every(entry => entry.controlledIntervalEndFrame === 180)
+    ).toBe(true);
+    expect(bySlot['slot-b']).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          controlledIntervalStartFrame: 180,
+          controlledIntervalEndFrame: 480,
+        }),
+      ])
     );
+    expect(
+      bySlot['slot-b'].every(
+        entry => entry.controlledIntervalStartFrame === 180
+      )
+    ).toBe(true);
     expect(bySlot['slot-c']).toBeUndefined();
-    expect(bySlot['slot-a'].some(action => action.schedule.frame === 180)).toBe(
-      false
-    );
-    expect(bySlot['slot-b'][0].schedule.frame).toBe(180);
     expect(result.controlledTimeline.transitions).toEqual([
       {
         switchActionId: 'switch-a-b',
@@ -149,8 +311,7 @@ describe('controlled Kibo auto-cast scheduler', () => {
       },
     ]);
   });
-
-  it('does not reset the old Kibo cooldown or sequence when switching away and back', () => {
+  it('preserves distinct eligibility intervals without inferring cooldown or cadence across switch-back', () => {
     const result = generate(
       createContract({
         actions: [
@@ -170,27 +331,34 @@ describe('controlled Kibo auto-cast scheduler', () => {
         durationFrames: 420,
       })
     );
-    const aActions = result.generatedActions.filter(
-      action => action.owner.slotId === 'slot-a'
-    );
+    const aIntervals = [
+      ...new Set(
+        result.scheduleExclusions
+          .filter(entry => entry.ownerSlotId === 'slot-a')
+          .map(
+            entry =>
+              `${entry.controlledIntervalStartFrame}:${entry.controlledIntervalEndFrame}`
+          )
+      ),
+    ];
 
-    expect(aActions.map(action => action.autoCastRule.sequenceIndex)).toEqual(
-      [...aActions.keys()].map(index => index + 1)
-    );
-    expect(aActions.some(action => action.schedule.frame === 180)).toBe(false);
+    expect(result.generatedActions).toEqual([]);
+    expect(aIntervals).toEqual(['0:120', '180:420']);
     expect(
-      aActions.filter(action => action.schedule.frame >= 180)[0]
-    ).toMatchObject({
-      schedule: { frame: expect.any(Number) },
-      autoCastRule: {
-        controlledIntervalIdentity: expect.stringContaining('switch-b-a'),
-      },
-    });
+      result.scheduleExclusions.every(
+        entry =>
+          entry.disposition === 'not-generated-without-nodecanvas-schedule'
+      )
+    ).toBe(true);
     expect(
-      aActions.filter(action => action.schedule.frame >= 180)[0].schedule.frame
-    ).toBeGreaterThan(180);
+      result.scheduleExclusions.some(
+        entry =>
+          'scheduledFrame' in entry ||
+          'sequenceIndex' in entry ||
+          'cooldownFrames' in entry
+      )
+    ).toBe(false);
   });
-
   it('records an off-field switch for the shared legality gate without granting background Kibo casts', () => {
     const result = generate(
       createContract({
@@ -216,11 +384,11 @@ describe('controlled Kibo auto-cast scheduler', () => {
         }),
       ],
     });
+    expect(result.generatedActions).toEqual([]);
     expect(
-      new Set(result.generatedActions.map(action => action.owner.slotId))
+      new Set(result.scheduleExclusions.map(entry => entry.ownerSlotId))
     ).toEqual(new Set(['slot-a']));
   });
-
   it('does not synthesize a nonzero-tag Kibo trigger and preserves the open evidence in the generation hash', () => {
     const contract = createContract({
       actions: [
@@ -257,7 +425,7 @@ describe('controlled Kibo auto-cast scheduler', () => {
     });
   });
 
-  it('binds a crossing accepted cast to the switch tail decision without adding a recast', () => {
+  it('does not invent a crossing cast or tail while the NodeCanvas schedule is unresolved', () => {
     const result = generate(
       createContract({
         actions: [
@@ -271,39 +439,38 @@ describe('controlled Kibo auto-cast scheduler', () => {
         durationFrames: 240,
       })
     );
-    const oldOwnerActions = result.generatedActions.filter(
-      action => action.owner.slotId === 'slot-a'
+
+    expect(result.generatedActions).toEqual([]);
+    expect(result.scheduleExclusions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ownerSlotId: 'slot-a',
+          controlledIntervalStartFrame: 0,
+          controlledIntervalEndFrame: 30,
+        }),
+        expect.objectContaining({
+          ownerSlotId: 'slot-b',
+          controlledIntervalStartFrame: 30,
+          controlledIntervalEndFrame: 240,
+        }),
+      ])
     );
-
-    expect(oldOwnerActions).toHaveLength(1);
-    expect(oldOwnerActions[0]).toMatchObject({
-      schedule: { frame: 0 },
-      autoCastRule: {
-        switchTransitionId: 'switch-a-b',
-        switchBoundaryFrame: 30,
-        switchExitTailStatus: 'kibo-switch-exit-tail-order-unresolved',
-        evidenceStatus: 'planner-simplified',
-        switchExitTailPolicyHash: expect.any(String),
-      },
-    });
     expect(
-      result.generatedActions.filter(
-        action =>
-          action.owner.slotId === 'slot-a' && action.schedule.frame >= 30
+      result.scheduleExclusions.some(
+        entry =>
+          'switchExitTailStatus' in entry || 'switchExitTailPolicyHash' in entry
       )
-    ).toEqual([]);
+    ).toBe(false);
   });
-
-  it('keeps the action-only facade but no longer requires a dragged Kibo input', () => {
+  it('keeps the action-only facade free of invented Kibo inputs', () => {
     const contract = createContract({ durationFrames: 240 });
     const expanded = expandKiboAutoCastActions(contract, {
       kiboCatalogById: KIBO_CATALOG,
     });
-    expect(
-      expanded.filter(action => action.autoCast === true).length
-    ).toBeGreaterThan(0);
-  });
 
+    expect(expanded).toEqual(contract.actions);
+    expect(expanded.some(action => action.autoCast === true)).toBe(false);
+  });
   it('never treats a self-signed embedded rule as compiler authority', () => {
     const actor = {
       id: 'actor-101007',
@@ -359,7 +526,7 @@ describe('controlled Kibo auto-cast scheduler', () => {
     });
   });
 
-  it('matches every autonomous declaration to the compiler registry and rejects mutations before settlement', () => {
+  it('materializes only schedule-open compiler evidence and makes it a formal hard gate', () => {
     const draft = createDefaultWorkbenchDemoDraftState();
     const project = createWorkbenchProject(draft.selection, {
       teamSlots: draft.teamSlots,
@@ -369,257 +536,92 @@ describe('controlled Kibo auto-cast scheduler', () => {
       durationMs: 3000,
     });
     const scenario = compileProject(project, getWorkbenchGameData());
-    const auto = scenario.actions.find(action => action.autoCast === true);
 
-    expect(auto).toMatchObject({
-      type: 'kiboEvent',
-      actorId: `actor-${draft.teamSlots[0].characterId}`,
-      kiboId: 500001,
-      skillId: expect.any(Number),
-      autoCast: true,
-      sourceSequenceSource: VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
-    });
-    expect(['normal-attack', 'active']).toContain(auto.eventType);
-    expect(
-      validateVerifiedKiboAutoCastDerivation(auto, scenario)
-    ).toMatchObject({
-      valid: true,
-      structurallyValid: true,
-      evidenceClosed: true,
-      authoritativeRegistryMatch: true,
+    expect(scenario.actions.filter(action => action.autoCast === true)).toEqual(
+      []
+    );
+    expect(scenario.kiboAutoCastDerivationRegistry).toMatchObject({
+      status:
+        'verified-kibo-auto-cast-derivation-registry-ready-with-open-evidence',
+      evidenceClosed: false,
+      entries: [],
+      eligibilityContract: {
+        status: 'foreground-kibo-eligibility-closed',
+        evidenceClosed: true,
+      },
+      scheduleExclusions: expect.arrayContaining([
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ownerActorId: `actor-${draft.teamSlots[0].characterId}`,
+          triggerTag: '0',
+        }),
+      ]),
+      summary: {
+        entryCount: 0,
+        scheduleExclusionCount: expect.any(Number),
+        triggerExclusionCount: expect.any(Number),
+        controlledTransitionCount: 0,
+      },
       registryHash: expect.any(String),
     });
 
-    const resign = (rule, patch = {}) => {
-      const value = { ...rule, ...patch };
-      return createVerifiedKiboAutoCastDerivation({
-        actionId: value.actionId,
-        slotId: value.ownerSlotId,
-        canonicalSlotId: value.canonicalOwnerSlotId,
-        ownerActorId: value.ownerActorId,
-        ownerCharacterId: value.ownerCharacterId,
-        kiboId: value.kiboId,
-        publicActionId: value.publicActionId,
-        actionKind: value.actionKind,
-        scheduledFrame: value.scheduledFrame,
-        sequenceIndex: value.sequenceIndex,
-        sourceSequencePath: value.sourceSequencePath,
-        sourceSequenceSource: value.sourceSequenceSource,
-        controlledIntervalIdentity: value.controlledIntervalIdentity,
-        controlledIntervalStartFrame: value.controlledIntervalStartFrame,
-        controlledIntervalEndFrame: value.controlledIntervalEndFrame,
-        switchExitTailStatus: value.switchExitTailStatus,
-        switchBoundaryFrame: value.switchBoundaryFrame,
-        switchTransitionId: value.switchTransitionId,
-        switchBoundarySourceSequencePath:
-          value.switchBoundarySourceSequencePath,
-        switchExitTailPolicyHash: value.switchExitTailPolicyHash,
-        mappingIdentity: value.mappingIdentity,
-        mechanicsPackageId: value.mechanicsPackageId,
-        mechanicsPackageHash: value.mechanicsPackageHash,
-        catalogHash: value.catalogHash,
-        trigger: value.trigger,
-        triggerTag: value.triggerTag,
-        evidenceStatus: value.evidenceStatus,
-      });
-    };
-    const mutations = [
-      {
-        name: 'signature-kind',
-        apply(action) {
-          action.eventType = 'signature';
-          action.actionKind = 'signature';
-          action.skillId = 50000102;
-          action.autoCastRule = resign(action.autoCastRule, {
-            actionKind: 'signature',
-            publicActionId: 50000102,
-          });
-        },
-      },
-      {
-        name: 'break-kind',
-        apply(action) {
-          action.eventType = 'break';
-          action.actionKind = 'break';
-          action.skillId = 50000112;
-          action.autoCastRule = resign(action.autoCastRule, {
-            actionKind: 'break',
-            publicActionId: 50000112,
-          });
-        },
-      },
-      {
-        name: 'arbitrary-skill',
-        apply(action) {
-          action.skillId = 999999;
-          action.autoCastRule = resign(action.autoCastRule, {
-            publicActionId: 999999,
-          });
-        },
-      },
-      {
-        name: 'frame',
-        apply(action) {
-          const scheduledFrame = action.autoCastRule.scheduledFrame + 1;
-          action.startMs = (scheduledFrame * 1000) / 60;
-          action.autoCastRule = resign(action.autoCastRule, {
-            scheduledFrame,
-          });
-        },
-      },
-      {
-        name: 'sequence-path',
-        apply(action) {
-          action.sourceSequencePath = [999];
-          action.autoCastRule = resign(action.autoCastRule, {
-            sourceSequencePath: [999],
-          });
-        },
-      },
-      {
-        name: 'sequence-source',
-        apply(action) {
-          action.sourceSequenceSource = 'self-signed-source-order';
-        },
-      },
-      {
-        name: 'owner',
-        apply(action) {
-          action.actorId = scenario.actors[1].id;
-          action.actor = scenario.actors[1];
-          action.autoCastRule = resign(action.autoCastRule, {
-            ownerActorId: scenario.actors[1].id,
-            ownerCharacterId: scenario.actors[1].characterId,
-          });
-        },
-      },
-      {
-        name: 'slot',
-        apply(action) {
-          action.autoCastRule = resign(action.autoCastRule, {
-            ownerSlotId: 'forged-slot',
-            canonicalOwnerSlotId: 'forged-slot',
-          });
-        },
-      },
-      {
-        name: 'package-hash',
-        apply(action) {
-          action.autoCastRule = resign(action.autoCastRule, {
-            mechanicsPackageHash: 'forged-package-hash',
-          });
-        },
-      },
-      {
-        name: 'mapping-identity',
-        apply(action) {
-          action.autoCastRule = resign(action.autoCastRule, {
-            mappingIdentity: 'forged-mapping',
-          });
-        },
-      },
-      {
-        name: 'sequence-index',
-        apply(action) {
-          action.autoCastRule = resign(action.autoCastRule, {
-            sequenceIndex: action.autoCastRule.sequenceIndex + 1,
-          });
-        },
-      },
-    ];
-
-    for (const mutation of mutations) {
-      const candidate = structuredClone(auto);
-      mutation.apply(candidate);
-      const result = validateVerifiedKiboAutoCastDerivation(
-        candidate,
-        scenario
-      );
-      expect(result.valid, mutation.name).toBe(false);
-      expect(
-        result.authoritativeRegistryMatch === false ||
-          result.structurallyValid === false,
-        mutation.name
-      ).toBe(true);
-    }
-
-    expect(
-      validateVerifiedKiboAutoCastDerivation(auto, {
-        ...scenario,
-        kiboAutoCastDerivationRegistry: structuredClone(
-          scenario.kiboAutoCastDerivationRegistry
-        ),
-      })
-    ).toMatchObject({
-      valid: false,
-      authoritativeRegistryMatch: false,
-      reasons: expect.arrayContaining([
-        'authoritative-derivation-registry-missing',
-      ]),
-    });
-
-    const forged = structuredClone(auto);
-    forged.skillId = 999999;
-    forged.autoCastRule = resign(forged.autoCastRule, {
-      publicActionId: 999999,
-    });
-    const forgedScenario = { ...scenario, actions: [forged] };
     const diagnostics = createActionRuleDiagnostics({
-      scenario: forgedScenario,
+      scenario: { ...scenario, formalActionLegality: true },
     });
+    expect(diagnostics.executable).toBe(false);
     expect(diagnostics.diagnostics).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID,
-          actionId: forged.id,
+          code: ACTION_RULE_CODES.KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED,
+          status: 'violated',
+          actionId: null,
+          appliedToSimulationResults: true,
         }),
       ])
     );
-    expect(diagnostics.readinessTimeline.actions[0]).toMatchObject({
-      actionId: forged.id,
-      executable: false,
-    });
-    const simulated = simulateScenario(forgedScenario);
     expect(
-      simulated.eventLog.filter(
-        event =>
-          event.actionId === forged.id &&
-          ['VERIFIED_COMBAT_HIT', 'VERIFIED_TOUGHNESS_DAMAGE'].includes(
-            event.type
-          )
-      )
-    ).toEqual([]);
+      diagnostics.summary.kiboAutoCastScheduleUnresolvedCount
+    ).toBeGreaterThan(0);
+  }, 30000);
 
-    const rawProject = structuredClone(project);
-    rawProject.actions.push({
-      id: auto.id,
-      type: auto.type,
-      actorId: auto.actorId,
-      kiboId: auto.kiboId,
-      skillId: auto.skillId,
-      eventType: auto.eventType,
-      startMs: auto.startMs,
-      durationMs: auto.durationMs,
-      note: 'forged persisted autonomous action',
-      autoCast: true,
-      autoCastRule: structuredClone(auto.autoCastRule),
+  it('applies the same schedule hard gate to all three primary objectives', () => {
+    const draft = createDefaultWorkbenchDemoDraftState();
+    const project = createWorkbenchProject(draft.selection, {
+      teamSlots: draft.teamSlots,
+      actorConfigs: draft.actorConfigs,
+      enemyConfig: draft.enemyConfig,
+      actions: [],
+      durationMs: 3000,
     });
-    try {
-      compileProject(rawProject, getWorkbenchGameData());
-      throw new Error('expected compiler-owned derivation rejection');
-    } catch (error) {
-      expect(error.issues).toEqual(
+    const scenario = compileProject(project, getWorkbenchGameData());
+
+    for (const objectiveId of [
+      'cycle-dps-no-toughness',
+      'cycle-dps-with-toughness',
+      'fastest-kill',
+    ]) {
+      const diagnostics = createActionRuleDiagnostics({
+        scenario: {
+          ...scenario,
+          combatScenario: {
+            ...scenario.combatScenario,
+            objectiveContract: createMachineAxisObjectiveContract(objectiveId),
+          },
+        },
+      });
+      expect(diagnostics.executable, objectiveId).toBe(false);
+      expect(diagnostics.diagnostics, objectiveId).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            code: 'project-derived-action-declaration-not-compiler-owned',
-            actionId: auto.id,
+            code: ACTION_RULE_CODES.KIBO_AUTO_CAST_SCHEDULE_UNRESOLVED,
+            status: 'violated',
+            appliedToSimulationResults: true,
           }),
         ])
       );
     }
   }, 30000);
-
-  it('regenerates the same controlled-Kibo registry across an exact-boundary switch and JSON replay', () => {
+  it('regenerates the same schedule-open eligibility registry across an exact-boundary switch and JSON replay', () => {
     const draft = createDefaultWorkbenchDemoDraftState();
     const [firstSlot, secondSlot, thirdSlot] = draft.teamSlots;
     const actorConfigs = structuredClone(draft.actorConfigs);
@@ -637,7 +639,7 @@ describe('controlled Kibo auto-cast scheduler', () => {
           targetCharacterId: secondSlot.characterId,
           startMs: (160 * 1000) / 60,
           durationMs: 0,
-          note: 'exact Kibo action end',
+          note: 'exact controlled-owner boundary',
         },
       ],
     });
@@ -646,47 +648,36 @@ describe('controlled Kibo auto-cast scheduler', () => {
       JSON.parse(JSON.stringify(project)),
       getWorkbenchGameData()
     );
-    const firstAutos = first.actions.filter(action => action.autoCast === true);
-    const replayAutos = replay.actions.filter(
-      action => action.autoCast === true
-    );
 
-    expect(firstAutos.length).toBeGreaterThan(1);
-    expect(
-      firstAutos
-        .map(action => ({
-          actionId: action.id,
-          result: validateVerifiedKiboAutoCastDerivation(action, first),
-        }))
-        .filter(entry => entry.result.valid !== true)
-    ).toEqual([]);
-    expect(
-      firstAutos
-        .filter(action => action.autoCastRule.scheduledFrame < 160)
-        .every(
-          action =>
-            action.actorId === `actor-${firstSlot.characterId}` &&
-            action.kiboId === actorConfigs[0].loadout.kiboId
-        )
-    ).toBe(true);
-    expect(
-      firstAutos
-        .filter(action => action.autoCastRule.scheduledFrame >= 160)
-        .every(
-          action =>
-            action.actorId === `actor-${secondSlot.characterId}` &&
-            action.kiboId === actorConfigs[1].loadout.kiboId
-        )
-    ).toBe(true);
-    expect(
-      firstAutos.some(
-        action => action.actorId === `actor-${thirdSlot.characterId}`
-      )
-    ).toBe(false);
-    expect(replayAutos).toEqual(firstAutos);
+    expect(first.actions.filter(action => action.autoCast === true)).toEqual(
+      []
+    );
+    expect(replay.actions.filter(action => action.autoCast === true)).toEqual(
+      []
+    );
     expect(replay.kiboAutoCastDerivationRegistry).toEqual(
       first.kiboAutoCastDerivationRegistry
     );
+    const exclusions =
+      first.kiboAutoCastDerivationRegistry.scheduleExclusions ?? [];
+    expect(exclusions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ownerActorId: `actor-${firstSlot.characterId}`,
+          controlledIntervalStartFrame: 0,
+          controlledIntervalEndFrame: 160,
+        }),
+        expect.objectContaining({
+          ownerActorId: `actor-${secondSlot.characterId}`,
+          controlledIntervalStartFrame: 160,
+        }),
+      ])
+    );
+    expect(
+      exclusions.some(
+        entry => entry.ownerActorId === `actor-${thirdSlot.characterId}`
+      )
+    ).toBe(false);
     expect(
       replay.kiboAutoCastDerivationRegistry.controlledTimeline.transitions
     ).toEqual([
@@ -698,7 +689,6 @@ describe('controlled Kibo auto-cast scheduler', () => {
       }),
     ]);
   }, 30000);
-
   it('lifts an equipped Kibo nonzero trigger tag into the shared formal legality proof without fabricating a cast', () => {
     const draft = createDefaultWorkbenchDemoDraftState();
     const [firstSlot, secondSlot] = draft.teamSlots;

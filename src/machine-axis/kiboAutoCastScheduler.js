@@ -1,22 +1,15 @@
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
-import {
-  getInstalledVerifiedCombatMechanicsPackage,
-  getVerifiedCombatActionMapping,
-} from '../data/verifiedCombatMechanicsPackage';
+import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import { getActionSourceSequencePath } from '../domain/actionSourceSequence';
 import { ACTION_TYPES } from '../domain/projectSchema';
-import {
-  createVerifiedKiboAutoCastDerivation,
-  VERIFIED_KIBO_AUTO_CAST_GENERATION_CONTRACT,
-  VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
-} from '../domain/verifiedBackgroundActionDerivation';
+import { VERIFIED_KIBO_AUTO_CAST_GENERATION_CONTRACT } from '../domain/verifiedBackgroundActionDerivation';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
-import { createVerifiedSwitchExitTailPolicy } from '../simulation/generation/verifiedSwitchExitTailPolicy';
 
 const AUTO_CAST_KINDS = new Set(['normal-attack', 'active']);
-const USER_KIBO_ACTION_KINDS = new Set(['signature', 'break']);
 const UNCONDITIONAL_TRIGGER_TAG = '0';
+const KIBO_FOREGROUND_ELIGIBILITY_CONTRACT =
+  'AzPrKiboForegroundAutoCastEligibility';
 const VERIFIED_CATALOG_SOURCE_ID = 'public-kibo-action-catalog';
 const VERIFIED_CATALOG = projectWorkbenchKiboActionCatalog(
   generatedWorkbenchKiboActionCatalog
@@ -48,8 +41,9 @@ export function expandKiboAutoCastActions(contract, options = {}) {
 
 /**
  * Canonical compiler entry point. Persisted projects contain only player
- * inputs; autonomous Kibo casts are regenerated here from the compiled
- * controlled-actor timeline and never trusted from project JSON.
+ * inputs. Compilation regenerates the controlled-owner eligibility evidence,
+ * but it does not invent autonomous casts while the NodeCanvas schedule is
+ * unresolved.
  */
 export function createCompiledProjectKiboAutoCastGeneration({
   actions = [],
@@ -173,10 +167,10 @@ export function createCompiledProjectKiboAutoCastGeneration({
 }
 
 /**
- * Generates Kibo normal/active casts only while the owning actor is the
- * controlled actor.  Source actions and switches use their resolved Machine
- * Axis frames plus input-array source order; generated casts are appended and
- * therefore observe every source switch at the same frame.
+ * Projects foreground Kibo eligibility over the controlled-actor timeline.
+ * Tag-0 proves that a skill belongs to the normal AI/behavior-tree surface; it
+ * does not prove an initial frame, arbitration priority, or recast cadence.
+ * Until those NodeCanvas inputs are sourced, no autonomous action is emitted.
  */
 export function createKiboAutoCastGeneration(
   contract,
@@ -208,16 +202,11 @@ export function createKiboAutoCastGeneration(
     scheduleByActionId,
   });
   const issues = [...controlled.issues];
-  const generatedSequenceRoot = resolveGeneratedSequenceRoot(sourceActions);
-  if (generatedSequenceRoot == null) {
-    issues.push(
-      schedulerIssue(
-        'kibo-auto-cast-source-sequence-space-exhausted',
-        'actions[*].sourceSequencePath',
-        'Compiler cannot append an unambiguous autonomous Kibo source sequence'
-      )
-    );
-  }
+  const eligibilityContract = createForegroundEligibilityContract({
+    controlled,
+    mechanicsPackage,
+    catalog,
+  });
   const schedulerInputHash = hashCanonicalValue({
     schemaVersion: 1,
     horizonFrames,
@@ -231,6 +220,9 @@ export function createKiboAutoCastGeneration(
         canonicalSlotIdByMachineSlotId?.get?.(String(slot.slotId)) ??
         String(slot.slotId),
     })),
+    initialKiboVitals: projectInitialKiboVitals(
+      contract?.scenario?.initialRuntimeState
+    ),
     initialActorId: controlled.initialActorId,
     sourceActions: sourceActions.map((action, index) => ({
       id: String(action.id),
@@ -244,7 +236,7 @@ export function createKiboAutoCastGeneration(
       ),
       sourceSequenceSource: action.sourceSequenceSource ?? null,
     })),
-    generatedSequenceRoot,
+    eligibilityContract,
     mechanicsPackage: mechanicsPackage
       ? {
           packageId: mechanicsPackage.packageId,
@@ -260,9 +252,12 @@ export function createKiboAutoCastGeneration(
       catalog,
       schedulerInputHash,
       controlled,
+      eligibilityContract,
       entries: [],
       issues,
       triggerExclusions: [],
+      scheduleExclusions: [],
+      evidenceClosed: eligibilityContract.evidenceClosed === true,
     });
     return {
       actions: sourceActions,
@@ -270,114 +265,105 @@ export function createKiboAutoCastGeneration(
       derivationGeneration,
       controlledTimeline: controlled.projection,
       triggerExclusions: [],
+      scheduleExclusions: [],
       issues,
     };
   }
 
-  const controlledUserActionsBySlot = new Map();
-  for (const [index, action] of sourceActions.entries()) {
-    if (action?.owner?.kind !== 'kibo') continue;
-    if (!USER_KIBO_ACTION_KINDS.has(String(action.intent?.actionKind ?? ''))) {
-      continue;
-    }
-    const slotId = String(action.owner.slotId ?? '');
-    const frame = scheduleByActionId.get(String(action.id));
-    if (!slotId || frame == null) continue;
-    if (controlled.slotBeforeActionId[String(action.id)] !== slotId) continue;
-    const rows = controlledUserActionsBySlot.get(slotId) ?? [];
-    rows.push({ ...action, resolvedFrame: frame, sourceIndex: index });
-    controlledUserActionsBySlot.set(slotId, rows);
-  }
-
-  const generated = [];
-  const entries = [];
   const triggerExclusions = [];
-  const schedulerStateBySlot = new Map();
+  const scheduleExclusions = [];
   const slotById = new Map(team.map(slot => [String(slot.slotId), slot]));
   for (const interval of controlled.intervals) {
     if (!(interval.endFrame > interval.startFrame)) continue;
     const slot = slotById.get(interval.slotId);
     const kiboId = Number(slot?.loadout?.kiboId);
     if (!Number.isInteger(kiboId) || kiboId <= 0) continue;
+    if (
+      !isInitiallyAliveKibo(
+        contract?.scenario?.initialRuntimeState,
+        interval.slotId,
+        kiboId
+      )
+    ) {
+      continue;
+    }
     const kibo = resolvedCatalogById.get(kiboId);
     if (!kibo) continue;
-    const userActions = controlledUserActionsBySlot.get(interval.slotId) ?? [];
     const declaredAutoSkills = (kibo.actions ?? []).filter(action =>
       AUTO_CAST_KINDS.has(String(action.kind))
     );
-    const autoSkills = declaredAutoSkills.filter(
-      action =>
-        String(action.petSkillLogicTag ?? '') === UNCONDITIONAL_TRIGGER_TAG
-    );
     for (const action of declaredAutoSkills) {
-      if (autoSkills.includes(action)) continue;
-      triggerExclusions.push({
-        code: 'kibo-auto-cast-trigger-unresolved',
+      const triggerTag = String(action.petSkillLogicTag ?? '');
+      const exclusion = {
         ownerActorId: interval.actorId,
         ownerSlotId: interval.slotId,
+        canonicalOwnerSlotId:
+          canonicalSlotIdByMachineSlotId?.get?.(String(slot.slotId)) ??
+          String(slot.slotId),
+        ownerCharacterId: Number(slot.characterId),
         kiboId,
         publicActionId: Number(action.skillId),
         actionKind: String(action.kind),
-        triggerTag: String(action.petSkillLogicTag ?? ''),
+        triggerTag,
         controlledIntervalIdentity: interval.identity,
         controlledIntervalStartFrame: interval.startFrame,
         controlledIntervalEndFrame: interval.endFrame,
-        disposition: 'not-generated-without-closed-trigger',
-      });
+        eligibilityContractHash: eligibilityContract.contractHash,
+        eligibilityStatus: 'foreground-owner-eligibility-closed',
+        requiresEquippedKibo: true,
+        requiresKiboAlive: true,
+      };
+      if (triggerTag === UNCONDITIONAL_TRIGGER_TAG) {
+        scheduleExclusions.push({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ...exclusion,
+          scheduleEvidenceStatus:
+            'nodecanvas-token-priority-cadence-source-open',
+          disposition: 'not-generated-without-nodecanvas-schedule',
+          leavesOpen: [
+            'nodecanvas-behavior-tree-graph',
+            'attack-and-skill-token-arbitration',
+            'normal-vs-active-priority',
+            'initial-delay-and-recast-cadence',
+          ],
+        });
+      } else {
+        triggerExclusions.push({
+          code: 'kibo-auto-cast-trigger-unresolved',
+          ...exclusion,
+          disposition: 'not-generated-without-closed-trigger',
+        });
+      }
     }
-    if (autoSkills.length === 0) continue;
-    const skillByAction = new Map(
-      (kibo.actions ?? []).map(action => [
-        `${Number(action.skillId)}|${action.kind}`,
-        action,
-      ])
-    );
-    const state =
-      schedulerStateBySlot.get(interval.slotId) ?? createSchedulerState();
-    schedulerStateBySlot.set(interval.slotId, state);
-    scheduleKiboAutoCastsInInterval({
-      kiboId,
-      slot,
-      canonicalSlotId:
-        canonicalSlotIdByMachineSlotId?.get?.(String(slot.slotId)) ??
-        String(slot.slotId),
-      interval,
-      autoSkills,
-      userActions,
-      skillByAction,
-      fps,
-      mechanicsPackage,
-      catalog,
-      state,
-      generatedSequenceRoot,
-      generated,
-      entries,
-    });
   }
+  triggerExclusions.sort(compareExclusions);
+  scheduleExclusions.sort(compareExclusions);
 
   const evidenceClosed =
+    eligibilityContract.evidenceClosed === true &&
     catalog.evidenceClosed === true &&
     mechanicsPackage != null &&
     triggerExclusions.length === 0 &&
-    entries.every(entry => entry.evidenceStatus === 'static-evidence-closed');
+    scheduleExclusions.length === 0;
   const derivationGeneration = createGeneration({
     mechanicsPackage,
     catalog,
     schedulerInputHash,
     controlled,
-    entries,
+    eligibilityContract,
+    entries: [],
     issues,
     triggerExclusions,
+    scheduleExclusions,
     evidenceClosed,
   });
   return {
-    actions: generated.length
-      ? [...sourceActions, ...generated]
-      : sourceActions,
-    generatedActions: generated,
+    actions: sourceActions,
+    generatedActions: [],
     derivationGeneration,
     controlledTimeline: controlled.projection,
     triggerExclusions,
+    scheduleExclusions,
     issues,
   };
 }
@@ -387,9 +373,11 @@ function createGeneration({
   catalog,
   schedulerInputHash,
   controlled,
+  eligibilityContract,
   entries,
   issues,
   triggerExclusions = [],
+  scheduleExclusions = [],
   evidenceClosed = false,
 }) {
   const value = {
@@ -410,8 +398,10 @@ function createGeneration({
     catalog,
     schedulerInputHash,
     controlledTimeline: controlled.projection,
+    eligibilityContract,
     entries,
     triggerExclusions,
+    scheduleExclusions,
     issues,
     summary: {
       generatedActionCount: entries.length,
@@ -419,6 +409,7 @@ function createGeneration({
       controlledTransitionCount: controlled.transitions.length,
       controlledRejectedActionCount: controlled.rejections?.length ?? 0,
       triggerExclusionCount: triggerExclusions.length,
+      scheduleExclusionCount: scheduleExclusions.length,
       issueCount: issues.length,
     },
   };
@@ -432,8 +423,12 @@ function createGeneration({
     catalog: structuredClone(value.catalog),
     schedulerInputHash: String(value.schedulerInputHash),
     controlledTimeline: structuredClone(value.controlledTimeline),
+    eligibilityContract: structuredClone(value.eligibilityContract),
     entries: value.entries.map(entry => structuredClone(entry)),
     triggerExclusions: value.triggerExclusions.map(entry =>
+      structuredClone(entry)
+    ),
+    scheduleExclusions: value.scheduleExclusions.map(entry =>
       structuredClone(entry)
     ),
     issues: value.issues.map(issue => structuredClone(issue)),
@@ -445,264 +440,6 @@ function createGeneration({
   });
   authoritativeGenerations.add(generation);
   return generation;
-}
-
-function scheduleKiboAutoCastsInInterval({
-  kiboId,
-  slot,
-  canonicalSlotId,
-  interval,
-  autoSkills,
-  userActions,
-  skillByAction,
-  fps,
-  mechanicsPackage,
-  catalog,
-  state,
-  generatedSequenceRoot,
-  generated,
-  entries,
-}) {
-  const busyWindows = userActions
-    .map(action => {
-      const skill = skillByAction.get(
-        `${Number(action.intent?.publicActionId)}|${action.intent?.actionKind}`
-      );
-      return {
-        start: Math.max(0, Number(action.resolvedFrame) || 0),
-        duration: positiveInteger(skill?.durationFrames) ?? 0,
-        catalog: skill,
-      };
-    })
-    .filter(
-      window =>
-        window.duration > 0 &&
-        window.start >= interval.startFrame &&
-        window.start < interval.endFrame
-    )
-    .sort(
-      (left, right) =>
-        left.start - right.start || right.duration - left.duration
-    );
-  const skills = [...autoSkills]
-    .sort((left, right) => {
-      const priority = { active: 0, 'normal-attack': 1 };
-      return (priority[left.kind] ?? 2) - (priority[right.kind] ?? 2);
-    })
-    .map(skill => ({
-      kind: String(skill.kind),
-      skillId: Number(skill.skillId),
-      mapping: getVerifiedCombatActionMapping({
-        type: 'kiboEvent',
-        kiboId,
-        skillId: Number(skill.skillId),
-        actionKind: String(skill.kind),
-        actor: {
-          characterId: Number(slot.characterId),
-          loadout: { kiboId },
-        },
-      }),
-      durationFrames: positiveInteger(skill.durationFrames) ?? 1,
-      cooldownFrames: msToFrames(skill.cooldownMs, fps),
-      selfCooldownFrames: msToFrames(skill.selfCooldownMs, fps),
-      selfCooldownGroup: positiveInteger(skill.selfCooldownGroup) ?? null,
-      gcdFrames: msToFrames(skill.gcdMs, fps),
-      triggerTag: String(skill.petSkillLogicTag ?? ''),
-    }))
-    .map(skill => ({
-      ...skill,
-      durationFrames:
-        positiveInteger(
-          skill.mapping?.actionTiming?.occupancy?.durationFrames
-        ) ?? skill.durationFrames,
-    }));
-
-  let frame = interval.startFrame;
-  while (frame < interval.endFrame) {
-    const busy = busyWindows.find(
-      window => frame >= window.start && frame < window.start + window.duration
-    );
-    if (busy) {
-      const locks = applyCastLocks(busy.catalog, busy.start, {
-        nextReadyBySkillId: state.nextReadyBySkillId,
-        selfGroupLockUntil: state.selfGroupLockUntil,
-        fps,
-      });
-      state.gcdLockUntil = Math.max(state.gcdLockUntil, locks.gcdLockUntil);
-      frame = Math.min(interval.endFrame, busy.start + busy.duration);
-      continue;
-    }
-    const nextBusyStart =
-      busyWindows
-        .map(window => window.start)
-        .filter(start => start > frame)
-        .sort((left, right) => left - right)[0] ??
-      (interval.endReason === 'switch'
-        ? Number.POSITIVE_INFINITY
-        : interval.endFrame);
-    const candidate = skills.find(skill => {
-      const ready =
-        frame >= (state.nextReadyBySkillId.get(skill.skillId) ?? 0) &&
-        (skill.selfCooldownGroup == null ||
-          frame >=
-            (state.selfGroupLockUntil.get(skill.selfCooldownGroup) ?? 0)) &&
-        frame >= state.gcdLockUntil;
-      return (
-        ready &&
-        frame + skill.durationFrames <= nextBusyStart &&
-        (interval.endReason === 'switch'
-          ? frame < interval.endFrame
-          : frame + skill.durationFrames <= interval.endFrame)
-      );
-    });
-    if (!candidate) {
-      frame += 1;
-      continue;
-    }
-
-    state.sequence += 1;
-    const actionId = `kibo-${kiboId}-${slot.slotId}-auto-${candidate.kind}-${state.sequence}`;
-    const trigger =
-      candidate.triggerTag === UNCONDITIONAL_TRIGGER_TAG
-        ? 'unconditional'
-        : 'event-triggered';
-    const mapping = candidate.mapping;
-    const mappingClosed =
-      mapping != null &&
-      mapping.ownerKind === 'kibo' &&
-      Number(mapping.ownerId) === kiboId &&
-      AUTO_CAST_KINDS.has(String(mapping.actionKind));
-    if (generatedSequenceRoot == null) break;
-    const sourceSequencePath = [generatedSequenceRoot, generated.length];
-    const tailPolicy =
-      interval.endReason === 'switch'
-        ? createVerifiedSwitchExitTailPolicy({
-            ownerKind: 'kibo',
-            actionId,
-            ownerActorId: interval.actorId,
-            actionStartFrame: frame,
-            actionDurationFrames: candidate.durationFrames,
-            actionSourceSequencePath: sourceSequencePath,
-            mapping,
-            mechanicsPackage,
-            switchActionId: interval.exitTransitionId,
-            switchBoundaryFrame: interval.endFrame,
-            switchBoundarySourceSequencePath:
-              interval.exitTransitionSourceSequencePath,
-            switchToActorId: interval.exitTransitionToActorId,
-          })
-        : {
-            status: 'not-crossing-switch-boundary',
-            evidenceClosed: true,
-            switchBoundaryFrame: null,
-            packetEvidence: [],
-            policyHash: null,
-          };
-    const evidenceStatus =
-      candidate.triggerTag === UNCONDITIONAL_TRIGGER_TAG &&
-      catalog.evidenceClosed === true &&
-      mappingClosed &&
-      mechanicsPackage != null &&
-      tailPolicy.evidenceClosed === true
-        ? 'static-evidence-closed'
-        : 'planner-simplified';
-    const ownerActorId = interval.actorId;
-    const autoCastRule = createVerifiedKiboAutoCastDerivation({
-      actionId,
-      slotId: String(slot.slotId),
-      canonicalSlotId,
-      ownerActorId,
-      ownerCharacterId: Number(slot.characterId),
-      kiboId,
-      publicActionId: candidate.skillId,
-      actionKind: candidate.kind,
-      scheduledFrame: frame,
-      sequenceIndex: state.sequence,
-      sourceSequencePath,
-      sourceSequenceSource: VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
-      controlledIntervalIdentity: interval.identity,
-      controlledIntervalStartFrame: interval.startFrame,
-      controlledIntervalEndFrame: interval.endFrame,
-      switchExitTailStatus: tailPolicy.status,
-      switchBoundaryFrame: tailPolicy.switchBoundaryFrame,
-      switchTransitionId: interval.exitTransitionId,
-      switchBoundarySourceSequencePath:
-        interval.exitTransitionSourceSequencePath,
-      switchExitTailPolicyHash: tailPolicy.policyHash,
-      mappingIdentity: mapping?.identity ?? null,
-      mechanicsPackageId: mechanicsPackage?.packageId ?? null,
-      mechanicsPackageHash: mechanicsPackage?.packageHash ?? null,
-      catalogHash: catalog.catalogHash,
-      trigger,
-      triggerTag: candidate.triggerTag || null,
-      evidenceStatus,
-    });
-    const generatedAction = {
-      id: actionId,
-      owner: { kind: 'kibo', slotId: String(slot.slotId) },
-      intent: {
-        kind: 'public-action',
-        publicActionId: candidate.skillId,
-        actionKind: candidate.kind,
-        level: 1,
-        autoCast: true,
-      },
-      schedule: { mode: 'absolute', frame, offsetFrames: 0 },
-      note: 'kibo-auto-cast',
-      autoCast: true,
-      autoCastRule,
-      hitOverrides: {},
-    };
-    generated.push(generatedAction);
-    entries.push({
-      actionId,
-      sourceIdentity: autoCastRule.sourceIdentity,
-      derivationHash: autoCastRule.derivationHash,
-      ownerSlotId: String(slot.slotId),
-      canonicalOwnerSlotId: String(canonicalSlotId),
-      ownerActorId,
-      ownerCharacterId: Number(slot.characterId),
-      kiboId,
-      publicActionId: candidate.skillId,
-      actionKind: candidate.kind,
-      scheduledFrame: frame,
-      sequenceIndex: state.sequence,
-      sourceSequencePath,
-      sourceSequenceSource: VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
-      controlledIntervalIdentity: interval.identity,
-      controlledIntervalStartFrame: interval.startFrame,
-      controlledIntervalEndFrame: interval.endFrame,
-      switchExitTailStatus: tailPolicy.status,
-      switchBoundaryFrame: tailPolicy.switchBoundaryFrame,
-      switchTransitionId: interval.exitTransitionId,
-      switchBoundarySourceSequencePath:
-        interval.exitTransitionSourceSequencePath,
-      switchExitTailPolicyHash: tailPolicy.policyHash,
-      tailPacketEvidence: tailPolicy.packetEvidence,
-      mappingIdentity: mapping?.identity ?? null,
-      mechanicsPackageId: mechanicsPackage?.packageId ?? null,
-      mechanicsPackageHash: mechanicsPackage?.packageHash ?? null,
-      catalogHash: catalog.catalogHash,
-      trigger,
-      triggerTag: candidate.triggerTag || null,
-      evidenceStatus,
-    });
-    state.nextReadyBySkillId.set(
-      candidate.skillId,
-      frame + candidate.cooldownFrames
-    );
-    if (candidate.selfCooldownGroup != null) {
-      state.selfGroupLockUntil.set(
-        candidate.selfCooldownGroup,
-        frame + candidate.selfCooldownFrames
-      );
-    }
-    state.gcdLockUntil = Math.max(
-      state.gcdLockUntil,
-      frame + candidate.gcdFrames
-    );
-    frame += candidate.durationFrames;
-  }
 }
 
 function createControlledKiboTimeline({ contract, scheduleByActionId }) {
@@ -932,6 +669,52 @@ function controlledInterval({
   };
 }
 
+function createForegroundEligibilityContract({
+  controlled,
+  mechanicsPackage,
+  catalog,
+}) {
+  const evidenceClosed =
+    mechanicsPackage != null &&
+    catalog?.evidenceClosed === true &&
+    controlled?.issues?.length === 0;
+  const projection = {
+    schemaVersion: 1,
+    contractName: KIBO_FOREGROUND_ELIGIBILITY_CONTRACT,
+    sourceKind: 'azpr-controlled-kibo-ai-eligibility',
+    status: evidenceClosed
+      ? 'foreground-kibo-eligibility-closed'
+      : 'foreground-kibo-eligibility-open',
+    evidenceClosed,
+    requirements: {
+      ownerActorMustBeControlled: true,
+      kiboMustMatchEquippedOwnerSlot: true,
+      kiboMustExistAndBeAlive: true,
+      rebornStateRejectsNewCast: true,
+      controlledInterval: '[startFrame,endFrame)',
+      switchBoundaryPolicy: 'old-owner-before-new-owner-after',
+    },
+    sourceEvidence: {
+      targetRoute: 'controlled-hero-lock-target',
+      ownerBinding: 'kibo-bound-hero-must-equal-controlled-hero',
+      aiActivation: 'operate-hero-pet-ai-normal-pet-ai',
+      scheduleScope: 'eligibility-only-nodecanvas-schedule-open',
+    },
+    mechanicsPackage: mechanicsPackage
+      ? {
+          packageId: mechanicsPackage.packageId,
+          packageHash: mechanicsPackage.packageHash,
+        }
+      : { packageId: null, packageHash: null },
+    catalogHash: catalog?.catalogHash ?? null,
+    controlledTimelineHash: controlled?.projection?.timelineHash ?? null,
+  };
+  return deepFreeze({
+    ...projection,
+    contractHash: hashCanonicalValue(projection),
+  });
+}
+
 function createCatalogAuthority({ kiboCatalogById, mechanicsPackage }) {
   const sourceFile = (mechanicsPackage?.sourceFiles ?? []).find(
     file => file.id === VERIFIED_CATALOG_SOURCE_ID
@@ -986,50 +769,6 @@ function normalizeScheduleMap(sourceActions, value) {
   return result;
 }
 
-function createSchedulerState() {
-  return {
-    nextReadyBySkillId: new Map(),
-    selfGroupLockUntil: new Map(),
-    gcdLockUntil: 0,
-    sequence: 0,
-  };
-}
-
-function applyCastLocks(
-  catalog,
-  castFrame,
-  { nextReadyBySkillId, selfGroupLockUntil, fps }
-) {
-  const skillId = Number(catalog?.skillId);
-  if (Number.isInteger(skillId) && skillId > 0) {
-    nextReadyBySkillId.set(
-      skillId,
-      Math.max(
-        nextReadyBySkillId.get(skillId) ?? 0,
-        castFrame + msToFrames(catalog.cooldownMs, fps)
-      )
-    );
-  }
-  const group = positiveInteger(catalog?.selfCooldownGroup);
-  if (group != null) {
-    selfGroupLockUntil.set(
-      group,
-      Math.max(
-        selfGroupLockUntil.get(group) ?? 0,
-        castFrame + msToFrames(catalog.selfCooldownMs, fps)
-      )
-    );
-  }
-  return { gcdLockUntil: castFrame + msToFrames(catalog?.gcdMs, fps) };
-}
-
-function msToFrames(ms, fps) {
-  const normalized = Number(ms);
-  return Number.isFinite(normalized) && normalized > 0
-    ? Math.ceil((normalized / 1000) * fps)
-    : 0;
-}
-
 function msToFrame(ms, fps) {
   const normalized = Number(ms);
   return Number.isFinite(normalized) && normalized >= 0
@@ -1056,12 +795,54 @@ function normalizeSourceSequencePath(value, fallbackIndex) {
     : [fallbackIndex];
 }
 
-function resolveGeneratedSequenceRoot(sourceActions) {
-  const maximumRoot = (sourceActions ?? []).reduce((maximum, action, index) => {
-    const path = normalizeSourceSequencePath(action?.sourceSequencePath, index);
-    return Math.max(maximum, path[0]);
-  }, -1);
-  return maximumRoot < Number.MAX_SAFE_INTEGER ? maximumRoot + 1 : null;
+function compareExclusions(left, right) {
+  return (
+    Number(left.controlledIntervalStartFrame) -
+      Number(right.controlledIntervalStartFrame) ||
+    String(left.ownerActorId ?? '').localeCompare(
+      String(right.ownerActorId ?? '')
+    ) ||
+    String(left.ownerSlotId ?? '').localeCompare(
+      String(right.ownerSlotId ?? '')
+    ) ||
+    Number(left.kiboId) - Number(right.kiboId) ||
+    String(left.actionKind ?? '').localeCompare(
+      String(right.actionKind ?? '')
+    ) ||
+    Number(left.publicActionId) - Number(right.publicActionId)
+  );
+}
+
+function projectInitialKiboVitals(initialRuntimeState) {
+  return (initialRuntimeState?.kiboVitalsBySlot ?? [])
+    .map(value => ({
+      slotId: value?.slotId == null ? null : String(value.slotId),
+      kiboId: Number(value?.kiboId) || null,
+      currentValue: finiteNumberOrNull(value?.currentValue ?? value?.currentHp),
+      maxValue: finiteNumberOrNull(value?.maxValue ?? value?.maximumHp),
+    }))
+    .sort(
+      (left, right) =>
+        String(left.slotId ?? '').localeCompare(String(right.slotId ?? '')) ||
+        Number(left.kiboId ?? 0) - Number(right.kiboId ?? 0)
+    );
+}
+
+function isInitiallyAliveKibo(initialRuntimeState, slotId, kiboId) {
+  const vital = (initialRuntimeState?.kiboVitalsBySlot ?? []).find(
+    value =>
+      String(value?.slotId ?? '') === String(slotId) &&
+      Number(value?.kiboId) === Number(kiboId)
+  );
+  if (!vital) return true;
+  const currentHp = finiteNumberOrNull(vital.currentValue ?? vital.currentHp);
+  return currentHp == null || currentHp > 0;
+}
+
+function finiteNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
 function compareSourceSequencePaths(left, right) {
@@ -1087,8 +868,10 @@ function projectKiboAutoCastGeneration(value) {
     catalog: value.catalog ?? null,
     schedulerInputHash: value.schedulerInputHash ?? null,
     controlledTimeline: value.controlledTimeline ?? null,
+    eligibilityContract: value.eligibilityContract ?? null,
     entries: value.entries ?? [],
     triggerExclusions: value.triggerExclusions ?? [],
+    scheduleExclusions: value.scheduleExclusions ?? [],
     issues: value.issues ?? [],
     summary: value.summary ?? null,
   };

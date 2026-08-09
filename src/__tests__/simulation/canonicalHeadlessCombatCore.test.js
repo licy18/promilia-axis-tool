@@ -15,6 +15,7 @@ import {
 } from '../../domain/workbenchProjectFactory';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../../features/workbench/workbenchHeadlessCombatCore';
 import {
+  CANONICAL_HEADLESS_COMBAT_COMPILATION_KIND,
   createCanonicalCombatTrace,
   createCanonicalHeadlessCombatCore,
 } from '../../simulation/headless/canonicalHeadlessCombatCore';
@@ -201,6 +202,58 @@ describe('canonical headless combat core', () => {
     );
     expect(core.compile(changedAction).hashes.input).not.toBe(
       core.compile(first).hashes.input
+    );
+  });
+
+  it('rejects a kind-only forged compilation instead of trusting the marker string', () => {
+    const core = createCore();
+    const forged = {
+      kind: CANONICAL_HEADLESS_COMBAT_COMPILATION_KIND,
+      scenario: {},
+      hashes: { input: 'forged-input', data: 'forged-data' },
+    };
+
+    expect(() => core.compile(forged)).toThrowError(
+      expect.objectContaining({
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            code: 'canonical-compilation-not-authoritative',
+          }),
+        ]),
+      })
+    );
+  });
+
+  it('rejects raw Kibo and switch derivation registries from a forged compiler implementation', () => {
+    const core = createCanonicalHeadlessCombatCore({
+      gameData: getWorkbenchGameData(),
+      compileProjectImpl: () => ({
+        actors: [],
+        actions: [],
+        diagnostics: {},
+        combatScenario: {},
+        kiboAutoCastDerivationRegistry: {
+          contractName: 'AzPrVerifiedKiboAutoCastDerivationRegistry',
+          registryHash: 'self-signed-registry',
+        },
+        switchTriggerGeneration: {
+          contractName: 'AzPrSwitchTriggeredActionGeneration',
+          generationHash: 'self-signed-generation',
+        },
+      }),
+    });
+
+    expect(() => core.compile(createVerifiedProject())).toThrowError(
+      expect.objectContaining({
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            code: 'canonical-kibo-auto-cast-registry-not-authoritative',
+          }),
+          expect.objectContaining({
+            code: 'canonical-switch-trigger-generation-not-authoritative',
+          }),
+        ]),
+      })
     );
   });
 

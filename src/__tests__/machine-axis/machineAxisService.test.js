@@ -298,24 +298,26 @@ describe('Machine Axis service', () => {
       )
     ).toMatchObject({ execute: true });
     expect(
-      run.trace.actions.find(
+      run.trace.actions.filter(
         action => action.derivation?.kind === 'kibo-autonomous-cast'
       )
-    ).toMatchObject({
-      derivation: {
-        contractName: 'AzPrVerifiedBackgroundActionDerivation',
-        ownerCharacterId: 101007,
-        kiboId: 500001,
-        sourceIdentity: expect.stringContaining('azpr-kibo-auto-cast-v2:'),
-        derivationHash: expect.any(String),
-        ownerActorId: 'actor-101007',
-        canonicalOwnerSlotId: 'team-slot-1',
-      },
-    });
+    ).toEqual([]);
     expect(run.trace.scenario.kiboAutoCastDerivationAuthority).toMatchObject({
       sourceKind: 'azpr-compile-owned-kibo-auto-cast-derivation-registry',
       registryHash: expect.any(String),
       sourceGenerationHash: expect.any(String),
+      evidenceClosed: false,
+      eligibilityContract: {
+        status: 'foreground-kibo-eligibility-closed',
+        evidenceClosed: true,
+      },
+      scheduleExclusions: expect.arrayContaining([
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ownerActorId: 'actor-101007',
+          triggerTag: '0',
+        }),
+      ]),
       controlledTimeline: {
         timelineHash: expect.any(String),
       },
@@ -473,10 +475,20 @@ describe('Machine Axis service', () => {
     const autonomousKiboActions = run.trace.actions.filter(
       action => action.derivation?.kind === 'kibo-autonomous-cast'
     );
-    expect(autonomousKiboActions.length).toBeGreaterThan(0);
+    expect(autonomousKiboActions).toEqual([]);
     expect(
-      new Set(autonomousKiboActions.map(action => action.actorId))
-    ).toEqual(new Set(['actor-101007']));
+      run.trace.scenario.kiboAutoCastDerivationAuthority.scheduleExclusions
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'kibo-auto-cast-schedule-unresolved',
+          ownerActorId: 'actor-101007',
+        }),
+      ])
+    );
+    expect(run.actionLegalityProof.rejectionCodes).toContain(
+      'kibo-auto-cast-schedule-unresolved'
+    );
     expect(run.actionLegalityProof.rejectionCodes).toContain(
       'kibo-auto-cast-trigger-unresolved'
     );

@@ -88,12 +88,44 @@ describe('verified joint attack contract', () => {
       binding,
     });
     expect(evidence).toMatchObject({
+      code: 'joint-attack-trigger-unresolved',
+      status: 'preweakbreak-static-predicate-partially-closed',
       formalEligible: false,
       actorActionId: 'actor-joint',
       kiboActionId: 'kibo-joint',
-      leavesOpen: [
-        'petCsEntity.data.existPetBreakTarget-authoritative-generation-chain',
-      ],
+      sourceLedger: expect.arrayContaining([
+        expect.objectContaining({
+          sourceIdentity: 'PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720',
+        }),
+        expect.objectContaining({
+          sourceIdentity:
+            'PreWeakBreakSystem.UpdatePreBreakThreshold@0x13FCB20',
+        }),
+      ]),
+      eligibilityEvidence: {
+        status: 'client-static-predicate-chain-partially-closed',
+        sourceMethod: 'PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720',
+        thresholdMethod: 'UpdatePreBreakThreshold@0x13FCB20',
+        closedPredicates: expect.arrayContaining([
+          'enemy-alive-and-breakable',
+          'enemy-not-broken-or-rage',
+          'weakness-point-below-prebreak-threshold-or-force-break',
+          'trigger-distance-height-hysteresis-and-connectivity',
+          'controlled-hero-and-kibo-alive-state-ready',
+          'player-slot-208-and-kibo-slot-601-ready',
+        ]),
+        leavesOpen: expect.arrayContaining([
+          'controlled-entity-offset-0x40-field-identity',
+          'service-cannot-be-joint-strike-set-runtime-input',
+        ]),
+      },
+      postCastEvidence: {
+        status: 'server-effect-and-weakness-cleanup-open',
+        leavesOpen: expect.arrayContaining([
+          'joint-strike-post-cast-effect-chain',
+          'server-authoritative-weakness-point-clear',
+        ]),
+      },
     });
     expect(evidence.pairIdentity).toMatch(/^joint-pair:[0-9a-f]{16}$/);
     expect(evidence.evidenceHash).toMatch(/^[0-9a-f]{16}$/);

@@ -301,8 +301,14 @@ describe('Workbench Machine Axis adapter', () => {
 
     // This assertion is about the objective/profile transport boundary. The
     // shared M11 diagnostic fixture intentionally contains standalone A3
-    // samples, which the formal legality gate above must reject.
+    // samples and three equipped Kibo, which the formal legality gate above
+    // must reject while autonomous scheduling remains source-open.
     contract.actions = [];
+    contract.scenario.team = contract.scenario.team.map(slot => {
+      const projected = structuredClone(slot);
+      delete projected.loadout?.kiboId;
+      return projected;
+    });
 
     const imported = adapter.importContract(contract);
     const exported = adapter.exportProject(imported.project);
