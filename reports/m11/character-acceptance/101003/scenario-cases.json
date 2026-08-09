@@ -175,6 +175,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0"
           },
           {
@@ -187,6 +189,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:1"
           },
           {
@@ -200,6 +204,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10"
           },
           {
@@ -213,6 +219,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:11"
           },
           {
@@ -226,6 +234,8 @@
               1,
               0
             ],
+            "controlSkillId": 10101021,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
           },
           {
@@ -239,6 +249,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
           },
           {
@@ -252,6 +264,8 @@
               2,
               0
             ],
+            "controlSkillId": 10101021,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14"
           },
           {
@@ -264,6 +278,8 @@
               1,
               0
             ],
+            "controlSkillId": 10101001,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15"
           },
           {
@@ -278,6 +294,8 @@
               152,
               0
             ],
+            "controlSkillId": 10101001,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16"
           },
           {
@@ -290,6 +308,8 @@
               1,
               0
             ],
+            "controlSkillId": 10101001,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:17"
           },
           {
@@ -304,6 +324,8 @@
               152,
               0
             ],
+            "controlSkillId": 10101001,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:18"
           },
           {
@@ -316,6 +338,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2"
           },
           {
@@ -330,6 +354,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
           },
           {
@@ -342,6 +368,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:4"
           },
           {
@@ -354,6 +382,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:5"
           },
           {
@@ -366,6 +396,8 @@
               6,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:6"
           },
           {
@@ -378,6 +410,8 @@
               7,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:7"
           },
           {
@@ -391,6 +425,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:8"
           },
           {
@@ -404,6 +440,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
           },
           {
@@ -411,6 +449,10 @@
             "effectIdentity": "battle-element:101003207",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "-3895435746724307476",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0"
           },
           {
@@ -418,6 +460,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:1"
           },
           {
@@ -425,6 +471,10 @@
             "effectIdentity": "battle-element:101003207",
             "operation": "transfer",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "-3895435746724307476",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10"
           },
           {
@@ -432,6 +482,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:11"
           },
           {
@@ -439,6 +491,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
           },
           {
@@ -446,6 +500,10 @@
             "effectIdentity": "battle-element:101003207",
             "operation": "expire",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "-3895435746724307476",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
           },
           {
@@ -453,6 +511,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14"
           },
           {
@@ -460,6 +522,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15"
           },
           {
@@ -467,6 +533,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-103002",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16"
           },
           {
@@ -474,6 +544,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:17"
           },
           {
@@ -481,6 +553,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:18"
           },
           {
@@ -488,6 +562,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19"
           },
           {
@@ -495,6 +571,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:2"
           },
           {
@@ -502,6 +582,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:20"
           },
           {
@@ -509,6 +591,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
           },
           {
@@ -516,6 +600,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22"
           },
           {
@@ -523,6 +609,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-103002",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
           },
           {
@@ -530,6 +620,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:4"
           },
           {
@@ -537,6 +629,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:5"
           },
           {
@@ -544,6 +638,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:6"
           },
           {
@@ -551,6 +647,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:7"
           },
           {
@@ -558,6 +656,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:8"
           },
           {
@@ -565,6 +665,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
           }
         ],
@@ -613,7 +715,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "6d45cf32ad0fd423",
+      "traceProjectionHash": "f25c1af3260d88d8",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:foreground-background-switch",
@@ -802,9 +904,11 @@
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003118",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -819,15 +923,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:6"
           ],
           "reasons": [],
-          "assertionHash": "0fc84738e8da8359"
+          "assertionHash": "39a01118a9992d54"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003071",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -840,15 +946,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
           ],
           "reasons": [],
-          "assertionHash": "23e054a749c4de9a"
+          "assertionHash": "f00ff91ba460b68f"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:12",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
             "effectIdentity": "battle-element:101010178",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -858,15 +966,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
           ],
           "reasons": [],
-          "assertionHash": "ca49befcf011834b"
+          "assertionHash": "2964247376acf2c5"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003074",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -876,15 +986,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
           ],
           "reasons": [],
-          "assertionHash": "917e20183b04bbc0"
+          "assertionHash": "cb0e82832d0bba51"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
             "effectIdentity": "battle-element:101010177",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -894,15 +1006,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14"
           ],
           "reasons": [],
-          "assertionHash": "3108e0b7cb711cca"
+          "assertionHash": "c24e12c4dfb66e98"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15",
           "selector": {
             "actionId": "xiaoyu-hit-during-buff",
+            "controlSkillId": 10101001,
             "effectIdentity": "battle-element:101010000",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -912,15 +1026,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:15"
           ],
           "reasons": [],
-          "assertionHash": "ffd16cc802de2ef3"
+          "assertionHash": "e5028305d7337827"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16",
           "selector": {
             "actionId": "xiaoyu-hit-during-buff",
+            "controlSkillId": 10101001,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -930,15 +1046,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16"
           ],
           "reasons": [],
-          "assertionHash": "b48a91d712140f16"
+          "assertionHash": "3ddc49176a98f476"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:17",
           "selector": {
             "actionId": "xiaoyu-hit-after-expiry",
+            "controlSkillId": 10101001,
             "effectIdentity": "battle-element:101010000",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -948,15 +1066,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:17"
           ],
           "reasons": [],
-          "assertionHash": "5214cfd86b7d53a4"
+          "assertionHash": "cd6e9f4547b4e22c"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:18",
           "selector": {
             "actionId": "xiaoyu-hit-after-expiry",
+            "controlSkillId": 10101001,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -966,15 +1086,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:18"
           ],
           "reasons": [],
-          "assertionHash": "82a0590eb28f81dd"
+          "assertionHash": "bb922dba56e27219"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -984,15 +1106,17 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
           ],
           "reasons": [],
-          "assertionHash": "380c8903d19fea98"
+          "assertionHash": "b7adc679561f0535"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:7",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003122",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -1002,15 +1126,19 @@
             "golden-damage-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:7"
           ],
           "reasons": [],
-          "assertionHash": "d72f52ca08e1f594"
+          "assertionHash": "dfdd2bc10e87d511"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "-3895435746724307476",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003207",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -1020,15 +1148,19 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:0"
           ],
           "reasons": [],
-          "assertionHash": "f7a86134a4b8400d"
+          "assertionHash": "2abc52e17078b425"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:1",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "6060088285417807340",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -1040,15 +1172,19 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:3"
           ],
           "reasons": [],
-          "assertionHash": "ee78faf47483915e"
+          "assertionHash": "ca6fe352f3662728"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "-3895435746724307476",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003207",
             "kind": "effect",
-            "operation": "transfer"
+            "operation": "transfer",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -1058,15 +1194,17 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:10"
           ],
           "reasons": [],
-          "assertionHash": "ecbb14f1491bc1be"
+          "assertionHash": "a0caf7f37728aa56"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:11",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -1077,15 +1215,19 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:12"
           ],
           "reasons": [],
-          "assertionHash": "1a941ea5e78ff9c5"
+          "assertionHash": "0f6b03d91ec99de0"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "-3895435746724307476",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003207",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -1095,15 +1237,19 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:13"
           ],
           "reasons": [],
-          "assertionHash": "777d0b04b85563fe"
+          "assertionHash": "0380962e70eda5c6"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:14",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "6060088285417807340",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -1115,15 +1261,17 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:16"
           ],
           "reasons": [],
-          "assertionHash": "d43373fa7171a719"
+          "assertionHash": "368191e8df7353eb"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:17",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -1140,15 +1288,17 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:9"
           ],
           "reasons": [],
-          "assertionHash": "8d83416f2e78a0e0"
+          "assertionHash": "d6dfe07de44607ed"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:19",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -1160,15 +1310,17 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:21"
           ],
           "reasons": [],
-          "assertionHash": "f8d207e38c4a8ee9"
+          "assertionHash": "e2c4638e670d30c0"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22",
           "selector": {
             "actionId": "switch-to-xiaoyu--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -1178,7 +1330,7 @@
             "golden-effect:m10-b2-r1:101003:ultimate-controlled-buff-switch:22"
           ],
           "reasons": [],
-          "assertionHash": "1575c5994ea7f38c"
+          "assertionHash": "3bb360bdfa15f8e5"
         },
         {
           "assertionIdentity": "trace-hit:golden-hit:m10-b2-r1:101003:ultimate-controlled-buff-switch:0",
@@ -1471,7 +1623,7 @@
           "assertionHash": "1be842279270d75b"
         }
       ],
-      "scenarioCaseHash": "e4e708c075f722d4"
+      "scenarioCaseHash": "5b9d18997b6cd725"
     },
     {
       "schemaVersion": 1,
@@ -2044,6 +2196,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:0"
           },
           {
@@ -2056,6 +2210,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:1"
           },
           {
@@ -2068,6 +2224,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:10"
           },
           {
@@ -2075,7 +2233,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:100"
           },
           {
@@ -2083,7 +2242,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:101"
           },
           {
@@ -2091,7 +2251,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:102"
           },
           {
@@ -2099,7 +2260,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:103"
           },
           {
@@ -2107,7 +2269,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:104"
           },
           {
@@ -2115,7 +2278,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:105"
           },
           {
@@ -2123,7 +2287,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:106"
           },
           {
@@ -2131,7 +2296,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:107"
           },
           {
@@ -2144,6 +2310,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:108"
           },
           {
@@ -2151,7 +2319,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:109"
           },
           {
@@ -2164,6 +2333,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:11"
           },
           {
@@ -2176,6 +2347,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:110"
           },
           {
@@ -2183,7 +2356,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:111"
           },
           {
@@ -2196,6 +2370,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:112"
           },
           {
@@ -2203,7 +2379,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:113"
           },
           {
@@ -2216,6 +2393,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:114"
           },
           {
@@ -2223,7 +2402,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:115"
           },
           {
@@ -2236,6 +2416,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100349,
+            "subSkillIndex": 1,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:116"
           },
           {
@@ -2243,7 +2425,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:117"
           },
           {
@@ -2251,7 +2434,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:118"
           },
           {
@@ -2259,7 +2443,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:119"
           },
           {
@@ -2274,6 +2459,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:12"
           },
           {
@@ -2281,7 +2468,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:120"
           },
           {
@@ -2289,7 +2477,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:121"
           },
           {
@@ -2297,7 +2486,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:122"
           },
           {
@@ -2305,7 +2495,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:123"
           },
           {
@@ -2313,7 +2504,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:124"
           },
           {
@@ -2321,7 +2513,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:125"
           },
           {
@@ -2329,7 +2522,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:126"
           },
           {
@@ -2337,7 +2531,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:127"
           },
           {
@@ -2345,7 +2540,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:128"
           },
           {
@@ -2353,7 +2549,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:129"
           },
           {
@@ -2366,6 +2563,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:13"
           },
           {
@@ -2373,7 +2572,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:130"
           },
           {
@@ -2381,7 +2581,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:131"
           },
           {
@@ -2389,7 +2590,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:132"
           },
           {
@@ -2397,7 +2599,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:133"
           },
           {
@@ -2405,7 +2608,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:134"
           },
           {
@@ -2413,7 +2617,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:135"
           },
           {
@@ -2421,7 +2626,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:136"
           },
           {
@@ -2429,7 +2635,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:137"
           },
           {
@@ -2437,7 +2644,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:138"
           },
           {
@@ -2445,7 +2653,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:139"
           },
           {
@@ -2458,6 +2667,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100303,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:14"
           },
           {
@@ -2465,7 +2676,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:140"
           },
           {
@@ -2473,7 +2685,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:141"
           },
           {
@@ -2481,7 +2694,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:142"
           },
           {
@@ -2489,7 +2703,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:143"
           },
           {
@@ -2497,7 +2712,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:144"
           },
           {
@@ -2505,7 +2721,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:145"
           },
           {
@@ -2513,7 +2730,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:146"
           },
           {
@@ -2521,7 +2739,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:147"
           },
           {
@@ -2529,7 +2748,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:148"
           },
           {
@@ -2537,7 +2757,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:149"
           },
           {
@@ -2550,6 +2771,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:15"
           },
           {
@@ -2562,6 +2785,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:150"
           },
           {
@@ -2576,6 +2801,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:151"
           },
           {
@@ -2588,6 +2815,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:152"
           },
           {
@@ -2595,7 +2824,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:153"
           },
           {
@@ -2608,6 +2838,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100325,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:154"
           },
           {
@@ -2615,7 +2847,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:155"
           },
           {
@@ -2623,7 +2856,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:156"
           },
           {
@@ -2631,7 +2865,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:157"
           },
           {
@@ -2639,7 +2874,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:158"
           },
           {
@@ -2647,7 +2883,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:159"
           },
           {
@@ -2660,6 +2897,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:16"
           },
           {
@@ -2667,7 +2906,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:160"
           },
           {
@@ -2675,7 +2915,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:161"
           },
           {
@@ -2683,7 +2924,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:162"
           },
           {
@@ -2691,7 +2933,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:163"
           },
           {
@@ -2699,7 +2942,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:164"
           },
           {
@@ -2707,7 +2951,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:165"
           },
           {
@@ -2715,7 +2960,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:166"
           },
           {
@@ -2723,7 +2969,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:167"
           },
           {
@@ -2731,7 +2978,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:168"
           },
           {
@@ -2739,7 +2987,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:169"
           },
           {
@@ -2752,6 +3001,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:17"
           },
           {
@@ -2759,7 +3010,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:170"
           },
           {
@@ -2767,7 +3019,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:171"
           },
           {
@@ -2781,6 +3034,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:172"
           },
           {
@@ -2796,6 +3051,10 @@
               152,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
+            "triggerFrame": 57,
+            "behaviorPathId": "-5797025868792535592",
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:173"
           },
           {
@@ -2809,6 +3068,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:174"
           },
           {
@@ -2822,6 +3083,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:175"
           },
           {
@@ -2835,6 +3098,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:176"
           },
           {
@@ -2848,6 +3113,8 @@
               1,
               0
             ],
+            "controlSkillId": 10101021,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:177"
           },
           {
@@ -2861,6 +3128,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:178"
           },
           {
@@ -2874,6 +3143,8 @@
               2,
               0
             ],
+            "controlSkillId": 10101021,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:179"
           },
           {
@@ -2886,6 +3157,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100304,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:18"
           },
           {
@@ -2898,6 +3171,8 @@
               1,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180"
           },
           {
@@ -2912,6 +3187,8 @@
               152,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181"
           },
           {
@@ -2924,6 +3201,8 @@
               2,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182"
           },
           {
@@ -2936,6 +3215,8 @@
               3,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:183"
           },
           {
@@ -2948,6 +3229,8 @@
               4,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184"
           },
           {
@@ -2960,6 +3243,8 @@
               5,
               0
             ],
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:185"
           },
           {
@@ -2967,7 +3252,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:186"
           },
           {
@@ -2975,7 +3261,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:187"
           },
           {
@@ -2983,7 +3270,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:188"
           },
           {
@@ -2991,7 +3279,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:189"
           },
           {
@@ -3004,6 +3293,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:19"
           },
           {
@@ -3011,7 +3302,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:190"
           },
           {
@@ -3019,7 +3311,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:191"
           },
           {
@@ -3027,7 +3320,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:192"
           },
           {
@@ -3035,7 +3329,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:193"
           },
           {
@@ -3043,7 +3338,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:194"
           },
           {
@@ -3051,7 +3347,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:195"
           },
           {
@@ -3059,7 +3356,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:196"
           },
           {
@@ -3067,7 +3365,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:197"
           },
           {
@@ -3075,7 +3374,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:198"
           },
           {
@@ -3083,7 +3383,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:199"
           },
           {
@@ -3096,6 +3397,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:2"
           },
           {
@@ -3108,6 +3411,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:20"
           },
           {
@@ -3115,7 +3420,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:200"
           },
           {
@@ -3123,7 +3429,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:201"
           },
           {
@@ -3131,7 +3438,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:202"
           },
           {
@@ -3139,7 +3447,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:203"
           },
           {
@@ -3147,7 +3456,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:204"
           },
           {
@@ -3155,7 +3465,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:205"
           },
           {
@@ -3163,7 +3474,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:206"
           },
           {
@@ -3171,7 +3483,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:207"
           },
           {
@@ -3179,7 +3492,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:208"
           },
           {
@@ -3187,7 +3501,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:209"
           },
           {
@@ -3200,6 +3515,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:21"
           },
           {
@@ -3207,7 +3524,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:210"
           },
           {
@@ -3215,7 +3533,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:211"
           },
           {
@@ -3223,7 +3542,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:212"
           },
           {
@@ -3236,6 +3556,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100305,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:22"
           },
           {
@@ -3248,6 +3570,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:23"
           },
           {
@@ -3262,6 +3586,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:24"
           },
           {
@@ -3274,6 +3600,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:25"
           },
           {
@@ -3286,6 +3614,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:26"
           },
           {
@@ -3298,6 +3628,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:27"
           },
           {
@@ -3310,6 +3642,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:28"
           },
           {
@@ -3322,6 +3656,8 @@
               6,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:29"
           },
           {
@@ -3336,6 +3672,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:3"
           },
           {
@@ -3348,6 +3686,8 @@
               7,
               0
             ],
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:30"
           },
           {
@@ -3360,6 +3700,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:31"
           },
           {
@@ -3372,6 +3714,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:32"
           },
           {
@@ -3384,6 +3728,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:33"
           },
           {
@@ -3396,6 +3742,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:34"
           },
           {
@@ -3408,6 +3756,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:35"
           },
           {
@@ -3420,6 +3770,8 @@
               6,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:36"
           },
           {
@@ -3432,6 +3784,8 @@
               7,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:37"
           },
           {
@@ -3444,6 +3798,8 @@
               8,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:38"
           },
           {
@@ -3451,7 +3807,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:39"
           },
           {
@@ -3464,6 +3821,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:4"
           },
           {
@@ -3476,6 +3835,8 @@
               9,
               0
             ],
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:40"
           },
           {
@@ -3483,7 +3844,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:41"
           },
           {
@@ -3491,7 +3853,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:42"
           },
           {
@@ -3499,7 +3862,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:43"
           },
           {
@@ -3507,7 +3871,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:44"
           },
           {
@@ -3515,7 +3880,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:45"
           },
           {
@@ -3523,7 +3889,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:46"
           },
           {
@@ -3531,7 +3898,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:47"
           },
           {
@@ -3539,7 +3907,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:48"
           },
           {
@@ -3547,7 +3916,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:49"
           },
           {
@@ -3560,6 +3930,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:5"
           },
           {
@@ -3567,7 +3939,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:50"
           },
           {
@@ -3575,7 +3948,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:51"
           },
           {
@@ -3583,7 +3957,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:52"
           },
           {
@@ -3591,7 +3966,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:53"
           },
           {
@@ -3599,7 +3975,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:54"
           },
           {
@@ -3607,7 +3984,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:55"
           },
           {
@@ -3615,7 +3993,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:56"
           },
           {
@@ -3623,7 +4002,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:57"
           },
           {
@@ -3631,7 +4011,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:58"
           },
           {
@@ -3644,6 +4025,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:59"
           },
           {
@@ -3656,6 +4039,8 @@
               6,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:6"
           },
           {
@@ -3670,6 +4055,8 @@
               152,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:60"
           },
           {
@@ -3682,6 +4069,8 @@
               2,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:61"
           },
           {
@@ -3694,6 +4083,8 @@
               3,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:62"
           },
           {
@@ -3701,7 +4092,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:63"
           },
           {
@@ -3709,7 +4101,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:64"
           },
           {
@@ -3722,6 +4115,8 @@
               4,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:65"
           },
           {
@@ -3729,7 +4124,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:66"
           },
           {
@@ -3742,6 +4138,8 @@
               5,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:67"
           },
           {
@@ -3749,7 +4147,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:68"
           },
           {
@@ -3762,6 +4161,8 @@
               6,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:69"
           },
           {
@@ -3774,6 +4175,8 @@
               7,
               0
             ],
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:7"
           },
           {
@@ -3781,7 +4184,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:70"
           },
           {
@@ -3794,6 +4198,8 @@
               7,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:71"
           },
           {
@@ -3806,6 +4212,8 @@
               8,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:72"
           },
           {
@@ -3813,7 +4221,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:73"
           },
           {
@@ -3826,6 +4235,8 @@
               9,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:74"
           },
           {
@@ -3838,6 +4249,8 @@
               10,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:75"
           },
           {
@@ -3845,7 +4258,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:76"
           },
           {
@@ -3858,6 +4272,8 @@
               11,
               0
             ],
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:77"
           },
           {
@@ -3865,7 +4281,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:78"
           },
           {
@@ -3873,7 +4290,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:79"
           },
           {
@@ -3886,6 +4304,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100301,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:8"
           },
           {
@@ -3893,7 +4313,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:80"
           },
           {
@@ -3901,7 +4322,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:81"
           },
           {
@@ -3909,7 +4331,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:82"
           },
           {
@@ -3917,7 +4340,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:83"
           },
           {
@@ -3925,7 +4349,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:84"
           },
           {
@@ -3933,7 +4358,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:85"
           },
           {
@@ -3941,7 +4367,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:86"
           },
           {
@@ -3949,7 +4376,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:87"
           },
           {
@@ -3957,7 +4385,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:88"
           },
           {
@@ -3965,7 +4394,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:89"
           },
           {
@@ -3978,6 +4408,8 @@
               1,
               0
             ],
+            "controlSkillId": 10100302,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:9"
           },
           {
@@ -3985,7 +4417,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:90"
           },
           {
@@ -3993,7 +4426,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:91"
           },
           {
@@ -4001,7 +4435,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:92"
           },
           {
@@ -4009,7 +4444,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:93"
           },
           {
@@ -4017,7 +4453,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:94"
           },
           {
@@ -4025,7 +4462,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:95"
           },
           {
@@ -4033,7 +4471,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:96"
           },
           {
@@ -4041,7 +4480,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:97"
           },
           {
@@ -4049,7 +4489,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:98"
           },
           {
@@ -4057,7 +4498,8 @@
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": null,
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:99"
           },
           {
@@ -4065,6 +4507,10 @@
             "effectIdentity": "battle-element:101003207",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "-3895435746724307476",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:0"
           },
           {
@@ -4072,6 +4518,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:1"
           },
           {
@@ -4079,6 +4529,10 @@
             "effectIdentity": "battle-element:101003207",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "-3895435746724307476",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:10"
           },
           {
@@ -4086,6 +4540,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:11"
           },
           {
@@ -4093,6 +4549,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:12"
           },
           {
@@ -4100,6 +4558,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:13"
           },
           {
@@ -4107,6 +4569,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:14"
           },
           {
@@ -4114,6 +4580,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-103002",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:15"
           },
           {
@@ -4121,6 +4591,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:16"
           },
           {
@@ -4128,6 +4600,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:17"
           },
           {
@@ -4135,6 +4609,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:18"
           },
           {
@@ -4142,6 +4618,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:19"
           },
           {
@@ -4149,6 +4627,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101010",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:2"
           },
           {
@@ -4156,6 +4638,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:20"
           },
           {
@@ -4163,6 +4647,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:21"
           },
           {
@@ -4170,6 +4656,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:22"
           },
           {
@@ -4177,6 +4665,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:23"
           },
           {
@@ -4184,6 +4674,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:24"
           },
           {
@@ -4191,6 +4683,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:25"
           },
           {
@@ -4198,6 +4692,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:26"
           },
           {
@@ -4205,6 +4701,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:27"
           },
           {
@@ -4212,6 +4710,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:28"
           },
           {
@@ -4219,6 +4719,8 @@
             "effectIdentity": "battle-element:480124006",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:29"
           },
           {
@@ -4226,6 +4728,10 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-103002",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "triggerFrame": 148,
+            "behaviorPathId": "6060088285417807340",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:3"
           },
           {
@@ -4233,6 +4739,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101010",
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:30"
           },
           {
@@ -4240,6 +4748,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-103002",
+            "controlSkillId": 10100310,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:31"
           },
           {
@@ -4247,6 +4757,8 @@
             "effectIdentity": "battle-element:101003079",
             "operation": "remove",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:32"
           },
           {
@@ -4254,6 +4766,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:33"
           },
           {
@@ -4261,6 +4775,8 @@
             "effectIdentity": "battle-element:480124006",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:34"
           },
           {
@@ -4268,6 +4784,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:35"
           },
           {
@@ -4275,6 +4793,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:36"
           },
           {
@@ -4282,6 +4802,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "apply",
             "targetId": "actor-103002",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:37"
           },
           {
@@ -4289,6 +4811,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:38"
           },
           {
@@ -4296,6 +4820,8 @@
             "effectIdentity": "battle-element:480124006",
             "operation": "transfer",
             "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:39"
           },
           {
@@ -4303,6 +4829,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:4"
           },
           {
@@ -4310,6 +4838,10 @@
             "effectIdentity": "battle-element:101003142",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
+            "triggerFrame": 57,
+            "behaviorPathId": "-5797025868792535592",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:40"
           },
           {
@@ -4317,6 +4849,10 @@
             "effectIdentity": "battle-element:101003145",
             "operation": "apply",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
+            "triggerFrame": 57,
+            "behaviorPathId": "-5797025868792535592",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:41"
           },
           {
@@ -4324,6 +4860,8 @@
             "effectIdentity": "battle-element:540070",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
           },
           {
@@ -4331,6 +4869,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:43"
           },
           {
@@ -4338,6 +4878,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:44"
           },
           {
@@ -4345,6 +4887,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
           },
           {
@@ -4352,6 +4896,10 @@
             "effectIdentity": "battle-element:101003142",
             "operation": "expire",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
+            "triggerFrame": 57,
+            "behaviorPathId": "-5797025868792535592",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
           },
           {
@@ -4359,6 +4907,10 @@
             "effectIdentity": "battle-element:101003145",
             "operation": "expire",
             "targetId": "enemy-300032",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
+            "triggerFrame": 57,
+            "behaviorPathId": "-5797025868792535592",
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
           },
           {
@@ -4366,6 +4918,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
           },
           {
@@ -4373,6 +4927,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           },
           {
@@ -4380,6 +4936,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:5"
           },
           {
@@ -4387,6 +4945,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:50"
           },
           {
@@ -4394,6 +4954,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:51"
           },
           {
@@ -4401,6 +4963,8 @@
             "effectIdentity": "battle-element:480124006",
             "operation": "expire",
             "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
           },
           {
@@ -4408,6 +4972,8 @@
             "effectIdentity": "battle-element:101003205",
             "operation": "expire",
             "targetId": "actor-103002",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           },
           {
@@ -4415,6 +4981,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:54"
           },
           {
@@ -4422,6 +4990,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:55"
           },
           {
@@ -4429,6 +4999,8 @@
             "effectIdentity": "battle-element:540070",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
           },
           {
@@ -4436,6 +5008,8 @@
             "effectIdentity": "kibo-passive:520090:520090002",
             "operation": "expire",
             "targetId": "actor-101003",
+            "controlSkillId": 50046903,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
           },
           {
@@ -4443,6 +5017,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:58"
           },
           {
@@ -4450,6 +5026,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
           },
           {
@@ -4457,6 +5035,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:6"
           },
           {
@@ -4464,6 +5044,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:60"
           },
           {
@@ -4471,6 +5053,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           },
           {
@@ -4478,6 +5062,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:62"
           },
           {
@@ -4485,6 +5071,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:63"
           },
           {
@@ -4492,6 +5080,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
           },
           {
@@ -4499,6 +5089,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:65"
           },
           {
@@ -4506,6 +5098,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
           },
           {
@@ -4513,6 +5107,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
           },
           {
@@ -4520,6 +5116,8 @@
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
+            "controlSkillId": 10100322,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
           },
           {
@@ -4527,6 +5125,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:7"
           },
           {
@@ -4534,6 +5134,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:8"
           },
           {
@@ -4541,6 +5143,8 @@
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           }
         ],
@@ -4861,7 +5465,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "a2f5e7f9d9447422",
+      "traceProjectionHash": "ee7e1bf2043c5ef2",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -5830,9 +6434,11 @@
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:0",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003118",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -5847,15 +6453,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:6"
           ],
           "reasons": [],
-          "assertionHash": "6b27e21447ab8b6b"
+          "assertionHash": "2390ffb296155b06"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:10",
           "selector": {
             "actionId": "han-normal-a2",
+            "controlSkillId": 10100302,
             "effectIdentity": "battle-element:101003046",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -5866,15 +6474,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "add6a2bc7399670c"
+          "assertionHash": "81e744ca73257acb"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:100",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:0",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -5994,15 +6604,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:99"
           ],
           "reasons": [],
-          "assertionHash": "9b58abab9b7e0778"
+          "assertionHash": "c55d91104a1bcbbe"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:108",
           "selector": {
             "actionId": "han-perfect-parry",
+            "controlSkillId": 10100349,
             "effectIdentity": "battle-element:101003109",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 1
           },
           "expectation": {
             "minimumCount": 1
@@ -6016,15 +6628,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:116"
           ],
           "reasons": [],
-          "assertionHash": "5b5a80ff14f52860"
+          "assertionHash": "d3dc4ae436627b03"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:11",
           "selector": {
             "actionId": "han-normal-a3",
+            "controlSkillId": 10100303,
             "effectIdentity": "battle-element:101003037",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6036,15 +6650,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:14"
           ],
           "reasons": [],
-          "assertionHash": "4feb36a7589227f7"
+          "assertionHash": "8df03e7c23f655cd"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:12",
           "selector": {
             "actionId": "han-normal-a3",
+            "controlSkillId": 10100303,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6054,15 +6670,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:12"
           ],
           "reasons": [],
-          "assertionHash": "189a530aaf7c1c49"
+          "assertionHash": "45b1f90bd8e6e6e7"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:15",
           "selector": {
             "actionId": "han-normal-a4",
+            "controlSkillId": 10100304,
             "effectIdentity": "battle-element:101003156",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6072,15 +6690,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:15"
           ],
           "reasons": [],
-          "assertionHash": "2c0e21a36d3f1307"
+          "assertionHash": "3d41f1505623bd52"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:150",
           "selector": {
             "actionId": "han-limit-counter",
+            "controlSkillId": 10100325,
             "effectIdentity": "battle-element:101003191",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6092,15 +6712,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:154"
           ],
           "reasons": [],
-          "assertionHash": "0440d895fef733e1"
+          "assertionHash": "31168c4dd99671e7"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:151",
           "selector": {
             "actionId": "han-limit-counter",
+            "controlSkillId": 10100325,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6110,15 +6732,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:151"
           ],
           "reasons": [],
-          "assertionHash": "6259989f043dd04b"
+          "assertionHash": "c73d71cd17282491"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:16",
           "selector": {
             "actionId": "han-normal-a4",
+            "controlSkillId": 10100304,
             "effectIdentity": "battle-element:101003182",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6130,15 +6754,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:18"
           ],
           "reasons": [],
-          "assertionHash": "f4ad1d67d1950235"
+          "assertionHash": "01e182a1f34f0c24"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:172",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003071",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6151,15 +6777,19 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:176"
           ],
           "reasons": [],
-          "assertionHash": "a4303310beb48ad2"
+          "assertionHash": "becf8c71b91e4187"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:173",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "behaviorPathId": "-5797025868792535592",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0,
+            "triggerFrame": 57
           },
           "expectation": {
             "minimumCount": 1
@@ -6169,15 +6799,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:173"
           ],
           "reasons": [],
-          "assertionHash": "0de1380e59db1b24"
+          "assertionHash": "0deb4a34b8b69a8d"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:177",
           "selector": {
             "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
             "effectIdentity": "battle-element:101010178",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6187,15 +6819,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:177"
           ],
           "reasons": [],
-          "assertionHash": "23b574bb128c4539"
+          "assertionHash": "338031fe8398dbef"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:178",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003074",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6205,15 +6839,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:178"
           ],
           "reasons": [],
-          "assertionHash": "935808719b9c21ea"
+          "assertionHash": "e4ca56971c5aa65f"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:179",
           "selector": {
             "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
             "effectIdentity": "battle-element:101010177",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6223,15 +6859,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:179"
           ],
           "reasons": [],
-          "assertionHash": "4ecc9a6a2faf8868"
+          "assertionHash": "2d7b806a3bd944e2"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:500469062",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6241,15 +6879,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180"
           ],
           "reasons": [],
-          "assertionHash": "435f7b2078cfab65"
+          "assertionHash": "d5ed0d41adaa23cc"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6259,15 +6899,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181"
           ],
           "reasons": [],
-          "assertionHash": "4525a25c9991090b"
+          "assertionHash": "49b2bd8bcb9cb8e2"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:500469008",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6278,15 +6920,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:183"
           ],
           "reasons": [],
-          "assertionHash": "1037f19139bcef59"
+          "assertionHash": "d188c4deb101e8d8"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:500469072",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6297,15 +6941,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:185"
           ],
           "reasons": [],
-          "assertionHash": "142d764f3c3417b6"
+          "assertionHash": "cbf3aee492115387"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:186",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:0",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6341,15 +6987,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:212"
           ],
           "reasons": [],
-          "assertionHash": "5110a25258afc3a4"
+          "assertionHash": "3262b8d856939b15"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:19",
           "selector": {
             "actionId": "han-normal-a5",
+            "controlSkillId": 10100305,
             "effectIdentity": "battle-element:101003157",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6359,15 +7007,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:19"
           ],
           "reasons": [],
-          "assertionHash": "e68a82400c16625f"
+          "assertionHash": "6dc75dfd62c23037"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:20",
           "selector": {
             "actionId": "han-normal-a5",
+            "controlSkillId": 10100305,
             "effectIdentity": "battle-element:101003179",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6379,15 +7029,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:22"
           ],
           "reasons": [],
-          "assertionHash": "50d2c268babe487c"
+          "assertionHash": "04db8ad8248410dc"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:23",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "battle-element:101003033",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6399,15 +7051,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:26"
           ],
           "reasons": [],
-          "assertionHash": "d6d1ad4d4f727e8f"
+          "assertionHash": "1ae37e001d0fad67"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:24",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6417,15 +7071,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:24"
           ],
           "reasons": [],
-          "assertionHash": "d7cc5c8a9403df2f"
+          "assertionHash": "f0f687822cc011fb"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:27",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "battle-element:101003108",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6438,15 +7094,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:30"
           ],
           "reasons": [],
-          "assertionHash": "b6e850657208bd6f"
+          "assertionHash": "a61a5aa55f7c4e6f"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:3",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6456,15 +7114,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:3"
           ],
           "reasons": [],
-          "assertionHash": "8d054f757d86a34a"
+          "assertionHash": "25b1665e304742e7"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:31",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:101003066",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6474,15 +7134,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:31"
           ],
           "reasons": [],
-          "assertionHash": "507dd3332f07964a"
+          "assertionHash": "fb51c13a39e88a44"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:32",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:101003104",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6494,15 +7156,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:35"
           ],
           "reasons": [],
-          "assertionHash": "e1d34a6c8fa28d14"
+          "assertionHash": "0c67132e3b6e4ea2"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:33",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:101003110",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6516,15 +7180,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:40"
           ],
           "reasons": [],
-          "assertionHash": "941da47fc6200f34"
+          "assertionHash": "285df1cba458c846"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:59",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003094",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6534,15 +7200,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:59"
           ],
           "reasons": [],
-          "assertionHash": "433cd9d241c8040d"
+          "assertionHash": "59a6ab3ccc98dea9"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:60",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:152",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6552,15 +7220,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:60"
           ],
           "reasons": [],
-          "assertionHash": "9df0ef3231e0ba9b"
+          "assertionHash": "d158ce1260d8fe17"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:61",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003105",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6574,15 +7244,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:77"
           ],
           "reasons": [],
-          "assertionHash": "07233805e8395108"
+          "assertionHash": "b94cc553b98a426c"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:62",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003111",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6596,15 +7268,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:75"
           ],
           "reasons": [],
-          "assertionHash": "7fafc50f9024e684"
+          "assertionHash": "1d63e3b66cdd76e0"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:7",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003122",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6614,15 +7288,17 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:7"
           ],
           "reasons": [],
-          "assertionHash": "a15f5d724f611b36"
+          "assertionHash": "bad828635fa9ab13"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:8",
           "selector": {
             "actionId": "han-normal-a1",
+            "controlSkillId": 10100301,
             "effectIdentity": "battle-element:101003087",
             "kind": "effect",
-            "operation": "damage"
+            "operation": "damage",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6632,15 +7308,19 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:8"
           ],
           "reasons": [],
-          "assertionHash": "94beacd4270e29e1"
+          "assertionHash": "585183bfb65e6949"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:0",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "-3895435746724307476",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003207",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -6650,15 +7330,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:0"
           ],
           "reasons": [],
-          "assertionHash": "a3ea51d5ece670fd"
+          "assertionHash": "3835177bcc0f9d75"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:1",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "6060088285417807340",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -6670,15 +7354,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:3"
           ],
           "reasons": [],
-          "assertionHash": "e1f53cdde3952a9e"
+          "assertionHash": "ab1378623f08a8e8"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:10",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "-3895435746724307476",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003207",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -6688,15 +7376,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:10"
           ],
           "reasons": [],
-          "assertionHash": "3abfb65446483114"
+          "assertionHash": "f8f40d252e8ffb68"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:11",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6717,15 +7407,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "19d53593417b2f5e"
+          "assertionHash": "ace07ce96cd5a39b"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:13",
           "selector": {
             "actionId": "han-ultimate",
+            "behaviorPathId": "6060088285417807340",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 148
           },
           "expectation": {
             "minimumCount": 1
@@ -6737,15 +7431,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:15"
           ],
           "reasons": [],
-          "assertionHash": "6a8486365f468b3f"
+          "assertionHash": "075896ef841d8ae9"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:16",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "battle-element:101003079",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6761,15 +7457,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:26"
           ],
           "reasons": [],
-          "assertionHash": "5e251592b1a62a59"
+          "assertionHash": "c7b5798ead591733"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:17",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6784,15 +7482,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
           ],
           "reasons": [],
-          "assertionHash": "65711693a22438b6"
+          "assertionHash": "24bffd86959ac06c"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:27",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:101003079",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6802,15 +7502,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:27"
           ],
           "reasons": [],
-          "assertionHash": "94088a914de0d671"
+          "assertionHash": "2bdd00335a45e47d"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:28",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6822,15 +7524,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:31"
           ],
           "reasons": [],
-          "assertionHash": "591ee6735ace33e3"
+          "assertionHash": "7fc9a68d5dc8451b"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:29",
           "selector": {
             "actionId": "han-charged-stage-one",
+            "controlSkillId": 10100310,
             "effectIdentity": "battle-element:480124006",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6840,15 +7544,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:29"
           ],
           "reasons": [],
-          "assertionHash": "7afba5d64b1067f3"
+          "assertionHash": "97cea3c3666cb24b"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:32",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003079",
             "kind": "effect",
-            "operation": "remove"
+            "operation": "remove",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6858,15 +7564,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:32"
           ],
           "reasons": [],
-          "assertionHash": "b249b4b60f8e1ad5"
+          "assertionHash": "84f3ddd3e5ec37b9"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:33",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6878,15 +7586,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:37"
           ],
           "reasons": [],
-          "assertionHash": "fdcd4ecb2bf96de1"
+          "assertionHash": "c251c5a8a6fcb807"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:34",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:480124006",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6896,15 +7606,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:34"
           ],
           "reasons": [],
-          "assertionHash": "f0dbdaafb9987515"
+          "assertionHash": "2066394cd16fcdf7"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:35",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "tuning-mark:150:persistent",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6915,15 +7627,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:38"
           ],
           "reasons": [],
-          "assertionHash": "a7458fd401b9d3b2"
+          "assertionHash": "b29b2d5f9abb5100"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:39",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:480124006",
             "kind": "effect",
-            "operation": "transfer"
+            "operation": "transfer",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6933,15 +7647,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:39"
           ],
           "reasons": [],
-          "assertionHash": "05a1b61ddf9b1a84"
+          "assertionHash": "aeb7506230b189ec"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:40",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "behaviorPathId": "-5797025868792535592",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003142",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 57
           },
           "expectation": {
             "minimumCount": 1
@@ -6951,15 +7669,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:40"
           ],
           "reasons": [],
-          "assertionHash": "0331031c5e6ea901"
+          "assertionHash": "c4d3cf116325c982"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:41",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "behaviorPathId": "-5797025868792535592",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003145",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0,
+            "triggerFrame": 57
           },
           "expectation": {
             "minimumCount": 1
@@ -6969,15 +7691,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:41"
           ],
           "reasons": [],
-          "assertionHash": "41cb7c19d69583f8"
+          "assertionHash": "a73d5da7de216fcf"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:42",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:540070",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -6987,15 +7711,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
           ],
           "reasons": [],
-          "assertionHash": "2d4cf108ec6b6fca"
+          "assertionHash": "67afeb99cbcf5783"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:43",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "kibo-passive:520090:520090002",
             "kind": "effect",
-            "operation": "apply"
+            "operation": "apply",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7009,15 +7735,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           ],
           "reasons": [],
-          "assertionHash": "d38020ba0e6ab5ee"
+          "assertionHash": "79a751117441d02f"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "behaviorPathId": "-5797025868792535592",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003142",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 57
           },
           "expectation": {
             "minimumCount": 1
@@ -7027,15 +7757,19 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
           ],
           "reasons": [],
-          "assertionHash": "713b169a1bc1a4ea"
+          "assertionHash": "487ecb45bc8fa8f3"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:47",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "behaviorPathId": "-5797025868792535592",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:101003145",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0,
+            "triggerFrame": 57
           },
           "expectation": {
             "minimumCount": 1
@@ -7045,15 +7779,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
           ],
           "reasons": [],
-          "assertionHash": "a6b4ce5845236961"
+          "assertionHash": "51b241d783e24180"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:101003205",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7065,15 +7801,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           ],
           "reasons": [],
-          "assertionHash": "399c97709523a837"
+          "assertionHash": "4ac5100b23ddac1f"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:480124006",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7083,15 +7821,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
           ],
           "reasons": [],
-          "assertionHash": "873478ea10d153ca"
+          "assertionHash": "09bc292244cd2b56"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:56",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "battle-element:540070",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7101,15 +7841,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
           ],
           "reasons": [],
-          "assertionHash": "d6799f92283b658d"
+          "assertionHash": "637f8a92f4ea2644"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:57",
           "selector": {
             "actionId": "han-kibo-signature",
+            "controlSkillId": 50046903,
             "effectIdentity": "kibo-passive:520090:520090002",
             "kind": "effect",
-            "operation": "expire"
+            "operation": "expire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7119,15 +7861,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
           ],
           "reasons": [],
-          "assertionHash": "f35c3a24efd1f885"
+          "assertionHash": "3b3218423f7499ac"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:62",
           "selector": {
             "actionId": "han-ultimate",
+            "controlSkillId": 10100313,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7139,15 +7883,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
           ],
           "reasons": [],
-          "assertionHash": "ad94f2acfdd0d58f"
+          "assertionHash": "1c0a88f55d6be066"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:65",
           "selector": {
             "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7158,15 +7904,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
           ],
           "reasons": [],
-          "assertionHash": "a6c6428e9251ae25"
+          "assertionHash": "bdc40ba06a67133f"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:67",
           "selector": {
             "actionId": "han-charged-stage-two",
+            "controlSkillId": 10100341,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7176,15 +7924,17 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
           ],
           "reasons": [],
-          "assertionHash": "3df9396bd4537233"
+          "assertionHash": "bbf5004f9e70bdf1"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:68",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
+            "controlSkillId": 10100322,
             "effectIdentity": "battle-element:250",
             "kind": "effect",
-            "operation": "acquire"
+            "operation": "acquire",
+            "subSkillIndex": 0
           },
           "expectation": {
             "minimumCount": 1
@@ -7194,7 +7944,7 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
           ],
           "reasons": [],
-          "assertionHash": "1d8f4ed0e4fc8bf2"
+          "assertionHash": "0412fed9a00a4917"
         },
         {
           "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:0",
@@ -8448,7 +9198,7 @@
           "assertionHash": "14aedd3a456ce1ad"
         }
       ],
-      "scenarioCaseHash": "de95cab5b2a6a153"
+      "scenarioCaseHash": "18199bd4f8a67c75"
     },
     {
       "schemaVersion": 1,
@@ -13416,5 +14166,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "37369f139122b04f"
+  "scenarioSetHash": "96f2118682b51be4"
 }

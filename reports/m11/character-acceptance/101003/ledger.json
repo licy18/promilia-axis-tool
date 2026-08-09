@@ -257,42 +257,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-star-carry-magical-defense-down",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:7aacaf5d3755b295",
-      "uniqueGapIdentity": "acceptance-gap:7aacaf5d3755b295"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-star-carry-physical-defense-down",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1c93dd5963201b74",
-      "uniqueGapIdentity": "acceptance-gap:1c93dd5963201b74"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:16adb13cd4fd5db4",
-      "uniqueGapIdentity": "acceptance-gap:16adb13cd4fd5db4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-1",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -326,18 +290,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:ee162ed92cf429e8",
       "uniqueGapIdentity": "acceptance-gap:ee162ed92cf429e8"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ffc512cd792f97a4",
-      "uniqueGapIdentity": "acceptance-gap:ffc512cd792f97a4"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -521,30 +473,6 @@
   "records": [
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:16adb13cd4fd5db4",
-      "uniqueGapIdentity": "acceptance-gap:16adb13cd4fd5db4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-star-carry-physical-defense-down",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1c93dd5963201b74",
-      "uniqueGapIdentity": "acceptance-gap:1c93dd5963201b74"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:35:0218fc54321d238c",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -624,18 +552,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:798d84743f84136a",
       "uniqueGapIdentity": "acceptance-gap:798d84743f84136a"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-star-carry-magical-defense-down",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:7aacaf5d3755b295",
-      "uniqueGapIdentity": "acceptance-gap:7aacaf5d3755b295"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -780,18 +696,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:f40b31012ff71b03",
       "uniqueGapIdentity": "acceptance-gap:f40b31012ff71b03"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ffc512cd792f97a4",
-      "uniqueGapIdentity": "acceptance-gap:ffc512cd792f97a4"
     },
     {
       "recordIdentity": "source-gap:05a24f9f6fef5cf9",
@@ -1072,25 +976,25 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 36,
+    "uniqueBlockingCount": 32,
     "sourceGapCount": 13,
-    "acceptanceGapCount": 23,
+    "acceptanceGapCount": 19,
     "nonBlockingCount": 2,
     "statusCounts": {
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 26
+      "static-evidence-gap": 22
     },
     "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 23,
+      "acceptance-scenario-coverage-missing": 19,
       "runtime-dependent": 10,
       "unresolved": 3
     },
     "categoryCounts": {
-      "acceptance-scenario-gap": 23,
+      "acceptance-scenario-gap": 19,
       "upstream-source-gap": 13
     }
   },
-  "ledgerHash": "2b904949519ee02b",
+  "ledgerHash": "bf194ebe50126432",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-effect-binding:han-perfect-dodge-team-tuning",

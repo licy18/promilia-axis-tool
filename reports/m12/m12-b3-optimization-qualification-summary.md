@@ -1,9 +1,9 @@
 # M12-B3-E16 Qualification Baseline With Set Closure
 
 - Status: `b3-e16-implemented`
-- Source snapshot: `e93e3c4bdc778195`
-- Roster: `349c445f5a02a23e`
-- Catalog: `e18192637047eca8`
+- Source snapshot: `99b5554c5bedfa57`
+- Roster: `730ac99dbb07b121`
+- Catalog: `83cd0be85700d7a6`
 - Denominators: characters 9, Kibo 43, soul essence 62, equipment 137, set skills 12
 - Optimization ready: characters 0, Kibo 0, soul essence 62, equipment 137, set skills 12
 - Blocking gaps: not implemented 12, evidence insufficient 0

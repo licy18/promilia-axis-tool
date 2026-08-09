@@ -1678,7 +1678,7 @@ function createGoldenScenarioCaseSource({ path, report, profile }) {
       },
     },
     traceProjection: {
-      ...createGoldenTraceProjection(report),
+      ...createGoldenTraceProjection(report, profile),
       ...profileRows,
     },
     assertionDefinitions: [],
@@ -1771,10 +1771,11 @@ export function hasRepeatedApplyRefreshLifecycle(effects = []) {
   return false;
 }
 
-function createGoldenTraceProjection(report) {
-  const selections = Object.entries(
-    report.actual?.actions?.selectionByActionId ?? {}
-  );
+function createGoldenTraceProjection(report, profile) {
+  const selectionByActionId =
+    report.actual?.actions?.selectionByActionId ?? {};
+  const selections = Object.entries(selectionByActionId);
+  const semanticEffects = profile?.contracts?.effects?.semantic ?? [];
   const effects = report.actual?.trace?.effects ?? [];
   const resourceEvents = report.actual?.trace?.specialResources ?? [];
   const tuningMarkEvents = report.actual?.trace?.tuningMarks ?? [];
@@ -1816,27 +1817,34 @@ function createGoldenTraceProjection(report) {
         frame: event.frame ?? null,
       })),
     effects: [
-      ...effects.map((event, index) => ({
-        projectionIdentity:
-          'golden-effect:' + report.scenarioIdentity + ':' + index,
-        actionId: event.actionId ?? null,
-        effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
-        operation: event.operation ?? null,
-        targetId: event.targetId ?? null,
-      })),
+      ...effects.map((event, index) =>
+        createGoldenEffectProjection({
+          event,
+          index,
+          prefix: 'golden-effect',
+          report,
+          profile,
+          selectionByActionId,
+          semanticEffects,
+        })
+      ),
       ...(report.actual?.trace?.damage ?? [])
         .filter(event => Number.isInteger(Number(event.elementId)))
-        .map((event, index) => ({
-          projectionIdentity:
-            'golden-damage-effect:' + report.scenarioIdentity + ':' + index,
-          actionId: event.actionId ?? null,
-          effectIdentity: 'battle-element:' + Number(event.elementId),
-          operation: 'damage',
-          targetId: event.targetId ?? null,
-          sourceSequencePath: Array.isArray(event.sourceSequencePath)
-            ? [...event.sourceSequencePath]
-            : null,
-        })),
+        .map((event, index) =>
+          createGoldenEffectProjection({
+            event: {
+              ...event,
+              effectId: 'battle-element:' + Number(event.elementId),
+              operation: 'damage',
+            },
+            index,
+            prefix: 'golden-damage-effect',
+            report,
+            profile,
+            selectionByActionId,
+            semanticEffects,
+          })
+        ),
     ],
     resources: resourceEvents.map((event, index) => ({
       projectionIdentity:
@@ -1884,6 +1892,77 @@ function createGoldenTraceProjection(report) {
         autoRecoveryReasons.has('verified-auto-sp-background') &&
         autoRecoveryReasons.has('verified-auto-sp-foreground'),
     },
+  };
+}
+
+function createGoldenEffectProjection({
+  event,
+  index,
+  prefix,
+  report,
+  profile,
+  selectionByActionId,
+  semanticEffects,
+}) {
+  const actionId = event.actionId ?? null;
+  const selection = actionId ? selectionByActionId[actionId] : null;
+  const controlSkillId = Number(selection?.controlSkillId);
+  const subSkillIndex = Number(selection?.subSkillIndex);
+  const effectIdentity =
+    event.effectId ?? event.runtimeEffectId ?? null;
+  const normalizedEffectIdentity = resolveEffectIdentity({
+    effectIdentity,
+  });
+  const ownerMatches =
+    Number(selection?.ownerId) === Number(profile?.owner?.ownerId);
+  const semanticMatches =
+    ownerMatches &&
+    Number.isInteger(controlSkillId) &&
+    Number.isInteger(subSkillIndex) &&
+    normalizedEffectIdentity
+      ? semanticEffects.filter(record => {
+          const recordControlSkillId = Number(record?.controlSkillId);
+          const recordSubSkillIndex = Number(
+            record?.subSkillIndex ??
+              record?.mapIndex ??
+              record?.trigger?.subSkillIndexes?.[0] ??
+              0
+          );
+          return (
+            recordControlSkillId === controlSkillId &&
+            recordSubSkillIndex === subSkillIndex &&
+            resolveEffectIdentity(record) === normalizedEffectIdentity
+          );
+        })
+      : [];
+  const uniqueSemanticEffect =
+    semanticMatches.length === 1 ? semanticMatches[0] : null;
+  return {
+    projectionIdentity:
+      prefix + ':' + report.scenarioIdentity + ':' + index,
+    actionId,
+    effectIdentity,
+    operation: event.operation ?? null,
+    targetId: event.targetId ?? null,
+    ...(Array.isArray(event.sourceSequencePath)
+      ? { sourceSequencePath: [...event.sourceSequencePath] }
+      : {}),
+    ...(Number.isInteger(controlSkillId)
+      ? { controlSkillId }
+      : {}),
+    ...(Number.isInteger(subSkillIndex)
+      ? { subSkillIndex }
+      : {}),
+    ...(Number.isInteger(Number(uniqueSemanticEffect?.trigger?.startFrame))
+      ? { triggerFrame: Number(uniqueSemanticEffect.trigger.startFrame) }
+      : {}),
+    ...(uniqueSemanticEffect?.trigger?.behaviorPathId == null
+      ? {}
+      : {
+          behaviorPathId: String(
+            uniqueSemanticEffect.trigger.behaviorPathId
+          ),
+        }),
   };
 }
 
