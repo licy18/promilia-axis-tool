@@ -3,6 +3,7 @@ import {
   resolveAzPrActionInputBinding,
   resolveAzPrSwitchInputBinding,
 } from '../../domain/azprInputCommandProfile';
+import { isVerifiedKiboJointAttack } from '../../domain/verifiedJointAttackContract';
 
 export const TIMELINE_OPERATION_INPUT_SCHEMA_VERSION = 1;
 export const TIMELINE_OPERATION_INPUT_CONTRACT_NAME =
@@ -22,14 +23,18 @@ export function projectTimelineOperationInputs({
       transition,
     ])
   );
-  const jointAttackPairs = createJointAttackPairs(actions, actors);
+  const jointAttackPairs = createJointAttackPairs(
+    actions,
+    actors,
+    resolveActionMapping
+  );
   const pairedKiboActionIds = new Set(
     [...jointAttackPairs.values()].map(pair => pair.kiboAction.id)
   );
   const markers = [];
 
   for (const action of actions) {
-    if (isKiboJointAttack(action)) {
+    if (isVerifiedKiboJointAttack(action, resolveActionMapping(action))) {
       continue;
     }
     const jointAttackPair = jointAttackPairs.get(action.id) ?? null;
@@ -154,9 +159,7 @@ function createActionMarker({
       : null;
   const contextualInputScheduling = action.contextualInputScheduling ?? null;
   const startMs = clamp(
-    finiteNumber(
-      contextualInputScheduling?.inputTimeMs ?? action.startMs
-    ),
+    finiteNumber(contextualInputScheduling?.inputTimeMs ?? action.startMs),
     0,
     durationMs
   );
@@ -207,11 +210,13 @@ function createActionMarker({
   };
 }
 
-function createJointAttackPairs(actions, actors) {
+function createJointAttackPairs(actions, actors, resolveActionMapping) {
   const actorById = new Map(
     actors.map(actor => [String(actor.id ?? ''), actor])
   );
-  const kiboCombos = actions.filter(isKiboJointAttack);
+  const kiboCombos = actions.filter(action =>
+    isVerifiedKiboJointAttack(action, resolveActionMapping(action))
+  );
   const pairs = new Map();
   for (const action of actions.filter(isActorJointAttack)) {
     const actor = actorById.get(String(action.actorId ?? '')) ?? action.actor;
@@ -233,13 +238,6 @@ function createJointAttackPairs(actions, actors) {
 
 function isActorJointAttack(action) {
   return action.type === 'skill' && action.actionKind === 'star-combo';
-}
-
-function isKiboJointAttack(action) {
-  return (
-    action.type === 'kiboEvent' &&
-    (action.eventType === 'break' || action.actionKind === 'break')
-  );
 }
 
 function timelineFrameIndex(timeMs) {

@@ -8,7 +8,9 @@ import {
 import { createSwitchAction } from '../../domain/projectSchema';
 import {
   createSwitchTriggeredActionGeneration,
+  isVerifiedSwitchTriggeredDerivedAction,
   resolveSwitchTriggeredCooldownGate,
+  validateSwitchTriggeredDerivedAction,
 } from '../../simulation/generation/switchTriggeredActionGeneration';
 
 const skillsById = new Map(
@@ -70,6 +72,77 @@ describe('switch triggered star-carry generation', () => {
     ]);
   });
 
+  it('does not materialize star-carry transactions from an off-field switch source', () => {
+    const result = generate({
+      actors: [actor(101003), actor(101007)],
+      initialActorId: 'actor-101003',
+      switches: [switchAction('off-field-switch', 1000, 101007, 101003)],
+    });
+
+    expect(result.actions).toEqual([]);
+    expect(result.bindings).toEqual([
+      expect.objectContaining({
+        switchEventId: 'off-field-switch',
+        resolutionStatus: 'parent-switch-rejected',
+        reasons: ['parent-switch-source-not-controlled'],
+        applied: false,
+      }),
+    ]);
+  });
+
+  it('requires the compiled generation, parent binding, owner and source path before granting a background-input exemption', () => {
+    const sourceSwitch = {
+      ...switchAction('switch-proof', 1000, 101003, 101007),
+      sourceSequenceIndex: 3,
+      sourceSequencePath: [3],
+      sourceSequenceSource: 'test-input-order',
+    };
+    const actors = [actor(101003), actor(101007)];
+    const generation = generate({
+      actors,
+      initialActorId: 'actor-101003',
+      switches: [sourceSwitch],
+    });
+    const scenario = {
+      actors,
+      actions: [sourceSwitch, ...generation.actions],
+      switchTriggerGeneration: generation,
+    };
+    expect(
+      generation.actions.every(action =>
+        isVerifiedSwitchTriggeredDerivedAction(action, scenario)
+      )
+    ).toBe(true);
+
+    const forged = {
+      ...generation.actions[0],
+      id: 'manually-forged-derived-action',
+      sourceSequencePath: [99],
+    };
+    expect(
+      validateSwitchTriggeredDerivedAction(forged, scenario)
+    ).toMatchObject({
+      declared: true,
+      valid: false,
+      reasons: expect.arrayContaining([
+        'compiled-generation-action-missing',
+        'derived-source-sequence-mismatch',
+      ]),
+    });
+    expect(
+      validateSwitchTriggeredDerivedAction(generation.actions[0], {
+        ...scenario,
+        switchTriggerGeneration: structuredClone(generation),
+      })
+    ).toMatchObject({
+      declared: true,
+      valid: false,
+      reasons: expect.arrayContaining([
+        'compiled-generation-not-authoritative',
+      ]),
+    });
+  });
+
   it('does not invent a child for a source gap or initial front actor', () => {
     expect(
       generate({
@@ -79,15 +152,15 @@ describe('switch triggered star-carry generation', () => {
       }).actions
     ).toEqual([]);
     const result = generate({
-      actors: [actor(102001), actor(101003)],
-      initialActorId: 'actor-102001',
-      switches: [switchAction('switch-gap', 1000, 102001, 101003)],
+      actors: [actor(199001), actor(101003)],
+      initialActorId: 'actor-199001',
+      switches: [switchAction('switch-gap', 1000, 199001, 101003)],
     });
     expect(result.actions).toEqual([]);
     expect(result.bindings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          starCarryOwnerCharacterId: 102001,
+          starCarryOwnerCharacterId: 199001,
           resolutionStatus: 'static-evidence-gap',
           applied: false,
         }),

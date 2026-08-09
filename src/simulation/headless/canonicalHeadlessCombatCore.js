@@ -18,6 +18,8 @@ import {
   getCharacterAcceptanceCatalog,
   getCharacterAcceptanceEntry,
 } from '../../character-acceptance/characterAcceptanceCatalog';
+import { projectKiboAutoCastDerivationRegistry } from '../../domain/verifiedBackgroundActionDerivation';
+import { projectVerifiedSwitchExitTailPolicy } from '../generation/verifiedSwitchExitTailPolicy';
 
 export const CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION = 1;
 export const CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT =
@@ -73,11 +75,19 @@ export function createCanonicalHeadlessCombatCore({
       resolvedCompileOptions
     );
     const dataIdentity = createDataIdentity({ scenario, gameData });
+    const kiboAutoCastDerivationAuthority =
+      projectKiboAutoCastDerivationRegistry(
+        scenario.kiboAutoCastDerivationRegistry
+      );
+    const switchTriggerGenerationAuthority =
+      projectSwitchTriggerGenerationAuthority(scenario.switchTriggerGeneration);
     const inputProjection = canonicalizeValue({
       schemaVersion: normalizedInput.schemaVersion,
       project: createCanonicalProjectInput(normalizedInput.project),
       critical: scenario.combatScenario?.critical ?? null,
       dataIdentity,
+      kiboAutoCastDerivationAuthority,
+      switchTriggerGenerationAuthority,
     });
     return {
       schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
@@ -137,6 +147,10 @@ export function createCanonicalHeadlessCombatCore({
       optimizationScenarioPolicy:
         compilation.scenario.combatScenario?.optimizationScenarioPolicy ?? null,
       enemyProfile: compilation.scenario.enemy?.profile ?? null,
+      kiboAutoCastDerivationAuthority:
+        compilation.dataIdentity?.kiboAutoCastDerivationAuthority ?? null,
+      switchTriggerGenerationAuthority:
+        compilation.dataIdentity?.switchTriggerGenerationAuthority ?? null,
       inputHash: compilation.hashes.input,
       dataHash: compilation.hashes.data,
       traceHash,
@@ -223,6 +237,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
   const effectTimeline = simulation.effectTimeline ?? {};
   const kiboPassiveRuntimeStates =
     simulation.verifiedKiboPassiveGeneration?.runtimeStates ?? [];
+  const attackChainContinuityWindows = projectAttackChainContinuityWindows(
+    simulation.verifiedActionVariantRuntime?.activeSwitchWindows
+  );
   const trace = {
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     kind: 'azpr-canonical-combat-trace',
@@ -252,6 +269,17 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
             objectiveContract:
               effectiveScenario.combatScenario.objectiveContract,
           }),
+      ...(effectiveScenario.kiboAutoCastDerivationRegistry == null
+        ? {}
+        : {
+            kiboAutoCastDerivationAuthority:
+              projectKiboAutoCastDerivationRegistry(
+                effectiveScenario.kiboAutoCastDerivationRegistry
+              ),
+          }),
+      switchTriggerGenerationAuthority: projectSwitchTriggerGenerationAuthority(
+        effectiveScenario.switchTriggerGeneration
+      ),
     },
     critical: effectiveScenario.combatScenario?.critical ?? null,
     actions: (effectiveScenario.actions ?? []).map(projectTraceAction),
@@ -314,6 +342,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       selections: projectVariantSelections(
         simulation.verifiedActionVariantRuntime?.selectionByActionId
       ),
+      ...(attackChainContinuityWindows.length > 0
+        ? { attackChainContinuityWindows }
+        : {}),
       stateEvents: (
         simulation.verifiedActionVariantRuntime?.stateEvents ?? []
       ).map(projectRuntimeEvent),
@@ -335,6 +366,7 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
 }
 
 function projectTraceAction(action) {
+  const derivation = projectActionDerivation(action);
   return {
     id: action.id,
     type: action.type,
@@ -364,8 +396,101 @@ function projectTraceAction(action) {
       null,
     sourceEvidenceStatus: action.sourceEvidenceStatus ?? null,
     scenarioRuntimeStatus: action.scenarioRuntimeStatus ?? null,
+    ...(derivation == null ? {} : { derivation }),
+    ...(action.switchExitTailPolicy == null
+      ? {}
+      : {
+          switchExitTailPolicy: projectVerifiedSwitchExitTailPolicy(
+            action.switchExitTailPolicy
+          ),
+        }),
+    ...(action.attackGroupId == null
+      ? {}
+      : {
+          attackGroupId: action.attackGroupId,
+          attackSequenceIndex: action.attackSequenceIndex ?? null,
+          attackSequenceTotal: action.attackSequenceTotal ?? null,
+          attackInputChainIdentity: action.attackInputChainIdentity ?? null,
+          attackInputLinkTimingStatus:
+            action.attackInput?.linkTimingStatus ?? null,
+          attackInputLinkWindow: action.attackInput?.linkWindow
+            ? {
+                startFrame: action.attackInput.linkWindow.startFrame ?? null,
+                endFrame: action.attackInput.linkWindow.endFrame ?? null,
+                targetControlSkillId:
+                  action.attackInput.linkWindow.targetControlSkillId ?? null,
+                targetSubSkillIndex:
+                  action.attackInput.linkWindow.targetSubSkillIndex ?? null,
+                allowAttack: action.attackInput.linkWindow.allowAttack ?? null,
+                sourceIdentity:
+                  action.attackInput.linkWindow.sourceIdentity ?? null,
+              }
+            : null,
+        }),
     hitOverrides: action.hitOverrides ?? {},
   };
+}
+
+function projectActionDerivation(action) {
+  if (action?.autoCastRule != null) {
+    const rule = action.autoCastRule;
+    return {
+      schemaVersion: rule.schemaVersion ?? null,
+      contractName: rule.contractName ?? null,
+      kind: rule.kind ?? null,
+      source: rule.source ?? null,
+      sourceIdentity: rule.sourceIdentity ?? null,
+      derivationHash: rule.derivationHash ?? null,
+      actionId: rule.actionId ?? null,
+      ownerSlotId: rule.ownerSlotId ?? null,
+      canonicalOwnerSlotId: rule.canonicalOwnerSlotId ?? null,
+      ownerActorId: rule.ownerActorId ?? null,
+      ownerCharacterId: rule.ownerCharacterId ?? null,
+      kiboId: rule.kiboId ?? null,
+      publicActionId: rule.publicActionId ?? null,
+      actionKind: rule.actionKind ?? null,
+      scheduledFrame: rule.scheduledFrame ?? null,
+      sequenceIndex: rule.sequenceIndex ?? null,
+      sourceSequencePath: rule.sourceSequencePath ?? null,
+      sourceSequenceSource: rule.sourceSequenceSource ?? null,
+      controlledIntervalIdentity: rule.controlledIntervalIdentity ?? null,
+      controlledIntervalStartFrame: rule.controlledIntervalStartFrame ?? null,
+      controlledIntervalEndFrame: rule.controlledIntervalEndFrame ?? null,
+      switchExitTailStatus: rule.switchExitTailStatus ?? null,
+      switchBoundaryFrame: rule.switchBoundaryFrame ?? null,
+      switchTransitionId: rule.switchTransitionId ?? null,
+      switchBoundarySourceSequencePath:
+        rule.switchBoundarySourceSequencePath ?? null,
+      switchExitTailPolicyHash: rule.switchExitTailPolicyHash ?? null,
+      mappingIdentity: rule.mappingIdentity ?? null,
+      mechanicsPackageId: rule.mechanicsPackageId ?? null,
+      mechanicsPackageHash: rule.mechanicsPackageHash ?? null,
+      catalogHash: rule.catalogHash ?? null,
+      trigger: rule.trigger ?? null,
+      triggerTag: rule.triggerTag ?? null,
+      priority: rule.priority ?? null,
+      evidenceStatus: rule.evidenceStatus ?? null,
+    };
+  }
+  if (action?.derivedAction != null || action?.switchTriggerBinding != null) {
+    const declaration = action.derivedAction ?? {};
+    const binding = action.switchTriggerBinding ?? {};
+    return {
+      schemaVersion: declaration.schemaVersion ?? null,
+      contractName: binding.contractName ?? null,
+      kind: declaration.kind ?? null,
+      parentActionId:
+        declaration.parentActionId ?? action.parentActionId ?? null,
+      bindingId: declaration.bindingId ?? binding.bindingId ?? null,
+      triggerPhase: binding.triggerPhase ?? null,
+      ownerActorId: binding.starCarryOwnerId ?? action.actorId ?? null,
+      ownerCharacterId: binding.starCarryOwnerCharacterId ?? null,
+      sourceIdentity: binding.sourceIdentity ?? null,
+      sourceIdentities: [...(binding.sourceIdentities ?? [])],
+      readOnly: declaration.readOnly === true && action.readOnly === true,
+    };
+  }
+  return null;
 }
 
 function projectExecutionPlan(plan = {}) {
@@ -979,6 +1104,33 @@ function projectVariantSelections(value) {
     actualDurationFrames: selection?.actualDurationFrames ?? null,
     edgeIdentity: selection?.edgeIdentity ?? null,
     contextActionId: selection?.contextActionId ?? null,
+    ...(selection?.attackGroupId == null
+      ? {}
+      : {
+          attackGroupId: selection.attackGroupId,
+          attackInputChainIdentity: selection.attackInputChainIdentity ?? null,
+          attackSequenceIndex:
+            selection.attackChainSequenceIndex ??
+            selection.attackSequenceIndex ??
+            null,
+          attackSequenceTotal: selection.attackSequenceTotal ?? null,
+          attackInputLinkTimingStatus:
+            selection.attackInputLinkTimingStatus ?? null,
+          attackInputLinkWindow: selection.attackInputLinkWindow
+            ? {
+                startFrame: selection.attackInputLinkWindow.startFrame ?? null,
+                endFrame: selection.attackInputLinkWindow.endFrame ?? null,
+                targetControlSkillId:
+                  selection.attackInputLinkWindow.targetControlSkillId ?? null,
+                targetSubSkillIndex:
+                  selection.attackInputLinkWindow.targetSubSkillIndex ?? null,
+                allowAttack:
+                  selection.attackInputLinkWindow.allowAttack ?? null,
+                sourceIdentity:
+                  selection.attackInputLinkWindow.sourceIdentity ?? null,
+              }
+            : null,
+        }),
     contextualInputScheduling: selection?.contextualInputScheduling
       ? {
           status: selection.contextualInputScheduling.status ?? null,
@@ -1015,6 +1167,48 @@ function projectVariantSelections(value) {
   }));
 }
 
+function projectAttackChainContinuityWindows(value) {
+  return (value ?? [])
+    .filter(
+      window =>
+        window?.relationType === 'attack-chain-continuity-window' &&
+        window.applied === true
+    )
+    .map(window => ({
+      edgeIdentity: window.edgeIdentity ?? null,
+      actorId: window.actorId ?? null,
+      ownerId: window.ownerId ?? null,
+      sourceActionId: window.sourceActionId ?? null,
+      sourceControlSkillId: window.sourceControlSkillId ?? null,
+      sourceSubSkillIndex: window.sourceSubSkillIndex ?? null,
+      targetControlSkillId: window.targetControlSkillId ?? null,
+      targetSubSkillIndex: window.targetSubSkillIndex ?? null,
+      targetChainIdentity: window.targetChainIdentity ?? null,
+      targetSequenceIndex: window.targetSequenceIndex ?? null,
+      startsAtMs: window.startsAtMs ?? null,
+      endsAtMs: window.endsAtMs ?? null,
+      inputWindow: window.inputWindow
+        ? {
+            startFrame: window.inputWindow.startFrame ?? null,
+            endFrame: window.inputWindow.endFrame ?? null,
+            durationFrames: window.inputWindow.durationFrames ?? null,
+          }
+        : null,
+      inputCommand: window.inputCommand ?? null,
+      sourceIdentity: window.sourceIdentity ?? null,
+      status: window.status ?? null,
+      applied: true,
+    }))
+    .sort(
+      (left, right) =>
+        Number(left.startsAtMs ?? 0) - Number(right.startsAtMs ?? 0) ||
+        String(left.edgeIdentity).localeCompare(
+          String(right.edgeIdentity),
+          'en'
+        )
+    );
+}
+
 function projectDiagnostics(simulation) {
   const rules = simulation.actionRuleDiagnostics ?? {};
   return {
@@ -1034,6 +1228,14 @@ function projectDiagnostics(simulation) {
         severity: diagnostic.severity ?? null,
         actionId: diagnostic.actionId ?? null,
         actionIds: diagnostic.actionIds ?? [],
+        actorId: diagnostic.actorId ?? null,
+        controlledActorId: diagnostic.controlledActorId ?? null,
+        blockingActionId: diagnostic.blockingActionId ?? null,
+        pairedActionId: diagnostic.pairedActionId ?? null,
+        targetId: diagnostic.targetId ?? null,
+        sourceIdentity: diagnostic.sourceIdentity ?? null,
+        sourceSequencePath: diagnostic.sourceSequencePath ?? null,
+        reason: diagnostic.reason ?? null,
         timeMs: diagnostic.timeMs ?? null,
         message: diagnostic.message ?? null,
       })),
@@ -1306,6 +1508,17 @@ function createDataIdentity({ scenario, gameData }) {
     optimizationScenarioPolicy:
       scenario.combatScenario?.optimizationScenarioPolicy ?? null,
     objectiveContract: scenario.combatScenario?.objectiveContract ?? null,
+    kiboAutoCastDerivationAuthority: projectKiboAutoCastDerivationRegistry(
+      scenario.kiboAutoCastDerivationRegistry
+    ),
+    switchTriggerGenerationAuthority: projectSwitchTriggerGenerationAuthority(
+      scenario.switchTriggerGeneration
+    ),
+    switchExitTailPolicies: (scenario.actions ?? [])
+      .filter(action => action.switchExitTailPolicy != null)
+      .map(action =>
+        projectVerifiedSwitchExitTailPolicy(action.switchExitTailPolicy)
+      ),
     enemyProfile: projectEnemyProfileIdentity(scenario.enemy?.profile),
     gameDataReferenceIdentity:
       scenario.gameDataCatalog?.referenceIdentity ?? null,
@@ -1316,6 +1529,19 @@ function createDataIdentity({ scenario, gameData }) {
       elementCount: gameData.elements?.length ?? 0,
     },
   });
+}
+
+function projectSwitchTriggerGenerationAuthority(value) {
+  if (!value || typeof value !== 'object') return null;
+  return {
+    schemaVersion: value.schemaVersion ?? null,
+    contractName: value.contractName ?? null,
+    sourceKind: value.sourceKind ?? null,
+    status: value.status ?? null,
+    generationHash: value.generationHash ?? null,
+    mechanicsPackage: value.mechanicsPackage ?? null,
+    summary: value.summary ?? null,
+  };
 }
 
 function projectEnemyProfileIdentity(profile) {

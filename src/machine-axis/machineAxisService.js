@@ -53,7 +53,7 @@ import {
   createMachineAxisObjectiveContract,
   validateMachineAxisObjectiveContract,
 } from './machineAxisObjectiveContract';
-import { expandKiboAutoCastActions } from './kiboAutoCastScheduler';
+import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -159,7 +159,17 @@ export function createMachineAxisService({
 
   function compile(machineAxis, options = {}) {
     const prepared = prepare(machineAxis);
-    if (!prepared.valid) throw new MachineAxisValidationError(prepared.issues);
+    if (!prepared.valid) {
+      const actionLegalityProof = createMachineAxisActionLegalityProof(null, {
+        objectiveId:
+          prepared.contract?.scenario?.objectiveContract?.objectiveId ?? null,
+        preflightIssues: prepared.issues,
+      });
+      throw new MachineAxisValidationError(prepared.issues, {
+        actionLegalityProof:
+          actionLegalityProof.passed === true ? null : actionLegalityProof,
+      });
+    }
     const canonicalCompilation =
       prepared.canonicalCompilation ??
       core.compile({ schemaVersion: 1, project: prepared.project }, options);
@@ -177,6 +187,8 @@ export function createMachineAxisService({
       contract: prepared.contract,
       project: prepared.project,
       actionResolutions: prepared.actionResolutions,
+      kiboAutoCastDerivationRegistry:
+        canonicalCompilation.scenario?.kiboAutoCastDerivationRegistry ?? null,
       canonicalCompilation,
       diagnostics: prepared.issues,
       hashes: canonicalCompilation.hashes,
@@ -187,7 +199,14 @@ export function createMachineAxisService({
   function validate(machineAxis, options = {}) {
     try {
       const prepared = prepareValidated(machineAxis, options);
-      const { compilation, run, issues, warnings, classification } = prepared;
+      const {
+        compilation,
+        run,
+        issues,
+        warnings,
+        classification,
+        actionLegalityProof,
+      } = prepared;
       return {
         schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
         contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
@@ -196,6 +215,7 @@ export function createMachineAxisService({
         issues,
         warnings,
         classification,
+        actionLegalityProof,
         hashes: {
           input: compilation.hashes.input,
           data: compilation.hashes.data,
@@ -214,6 +234,7 @@ export function createMachineAxisService({
         issues,
         warnings: [],
         classification: createFailedMachineAxisValidationClassification(issues),
+        actionLegalityProof: error?.actionLegalityProof ?? null,
         hashes: { input: null, data: null, trace: null },
         actionResolutions: [],
       };
@@ -221,7 +242,8 @@ export function createMachineAxisService({
   }
 
   function simulate(machineAxis, options = {}) {
-    const { compilation, run } = simulateCanonical(machineAxis, options);
+    const { compilation, run, actionLegalityProof, validation } =
+      simulateCanonical(machineAxis, options);
     return {
       schemaVersion: MACHINE_AXIS_SERVICE_SCHEMA_VERSION,
       contractName: MACHINE_AXIS_SERVICE_CONTRACT_NAME,
@@ -234,6 +256,8 @@ export function createMachineAxisService({
       inputHash: run.inputHash,
       dataHash: run.dataHash,
       traceHash: run.traceHash,
+      validation,
+      actionLegalityProof,
     };
   }
 
@@ -489,20 +513,66 @@ export function createMachineAxisService({
 
   function prepareValidated(machineAxis, options = {}) {
     const compilation = compile(machineAxis, options);
-    const run = core.simulate(compilation.canonicalCompilation, options);
-    const issues = collectExecutionIssues(run, compilation.actionResolutions);
+    const canonicalRun = core.simulate(
+      compilation.canonicalCompilation,
+      options
+    );
+    const executionIssues = collectExecutionIssues(
+      canonicalRun,
+      compilation.actionResolutions
+    );
     const warnings = collectExecutionWarnings({
       compilation,
-      run,
+      run: canonicalRun,
     });
+    const classification = createMachineAxisValidationClassification({
+      issues: executionIssues,
+      warnings,
+    });
+    const runWithValidation = {
+      ...canonicalRun,
+      validation: {
+        issues: executionIssues,
+        warnings,
+        classification,
+      },
+    };
+    const actionLegalityProof = createMachineAxisActionLegalityProof(
+      runWithValidation,
+      {
+        objectiveId:
+          compilation.contract.scenario?.objectiveContract?.objectiveId ?? null,
+      }
+    );
+    const requiresFormalProof =
+      compilation.contract.scenario?.objectiveContract?.classification ===
+      'primary';
+    const issues = dedupeMachineAxisIssues([
+      ...executionIssues,
+      ...((requiresFormalProof || executionIssues.length > 0) &&
+      actionLegalityProof.passed !== true
+        ? actionLegalityProof.issues
+        : []),
+    ]);
+    const finalClassification = createMachineAxisValidationClassification({
+      issues,
+      warnings,
+    });
+    const run = {
+      ...canonicalRun,
+      validation: {
+        issues,
+        warnings,
+        classification: finalClassification,
+      },
+      actionLegalityProof,
+    };
     return {
       valid: issues.length === 0,
       issues,
       warnings,
-      classification: createMachineAxisValidationClassification({
-        issues,
-        warnings,
-      }),
+      classification: finalClassification,
+      actionLegalityProof,
       compilation,
       run,
     };
@@ -511,22 +581,25 @@ export function createMachineAxisService({
   function simulateCanonical(machineAxis, options = {}) {
     const prepared = prepareValidated(machineAxis, options);
     if (!prepared.valid) {
-      throw new MachineAxisValidationError(prepared.issues);
+      throw new MachineAxisValidationError(prepared.issues, {
+        actionLegalityProof: prepared.actionLegalityProof,
+      });
     }
     return {
       compilation: prepared.compilation,
       run: prepared.run,
+      validation: {
+        issues: prepared.issues,
+        warnings: prepared.warnings,
+        classification: prepared.classification,
+      },
+      actionLegalityProof: prepared.actionLegalityProof,
     };
   }
   function prepare(machineAxis) {
     const contractValidation = validateMachineAxisContract(machineAxis);
     const normalizedContract = contractValidation.normalized;
-    let contract = {
-      ...normalizedContract,
-      actions: expandKiboAutoCastActions(normalizedContract, {
-        kiboCatalogById,
-      }),
-    };
+    let contract = normalizedContract;
     const issues = [...contractValidation.issues];
     if (!contractValidation.valid) {
       return {
@@ -1228,10 +1301,11 @@ function remapMachineAxisInitialRuntimeState(
 }
 
 export class MachineAxisValidationError extends Error {
-  constructor(issues) {
+  constructor(issues, { actionLegalityProof = null } = {}) {
     super('Machine Axis input is invalid');
     this.name = 'MachineAxisValidationError';
     this.issues = issues;
+    this.actionLegalityProof = actionLegalityProof;
   }
 }
 function createActionTemplate({
@@ -2350,9 +2424,27 @@ function createActorCatalogEntries(character, gameData) {
       durationFrames: mapping?.actionTiming?.occupancy?.durationFrames ?? null,
       attackInputs: (mapping?.attackInputSegments ?? []).map(segment => ({
         sequenceIndex: segment.sequenceIndex,
+        sequenceTotal: segment.sequenceTotal,
         label: segment.label,
+        chainIdentity:
+          segment.attackInputChainIdentity ??
+          mapping.attackInputChainIdentity ??
+          null,
         durationFrames:
           segment.effectiveDurationFrames ?? segment.durationFrames ?? null,
+        linkTimingStatus: segment.linkTimingStatus ?? null,
+        linkWindow: segment.linkWindow
+          ? {
+              startFrame: segment.linkWindow.startFrame ?? null,
+              endFrame: segment.linkWindow.endFrame ?? null,
+              targetControlSkillId:
+                segment.linkWindow.targetControlSkillId ?? null,
+              targetSubSkillIndex:
+                segment.linkWindow.targetSubSkillIndex ?? null,
+              allowAttack: segment.linkWindow.allowAttack ?? null,
+              sourceIdentity: segment.linkWindow.sourceIdentity ?? null,
+            }
+          : null,
         hitIdentities: segment.selectedHitIdentities ?? [],
       })),
       hitIdentities: collectMappingHitIdentities(mapping ?? {}),
@@ -2419,51 +2511,30 @@ function collectExecutionIssues(run, actionResolutions) {
   const resolutionByActionId = new Map(
     actionResolutions.map(entry => [String(entry.actionId), entry])
   );
-  const resourceBlockByActionId = new Map(
-    (run.simulation?.verifiedCombatRuntime?.executionBlocks ?? []).map(
-      block => [String(block.actionId), block]
-    )
-  );
+  const blocksByActionId = new Map();
+  for (const block of run.simulation?.verifiedCombatRuntime?.executionBlocks ??
+    []) {
+    const actionId = String(block.actionId);
+    const blocks = blocksByActionId.get(actionId) ?? [];
+    blocks.push(block);
+    blocksByActionId.set(actionId, blocks);
+  }
   return (run.trace.executionPlan.actions ?? []).flatMap((entry, planIndex) => {
     const actionId = String(entry.actionId);
     const resolution = resolutionByActionId.get(actionId);
     if (!resolution || entry.execute !== false) return [];
-    const block = resourceBlockByActionId.get(actionId);
-    if (block) {
-      const ownerKind = block.ownerKind ?? resolution.ownerKind;
-      const ownerId =
-        ownerKind === 'kibo'
-          ? Number(block.kiboId ?? resolution.ownerId)
-          : Number(resolution.ownerId);
-      const resourceIdentity = `${ownerKind}:${ownerId}:sp`;
-      const insufficient =
-        block.status === 'violated' &&
-        Number.isFinite(Number(block.currentValue)) &&
-        Number.isFinite(Number(block.requiredValue));
-      return [
-        createMachineAxisDiagnostic(
-          insufficient
-            ? 'machine-axis-action-resource-insufficient'
-            : 'machine-axis-action-resource-unresolved',
-          `executionPlan.actions.${planIndex}`,
-          insufficient
-            ? `Action ${actionId} requires ${block.requiredValue} ${ownerKind} SP, current ${block.currentValue}/${block.maxValue}`
-            : `Action ${actionId} resource precondition is unresolved: ${block.reason}`,
-          {
-            actionId,
-            resourceOwnerKind: ownerKind,
-            resourceOwnerId: ownerId,
-            resourceIdentity,
-            currentValue: block.currentValue ?? null,
-            requiredValue: block.requiredValue ?? null,
-            maxValue: block.maxValue ?? null,
-            valueUnit: block.valueUnit ?? 'absolute-sp-points',
-            reason: block.reason ?? entry.skipReason ?? entry.status,
-            sourceIdentity: block.sourceIdentity ?? null,
-            canonicalDiagnosticCode: block.code ?? null,
-          }
-        ),
-      ];
+    const blocks = blocksByActionId.get(actionId) ?? [];
+    if (blocks.length > 0) {
+      return blocks.map((block, blockIndex) =>
+        createExecutionBlockIssue({
+          block,
+          blockIndex,
+          actionId,
+          entry,
+          planIndex,
+          resolution,
+        })
+      );
     }
     return [
       createMachineAxisDiagnostic(
@@ -2479,6 +2550,96 @@ function collectExecutionIssues(run, actionResolutions) {
       ),
     ];
   });
+}
+
+function createExecutionBlockIssue({
+  block,
+  blockIndex,
+  actionId,
+  entry,
+  planIndex,
+  resolution,
+}) {
+  const path = `executionPlan.actions.${planIndex}.blocks.${blockIndex}`;
+  const blockCode = String(block.code ?? 'machine-axis-action-not-executable');
+  const isResourceBlock = [
+    'verified-resource-cost-unavailable',
+    'VERIFIED_SPECIAL_RESOURCE_INSUFFICIENT',
+  ].includes(blockCode);
+  if (!isResourceBlock) {
+    const unresolved = block.status === 'unresolved';
+    return createMachineAxisDiagnostic(
+      unresolved
+        ? 'machine-axis-action-conditions-unresolved'
+        : 'machine-axis-action-not-executable',
+      path,
+      unresolved
+        ? `Action ${actionId} has an unresolved execution condition: ${block.reason ?? blockCode}`
+        : `Action ${actionId} is blocked by ${block.reason ?? blockCode}`,
+      {
+        actionId,
+        actorId: block.actorId ?? null,
+        reason: block.reason ?? entry.skipReason ?? entry.status,
+        sourceIdentity: block.sourceIdentity ?? null,
+        sourceSequencePath: block.sourceSequencePath ?? null,
+        ...(unresolved
+          ? { unresolvedCodes: [blockCode] }
+          : { violationCodes: [blockCode] }),
+      }
+    );
+  }
+
+  const ownerKind = block.ownerKind ?? resolution.ownerKind ?? 'actor';
+  const ownerId = Number(
+    block.ownerId ??
+      (ownerKind === 'kibo'
+        ? (block.kiboId ?? resolution.ownerId)
+        : resolution.ownerId)
+  );
+  const resourceKind =
+    block.resourceKind ??
+    (ownerKind === 'kibo'
+      ? 'kibo-energy'
+      : block.resourceName
+        ? 'special-resource'
+        : 'actor-sp');
+  const resourceIdentity =
+    block.resourceIdentity ??
+    `${ownerKind}:${Number.isFinite(ownerId) ? ownerId : 'unknown'}:${resourceKind}`;
+  const currentValue = Number(block.currentValue);
+  const requiredValue = Number(block.requiredValue);
+  const insufficient =
+    ['blocked', 'violated'].includes(String(block.status)) &&
+    Number.isFinite(currentValue) &&
+    Number.isFinite(requiredValue) &&
+    currentValue < requiredValue;
+  return createMachineAxisDiagnostic(
+    insufficient
+      ? 'machine-axis-action-resource-insufficient'
+      : 'machine-axis-action-resource-unresolved',
+    path,
+    insufficient
+      ? `Action ${actionId} requires ${block.requiredValue} ${resourceKind}, current ${block.currentValue}/${block.maxValue}`
+      : `Action ${actionId} resource precondition is unresolved: ${block.reason ?? blockCode}`,
+    {
+      actionId,
+      actorId: block.actorId ?? null,
+      ownerKind,
+      ownerId: Number.isFinite(ownerId) ? ownerId : null,
+      resourceOwnerKind: ownerKind,
+      resourceOwnerId: Number.isFinite(ownerId) ? ownerId : null,
+      resourceIdentity,
+      resourceKind,
+      currentValue: block.currentValue ?? null,
+      requiredValue: block.requiredValue ?? null,
+      maxValue: block.maxValue ?? null,
+      valueUnit: block.valueUnit ?? 'runtime-resource-points',
+      reason: block.reason ?? entry.skipReason ?? entry.status,
+      sourceIdentity: block.sourceIdentity ?? null,
+      sourceSequencePath: block.sourceSequencePath ?? null,
+      canonicalDiagnosticCode: block.code ?? null,
+    }
+  );
 }
 
 function collectExecutionWarnings({ compilation, run }) {
@@ -2904,6 +3065,42 @@ function aggregateSearchSummaries({
     prunedCandidates: sum('prunedCandidates'),
     expandedCandidates: sum('expandedCandidates'),
     completedCandidates: sum('completedCandidates'),
+    formalSurfaceRejectedCandidates: sum('formalSurfaceRejectedCandidates'),
+    rejectionCounts: Object.fromEntries(
+      [
+        ...new Set(
+          summaries.flatMap(summary =>
+            Object.keys(summary?.rejectionCounts ?? {})
+          )
+        ),
+      ]
+        .sort((left, right) => left.localeCompare(right, 'en'))
+        .map(code => [
+          code,
+          summaries.reduce(
+            (total, summary) =>
+              total + Number(summary?.rejectionCounts?.[code] ?? 0),
+            0
+          ),
+        ])
+    ),
+    rejectionExamples: [
+      ...new Map(
+        summaries
+          .flatMap(summary => summary?.rejectionExamples ?? [])
+          .map(example => [JSON.stringify(example), example])
+      ).values(),
+    ]
+      .sort(
+        (left, right) =>
+          String(left.code).localeCompare(String(right.code), 'en') ||
+          String(left.path).localeCompare(String(right.path), 'en') ||
+          String(left.actionId ?? '').localeCompare(
+            String(right.actionId ?? ''),
+            'en'
+          )
+      )
+      .slice(0, 8),
     wallTimeMs,
     beamWidth: options.beamWidth,
     topN: options.topN,
@@ -2929,6 +3126,21 @@ function normalizeMachineAxisIssues(error) {
       error?.message ?? String(error)
     ),
   ];
+}
+
+function dedupeMachineAxisIssues(issues) {
+  const uniqueIssues = new Map();
+  for (const issue of issues ?? []) {
+    const key = JSON.stringify({
+      code: issue?.code ?? null,
+      path: issue?.path ?? null,
+      actionId: issue?.actionId ?? null,
+      resourceIdentity: issue?.resourceIdentity ?? null,
+      targetId: issue?.targetId ?? null,
+    });
+    if (!uniqueIssues.has(key)) uniqueIssues.set(key, issue);
+  }
+  return [...uniqueIssues.values()];
 }
 
 function findInstalledHitByIdentity(hitIdentity) {

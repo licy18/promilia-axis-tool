@@ -87,6 +87,7 @@ function createResultRow({
       warnings: validation.warnings,
       classification: validation.classification ?? null,
       invalidActionCount: entry.invalidActionCount ?? 0,
+      proof: entry.actionLegalityProof ?? null,
     },
     criticalPolicy: {
       policy:
@@ -128,6 +129,7 @@ function createResultRow({
         effects: state.effects,
         tuningMarks: state.tuningMarks,
         specialResources: state.specialResources,
+        attackChains: state.attackChains ?? [],
         pendingEvents: state.pendingEvents,
         enemy: state.enemy,
       },

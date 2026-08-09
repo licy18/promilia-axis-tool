@@ -367,6 +367,124 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
+  it('rejects a standalone normal-chain successor before cycle scoring', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    envelope.contract.actions = [
+      {
+        id: 'formal-standalone-a2',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 10300201,
+          actionKind: 'normal-attack',
+          attackInput: {
+            sequenceIndex: 2,
+            groupId: 'formal-orphan-chain',
+          },
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 60 },
+      },
+    ];
+    envelope.loop = { startFrame: 60, endFrame: 360 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope, {
+      allowUnverifiedRuntimeTiming: true,
+    });
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      actionLegalityProof: {
+        passed: false,
+        finalScoreEligible: false,
+        rejectionCodes: expect.arrayContaining([
+          'attack-input-chain-incomplete',
+        ]),
+      },
+    });
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-action-not-executable',
+          actionId: 'formal-standalone-a2',
+        }),
+      ])
+    );
+  });
+
+  it('rejects a mapped same-frame joint pair while existPetBreakTarget remains unresolved', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    envelope.contract.scenario.team[0].loadout = { kiboId: 500001 };
+    envelope.contract.scenario.initialRuntimeState.kiboEnergyBySlot[0] = {
+      slotId: 'slot-1',
+      actorId: 'actor-103002',
+      characterId: 103002,
+      kiboId: 500001,
+      kiboName: '迅狼',
+      currentValue: 100,
+      maxValue: 100,
+    };
+    envelope.contract.actions = [
+      {
+        id: 'formal-actor-joint',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 10300212,
+          actionKind: 'star-combo',
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 60 },
+      },
+      {
+        id: 'formal-kibo-joint',
+        owner: { kind: 'kibo', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 50000112,
+          actionKind: 'break',
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 60 },
+      },
+    ];
+    envelope.loop = { startFrame: 60, endFrame: 360 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope, {
+      allowUnverifiedRuntimeTiming: true,
+    });
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      actionLegalityProof: {
+        passed: false,
+        finalScoreEligible: false,
+        rejectionCodes: expect.arrayContaining([
+          'joint-attack-trigger-unresolved',
+          'machine-axis-same-frame-order-unresolved',
+        ]),
+        minimalCounterexamples: expect.arrayContaining([
+          expect.objectContaining({
+            code: 'joint-attack-trigger-unresolved',
+            actionId: 'formal-actor-joint',
+          }),
+        ]),
+      },
+    });
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'joint-attack-trigger-unresolved',
+          actionId: 'formal-actor-joint',
+        }),
+      ])
+    );
+  });
+
   it('rejects coercible, additional, and schema-invalid cycle fields before normalization', () => {
     const invalid = createNormalAttackCycleEnvelope();
     invalid.loop.startFrame = '60';
@@ -461,6 +579,70 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         ],
       });
     }
+  });
+
+  it('rejects normal-chain phase drift and normalizes replay-local predecessor identities', () => {
+    const createBoundary = ({ currentFrame, cycle, remainingFrames = 20 }) => ({
+      currentFrame,
+      activeActorId: 'actor-1',
+      actors: [],
+      kibos: [],
+      actorVitals: [],
+      kiboVitals: [],
+      specialResources: [],
+      cooldowns: [],
+      chargeCooldowns: [],
+      effects: [],
+      pendingEvents: [],
+      tuningMarks: [],
+      attackChains: [
+        {
+          actorId: 'actor-1',
+          chainIdentity: 'normal-chain:1001',
+          groupId: `cycle-${cycle}:normal-group`,
+          sequenceIndex: 1,
+          sequenceTotal: 3,
+          nextSequenceIndex: 2,
+          status: 'successor-window',
+          predecessorAcceptedIdentity: `cycle-${cycle}:a1`,
+          publicActionId: 1001,
+          linkWindowStatus: 'applied',
+          linkWindowStartFrame: currentFrame,
+          linkWindowEndFrame: currentFrame + remainingFrames,
+          linkWindowSourceIdentity: 'client-input-window:a1-a2',
+        },
+      ],
+    });
+    const first = createBoundary({ currentFrame: 100, cycle: 1 });
+    const replay = createBoundary({ currentFrame: 400, cycle: 2 });
+    expect(compareCycleBoundaryStates(first, replay)).toMatchObject({
+      closed: true,
+      issues: [],
+    });
+
+    const drifted = createBoundary({
+      currentFrame: 400,
+      cycle: 2,
+      remainingFrames: 19,
+    });
+    expect(compareCycleBoundaryStates(first, drifted)).toMatchObject({
+      closed: false,
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-cycle-state-not-closed',
+          dimension: 'attackChains',
+        }),
+      ],
+    });
+
+    expect(
+      compareCycleBoundaryStates({ ...first, attackChains: [] }, replay).issues
+    ).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'attackChains',
+      })
+    );
   });
 
   it('accepts an exact zero-frame loop boundary without including later frames', () => {
@@ -1113,9 +1295,10 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
   }, 30_000);
 
   it('accepts a real two-cycle normal-attack loop with stable damage and closure', () => {
-    const report = createMachineAxisService().evaluateCycle(
-      createNormalAttackCycleEnvelope()
-    );
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    const report = createMachineAxisService().evaluateCycle(envelope);
     expect(report.issues).toEqual([]);
     expect(report).toMatchObject({
       kind: 'azpr-machine-axis-cycle-dps-evaluation',

@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { frameToMs } from '../../domain/timebase';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
   layoutTimelineOperationMarkers,
   projectTimelineOperationInputs,
 } from '../../simulation/projection/projectTimelineOperationInputs';
 
 describe('projectTimelineOperationInputs', () => {
+  beforeAll(() => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  });
+
   it('projects a contextual input marker independently from action execution', () => {
     const projection = projectTimelineOperationInputs({
       actions: [
@@ -243,8 +249,18 @@ describe('projectTimelineOperationInputs', () => {
         }
         if (action.id === 'kibo-combo') {
           return {
+            identity: 'kibo:500001:break:50000112',
+            ownerKind: 'kibo',
+            ownerId: 500001,
             actionKind: 'break',
-            controlLogic: { spCost: 0 },
+            sourceSkillId: 50000112,
+            controlVariantSourceIdentity:
+              'NewTable/pet.rows[id=500001].breakSkillList',
+            controlLogic: {
+              spCost: 0,
+              skillTag: 15,
+              sourceIdentity: 'kibo-control-binding.rows[id=50000112].skillTag',
+            },
           };
         }
         return null;

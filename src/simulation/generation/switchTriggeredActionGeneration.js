@@ -6,14 +6,18 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import {
+  getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMappingByIdentity,
   getVerifiedSwitchTriggerProfile,
 } from '../../data/verifiedCombatMechanicsPackage';
+import { hashCanonicalValue } from '../headless/canonicalSerialization';
 
 export const SWITCH_TRIGGER_GENERATION_CONTRACT_NAME =
   'AzPrSwitchTriggeredActionGeneration';
 export const SWITCH_TRIGGER_BINDING_CONTRACT_NAME = 'AzPrSwitchTriggerBinding';
 export const SWITCH_TRIGGERED_ACTION_KIND = 'switch-triggered-star-carry';
+
+const authoritativeSwitchTriggerGenerations = new WeakSet();
 
 export function createSwitchTriggeredActionGeneration({
   actions = [],
@@ -58,6 +62,19 @@ export function createSwitchTriggeredActionGeneration({
     acceptedSwitchByFrame.set(frameIndex, switchAction);
 
     const beforeActor = controlledActor;
+    if (
+      !beforeActor ||
+      String(switchAction.actorId ?? '') !== String(beforeActor.id ?? '')
+    ) {
+      bindings.push(
+        createRejectedSwitchBinding({
+          switchAction,
+          frameIndex,
+          reason: 'parent-switch-source-not-controlled',
+        })
+      );
+      continue;
+    }
     const targetActor = actorsById.get(switchAction.targetActorId) ?? null;
     if (!targetActor) {
       bindings.push(
@@ -108,10 +125,17 @@ export function createSwitchTriggeredActionGeneration({
     bindings,
     binding => binding.switchEventId
   );
-  return {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const projection = {
     schemaVersion: 1,
     contractName: SWITCH_TRIGGER_GENERATION_CONTRACT_NAME,
     sourceKind: 'azpr-verified-switch-trigger-action-generation',
+    mechanicsPackage: mechanicsPackage
+      ? {
+          packageId: mechanicsPackage.packageId,
+          packageHash: mechanicsPackage.packageHash,
+        }
+      : { packageId: null, packageHash: null },
     status: bindings.some(
       binding =>
         !['applied', 'suppressed-cooldown-active'].includes(
@@ -147,6 +171,25 @@ export function createSwitchTriggeredActionGeneration({
       ).length,
     },
   };
+  const generation = deepFreeze({
+    ...projection,
+    generationHash: hashCanonicalValue(projection),
+  });
+  authoritativeSwitchTriggerGenerations.add(generation);
+  return generation;
+}
+
+export function isAuthoritativeSwitchTriggerGeneration(value) {
+  if (
+    !value ||
+    !authoritativeSwitchTriggerGenerations.has(value) ||
+    value.contractName !== SWITCH_TRIGGER_GENERATION_CONTRACT_NAME
+  ) {
+    return false;
+  }
+  const projection = { ...value };
+  delete projection.generationHash;
+  return value.generationHash === hashCanonicalValue(projection);
 }
 
 export function isSwitchTriggeredDerivedAction(action) {
@@ -155,6 +198,108 @@ export function isSwitchTriggeredDerivedAction(action) {
     action?.switchTriggerBinding?.contractName ===
       SWITCH_TRIGGER_BINDING_CONTRACT_NAME
   );
+}
+
+/**
+ * Formal/runtime consumers must not treat the loose UI marker above as an
+ * authority boundary.  A verified switch-derived action is one materialized
+ * by this compilation's generation result and still bound to the exact parent
+ * switch, owner and source-sequence path.
+ */
+export function validateSwitchTriggeredDerivedAction(action, scenario = {}) {
+  if (!isSwitchTriggeredDerivedAction(action)) {
+    return { declared: false, valid: false, reasons: [] };
+  }
+  const reasons = [];
+  const generation = scenario?.switchTriggerGeneration;
+  if (!isAuthoritativeSwitchTriggerGeneration(generation)) {
+    reasons.push('compiled-generation-not-authoritative');
+  }
+  const generatedAction = (generation?.actions ?? []).find(
+    candidate => String(candidate.id) === String(action?.id)
+  );
+  const bindingId = String(
+    action?.derivedAction?.bindingId ??
+      action?.switchTriggerBinding?.bindingId ??
+      ''
+  );
+  const binding = (generation?.bindings ?? []).find(
+    candidate => String(candidate.bindingId) === bindingId
+  );
+  const parentActionId = String(
+    action?.derivedAction?.parentActionId ?? action?.parentActionId ?? ''
+  );
+  const parentAction = (scenario?.actions ?? []).find(
+    candidate =>
+      candidate?.type === ACTION_TYPES.SWITCH &&
+      String(candidate.id) === parentActionId
+  );
+  const actionPath = getActionSourceSequencePath(action);
+  const parentPath = getActionSourceSequencePath(parentAction);
+  const localIndex = Number(action?.localSourceSequenceIndex);
+  const expectedPath =
+    parentPath && Number.isInteger(localIndex) && localIndex >= 0
+      ? [...parentPath, localIndex]
+      : null;
+
+  if (!generatedAction) reasons.push('compiled-generation-action-missing');
+  if (!binding) reasons.push('compiled-generation-binding-missing');
+  if (!parentAction) reasons.push('parent-switch-action-missing');
+  if (
+    action?.derivedAction?.schemaVersion !== 1 ||
+    action?.derivedAction?.kind !== SWITCH_TRIGGERED_ACTION_KIND ||
+    action?.derivedAction?.readOnly !== true ||
+    action?.readOnly !== true
+  ) {
+    reasons.push('derived-declaration-invalid');
+  }
+  if (
+    binding?.contractName !== SWITCH_TRIGGER_BINDING_CONTRACT_NAME ||
+    binding?.applied !== true ||
+    binding?.resolutionStatus !== 'applied' ||
+    binding?.materializationStatus !== 'materialized'
+  ) {
+    reasons.push('binding-not-materialized-applied');
+  }
+  if (
+    binding &&
+    (String(binding.switchEventId) !== parentActionId ||
+      String(binding.sourceOwnerId) !== String(parentAction?.actorId ?? '') ||
+      String(binding.starCarryOwnerId) !== String(action?.actorId) ||
+      String(binding.bindingId) !== bindingId)
+  ) {
+    reasons.push('binding-owner-or-parent-mismatch');
+  }
+  if (
+    generatedAction &&
+    (String(generatedAction.actorId) !== String(action?.actorId) ||
+      String(generatedAction.parentActionId) !== parentActionId ||
+      String(generatedAction.skillId) !== String(action?.skillId) ||
+      Number(generatedAction.startMs) !== Number(action?.startMs) ||
+      String(generatedAction.switchTriggerBinding?.bindingId ?? '') !==
+        bindingId)
+  ) {
+    reasons.push('generated-action-identity-mismatch');
+  }
+  if (
+    !expectedPath ||
+    !pathsEqual(actionPath, expectedPath) ||
+    !pathsEqual(action?.parentSourceSequencePath, parentPath) ||
+    action?.sourceSequenceSource !== 'switch-trigger-parent-local-order'
+  ) {
+    reasons.push('derived-source-sequence-mismatch');
+  }
+  return {
+    declared: true,
+    valid: reasons.length === 0,
+    reasons,
+    bindingId: bindingId || null,
+    parentActionId: parentActionId || null,
+  };
+}
+
+export function isVerifiedSwitchTriggeredDerivedAction(action, scenario = {}) {
+  return validateSwitchTriggeredDerivedAction(action, scenario).valid === true;
 }
 
 function createPhaseBinding({
@@ -202,8 +347,7 @@ function createPhaseBinding({
     bindingId,
     switchEventId: switchAction.id,
     sourceSequenceIndex: switchAction.sourceSequenceIndex ?? null,
-    sourceSequencePath:
-      getActionSourceSequencePath(switchAction) ?? null,
+    sourceSequencePath: getActionSourceSequencePath(switchAction) ?? null,
     localSourceSequenceIndex: phaseSequenceIndex,
     triggerPhase: phaseOwner.triggerPhase,
     sourceOwnerId: beforeActor?.id ?? null,
@@ -460,7 +604,24 @@ function compareActions(left, right) {
   );
 }
 
+function pathsEqual(left, right) {
+  return (
+    Array.isArray(left) &&
+    Array.isArray(right) &&
+    left.length === right.length &&
+    left.every((entry, index) => Number(entry) === Number(right[index]))
+  );
+}
+
 function positiveNumber(value, fallback) {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : fallback;
+}
+
+function deepFreeze(value) {
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) {
+    return value;
+  }
+  for (const child of Object.values(value)) deepFreeze(child);
+  return Object.freeze(value);
 }

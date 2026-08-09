@@ -6,6 +6,7 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import { createMachineAxisEnemyProfile } from '../../machine-axis/machineAxisEnemyProfileContract';
 import {
   compareFastestKillCandidates,
+  createMachineAxisKillEvaluator,
   createFastestKillProof,
 } from '../../machine-axis/machineAxisKillEvaluator';
 import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
@@ -215,6 +216,64 @@ describe('Machine Axis fastest-kill proof', () => {
     });
   });
 
+  it('rejects a newly scheduled action after the first lethal cursor while keeping same-action tail packets diagnostic', () => {
+    const lethal = damagePacket({
+      frame: 30,
+      sequence: 1,
+      damage: 1000,
+      lethal: true,
+      actionId: 'lethal-action',
+    });
+    lethal.sourceSequencePath = [0, 10, 0];
+    const run = createRun([lethal]);
+    run.trace.actions = [
+      {
+        id: 'lethal-action',
+        type: 'skill',
+        actorId: 'actor-a',
+        startMs: 0,
+        sourceSequencePath: [0],
+      },
+      {
+        id: 'post-death-action',
+        type: 'skill',
+        actorId: 'actor-a',
+        startMs: (31 * 1000) / 60,
+        targetId: 'enemy-300032',
+        sourceSequencePath: [1],
+      },
+    ];
+    run.trace.executionPlan = {
+      actions: run.trace.actions.map(action => ({
+        actionId: action.id,
+        status: 'scheduled',
+        execute: true,
+        violationCodes: [],
+        unresolvedCodes: [],
+      })),
+    };
+
+    const report = prove(run);
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      formalScore: null,
+      actionLegalityProof: {
+        passed: false,
+        rejectionCodes: ['machine-axis-action-target-dead'],
+      },
+    });
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-action-target-dead',
+          actionId: 'post-death-action',
+          lethalActionId: 'lethal-action',
+        }),
+      ])
+    );
+  });
+
   it('keeps an un-killed axis infeasible and ranks real earlier kills first', () => {
     const unKilled = prove(
       createRun([damagePacket({ frame: 60, sequence: 1, damage: 999 })])
@@ -249,6 +308,101 @@ describe('Machine Axis fastest-kill proof', () => {
     expect(
       [unKilled, later, earlier].sort(compareFastestKillCandidates)
     ).toEqual([earlier, later, unKilled]);
+  });
+
+  it('rejects a skipped or unresolved action before fastest-kill scoring', () => {
+    const run = createRun([
+      damagePacket({
+        frame: 30,
+        sequence: 1,
+        damage: 1000,
+        lethal: true,
+        actionId: 'illegal-lethal-action',
+      }),
+    ]);
+    run.trace.executionPlan = {
+      actions: [
+        {
+          actionId: 'illegal-lethal-action',
+          execute: false,
+          status: 'skipped-rule-blocked',
+          violationCodes: ['attack-input-chain-incomplete'],
+          unresolvedCodes: [],
+        },
+      ],
+    };
+    const report = prove(run);
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      formalScore: null,
+      killProof: null,
+      actionLegalityProof: {
+        passed: false,
+        finalScoreEligible: false,
+        rejectionCodes: ['attack-input-chain-incomplete'],
+      },
+    });
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'attack-input-chain-incomplete',
+          actionId: 'illegal-lethal-action',
+        }),
+      ])
+    );
+  });
+
+  it('projects preflight action-rule rejection into a fastest-kill legality proof', () => {
+    const evaluator = createMachineAxisKillEvaluator({
+      service: {
+        simulate() {
+          const error = new Error('invalid axis');
+          error.issues = [
+            {
+              code: 'machine-axis-action-not-executable',
+              path: 'executionPlan.actions.0',
+              actionId: 'formal-standalone-a2',
+              violationCodes: ['attack-input-chain-incomplete'],
+            },
+          ];
+          throw error;
+        },
+      },
+    });
+    const objectiveContract =
+      createMachineAxisObjectiveContract('fastest-kill');
+    const report = evaluator.evaluate(
+      {
+        contract: {
+          scenario: {
+            fps: 60,
+            enemy: {
+              enemyId: 300032,
+              level: 80,
+              profile: createResolvedProfile(),
+            },
+          },
+        },
+        objectiveContract,
+      },
+      { objectiveContract }
+    );
+    expect(report).toMatchObject({
+      valid: false,
+      formalScore: null,
+      actionLegalityProof: {
+        passed: false,
+        finalScoreEligible: false,
+        rejectionCodes: ['attack-input-chain-incomplete'],
+        minimalCounterexamples: [
+          expect.objectContaining({
+            actionId: 'formal-standalone-a2',
+            ruleCodes: ['attack-input-chain-incomplete'],
+          }),
+        ],
+      },
+    });
   });
 
   it('cuts healing at the exact lethal cursor within the same frame', () => {
@@ -332,6 +486,15 @@ describe('Machine Axis fastest-kill proof', () => {
       createMachineAxisObjectiveContract('fastest-kill');
     const createEnvelope = defense => {
       const contract = structuredClone(cycleFixture.contract);
+      contract.dataIdentity.verifiedMechanicsPackageHash =
+        mechanicsPackage.packageHash;
+      contract.actions = contract.actions.filter(
+        action => action.id === 'cycle-ruby-a1'
+      );
+      for (const slot of contract.scenario.team) {
+        delete slot.loadout.kiboId;
+      }
+      contract.scenario.initialRuntimeState.kiboEnergyBySlot = [];
       contract.scenario.enemy.level = 80;
       contract.scenario.enemy.profile = createResolvedProfile({
         maxHp: 20,

@@ -338,6 +338,7 @@ describe('verified action variant and special resource runtime', () => {
       expect.objectContaining({
         actionId: enhanced.id,
         reason: 'verified-attack-input-chain-complete',
+        resourceIdentity: 'actor:103002:element:103002047',
         currentValue: 0,
         maxValue: 12,
       }),

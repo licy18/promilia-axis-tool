@@ -25,7 +25,10 @@ export function createSearchStateSnapshot({
   const horizonFrames =
     positiveIntegerOrNull(contract?.scenario?.durationFrames) ??
     msToFrame(trace.scenario?.durationMs ?? 0);
-  const activeActorId = deriveActiveActorId(trace);
+  const activeActorId = deriveActiveActorId(trace, {
+    currentFrame: resolvedFrame,
+    fps,
+  });
   const snapshot = {
     schemaVersion: MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SEARCH_STATE_CONTRACT,
@@ -53,6 +56,11 @@ export function createSearchStateSnapshot({
     specialResources: normalizeSpecialResources({
       events: trace.resources?.special ?? [],
       initial: contract?.scenario?.initialRuntimeState?.specialResourcesByActor,
+    }),
+    attackChains: createSearchAttackChainProjection({
+      trace,
+      currentFrame: resolvedFrame,
+      fps,
     }),
     pendingEvents: createSearchPendingEventProjection({
       run: pendingRun ?? run,
@@ -85,9 +93,161 @@ export function createSearchLoopClosureProjection(snapshot) {
     effects: snapshot.effects ?? [],
     tuningMarks: snapshot.tuningMarks ?? [],
     specialResources: snapshot.specialResources ?? [],
+    attackChains: snapshot.attackChains ?? [],
     pendingEvents: snapshot.pendingEvents ?? [],
     enemy: snapshot.enemy ?? null,
   };
+}
+
+export function createSearchAttackChainProjection({
+  trace = {},
+  currentFrame = 0,
+  fps = 60,
+} = {}) {
+  const actionById = new Map(
+    (trace.actions ?? []).map(action => [String(action.id), action])
+  );
+  const selectionById = new Map(
+    (trace.variants?.selections ?? []).map(selection => [
+      String(selection.actionId),
+      selection,
+    ])
+  );
+  const continuityWindowsBySourceActionId = new Map();
+  for (const window of trace.variants?.attackChainContinuityWindows ?? []) {
+    const key = String(window.sourceActionId ?? '');
+    if (!key) continue;
+    const rows = continuityWindowsBySourceActionId.get(key) ?? [];
+    rows.push(window);
+    continuityWindowsBySourceActionId.set(key, rows);
+  }
+  const stateByActorId = new Map();
+  const ordered = [...(trace.executionPlan?.actions ?? [])].sort(
+    (left, right) =>
+      Number(left.sourceSequenceIndex ?? 0) -
+        Number(right.sourceSequenceIndex ?? 0) ||
+      Number(left.startMs ?? 0) - Number(right.startMs ?? 0) ||
+      String(left.actionId).localeCompare(String(right.actionId), 'en')
+  );
+  for (const entry of ordered) {
+    if (entry.execute === false) continue;
+    const action = actionById.get(String(entry.actionId));
+    if (!action) continue;
+    const actionStartFrame = msToFrame(Number(action.startMs) || 0, fps);
+    if (actionStartFrame > Number(currentFrame)) continue;
+    if (action.type === 'switch') {
+      stateByActorId.clear();
+      continue;
+    }
+    // A compiler-authorized Kibo autonomous action owns the Kibo lane. It
+    // does not consume or reset the foreground Hero normal-attack chain.
+    if (action.type === 'kiboEvent') continue;
+    const actorId = String(action.actorId ?? '');
+    if (!actorId) continue;
+    if (action.actionKind !== 'normal-attack') {
+      const active = stateByActorId.get(actorId) ?? null;
+      const continuityWindow = (
+        continuityWindowsBySourceActionId.get(String(action.id)) ?? []
+      ).find(
+        window =>
+          active != null &&
+          window.applied === true &&
+          String(window.actorId ?? '') === actorId &&
+          String(window.targetChainIdentity ?? '') ===
+            String(active.chainIdentity) &&
+          Number(window.targetSequenceIndex) ===
+            Number(active.nextSequenceIndex) &&
+          Number.isFinite(Number(window.startsAtMs)) &&
+          Number.isFinite(Number(window.endsAtMs)) &&
+          Number(window.endsAtMs) > Number(window.startsAtMs) &&
+          typeof window.sourceIdentity === 'string' &&
+          window.sourceIdentity.length > 0
+      );
+      if (active && continuityWindow) {
+        stateByActorId.set(actorId, {
+          ...active,
+          status: 'sourced-continuity-window',
+          continuityStatus: 'verified-attack-chain-continuity',
+          continuityActionId: String(action.id),
+          continuityEdgeIdentity: continuityWindow.edgeIdentity ?? null,
+          linkWindowStatus: 'applied',
+          linkWindowStartFrame: msToFrame(
+            Number(continuityWindow.startsAtMs),
+            fps
+          ),
+          linkWindowEndFrame: msToFrame(Number(continuityWindow.endsAtMs), fps),
+          linkWindowSourceIdentity: continuityWindow.sourceIdentity,
+        });
+      } else {
+        stateByActorId.delete(actorId);
+      }
+      continue;
+    }
+    const selection = selectionById.get(String(action.id)) ?? {};
+    const chainIdentity =
+      selection.attackInputChainIdentity ??
+      action.attackInputChainIdentity ??
+      null;
+    const groupId = selection.attackGroupId ?? action.attackGroupId ?? null;
+    const sequenceIndex = positiveIntegerOrNull(
+      selection.attackSequenceIndex ?? action.attackSequenceIndex
+    );
+    const sequenceTotal = positiveIntegerOrNull(
+      selection.attackSequenceTotal ?? action.attackSequenceTotal
+    );
+    const linkWindow =
+      selection.attackInputLinkWindow ?? action.attackInputLinkWindow ?? null;
+    if (
+      chainIdentity == null ||
+      groupId == null ||
+      sequenceIndex == null ||
+      sequenceTotal == null
+    ) {
+      stateByActorId.delete(actorId);
+      continue;
+    }
+    const linkStartFrame = nonNegativeIntegerOrNull(linkWindow?.startFrame);
+    const linkEndFrame = nonNegativeIntegerOrNull(linkWindow?.endFrame);
+    const hasSourcedWindow =
+      (selection.attackInputLinkTimingStatus ??
+        action.attackInputLinkTimingStatus) === 'applied' &&
+      linkStartFrame != null &&
+      linkEndFrame != null &&
+      linkEndFrame > linkStartFrame;
+    stateByActorId.set(actorId, {
+      actorId,
+      chainIdentity: String(chainIdentity),
+      groupId: String(groupId),
+      sequenceIndex,
+      sequenceTotal,
+      nextSequenceIndex: sequenceIndex < sequenceTotal ? sequenceIndex + 1 : 1,
+      status:
+        sequenceIndex < sequenceTotal
+          ? 'successor-window'
+          : 'chain-complete-reopen-window',
+      continuityStatus: 'direct-normal-attack-link',
+      continuityActionId: null,
+      continuityEdgeIdentity: null,
+      predecessorAcceptedIdentity: String(action.id),
+      predecessorStartFrame: actionStartFrame,
+      publicActionId: action.skillId ?? null,
+      linkWindowStatus: hasSourcedWindow ? 'applied' : 'unresolved',
+      linkWindowStartFrame: hasSourcedWindow
+        ? actionStartFrame + linkStartFrame
+        : null,
+      linkWindowEndFrame: hasSourcedWindow
+        ? actionStartFrame + linkEndFrame
+        : null,
+      linkWindowSourceIdentity: linkWindow?.sourceIdentity ?? null,
+    });
+  }
+  return [...stateByActorId.values()]
+    .filter(
+      state =>
+        state.linkWindowEndFrame == null ||
+        Number(currentFrame) < state.linkWindowEndFrame
+    )
+    .sort((left, right) => left.actorId.localeCompare(right.actorId, 'en'));
 }
 
 export function hashSearchState(snapshot) {
@@ -102,12 +262,24 @@ export function searchStatesEquivalent(left, right) {
   return hashSearchState(left) === hashSearchState(right);
 }
 
-export function deriveActiveActorId(trace) {
+export function deriveActiveActorId(
+  trace,
+  { currentFrame = null, fps = 60 } = {}
+) {
   const controlled = trace?.controlledActors ?? {};
   const transitions = controlled.transitions ?? [];
+  const boundaryTimeMs =
+    currentFrame == null
+      ? Number.POSITIVE_INFINITY
+      : (Number(currentFrame) * 1000) / Number(fps || 60);
   const lastApplied = [...transitions]
+    .filter(
+      transition =>
+        transition.applied === true &&
+        Number(transition.timeMs) < boundaryTimeMs
+    )
     .reverse()
-    .find(transition => transition.applied === true);
+    .find(Boolean);
   return (
     lastApplied?.afterActorId ??
     controlled.initialActorId ??
@@ -361,8 +533,14 @@ export function deriveExecutionNodeFrame(trace) {
   const plan = trace.executionPlan?.actions ?? [];
   return plan.reduce((latest, entry) => {
     if (entry.execute === false) return latest;
-    const end = Number(entry.startMs) + Number(entry.durationMs);
-    const frame = Number.isFinite(end) ? msToFrame(end) : null;
+    const start = Number(entry.startMs);
+    const duration = Number(entry.durationMs);
+    const end = start + duration;
+    const frame = Number.isFinite(end)
+      ? duration <= 0
+        ? msToFrame(start) + 1
+        : msToFrame(end)
+      : null;
     return frame != null && frame > latest ? frame : latest;
   }, 0);
 }

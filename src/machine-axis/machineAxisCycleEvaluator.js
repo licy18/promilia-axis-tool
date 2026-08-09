@@ -14,6 +14,7 @@ import {
   projectActiveEffectStates,
 } from './machineAxisEffectState';
 import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
+import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import {
   MACHINE_AXIS_DEFAULT_PRIMARY_OBJECTIVE,
   createMachineAxisObjectiveContract,
@@ -665,6 +666,7 @@ export function compareCycleBoundaryStates(startSnapshot, endSnapshot) {
     ['cooldowns', normalizeCooldownState],
     ['chargeCooldowns', normalizeChargeCooldownState],
     ['effects', normalizeEffectState],
+    ['attackChains', normalizeAttackChainState],
     ['kiboPassiveRuntime', normalizeKiboPassiveRuntimeState],
     ['targetStates', normalizeTargetState],
     ['specialStates', normalizeSpecialState],
@@ -814,10 +816,37 @@ function evaluateCycleSample({
   try {
     firstPrepared = prepareRun(firstContract, runtimeOptions);
   } catch (error) {
-    return rejectedSample(seed, normalizeErrorIssues(error));
+    const issues = normalizeErrorIssues(error);
+    const proof =
+      error?.actionLegalityProof ??
+      createMachineAxisActionLegalityProof(null, {
+        objectiveId: objectiveContract?.objectiveId ?? null,
+        preflightIssues: issues,
+      });
+    return rejectedSample(seed, issues, {
+      actionLegalityProof: proof.passed === true ? null : proof,
+    });
   }
   if (firstPrepared.valid !== true) {
-    return rejectedSample(seed, firstPrepared.issues ?? []);
+    const preflightActionLegality = createMachineAxisActionLegalityProof(null, {
+      objectiveId: objectiveContract?.objectiveId ?? null,
+      preflightIssues: firstPrepared.issues ?? [],
+    });
+    return rejectedSample(seed, firstPrepared.issues ?? [], {
+      actionLegalityProof:
+        preflightActionLegality.passed === true
+          ? null
+          : preflightActionLegality,
+    });
+  }
+  const firstActionLegality = createMachineAxisActionLegalityProof(
+    firstPrepared.run,
+    { objectiveId: objectiveContract?.objectiveId ?? null }
+  );
+  if (firstActionLegality.passed !== true) {
+    return rejectedSample(seed, firstActionLegality.issues, {
+      actionLegalityProof: firstActionLegality,
+    });
   }
   const stateCriticalIssues = guardCriticalStateEffectPolicy({
     policy: criticalPolicy,
@@ -866,14 +895,31 @@ function evaluateCycleSample({
   try {
     replayPrepared = prepareRun(replayContract, runtimeOptions);
   } catch (error) {
-    return rejectedSample(seed, [
-      cycleIssue(
-        'machine-axis-cycle-second-replay-not-runnable',
-        'replayProof.secondCycle',
-        'The doubled semantic loop failed canonical compilation or simulation',
-        { causes: normalizeErrorIssues(error) }
-      ),
-    ]);
+    const causes = normalizeErrorIssues(error);
+    const replayProof =
+      error?.actionLegalityProof ??
+      createMachineAxisActionLegalityProof(null, {
+        objectiveId: objectiveContract?.objectiveId ?? null,
+        preflightIssues: causes,
+      });
+    return rejectedSample(
+      seed,
+      [
+        cycleIssue(
+          'machine-axis-cycle-second-replay-not-runnable',
+          'replayProof.secondCycle',
+          'The doubled semantic loop failed canonical compilation or simulation',
+          { causes }
+        ),
+      ],
+      {
+        actionLegalityProof: {
+          passed: false,
+          firstCycle: firstActionLegality,
+          replay: replayProof.passed === true ? null : replayProof,
+        },
+      }
+    );
   }
   if (replayPrepared.valid !== true) {
     return rejectedSample(seed, [
@@ -884,6 +930,19 @@ function evaluateCycleSample({
         { causes: replayPrepared.issues ?? [] }
       ),
     ]);
+  }
+  const replayActionLegality = createMachineAxisActionLegalityProof(
+    replayPrepared.run,
+    { objectiveId: objectiveContract?.objectiveId ?? null }
+  );
+  if (replayActionLegality.passed !== true) {
+    return rejectedSample(seed, replayActionLegality.issues, {
+      actionLegalityProof: {
+        passed: false,
+        firstCycle: firstActionLegality,
+        replay: replayActionLegality,
+      },
+    });
   }
 
   const replayRun = attachActionResolutions(
@@ -1006,6 +1065,11 @@ function evaluateCycleSample({
       criticalPolicy === 'sampled' ? sampledFirstCycle : proofFirstCycle,
     secondCycle,
     replayProof,
+    actionLegalityProof: {
+      passed: true,
+      firstCycle: firstActionLegality,
+      replay: replayActionLegality,
+    },
     state: {
       start: startSnapshot,
       firstEnd: firstEndSnapshot,
@@ -1486,6 +1550,18 @@ function createAcceptedReport({
       : { formalScorePolicy: settlementContract.formalScoring }),
     sampleStatistics,
     contributions: aggregate.contributions,
+    actionLegalityProof:
+      samples.length === 1
+        ? samples[0].actionLegalityProof
+        : {
+            passed: samples.every(
+              sample => sample.actionLegalityProof?.passed === true
+            ),
+            samples: samples.map(sample => ({
+              seed: sample.seed ?? null,
+              proof: sample.actionLegalityProof ?? null,
+            })),
+          },
     replayProof:
       samples.length === 1
         ? samples[0].replayProof
@@ -1543,6 +1619,7 @@ function createAcceptedReport({
     metrics: value.metrics,
     sampleStatistics: value.sampleStatistics,
     contributions: value.contributions,
+    actionLegalityProof: value.actionLegalityProof,
     replayProof: value.replayProof,
     evidence: value.evidence,
     warnings: value.warnings,
@@ -1579,6 +1656,20 @@ function createRejectedReport({
         }
       : null,
     samples: samples.map(projectSampleReport),
+    actionLegalityProof:
+      samples.length === 0
+        ? null
+        : samples.length === 1
+          ? (samples[0].actionLegalityProof ?? null)
+          : {
+              passed: samples.every(
+                sample => sample.actionLegalityProof?.passed === true
+              ),
+              samples: samples.map(sample => ({
+                seed: sample.seed ?? null,
+                proof: sample.actionLegalityProof ?? null,
+              })),
+            },
     hashes: {
       input: null,
       data: null,
@@ -1857,6 +1948,7 @@ function projectSampleReport(sample) {
     firstCycle: sample.firstCycle ?? null,
     secondCycle: sample.secondCycle ?? null,
     replayProof: sample.replayProof ?? null,
+    actionLegalityProof: sample.actionLegalityProof ?? null,
     loopPlan: sample.loopPlan ?? null,
     evidence: sample.evidence ?? null,
   };
@@ -2492,6 +2584,43 @@ function normalizeEffectState(snapshot) {
       modifiers: normalizeEffectModifiers(row.modifiers),
     }))
     .filter(row => row.remainingFrames > 0)
+    .sort(compareCanonicalRows);
+}
+
+function normalizeAttackChainState(snapshot) {
+  const currentFrame = Number(snapshot.currentFrame) || 0;
+  return (snapshot.attackChains ?? [])
+    .map(row => ({
+      actorId: row.actorId ?? null,
+      chainIdentity: row.chainIdentity ?? null,
+      groupId: normalizeCycleLocalCooldownIdentity(row.groupId),
+      sequenceIndex: integerOrNull(row.sequenceIndex),
+      sequenceTotal: integerOrNull(row.sequenceTotal),
+      nextSequenceIndex: integerOrNull(row.nextSequenceIndex),
+      status: row.status ?? null,
+      continuityStatus: row.continuityStatus ?? null,
+      continuityActionId: normalizeCycleLocalCooldownIdentity(
+        row.continuityActionId
+      ),
+      continuityEdgeIdentity: normalizeCycleLocalCooldownIdentity(
+        row.continuityEdgeIdentity
+      ),
+      predecessorAcceptedIdentity: normalizeCycleLocalCooldownIdentity(
+        row.predecessorAcceptedIdentity
+      ),
+      publicActionId: row.publicActionId ?? null,
+      linkWindowStatus: row.linkWindowStatus ?? null,
+      opensInFrames:
+        row.linkWindowStartFrame == null
+          ? null
+          : Math.max(0, Number(row.linkWindowStartFrame) - currentFrame),
+      remainingFrames:
+        row.linkWindowEndFrame == null
+          ? null
+          : Math.max(0, Number(row.linkWindowEndFrame) - currentFrame),
+      linkWindowSourceIdentity: row.linkWindowSourceIdentity ?? null,
+    }))
+    .filter(row => row.actorId && row.chainIdentity)
     .sort(compareCanonicalRows);
 }
 

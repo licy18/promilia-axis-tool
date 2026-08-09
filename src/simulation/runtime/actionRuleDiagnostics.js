@@ -8,13 +8,30 @@ import {
 import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEffectSourceSequence';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import {
+  getInstalledVerifiedCombatMechanicsPackage,
   getVerifiedCombatActionMapping,
-  getVerifiedCombatActionMappingByIdentity,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
-import { isSwitchTriggeredDerivedAction } from '../generation/switchTriggeredActionGeneration';
+import {
+  isVerifiedSwitchTriggeredDerivedAction,
+  validateSwitchTriggeredDerivedAction,
+} from '../generation/switchTriggeredActionGeneration';
 import { createVerifiedKiboCooldownModifierSession } from '../mechanics/verifiedKiboCooldownModifierSession';
+import {
+  isAuthoritativeKiboAutoCastDerivationRegistry,
+  validateVerifiedKiboAutoCastDerivation,
+} from '../../domain/verifiedBackgroundActionDerivation';
+import {
+  JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
+  createJointAttackTriggerUnresolvedEvidence,
+  resolveVerifiedKiboJointAttackBinding,
+} from '../../domain/verifiedJointAttackContract';
+import {
+  ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+  KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
+  isVerifiedSwitchExitTailPolicy,
+} from '../generation/verifiedSwitchExitTailPolicy';
 
 export const ACTION_RULE_DIAGNOSTICS_CONTRACT_NAME =
   'AzPrActionRuleDiagnostics';
@@ -24,7 +41,18 @@ const ACTION_BOUNDARY_EPSILON_MS = 0.001;
 
 export const ACTION_RULE_CODES = Object.freeze({
   LANE_OVERLAP: 'action-lane-overlap',
+  SWITCH_OCCUPANCY_UNRESOLVED: 'switch-action-cancel-window-unresolved',
   SWITCH_FRAME_CONFLICT: 'switch-frame-conflict',
+  CONTROLLED_ACTOR_UNAVAILABLE: 'controlled-actor-action-unavailable',
+  CONTROLLED_ACTOR_SOURCE_ORDER_UNRESOLVED:
+    'controlled-actor-source-order-unresolved',
+  CONTROLLED_ACTOR_FRAME_INPUT_CONFLICT:
+    'controlled-actor-frame-input-conflict',
+  BACKGROUND_DERIVATION_INVALID: 'background-action-derivation-invalid',
+  KIBO_AUTO_CAST_TRIGGER_UNRESOLVED: 'kibo-auto-cast-trigger-unresolved',
+  ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
+  KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
+  SWITCH_EXIT_TAIL_POLICY_INVALID: 'switch-exit-tail-policy-invalid',
   SKILL_COOLDOWN_ACTIVE: 'skill-cooldown-active',
   SKILL_SP_PRECONDITION_UNRESOLVED: 'skill-sp-precondition-unresolved',
   ATTACK_INPUT_CHAIN_INCOMPLETE: 'attack-input-chain-incomplete',
@@ -33,9 +61,14 @@ export const ACTION_RULE_CODES = Object.freeze({
   ATTACK_INPUT_LINK_TOO_EARLY: 'attack-input-link-too-early',
   ATTACK_INPUT_LINK_TOO_LATE: 'attack-input-link-too-late',
   ATTACK_INPUT_LEGACY_UNRESOLVED: 'attack-input-legacy-unresolved',
+  ATTACK_INPUT_CONTEXT_CONFLICT: 'attack-input-context-conflict',
   JOINT_ATTACK_KIBO_REQUIRED: 'joint-attack-kibo-required',
   JOINT_ATTACK_PAIR_MISSING: 'joint-attack-pair-missing',
   JOINT_ATTACK_FRAME_MISMATCH: 'joint-attack-frame-mismatch',
+  JOINT_ATTACK_TARGET_MISMATCH: 'joint-attack-target-mismatch',
+  JOINT_ATTACK_DUPLICATE_SIDE: 'joint-attack-duplicate-side',
+  JOINT_ATTACK_COUNTERPART_BLOCKED: 'joint-attack-counterpart-blocked',
+  JOINT_ATTACK_TRIGGER_UNRESOLVED: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
   STAR_CARRY_SWITCH_TRIGGER_REQUIRED: 'star-carry-switch-trigger-required',
   KIBO_PASSIVE_SKILL_TAG_UNRESOLVED:
     'kibo-passive-cooldown-skill-tag-unresolved',
@@ -52,21 +85,57 @@ export function createActionRuleDiagnostics({
   externallyBlockedActionIds = [],
 } = {}) {
   const actions = [...(scenario.actions ?? [])].sort(compareActions);
-  const nonCooldownDiagnostics = [
+  const baseNonCooldownDiagnostics = [
     ...createLaneOverlapDiagnostics(actions),
+    ...createSwitchOccupancyDiagnostics(
+      actions,
+      scenario.time?.fps,
+      isFormalActionLegalityScenario(scenario)
+    ),
     ...createSwitchFrameConflictDiagnostics(actions, scenario.time?.fps),
-    ...createStandaloneStarCarryDiagnostics(actions),
+    ...createSwitchExitTailDiagnostics(actions, scenario),
+    ...createKiboAutoCastTriggerDiagnostics(scenario),
+    ...createBackgroundActionDerivationDiagnostics(actions, scenario),
+    ...createStandaloneStarCarryDiagnostics(actions, scenario),
     ...createSkillSpPreconditionDiagnostics(
       actions,
       scenario.actors ?? [],
       scenario
     ),
-    ...createAttackInputChainDiagnostics(actions, scenario.time?.fps),
+    ...createAttackInputChainDiagnostics(
+      actions,
+      scenario.time?.fps,
+      isFormalActionLegalityScenario(scenario)
+    ),
     ...createJointAttackDiagnostics(
       actions,
       scenario.actors ?? [],
-      scenario.time?.fps
+      scenario.time?.fps,
+      scenario
     ),
+  ];
+  const controlledActorDiagnostics = createControlledActorActionDiagnostics({
+    actions,
+    actors: scenario.actors ?? [],
+    scenario,
+    blockingDiagnostics: baseNonCooldownDiagnostics,
+    externallyBlockedActionIds,
+  });
+  const blockedDerivedActionDiagnostics = createBlockedDerivedActionDiagnostics(
+    {
+      actions,
+      scenario,
+      blockingDiagnostics: [
+        ...baseNonCooldownDiagnostics,
+        ...controlledActorDiagnostics,
+      ],
+      externallyBlockedActionIds,
+    }
+  );
+  const nonCooldownDiagnostics = [
+    ...baseNonCooldownDiagnostics,
+    ...controlledActorDiagnostics,
+    ...blockedDerivedActionDiagnostics,
   ];
   const preblockedActionIds = new Set([
     ...externallyBlockedActionIds.map(String),
@@ -74,16 +143,46 @@ export function createActionRuleDiagnostics({
       .filter(item => item.status === ACTION_RULE_STATUSES.VIOLATED)
       .map(item => String(item.actionId)),
   ]);
-  const cooldownEvaluation = createSkillCooldownEvaluation(actions, {
+  let cooldownEvaluation = createSkillCooldownEvaluation(actions, {
     scenario,
     cooldownEvaluationAdapter,
     preblockedActionIds,
   });
-  const diagnostics = [
+  let preliminaryDiagnostics = [
     ...nonCooldownDiagnostics,
     ...cooldownEvaluation.diagnostics,
     ...createKiboCooldownSessionDiagnostics(
       cooldownEvaluation.cooldownModifierSession
+    ),
+  ];
+  const blockedJointCounterparts = createBlockedJointCounterpartDiagnostics({
+    jointDiagnostics: nonCooldownDiagnostics,
+    blockingDiagnostics: preliminaryDiagnostics,
+    externallyBlockedActionIds,
+  });
+  if (blockedJointCounterparts.length > 0) {
+    for (const diagnostic of blockedJointCounterparts) {
+      preblockedActionIds.add(String(diagnostic.actionId));
+    }
+    cooldownEvaluation = createSkillCooldownEvaluation(actions, {
+      scenario,
+      cooldownEvaluationAdapter,
+      preblockedActionIds,
+    });
+    preliminaryDiagnostics = [
+      ...nonCooldownDiagnostics,
+      ...blockedJointCounterparts,
+      ...cooldownEvaluation.diagnostics,
+      ...createKiboCooldownSessionDiagnostics(
+        cooldownEvaluation.cooldownModifierSession
+      ),
+    ];
+  }
+  const diagnostics = [
+    ...preliminaryDiagnostics,
+    ...createBlockedAttackInputPredecessorDiagnostics(
+      actions,
+      preliminaryDiagnostics
     ),
   ].sort(compareDiagnostics);
   const violationCount = diagnostics.filter(
@@ -117,7 +216,7 @@ export function createActionRuleDiagnostics({
     readinessTimeline,
     summary: {
       actionCount: actions.length,
-      ruleCount: 15,
+      ruleCount: Object.keys(ACTION_RULE_CODES).length,
       diagnosticCount: diagnostics.length,
       violationCount,
       unresolvedCount,
@@ -130,8 +229,20 @@ export function createActionRuleDiagnostics({
       laneOverlapCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.LANE_OVERLAP
       ).length,
+      switchOccupancyDiagnosticCount: diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.SWITCH_OCCUPANCY_UNRESOLVED
+      ).length,
       switchFrameConflictCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SWITCH_FRAME_CONFLICT
+      ).length,
+      controlledActorViolationCount: diagnostics.filter(item =>
+        [
+          ACTION_RULE_CODES.CONTROLLED_ACTOR_UNAVAILABLE,
+          ACTION_RULE_CODES.CONTROLLED_ACTOR_SOURCE_ORDER_UNRESOLVED,
+        ].includes(item.code)
+      ).length,
+      backgroundDerivationDiagnosticCount: diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID
       ).length,
       cooldownViolationCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE
@@ -147,6 +258,7 @@ export function createActionRuleDiagnostics({
           ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY,
           ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
           ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
+          ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
         ].includes(item.code)
       ).length,
       jointAttackViolationCount: diagnostics.filter(item =>
@@ -154,7 +266,13 @@ export function createActionRuleDiagnostics({
           ACTION_RULE_CODES.JOINT_ATTACK_KIBO_REQUIRED,
           ACTION_RULE_CODES.JOINT_ATTACK_PAIR_MISSING,
           ACTION_RULE_CODES.JOINT_ATTACK_FRAME_MISMATCH,
+          ACTION_RULE_CODES.JOINT_ATTACK_TARGET_MISMATCH,
+          ACTION_RULE_CODES.JOINT_ATTACK_DUPLICATE_SIDE,
+          ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
         ].includes(item.code)
+      ).length,
+      jointAttackTriggerUnresolvedCount: diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED
       ).length,
       standaloneStarCarryViolationCount: diagnostics.filter(
         item =>
@@ -181,14 +299,469 @@ export function createActionRuleDiagnostics({
   };
 }
 
-function createStandaloneStarCarryDiagnostics(actions) {
+function createControlledActorActionDiagnostics({
+  actions,
+  actors,
+  scenario,
+  blockingDiagnostics = [],
+  externallyBlockedActionIds = [],
+}) {
+  const actorsById = new Map(
+    (actors ?? []).map(actor => [
+      String(actor.id ?? actor.actorId ?? ''),
+      actor,
+    ])
+  );
+  let controlledActorId = resolveInitialControlledActorId({
+    actors,
+    actorsById,
+    scenario,
+  });
+  const sourceOrderDiagnostics = createControlledActorSourceOrderDiagnostics(
+    actions,
+    scenario
+  );
+  const blockedActionIds = new Set([
+    ...(externallyBlockedActionIds ?? []).map(String),
+    ...(blockingDiagnostics ?? [])
+      .filter(diagnostic => diagnostic.status === ACTION_RULE_STATUSES.VIOLATED)
+      .map(diagnostic => String(diagnostic.actionId)),
+    ...sourceOrderDiagnostics.flatMap(diagnostic =>
+      (diagnostic.actionIds ?? []).map(String)
+    ),
+  ]);
+  const diagnostics = [...sourceOrderDiagnostics];
+  for (const action of actions ?? []) {
+    const actionId = String(action.id ?? '');
+    const isBlocked = blockedActionIds.has(actionId);
+    const actorId = String(action.actorId ?? '');
+    if (action.type === ACTION_TYPES.SWITCH) {
+      if (
+        !isBlocked &&
+        controlledActorId != null &&
+        actorId &&
+        actorId !== controlledActorId
+      ) {
+        diagnostics.push(
+          createControlledActorUnavailableDiagnostic({
+            action,
+            controlledActorId,
+            reason: 'switch-source-is-not-current-controlled-actor',
+          })
+        );
+        blockedActionIds.add(actionId);
+        continue;
+      }
+      const targetActorId = String(action.targetActorId ?? '');
+      if (!isBlocked && targetActorId && actorsById.has(targetActorId)) {
+        controlledActorId = targetActorId;
+      }
+      continue;
+    }
+    if (!isControlledInputAction(action, scenario) || isBlocked) continue;
+    if (controlledActorId != null && actorId && actorId !== controlledActorId) {
+      diagnostics.push(
+        createControlledActorUnavailableDiagnostic({
+          action,
+          controlledActorId,
+          reason: 'action-owner-is-not-current-controlled-actor',
+        })
+      );
+      blockedActionIds.add(actionId);
+    }
+  }
+  return diagnostics;
+}
+
+function createControlledActorSourceOrderDiagnostics(actions, scenario) {
+  const fps = Number(scenario?.time?.fps) || 60;
+  const diagnostics = [];
+  const switches = (actions ?? []).filter(
+    action => action.type === ACTION_TYPES.SWITCH
+  );
+  const inputs = (actions ?? []).filter(action =>
+    isControlledInputAction(action, scenario)
+  );
+  diagnostics.push(...createControlledActorFrameInputConflicts(inputs, fps));
+  for (const switchAction of switches) {
+    for (const inputAction of inputs) {
+      if (
+        msToFrame(switchAction.startMs, fps) !==
+        msToFrame(inputAction.startMs, fps)
+      ) {
+        continue;
+      }
+      const switchPath = getActionSourceSequencePath(switchAction);
+      const inputPath = getActionSourceSequencePath(inputAction);
+      const ordered =
+        switchPath != null &&
+        inputPath != null &&
+        compareSourceSequencePaths(switchPath, inputPath) !== 0;
+      if (ordered) continue;
+      const actionIds = [switchAction.id, inputAction.id].map(String).sort();
+      for (const action of [switchAction, inputAction]) {
+        diagnostics.push({
+          schemaVersion: 1,
+          id: createDiagnosticId(
+            ACTION_RULE_CODES.CONTROLLED_ACTOR_SOURCE_ORDER_UNRESOLVED,
+            ...actionIds,
+            action.id
+          ),
+          code: ACTION_RULE_CODES.CONTROLLED_ACTOR_SOURCE_ORDER_UNRESOLVED,
+          ruleKey: 'current-controlled-actor-source-order',
+          status: ACTION_RULE_STATUSES.VIOLATED,
+          severity: 'error',
+          actionId: action.id,
+          actionIds,
+          actorId: action.actorId ?? null,
+          timeMs: Number(action.startMs) || 0,
+          reason: 'same-frame-switch-input-source-order-unresolved',
+          sourceSequencePath: action.sourceSequencePath ?? null,
+          message: `同帧 switch/input 缺少可验证的 sourceSequencePath 顺序，${action.id} 不执行`,
+          source: {
+            sourceKind: 'azpr-controlled-actor-runtime-timeline',
+            sourceStatus: 'same-frame-switch-input-order-fail-closed',
+            fieldPaths: [
+              'action.sourceSequencePath',
+              'action.sourceSequenceSource',
+            ],
+          },
+          appliedToSimulationResults: true,
+        });
+      }
+    }
+  }
+  return diagnostics;
+}
+
+function createControlledActorFrameInputConflicts(inputs, fps) {
+  const diagnostics = [];
+  const byFrame = groupByKey(inputs, action =>
+    String(msToFrame(action.startMs, fps))
+  );
+  for (const [frameKey, frameInputs] of byFrame) {
+    const actorIds = uniqueValues(
+      frameInputs.map(action => String(action.actorId ?? '')).filter(Boolean)
+    );
+    if (actorIds.length < 2) continue;
+    const actionIds = frameInputs.map(action => String(action.id)).sort();
+    for (const action of frameInputs) {
+      diagnostics.push({
+        schemaVersion: 1,
+        id: createDiagnosticId(
+          ACTION_RULE_CODES.CONTROLLED_ACTOR_FRAME_INPUT_CONFLICT,
+          ...actionIds,
+          action.id
+        ),
+        code: ACTION_RULE_CODES.CONTROLLED_ACTOR_FRAME_INPUT_CONFLICT,
+        ruleKey: 'single-controlled-actor-input-per-frame',
+        status: ACTION_RULE_STATUSES.VIOLATED,
+        severity: 'error',
+        actionId: action.id,
+        actionIds,
+        actorId: action.actorId ?? null,
+        actorIds,
+        frameIndex: Number(frameKey),
+        timeMs: Number(action.startMs) || 0,
+        reason: 'multiple-actors-declared-player-input-in-one-frame',
+        sourceSequencePath: action.sourceSequencePath ?? null,
+        message: `同一帧只能由一个当前主控角色响应玩家输入，${action.id} 不执行`,
+        source: {
+          sourceKind: 'azpr-controlled-actor-runtime-timeline',
+          sourceStatus: 'same-frame-cross-actor-input-conflict-applied',
+          fieldPaths: [
+            'action.actorId',
+            'action.startMs',
+            'scenario.initialRuntimeState.controlledActor',
+          ],
+        },
+        appliedToSimulationResults: true,
+      });
+    }
+  }
+  return diagnostics;
+}
+
+function resolveInitialControlledActorId({ actors, actorsById, scenario }) {
+  const initial = scenario?.initialRuntimeState?.controlledActor;
+  if (initial?.actorId != null && actorsById.has(String(initial.actorId))) {
+    return String(initial.actorId);
+  }
+  if (initial?.characterId != null) {
+    const actor = (actors ?? []).find(
+      candidate => Number(candidate.characterId) === Number(initial.characterId)
+    );
+    if (actor) return String(actor.id ?? actor.actorId);
+  }
+  const teamActorId = scenario?.team?.slots?.[0]?.actorId;
+  if (teamActorId != null && actorsById.has(String(teamActorId))) {
+    return String(teamActorId);
+  }
+  const first = (actors ?? [])[0];
+  return first == null ? null : String(first.id ?? first.actorId ?? '');
+}
+
+function isControlledInputAction(action, scenario) {
+  const kiboDerivation = validateVerifiedKiboAutoCastDerivation(
+    action,
+    scenario
+  );
+  if (
+    isVerifiedSwitchTriggeredDerivedAction(action, scenario) ||
+    (kiboDerivation.valid === true &&
+      kiboDerivation.evidenceClosed === true &&
+      kiboDerivation.authoritativeRegistryMatch === true)
+  ) {
+    return false;
+  }
+  return [ACTION_TYPES.SKILL, ACTION_TYPES.KIBO_EVENT].includes(action?.type);
+}
+
+function createControlledActorUnavailableDiagnostic({
+  action,
+  controlledActorId,
+  reason,
+}) {
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(
+      ACTION_RULE_CODES.CONTROLLED_ACTOR_UNAVAILABLE,
+      action.id,
+      controlledActorId
+    ),
+    code: ACTION_RULE_CODES.CONTROLLED_ACTOR_UNAVAILABLE,
+    ruleKey: 'current-controlled-actor-action-readiness',
+    status: ACTION_RULE_STATUSES.VIOLATED,
+    severity: 'error',
+    actionId: action.id,
+    actionIds: [action.id],
+    actionName: action.name ?? action.id,
+    actorId: action.actorId ?? null,
+    controlledActorId,
+    timeMs: Number(action.startMs) || 0,
+    reason,
+    message: `${action.name ?? action.id} 的 owner 不是该时刻当前主控角色，动作不执行`,
+    source: {
+      sourceKind: 'azpr-controlled-actor-runtime-timeline',
+      sourceStatus: 'controlled-actor-input-readiness-applied',
+      fieldPaths: [
+        'scenario.initialRuntimeState.controlledActor',
+        'action.actorId',
+        'action.sourceSequencePath',
+      ],
+    },
+    appliedToSimulationResults: true,
+  };
+}
+
+function createBlockedJointCounterpartDiagnostics({
+  jointDiagnostics,
+  blockingDiagnostics,
+  externallyBlockedActionIds = [],
+}) {
+  const blockedActionIds = new Set([
+    ...(externallyBlockedActionIds ?? []).map(String),
+    ...(blockingDiagnostics ?? [])
+      .filter(diagnostic => diagnostic.status === ACTION_RULE_STATUSES.VIOLATED)
+      .map(diagnostic => String(diagnostic.actionId)),
+  ]);
+  const diagnostics = [];
+  for (const pair of (jointDiagnostics ?? []).filter(
+    diagnostic =>
+      diagnostic.code === ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED &&
+      (diagnostic.actionIds ?? []).length === 2
+  )) {
+    const pairIds = uniqueValues(pair.actionIds.map(String));
+    const blockingActionId = pairIds.find(actionId =>
+      blockedActionIds.has(actionId)
+    );
+    if (!blockingActionId) continue;
+    for (const actionId of pairIds) {
+      if (blockedActionIds.has(actionId)) continue;
+      diagnostics.push({
+        schemaVersion: 1,
+        id: createDiagnosticId(
+          ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
+          actionId,
+          blockingActionId
+        ),
+        code: ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
+        ruleKey: 'joint-attack-atomic-pair',
+        status: ACTION_RULE_STATUSES.VIOLATED,
+        severity: 'error',
+        actionId,
+        actionIds: pairIds,
+        blockingActionId,
+        timeMs: Number(pair.timeMs) || 0,
+        message: `合击配对的 ${blockingActionId} 未被接受，${actionId} 同步回滚`,
+        source: {
+          sourceKind: 'azpr-joint-attack-input-contract',
+          sourceStatus: 'joint-attack-atomic-pair-rollback-applied',
+          fieldPaths: ['action.id', 'action.sourceSequencePath'],
+        },
+        appliedToSimulationResults: true,
+      });
+      blockedActionIds.add(actionId);
+    }
+  }
+  return diagnostics;
+}
+
+function createBackgroundActionDerivationDiagnostics(actions, scenario) {
+  return (actions ?? []).flatMap(action => {
+    const switchDerivation = validateSwitchTriggeredDerivedAction(
+      action,
+      scenario
+    );
+    const kiboDerivation = validateVerifiedKiboAutoCastDerivation(
+      action,
+      scenario
+    );
+    const originConflict =
+      switchDerivation.declared === true && kiboDerivation.declared === true;
+    const autonomousKiboDeclarationMissing =
+      action.type === ACTION_TYPES.KIBO_EVENT &&
+      ['normal-attack', 'active'].includes(
+        String(action.eventType ?? action.actionKind ?? '')
+      ) &&
+      kiboDerivation.declared !== true;
+    const declared =
+      switchDerivation.declared ||
+      kiboDerivation.declared ||
+      autonomousKiboDeclarationMissing;
+    const valid =
+      !originConflict &&
+      ((switchDerivation.declared && switchDerivation.valid) ||
+        (kiboDerivation.declared && kiboDerivation.valid));
+    if (!declared || valid) return [];
+    const reasons = uniqueValues([
+      ...(originConflict ? ['derived-action-origin-conflict'] : []),
+      ...(autonomousKiboDeclarationMissing
+        ? ['autonomous-kibo-action-requires-compiler-registry']
+        : []),
+      ...(switchDerivation.reasons ?? []),
+      ...(kiboDerivation.reasons ?? []),
+    ]).sort((left, right) => left.localeCompare(right, 'en'));
+    const evidenceOnlyOpen =
+      kiboDerivation.structurallyValid === true &&
+      kiboDerivation.evidenceClosed === false &&
+      (switchDerivation.declared !== true || switchDerivation.valid === true);
+    const status =
+      evidenceOnlyOpen && !isFormalActionLegalityScenario(scenario)
+        ? ACTION_RULE_STATUSES.UNRESOLVED
+        : ACTION_RULE_STATUSES.VIOLATED;
+    return [
+      {
+        schemaVersion: 1,
+        id: createDiagnosticId(
+          ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID,
+          action.id
+        ),
+        code: ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID,
+        ruleKey: 'verified-source-derived-action-only',
+        status,
+        severity:
+          status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
+        actionId: action.id,
+        actionIds: [action.id],
+        actorId: action.actorId ?? null,
+        timeMs: Number(action.startMs) || 0,
+        reason: reasons.join('|') || 'derivation-declaration-invalid',
+        sourceIdentity:
+          switchDerivation.bindingId ?? kiboDerivation.sourceIdentity ?? null,
+        sourceSequencePath: action.sourceSequencePath ?? null,
+        message: `${action.name ?? action.id} 声明为后台派生动作，但其触发、owner 或来源顺序合同无效`,
+        source: {
+          sourceKind: 'azpr-verified-background-action-derivation',
+          sourceStatus: 'background-action-derivation-fail-closed',
+          fieldPaths: [
+            'action.derivedAction',
+            'action.switchTriggerBinding',
+            'action.autoCastRule',
+            'action.sourceSequencePath',
+          ],
+        },
+        appliedToSimulationResults: status === ACTION_RULE_STATUSES.VIOLATED,
+      },
+    ];
+  });
+}
+
+function createBlockedDerivedActionDiagnostics({
+  actions,
+  scenario,
+  blockingDiagnostics = [],
+  externallyBlockedActionIds = [],
+}) {
+  const blockingByActionId = new Map();
+  for (const actionId of externallyBlockedActionIds ?? []) {
+    blockingByActionId.set(String(actionId), {
+      code: 'externally-blocked-action',
+      actionId: String(actionId),
+    });
+  }
+  for (const diagnostic of blockingDiagnostics ?? []) {
+    if (
+      diagnostic.status !== ACTION_RULE_STATUSES.VIOLATED ||
+      diagnostic.actionId == null
+    ) {
+      continue;
+    }
+    const key = String(diagnostic.actionId);
+    if (!blockingByActionId.has(key)) {
+      blockingByActionId.set(key, diagnostic);
+    }
+  }
+  return (actions ?? []).flatMap(action => {
+    const derivation = validateSwitchTriggeredDerivedAction(action, scenario);
+    if (derivation.valid !== true || derivation.parentActionId == null) {
+      return [];
+    }
+    const blocker = blockingByActionId.get(String(derivation.parentActionId));
+    if (!blocker) return [];
+    return [
+      {
+        schemaVersion: 1,
+        id: createDiagnosticId(
+          ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID,
+          action.id,
+          derivation.parentActionId
+        ),
+        code: ACTION_RULE_CODES.BACKGROUND_DERIVATION_INVALID,
+        ruleKey: 'verified-source-derived-action-only',
+        status: ACTION_RULE_STATUSES.VIOLATED,
+        severity: 'error',
+        actionId: action.id,
+        actionIds: uniqueValues([derivation.parentActionId, action.id]),
+        actorId: action.actorId ?? null,
+        blockingActionId: derivation.parentActionId,
+        timeMs: Number(action.startMs) || 0,
+        reason: 'source-trigger-action-not-accepted',
+        sourceIdentity: derivation.bindingId ?? null,
+        sourceSequencePath: action.sourceSequencePath ?? null,
+        message: `${action.name ?? action.id} 的触发输入 ${derivation.parentActionId} 未被接受，派生事务同步回滚`,
+        source: {
+          sourceKind: 'azpr-verified-background-action-derivation',
+          sourceStatus: 'parent-trigger-atomic-rollback-applied',
+          fieldPaths: [
+            'action.derivedAction.parentActionId',
+            'action.switchTriggerBinding.bindingId',
+            'action.sourceSequencePath',
+          ],
+        },
+        appliedToSimulationResults: true,
+      },
+    ];
+  });
+}
+
+function createStandaloneStarCarryDiagnostics(actions, scenario) {
   return actions
     .filter(
       action =>
         action.type === ACTION_TYPES.SKILL &&
         action.actionKind === 'star-carry' &&
-        !isSwitchTriggeredDerivedAction(action) &&
-        !isVerifiedDeclaredPublicAction(action)
+        !isVerifiedSwitchTriggeredDerivedAction(action, scenario)
     )
     .map(action => ({
       schemaVersion: 1,
@@ -220,54 +793,61 @@ function createStandaloneStarCarryDiagnostics(actions) {
     }));
 }
 
-function isVerifiedDeclaredPublicAction(action) {
-  const intent = action?.verifiedDeclaredPublicActionIntent;
-  if (
-    intent?.schemaVersion !== 1 ||
-    intent?.contractName !== 'AzPrVerifiedDeclaredPublicAction' ||
-    String(intent.actionId ?? '') !== String(action?.id ?? '')
-  ) {
-    return false;
-  }
-  const mapping = getVerifiedCombatActionMappingByIdentity(
-    intent.mappingIdentity
-  );
-  return Boolean(
-    mapping?.schedulable === true &&
-    mapping.catalogDeclaration &&
-    String(mapping.identity) === String(intent.mappingIdentity) &&
-    Number(mapping.ownerId) === Number(intent.ownerId) &&
-    Number(mapping.ownerId) === Number(action?.actor?.characterId) &&
-    Number(mapping.sourceSkillId) === Number(action?.skillId) &&
-    String(mapping.actionKind) === String(action?.actionKind)
-  );
-}
-
-function createJointAttackDiagnostics(actions, actors, fps = 60) {
+function createJointAttackDiagnostics(
+  actions,
+  actors,
+  fps = 60,
+  scenario = {}
+) {
   const actorById = new Map(
     actors.map(actor => [String(actor.id ?? ''), actor])
   );
   const actorCombos = actions.filter(isActorJointAttack);
-  const kiboCombos = actions.filter(isKiboJointAttack);
+  const kiboCombos = actions
+    .map(action => ({
+      action,
+      binding: resolveVerifiedKiboJointAttackBinding(action),
+    }))
+    .filter(entry => entry.binding != null);
+  const defaultTargetId = resolveScenarioDefaultTargetIdentity(scenario);
+  const duplicateDiagnostics = createJointAttackDuplicateDiagnostics({
+    actorCombos,
+    kiboCombos,
+    actorById,
+    fps,
+    defaultTargetId,
+  });
+  const duplicateActionIds = new Set(
+    duplicateDiagnostics.map(diagnostic => String(diagnostic.actionId))
+  );
   return [
-    ...actorCombos.map(action =>
-      createJointAttackDiagnostic({
-        action,
-        counterpartActions: kiboCombos,
-        actorById,
-        fps,
-        side: 'actor',
-      })
-    ),
-    ...kiboCombos.map(action =>
-      createJointAttackDiagnostic({
-        action,
-        counterpartActions: actorCombos,
-        actorById,
-        fps,
-        side: 'kibo',
-      })
-    ),
+    ...duplicateDiagnostics,
+    ...actorCombos
+      .filter(action => !duplicateActionIds.has(String(action.id)))
+      .map(action =>
+        createJointAttackDiagnostic({
+          action,
+          counterpartActions: kiboCombos.map(entry => entry.action),
+          kiboBindings: kiboCombos,
+          actorById,
+          fps,
+          defaultTargetId,
+          side: 'actor',
+        })
+      ),
+    ...kiboCombos
+      .filter(({ action }) => !duplicateActionIds.has(String(action.id)))
+      .map(({ action, binding }) =>
+        createJointAttackDiagnostic({
+          action,
+          counterpartActions: actorCombos,
+          kiboBindings: [{ action, binding }],
+          actorById,
+          fps,
+          defaultTargetId,
+          side: 'kibo',
+        })
+      ),
   ].filter(Boolean);
 }
 
@@ -277,6 +857,8 @@ function createJointAttackDiagnostic({
   actorById,
   fps,
   side,
+  kiboBindings = [],
+  defaultTargetId = null,
 }) {
   const actor = actorById.get(String(action.actorId ?? '')) ?? action.actor;
   const configuredKiboId = positiveIntegerOrNull(actor?.loadout?.kiboId);
@@ -307,10 +889,36 @@ function createJointAttackDiagnostic({
     );
   });
   const actionFrame = msToFrame(action.startMs, fps);
-  const sameFrame = compatibleActions.find(
+  const sameFrameCandidates = compatibleActions.filter(
     counterpart => msToFrame(counterpart.startMs, fps) === actionFrame
   );
-  if (sameFrame) return null;
+  const sameFrame = sameFrameCandidates.find(counterpart =>
+    jointAttackTargetsCompatible(action, counterpart, defaultTargetId)
+  );
+  if (sameFrame) {
+    if (side === 'kibo') return null;
+    const binding = kiboBindings.find(
+      entry => String(entry.action.id) === String(sameFrame.id)
+    )?.binding;
+    return createJointAttackTriggerUnresolvedDiagnostic({
+      actorAction: action,
+      kiboAction: sameFrame,
+      binding,
+    });
+  }
+  if (sameFrameCandidates.length > 0) {
+    const counterpart = sameFrameCandidates.sort(
+      compareActionSourceSequence
+    )[0];
+    return createJointAttackDiagnosticRecord({
+      code: ACTION_RULE_CODES.JOINT_ATTACK_TARGET_MISMATCH,
+      action,
+      actor,
+      configuredKiboId,
+      counterpart,
+      message: `${action.name} 与 ${counterpart.name} 必须指向同一目标`,
+    });
+  }
 
   const nearest = compatibleActions.sort(
     (left, right) =>
@@ -339,6 +947,117 @@ function createJointAttackDiagnostic({
     suggestedStartMs: Number(nearest.startMs) || 0,
     message: `${action.name} 必须与 ${nearest.name} 在同一帧发动`,
   });
+}
+
+function createJointAttackDuplicateDiagnostics({
+  actorCombos,
+  kiboCombos,
+  actorById,
+  fps,
+  defaultTargetId,
+}) {
+  const diagnostics = [];
+  for (const entries of [
+    actorCombos.map(action => ({ action, side: 'actor' })),
+    kiboCombos.map(entry => ({ ...entry, side: 'kibo' })),
+  ]) {
+    const groups = groupByKey(entries, entry => {
+      const action = entry.action;
+      return [
+        entry.side,
+        String(action.actorId ?? ''),
+        msToFrame(action.startMs, fps),
+        resolveJointAttackTargetIdentity(action, defaultTargetId) ??
+          'default-target',
+      ].join('|');
+    });
+    groups.forEach(group => {
+      if (group.length < 2) return;
+      const actionIds = group.map(entry => entry.action.id);
+      for (const { action } of group) {
+        const actor =
+          actorById.get(String(action.actorId ?? '')) ?? action.actor;
+        diagnostics.push({
+          ...createJointAttackDiagnosticRecord({
+            code: ACTION_RULE_CODES.JOINT_ATTACK_DUPLICATE_SIDE,
+            action,
+            actor,
+            configuredKiboId: positiveIntegerOrNull(actor?.loadout?.kiboId),
+            message: `${action.name} 的同帧同目标合击侧重复，不能组成唯一原子配对`,
+          }),
+          actionIds,
+          duplicateActionIds: actionIds,
+        });
+      }
+    });
+  }
+  return diagnostics;
+}
+
+function resolveJointAttackTargetIdentity(action, defaultTargetId = null) {
+  const value =
+    action?.targetId ?? action?.target?.id ?? defaultTargetId ?? null;
+  return value == null ? null : String(value);
+}
+
+function jointAttackTargetsCompatible(left, right, defaultTargetId) {
+  const leftTarget = resolveJointAttackTargetIdentity(left, defaultTargetId);
+  const rightTarget = resolveJointAttackTargetIdentity(right, defaultTargetId);
+  return (
+    leftTarget == null || rightTarget == null || leftTarget === rightTarget
+  );
+}
+
+function resolveScenarioDefaultTargetIdentity(scenario) {
+  return (
+    scenario?.enemies?.[0]?.id ??
+    scenario?.enemy?.id ??
+    scenario?.target?.id ??
+    null
+  );
+}
+
+function createJointAttackTriggerUnresolvedDiagnostic({
+  actorAction,
+  kiboAction,
+  binding,
+}) {
+  const evidence = createJointAttackTriggerUnresolvedEvidence({
+    actorAction,
+    kiboAction,
+    binding,
+  });
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(
+      ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED,
+      actorAction.id,
+      kiboAction.id
+    ),
+    code: ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED,
+    ruleKey: 'joint-attack-trigger',
+    status: ACTION_RULE_STATUSES.UNRESOLVED,
+    severity: 'warning',
+    actionId: actorAction.id,
+    actionIds: [actorAction.id, kiboAction.id],
+    actionName: actorAction.name,
+    actorId: actorAction.actorId ?? null,
+    kiboId: binding?.ownerId ?? kiboAction.kiboId ?? null,
+    timeMs: Number(actorAction.startMs) || 0,
+    message:
+      '合击动作映射与同帧配对已确认，但 existPetBreakTarget 的权威生成链尚未闭合',
+    evidence,
+    source: {
+      sourceKind: 'azpr-joint-attack-trigger-contract',
+      sourceStatus: evidence.status,
+      fieldPaths: [
+        'petCsEntity.data.existPetBreakTarget',
+        'NewTable/pet.breakSkillList',
+        'controlBinding.logic.skillTag',
+      ],
+    },
+    appliedToSimulationResults: false,
+  };
 }
 
 function createJointAttackDiagnosticRecord({
@@ -390,14 +1109,10 @@ function isActorJointAttack(action) {
   );
 }
 
-function isKiboJointAttack(action) {
-  return (
-    action.type === ACTION_TYPES.KIBO_EVENT &&
-    (action.eventType === 'break' || action.actionKind === 'break')
-  );
-}
-
-function createAttackInputChainDiagnostics(actions, fps = 60) {
+function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
+  const structuralStatus = strict
+    ? ACTION_RULE_STATUSES.VIOLATED
+    : ACTION_RULE_STATUSES.UNRESOLVED;
   const diagnostics = actions
     .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
     .map(action =>
@@ -405,39 +1120,61 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
         code: ACTION_RULE_CODES.ATTACK_INPUT_LEGACY_UNRESOLVED,
         action,
         message: `${action.name} 是无法唯一拆分的旧版聚合普攻，不参与三值结算`,
+        status: ACTION_RULE_STATUSES.UNRESOLVED,
       })
     );
+  for (const action of actions) {
+    const identities = uniqueValues(
+      [
+        action.attackInputChainIdentity,
+        action.attackInput?.attackInputChainIdentity,
+        action.attackInputIntent?.chainIdentity,
+      ]
+        .filter(value => value != null && value !== '')
+        .map(String)
+    );
+    if (identities.length <= 1) continue;
+    diagnostics.push(
+      createAttackInputDiagnostic({
+        code: ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
+        action,
+        message: `${action.name} 的显式普攻链与上下文链身份冲突`,
+        extra: {
+          reason: 'attack-input-explicit-context-chain-conflict',
+          conflictingChainIdentities: identities,
+        },
+        status: structuralStatus,
+      })
+    );
+  }
   const groups = groupByKey(
     actions.filter(action => action.attackGroupId),
     action => action.attackGroupId
   );
   groups.forEach(groupActions => {
+    const byTimeline = [...groupActions].sort(compareActions);
     const bySequence = [...groupActions].sort(
       (left, right) =>
-        Number(left.attackSequenceIndex) - Number(right.attackSequenceIndex)
+        Number(left.attackSequenceIndex) - Number(right.attackSequenceIndex) ||
+        compareActions(left, right)
     );
-    const expectedTotal = Math.max(
-      ...bySequence.map(action => Number(action.attackSequenceTotal) || 0)
+    const duplicatesBySequence = groupByKey(bySequence, action =>
+      Number(action.attackSequenceIndex)
     );
-    const presentIndexes = new Set(
-      bySequence.map(action => Number(action.attackSequenceIndex))
-    );
-    const missingIndexes = Array.from(
-      { length: expectedTotal },
-      (_, index) => index + 1
-    ).filter(index => !presentIndexes.has(index));
-    if (missingIndexes.length) {
-      const action = bySequence[0];
-      diagnostics.push(
-        createAttackInputDiagnostic({
-          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
-          action,
-          groupActions: bySequence,
-          message: `普攻输入链缺少 ${missingIndexes.map(index => `A${index}`).join('、')}，其余输入段保持独立`,
-          extra: { missingSequenceIndexes: missingIndexes },
-        })
-      );
-    }
+    duplicatesBySequence.forEach(duplicates => {
+      for (const duplicate of duplicates.slice(1)) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+            action: duplicate,
+            groupActions: duplicates,
+            message: `${duplicate.name} 重复消费了同一普攻前置段`,
+            extra: { reason: 'attack-input-predecessor-already-consumed' },
+            status: structuralStatus,
+          })
+        );
+      }
+    });
     const inverted = bySequence.find(
       (action, index) =>
         index > 0 &&
@@ -450,30 +1187,174 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
           action: inverted,
           groupActions: bySequence,
           message: `普攻输入链顺序已改变，${inverted.name} 早于前一输入段`,
+          extra: { reason: 'attack-input-sequence-order-inverted' },
+          status: structuralStatus,
         })
       );
     }
-    for (const action of bySequence) {
+    for (const action of byTimeline) {
       const sequenceIndex = Number(action.attackSequenceIndex) || 0;
-      if (sequenceIndex <= 0 || sequenceIndex >= expectedTotal) continue;
-      const nextAction = bySequence.find(
-        candidate => Number(candidate.attackSequenceIndex) === sequenceIndex + 1
+      if (sequenceIndex <= 1) continue;
+      const predecessorCandidates = bySequence.filter(
+        candidate =>
+          Number(candidate.attackSequenceIndex) === sequenceIndex - 1 &&
+          (Number(candidate.startMs) < Number(action.startMs) ||
+            (Number(candidate.startMs) === Number(action.startMs) &&
+              compareActionSourceSequence(candidate, action) < 0))
       );
-      if (!nextAction) continue;
-      const linkWindow = action.attackInput?.linkWindow;
-      if (action.attackInput?.linkTimingStatus !== 'applied' || !linkWindow) {
+      const predecessor = predecessorCandidates
+        .filter(
+          candidate => Number(candidate.startMs) <= Number(action.startMs)
+        )
+        .sort((left, right) => compareActions(right, left))[0];
+      if (!predecessor) {
+        const missingSequenceIndexes = Array.from(
+          { length: sequenceIndex - 1 },
+          (_, index) => index + 1
+        ).filter(
+          index =>
+            !bySequence.some(
+              candidate => Number(candidate.attackSequenceIndex) === index
+            )
+        );
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+            action,
+            groupActions: bySequence,
+            message: `${action.name} 缺少已接受的 A${sequenceIndex - 1} 前置输入`,
+            extra: {
+              missingSequenceIndexes:
+                missingSequenceIndexes.length > 0
+                  ? missingSequenceIndexes
+                  : [sequenceIndex - 1],
+              reason: 'attack-input-predecessor-required',
+            },
+            status: structuralStatus,
+          })
+        );
+        continue;
+      }
+      if (String(predecessor.actorId ?? '') !== String(action.actorId ?? '')) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+            action,
+            groupActions: [predecessor, action],
+            message: `${action.name} 不能消费其他角色的普攻前置段`,
+            extra: { reason: 'attack-input-cross-actor-predecessor' },
+            status: structuralStatus,
+          })
+        );
+        continue;
+      }
+      if (
+        action.contextActionId != null &&
+        String(action.contextActionId) !== String(predecessor.id)
+      ) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+            action,
+            groupActions: [predecessor, action],
+            message: `${action.name} 引用的前置段不是已接受的同链上一段`,
+            extra: {
+              reason: 'attack-input-predecessor-identity-mismatch',
+              expectedContextActionId: predecessor.id,
+              actualContextActionId: action.contextActionId,
+            },
+            status: structuralStatus,
+          })
+        );
+        continue;
+      }
+      const predecessorChainIdentity =
+        predecessor.attackInputChainIdentity ??
+        predecessor.attackInput?.attackInputChainIdentity ??
+        null;
+      const actionChainIdentity =
+        action.attackInputChainIdentity ??
+        action.attackInput?.attackInputChainIdentity ??
+        null;
+      if (
+        predecessorChainIdentity != null &&
+        actionChainIdentity != null &&
+        String(predecessorChainIdentity) !== String(actionChainIdentity)
+      ) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+            action,
+            groupActions: [predecessor, action],
+            message: `${action.name} 与前置段不属于同一来源化普攻链`,
+            extra: { reason: 'attack-input-cross-chain-predecessor' },
+            status: structuralStatus,
+          })
+        );
+        continue;
+      }
+      const predecessorIndex = actions.indexOf(predecessor);
+      const actionIndex = actions.indexOf(action);
+      let continuityBridge = null;
+      const interruption = actions
+        .slice(predecessorIndex + 1, actionIndex)
+        .find(candidate => {
+          if (candidate.type === ACTION_TYPES.SWITCH) return true;
+          if (
+            String(candidate.actorId ?? '') !== String(action.actorId ?? '') ||
+            String(candidate.attackGroupId ?? '') ===
+              String(action.attackGroupId ?? '')
+          ) {
+            return false;
+          }
+          const bridge = resolveVerifiedAttackChainContinuityBridge({
+            predecessor,
+            intermediary: candidate,
+            successor: action,
+          });
+          if (bridge && continuityBridge == null) {
+            continuityBridge = { ...bridge, action: candidate };
+            return false;
+          }
+          return true;
+        });
+      if (interruption) {
+        diagnostics.push(
+          createAttackInputDiagnostic({
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_ORDER_INVALID,
+            action,
+            groupActions: [predecessor, action],
+            message: `${action.name} 的普攻前置段已被 ${interruption.name ?? interruption.id} 中断`,
+            extra: {
+              reason: 'attack-input-chain-interrupted',
+              blockingActionId: interruption.id,
+            },
+            status: structuralStatus,
+          })
+        );
+        continue;
+      }
+      const linkSourceAction = continuityBridge?.action ?? predecessor;
+      const linkWindow =
+        continuityBridge?.rule?.inputWindow ??
+        predecessor.attackInput?.linkWindow;
+      const linkTimingApplied =
+        continuityBridge != null ||
+        predecessor.attackInput?.linkTimingStatus === 'applied';
+      if (!linkTimingApplied || !linkWindow) {
         diagnostics.push(
           createAttackInputDiagnostic({
             code: ACTION_RULE_CODES.ATTACK_INPUT_LINK_TIMING_UNRESOLVED,
             action,
-            groupActions: [action, nextAction],
-            message: `${action.name} 到 ${nextAction.name} 的真实输入窗口尚未确认，当前自由排布不会被自动修正`,
+            groupActions: [predecessor, linkSourceAction, action],
+            message: `${linkSourceAction.name} 到 ${action.name} 的真实输入窗口尚未确认`,
+            status: ACTION_RULE_STATUSES.UNRESOLVED,
           })
         );
         continue;
       }
       const relativeStartFrame = msToFrame(
-        Number(nextAction.startMs) - Number(action.startMs),
+        Number(action.startMs) - Number(linkSourceAction.startMs),
         fps
       );
       if (isFrameWithinVerifiedInputWindow(relativeStartFrame, linkWindow)) {
@@ -489,24 +1370,101 @@ function createAttackInputChainDiagnostics(actions, fps = 60) {
           code: tooEarly
             ? ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_EARLY
             : ACTION_RULE_CODES.ATTACK_INPUT_LINK_TOO_LATE,
-          action: nextAction,
-          groupActions: [action, nextAction],
+          action,
+          groupActions: [predecessor, linkSourceAction, action],
           message: tooEarly
-            ? `${nextAction.name} 比 ${action.name} 的最早输入窗口提前 ${linkWindow.startFrame - relativeStartFrame}F`
-            : `${nextAction.name} 已超过 ${action.name} 的输入窗口 ${relativeStartFrame - latestStartFrame}F`,
+            ? `${action.name} 比 ${linkSourceAction.name} 的最早输入窗口提前 ${linkWindow.startFrame - relativeStartFrame}F`
+            : `${action.name} 已超过 ${linkSourceAction.name} 的输入窗口 ${relativeStartFrame - latestStartFrame}F`,
           extra: {
             relativeStartFrame,
             suggestedStartMs:
-              Number(action.startMs) +
+              Number(linkSourceAction.startMs) +
               ((tooEarly ? linkWindow.startFrame : latestStartFrame) * 1000) /
                 (Number(fps) || 60),
             editFieldKey: 'startMs',
+            ...(continuityBridge
+              ? {
+                  continuityRuleIdentity: continuityBridge.rule.ruleIdentity,
+                  continuitySourceIdentity:
+                    continuityBridge.rule.sourceIdentity,
+                }
+              : {}),
           },
+          status: structuralStatus,
         })
       );
     }
   });
   return diagnostics;
+}
+
+function resolveVerifiedAttackChainContinuityBridge({
+  predecessor,
+  intermediary,
+  successor,
+}) {
+  const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const chainIdentity =
+    predecessor?.attackInputChainIdentity ??
+    predecessor?.attackInput?.attackInputChainIdentity ??
+    null;
+  const successorChainIdentity =
+    successor?.attackInputChainIdentity ??
+    successor?.attackInput?.attackInputChainIdentity ??
+    null;
+  const predecessorSequence = Number(predecessor?.attackSequenceIndex) || 0;
+  const successorSequence = Number(successor?.attackSequenceIndex) || 0;
+  if (
+    !chainIdentity ||
+    (successorChainIdentity != null &&
+      String(successorChainIdentity) !== String(chainIdentity)) ||
+    successorSequence !== predecessorSequence + 1
+  ) {
+    return null;
+  }
+  const chain = (
+    mechanicsPackage?.actionVariantGraph?.attackInputChains ?? []
+  ).find(
+    candidate =>
+      candidate.applied === true &&
+      String(candidate.chainIdentity) === String(chainIdentity)
+  );
+  const mapping = getVerifiedCombatActionMapping(intermediary);
+  if (!chain || !mapping || Number(mapping.ownerId) !== Number(chain.ownerId)) {
+    return null;
+  }
+  const rule = (chain.continuityRules ?? []).find(
+    candidate =>
+      candidate.applied === true &&
+      Number(candidate.intermediaryControlSkillId) ===
+        Number(mapping.controlSkillId) &&
+      Number(candidate.intermediarySubSkillIndex) ===
+        Number(mapping.selectedSubSkillIndex) &&
+      candidate.resumePolicy === 'next-segment' &&
+      candidate.inputCommand === 'normal-attack' &&
+      Number.isInteger(Number(candidate.inputWindow?.startFrame)) &&
+      Number.isInteger(Number(candidate.inputWindow?.endFrame)) &&
+      Number(candidate.inputWindow.endFrame) >
+        Number(candidate.inputWindow.startFrame) &&
+      typeof candidate.sourceIdentity === 'string' &&
+      candidate.sourceIdentity.length > 0
+  );
+  return rule
+    ? {
+        rule,
+        mappingIdentity: mapping.identity ?? null,
+        runtimeConditionRequired: true,
+      }
+    : null;
+}
+
+function isFormalActionLegalityScenario(scenario) {
+  return (
+    scenario?.formalActionLegality === true ||
+    scenario?.optimizationQualification?.mode === 'formal' ||
+    scenario?.combatScenario?.objectiveContract?.classification === 'primary' ||
+    scenario?.objectiveContract?.classification === 'primary'
+  );
 }
 
 function createAttackInputDiagnostic({
@@ -515,14 +1473,15 @@ function createAttackInputDiagnostic({
   groupActions = [action],
   message,
   extra = {},
+  status = ACTION_RULE_STATUSES.VIOLATED,
 }) {
   return {
     schemaVersion: 1,
     id: createDiagnosticId(code, action.id, action.attackGroupId),
     code,
     ruleKey: 'normal-attack-input-chain',
-    status: ACTION_RULE_STATUSES.UNRESOLVED,
-    severity: 'warning',
+    status,
+    severity: status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
     actionId: action.id,
     actionIds: groupActions.map(item => item.id),
     actionName: action.name,
@@ -541,9 +1500,65 @@ function createAttackInputDiagnostic({
         'action.attackInputLegacyStatus',
       ],
     },
-    appliedToSimulationResults: false,
+    appliedToSimulationResults: status === ACTION_RULE_STATUSES.VIOLATED,
     ...extra,
   };
+}
+
+function createBlockedAttackInputPredecessorDiagnostics(
+  actions,
+  existingDiagnostics
+) {
+  const blockedActionIds = new Set(
+    existingDiagnostics
+      .filter(item => item.status === ACTION_RULE_STATUSES.VIOLATED)
+      .map(item => String(item.actionId))
+  );
+  const diagnostics = [];
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const action of actions) {
+      const sequenceIndex = Number(action.attackSequenceIndex) || 0;
+      if (
+        sequenceIndex <= 1 ||
+        action.attackGroupId == null ||
+        blockedActionIds.has(String(action.id))
+      ) {
+        continue;
+      }
+      const predecessor = [...actions]
+        .filter(
+          candidate =>
+            String(candidate.attackGroupId ?? '') ===
+              String(action.attackGroupId) &&
+            String(candidate.actorId ?? '') === String(action.actorId ?? '') &&
+            Number(candidate.attackSequenceIndex) === sequenceIndex - 1 &&
+            Number(candidate.startMs) <= Number(action.startMs)
+        )
+        .sort((left, right) => compareActions(right, left))[0];
+      if (!predecessor || !blockedActionIds.has(String(predecessor.id))) {
+        continue;
+      }
+      diagnostics.push(
+        createAttackInputDiagnostic({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+          action,
+          groupActions: [predecessor, action],
+          message: `${action.name} 的前置段 ${predecessor.name} 未被接受，后续输入不执行`,
+          extra: {
+            reason: 'attack-input-predecessor-not-accepted',
+            blockingActionId: predecessor.id,
+            missingSequenceIndexes: [sequenceIndex - 1],
+          },
+          status: ACTION_RULE_STATUSES.VIOLATED,
+        })
+      );
+      blockedActionIds.add(String(action.id));
+      changed = true;
+    }
+  }
+  return diagnostics;
 }
 
 function createActionReadinessTimeline({
@@ -716,6 +1731,186 @@ function createLaneOverlapDiagnostics(actions) {
     }
   });
   return diagnostics;
+}
+
+function createSwitchOccupancyDiagnostics(actions, fps = 60, strict = false) {
+  const status = strict
+    ? ACTION_RULE_STATUSES.VIOLATED
+    : ACTION_RULE_STATUSES.UNRESOLVED;
+  const actorActions = (actions ?? []).filter(isBlockingActorAction);
+  const diagnostics = [];
+  const acceptedSwitchByFrame = new Map();
+  for (const switchAction of (actions ?? [])
+    .filter(action => action.type === ACTION_TYPES.SWITCH)
+    .sort(compareActions)) {
+    const frame = msToFrame(switchAction.startMs, Number(fps) || 60);
+    if (acceptedSwitchByFrame.has(frame)) continue;
+    acceptedSwitchByFrame.set(frame, switchAction);
+    const switchStartMs = Math.max(0, Number(switchAction.startMs) || 0);
+    const blocking = actorActions
+      .filter(action => {
+        if (
+          String(action.actorId ?? '') !== String(switchAction.actorId ?? '')
+        ) {
+          return false;
+        }
+        const range = createActionRange(action);
+        const actionPrecedesSwitch =
+          range.startMs < switchStartMs ||
+          (range.startMs === switchStartMs &&
+            compareActionSourceSequence(action, switchAction) < 0);
+        const tailPolicy = action.switchExitTailPolicy;
+        const verifiedTailContinuation =
+          isVerifiedSwitchExitTailPolicy(tailPolicy) &&
+          tailPolicy.evidenceClosed === true &&
+          String(tailPolicy.switchActionId ?? '') ===
+            String(switchAction.id ?? '');
+        return (
+          actionPrecedesSwitch &&
+          switchStartMs < range.endMs - ACTION_BOUNDARY_EPSILON_MS &&
+          !verifiedTailContinuation
+        );
+      })
+      .sort((left, right) => compareActions(right, left))[0];
+    if (!blocking) continue;
+    const blockingRange = createActionRange(blocking);
+    diagnostics.push({
+      schemaVersion: 1,
+      id: createDiagnosticId(
+        ACTION_RULE_CODES.SWITCH_OCCUPANCY_UNRESOLVED,
+        switchAction.id,
+        blocking.id
+      ),
+      code: ACTION_RULE_CODES.SWITCH_OCCUPANCY_UNRESOLVED,
+      ruleKey: 'actor-switch-cancel-window',
+      status,
+      severity: status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
+      actionId: switchAction.id,
+      actionIds: [blocking.id, switchAction.id],
+      actorId: switchAction.actorId ?? null,
+      blockingActionId: blocking.id,
+      timeMs: switchStartMs,
+      range: {
+        startMs: blockingRange.startMs,
+        endMs: blockingRange.endMs,
+      },
+      suggestedStartMs: blockingRange.endMs,
+      editFieldKey: 'startMs',
+      reason: 'verified-switch-cancel-window-missing',
+      message: `${switchAction.name ?? switchAction.id} 位于 ${blocking.name ?? blocking.id} 的占用区间内，但没有已验证的切人取消窗口`,
+      source: {
+        sourceKind: 'azpr-action-effective-timeline',
+        sourceStatus: 'switch-cancel-window-evidence-open',
+        fieldPaths: [
+          'action.startMs',
+          'action.durationMs',
+          'action.actionScheduling.cancelWindows',
+        ],
+      },
+      appliedToSimulationResults: status === ACTION_RULE_STATUSES.VIOLATED,
+    });
+  }
+  return diagnostics;
+}
+
+function createSwitchExitTailDiagnostics(actions, scenario) {
+  return (actions ?? []).flatMap(action => {
+    const policy = action?.switchExitTailPolicy;
+    if (policy == null) return [];
+    const valid = isVerifiedSwitchExitTailPolicy(policy);
+    if (valid && policy.evidenceClosed === true) return [];
+    const code = valid
+      ? policy.rejectionCode ||
+        ACTION_RULE_CODES.SWITCH_EXIT_TAIL_POLICY_INVALID
+      : ACTION_RULE_CODES.SWITCH_EXIT_TAIL_POLICY_INVALID;
+    const status =
+      valid && !isFormalActionLegalityScenario(scenario)
+        ? ACTION_RULE_STATUSES.UNRESOLVED
+        : ACTION_RULE_STATUSES.VIOLATED;
+    return [
+      {
+        schemaVersion: 1,
+        id: createDiagnosticId(code, action.id, policy.switchActionId),
+        code,
+        ruleKey: 'verified-switch-exit-tail-materialization',
+        status,
+        severity:
+          status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
+        actionId: action.id,
+        actionIds: uniqueValues([action.id, policy.switchActionId]),
+        actorId: action.actorId ?? null,
+        timeMs: Number(action.startMs) || 0,
+        switchActionId: policy.switchActionId ?? null,
+        switchBoundaryFrame: policy.switchBoundaryFrame ?? null,
+        reason: valid
+          ? policy.status
+          : 'compiler-switch-exit-tail-policy-invalid',
+        sourceIdentity: policy.policyHash ?? null,
+        sourceSequencePath: action.sourceSequencePath ?? null,
+        message: `${action.name ?? action.id} 在切换边界后的未物化 owner-bound 尾包缺少可验证继续结算来源，动作不执行`,
+        source: {
+          sourceKind: 'azpr-client-static-switch-exit-tail-v1',
+          sourceStatus: 'switch-exit-tail-fail-closed',
+          fieldPaths: [
+            'action.switchExitTailPolicy',
+            'action.sourceSequencePath',
+          ],
+        },
+        appliedToSimulationResults: status === ACTION_RULE_STATUSES.VIOLATED,
+      },
+    ];
+  });
+}
+
+function createKiboAutoCastTriggerDiagnostics(scenario) {
+  const registry = scenario?.kiboAutoCastDerivationRegistry;
+  if (!isAuthoritativeKiboAutoCastDerivationRegistry(registry)) return [];
+  const formal = isFormalActionLegalityScenario(scenario);
+  const fps = Number(scenario?.time?.fps) || 60;
+  return (registry.triggerExclusions ?? []).map((exclusion, index) => {
+    const status = formal
+      ? ACTION_RULE_STATUSES.VIOLATED
+      : ACTION_RULE_STATUSES.UNRESOLVED;
+    const startFrame = Number(exclusion.controlledIntervalStartFrame);
+    return {
+      schemaVersion: 1,
+      id: createDiagnosticId(
+        ACTION_RULE_CODES.KIBO_AUTO_CAST_TRIGGER_UNRESOLVED,
+        exclusion.ownerActorId,
+        exclusion.kiboId,
+        exclusion.publicActionId,
+        exclusion.controlledIntervalIdentity,
+        index
+      ),
+      code: ACTION_RULE_CODES.KIBO_AUTO_CAST_TRIGGER_UNRESOLVED,
+      ruleKey: 'verified-kibo-autonomous-trigger',
+      status,
+      severity: status === ACTION_RULE_STATUSES.VIOLATED ? 'error' : 'warning',
+      actionId: null,
+      actionIds: [],
+      actorId: exclusion.ownerActorId ?? null,
+      timeMs:
+        Number.isInteger(startFrame) && startFrame >= 0
+          ? (startFrame * 1000) / fps
+          : 0,
+      reason: 'autonomous-trigger-evidence-open',
+      sourceIdentity: registry.registryHash ?? null,
+      message: `Kibo ${exclusion.kiboId} action ${exclusion.publicActionId} trigger ${exclusion.triggerTag} is unresolved and was not scheduled`,
+      kiboId: exclusion.kiboId ?? null,
+      publicActionId: exclusion.publicActionId ?? null,
+      actionKind: exclusion.actionKind ?? null,
+      triggerTag: exclusion.triggerTag ?? null,
+      controlledIntervalIdentity: exclusion.controlledIntervalIdentity ?? null,
+      source: {
+        sourceKind: 'azpr-controlled-kibo-auto-cast-scheduler',
+        sourceStatus: 'autonomous-trigger-fail-closed',
+        fieldPaths: [
+          'scenario.kiboAutoCastDerivationRegistry.triggerExclusions',
+        ],
+      },
+      appliedToSimulationResults: formal,
+    };
+  });
 }
 
 function createSwitchFrameConflictDiagnostics(actions, fps = 60) {
@@ -1246,7 +2441,10 @@ function applyCooldownReductionTransaction({
     });
   }
   const targetCharge = state.charges
-    .filter(charge => charge.readyAtMs > transaction.timeMs)
+    .filter(
+      charge =>
+        charge.readyAtMs > transaction.timeMs + ACTION_BOUNDARY_EPSILON_MS
+    )
     .sort(compareCooldownCharges)[0];
   if (!targetCharge) {
     return {
@@ -1317,7 +2515,9 @@ function hasActiveCooldownAtTime(state, timeMs) {
     ? state.currentChargeCount < state.chargeMaxCount &&
         state.sharedTimerRunning &&
         state.coolTimeMs > 0
-    : state.charges.some(charge => charge.readyAtMs > timeMs);
+    : state.charges.some(
+        charge => charge.readyAtMs > timeMs + ACTION_BOUNDARY_EPSILON_MS
+      );
 }
 
 function applySharedChargeCooldownReduction({
@@ -1750,7 +2950,9 @@ function consumeSkillCooldownAvailability({
   }
 
   const consumedCharge = state.charges
-    .filter(charge => charge.readyAtMs <= action.startMs)
+    .filter(
+      charge => charge.readyAtMs <= action.startMs + ACTION_BOUNDARY_EPSILON_MS
+    )
     .sort((left, right) => left.chargeIndex - right.chargeIndex)[0];
   const readyAtMs = action.startMs + cooldown.cooldownMs;
   const windowId = `${action.id}|cooldown-charge|${consumedCharge.chargeIndex}`;
@@ -1895,7 +3097,7 @@ function getBlockingCooldownState(state, timeMs) {
   }
   return (
     state.charges
-      .filter(charge => charge.readyAtMs > timeMs)
+      .filter(charge => charge.readyAtMs > timeMs + ACTION_BOUNDARY_EPSILON_MS)
       .sort(compareCooldownCharges)[0] ?? null
   );
 }
@@ -1965,14 +3167,16 @@ function createCooldownRuntimeOwnerIdentity({ action, ownerKind, ownerId }) {
 }
 
 function countAvailableCharges(charges, timeMs) {
-  return charges.filter(charge => charge.readyAtMs <= timeMs).length;
+  return charges.filter(
+    charge => charge.readyAtMs <= timeMs + ACTION_BOUNDARY_EPSILON_MS
+  ).length;
 }
 
 function getNextReadyAtMs(charges, timeMs) {
   return (
     charges
       .map(charge => charge.readyAtMs)
-      .filter(readyAtMs => readyAtMs > timeMs)
+      .filter(readyAtMs => readyAtMs > timeMs + ACTION_BOUNDARY_EPSILON_MS)
       .sort((left, right) => left - right)[0] ?? null
   );
 }

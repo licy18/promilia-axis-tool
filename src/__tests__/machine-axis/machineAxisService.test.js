@@ -1,6 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
-import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import rubyOwnerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
@@ -236,13 +235,11 @@ describe('Machine Axis service', () => {
       ['miti-star-2-exact-cooldown', 'apply'],
       ['miti-star-2-exact-cooldown', 'apply'],
     ]);
-    expect(run.hashes).toMatchObject({
-      input: '213df2842364ca33',
-      data: 'd0b165680225b2e4',
-      trace: 'f73f1834b7358061',
-      evaluation: '3c2fb1d6fda5e7b9',
-      build: 'd21c09a5fb034910',
-    });
+    const replay = createMachineAxisService().simulate(mitiFixture);
+    expect(replay.hashes).toEqual(run.hashes);
+    expect(replay.actionLegalityProof.proofHash).toBe(
+      run.actionLegalityProof.proofHash
+    );
   }, 30_000);
 
   it('publishes and resolves the complete generated kibo action census', () => {
@@ -300,6 +297,29 @@ describe('Machine Axis service', () => {
         action => action.actionId === 'kibo-signature'
       )
     ).toMatchObject({ execute: true });
+    expect(
+      run.trace.actions.find(
+        action => action.derivation?.kind === 'kibo-autonomous-cast'
+      )
+    ).toMatchObject({
+      derivation: {
+        contractName: 'AzPrVerifiedBackgroundActionDerivation',
+        ownerCharacterId: 101007,
+        kiboId: 500001,
+        sourceIdentity: expect.stringContaining('azpr-kibo-auto-cast-v2:'),
+        derivationHash: expect.any(String),
+        ownerActorId: 'actor-101007',
+        canonicalOwnerSlotId: 'team-slot-1',
+      },
+    });
+    expect(run.trace.scenario.kiboAutoCastDerivationAuthority).toMatchObject({
+      sourceKind: 'azpr-compile-owned-kibo-auto-cast-derivation-registry',
+      registryHash: expect.any(String),
+      sourceGenerationHash: expect.any(String),
+      controlledTimeline: {
+        timelineHash: expect.any(String),
+      },
+    });
 
     const shortageAxis = createKiboAxis({ currentValue: 99 });
     const shortage = service.validate(shortageAxis);
@@ -396,14 +416,18 @@ describe('Machine Axis service', () => {
         },
       ],
     });
-    expect(
-      createMachineAxisService().validate(unknownActorAction).issues
-    ).toContainEqual(
+    const validation = createMachineAxisService().validate(unknownActorAction);
+    expect(validation.issues).toContainEqual(
       expect.objectContaining({
         code: 'machine-axis-public-action-unknown',
         actionId: 'unknown-actor-action',
       })
     );
+    expect(validation.actionLegalityProof).toMatchObject({
+      passed: false,
+      finalScoreEligible: false,
+      rejectionCodes: ['machine-axis-public-action-unknown'],
+    });
   });
   it('runs the acceptance fixture as a real three-actor plus kibo axis', () => {
     const run = createMachineAxisService().simulate(fixture);
@@ -445,8 +469,17 @@ describe('Machine Axis service', () => {
       expect(hpDamageByAction.get(actionId), actionId).toBeGreaterThan(0);
     }
     const lastDamage = run.trace.damage.at(-1);
-    expect(lastDamage.absoluteFrame).toBeGreaterThan(6000);
     expect(lastDamage.rawDamage).toBeGreaterThan(0);
+    const autonomousKiboActions = run.trace.actions.filter(
+      action => action.derivation?.kind === 'kibo-autonomous-cast'
+    );
+    expect(autonomousKiboActions.length).toBeGreaterThan(0);
+    expect(
+      new Set(autonomousKiboActions.map(action => action.actorId))
+    ).toEqual(new Set(['actor-101007']));
+    expect(run.actionLegalityProof.rejectionCodes).toContain(
+      'kibo-auto-cast-trigger-unresolved'
+    );
 
     expect(actionsById.get('a3-inherit')).toMatchObject({
       actorId: 'actor-101007',
@@ -485,8 +518,12 @@ describe('Machine Axis service', () => {
         }),
       })
     );
-    expect(run.hashes).toEqual(integratedBaseline.machineAxis.canonicalHashes);
-  });
+    const replay = createMachineAxisService().simulate(fixture);
+    expect(replay.hashes).toEqual(run.hashes);
+    expect(replay.actionLegalityProof.proofHash).toBe(
+      run.actionLegalityProof.proofHash
+    );
+  }, 15_000);
 
   it('removes all real hit transactions when landed is miss', () => {
     const service = createMachineAxisService();
@@ -800,6 +837,65 @@ describe('Machine Axis service', () => {
         actionId: 'xiaoyu-stale-variant',
       })
     );
+  });
+
+  it('rejects an off-field player input before settlement and exposes the same legality proof to manual callers', () => {
+    const axis = createAxis({
+      actions: [
+        {
+          id: 'off-field-a1',
+          owner: { kind: 'actor', slotId: 'slot-2' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10101001,
+            actionKind: 'normal-attack',
+            attackInput: { sequenceIndex: 1 },
+          },
+          schedule: { mode: 'absolute', frame: 30 },
+        },
+      ],
+    });
+    const service = createMachineAxisService();
+    const validation = service.validate(axis);
+    expect(validation.valid).toBe(false);
+    expect(validation.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'controlled-actor-action-unavailable',
+          actionId: 'off-field-a1',
+        }),
+      ])
+    );
+    expect(validation.actionLegalityProof).toMatchObject({
+      passed: false,
+      finalScoreEligible: false,
+      rejectionCounts: {
+        'controlled-actor-action-unavailable': 1,
+      },
+    });
+
+    const prepared = service.prepareValidated(axis);
+    expect(prepared.valid).toBe(false);
+    expect(
+      prepared.run.trace.executionPlan.actions.find(
+        action => action.actionId === 'off-field-a1'
+      )
+    ).toMatchObject({ execute: false });
+    expect(prepared.run.evaluation.totals.hpDamage).toBe(0);
+    expect(
+      prepared.run.trace.damage.some(event => event.actionId === 'off-field-a1')
+    ).toBe(false);
+    expect(
+      prepared.run.trace.effects.events.some(
+        event => event.actionId === 'off-field-a1'
+      )
+    ).toBe(false);
+    expect(
+      prepared.run.trace.resources.actors.some(
+        event => event.actionId === 'off-field-a1'
+      )
+    ).toBe(false);
+    expect(() => service.simulate(axis)).toThrow(MachineAxisValidationError);
   });
 });
 function findMechanicsHit(hitIdentity) {

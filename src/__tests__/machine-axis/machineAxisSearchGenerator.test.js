@@ -82,6 +82,62 @@ describe('Machine Axis search generator', () => {
     );
   });
 
+  it('exposes only a legal opener and then the exact sourced successor with one stable group', () => {
+    const axis = cloneFixture();
+    axis.actions = [];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-101010',
+      characterId: 101010,
+    };
+    const initial = generator.generateNextActions({
+      axis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+      options: {
+        activeActorId: 'actor-101010',
+        includeKibo: false,
+        includeSwitch: false,
+      },
+    });
+    const normalOpeners = initial.filter(
+      candidate => candidate.action.intent.actionKind === 'normal-attack'
+    );
+    expect(normalOpeners.length).toBeGreaterThan(0);
+    expect(
+      normalOpeners.every(
+        candidate => candidate.action.intent.attackInput.sequenceIndex === 1
+      )
+    ).toBe(true);
+
+    const opener = normalOpeners[0];
+    const withOpener = {
+      ...axis,
+      actions: [opener.action],
+    };
+    expect(service.validate(withOpener).issues).toEqual([]);
+    const run = service.simulate(withOpener);
+    const next = generator.generateNextActions({
+      axis: withOpener,
+      run,
+      nextStartFrameByActor: deriveNextStartFrameByActor(run),
+      options: {
+        activeActorId: 'actor-101010',
+        includeKibo: false,
+        includeSwitch: false,
+      },
+    });
+    const successors = next.filter(
+      candidate => candidate.action.intent.actionKind === 'normal-attack'
+    );
+    expect(successors).toHaveLength(1);
+    expect(successors[0].action.intent.attackInput).toMatchObject({
+      sequenceIndex: 2,
+      groupId: opener.action.intent.attackInput.groupId,
+      contextActionId: opener.action.id,
+    });
+    expect(successors[0].startFrame).toBeGreaterThan(opener.startFrame);
+  }, 30_000);
+
   it('allocates action identities after the existing axis instead of resetting each generation', () => {
     const axis = cloneFixture();
     axis.actions = [
@@ -113,6 +169,119 @@ describe('Machine Axis search generator', () => {
     expect(nextCandidates.map(candidate => candidate.action.id)).not.toContain(
       selectedAlternative.id
     );
+  });
+
+  it('excludes both joint-attack halves from the formal surface with a stable rejection', () => {
+    const axis = cloneFixture();
+    axis.actions = [];
+    const rejections = [];
+    const candidates = generator.generateNextActions({
+      axis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+      options: {
+        activeActorId: 'actor-101010',
+        includeSwitch: false,
+        requireFormalLegality: true,
+        onFormalRejection: issue => rejections.push(issue),
+      },
+    });
+    expect(
+      candidates.some(
+        candidate => candidate.action.intent.actionKind === 'star-combo'
+      )
+    ).toBe(false);
+    expect(
+      candidates.some(
+        candidate =>
+          candidate.ownerKind === 'kibo' &&
+          candidate.action.intent.publicActionId === 50000112
+      )
+    ).toBe(false);
+    expect(rejections).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'joint-attack-trigger-unresolved' }),
+      ])
+    );
+  });
+
+  it('resets to a legal opener after an ordinary intervening skill', () => {
+    const axis = cloneFixture();
+    axis.actions = [];
+    const run = {
+      trace: {
+        actions: [
+          {
+            id: 'chain-a1',
+            type: 'skill',
+            actorId: 'actor-101010',
+            actionKind: 'normal-attack',
+            skillId: 10101001,
+            startMs: 0,
+          },
+          {
+            id: 'chain-interruption',
+            type: 'skill',
+            actorId: 'actor-101010',
+            actionKind: 'star-skill',
+            startMs: (5 * 1000) / 60,
+          },
+        ],
+        executionPlan: {
+          actions: [
+            {
+              actionId: 'chain-a1',
+              execute: true,
+              sourceSequenceIndex: 0,
+              startMs: 0,
+            },
+            {
+              actionId: 'chain-interruption',
+              execute: true,
+              sourceSequenceIndex: 1,
+              startMs: (5 * 1000) / 60,
+            },
+          ],
+        },
+        variants: {
+          selections: [
+            {
+              actionId: 'chain-a1',
+              attackGroupId: 'chain-group',
+              attackSequenceIndex: 1,
+              attackSequenceTotal: 5,
+              attackInputChainIdentity: 'chain:10101001',
+              attackInputLinkTimingStatus: 'applied',
+              attackInputLinkWindow: {
+                startFrame: 1,
+                endFrame: 20,
+                sourceIdentity: 'client-input-window:a1-a2',
+              },
+            },
+          ],
+        },
+      },
+    };
+    const candidates = generator.generateNextActions({
+      axis,
+      run,
+      nextStartFrameByActor: { 'actor-101010': 10 },
+      options: {
+        activeActorId: 'actor-101010',
+        includeKibo: false,
+        includeSwitch: false,
+        requireFormalLegality: true,
+      },
+    });
+    const normalCandidates = candidates.filter(
+      candidate => candidate.action.intent.actionKind === 'normal-attack'
+    );
+    expect(normalCandidates.length).toBeGreaterThan(0);
+    expect(
+      normalCandidates.every(
+        candidate => candidate.action.intent.attackInput.sequenceIndex === 1
+      )
+    ).toBe(true);
   });
 
   it('schedules candidates at the per-actor next available frame', () => {

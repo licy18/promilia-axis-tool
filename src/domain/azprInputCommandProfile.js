@@ -1,3 +1,5 @@
+import { isVerifiedKiboJointAttack } from './verifiedJointAttackContract';
+
 export const AZPR_INPUT_COMMAND_PROFILE_SCHEMA_VERSION = 1;
 export const AZPR_PC_DEFAULT_INPUT_PROFILE_ID =
   'azpr-pc-default-input-profile-2026-07-20';
@@ -112,9 +114,7 @@ export function resolveAzPrActionInputBinding(
     Number.isInteger(Number(action.skillId)) &&
     Number(action.skillId) > 0
   ) {
-    const actionKind =
-      action.eventType ?? action.actionKind ?? actionMapping?.actionKind;
-    if (actionKind === 'break') {
+    if (isVerifiedKiboJointAttack(action, actionMapping)) {
       return AZPR_PC_DEFAULT_INPUT_PROFILE.commands['star-combo'];
     }
     if (Number(actionMapping?.controlLogic?.spCost) > 0) {

@@ -68,9 +68,7 @@ export function settleVerifiedEnemyDamagePacket({
   sourceActorId,
   sourceBindingIdentity,
 }) {
-  const settlementOrder = [
-    VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[0],
-  ];
+  const settlementOrder = [VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER[0]];
   const toughnessBefore = enemy.toughness;
   if (!toughnessDisabled) {
     enemy.toughness = roundValue(enemy.toughness - toughnessDamage);
@@ -3091,12 +3089,11 @@ function resolveDirectHealFormula({ descriptor, state }) {
       sourceMaximumHp: Number.isFinite(sourceMaximumHp)
         ? roundValue(sourceMaximumHp)
         : null,
-      maximumHpSubject:
-        usesSourceMaximumHpRatioFormula
-          ? 'source-actor'
-          : usesTargetMaximumHpRatioFormula
-            ? 'target-actor'
-            : null,
+      maximumHpSubject: usesSourceMaximumHpRatioFormula
+        ? 'source-actor'
+        : usesTargetMaximumHpRatioFormula
+          ? 'target-actor'
+          : null,
       baseExpression: formulaContract?.baseExpression ?? null,
       baseRequestedChange: roundValue(baseRequestedChange),
       sourceShootHealUpRaw: roundValue(sourceShootHealUpRaw),
@@ -6208,6 +6205,13 @@ function createResourceExecutionBlock({
   requiredValue = null,
 }) {
   const resolution = descriptor.resolution;
+  const ownerKind = resolution.actionBinding.ownerKind;
+  const ownerId =
+    resolution.actionBinding.ownerId ??
+    (ownerKind === 'kibo'
+      ? (resourceState?.kiboId ?? descriptor.action.kiboId ?? null)
+      : (descriptor.action.actor?.characterId ?? null));
+  const resourceKind = ownerKind === 'kibo' ? 'kibo-energy' : 'actor-sp';
   return {
     schemaVersion: 1,
     sourceKind: 'azpr-verified-resource-execution-block',
@@ -6221,7 +6225,11 @@ function createResourceExecutionBlock({
     sourceSequenceSource:
       descriptor.action.sourceSequenceSource ?? 'scenario-action-array-order',
     actorId: descriptor.action.actorId ?? null,
-    ownerKind: resolution.actionBinding.ownerKind,
+    runtimeOwnerIdentity: descriptor.action.actorId ?? null,
+    ownerKind,
+    ownerId,
+    resourceKind,
+    resourceIdentity: `${ownerKind}:${ownerId ?? 'unknown'}:sp`,
     slotId: resourceState?.slotId ?? null,
     kiboId: resourceState?.kiboId ?? null,
     timeMs: roundValue(descriptor.timeMs),

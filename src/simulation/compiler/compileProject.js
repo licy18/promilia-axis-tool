@@ -18,6 +18,12 @@ import {
 } from '../mechanics/threeValueMechanicsProfileCatalog';
 import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
 import { resolveEnemyLevelStats } from '../mechanics/enemyLevelStats';
+import { materializeVerifiedKiboAutoCastDerivationRegistry } from '../../domain/verifiedBackgroundActionDerivation';
+import {
+  createCompiledProjectKiboAutoCastGeneration,
+  isAuthoritativeKiboAutoCastGeneration,
+} from '../../machine-axis/kiboAutoCastScheduler';
+import { attachVerifiedSwitchExitTailPolicies } from '../generation/verifiedSwitchExitTailPolicy';
 
 export class CompileProjectError extends Error {
   constructor(issues) {
@@ -39,6 +45,10 @@ export function compileProject(
   const validation = validateProject(project, gameData);
   if (!validation.valid) {
     throw new CompileProjectError(validation.errors);
+  }
+  const rawDerivedActionIssues = createRawDerivedActionIssues(project.actions);
+  if (rawDerivedActionIssues.length > 0) {
+    throw new CompileProjectError(rawDerivedActionIssues);
   }
 
   const charactersById = indexById(gameData.characters);
@@ -168,7 +178,7 @@ export function compileProject(
   );
 
   const team = compileTeam(project.team, actorsById);
-  const baseActions = sortActionsByStartAndSourceSequence(
+  const compiledBaseActions = sortActionsByStartAndSourceSequence(
     project.actions.map(action =>
       compileAction(
         action,
@@ -179,6 +189,48 @@ export function compileProject(
       )
     )
   );
+  const kiboAutoCastPlan = createCompiledProjectKiboAutoCastGeneration({
+    actions: compiledBaseActions,
+    actors,
+    team,
+    initialRuntimeState: project.initialRuntimeState,
+    time: project.time,
+  });
+  const compiledKiboAutoCastActions = kiboAutoCastPlan.projectActions.map(
+    action => compileAction(action, actorsById, enemy, skillsById)
+  );
+  const baseActions = attachVerifiedSwitchExitTailPolicies({
+    actions: sortActionsByStartAndSourceSequence([
+      ...compiledBaseActions,
+      ...compiledKiboAutoCastActions,
+    ]),
+    actors,
+    team,
+    initialRuntimeState: project.initialRuntimeState,
+    time: project.time,
+  });
+  const effectiveKiboAutoCastGeneration =
+    compiledKiboAutoCastActions.length > 0 ||
+    (kiboAutoCastPlan.triggerExclusions ?? []).length > 0
+      ? kiboAutoCastPlan.derivationGeneration
+      : null;
+  const kiboAutoCastRegistryResult =
+    materializeVerifiedKiboAutoCastDerivationRegistry({
+      generation: effectiveKiboAutoCastGeneration,
+      generationAuthoritative: isAuthoritativeKiboAutoCastGeneration(
+        effectiveKiboAutoCastGeneration
+      ),
+      actions: baseActions,
+      actors,
+      team,
+      initialRuntimeState: project.initialRuntimeState,
+      time: project.time,
+      horizonFrameOverride:
+        project.metadata?.cycleBoundaryProjection?.horizonFrame ?? null,
+    });
+  if (!kiboAutoCastRegistryResult.valid) {
+    throw new CompileProjectError(kiboAutoCastRegistryResult.issues);
+  }
   const switchTriggerGeneration = createSwitchTriggeredActionGeneration({
     actions: baseActions,
     actors,
@@ -202,10 +254,16 @@ export function compileProject(
   const derivedActions = switchTriggerGeneration.actions.map(action =>
     compileAction(action, actorsById, enemy, skillsById)
   );
-  const actions = sortActionsByStartAndSourceSequence([
-    ...baseActionsWithSwitchBindings,
-    ...derivedActions,
-  ]);
+  const actions = attachVerifiedSwitchExitTailPolicies({
+    actions: sortActionsByStartAndSourceSequence([
+      ...baseActionsWithSwitchBindings,
+      ...derivedActions,
+    ]),
+    actors,
+    team,
+    initialRuntimeState: project.initialRuntimeState,
+    time: project.time,
+  });
 
   return {
     schemaVersion: 1,
@@ -230,6 +288,7 @@ export function compileProject(
     gameDataCatalog,
     gameDataCompatibility,
     actions,
+    kiboAutoCastDerivationRegistry: kiboAutoCastRegistryResult.registry ?? null,
     switchTriggerGeneration,
     actionRelations: (project.actionRelations ?? []).map(relation => ({
       ...relation,
@@ -248,6 +307,32 @@ export function compileProject(
         .map(action => action.id),
     },
   };
+}
+
+function createRawDerivedActionIssues(actions = []) {
+  return actions.flatMap((action, index) => {
+    if (
+      action?.derivedAction == null &&
+      action?.switchTriggerBinding == null &&
+      action?.parentActionId == null &&
+      action?.parentSourceSequencePath == null &&
+      action?.switchExitTailPolicy == null &&
+      action?.autoCast !== true &&
+      action?.autoCastRule == null
+    ) {
+      return [];
+    }
+    return [
+      {
+        code: 'project-derived-action-declaration-not-compiler-owned',
+        path: `actions.${index}`,
+        field: `actions.${index}`,
+        message:
+          'Derived, autonomous, and switch-exit tail declarations must be materialized by this compilation and cannot be supplied as project input',
+        actionId: action?.id ?? null,
+      },
+    ];
+  });
 }
 
 function sortActionsByStartAndSourceSequence(actions) {
@@ -568,7 +653,7 @@ function compileEnemyElementDefense(
           ? 'authoritative-machine-axis-profile'
           : baseValue != null
             ? 'azpr-client-level-grown-attribute'
-          : `missing-level-grown-attribute-${levelScaling.status}`,
+            : `missing-level-grown-attribute-${levelScaling.status}`,
     appliedToDamage: false,
   };
 }

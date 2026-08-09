@@ -150,8 +150,7 @@ describe('generated action status runtime', () => {
     ).toMatchObject({
       resolutionStatus: 'suppressed-cooldown-active',
       materializationStatus: 'not-materialized',
-      starCarryActionIdentity:
-        'actor|101003|10100322|0|10100322|star-carry',
+      starCarryActionIdentity: 'actor|101003|10100322|0|10100322|star-carry',
       applied: false,
     });
     expect(result.effectTimeline.input.summary).toMatchObject({
@@ -260,6 +259,7 @@ describe('generated action status runtime', () => {
         }),
       ],
       {
+        initialRuntimeState: controlledActorState(101007),
         actorConfigs: [
           {
             characterId: 101007,
@@ -394,6 +394,7 @@ describe('generated action status runtime', () => {
           }),
         ],
         {
+          initialRuntimeState: controlledActorState(101007),
           actorConfigs: [
             {
               characterId: 101007,
@@ -419,14 +420,17 @@ describe('generated action status runtime', () => {
 
   it('creates an ultimate cooldown only when skill-level provides a positive value', () => {
     const confirmed = runSimulation(
-      createStatusProject([
-        createWorkbenchActionDraft({
-          id: 'ultimate-status-confirmed',
-          skillId: 10100713,
-          actorCharacterId: 101007,
-          startMs: 0,
-        }),
-      ]),
+      createStatusProject(
+        [
+          createWorkbenchActionDraft({
+            id: 'ultimate-status-confirmed',
+            skillId: 10100713,
+            actorCharacterId: 101007,
+            startMs: 0,
+          }),
+        ],
+        { initialRuntimeState: controlledActorState(101007) }
+      ),
       getWorkbenchGameData()
     );
     expect(
@@ -445,14 +449,17 @@ describe('generated action status runtime', () => {
     ]);
 
     const unavailable = runSimulation(
-      createStatusProject([
-        createWorkbenchActionDraft({
-          id: 'ultimate-status-unavailable',
-          skillId: 10100313,
-          actorCharacterId: 101003,
-          startMs: 0,
-        }),
-      ]),
+      createStatusProject(
+        [
+          createWorkbenchActionDraft({
+            id: 'ultimate-status-unavailable',
+            skillId: 10100313,
+            actorCharacterId: 101003,
+            startMs: 0,
+          }),
+        ],
+        { initialRuntimeState: controlledActorState(101003) }
+      ),
       getWorkbenchGameData()
     );
     expect(
@@ -462,20 +469,23 @@ describe('generated action status runtime', () => {
 
   it('blocks a confirmed ultimate reused before its sourced cooldown ends', () => {
     const result = runSimulation(
-      createStatusProject([
-        createWorkbenchActionDraft({
-          id: 'ultimate-conflict-1',
-          skillId: 10100713,
-          actorCharacterId: 101007,
-          startMs: 0,
-        }),
-        createWorkbenchActionDraft({
-          id: 'ultimate-conflict-2',
-          skillId: 10100713,
-          actorCharacterId: 101007,
-          startMs: 5000,
-        }),
-      ]),
+      createStatusProject(
+        [
+          createWorkbenchActionDraft({
+            id: 'ultimate-conflict-1',
+            skillId: 10100713,
+            actorCharacterId: 101007,
+            startMs: 0,
+          }),
+          createWorkbenchActionDraft({
+            id: 'ultimate-conflict-2',
+            skillId: 10100713,
+            actorCharacterId: 101007,
+            startMs: 5000,
+          }),
+        ],
+        { initialRuntimeState: controlledActorState(101007) }
+      ),
       getWorkbenchGameData()
     );
 
@@ -656,6 +666,7 @@ function createStatusProject(
     {
       characterId: 109001,
       secondaryCharacterId: 101003,
+      tertiaryCharacterId: 101007,
       skillId: 10900101,
       enemyId: 300032,
     },
@@ -666,6 +677,15 @@ function createStatusProject(
       actorConfigs,
     }
   );
+}
+
+function controlledActorState(characterId) {
+  return {
+    controlledActor: {
+      actorId: `actor-${characterId}`,
+      characterId,
+    },
+  };
 }
 
 function createStatusLifecycleProject(

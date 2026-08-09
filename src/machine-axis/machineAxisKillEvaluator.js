@@ -1,4 +1,5 @@
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { compareSourceSequencePaths } from '../domain/actionSourceSequence';
 import {
   createEnemyProfileIdentity,
   validateMachineAxisEnemyProfile,
@@ -9,6 +10,7 @@ import {
   getMachineAxisEnemySettlementFormalReadiness,
 } from './machineAxisEnemySettlementContract';
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
+import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 
 export const MACHINE_AXIS_KILL_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_KILL_CONTRACT_NAME = 'AzPrMachineAxisFastestKill';
@@ -40,7 +42,22 @@ export function createMachineAxisKillEvaluator({ service } = {}) {
     try {
       run = service.simulate(contract);
     } catch (error) {
-      return createRejectedKillReport(source, normalizeErrorIssues(error));
+      const preflightIssues = normalizeErrorIssues(error);
+      const actionLegalityProof =
+        error?.actionLegalityProof ??
+        createMachineAxisActionLegalityProof(null, {
+          objectiveId: objectiveContract?.objectiveId ?? null,
+          preflightIssues,
+        });
+      return createRejectedKillReport(
+        {
+          ...source,
+          objectiveContract,
+          actionLegalityProof:
+            actionLegalityProof.passed === true ? null : actionLegalityProof,
+        },
+        preflightIssues
+      );
     }
     return createFastestKillProof(run, contract, {
       objectiveContract,
@@ -84,6 +101,9 @@ export function createFastestKillProof(
     contract?.scenario?.enemy?.profile,
     { scenarioEnemy: contract?.scenario?.enemy }
   );
+  let actionLegalityProof = createMachineAxisActionLegalityProof(run, {
+    objectiveId: objectiveContract?.objectiveId ?? null,
+  });
   const issues = [
     ...objectiveValidation.issues.map(entry =>
       killIssue(
@@ -93,6 +113,7 @@ export function createFastestKillProof(
       )
     ),
     ...profileValidation.issues,
+    ...actionLegalityProof.issues,
   ];
   if (
     objectiveValidation.valid === true &&
@@ -121,7 +142,12 @@ export function createFastestKillProof(
   }
   if (issues.length > 0) {
     return createRejectedKillReport(
-      { contract, objectiveContract, settlementContract },
+      {
+        contract,
+        objectiveContract,
+        settlementContract,
+        actionLegalityProof,
+      },
       issues,
       run?.hashes
     );
@@ -131,7 +157,12 @@ export function createFastestKillProof(
     allowUnverifiedRuntimeTiming !== true
   ) {
     return createRejectedKillReport(
-      { contract, objectiveContract, settlementContract },
+      {
+        contract,
+        objectiveContract,
+        settlementContract,
+        actionLegalityProof,
+      },
       settlementReadiness.issues,
       run?.hashes
     );
@@ -148,12 +179,13 @@ export function createFastestKillProof(
       contract,
       objectiveContract,
       profile: profileValidation.normalized,
+      actionLegalityProof,
     });
   }
   const lethal = lethalEvents[0];
   if (!hasCompleteRuntimeCursor(lethal)) {
     return createRejectedKillReport(
-      { contract, objectiveContract },
+      { contract, objectiveContract, actionLegalityProof },
       [
         killIssue(
           'machine-axis-fastest-kill-lethal-cursor-incomplete',
@@ -161,6 +193,21 @@ export function createFastestKillProof(
           'Lethal settlement is missing its canonical runtime cursor'
         ),
       ],
+      run?.hashes
+    );
+  }
+  const postDeathActionIssues = createPostDeathActionLegalityIssues(
+    run,
+    lethal
+  );
+  if (postDeathActionIssues.length > 0) {
+    actionLegalityProof = createMachineAxisActionLegalityProof(run, {
+      objectiveId: objectiveContract?.objectiveId ?? null,
+      additionalIssues: postDeathActionIssues,
+    });
+    return createRejectedKillReport(
+      { contract, objectiveContract, settlementContract, actionLegalityProof },
+      actionLegalityProof.issues,
       run?.hashes
     );
   }
@@ -198,7 +245,7 @@ export function createFastestKillProof(
     !Number.isFinite(effectiveHpDamage)
   ) {
     return createRejectedKillReport(
-      { contract, objectiveContract },
+      { contract, objectiveContract, actionLegalityProof },
       [
         killIssue(
           'machine-axis-fastest-kill-lethal-damage-proof-missing',
@@ -267,6 +314,7 @@ export function createFastestKillProof(
         : 'blocked-runtime-semantics-evidence-open',
     formalScorePolicy: settlementContract.formalScoring,
     killProof: proof,
+    actionLegalityProof,
     diagnostics,
     healing,
     hashes: {
@@ -285,6 +333,7 @@ export function createFastestKillProof(
     formalScorePolicy: report.formalScorePolicy,
     warnings: report.warnings,
     killProof: report.killProof,
+    actionLegalityProof: report.actionLegalityProof,
     diagnostics: report.diagnostics,
     healing: report.healing,
     runHashes: run.hashes ?? null,
@@ -415,7 +464,15 @@ function validateKillEnvelope(raw, normalized, objectiveContract) {
   return issues;
 }
 
-function createUnkilledReport({ run, contract, objectiveContract, profile }) {
+function createUnkilledReport({
+  run,
+  contract,
+  objectiveContract,
+  profile,
+  actionLegalityProof = createMachineAxisActionLegalityProof(run, {
+    objectiveId: objectiveContract?.objectiveId ?? null,
+  }),
+}) {
   const settlementContract = getMachineAxisEnemySettlementContract();
   const settlementReadiness = getMachineAxisEnemySettlementFormalReadiness();
   const diagnostics = createKillDiagnostics(run);
@@ -449,6 +506,7 @@ function createUnkilledReport({ run, contract, objectiveContract, profile }) {
       reason: 'enemy-not-killed-within-axis-horizon',
       firstLethal: null,
     },
+    actionLegalityProof,
     diagnostics,
     healing,
     hashes: { ...(run.hashes ?? {}), kill: null },
@@ -464,6 +522,7 @@ function createUnkilledReport({ run, contract, objectiveContract, profile }) {
     formalScorePolicy: report.formalScorePolicy,
     warnings: report.warnings,
     killProof: report.killProof,
+    actionLegalityProof: report.actionLegalityProof,
     diagnostics,
     healing,
     runHashes: run.hashes ?? null,
@@ -494,6 +553,7 @@ function createRejectedKillReport(source, issues, hashes = null) {
       source?.settlementContract?.formalScoring ??
       getMachineAxisEnemySettlementContract().formalScoring,
     killProof: null,
+    actionLegalityProof: source?.actionLegalityProof ?? null,
     diagnostics: null,
     healing: null,
     hashes: { ...(hashes ?? {}), kill: null },
@@ -520,6 +580,75 @@ function createKillDiagnostics(run, { endEvent = null } = {}) {
       Number(run?.evaluation?.totals?.netToughnessDamage) || 0,
     hitCount: damage.length,
   };
+}
+
+function createPostDeathActionLegalityIssues(run, lethal) {
+  const fps = Number(run?.trace?.scenario?.frameRate) || 60;
+  const lethalFrame = Number(lethal?.absoluteFrame);
+  const lethalPath = Array.isArray(lethal?.sourceSequencePath)
+    ? lethal.sourceSequencePath
+    : null;
+  const executedActionIds = new Set(
+    (run?.trace?.executionPlan?.actions ?? [])
+      .filter(entry => entry.execute !== false)
+      .map(entry => String(entry.actionId ?? ''))
+  );
+  return (run?.trace?.actions ?? [])
+    .filter(
+      action =>
+        ['skill', 'kiboEvent'].includes(String(action?.type ?? '')) &&
+        executedActionIds.has(String(action.id ?? '')) &&
+        String(action.id ?? '') !== String(lethal?.actionId ?? '')
+    )
+    .flatMap(action => {
+      const actionFrame = Math.round(
+        ((Number(action.startMs) || 0) * fps) / 1000
+      );
+      if (actionFrame < lethalFrame) return [];
+      const actionPath = Array.isArray(action.sourceSequencePath)
+        ? action.sourceSequencePath
+        : null;
+      if (actionFrame === lethalFrame && (!actionPath || !lethalPath)) {
+        return [
+          killIssue(
+            'machine-axis-post-death-source-order-unresolved',
+            `trace.actions.${String(action.id)}.sourceSequencePath`,
+            `Action ${action.id} shares the lethal frame but its order relative to the lethal settlement is unresolved`,
+            {
+              actionId: action.id,
+              actionIds: [action.id],
+              actorId: action.actorId ?? null,
+              targetId: action.targetId ?? lethal.targetId ?? null,
+              lethalActionId: lethal.actionId ?? null,
+              absoluteFrame: actionFrame,
+              sourceSequencePath: action.sourceSequencePath ?? null,
+            }
+          ),
+        ];
+      }
+      if (
+        actionFrame === lethalFrame &&
+        compareSourceSequencePaths(actionPath, lethalPath) <= 0
+      ) {
+        return [];
+      }
+      return [
+        killIssue(
+          'machine-axis-action-target-dead',
+          `trace.actions.${String(action.id)}`,
+          `Action ${action.id} starts after the first lethal settlement and has no live enemy target`,
+          {
+            actionId: action.id,
+            actionIds: [action.id],
+            actorId: action.actorId ?? null,
+            targetId: action.targetId ?? lethal.targetId ?? null,
+            lethalActionId: lethal.actionId ?? null,
+            absoluteFrame: actionFrame,
+            sourceSequencePath: action.sourceSequencePath ?? null,
+          }
+        ),
+      ];
+    });
 }
 
 function hasCompleteRuntimeCursor(event) {

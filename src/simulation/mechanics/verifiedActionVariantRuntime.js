@@ -2732,6 +2732,28 @@ function createVariantSelectionRecord({
       null,
     attackInputChainIdentity: selectionSource?.chainIdentity ?? null,
     attackChainSequenceIndex: selectionSource?.chainSequenceIndex ?? null,
+    ...(action.attackGroupId == null
+      ? {}
+      : {
+          attackGroupId: action.attackGroupId,
+          attackSequenceIndex: action.attackSequenceIndex ?? null,
+          attackSequenceTotal: action.attackSequenceTotal ?? null,
+          attackInputLinkTimingStatus:
+            action.attackInput?.linkTimingStatus ?? null,
+          attackInputLinkWindow: action.attackInput?.linkWindow
+            ? {
+                startFrame: action.attackInput.linkWindow.startFrame ?? null,
+                endFrame: action.attackInput.linkWindow.endFrame ?? null,
+                targetControlSkillId:
+                  action.attackInput.linkWindow.targetControlSkillId ?? null,
+                targetSubSkillIndex:
+                  action.attackInput.linkWindow.targetSubSkillIndex ?? null,
+                allowAttack: action.attackInput.linkWindow.allowAttack ?? null,
+                sourceIdentity:
+                  action.attackInput.linkWindow.sourceIdentity ?? null,
+              }
+            : null,
+        }),
     sourceKind: selectionSource?.sourceKind ?? 'action-mapping-selection',
     sourceIdentity:
       selectionSource?.sourceIdentity ??
@@ -3040,14 +3062,19 @@ function createResourceExecutionBlock({
     actionId: action.id,
     actionName: action.name,
     actorId: action.actorId,
+    runtimeOwnerIdentity: action.actorId,
+    ownerKind: 'actor',
+    ownerId: Number(actorState.profile.ownerId),
     timeMs: action.startMs,
     controlSkillId,
     selectedSubSkillIndex,
     resourceIdentity: actorState.profile.resourceIdentity,
+    resourceKind: 'special-resource',
     resourceName: actorState.profile.name,
     requiredValue,
     currentValue: actorState.current,
     maxValue: actorState.profile.capacity,
+    valueUnit: 'verified-special-resource-points',
   };
 }
 

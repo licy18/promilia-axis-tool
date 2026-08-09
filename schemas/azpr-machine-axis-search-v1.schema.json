@@ -80,6 +80,15 @@
         "prunedCandidates": { "type": "integer" },
         "expandedCandidates": { "type": "integer" },
         "completedCandidates": { "type": "integer" },
+        "formalSurfaceRejectedCandidates": { "type": "integer" },
+        "rejectionCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "rejectionExamples": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
         "beamWidth": { "type": "integer" },
         "topN": { "type": "integer" },
         "objective": {
@@ -165,7 +174,8 @@
             "issues": { "type": "array" },
             "warnings": { "type": "array" },
             "classification": { "type": ["object", "null"] },
-            "invalidActionCount": { "type": "integer" }
+            "invalidActionCount": { "type": "integer" },
+            "proof": { "type": ["object", "null"] }
           }
         },
         "criticalPolicy": { "type": "object" },

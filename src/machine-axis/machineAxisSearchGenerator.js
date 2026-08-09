@@ -2,6 +2,11 @@ import { msToFrame } from '../domain/timebase';
 import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
+  JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
+  resolveVerifiedKiboJointAttackBinding,
+} from '../domain/verifiedJointAttackContract';
+import { createSearchAttackChainProjection } from './machineAxisSearchState';
+import {
   isOptimizationCandidateCharacterInScope,
   isOptimizationScenarioActionKindInScope,
 } from '../optimization-scenario/optimizationScenarioPolicy';
@@ -47,10 +52,7 @@ export function createMachineAxisSearchGenerator({
 
   function getCharacterActionCandidates(
     characterId,
-    {
-      includeNormalAttacks = true,
-      enforceCandidateRoster = false,
-    } = {}
+    { includeNormalAttacks = true, enforceCandidateRoster = false } = {}
   ) {
     if (
       enforceCandidateRoster &&
@@ -146,9 +148,14 @@ export function createMachineAxisSearchGenerator({
 
     const activeCharacterId = characterIdByActorId.get(String(activeActorId));
     if (activeCharacterId != null) {
-      const startFrame =
+      const baseStartFrame =
         positiveIntegerOrNull(nextStartFrameByActor[String(activeActorId)]) ??
         0;
+      const activeAttackChain = createSearchAttackChainProjection({
+        trace: run?.trace ?? {},
+        currentFrame: baseStartFrame,
+        fps: Number(scenario.fps) || 60,
+      }).find(state => String(state.actorId) === String(activeActorId));
       const slotId = slotByActorId.get(String(activeActorId));
       const characterCandidates = getCharacterActionCandidates(
         activeCharacterId,
@@ -165,31 +172,97 @@ export function createMachineAxisSearchGenerator({
       for (const entry of limited) {
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
-          for (const segment of attackInputs) {
-            add({
-              action: createMachineAxisSearchAction({
-                id: nextActionId(),
-                ownerKind: 'actor',
-                slotId,
-                publicActionId: entry.publicActionId,
-                actionKind: entry.actionKind,
-                attackInput: {
-                  sequenceIndex: segment.sequenceIndex,
-                  groupId: `search-${actionOrdinalBase + 1}-${segment.sequenceIndex}`,
-                },
-                level: 1,
-                startFrame,
-              }),
-              ownerId: `actor:${activeCharacterId}`,
+          const segment = selectNextAttackInputSegment({
+            entry,
+            attackInputs,
+            activeAttackChain,
+          });
+          if (!segment) continue;
+          if (
+            activeAttackChain &&
+            activeAttackChain.linkWindowStatus !== 'applied'
+          ) {
+            rejectFormalSurface(options, {
+              code: 'attack-input-link-timing-unresolved',
+              path: 'actions',
+              message: `Normal-chain continuation is unresolved for ${activeActorId}`,
+              actorId: activeActorId,
+              predecessorActionId:
+                activeAttackChain.predecessorAcceptedIdentity,
+            });
+            continue;
+          }
+          const continuesChain =
+            activeAttackChain != null &&
+            Number(segment.sequenceIndex) ===
+              Number(activeAttackChain.nextSequenceIndex) &&
+            Number(segment.sequenceIndex) > 1;
+          const startFrame = activeAttackChain
+            ? Math.max(
+                baseStartFrame,
+                Number(activeAttackChain.linkWindowStartFrame) || 0
+              )
+            : baseStartFrame;
+          if (
+            activeAttackChain?.linkWindowEndFrame != null &&
+            startFrame >= activeAttackChain.linkWindowEndFrame
+          ) {
+            continue;
+          }
+          const groupId = continuesChain
+            ? activeAttackChain.groupId
+            : createSearchAttackGroupId({
+                activeActorId,
+                entry,
+                actionOrdinalBase,
+              });
+          add({
+            action: createMachineAxisSearchAction({
+              id: nextActionId(),
               ownerKind: 'actor',
               slotId,
+              publicActionId: entry.publicActionId,
+              actionKind: entry.actionKind,
+              attackInput: {
+                sequenceIndex: segment.sequenceIndex,
+                groupId,
+                ...(segment.chainIdentity
+                  ? { chainIdentity: segment.chainIdentity }
+                  : {}),
+                ...(activeAttackChain?.predecessorAcceptedIdentity
+                  ? {
+                      contextActionId:
+                        activeAttackChain.predecessorAcceptedIdentity,
+                    }
+                  : {}),
+              },
+              level: 1,
               startFrame,
-              label: `${entry.name ?? entry.actionKind} A${segment.sequenceIndex}`,
-              source: 'catalog:character-public-action',
+            }),
+            ownerId: `actor:${activeCharacterId}`,
+            ownerKind: 'actor',
+            slotId,
+            startFrame,
+            label: `${entry.name ?? entry.actionKind} A${segment.sequenceIndex}`,
+            source: 'catalog:character-public-action',
+            sourceIdentity: entry.mappingIdentity ?? null,
+          });
+        } else {
+          if (
+            options.requireFormalLegality === true &&
+            String(entry.actionKind) === 'star-combo'
+          ) {
+            rejectFormalSurface(options, {
+              code: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
+              path: 'actions',
+              message:
+                'Joint attacks are excluded from the formal surface until existPetBreakTarget is authoritative',
+              actorId: activeActorId,
+              publicActionId: entry.publicActionId,
               sourceIdentity: entry.mappingIdentity ?? null,
             });
+            continue;
           }
-        } else {
           add({
             action: createMachineAxisSearchAction({
               id: nextActionId(),
@@ -198,12 +271,12 @@ export function createMachineAxisSearchGenerator({
               publicActionId: entry.publicActionId,
               actionKind: entry.actionKind,
               level: 1,
-              startFrame,
+              startFrame: baseStartFrame,
             }),
             ownerId: `actor:${activeCharacterId}`,
             ownerKind: 'actor',
             slotId,
-            startFrame,
+            startFrame: baseStartFrame,
             label: entry.name ?? entry.actionKind,
             source: 'catalog:character-public-action',
             sourceIdentity: entry.mappingIdentity ?? null,
@@ -223,6 +296,31 @@ export function createMachineAxisSearchGenerator({
           ? kiboCandidates.slice(0, maxKiboActions)
           : kiboCandidates;
         for (const entry of limitedKibo) {
+          const jointBinding = resolveVerifiedKiboJointAttackBinding({
+            type: ACTION_TYPES.KIBO_EVENT,
+            kiboId,
+            skillId: entry.publicActionId,
+            actionKind: entry.actionKind,
+            eventType: entry.actionKind,
+            actor: {
+              characterId: activeCharacterId,
+              loadout: { kiboId },
+            },
+          });
+          if (options.requireFormalLegality === true && jointBinding != null) {
+            rejectFormalSurface(options, {
+              code: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
+              path: 'actions',
+              message:
+                'Kibo joint attacks are excluded from the formal surface until existPetBreakTarget is authoritative',
+              actorId: activeActorId,
+              kiboId,
+              publicActionId: entry.publicActionId,
+              mappingIdentity: jointBinding.mappingIdentity,
+              mechanicsPackageHash: jointBinding.mechanicsPackageHash,
+            });
+            continue;
+          }
           add({
             action: createMachineAxisSearchAction({
               id: nextActionId(),
@@ -231,12 +329,12 @@ export function createMachineAxisSearchGenerator({
               publicActionId: entry.publicActionId,
               actionKind: entry.actionKind,
               level: 1,
-              startFrame,
+              startFrame: baseStartFrame,
             }),
             ownerId: `kibo:${kiboId}`,
             ownerKind: 'kibo',
             slotId,
-            startFrame,
+            startFrame: baseStartFrame,
             label: entry.name ?? entry.actionKind,
             source: 'catalog:kibo-action',
             sourceIdentity: null,
@@ -288,6 +386,54 @@ export function createMachineAxisSearchGenerator({
     getKiboActionCandidates,
     generateNextActions,
   });
+}
+
+function selectNextAttackInputSegment({
+  entry,
+  attackInputs,
+  activeAttackChain,
+}) {
+  if (!activeAttackChain) {
+    return attackInputs.find(
+      segment =>
+        Number(segment.sequenceIndex) === 1 &&
+        positiveIntegerOrNull(segment.durationFrames) != null
+    );
+  }
+  if (
+    Number(entry.publicActionId) !== Number(activeAttackChain.publicActionId)
+  ) {
+    return null;
+  }
+  return attackInputs.find(
+    segment =>
+      positiveIntegerOrNull(segment.durationFrames) != null &&
+      Number(segment.sequenceIndex) ===
+        Number(activeAttackChain.nextSequenceIndex) &&
+      (activeAttackChain.chainIdentity == null ||
+        segment.chainIdentity == null ||
+        String(segment.chainIdentity) ===
+          String(activeAttackChain.chainIdentity))
+  );
+}
+
+function createSearchAttackGroupId({
+  activeActorId,
+  entry,
+  actionOrdinalBase,
+}) {
+  return [
+    'search-chain',
+    String(activeActorId),
+    String(entry.mappingIdentity ?? entry.publicActionId),
+    String(actionOrdinalBase + 1),
+  ].join('|');
+}
+
+function rejectFormalSurface(options, issue) {
+  if (typeof options?.onFormalRejection === 'function') {
+    options.onFormalRejection(Object.freeze({ ...issue }));
+  }
 }
 
 export function createMachineAxisSearchAction({
@@ -344,8 +490,8 @@ export function createMachineAxisSearchAction({
 
 export function deriveNextStartFrameByActor(run) {
   const trace = run?.trace ?? {};
-  const actorByActionId = new Map(
-    (trace.actions ?? []).map(action => [String(action.id), action.actorId])
+  const actionById = new Map(
+    (trace.actions ?? []).map(action => [String(action.id), action])
   );
   const latestByActor = new Map();
   for (const entry of trace.executionPlan?.actions ?? []) {
@@ -353,7 +499,11 @@ export function deriveNextStartFrameByActor(run) {
     const start = Number(entry.startMs);
     const span = Number(entry.durationMs);
     if (!Number.isFinite(start) || !Number.isFinite(span)) continue;
-    const actorId = actorByActionId.get(String(entry.actionId)) ?? null;
+    const action = actionById.get(String(entry.actionId)) ?? null;
+    // Autonomous Kibo actions retain their owner actor for attribution, but
+    // occupy the Kibo lane and must not delay the Hero's next input frame.
+    if (action?.type === ACTION_TYPES.KIBO_EVENT) continue;
+    const actorId = action?.actorId ?? null;
     if (!actorId) continue;
     const endFrame = msToFrame(start + span);
     latestByActor.set(
@@ -386,5 +536,5 @@ function hasVerifiedKiboDuration(entry, kiboId, characterId) {
 function positiveIntegerOrNull(value) {
   if (value == null || value === '') return null;
   const number = Number(value);
-  return Number.isInteger(number) && number >= 0 ? number : null;
+  return Number.isInteger(number) && number > 0 ? number : null;
 }

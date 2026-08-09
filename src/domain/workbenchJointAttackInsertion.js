@@ -3,6 +3,10 @@ import {
   ACTION_RELATION_KINDS,
   ACTION_TYPES,
 } from './projectSchema';
+import {
+  createJointAttackTriggerUnresolvedEvidence,
+  resolveVerifiedKiboJointAttackBinding,
+} from './verifiedJointAttackContract';
 
 export function isWorkbenchJointAttackTimelineEntry(
   entry = {},
@@ -46,7 +50,9 @@ export function createWorkbenchJointAttackInsertion({
     : actorActionEntries.find(candidate => candidate.kind === 'star-combo');
   const kiboComboEntry = insertsKibo
     ? entry
-    : kiboActionEntries.find(candidate => candidate.kind === 'break');
+    : kiboActionEntries.find(candidate =>
+        isVerifiedKiboJointCatalogEntry(candidate, kiboId)
+      );
   if (!starComboEntry) {
     return blocked('当前角色目录中没有可确认的星结合击');
   }
@@ -93,9 +99,28 @@ export function createWorkbenchJointAttackInsertion({
         needsTimingData: false,
         note: 'Skill Control 时长已确认；与角色星结合击同时发动。',
       };
+  const kiboBinding = resolveVerifiedKiboJointAttackBinding({
+    ...kiboDraft,
+    actor: {
+      characterId: actorCharacterId,
+      loadout: { kiboId },
+    },
+  });
+  if (!kiboBinding) {
+    return blocked(
+      '奇波动作缺少 breakSkillList 与 skillTag=15/PetJointStrikeSkill 的一致映射'
+    );
+  }
+  const triggerEvidence = createJointAttackTriggerUnresolvedEvidence({
+    actorAction: actorDraft,
+    kiboAction: kiboDraft,
+    binding: kiboBinding,
+  });
 
   return {
     status: 'paired',
+    formalEligible: false,
+    triggerEvidence,
     draftPatches: [
       { ...actorDraft, startMs },
       { ...kiboDraft, startMs },
@@ -127,7 +152,20 @@ function resolveActorActionEntry(entry, actorActionEntries) {
 }
 
 function isKiboJointAttackEntry(entry) {
-  return entry.type === ACTION_TYPES.KIBO_EVENT && entry.eventType === 'break';
+  return resolveVerifiedKiboJointAttackBinding(entry) != null;
+}
+
+function isVerifiedKiboJointCatalogEntry(entry, kiboId) {
+  return (
+    resolveVerifiedKiboJointAttackBinding({
+      type: ACTION_TYPES.KIBO_EVENT,
+      kiboId,
+      skillId: entry?.skillId,
+      eventType: entry?.kind,
+      actionKind: entry?.kind,
+      actor: { loadout: { kiboId } },
+    }) != null
+  );
 }
 
 function blocked(message) {

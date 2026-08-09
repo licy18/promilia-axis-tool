@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
@@ -59,7 +60,13 @@ describe('Machine Axis batch evaluator', () => {
     expect(row.metrics.dps).toBeCloseTo(totals.hpDamage / 120, 8);
     expect(row.metrics.toughnessDamage).toBe(totals.toughnessDamage);
     expect(row.metrics.combatHitCount).toBe(totals.combatHitCount);
-    expect(row.metrics.unresolvedActionCount).toBe(2);
+    expect(row.metrics.unresolvedActionCount).toBe(
+      direct.trace.executionPlan.actions.filter(
+        action =>
+          action.status === 'scheduled-with-unresolved-conditions' ||
+          (action.unresolvedCodes ?? []).length > 0
+      ).length
+    );
     expect(row.metrics.nonExecutableActions).toEqual([]);
 
     expect(row.metrics.burst).toMatchObject({
@@ -463,5 +470,47 @@ describe('Machine Axis batch evaluator', () => {
         lastTimeMs: 300,
       },
     ]);
+  });
+
+  it('rejects a primary-objective sample before metric scoring when the shared legality proof fails', async () => {
+    const actionLegalityProof = {
+      contractName: 'AzPrMachineAxisActionLegalityProof',
+      passed: false,
+      finalScoreEligible: false,
+      issues: [
+        {
+          code: 'controlled-actor-action-unavailable',
+          path: 'executionPlan.actions.0',
+          actionId: 'off-field-input',
+        },
+      ],
+    };
+    const simulate = vi.fn(async () => ({
+      trace: { critical: { policy: 'non-critical' } },
+      hashes: { input: 'input', data: 'data', trace: 'trace' },
+      actionLegalityProof,
+    }));
+    const evaluator = createMachineAxisBatchEvaluator({
+      service: { simulate },
+    });
+    const report = await evaluator.evaluate({
+      kind: 'azpr-machine-axis-batch',
+      runs: [
+        {
+          label: 'illegal',
+          axis: { scenario: {}, actions: [] },
+          options: { objective: 'cycle-dps-no-toughness' },
+        },
+      ],
+    });
+
+    expect(report.runs[0]).toMatchObject({
+      status: 'validation-failed',
+      actionLegalityProof,
+      metrics: null,
+      contributions: null,
+    });
+    expect(report.runs[0].errors).toEqual(actionLegalityProof.issues);
+    expect(simulate).toHaveBeenCalledTimes(1);
   });
 });

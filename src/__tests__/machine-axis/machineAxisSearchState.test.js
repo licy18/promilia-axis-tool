@@ -3,11 +3,13 @@ import mechanicsPackage from '../../data/generated/verified-combat-mechanics-pac
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import {
+  createSearchAttackChainProjection,
   createSearchEventBoundaryNodes,
   createSearchLoopClosureProjection,
   createSearchPendingEventProjection,
   createSearchStateSnapshot,
   deriveActiveActorId,
+  deriveExecutionNodeFrame,
   hashSearchState,
   searchStatesEquivalent,
 } from '../../machine-axis/machineAxisSearchState';
@@ -223,8 +225,180 @@ describe('Machine Axis search state', () => {
     expect(searchStatesEquivalent(base, brokenEnemy)).toBe(false);
   });
 
+  it('keeps accepted normal-chain predecessor and right-open link state in the hash', () => {
+    const trace = {
+      actions: [
+        {
+          id: 'actor-a-a1',
+          type: 'skill',
+          actionKind: 'normal-attack',
+          actorId: 'actor-a',
+          skillId: 10101001,
+          startMs: 100,
+          attackGroupId: 'chain-group-a',
+          attackSequenceIndex: 1,
+          attackSequenceTotal: 3,
+          attackInputChainIdentity: 'chain:10101001',
+          attackInputLinkTimingStatus: 'applied',
+          attackInputLinkWindow: {
+            startFrame: 5,
+            endFrame: 10,
+            sourceIdentity: 'client-input-window:a1-a2',
+          },
+        },
+      ],
+      executionPlan: {
+        actions: [
+          {
+            actionId: 'actor-a-a1',
+            execute: true,
+            sourceSequenceIndex: 0,
+            startMs: 100,
+          },
+        ],
+      },
+      variants: {
+        selections: [
+          {
+            actionId: 'actor-a-a1',
+            attackGroupId: 'chain-group-a',
+            attackSequenceIndex: 1,
+            attackSequenceTotal: 3,
+            attackInputChainIdentity: 'chain:10101001',
+            attackInputLinkTimingStatus: 'applied',
+            attackInputLinkWindow: {
+              startFrame: 5,
+              endFrame: 10,
+              sourceIdentity: 'client-input-window:a1-a2',
+            },
+          },
+        ],
+      },
+    };
+    const exactStart = createSearchAttackChainProjection({
+      trace,
+      currentFrame: 11,
+      fps: 60,
+    });
+    expect(exactStart).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-a',
+        groupId: 'chain-group-a',
+        chainIdentity: 'chain:10101001',
+        nextSequenceIndex: 2,
+        predecessorAcceptedIdentity: 'actor-a-a1',
+        linkWindowStartFrame: 11,
+        linkWindowEndFrame: 16,
+      }),
+    ]);
+    expect(
+      createSearchAttackChainProjection({ trace, currentFrame: 16, fps: 60 })
+    ).toEqual([]);
+
+    const base = createSearchStateSnapshot({ run, contract: fixture });
+    const withChain = { ...base, attackChains: exactStart };
+    expect(hashSearchState(withChain)).not.toBe(hashSearchState(base));
+
+    const interrupted = structuredClone(trace);
+    interrupted.actions.push({
+      id: 'intervening-skill',
+      type: 'skill',
+      actorId: 'actor-a',
+      actionKind: 'star-skill',
+      startMs: (12 * 1000) / 60,
+    });
+    interrupted.executionPlan.actions.push({
+      actionId: 'intervening-skill',
+      execute: true,
+      sourceSequenceIndex: 1,
+      startMs: (12 * 1000) / 60,
+    });
+    expect(
+      createSearchAttackChainProjection({
+        trace: interrupted,
+        currentFrame: 13,
+        fps: 60,
+      })
+    ).toEqual([]);
+
+    const preserved = structuredClone(interrupted);
+    preserved.variants.attackChainContinuityWindows = [
+      {
+        edgeIdentity: 'attack-chain-continuity:intervening-skill:rule:2',
+        actorId: 'actor-a',
+        sourceActionId: 'intervening-skill',
+        targetChainIdentity: 'chain:10101001',
+        targetSequenceIndex: 2,
+        startsAtMs: (13 * 1000) / 60,
+        endsAtMs: (30 * 1000) / 60,
+        sourceIdentity: 'client-continuity-rule:counter-keeps-chain',
+        applied: true,
+      },
+    ];
+    expect(
+      createSearchAttackChainProjection({
+        trace: preserved,
+        currentFrame: 13,
+        fps: 60,
+      })
+    ).toEqual([
+      expect.objectContaining({
+        status: 'sourced-continuity-window',
+        continuityStatus: 'verified-attack-chain-continuity',
+        continuityActionId: 'intervening-skill',
+        nextSequenceIndex: 2,
+        linkWindowStartFrame: 13,
+        linkWindowEndFrame: 30,
+        linkWindowSourceIdentity: 'client-continuity-rule:counter-keeps-chain',
+      }),
+    ]);
+
+    const switched = structuredClone(trace);
+    switched.actions.push({
+      id: 'switch-away',
+      type: 'switch',
+      startMs: 150,
+    });
+    switched.executionPlan.actions.push({
+      actionId: 'switch-away',
+      execute: true,
+      sourceSequenceIndex: 1,
+      startMs: 150,
+    });
+    expect(
+      createSearchAttackChainProjection({
+        trace: switched,
+        currentFrame: 15,
+        fps: 60,
+      })
+    ).toEqual([]);
+  });
+
   it('derives the active actor from controlled actor transitions', () => {
     expect(deriveActiveActorId(run.trace)).toBe('actor-103002');
+    expect(deriveActiveActorId(run.trace, { currentFrame: 0, fps: 60 })).toBe(
+      run.trace.controlledActors.initialActorId
+    );
+    const firstTransition = run.trace.controlledActors.transitions.find(
+      transition => transition.applied === true
+    );
+    if (firstTransition) {
+      const transitionFrame = Math.round(
+        (Number(firstTransition.timeMs) * 60) / 1000
+      );
+      expect(
+        deriveActiveActorId(run.trace, {
+          currentFrame: transitionFrame,
+          fps: 60,
+        })
+      ).toBe(run.trace.controlledActors.initialActorId);
+      expect(
+        deriveActiveActorId(run.trace, {
+          currentFrame: transitionFrame + 1,
+          fps: 60,
+        })
+      ).toBe(firstTransition.afterActorId);
+    }
     expect(deriveActiveActorId({ controlledActors: {} })).toBeNull();
     expect(
       deriveActiveActorId({
@@ -232,6 +406,69 @@ describe('Machine Axis search state', () => {
         scenario: { actorIds: ['actor-101007'] },
       })
     ).toBe('actor-101007');
+  });
+
+  it('advances a zero-duration switch past its frame before hashing the controlled actor state', () => {
+    const trace = {
+      scenario: {
+        actorIds: ['actor-a', 'actor-b'],
+        durationMs: 2000,
+      },
+      actions: [
+        {
+          id: 'switch-to-b',
+          type: 'switch',
+          actorId: 'actor-a',
+          targetActorId: 'actor-b',
+          startMs: 1000,
+          durationMs: 0,
+        },
+      ],
+      executionPlan: {
+        actions: [
+          {
+            actionId: 'switch-to-b',
+            execute: true,
+            startMs: 1000,
+            durationMs: 0,
+          },
+        ],
+      },
+      controlledActors: {
+        initialActorId: 'actor-a',
+        transitions: [
+          {
+            actionId: 'switch-to-b',
+            applied: true,
+            timeMs: 1000,
+            afterActorId: 'actor-b',
+          },
+        ],
+      },
+      state: { final: {} },
+    };
+    const boundaryFrame = deriveExecutionNodeFrame(trace);
+    expect(boundaryFrame).toBe(61);
+    expect(deriveActiveActorId(trace, { currentFrame: 60, fps: 60 })).toBe(
+      'actor-a'
+    );
+    expect(
+      deriveActiveActorId(trace, { currentFrame: boundaryFrame, fps: 60 })
+    ).toBe('actor-b');
+
+    const before = createSearchStateSnapshot({
+      run: { trace, evaluation: {} },
+      contract: { scenario: { durationFrames: 120 } },
+      currentFrame: 60,
+    });
+    const after = createSearchStateSnapshot({
+      run: { trace, evaluation: {} },
+      contract: { scenario: { durationFrames: 120 } },
+      currentFrame: boundaryFrame,
+    });
+    expect(before.activeActorId).toBe('actor-a');
+    expect(after.activeActorId).toBe('actor-b');
+    expect(searchStatesEquivalent(before, after)).toBe(false);
   });
 
   it('extracts event boundary nodes without frame-by-frame enumeration', () => {

@@ -1,6 +1,7 @@
 import { COMBAT_CRITICAL_POLICIES } from '../domain/combatCriticalPolicy';
 import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisHealingStatistics } from './machineAxisHealingStatistics';
+import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 import {
   MACHINE_AXIS_LEGACY_DIAGNOSTIC_OBJECTIVE_IDS,
   MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
@@ -65,12 +66,15 @@ export function createMachineAxisBatchEvaluator({
     const concurrency = normalizeJobs(
       options.jobs ?? normalization.normalized.options.jobs ?? jobs
     );
-    const overrideOptions = pickDefined(options, [
-      'criticalPolicy',
-      'seeds',
-      'burstWindowMs',
-      'objective',
-    ]);
+    const overrideOptions = {
+      ...normalization.normalized.options,
+      ...pickDefined(options, [
+        'criticalPolicy',
+        'seeds',
+        'burstWindowMs',
+        'objective',
+      ]),
+    };
     const runs = await runWithConcurrency(
       normalization.normalized.runs,
       concurrency,
@@ -377,10 +381,12 @@ async function executeRun(run, index, overrideOptions, simulate) {
         hashes: sample.hashes,
         metrics: sample.metrics,
         contributions: sample.contributions,
+        actionLegalityProof: sample.actionLegalityProof,
         errors: sample.errors,
       })),
       sampling: buildSamplingAggregates(okSamples),
       contributions: aggregateSampleContributions(okSamples),
+      actionLegalityProof: aggregateBatchActionLegalityProof(samples),
       executionMs: Date.now() - startedAt,
       errors: samples.flatMap(sample => sample.errors ?? []),
     };
@@ -413,6 +419,7 @@ async function executeRun(run, index, overrideOptions, simulate) {
     hashes: sample.hashes,
     metrics: sample.metrics,
     contributions: sample.contributions,
+    actionLegalityProof: sample.actionLegalityProof,
     executionMs: Date.now() - startedAt,
     errors: sample.errors,
   };
@@ -421,6 +428,27 @@ async function executeRun(run, index, overrideOptions, simulate) {
 async function executeSingleSample(contract, effective, { seed }, simulate) {
   try {
     const run = await simulate(contract);
+    const actionLegalityProof =
+      run.actionLegalityProof ??
+      createMachineAxisActionLegalityProof(run, {
+        objectiveId: contract.scenario?.objectiveContract?.objectiveId ?? null,
+      });
+    if (
+      contract.scenario?.objectiveContract?.classification === 'primary' &&
+      actionLegalityProof.passed !== true
+    ) {
+      return {
+        seed,
+        status: 'validation-failed',
+        critical: run.trace?.critical ?? null,
+        scenario: null,
+        hashes: run.hashes ?? null,
+        metrics: null,
+        contributions: null,
+        actionLegalityProof,
+        errors: actionLegalityProof.issues,
+      };
+    }
     const policy = String(
       run.trace?.critical?.policy ??
         contract.scenario?.critical?.policy ??
@@ -439,6 +467,7 @@ async function executeSingleSample(contract, effective, { seed }, simulate) {
         hashes: null,
         metrics: null,
         contributions: null,
+        actionLegalityProof,
         errors: [
           createBatchIssue(
             'scenario.critical',
@@ -457,6 +486,7 @@ async function executeSingleSample(contract, effective, { seed }, simulate) {
       hashes: run.hashes ?? null,
       metrics,
       contributions: createContributions(run),
+      actionLegalityProof,
       errors: [],
     };
   } catch (error) {
@@ -469,6 +499,12 @@ async function executeSingleSample(contract, effective, { seed }, simulate) {
             error?.message ?? String(error)
           ),
         ];
+    const actionLegalityProof =
+      error?.actionLegalityProof ??
+      createMachineAxisActionLegalityProof(null, {
+        objectiveId: contract.scenario?.objectiveContract?.objectiveId ?? null,
+        preflightIssues: issues,
+      });
     return {
       seed,
       status: Array.isArray(error?.issues)
@@ -479,6 +515,8 @@ async function executeSingleSample(contract, effective, { seed }, simulate) {
       hashes: null,
       metrics: null,
       contributions: null,
+      actionLegalityProof:
+        actionLegalityProof.passed === true ? null : actionLegalityProof,
       errors: issues,
     };
   }
@@ -898,6 +936,23 @@ function aggregateSampleContributions(samples) {
       samples,
       'healingBySourceAction'
     ),
+  };
+}
+
+function aggregateBatchActionLegalityProof(samples) {
+  const proofs = (samples ?? [])
+    .map(sample => sample.actionLegalityProof)
+    .filter(Boolean);
+  if (proofs.length === 0) return null;
+  if (proofs.length === 1) return proofs[0];
+  return {
+    passed:
+      proofs.length === samples.length &&
+      proofs.every(proof => proof.passed === true),
+    samples: samples.map(sample => ({
+      seed: sample.seed ?? null,
+      proof: sample.actionLegalityProof ?? null,
+    })),
   };
 }
 

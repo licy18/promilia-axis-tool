@@ -22,7 +22,7 @@ import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG } from '../../simulation/
 
 const PANGPANG_CHARACTER_ID = 101007;
 const PANGPANG_SKILL_ID = 10100701;
-const MUYIN_ULTIMATE_SKILL_ID = 10900113;
+const PANGPANG_ULTIMATE_SKILL_ID = 10100713;
 const PANGPANG_MAPPING = verifiedCombatMechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === PANGPANG_CHARACTER_ID &&
@@ -318,7 +318,7 @@ describe('canonical headless combat core', () => {
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          actionId: 'm11-blocked-muyin-ultimate',
+          actionId: 'm11-blocked-pangpang-ultimate',
         }),
       ])
     );
@@ -510,12 +510,12 @@ function createVerifiedProject({
   if (includeBlockedUltimate) {
     actions.push(
       createWorkbenchActionDraft({
-        id: 'm11-blocked-muyin-ultimate',
+        id: 'm11-blocked-pangpang-ultimate',
         type: 'skill',
-        actorCharacterId: 109001,
-        skillId: MUYIN_ULTIMATE_SKILL_ID,
+        actorCharacterId: PANGPANG_CHARACTER_ID,
+        skillId: PANGPANG_ULTIMATE_SKILL_ID,
         actionVariantIndex: 0,
-        startMs: 100,
+        startMs: 600,
         durationMs: 800,
       })
     );
@@ -525,6 +525,12 @@ function createVerifiedProject({
     teamSlots,
     actorConfigs,
     actions,
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${PANGPANG_CHARACTER_ID}`,
+        characterId: PANGPANG_CHARACTER_ID,
+      },
+    },
     combatScenario: {
       projectile: { targetDistance: 0, defaultWillHit: true },
       critical,

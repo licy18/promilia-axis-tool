@@ -27,7 +27,9 @@ export function createWorkbenchMachineAxisAdapter({
   function importContract(machineAxis) {
     const prepared = service.prepareValidated(machineAxis);
     if (!prepared.valid) {
-      throw new MachineAxisValidationError(prepared.issues);
+      throw new MachineAxisValidationError(prepared.issues, {
+        actionLegalityProof: prepared.actionLegalityProof,
+      });
     }
     return {
       schemaVersion: WORKBENCH_MACHINE_AXIS_ADAPTER_SCHEMA_VERSION,
@@ -49,6 +51,12 @@ export function createWorkbenchMachineAxisAdapter({
     const validation = validateMachineAxisContract(contract);
     if (!validation.valid) {
       throw new MachineAxisValidationError(validation.issues);
+    }
+    const executionValidation = service.validate(validation.normalized);
+    if (!executionValidation.valid) {
+      throw new MachineAxisValidationError(executionValidation.issues, {
+        actionLegalityProof: executionValidation.actionLegalityProof,
+      });
     }
     return validation.normalized;
   }

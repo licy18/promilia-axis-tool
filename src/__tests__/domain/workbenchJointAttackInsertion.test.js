@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createWorkbenchJointAttackInsertion } from '../../domain/workbenchJointAttackInsertion';
 
 const actorEntry = {
@@ -21,6 +23,10 @@ const kiboEntry = {
 };
 
 describe('workbench joint attack insertion', () => {
+  beforeAll(() => {
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  });
+
   it('adds the equipped kibo counterpart when the actor combo is dragged', () => {
     const result = createWorkbenchJointAttackInsertion({
       entry: {
@@ -48,6 +54,15 @@ describe('workbench joint attack insertion', () => {
     });
 
     expect(result.status).toBe('paired');
+    expect(result).toMatchObject({
+      formalEligible: false,
+      triggerEvidence: {
+        code: 'joint-attack-trigger-unresolved',
+        status: 'exist-pet-break-target-authority-unresolved',
+        skillTag: 15,
+        mechanicsPackageHash: mechanicsPackage.packageHash,
+      },
+    });
     expect(result.draftPatches).toEqual([
       expect.objectContaining({ id: 'actor-combo', startMs: 2000 }),
       expect.objectContaining({
@@ -128,6 +143,27 @@ describe('workbench joint attack insertion', () => {
       status: 'blocked',
       message: '该角色未装备奇波，不能加入星结合击',
       draftPatches: [],
+    });
+  });
+
+  it('does not pair a generic break action without the verified PetJointStrikeSkill binding', () => {
+    const result = createWorkbenchJointAttackInsertion({
+      entry: {
+        type: 'kiboEvent',
+        kiboId: 500001,
+        skillId: 50000102,
+        eventType: 'break',
+      },
+      actorCharacterId: 101007,
+      actorActionEntries: [actorEntry],
+      kiboActionEntries: [kiboEntry],
+      equippedKiboId: 500001,
+      baseDraftPatches: [{ id: 'ordinary-break' }],
+    });
+
+    expect(result).toEqual({
+      status: 'not-joint-attack',
+      draftPatches: [{ id: 'ordinary-break' }],
     });
   });
 });

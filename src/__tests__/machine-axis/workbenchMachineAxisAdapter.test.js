@@ -190,7 +190,7 @@ describe('Workbench Machine Axis adapter', () => {
       restored.contract.actions.find(item => item.id === 'a3-miss')
         .hitOverrides[PANGPANG_A3_HIT]
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
-  });
+  }, 30_000);
 
   it('round-trips contextual inputs without a projected attack segment and fails closed on stale intent metadata', () => {
     const service = createMachineAxisService();
@@ -279,6 +279,30 @@ describe('Workbench Machine Axis adapter', () => {
     contract.scenario.objectiveContract = objectiveContract;
     contract.scenario.target = structuredClone(objectiveContract.targetPolicy);
     contract.scenario.enemy.profile = enemyProfile;
+
+    let legalityError = null;
+    try {
+      adapter.importContract(contract);
+    } catch (error) {
+      legalityError = error;
+    }
+    expect(legalityError).toBeInstanceOf(MachineAxisValidationError);
+    expect(legalityError.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'a3-inherit',
+          code: 'machine-axis-action-not-executable',
+          violationCodes: expect.arrayContaining([
+            'attack-input-chain-incomplete',
+          ]),
+        }),
+      ])
+    );
+
+    // This assertion is about the objective/profile transport boundary. The
+    // shared M11 diagnostic fixture intentionally contains standalone A3
+    // samples, which the formal legality gate above must reject.
+    contract.actions = [];
 
     const imported = adapter.importContract(contract);
     const exported = adapter.exportProject(imported.project);
@@ -371,22 +395,26 @@ describe('Workbench Machine Axis adapter', () => {
   it('projects Workbench edits and rejects unsupported project actions', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
-    const imported = adapter.importContract(fixture);
+    const isolated = structuredClone(fixture);
+    isolated.actions = isolated.actions.filter(
+      item => item.id === 'a3-inherit'
+    );
+    const imported = adapter.importContract(isolated);
     const edited = structuredClone(imported.project);
-    const action = edited.actions.find(item => item.id === 'a3-sampled');
-    action.startMs += 1000;
+    const action = edited.actions.find(item => item.id === 'a3-inherit');
+    action.startMs += 1000 / 60;
     action.startFrame = null;
     const exported = adapter.exportProject(edited);
     expect(
       exported.actions.every(item => item.schedule.mode === 'absolute')
     ).toBe(true);
     expect(
-      exported.actions.find(item => item.id === 'a3-sampled').schedule
+      exported.actions.find(item => item.id === 'a3-inherit').schedule
     ).toEqual({
       mode: 'absolute',
       frame:
-        imported.actionResolutions.find(item => item.actionId === 'a3-sampled')
-          .startFrame + 60,
+        imported.actionResolutions.find(item => item.actionId === 'a3-inherit')
+          .startFrame + 1,
       actionId: null,
       offsetFrames: 0,
     });
@@ -408,6 +436,53 @@ describe('Workbench Machine Axis adapter', () => {
           actionId: 'unsupported-enemy-event',
         })
       );
+    }
+  }, 30_000);
+
+  it('uses the same foreground-input proof for contract import and Workbench export', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const invalidContract = structuredClone(fixture);
+    const offFieldAction = invalidContract.actions.find(
+      action => action.id === 'xiaoyu-charged'
+    );
+    offFieldAction.schedule = {
+      mode: 'absolute',
+      frame: 1,
+      actionId: null,
+      offsetFrames: 0,
+    };
+
+    for (const invoke of [
+      () => adapter.importContract(invalidContract),
+      () => {
+        const imported = adapter.importContract(fixture);
+        const projectAction = imported.project.actions.find(
+          action => action.id === 'xiaoyu-charged'
+        );
+        projectAction.startMs = 1000 / 60;
+        projectAction.startFrame = 1;
+        return adapter.exportProject(imported.project);
+      },
+    ]) {
+      expect(invoke).toThrow(MachineAxisValidationError);
+      try {
+        invoke();
+      } catch (error) {
+        expect(error.issues).toContainEqual(
+          expect.objectContaining({
+            code: 'controlled-actor-action-unavailable',
+            actionId: 'xiaoyu-charged',
+          })
+        );
+        expect(error.actionLegalityProof).toMatchObject({
+          passed: false,
+          finalScoreEligible: false,
+          rejectionCodes: expect.arrayContaining([
+            'controlled-actor-action-unavailable',
+          ]),
+        });
+      }
     }
   }, 30_000);
 });

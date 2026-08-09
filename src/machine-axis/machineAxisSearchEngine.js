@@ -33,6 +33,7 @@ import {
   MACHINE_AXIS_CYCLE_KIND,
   MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
 } from './machineAxisCycleEvaluator';
+import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
 
 export const MACHINE_AXIS_SEARCH_ENGINE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_ENGINE_CONTRACT = 'AzPrMachineAxisSearch';
@@ -90,6 +91,9 @@ export function createMachineAxisSearchEngine({
       prunedCandidates: 0,
       expandedCandidates: 0,
       completedCandidates: 0,
+      formalSurfaceRejectedCandidates: 0,
+      rejectionCounts: {},
+      rejectionExamples: [],
     };
     while (frontier.length > 0 && stats.steps < settings.maxDepth) {
       stats.steps += 1;
@@ -103,6 +107,7 @@ export function createMachineAxisSearchEngine({
             candidate.currentFrame
           );
         }
+        const surfaceRejections = [];
         const nextActions = generator.generateNextActions({
           axis: candidate.axis,
           run: candidate.run,
@@ -114,8 +119,17 @@ export function createMachineAxisSearchEngine({
             includeNormalAttacks: settings.includeNormalAttacks,
             maxActionsPerOwner: settings.maxActionsPerOwner,
             maxKiboActions: settings.maxKiboActions,
+            requireFormalLegality: MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(
+              settings.objective
+            ),
+            onFormalRejection: issue => surfaceRejections.push(issue),
           },
         });
+        if (surfaceRejections.length > 0) {
+          stats.formalSurfaceRejectedCandidates += surfaceRejections.length;
+          recordSearchRejections(stats, surfaceRejections);
+          issues.push(...surfaceRejections);
+        }
         const waitActions = settings.includeWait
           ? createBoundaryWaitCandidates(candidate, settings, horizonFrames)
           : [];
@@ -140,6 +154,7 @@ export function createMachineAxisSearchEngine({
           stats.invalidCandidates += 1;
           const childIssues = normalizeSearchIssues(error);
           issues.push(...childIssues);
+          recordSearchRejections(stats, childIssues);
           if (settings.includeWait) {
             resourceThresholdChildren.push(
               ...createResourceThresholdWaitCandidates({
@@ -194,7 +209,9 @@ export function createMachineAxisSearchEngine({
           addCompletedEntries(completed, [entry], stats);
         } catch (error) {
           stats.invalidCandidates += 1;
-          issues.push(...normalizeSearchIssues(error));
+          const childIssues = normalizeSearchIssues(error);
+          issues.push(...childIssues);
+          recordSearchRejections(stats, childIssues);
         }
       }
 
@@ -286,6 +303,19 @@ export function createMachineAxisSearchEngine({
     }
     const resolvedNodeFrame =
       nodeFrame ?? deriveExecutionNodeFrame(runs[0]?.run?.trace ?? {});
+    const actionLegalityProofs = runs.map(sample =>
+      createMachineAxisActionLegalityProof(sample.run, {
+        objectiveId: settings.objective,
+      })
+    );
+    if (
+      MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(settings.objective) &&
+      actionLegalityProofs.some(proof => proof.passed !== true)
+    ) {
+      throw new SearchCandidateEvaluationError(
+        actionLegalityProofs.flatMap(proof => proof.issues ?? [])
+      );
+    }
     const snapshots = [];
     for (const sample of runs) {
       if (resolvedNodeFrame === 0) {
@@ -349,6 +379,16 @@ export function createMachineAxisSearchEngine({
       finalScoreEligible: objectiveEvaluation.finalScoreEligible,
       objectiveProof: objectiveEvaluation.proof,
       objectiveIssues: objectiveEvaluation.issues,
+      actionLegalityProof:
+        actionLegalityProofs.length === 1
+          ? actionLegalityProofs[0]
+          : {
+              status: actionLegalityProofs.every(proof => proof.passed)
+                ? 'axis-action-legality-passed'
+                : 'axis-action-legality-rejected',
+              passed: actionLegalityProofs.every(proof => proof.passed),
+              samples: actionLegalityProofs,
+            },
       sampling:
         runs.length > 1 || settings.seeds?.length
           ? {
@@ -533,6 +573,7 @@ function createCandidateEntry({
   finalScoreEligible,
   objectiveProof,
   objectiveIssues,
+  actionLegalityProof,
   sampling,
   chain,
   parentLabel,
@@ -559,6 +600,7 @@ function createCandidateEntry({
     finalScoreEligible,
     objectiveProof,
     objectiveIssues,
+    actionLegalityProof,
     metrics,
     contributions,
     sampling,
@@ -1079,6 +1121,48 @@ function dedupeSearchIssues(issues) {
     if (!byIdentity.has(key)) byIdentity.set(key, issue);
   }
   return [...byIdentity.values()];
+}
+
+function recordSearchRejections(stats, issues) {
+  stats.rejectionCounts ??= {};
+  stats.rejectionExamples ??= [];
+  for (const issue of issues ?? []) {
+    const code = String(issue?.code ?? 'machine-axis-search-candidate-invalid');
+    stats.rejectionCounts[code] = (stats.rejectionCounts[code] ?? 0) + 1;
+    const example = {
+      code,
+      path: issue?.path ?? 'actions',
+      actionId: issue?.actionId ?? null,
+      actorId: issue?.actorId ?? null,
+      publicActionId: issue?.publicActionId ?? null,
+      predecessorActionId: issue?.predecessorActionId ?? null,
+      ruleCodes: [...(issue?.ruleCodes ?? [])].sort(),
+      unresolvedCodes: [...(issue?.unresolvedCodes ?? [])].sort(),
+    };
+    const identity = JSON.stringify(example);
+    if (
+      stats.rejectionExamples.length < 8 &&
+      !stats.rejectionExamples.some(
+        existing => JSON.stringify(existing) === identity
+      )
+    ) {
+      stats.rejectionExamples.push(example);
+    }
+  }
+  stats.rejectionCounts = Object.fromEntries(
+    Object.entries(stats.rejectionCounts).sort(([left], [right]) =>
+      left.localeCompare(right, 'en')
+    )
+  );
+  stats.rejectionExamples.sort(
+    (left, right) =>
+      left.code.localeCompare(right.code, 'en') ||
+      String(left.path).localeCompare(String(right.path), 'en') ||
+      String(left.actionId ?? '').localeCompare(
+        String(right.actionId ?? ''),
+        'en'
+      )
+  );
 }
 
 function normalizeCriticalPolicy(value) {

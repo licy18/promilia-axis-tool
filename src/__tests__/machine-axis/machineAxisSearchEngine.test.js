@@ -11,6 +11,7 @@ import {
   selectTopN,
   shouldPrune,
 } from '../../machine-axis/machineAxisSearchEngine';
+import { createMachineAxisSearchAction } from '../../machine-axis/machineAxisSearchGenerator';
 
 function cloneFixture() {
   return structuredClone(fixture);
@@ -190,4 +191,151 @@ describe('Machine Axis search engine', () => {
     expect(secondWallTime).toBeGreaterThan(0);
     expect(secondSummary).toEqual(firstSummary);
   }, 180_000);
+
+  it('prunes a primary-objective candidate before scoring when its execution plan skips an action', async () => {
+    const fakeService = {
+      async simulate(axis) {
+        const blocked = (axis.actions ?? []).length > 0;
+        return {
+          contract: axis,
+          hashes: {
+            input: blocked ? 'blocked-input' : 'root-input',
+            data: 'data',
+            trace: blocked ? 'blocked-trace' : 'root-trace',
+            build: 'build',
+          },
+          evaluation: { totals: {} },
+          trace: {
+            scenario: { durationMs: 1000, frameRate: 60, actorIds: [] },
+            state: { initial: {}, final: {} },
+            controlledActors: {},
+            actions: blocked
+              ? [{ id: 'blocked-a2', type: 'skill', startMs: 0 }]
+              : [],
+            executionPlan: {
+              actions: blocked
+                ? [
+                    {
+                      actionId: 'blocked-a2',
+                      execute: false,
+                      status: 'skipped-rule-blocked',
+                      violationCodes: ['attack-input-chain-incomplete'],
+                      unresolvedCodes: [],
+                    },
+                  ]
+                : [],
+            },
+            diagnostics: { actionRules: { diagnostics: [], summary: {} } },
+          },
+        };
+      },
+    };
+    const generator = {
+      generateNextActions({ axis }) {
+        if ((axis.actions ?? []).length > 0) return [];
+        return [
+          {
+            action: createMachineAxisSearchAction({
+              id: 'blocked-a2',
+              ownerKind: 'actor',
+              slotId: 'slot-1',
+              publicActionId: 10101001,
+              actionKind: 'normal-attack',
+              attackInput: { sequenceIndex: 2, groupId: 'orphan' },
+              startFrame: 0,
+            }),
+            label: 'standalone-a2',
+          },
+        ];
+      },
+    };
+    const engine = createMachineAxisSearchEngine({
+      service: fakeService,
+      generator,
+    });
+    const result = await engine.search({
+      contract: {
+        scenario: { durationFrames: 60, fps: 60, team: [] },
+        actions: [],
+      },
+      options: {
+        objective: 'cycle-dps-no-toughness',
+        maxDepth: 1,
+        includeWait: false,
+      },
+    });
+    expect(result.results).toEqual([]);
+    expect(result.summary).toMatchObject({
+      invalidCandidates: 1,
+      rejectionCounts: { 'attack-input-chain-incomplete': 1 },
+      rejectionExamples: [
+        expect.objectContaining({
+          code: 'attack-input-chain-incomplete',
+          actionId: 'blocked-a2',
+          ruleCodes: ['attack-input-chain-incomplete'],
+        }),
+      ],
+    });
+  });
+
+  it('records unresolved joint actions as excluded formal surface evidence', async () => {
+    const fakeService = {
+      async simulate(axis) {
+        return {
+          contract: axis,
+          hashes: {
+            input: 'root-input',
+            data: 'data',
+            trace: 'root-trace',
+            build: 'build',
+          },
+          evaluation: { totals: {} },
+          trace: {
+            scenario: { durationMs: 1000, frameRate: 60, actorIds: [] },
+            state: { initial: {}, final: {} },
+            controlledActors: {},
+            actions: [],
+            executionPlan: { actions: [] },
+            diagnostics: { actionRules: { diagnostics: [], summary: {} } },
+          },
+        };
+      },
+    };
+    const generator = {
+      generateNextActions({ options }) {
+        options.onFormalRejection({
+          code: 'joint-attack-trigger-unresolved',
+          path: 'actions',
+          actorId: 'actor-101010',
+          publicActionId: 10101012,
+        });
+        return [];
+      },
+    };
+    const result = await createMachineAxisSearchEngine({
+      service: fakeService,
+      generator,
+    }).search({
+      contract: {
+        scenario: { durationFrames: 60, fps: 60, team: [] },
+        actions: [],
+      },
+      options: {
+        objective: 'cycle-dps-no-toughness',
+        maxDepth: 1,
+        includeWait: false,
+      },
+    });
+    expect(result.summary).toMatchObject({
+      formalSurfaceRejectedCandidates: 1,
+      rejectionCounts: { 'joint-attack-trigger-unresolved': 1 },
+      rejectionExamples: [
+        expect.objectContaining({
+          code: 'joint-attack-trigger-unresolved',
+          actorId: 'actor-101010',
+          publicActionId: 10101012,
+        }),
+      ],
+    });
+  });
 });
