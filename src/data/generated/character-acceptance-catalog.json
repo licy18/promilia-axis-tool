@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "e4938ebddcd5a26b",
+  "manifestIndexHash": "e4a754da51af5ca9",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -737,12 +737,12 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 35,
+      "blockingLedgerCount": 29,
       "matrixRequiredCount": 159,
-      "matrixPassedCount": 130,
-      "manifestHash": "c1508c43b1f362e6",
-      "qualificationSubjectHash": "cb2acf38f8009dd9",
-      "sourceOfTruthHash": "6f6212e667a8b1ac",
+      "matrixPassedCount": 136,
+      "manifestHash": "32184beaa2558ee6",
+      "qualificationSubjectHash": "443ffda5218c8cb9",
+      "sourceOfTruthHash": "b8ebb760a4d5a19f",
       "profileHash": "4a761a55cbd2ac6c0e5ad7e7c8b53c9d95c6daeae2039070f642cb3d5877298f",
       "visualScenarioIds": [
         "m11-d-101003-visual-acceptance"
@@ -812,12 +812,12 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 109,
+      "blockingLedgerCount": 108,
       "matrixRequiredCount": 127,
-      "matrixPassedCount": 39,
-      "manifestHash": "9bd10aa413a437e2",
-      "qualificationSubjectHash": "0dfead9fbe36bf35",
-      "sourceOfTruthHash": "34f1a2d01eba7504",
+      "matrixPassedCount": 40,
+      "manifestHash": "c5197f2dcae370d9",
+      "qualificationSubjectHash": "4946132d26e0468b",
+      "sourceOfTruthHash": "418276248d789263",
       "profileHash": "3469f5994d16d547d2fce5b2f7b786bdc65a7473a588b84791fbf2fb6912118e",
       "visualScenarioIds": [
         "m12-b3-107001-focused-acceptance"
@@ -826,24 +826,21 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "extracted",
+      "maturityState": "optimization-ready",
       "earnedStates": [
-        "extracted"
+        "extracted",
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-headless-replay-gate-failed",
-        "acceptance-functional-failure-present",
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 54,
-      "matrixRequiredCount": 123,
-      "matrixPassedCount": 69,
-      "manifestHash": "e33f8c57153d9ab2",
-      "qualificationSubjectHash": "01d6f813afb6b2db",
-      "sourceOfTruthHash": "90850007fda8ee91",
+      "optimizationReady": true,
+      "blockers": [],
+      "blockingLedgerCount": 0,
+      "matrixRequiredCount": 111,
+      "matrixPassedCount": 111,
+      "manifestHash": "779bfb4c54398363",
+      "qualificationSubjectHash": "479c4dd58390caf4",
+      "sourceOfTruthHash": "3e74612699538ecd",
       "profileHash": "f6eec495783b56210902a5f3fbc804e712847b95a92d8f251d129b36c01cb1f2",
       "visualScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -864,9 +861,9 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 139,
       "matrixPassedCount": 139,
-      "manifestHash": "e9f8e939ea0a5f6a",
-      "qualificationSubjectHash": "0e61f7ee8ece341b",
-      "sourceOfTruthHash": "3038dbc661e02cee",
+      "manifestHash": "3bf1a1a1ac78bc73",
+      "qualificationSubjectHash": "1e188feb0fc91444",
+      "sourceOfTruthHash": "dd72580ea9115102",
       "profileHash": "f29503d90cd202aef79e4552756fcf68417f3c631efe0dc203842ef9c0982d89",
       "visualScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -887,9 +884,9 @@
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 138,
       "matrixPassedCount": 138,
-      "manifestHash": "cdeaf7794a0b13e8",
-      "qualificationSubjectHash": "f1841762d2522b6a",
-      "sourceOfTruthHash": "d777808b0f3ccc9d",
+      "manifestHash": "07d272ee0d19e852",
+      "qualificationSubjectHash": "5ca65b6148712520",
+      "sourceOfTruthHash": "781714f7a48591ce",
       "profileHash": "0d503f6936db63381ef424727bcd085c2fc6924218b7f1d93fe23aecf0f75d07",
       "visualScenarioIds": [
         "m11-d-109001-visual-acceptance"
@@ -901,11 +898,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "extracted": 1,
-      "optimization-ready": 2,
+      "optimization-ready": 3,
       "runtime-integrated": 4
     },
-    "optimizationReadyCount": 2
+    "optimizationReadyCount": 3
   },
-  "catalogHash": "5fe0901f77f3a849"
+  "catalogHash": "a9ada2ef667f8e60"
 }

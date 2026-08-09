@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "980ace9877d6bfa8",
+  "rosterHash": "c1e7da7b4c3285b0",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "0d0fe7e8e7551bc4",
-        "980ace9877d6bfa8"
+        "2f9979c133f22101",
+        "c1e7da7b4c3285b0"
       ]
     },
     {
@@ -194,20 +194,6 @@
       "gapHash": "e15d2ad8e5405433"
     },
     {
-      "gapIdentity": "character:107002:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "107002",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=107002]"
-      ],
-      "details": {},
-      "gapHash": "c99a421e56f2b5e4"
-    },
-    {
       "gapIdentity": "character:112001:character-acceptance-not-published",
       "objectKind": "character",
       "objectId": "112001",
@@ -282,18 +268,18 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 11,
+    "blockingUniqueGapCount": 10,
     "byCategory": {
-      "not-implemented": 11
+      "not-implemented": 10
     },
     "byCode": {
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 3,
-      "character-not-optimization-ready": 7
+      "character-not-optimization-ready": 6
     },
     "byObjectKind": {
-      "character": 11
+      "character": 10
     }
   },
-  "ledgerHash": "e362b755919580ca"
+  "ledgerHash": "c91f931772f4b8fd"
 }

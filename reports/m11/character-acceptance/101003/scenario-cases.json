@@ -9948,6 +9948,157 @@
             "operation": "apply",
             "targetId": "enemy-300032",
             "projectionIdentity": "machine-effect:m11-d-101003-visual-acceptance:9"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:152",
+            "operation": "settle-damage",
+            "targetId": "enemy-300032",
+            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=152|battle-element-assets.jsonl#path_id=3879285143630828198.types",
+            "rawDamage": 113,
+            "projectionIdentity": "machine-tuning-damage-effect:m11-d-101003-visual-acceptance:7"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:150",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
+            "beforeValue": 0,
+            "afterValue": 1,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:0"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:150",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
+            "beforeValue": 1,
+            "afterValue": 2,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:1"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:1:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:19:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:2:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:20:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:21:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "remove",
+            "targetId": "actor-101003",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:26:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "remove",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:27:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:28:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:3:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:5:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:6:151"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=466374251647106866",
+            "attributeId": 1,
+            "valueRaw": 60,
+            "projectionIdentity": "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:7:151"
           }
         ],
         "resources": [],
@@ -10258,7 +10409,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "fd268b29d52480c6",
+      "traceProjectionHash": "5d833e55c7a39d87",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -11758,6 +11909,89 @@
           "assertionHash": "911ec99e0f9a4088"
         },
         {
+          "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m11-d-101003-visual-acceptance:7",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:152",
+            "kind": "effect",
+            "operation": "settle-damage"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-damage-effect:m11-d-101003-visual-acceptance:7"
+          ],
+          "reasons": [],
+          "assertionHash": "b8b9630248e8139d"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:0",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:150",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:0",
+            "machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "bb6ca8f7251faf24"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:1:151",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:1:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:19:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:2:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:20:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:21:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:3:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:5:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:6:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:7:151"
+          ],
+          "reasons": [],
+          "assertionHash": "564450599a44210b"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:26:151",
+          "selector": {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:151",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:26:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:27:151",
+            "machine-tuning-modifier-effect:m11-d-101003-visual-acceptance:28:151"
+          ],
+          "reasons": [],
+          "assertionHash": "0d98e81ea75b328c"
+        },
+        {
           "assertionIdentity": "trace-hit:machine-hit:m11-d-101003-visual-acceptance:0",
           "selector": {
             "actionId": "101003-critical-sampled-low",
@@ -12090,18 +12324,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "27d778c95440a12b"
+      "scenarioCaseHash": "812da758a761c1f5"
     }
   ],
   "summary": {
     "scenarioCount": 3,
     "executionPassedCount": 3,
-    "assertionCount": 341,
-    "assertionPassedCount": 335,
+    "assertionCount": 345,
+    "assertionPassedCount": 339,
     "runnerKindCounts": {
       "canonical-character-golden": 2,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "1b175fd005ebc2cc"
+  "scenarioSetHash": "b037a2ccf1e81398"
 }

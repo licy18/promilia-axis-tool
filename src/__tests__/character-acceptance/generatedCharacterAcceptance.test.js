@@ -80,11 +80,10 @@ describe('generated character acceptance manifests', () => {
     expect(generatedCatalog.summary).toMatchObject({
       ownerCount: 7,
       maturityCounts: {
-        extracted: 1,
         'runtime-integrated': 4,
-        'optimization-ready': 2,
+        'optimization-ready': 3,
       },
-      optimizationReadyCount: 2,
+      optimizationReadyCount: 3,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -157,11 +156,11 @@ describe('generated character acceptance manifests', () => {
         valid: true,
         issues: [],
       });
-      const acceptanceCommit = [108003, 109001].includes(ownerId)
-        ? '310a4bb50239572553456ee2db14f10bd2bbc494'
+      const productAccepted = [107002, 108003, 109001].includes(ownerId);
+      const acceptanceCommit = productAccepted
+        ? '968d5d0c5f4396aab1d9f8a1263b7586998b25c1'
         : null;
-      const productAccepted = acceptanceCommit !== null;
-      const runtimeIntegrated = ownerId !== 107002;
+      const runtimeIntegrated = true;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'

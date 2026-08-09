@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "980ace9877d6bfa8",
+  "rosterHash": "c1e7da7b4c3285b0",
   "records": [
     {
       "objectKind": "character",
@@ -111,10 +111,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "9bd10aa413a437e2"
+          "c5197f2dcae370d9"
         ]
       },
-      "manifestHash": "0db0d08e5a94fc3c"
+      "manifestHash": "f44080b8c885f429"
     },
     {
       "objectKind": "character",
@@ -125,23 +125,17 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           107002
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "e33f8c57153d9ab2"
+          "779bfb4c54398363"
         ]
       },
-      "manifestHash": "42a3eca842337901"
+      "manifestHash": "a5efcfe7de56b41b"
     },
     {
       "objectKind": "character",
@@ -159,10 +153,10 @@
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "e9f8e939ea0a5f6a"
+          "3bf1a1a1ac78bc73"
         ]
       },
-      "manifestHash": "b3d0204f13052b23"
+      "manifestHash": "08d8ad572f6c1086"
     },
     {
       "objectKind": "character",
@@ -180,10 +174,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "cdeaf7794a0b13e8"
+          "07d272ee0d19e852"
         ]
       },
-      "manifestHash": "cf6ba2bd0b17936a"
+      "manifestHash": "4f036a9b58a737ac"
     },
     {
       "objectKind": "character",
@@ -30895,5 +30889,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "c21a9f0a3b5d0e21"
+  "manifestsHash": "0949bfaac9967fde"
 }

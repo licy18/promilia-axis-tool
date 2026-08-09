@@ -39623,6 +39623,337 @@
             "afterValue": 6.800003,
             "change": 0.012146,
             "projectionIdentity": "machine-resource-backed-effect:m12-b3-107001-focused-acceptance:999"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:752",
+            "operation": "settle-damage",
+            "targetId": "enemy-300032",
+            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=752|battle-element-assets.jsonl#path_id=-8148787786042882084.types",
+            "rawDamage": 66,
+            "projectionIdentity": "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:11"
+          },
+          {
+            "actionId": "sifliya-a1-cycle-2a",
+            "effectIdentity": "battle-element:752",
+            "operation": "settle-damage",
+            "targetId": "enemy-300032",
+            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=752|battle-element-assets.jsonl#path_id=-8148787786042882084.types",
+            "rawDamage": 199,
+            "projectionIdentity": "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:41"
+          },
+          {
+            "actionId": "sifliya-a1-cycle-2b",
+            "effectIdentity": "battle-element:752",
+            "operation": "settle-damage",
+            "targetId": "enemy-300032",
+            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=752|battle-element-assets.jsonl#path_id=-8148787786042882084.types",
+            "rawDamage": 199,
+            "projectionIdentity": "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:48"
+          },
+          {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:752",
+            "operation": "settle-damage",
+            "targetId": "enemy-300032",
+            "sourceIdentity": "combat-overlimit-mechanics-20260718.json#elementConfigId=752|battle-element-assets.jsonl#path_id=-8148787786042882084.types",
+            "rawDamage": 914,
+            "projectionIdentity": "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:55"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:750",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107001133.asset/MonoBehaviour/ast_107001133__-5198070001380788731.json#elementConfigId=107001133#notDelElementDataList[m_PathID=1474042154774785480]x1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|Battle/Element/ast_107001133.asset#notDelElementDataList includes ast_750 once",
+            "beforeValue": 0,
+            "afterValue": 1,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:0"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:750",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10700112:0:1474042154774785480:588802666480550264:10|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700112.asset#elementConfigId=750@10F",
+            "beforeValue": 1,
+            "afterValue": 2,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:1"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:750",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10700113:0:1474042154774785480:-4555925827987686937:133|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700113.asset#elementConfigId=750@133F",
+            "beforeValue": 2,
+            "afterValue": 3,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:2"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:750",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107001133.asset/MonoBehaviour/ast_107001133__-5198070001380788731.json#elementConfigId=107001133#notDelElementDataList[m_PathID=1474042154774785480]x1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|Battle/Element/ast_107001133.asset#notDelElementDataList includes ast_750 once",
+            "beforeValue": 3,
+            "afterValue": 4,
+            "change": 1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:3"
+          },
+          {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:750",
+            "operation": "consume",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10101021:0:4731523060341306954:-7178919562725074255:109",
+            "beforeValue": 4,
+            "afterValue": 3,
+            "change": -1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:4"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:10:751"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:11:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:16:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:17:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:18:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:2:751"
+          },
+          {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:20:751"
+          },
+          {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:21:751"
+          },
+          {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:22:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:26:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:27:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:28:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:3:751"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:30:751"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:31:751"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:32:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "remove",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:33:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "remove",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:34:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "operation": "remove",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:35:751"
+          },
+          {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:4:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:5:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-103002",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:6:751"
+          },
+          {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-107001",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:7:751"
+          },
+          {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "operation": "apply",
+            "targetId": "actor-101010",
+            "sourceIdentity": "battle-element-assets.jsonl#path_id=-4529113272733101309",
+            "attributeId": 105,
+            "valueRaw": 558,
+            "projectionIdentity": "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:9:751"
           }
         ],
         "resources": [
@@ -40641,7 +40972,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "0ebe74b9746213a1",
+      "traceProjectionHash": "a61baa5f70e6cc48",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -47750,6 +48081,294 @@
           "assertionHash": "1c58efbf3c1c2b0d"
         },
         {
+          "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:11",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:752",
+            "kind": "effect",
+            "operation": "settle-damage"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:11"
+          ],
+          "reasons": [],
+          "assertionHash": "94818a91eb099a5e"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:41",
+          "selector": {
+            "actionId": "sifliya-a1-cycle-2a",
+            "effectIdentity": "battle-element:752",
+            "kind": "effect",
+            "operation": "settle-damage"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:41"
+          ],
+          "reasons": [],
+          "assertionHash": "0c65f68b14f4fdc8"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:48",
+          "selector": {
+            "actionId": "sifliya-a1-cycle-2b",
+            "effectIdentity": "battle-element:752",
+            "kind": "effect",
+            "operation": "settle-damage"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:48"
+          ],
+          "reasons": [],
+          "assertionHash": "d5d954213ef9c8e9"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:55",
+          "selector": {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:752",
+            "kind": "effect",
+            "operation": "settle-damage"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:55"
+          ],
+          "reasons": [],
+          "assertionHash": "f92cf9b8389b769f"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:0",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:750",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "3382aa5c64c0a1ef"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:1",
+          "selector": {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:750",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "680c2b8533b2b582"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:2",
+          "selector": {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:750",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "8637bdd33e5dbe13"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:3",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:750",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "f4e82c6122347714"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:4",
+          "selector": {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:750",
+            "kind": "effect",
+            "operation": "consume"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "bea6c3ca5e7aac90"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:10:751",
+          "selector": {
+            "actionId": "sifliya-ultimate-three-marks",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:10:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:11:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:30:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:31:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:32:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:9:751"
+          ],
+          "reasons": [],
+          "assertionHash": "5c764705a39cd767"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:16:751",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:16:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:17:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:18:751"
+          ],
+          "reasons": [],
+          "assertionHash": "b625a440a615dbde"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:2:751",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-1",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:2:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:3:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:4:751"
+          ],
+          "reasons": [],
+          "assertionHash": "abb321c2919b6489"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:20:751",
+          "selector": {
+            "actionId": "switch-away-from-second-lumi--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:20:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:21:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:22:751"
+          ],
+          "reasons": [],
+          "assertionHash": "e7d4f6ef8ed94170"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:26:751",
+          "selector": {
+            "actionId": "sifliya-star-response",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "apply"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:26:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:27:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:28:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:5:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:6:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:7:751"
+          ],
+          "reasons": [],
+          "assertionHash": "2b54d9fbcd060fa8"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:33:751",
+          "selector": {
+            "actionId": "sifliya-a3-cycle-2b",
+            "effectIdentity": "battle-element:751",
+            "kind": "effect",
+            "operation": "remove"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:33:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:34:751",
+            "machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:35:751"
+          ],
+          "reasons": [],
+          "assertionHash": "5a1d76d96f716d40"
+        },
+        {
           "assertionIdentity": "trace-hit:machine-hit:m12-b3-107001-focused-acceptance:0",
           "selector": {
             "actionId": "107001-critical-sampled-low",
@@ -49051,7 +49670,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "68414de881642e91"
+      "scenarioCaseHash": "a8ad5c5d7292783a"
     },
     {
       "schemaVersion": 1,
@@ -52891,12 +53510,12 @@
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 397,
-    "assertionPassedCount": 393,
+    "assertionCount": 412,
+    "assertionPassedCount": 408,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "635c33ad3205e4ea"
+  "scenarioSetHash": "e0a126f2c36e2a70"
 }

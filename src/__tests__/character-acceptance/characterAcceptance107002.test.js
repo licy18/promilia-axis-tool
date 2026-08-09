@@ -163,9 +163,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       functionalFailureCount: 0,
     });
     expect(misaManifest.evidence.productVisualAcceptance.status).toBe(
-      'pending'
+      'accepted'
     );
-    expect(misaManifest.maturity.optimizationReady).toBe(false);
+    expect(misaManifest.maturity.optimizationReady).toBe(true);
 
     const sourceSubskillBoundaries = misaManifest.requirementInventory.records
       .filter(record =>

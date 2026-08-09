@@ -12598,6 +12598,72 @@
             "projectionIdentity": "machine-tuning-damage-effect:m11-d-109001-visual-acceptance:95"
           },
           {
+            "actionId": "moyin-lifecycle-a5-1",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
+            "beforeValue": 0,
+            "afterValue": 2,
+            "change": 2,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:0"
+          },
+          {
+            "actionId": "moyin-lifecycle-a5-2",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
+            "beforeValue": 2,
+            "afterValue": 4,
+            "change": 2,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:1"
+          },
+          {
+            "actionId": "moyin-lifecycle-brilliant-chase-2",
+            "effectIdentity": "battle-element:250",
+            "operation": "consume",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900143:0:-7506081561353179437:5854955834435011997:13",
+            "beforeValue": 4,
+            "afterValue": 3,
+            "change": -1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:2"
+          },
+          {
+            "actionId": "moyin-lifecycle-a5-3",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
+            "beforeValue": 3,
+            "afterValue": 5,
+            "change": 2,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:3"
+          },
+          {
+            "actionId": "window-inside-start",
+            "effectIdentity": "battle-element:250",
+            "operation": "consume",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900143:0:-7506081561353179437:5854955834435011997:13",
+            "beforeValue": 4,
+            "afterValue": 3,
+            "change": -1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:4"
+          },
+          {
+            "actionId": "window-inside-end",
+            "effectIdentity": "battle-element:250",
+            "operation": "consume",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10900143:0:-7506081561353179437:5854955834435011997:13",
+            "beforeValue": 2,
+            "afterValue": 1,
+            "change": -1,
+            "projectionIdentity": "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:5"
+          },
+          {
             "actionId": "moyin-lifecycle-a5-2",
             "effectIdentity": "battle-element:252",
             "operation": "apply",
@@ -14738,7 +14804,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "c4f59d9231468794",
+      "traceProjectionHash": "7e5aec47e959b1e0",
       "assertions": [
         {
           "assertionIdentity": "buff-apply-refresh-stack-expire",
@@ -19855,6 +19921,114 @@
           "assertionHash": "4f8948a92427a064"
         },
         {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:0",
+          "selector": {
+            "actionId": "moyin-lifecycle-a5-1",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:0"
+          ],
+          "reasons": [],
+          "assertionHash": "f24a8fdf3c6c6efd"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:1",
+          "selector": {
+            "actionId": "moyin-lifecycle-a5-2",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:1"
+          ],
+          "reasons": [],
+          "assertionHash": "a656fe97641d158c"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:2",
+          "selector": {
+            "actionId": "moyin-lifecycle-brilliant-chase-2",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "consume"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:2"
+          ],
+          "reasons": [],
+          "assertionHash": "b0ff97253ae3a43e"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:3",
+          "selector": {
+            "actionId": "moyin-lifecycle-a5-3",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "acquire"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:3"
+          ],
+          "reasons": [],
+          "assertionHash": "6460311bb106a879"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:4",
+          "selector": {
+            "actionId": "window-inside-start",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "consume"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:4"
+          ],
+          "reasons": [],
+          "assertionHash": "f847d51efa005d3d"
+        },
+        {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:5",
+          "selector": {
+            "actionId": "window-inside-end",
+            "effectIdentity": "battle-element:250",
+            "kind": "effect",
+            "operation": "consume"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-resource-effect:m11-d-109001-visual-acceptance:5"
+          ],
+          "reasons": [],
+          "assertionHash": "e56ed96677d0d81c"
+        },
+        {
           "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m11-d-109001-visual-acceptance:10:252",
           "selector": {
             "actionId": "moyin-lifecycle-a5-2",
@@ -22268,18 +22442,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "27916eb78c9ff6c8"
+      "scenarioCaseHash": "b134ae516097da5c"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
-    "assertionCount": 676,
-    "assertionPassedCount": 675,
+    "assertionCount": 682,
+    "assertionPassedCount": 681,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "b47d6c429ecec85b"
+  "scenarioSetHash": "4bb6a30a3024fc24"
 }

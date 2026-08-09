@@ -752,20 +752,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 35,
+      "blockingLedgerCount": 29,
       "sourceGapCount": 13,
-      "acceptanceGapCount": 22,
+      "acceptanceGapCount": 16,
       "nonBlockingSourceCount": 2,
       "matrix": {
         "requirementCount": 239,
         "requiredCount": 159,
-        "passedCount": 130,
-        "blockedCount": 29,
+        "passedCount": 136,
+        "blockedCount": 23,
         "notApplicableCount": 80,
         "statusCounts": {
-          "blocked": 29,
+          "blocked": 23,
           "not-applicable": 80,
-          "passed": 130
+          "passed": 136
         },
         "dimensionCounts": {
           "action-effect-binding": 11,
@@ -794,8 +794,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c1508c43b1f362e6",
-      "sourceOfTruthHash": "6f6212e667a8b1ac",
+      "manifestHash": "32184beaa2558ee6",
+      "sourceOfTruthHash": "b8ebb760a4d5a19f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "50ecf1ff3e50bbe1",
@@ -940,20 +940,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 109,
+      "blockingLedgerCount": 108,
       "sourceGapCount": 63,
-      "acceptanceGapCount": 46,
+      "acceptanceGapCount": 45,
       "nonBlockingSourceCount": 53,
       "matrix": {
         "requirementCount": 265,
         "requiredCount": 127,
-        "passedCount": 39,
-        "blockedCount": 88,
+        "passedCount": 40,
+        "blockedCount": 87,
         "notApplicableCount": 138,
         "statusCounts": {
-          "blocked": 88,
+          "blocked": 87,
           "not-applicable": 138,
-          "passed": 39
+          "passed": 40
         },
         "dimensionCounts": {
           "action-effect-binding": 2,
@@ -981,8 +981,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9bd10aa413a437e2",
-      "sourceOfTruthHash": "34f1a2d01eba7504",
+      "manifestHash": "c5197f2dcae370d9",
+      "sourceOfTruthHash": "418276248d789263",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "efc735b280197f4e",
@@ -995,29 +995,22 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "extracted",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-headless-replay-gate-failed",
-        "acceptance-functional-failure-present",
-        "acceptance-product-visual-signoff-pending",
-        "acceptance-required-matrix-incomplete",
-        "acceptance-blocking-ledger-not-empty"
-      ],
-      "blockingLedgerCount": 54,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
+      "blockingLedgerCount": 0,
       "sourceGapCount": 0,
-      "acceptanceGapCount": 54,
+      "acceptanceGapCount": 0,
       "nonBlockingSourceCount": 16,
       "matrix": {
         "requirementCount": 181,
-        "requiredCount": 123,
-        "passedCount": 69,
-        "blockedCount": 54,
-        "notApplicableCount": 58,
+        "requiredCount": 111,
+        "passedCount": 111,
+        "blockedCount": 0,
+        "notApplicableCount": 70,
         "statusCounts": {
-          "blocked": 54,
-          "not-applicable": 58,
-          "passed": 69
+          "not-applicable": 70,
+          "passed": 111
         },
         "dimensionCounts": {
           "action-effect-binding": 4,
@@ -1041,15 +1034,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "e33f8c57153d9ab2",
-      "sourceOfTruthHash": "90850007fda8ee91",
+      "manifestHash": "779bfb4c54398363",
+      "sourceOfTruthHash": "3e74612699538ecd",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "f317810a065b6cb2",
-        "data": "ab8fd1f7a9fe66fe",
-        "trace": "b92c8b853b49a902",
-        "evaluation": "1bdc3d581a79c252",
-        "build": "c0e2fe00b44b8c5d"
+        "input": "f36808c67e6e82b0",
+        "data": "381c147c15b3d590",
+        "trace": "98facff5a52fd7de",
+        "evaluation": "620d8da34c9edd60",
+        "build": "e1515b0ddc630184"
       }
     },
     {
@@ -1098,8 +1091,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "e9f8e939ea0a5f6a",
-      "sourceOfTruthHash": "3038dbc661e02cee",
+      "manifestHash": "3bf1a1a1ac78bc73",
+      "sourceOfTruthHash": "dd72580ea9115102",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "0088d6b91e58aad3",
@@ -1154,8 +1147,8 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "cdeaf7794a0b13e8",
-      "sourceOfTruthHash": "d777808b0f3ccc9d",
+      "manifestHash": "07d272ee0d19e852",
+      "sourceOfTruthHash": "781714f7a48591ce",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "6d4454102831a0fe",
@@ -1166,21 +1159,21 @@
       }
     }
   ],
-  "catalogHash": "5fe0901f77f3a849",
-  "manifestIndexHash": "e4938ebddcd5a26b",
+  "catalogHash": "a9ada2ef667f8e60",
+  "manifestIndexHash": "e4a754da51af5ca9",
   "summary": {
     "ownerCount": 7,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
-    "runtimeIntegratedCount": 6,
-    "visuallyAcceptedCount": 2,
-    "optimizationReadyCount": 2,
-    "machineScenarioPassCount": 6,
+    "runtimeIntegratedCount": 7,
+    "visuallyAcceptedCount": 3,
+    "optimizationReadyCount": 3,
+    "machineScenarioPassCount": 7,
     "workbenchRoundTripPassCount": 7,
     "sourceGapCount": 219,
-    "acceptanceGapCount": 342,
+    "acceptanceGapCount": 281,
     "nonBlockingSourceCount": 563,
-    "functionalBlockers": 561,
+    "functionalBlockers": 500,
     "performanceAndBundleRisksBlocking": false
   }
 }

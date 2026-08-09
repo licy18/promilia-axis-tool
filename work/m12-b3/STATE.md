@@ -274,3 +274,12 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - qualification=`9/43/62/137/12`；source/roster/manifests/ledger/binding/catalog=`26db4986bce695fe/b3bb274e638433c1/f6aab7de4accdba6/3f1ee6e8e0af5ec4/6cba81d337120c35/b8810086de37175e`；全局 blocker `16→14→13`，全部为角色项。M12-C/formal search 继续 locked，Kibo DNA=`[]`。
 - 测试：仅一次 bounded `test:full` 为 `1511 passed / 16 failed`；失败文件经聚焦修订最终 `242/242` 通过，没有第二次 full。verified-combat/character-combat/scenario/acceptance/qualification/applied-source/production-imports/Workbench/action-status 审计、Miti E2E、production build `1885 modules`、diff check 全通过。
 - 下一步只允许提交窄 acceptance closeout 并向中央任务回报；保留全部 `281+14` 个未跟踪产物。不开始下一角色或中央集成。
+
+## M12-B3 107002 中央验收检查点（2026-08-09，产品验收通过）
+
+- 中央机制基线 `968d5d0c5f4396aab1d9f8a1263b7586998b25c1` 闭合米砂 107002 的正式验收缺口；旧、新 requirement identity 各 `181` 且集合完全一致，没有删 requirement 或 selector 漂移。最终 required/pass/N/A/blocked=`111/111/70/0`，source/acceptance gap=`0/0`。
+- 12 行 disposition 变化仅对应 `10700212/sub1` 与 `10700226/sub1` 的 control-window/hit：来源存在，但冻结产品场景中没有 runtime-reachable public action form，按来源化 N/A；通用生成器对误声明为可达的 subskill fail-closed，无 107002 角色 ID 特判。
+- Workbench 截图 `reports/m11-d-character-acceptance-107002-desktop.png` 已中央视觉检查，SHA-256=`349a930b34b38fa59e387655600d72bc9ba55695502504df7644c7aa7b16e2fc`。产品验收记录绑定完整中央机制提交 `968d5d0c5f4396aab1d9f8a1263b7586998b25c1`；qualification subject/scenario set=`479c4dd58390caf4/636a3cf0e57e0c29`，107002 maturity=`optimization-ready`。
+- 同输入 Machine Axis 双轮重放哈希稳定。米蒂 fixture input/data/trace/evaluation/build=`0088d6b91e58aad3/e281fe04fdbc2f6c/a8aa1cf4068a6d33/3c2fb1d6fda5e7b9/aef073acf58b042f`；M11 三角色 fixture=`daefb7220d3ebd19/5de748dda0c9ad95/2ef45ddf51a3712e/6b1817db45d140ab/39db05591de1c474`。
+- 中央聚焦门禁 `6 files / 89 tests` 全绿；verified-combat、scenario policy、character acceptance、optimization qualification、visual acceptance、applied-source bindings、production imports、Workbench data、action status 与 diff check 全 clean。当前已发布角色 `7`、runtime-integrated `7`、optimization-ready `3`；全局 blocker=`10`，全部为 character/not-implemented；M12-C/formal search 继续锁定，Kibo DNA=`[]`。
+- 下一步：串行复验并集成 102001 R2 与 107001 R2；112001 继续等待真实 controlled client toughness/break 顺序证据，不用 blocked tooling 代替裁决。
