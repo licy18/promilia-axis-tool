@@ -405,14 +405,16 @@
       "contractStatus": "verified-attack-input-chain-ready",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "chainIdentity": "miti-normal-three-inputs",
-        "kind": "attack-input-chain"
+        "controlSkillId": 10800301,
+        "kind": "action-form",
+        "ownerId": 108003,
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800301.asset/MonoBehaviour/MonoBehaviour_-3764981573334060928__-3764981573334060928.json#behaviorlineControl[0].behaviorList[pathId=4096369931231309952]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800301.asset/MonoBehaviour/MonoBehaviour_4096369931231309952__4096369931231309952.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800302.asset/MonoBehaviour/MonoBehaviour_-8176334897650960397__-8176334897650960397.json#behaviorlineControl[0].behaviorList[pathId=-8962388625268901901]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800302.asset/MonoBehaviour/MonoBehaviour_-8962388625268901901__-8962388625268901901.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_3326986919345854342__3326986919345854342.json#behaviorlineControl[0].behaviorList[pathId=6543793637146040198]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_6543793637146040198__6543793637146040198.json"
       ],
       "reasons": [],
-      "sourceRecordHash": "5b8d1cd68c1c784e"
+      "sourceRecordHash": "f76e0b7418ee6270"
     },
     {
       "requirementIdentity": "contract:conditional-hit-group:miti-electrified-full-charge-extra-arrows",
@@ -5238,5 +5240,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "c413587f0161c076"
+  "inventoryHash": "2675b03a795c06a7"
 }

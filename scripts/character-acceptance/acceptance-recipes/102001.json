@@ -6,11 +6,14 @@
   "goldenReports": ["reports/m10/102001/golden-trace.json"],
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
-    "qualificationSubjectHash": null,
-    "scenarioSetHash": null,
+    "status": "accepted",
+    "acceptanceCommit": "064d481c18a8ec3155df67d8fd8b1f603d31a899",
+    "recordIdentity": "character-product-acceptance:102001:064d481c18a8ec3155df67d8fd8b1f603d31a899:8172b8ec7e6014f9",
+    "qualificationSubjectHash": "8172b8ec7e6014f9",
+    "scenarioSetHash": "68fdee10a5edb61c",
+    "scenarioIdentities": [
+      "m12-b3-102001-zero-distance-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-102001-zero-distance-acceptance",

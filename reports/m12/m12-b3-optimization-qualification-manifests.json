@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "c1e7da7b4c3285b0",
+  "rosterHash": "dc3b4f59d3c7c4bb",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "872b81fb7957fcf1"
+          "812fbf721f9b896f"
         ]
       },
-      "manifestHash": "8997e8dab34f669a"
+      "manifestHash": "a17208f23a97ec51"
     },
     {
       "objectKind": "character",
@@ -39,28 +39,19 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=102001]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           102001
         ],
         "mechanismHash": "5b81beb6a20b273f",
-        "characterAcceptanceManifestHashes": []
+        "characterAcceptanceManifestHashes": [
+          "00ed32876483fb1e"
+        ]
       },
-      "manifestHash": "6b569cecc223eeac"
+      "manifestHash": "3998839e03d0a795"
     },
     {
       "objectKind": "character",
@@ -84,10 +75,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "80507fd582f766cb"
+          "1cd23d86dd943df6"
         ]
       },
-      "manifestHash": "28bd1e9e2cc29087"
+      "manifestHash": "14166de8106c04f1"
     },
     {
       "objectKind": "character",
@@ -111,10 +102,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "c5197f2dcae370d9"
+          "9c428f06d9390fd3"
         ]
       },
-      "manifestHash": "f44080b8c885f429"
+      "manifestHash": "0e8b05e784f06540"
     },
     {
       "objectKind": "character",
@@ -132,10 +123,10 @@
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "779bfb4c54398363"
+          "6cae9c6f98f3edcf"
         ]
       },
-      "manifestHash": "a5efcfe7de56b41b"
+      "manifestHash": "bf6b4fd24c968747"
     },
     {
       "objectKind": "character",
@@ -153,10 +144,10 @@
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "3bf1a1a1ac78bc73"
+          "9edddca050cb88dd"
         ]
       },
-      "manifestHash": "08d8ad572f6c1086"
+      "manifestHash": "5797c79961fd721a"
     },
     {
       "objectKind": "character",
@@ -174,10 +165,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "07d272ee0d19e852"
+          "aaaf661e1d50aa1b"
         ]
       },
-      "manifestHash": "4f036a9b58a737ac"
+      "manifestHash": "09c69929020b229e"
     },
     {
       "objectKind": "character",
@@ -30876,9 +30867,9 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 18,
+      "extracted": 17,
       "optimization-ready": 211,
-      "runtime-integrated": 34
+      "runtime-integrated": 35
     },
     "optimizationReadyCounts": {
       "character": 0,
@@ -30889,5 +30880,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "0949bfaac9967fde"
+  "manifestsHash": "6cb34851121b6bee"
 }

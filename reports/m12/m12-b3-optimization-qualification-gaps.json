@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "c1e7da7b4c3285b0",
+  "rosterHash": "dc3b4f59d3c7c4bb",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "2f9979c133f22101",
-        "c1e7da7b4c3285b0"
+        "2e0b11092ebd754a",
+        "dc3b4f59d3c7c4bb"
       ]
     },
     {
@@ -138,34 +138,6 @@
       "gapHash": "b25254be6b1fa6fb"
     },
     {
-      "gapIdentity": "character:102001:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "102001",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=102001]"
-      ],
-      "details": {},
-      "gapHash": "157c37ba17c6f2be"
-    },
-    {
-      "gapIdentity": "character:102001:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "102001",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=102001]"
-      ],
-      "details": {},
-      "gapHash": "07b024366cada0a8"
-    },
-    {
       "gapIdentity": "character:103002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "103002",
@@ -268,18 +240,18 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 10,
+    "blockingUniqueGapCount": 8,
     "byCategory": {
-      "not-implemented": 10
+      "not-implemented": 8
     },
     "byCode": {
       "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 3,
-      "character-not-optimization-ready": 6
+      "character-acceptance-not-published": 2,
+      "character-not-optimization-ready": 5
     },
     "byObjectKind": {
-      "character": 10
+      "character": 8
     }
   },
-  "ledgerHash": "c91f931772f4b8fd"
+  "ledgerHash": "3ea908f620489b05"
 }

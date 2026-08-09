@@ -752,20 +752,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 29,
+      "blockingLedgerCount": 28,
       "sourceGapCount": 13,
-      "acceptanceGapCount": 16,
+      "acceptanceGapCount": 15,
       "nonBlockingSourceCount": 2,
       "matrix": {
         "requirementCount": 239,
         "requiredCount": 159,
-        "passedCount": 136,
-        "blockedCount": 23,
+        "passedCount": 137,
+        "blockedCount": 22,
         "notApplicableCount": 80,
         "statusCounts": {
-          "blocked": 23,
+          "blocked": 22,
           "not-applicable": 80,
-          "passed": 136
+          "passed": 137
         },
         "dimensionCounts": {
           "action-effect-binding": 11,
@@ -794,15 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "32184beaa2558ee6",
-      "sourceOfTruthHash": "b8ebb760a4d5a19f",
+      "manifestHash": "abf6ef4da2e1428e",
+      "sourceOfTruthHash": "9e173ef873bd6876",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "50ecf1ff3e50bbe1",
-        "data": "88857a6aa25cc856",
-        "trace": "ae0e9b9ee77d84e7",
+        "input": "b41d527f81ffc7c5",
+        "data": "1bda6b2d8b2ae1aa",
+        "trace": "ef8ae49f3575f873",
         "evaluation": "53eb57b729f3a7e6",
-        "build": "c3042e864cebe232"
+        "build": "02a5adf9d3016b68"
       }
     },
     {
@@ -856,15 +856,71 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "872b81fb7957fcf1",
-      "sourceOfTruthHash": "0364bddbccbc5bcf",
+      "manifestHash": "812fbf721f9b896f",
+      "sourceOfTruthHash": "4d08d010c248edaa",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "8dbee931c078f99a",
-        "data": "2f57b3350617b6da",
-        "trace": "77a5d0e81f883405",
+        "input": "4eff2ba18c8ae0ce",
+        "data": "ac061593f2df062e",
+        "trace": "02d02392f8c3f731",
         "evaluation": "204c04b2ab3f5fb4",
-        "build": "4b8b15d166addf47"
+        "build": "676136dd831bc1d9"
+      }
+    },
+    {
+      "ownerId": 102001,
+      "ownerName": "莉莉",
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
+      "blockingLedgerCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "nonBlockingSourceCount": 33,
+      "matrix": {
+        "requirementCount": 260,
+        "requiredCount": 128,
+        "passedCount": 128,
+        "blockedCount": 0,
+        "notApplicableCount": 132,
+        "statusCounts": {
+          "not-applicable": 132,
+          "passed": 128
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 12,
+          "action-form": 14,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "control-window": 80,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 39,
+          "hit": 78,
+          "hit-override": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "runtime-effect-binding": 3,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "target-state-profile": 1,
+          "target-state-transaction": 2,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "00ed32876483fb1e",
+      "sourceOfTruthHash": "48b6acc0e24d32ce",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "fec9db64f396e332",
+        "data": "db8ad0b36c763d27",
+        "trace": "b39eb87119696631",
+        "evaluation": "f509878645099689",
+        "build": "b4e0a1ed87ab84df"
       }
     },
     {
@@ -877,20 +933,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 234,
+      "blockingLedgerCount": 231,
       "sourceGapCount": 71,
-      "acceptanceGapCount": 163,
+      "acceptanceGapCount": 160,
       "nonBlockingSourceCount": 297,
       "matrix": {
         "requirementCount": 696,
         "requiredCount": 588,
-        "passedCount": 167,
-        "blockedCount": 421,
+        "passedCount": 170,
+        "blockedCount": 418,
         "notApplicableCount": 108,
         "statusCounts": {
-          "blocked": 421,
+          "blocked": 418,
           "not-applicable": 108,
-          "passed": 167
+          "passed": 170
         },
         "dimensionCounts": {
           "action-effect-binding": 3,
@@ -919,15 +975,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "80507fd582f766cb",
-      "sourceOfTruthHash": "3e7e5d941722fef2",
+      "manifestHash": "1cd23d86dd943df6",
+      "sourceOfTruthHash": "d7ceeda3f7d683f2",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7686fbac77966cd9",
-        "data": "08b15f6389fddeb4",
-        "trace": "6fde765db0f80cac",
+        "input": "73e7970ab177b4f9",
+        "data": "0b1abd6249b310f8",
+        "trace": "0682c3e6c84edb94",
         "evaluation": "208849308c4ec837",
-        "build": "e9267205a3fdad56"
+        "build": "ea8ebee0269ac9b9"
       }
     },
     {
@@ -981,15 +1037,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c5197f2dcae370d9",
-      "sourceOfTruthHash": "418276248d789263",
+      "manifestHash": "9c428f06d9390fd3",
+      "sourceOfTruthHash": "0cd950e64d5c7c71",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "efc735b280197f4e",
-        "data": "dd6829ffda5eb960",
-        "trace": "1ef264549b93f420",
+        "input": "a7e500416367f1a2",
+        "data": "65e43de4a7e69424",
+        "trace": "d7ba6623ea11f42c",
         "evaluation": "2cfbca381aa12bae",
-        "build": "94f2ac3f150dc685"
+        "build": "9ed55171558ff5f4"
       }
     },
     {
@@ -1001,7 +1057,7 @@
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
-      "nonBlockingSourceCount": 16,
+      "nonBlockingSourceCount": 19,
       "matrix": {
         "requirementCount": 181,
         "requiredCount": 111,
@@ -1034,15 +1090,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "779bfb4c54398363",
-      "sourceOfTruthHash": "3e74612699538ecd",
+      "manifestHash": "6cae9c6f98f3edcf",
+      "sourceOfTruthHash": "78ff7d5a6c065bbc",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "f36808c67e6e82b0",
-        "data": "381c147c15b3d590",
-        "trace": "98facff5a52fd7de",
+        "input": "04a3403fb285d620",
+        "data": "0aded1e3190664b4",
+        "trace": "5855a8ab4fb3d5ba",
         "evaluation": "620d8da34c9edd60",
-        "build": "e1515b0ddc630184"
+        "build": "ae506f8da05bccf5"
       }
     },
     {
@@ -1091,15 +1147,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "3bf1a1a1ac78bc73",
-      "sourceOfTruthHash": "dd72580ea9115102",
+      "manifestHash": "9edddca050cb88dd",
+      "sourceOfTruthHash": "91e0c60b2fbc3739",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "0088d6b91e58aad3",
-        "data": "e281fe04fdbc2f6c",
-        "trace": "a8aa1cf4068a6d33",
+        "input": "9f718baee33657d3",
+        "data": "1ad44128a8a5bd20",
+        "trace": "a75ad5e2bff422a3",
         "evaluation": "3c2fb1d6fda5e7b9",
-        "build": "aef073acf58b042f"
+        "build": "454dcafa1444a828"
       }
     },
     {
@@ -1147,33 +1203,33 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "07d272ee0d19e852",
-      "sourceOfTruthHash": "781714f7a48591ce",
+      "manifestHash": "aaaf661e1d50aa1b",
+      "sourceOfTruthHash": "75f95f50279203d2",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "6d4454102831a0fe",
-        "data": "bb46f832c8060706",
-        "trace": "143277c1f0fd333c",
+        "input": "f12e0fa80af271ba",
+        "data": "aea5f24e5281c37a",
+        "trace": "413ff7733e747c50",
         "evaluation": "855dd5b0926bf110",
-        "build": "3ed3fc327c820c8a"
+        "build": "c5f9d705a71184a8"
       }
     }
   ],
-  "catalogHash": "a9ada2ef667f8e60",
-  "manifestIndexHash": "e4a754da51af5ca9",
+  "catalogHash": "a8035b08e2fd9e41",
+  "manifestIndexHash": "fa0526ab5e7e3bf7",
   "summary": {
-    "ownerCount": 7,
+    "ownerCount": 8,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
-    "runtimeIntegratedCount": 7,
-    "visuallyAcceptedCount": 3,
-    "optimizationReadyCount": 3,
-    "machineScenarioPassCount": 7,
-    "workbenchRoundTripPassCount": 7,
+    "runtimeIntegratedCount": 8,
+    "visuallyAcceptedCount": 4,
+    "optimizationReadyCount": 4,
+    "machineScenarioPassCount": 8,
+    "workbenchRoundTripPassCount": 8,
     "sourceGapCount": 219,
-    "acceptanceGapCount": 281,
-    "nonBlockingSourceCount": 563,
-    "functionalBlockers": 500,
+    "acceptanceGapCount": 277,
+    "nonBlockingSourceCount": 599,
+    "functionalBlockers": 496,
     "performanceAndBundleRisksBlocking": false
   }
 }

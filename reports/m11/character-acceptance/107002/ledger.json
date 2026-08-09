@@ -177,6 +177,23 @@
       "blocking": false
     },
     {
+      "recordIdentity": "source-gap:99f42bb32c9ea9db",
+      "uniqueGapIdentity": "source-gap:99f42bb32c9ea9db",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0|projected:misa-star-wood-priority-consume",
+        "semantic-gap:fb725e47c341e047df05"
+      ],
+      "blocking": false
+    },
+    {
       "recordIdentity": "source-gap:9f2cd6f0bd3d89c0",
       "uniqueGapIdentity": "source-gap:9f2cd6f0bd3d89c0",
       "category": "non-gameplay-source-record",
@@ -245,6 +262,23 @@
       "blocking": false
     },
     {
+      "recordIdentity": "source-gap:cb2cd3eebadaed5a",
+      "uniqueGapIdentity": "source-gap:cb2cd3eebadaed5a",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0|projected:misa-star-wood-priority-consume",
+        "semantic-gap:c10540ce7b7f2bed59fc"
+      ],
+      "blocking": false
+    },
+    {
       "recordIdentity": "source-gap:e6194d921b7fffb8",
       "uniqueGapIdentity": "source-gap:e6194d921b7fffb8",
       "category": "non-gameplay-source-record",
@@ -258,6 +292,23 @@
       "sourceRecordIdentities": [
         "effect:10700212|0|elements|5|-2174275479014567856|element:-2174275479014567856|82|0",
         "semantic-gap:00a5fb4b71960a38e44e"
+      ],
+      "blocking": false
+    },
+    {
+      "recordIdentity": "source-gap:ed9b3a8a18985a68",
+      "uniqueGapIdentity": "source-gap:ed9b3a8a18985a68",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordIdentities": [
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0|projected:misa-star-wood-priority-consume",
+        "semantic-gap:a3c67d2201c471b9932e"
       ],
       "blocking": false
     },
@@ -283,12 +334,12 @@
     "uniqueBlockingCount": 0,
     "sourceGapCount": 0,
     "acceptanceGapCount": 0,
-    "nonBlockingCount": 16,
+    "nonBlockingCount": 19,
     "statusCounts": {},
     "reasonCounts": {},
     "categoryCounts": {}
   },
-  "ledgerHash": "76a6d112aa1969c6",
+  "ledgerHash": "05a876faf8e93f31",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-form:actor|107002|10700201|2|10700215|dodge-attack:default",
@@ -830,12 +881,13 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]",
         "battle-element-assets.jsonl#path_id=-7412029037550756065"
       ],
-      "sourceRecordHash": "637205a968c3f3da",
+      "sourceRecordHash": "476199671da3bdbb",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:ad4cb36e950e5df66317"
+          "semantic-gap:ad4cb36e950e5df66317",
+          "semantic-gap:c10540ce7b7f2bed59fc"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0"
@@ -845,7 +897,8 @@
           "10700212|-7412029037550756065"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-damage-trigger-lifecycle-not-expanded",
@@ -1301,12 +1354,13 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]",
         "battle-element-assets.jsonl#path_id=-1085330686087474031"
       ],
-      "sourceRecordHash": "ce581399f213fd27",
+      "sourceRecordHash": "2f4b36cdd0d72533",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:be0f817de7f42178d75d"
+          "semantic-gap:be0f817de7f42178d75d",
+          "semantic-gap:fb725e47c341e047df05"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0"
@@ -1316,7 +1370,8 @@
           "10700212|-6104701335743815286"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-effect-wrapper-semantics-unresolved",
@@ -1338,12 +1393,13 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[9]",
         "battle-element-assets.jsonl#path_id=-1722401594839030113"
       ],
-      "sourceRecordHash": "22aea2a2510adc78",
+      "sourceRecordHash": "3abc6549b48ed1c8",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:7f97fbd5fdacbda72077"
+          "semantic-gap:7f97fbd5fdacbda72077",
+          "semantic-gap:a3c67d2201c471b9932e"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0"
@@ -1353,7 +1409,8 @@
           "10700212|-6104701335743815286"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-effect-wrapper-semantics-unresolved",
@@ -1926,6 +1983,17 @@
       "sourceRecordHash": "f1fe41a2cc035aa6"
     },
     {
+      "recordIdentity": "not-applicable:source-gap:99f42bb32c9ea9db",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-1085330686087474031:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordHash": "22d81b7bcd8ea8b5"
+    },
+    {
       "recordIdentity": "not-applicable:source-gap:9f2cd6f0bd3d89c0",
       "status": "not-applicable",
       "reason": "nested-effect-wrapper-semantics-unresolved",
@@ -1970,6 +2038,17 @@
       "sourceRecordHash": "b85d38c838e6aa23"
     },
     {
+      "recordIdentity": "not-applicable:source-gap:cb2cd3eebadaed5a",
+      "status": "not-applicable",
+      "reason": "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-7412029037550756065:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordHash": "aad855ab09031eeb"
+    },
+    {
       "recordIdentity": "not-applicable:source-gap:e6194d921b7fffb8",
       "status": "not-applicable",
       "reason": "judgment-condition-runtime-unimplemented",
@@ -1979,6 +2058,17 @@
         "effect:10700212|0|elements|5|-2174275479014567856|element:-2174275479014567856|82|0"
       ],
       "sourceRecordHash": "5e9472a407d840e6"
+    },
+    {
+      "recordIdentity": "not-applicable:source-gap:ed9b3a8a18985a68",
+      "status": "not-applicable",
+      "reason": "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10700212:0:-1722401594839030113:3929844140260263526:82|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "effect:10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0|projected:misa-star-wood-priority-consume"
+      ],
+      "sourceRecordHash": "ba211611ea29ef3c"
     },
     {
       "recordIdentity": "not-applicable:source-gap:f7a3e56282d20262",

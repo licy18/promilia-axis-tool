@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "219ca6e62a37dea9",
+        "reportHash": "d7e3111532ef06a9",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "093558efdba79034",
-          "data": "735191a959abdf6c",
-          "trace": "8237fbcdbe68eea9",
+          "input": "f88f09b18e1aced3",
+          "data": "61c4e97842ea75fd",
+          "trace": "9cb5fd5add4acbad",
           "evaluation": null
         }
       },
@@ -9515,7 +9515,7 @@
           "assertionHash": "760774e6e477fd45"
         }
       ],
-      "scenarioCaseHash": "769430d2a59388e0"
+      "scenarioCaseHash": "6b92336ab401c7aa"
     },
     {
       "schemaVersion": 1,
@@ -9523,7 +9523,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/109001-visual.json",
-        "inputHash": "6d4454102831a0fe",
+        "inputHash": "f12e0fa80af271ba",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/109001-visual.json"
       },
       "execution": {
@@ -9532,11 +9532,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "6d4454102831a0fe",
-          "data": "bb46f832c8060706",
-          "trace": "143277c1f0fd333c",
+          "input": "f12e0fa80af271ba",
+          "data": "aea5f24e5281c37a",
+          "trace": "413ff7733e747c50",
           "evaluation": "855dd5b0926bf110",
-          "build": "3ed3fc327c820c8a"
+          "build": "c5f9d705a71184a8"
         }
       },
       "traceProjection": {
@@ -9790,654 +9790,872 @@
             "actionId": "109001-critical-rate-zero",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 12,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:0"
           },
           {
             "actionId": "109001-critical-rate-zero",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 13,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:1"
           },
           {
             "actionId": "109001-critical-critical",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 1412,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:10"
           },
           {
             "actionId": "window-inside-end",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|13|1",
             "frame": null,
+            "absoluteFrame": 5289,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:100"
           },
           {
             "actionId": "window-inside-end",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
             "frame": null,
+            "absoluteFrame": 5294,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:101"
           },
           {
             "actionId": "window-inside-end",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
             "frame": null,
+            "absoluteFrame": 5299,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:102"
           },
           {
             "actionId": "window-after-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 6003,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:103"
           },
           {
             "actionId": "window-after-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 6008,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:104"
           },
           {
             "actionId": "window-after-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 6013,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:105"
           },
           {
             "actionId": "window-after-source",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 6029,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:106"
           },
           {
             "actionId": "window-outside-after",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 6090,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:107"
           },
           {
             "actionId": "window-outside-after",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 6091,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:108"
           },
           {
             "actionId": "109001-critical-critical",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1413,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:11"
           },
           {
             "actionId": "109001-critical-non-critical",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 1462,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:12"
           },
           {
             "actionId": "109001-critical-non-critical",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1463,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:13"
           },
           {
             "actionId": "109001-critical-miss-critical",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1513,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:14"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|4|1",
             "frame": null,
+            "absoluteFrame": 1544,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:15"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|8|2",
             "frame": null,
+            "absoluteFrame": 1548,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:16"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|12|3",
             "frame": null,
+            "absoluteFrame": 1552,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:17"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|16|4",
             "frame": null,
+            "absoluteFrame": 1556,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:18"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|20|5",
             "frame": null,
+            "absoluteFrame": 1560,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:19"
           },
           {
             "actionId": "109001-critical-rate-one-hundred",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 662,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:2"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|47|6",
             "frame": null,
+            "absoluteFrame": 1587,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:20"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|56|7",
             "frame": null,
+            "absoluteFrame": 1596,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:21"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|61|8",
             "frame": null,
+            "absoluteFrame": 1601,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:22"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|66|9",
             "frame": null,
+            "absoluteFrame": 1606,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:23"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|71|10",
             "frame": null,
+            "absoluteFrame": 1611,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:24"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-1",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 1621,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:25"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-1",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 1626,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:26"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-1",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 1631,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:27"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-1",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 1647,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:28"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-1",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|13|1",
             "frame": null,
+            "absoluteFrame": 1672,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:29"
           },
           {
             "actionId": "109001-critical-rate-one-hundred",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 663,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:3"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-1",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
             "frame": null,
+            "absoluteFrame": 1677,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:30"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-1",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
             "frame": null,
+            "absoluteFrame": 1682,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:31"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|4|1",
             "frame": null,
+            "absoluteFrame": 1893,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:32"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|8|2",
             "frame": null,
+            "absoluteFrame": 1897,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:33"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|12|3",
             "frame": null,
+            "absoluteFrame": 1901,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:34"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|16|4",
             "frame": null,
+            "absoluteFrame": 1905,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:35"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|20|5",
             "frame": null,
+            "absoluteFrame": 1909,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:36"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|47|6",
             "frame": null,
+            "absoluteFrame": 1936,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:37"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|56|7",
             "frame": null,
+            "absoluteFrame": 1945,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:38"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|61|8",
             "frame": null,
+            "absoluteFrame": 1950,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:39"
           },
           {
             "actionId": "109001-critical-sampled-low",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 1262,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:4"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|66|9",
             "frame": null,
+            "absoluteFrame": 1955,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:40"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|71|10",
             "frame": null,
+            "absoluteFrame": 1960,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:41"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|4|1",
             "frame": null,
+            "absoluteFrame": 1971,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:42"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|8|2",
             "frame": null,
+            "absoluteFrame": 1975,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:43"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|12|3",
             "frame": null,
+            "absoluteFrame": 1979,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:44"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|16|4",
             "frame": null,
+            "absoluteFrame": 1983,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:45"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|20|5",
             "frame": null,
+            "absoluteFrame": 1987,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:46"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|47|6",
             "frame": null,
+            "absoluteFrame": 2014,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:47"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|56|7",
             "frame": null,
+            "absoluteFrame": 2023,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:48"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|61|8",
             "frame": null,
+            "absoluteFrame": 2028,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:49"
           },
           {
             "actionId": "109001-critical-sampled-low",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1263,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:5"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|66|9",
             "frame": null,
+            "absoluteFrame": 2033,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:50"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|71|10",
             "frame": null,
+            "absoluteFrame": 2038,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:51"
           },
           {
             "actionId": "moyin-held-boundary-hit",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 2236,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:52"
           },
           {
             "actionId": "moyin-held-boundary-hit",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 2237,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:53"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-2",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 2243,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:54"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-2",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 2248,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:55"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-2",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 2253,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:56"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-source-2",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 2269,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:57"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-2",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|13|1",
             "frame": null,
+            "absoluteFrame": 2294,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:58"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-2",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
             "frame": null,
+            "absoluteFrame": 2299,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:59"
           },
           {
             "actionId": "109001-critical-sampled-boundary",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 1312,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:6"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-2",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
             "frame": null,
+            "absoluteFrame": 2304,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:60"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|4|1",
             "frame": null,
+            "absoluteFrame": 2515,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:61"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|8|2",
             "frame": null,
+            "absoluteFrame": 2519,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:62"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|12|3",
             "frame": null,
+            "absoluteFrame": 2523,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:63"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|16|4",
             "frame": null,
+            "absoluteFrame": 2527,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:64"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|20|5",
             "frame": null,
+            "absoluteFrame": 2531,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:65"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|47|6",
             "frame": null,
+            "absoluteFrame": 2558,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:66"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|56|7",
             "frame": null,
+            "absoluteFrame": 2567,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:67"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|61|8",
             "frame": null,
+            "absoluteFrame": 2572,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:68"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|66|9",
             "frame": null,
+            "absoluteFrame": 2577,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:69"
           },
           {
             "actionId": "109001-critical-sampled-boundary",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1313,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:7"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|71|10",
             "frame": null,
+            "absoluteFrame": 2582,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:70"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|4|1",
             "frame": null,
+            "absoluteFrame": 2593,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:71"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|8|2",
             "frame": null,
+            "absoluteFrame": 2597,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:72"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|12|3",
             "frame": null,
+            "absoluteFrame": 2601,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:73"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|3|5068827089459744812|16|4",
             "frame": null,
+            "absoluteFrame": 2605,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:74"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|2|-4067071381797012601|20|5",
             "frame": null,
+            "absoluteFrame": 2609,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:75"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|47|6",
             "frame": null,
+            "absoluteFrame": 2636,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:76"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|56|7",
             "frame": null,
+            "absoluteFrame": 2645,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:77"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|61|8",
             "frame": null,
+            "absoluteFrame": 2650,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:78"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|66|9",
             "frame": null,
+            "absoluteFrame": 2655,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:79"
           },
           {
             "actionId": "109001-critical-expected",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 1362,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:8"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "hitIdentity": "10900105|0|elements|6|2602386345610884148|71|10",
             "frame": null,
+            "absoluteFrame": 2660,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:80"
           },
           {
             "actionId": "window-before-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 3603,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:81"
           },
           {
             "actionId": "window-before-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 3608,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:82"
           },
           {
             "actionId": "window-before-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 3613,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:83"
           },
           {
             "actionId": "window-before-source",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 3629,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:84"
           },
           {
             "actionId": "window-outside-before",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 3651,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:85"
           },
           {
             "actionId": "window-outside-before",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 3652,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:86"
           },
           {
             "actionId": "moyin-expiry-boundary-hit",
             "hitIdentity": "10900101|0|elements|0|3476557355496561381|12|1",
             "frame": null,
+            "absoluteFrame": 3836,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:87"
           },
           {
             "actionId": "moyin-expiry-boundary-hit",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 3837,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:88"
           },
           {
             "actionId": "window-start-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 4403,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:89"
           },
           {
             "actionId": "109001-critical-expected",
             "hitIdentity": "10900101|0|elements|3|-4052262175632216603|13|2",
             "frame": null,
+            "absoluteFrame": 1363,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:9"
           },
           {
             "actionId": "window-start-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 4408,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:90"
           },
           {
             "actionId": "window-start-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 4413,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:91"
           },
           {
             "actionId": "window-start-source",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 4429,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:92"
           },
           {
             "actionId": "window-inside-start",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|13|1",
             "frame": null,
+            "absoluteFrame": 4454,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:93"
           },
           {
             "actionId": "window-inside-start",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|18|2",
             "frame": null,
+            "absoluteFrame": 4459,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:94"
           },
           {
             "actionId": "window-inside-start",
             "hitIdentity": "10900143|0|elements|0|2642523047740593292|23|3",
             "frame": null,
+            "absoluteFrame": 4464,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:95"
           },
           {
             "actionId": "window-end-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|3|1",
             "frame": null,
+            "absoluteFrame": 5203,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:96"
           },
           {
             "actionId": "window-end-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|8|2",
             "frame": null,
+            "absoluteFrame": 5208,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:97"
           },
           {
             "actionId": "window-end-source",
             "hitIdentity": "10900112|0|elements|1|-4564820134104165813|13|3",
             "frame": null,
+            "absoluteFrame": 5213,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:98"
           },
           {
             "actionId": "window-end-source",
             "hitIdentity": "10900112|0|elements|3|7337825396973098198|29|4",
             "frame": null,
+            "absoluteFrame": 5229,
+            "sourceSequencePath": null,
             "projectionIdentity": "machine-hit:m11-d-109001-visual-acceptance:99"
           }
         ],
@@ -10452,7 +10670,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10470,7 +10688,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10488,7 +10706,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10506,7 +10724,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10524,7 +10742,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10542,7 +10760,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10560,7 +10778,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10578,7 +10796,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10596,7 +10814,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10614,7 +10832,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10632,7 +10850,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10650,7 +10868,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10668,7 +10886,7 @@
               "effectIdentity": "actor:109001:passive:10900161",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001316.asset/MonoBehaviour/ast_109001316__-2193895459641539428.json#elementConfigId=109001316|hero-module:109001#skill:10900161#description=末音造成的超限伤害增加54%|Battle/Element/ast_109001316.asset#新被动overdrive伤害提升 attributeID=21 defaultPropertyTags[307]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10686,7 +10904,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10704,7 +10922,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10722,7 +10940,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10740,7 +10958,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10758,7 +10976,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10776,7 +10994,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10794,7 +11012,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|33|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10812,7 +11030,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10830,7 +11048,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10848,7 +11066,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10866,7 +11084,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10884,7 +11102,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10902,7 +11120,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10920,7 +11138,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10938,7 +11156,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|44|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10956,7 +11174,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10974,7 +11192,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10992,7 +11210,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11010,7 +11228,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11028,7 +11246,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11046,7 +11264,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11064,7 +11282,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11082,7 +11300,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1|layer|65|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11100,7 +11318,7 @@
               "effectIdentity": "moyin-brilliant",
               "elementId": 109001270,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#time=8000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270#combineNumber=-1|declared-capacity-override=1|Battle/Element/ast_109001270.asset#time=8000|character-combat-recipe:109001#brilliant-state-declared-capacity-1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11118,7 +11336,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11136,7 +11354,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11154,7 +11372,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11172,7 +11390,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11190,7 +11408,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11208,7 +11426,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11226,7 +11444,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11244,7 +11462,7 @@
               "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
               "elementId": null,
               "identity": "battle-effect:10900105:0:-3809486317990090417:7759936102957048157:47|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2",
-              "packageHash": "d5887c9881c938a1e41a2827d082563fa4c309c6e682a4ea5e52cfca7480d081",
+              "packageHash": "6ec7db9986cd5ceaaa7a6235025a35639c21a43ac740a0de4b24ab5065fe3f21",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -12259,6 +12477,19 @@
             "effectIdentity": "protocol:109001:critical-rate-boundary-source",
             "operation": "inherit",
             "targetId": "actor-109001",
+            "absoluteFrame": 0,
+            "timeMs": 0,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 9500
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:0"
           },
           {
@@ -12266,6 +12497,19 @@
             "effectIdentity": "protocol:109001:critical-rate-zero-offset",
             "operation": "inherit",
             "targetId": "actor-109001",
+            "absoluteFrame": 0,
+            "timeMs": 0,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": -10000
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:1"
           },
           {
@@ -12273,6 +12517,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 2014,
+            "timeMs": 33566.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:10"
           },
           {
@@ -12280,6 +12545,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 2014,
+            "timeMs": 33566.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:11"
           },
           {
@@ -12287,6 +12573,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 2149,
+            "timeMs": 35816.667,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:12"
           },
           {
@@ -12294,6 +12584,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 2291,
+            "timeMs": 38183.333,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:13"
           },
           {
@@ -12301,6 +12595,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 2294,
+            "timeMs": 38233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:14"
           },
           {
@@ -12308,6 +12623,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 2294,
+            "timeMs": 38233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:15"
           },
           {
@@ -12315,6 +12651,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 2294,
+            "timeMs": 38233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:16"
           },
           {
@@ -12322,6 +12679,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 2558,
+            "timeMs": 42633.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:17"
           },
           {
@@ -12329,6 +12707,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 2558,
+            "timeMs": 42633.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:18"
           },
           {
@@ -12336,6 +12735,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 2558,
+            "timeMs": 42633.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:19"
           },
           {
@@ -12343,6 +12763,19 @@
             "effectIdentity": "battle-element:109001316",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 0,
+            "timeMs": 0,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 21,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 5400
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:2"
           },
           {
@@ -12350,6 +12783,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 2771,
+            "timeMs": 46183.333,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:20"
           },
           {
@@ -12357,6 +12794,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 3836,
+            "timeMs": 63933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:21"
           },
           {
@@ -12364,6 +12822,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 3836,
+            "timeMs": 63933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:22"
           },
           {
@@ -12371,6 +12850,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 3836,
+            "timeMs": 63933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:23"
           },
           {
@@ -12378,6 +12878,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 4451,
+            "timeMs": 74183.333,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:24"
           },
           {
@@ -12385,6 +12889,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 4454,
+            "timeMs": 74233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:25"
           },
           {
@@ -12392,6 +12917,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 4454,
+            "timeMs": 74233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:26"
           },
           {
@@ -12399,6 +12945,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 4454,
+            "timeMs": 74233.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:27"
           },
           {
@@ -12406,6 +12973,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 4931,
+            "timeMs": 82183.333,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:28"
           },
           {
@@ -12413,6 +12984,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 5036,
+            "timeMs": 83933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:29"
           },
           {
@@ -12420,6 +13012,19 @@
             "effectIdentity": "protocol:109001:critical-rate-zero-offset",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 600,
+            "timeMs": 10000,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": -10000
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:3"
           },
           {
@@ -12427,6 +13032,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 5036,
+            "timeMs": 83933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:30"
           },
           {
@@ -12434,6 +13060,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 5036,
+            "timeMs": 83933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:31"
           },
           {
@@ -12441,6 +13088,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 5286,
+            "timeMs": 88100,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:32"
           },
           {
@@ -12448,6 +13099,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 5289,
+            "timeMs": 88150,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:33"
           },
           {
@@ -12455,6 +13127,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 5289,
+            "timeMs": 88150,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:34"
           },
           {
@@ -12462,6 +13155,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 5289,
+            "timeMs": 88150,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:35"
           },
           {
@@ -12469,6 +13183,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 5766,
+            "timeMs": 96100,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:36"
           },
           {
@@ -12476,6 +13194,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "remove",
             "targetId": "actor-101010",
+            "absoluteFrame": 6236,
+            "timeMs": 103933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:37"
           },
           {
@@ -12483,6 +13222,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "remove",
             "targetId": "actor-103002",
+            "absoluteFrame": 6236,
+            "timeMs": 103933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:38"
           },
           {
@@ -12490,6 +13250,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "remove",
             "targetId": "actor-109001",
+            "absoluteFrame": 6236,
+            "timeMs": 103933.333,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:39"
           },
           {
@@ -12497,6 +13278,19 @@
             "effectIdentity": "protocol:109001:critical-rate-boundary-source",
             "operation": "expire",
             "targetId": "actor-109001",
+            "absoluteFrame": 1200,
+            "timeMs": 20000,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 9500
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:4"
           },
           {
@@ -12504,6 +13298,10 @@
             "effectIdentity": "battle-element:109001270",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 1669,
+            "timeMs": 27816.667,
+            "expiresAtMs": null,
+            "modifiers": [],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:5"
           },
           {
@@ -12511,6 +13309,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 1936,
+            "timeMs": 32266.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:6"
           },
           {
@@ -12518,6 +13337,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-103002",
+            "absoluteFrame": 1936,
+            "timeMs": 32266.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:7"
           },
           {
@@ -12525,6 +13365,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-109001",
+            "absoluteFrame": 1936,
+            "timeMs": 32266.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:8"
           },
           {
@@ -12532,6 +13393,27 @@
             "effectIdentity": "tuning-mark:250:persistent",
             "operation": "apply",
             "targetId": "actor-101010",
+            "absoluteFrame": 2014,
+            "timeMs": 33566.667,
+            "expiresAtMs": null,
+            "modifiers": [
+              {
+                "attributeId": 8,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 86
+              },
+              {
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "formulaFamily": null,
+                "formulaValue": null,
+                "kind": "battle-property",
+                "valueRaw": 43
+              }
+            ],
             "projectionIdentity": "machine-effect:m11-d-109001-visual-acceptance:9"
           },
           {
@@ -13210,168 +14092,460 @@
             "actionId": "moyin-a5-brilliant-off",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": false,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
+              "elementId": 250,
+              "reason": "target-state-activation-condition-not-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:0"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": false,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
+              "elementId": 253,
+              "reason": "target-state-activation-condition-not-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:1"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
+              "elementId": 253,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:10"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
+              "elementId": 251,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:11"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
+              "elementId": 252,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:12"
           },
           {
             "actionId": null,
             "stateIdentity": "moyin-brilliant",
             "operation": "expire",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 0,
+              "appliedToCalculators": false,
+              "beforeValue": 1,
+              "change": -1,
+              "currentValue": 0,
+              "maxValue": 1,
+              "operation": "expire",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:13"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-2",
             "stateIdentity": "moyin-brilliant",
             "operation": "gain",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 1,
+              "appliedToCalculators": false,
+              "beforeValue": 0,
+              "change": 1,
+              "currentValue": 1,
+              "maxValue": 1,
+              "operation": "gain",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:14"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
+              "elementId": 250,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:15"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
+              "elementId": 253,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:16"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
+              "elementId": 251,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:17"
           },
           {
             "actionId": "moyin-lifecycle-a5-3",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
+              "elementId": 252,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:18"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
+              "elementId": 250,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:19"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": false,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
+              "elementId": 251,
+              "reason": "target-state-activation-condition-not-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:2"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
+              "elementId": 253,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:20"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
+              "elementId": 251,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:21"
           },
           {
             "actionId": "moyin-lifecycle-a5-4-refresh",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
+              "elementId": 252,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:22"
           },
           {
             "actionId": null,
             "stateIdentity": "moyin-brilliant",
             "operation": "expire",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 0,
+              "appliedToCalculators": false,
+              "beforeValue": 1,
+              "change": -1,
+              "currentValue": 0,
+              "maxValue": 1,
+              "operation": "expire",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:23"
           },
           {
             "actionId": "window-inside-start",
             "stateIdentity": "moyin-brilliant",
             "operation": "gain",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 1,
+              "appliedToCalculators": false,
+              "beforeValue": 0,
+              "change": 1,
+              "currentValue": 1,
+              "maxValue": 1,
+              "operation": "gain",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:24"
           },
           {
             "actionId": null,
             "stateIdentity": "moyin-brilliant",
             "operation": "expire",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 0,
+              "appliedToCalculators": false,
+              "beforeValue": 1,
+              "change": -1,
+              "currentValue": 0,
+              "maxValue": 1,
+              "operation": "expire",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:25"
           },
           {
             "actionId": "window-inside-end",
             "stateIdentity": "moyin-brilliant",
             "operation": "gain",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 1,
+              "appliedToCalculators": false,
+              "beforeValue": 0,
+              "change": 1,
+              "currentValue": 1,
+              "maxValue": 1,
+              "operation": "gain",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:26"
           },
           {
             "actionId": null,
             "stateIdentity": "moyin-brilliant",
             "operation": "expire",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 0,
+              "appliedToCalculators": false,
+              "beforeValue": 1,
+              "change": -1,
+              "currentValue": 0,
+              "maxValue": 1,
+              "operation": "expire",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:27"
           },
           {
             "actionId": "moyin-a5-brilliant-off",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": false,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
+              "elementId": 252,
+              "reason": "target-state-activation-condition-not-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:3"
           },
           {
             "actionId": "moyin-lifecycle-brilliant-chase-1",
             "stateIdentity": "moyin-brilliant",
             "operation": "gain",
+            "absoluteFrame": null,
+            "payload": {
+              "afterValue": 1,
+              "appliedToCalculators": false,
+              "beforeValue": 0,
+              "change": 1,
+              "currentValue": 1,
+              "maxValue": 1,
+              "operation": "gain",
+              "resource": "target-state",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001270.asset/MonoBehaviour/ast_109001270__8949110464361487189.json#elementConfigId=109001270|skill_control_10900143.asset/MonoBehaviour/MonoBehaviour_-6292682817961163363__-6292682817961163363.json#brilliant-buff@10F",
+              "stateIdentity": "moyin-brilliant",
+              "stateName": "璀璨"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:4"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
+              "elementId": 250,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:5"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-1715488869977622004|47|0",
+              "elementId": 253,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:6"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-637110086033006477|47|0",
+              "elementId": 251,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:7"
           },
           {
             "actionId": "moyin-lifecycle-a5-1",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|element:-7783775984244194322|47|0",
+              "elementId": 252,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:8"
           },
           {
             "actionId": "moyin-lifecycle-a5-2",
             "stateIdentity": "moyin-brilliant",
             "operation": "VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED",
+            "absoluteFrame": null,
+            "payload": {
+              "applied": true,
+              "effectIdentity": "10900105|0|elements|7|5485634636675905737|47|1",
+              "elementId": 250,
+              "reason": "target-state-activation-condition-met",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0",
+              "stateIdentity": "moyin-brilliant"
+            },
             "projectionIdentity": "machine-state:m11-d-109001-visual-acceptance:9"
           }
         ],
@@ -14804,7 +15978,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "7e5aec47e959b1e0",
+      "traceProjectionHash": "ac22e872e33a843c",
       "assertions": [
         {
           "assertionIdentity": "buff-apply-refresh-stack-expire",
@@ -22442,7 +23616,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "b134ae516097da5c"
+      "scenarioCaseHash": "274429f36a6b08a9"
     }
   ],
   "summary": {
@@ -22455,5 +23629,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "4bb6a30a3024fc24"
+  "scenarioSetHash": "461885454d394eb9"
 }

@@ -8,9 +8,10 @@
 
 | 角色 | 成熟度 | 矩阵通过/必需 | source gap | acceptance gap | optimization-ready |
 |---|---:|---:|---:|---:|---:|
-| 寒悠悠 (101003) | runtime-integrated | 136/159 | 13 | 16 | 否 |
+| 寒悠悠 (101003) | runtime-integrated | 137/159 | 13 | 15 | 否 |
 | 涂山小玉 (101010) | runtime-integrated | 148/255 | 72 | 57 | 否 |
-| 红宝石 (103002) | runtime-integrated | 167/588 | 71 | 163 | 否 |
+| 莉莉 (102001) | optimization-ready | 128/128 | 0 | 0 | 是 |
+| 红宝石 (103002) | runtime-integrated | 170/588 | 71 | 160 | 否 |
 | 西芙莉雅 (107001) | runtime-integrated | 40/127 | 63 | 45 | 否 |
 | 米砂 (107002) | optimization-ready | 111/111 | 0 | 0 | 是 |
 | 米蒂 (108003) | optimization-ready | 139/139 | 0 | 0 | 是 |

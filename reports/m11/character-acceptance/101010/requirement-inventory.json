@@ -480,14 +480,16 @@
       "contractStatus": "verified-attack-input-chain-ready",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "chainIdentity": "xiaoyu-normal-default-five-inputs",
-        "kind": "attack-input-chain"
+        "controlSkillId": 10101001,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_165341662459234635__165341662459234635.json#behaviorlineControl[0].behaviorList[pathId=2660188517265606987]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_2660188517265606987__2660188517265606987.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_7212743067276039530__7212743067276039530.json#behaviorlineControl[0].behaviorList[pathId=3067658033679914346]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101002.asset/MonoBehaviour/MonoBehaviour_3067658033679914346__3067658033679914346.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_6626720207028828576__6626720207028828576.json#behaviorlineControl[0].behaviorList[pathId=3622866919876671904]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101003.asset/MonoBehaviour/MonoBehaviour_3622866919876671904__3622866919876671904.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-7015361169988888992__-7015361169988888992.json#behaviorlineControl[0].behaviorList[pathId=3144736292614526560]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_3144736292614526560__3144736292614526560.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-315692776239424798__-315692776239424798.json#behaviorlineControl[0].behaviorList[pathId=1142011828510366434]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1142011828510366434__1142011828510366434.json"
       ],
       "reasons": [],
-      "sourceRecordHash": "a6f86800829a0f79"
+      "sourceRecordHash": "8fe5edb64db433f1"
     },
     {
       "requirementIdentity": "contract:attack-input-chain:attack-input-chain:1:e486a47f2e8a96e3",
@@ -497,14 +499,16 @@
       "contractStatus": "verified-attack-input-chain-ready",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "chainIdentity": "xiaoyu-burst-three-inputs",
-        "kind": "attack-input-chain"
+        "controlSkillId": 10101001,
+        "kind": "action-form",
+        "ownerId": 101010,
+        "subSkillIndex": 1
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-3913756207518368359__-3913756207518368359.json#behaviorlineControl[0].behaviorList[pathId=-5130379327590023783]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101001.asset/MonoBehaviour/MonoBehaviour_-5130379327590023783__-5130379327590023783.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-3826611085350762852__-3826611085350762852.json#behaviorlineControl[0].behaviorList[pathId=-8511053184908753252]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101004.asset/MonoBehaviour/MonoBehaviour_-8511053184908753252__-8511053184908753252.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_-2926502216708723353__-2926502216708723353.json#behaviorlineControl[0].behaviorList[pathId=1963435923347205479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10101005.asset/MonoBehaviour/MonoBehaviour_1963435923347205479__1963435923347205479.json"
       ],
       "reasons": [],
-      "sourceRecordHash": "1fe603d01584b565"
+      "sourceRecordHash": "c667609b2eb5bf47"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:0:b143d1d56dd9550c",
@@ -8740,5 +8744,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "5cb7f1ce51bd362c"
+  "inventoryHash": "34058344bae474e8"
 }

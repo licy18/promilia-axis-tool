@@ -1311,7 +1311,8 @@
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:ad4cb36e950e5df66317"
+          "semantic-gap:ad4cb36e950e5df66317",
+          "semantic-gap:c10540ce7b7f2bed59fc"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-7412029037550756065|82|0"
@@ -1321,7 +1322,8 @@
           "10700212|-7412029037550756065"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-damage-trigger-lifecycle-not-expanded",
@@ -1343,7 +1345,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "637205a968c3f3da"
+      "sourceRecordHash": "476199671da3bdbb"
     },
     {
       "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
@@ -2339,7 +2341,8 @@
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:be0f817de7f42178d75d"
+          "semantic-gap:be0f817de7f42178d75d",
+          "semantic-gap:fb725e47c341e047df05"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-1085330686087474031|82|0"
@@ -2349,7 +2352,8 @@
           "10700212|-6104701335743815286"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-effect-wrapper-semantics-unresolved",
@@ -2370,7 +2374,7 @@
         "tuning-consume-success-branch-unresolved",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "ce581399f213fd27"
+      "sourceRecordHash": "2f4b36cdd0d72533"
     },
     {
       "requirementIdentity": "contract:effect:effect:8:205f1df49dd94266",
@@ -2392,7 +2396,8 @@
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
           "semantic-gap:2e5f572ded74a902fffb",
-          "semantic-gap:7f97fbd5fdacbda72077"
+          "semantic-gap:7f97fbd5fdacbda72077",
+          "semantic-gap:a3c67d2201c471b9932e"
         ],
         "rawRecordIdentities": [
           "10700212|0|elements|9|-6104701335743815286|element:-1722401594839030113|82|0"
@@ -2402,7 +2407,8 @@
           "10700212|-6104701335743815286"
         ],
         "impactClassifications": [
-          "not-applicable"
+          "not-applicable",
+          "wrapper-or-duplicate"
         ],
         "reasons": [
           "nested-effect-wrapper-semantics-unresolved",
@@ -2423,7 +2429,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "22aea2a2510adc78"
+      "sourceRecordHash": "3abc6549b48ed1c8"
     },
     {
       "requirementIdentity": "contract:effect:effect:9:e0e9a7a8dae4f57b",
@@ -4324,5 +4330,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "523c0254fe32f5d0"
+  "inventoryHash": "36bbda3192325a59"
 }

@@ -437,14 +437,16 @@
       "contractStatus": "verified-attack-input-chain-ready",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
-        "chainIdentity": "sifliya-normal-three-inputs",
-        "kind": "attack-input-chain"
+        "controlSkillId": 10700101,
+        "kind": "action-form",
+        "ownerId": 107001,
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/MonoBehaviour_-4316639902123875728__-4316639902123875728.json#behaviorlineControl[0].behaviorList[pathId=-2965112826146643344]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700101.asset/MonoBehaviour/MonoBehaviour_-2965112826146643344__-2965112826146643344.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/MonoBehaviour_-7334465402919574213__-7334465402919574213.json#behaviorlineControl[0].behaviorList[pathId=3139945747525412155]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700102.asset/MonoBehaviour/MonoBehaviour_3139945747525412155__3139945747525412155.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/MonoBehaviour_-376663644133972316__-376663644133972316.json#behaviorlineControl[0].behaviorList[pathId=1952774975192835748]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700103.asset/MonoBehaviour/MonoBehaviour_1952774975192835748__1952774975192835748.json"
       ],
       "reasons": [],
-      "sourceRecordHash": "f6a7ca5c594f387d"
+      "sourceRecordHash": "3c225e810c220dfb"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:0:0ec79627c12568e5",
@@ -7107,5 +7109,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "8a532022962bb3b8"
+  "inventoryHash": "6e2580815fedae3c"
 }

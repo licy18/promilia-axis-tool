@@ -339,18 +339,6 @@
     },
     {
       "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:101003:buff-apply-refresh-stack-expire",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:101003"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:bc6f12e825b5ebb4",
-      "uniqueGapIdentity": "acceptance-gap:bc6f12e825b5ebb4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
       "requirementIdentity": "protocol:101003:condition-insufficient-negative",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -588,18 +576,6 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:af50f8206b2846f1",
       "uniqueGapIdentity": "acceptance-gap:af50f8206b2846f1"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:101003:buff-apply-refresh-stack-expire",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:101003"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:bc6f12e825b5ebb4",
-      "uniqueGapIdentity": "acceptance-gap:bc6f12e825b5ebb4"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -902,25 +878,25 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 29,
+    "uniqueBlockingCount": 28,
     "sourceGapCount": 13,
-    "acceptanceGapCount": 16,
+    "acceptanceGapCount": 15,
     "nonBlockingCount": 2,
     "statusCounts": {
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 19
+      "static-evidence-gap": 18
     },
     "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 16,
+      "acceptance-scenario-coverage-missing": 15,
       "runtime-dependent": 10,
       "unresolved": 3
     },
     "categoryCounts": {
-      "acceptance-scenario-gap": 16,
+      "acceptance-scenario-gap": 15,
       "upstream-source-gap": 13
     }
   },
-  "ledgerHash": "d5ab7c5c59872f63",
+  "ledgerHash": "5cd01eab0236e900",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-effect-binding:han-perfect-dodge-team-tuning",
