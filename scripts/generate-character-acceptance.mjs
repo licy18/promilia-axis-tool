@@ -45,8 +45,17 @@ const reportRoot = path.join(
 );
 const writeMode = process.argv.includes('--write');
 const assertClean = process.argv.includes('--assert-clean');
+const requestedOwnerId = readRequestedOwnerId(process.argv.slice(2));
 
-const recipes = await loadRecipes();
+const recipes = (await loadRecipes()).filter(
+  recipe =>
+    requestedOwnerId == null || Number(recipe.ownerId) === requestedOwnerId
+);
+if (requestedOwnerId != null && recipes.length !== 1) {
+  throw new Error(
+    'Character acceptance recipe missing for owner: ' + requestedOwnerId
+  );
+}
 const mechanicsPackage = await readJson(
   path.join(
     projectRoot,
@@ -173,6 +182,19 @@ try {
     visualRuns.push(visualScenario);
   }
 
+  const result =
+    requestedOwnerId == null
+      ? createPublishedAcceptanceResult(manifests, visualRuns)
+      : createOwnerAcceptanceResult(manifests, visualRuns);
+  const { report, outputs } = result;
+  if (writeMode) await writeOutputs(outputs);
+  if (assertClean) await assertOutputsClean(outputs);
+  console.log(JSON.stringify(report.summary, null, 2));
+} finally {
+  await vite.close();
+}
+
+function createPublishedAcceptanceResult(manifests, visualRuns) {
   const manifestIndex = createCharacterAcceptanceManifestIndex(manifests);
   const indexValidation =
     validateCharacterAcceptanceManifestIndex(manifestIndex);
@@ -203,12 +225,40 @@ try {
     catalog,
     manifestIndex
   );
-  const outputs = createOutputs(manifests, catalog, manifestIndex, report);
-  if (writeMode) await writeOutputs(outputs);
-  if (assertClean) await assertOutputsClean(outputs);
-  console.log(JSON.stringify(report.summary, null, 2));
-} finally {
-  await vite.close();
+  return {
+    report,
+    outputs: createOutputs(manifests, catalog, manifestIndex, report),
+  };
+}
+
+function createOwnerAcceptanceResult(manifests, visualRuns) {
+  if (manifests.length !== 1 || visualRuns.length !== 1) {
+    throw new Error('Owner acceptance generation requires exactly one owner');
+  }
+  const manifest = manifests[0];
+  const visualRun = visualRuns[0];
+  return {
+    report: {
+      summary: {
+        ownerId: manifest.owner.ownerId,
+        requirementCount: manifest.matrix.summary.requirementCount,
+        requiredCount: manifest.matrix.summary.requiredCount,
+        passedCount: manifest.matrix.summary.passedCount,
+        notApplicableCount: manifest.matrix.summary.notApplicableCount,
+        blockedCount: manifest.matrix.summary.blockedCount,
+        sourceGapCount: manifest.ledger.summary.sourceGapCount,
+        acceptanceGapCount: manifest.ledger.summary.acceptanceGapCount,
+        functionalFailureCount: manifest.ledger.summary.uniqueBlockingCount,
+        headlessReplayPassed: visualRun.status === 'passed',
+        canonicalReplayStable: visualRun.stableReplay === true,
+        workbenchRoundTripPassed: visualRun.workbenchRoundTrip === 'passed',
+        productVisualAcceptance:
+          manifest.evidence.productVisualAcceptance.status,
+        optimizationReady: manifest.maturity.optimizationReady,
+      },
+    },
+    outputs: createOwnerOutputs(manifests),
+  };
 }
 
 function executeVisualScenario({
@@ -243,13 +293,23 @@ function executeVisualScenario({
   const criticalMatrix = inspectCriticalMatrix(
     Number(recipe.ownerId),
     first,
-    second
+    second,
+    recipe.criticalProbe ?? null
   );
   const thunderLifecycle = inspectThunderLifecycle(first);
+  const configuredInputWindowBoundaries = recipe.inputWindowProbe
+    ? inspectConfiguredInputWindowBoundaries({
+        fixture,
+        run: first,
+        profile,
+        probe: recipe.inputWindowProbe,
+      })
+    : null;
   const inputWindowBoundaries =
-    Number(recipe.ownerId) === 108003
+    configuredInputWindowBoundaries ??
+    (Number(recipe.ownerId) === 108003
       ? inspectMitiInputWindowBoundaries(fixture, first, service)
-      : inspectInputWindowBoundaries(fixture, first);
+      : inspectInputWindowBoundaries(fixture, first));
   const foregroundBackgroundSwitch =
     Number(recipe.ownerId) === 108003
       ? inspectMitiForegroundBackgroundSwitch(first)
@@ -265,6 +325,23 @@ function executeVisualScenario({
     first,
     fixture.scenario.id
   );
+  const tuningComponentEffects = projectVerifiedTuningComponentEffects(
+    first,
+    fixture.scenario.id
+  );
+  const verifiedDirectEffectSources = projectVerifiedDirectEffectSources(
+    first,
+    fixture.scenario.id
+  );
+  const tuningMarkResourceEffects = projectTuningMarkResourceEffects(
+    first,
+    fixture.scenario.id
+  );
+  const sourceActionBindingForms = projectSourceActionBindingForms(
+    first,
+    fixture.scenario.id
+  );
+  const sourceHitAliases = projectSourceHitAliases(first, fixture.scenario.id);
   const assertionResults = [
     { identity: 'machine-axis-validation', passed: validation.valid },
     { identity: 'canonical-same-input-replay', passed: stableReplay },
@@ -303,16 +380,22 @@ function executeVisualScenario({
           },
         ]
       : []),
+    ...(configuredInputWindowBoundaries
+      ? [
+          {
+            identity: 'input-window-inside-outside-boundaries',
+            passed: configuredInputWindowBoundaries.passed,
+            actual: configuredInputWindowBoundaries.details,
+          },
+        ]
+      : []),
     ...probeResults,
   ];
   const failed = assertionResults.filter(result => !result.passed);
   const selectionRows = first.trace?.variants?.selections ?? [];
   const profileRows = createScenarioProfileProjectionRows({
     profile,
-    exercisedControls: selectionRows.map(selection => [
-      Number(selection.controlSkillId),
-      Number(selection.subSkillIndex),
-    ]),
+    exercisedControls: collectRuntimeExercisedControls(first),
     exercisedFromHitAndEffectIdentities: [
       ...(first.trace?.damage ?? []).map(event => event.hitIdentity),
       ...(first.trace?.effects?.events ?? []).map(event => event.effectId),
@@ -321,6 +404,9 @@ function executeVisualScenario({
       ...(first.trace?.effects?.events ?? []).map(event => event.effectId),
       ...resourceBackedEffects.map(event => event.effectIdentity),
       ...appliedEffectSourceElements.map(event => event.effectIdentity),
+      ...tuningComponentEffects.map(event => event.effectIdentity),
+      ...verifiedDirectEffectSources.map(event => event.effectIdentity),
+      ...tuningMarkResourceEffects.map(event => event.effectIdentity),
     ],
     scenarioId: fixture.scenario?.id,
     prefix: 'machine',
@@ -369,28 +455,34 @@ function executeVisualScenario({
       reasons: result.passed ? [] : ['canonical-scenario-assertion-failed'],
     })),
     traceProjection: {
-      actionForms: selectionRows.map(selection => ({
-        projectionIdentity:
-          'machine-action-form:' +
-          fixture.scenario.id +
-          ':' +
-          selection.actionId,
-        actionId: selection.actionId,
-        ownerId: selection.ownerId,
-        semanticName: selection.semanticName,
-        controlSkillId: selection.controlSkillId,
-        subSkillIndex: selection.subSkillIndex,
-        actualDurationFrames: selection.actualDurationFrames,
-      })),
-      hits: (first.trace?.damage ?? [])
-        .filter(event => event.hitIdentity)
-        .map((event, index) => ({
+      actionForms: [
+        ...selectionRows.map(selection => ({
           projectionIdentity:
-            'machine-hit:' + fixture.scenario.id + ':' + index,
-          actionId: event.actionId ?? null,
-          hitIdentity: event.hitIdentity,
-          frame: event.frame ?? null,
+            'machine-action-form:' +
+            fixture.scenario.id +
+            ':' +
+            selection.actionId,
+          actionId: selection.actionId,
+          ownerId: selection.ownerId,
+          semanticName: selection.semanticName,
+          controlSkillId: selection.controlSkillId,
+          subSkillIndex: selection.subSkillIndex,
+          actualDurationFrames: selection.actualDurationFrames,
         })),
+        ...sourceActionBindingForms,
+      ],
+      hits: [
+        ...(first.trace?.damage ?? [])
+          .filter(event => event.hitIdentity)
+          .map((event, index) => ({
+            projectionIdentity:
+              'machine-hit:' + fixture.scenario.id + ':' + index,
+            actionId: event.actionId ?? null,
+            hitIdentity: event.hitIdentity,
+            frame: event.frame ?? null,
+          })),
+        ...sourceHitAliases,
+      ],
       resources: (first.trace?.variants?.resourceEvents ?? []).map(
         (event, index) => ({
           projectionIdentity:
@@ -432,9 +524,11 @@ function executeVisualScenario({
               ? [...event.sourceSequencePath]
               : null,
           })),
-        ...projectVerifiedTuningComponentEffects(first, fixture.scenario.id),
+        ...tuningComponentEffects,
         ...resourceBackedEffects,
         ...appliedEffectSourceElements,
+        ...verifiedDirectEffectSources,
+        ...tuningMarkResourceEffects,
       ],
       diagnostics: [
         ...(first.trace?.diagnostics?.validationWarnings ?? []),
@@ -471,7 +565,7 @@ function executeVisualScenario({
   };
 }
 
-function inspectCriticalMatrix(ownerId, first, second) {
+function inspectCriticalMatrix(ownerId, first, second, probe) {
   const prefix = String(ownerId) + '-critical-';
   const boundary = { low: 499, threshold: 500 };
   const damageEvents = first.trace?.damage ?? [];
@@ -497,8 +591,14 @@ function inspectCriticalMatrix(ownerId, first, second) {
   const miss = findHit('miss-critical');
   const rateZero = findHit('rate-zero');
   const rateOneHundred = findHit('rate-one-hundred');
-  const preHitBefore =
-    ownerId === 109001
+  const configuredPreHit = probe?.preHitAttributeChange ?? null;
+  const preHitBefore = configuredPreHit
+    ? findConfiguredCriticalHit(
+        damageEvents,
+        configuredPreHit.beforeActionId,
+        configuredPreHit.hitIdentity ?? overriddenHitIdentity
+      )
+    : ownerId === 109001
       ? (first.trace?.damage ?? []).find(
           event =>
             event.actionId === 'moyin-lifecycle-a5-1' &&
@@ -508,8 +608,13 @@ function inspectCriticalMatrix(ownerId, first, second) {
       : ownerId === 108003
         ? sampledLow
         : null;
-  const preHitAfter =
-    ownerId === 109001
+  const preHitAfter = configuredPreHit
+    ? findConfiguredCriticalHit(
+        damageEvents,
+        configuredPreHit.afterActionId,
+        configuredPreHit.hitIdentity ?? overriddenHitIdentity
+      )
+    : ownerId === 109001
       ? (first.trace?.damage ?? []).find(
           event =>
             event.actionId === 'moyin-lifecycle-a5-1' &&
@@ -524,10 +629,14 @@ function inspectCriticalMatrix(ownerId, first, second) {
               event.hitIdentity === sampledLow?.hitIdentity
           )
         : null;
-  const nonCrittable = (first.trace?.damage ?? []).find(
-    event =>
-      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
-      Number(event.elementId) === 251
+  const configuredNonCrittable = probe?.nonCrittable ?? null;
+  const nonCrittable = damageEvents.find(event =>
+    configuredNonCrittable
+      ? event.actionId === configuredNonCrittable.actionId &&
+        event.eventType === configuredNonCrittable.eventType &&
+        Number(event.elementId) === Number(configuredNonCrittable.elementId)
+      : event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+        Number(event.elementId) === 251
   );
   const nonCrittablePeer = (first.trace?.damage ?? []).find(
     event =>
@@ -557,7 +666,7 @@ function inspectCriticalMatrix(ownerId, first, second) {
       expectedResult?.criticalEventMaterialized === false &&
       expectedResult?.weightedValue === expected?.rawDamage,
     missSuppressesHit: miss == null,
-    ...([109001, 108003].includes(ownerId)
+    ...([109001, 108003].includes(ownerId) || probe
       ? {
           rateZero:
             rateZero?.formula?.randomBranch?.criticalThreshold === 0 &&
@@ -569,22 +678,16 @@ function inspectCriticalMatrix(ownerId, first, second) {
             rateOneHundred?.formula?.randomBranch?.criticalRoll === 9999 &&
             rateOneHundred?.formula?.randomBranch?.critical === true,
           preHitAttributeChange:
-            Number(
-              preHitAfter?.formula?.randomBranch
-                ?.sourceCriticalRateBasisPoints
-            ) >
-              Number(
-                preHitBefore?.formula?.randomBranch
-                  ?.sourceCriticalRateBasisPoints
-              ) &&
-            Number(
-              preHitAfter?.formula?.randomBranch
-                ?.sourceCriticalDamageBasisPoints
-            ) >
-              Number(
-                preHitBefore?.formula?.randomBranch
-                  ?.sourceCriticalDamageBasisPoints
-              ),
+            criticalAttributeIncreased(
+              preHitBefore,
+              preHitAfter,
+              'sourceCriticalRateBasisPoints'
+            ) &&
+            criticalAttributeIncreased(
+              preHitBefore,
+              preHitAfter,
+              'sourceCriticalDamageBasisPoints'
+            ),
           nonCrittableRejection:
             nonCrittable?.formula?.status ===
               'verified-tuning-formula-applied' &&
@@ -607,6 +710,27 @@ function inspectCriticalMatrix(ownerId, first, second) {
       nonCrittablePeer: projectCriticalHit(nonCrittablePeer),
     },
   };
+}
+
+function findConfiguredCriticalHit(events, actionId, hitIdentity) {
+  return (
+    events.find(
+      event =>
+        event.actionId === actionId &&
+        event.eventType === 'VERIFIED_COMBAT_HIT' &&
+        (hitIdentity == null || event.hitIdentity === hitIdentity)
+    ) ?? null
+  );
+}
+
+function criticalAttributeIncreased(before, after, field) {
+  const beforeValue = Number(before?.formula?.randomBranch?.[field]);
+  const afterValue = Number(after?.formula?.randomBranch?.[field]);
+  return (
+    Number.isFinite(beforeValue) &&
+    Number.isFinite(afterValue) &&
+    afterValue > beforeValue
+  );
 }
 
 function inspectThunderLifecycle(run) {
@@ -778,6 +902,97 @@ function inspectInputWindowBoundaries(fixture, run) {
   };
 }
 
+function inspectConfiguredInputWindowBoundaries({
+  fixture,
+  run,
+  profile,
+  probe,
+}) {
+  if (probe.kind !== 'focused-mechanic-window') {
+    return {
+      passed: false,
+      details: { reason: 'configured-input-window-probe-kind-unsupported' },
+    };
+  }
+  const window = (profile.contracts?.attackInputMechanicWindows ?? []).find(
+    candidate => candidate.bindingIdentity === probe.bindingIdentity
+  );
+  const action = (fixture.actions ?? []).find(
+    candidate => candidate.id === probe.actionId
+  );
+  const selection = (run.trace?.variants?.selections ?? []).find(
+    candidate => candidate.actionId === probe.actionId
+  );
+  const actionFrame = Number(action?.schedule?.frame);
+  const durationFrames = Number(window?.durationFrames);
+  const lastCoveredHitFrame = Number(window?.lastCoveredHitFrame);
+  const hitPrefix = `${Number(window?.controlSkillId)}|${Number(
+    window?.subSkillIndex
+  )}|`;
+  const relativeHitFrames = (run.trace?.damage ?? [])
+    .filter(
+      event =>
+        event.actionId === probe.actionId &&
+        event.eventType === 'VERIFIED_COMBAT_HIT' &&
+        String(event.hitIdentity ?? '').startsWith(hitPrefix)
+    )
+    .map(event => Number(event.absoluteFrame) - actionFrame)
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right);
+  const leftOutsideClear = relativeHitFrames.every(frame => frame >= 0);
+  const rightInsideObserved = relativeHitFrames.includes(lastCoveredHitFrame);
+  const rightOutsideClear = relativeHitFrames.every(
+    frame => frame < durationFrames
+  );
+  const passed =
+    Boolean(window) &&
+    Boolean(action) &&
+    Boolean(selection) &&
+    window.status === 'verified-attack-input-mechanic-window-ready' &&
+    window.applied === true &&
+    window.interval === '[0,durationFrames)' &&
+    Number(selection.controlSkillId) === Number(window.controlSkillId) &&
+    Number(selection.subSkillIndex) === Number(window.subSkillIndex) &&
+    Number.isInteger(actionFrame) &&
+    Number.isInteger(durationFrames) &&
+    durationFrames === lastCoveredHitFrame + 1 &&
+    relativeHitFrames.length > 0 &&
+    leftOutsideClear &&
+    rightInsideObserved &&
+    rightOutsideClear;
+  return {
+    passed,
+    details: {
+      probeKind: probe.kind,
+      bindingIdentity: probe.bindingIdentity,
+      sourceIdentity: window?.sourceIdentity ?? null,
+      interval: window?.interval ?? null,
+      actionId: probe.actionId,
+      actionFrame: Number.isInteger(actionFrame) ? actionFrame : null,
+      controlSkillId: window?.controlSkillId ?? null,
+      subSkillIndex: window?.subSkillIndex ?? null,
+      durationFrames: Number.isInteger(durationFrames) ? durationFrames : null,
+      lastCoveredHitFrame: Number.isInteger(lastCoveredHitFrame)
+        ? lastCoveredHitFrame
+        : null,
+      relativeHitFrames,
+      boundaries: {
+        leftOutsideFrame: -1,
+        leftInsideFrame: 0,
+        rightInsideFrame: Number.isInteger(durationFrames)
+          ? durationFrames - 1
+          : null,
+        rightOutsideFrame: Number.isInteger(durationFrames)
+          ? durationFrames
+          : null,
+        leftOutsideClear,
+        rightInsideObserved,
+        rightOutsideClear,
+      },
+    },
+  };
+}
+
 function inspectMitiInputWindowBoundaries(fixture, run, service) {
   const activeActionId = 'miti-star-combo-active';
   const pairedKiboActionId = 'miti-star-combo-kibo-break';
@@ -849,14 +1064,14 @@ function inspectMitiInputWindowBoundaries(fixture, run, service) {
 function inspectMitiForegroundBackgroundSwitch(run) {
   const controlledActorAt = timeMs => {
     const switches = (run.trace?.events ?? [])
-      .filter(event => event.type === 'SWITCH' && Number(event.timeMs) <= timeMs)
+      .filter(
+        event => event.type === 'SWITCH' && Number(event.timeMs) <= timeMs
+      )
       .sort((left, right) => Number(left.timeMs) - Number(right.timeMs));
     return switches.at(-1)?.payload?.targetActorId ?? 'actor-108003';
   };
   const periodicSpEvents = (run.trace?.resources?.actors ?? []).filter(
-    event =>
-      Number(event.elementId) === 108003164 &&
-      Number(event.change) === 2
+    event => Number(event.elementId) === 108003164 && Number(event.change) === 2
   );
   const backgroundTicks = periodicSpEvents.filter(
     event => controlledActorAt(Number(event.timeMs)) !== 'actor-108003'
@@ -893,21 +1108,20 @@ function inspectMitiForegroundBackgroundSwitch(run) {
 }
 
 function projectVerifiedTuningComponentEffects(run, scenarioId) {
-  const thunder = mechanicsPackage.tuningMechanicsCatalog?.profiles?.find(
-    profile => Number(profile.markId) === 250
-  );
-  if (!thunder) return [];
-  const damageComponentIds = new Set(
-    (thunder.heldDamageTemplates ?? []).map(template =>
-      Number(template.elementConfigId)
+  const profiles = mechanicsPackage.tuningMechanicsCatalog?.profiles ?? [];
+  const damageComponents = new Map(
+    profiles.flatMap(profile =>
+      (profile.heldDamageTemplates ?? []).map(template => [
+        Number(template.elementConfigId),
+        { profile, template },
+      ])
     )
   );
-  const persistentModifiers = thunder.persistentModifiers ?? [];
   const rows = [];
   for (const [index, event] of (run.trace?.damage ?? []).entries()) {
     if (
       event.eventType !== 'VERIFIED_TUNING_DAMAGE' ||
-      !damageComponentIds.has(Number(event.elementId)) ||
+      !damageComponents.has(Number(event.elementId)) ||
       event.formula?.status !== 'verified-tuning-formula-applied'
     ) {
       continue;
@@ -924,9 +1138,16 @@ function projectVerifiedTuningComponentEffects(run, scenarioId) {
     });
   }
   for (const [index, event] of (run.trace?.effects?.events ?? []).entries()) {
-    if (event.effectId !== 'tuning-mark:250:persistent') continue;
+    const match = String(event.effectId ?? '').match(
+      /^tuning-mark:(\d+):persistent$/
+    );
+    if (!match) continue;
+    const profile = profiles.find(
+      candidate => Number(candidate.markId) === Number(match[1])
+    );
+    if (!profile) continue;
     for (const modifier of event.modifiers ?? []) {
-      const verified = persistentModifiers.find(
+      const verified = (profile.persistentModifiers ?? []).find(
         candidate =>
           Number(candidate.attributeId) === Number(modifier.attributeId) &&
           Number(candidate.valueRaw) === Number(modifier.valueRaw)
@@ -947,6 +1168,38 @@ function projectVerifiedTuningComponentEffects(run, scenarioId) {
         sourceIdentity: verified.sourceIdentity ?? null,
         attributeId: Number(verified.attributeId),
         valueRaw: Number(verified.valueRaw),
+      });
+    }
+  }
+  for (const [index, event] of (run.trace?.events ?? []).entries()) {
+    if (
+      event.type !== 'VERIFIED_TUNING_PERIODIC_HEAL' ||
+      event.payload?.applied !== true ||
+      event.payload?.appliedToCalculators !== true
+    ) {
+      continue;
+    }
+    const sourceText = String(event.payload?.sourceIdentity ?? '');
+    const profile = profiles.find(candidate =>
+      sourceText.includes(
+        `markContainers[elementConfigId=${Number(candidate.markId)}]`
+      )
+    );
+    for (const componentId of profile?.heldEffect?.componentIds ?? []) {
+      rows.push({
+        projectionIdentity:
+          'machine-tuning-periodic-heal-component:' +
+          scenarioId +
+          ':' +
+          index +
+          ':' +
+          Number(componentId),
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + Number(componentId),
+        operation: 'periodic-heal',
+        targetId: event.targetId ?? null,
+        sourceIdentity: event.payload?.sourceIdentity ?? null,
+        requestedChange: event.payload?.requestedChange ?? null,
       });
     }
   }
@@ -1006,6 +1259,201 @@ function projectAppliedEffectSourceElements(run, scenarioId) {
     }
   }
   return rows;
+}
+
+function projectVerifiedDirectEffectSources(run, scenarioId) {
+  const rows = [];
+  for (const [eventIndex, event] of (run.trace?.events ?? []).entries()) {
+    if (
+      event.type !== 'VERIFIED_DIRECT_HEAL' ||
+      event.payload?.applied !== true ||
+      event.payload?.appliedToCalculators !== true ||
+      !(Number(event.payload?.requestedChange) > 0)
+    ) {
+      continue;
+    }
+    const sourceText = String(event.payload?.sourceIdentity ?? '');
+    const elementIds = extractBattleElementIds(sourceText);
+    for (const [elementIndex, elementId] of elementIds.entries()) {
+      rows.push({
+        projectionIdentity:
+          'machine-verified-direct-effect-source:' +
+          scenarioId +
+          ':' +
+          eventIndex +
+          ':' +
+          elementIndex,
+        actionId: event.actionId ?? null,
+        effectIdentity: 'battle-element:' + elementId,
+        operation: 'direct-heal',
+        targetId: event.targetId ?? null,
+        sourceIdentity: event.payload?.sourceIdentity ?? null,
+        effectSourceIdentity: event.payload?.effectIdentity ?? null,
+        requestedChange: event.payload?.requestedChange ?? null,
+      });
+    }
+  }
+  return rows;
+}
+
+function projectTuningMarkResourceEffects(run, scenarioId) {
+  return (run.trace?.resources?.tuningMarks ?? [])
+    .filter(
+      event =>
+        ['acquire', 'consume'].includes(String(event.kind)) &&
+        Number.isInteger(Number(event.markId)) &&
+        Number(event.delta) !== 0
+    )
+    .map((event, index) => ({
+      projectionIdentity:
+        'machine-tuning-mark-resource-effect:' + scenarioId + ':' + index,
+      actionId: event.actionId ?? null,
+      effectIdentity: 'battle-element:' + Number(event.markId),
+      operation: event.kind,
+      targetId: event.targetId ?? null,
+      sourceIdentity: event.sourceIdentity ?? null,
+      beforeValue: event.before ?? null,
+      afterValue: event.after ?? null,
+      change: event.delta ?? null,
+    }));
+}
+
+function projectSourceActionBindingForms(run, scenarioId) {
+  const rows = [];
+  const seen = new Set();
+  for (const evidence of collectActionBindingEvidence(run)) {
+    const binding = parseActionBindingIdentity(evidence.sourceIdentity);
+    if (
+      !binding ||
+      binding.controlSkillId === binding.executionControlSkillId
+    ) {
+      continue;
+    }
+    const key = `${evidence.actionId}|${binding.ownerId}|${binding.controlSkillId}|${binding.subSkillIndex}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    rows.push({
+      projectionIdentity:
+        'machine-source-action-form:' + scenarioId + ':' + rows.length,
+      actionId: evidence.actionId,
+      ownerId: binding.ownerId,
+      semanticName: binding.actionKind,
+      controlSkillId: binding.controlSkillId,
+      subSkillIndex: binding.subSkillIndex,
+      executionControlSkillId: binding.executionControlSkillId,
+      sourceIdentity: evidence.sourceIdentity,
+    });
+  }
+  return rows;
+}
+
+function projectSourceHitAliases(run, scenarioId) {
+  const rows = [];
+  for (const [index, event] of (run.trace?.damage ?? []).entries()) {
+    if (
+      event.eventType !== 'VERIFIED_COMBAT_HIT' ||
+      !event.hitIdentity ||
+      typeof event.formula?.sourceIdentity !== 'string'
+    ) {
+      continue;
+    }
+    const binding = parseActionBindingIdentity(event.formula.sourceIdentity);
+    if (
+      !binding ||
+      binding.controlSkillId === binding.executionControlSkillId
+    ) {
+      continue;
+    }
+    const executionPrefix = `${binding.executionControlSkillId}|${binding.subSkillIndex}|`;
+    if (!String(event.hitIdentity).startsWith(executionPrefix)) continue;
+    rows.push({
+      projectionIdentity:
+        'machine-source-hit-alias:' + scenarioId + ':' + index,
+      actionId: event.actionId ?? null,
+      hitIdentity:
+        `${binding.controlSkillId}|${binding.subSkillIndex}|` +
+        String(event.hitIdentity).slice(executionPrefix.length),
+      executionHitIdentity: event.hitIdentity,
+      frame: event.frame ?? null,
+      sourceIdentity: event.formula.sourceIdentity,
+    });
+  }
+  return rows;
+}
+
+function collectRuntimeExercisedControls(run) {
+  const pairs = new Map();
+  const add = (controlSkillId, subSkillIndex) => {
+    const control = Number(controlSkillId);
+    const sub = Number(subSkillIndex);
+    if (!Number.isInteger(control) || !Number.isInteger(sub)) return;
+    pairs.set(`${control}|${sub}`, [control, sub]);
+  };
+  for (const selection of run.trace?.variants?.selections ?? []) {
+    add(selection.controlSkillId, selection.subSkillIndex);
+  }
+  for (const event of run.trace?.damage ?? []) {
+    const match = String(event.hitIdentity ?? '').match(/^(\d+)\|(\d+)\|/);
+    if (match) add(match[1], match[2]);
+  }
+  for (const evidence of collectActionBindingEvidence(run)) {
+    const binding = parseActionBindingIdentity(evidence.sourceIdentity);
+    if (!binding) continue;
+    add(binding.controlSkillId, binding.subSkillIndex);
+    add(binding.executionControlSkillId, binding.subSkillIndex);
+  }
+  return [...pairs.values()].sort(
+    (left, right) => left[0] - right[0] || left[1] - right[1]
+  );
+}
+
+function collectActionBindingEvidence(run) {
+  return [
+    ...(run.trace?.damage ?? []).map(event => ({
+      actionId: event.actionId ?? null,
+      sourceIdentity: event.formula?.sourceIdentity ?? null,
+    })),
+    ...(run.trace?.events ?? []).map(event => ({
+      actionId: event.actionId ?? null,
+      sourceIdentity:
+        typeof event.payload?.sourceIdentity === 'string'
+          ? event.payload.sourceIdentity
+          : (event.payload?.sourceIdentity?.actionBindingIdentity ?? null),
+    })),
+    ...(run.trace?.effects?.events ?? []).map(event => ({
+      actionId: event.actionId ?? null,
+      sourceIdentity: event.sourceIdentity?.actionBindingIdentity ?? null,
+    })),
+  ].filter(
+    evidence =>
+      evidence.actionId != null && typeof evidence.sourceIdentity === 'string'
+  );
+}
+
+function parseActionBindingIdentity(value) {
+  const match = String(value ?? '').match(
+    /^actor\|(\d+)\|\d+\|\d+\|(\d+)\|([^|]+)\|execution-control:(\d+)\|sub:(\d+)$/
+  );
+  if (!match) return null;
+  return {
+    ownerId: Number(match[1]),
+    controlSkillId: Number(match[2]),
+    actionKind: match[3],
+    executionControlSkillId: Number(match[4]),
+    subSkillIndex: Number(match[5]),
+  };
+}
+
+function extractBattleElementIds(sourceText) {
+  return [
+    ...new Set(
+      [
+        ...String(sourceText).matchAll(/ast_(\d+)\.asset/g),
+        ...String(sourceText).matchAll(/elementConfigId=(\d+)/g),
+        ...String(sourceText).matchAll(/(?:^|[;|])heal=(\d+)/g),
+      ].map(match => Number(match[1]))
+    ),
+  ].filter(Number.isInteger);
 }
 
 function projectCriticalHit(event) {
@@ -1179,6 +1627,17 @@ function createOutputs(manifests, catalog, manifestIndex, report) {
     path.join(reportRoot, 'summary.md'),
     createMarkdownReport(report)
   );
+  addOwnerOutputs(outputs, manifests);
+  return outputs;
+}
+
+function createOwnerOutputs(manifests) {
+  const outputs = new Map();
+  addOwnerOutputs(outputs, manifests);
+  return outputs;
+}
+
+function addOwnerOutputs(outputs, manifests) {
   for (const manifest of manifests) {
     const ownerRoot = path.join(reportRoot, String(manifest.owner.ownerId));
     outputs.set(path.join(ownerRoot, 'manifest.json'), jsonText(manifest));
@@ -1210,7 +1669,6 @@ function createOutputs(manifests, catalog, manifestIndex, report) {
       })
     );
   }
-  return outputs;
 }
 
 async function writeOutputs(outputs) {
@@ -1243,6 +1701,16 @@ async function loadRecipes() {
     .filter(name => name.endsWith('.json'))
     .sort();
   return Promise.all(names.map(name => readJson(path.join(recipeRoot, name))));
+}
+
+function readRequestedOwnerId(args) {
+  const index = args.indexOf('--owner');
+  if (index < 0) return null;
+  const value = Number(args[index + 1]);
+  if (!Number.isInteger(value) || value <= 0) {
+    throw new Error('Invalid --owner value: ' + String(args[index + 1]));
+  }
+  return value;
 }
 
 async function readJson(filePath) {

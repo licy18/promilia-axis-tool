@@ -53,6 +53,8 @@ export function createCharacterAcceptanceManifest({
     records: createCharacterAcceptanceRequirementSources({
       profile,
       sourceGapRecords: unresolvedLedger?.records ?? [],
+      sourceNotApplicableControlSubskills:
+        recipe.sourceNotApplicableControlSubskills ?? [],
     }),
   };
   const sourceGapInventory = {
@@ -148,6 +150,7 @@ export function createCharacterAcceptanceMatrix({
 export function createCharacterAcceptanceRequirementSources({
   profile,
   sourceGapRecords = [],
+  sourceNotApplicableControlSubskills = [],
 }) {
   const ownerId = Number(profile.owner?.ownerId);
   const requirements = [];
@@ -155,6 +158,11 @@ export function createCharacterAcceptanceRequirementSources({
     createOptimizationScenarioRequirementClassifier(profile);
   const classifyNonBlockingSourceRecord =
     createNonBlockingSourceRecordClassifier(sourceGapRecords);
+  const classifySourceNotApplicableControlSubskill =
+    createSourceNotApplicableControlSubskillClassifier({
+      profile,
+      boundaries: sourceNotApplicableControlSubskills,
+    });
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
@@ -163,8 +171,9 @@ export function createCharacterAcceptanceRequirementSources({
     records.forEach((record, index) => {
       const subjectIdentity = resolveContractIdentity(record, dimension, index);
       const optimizationScenario = classifyOptimizationScope(record);
-      const sourceGapDisposition =
-        classifyNonBlockingSourceRecord(record);
+      const sourceGapDisposition = classifyNonBlockingSourceRecord(record);
+      const sourceNotApplicableControlSubskill =
+        classifySourceNotApplicableControlSubskill(record, dimension);
       const productBoundaryEvidence = createProductBoundaryEvidence({
         ownerId,
         profile,
@@ -180,6 +189,7 @@ export function createCharacterAcceptanceRequirementSources({
         isUnwiredControlWindowRequirement(record, dimension, profile) ||
         optimizationScenario != null ||
         sourceGapDisposition != null ||
+        sourceNotApplicableControlSubskill != null ||
         aggregateStatDependency;
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
@@ -199,22 +209,23 @@ export function createCharacterAcceptanceRequirementSources({
           dimension,
           ownerId,
         }),
-        sourceIdentities: collectSourceIdentities(record),
-        ...(optimizationScenario == null
+        sourceIdentities: uniqueStrings([
+          ...collectSourceIdentities(record),
+          sourceNotApplicableControlSubskill?.sourceIdentity,
+        ]),
+        ...(optimizationScenario == null ? {} : { optimizationScenario }),
+        ...(sourceGapDisposition == null ? {} : { sourceGapDisposition }),
+        ...(sourceNotApplicableControlSubskill == null
           ? {}
-          : { optimizationScenario }),
-        ...(sourceGapDisposition == null
-          ? {}
-          : { sourceGapDisposition }),
-        ...(productBoundaryEvidence == null
-          ? {}
-          : { productBoundaryEvidence }),
+          : { sourceNotApplicableControlSubskill }),
+        ...(productBoundaryEvidence == null ? {} : { productBoundaryEvidence }),
         reasons: notApplicable
           ? [
               ...(optimizationScenario?.reason
                 ? [optimizationScenario.reason]
                 : []),
               ...(sourceGapDisposition?.reasons ?? []),
+              ...(sourceNotApplicableControlSubskill?.reasons ?? []),
               ...(aggregateStatDependency
                 ? ['aggregate-stat-dependency-index-not-standalone-requirement']
                 : []),
@@ -266,9 +277,10 @@ function createProductBoundaryEvidence({
   if (Number(ownerId) !== 109001 || Number(record?.elementId) !== 799) {
     return null;
   }
-  const rootPathId = String(
-    record.relationPath?.[0]?.from ?? ''
-  ).replace(/^element:/, '');
+  const rootPathId = String(record.relationPath?.[0]?.from ?? '').replace(
+    /^element:/,
+    ''
+  );
   const rootRecord = flattenContractRecords(
     profile?.contracts?.effects,
     'effects'
@@ -294,9 +306,7 @@ function createProductBoundaryEvidence({
       childPathId: String(record.pathId),
       relationPath: structuredClone(record.relationPath ?? []),
       sourceIdentity: record.sourceIdentity ?? null,
-      rootSourceIdentities: structuredClone(
-        rootRecord?.sourceIdentities ?? []
-      ),
+      rootSourceIdentities: structuredClone(rootRecord?.sourceIdentities ?? []),
     },
     nativeConsumer: {
       reachable: false,
@@ -357,19 +367,17 @@ function createNonBlockingSourceRecordClassifier(records) {
       ...(record?.rawEffectIdentities ?? []),
       ...directIdentities,
     ]);
-    const controlAndElementKeys = uniqueStrings(
-      [
-        ...rawIdentities.flatMap(identity => {
-          const match = String(identity).match(
-            /^(\d+)\|\d+\|.*\|element:([^|]+)\|/
-          );
-          return match ? [`${Number(match[1])}|${match[2]}`] : [];
-        }),
-        ...(record?.rootBattleIdentities ?? []).map(
-          identity => `${Number(record.controlSkillId)}|${identity}`
-        ),
-      ]
-    );
+    const controlAndElementKeys = uniqueStrings([
+      ...rawIdentities.flatMap(identity => {
+        const match = String(identity).match(
+          /^(\d+)\|\d+\|.*\|element:([^|]+)\|/
+        );
+        return match ? [`${Number(match[1])}|${match[2]}`] : [];
+      }),
+      ...(record?.rootBattleIdentities ?? []).map(
+        identity => `${Number(record.controlSkillId)}|${identity}`
+      ),
+    ]);
     const matches = [
       ...new Map(
         [
@@ -379,8 +387,7 @@ function createNonBlockingSourceRecordClassifier(records) {
           ...controlAndElementKeys.flatMap(
             key => byControlAndElementPath.get(key) ?? []
           ),
-        ]
-          .map(source => [String(source.recordIdentity), source])
+        ].map(source => [String(source.recordIdentity), source])
       ).values(),
     ];
     if (matches.length === 0) return null;
@@ -404,6 +411,140 @@ function createNonBlockingSourceRecordClassifier(records) {
   };
 }
 
+function createSourceNotApplicableControlSubskillClassifier({
+  profile,
+  boundaries,
+}) {
+  const reachable = collectRuntimeReachableControlSubskills(profile);
+  const normalized = (boundaries ?? []).map((boundary, index) => {
+    const controlSkillId = Number(boundary?.controlSkillId);
+    const subSkillIndex = Number(boundary?.subSkillIndex);
+    const dimensions = uniqueStrings(boundary?.dimensions ?? []).sort();
+    const identity = String(boundary?.identity ?? '').trim();
+    const reason = String(boundary?.reason ?? '').trim();
+    const sourceIdentity = String(boundary?.sourceIdentity ?? '').trim();
+    if (
+      !identity ||
+      !Number.isInteger(controlSkillId) ||
+      !Number.isInteger(subSkillIndex) ||
+      dimensions.length === 0 ||
+      dimensions.some(
+        dimension => !['control-window', 'hit'].includes(dimension)
+      ) ||
+      !reason ||
+      !sourceIdentity
+    ) {
+      throw new Error(
+        'Invalid source not-applicable control boundary at index ' + index
+      );
+    }
+    const pairIdentity = `${controlSkillId}|${subSkillIndex}`;
+    if (reachable.has(pairIdentity)) {
+      throw new Error(
+        'Source not-applicable control boundary is runtime reachable: ' +
+          identity
+      );
+    }
+    return {
+      identity,
+      controlSkillId,
+      subSkillIndex,
+      dimensions,
+      reason,
+      sourceIdentity,
+      scenarioPolicyId: boundary.scenarioPolicyId ?? null,
+    };
+  });
+  return (record, dimension) => {
+    const pair = resolveRecordControlSubskill(record, dimension);
+    if (!pair) return null;
+    const boundary = normalized.find(
+      candidate =>
+        candidate.dimensions.includes(dimension) &&
+        candidate.controlSkillId === pair.controlSkillId &&
+        candidate.subSkillIndex === pair.subSkillIndex
+    );
+    if (!boundary) return null;
+    if (collectSourceIdentities(record).length === 0) {
+      throw new Error(
+        'Source not-applicable requirement lacks source evidence: ' +
+          boundary.identity
+      );
+    }
+    return {
+      boundaryIdentity: boundary.identity,
+      disposition: 'not-applicable',
+      controlSkillId: boundary.controlSkillId,
+      subSkillIndex: boundary.subSkillIndex,
+      dimensions: [...boundary.dimensions],
+      scenarioPolicyId: boundary.scenarioPolicyId,
+      sourceIdentity: boundary.sourceIdentity,
+      reasons: [boundary.reason],
+    };
+  };
+}
+
+function collectRuntimeReachableControlSubskills(profile) {
+  const pairs = new Set();
+  const add = (controlSkillId, subSkillIndex) => {
+    const control = Number(controlSkillId);
+    const sub = Number(subSkillIndex);
+    if (Number.isInteger(control) && Number.isInteger(sub)) {
+      pairs.add(`${control}|${sub}`);
+    }
+  };
+  for (const form of profile?.contracts?.actionForms ?? []) {
+    if (!isAppliedRecord(form)) continue;
+    add(form.executionControlSkillId, form.executionSubSkillIndex);
+    add(form.sourceControlSkillId, form.sourceSubSkillIndex);
+    add(form.publicControlSkillId, form.executionSubSkillIndex);
+  }
+  for (const action of profile?.contracts?.publicActions ?? []) {
+    if (action.runtimeReady !== true) continue;
+    add(action.controlSkillId, action.selectedSubSkillIndex);
+    for (const identity of action.selectedHitIdentities ?? []) {
+      const match = String(identity).match(/^(\d+)\|(\d+)\|/);
+      if (match) add(match[1], match[2]);
+    }
+  }
+  for (const chain of profile?.contracts?.attackInputChains ?? []) {
+    for (const segment of chain.segments ?? []) {
+      add(segment.controlSkillId, segment.subSkillIndex);
+    }
+  }
+  for (const edge of profile?.contracts?.variantEdges ?? []) {
+    if (!isAppliedRecord(edge)) continue;
+    add(edge.sourceControlSkillId, edge.sourceSubSkillIndex);
+    add(edge.executionControlSkillId, edge.executionSubSkillIndex);
+    add(edge.targetControlSkillId, edge.targetSubSkillIndex);
+  }
+  return pairs;
+}
+
+function resolveRecordControlSubskill(record, dimension) {
+  if (dimension === 'hit') {
+    const match = String(record?.hitIdentity ?? '').match(/^(\d+)\|(\d+)\|/);
+    if (match) {
+      return {
+        controlSkillId: Number(match[1]),
+        subSkillIndex: Number(match[2]),
+      };
+    }
+  }
+  if (dimension === 'control-window') {
+    const controlSkillId = Number(
+      record?.sourceControlSkillId ?? record?.controlSkillId
+    );
+    const subSkillIndex = Number(
+      record?.sourceSubSkillIndex ?? record?.subSkillIndex
+    );
+    if (Number.isInteger(controlSkillId) && Number.isInteger(subSkillIndex)) {
+      return { controlSkillId, subSkillIndex };
+    }
+  }
+  return null;
+}
+
 export function createScenarioProfileProjectionRows({
   profile,
   exercisedControls,
@@ -412,21 +553,26 @@ export function createScenarioProfileProjectionRows({
   scenarioId,
   prefix,
 }) {
-  const exercised = new Set(
-    [
-      ...(exercisedControls ?? []).map(
-        ([controlSkillId, subSkillIndex]) =>
-          `${controlSkillId}|${subSkillIndex}`
-      ),
-      ...(exercisedFromHitAndEffectIdentities ?? []).flatMap(identity => {
-        const match = String(identity ?? '').match(/^(\d+)\|(\d+)\|/);
-        return match ? [`${Number(match[1])}|${Number(match[2])}`] : [];
-      }),
-    ]
-  );
+  const exercised = new Set([
+    ...(exercisedControls ?? []).map(
+      ([controlSkillId, subSkillIndex]) => `${controlSkillId}|${subSkillIndex}`
+    ),
+    ...(exercisedFromHitAndEffectIdentities ?? []).flatMap(identity => {
+      const match = String(identity ?? '').match(/^(\d+)\|(\d+)\|/);
+      return match ? [`${Number(match[1])}|${Number(match[2])}`] : [];
+    }),
+  ]);
   const observed = new Set((observedEffectIds ?? []).map(String));
   const contracts = profile?.contracts ?? {};
-  const index = { attackInputChains: 0, controlWindows: 0, variantEdges: 0, variantWindows: 0, conditionalHitGroups: 0, passives: 0, switchTriggers: 0 };
+  const index = {
+    attackInputChains: 0,
+    controlWindows: 0,
+    variantEdges: 0,
+    variantWindows: 0,
+    conditionalHitGroups: 0,
+    passives: 0,
+    switchTriggers: 0,
+  };
   const rows = {
     attackInputChains: [],
     controlWindows: [],
@@ -440,8 +586,7 @@ export function createScenarioProfileProjectionRows({
     const sequence = (index[collection] += 1);
     rows[collection].push({
       ...base,
-      projectionIdentity:
-        `${prefix}-${collection}-${scenarioId}-${sequence}`,
+      projectionIdentity: `${prefix}-${collection}-${scenarioId}-${sequence}`,
     });
   };
   for (const chain of contracts.attackInputChains ?? []) {
@@ -475,9 +620,7 @@ export function createScenarioProfileProjectionRows({
   }
   for (const edge of contracts.variantEdges ?? []) {
     if (
-      exercised.has(
-        `${edge.sourceControlSkillId}|${edge.sourceSubSkillIndex}`
-      )
+      exercised.has(`${edge.sourceControlSkillId}|${edge.sourceSubSkillIndex}`)
     ) {
       add('variantEdges', {
         sourceControlSkillId: edge.sourceControlSkillId,
@@ -522,9 +665,7 @@ export function createScenarioProfileProjectionRows({
     );
     const starCarryExercised =
       trigger.starCarryActionIdentity &&
-      exercised.has(
-        `${trigger.sourceSkillId ?? trigger.controlSkillId}|0`
-      );
+      exercised.has(`${trigger.sourceSkillId ?? trigger.controlSkillId}|0`);
     if (exercisedControl || starCarryExercised) {
       add('switchTriggers', {
         profileIdentity: trigger.profileIdentity,

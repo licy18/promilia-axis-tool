@@ -2,1378 +2,8 @@
   "schemaVersion": 1,
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [],
-  "acceptanceGaps": [
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:misa-star-independent-wind-mark",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#90F-toOwn-wind-mark-before-SP-summon"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:2b984fbad1bb8447",
-      "uniqueGapIdentity": "acceptance-gap:2b984fbad1bb8447"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:misa-star-wood-priority-consume",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b8182b2fb3dd2c47",
-      "uniqueGapIdentity": "acceptance-gap:b8182b2fb3dd2c47"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:16:02d86e15a0a5e9e1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-5369460366357035418__-5369460366357035418.json#behaviorlineControl[0].behaviorList[pathId=2665663051999872614]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_2665663051999872614__2665663051999872614.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:31c76f9ddfe35277",
-      "uniqueGapIdentity": "acceptance-gap:31c76f9ddfe35277"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:17:56ddf29ec010a509",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8774948698827196006__8774948698827196006.json#behaviorlineControl[0].behaviorList[pathId=-3650649530310654362]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-3650649530310654362__-3650649530310654362.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:9b455c4ccd54f4f6",
-      "uniqueGapIdentity": "acceptance-gap:9b455c4ccd54f4f6"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:18:4802db1412a44e4c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_4596468939688831301__4596468939688831301.json#behaviorlineControl[0].behaviorList[pathId=8312386682284271941]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8312386682284271941__8312386682284271941.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ce75e8c225f0f7ea",
-      "uniqueGapIdentity": "acceptance-gap:ce75e8c225f0f7ea"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:19:c7c3b88d8f7b2040",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-2141813906990569147__-2141813906990569147.json#behaviorlineControl[0].behaviorList[pathId=3668238715131324741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3668238715131324741__3668238715131324741.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:13b68d934a3ef359",
-      "uniqueGapIdentity": "acceptance-gap:13b68d934a3ef359"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:32:ab8ce1c0e201e948",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-4170088595740803004__-4170088595740803004.json#behaviorlineControl[0].behaviorList[pathId=-2644696618471964604]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-2644696618471964604__-2644696618471964604.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:7b70259e072f6942",
-      "uniqueGapIdentity": "acceptance-gap:7b70259e072f6942"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:33:1da67dee514ac407",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-8600140471653089212__-8600140471653089212.json#behaviorlineControl[0].behaviorList[pathId=-7088067759948939196]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-7088067759948939196__-7088067759948939196.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:89a1d9c997e12eee",
-      "uniqueGapIdentity": "acceptance-gap:89a1d9c997e12eee"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:0:f6e9eddd4aa53b48",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=-3902053340404252506"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1c49820f21220e83",
-      "uniqueGapIdentity": "acceptance-gap:1c49820f21220e83"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:1:e6e29c2ec42a2840",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=1466117413664505892"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:f41ecff8518fbacc",
-      "uniqueGapIdentity": "acceptance-gap:f41ecff8518fbacc"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:10:7d61a1d6a4332671",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=-4529113272733101309"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:83bfb8108162bb04",
-      "uniqueGapIdentity": "acceptance-gap:83bfb8108162bb04"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:14:5acb2311f5293753",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=1474042154774785480"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:0716e321583966f9",
-      "uniqueGapIdentity": "acceptance-gap:0716e321583966f9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:23:9a2a497fc62e134c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-4423318694946358813__-4423318694946358813.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b4bcbb449e20d4f3",
-      "uniqueGapIdentity": "acceptance-gap:b4bcbb449e20d4f3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:24:987a9526ab6beb88",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-6761994800908617245__-6761994800908617245.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:33b7c06019a268b7",
-      "uniqueGapIdentity": "acceptance-gap:33b7c06019a268b7"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:25:edd383a62445f518",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2012046129064557027__2012046129064557027.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:cb32c2f042d2444a",
-      "uniqueGapIdentity": "acceptance-gap:cb32c2f042d2444a"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:26:745e73295ccfadc1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2335886512998758883__2335886512998758883.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:05e43835ee9378fc",
-      "uniqueGapIdentity": "acceptance-gap:05e43835ee9378fc"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:27:89b143776d2ad49c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2690596788617984483__2690596788617984483.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5052c7be045b5519",
-      "uniqueGapIdentity": "acceptance-gap:5052c7be045b5519"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:28:a06aadf43151e791",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7379670190087882269__-7379670190087882269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-408193470852536619"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:f91ebc85b4a5fa53",
-      "uniqueGapIdentity": "acceptance-gap:f91ebc85b4a5fa53"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:29:a06eb8ed617bb1f8",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7448755903733450269__-7448755903733450269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-408193470852536619"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:d09caf6fc7033ab5",
-      "uniqueGapIdentity": "acceptance-gap:d09caf6fc7033ab5"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:3:145e560be426e097",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]",
-        "battle-element-assets.jsonl#path_id=-3902053340404252506"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:4396fb2e85959a4d",
-      "uniqueGapIdentity": "acceptance-gap:4396fb2e85959a4d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:30:9428f300ca43083a",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7379670190087882269__-7379670190087882269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-669846950425800112"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:07b5ca0b7f777152",
-      "uniqueGapIdentity": "acceptance-gap:07b5ca0b7f777152"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:31:39f44d6773061bd1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7448755903733450269__-7448755903733450269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-669846950425800112"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1a350590ac875f13",
-      "uniqueGapIdentity": "acceptance-gap:1a350590ac875f13"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:36:85e1b0a6ff706448",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-2272681421718471085__-2272681421718471085.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:24f6ff275d5fe198",
-      "uniqueGapIdentity": "acceptance-gap:24f6ff275d5fe198"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:37:7a0bbecfac7cde5b",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-2543388952570675629__-2543388952570675629.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3ea52b48ebf07a48",
-      "uniqueGapIdentity": "acceptance-gap:3ea52b48ebf07a48"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:38:11638d466c4c043b",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-5779514452982153645__-5779514452982153645.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1610c396b231fc03",
-      "uniqueGapIdentity": "acceptance-gap:1610c396b231fc03"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:39:7470e2da28551965",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_4569103198936120915__4569103198936120915.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5d624176091bbea9",
-      "uniqueGapIdentity": "acceptance-gap:5d624176091bbea9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:4:5a566968757cb1fd",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]",
-        "battle-element-assets.jsonl#path_id=1466117413664505892"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:74399d6d3702ed3f",
-      "uniqueGapIdentity": "acceptance-gap:74399d6d3702ed3f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|107|5",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:61d7a62945b147d1",
-      "uniqueGapIdentity": "acceptance-gap:61d7a62945b147d1"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|114|6",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3a941ea42126e760",
-      "uniqueGapIdentity": "acceptance-gap:3a941ea42126e760"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|74|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1470963d75054392",
-      "uniqueGapIdentity": "acceptance-gap:1470963d75054392"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|82|2",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c6bfa999b4ccff92",
-      "uniqueGapIdentity": "acceptance-gap:c6bfa999b4ccff92"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|90|3",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3e15d40d9583aaa6",
-      "uniqueGapIdentity": "acceptance-gap:3e15d40d9583aaa6"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|99|4",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5ac2aa96e87418b4",
-      "uniqueGapIdentity": "acceptance-gap:5ac2aa96e87418b4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|28|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:37f10fb204d7d938",
-      "uniqueGapIdentity": "acceptance-gap:37f10fb204d7d938"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|37|2",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c3aa91fa455f957d",
-      "uniqueGapIdentity": "acceptance-gap:c3aa91fa455f957d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|48|3",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:700bdca8c80bda90",
-      "uniqueGapIdentity": "acceptance-gap:700bdca8c80bda90"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|57|4",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:698112a87e8acd55",
-      "uniqueGapIdentity": "acceptance-gap:698112a87e8acd55"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|66|5",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:87899cab1ebd396a",
-      "uniqueGapIdentity": "acceptance-gap:87899cab1ebd396a"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|75|6",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:60d0954b4551762f",
-      "uniqueGapIdentity": "acceptance-gap:60d0954b4551762f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|83|7",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b83f0af9c0ad7eed",
-      "uniqueGapIdentity": "acceptance-gap:b83f0af9c0ad7eed"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700226|1|elements|0|-1477398542504158327|40|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-1477398542504158327"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:abb8c5eeb7f4e776",
-      "uniqueGapIdentity": "acceptance-gap:abb8c5eeb7f4e776"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:public-action:actor|107002|10700212|0|10700212|star-skill",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:471db35cdaee8ba1",
-      "uniqueGapIdentity": "acceptance-gap:471db35cdaee8ba1"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-expected-no-random-side-effect",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:9f64ffecf0066d1e",
-      "uniqueGapIdentity": "acceptance-gap:9f64ffecf0066d1e"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-integer-threshold-boundary",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:feeacea313730369",
-      "uniqueGapIdentity": "acceptance-gap:feeacea313730369"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-miss-coexistence",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:4f74790be0489af3",
-      "uniqueGapIdentity": "acceptance-gap:4f74790be0489af3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-non-crittable-rejection",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:bd60bc16593d6a86",
-      "uniqueGapIdentity": "acceptance-gap:bd60bc16593d6a86"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-per-hit-modes",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:e2f753e6e17cd300",
-      "uniqueGapIdentity": "acceptance-gap:e2f753e6e17cd300"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-pre-hit-attribute-change",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c96bae394978a773",
-      "uniqueGapIdentity": "acceptance-gap:c96bae394978a773"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-rate-one-hundred-percent",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:8b4f0f9d301761fe",
-      "uniqueGapIdentity": "acceptance-gap:8b4f0f9d301761fe"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-rate-zero",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ec4018ff990005b5",
-      "uniqueGapIdentity": "acceptance-gap:ec4018ff990005b5"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-sampled-same-seed",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:8a0ba9f85cf57e75",
-      "uniqueGapIdentity": "acceptance-gap:8a0ba9f85cf57e75"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:hit-landed-and-miss",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:72731ead2155baa3",
-      "uniqueGapIdentity": "acceptance-gap:72731ead2155baa3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:input-window-inside-outside-boundaries",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1e4d24909df7fe3f",
-      "uniqueGapIdentity": "acceptance-gap:1e4d24909df7fe3f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:save-import-replay",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:23f0993774a46e09",
-      "uniqueGapIdentity": "acceptance-gap:23f0993774a46e09"
-    }
-  ],
-  "records": [
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:26:745e73295ccfadc1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2335886512998758883__2335886512998758883.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:05e43835ee9378fc",
-      "uniqueGapIdentity": "acceptance-gap:05e43835ee9378fc"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:14:5acb2311f5293753",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=1474042154774785480"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:0716e321583966f9",
-      "uniqueGapIdentity": "acceptance-gap:0716e321583966f9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:30:9428f300ca43083a",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7379670190087882269__-7379670190087882269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-669846950425800112"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:07b5ca0b7f777152",
-      "uniqueGapIdentity": "acceptance-gap:07b5ca0b7f777152"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:19:c7c3b88d8f7b2040",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-2141813906990569147__-2141813906990569147.json#behaviorlineControl[0].behaviorList[pathId=3668238715131324741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3668238715131324741__3668238715131324741.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:13b68d934a3ef359",
-      "uniqueGapIdentity": "acceptance-gap:13b68d934a3ef359"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|74|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1470963d75054392",
-      "uniqueGapIdentity": "acceptance-gap:1470963d75054392"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:38:11638d466c4c043b",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-5779514452982153645__-5779514452982153645.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1610c396b231fc03",
-      "uniqueGapIdentity": "acceptance-gap:1610c396b231fc03"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:31:39f44d6773061bd1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7448755903733450269__-7448755903733450269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-669846950425800112"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1a350590ac875f13",
-      "uniqueGapIdentity": "acceptance-gap:1a350590ac875f13"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:0:f6e9eddd4aa53b48",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=-3902053340404252506"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1c49820f21220e83",
-      "uniqueGapIdentity": "acceptance-gap:1c49820f21220e83"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:input-window-inside-outside-boundaries",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:1e4d24909df7fe3f",
-      "uniqueGapIdentity": "acceptance-gap:1e4d24909df7fe3f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:save-import-replay",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:23f0993774a46e09",
-      "uniqueGapIdentity": "acceptance-gap:23f0993774a46e09"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:36:85e1b0a6ff706448",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-2272681421718471085__-2272681421718471085.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:24f6ff275d5fe198",
-      "uniqueGapIdentity": "acceptance-gap:24f6ff275d5fe198"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:misa-star-independent-wind-mark",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#90F-toOwn-wind-mark-before-SP-summon"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:2b984fbad1bb8447",
-      "uniqueGapIdentity": "acceptance-gap:2b984fbad1bb8447"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:16:02d86e15a0a5e9e1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-5369460366357035418__-5369460366357035418.json#behaviorlineControl[0].behaviorList[pathId=2665663051999872614]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_2665663051999872614__2665663051999872614.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:31c76f9ddfe35277",
-      "uniqueGapIdentity": "acceptance-gap:31c76f9ddfe35277"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:24:987a9526ab6beb88",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-6761994800908617245__-6761994800908617245.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:33b7c06019a268b7",
-      "uniqueGapIdentity": "acceptance-gap:33b7c06019a268b7"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|28|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:37f10fb204d7d938",
-      "uniqueGapIdentity": "acceptance-gap:37f10fb204d7d938"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|114|6",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3a941ea42126e760",
-      "uniqueGapIdentity": "acceptance-gap:3a941ea42126e760"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|90|3",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3e15d40d9583aaa6",
-      "uniqueGapIdentity": "acceptance-gap:3e15d40d9583aaa6"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:37:7a0bbecfac7cde5b",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_-2543388952570675629__-2543388952570675629.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:3ea52b48ebf07a48",
-      "uniqueGapIdentity": "acceptance-gap:3ea52b48ebf07a48"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:3:145e560be426e097",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]",
-        "battle-element-assets.jsonl#path_id=-3902053340404252506"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:4396fb2e85959a4d",
-      "uniqueGapIdentity": "acceptance-gap:4396fb2e85959a4d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:public-action:actor|107002|10700212|0|10700212|star-skill",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:471db35cdaee8ba1",
-      "uniqueGapIdentity": "acceptance-gap:471db35cdaee8ba1"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-miss-coexistence",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:4f74790be0489af3",
-      "uniqueGapIdentity": "acceptance-gap:4f74790be0489af3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:27:89b143776d2ad49c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2690596788617984483__2690596788617984483.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5052c7be045b5519",
-      "uniqueGapIdentity": "acceptance-gap:5052c7be045b5519"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|99|4",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5ac2aa96e87418b4",
-      "uniqueGapIdentity": "acceptance-gap:5ac2aa96e87418b4"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:39:7470e2da28551965",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/MonoBehaviour_4569103198936120915__4569103198936120915.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700222.asset/MonoBehaviour/skill_control_10700222__-3103898746845288998.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=3069733526995086666"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:5d624176091bbea9",
-      "uniqueGapIdentity": "acceptance-gap:5d624176091bbea9"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|75|6",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:60d0954b4551762f",
-      "uniqueGapIdentity": "acceptance-gap:60d0954b4551762f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|107|5",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:61d7a62945b147d1",
-      "uniqueGapIdentity": "acceptance-gap:61d7a62945b147d1"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|57|4",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:698112a87e8acd55",
-      "uniqueGapIdentity": "acceptance-gap:698112a87e8acd55"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|48|3",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:700bdca8c80bda90",
-      "uniqueGapIdentity": "acceptance-gap:700bdca8c80bda90"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:hit-landed-and-miss",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:72731ead2155baa3",
-      "uniqueGapIdentity": "acceptance-gap:72731ead2155baa3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:4:5a566968757cb1fd",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]",
-        "battle-element-assets.jsonl#path_id=1466117413664505892"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:74399d6d3702ed3f",
-      "uniqueGapIdentity": "acceptance-gap:74399d6d3702ed3f"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:32:ab8ce1c0e201e948",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-4170088595740803004__-4170088595740803004.json#behaviorlineControl[0].behaviorList[pathId=-2644696618471964604]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-2644696618471964604__-2644696618471964604.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:7b70259e072f6942",
-      "uniqueGapIdentity": "acceptance-gap:7b70259e072f6942"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:10:7d61a1d6a4332671",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=-4529113272733101309"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:83bfb8108162bb04",
-      "uniqueGapIdentity": "acceptance-gap:83bfb8108162bb04"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|66|5",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:87899cab1ebd396a",
-      "uniqueGapIdentity": "acceptance-gap:87899cab1ebd396a"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:33:1da67dee514ac407",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-8600140471653089212__-8600140471653089212.json#behaviorlineControl[0].behaviorList[pathId=-7088067759948939196]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-7088067759948939196__-7088067759948939196.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:89a1d9c997e12eee",
-      "uniqueGapIdentity": "acceptance-gap:89a1d9c997e12eee"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-sampled-same-seed",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:8a0ba9f85cf57e75",
-      "uniqueGapIdentity": "acceptance-gap:8a0ba9f85cf57e75"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-rate-one-hundred-percent",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:8b4f0f9d301761fe",
-      "uniqueGapIdentity": "acceptance-gap:8b4f0f9d301761fe"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:17:56ddf29ec010a509",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8774948698827196006__8774948698827196006.json#behaviorlineControl[0].behaviorList[pathId=-3650649530310654362]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-3650649530310654362__-3650649530310654362.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:9b455c4ccd54f4f6",
-      "uniqueGapIdentity": "acceptance-gap:9b455c4ccd54f4f6"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-expected-no-random-side-effect",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:9f64ffecf0066d1e",
-      "uniqueGapIdentity": "acceptance-gap:9f64ffecf0066d1e"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700226|1|elements|0|-1477398542504158327|40|1",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-1477398542504158327"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:abb8c5eeb7f4e776",
-      "uniqueGapIdentity": "acceptance-gap:abb8c5eeb7f4e776"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:23:9a2a497fc62e134c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-4423318694946358813__-4423318694946358813.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b4bcbb449e20d4f3",
-      "uniqueGapIdentity": "acceptance-gap:b4bcbb449e20d4f3"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:action-effect-binding:misa-star-wood-priority-consume",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b8182b2fb3dd2c47",
-      "uniqueGapIdentity": "acceptance-gap:b8182b2fb3dd2c47"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|83|7",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:b83f0af9c0ad7eed",
-      "uniqueGapIdentity": "acceptance-gap:b83f0af9c0ad7eed"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-non-crittable-rejection",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:bd60bc16593d6a86",
-      "uniqueGapIdentity": "acceptance-gap:bd60bc16593d6a86"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|1|elements|1|-1404469563182445209|37|2",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c3aa91fa455f957d",
-      "uniqueGapIdentity": "acceptance-gap:c3aa91fa455f957d"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:hit:10700212|0|elements|1|-3883846112050479707|82|2",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c6bfa999b4ccff92",
-      "uniqueGapIdentity": "acceptance-gap:c6bfa999b4ccff92"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-pre-hit-attribute-change",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:c96bae394978a773",
-      "uniqueGapIdentity": "acceptance-gap:c96bae394978a773"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:25:edd383a62445f518",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_2012046129064557027__2012046129064557027.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[0]",
-        "battle-element-assets.jsonl#path_id=-3930384060379573910"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:cb32c2f042d2444a",
-      "uniqueGapIdentity": "acceptance-gap:cb32c2f042d2444a"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:control-window:control-window:18:4802db1412a44e4c",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_4596468939688831301__4596468939688831301.json#behaviorlineControl[0].behaviorList[pathId=8312386682284271941]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8312386682284271941__8312386682284271941.json"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ce75e8c225f0f7ea",
-      "uniqueGapIdentity": "acceptance-gap:ce75e8c225f0f7ea"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:29:a06eb8ed617bb1f8",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7448755903733450269__-7448755903733450269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-408193470852536619"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:d09caf6fc7033ab5",
-      "uniqueGapIdentity": "acceptance-gap:d09caf6fc7033ab5"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-per-hit-modes",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:e2f753e6e17cd300",
-      "uniqueGapIdentity": "acceptance-gap:e2f753e6e17cd300"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-rate-zero",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:ec4018ff990005b5",
-      "uniqueGapIdentity": "acceptance-gap:ec4018ff990005b5"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:1:e6e29c2ec42a2840",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]",
-        "battle-element-assets.jsonl#path_id=1466117413664505892"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:f41ecff8518fbacc",
-      "uniqueGapIdentity": "acceptance-gap:f41ecff8518fbacc"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "contract:effect:effect:28:a06aadf43151e791",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-7379670190087882269__-7379670190087882269.json#startFrame|directInjectTargetType",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/skill_control_10700213__4698294157157600883.json#skillResourceMaps[0].elements[1]",
-        "battle-element-assets.jsonl#path_id=-408193470852536619"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:f91ebc85b4a5fa53",
-      "uniqueGapIdentity": "acceptance-gap:f91ebc85b4a5fa53"
-    },
-    {
-      "category": "acceptance-scenario-gap",
-      "requirementIdentity": "protocol:107002:critical-integer-threshold-boundary",
-      "status": "static-evidence-gap",
-      "reason": "acceptance-scenario-coverage-missing",
-      "sourceIdentities": [
-        "protocol:m11-d-character-acceptance-v1:owner:107002"
-      ],
-      "blocking": true,
-      "recordIdentity": "acceptance-gap:feeacea313730369",
-      "uniqueGapIdentity": "acceptance-gap:feeacea313730369"
-    }
-  ],
+  "acceptanceGaps": [],
+  "records": [],
   "nonBlockingRecords": [
     {
       "recordIdentity": "source-gap:0495be23aed9db67",
@@ -1650,21 +280,15 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 54,
+    "uniqueBlockingCount": 0,
     "sourceGapCount": 0,
-    "acceptanceGapCount": 54,
+    "acceptanceGapCount": 0,
     "nonBlockingCount": 16,
-    "statusCounts": {
-      "static-evidence-gap": 54
-    },
-    "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 54
-    },
-    "categoryCounts": {
-      "acceptance-scenario-gap": 54
-    }
+    "statusCounts": {},
+    "reasonCounts": {},
+    "categoryCounts": {}
   },
-  "ledgerHash": "d91751bcf1392b03",
+  "ledgerHash": "76a6d112aa1969c6",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-form:actor|107002|10700201|2|10700215|dodge-attack:default",
@@ -1846,6 +470,28 @@
           10700211
         ]
       }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:18:4802db1412a44e4c",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_4596468939688831301__4596468939688831301.json#behaviorlineControl[0].behaviorList[pathId=8312386682284271941]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8312386682284271941__8312386682284271941.json",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "77de40c244581fdb"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:19:c7c3b88d8f7b2040",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-2141813906990569147__-2141813906990569147.json#behaviorlineControl[0].behaviorList[pathId=3668238715131324741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3668238715131324741__3668238715131324741.json",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "41c2aedf050c83b6"
     },
     {
       "recordIdentity": "not-applicable:contract:control-window:control-window:2:0b175f0cc05f2a41",
@@ -2055,6 +701,28 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/MonoBehaviour_-4209780121840570339__-4209780121840570339.json#behaviorlineControl[0].behaviorList[pathId=-5194245087831117795]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/MonoBehaviour_-5194245087831117795__-5194245087831117795.json"
       ],
       "sourceRecordHash": "2447dd7e1f5dcb5d"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:32:ab8ce1c0e201e948",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-4170088595740803004__-4170088595740803004.json#behaviorlineControl[0].behaviorList[pathId=-2644696618471964604]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-2644696618471964604__-2644696618471964604.json",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"
+      ],
+      "sourceRecordHash": "2bf191ebef40ca4d"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:33:1da67dee514ac407",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-8600140471653089212__-8600140471653089212.json#behaviorlineControl[0].behaviorList[pathId=-7088067759948939196]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_-7088067759948939196__-7088067759948939196.json",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"
+      ],
+      "sourceRecordHash": "4f4474873c01a32f"
     },
     {
       "recordIdentity": "not-applicable:contract:control-window:control-window:34:c5666d32bdfa3f3d",
@@ -2751,6 +1419,83 @@
       }
     },
     {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|28|1",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "be4e70d55ed526ee"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|37|2",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "d3049367bffed7ef"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|48|3",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "a04efd98d09ce9b6"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|57|4",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "e035dc2efc7510e3"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|66|5",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "c4e9e33f98e28800"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|75|6",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "a148122789313fc5"
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700212|1|elements|1|-1404469563182445209|83|7",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[1].elements[1]|battle-element-assets.jsonl#path_id=-1404469563182445209",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
+      ],
+      "sourceRecordHash": "a1903d2a09bc241b"
+    },
+    {
       "recordIdentity": "not-applicable:contract:hit:10700225|0|elements|0|5593300562289576764|15|1",
       "status": "not-applicable",
       "reason": "m12c-zero-distance-passive-boss-out-of-scope",
@@ -2938,6 +1683,17 @@
           10700225
         ]
       }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:hit:10700226|1|elements|0|-1477398542504158327|40|1",
+      "status": "not-applicable",
+      "reason": "source-confirmed-not-applicable",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillResourceMaps[1].elements[0]|battle-element-assets.jsonl#path_id=-1477398542504158327",
+        "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"
+      ],
+      "sourceRecordHash": "0cb5dd340b5f2ee2"
     },
     {
       "recordIdentity": "not-applicable:contract:public-action:actor|107002|10700201|2|10700215|dodge-attack",
