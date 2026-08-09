@@ -870,11 +870,9 @@
     {
       "ownerId": 102001,
       "ownerName": "莉莉",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -914,7 +912,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "35795e8323d74a8e",
+      "manifestHash": "1f6c407916a7ad58",
       "sourceOfTruthHash": "dfe165a758766938",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -988,11 +986,9 @@
     {
       "ownerId": 107001,
       "ownerName": "西芙莉雅",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1034,7 +1030,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "deda12b1998a8ff9",
+      "manifestHash": "62a0fb3c6cc5b291",
       "sourceOfTruthHash": "143cce6cbc2f5da0",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1103,11 +1099,9 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1148,7 +1142,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b554529513ccff6b",
+      "manifestHash": "67f7780092483ad2",
       "sourceOfTruthHash": "d3af80d43805d400",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1162,11 +1156,9 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1206,7 +1198,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "30c27e908f8359db",
+      "manifestHash": "c5dfccd2e26bd183",
       "sourceOfTruthHash": "f094f341c8a94801",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1218,15 +1210,15 @@
       }
     }
   ],
-  "catalogHash": "d76e55655fd00855",
-  "manifestIndexHash": "0282507bd167be3e",
+  "catalogHash": "32faaa5509637f2a",
+  "manifestIndexHash": "68ea9bf916baa075",
   "summary": {
     "ownerCount": 8,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 8,
-    "visuallyAcceptedCount": 0,
-    "optimizationReadyCount": 0,
+    "visuallyAcceptedCount": 4,
+    "optimizationReadyCount": 4,
     "machineScenarioPassCount": 8,
     "workbenchRoundTripPassCount": 8,
     "sourceGapCount": 85,

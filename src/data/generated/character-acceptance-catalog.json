@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "0282507bd167be3e",
+  "manifestIndexHash": "68ea9bf916baa075",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -776,19 +776,19 @@
     {
       "ownerId": 102001,
       "ownerName": "莉莉",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 111,
       "matrixPassedCount": 111,
-      "manifestHash": "35795e8323d74a8e",
+      "manifestHash": "1f6c407916a7ad58",
       "qualificationSubjectHash": "d32a427a186b409a",
       "sourceOfTruthHash": "dfe165a758766938",
       "profileHash": "4dffa0a98c2d04624b24a2376ff1a41d8a0890537595d7cc0a11fd373174d839",
@@ -822,19 +822,19 @@
     {
       "ownerId": 107001,
       "ownerName": "西芙莉雅",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 86,
       "matrixPassedCount": 86,
-      "manifestHash": "deda12b1998a8ff9",
+      "manifestHash": "62a0fb3c6cc5b291",
       "qualificationSubjectHash": "d15a7ab877a69c89",
       "sourceOfTruthHash": "143cce6cbc2f5da0",
       "profileHash": "d017ec094267225eedab3fbfdef7578d46ec49b347bc0c5f9fc3dc4ef3418c24",
@@ -868,19 +868,19 @@
     {
       "ownerId": 108003,
       "ownerName": "米蒂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 139,
       "matrixPassedCount": 139,
-      "manifestHash": "b554529513ccff6b",
+      "manifestHash": "67f7780092483ad2",
       "qualificationSubjectHash": "c010f26e39e88329",
       "sourceOfTruthHash": "d3af80d43805d400",
       "profileHash": "ea2947d0d53a4b7201f79a50df30d0360bfd02b70350ff187de77e738d856068",
@@ -891,19 +891,19 @@
     {
       "ownerId": 109001,
       "ownerName": "末音",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 138,
       "matrixPassedCount": 138,
-      "manifestHash": "30c27e908f8359db",
+      "manifestHash": "c5dfccd2e26bd183",
       "qualificationSubjectHash": "e8c3abb0b962bfd2",
       "sourceOfTruthHash": "f094f341c8a94801",
       "profileHash": "c6d6b7a8db5a2ec7abacc7e790812ae6f4cbaf7627cdfc4edf50d041650363e6",
@@ -917,9 +917,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "runtime-integrated": 8
+      "optimization-ready": 4,
+      "runtime-integrated": 4
     },
-    "optimizationReadyCount": 0
+    "optimizationReadyCount": 4
   },
-  "catalogHash": "d76e55655fd00855"
+  "catalogHash": "32faaa5509637f2a"
 }

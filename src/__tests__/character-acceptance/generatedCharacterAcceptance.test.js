@@ -169,7 +169,7 @@ describe('generated character acceptance manifests', () => {
         ownerId
       );
       const acceptanceCommit = productAccepted
-        ? '1a56e0a295f31298da6c3ddb5d70db90183971fb'
+        ? '76339c4c55664ba3e686f307aa2ec5c351a16315'
         : null;
       const runtimeIntegrated = true;
       expect(manifest.maturity).toMatchObject({

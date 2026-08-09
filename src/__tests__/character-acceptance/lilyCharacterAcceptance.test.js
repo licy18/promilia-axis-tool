@@ -19,15 +19,15 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.requirementInventory.summary).toMatchObject({
       recordCount: 260,
-      appliedCount: 128,
+      appliedCount: 111,
       gapCount: 0,
-      notApplicableCount: 132,
+      notApplicableCount: 149,
     });
     expect(manifest.matrix.summary).toMatchObject({
-      requiredCount: 128,
-      passedCount: 128,
+      requiredCount: 111,
+      passedCount: 111,
       blockedCount: 0,
-      notApplicableCount: 132,
+      notApplicableCount: 149,
     });
     expect(manifest.sourceGapInventory.summary).toMatchObject({
       blockingCount: 0,
@@ -51,7 +51,7 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: '1a56e0a295f31298da6c3ddb5d70db90183971fb',
+      acceptanceCommit: '76339c4c55664ba3e686f307aa2ec5c351a16315',
       bindingStatus: 'verified',
       scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
       automatedEvidence: [
