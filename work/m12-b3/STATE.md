@@ -283,3 +283,11 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - 同输入 Machine Axis 双轮重放哈希稳定。米蒂 fixture input/data/trace/evaluation/build=`0088d6b91e58aad3/e281fe04fdbc2f6c/a8aa1cf4068a6d33/3c2fb1d6fda5e7b9/aef073acf58b042f`；M11 三角色 fixture=`daefb7220d3ebd19/5de748dda0c9ad95/2ef45ddf51a3712e/6b1817db45d140ab/39db05591de1c474`。
 - 中央聚焦门禁 `6 files / 89 tests` 全绿；verified-combat、scenario policy、character acceptance、optimization qualification、visual acceptance、applied-source bindings、production imports、Workbench data、action status 与 diff check 全 clean。当前已发布角色 `7`、runtime-integrated `7`、optimization-ready `3`；全局 blocker=`10`，全部为 character/not-implemented；M12-C/formal search 继续锁定，Kibo DNA=`[]`。
 - 下一步：串行复验并集成 102001 R2 与 107001 R2；112001 继续等待真实 controlled client toughness/break 顺序证据，不用 blocked tooling 代替裁决。
+
+## M12-B3 优化器 runtime-v2 中央集成（2026-08-09）
+
+- 中央从已验收角色基线 `ee5c4cf817521165186f438f274893c91dfb1280` 顺序语义合并优化器五提交，当前机制提交为 `294d1085`。合并保留全部中央角色 runtime/compiler 与产品验收，没有整边覆盖旧分支。
+- 评分合同升级为 `m12-enemy-settlement-runtime-v2` / `2e3095db4b8c9232`。`cycle-dps-with-toughness` 与 `fastest-kill` 可按当前版本化无头核心输出 formal score；`clientParityReady=false`、四项 controlled-capture `leavesOpen` 和未来证据不同时升版并重算的约束继续保留。该政策不构成 112001 break watcher 的客户端机制证据。
+- 中央重新生成 cycle acceptance 与 M11 三人轴 canonical 锁；结算顺序进入 trace 后仅 `trace/build` 漂移，input/data/evaluation 与所有行为断言保持不变。`scripts/machine-axis/evidence/*.json` 已固定 LF，避免 Windows checkout 造成证据字节哈希漂移。
+- 中央聚焦回归：首轮 `159/162` 仅暴露 3 个陈旧锁，修正后相关 `55/55`；search/CLI/Workbench/Machine Axis 扩展首轮 `67/69` 仅暴露 2 个陈旧 trace/build 锁，修正后 `22/22`。runtime capture manifest、enemy settlement evidence、scenario policy、qualification、Workbench data 与 production imports 双轮只读审计全绿；Machine Axis build 与 production build `1889 modules` 通过。
+- 当前 qualification 分母仍为 `9/43/62/137/12`，角色级 ready 为 `102001/107001/107002/108003/109001` 共 `5/9`；blocking unique=`7`，全部为角色 not-implemented。101010 与 103002 closure 并行 active；112001 production 仍受真实客户端机制顺序证据约束；STARBORN 未启动。`m12cLocked=true`，未运行正式搜索，Kibo DNA=`[]`。

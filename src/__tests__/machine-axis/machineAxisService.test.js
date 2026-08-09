@@ -242,9 +242,9 @@ describe('Machine Axis service', () => {
     expect(run.hashes).toMatchObject({
       input: 'aff5191ffb37e196',
       data: 'd4db176176ebd09b',
-      trace: 'aeccd313e0454208',
+      trace: 'fae43a5d8865c76e',
       evaluation: '3c2fb1d6fda5e7b9',
-      build: '63de7bb1f05cfbb8',
+      build: '167c9d82b18124a2',
     });
   }, 30_000);
 
