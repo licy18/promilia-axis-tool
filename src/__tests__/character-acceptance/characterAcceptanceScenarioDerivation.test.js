@@ -4,10 +4,49 @@ import xiaoyuGolden from '../../../reports/m10/101010/golden-trace.json';
 import {
   applyCharacterAcceptanceSourceGapDispositions,
   createCharacterAcceptanceMatrix,
+  hasRepeatedApplyRefreshLifecycle,
 } from '../../../scripts/character-acceptance/character-acceptance-generation.mjs';
 import { finalizeSourceGapInventory } from '../../character-acceptance/characterAcceptanceDerivation';
 
 describe('character acceptance scenario derivation', () => {
+  it('recognizes a same-effect repeated apply with extended expiry as a real refresh lifecycle', () => {
+    const lifecycle = [
+      {
+        effectId: 'synthetic-effect',
+        targetId: 'actor-a',
+        operation: 'apply',
+        expiresAtMs: 6000,
+      },
+      {
+        effectId: 'synthetic-effect',
+        targetId: 'actor-a',
+        operation: 'apply',
+        expiresAtMs: 6500,
+      },
+      {
+        effectId: 'synthetic-effect',
+        targetId: 'actor-a',
+        operation: 'expire',
+      },
+    ];
+
+    expect(hasRepeatedApplyRefreshLifecycle(lifecycle)).toBe(true);
+    expect(
+      hasRepeatedApplyRefreshLifecycle([
+        lifecycle[0],
+        { ...lifecycle[1], targetId: 'actor-b' },
+        lifecycle[2],
+      ])
+    ).toBe(false);
+    expect(
+      hasRepeatedApplyRefreshLifecycle([
+        lifecycle[0],
+        lifecycle[2],
+        lifecycle[1],
+      ])
+    ).toBe(false);
+  });
+
   it('preserves source-backed passive-scenario N/A as structured scope', () => {
     const [projected] = applyCharacterAcceptanceSourceGapDispositions(
       [

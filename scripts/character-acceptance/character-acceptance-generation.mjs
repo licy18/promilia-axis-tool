@@ -1447,6 +1447,49 @@ function createVisualScenarioCaseSource(visualScenario) {
   };
 }
 
+export function hasRepeatedApplyRefreshLifecycle(effects = []) {
+  const lifecycleByEffectTarget = new Map();
+  for (const event of effects) {
+    const effectIdentity = event?.effectId ?? event?.runtimeEffectId;
+    if (!effectIdentity) continue;
+    const key = String(effectIdentity) + '|' + String(event?.targetId ?? '');
+    const current = lifecycleByEffectTarget.get(key) ?? {
+      active: false,
+      refreshed: false,
+      expiresAtMs: null,
+    };
+    const operation = String(event?.operation ?? '');
+    if (operation === 'apply') {
+      const rawExpiresAtMs = event?.expiresAtMs;
+      const expiresAtMs = Number(rawExpiresAtMs);
+      const hasExpiry =
+        rawExpiresAtMs !== null &&
+        rawExpiresAtMs !== undefined &&
+        rawExpiresAtMs !== '' &&
+        Number.isFinite(expiresAtMs);
+      current.refreshed =
+        current.refreshed ||
+        (current.active &&
+          hasExpiry &&
+          Number.isFinite(current.expiresAtMs) &&
+          expiresAtMs > current.expiresAtMs);
+      current.active = true;
+      current.expiresAtMs = hasExpiry ? expiresAtMs : null;
+    } else if (operation === 'expire') {
+      if (current.active && current.refreshed) return true;
+      current.active = false;
+      current.refreshed = false;
+      current.expiresAtMs = null;
+    } else if (operation === 'remove' || operation === 'consume') {
+      current.active = false;
+      current.refreshed = false;
+      current.expiresAtMs = null;
+    }
+    lifecycleByEffectTarget.set(key, current);
+  }
+  return false;
+}
+
 function createGoldenTraceProjection(report) {
   const selections = Object.entries(
     report.actual?.actions?.selectionByActionId ?? {}
@@ -1553,7 +1596,8 @@ function createGoldenTraceProjection(report) {
         (effectOperations.has('expire') || stateOperations.has('expire')) &&
         (effectOperations.has('refresh') ||
           effectOperations.has('stack') ||
-          stateOperations.has('refresh')),
+          stateOperations.has('refresh') ||
+          hasRepeatedApplyRefreshLifecycle(effects)),
       'foreground-background-switch':
         hasSwitch &&
         autoRecoveryReasons.has('verified-auto-sp-background') &&

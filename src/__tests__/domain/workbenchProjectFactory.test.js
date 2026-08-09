@@ -847,6 +847,73 @@ describe('workbench project actor configuration', () => {
     });
   });
 
+  describe('verified declared public action intent draft persistence', () => {
+    it('projects a proxy-backed marker into a clone-safe plain contract', () => {
+      const marker = new Proxy(
+        {
+          schemaVersion: 1,
+          contractName: 'AzPrVerifiedDeclaredPublicAction',
+          actionId: 'declared-proxy-action',
+          ownerId: 101007,
+          mappingIdentity: 'actor|101007|skill|declared',
+          ignored: new Proxy({}, {}),
+        },
+        {}
+      );
+      const draft = createWorkbenchActionDraft({
+        id: 'declared-proxy-action',
+        type: ACTION_TYPES.SKILL,
+        skillId: 10100701,
+        actorCharacterId: 101007,
+        verifiedDeclaredPublicActionIntent: marker,
+      });
+
+      expect(draft.verifiedDeclaredPublicActionIntent).toEqual({
+        schemaVersion: 1,
+        contractName: 'AzPrVerifiedDeclaredPublicAction',
+        actionId: 'declared-proxy-action',
+        ownerId: 101007,
+        mappingIdentity: 'actor|101007|skill|declared',
+      });
+      expect(() =>
+        structuredClone(draft.verifiedDeclaredPublicActionIntent)
+      ).not.toThrow();
+
+      const [normalized] = normalizeWorkbenchActionDrafts([draft], 101007);
+      expect(normalized.verifiedDeclaredPublicActionIntent).toEqual(
+        draft.verifiedDeclaredPublicActionIntent
+      );
+    });
+
+    it('fails closed on non-scalar marker fields and strips additions', () => {
+      const draft = createWorkbenchActionDraft({
+        id: 'declared-invalid-action',
+        type: ACTION_TYPES.SKILL,
+        skillId: 10100701,
+        actorCharacterId: 101007,
+        verifiedDeclaredPublicActionIntent: {
+          schemaVersion: '1',
+          contractName: { value: 'AzPrVerifiedDeclaredPublicAction' },
+          actionId: ['declared-invalid-action'],
+          ownerId: '101007',
+          mappingIdentity: new Proxy({}, {}),
+          unexpected: 'must-not-survive',
+        },
+      });
+
+      expect(draft.verifiedDeclaredPublicActionIntent).toEqual({
+        schemaVersion: null,
+        contractName: null,
+        actionId: null,
+        ownerId: null,
+        mappingIdentity: null,
+      });
+      expect(draft.verifiedDeclaredPublicActionIntent).not.toHaveProperty(
+        'unexpected'
+      );
+    });
+  });
+
   describe('machine axis source sequence draft persistence', () => {
     it('keeps source sequence through draft normalization and project rebuild', () => {
       const draft = createWorkbenchActionDraft({

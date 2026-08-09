@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fixture from '../../../fixtures/character-acceptance/102001-visual.json';
 import manifest from '../../../reports/m11/character-acceptance/102001/manifest.json';
+import scenarioCases from '../../../reports/m11/character-acceptance/102001/scenario-cases.json';
 import { validateCharacterAcceptanceManifest } from '../../character-acceptance/characterAcceptanceProtocol';
 
 const SCENARIO_POLICY = 'm12c-zero-distance-passive-boss-v1';
@@ -52,9 +53,51 @@ describe('Lily M12-B3 owner character acceptance', () => {
       status: 'pending',
       acceptanceCommit: null,
       bindingStatus: 'not-requested',
-      automatedEvidence: [],
+      scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
+      automatedEvidence: [
+        {
+          scenarioIdentity: 'm12-b3-102001-zero-distance-acceptance',
+          status: 'automated-workbench-import-passed',
+          screenshotPath:
+            'reports/m11-d-character-acceptance-102001-desktop.png',
+          screenshotSha256:
+            '71f35e3e964093414d56841759d63d33b38dde7cdf432f30b0e85c8c6799b516',
+        },
+      ],
     });
   }, 15000);
+
+  it('passes every declared assertion including the refresh lifecycle fact', () => {
+    expect(scenarioCases.summary).toMatchObject({
+      scenarioCount: 2,
+      executionPassedCount: 2,
+    });
+    expect(scenarioCases.summary.assertionCount).toBeGreaterThan(0);
+    expect(scenarioCases.summary.assertionPassedCount).toBe(
+      scenarioCases.summary.assertionCount
+    );
+    expect(
+      scenarioCases.records
+        .flatMap(record => record.assertions)
+        .every(assertion => assertion.status === 'passed')
+    ).toBe(true);
+
+    const goldenScenario = scenarioCases.records.find(
+      record =>
+        record.scenarioIdentity === 'm12-b3-102001:active-surface-golden'
+    );
+    expect(
+      goldenScenario.assertions.find(
+        assertion =>
+          assertion.assertionIdentity ===
+          'scenario-fact:buff-apply-refresh-stack-expire'
+      )
+    ).toMatchObject({
+      status: 'passed',
+      actualProjectionIdentities: ['fact:buff-apply-refresh-stack-expire'],
+      reasons: [],
+    });
+  });
 
   it('locks landed-hit cardinality, interruption, gates, and exact lifecycles to real traces', () => {
     const scenario = manifest.evidence.machineScenarios[0];

@@ -284,10 +284,38 @@ describe('character acceptance protocol', () => {
     pendingVisualInput.evidence.productVisualAcceptance.automatedEvidence = [];
     const pendingVisual =
       finalizeCharacterAcceptanceManifest(pendingVisualInput);
-    expect(pendingVisual.validation.issues).not.toContain(
+    expect(pendingVisual.validation.issues).toContain(
       'character-acceptance-visual-evidence-missing:synthetic-scenario'
     );
+    expect(pendingVisual.validation.status).toBe(
+      'character-acceptance-manifest-invalid'
+    );
     expect(pendingVisual.maturity.optimizationReady).toBe(false);
+
+    const pendingUnknownVisualInput = createManifestInput({
+      productVisualStatus: 'pending',
+    });
+    pendingUnknownVisualInput.evidence.productVisualAcceptance.automatedEvidence =
+      [
+        {
+          scenarioIdentity: 'unknown-scenario',
+          status: 'automated-workbench-import-passed',
+          screenshotPath: 'reports/unknown.png',
+          screenshotSha256: 'a'.repeat(64),
+        },
+      ];
+    const pendingUnknownVisual = finalizeCharacterAcceptanceManifest(
+      pendingUnknownVisualInput
+    );
+    expect(pendingUnknownVisual.validation.issues).toEqual(
+      expect.arrayContaining([
+        'character-acceptance-visual-evidence-missing:synthetic-scenario',
+        'character-acceptance-visual-evidence-scenario-unknown:unknown-scenario',
+      ])
+    );
+    expect(pendingUnknownVisual.validation.status).toBe(
+      'character-acceptance-manifest-invalid'
+    );
 
     const acceptedVisualGapInput = createManifestInput();
     acceptedVisualGapInput.evidence.productVisualAcceptance.automatedEvidence =

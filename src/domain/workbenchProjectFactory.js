@@ -1512,7 +1512,16 @@ function cloneAutoCastRule(value) {
 
 function cloneVerifiedDeclaredPublicActionIntent(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  return structuredClone(value);
+  return {
+    schemaVersion:
+      typeof value.schemaVersion === 'number' ? value.schemaVersion : null,
+    contractName:
+      typeof value.contractName === 'string' ? value.contractName : null,
+    actionId: typeof value.actionId === 'string' ? value.actionId : null,
+    ownerId: typeof value.ownerId === 'number' ? value.ownerId : null,
+    mappingIdentity:
+      typeof value.mappingIdentity === 'string' ? value.mappingIdentity : null,
+  };
 }
 
 function createSkillLevelsForCharacter(skillDrafts, characterId) {

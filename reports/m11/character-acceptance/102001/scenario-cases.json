@@ -29426,14 +29426,14 @@
         ],
         "criticalDecisions": [],
         "facts": {
-          "buff-apply-refresh-stack-expire": false,
+          "buff-apply-refresh-stack-expire": true,
           "condition-insufficient-negative": true,
           "foreground-background-switch": true,
           "normal-trigger-positive": true,
           "resource-exact-and-insufficient": true
         }
       },
-      "traceProjectionHash": "96b7955a5de538ff",
+      "traceProjectionHash": "d67d1538792753f8",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -29445,12 +29445,12 @@
           "expectation": {
             "minimumCount": 1
           },
-          "status": "blocked",
-          "actualProjectionIdentities": [],
-          "reasons": [
-            "scenario-assertion-not-satisfied"
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:buff-apply-refresh-stack-expire"
           ],
-          "assertionHash": "45e239727ee1b097"
+          "reasons": [],
+          "assertionHash": "70ac503c6ac0d236"
         },
         {
           "assertionIdentity": "scenario-fact:condition-insufficient-negative",
@@ -32262,18 +32262,18 @@
           "assertionHash": "80cb28d3eb846e6c"
         }
       ],
-      "scenarioCaseHash": "a2c29baaa452606f"
+      "scenarioCaseHash": "338953c7e2eee864"
     }
   ],
   "summary": {
     "scenarioCount": 2,
     "executionPassedCount": 2,
     "assertionCount": 553,
-    "assertionPassedCount": 552,
+    "assertionPassedCount": 553,
     "runnerKindCounts": {
       "canonical-character-golden": 1,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "de6ef020cef7da44"
+  "scenarioSetHash": "c401901673278e98"
 }

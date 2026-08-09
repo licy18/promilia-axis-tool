@@ -9138,13 +9138,25 @@ test('[m11-d-character-acceptance-visual-import] imports each owner acceptance f
       actionId: 'misa-star',
       expectedTraceText: 'control 10700226 / sub 0',
     },
-  ].filter(
-    entry =>
-      !process.env.CHARACTER_ACCEPTANCE_OWNER_ID ||
-      String(entry.ownerId) === process.env.CHARACTER_ACCEPTANCE_OWNER_ID
+    {
+      ownerId: 102001,
+      fixturePath: 'fixtures/character-acceptance/102001-visual.json',
+      traceHash: 'fdd715cff0173fb7',
+      actionId: 'lily-star-all-land',
+      expectedTraceText: 'control 10200112 / sub 0',
+    },
+  ];
+  const requestedOwnerId = String(
+    process.env.PROMILIA_CHARACTER_ACCEPTANCE_OWNER ??
+      process.env.CHARACTER_ACCEPTANCE_OWNER_ID ??
+      ''
   );
+  const selectedCases = requestedOwnerId
+    ? cases.filter(entry => String(entry.ownerId) === requestedOwnerId)
+    : cases;
+  expect(selectedCases.length).toBeGreaterThan(0);
 
-  for (const entry of cases) {
+  for (const entry of selectedCases) {
     const fixtureText = await readFile(entry.fixturePath, 'utf8');
     await page.getByTestId('workbench-import-project-file').setInputFiles({
       name: entry.ownerId + '-m11-d-acceptance.json',

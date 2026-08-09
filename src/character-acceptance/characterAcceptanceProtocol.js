@@ -415,10 +415,7 @@ function collectCharacterAcceptanceManifestIssues(
     )
   );
   for (const scenarioIdentity of scenarioIdentities) {
-    if (
-      productVisual.status === 'accepted' &&
-      !automatedScenarioIdentities.has(scenarioIdentity)
-    ) {
+    if (!automatedScenarioIdentities.has(scenarioIdentity)) {
       issues.push(
         'character-acceptance-visual-evidence-missing:' +
           String(scenarioIdentity ?? '')
