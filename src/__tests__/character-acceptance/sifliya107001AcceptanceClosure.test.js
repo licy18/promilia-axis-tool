@@ -129,6 +129,33 @@ describe('Sifliya 107001 acceptance closure', () => {
       )
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance.status).toBe('pending');
+    expect(
+      manifest.evidence.productVisualAcceptance.scenarioIdentities
+    ).toEqual(['m12-b3-107001-focused-acceptance']);
+    expect(manifest.evidence.productVisualAcceptance.automatedEvidence).toEqual(
+      [
+        expect.objectContaining({
+          scenarioIdentity: 'm12-b3-107001-focused-acceptance',
+          evidenceKind: 'workbench-playwright-screenshot',
+          fixturePath: 'fixtures/character-acceptance/107001-visual.json',
+          canonicalTraceHash: 'b0da221b401d90ce',
+          screenshotPath: 'reports/m12-b3-107001-workbench-visual-evidence.png',
+          screenshotSha256:
+            'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260',
+        }),
+      ]
+    );
+    expect(
+      manifest.evidence.productVisualAcceptance.automatedEvidence[0]
+    ).not.toHaveProperty('traceSha256');
+    expect(manifest.evidence.machineEvidence).toEqual([
+      expect.objectContaining({
+        scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
+        evidenceKind: 'machine-axis-trace',
+        canonicalTraceHash: '5471bde9be536b69',
+        traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
+      }),
+    ]);
     expect(manifest.maturity).toMatchObject({
       optimizationReady: false,
       gates: {

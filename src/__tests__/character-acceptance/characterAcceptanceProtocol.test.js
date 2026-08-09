@@ -73,7 +73,11 @@ function createManifestInput({
         automatedEvidence: [
           {
             scenarioIdentity,
+            evidenceKind: 'workbench-playwright-screenshot',
             status: 'automated-workbench-import-passed',
+            fixturePath: 'fixtures/synthetic.json',
+            fixtureSha256: '1'.repeat(64),
+            canonicalTraceHash: '0000000000000003',
             screenshotPath: 'reports/synthetic.png',
             screenshotSha256: '0'.repeat(64),
           },
@@ -326,6 +330,53 @@ describe('character acceptance protocol', () => {
     expect(acceptedVisualGap.validation.issues).toContain(
       'character-acceptance-visual-evidence-missing:synthetic-scenario'
     );
+  });
+
+  it('keeps machine trace evidence structurally separate from visual screenshot evidence', () => {
+    const traceOnlyInput = createManifestInput({
+      productVisualStatus: 'pending',
+    });
+    traceOnlyInput.evidence.productVisualAcceptance.automatedEvidence = [
+      {
+        scenarioIdentity: 'synthetic-scenario',
+        evidenceKind: 'machine-axis-trace',
+        status: 'automated-machine-axis-passed',
+        traceSha256: '0'.repeat(64),
+      },
+    ];
+    const traceOnly = finalizeCharacterAcceptanceManifest(traceOnlyInput);
+    expect(traceOnly.validation.issues).toEqual(
+      expect.arrayContaining([
+        'character-acceptance-visual-evidence-kind-invalid:synthetic-scenario',
+        'character-acceptance-visual-evidence-status-invalid:synthetic-scenario',
+        'character-acceptance-visual-evidence-path-missing:synthetic-scenario',
+        'character-acceptance-visual-evidence-hash-invalid:synthetic-scenario',
+        'character-acceptance-visual-evidence-trace-hash-forbidden:synthetic-scenario',
+      ])
+    );
+
+    const machineOnlyInput = createManifestInput({
+      productVisualStatus: 'pending',
+    });
+    machineOnlyInput.evidence.productVisualAcceptance.automatedEvidence = [];
+    machineOnlyInput.evidence.machineEvidence = [
+      {
+        scenarioIdentity: 'synthetic-scenario',
+        evidenceKind: 'machine-axis-trace',
+        status: 'automated-machine-axis-passed',
+        canonicalTraceHash: '0000000000000003',
+        traceSha256: '0'.repeat(64),
+      },
+    ];
+    const machineOnly = finalizeCharacterAcceptanceManifest(machineOnlyInput);
+    expect(machineOnly.validation.issues).toContain(
+      'character-acceptance-visual-evidence-missing:synthetic-scenario'
+    );
+    expect(
+      machineOnly.validation.issues.some(issue =>
+        issue.startsWith('character-acceptance-machine-evidence-')
+      )
+    ).toBe(false);
   });
 
   it('rejects N/A, empty-ledger, and fake-signoff qualification forged from a committed manifest', () => {

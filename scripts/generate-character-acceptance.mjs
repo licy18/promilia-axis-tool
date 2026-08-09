@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
@@ -10,6 +9,7 @@ import {
   createScenarioProfileProjectionRows,
   validateUnnamedSecondaryPassiveBoundary,
 } from './character-acceptance/character-acceptance-generation.mjs';
+import { verifyProductVisualEvidenceFiles } from './character-acceptance/visual-evidence-verification.mjs';
 import {
   validateCharacterAcceptanceManifest,
   validateCharacterAcceptanceManifestIndex,
@@ -56,6 +56,9 @@ if (requestedOwnerId != null && recipes.length !== 1) {
     'Character acceptance recipe missing for owner: ' + requestedOwnerId
   );
 }
+for (const recipe of recipes) {
+  await verifyProductVisualEvidenceFiles(recipe, { projectRoot });
+}
 const mechanicsPackage = await readJson(
   path.join(
     projectRoot,
@@ -95,7 +98,6 @@ try {
   const visualRuns = [];
 
   for (const recipe of recipes) {
-    await verifyAutomatedVisualEvidence(recipe);
     const ownerId = Number(recipe.ownerId);
     const additionalScenarioDefinitions = recipe.additionalScenarios ?? [];
     const loaded = await Promise.all([
@@ -2892,25 +2894,6 @@ function readRequestedOwnerId(args) {
 
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, 'utf8'));
-}
-
-async function verifyAutomatedVisualEvidence(recipe) {
-  for (const evidence of recipe.productVisualAcceptance?.automatedEvidence ??
-    []) {
-    if (!evidence.screenshotPath) continue;
-    const screenshotPath = path.join(projectRoot, evidence.screenshotPath);
-    const actualHash = createHash('sha256')
-      .update(await fs.readFile(screenshotPath))
-      .digest('hex');
-    if (actualHash !== evidence.screenshotSha256) {
-      throw new Error(
-        'Character acceptance screenshot hash mismatch for ' +
-          recipe.ownerId +
-          ': ' +
-          evidence.screenshotPath
-      );
-    }
-  }
 }
 
 function parseOwnerId(argv) {
