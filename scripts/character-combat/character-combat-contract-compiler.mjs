@@ -204,6 +204,13 @@ export function compileCharacterCombatRecipeContracts({
     controlBySkillId,
     pickupProfiles,
   });
+  const pickupAbsorbBindings = compilePickupAbsorbBindings({
+    ownerId,
+    definitions: compilerRecipe.pickupAbsorbBindings ?? [],
+    controlBySkillId,
+    pickupProfiles,
+    operators: normalizedOperators,
+  });
   const scenarioOutOfScopeActions = compileScenarioOutOfScopeActions({
     ownerId,
     definitions: compilerRecipe.scenarioOutOfScopeActions ?? [],
@@ -247,6 +254,7 @@ export function compileCharacterCombatRecipeContracts({
     rawDirectEffectBindings,
     pickupProfiles,
     pickupSpawnBindings,
+    pickupAbsorbBindings,
     scenarioOutOfScopeActions,
     resourceProfiles: specialResourceContracts.profiles,
     resourceTransactions: specialResourceContracts.operations,
@@ -307,6 +315,7 @@ export function compileCharacterCombatRecipeContracts({
       rawDirectEffectBindingCount: contracts.rawDirectEffectBindings.length,
       pickupProfileCount: contracts.pickupProfiles.length,
       pickupSpawnBindingCount: contracts.pickupSpawnBindings.length,
+      pickupAbsorbBindingCount: contracts.pickupAbsorbBindings.length,
       scenarioOutOfScopeActionCount:
         contracts.scenarioOutOfScopeActions.length,
       resourceProfileCount: contracts.resourceProfiles.length,
@@ -394,6 +403,10 @@ export function mergeCharacterCombatOwnerCompilations({
     actionVariantGraph.pickupSpawnBindings,
     compilations.flatMap(item => item.contracts.pickupSpawnBindings ?? [])
   );
+  const pickupAbsorbBindings = replaceOwnerRecords(
+    actionVariantGraph.pickupAbsorbBindings ?? [],
+    compilations.flatMap(item => item.contracts.pickupAbsorbBindings ?? [])
+  );
   const thresholdTransitions = replaceOwnerRecords(
     specialResourceCatalog.thresholdTransitions,
     compilations.flatMap(item => item.contracts.thresholdTransitions)
@@ -439,6 +452,7 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.runtimeEffectBindings = runtimeEffectBindings;
   actionVariantGraph.pickupProfiles = pickupProfiles;
   actionVariantGraph.pickupSpawnBindings = pickupSpawnBindings;
+  actionVariantGraph.pickupAbsorbBindings = pickupAbsorbBindings;
   actionVariantGraph.derivedControlContracts =
     applyCompiledInputVariantSelectors({
       contracts: actionVariantGraph.derivedControlContracts ?? [],
@@ -467,6 +481,7 @@ export function mergeCharacterCombatOwnerCompilations({
     runtimeEffectBindingCount: runtimeEffectBindings.length,
     pickupProfileCount: pickupProfiles.length,
     pickupSpawnBindingCount: pickupSpawnBindings.length,
+    pickupAbsorbBindingCount: pickupAbsorbBindings.length,
   };
   specialResourceCatalog.thresholdTransitions = thresholdTransitions;
   specialResourceCatalog.passiveEffects = passiveEffects;
@@ -504,6 +519,7 @@ export function mergeCharacterCombatOwnerCompilations({
     runtimeEffectBindings,
     pickupProfiles,
     pickupSpawnBindings,
+    pickupAbsorbBindings,
   };
 }
 
@@ -1964,6 +1980,7 @@ export function createCharacterCombatOwnerRuntimeContracts({
     rawDirectEffectBindings: compilation.contracts.rawDirectEffectBindings,
     pickupProfiles: compilation.contracts.pickupProfiles,
     pickupSpawnBindings: compilation.contracts.pickupSpawnBindings,
+    pickupAbsorbBindings: compilation.contracts.pickupAbsorbBindings,
     scenarioOutOfScopeActions:
       compilation.contracts.scenarioOutOfScopeActions,
     hits: sortByIdentity(hits ?? []),
@@ -4749,7 +4766,9 @@ function compilePickupProfiles({ ownerId, definitions, operators }) {
       collisionDelayFrames < 0 ||
       !(collisionRadius >= 0) ||
       !Number.isInteger(maxCount) ||
-      maxCount <= 0
+      maxCount <= 0 ||
+      definition.autoCollect !== false ||
+      definition.collectionMode !== 'owner-source-action-absorb-only'
     ) {
       throw new Error(
         `character combat pickup profile evidence missing: ${ownerId}/${definition.pickupIdentity}`
@@ -4812,6 +4831,8 @@ function compilePickupProfiles({ ownerId, definitions, operators }) {
       collisionDelayFrames,
       collisionRadius,
       maxCount,
+      autoCollect: false,
+      collectionMode: 'owner-source-action-absorb-only',
       atCapacityPolicy: 'reject-new-conservative',
       reward,
       passiveMarker,
@@ -5017,6 +5038,116 @@ function compilePickupSpawnBindings({
         applied: true,
       };
     });
+  });
+}
+
+function compilePickupAbsorbBindings({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  pickupProfiles,
+  operators,
+}) {
+  const profileByIdentity = new Map(
+    pickupProfiles.map(profile => [profile.pickupIdentity, profile])
+  );
+  return definitions.map(definition => {
+    const control = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'pickup absorb trigger'
+    );
+    const subSkillIndex = Number(definition.subSkillIndex);
+    const triggerFrame = Number(definition.triggerFrame);
+    const triggerElementId = Number(definition.triggerElementId);
+    const triggerElementIndex = Number(definition.triggerElementIndex);
+    const sourceTrackOrder = Number(definition.sourceTrackOrder);
+    const pickupIdentities = [
+      ...new Set((definition.pickupIdentities ?? []).map(String)),
+    ];
+    const variant = (control.variants ?? []).find(
+      entry => Number(entry.subSkillIndex) === subSkillIndex
+    );
+    const graphEvidence = (control.effectGraph ?? []).find(
+      entry =>
+        Number(entry.rootElementId) === triggerElementId &&
+        Number(entry.elementIndex) === triggerElementIndex &&
+        Number(String(entry.graphIdentity ?? '').split('|')[1]) ===
+          subSkillIndex
+    );
+    const triggerAsset = operators.readElementAsset(triggerElementId);
+    const triggerTree = triggerAsset?.tree ?? {};
+    const sourceEvidenceMatches =
+      Number(triggerTree.displacementType) ===
+        Number(definition.expectedDisplacementType) &&
+      Number(triggerTree.targetType) === Number(definition.expectedTargetType) &&
+      Number(triggerTree.entityFilterData) ===
+        Number(definition.expectedEntityFilterData) &&
+      Number(triggerTree.radius) === Number(definition.expectedRadius);
+    const profiles = pickupIdentities.map(identity =>
+      profileByIdentity.get(identity)
+    );
+    if (
+      !String(definition.bindingIdentity ?? '').trim() ||
+      !variant ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !Number.isInteger(triggerElementIndex) ||
+      triggerElementIndex < 0 ||
+      !Number.isInteger(sourceTrackOrder) ||
+      sourceTrackOrder < 0 ||
+      pickupIdentities.length === 0 ||
+      profiles.some(profile => !profile) ||
+      !graphEvidence ||
+      !triggerAsset ||
+      !sourceEvidenceMatches ||
+      definition.collector !== 'action-owner' ||
+      definition.settlementGate !== 'successful-action-execute' ||
+      definition.requiresHit !== false ||
+      definition.sameFrameSpawnPolicy !==
+        'exclude-same-frame-fail-closed' ||
+      definition.sameFrameExpiryPolicy !== 'expire-before-absorb' ||
+      !String(definition.sourceIdentity ?? '').trim()
+    ) {
+      throw new Error(
+        `character combat pickup absorb evidence mismatch: ${ownerId}/${definition.bindingIdentity}`
+      );
+    }
+    return {
+      bindingIdentity: String(definition.bindingIdentity),
+      ownerId,
+      controlSkillId: Number(control.controlSkillId),
+      subSkillIndex,
+      triggerFrame,
+      frameRate: Number(control.frameRate) || 60,
+      triggerElementId,
+      triggerElementIndex,
+      sourceTrackOrder,
+      pickupIdentities,
+      collector: 'action-owner',
+      settlementGate: 'successful-action-execute',
+      requiresHit: false,
+      absorbScope: 'listed-owner-live-entities',
+      sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+      sameFrameExpiryPolicy: 'expire-before-absorb',
+      triggerEvidence: {
+        displacementType: Number(triggerTree.displacementType),
+        targetType: Number(triggerTree.targetType),
+        entityFilterData: Number(triggerTree.entityFilterData),
+        radius: Number(triggerTree.radius),
+        elementSourceIdentity: triggerAsset.sourceIdentity,
+        graphSourceIdentity: graphEvidence.sourceIdentity,
+      },
+      sourceIdentity: [
+        graphEvidence.sourceIdentity,
+        triggerAsset.sourceIdentity,
+        definition.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-pickup-owner-action-absorb-binding-ready',
+      applied: true,
+    };
   });
 }
 

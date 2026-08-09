@@ -477,6 +477,9 @@ export function createCharacterCombatOwnerArtifacts({
   const pickupSpawnBindings = sortByIdentity(
     compiledContracts.pickupSpawnBindings ?? []
   );
+  const pickupAbsorbBindings = sortByIdentity(
+    compiledContracts.pickupAbsorbBindings ?? []
+  );
   const scenarioOutOfScopeActions = sortByIdentity(
     compiledContracts.scenarioOutOfScopeActions ?? []
   );
@@ -595,6 +598,7 @@ export function createCharacterCombatOwnerArtifacts({
       rawDirectEffectBindings,
       pickupProfiles,
       pickupSpawnBindings,
+      pickupAbsorbBindings,
       scenarioOutOfScopeActions,
       passives,
       switchTriggers,
@@ -622,6 +626,7 @@ export function createCharacterCombatOwnerArtifacts({
     rawDirectEffectBindings,
     pickupProfiles,
     pickupSpawnBindings,
+    pickupAbsorbBindings,
     scenarioOutOfScopeActions,
     passives,
     switchTriggers,
@@ -726,6 +731,7 @@ export function createCharacterCombatOwnerArtifacts({
     rawDirectEffectBindings,
     pickupProfiles,
     pickupSpawnBindings,
+    pickupAbsorbBindings,
     scenarioOutOfScopeActions,
     effects: {
       raw: rawEffects,

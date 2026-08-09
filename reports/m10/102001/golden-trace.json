@@ -6,14 +6,14 @@
   "scenarioIdentity": "m12-b3-102001:active-surface-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "4382953b0c8852b4089ed2e144e4bf7d5442830d0346dd8b7a4da4779a0de63b",
+  "sourcePackageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "e4316412bd9888e5",
-    "traceHash": "b0266b8ad970bb5f",
-    "dataHash": "0b193f3940014624",
+    "inputHash": "76b605e889ebfbec",
+    "traceHash": "1b6105e853e5bbab",
+    "dataHash": "81374dcd10dba753",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -1783,6 +1783,9 @@
         "bindingCount": 12,
         "spawnedEntityCount": 0,
         "collectedEntityCount": 0,
+        "absorbedEntityCount": 0,
+        "absorbAttemptCount": 0,
+        "absorbBindingCount": 1,
         "capacityRejectedCount": 0,
         "directHpEventCount": 0,
         "directSpEventCount": 0,
@@ -7155,7 +7158,7 @@
         }
       ]
     },
-    "summaryHash": "5990368623b546fcd8a569768ef3cad95fdab7951fd950e8373cab39e32f82d5"
+    "summaryHash": "c3f6a0288a021a72eecd05d8b691e2d3f077331df3b1a613cfd9b5ca20d9d3bd"
   },
   "expected": {
     "exact": {
@@ -7187,6 +7190,6 @@
       }
     ]
   },
-  "replayHash": "b05dda466b828b668b9f9656fbe4de790e3b7685c6ade4a68726c537f2a9e450",
-  "profileHash": "4854525a76d5ef554ed2d409b8eb9739a6b805b2a6c37815c64b6fb82a38d47a"
+  "replayHash": "9ba27c6642906f9bc5bbb240836e2f7ec2dd179f52fc8e9bd4bd8ac0e8bfc356",
+  "profileHash": "26c47233ee8de985745adff20a3461f4cf16c23538b5cf82a7c0b1633989305f"
 }

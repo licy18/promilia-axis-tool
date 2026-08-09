@@ -692,6 +692,9 @@ export function createMachineAxisService({
         combatScenario: {
           projectile: contract.scenario.projectile,
           critical: contract.scenario.critical,
+          ...(contract.scenario.pickups == null
+            ? {}
+            : { pickups: contract.scenario.pickups }),
           ...(contract.scenario.optimizationScenarioPolicy == null
             ? {}
             : {

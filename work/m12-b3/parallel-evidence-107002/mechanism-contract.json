@@ -1,38 +1,50 @@
 {
   "schemaVersion": 1,
   "kind": "m12-b3-character-evidence-sidecar-contract",
-  "status": "accepted-evidence-with-s1-implementation-scope",
+  "status": "accepted-evidence-with-r2-charged-absorb-implementation-scope",
   "character": {
     "id": 107002,
     "name": "米砂"
   },
   "frozenBaselineCommit": "140eefcd233cd9c1d136728f1c94b91aff632278",
+  "r2IntegrationBaselineCommit": "1a56e0a295f31298da6c3ddb5d70db90183971fb",
   "artifactReproducibility": {
     "coreArtifacts": [
       "resource-graph-excerpt.json",
       "runtime-evidence-excerpt.json"
     ],
-    "frozenProductionBaselineCommit": "140eefcd233cd9c1d136728f1c94b91aff632278",
+    "frozenProductionBaselineCommit": "1a56e0a295f31298da6c3ddb5d70db90183971fb",
+    "inheritedEvidenceBaselineCommit": "140eefcd233cd9c1d136728f1c94b91aff632278",
     "allowedEvidenceCarrierPrefix": "work/m12-b3/parallel-evidence-107002/",
     "allowedImplementationPaths": [
       "fixtures/character-acceptance/107002-visual.json",
       "reports/m10/107002/**",
+      "reports/m11/character-acceptance/107002/**",
+      "schemas/azpr-machine-axis-v1.schema.json",
+      "scripts/generate-character-acceptance.mjs",
       "scripts/character-acceptance/acceptance-recipes/107002.json",
       "scripts/character-combat/character-combat-contract-compiler.mjs",
       "scripts/character-combat/character-combat-golden-runtime.mjs",
       "scripts/character-combat/character-combat-production-orchestrator.mjs",
       "scripts/character-combat/character-combat-profile-pipeline.mjs",
       "scripts/character-combat/profile-recipes/107002.json",
+      "scripts/optimization-scenario/optimization-scenario-policy-source.mjs",
       "scripts/sync-verified-combat-mechanics.mjs",
+      "src/__tests__/character-acceptance/characterAcceptance107002.test.js",
       "src/__tests__/data/misaCharacterCombatProfile.test.js",
       "src/__tests__/simulation/actionRuleDiagnostics.test.js",
       "src/__tests__/simulation/effectRuntimeTimeline.test.js",
       "src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js",
       "src/__tests__/simulation/verifiedPickupEntityGeneration.test.js",
+      "src/__tests__/simulation/verifiedPickupOwnerActionAbsorb.test.js",
       "src/__tests__/simulation/verifiedTargetStateRuntime.test.js",
       "src/__tests__/simulation/verifiedTuningMarkRuntime.test.js",
       "src/data/generated/character-combat-owner-contracts/107002.json",
       "src/data/generated/character-combat-profiles/107002.json",
+      "src/domain/combatScenario.js",
+      "src/machine-axis/machineAxisContract.js",
+      "src/machine-axis/machineAxisService.js",
+      "src/machine-axis/workbenchMachineAxisAdapter.js",
       "src/simulation/engine/simulateScenario.js",
       "src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js",
       "src/simulation/mechanics/verifiedBattleEffectGeneration.js",
@@ -55,7 +67,12 @@
     "distance": 0,
     "projectileImpact": "immediate",
     "bossMovement": "stationary",
-    "bossAttacks": false
+    "bossAttacks": false,
+    "pickupPolicyId": "m12c-pickup-owner-source-action-absorb-v1",
+    "pickupPolicyHash": "2d4b4c4977e689bc",
+    "pickupAutoCollect": false,
+    "pickupMovementPolicy": "no-implicit-movement",
+    "pickupCollectionPolicy": "owner-source-action-absorb-only"
   },
   "frozenBoundaries": {
     "formalRosterDenominator": 9,
@@ -65,7 +82,8 @@
     "optimizationReadyClaim": false,
     "m12cSearchAllowed": false,
     "productionImplementationAllowed": true,
-    "productionImplementationScope": "frozen-s1-allowlist-only"
+    "productionImplementationScope": "r2-charged-absorb-allowlist-only",
+    "productVisualAcceptanceStatus": "pending-stale-previous-record"
   },
   "sourcePrecedence": [
     "runtime binary and enum evidence",
@@ -84,7 +102,7 @@
       {
         "family": "charged-hit-debuff",
         "controls": [10700210],
-        "scope": "charged hit-confirmed DEF debuff"
+        "scope": "charged hit-confirmed DEF debuff plus independent owner pickup absorb at 70F"
       },
       {
         "family": "star-skill",
@@ -104,7 +122,7 @@
       {
         "family": "pickup-and-passive",
         "controls": [48004101, 48004102, 48004201, 48004202, 10700261],
-        "scope": "entity lifecycle, collision routing, one-shot reward, passive gate and tuning-intensity layers"
+        "scope": "entity lifecycle, owner charged-action absorb routing, one-shot reward, passive gate and tuning-intensity layers"
       },
       {
         "family": "action-resource-cooldown",
@@ -186,9 +204,11 @@
         "requiresHit": true
       },
       "pickup": {
-        "collisionTarget": "Target",
-        "collisionTargetType": 2,
-        "collisionTargetTypeName": "Ally",
+        "rawRewardTarget": "Target",
+        "rawRewardTargetType": 2,
+        "rawRewardTargetTypeName": "Ally",
+        "autoCollect": false,
+        "collectorBinding": "misa-charged-action-owner",
         "rewardElement": {"elementId": 107002216, "pathId": "-8742085360987801148"},
         "healFormula": 104,
         "healFormulaExpression": "(self.MAXHP[0] * A) / 10000",
@@ -197,7 +217,7 @@
         "directAllHero": false,
         "shareAll": false,
         "publicTextSaysAllTeam": true,
-        "implementationRule": "apply the heal to the collision Target only; do not synthesize team propagation without new runtime evidence"
+        "implementationRule": "after a legal owner charged absorb, apply the heal to Misa Target only; do not synthesize team propagation"
       },
       "sameFrameOrder": ["pickup visual placeholder", "passive tuning-intensity gate", "3% HP heal"],
       "capPolicy": {
@@ -372,26 +392,52 @@
         "startBehavior": "find nearest allied camp entity, set SkillPosition to that entity, and cast slot 1",
         "configuredDelaySeconds": 0.1,
         "delayControlEdgeProven": false,
-        "implementationRule": "do not delay pickup eligibility by 0.1s unless a control edge or runtime trace proves it",
+        "implementationRule": "retain as raw child graph evidence; do not infer movement or auto collection from nearest-ally positioning",
         "death": "broadcast event value 1 routes to TransmitDie"
+      },
+      "chargedAbsorb": {
+        "controlSkillId": 10700210,
+        "subSkillIndex": 0,
+        "triggerFrame": 70,
+        "subSkillUniqueId": "17340006214530000",
+        "sourceTrackOrder": 15,
+        "parentPathId": "4813059941072756916",
+        "trackIndex": 92,
+        "behaviorPathId": "3637962353715634356",
+        "elementId": 107002233,
+        "elementPathId": "-2816437001102957180",
+        "displacementType": 2,
+        "targetType": 2,
+        "entityFilterData": 64,
+        "radius": 9,
+        "collector": "action-owner",
+        "settlementGate": "successful-action-execute",
+        "requiresHit": false,
+        "sameFrameSpawnPolicy": "exclude-same-frame-fail-closed",
+        "sameFrameExpiryPolicy": "expire-before-absorb",
+        "sameFrameFollowingEnemyGatherSourceOrder": 16
       },
       "lifecycle": {
         "controlFrameCount": 920,
-        "collisionWindowFrames": "[spawn + 2, spawn + 902)",
+        "rawChildCollisionWindowFrames": "[spawn + 2, spawn + 902)",
         "summonLifetimeFramesAt60Hz": 900,
-        "effectiveEligibilityWindowFrames": "[spawn + 2, spawn + 900)",
+        "absorbEligibilityWindowFrames": "(spawn, spawn + 900)",
         "exactLifetimeBoundaryEligible": false,
         "frameBeforeOpenEligible": false,
         "collisionRadius": 0.6,
         "collisionIntervalMs": 99999,
         "toOwnMaxCount": 1,
+        "autoCollect": false,
+        "projectileDistanceCoupling": false,
         "oneEntityRewardsAtMostOnce": true,
         "distinctEntitiesMayEachRewardOnce": true,
         "collectedDestroyBroadcastFrame": {"HP": 25, "SP": 30}
       },
       "zeroDistanceReachability": {
-        "reachable": true,
-        "reason": "the item graph relocates the pickup skill to the nearest ally and opens collision at child frame 2; a passive stationary Boss does not gate collection"
+        "creationReachable": true,
+        "automaticCollectionReachable": false,
+        "chargedAbsorbReachable": true,
+        "reason": "zero distance only applies to actor-Boss and projectile impact; pickup reward requires the sourced Misa charged action"
       },
       "passiveGate": {
         "control": 10700261,
@@ -400,7 +446,7 @@
         "gateFormula": 1006,
         "gateExpression": "IF(target.ELEMENT_LAYERS[F] > I, G, 0)",
         "gateParameters": {"F": 107002271, "I": 0, "G": 10000},
-        "gateTarget": "collision Target",
+        "gateTarget": "charged absorb Target fixed to action owner Misa",
         "directAllHero": false,
         "shareAll": false
       },
@@ -417,7 +463,7 @@
         "layerInterval": "[applyMs, applyMs + 24000)",
         "rightBoundaryActive": false,
         "publicTextSaysAllTeam": true,
-        "implementationRule": "apply to collision Target only; model independent layers; at cap ignore the new layer and do not refresh existing layers until replacement behavior has binary proof",
+        "implementationRule": "apply to charged absorb Target Misa only; model independent layers; at cap ignore the new layer and do not refresh existing layers until replacement behavior has binary proof",
         "policyEvidence": {
           "proven": ["6 percent value", "four-layer cap", "24 second lifetime", "Overlying combine type"],
           "conservativeNotRuntimeProven": ["independent expiry implementation", "ignore-at-cap", "no refresh at cap"]
@@ -489,9 +535,9 @@
         "status": "implemented-source-driven-no-character-id-branch"
       },
       {
-        "primitive": "pickup collision and once-only collection",
+        "primitive": "owner source-action pickup absorb and once-only reward",
         "files": ["src/simulation/mechanics/verifiedPickupEntityGeneration.js"],
-        "status": "implemented-source-driven-no-character-id-branch"
+        "status": "implemented-declarative-execute-gated-no-character-id-branch"
       },
       {
         "primitive": "pickup reward routing",
@@ -535,9 +581,18 @@
   },
   "potentialIntegrationConflicts": {
     "sharedFiles": [
+      "schemas/azpr-machine-axis-v1.schema.json",
+      "scripts/generate-character-acceptance.mjs",
       "scripts/character-combat/character-combat-contract-compiler.mjs",
+      "scripts/character-combat/character-combat-golden-runtime.mjs",
       "scripts/character-combat/character-combat-product-boundaries.mjs",
+      "scripts/character-combat/character-combat-profile-pipeline.mjs",
+      "scripts/optimization-scenario/optimization-scenario-policy-source.mjs",
       "scripts/sync-verified-combat-mechanics.mjs",
+      "src/domain/combatScenario.js",
+      "src/machine-axis/machineAxisContract.js",
+      "src/machine-axis/machineAxisService.js",
+      "src/machine-axis/workbenchMachineAxisAdapter.js",
       "src/simulation/mechanics/verifiedActionVariantRuntime.js",
       "src/simulation/mechanics/verifiedCombatRuntime.js",
       "src/simulation/mechanics/verifiedDamageEventGeneration.js",
@@ -545,6 +600,7 @@
       "src/simulation/mechanics/verifiedTuningMarkGeneration.js",
       "src/simulation/mechanics/verifiedBattleEffectGeneration.js",
       "src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js",
+      "src/simulation/mechanics/verifiedPickupEntityGeneration.js",
       "src/simulation/runtime/effectRuntimeTimeline.js",
       "src/simulation/runtime/actionCooldownEvaluation.js",
       "src/simulation/engine/actionExecutionPlan.js",

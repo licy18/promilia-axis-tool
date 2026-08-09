@@ -24,7 +24,7 @@ function findCriticalHit(run, suffix) {
 
 describe('M12-B3-107002 owner acceptance closure', () => {
   beforeEach(() => {
-    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    installVerifiedCombatMechanicsPackage(createMisaRuntimePackage());
   });
 
   it('replays the canonical fixture and Workbench roundtrip without hash drift', () => {
@@ -41,13 +41,128 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: '97373dec94e398af',
-      data: '53a3caff8a4d6807',
-      trace: 'c02b3d3c7756351c',
-      evaluation: '620d8da34c9edd60',
+      input: 'f14dabb7e5b4795f',
+      data: '59da78cd92e24d54',
+      trace: '1dd3042b896d7a2f',
+      evaluation: '5238bf8119e66446',
     });
     expect(second.hashes).toEqual(first.hashes);
     expect(roundTrip.hashes).toEqual(first.hashes);
+    expect(first.contract.scenario.pickups).toEqual({
+      policyId: 'm12c-pickup-owner-source-action-absorb-v1',
+      policyVersion: 1,
+      policyHash: '2d4b4c4977e689bc',
+      autoCollect: false,
+      movementPolicy: 'no-implicit-movement',
+      collectionPolicy: 'owner-source-action-absorb-only',
+      sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+      sameFrameExpiryPolicy: 'expire-before-absorb',
+    });
+    expect(exported.scenario.pickups).toEqual(first.contract.scenario.pickups);
+
+    const directHeals = (first.trace?.events ?? []).filter(
+      event => event.type === 'VERIFIED_DIRECT_HEAL'
+    );
+    const a3AbsorbHeals = directHeals.filter(
+      event => event.actionId === 'misa-charged'
+    );
+    expect(a3AbsorbHeals).toHaveLength(6);
+    expect(
+      a3AbsorbHeals.map(event => [
+        event.absoluteFrame,
+        event.actorId,
+        event.targetId,
+        event.payload.effectIdentity,
+      ])
+    ).toEqual(
+      [
+        [2740, 55, 1],
+        [2746, 56, 1],
+        [2752, 57, 1],
+        [2758, 58, 1],
+        [2764, 59, 1],
+        [2770, 60, 1],
+      ].map(([spawnFrame, entitySequence, ordinal]) => [
+        3370,
+        'actor-107002',
+        'actor-107002',
+        `pickup-reward:pickup|misa-a3-hp-pickup|misa-a3|${spawnFrame}|0|${entitySequence}|${ordinal}`,
+      ])
+    );
+    expect(
+      directHeals.filter(event => event.actionId === 'misa-a3')
+    ).toEqual([]);
+
+    const missAbsorbActionId = 'misa-charged-ultimate-absorb-miss';
+    expect(
+      (first.trace?.damage ?? []).filter(
+        event =>
+          event.actionId === missAbsorbActionId &&
+          event.eventType === 'VERIFIED_COMBAT_HIT' &&
+          Number(event.hitSkillId) === 10700210
+      )
+    ).toEqual([]);
+    const missAbsorbHeals = directHeals.filter(
+      event => event.actionId === missAbsorbActionId
+    );
+    expect(
+      missAbsorbHeals.map(event => [
+        event.absoluteFrame,
+        event.actorId,
+        event.targetId,
+        event.payload.effectIdentity,
+      ])
+    ).toEqual(
+      [
+        [61, 1],
+        [62, 2],
+        [63, 3],
+      ].map(([entitySequence, ordinal]) => [
+        4680,
+        'actor-107002',
+        'actor-107002',
+        `pickup-reward:pickup|misa-ultimate-hp-pickup|misa-ultimate|3835|20|${entitySequence}|${ordinal}`,
+      ])
+    );
+    const missAbsorbSp = (first.trace?.events ?? []).filter(
+      event =>
+        event.actionId === missAbsorbActionId &&
+        event.type === 'VERIFIED_RESOURCE_CHANGE' &&
+        ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+          event.payload?.reason
+        )
+    );
+    expect(missAbsorbSp).toHaveLength(21);
+    expect(
+      Object.fromEntries(
+        ['actor-107002', 'actor-101010', 'actor-103002'].map(actorId => [
+          actorId,
+          missAbsorbSp.filter(event => event.actorId === actorId).length,
+        ])
+      )
+    ).toEqual({
+      'actor-107002': 7,
+      'actor-101010': 7,
+      'actor-103002': 7,
+    });
+    expect(missAbsorbSp.every(event => event.absoluteFrame === 4680)).toBe(
+      true
+    );
+    expect(missAbsorbSp.every(event => event.payload.change === 1)).toBe(true);
+    expect(
+      (first.trace?.events ?? []).filter(
+        event =>
+          ['misa-star', 'misa-star-at-cooldown-boundary'].includes(
+            event.actionId
+          ) &&
+          ['VERIFIED_DIRECT_HEAL', 'VERIFIED_RESOURCE_CHANGE'].includes(
+            event.type
+          ) &&
+          ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+            event.payload?.reason
+          )
+      )
+    ).toEqual([]);
   }, 60_000);
 
   it('settles every critical mode, integer boundary, miss, and non-crittable event', () => {
@@ -225,3 +340,26 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     );
   });
 });
+
+function createMisaRuntimePackage() {
+  const result = structuredClone(mechanicsPackage);
+  result.packageHash = misaFixture.dataIdentity.verifiedMechanicsPackageHash;
+  const ownerId = Number(misaProfile.owner.ownerId);
+  const replaceOwner = (records, additions) => [
+    ...(records ?? []).filter(record => Number(record.ownerId) !== ownerId),
+    ...structuredClone(additions ?? []),
+  ];
+  result.actionVariantGraph.pickupProfiles = replaceOwner(
+    result.actionVariantGraph.pickupProfiles,
+    misaProfile.contracts.pickupProfiles
+  );
+  result.actionVariantGraph.pickupSpawnBindings = replaceOwner(
+    result.actionVariantGraph.pickupSpawnBindings,
+    misaProfile.contracts.pickupSpawnBindings
+  );
+  result.actionVariantGraph.pickupAbsorbBindings = replaceOwner(
+    result.actionVariantGraph.pickupAbsorbBindings,
+    misaProfile.contracts.pickupAbsorbBindings
+  );
+  return result;
+}

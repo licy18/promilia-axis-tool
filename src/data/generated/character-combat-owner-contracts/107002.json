@@ -5,8 +5,8 @@
   "ownerId": 107002,
   "ownerName": "米砂",
   "recipeIdentity": "actor:107002:character-combat-recipe:v1",
-  "recipeHash": "b3332b110ffbdd9705343b54be05eb7b70c24c0dfeb534b4abd0268119f8602b",
-  "compilerInputHash": "4dffc3dc61a238798b12da358639cc3bdcc8c25c9e16b58ed0987dececade300",
+  "recipeHash": "45f1d04b80e81e93905888d266e17ed2221dc89b8a12ffbfd1dd077416bf7cac",
+  "compilerInputHash": "4370f22d6de9acaa4516c7bbcdfc69a237dc6537cacea160f00101ef8e14cbc1",
   "timingPolicy": "standalone-animation",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -25555,6 +25555,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-heal",
@@ -25945,7 +25947,7 @@
           "status": "verified-pickup-tuning-effect-ready-conservative-cap-policy",
           "applied": true
         },
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002220.asset/MonoBehaviour/ast_107002220__3434452943307337244.json#elementConfigId=107002220|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002216.asset/MonoBehaviour/ast_107002216__-8742085360987801148.json#elementConfigId=107002216|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002271.asset/MonoBehaviour/ast_107002271__7643301625766811642.json#elementConfigId=107002271|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480041002.asset/MonoBehaviour/ast_480041002__-5253142493209012449.json#elementConfigId=480041002#attributeID=229;function=3;A=600|Battle/Element/ast_107002220.asset#unit=480042;life=15000;max=6;countType=2|battle-item:480042#collision=[spawn+2,spawn+900);radius=0.6;Target",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002220.asset/MonoBehaviour/ast_107002220__3434452943307337244.json#elementConfigId=107002220|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002216.asset/MonoBehaviour/ast_107002216__-8742085360987801148.json#elementConfigId=107002216|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002271.asset/MonoBehaviour/ast_107002271__7643301625766811642.json#elementConfigId=107002271|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480041002.asset/MonoBehaviour/ast_480041002__-5253142493209012449.json#elementConfigId=480041002#attributeID=229;function=3;A=600|Battle/Element/ast_107002220.asset#unit=480042;life=15000;max=6;countType=2|battle-item:480042#collision=[spawn+2,spawn+900);radius=0.6;Target;collision-is-not-auto-collection",
         "status": "verified-pickup-profile-ready",
         "applied": true
       },
@@ -25960,6 +25962,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-sp",
@@ -26013,6 +26017,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-heal",
@@ -26418,6 +26424,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-sp",
@@ -26664,6 +26672,42 @@
         "requiresHitElementId": null,
         "sourceIdentity": "skill_control_10700213.asset#skillTrackDatas[21]/trackIndex=24/pathId=-2302479272537638429@135F",
         "status": "verified-pickup-spawn-binding-ready",
+        "applied": true
+      }
+    ],
+    "pickupAbsorbBindings": [
+      {
+        "bindingIdentity": "misa-charged-absorb-all-live-pickups",
+        "ownerId": 107002,
+        "controlSkillId": 10700210,
+        "subSkillIndex": 0,
+        "triggerFrame": 70,
+        "frameRate": 60,
+        "triggerElementId": 107002233,
+        "triggerElementIndex": 7,
+        "sourceTrackOrder": 15,
+        "pickupIdentities": [
+          "misa-a3-hp-pickup",
+          "misa-star-sp-pickup",
+          "misa-ultimate-hp-pickup",
+          "misa-ultimate-sp-pickup"
+        ],
+        "collector": "action-owner",
+        "settlementGate": "successful-action-execute",
+        "requiresHit": false,
+        "absorbScope": "listed-owner-live-entities",
+        "sameFrameSpawnPolicy": "exclude-same-frame-fail-closed",
+        "sameFrameExpiryPolicy": "expire-before-absorb",
+        "triggerEvidence": {
+          "displacementType": 2,
+          "targetType": 2,
+          "entityFilterData": 64,
+          "radius": 9,
+          "elementSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002233.asset/MonoBehaviour/ast_107002233__-2816437001102957180.json#elementConfigId=107002233",
+          "graphSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[7]"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[7]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002233.asset/MonoBehaviour/ast_107002233__-2816437001102957180.json#elementConfigId=107002233|skill_control_10700210.asset#skillTrackDatas[15]/pathId=4813059941072756916/trackIndex=92/subSkillUniqueId=17340006214530000@70F|MonoBehaviour_3637962353715634356#startFrame=70;frameCount=1;elementDataList=-2816437001102957180;directInjectTargetType=17|Battle/Element/ast_107002233.asset#displacementType=2;targetType=2;entityFilterData=64;radius=9|lang_guide_pic.json#charged-attack-absorbs-all-summons|lang_words.json#hold-normal-to-absorb-nearby-summons",
+        "status": "verified-pickup-owner-action-absorb-binding-ready",
         "applied": true
       }
     ],
@@ -46127,7 +46171,7 @@
       "sourceIdentity": "NewTable/template_value.rows[id=107002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=623176689467243005|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1913468686735845945"
     }
   },
-  "contractHash": "17bf93c5c9b9a5aeed83272e5aa73d1a8ccecb2f826b0d060973e0e4b031b930",
+  "contractHash": "3b19ca679931d6db8f10ada62da89a3ec9eb3cc231a4d70373a0e026e1f9b792",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
@@ -46147,6 +46191,7 @@
     "rawDirectEffectBindingCount": 2,
     "pickupProfileCount": 4,
     "pickupSpawnBindingCount": 12,
+    "pickupAbsorbBindingCount": 1,
     "scenarioOutOfScopeActionCount": 5,
     "resourceProfileCount": 0,
     "resourceTransactionCount": 0,
@@ -46155,5 +46200,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 0
   },
-  "recipeContractHash": "48e1aacd4c91642d01f69e8950d2504ec8dbc616940ef38feed749b82b6ddd33"
+  "recipeContractHash": "a3fdb05cc74ea029e0e949fd308a5c1a7562ab801c302e9a839269881b698c26"
 }

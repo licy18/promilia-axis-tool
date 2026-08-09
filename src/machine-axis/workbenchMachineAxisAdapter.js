@@ -281,6 +281,11 @@ function createContractFromProject(project, { service, metadata } = {}) {
         policy: project.combatScenario?.critical?.policy ?? 'non-critical',
         seed: project.combatScenario?.critical?.seed ?? null,
       },
+      ...(project.combatScenario?.pickups == null
+        ? {}
+        : {
+            pickups: structuredClone(project.combatScenario.pickups),
+          }),
       ...(project.combatScenario?.target == null
         ? {}
         : {

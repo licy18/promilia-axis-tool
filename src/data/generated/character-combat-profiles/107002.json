@@ -69,7 +69,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "4382953b0c8852b4089ed2e144e4bf7d5442830d0346dd8b7a4da4779a0de63b",
+    "packageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -29667,6 +29667,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-heal",
@@ -30057,7 +30059,7 @@
           "status": "verified-pickup-tuning-effect-ready-conservative-cap-policy",
           "applied": true
         },
-        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002220.asset/MonoBehaviour/ast_107002220__3434452943307337244.json#elementConfigId=107002220|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002216.asset/MonoBehaviour/ast_107002216__-8742085360987801148.json#elementConfigId=107002216|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002271.asset/MonoBehaviour/ast_107002271__7643301625766811642.json#elementConfigId=107002271|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480041002.asset/MonoBehaviour/ast_480041002__-5253142493209012449.json#elementConfigId=480041002#attributeID=229;function=3;A=600|Battle/Element/ast_107002220.asset#unit=480042;life=15000;max=6;countType=2|battle-item:480042#collision=[spawn+2,spawn+900);radius=0.6;Target",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002220.asset/MonoBehaviour/ast_107002220__3434452943307337244.json#elementConfigId=107002220|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002216.asset/MonoBehaviour/ast_107002216__-8742085360987801148.json#elementConfigId=107002216|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002271.asset/MonoBehaviour/ast_107002271__7643301625766811642.json#elementConfigId=107002271|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480041002.asset/MonoBehaviour/ast_480041002__-5253142493209012449.json#elementConfigId=480041002#attributeID=229;function=3;A=600|Battle/Element/ast_107002220.asset#unit=480042;life=15000;max=6;countType=2|battle-item:480042#collision=[spawn+2,spawn+900);radius=0.6;Target;collision-is-not-auto-collection",
         "status": "verified-pickup-profile-ready",
         "applied": true
       },
@@ -30072,6 +30074,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-sp",
@@ -30125,6 +30129,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-heal",
@@ -30530,6 +30536,8 @@
         "collisionDelayFrames": 2,
         "collisionRadius": 0.6,
         "maxCount": 6,
+        "autoCollect": false,
+        "collectionMode": "owner-source-action-absorb-only",
         "atCapacityPolicy": "reject-new-conservative",
         "reward": {
           "kind": "direct-sp",
@@ -30776,6 +30784,42 @@
         "requiresHitElementId": 107002253,
         "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-only-hit-frames=74,82,90,99-create-107002214|selected-execution=10700226/sub0",
         "status": "verified-pickup-spawn-binding-ready",
+        "applied": true
+      }
+    ],
+    "pickupAbsorbBindings": [
+      {
+        "bindingIdentity": "misa-charged-absorb-all-live-pickups",
+        "ownerId": 107002,
+        "controlSkillId": 10700210,
+        "subSkillIndex": 0,
+        "triggerFrame": 70,
+        "frameRate": 60,
+        "triggerElementId": 107002233,
+        "triggerElementIndex": 7,
+        "sourceTrackOrder": 15,
+        "pickupIdentities": [
+          "misa-a3-hp-pickup",
+          "misa-star-sp-pickup",
+          "misa-ultimate-hp-pickup",
+          "misa-ultimate-sp-pickup"
+        ],
+        "collector": "action-owner",
+        "settlementGate": "successful-action-execute",
+        "requiresHit": false,
+        "absorbScope": "listed-owner-live-entities",
+        "sameFrameSpawnPolicy": "exclude-same-frame-fail-closed",
+        "sameFrameExpiryPolicy": "expire-before-absorb",
+        "triggerEvidence": {
+          "displacementType": 2,
+          "targetType": 2,
+          "entityFilterData": 64,
+          "radius": 9,
+          "elementSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002233.asset/MonoBehaviour/ast_107002233__-2816437001102957180.json#elementConfigId=107002233",
+          "graphSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[7]"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[7]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_107002233.asset/MonoBehaviour/ast_107002233__-2816437001102957180.json#elementConfigId=107002233|skill_control_10700210.asset#skillTrackDatas[15]/pathId=4813059941072756916/trackIndex=92/subSkillUniqueId=17340006214530000@70F|MonoBehaviour_3637962353715634356#startFrame=70;frameCount=1;elementDataList=-2816437001102957180;directInjectTargetType=17|Battle/Element/ast_107002233.asset#displacementType=2;targetType=2;entityFilterData=64;radius=9|lang_guide_pic.json#charged-attack-absorbs-all-summons|lang_words.json#hold-normal-to-absorb-nearby-summons",
+        "status": "verified-pickup-owner-action-absorb-binding-ready",
         "applied": true
       }
     ],
@@ -46173,10 +46217,10 @@
     "sourceCompilation": {
       "compilerVersion": 5,
       "recipeIdentity": "actor:107002:character-combat-recipe:v1",
-      "recipeHash": "b3332b110ffbdd9705343b54be05eb7b70c24c0dfeb534b4abd0268119f8602b",
-      "compilerInputHash": "4dffc3dc61a238798b12da358639cc3bdcc8c25c9e16b58ed0987dececade300",
-      "recipeContractHash": "48e1aacd4c91642d01f69e8950d2504ec8dbc616940ef38feed749b82b6ddd33",
-      "ownerContractHash": "17bf93c5c9b9a5aeed83272e5aa73d1a8ccecb2f826b0d060973e0e4b031b930"
+      "recipeHash": "45f1d04b80e81e93905888d266e17ed2221dc89b8a12ffbfd1dd077416bf7cac",
+      "compilerInputHash": "4370f22d6de9acaa4516c7bbcdfc69a237dc6537cacea160f00101ef8e14cbc1",
+      "recipeContractHash": "a3fdb05cc74ea029e0e949fd308a5c1a7562ab801c302e9a839269881b698c26",
+      "ownerContractHash": "3b19ca679931d6db8f10ada62da89a3ec9eb3cc231a4d70373a0e026e1f9b792"
     },
     "operators": [
       "public-action-binding",
@@ -47219,7 +47263,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "4f08b841fde529d20b32a36df4703b8ca2e4f201b07dd66b0933e31542839b37"
+    "deterministicInputHash": "723fc5d755fc801fe8d13f529dfcbede792fefe8402eb17a05b55b806b47b383"
   },
-  "profileHash": "5a24d9f3c4ef9a2de3cf174161f6b5eba54366809f1ae7c55dc5ce3b0aeb6756"
+  "profileHash": "1614d5179ab633e22d01605931d535cdab322604111def062145447d976d5a71"
 }

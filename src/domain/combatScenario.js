@@ -25,6 +25,9 @@ export function normalizeCombatScenario(value = null) {
           : Boolean(projectile.defaultWillHit),
     },
     critical: normalizeCombatCriticalScenario(value?.critical),
+    ...(value?.pickups == null
+      ? {}
+      : { pickups: normalizeCombatPickupPolicy(value.pickups) }),
     ...(value?.optimizationScenarioPolicy == null
       ? {}
       : {
@@ -42,6 +45,32 @@ export function normalizeCombatScenario(value = null) {
   };
 }
 
+export function normalizeCombatPickupPolicy(value = null) {
+  const source = value && typeof value === 'object' ? value : {};
+  return {
+    policyId: String(source.policyId ?? ''),
+    policyVersion: positiveIntegerOrDefault(source.policyVersion, 1),
+    policyHash: String(source.policyHash ?? ''),
+    autoCollect: source.autoCollect === true,
+    movementPolicy:
+      source.movementPolicy === 'explicit-scenario-movement'
+        ? 'explicit-scenario-movement'
+        : 'no-implicit-movement',
+    collectionPolicy:
+      source.collectionPolicy === 'explicit-collision'
+        ? 'explicit-collision'
+        : 'owner-source-action-absorb-only',
+    sameFrameSpawnPolicy:
+      source.sameFrameSpawnPolicy === 'include-same-frame'
+        ? 'include-same-frame'
+        : 'exclude-same-frame-fail-closed',
+    sameFrameExpiryPolicy: 'expire-before-absorb',
+    ...(Number.isFinite(Number(source.distance)) && Number(source.distance) >= 0
+      ? { distance: Number(source.distance) }
+      : {}),
+  };
+}
+
 export function normalizeCombatTargetPolicy(value = null) {
   const source = value && typeof value === 'object' ? value : {};
   return {
@@ -56,4 +85,9 @@ export function normalizeCombatTargetPolicy(value = null) {
 function nonNegativeNumberOrDefault(value, fallback) {
   const number = Number(value);
   return Number.isFinite(number) && number >= 0 ? number : fallback;
+}
+
+function positiveIntegerOrDefault(value, fallback) {
+  const number = Number(value);
+  return Number.isInteger(number) && number > 0 ? number : fallback;
 }

@@ -44,36 +44,37 @@
 | `HIT-P-04` | ultimate 到 135F | `skillTrackDatas[20]` 的 HP×3 先于 `[21]` 的 SP×3；两类 `SummonId` 池分开 | 同帧 source array order |
 | `HIT-N-07` | 普通 `SummonTempData` HP 池已满 6，ultimate 135F | ultimate HP `SummonId` 池仍可创建 3 | 防止跨 countType 混池 |
 
-## 4. 拾取生命周期、重复与零距离
+## 4. 生成物生命周期、重击吸收与零距离
 
-设实体 `spawnFrame=100`，则 collision open=102，expire exclusive=1000。
+设实体 `spawnFrame=100`、`expiresFrameExclusive=1000`。child collision open=102 仅是原图事实，不是默认 collection gate。
 
 | ID | 输入 | 期望 | 反例意图 |
 |---|---|---|---|
-| `PICK-P-01` | frame102，友方 collector，distance=0 | 可收集 | 左边界包含 |
-| `PICK-N-01` | frame101 | 不可收集，实体仍存在 | 开窗前 1F |
-| `PICK-P-02` | frame999 | 可收集 | 右边界前 1F |
-| `PICK-N-02` | frame1000 | 先过期，再拒绝；无 reward | 右开边界 |
-| `PICK-P-03` | frame102，distance=0.6 | 可收集 | 半径边界包含 |
-| `PICK-N-03` | frame102，distance>0.6 | 不可收集 | 半径外 |
-| `PICK-P-04` | 冻结 scenario，图已把 SkillPosition 移到最近友方，child 到 2F | distance=0 可收集，不依赖 Boss attack | 零距离被动 Boss 可达性 |
-| `PICK-N-04` | 同一个 entity，同帧提交两次 collision | 只第一笔成功；rewardCount=1 | 同帧重复幂等 |
-| `PICK-P-05` | 两个不同 entity，同帧同一 collector | 两笔各成功一次，按 entity source order | distinct entity 可重复 |
-| `PICK-N-05` | 两个 collector 同帧抢同一 entity | 稳定排序首个成功，另一个 `already-collected` | 并发双领 |
-| `PICK-N-06` | entity 被 capacity policy 拒绝创建后伪造 collision id | `entity-not-found`，无 reward | 防幽灵拾取 |
-| `PICK-N-07` | 仅依据 `Delay#0.1` 把开窗改为 6F | 测试失败；现有 contract 仍是 child 2F | 防止无 control edge 的延迟猜测 |
+| `ABSORB-FAIL-OLD-01` | 距离0、无重击，旧 S1 trace | 旧实现会在 spawn+2F 自动奖励，R2 必须 failure-to-pass | 用户裁决推翻旧自动领取 |
+| `ABSORB-N-01` | 距离0、无重击、一直不移动 | reward=0；实体留存到 frame1000 自然过期 | 0距离不等于 pickup 碰撞 |
+| `ABSORB-N-02` | 普攻/星鸣/星决/星携执行 | 只生成各自实体/效果，不产生 absorb attempt | 非重击不能吸收 |
+| `ABSORB-N-03` | 其他角色重击或切换当前前台 actor | 不吸收米砂实体；collector 不被前台劫持 | owner binding |
+| `ABSORB-P-01` | 米砂 `10700210/sub0` 成功 execute，到动作70F | 吸收当时所有 owner live、listed entities | 精确 control/subskill/frame |
+| `ABSORB-P-02` | 重击所有 damage hit miss | 70F 仍吸收 | 独立 Self element track，不依赖 landed |
+| `ABSORB-N-04` | 重击 blocked/未执行 | 无 absorb attempt、无 reward、实体不变 | execute gate |
+| `ABSORB-P-03` | 普通池 HP/SP 与星决 `SummonId` HP/SP 同时 live | 按 sourceOrder/entityId 逐个各结算一次 | 跨池稳定全量吸收 |
+| `ABSORB-N-05` | 同一实体后续再重击 | rewardCount 仍1；第二次 count0 | once-only |
+| `ABSORB-N-06` | 无实体重击 | 留一条 eligible=0 attempt，不造幽灵 reward | 可审计 no-op |
+| `ABSORB-N-07` | exact frame1000 重击 | 先过期，吸收数0 | 右开到期 |
+| `ABSORB-N-08` | frame100 同帧 spawn+absorb | 新实体显式排除并留存 | fail-closed，不靠数组顺序 |
+| `ABSORB-N-09` | 满池第七次 spawn 后重击 | 被拒绝请求无实体、无 reward；既有6个可吸收 | conservative capacity |
 
 ## 5. HP / SP / AllHero 路由
 
-测试 roster：前台米砂 `M`、后台 `B1/B2`；另放一个友方 collector `A` 以区分 Source 与 Target。
+测试 roster：米砂 owner `M`、后台 `B1/B2`、可切为前台的友方 `A`。合法 collector 始终为执行来源重击的 `M`。
 
 | ID | 输入 | 期望 | 明确不应发生 |
 |---|---|---|---|
-| `ROUTE-P-01` | A 收集 HP pickup；M maxHP=10000 | A heal=300；M/B1/B2 不因该 reward 被 heal | 不广播“全队” |
-| `ROUTE-N-01` | A 没有 marker107002271，收 HP | A 仍 heal=300；不加调谐层 | marker 只 gate 被动，不 gate HP heal |
-| `ROUTE-P-02` | A 有 marker，收 HP | A heal=300 且 A +1 调谐层 | reward list 两种效果都执行 |
-| `ROUTE-P-03` | M 收 SP pickup，roster M/B1/B2 | M +1，B1/B2 按 ShareAll +1 | SP 独有 ShareAll |
-| `ROUTE-N-02` | A 收 HP 或获得调谐层 | B1/B2 不变化 | 禁止把 SP ShareAll 泛化 |
+| `ROUTE-P-01` | A 当前前台，M 重击吸收 HP；M maxHP=10000 | 仅 M heal=300；A/B1/B2 不因该 reward 被 heal | collector 固定 M、不广播 |
+| `ROUTE-N-01` | marker107002271 不存在，M 吸收 HP | M 仍 heal=300；不加调谐层 | marker 只 gate 被动，不 gate HP heal |
+| `ROUTE-P-02` | M 有 marker，吸收 HP | M heal=300 且 M +1 调谐层 | reward list 两种效果都执行 |
+| `ROUTE-P-03` | M 吸收 SP，roster M/B1/B2 | M +1，B1/B2 按 ShareAll +1 | SP 独有 ShareAll |
+| `ROUTE-N-02` | M 吸收 HP 或获得调谐层 | A/B1/B2 不变化 | 禁止把 SP ShareAll 泛化 |
 | `ROUTE-P-04` | ultimate 143F heal | M/B1/B2 各收到一个独立 AllHero heal event | 不是前台单收再 ShareAll |
 | `ROUTE-P-05` | star-carry 四个 heal 帧 | 每帧 M/B1/B2 各有一个事件，共四批 | 不折叠为一次总治疗 |
 | `ROUTE-N-03` | star 82F 有印记 | 30s 木/风伤 +5% 只施给 raw Source | 不因公示文本广播 roster |
@@ -117,27 +118,27 @@
 | ID | 输入 | 期望 | 反例焦点 |
 |---|---|---|---|
 | `HEAL-P-01` | ultimate 完整 timeline | 143/155/167/181/193F 五次独立 AllHero heal | 多段不合并 |
-| `HEAL-P-02` | ultimate 135F 生成物在 distance0 | 最早 137F 可先拾取，143F 才第一段 heal | pickup 可早于 heal |
+| `HEAL-P-02` | ultimate 135F 生成物在 distance0、无后续重击 | 生成物不奖励；143F 才是第一段显式 AllHero heal | 防自动领取混入团队治疗 |
 | `HEAL-P-03` | ultimate 144/150F | 每帧来源米砂 +1 木印记 | 与 heal 事件交错 |
 | `HEAL-P-04` | star-carry | 46/61/79/98F 四次独立 AllHero heal | 星携多段 |
 | `HEAL-P-05` | M maxHP=10000，HP pickup A=300 | 每个成功 reward 的 base heal=300，再进入既有 heal-up modifier/rounding | 通用公式104正例 |
 | `HEAL-N-01` | HP collector 的 maxHP 与 M 不同 | heal 仍按来源 M 的 maxHP 3% | 防止用 Target maxHP |
-| `HEAL-N-02` | HP pickup collision miss/未开窗/已过期 | 不 heal、不加层、不 destroy（过期除外） | 碰撞 gate 原子性 |
+| `HEAL-N-02` | HP 生成物未被合法重击吸收/已过期 | 不 heal、不加层、不 destroy（过期除外） | absorb gate 原子性 |
 | `HEAL-N-03` | 公式104尚未接通，却把 raw A=300 当 heal=300 | 当 M maxHP≠10000 时测试失败；不得 literal-A fallback | 防止掩盖 `unsupported-1-104` |
 
 ## 9. 调谐强度层与右开边界
 
 | ID | 输入 | 期望 | 证据状态 |
 |---|---|---|---|
-| `TUNE-P-01` | marker 有，首次拾取 | +600bp，expiry=`t+24000` | 源值已证 |
+| `TUNE-P-01` | marker 有，首次合法吸收实体 | +600bp，expiry=`t+24000` | 源值已证 |
 | `TUNE-P-02` | t0/t1/t2/t3 四个不同 entity | 四个独立层，总 +2400bp，各自 expiry | 独立层实现规格 |
 | `TUNE-N-01` | marker 无 | 公式1006=0，不加层；主 reward 照常 | gate 已证 |
-| `TUNE-N-02` | 同一 entity 重放 collision | 不重复加层 | once-only 已证于配置 |
+| `TUNE-N-02` | 同一 entity 后续重击再次吸收 | 不重复加层 | once-only |
 | `TUNE-N-03` | 已4层，第五个 entity | ignore new，不刷新任何 expiry | `conservative-policy` |
 | `TUNE-P-03` | 最早层 `expiry-1ms` | 仍有该层 | 右开前 |
 | `TUNE-N-04` | 恰好最早层 `expiry` | 该层先过期 | 右开端点 |
-| `TUNE-P-04` | 恰好 expiry 同刻再拾取 | 先过期，再成功添加新层；保持最多4层 | 同刻 phase order |
-| `TUNE-P-05` | ultimate 六 entity 同刻 | source order 前4层成功，后2层 capacity-ignored | stable order + 保守 cap |
+| `TUNE-P-04` | 恰好 expiry 同刻合法重击吸收新实体 | 先过期，再成功添加新层；保持最多4层 | 同刻 phase order |
+| `TUNE-P-05` | 一次重击吸收六 entity | source order 前4层成功，后2层 capacity-ignored | stable order + 保守 cap |
 
 ## 10. 30s buff / 24s层 / 15s实体的右开交叉例
 
@@ -147,9 +148,9 @@
 | `TIME-N-01` | buff apply+30000ms | buff inactive |
 | `TIME-P-02` | wind mark apply+19999ms | mark 可被 consume |
 | `TIME-N-02` | wind mark apply+20000ms | mark 已过期，不能被 consume |
-| `TIME-P-03` | pickup spawn+14999ms 且 collision 已开 | 可收集 |
-| `TIME-N-03` | pickup spawn+15000ms | 已过期，不可收集 |
-| `TIME-P-04` | tuning layer expiry 与新 pickup 同毫秒 | 先 expire，再 apply 新层 |
+| `TIME-P-03` | pickup spawn+14999ms 且合法重击70F触发 | 可吸收 |
+| `TIME-N-03` | pickup spawn+15000ms 同刻触发 | 已先过期，不可吸收 |
+| `TIME-P-04` | tuning layer expiry 与吸收新 entity 同毫秒 | 先 expire，再 apply 新层 |
 
 ## 11. scenario-out-of-scope N/A 反例
 
@@ -184,6 +185,12 @@
 
 R1 实际 failure-to-pass 门已命中：中央复现留下的旧 artifact 与 `HEAD` blob 不同，严格 validator 返回非零，核心错误为 `working artifact differs from committed artifact`。这证明 validator 不再在 artifact 被重写后误报通过。
 
+## 14. R2 自动领取 failure-to-pass
+
+在 R2 修改 compiler/runtime 后、更新 golden 期望前，owner 只读构建真实失败 27 条旧断言；首组精确失败是 `misa-a3` 在 42/48/54/60/66/72F 的 6 次 direct heal 不再存在。这不是快照手改，而是旧 `spawn+2F` 自动 collision trace 被新 policy 拒绝后的预期红灯。
+
+新通过条件：A3 实体在 40–70F 创建，直到后续米砂重击动作的 70F 才由该重击一次吸收；无重击场景奖励为0并自然过期。两轮相同输入必须得到相同 entity order、trace hash 与 Workbench roundtrip hash。
+
 后续聚焦断言：
 
 | ID | 输入 | 期望 |
@@ -193,22 +200,26 @@ R1 实际 failure-to-pass 门已命中：中央复现留下的旧 artifact 与 `
 | `DET-N-01` | 手工改一字节核心 artifact 后运行对应 `--assert-clean` | 非零退出，报告 working/committed byte mismatch；不得自愈式重写 |
 | `DET-N-02` | artifact 中注入 `generatedAt`、当前侧车 SHA、旧 `headAtExtraction` 或 tracked sidecar list | 重算 bytes 与 committed bytes 不同，生成器及 validator 均失败 |
 | `DET-N-03` | 相对 baseline 在允许前缀外制造 tracked/index/working/untracked 漂移 | 两份生成器在读取/写入 artifact 前拒绝 |
-| `DET-P-03` | 显式运行 `extract-integration-conflicts.mjs` | 只刷新动态时点快照；不得据此宣称核心 artifact 不确定 |
+| `DET-P-03` | 中央基线不含动态冲突快照 | validator 报告 `dynamicConflictSnapshotPresent=false` 但核心门仍严格通过；不得虚构刷新命令或把缺席混入核心 artifact |
 
 `--assert-current` / `--allow-dirty-sidecar` 只用于提交前核对候选 artifact；它们不能作为 post-commit clean 验收结果。
 
-## 14. S1 实现 failure-to-pass 记录
+## 15. S1/R2 实现 failure-to-pass 记录
 
 以下反例均在本实现线先得到错误结果、再由聚焦门转为通过；它们用于说明最终 contract 不是只匹配 happy path。
 
 | ID | 初始错误实现/轴 | 可观察失败 | 最终门 |
 |---|---|---|---|
 | `S1-FAIL-01` | target-state 只发 tracking command | A4/charged 的状态计数变化，但 calculator 看不到物/法 DEF `-1000bp` | target-state command 必须带两个 modifier、package source identity，且 `appliedToCalculators=true` |
-| `S1-FAIL-02` | 把 raw AllHero heal 与完整 semantic subtree 同时执行 | 星决/星携同一来源帧被重复治疗 | raw-direct binding 只启用明确的五帧/四帧，golden 固定为 18/12 个 team actor event |
-| `S1-FAIL-03` | 用 2639F 作为 star “CD 前 1F” | 前一施放 occupancy 与探针重叠，失败原因不是 cooldown；边界证据失真 | 独立探针放到 1500F；2640F 精确右开执行，仅前者产生 `skill-cooldown-active` |
-| `S1-FAIL-04` | effect summary 把 `EFFECT_BLOCKED` 也算 applied | 满四层后 12 个 no-refresh 反例被误报为成功加层 | `appliedEventCount=12`、`blockedEventCount=12` 分开统计，满层不刷新 expiry |
+| `S1-FAIL-02` | 把 raw AllHero heal 与完整 semantic subtree 同时执行 | 星决/星携同一来源帧被重复治疗 | raw-direct binding 只启用明确的五帧/四帧，golden 固定为 15/12 个 team actor event |
+| `S1-FAIL-03` | 用 2639F 作为 star “CD 前 1F” | 前一施放 occupancy 与探针重叠，失败原因不是 cooldown；边界证据失真 | 独立探针放到 2100F；2340F 精确右开执行，仅前者产生 `skill-cooldown-active` |
+| `S1-FAIL-04` | effect summary 把 `EFFECT_BLOCKED` 也算 applied | 满四层后的 no-refresh 反例被误报为成功加层 | R2 六实体 golden 固定 `appliedEventCount=4`、`blockedEventCount=2`，满层不刷新 expiry |
 | `S1-FAIL-05` | target-state 自然到期同时再发显式 remove | 2116F 出现重复 remove/expire，状态和 effect ledger 双重结算 | 自然 expiry 只由 duration timeline 关闭；显式 consume 才生成 remove |
 | `S1-FAIL-06` | 第三次星鸣没有结构化无候选投影 | validator 只看到无 consume，却无法区分漏实现与合法 no-candidate | 6000F 星鸣在 6082F 固定 `tuning-consume-no-sufficient-priority-candidate`，6090F 独立 `+750` 仍执行 |
 | `S1-FAIL-07` | 消费成功效果没有 strict source sequence | 82F 成功 buff 可能被触发 hit 反向读取，且 trace 无法证明 `consume -> inject` | success effect 的 path 排在 consume 后，并以 `strict-source-sequence` 对同帧 settlement 可见性做门控 |
+| `R2-FAIL-01` | compiler/runtime 改为 owner 重击吸收但仍使用旧 golden | 27 条旧 `spawn+2F` heal/SP/tuning 断言失败 | 更新为实体留存及 70F 重击逐实体吸收；旧 trace 留作 failure-to-pass |
+| `R2-FAIL-02` | 只在 fixture 写 `scenario.pickups`，未扩展通用 Machine Axis schema | acceptance 报 `scenario.pickups` additional property | schema/contract/service/Workbench adapter 以无角色特判的可选 pickup policy roundtrip |
+| `R2-FAIL-03` | 新重击探针与既有 critical/A4 lane 重叠 | blocked reason 被 occupancy 覆盖，无法证明目标 gate | cooldown probe 移到 2100F；blocked absorb probe 保留在 3000F A4 lane overlap，并分别断言无 pickup reward |
+| `R2-FAIL-04` | R2 scope guard 仍从原始 `140eef...` 计算变更 | 把中央已集成 production 文件误报为本支线越界漂移 | 来源证据仍固定 `140eef...`，scope guard 独立固定 `1a56e0a...`，禁止 carrier SHA |
 
 S1 仍保留而不伪造的边界：A5/完整普攻 occupancy、隐藏团队传播、满池 replacement、满层 refresh 的客户端真实策略。它们只允许 `N/A` 或 conservative/fail-closed，不得因为本实现线聚焦 golden 通过而升级为已证来源。

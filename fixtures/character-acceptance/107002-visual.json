@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "71ff1c31f2a09db9781d214b2c4890a6d6fb461e4bc114d669f01e8c3f41027f",
+    "verifiedMechanicsPackageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -194,6 +194,16 @@
     "projectile": {
       "targetDistance": 0,
       "defaultWillHit": true
+    },
+    "pickups": {
+      "policyId": "m12c-pickup-owner-source-action-absorb-v1",
+      "policyVersion": 1,
+      "policyHash": "2d4b4c4977e689bc",
+      "autoCollect": false,
+      "movementPolicy": "no-implicit-movement",
+      "collectionPolicy": "owner-source-action-absorb-only",
+      "sameFrameSpawnPolicy": "exclude-same-frame-fail-closed",
+      "sameFrameExpiryPolicy": "expire-before-absorb"
     },
     "target": {
       "hpMode": "infinite",
@@ -540,6 +550,53 @@
       }
     },
     {
+      "id": "misa-charged-ultimate-absorb-miss",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700201,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4610
+      },
+      "hitOverrides": {
+        "10700210|0|elements|2|-1211965369219084289|48|1": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|51|2": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|63|3": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|69|4": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|76|5": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|83|6": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10700210|0|elements|2|-1211965369219084289|90|7": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
       "id": "misa-a4-required-hit-miss",
       "owner": {
         "kind": "actor",
@@ -557,7 +614,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 4500
+      "frame": 5000
       },
       "hitOverrides": {
         "10700204|0|elements|1|1159803510611510720|84|6": {
@@ -584,7 +641,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 4900
+      "frame": 5400
       },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
@@ -625,7 +682,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 5300
+      "frame": 5800
       }
     },
     {
@@ -640,7 +697,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 5600
+      "frame": 6100
       }
     },
     {
@@ -658,6 +715,23 @@
       "schedule": {
         "mode": "absolute",
         "frame": 4200
+      }
+    },
+    {
+      "id": "misa-charged-empty",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700201,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 6500
       }
     }
   ],

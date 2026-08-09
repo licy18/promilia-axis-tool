@@ -22,6 +22,7 @@ describe('M12-B3 Misa reduced action surface profile', () => {
         rawDirectEffectBindingCount: 2,
         pickupProfileCount: 4,
         pickupSpawnBindingCount: 12,
+        pickupAbsorbBindingCount: 1,
         scenarioOutOfScopeActionCount: 5,
       },
     });
@@ -82,6 +83,8 @@ describe('M12-B3 Misa reduced action surface profile', () => {
       collisionDelayFrames: 2,
       maxCount: 6,
       atCapacityPolicy: 'reject-new-conservative',
+      autoCollect: false,
+      collectionMode: 'owner-source-action-absorb-only',
       reward: {
         kind: 'direct-heal',
         formula: {
@@ -140,6 +143,36 @@ describe('M12-B3 Misa reduced action surface profile', () => {
     ).toEqual([
       ['misa-ultimate-hp-pickup', 135, 3, 20],
       ['misa-ultimate-sp-pickup', 135, 3, 21],
+    ]);
+    expect(ownerContract.contracts.pickupAbsorbBindings).toEqual([
+      expect.objectContaining({
+        bindingIdentity: 'misa-charged-absorb-all-live-pickups',
+        ownerId: MISA_ID,
+        controlSkillId: 10700210,
+        subSkillIndex: 0,
+        triggerFrame: 70,
+        triggerElementId: 107002233,
+        triggerElementIndex: 7,
+        sourceTrackOrder: 15,
+        pickupIdentities: [
+          'misa-a3-hp-pickup',
+          'misa-star-sp-pickup',
+          'misa-ultimate-hp-pickup',
+          'misa-ultimate-sp-pickup',
+        ],
+        collector: 'action-owner',
+        settlementGate: 'successful-action-execute',
+        requiresHit: false,
+        sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+        sameFrameExpiryPolicy: 'expire-before-absorb',
+        triggerEvidence: expect.objectContaining({
+          displacementType: 2,
+          targetType: 2,
+          entityFilterData: 64,
+          radius: 9,
+        }),
+        applied: true,
+      }),
     ]);
   });
 
@@ -236,29 +269,32 @@ describe('M12-B3 Misa reduced action surface profile', () => {
       }),
     ]);
     expect(
-      goldenTrace.actual.combat.ownerDirectHealSummaryByActionId['misa-a3']
+      goldenTrace.actual.combat.ownerDirectHealSummaryByActionId['misa-charged']
     ).toMatchObject({
       eventCount: 6,
+      frames: [670, 670, 670, 670, 670, 670],
       targetIds: ['actor-107002'],
       requestedChangeTotal: 966,
       baseFunctionIds: [104],
       maximumHpSubjects: ['source-actor'],
     });
-    expect(
-      goldenTrace.actual.resources.directSpSummaryByActionId['misa-star']
-    ).toMatchObject({
-      targetEventCount: 4,
-      shareAllEventCount: 8,
-      targetActorIds: ['actor-107002'],
-      sharedActorIds: ['actor-101010', 'actor-103002'],
+    expect(goldenTrace.actual.resources.directSpSummaryByActionId).toEqual({});
+    expect(goldenTrace.actual.resources.pickupSummary).toMatchObject({
+      spawnedEntityCount: 24,
+      collectedEntityCount: 0,
+      absorbedEntityCount: 6,
+      absorbAttemptCount: 1,
+      directHpEventCount: 6,
+      directSpEventCount: 0,
     });
     expect(
       goldenTrace.actual.combat.ownerDirectHealSummaryByActionId[
         'misa-ultimate'
       ]
     ).toMatchObject({
-      eventCount: 18,
+      eventCount: 15,
       targetIds: ['actor-101010', 'actor-103002', 'actor-107002'],
+      baseFunctionIds: [],
     });
   });
 

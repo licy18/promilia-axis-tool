@@ -61,6 +61,7 @@
         "initialRuntimeState": { "type": "object" },
         "projectile": { "$ref": "#/$defs/projectile" },
         "critical": { "$ref": "#/$defs/critical" },
+        "pickups": { "$ref": "#/$defs/pickupPolicy" },
         "target": { "$ref": "#/$defs/targetPolicy" },
         "optimizationQualification": {
           "$ref": "#/$defs/optimizationQualification"
@@ -270,6 +271,37 @@
       "properties": {
         "targetDistance": { "type": "number", "minimum": 0 },
         "defaultWillHit": { "type": "boolean" }
+      }
+    },
+    "pickupPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policyId",
+        "policyVersion",
+        "policyHash",
+        "autoCollect",
+        "movementPolicy",
+        "collectionPolicy",
+        "sameFrameSpawnPolicy",
+        "sameFrameExpiryPolicy"
+      ],
+      "properties": {
+        "policyId": { "type": "string", "minLength": 1 },
+        "policyVersion": { "type": "integer", "minimum": 1 },
+        "policyHash": { "type": "string", "minLength": 1 },
+        "autoCollect": { "type": "boolean" },
+        "movementPolicy": {
+          "enum": ["no-implicit-movement", "explicit-scenario-movement"]
+        },
+        "collectionPolicy": {
+          "enum": ["owner-source-action-absorb-only", "explicit-collision"]
+        },
+        "sameFrameSpawnPolicy": {
+          "enum": ["exclude-same-frame-fail-closed", "include-same-frame"]
+        },
+        "sameFrameExpiryPolicy": { "const": "expire-before-absorb" },
+        "distance": { "type": "number", "minimum": 0 }
       }
     },
     "targetPolicy": {

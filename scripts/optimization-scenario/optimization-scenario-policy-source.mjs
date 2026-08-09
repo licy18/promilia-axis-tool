@@ -9,6 +9,8 @@ export const M12C_OPTIMIZATION_SCENARIO_POLICY_REASON =
   'm12c-zero-distance-passive-boss-out-of-scope';
 export const M12C_OPTIMIZATION_ROSTER_EXCLUSION_REASON =
   'm12c-no-in-scope-wind-or-thunder-mark-production';
+export const M12C_PICKUP_COLLECTION_POLICY_ID =
+  'm12c-pickup-owner-source-action-absorb-v1';
 
 const EXCLUDED_ACTION_KINDS = Object.freeze([
   'dodge-attack',
@@ -238,6 +240,29 @@ const POLICY_SOURCE = Object.freeze({
   ],
   hashBindings: ['input', 'data', 'trace', 'build'],
 });
+
+const PICKUP_COLLECTION_POLICY_SOURCE = Object.freeze({
+  schemaVersion: 1,
+  contractName: 'AzPrPickupCollectionScenarioPolicy',
+  policyId: M12C_PICKUP_COLLECTION_POLICY_ID,
+  policyVersion: 1,
+  status: 'product-corrected',
+  autoCollect: false,
+  movementPolicy: 'no-implicit-movement',
+  collectionPolicy: 'owner-source-action-absorb-only',
+  triggerFamily: 'owner-declared-charged-attack-absorb',
+  sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+  sameFrameExpiryPolicy: 'expire-before-absorb',
+  projectileDistanceCoupling: 'forbidden',
+});
+
+export function createM12cPickupCollectionScenarioPolicy() {
+  const policy = structuredClone(PICKUP_COLLECTION_POLICY_SOURCE);
+  return {
+    ...policy,
+    policyHash: hashCanonicalValue(policy),
+  };
+}
 
 export function createOptimizationScenarioPolicy() {
   const roster = createCandidateRosterPolicy();

@@ -45,6 +45,20 @@ assertEqual(
   'immediate projectile-hit policy'
 );
 assertDeepEqual(
+  fixture.scenario?.pickups,
+  {
+    policyId: 'm12c-pickup-owner-source-action-absorb-v1',
+    policyVersion: 1,
+    policyHash: '2d4b4c4977e689bc',
+    autoCollect: false,
+    movementPolicy: 'no-implicit-movement',
+    collectionPolicy: 'owner-source-action-absorb-only',
+    sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+    sameFrameExpiryPolicy: 'expire-before-absorb',
+  },
+  'owner charged-absorb pickup policy'
+);
+assertDeepEqual(
   fixture.metadata?.kiboDnaFactors,
   [],
   'Kibo DNA factors remain empty'
@@ -84,28 +98,47 @@ try {
   const blockedProbe = {
     ...JSON.parse(JSON.stringify(sourceStar)),
     id: blockedProbeId,
-    schedule: { mode: 'absolute', frame: 1500 },
+    schedule: { mode: 'absolute', frame: 2100 },
+  };
+  const sourceCharged = runtimeFixture.actions.find(
+    action => action.id === 'misa-charged'
+  );
+  assert(sourceCharged, 'source charged action missing for blocked absorb probe');
+  const blockedAbsorbProbeId = 'misa-charged-blocked-absorb-probe';
+  const blockedAbsorbProbe = {
+    ...JSON.parse(JSON.stringify(sourceCharged)),
+    id: blockedAbsorbProbeId,
+    schedule: { mode: 'absolute', frame: 3000 },
   };
   const fullFixture = {
     ...runtimeFixture,
-    actions: [...runtimeFixture.actions, blockedProbe],
+    actions: [...runtimeFixture.actions, blockedProbe, blockedAbsorbProbe],
   };
   const blockedValidation = service.validate(fullFixture);
   assertEqual(blockedValidation.valid, false, 'blocked probe validation');
-  assertDeepEqual(
-    blockedValidation.issues.map(issue => ({
-      actionId: issue.actionId,
-      code: issue.code,
-      violationCodes: issue.violationCodes,
-    })),
-    [
-      {
-        actionId: blockedProbeId,
-        code: 'machine-axis-action-not-executable',
-        violationCodes: ['skill-cooldown-active'],
-      },
-    ],
-    'blocked probe diagnostics'
+  assert(
+    blockedValidation.issues.some(
+      issue =>
+        issue.actionId === blockedProbeId &&
+        issue.code === 'machine-axis-action-not-executable' &&
+        (issue.violationCodes ?? []).includes('skill-cooldown-active')
+    ),
+    `blocked cooldown probe diagnostics: ${JSON.stringify(
+      blockedValidation.issues.filter(issue => issue.actionId === blockedProbeId)
+    )}`
+  );
+  assert(
+    blockedValidation.issues.some(
+      issue =>
+        issue.actionId === blockedAbsorbProbeId &&
+        issue.code === 'machine-axis-action-not-executable' &&
+        (issue.violationCodes ?? []).includes('action-lane-overlap')
+    ),
+    `blocked charged-absorb probe diagnostics: ${JSON.stringify(
+      blockedValidation.issues.filter(
+        issue => issue.actionId === blockedAbsorbProbeId
+      )
+    )}`
   );
   const fullCompilation = service.compile(fullFixture);
   const fullFirst = coreModule.DEFAULT_HEADLESS_COMBAT_CORE.simulate(
@@ -132,6 +165,11 @@ try {
   const exported = adapter.exportProject(imported.project, {
     metadata: fixture.metadata,
   });
+  assertDeepEqual(
+    exported.scenario.pickups,
+    runtimeFixture.scenario.pickups,
+    'Workbench charged-absorb policy roundtrip'
+  );
   const roundTrip = service.simulate(
     JSON.parse(JSON.stringify(exported))
   );
@@ -181,6 +219,71 @@ try {
     true,
     'right-open cooldown boundary'
   );
+  const blockedAbsorb = executionByActionId.get(blockedAbsorbProbeId);
+  assert(blockedAbsorb, 'blocked charged-absorb probe missing');
+  assertEqual(blockedAbsorb.execute, false, 'blocked charged absorb execute gate');
+  assert(
+    (blockedAbsorb.violationCodes ?? []).includes('action-lane-overlap'),
+    'blocked charged-absorb overlap diagnostic missing'
+  );
+  assertEqual(
+    (fullFirst.trace?.events ?? []).filter(
+      event =>
+        event.actionId === blockedAbsorbProbeId &&
+        ['VERIFIED_DIRECT_HEAL', 'VERIFIED_RESOURCE_CHANGE'].includes(event.type) &&
+        (event.type === 'VERIFIED_DIRECT_HEAL' ||
+          ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+            event.payload?.reason
+          ))
+    ).length,
+    0,
+    'blocked charged absorb rewards'
+  );
+
+  const directHeals = (first.trace?.events ?? []).filter(
+    event => event.type === 'VERIFIED_DIRECT_HEAL'
+  );
+  assertEqual(
+    directHeals.filter(event => event.actionId === 'misa-a3').length,
+    0,
+    'A3 does not auto-collect at zero distance'
+  );
+  assertEqual(
+    directHeals.filter(event => event.actionId === 'misa-charged').length,
+    6,
+    'charged attack absorbs six A3 pickups'
+  );
+  const missAbsorbActionId = 'misa-charged-ultimate-absorb-miss';
+  assertEqual(
+    (first.trace?.damage ?? []).filter(
+      event =>
+        event.actionId === missAbsorbActionId &&
+        event.eventType === 'VERIFIED_COMBAT_HIT' &&
+        Number(event.hitSkillId) === 10700210
+    ).length,
+    0,
+    'charged miss has no landed damage'
+  );
+  assertEqual(
+    directHeals.filter(event => event.actionId === missAbsorbActionId).length,
+    3,
+    'charged miss still absorbs three live HP pickups'
+  );
+  const missAbsorbSp = (first.trace?.events ?? []).filter(
+    event =>
+      event.actionId === missAbsorbActionId &&
+      event.type === 'VERIFIED_RESOURCE_CHANGE' &&
+      ['verified-direct-sp', 'verified-direct-sp-shared'].includes(
+        event.payload?.reason
+      )
+  );
+  assertEqual(missAbsorbSp.length, 21, 'seven SP pickups ShareAll to three actors');
+  assert(
+    missAbsorbSp.every(
+      event => event.absoluteFrame === 4680 && event.payload.change === 1
+    ),
+    'SP pickup absorb frame/value drifted'
+  );
   assertEqual(
     fixture.dataIdentity?.verifiedMechanicsPackageHash,
     mechanicsPackage.packageHash,
@@ -202,6 +305,14 @@ try {
         actionCount: runtimeFixture.actions.length,
         executableActionCount: runtimeFixture.actions.length,
         blockedProbe: blockedProbeId,
+        blockedAbsorbProbe: blockedAbsorbProbeId,
+        pickupTrace: {
+          a3AutoCollectHealCount: 0,
+          a3ChargedAbsorbHealCount: 6,
+          chargedMissHpAbsorbCount: 3,
+          chargedMissShareAllSpEventCount: 21,
+          chargedMissAbsorbFrame: 4680,
+        },
       },
       null,
       2

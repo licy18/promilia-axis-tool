@@ -7,6 +7,7 @@ import {
   validateMachineAxisEnemyProfile,
 } from './machineAxisEnemyProfileContract';
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
+import { normalizeCombatPickupPolicy } from '../domain/combatScenario';
 
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
@@ -75,6 +76,9 @@ export function normalizeMachineAxisContract(value = {}) {
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
       projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
+      ...(scenario.pickups == null
+        ? {}
+        : { pickups: normalizeCombatPickupPolicy(scenario.pickups) }),
       ...(scenario.optimizationScenarioPolicy == null
         ? {}
         : {

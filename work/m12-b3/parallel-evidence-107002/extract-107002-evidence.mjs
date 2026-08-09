@@ -18,28 +18,39 @@ const tuningConsumePriorityEvidencePath = path.join(
   'scripts/evidence/tuning-consume-priority-runtime-evidence.json',
 )
 
-const EXPECTED_PRODUCTION_BASELINE = '140eefcd233cd9c1d136728f1c94b91aff632278'
-const EXPECTED_BRANCH = 'feature/m12-b3-107002'
+const INHERITED_EVIDENCE_BASELINE = '140eefcd233cd9c1d136728f1c94b91aff632278'
+const EXPECTED_PRODUCTION_BASELINE = '1a56e0a295f31298da6c3ddb5d70db90183971fb'
+const EXPECTED_BRANCH = 'fix/m12-b3-107002-charged-absorb'
 const ALLOWED_EVIDENCE_CARRIER_PREFIX = 'work/m12-b3/parallel-evidence-107002/'
 const ALLOWED_IMPLEMENTATION_PATHS = Object.freeze([
   'fixtures/character-acceptance/107002-visual.json',
   'reports/m10/107002/**',
+  'reports/m11/character-acceptance/107002/**',
+  'schemas/azpr-machine-axis-v1.schema.json',
+  'scripts/generate-character-acceptance.mjs',
   'scripts/character-acceptance/acceptance-recipes/107002.json',
   'scripts/character-combat/character-combat-contract-compiler.mjs',
   'scripts/character-combat/character-combat-golden-runtime.mjs',
   'scripts/character-combat/character-combat-production-orchestrator.mjs',
   'scripts/character-combat/character-combat-profile-pipeline.mjs',
   'scripts/character-combat/profile-recipes/107002.json',
+  'scripts/optimization-scenario/optimization-scenario-policy-source.mjs',
   'scripts/sync-verified-combat-mechanics.mjs',
+  'src/__tests__/character-acceptance/characterAcceptance107002.test.js',
   'src/__tests__/data/misaCharacterCombatProfile.test.js',
   'src/__tests__/simulation/actionRuleDiagnostics.test.js',
   'src/__tests__/simulation/effectRuntimeTimeline.test.js',
   'src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js',
   'src/__tests__/simulation/verifiedPickupEntityGeneration.test.js',
+  'src/__tests__/simulation/verifiedPickupOwnerActionAbsorb.test.js',
   'src/__tests__/simulation/verifiedTargetStateRuntime.test.js',
   'src/__tests__/simulation/verifiedTuningMarkRuntime.test.js',
   'src/data/generated/character-combat-owner-contracts/107002.json',
   'src/data/generated/character-combat-profiles/107002.json',
+  'src/domain/combatScenario.js',
+  'src/machine-axis/machineAxisContract.js',
+  'src/machine-axis/machineAxisService.js',
+  'src/machine-axis/workbenchMachineAxisAdapter.js',
   'src/simulation/engine/simulateScenario.js',
   'src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js',
   'src/simulation/mechanics/verifiedBattleEffectGeneration.js',
@@ -177,7 +188,7 @@ function assertFrozenProductionSourceTree() {
   const forbidden = [...touched].filter(entry => !isAllowedCarrierPath(entry))
   if (forbidden.length > 0) {
     throw new Error(
-      `repository drift outside evidence carrier and S1 implementation allowlist: ${forbidden.join(', ')}`,
+      `repository drift outside evidence carrier and R2 implementation allowlist: ${forbidden.join(', ')}`,
     )
   }
 }
@@ -186,8 +197,9 @@ function deterministicSourceMetadata() {
   return {
     frozenProductionBaseline: {
       commit: EXPECTED_PRODUCTION_BASELINE,
+      inheritedEvidenceBaselineCommit: INHERITED_EVIDENCE_BASELINE,
       comparisonPolicy:
-        'reject-repository-drift-outside-evidence-carrier-and-s1-implementation-allowlist',
+        'reject-repository-drift-outside-evidence-carrier-and-r2-implementation-allowlist',
       allowedEvidenceCarrierPrefix: ALLOWED_EVIDENCE_CARRIER_PREFIX,
       allowedImplementationPaths: [...ALLOWED_IMPLEMENTATION_PATHS],
       scopeGuard: 'passed',
@@ -584,6 +596,16 @@ const battlefieldItems = tableRows(
 const battlefieldLangPath = path.join(languageRoot, 'lang_battlefield_item.json')
 const battlefieldLang = readJson(battlefieldLangPath)
 const battlefieldNameIds = new Set(battlefieldItems.rows.map(row => String(row.displayName)))
+const guidePicLangPath = path.join(languageRoot, 'lang_guide_pic.json')
+const wordsLangPath = path.join(languageRoot, 'lang_words.json')
+const guidePicLang = readJson(guidePicLangPath)
+const wordsLang = readJson(wordsLangPath)
+const chargedAbsorbGuideIds = new Set([
+  '48979807044608',
+  '48979807045120',
+  '48979807045632',
+])
+const chargedAbsorbWordIds = new Set(['3261540932764438781'])
 
 const selectedElementIds = new Set([
   ...closureElementIds,
@@ -615,6 +637,8 @@ const sourceFiles = [
   path.join(newTableRoot, 'element_formula.json'),
   path.join(newTableRoot, 'battlefield_item.json'),
   battlefieldLangPath,
+  guidePicLangPath,
+  wordsLangPath,
   tuningConsumePriorityEvidencePath,
 ]
 
@@ -669,6 +693,16 @@ const output = {
     battlefieldItemNames: {
       source: sourceRecord(battlefieldLangPath),
       rows: battlefieldLang.rows.filter(row => battlefieldNameIds.has(String(row.id))),
+    },
+    chargedAbsorbGuidance: {
+      guidePic: {
+        source: sourceRecord(guidePicLangPath),
+        rows: guidePicLang.rows.filter(row => chargedAbsorbGuideIds.has(String(row.id))),
+      },
+      words: {
+        source: sourceRecord(wordsLangPath),
+        rows: wordsLang.rows.filter(row => chargedAbsorbWordIds.has(String(row.id))),
+      },
     },
   },
   rawUnity: {

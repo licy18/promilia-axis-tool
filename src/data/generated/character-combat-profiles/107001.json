@@ -73,7 +73,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "4382953b0c8852b4089ed2e144e4bf7d5442830d0346dd8b7a4da4779a0de63b",
+    "packageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -54953,6 +54953,7 @@
     "rawDirectEffectBindings": [],
     "pickupProfiles": [],
     "pickupSpawnBindings": [],
+    "pickupAbsorbBindings": [],
     "scenarioOutOfScopeActions": [],
     "effects": {
       "raw": [
@@ -94538,8 +94539,8 @@
       "recipeIdentity": "actor:107001:character-combat-recipe:v1",
       "recipeHash": "6126eea19e5ed8d69c73580b47ac7e837837c70711381eb0f4d574025c6d4d63",
       "compilerInputHash": "9f99004c3425cb377ab374f5712137246c17bc07673990287a4d25d67cc5ad81",
-      "recipeContractHash": "6cdbd12961f05400e6b025c2264a22b98437dfde3b64afd2a372caf1ea38fa94",
-      "ownerContractHash": "62b0486d43d15e3afe3856bbc4904ec0bf8e0e88e58968762ab1507a3aa33ea4"
+      "recipeContractHash": "e69eebfae0d3dc5df5a86f3a654343c0bfa56ef1c3dff567389fe4f7a6734a48",
+      "ownerContractHash": "0fb798b7df99feffe0d41006dd5413515cc3adee0d7ce5c61b5e3481dca3dcb1"
     },
     "operators": [
       "public-action-binding",
@@ -99118,7 +99119,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "3a55aea8e80fa5ca729deafe3d69f402929a3ade6321e8cf25dc0826605e497a"
+    "deterministicInputHash": "c484a05a27143b7e3bb4e1d882836a49c300d3a398137dbddcb050301e9b507b"
   },
-  "profileHash": "61792348a5f4a2373289fdc87c0ab2a71fe6ff2fd80dbe9986c59315b4fb1e32"
+  "profileHash": "c9ae44808c965b1d26d9e1c0006314df76acb2474cde31815062c02bb300d575"
 }

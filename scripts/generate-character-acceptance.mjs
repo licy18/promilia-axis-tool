@@ -153,7 +153,11 @@ try {
       report: goldenReports[index],
     }));
     const runtimePackage = recipe.runtimeProfileOverlay
-      ? createRuntimeProfileOverlay(mechanicsPackage, profile)
+      ? createRuntimeProfileOverlay(
+          mechanicsPackage,
+          profile,
+          fixture.dataIdentity?.verifiedMechanicsPackageHash
+        )
       : mechanicsPackage;
     const packageValidation =
       packageModule.validateVerifiedCombatMechanicsPackage(runtimePackage);
@@ -324,8 +328,21 @@ function createOwnerAcceptanceResult(manifests, visualRuns) {
   };
 }
 
-function createRuntimeProfileOverlay(basePackage, profile) {
+function createRuntimeProfileOverlay(
+  basePackage,
+  profile,
+  expectedFullPackageHash
+) {
   const result = structuredClone(basePackage);
+  if (!/^[a-f0-9]{64}$/.test(String(expectedFullPackageHash ?? ''))) {
+    throw new Error(
+      'Runtime profile overlay requires the fixture full package hash'
+    );
+  }
+  // Owner-only acceptance overlays deliberately avoid writing the global
+  // package. The dedicated Workbench validator independently recomputes this
+  // full-package hash from source before the fixture may be accepted.
+  result.packageHash = String(expectedFullPackageHash);
   result.actionMappings = upsertRows(
     result.actionMappings,
     profile.contracts?.publicActions,
@@ -505,6 +522,21 @@ function createRuntimeProfileOverlay(basePackage, profile) {
       applied: true,
     };
   });
+  graph.pickupProfiles = upsertRows(
+    graph.pickupProfiles,
+    profile.contracts?.pickupProfiles,
+    row => `${Number(row?.ownerId)}|${String(row?.pickupIdentity ?? '')}`
+  );
+  graph.pickupSpawnBindings = upsertRows(
+    graph.pickupSpawnBindings,
+    profile.contracts?.pickupSpawnBindings,
+    row => `${Number(row?.ownerId)}|${String(row?.bindingIdentity ?? '')}`
+  );
+  graph.pickupAbsorbBindings = upsertRows(
+    graph.pickupAbsorbBindings,
+    profile.contracts?.pickupAbsorbBindings,
+    row => `${Number(row?.ownerId)}|${String(row?.bindingIdentity ?? '')}`
+  );
   graph.targetStateProfiles = upsertRows(
     graph.targetStateProfiles,
     [
@@ -584,6 +616,12 @@ function createRuntimeProfileOverlay(basePackage, profile) {
     appliedSwitchProfiles.length;
   result.summary.unresolvedSwitchTriggerProfileCount =
     switchProfiles.length - appliedSwitchProfiles.length;
+  graph.summary = {
+    ...(graph.summary ?? {}),
+    pickupProfileCount: graph.pickupProfiles.length,
+    pickupSpawnBindingCount: graph.pickupSpawnBindings.length,
+    pickupAbsorbBindingCount: graph.pickupAbsorbBindings.length,
+  };
   return result;
 }
 

@@ -15,28 +15,39 @@ from capstone import CS_ARCH_X86, CS_MODE_64, Cs
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parents[2]
 OUTPUT_PATH = HERE / "runtime-evidence-excerpt.json"
-EXPECTED_BASELINE = "140eefcd233cd9c1d136728f1c94b91aff632278"
-EXPECTED_BRANCH = "feature/m12-b3-107002"
+INHERITED_EVIDENCE_BASELINE = "140eefcd233cd9c1d136728f1c94b91aff632278"
+EXPECTED_BASELINE = "1a56e0a295f31298da6c3ddb5d70db90183971fb"
+EXPECTED_BRANCH = "fix/m12-b3-107002-charged-absorb"
 ALLOWED_PREFIX = "work/m12-b3/parallel-evidence-107002/"
 ALLOWED_IMPLEMENTATION_PATHS = (
     "fixtures/character-acceptance/107002-visual.json",
     "reports/m10/107002/**",
+    "reports/m11/character-acceptance/107002/**",
+    "schemas/azpr-machine-axis-v1.schema.json",
+    "scripts/generate-character-acceptance.mjs",
     "scripts/character-acceptance/acceptance-recipes/107002.json",
     "scripts/character-combat/character-combat-contract-compiler.mjs",
     "scripts/character-combat/character-combat-golden-runtime.mjs",
     "scripts/character-combat/character-combat-production-orchestrator.mjs",
     "scripts/character-combat/character-combat-profile-pipeline.mjs",
     "scripts/character-combat/profile-recipes/107002.json",
+    "scripts/optimization-scenario/optimization-scenario-policy-source.mjs",
     "scripts/sync-verified-combat-mechanics.mjs",
+    "src/__tests__/character-acceptance/characterAcceptance107002.test.js",
     "src/__tests__/data/misaCharacterCombatProfile.test.js",
     "src/__tests__/simulation/actionRuleDiagnostics.test.js",
     "src/__tests__/simulation/effectRuntimeTimeline.test.js",
     "src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js",
     "src/__tests__/simulation/verifiedPickupEntityGeneration.test.js",
+    "src/__tests__/simulation/verifiedPickupOwnerActionAbsorb.test.js",
     "src/__tests__/simulation/verifiedTargetStateRuntime.test.js",
     "src/__tests__/simulation/verifiedTuningMarkRuntime.test.js",
     "src/data/generated/character-combat-owner-contracts/107002.json",
     "src/data/generated/character-combat-profiles/107002.json",
+    "src/domain/combatScenario.js",
+    "src/machine-axis/machineAxisContract.js",
+    "src/machine-axis/machineAxisService.js",
+    "src/machine-axis/workbenchMachineAxisAdapter.js",
     "src/simulation/engine/simulateScenario.js",
     "src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js",
     "src/simulation/mechanics/verifiedBattleEffectGeneration.js",
@@ -158,7 +169,7 @@ def assert_frozen_source_tree() -> None:
     forbidden = sorted(path for path in touched if not is_allowed_carrier_path(path))
     if forbidden:
         raise RuntimeError(
-            "repository drift outside evidence carrier and S1 implementation allowlist: "
+            "repository drift outside evidence carrier and R2 implementation allowlist: "
             + ", ".join(forbidden)
         )
 
@@ -167,8 +178,9 @@ def deterministic_source_metadata() -> dict[str, Any]:
     return {
         "frozenProductionBaseline": {
             "commit": EXPECTED_BASELINE,
+            "inheritedEvidenceBaselineCommit": INHERITED_EVIDENCE_BASELINE,
             "comparisonPolicy": (
-                "reject-repository-drift-outside-evidence-carrier-and-s1-implementation-allowlist"
+                "reject-repository-drift-outside-evidence-carrier-and-r2-implementation-allowlist"
             ),
             "allowedEvidenceCarrierPrefix": ALLOWED_PREFIX,
             "allowedImplementationPaths": list(ALLOWED_IMPLEMENTATION_PATHS),

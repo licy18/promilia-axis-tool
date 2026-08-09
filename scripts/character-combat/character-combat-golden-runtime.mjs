@@ -269,6 +269,7 @@ function runGoldenScenario({
       ...(scenarioRecipe.enemyConfig ?? {}),
     },
     initialRuntimeState,
+    combatScenario: scenarioRecipe.combatScenario,
     mechanicsProfileSelection:
       mechanicsSelection.createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -914,7 +915,13 @@ function createGoldenActualProjection({
         poolKey: event.poolKey ?? entity?.poolKey ?? null,
         sourceActionId:
           event.sourceActionId ?? entity?.sourceActionId ?? null,
+        pickupSourceActionId:
+          event.pickupSourceActionId ?? entity?.sourceActionId ?? null,
         collectorActorId: event.collectorActorId ?? null,
+        absorberActorId: event.absorberActorId ?? null,
+        triggerIdentity: event.triggerIdentity ?? null,
+        candidateEntityCount: numberOrNull(event.candidateEntityCount),
+        eligibleEntityCount: numberOrNull(event.eligibleEntityCount),
         applied: event.applied === true,
       };
     })
@@ -934,15 +941,30 @@ function createGoldenActualProjection({
         const collected = rows.filter(
           event => event.kind === 'pickup-collected'
         );
+        const absorbed = rows.filter(
+          event => event.kind === 'pickup-absorbed'
+        );
         const rejected = rows.filter(event => event.applied !== true);
         return [
           pickupIdentity,
           {
             spawnedCount: spawned.length,
             collectedCount: collected.length,
+            absorbedCount: absorbed.length,
             rejectedCount: rejected.length,
             spawnFrames: spawned.map(event => event.frame),
             collectionFrames: collected.map(event => event.frame),
+            absorptionFrames: absorbed.map(event => event.frame),
+            absorberActorIds: [
+              ...new Set(
+                absorbed.map(event => event.absorberActorId).filter(Boolean)
+              ),
+            ].sort(),
+            absorberActionIds: [
+              ...new Set(
+                absorbed.map(event => event.sourceActionId).filter(Boolean)
+              ),
+            ].sort(),
             sourceActionIds: [
               ...new Set(rows.map(event => event.sourceActionId).filter(Boolean)),
             ].sort(),

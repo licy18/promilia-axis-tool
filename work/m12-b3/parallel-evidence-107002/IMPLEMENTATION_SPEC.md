@@ -1,14 +1,15 @@
 # 107002 米砂：可直接下发的实现规格
 
-> S1 状态说明：本文保留 `b900801` 接受证据时的历史实现拆分与来源边界；其中 required 项已由当前 S1 实现线落地。最终实现、验证结果与仍保守关闭的缺口以同目录 `IMPLEMENTATION_RESULT.md` 为准。
+> R2 状态说明：用户产品裁决已推翻 S1 的零距离自动碰撞领取；本文按 `10700210/sub0@70F` 重击吸收来源给出当前可直接实现合同。旧推断只作为 failure-to-pass 保留在反例，不再是有效规格。
 
 ## 0. 下发结论
 
-本规格只拆实现包，不在本支线实现。集成线应先补四个通用 primitive，再添加 `107002` 独有 recipe，并最后统一重生成全局产物。当前证据足以实现本规格中标为 `required` 的机制，但不构成 formal admission 或 optimization-ready；A5/完整普攻排程、隐藏团队传播、满池替换和满层刷新仍是明确缺口。
+本规格对应 R2 实现线：复用 S1 entity/formula/routing primitive，新增无角色特判的 owner-action absorb binding，并仅生成 107002 owner 产物。它不构成 visual/formal admission 或 optimization-ready；A5/完整普攻排程、隐藏团队传播、满池替换和满层刷新仍是明确缺口。
 
 冻结输入：
 
-- baseline：`140eefcd233cd9c1d136728f1c94b91aff632278`
+- inherited source-evidence baseline：`140eefcd233cd9c1d136728f1c94b91aff632278`
+- fixed R2 integration/scope baseline：`1a56e0a295f31298da6c3ddb5d70db90183971fb`
 - scenario：`m12c-zero-distance-passive-boss-v1`
 - roster denominator：9
 - Kibo DNA：`[]`
@@ -17,9 +18,9 @@
 ## 1. 建议实现包与依赖
 
 ```text
-P0 source guards / schema
+P0 source guards / scenario policy
  ├─ P1 pickup entity ledger + same-frame scheduler
- │   └─ P2 pickup collision + reward routing
+ │   └─ P2 owner charged-action absorb + reward routing
  │       ├─ P3 generic source-MAXHP formula 104
  │       └─ P4 pickup passive gate + tuning layers
  ├─ P5 reusable hit-confirmed DEF state
@@ -29,7 +30,7 @@ P0 source guards / schema
        └─ P9 integration-line regeneration only
 ```
 
-P1/P2/P3/P4 是真正缺失的通用能力，其中 P3 是现有代码核验后确认的新缺口。P5/P6/P7 应复用现有 target-state、mark 与 direct-routing 框架，避免为米砂复制角色专用运行时。
+P1/P3/P4/P5/P6/P7 复用 S1；R2 的新增通用面只有 P0 pickup policy normalization、P2 declarative absorb binding 和相应 trace/acceptance 投影。角色限定只在 107002 recipe。
 
 ## 2. P0：来源 guard 与 schema
 
@@ -51,6 +52,8 @@ P1/P2/P3/P4 是真正缺失的通用能力，其中 P3 是现有代码核验后�
 }
 ```
 
+`sourceBaseline` 表示 recipe 继承的原始来源身份；R2 证据生成器和 `mechanism-contract.json` 另以 `1a56e0a295f31298da6c3ddb5d70db90183971fb` 作为固定 production scope guard。两者不得折叠为当前侧车 HEAD。
+
 ### 2.2 来源选择 guard
 
 - cooldown/SP 采用 `skillsub_logic`：charged 100ms；star 24000ms；ultimate 0ms + SP100；star-carry 24000ms。
@@ -58,12 +61,17 @@ P1/P2/P3/P4 是真正缺失的通用能力，其中 P3 是现有代码核验后�
 - 星鸣主 action 的后段 control 是 `10700226/sub0`；`10700212/sub1` 只留审计，不进入 action timeline。
 - HP 拾取、调谐强度、30s 元素伤害 buff 不得因公示“全队”自动升级为 AllHero/ShareAll。
 - SP 拾取的 `ShareAll` 只绑定 SP element `107002215`。
+- `projectile.targetDistance=0` 不得解释为 pickup distance；默认 `autoCollect=false`，没有显式移动。
 
 ### 2.3 未闭合 guard
 
 - A5 variant/duration 未解析时，编译器必须保持 `unresolved`，不得 generic fallback 后标 ready。
 - 完整普攻循环不能把 A3 100F 或 A4 最后 hit 102F 当成已证的全链 occupancy。
 - 不把 N/A action 纳入产品场景动作集合，但保留 source binding 和结构化原因。
+
+### 2.4 场景政策扩展
+
+`m12c-pickup-owner-source-action-absorb-v1` 必须随 fixture/Workbench roundtrip 保留：`autoCollect=false`、`movementPolicy=no-implicit-movement`、`collectionPolicy=owner-source-action-absorb-only`、同帧新生排除、同帧到期先清理。该扩展不改写已冻结的 M12-C 主 policy hash；中央线统一生成时再决定是否折入下一版全局 policy。
 
 ## 3. P1：通用 `summoned pickup entity ledger`
 
@@ -80,6 +88,10 @@ type PickupEntity = {
   collisionOpenFrame: number;
   expiresFrameExclusive: number;
   collected: boolean;
+  absorbed: boolean;
+  absorbedByActorId: string | null;
+  absorbSourceActionId: string | null;
+  rewardCount: 0 | 1;
   destroyed: boolean;
   sourceOrder: number;
 };
@@ -104,72 +116,74 @@ type PickupEntity = {
 3. 为每个成功创建实体分配稳定 `entityId`；实体 ID 不得依赖 JS object iteration。
 4. 上限内创建；达到 6 时采用 `reject-new-at-cap`。
 5. `reject-new-at-cap` 是保守实现策略；诊断中写 `conservative-cap-policy`，不要写 `runtime-verified-replacement`。
-6. 被拒绝请求不能创建 collision，也不能发 reward。
+6. 被拒绝请求不能进入后续 absorb candidate，也不能发 reward。
 
 ### 3.3 生命周期
 
-- 所有米砂拾取物召唤寿命 15000ms，即 60Hz 下 900F。
-- child collision 源窗口 `[spawn+2, spawn+902)`；寿命裁剪后有效窗口为 `[spawn+2, spawn+900)`。
-- exact `spawn+900` 已过期，先执行 expiry，再判 collision。
-- 收集成功后触发对应 child death broadcast（HP child 25F、SP child 30F）；无论视觉 death 延迟如何，reward gate 在首次成功 collision 后立即锁死。
-- 自然过期时销毁且不发 reward。
+- 所有米砂生成物寿命 15000ms，即 60Hz 下 900F；无重击时一直留存至自然过期。
+- child collision `[spawn+2,spawn+902)` 只保留为原图证据，默认不排队自动领取。
+- exact `spawn+900` 先过期；过期实体不进入同帧吸收。
+- 首次吸收立即把 `rewardCount` 锁为 1 并销毁逻辑实体；自然过期无 reward。
 
 ### 3.4 同帧 scheduler
 
 同一 simulation time 的 phase 固定为：
 
 1. action hit/effect 的 serialized list
-2. summon requests 的 source/track order
-3. entity creation
-4. collision-open/expiry state changes
-5. collision attempts，按 entity `sourceOrder` / `entityId` 稳定排序
-6. reward element list
-7. destroy broadcasts
+2. 到期清理
+3. summon requests 的 source/track order 与 entity creation
+4. owner-action absorb attempt
+5. eligible entity 按 `sourceOrder` / `entityId` 稳定逐个 reward
+6. destroy/trace
 
-在星决 135F 创建 3 HP + 3 SP 时，先创建 `skillTrackDatas[20]`（内部 `trackIndex=23`）的三个 HP，再创建 `[21]`（内部 `trackIndex=24`）的三个 SP。距离 0 时 137F 才进入 collision；它们可以在 143F 第一段 AllHero heal 前奖励。
+在星决 135F 创建 3 HP + 3 SP 时，仍先 `[20]` HP 后 `[21]` SP。同帧 spawn/absorb 细序未直接取证，故显式排除同帧新生实体；这不是数组插入顺序的副作用。
 
-## 4. P2：通用碰撞与奖励路由
+## 4. P2：owner 重击吸收与奖励路由
 
-### 4.1 collision contract
+### 4.1 declarative absorb contract
 
 ```ts
-collectPickup({
+absorbOwnerPickups({
   nowFrame,
-  pickupEntityId,
-  collectorActorId,
-  distance,
-  targetType: "Ally"
+  action,
+  binding: {
+    controlSkillId,
+    subSkillIndex,
+    triggerFrame,
+    pickupIdentities,
+    collector: "action-owner",
+    settlementGate: "successful-action-execute",
+    requiresHit: false,
+    sameFrameSpawnPolicy: "exclude-same-frame-fail-closed",
+    sameFrameExpiryPolicy: "expire-before-absorb"
+  }
 })
 ```
 
-成功条件：
+107002 recipe 固定：`control=10700210/sub0`、`triggerFrame=70`、source track order 15、element `107002233`。compiler 必须核对 control root 与 element 的 `displacementType=2,targetType=2,entityFilterData=64,radius=9`，runtime 不含角色 ID/名称特判。
 
-- 实体存在、未销毁、未收集；
-- `collisionOpenFrame <= nowFrame < expiresFrameExclusive`；
-- collector 与 owner 同阵营且符合 `TargetType=Ally`；
-- 距离 `<= 0.6`；
-- 对同一实体的 reward count 尚未达到 `toOwnMaxCount=1`。
+成功 execute 的合法动作在 70F 吸收所有满足下列条件的实体：owner 等于 action owner、identity 在 binding 列表、`spawnFrame < nowFrame < expiresFrameExclusive`、未吸收且 `rewardCount=0`。blocked action 不排队；damage miss 不阻断。普通攻击、星鸣、星决、星携、其他角色重击和受控角色切换均无匹配 binding。
 
-失败必须是无副作用事务：不治疗、不加 SP、不加调谐层、不销毁实体（若失败原因不是过期）。同帧两个 collector 抢同一实体时，稳定排序的首个成功，其余得到 `already-collected`。
+连续第二次或无实体重击仍可留下 count=0 的 absorb-attempt trace，但不产生 reward。已吸收/已过期实体不能复活或重复结算。
 
 ### 4.2 三种路由必须分开
 
 | 路由 | 原始语义 | 米砂用途 |
 |---|---|---|
-| collision `Target` | 只注入碰撞收集者 | HP 3% heal；passive gate；调谐强度 |
-| SP `ShareAll` | 收集者获得 SP，并完整分享给后台英雄 | SP pickup +1 |
+| absorb reward `Target` | 只注入 binding collector=重击 owner 米砂 | HP 3% heal；passive gate；调谐强度 |
+| SP `ShareAll` | 米砂获得 SP，并完整分享给后台英雄 | SP 生成物 +1 |
 | `DirectInject AllHero` | 对玩家所有英雄分别执行事件 | 星决五段 heal；星携四段 heal |
 
 禁止用一个 `teamWide=true` 布尔值合并三种路由；否则会把 HP heal/调谐层错误广播，或把多段 AllHero heal 错误折叠为一次 shared event。
 
-现有 runtime 已能把 `directSp.shareType=2` 解释为后台英雄 100% 分享，但 compiler 的 `compileRuntimeDirectSp` 当前硬编码 `shareType: 0`。P2 必须把 raw `TSpElementParams.shareType` 读入 contract，并可用 expected value 校验；不能只改 runtime，也不能在 107002 recipe 中绕过来源字段写死 2。
-
 ### 4.3 来源角色属性
 
-HP reward 公式 104 使用 `self.MAXHP`。实现时 `self` 必须解析为 summon/reward element 的来源 owner（米砂），而不是 collector 自己；随后结果注入 collision Target。需要在 trace 中同时记录：
+HP reward 公式 104 使用 `self.MAXHP`。R2 collector 与 source owner 都固定为执行重击的米砂，但 trace 仍需分别记录以防未来泛化时劫持：
 
 - `sourceActorId`
 - `collectorTargetId`
+- `pickupSourceActionId`
+- `absorbActionId`
 - `sourceMaxHp`
 - `formulaId=104`
 - `formulaA=300`
@@ -195,9 +209,9 @@ HP reward 公式 104 使用 `self.MAXHP`。实现时 `self` 必须解析为 summ
 (self.MAXHP[0] * A) / 10000
 ```
 
-这里 `self` 必须绑定 effect 的来源 actor（米砂），不是 collision Target 或 AllHero 中逐个目标。公示技能文本也明确写“米砂最大生命值”。输出再按显式 route 注入：
+这里 `self` 必须绑定 effect 的来源 actor（米砂），不是任意前台 actor 或 AllHero 中逐个目标。公示技能文本也明确写“米砂最大生命值”。输出再按显式 route 注入：
 
-- HP pickup：同一个 source-MAXHP 结果注入 collision Target。
+- HP 生成物：同一个 source-MAXHP 结果注入重击 absorb Target 米砂。
 - 星决/星携：同一个 source-MAXHP 结果分别形成各 AllHero target 的 direct heal event。
 
 建议通用分类：
@@ -238,7 +252,7 @@ HP reward 公式 104 使用 `self.MAXHP`。实现时 `self` 必须解析为 summ
 - `time=-1`
 - marker 只作为 pickup gate，不直接当调谐层。
 
-只有 collision Target 的 marker 层数 `>0` 时，公式 1006 才返回 10000 并允许注入 `480041002`。
+只有 absorb Target 米砂的 marker 层数 `>0` 时，公式 1006 才返回 10000 并允许注入 `480041002`。
 
 ### 5.2 调谐层 profile
 
@@ -258,7 +272,7 @@ HP reward 公式 104 使用 `self.MAXHP`。实现时 `self` 必须解析为 summ
 
 每层区间 `[applyMs, applyMs+24000)`；恰好右端点先过期，再处理同刻新拾取。层排序需按 `(expiresAtMs, applySequence)` 稳定。
 
-同一个实体重复碰撞永不重复加层；不同实体每个可加一层。星决六个实体同刻收集时，前四个加层，后两个得到 `capacity-ignored`，且不刷新前四层。
+同一个实体重复吸收永不重复加层；不同实体每个可尝试加一层。一次重击吸收六个实体时，稳定序前四个加层，后两个得到 `capacity-ignored`，且不刷新前四层。
 
 ## 7. P5：复用 hit-confirmed target state 实现 DEF debuff
 
@@ -386,7 +400,7 @@ recipe 至少拆成以下高内聚块，不把所有语义塞进单个 action ov
 - cooldown：`readyAt-1` 失败、`readyAt` 成功。
 - mark consume/overlimit：0、木、风、木+风；82F miss / 90F miss 分离。
 - heal：HP Target-only；星决/星携 AllHero；多段不折叠。
-- pickup：创建、上限、2F 开窗、900F 过期、一次性收集、同帧重复、不同实体重复、零距离可达。
+- pickup：创建、上限、900F 过期、无重击零奖励、仅 owner 重击吸收、一次性奖励、稳定跨池顺序、同帧新生排除、同帧到期先清理；child `+2F` collision 只验原图事实，不是产品 collection gate。
 - tuning layer：marker 有/无、1..4 层、第五次、独立过期、右开边界。
 
 ### 结构化 N/A 只测分类

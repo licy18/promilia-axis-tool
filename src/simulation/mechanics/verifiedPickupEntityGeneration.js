@@ -128,6 +128,9 @@ export function createPickupEntityLedger({ profiles = [] } = {}) {
           Number(spawnFrame) + Number(profile.lifetimeFrames),
         collected: false,
         collectedByActorId: null,
+        absorbed: false,
+        absorbedByActorId: null,
+        absorbSourceActionId: null,
         destroyed: false,
         destroyReason: null,
         rewardCount: 0,
@@ -176,6 +179,9 @@ export function createPickupEntityLedger({ profiles = [] } = {}) {
       }),
     });
     if (!entity || !profile) return reject('pickup-entity-not-found');
+    if (entity.absorbed) {
+      return reject('pickup-entity-already-absorbed');
+    }
     if (entity.collected || entity.rewardCount >= 1) {
       return reject('pickup-entity-already-collected');
     }
@@ -217,9 +223,92 @@ export function createPickupEntityLedger({ profiles = [] } = {}) {
     };
   };
 
+  const absorbAll = ({
+    frame,
+    absorberActorId,
+    pickupIdentities = [],
+    sourceActionId = null,
+    triggerIdentity = null,
+    sameFrameSpawnPolicy = 'exclude-same-frame-fail-closed',
+  }) => {
+    expireThrough(frame);
+    const identitySet = new Set(pickupIdentities.map(String));
+    const ownerLiveEntities = [...entityById.values()]
+      .filter(
+        entity =>
+          !entity.destroyed &&
+          String(entity.ownerActorId) === String(absorberActorId) &&
+          identitySet.has(String(entity.pickupIdentity))
+      )
+      .sort(comparePickupEntities);
+    const includeSameFrame = sameFrameSpawnPolicy === 'include-same-frame';
+    const eligible = ownerLiveEntities.filter(entity =>
+      includeSameFrame
+        ? Number(entity.spawnFrame) <= Number(frame)
+        : Number(entity.spawnFrame) < Number(frame)
+    );
+    const sameFrameExcluded = ownerLiveEntities.filter(
+      entity =>
+        !includeSameFrame && Number(entity.spawnFrame) === Number(frame)
+    );
+    const attemptEvent = emit({
+      kind: 'pickup-absorb-attempted',
+      status: 'pickup-owner-action-absorb-attempted',
+      frame: Number(frame),
+      absorberActorId: String(absorberActorId),
+      sourceActionId,
+      triggerIdentity,
+      candidateEntityCount: ownerLiveEntities.length,
+      eligibleEntityCount: eligible.length,
+      sameFrameExcludedCount: sameFrameExcluded.length,
+      applied: true,
+    });
+    const rejected = sameFrameExcluded.map(entity =>
+      emit({
+        kind: 'pickup-absorb-rejected',
+        status: 'pickup-same-frame-spawn-excluded-fail-closed',
+        frame: Number(frame),
+        entityId: entity.entityId,
+        pickupIdentity: entity.pickupIdentity,
+        absorberActorId: String(absorberActorId),
+        sourceActionId,
+        triggerIdentity,
+        applied: false,
+      })
+    );
+    const absorbed = eligible.map(entity => {
+      entity.absorbed = true;
+      entity.absorbedByActorId = String(absorberActorId);
+      entity.absorbSourceActionId = sourceActionId;
+      entity.rewardCount = 1;
+      entity.destroyed = true;
+      entity.destroyReason = 'owner-action-absorbed';
+      return {
+        entity,
+        profile: profileByIdentity.get(String(entity.pickupIdentity)),
+        event: emit({
+          kind: 'pickup-absorbed',
+          status: 'pickup-entity-absorbed',
+          frame: Number(frame),
+          entityId: entity.entityId,
+          pickupIdentity: entity.pickupIdentity,
+          poolKey: entity.poolKey,
+          absorberActorId: String(absorberActorId),
+          sourceActionId,
+          pickupSourceActionId: entity.sourceActionId,
+          triggerIdentity,
+          rewardCount: entity.rewardCount,
+          applied: true,
+        }),
+      };
+    });
+    return { absorbed, rejected, attemptEvent };
+  };
+
   return {
     spawn,
     collect,
+    absorbAll,
     expireThrough,
     snapshot() {
       return {
@@ -242,6 +331,9 @@ export function createVerifiedPickupEntityGeneration({
     profile => profile.applied === true
   );
   const bindings = (graph?.pickupSpawnBindings ?? []).filter(
+    binding => binding.applied === true
+  );
+  const absorbBindings = (graph?.pickupAbsorbBindings ?? []).filter(
     binding => binding.applied === true
   );
   if (!mechanicsPackage || profiles.length === 0 || bindings.length === 0) {
@@ -344,6 +436,38 @@ export function createVerifiedPickupEntityGeneration({
         }),
       });
     }
+    for (const binding of absorbBindings) {
+      if (
+        Number(binding.controlSkillId) !== controlSkillId ||
+        Number(binding.subSkillIndex) !== subSkillIndex ||
+        Number(binding.ownerId) !==
+          resolveActionOwnerCharacterId(action, resolution)
+      ) {
+        continue;
+      }
+      const absorbTimeMs = roundValue(
+        Number(action.startMs) +
+          (Number(binding.triggerFrame) * 1000) /
+            positiveNumber(binding.frameRate, frameRate)
+      );
+      enqueue({
+        kind: 'absorb',
+        phase: 2,
+        frame: Math.round((absorbTimeMs * frameRate) / 1000),
+        timeMs: absorbTimeMs,
+        action,
+        resolution,
+        binding,
+        sourceSequencePath: createPickupSourceSequencePath({
+          action,
+          binding: {
+            ...binding,
+            sourceOrder: binding.sourceTrackOrder,
+          },
+          phase: 20,
+        }),
+      });
+    }
   }
 
   while (descriptors.length > 0) {
@@ -410,6 +534,51 @@ export function createVerifiedPickupEntityGeneration({
       }
       continue;
     }
+    if (descriptor.kind === 'absorb') {
+      const before = ledger.snapshot().events.length;
+      const result = ledger.absorbAll({
+        frame: descriptor.frame,
+        absorberActorId: descriptor.action.actorId,
+        pickupIdentities: descriptor.binding.pickupIdentities,
+        sourceActionId: descriptor.action.id,
+        triggerIdentity: descriptor.binding.bindingIdentity,
+        sameFrameSpawnPolicy: descriptor.binding.sameFrameSpawnPolicy,
+      });
+      events.push(
+        ...ledger
+          .snapshot()
+          .events.slice(before)
+          .map(event => publishLedgerEvent(event, frameRate))
+      );
+      for (const [entityIndex, absorbed] of result.absorbed.entries()) {
+        const rewardDescriptor = {
+          ...descriptor,
+          entity: absorbed.entity,
+          profile: absorbed.profile,
+          collectionMode: 'owner-source-action-absorb',
+          sourceSequencePath: [
+            ...descriptor.sourceSequencePath,
+            30,
+            entityIndex,
+          ],
+        };
+        const reward = createPickupRewardEvent({
+          descriptor: rewardDescriptor,
+          collectorActorId: descriptor.action.actorId,
+          mechanicsPackage,
+        });
+        if (reward?.kind === 'direct-heal') directHpEvents.push(reward);
+        if (reward?.kind === 'direct-sp') directSpEvents.push(reward);
+        const tuningCommand = createPickupTuningEffectCommand({
+          descriptor: rewardDescriptor,
+          collectorActorId: descriptor.action.actorId,
+          scenario,
+          mechanicsPackage,
+        });
+        if (tuningCommand) effectCommands.push(tuningCommand);
+      }
+      continue;
+    }
     if (descriptor.kind !== 'collision') continue;
     const controlled = resolveControlledActorAt(
       controlledActorTimeline,
@@ -440,14 +609,14 @@ export function createVerifiedPickupEntityGeneration({
     );
     if (!collection.collected) continue;
     const reward = createPickupRewardEvent({
-      descriptor,
+      descriptor: { ...descriptor, collectionMode: 'explicit-collision' },
       collectorActorId: controlled.actorId,
       mechanicsPackage,
     });
     if (reward?.kind === 'direct-heal') directHpEvents.push(reward);
     if (reward?.kind === 'direct-sp') directSpEvents.push(reward);
     const tuningCommand = createPickupTuningEffectCommand({
-      descriptor,
+      descriptor: { ...descriptor, collectionMode: 'explicit-collision' },
       collectorActorId: controlled.actorId,
       scenario,
       mechanicsPackage,
@@ -469,6 +638,7 @@ export function createVerifiedPickupEntityGeneration({
     packageHash: mechanicsPackage.packageHash,
     profiles,
     bindings,
+    absorbBindings,
     events,
     entities: snapshot.entities,
     directHpEvents,
@@ -483,6 +653,13 @@ export function createVerifiedPickupEntityGeneration({
       collectedEntityCount: events.filter(
         event => event.kind === 'pickup-collected'
       ).length,
+      absorbedEntityCount: events.filter(
+        event => event.kind === 'pickup-absorbed'
+      ).length,
+      absorbAttemptCount: events.filter(
+        event => event.kind === 'pickup-absorb-attempted'
+      ).length,
+      absorbBindingCount: absorbBindings.length,
       capacityRejectedCount: events.filter(
         event =>
           event.status === 'pickup-capacity-rejected-conservative-policy'
@@ -508,6 +685,10 @@ function createPickupRewardEvent({
     kind: EFFECT_TARGET_KINDS.ACTOR,
     id: String(collectorActorId),
   };
+  const semanticTargetKind =
+    descriptor.collectionMode === 'owner-source-action-absorb'
+      ? 'pickup-absorb-target'
+      : 'collision-target';
   const effect = {
     elementId: Number(reward.elementId),
     semanticIdentity: `pickup-reward:${descriptor.entity.entityId}`,
@@ -517,7 +698,7 @@ function createPickupRewardEvent({
       sourceSequencePath: descriptor.sourceSequencePath,
       sourceIdentity: reward.sourceIdentity,
     },
-    target: { kind: 'collision-target' },
+    target: { kind: semanticTargetKind },
     ...(reward.kind === 'direct-heal'
       ? { heal: { formula: reward.formula, valueByLevel: reward.valueByLevel } }
       : { directSp: reward.directSp }),
@@ -546,6 +727,11 @@ function createPickupRewardEvent({
     action: descriptor.action,
     actionId: descriptor.action.id,
     actorId: descriptor.action.actorId,
+    pickupEntityId: descriptor.entity.entityId,
+    pickupIdentity: descriptor.entity.pickupIdentity,
+    pickupSourceActionId: descriptor.entity.sourceActionId,
+    collectorActorId: String(collectorActorId),
+    collectionMode: descriptor.collectionMode,
     target,
     value: Number(value),
     formulaResult,
@@ -605,7 +791,15 @@ function createPickupTuningEffectCommand({
     sourceActionName: descriptor.action.name,
     sourceActorId: descriptor.action.actorId,
     sourceActorName: descriptor.action.actor?.name ?? null,
-    semanticTargetKind: 'collision-target',
+    semanticTargetKind:
+      descriptor.collectionMode === 'owner-source-action-absorb'
+        ? 'pickup-absorb-target'
+        : 'collision-target',
+    pickupEntityId: descriptor.entity.entityId,
+    pickupIdentity: descriptor.entity.pickupIdentity,
+    pickupSourceActionId: descriptor.entity.sourceActionId,
+    collectorActorId: String(collectorActorId),
+    collectionMode: descriptor.collectionMode,
     sourceIdentity: {
       packageId: mechanicsPackage.packageId,
       packageHash: mechanicsPackage.packageHash,
@@ -676,16 +870,27 @@ function createRuntimePoolKey({ profile, ownerActorId }) {
 }
 
 function resolveAutoCollectPolicy(scenario) {
-  return scenario?.combatScenario?.pickups?.autoCollect !== false;
+  return scenario?.combatScenario?.pickups?.autoCollect === true;
 }
 
 function resolvePickupDistance(scenario) {
   const configured = Number(scenario?.combatScenario?.pickups?.distance);
   if (Number.isFinite(configured)) return configured;
-  const projectileDistance = Number(
-    scenario?.combatScenario?.projectile?.targetDistance
-  );
-  return Number.isFinite(projectileDistance) ? projectileDistance : 0;
+  return Number.POSITIVE_INFINITY;
+}
+
+function resolveActionOwnerCharacterId(action, resolution) {
+  for (const value of [
+    action?.actor?.characterId,
+    action?.characterId,
+    resolution?.owner?.id,
+    resolution?.actionBinding?.ownerId,
+    resolution?.actionMapping?.ownerId,
+  ]) {
+    const ownerId = Number(value);
+    if (Number.isInteger(ownerId) && ownerId > 0) return ownerId;
+  }
+  return null;
 }
 
 function publishLedgerEvent(event, frameRate) {
@@ -764,6 +969,7 @@ function createEmptyGeneration(mechanicsPackage) {
     packageHash: mechanicsPackage?.packageHash ?? null,
     profiles: [],
     bindings: [],
+    absorbBindings: [],
     events: [],
     entities: [],
     directHpEvents: [],
@@ -775,6 +981,9 @@ function createEmptyGeneration(mechanicsPackage) {
       bindingCount: 0,
       spawnedEntityCount: 0,
       collectedEntityCount: 0,
+      absorbedEntityCount: 0,
+      absorbAttemptCount: 0,
+      absorbBindingCount: 0,
       capacityRejectedCount: 0,
       directHpEventCount: 0,
       directSpEventCount: 0,

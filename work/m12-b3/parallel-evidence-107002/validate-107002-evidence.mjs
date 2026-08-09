@@ -4,28 +4,39 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 
-const BASELINE = '140eefcd233cd9c1d136728f1c94b91aff632278'
+const INHERITED_EVIDENCE_BASELINE = '140eefcd233cd9c1d136728f1c94b91aff632278'
+const BASELINE = '1a56e0a295f31298da6c3ddb5d70db90183971fb'
 const ALLOWED_PREFIX = 'work/m12-b3/parallel-evidence-107002/'
-const EXPECTED_BRANCH = 'feature/m12-b3-107002'
+const EXPECTED_BRANCH = 'fix/m12-b3-107002-charged-absorb'
 const ALLOWED_IMPLEMENTATION_PATHS = Object.freeze([
   'fixtures/character-acceptance/107002-visual.json',
   'reports/m10/107002/**',
+  'reports/m11/character-acceptance/107002/**',
+  'schemas/azpr-machine-axis-v1.schema.json',
+  'scripts/generate-character-acceptance.mjs',
   'scripts/character-acceptance/acceptance-recipes/107002.json',
   'scripts/character-combat/character-combat-contract-compiler.mjs',
   'scripts/character-combat/character-combat-golden-runtime.mjs',
   'scripts/character-combat/character-combat-production-orchestrator.mjs',
   'scripts/character-combat/character-combat-profile-pipeline.mjs',
   'scripts/character-combat/profile-recipes/107002.json',
+  'scripts/optimization-scenario/optimization-scenario-policy-source.mjs',
   'scripts/sync-verified-combat-mechanics.mjs',
+  'src/__tests__/character-acceptance/characterAcceptance107002.test.js',
   'src/__tests__/data/misaCharacterCombatProfile.test.js',
   'src/__tests__/simulation/actionRuleDiagnostics.test.js',
   'src/__tests__/simulation/effectRuntimeTimeline.test.js',
   'src/__tests__/simulation/verifiedBattleEffectFormulaRuntime.test.js',
   'src/__tests__/simulation/verifiedPickupEntityGeneration.test.js',
+  'src/__tests__/simulation/verifiedPickupOwnerActionAbsorb.test.js',
   'src/__tests__/simulation/verifiedTargetStateRuntime.test.js',
   'src/__tests__/simulation/verifiedTuningMarkRuntime.test.js',
   'src/data/generated/character-combat-owner-contracts/107002.json',
   'src/data/generated/character-combat-profiles/107002.json',
+  'src/domain/combatScenario.js',
+  'src/machine-axis/machineAxisContract.js',
+  'src/machine-axis/machineAxisService.js',
+  'src/machine-axis/workbenchMachineAxisAdapter.js',
   'src/simulation/engine/simulateScenario.js',
   'src/simulation/mechanics/verifiedBattleEffectFormulaRuntime.js',
   'src/simulation/mechanics/verifiedBattleEffectGeneration.js',
@@ -122,8 +133,9 @@ function assertDeterministicMetadata(artifact, label) {
   assert.equal(artifact.frozenBaseline, undefined, `${label} embeds legacy frozenBaseline`)
   same(artifact.frozenProductionBaseline, {
     commit: BASELINE,
+    inheritedEvidenceBaselineCommit: INHERITED_EVIDENCE_BASELINE,
     comparisonPolicy:
-      'reject-repository-drift-outside-evidence-carrier-and-s1-implementation-allowlist',
+      'reject-repository-drift-outside-evidence-carrier-and-r2-implementation-allowlist',
     allowedEvidenceCarrierPrefix: ALLOWED_PREFIX,
     allowedImplementationPaths: [...ALLOWED_IMPLEMENTATION_PATHS],
     scopeGuard: 'passed',
@@ -165,10 +177,13 @@ runArtifactAssertion(
 const resource = readJson('resource-graph-excerpt.json')
 const runtime = readJson('runtime-evidence-excerpt.json')
 const contract = readJson('mechanism-contract.json')
-const conflicts = readJson('integration-conflict-snapshot.json')
+const conflictSnapshotPath = path.join(sidecarRoot, 'integration-conflict-snapshot.json')
+const conflicts = fs.existsSync(conflictSnapshotPath)
+  ? readJson('integration-conflict-snapshot.json')
+  : null
 
 // Every baseline, staged, working-tree, or untracked path must remain inside the
-// evidence carrier or the frozen S1 implementation allowlist. Strict/default
+// evidence carrier or the frozen R2 implementation allowlist. Strict/default
 // mode additionally requires byte-clean status.
 execFileSync('git', ['merge-base', '--is-ancestor', BASELINE, 'HEAD'], {
   cwd: repoRoot,
@@ -195,8 +210,12 @@ if (!allowDirtySidecar) {
     'strict validator requires a clean tracked/index/working tree',
   )
 }
-assert.equal(contract.frozenBaselineCommit, BASELINE)
-assert.equal(contract.status, 'accepted-evidence-with-s1-implementation-scope')
+assert.equal(contract.frozenBaselineCommit, INHERITED_EVIDENCE_BASELINE)
+assert.equal(contract.r2IntegrationBaselineCommit, BASELINE)
+assert.equal(
+  contract.status,
+  'accepted-evidence-with-r2-charged-absorb-implementation-scope',
+)
 assert.equal(contract.character.id, 107002)
 assert.equal(contract.character.name, '米砂')
 same(contract.artifactReproducibility, {
@@ -205,6 +224,7 @@ same(contract.artifactReproducibility, {
     'runtime-evidence-excerpt.json',
   ],
   frozenProductionBaselineCommit: BASELINE,
+  inheritedEvidenceBaselineCommit: INHERITED_EVIDENCE_BASELINE,
   allowedEvidenceCarrierPrefix: ALLOWED_PREFIX,
   allowedImplementationPaths: [...ALLOWED_IMPLEMENTATION_PATHS],
   carrierCommitEmbedded: false,
@@ -215,6 +235,23 @@ same(contract.artifactReproducibility, {
 assert.equal(contract.productScenario.id, 'm12c-zero-distance-passive-boss-v1')
 assert.equal(contract.productScenario.distance, 0)
 assert.equal(contract.productScenario.bossAttacks, false)
+same(
+  {
+    pickupPolicyId: contract.productScenario.pickupPolicyId,
+    pickupPolicyHash: contract.productScenario.pickupPolicyHash,
+    pickupAutoCollect: contract.productScenario.pickupAutoCollect,
+    pickupMovementPolicy: contract.productScenario.pickupMovementPolicy,
+    pickupCollectionPolicy: contract.productScenario.pickupCollectionPolicy,
+  },
+  {
+    pickupPolicyId: 'm12c-pickup-owner-source-action-absorb-v1',
+    pickupPolicyHash: '2d4b4c4977e689bc',
+    pickupAutoCollect: false,
+    pickupMovementPolicy: 'no-implicit-movement',
+    pickupCollectionPolicy: 'owner-source-action-absorb-only',
+  },
+  'R2 pickup product-scenario policy drifted',
+)
 assert.equal(contract.frozenBoundaries.formalRosterDenominator, 9)
 same(contract.frozenBoundaries.kiboDna, [], 'Kibo DNA must remain empty')
 assert.equal(contract.frozenBoundaries.heroRank, 'unimplemented-dead-config')
@@ -224,7 +261,49 @@ assert.equal(contract.frozenBoundaries.m12cSearchAllowed, false)
 assert.equal(contract.frozenBoundaries.productionImplementationAllowed, true)
 assert.equal(
   contract.frozenBoundaries.productionImplementationScope,
-  'frozen-s1-allowlist-only',
+  'r2-charged-absorb-allowlist-only',
+)
+assert.equal(
+  contract.frozenBoundaries.productVisualAcceptanceStatus,
+  'pending-stale-previous-record',
+)
+
+const pickupFamily = contract.mechanismFamilies.find(
+  family => family.id === 'pickup-lifecycle-routing-and-tuning-intensity',
+)
+same(
+  {
+    controlSkillId: pickupFamily.chargedAbsorb.controlSkillId,
+    subSkillIndex: pickupFamily.chargedAbsorb.subSkillIndex,
+    triggerFrame: pickupFamily.chargedAbsorb.triggerFrame,
+    sourceTrackOrder: pickupFamily.chargedAbsorb.sourceTrackOrder,
+    elementId: pickupFamily.chargedAbsorb.elementId,
+    collector: pickupFamily.chargedAbsorb.collector,
+    settlementGate: pickupFamily.chargedAbsorb.settlementGate,
+    requiresHit: pickupFamily.chargedAbsorb.requiresHit,
+    sameFrameSpawnPolicy: pickupFamily.chargedAbsorb.sameFrameSpawnPolicy,
+    sameFrameExpiryPolicy: pickupFamily.chargedAbsorb.sameFrameExpiryPolicy,
+    autoCollect: pickupFamily.lifecycle.autoCollect,
+    projectileDistanceCoupling: pickupFamily.lifecycle.projectileDistanceCoupling,
+    automaticCollectionReachable:
+      pickupFamily.zeroDistanceReachability.automaticCollectionReachable,
+  },
+  {
+    controlSkillId: 10700210,
+    subSkillIndex: 0,
+    triggerFrame: 70,
+    sourceTrackOrder: 15,
+    elementId: 107002233,
+    collector: 'action-owner',
+    settlementGate: 'successful-action-execute',
+    requiresHit: false,
+    sameFrameSpawnPolicy: 'exclude-same-frame-fail-closed',
+    sameFrameExpiryPolicy: 'expire-before-absorb',
+    autoCollect: false,
+    projectileDistanceCoupling: false,
+    automaticCollectionReachable: false,
+  },
+  'R2 charged absorb mechanism contract drifted',
 )
 
 assertDeterministicMetadata(resource, 'resource artifact')
@@ -237,7 +316,7 @@ assert.equal(runtime.scope.characterId, 107002)
 
 assert.equal(resource.generatedProjection.actions.length, 10)
 assert.equal(resource.generatedProjection.controls.length, 14)
-assert.equal(resource.generatedProjection.semanticEffects.length, 25)
+assert.equal(resource.generatedProjection.semanticEffects.length, 30)
 assert.equal(resource.rawUnity.battleElementRootPathIds.length, 74)
 assert.equal(resource.rawUnity.battleElementClosure.length, 74)
 assert.equal(resource.rawTables.skillElementValues.rows.length, 168)
@@ -250,13 +329,49 @@ same(
 
 const sourceByHash = new Set(resource.sourceFiles.map((entry) => entry.sha256))
 for (const requiredHash of [
-  '2fc58e7e84d8c42f3382f8022330049b768aa9e6d75c99318162004558709543',
+  '313758c59b0bcb94dda079bb10c40caa645b50fea20b94d7069649ac6573d198',
   '059535b45b7b64db59e5cdc49eb6f60bf9fc4b1bb547aaa74f773f2752406346',
   'ca6da39f122466a32b229b9599ecfc34dbdbbf6e10a157c529d43d1043b8f4b7',
   '102de0686bab70718cffd5ac238499d4c43024929d35b2592a37a09eb39e4680',
+  '840740680e79624dd154db91091956d8a811a9381f1fe0f90d53c9d6d42b0444',
+  '4b5ddb03534713fcecbbc41c911c88a3eb57c5f6f3d06cc68a7c3f08f39c34b7',
 ]) {
   assert.ok(sourceByHash.has(requiredHash), `required source hash missing: ${requiredHash}`)
 }
+same(
+  resource.rawTables.chargedAbsorbGuidance.guidePic.rows.map(row => [
+    String(row.id),
+    row.value,
+  ]),
+  [
+    [
+      '48979807044608',
+      '使用重击可以把召唤物和敌人聚拢向米砂，对敌方造成伤害的同时吸收所有召唤物恢复生命和星决蓄能',
+    ],
+    [
+      '48979807045120',
+      '使用重击可以把召唤物和敌人聚拢向米砂，对敌方造成伤害的同时吸收所有召唤物恢复生命和星决蓄能',
+    ],
+    [
+      '48979807045632',
+      '使用重击可以把召唤物和敌人聚拢向米砂，对敌方造成伤害的同时吸收所有召唤物恢复生命和星决蓄能',
+    ],
+  ],
+  'charged absorb guide source drifted',
+)
+same(
+  resource.rawTables.chargedAbsorbGuidance.words.rows.map(row => [
+    String(row.id),
+    row.value,
+  ]),
+  [
+    [
+      '3261540932764438781',
+      '长按普攻键，使用重击，吸收周围召唤物并聚拢敌方单位 {0}/{1}',
+    ],
+  ],
+  'charged absorb word source drifted',
+)
 assert.equal(runtime.sources.manifest.sha256, 'b72e1835d4dacd21589bc22d1a6afef871e43239e567ead5d061ca67b14fc513')
 assert.equal(runtime.sources.dump.sha256, '0ea1f95a5fe8beb0c4b6c5dc2434c72c3e2a38cf94701b240aac35bca6bd817a')
 assert.equal(runtime.sources.gameAssembly.sha256, 'c60d13795629f0851b1399338f375eb378aef2098515d41841f30ccc3463c22b')
@@ -347,7 +462,8 @@ function action(controlSkillId) {
 
 function selectedActionHitFrames(controlSkillId) {
   const selected = new Set(action(controlSkillId).selectedHitIdentities)
-  return control(controlSkillId).hits
+  return resource.generatedProjection.controls
+    .flatMap(entry => entry.hits ?? [])
     .filter((entry) => selected.has(entry.hitIdentity))
     .map((entry) => entry.trigger.startFrame)
     .sort((a, b) => a - b)
@@ -356,7 +472,7 @@ function selectedActionHitFrames(controlSkillId) {
 // Action and runtime resource/cooldown facts.
 assert.equal(action(10700210).actionScheduling.durationFrames, 330)
 assert.equal(action(10700210).inputTrigger.holdTriggerTimeMs, 250)
-assert.equal(action(10700212).actionScheduling.durationFrames, 336)
+assert.equal(action(10700212).actionScheduling.durationFrames, 218)
 assert.equal(action(10700226).actionScheduling.durationFrames, 218)
 assert.equal(action(10700226).selectedSubSkillIndex, 0)
 assert.equal(action(10700213).actionScheduling.durationFrames, 298)
@@ -379,6 +495,81 @@ assert.equal(hpNormalSummon.summonCountType, 2)
 
 same(hitFrames(10700204), [49, 56, 63, 70, 77, 84, 90, 96, 102])
 same(hitFrames(10700210), [48, 51, 63, 69, 76, 83, 90])
+const chargedRoot = controlRoot(10700210)
+const chargedTrackRefs = refPathIds(
+  chargedRoot.skillControlData.skillPlayers[0].skillTrackDatas,
+)
+assert.equal(chargedTrackRefs[15], '4813059941072756916')
+assert.equal(chargedTrackRefs[16], '492007593651855540')
+const summonAbsorbTrack = rawClosureEntry(10700210, '4813059941072756916')
+same(
+  [
+    String(summonAbsorbTrack.subSkillUniqueId),
+    summonAbsorbTrack.trackIndex,
+    summonAbsorbTrack.behaviorlineControl[0].startFrame,
+    summonAbsorbTrack.behaviorlineControl[0].endFrame,
+    ...refPathIds(summonAbsorbTrack.behaviorlineControl[0].behaviorList),
+  ],
+  ['17340006214530000', 92, 70, 71, '3637962353715634356'],
+  'charged summon-absorb track drifted',
+)
+const summonAbsorbBehavior = rawClosureEntry(10700210, '3637962353715634356')
+same(
+  [
+    summonAbsorbBehavior.startFrame,
+    summonAbsorbBehavior.frameCount,
+    summonAbsorbBehavior.directInjectTargetType,
+    ...refPathIds(summonAbsorbBehavior.elementDataList),
+  ],
+  [70, 1, 17, '-2816437001102957180'],
+  'charged summon-absorb behavior drifted',
+)
+const summonAbsorbElement = battleElement('-2816437001102957180')
+same(
+  [
+    summonAbsorbElement.elementConfigId,
+    summonAbsorbElement.displacementType,
+    summonAbsorbElement.targetType,
+    summonAbsorbElement.entityFilterData,
+    summonAbsorbElement.radius,
+  ],
+  [107002233, 2, 2, 64, 9],
+  'charged summon-absorb element drifted',
+)
+const enemyGatherTrack = rawClosureEntry(10700210, '492007593651855540')
+same(
+  [
+    String(enemyGatherTrack.subSkillUniqueId),
+    enemyGatherTrack.behaviorlineControl[0].startFrame,
+    enemyGatherTrack.behaviorlineControl[0].endFrame,
+    ...refPathIds(enemyGatherTrack.behaviorlineControl[0].behaviorList),
+  ],
+  ['17340006214530000', 70, 71, '5068420164240990388'],
+  'charged enemy-gather track drifted',
+)
+const enemyGatherBehavior = rawClosureEntry(10700210, '5068420164240990388')
+same(
+  [
+    enemyGatherBehavior.startFrame,
+    enemyGatherBehavior.frameCount,
+    enemyGatherBehavior.directInjectTargetType,
+    ...refPathIds(enemyGatherBehavior.elementDataList),
+  ],
+  [70, 1, 17, '5001916014055185626'],
+  'charged enemy-gather behavior drifted',
+)
+const enemyGatherElement = battleElement('5001916014055185626')
+same(
+  [
+    enemyGatherElement.elementConfigId,
+    enemyGatherElement.displacementType,
+    enemyGatherElement.targetType,
+    enemyGatherElement.entityFilterData,
+    enemyGatherElement.radius,
+  ],
+  [107002230, 2, 1, 18752, 12],
+  'charged enemy-gather element drifted',
+)
 same(
   refPathIds(behavior(10700204, 84, (entry) => Array.isArray(entry.elementBaseDatas)).elementBaseDatas),
   ['1159803510611510720', '-5490397539017617711', '7790264186762117375'],
@@ -599,30 +790,37 @@ assert.ok(
 assert.ok(contract.potentialIntegrationConflicts.knownParallelCharacters.some((entry) => entry.id === 108003))
 assert.ok(contract.potentialIntegrationConflicts.knownParallelCharacters.some((entry) => entry.id === 107001))
 assert.ok(contract.potentialIntegrationConflicts.knownParallelCharacters.some((entry) => entry.id === 102001))
-assert.equal(conflicts.kind, 'm12-b3-parallel-integration-conflict-read-only-snapshot')
-same(conflicts.worktrees.map((entry) => entry.characterId), [108003, 102001, 107001])
-const conflictsByCharacter = new Map(conflicts.worktrees.map((entry) => [entry.characterId, entry]))
-assert.ok(
-  conflictsByCharacter.get(108003).directSharedRuntimeCompilerTest.some(
-    (entry) => entry.path === 'scripts/character-combat/character-combat-contract-compiler.mjs',
-  ),
-)
-assert.ok(
-  conflictsByCharacter.get(102001).directSharedRuntimeCompilerTest.some(
-    (entry) => entry.path === 'src/simulation/mechanics/verifiedTargetStateRuntime.js',
-  ),
-)
-assert.ok(
-  conflictsByCharacter.get(107001).directSharedRuntimeCompilerTest.some(
-    (entry) => entry.path === 'src/simulation/mechanics/verifiedTuningMarkGeneration.js',
-  ),
-)
+if (conflicts) {
+  assert.equal(conflicts.kind, 'm12-b3-parallel-integration-conflict-read-only-snapshot')
+  same(conflicts.worktrees.map((entry) => entry.characterId), [108003, 102001, 107001])
+  const conflictsByCharacter = new Map(
+    conflicts.worktrees.map((entry) => [entry.characterId, entry]),
+  )
+  assert.ok(
+    conflictsByCharacter.get(108003).directSharedRuntimeCompilerTest.some(
+      (entry) =>
+        entry.path === 'scripts/character-combat/character-combat-contract-compiler.mjs',
+    ),
+  )
+  assert.ok(
+    conflictsByCharacter.get(102001).directSharedRuntimeCompilerTest.some(
+      (entry) => entry.path === 'src/simulation/mechanics/verifiedTargetStateRuntime.js',
+    ),
+  )
+  assert.ok(
+    conflictsByCharacter.get(107001).directSharedRuntimeCompilerTest.some(
+      (entry) => entry.path === 'src/simulation/mechanics/verifiedTuningMarkGeneration.js',
+    ),
+  )
+}
 
 console.log(JSON.stringify({
   status: 'ok',
   mode: allowDirtySidecar ? 'allow-dirty-sidecar' : 'strict-post-commit-clean',
   characterId: 107002,
-  baseline: BASELINE,
+  inheritedEvidenceBaseline: INHERITED_EVIDENCE_BASELINE,
+  r2IntegrationBaseline: BASELINE,
+  dynamicConflictSnapshotPresent: conflicts != null,
   touchedPathCount: touchedPaths.size,
   coreArtifactHashes: {
     resource: fileSha256('resource-graph-excerpt.json'),

@@ -2,8 +2,9 @@
 
 ## 1. 账本边界
 
-- 状态：`evidence-sidecar-only`。
-- 冻结基线：`140eefcd233cd9c1d136728f1c94b91aff632278`。
+- 状态：`r2-owner-implementation-candidate`；产品视觉仍为 `pending`。
+- 继承来源证据基线：`140eefcd233cd9c1d136728f1c94b91aff632278`。
+- 固定 R2 集成/范围基线：`1a56e0a295f31298da6c3ddb5d70db90183971fb`。
 - 产品场景：`m12c-zero-distance-passive-boss-v1`，距离 0、投射物立即命中、Boss 静止且不攻击。
 - 正式 roster 分母保持 9；`Kibo DNA=[]`；`hero_rank` 仅是未实装死配置。
 - 本账本不声明 formal admission、optimization-ready，也不进入 M12-C 或正式搜索。
@@ -15,14 +16,14 @@
 
 ## 2. 可复现来源快照
 
-两份核心机器摘录采用同一冻结模型：production 来源树固定为 `140eefcd233cd9c1d136728f1c94b91aff632278`，侧车当前 commit 只承载证据，不写入产物。生成器会把 `baseline..HEAD`、index、working tree、untracked 的路径取并集，并拒绝本目录之外的任何漂移；因此侧车可继续提交，而冻结 production 输入不能暗中变化。
+两份核心机器摘录采用同一双基线模型：原始 production 来源身份继承并固定为 `140eefcd233cd9c1d136728f1c94b91aff632278`，本批 production 漂移审计的固定起点为中央 R2 集成提交 `1a56e0a295f31298da6c3ddb5d70db90183971fb`。侧车当前 commit 只承载证据，不写入产物。生成器会把 `1a56e0a..HEAD`、index、working tree、untracked 的路径取并集，并拒绝固定 R2 allowlist 之外的任何漂移；因此后续侧车提交不会污染产物，中央基线以后的 production 变更也不能暗中越界。
 
 核心产物不含 `generatedAt`、当前 HEAD、`headAtExtraction` 或 `trackedChangesSinceBaseline`。它们固定按 UTF-8 / 2-space / LF / final newline 序列化；当前确定性 SHA-256 分别为：
 
-- `resource-graph-excerpt.json`: `15045ee7b86bbf7592dc806f31105e734f67c924f94b4ca58c74403dcb550b34`
-- `runtime-evidence-excerpt.json`: `88a4a5753a7b1c5e5dfd2e1201168b08851e0601a963d3f3e5c549c93fb2f242`
+- `resource-graph-excerpt.json`: `e2455070684172a0dd5e8fdaf86be0abd8aeb63716c145f7fbe2e6f1d6eb8c34`
+- `runtime-evidence-excerpt.json`: `068bc52253d539bb77487742f60f0f75dbb0d118705683b75b5779742efa528f`
 
-`integration-conflict-snapshot.json` 另属动态时点快照：它保留 `generatedAt` 和其他工作树的 HEAD/status，只用于合并风险提示，不属于上述核心来源证据的字节可复现声明。
+中央 R2 基线没有携带 `integration-conflict-snapshot.json` 或其刷新脚本，本批不新增该动态产物。validator 仅在文件存在时把它当作可选、非核心时点快照；缺席不会进入上述核心来源证据的字节可复现声明。
 
 | 来源 | 字节数 | SHA-256 | 用途 |
 |---|---:|---|---|
@@ -153,11 +154,11 @@ N/A 只表示在该产品场景中不参与优化面，不表示来源被删除�
 
 它发生在 82F 消费之后，不能给本次施放的 82F 判断“垫付”印记。标准风印记上限 5、每个独立层 20s。
 
-### SP 拾取实际路由
+### SP 生成物实际路由
 
-- 碰撞选择 `TargetType=2/Ally`。
+- child reward 原始目标仍为 `TargetType=2/Ally`；这只定义 reward 注入目标，不证明实体会自动移动或自动发生碰撞。
 - SP element `107002215/pathId=-5003344262624947112` 的值为 1，`shareType=2/ShareAll`。
-- 因此收集者 Target 收到 SP，SP element 再将资源完整分享给后台英雄。`ShareAll` 是 SP element 的资源路由，不应泛化为 HP heal、调谐强度或 30s 伤害 buff 的传播。
+- 产品裁决后，Target 由米砂合法重击吸收事务显式绑定为该重击 owner 米砂；米砂先收到 SP，SP element 再将资源完整分享给后台英雄。`ShareAll` 只属于 SP 路由，不泛化为 HP heal、调谐强度或 30s 伤害 buff。
 
 ## 7. 星决与星携治疗
 
@@ -170,7 +171,7 @@ N/A 只表示在该产品场景中不参与优化面，不表示来源被删除�
   1. 数组下标 20（内部 `trackIndex=23`）：3 个 HP `480042`，`pathId=5308513824935950819`
   2. 数组下标 21（内部 `trackIndex=24`）：3 个 SP `480041`，`pathId=-2302479272537638429`
 - 两者 `life=15s`, `maxCount=6`, `countType=1/SummonId`。这解释了“不计入普通上限”：它们与普通 `SummonTempData` 池分离；并不表示星决池没有自己的 6 个上限。
-- 距离 0 时 child collision 在创建后 2F 开启，最早约 137F，因此拾取奖励可以先于 143F 第一段团队治疗。
+- child collision 轨虽在创建后 2F 开启，但产品裁决明确禁止把它解释为冻结场景中的自动收取；135F 生成物留在场景，只有后续米砂重击 70F 吸收事件才会结算奖励。
 
 ### 星携 `10700222`
 
@@ -180,37 +181,41 @@ N/A 只表示在该产品场景中不参与优化面，不表示来源被删除�
 
 只有这里的显式 `AllHero` 可直接实现为团队治疗；不要拿它反推 HP 拾取物也是 AllHero。
 
-## 8. 拾取物生命周期、调谐强度与零距离可达性
+## 8. 生成物生命周期、重击吸收、调谐强度与零距离边界
 
-### 图和碰撞窗口
+### R2 产品裁决与旧结论 failure-to-pass
 
-- 战场物件 480041：`graphast_battle_item_107002`，slot 1=`48004101`、slot 2=`48004102`。
-- 战场物件 480042：同图，slot 1=`48004201`、slot 2=`48004202`。
-- Start 图：找同阵营最近实体 -> 把 `SkillPosition` 设置到该实体 -> 立即 cast slot 1。
-- 表里虽有 `Delay#0.1`，但 Wait 节点只有 data edge，没有 control edge；不可据此宣称碰撞延后 0.1s。
-- slot 1 control 总长 920F；collision/visual track `[2,902)`；召唤寿命 15s=900F，故有效可收集区间是 `[spawn+2F, spawn+900F)`。`spawn+1F` 与恰好 `spawn+900F` 都不可收集。
-- collision `interval=99999`, `toOwnMaxCount=1`, `radius=0.6`。同一实体同帧重复碰撞必须幂等；不同实体可以各奖励一次。
-- 收集后 HP child 在 25F、SP child 在 30F 发死亡广播；自然过期也必须清理实体。
+旧 S1 把 `projectile.targetDistance=0`、物件图的最近友方定位和 child collision +2F 合并为“零距离自动拾取可达”。该 trace 会在无重击时于 `spawn+2F` 立刻发 HP/SP/调谐奖励，现已由用户产品裁决明确推翻。距离 0 只约束米砂与 Boss 的固定距离及投射物立即命中；角色、召唤物、生成物均无隐式移动。`autoCollect` 默认和本场景显式值都为 `false`。
 
-### 被动 marker 与 gate
+原 collision 轨仍作为 child 图来源保留，但不再是产品收取触发。无重击时实体从 spawn 留存到 15s 自然过期，奖励始终为 0；切换当前受控角色也不能收取。
 
-- `10700261` 根 control 外链 `pathId=-2651181542894854447`。
-- manifest 定位：control bundle index `75274`，logical name `d_assets_resourcesassets_config_battle_skilllist_skill_control_10700261`；外链 track bundle index `184296`，logical name `d_sh_assets_program_battle_character_config_hero_107002_subskill_ast_17515239739020000`。
-- 外链 track 名“被动回能量”，`[0,1)F`，Self 注入 marker `elementId=107002271/pathId=7643301625766811642`，`combineType=Cover`, `time=-1`。
-- 拾取 gate `elementId=480042003/pathId=-2125812726072660913` 使用公式 1006：`IF(target.ELEMENT_LAYERS[F]>I,G,0)`，`F=107002271`, `I=0`, `G=10000`。
-- gate 绑定碰撞 Target；没有 `AllHero` 或 `ShareAll`。
+### 重击吸收来源与准确时序
 
-### 调谐强度层
+- 指引表 `lang_guide_pic.json`：重击聚拢召唤物和敌人，并“吸收所有召唤物恢复生命和星决蓄能”。`lang_words.json`：长按普攻使用重击，吸收周围召唤物。
+- 唯一产品重击 control 为 `10700210/sub0`，`subSkillUniqueId=17340006214530000`。
+- `skillTrackDatas[15]` 指向 parent `pathId=4813059941072756916`，`trackIndex=92`，轨道“元素(自己”，窗口 `[70,71)F`；behavior `pathId=3637962353715634356` 在 70F Self 注入 `elementDataList=-2816437001102957180`。
+- 该 path 对应 `107002233`：`displacementType=2,targetType=2,entityFilterData=64,radius=9`，即召唤物侧聚拢/吸收来源。
+- 同帧下一条 `skillTrackDatas[16]` 才是 `107002230`（parent `492007593651855540`、behavior `5068420164240990388`，`targetType=1,entityFilterData=18752,radius=12`）的敌方聚拢。稳定来源顺序为召唤物侧 15 -> 敌方侧 16。
+- 70F 是独立的 Self element track；重击 damage hit 在 48/51/63/69/76/83/90F。故吸收 gate 是“重击成功 execute”，不是 `damage landed`：所有 hit miss 仍在 70F 吸收；blocked/未执行重击不产生吸收尝试。
 
-- element `480041002/pathId=-5253142493209012449`，`attr=229`, `calculateType=2`, `value=600bp=6%`。
-- `combineType=4/Overlying`, `combineNumber=4`, `time=24000ms`。
-- 静态证据证明 6% / 4 层 / 24s / Overlying；不单独证明满层再拾取时会替换、刷新还是忽略。
-- 实现规格采用独立右开层 `[apply, apply+24000)`；满 4 层后 `ignore-new-at-cap` 且不刷新旧层，直到新的二进制证据出现。这是 fail-closed 策略，必须在实现和测试名中标为 conservative policy。
-- 星决在零距离同帧可产生六次独立拾取请求；稳定实体/track 序下前四次加层，后两次在保守策略下忽略。
+### 实体和同帧合同
+
+- 战场物件 480041/480042 与原 pool、15s=900F、max6、`SummonTempData`/`SummonId` 分池证据不变。
+- 每个实体仅奖励一次；已吸收/已过期实体不可重复。一次重击吸收当刻所有属于该米砂、列入 binding 且仍 live 的实体，按 `sourceOrder -> entityId` 稳定逐个结算。
+- exact `spawn+900F` 先自然过期，再处理吸收。
+- 同帧 spawn/absorb 的客户端细序未得到直接来源；R2 最窄 fail-closed 合同为 `exclude-same-frame-spawn`，该实体留存到后续重击或过期，不依赖队列插入偶然性。
+- 普通池和星决 `SummonId` 池继续分离；满池 replacement 未证，仍 `reject-new-conservative`。
+
+### reward、marker 与调谐强度
+
+- 合法吸收者固定为触发重击的 source owner 米砂，不读取当前前台 actor；其他角色重击、普通攻击、星鸣、星决、星携和切人都不能劫持实体。
+- HP 生成物按 formula104 使用米砂 MAXHP×3%，仅注入该吸收 Target 米砂；不是 AllHero。
+- SP 生成物对米砂 direct +1，再按 raw `shareType=2/ShareAll` 分享后台英雄。
+- `107002271` 永久 marker 与公式1006 gate 不变；每个成功吸收实体独立尝试注入 `480041002`：+600bp、24s、max4、Overlying。满层继续 `ignore-new/no-refresh` conservative policy；层区间右开。
 
 ### 零距离被动 Boss 可达性
 
-物件图主动把拾取 skill 位置移到最近友方，child collision 2F 后开放；Boss 是否攻击不参与 gate。因此在冻结场景中，拾取机制可达，不得因“Boss 不动不攻击”误判为 N/A。
+生成机制本身 required 且可创建实体；收取可达性只来自玩家主动执行米砂重击，不来自 Boss、距离 0 或物件自动移动。Boss 静止不攻击不妨碍重击，但“零距离且不操作”必须保持实体与零奖励。
 
 ## 9. 证据冲突与未闭合项
 
@@ -218,13 +223,13 @@ N/A 只表示在该产品场景中不参与优化面，不表示来源被删除�
 |---|---|---|---|
 | 星鸣 CD | `skillsub_logic=24000ms` | public projection 12000ms | runtime 24000ms |
 | 星决 CD | `skillsub_logic=0ms`, SP=100 | public projection 30000ms | runtime 0ms + SP gate |
-| HP 拾取治疗路由 | collision Target，无 ShareAll/AllHero | 文本“全队” | 只给 Target；待 trace 升级 |
-| 调谐强度路由 | collision Target，无 ShareAll/AllHero | 文本“全队” | 只给 Target；待 trace 升级 |
+| HP 生成物治疗路由 | reward Target，无 ShareAll/AllHero；重击 owner 吸收 | 文本“全队” | 只给吸收者米砂 |
+| 调谐强度路由 | reward Target，无 ShareAll/AllHero；重击 owner 吸收 | 文本“全队” | 只给吸收者米砂 |
 | 30s 元素伤害 buff | raw executeTarget=Source | 文本“全队” | 只给 Source；待 trace 升级 |
 | 星鸣后段 | action 映射 `10700226/sub0` | `10700212/sub1` 存在 28F alternate | 不混入主 action |
 | 第七拾取物 | 只证明 cap=6 | replacement 未知 | 保守 reject-new |
 | 第五调谐层 | 只证明 cap=4/Overlying | replacement/refresh 未知 | 保守 ignore-new/no-refresh |
-| Delay#0.1 | Wait 无 control edge | 表参数存在 | 不额外延迟 |
+| 零距离自动收取 | 用户裁决 no implicit movement + 10700210 70F 吸收轨 | 旧 S1 `spawn+2F` collision 推断 | 旧 trace failure-to-pass；仅重击吸收 |
 
 未闭合项不允许被“合理猜测”转成 verified。A5、完整普攻排程、隐藏团队传播、满池替换和满层刷新都必须继续保持 unresolved。
 
@@ -240,23 +245,21 @@ N/A 只表示在该产品场景中不参与优化面，不表示来源被删除�
 - `verifiedBattleEffectGeneration.js` / `verifiedCombatRuntime.js` 的 direct event、Target/AllHero 目标展开、SP/HP event 与 heal-up modifier 框架。
 - `actionCooldownEvaluation.js` / `actionExecutionPlan.js` 的 cooldown/resource gate。
 
-### 真正缺失
+### R2 通用 primitive 结论
 
-1. summoned pickup entity ledger：`ESummonCountType` 池、稳定 entity identity、cap、过期、死亡广播。
-2. pickup collision once-only：右开窗口、半径、同一实体幂等、不同实体重复。
-3. pickup reward routing glue：collision Target、SP ShareAll、AllHero 三路分离，关联来源 owner 与 passive gate。
-4. stable same-frame entity scheduler：element list、track array、spawn、collision/reward 的确定顺序。
-5. generic direct-heal formula 104：来源米砂 MAXHP × 等级 A / 10000。
-6. direct-SP ShareAll compiler binding：runtime 已支持 `shareType=2`，但 `compileRuntimeDirectSp` 当前硬编码 `shareType:0`，会把原始 ShareAll 降成 NoShare。
+1. 复用 S1 entity ledger 的 pool/cap/expiry/稳定 identity；新增通用 `pickupAbsorbBindings`，角色 ID、control、帧和 profile 列表只在 recipe。
+2. 新增 owner-action absorb 事务：`successful-action-execute` gate、固定 action owner、全 live 列表吸收、一次奖励、稳定实体序。
+3. scheduler 固定 `expiry -> spawn -> absorb`，并用显式 `exclude-same-frame-spawn-fail-closed` 过滤避免数组偶然性。
+4. formula104、HP Target、SP ShareAll、调谐层 effect 继续复用 S1 已实现 primitive；R2 只改变领取触发和 collector 解析，不改变数值路由。
+5. collision ledger API 仅保留为通用显式碰撞能力和原始 child 来源验证；默认 policy 不再排队 collision，且缺少显式 pickup distance 时不得从 projectile distance 回退。
 
-第 5 项由当前源码反查确认：`verifiedBattleEffectFormulaRuntime.js` 没有分类 `baseFunctionId=104`，会落入 `unsupported-1-104`；`verifiedCombatRuntime.js#resolveDirectHealFormula` 只对 108 做 MAXHP ratio 特判。Kibo periodic-heal 的 104 是 schedule-specific，不会自动覆盖普通 battle-effect direct heal。因此 HP 拾取、星决和星携都必须先补通用 104 evaluator，不能把 raw `A=300/600...` 当固定 HP 值。
+## 11. 并行集成冲突面
 
-## 11. 并行工作树冲突快照
+本批没有可复用的动态 worktree 快照；以下仅是由实际 R2 diff 得到的静态语义冲突面，中央集成前必须重新读取米蒂/107001/102001 分支状态：
 
-`integration-conflict-snapshot.json` 由 `git status --porcelain=v1 --untracked-files=normal` 只读生成。快照时三条并行线仍以冻结基线为共同起点，其生产路径风险如下：
+- compiler/profile：`character-combat-contract-compiler.mjs`、`character-combat-profile-pipeline.mjs`、`character-combat-golden-runtime.mjs`。
+- scenario/Workbench：`optimization-scenario-policy-source.mjs`、`combatScenario.js`、Machine Axis schema/contract/service/adapter。
+- acceptance：`generate-character-acceptance.mjs` 及 owner-only acceptance overlay。
+- runtime：`verifiedPickupEntityGeneration.js` 的通用声明式 absorb primitive。
 
-- 米蒂/集成线 `108003`：18 个 `reports|scripts|src` 路径，直接共享 compiler/runtime 候选 3 个，全局重生成候选 12 个。当前直接重叠面包括 contract compiler、product boundaries、target-state runtime；`108003.json` 本身是角色唯一文件。
-- 莉莉 `102001`：9 个生产路径，直接共享候选 5 个，全局生成候选 3 个。当前直接面包括 contract compiler、product boundaries、product-boundary test、target-state test/runtime；`102001.json` 本身唯一。
-- 西芙莉雅 `107001`：7 个生产路径，其中 6 个是直接共享候选：contract compiler、sync generator、action variant/combat/damage/tuning runtime；新出现的 `107001.json` 是角色唯一 recipe。
-
-这只是合并风险快照，不表示本侧车拥有或修改那些工作树。集成时应读取 JSON 中的 branch/HEAD/status 重新核验；角色唯一 recipe 通常不产生路径级冲突，但共享 schema 仍可能产生语义冲突。全局 `reports/**` 与 `src/data/generated/**` 一律由集成线合并后统一重生成。
+角色唯一 recipe、fixture、owner contract/profile 与 `reports/m10/107002/**` 通常不产生路径级冲突；共享文件必须按 primitive 语义合并，不能用任一角色分支整文件覆盖。全局 mechanics package、catalog、qualification/binding/summary 和 character-acceptance index/summary 一律由中央合并后统一重生成。
