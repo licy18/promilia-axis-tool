@@ -444,6 +444,138 @@ describe('M10 character combat profile pipeline', () => {
     expect(runtimeContract.contractHash).toMatch(/^[a-f0-9]{64}$/);
   });
 
+  it('keeps an optimization-object alias in compilation identity and fail-closes source-stat formulas', () => {
+    const ownerId = 424243;
+    const controlSkillId = 42424322;
+    const propertyElementId = 9006;
+    const recipe = {
+      schemaVersion: 1,
+      ownerId,
+      optimizationObject: {
+        optimizationObjectId: 'SYNTHETIC-OBJECT',
+        sourceCharacterId: ownerId,
+        sourceAliasIdentity: 'synthetic-object:source-alias:424243',
+        sourceIdentity: 'fixture:synthetic-object:424243',
+      },
+      compiler: {
+        timingPolicy: 'standalone-animation',
+        reachableControlSkillIds: [controlSkillId],
+        contextInputEdges: [],
+        publicActionForms: [],
+        attackInputChains: [],
+        thresholdTransitions: [],
+        passiveEffects: [],
+        runtimeEffectBindings: [
+          {
+            bindingIdentity: 'synthetic-source-attack-ratio',
+            triggerKind: 'action-frame',
+            controlSkillId,
+            subSkillIndex: 0,
+            triggerFrame: 1,
+            targetKind: 'team-actors',
+            propertyElementId,
+            expectedAttributeId: 1,
+            expectedBucket: 'dynamicExtra',
+            expectedValueRaw: 1100,
+            sourceStatFormula: {
+              formulaId: 2001,
+              formulaFamily: 'source-stat-times-a-divisor',
+              expression: '(self.ATK[4]*A)/10000',
+              sourceStatKey: 'attack',
+              sourceArray: 'ATK',
+              sourceIndex: 4,
+              divisor: 10000,
+              sourceIdentity: 'fixture:element-formula:2001',
+            },
+            durationMs: 24000,
+            sourceIdentity: 'fixture:synthetic-source-attack-ratio',
+          },
+        ],
+      },
+    };
+    const controls = [
+      {
+        controlSkillId,
+        frameRate: 60,
+        variants: [{ subSkillIndex: 0 }],
+        hits: [],
+        elements: [],
+      },
+    ];
+    const createOperators = (formulaOutput = '(self.ATK[4]*A)/10000') => ({
+      ...createNoopCompilerOperators(),
+      readElementAsset: elementId =>
+        Number(elementId) === propertyElementId
+          ? {
+              elementId: propertyElementId,
+              pathId: 'fixture-property-path',
+              sourceIdentity: 'fixture:property:9006',
+              tree: {
+                time: 24000,
+                inherit: 0,
+                inheritType: 0,
+                attributeID: 1,
+                formulaParams: { function_2: 2001 },
+                functionParams: [1100],
+              },
+            }
+          : null,
+      readNewTableRows: (tableName, fieldName, value) =>
+        tableName === 'element_formula' &&
+        fieldName === 'id' &&
+        Number(value) === 2001
+          ? [{ id: 2001, functionOutput: formulaOutput }]
+          : [],
+    });
+    const compile = (inputRecipe = recipe, operators = createOperators()) =>
+      compileCharacterCombatRecipeContracts({
+        recipe: inputRecipe,
+        character: {
+          id: ownerId,
+          name: 'Synthetic Alias',
+          sourceIdentity: 'fixture:character:424243',
+        },
+        evidence: {
+          controls,
+          skills: [],
+          specialResourceProfiles: [],
+          specialResourceOperations: [],
+        },
+        operators,
+      });
+
+    const compilation = compile();
+    expect(compilation.optimizationObject).toMatchObject({
+      optimizationObjectId: 'SYNTHETIC-OBJECT',
+      sourceCharacterId: ownerId,
+      sourceAliasIdentity: 'synthetic-object:source-alias:424243',
+      applied: true,
+    });
+    expect(
+      compilation.contracts.runtimeEffectBindings[0].modifiers[0]
+        .sourceStatFormula
+    ).toMatchObject({
+      formulaId: 2001,
+      sourceStatKey: 'attack',
+      divisor: 10000,
+      applied: true,
+    });
+    expect(compilation.compilerInputHash).toMatch(/^[a-f0-9]{64}$/);
+
+    expect(() =>
+      compile({
+        ...recipe,
+        optimizationObject: {
+          ...recipe.optimizationObject,
+          sourceCharacterId: ownerId + 1,
+        },
+      })
+    ).toThrow(/optimization object evidence invalid/);
+    expect(() => compile(recipe, createOperators('A/10000'))).toThrow(
+      /source-stat formula evidence mismatch/
+    );
+  });
+
   it('compiles target-state transactions and conditional runtime effects for a synthetic owner', () => {
     const ownerId = 424244;
     const controlSkillId = 42424401;

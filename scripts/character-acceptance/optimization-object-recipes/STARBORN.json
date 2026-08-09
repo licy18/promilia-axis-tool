@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrOptimizationObjectAliasAcceptanceRecipe",
+  "optimizationObjectId": "STARBORN",
+  "requiredSourceCharacterIds": [199001, 199002],
+  "sourceAliases": [
+    {
+      "sourceCharacterId": 199001,
+      "sourceAliasIdentity": "STARBORN:source-alias:199001",
+      "profilePath": "src/data/generated/character-combat-profiles/199001.json",
+      "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
+      "acceptanceManifestPath": "reports/m11/character-acceptance/199001/manifest.json",
+      "scenarioCasesPath": "reports/m11/character-acceptance/199001/scenario-cases.json"
+    },
+    {
+      "sourceCharacterId": 199002,
+      "sourceAliasIdentity": "STARBORN:source-alias:199002",
+      "profilePath": "src/data/generated/character-combat-profiles/199002.json",
+      "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
+      "acceptanceManifestPath": "reports/m11/character-acceptance/199002/manifest.json",
+      "scenarioCasesPath": "reports/m11/character-acceptance/199002/scenario-cases.json"
+    }
+  ],
+  "selectionPolicy": {
+    "objectDenominatorCount": 1,
+    "sourceAliasCardinalityPerAxis": 1,
+    "requireEverySourceAliasAcceptance": true,
+    "rejectCrossAliasActionsResourcesStatesChainsAndSwitches": true,
+    "requireAliasDistinctProfileInputDataTraceAndBuildHashes": true
+  },
+  "productVisualAcceptance": {
+    "status": "pending",
+    "formalAdmission": false,
+    "optimizationReady": false
+  },
+  "outputPath": "reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json"
+}

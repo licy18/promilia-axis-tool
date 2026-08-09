@@ -1,0 +1,2019 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-description-coverage",
+  "ownerId": 199001,
+  "policy": {
+    "descriptionIsDiscoveryAndCrossCheckOnly": true,
+    "descriptionNeverCreatesAppliedValues": true
+  },
+  "entries": [
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:0:0",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【普攻】进行至多五段的多段攻击，对敌方造成最多{0}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+        "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
+        "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
+        "actor|199001|19900101|0|19900103|normal-attack",
+        "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+        "hit:19900102|0|elements|1|3308259353287041306|23|2",
+        "hit:19900102|0|elements|1|3308259353287041306|28|3",
+        "hit:19900102|0|elements|1|3308259353287041306|33|4",
+        "hit:19900103|0|elements|0|2068754825183623470|4|1",
+        "hit:19900103|0|elements|0|2068754825183623470|9|2",
+        "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+        "hit:19900103|0|elements|2|-867018916007424089|30|4",
+        "hit:19900103|0|elements|5|3551105314097089551|35|5",
+        "hit:19900103|0|elements|6|6877357056743283153|40|6",
+        "hit:19900104|0|elements|0|7312016640040151577|8|1",
+        "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+        "hit:19900104|0|elements|2|875113182495447834|26|3",
+        "hit:19900104|0|elements|2|875113182495447834|31|4",
+        "hit:19900105|0|elements|0|-921741295185088314|8|1",
+        "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+        "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+        "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+        "hit:19900105|0|elements|2|-8118771174586192089|28|5",
+        "starborn-199001-normal-five-inputs:segment:1",
+        "starborn-199001-normal-five-inputs:segment:2",
+        "starborn-199001-normal-five-inputs:segment:3",
+        "starborn-199001-normal-five-inputs:segment:4",
+        "starborn-199001-normal-five-inputs:segment:5"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 1,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_-4619844226738356821__-4619844226738356821.json#behaviorlineControl[0].behaviorList[pathId=265759914593746347]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_265759914593746347__265759914593746347.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_-6366115515108663486__-6366115515108663486.json#behaviorlineControl[0].behaviorList[pathId=3080288996134641474]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_3080288996134641474__3080288996134641474.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900102,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+            "hit:19900102|0|elements|1|3308259353287041306|23|2",
+            "hit:19900102|0|elements|1|3308259353287041306|28|3",
+            "hit:19900102|0|elements|1|3308259353287041306|33|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_5683880356257405623__5683880356257405623.json#behaviorlineControl[0].behaviorList[pathId=3862458987646818999]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_3862458987646818999__3862458987646818999.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900103,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:19900103|0|elements|0|2068754825183623470|4|1",
+            "hit:19900103|0|elements|0|2068754825183623470|9|2",
+            "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+            "hit:19900103|0|elements|2|-867018916007424089|30|4",
+            "hit:19900103|0|elements|5|3551105314097089551|35|5",
+            "hit:19900103|0|elements|6|6877357056743283153|40|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_6515913328672826355__6515913328672826355.json#behaviorlineControl[0].behaviorList[pathId=-88222508692937741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_-88222508692937741__-88222508692937741.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:4",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900104,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900104|0|elements|0|7312016640040151577|8|1",
+            "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+            "hit:19900104|0|elements|2|875113182495447834|26|3",
+            "hit:19900104|0|elements|2|875113182495447834|31|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_3886858263929368691__3886858263929368691.json#behaviorlineControl[0].behaviorList[pathId=1224890378162221171]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_1224890378162221171__1224890378162221171.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:5",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900105,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:19900105|0|elements|0|-921741295185088314|8|1",
+            "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+            "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+            "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+            "hit:19900105|0|elements|2|-8118771174586192089|28|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:1:0",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【重击】蓄力攻击敌方，造成{1}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:199001:charged-attack:starborn-199001-default-charged",
+        "actor:199001:charged-attack:starborn-199001-derived-charged",
+        "actor:199001|control:19900104|sub:0|context:38-97|public-control:19900110|execution-control:19900110|sub:1",
+        "actor:199001|control:19900105|sub:0|context:32-52|public-control:19900110|execution-control:19900110|sub:1",
+        "actor|199001|19900101|1|19900110|charged-attack",
+        "hit:19900110|0|elements|0|710429675760709128|16|1",
+        "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+        "hit:19900110|0|elements|4|6044187756301958298|39|3",
+        "hit:19900110|1|elements|3|-309319716341630615|24|1",
+        "hit:19900110|1|elements|3|-309319716341630615|36|3",
+        "hit:19900110|1|elements|3|-309319716341630615|48|5",
+        "hit:19900110|1|elements|3|-309319716341630615|60|7",
+        "hit:19900110|1|elements|3|-309319716341630615|72|9",
+        "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+        "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+        "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+        "hit:19900110|1|elements|7|-3303620080455896909|66|8"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-default-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:19900110|0|elements|0|710429675760709128|16|1",
+            "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+            "hit:19900110|0|elements|4|6044187756301958298|39|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-derived-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 1,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:19900110|1|elements|3|-309319716341630615|24|1",
+            "hit:19900110|1|elements|3|-309319716341630615|36|3",
+            "hit:19900110|1|elements|3|-309319716341630615|48|5",
+            "hit:19900110|1|elements|3|-309319716341630615|60|7",
+            "hit:19900110|1|elements|3|-309319716341630615|72|9",
+            "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+            "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+            "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+            "hit:19900110|1|elements|7|-3303620080455896909|66|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_4403028615320514675__4403028615320514675.json#behaviorlineControl[0].behaviorList[pathId=-5818156733295873933]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5818156733295873933__-5818156733295873933.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:1:1",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 1,
+      "clauseIndex": 1,
+      "text": "若在第四/五段普攻后使用重击，则会施放派生攻击，对敌方造成{2}攻击力的无属性物理伤害，并使破坏其架势的效率提升5%（持续24秒）。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:199001:charged-attack:starborn-199001-default-charged",
+        "actor:199001:charged-attack:starborn-199001-derived-charged",
+        "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+        "actor:199001|control:19900104|sub:0|context:38-97|public-control:19900110|execution-control:19900110|sub:1",
+        "actor:199001|control:19900105|sub:0|context:32-52|public-control:19900110|execution-control:19900110|sub:1",
+        "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
+        "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
+        "actor|199001|19900101|0|19900103|normal-attack",
+        "actor|199001|19900101|1|19900110|charged-attack",
+        "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+        "hit:19900102|0|elements|1|3308259353287041306|23|2",
+        "hit:19900102|0|elements|1|3308259353287041306|28|3",
+        "hit:19900102|0|elements|1|3308259353287041306|33|4",
+        "hit:19900103|0|elements|0|2068754825183623470|4|1",
+        "hit:19900103|0|elements|0|2068754825183623470|9|2",
+        "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+        "hit:19900103|0|elements|2|-867018916007424089|30|4",
+        "hit:19900103|0|elements|5|3551105314097089551|35|5",
+        "hit:19900103|0|elements|6|6877357056743283153|40|6",
+        "hit:19900104|0|elements|0|7312016640040151577|8|1",
+        "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+        "hit:19900104|0|elements|2|875113182495447834|26|3",
+        "hit:19900104|0|elements|2|875113182495447834|31|4",
+        "hit:19900105|0|elements|0|-921741295185088314|8|1",
+        "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+        "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+        "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+        "hit:19900105|0|elements|2|-8118771174586192089|28|5",
+        "hit:19900110|0|elements|0|710429675760709128|16|1",
+        "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+        "hit:19900110|0|elements|4|6044187756301958298|39|3",
+        "hit:19900110|1|elements|3|-309319716341630615|24|1",
+        "hit:19900110|1|elements|3|-309319716341630615|36|3",
+        "hit:19900110|1|elements|3|-309319716341630615|48|5",
+        "hit:19900110|1|elements|3|-309319716341630615|60|7",
+        "hit:19900110|1|elements|3|-309319716341630615|72|9",
+        "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+        "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+        "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+        "hit:19900110|1|elements|7|-3303620080455896909|66|8",
+        "starborn-199001-normal-five-inputs:segment:1",
+        "starborn-199001-normal-five-inputs:segment:2",
+        "starborn-199001-normal-five-inputs:segment:3",
+        "starborn-199001-normal-five-inputs:segment:4",
+        "starborn-199001-normal-five-inputs:segment:5"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 1,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_-4619844226738356821__-4619844226738356821.json#behaviorlineControl[0].behaviorList[pathId=265759914593746347]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_265759914593746347__265759914593746347.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_-6366115515108663486__-6366115515108663486.json#behaviorlineControl[0].behaviorList[pathId=3080288996134641474]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_3080288996134641474__3080288996134641474.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900102,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+            "hit:19900102|0|elements|1|3308259353287041306|23|2",
+            "hit:19900102|0|elements|1|3308259353287041306|28|3",
+            "hit:19900102|0|elements|1|3308259353287041306|33|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_5683880356257405623__5683880356257405623.json#behaviorlineControl[0].behaviorList[pathId=3862458987646818999]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_3862458987646818999__3862458987646818999.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900103,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:19900103|0|elements|0|2068754825183623470|4|1",
+            "hit:19900103|0|elements|0|2068754825183623470|9|2",
+            "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+            "hit:19900103|0|elements|2|-867018916007424089|30|4",
+            "hit:19900103|0|elements|5|3551105314097089551|35|5",
+            "hit:19900103|0|elements|6|6877357056743283153|40|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_6515913328672826355__6515913328672826355.json#behaviorlineControl[0].behaviorList[pathId=-88222508692937741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_-88222508692937741__-88222508692937741.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:4",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900104,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900104|0|elements|0|7312016640040151577|8|1",
+            "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+            "hit:19900104|0|elements|2|875113182495447834|26|3",
+            "hit:19900104|0|elements|2|875113182495447834|31|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_3886858263929368691__3886858263929368691.json#behaviorlineControl[0].behaviorList[pathId=1224890378162221171]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_1224890378162221171__1224890378162221171.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:5",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900105,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:19900105|0|elements|0|-921741295185088314|8|1",
+            "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+            "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+            "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+            "hit:19900105|0|elements|2|-8118771174586192089|28|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-default-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:19900110|0|elements|0|710429675760709128|16|1",
+            "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+            "hit:19900110|0|elements|4|6044187756301958298|39|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-derived-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 1,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:19900110|1|elements|3|-309319716341630615|24|1",
+            "hit:19900110|1|elements|3|-309319716341630615|36|3",
+            "hit:19900110|1|elements|3|-309319716341630615|48|5",
+            "hit:19900110|1|elements|3|-309319716341630615|60|7",
+            "hit:19900110|1|elements|3|-309319716341630615|72|9",
+            "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+            "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+            "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+            "hit:19900110|1|elements|7|-3303620080455896909|66|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_4403028615320514675__4403028615320514675.json#behaviorlineControl[0].behaviorList[pathId=-5818156733295873933]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5818156733295873933__-5818156733295873933.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:1:2",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 1,
+      "clauseIndex": 2,
+      "text": "派生攻击命中敌方后，可进行突刺，造成{3}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:199001:charged-attack:starborn-199001-default-charged",
+        "actor:199001:charged-attack:starborn-199001-derived-charged",
+        "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+        "actor|199001|19900101|0|19900103|normal-attack",
+        "actor|199001|19900101|1|19900110|charged-attack",
+        "actor|199001|19900101|4|19900115|dodge-attack",
+        "actor|199001|19900101|4|19900115|dodge-attack:default",
+        "actor|199001|19900101|5|19900111|plunging-attack",
+        "actor|199001|19900101|5|19900111|plunging-attack:default",
+        "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+        "hit:19900102|0|elements|1|3308259353287041306|23|2",
+        "hit:19900102|0|elements|1|3308259353287041306|28|3",
+        "hit:19900102|0|elements|1|3308259353287041306|33|4",
+        "hit:19900103|0|elements|0|2068754825183623470|4|1",
+        "hit:19900103|0|elements|0|2068754825183623470|9|2",
+        "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+        "hit:19900103|0|elements|2|-867018916007424089|30|4",
+        "hit:19900103|0|elements|5|3551105314097089551|35|5",
+        "hit:19900103|0|elements|6|6877357056743283153|40|6",
+        "hit:19900104|0|elements|0|7312016640040151577|8|1",
+        "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+        "hit:19900104|0|elements|2|875113182495447834|26|3",
+        "hit:19900104|0|elements|2|875113182495447834|31|4",
+        "hit:19900105|0|elements|0|-921741295185088314|8|1",
+        "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+        "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+        "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+        "hit:19900105|0|elements|2|-8118771174586192089|28|5",
+        "hit:19900110|0|elements|0|710429675760709128|16|1",
+        "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+        "hit:19900110|0|elements|4|6044187756301958298|39|3",
+        "hit:19900110|1|elements|3|-309319716341630615|24|1",
+        "hit:19900110|1|elements|3|-309319716341630615|36|3",
+        "hit:19900110|1|elements|3|-309319716341630615|48|5",
+        "hit:19900110|1|elements|3|-309319716341630615|60|7",
+        "hit:19900110|1|elements|3|-309319716341630615|72|9",
+        "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+        "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+        "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+        "hit:19900110|1|elements|7|-3303620080455896909|66|8",
+        "hit:19900111|0|elements|0|7275511722441408677|37|1",
+        "hit:19900115|0|elements|0|7420299487459224146|5|1",
+        "semantic-effect:19900111|0|-2576399084213501582|4948146489574413858:37",
+        "starborn-199001-normal-five-inputs:segment:1",
+        "starborn-199001-normal-five-inputs:segment:2",
+        "starborn-199001-normal-five-inputs:segment:3",
+        "starborn-199001-normal-five-inputs:segment:4",
+        "starborn-199001-normal-five-inputs:segment:5"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 1,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_4808393641053388203__4808393641053388203.json#behaviorlineControl[0].behaviorList[pathId=618421077987753387]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_618421077987753387__618421077987753387.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_-4619844226738356821__-4619844226738356821.json#behaviorlineControl[0].behaviorList[pathId=265759914593746347]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/MonoBehaviour_265759914593746347__265759914593746347.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/skill_control_19900101__8941757695171335637.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:1",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900101,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_-6366115515108663486__-6366115515108663486.json#behaviorlineControl[0].behaviorList[pathId=3080288996134641474]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_3080288996134641474__3080288996134641474.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:2",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900102,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900102|0|elements|0|-6304716636768638044|8|1",
+            "hit:19900102|0|elements|1|3308259353287041306|23|2",
+            "hit:19900102|0|elements|1|3308259353287041306|28|3",
+            "hit:19900102|0|elements|1|3308259353287041306|33|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_5683880356257405623__5683880356257405623.json#behaviorlineControl[0].behaviorList[pathId=3862458987646818999]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900102.asset/MonoBehaviour/MonoBehaviour_3862458987646818999__3862458987646818999.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:3",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900103,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:19900103|0|elements|0|2068754825183623470|4|1",
+            "hit:19900103|0|elements|0|2068754825183623470|9|2",
+            "hit:19900103|0|elements|1|-2644052634269684775|14|3",
+            "hit:19900103|0|elements|2|-867018916007424089|30|4",
+            "hit:19900103|0|elements|5|3551105314097089551|35|5",
+            "hit:19900103|0|elements|6|6877357056743283153|40|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_6515913328672826355__6515913328672826355.json#behaviorlineControl[0].behaviorList[pathId=-88222508692937741]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/MonoBehaviour_-88222508692937741__-88222508692937741.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:4",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900104,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900104|0|elements|0|7312016640040151577|8|1",
+            "hit:19900104|0|elements|1|-1796432883904654598|17|2",
+            "hit:19900104|0|elements|2|875113182495447834|26|3",
+            "hit:19900104|0|elements|2|875113182495447834|31|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_3886858263929368691__3886858263929368691.json#behaviorlineControl[0].behaviorList[pathId=1224890378162221171]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_1224890378162221171__1224890378162221171.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
+          "publicFormId": "starborn-199001-normal-five-inputs:segment:5",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900105,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:19900105|0|elements|0|-921741295185088314|8|1",
+            "hit:19900105|0|elements|1|-7483067538848697873|13|2",
+            "hit:19900105|0|elements|2|-8118771174586192089|18|3",
+            "hit:19900105|0|elements|2|-8118771174586192089|23|4",
+            "hit:19900105|0|elements|2|-8118771174586192089|28|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-default-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:19900110|0|elements|0|710429675760709128|16|1",
+            "hit:19900110|0|elements|2|-7899452403263288347|33|2",
+            "hit:19900110|0|elements|4|6044187756301958298|39|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|1|19900110|charged-attack",
+          "publicFormId": "actor:199001:charged-attack:starborn-199001-derived-charged",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 1,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:19900110|1|elements|3|-309319716341630615|24|1",
+            "hit:19900110|1|elements|3|-309319716341630615|36|3",
+            "hit:19900110|1|elements|3|-309319716341630615|48|5",
+            "hit:19900110|1|elements|3|-309319716341630615|60|7",
+            "hit:19900110|1|elements|3|-309319716341630615|72|9",
+            "hit:19900110|1|elements|7|-3303620080455896909|30|2",
+            "hit:19900110|1|elements|7|-3303620080455896909|42|4",
+            "hit:19900110|1|elements|7|-3303620080455896909|54|6",
+            "hit:19900110|1|elements|7|-3303620080455896909|66|8"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5702620205616713613__-5702620205616713613.json#behaviorlineControl[0].behaviorList[pathId=-1594106589138833293]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-1594106589138833293__-1594106589138833293.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_4403028615320514675__4403028615320514675.json#behaviorlineControl[0].behaviorList[pathId=-5818156733295873933]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900104.asset/MonoBehaviour/MonoBehaviour_-5818156733295873933__-5818156733295873933.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-7266172365840092492__-7266172365840092492.json#behaviorlineControl[0].behaviorList[pathId=-8970972927521819980]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-8970972927521819980__-8970972927521819980.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_-1785730112282594636__-1785730112282594636.json#behaviorlineControl[0].behaviorList[pathId=6562838015045300916]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900105.asset/MonoBehaviour/MonoBehaviour_6562838015045300916__6562838015045300916.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|4|19900115|dodge-attack",
+          "publicFormId": "actor|199001|19900101|4|19900115|dodge-attack:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900115,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:19900115|0|elements|0|7420299487459224146|5|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=204]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900101|5|19900111|plunging-attack",
+          "publicFormId": "actor|199001|19900101|5|19900111|plunging-attack:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900111,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:19900111|0|elements|0|7275511722441408677|37|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=aerial,slot=301]"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:1:3",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 1,
+      "clauseIndex": 3,
+      "text": "突刺后可衔接普攻第三段。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
+        "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
+        "starborn-199001-normal-five-inputs:segment:1",
+        "starborn-199001-normal-five-inputs:segment:2",
+        "starborn-199001-normal-five-inputs:segment:3",
+        "starborn-199001-normal-five-inputs:segment:4",
+        "starborn-199001-normal-five-inputs:segment:5"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:2:0",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【闪击】造成{4}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900101|4|19900115|dodge-attack",
+        "actor|199001|19900101|4|19900115|dodge-attack:default",
+        "hit:19900115|0|elements|0|7420299487459224146|5|1"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|4|19900115|dodge-attack",
+          "publicFormId": "actor|199001|19900101|4|19900115|dodge-attack:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900115,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:19900115|0|elements|0|7420299487459224146|5|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=204]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900101:description:3:0",
+      "skillId": 19900101,
+      "skillName": "跃动之星",
+      "paragraphIndex": 3,
+      "clauseIndex": 0,
+      "text": "【跃击】造成{5}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900101|5|19900111|plunging-attack",
+        "actor|199001|19900101|5|19900111|plunging-attack:default",
+        "hit:19900111|0|elements|0|7275511722441408677|37|1",
+        "semantic-effect:19900111|0|-2576399084213501582|4948146489574413858:37"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900101|5|19900111|plunging-attack",
+          "publicFormId": "actor|199001|19900101|5|19900111|plunging-attack:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 19900101,
+          "executionControlSkillId": 19900111,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:19900111|0|elements|0|7275511722441408677|37|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=aerial,slot=301]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900112:description:0:0",
+      "skillId": 19900112,
+      "skillName": "明耀之光",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星鸣技】对敌方造成{0}攻击力的无属性物理伤害，并使其被破坏架势效率提升5%（持续24秒）。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900112|0|19900112|star-skill",
+        "actor|199001|19900112|0|19900112|star-skill:default",
+        "hit:19900112|0|elements|11|-6041608976607429785|22|2",
+        "hit:19900112|0|elements|11|-6041608976607429785|34|4",
+        "hit:19900112|0|elements|11|-6041608976607429785|46|6",
+        "hit:19900112|0|elements|11|-6041608976607429785|58|8",
+        "hit:19900112|0|elements|4|-7530867443862883934|16|1",
+        "hit:19900112|0|elements|4|-7530867443862883934|28|3",
+        "hit:19900112|0|elements|4|-7530867443862883934|40|5",
+        "hit:19900112|0|elements|4|-7530867443862883934|52|7",
+        "hit:19900112|0|elements|4|-7530867443862883934|64|9",
+        "semantic-effect:19900112|0|-1066428766446214310|1628877279910559147:16",
+        "semantic-effect:19900112|0|-1581084878074953084|1628877279910559147:16",
+        "semantic-effect:19900112|0|-3012814009576426324|1628877279910559147:16",
+        "semantic-effect:19900112|0|-5387148516986885498|1628877279910559147:16",
+        "semantic-effect:19900112|0|-8799594956058606391|-5090233644669600341:64",
+        "semantic-effect:19900112|0|-8799594956058606391|-5691058261068546645:58",
+        "semantic-effect:19900112|0|-8799594956058606391|-5921772050494718549:22",
+        "semantic-effect:19900112|0|-8799594956058606391|-6253650707097518677:52",
+        "semantic-effect:19900112|0|-8799594956058606391|-6667789291058954837:28",
+        "semantic-effect:19900112|0|-8799594956058606391|-8312477536290275925:46",
+        "semantic-effect:19900112|0|-8799594956058606391|1628877279910559147:16",
+        "semantic-effect:19900112|0|-8799594956058606391|4054236092579708331:34",
+        "semantic-effect:19900112|0|-8799594956058606391|7079821679836069291:40",
+        "semantic-effect:19900112|0|2372568123301555994|1628877279910559147:16",
+        "semantic-effect:19900112|0|4339511576848864872|1628877279910559147:16",
+        "semantic-effect:19900112|0|5282934856303691397|1628877279910559147:16",
+        "semantic-effect:19900112|0|6621857615038897489|1628877279910559147:16"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900112|0|19900112|star-skill",
+          "publicFormId": "actor|199001|19900112|0|19900112|star-skill:default",
+          "actionKind": "star-skill",
+          "sourceSkillId": 19900112,
+          "executionControlSkillId": 19900112,
+          "executionSubSkillIndex": 0,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:19900112|0|elements|11|-6041608976607429785|22|2",
+            "hit:19900112|0|elements|11|-6041608976607429785|34|4",
+            "hit:19900112|0|elements|11|-6041608976607429785|46|6",
+            "hit:19900112|0|elements|11|-6041608976607429785|58|8",
+            "hit:19900112|0|elements|4|-7530867443862883934|16|1",
+            "hit:19900112|0|elements|4|-7530867443862883934|28|3",
+            "hit:19900112|0|elements|4|-7530867443862883934|40|5",
+            "hit:19900112|0|elements|4|-7530867443862883934|52|7",
+            "hit:19900112|0|elements|4|-7530867443862883934|64|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=3]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900112:description:0:1",
+      "skillId": 19900112,
+      "skillName": "明耀之光",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "星鸣技命中敌方后，可进行突刺，造成{1}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900112|0|19900112|star-skill",
+        "actor|199001|19900112|0|19900112|star-skill:default",
+        "hit:19900112|0|elements|11|-6041608976607429785|22|2",
+        "hit:19900112|0|elements|11|-6041608976607429785|34|4",
+        "hit:19900112|0|elements|11|-6041608976607429785|46|6",
+        "hit:19900112|0|elements|11|-6041608976607429785|58|8",
+        "hit:19900112|0|elements|4|-7530867443862883934|16|1",
+        "hit:19900112|0|elements|4|-7530867443862883934|28|3",
+        "hit:19900112|0|elements|4|-7530867443862883934|40|5",
+        "hit:19900112|0|elements|4|-7530867443862883934|52|7",
+        "hit:19900112|0|elements|4|-7530867443862883934|64|9",
+        "semantic-effect:19900112|0|-1066428766446214310|1628877279910559147:16",
+        "semantic-effect:19900112|0|-1581084878074953084|1628877279910559147:16",
+        "semantic-effect:19900112|0|-3012814009576426324|1628877279910559147:16",
+        "semantic-effect:19900112|0|-5387148516986885498|1628877279910559147:16",
+        "semantic-effect:19900112|0|-8799594956058606391|-5090233644669600341:64",
+        "semantic-effect:19900112|0|-8799594956058606391|-5691058261068546645:58",
+        "semantic-effect:19900112|0|-8799594956058606391|-5921772050494718549:22",
+        "semantic-effect:19900112|0|-8799594956058606391|-6253650707097518677:52",
+        "semantic-effect:19900112|0|-8799594956058606391|-6667789291058954837:28",
+        "semantic-effect:19900112|0|-8799594956058606391|-8312477536290275925:46",
+        "semantic-effect:19900112|0|-8799594956058606391|1628877279910559147:16",
+        "semantic-effect:19900112|0|-8799594956058606391|4054236092579708331:34",
+        "semantic-effect:19900112|0|-8799594956058606391|7079821679836069291:40",
+        "semantic-effect:19900112|0|2372568123301555994|1628877279910559147:16",
+        "semantic-effect:19900112|0|4339511576848864872|1628877279910559147:16",
+        "semantic-effect:19900112|0|5282934856303691397|1628877279910559147:16",
+        "semantic-effect:19900112|0|6621857615038897489|1628877279910559147:16"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900112|0|19900112|star-skill",
+          "publicFormId": "actor|199001|19900112|0|19900112|star-skill:default",
+          "actionKind": "star-skill",
+          "sourceSkillId": 19900112,
+          "executionControlSkillId": 19900112,
+          "executionSubSkillIndex": 0,
+          "hitCount": 9,
+          "settlementEvidence": [
+            "hit:19900112|0|elements|11|-6041608976607429785|22|2",
+            "hit:19900112|0|elements|11|-6041608976607429785|34|4",
+            "hit:19900112|0|elements|11|-6041608976607429785|46|6",
+            "hit:19900112|0|elements|11|-6041608976607429785|58|8",
+            "hit:19900112|0|elements|4|-7530867443862883934|16|1",
+            "hit:19900112|0|elements|4|-7530867443862883934|28|3",
+            "hit:19900112|0|elements|4|-7530867443862883934|40|5",
+            "hit:19900112|0|elements|4|-7530867443862883934|52|7",
+            "hit:19900112|0|elements|4|-7530867443862883934|64|9"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 9
+            },
+            "toughness": {
+              "applied": 9
+            },
+            "actorSp": {
+              "applied": 9
+            },
+            "kiboSp": {
+              "applied": 9
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=3]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900112:description:0:2",
+      "skillId": 19900112,
+      "skillName": "明耀之光",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "突刺后可衔接普攻第三段。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
+        "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
+        "starborn-199001-normal-five-inputs:segment:1",
+        "starborn-199001-normal-five-inputs:segment:2",
+        "starborn-199001-normal-five-inputs:segment:3",
+        "starborn-199001-normal-five-inputs:segment:4",
+        "starborn-199001-normal-five-inputs:segment:5"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900112:description:1:0",
+      "skillId": 19900112,
+      "skillName": "明耀之光",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【星结合击】造成{2}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900112|2|19900126|star-combo",
+        "actor|199001|19900112|2|19900126|star-combo:default",
+        "hit:19900126|0|elements|0|5942190133998616889|40|1"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900112|2|19900126|star-combo",
+          "publicFormId": "actor|199001|19900112|2|19900126|star-combo:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 19900112,
+          "executionControlSkillId": 19900126,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:19900126|0|elements|0|5942190133998616889|40|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=208]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900113:description:0:0",
+      "skillId": 19900113,
+      "skillName": "终将归于星海",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "对周围敌方造成{0}攻击力的无属性物理伤害，使已有属性调谐印记各增加1枚。",
+      "mechanicKinds": [
+        "action-settlement",
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900113|0|19900113|ultimate",
+        "actor|199001|19900113|0|19900113|ultimate:default",
+        "hit:19900113|0|elements|2|-8114452604589887262|103|1",
+        "hit:19900113|0|elements|3|-2838106382747411820|118|2",
+        "hit:19900113|0|elements|5|5839196054305706814|125|3",
+        "hit:19900113|0|elements|6|-8421292686708312567|130|4",
+        "hit:19900113|0|elements|7|7264208303108875128|135|5",
+        "hit:19900113|0|elements|8|-5454502824945863457|140|6",
+        "semantic-effect:19900113|0|-1156211791305095863|6298034758687496659:140",
+        "semantic-effect:19900113|0|-1329856183780981067|6298034758687496659:140",
+        "semantic-effect:19900113|0|-1498771669867596146|6298034758687496659:140",
+        "semantic-effect:19900113|0|-1715488869977622004|6298034758687496659:140",
+        "semantic-effect:19900113|0|-3385844286697091665|6298034758687496659:140",
+        "semantic-effect:19900113|0|-3809486317990090417|6298034758687496659:140",
+        "semantic-effect:19900113|0|-408193470852536619|6298034758687496659:140",
+        "semantic-effect:19900113|0|-4529113272733101309|6298034758687496659:140",
+        "semantic-effect:19900113|0|-4681911869225594217|6298034758687496659:140",
+        "semantic-effect:19900113|0|-5819740171084359278|6298034758687496659:140",
+        "semantic-effect:19900113|0|-6147627588750845778|6298034758687496659:140",
+        "semantic-effect:19900113|0|-637110086033006477|6298034758687496659:140",
+        "semantic-effect:19900113|0|-669846950425800112|6298034758687496659:140",
+        "semantic-effect:19900113|0|-7783775984244194322|6298034758687496659:140",
+        "semantic-effect:19900113|0|-7971530825700303086|6298034758687496659:140",
+        "semantic-effect:19900113|0|-8125310485002205|6298034758687496659:140",
+        "semantic-effect:19900113|0|-8148787786042882084|6298034758687496659:140",
+        "semantic-effect:19900113|0|-8162268947497707053|6298034758687496659:140",
+        "semantic-effect:19900113|0|-8555577344516787750|6298034758687496659:140",
+        "semantic-effect:19900113|0|-8695654341717050083|6298034758687496659:140",
+        "semantic-effect:19900113|0|125057607780389237|6298034758687496659:140",
+        "semantic-effect:19900113|0|1474042154774785480|6298034758687496659:140",
+        "semantic-effect:19900113|0|1926755712068365056|6298034758687496659:140",
+        "semantic-effect:19900113|0|2699138840966960245|6298034758687496659:140",
+        "semantic-effect:19900113|0|2771922491407305440|6298034758687496659:140",
+        "semantic-effect:19900113|0|2800522390746114838|6298034758687496659:140",
+        "semantic-effect:19900113|0|3107436379383955232|6298034758687496659:140",
+        "semantic-effect:19900113|0|3226627960965811483|6298034758687496659:140",
+        "semantic-effect:19900113|0|3273457016050714061|6298034758687496659:140",
+        "semantic-effect:19900113|0|3879285143630828198|6298034758687496659:140",
+        "semantic-effect:19900113|0|3907667958652473563|6298034758687496659:140",
+        "semantic-effect:19900113|0|4344804893602023502|6298034758687496659:140",
+        "semantic-effect:19900113|0|466374251647106866|6298034758687496659:140",
+        "semantic-effect:19900113|0|5111418560280323002|6298034758687496659:140",
+        "semantic-effect:19900113|0|5446809546471580023|6298034758687496659:140",
+        "semantic-effect:19900113|0|5879350489537660978|6298034758687496659:140",
+        "semantic-effect:19900113|0|6164331469746081753|6298034758687496659:140",
+        "semantic-effect:19900113|0|6795223062325663446|6298034758687496659:140",
+        "semantic-effect:19900113|0|8755289717895663128|6298034758687496659:140",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900113|0|19900113|ultimate",
+          "publicFormId": "actor|199001|19900113|0|19900113|ultimate:default",
+          "actionKind": "ultimate",
+          "sourceSkillId": 19900113,
+          "executionControlSkillId": 19900113,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:19900113|0|elements|2|-8114452604589887262|103|1",
+            "hit:19900113|0|elements|3|-2838106382747411820|118|2",
+            "hit:19900113|0|elements|5|5839196054305706814|125|3",
+            "hit:19900113|0|elements|6|-8421292686708312567|130|4",
+            "hit:19900113|0|elements|7|7264208303108875128|135|5",
+            "hit:19900113|0|elements|8|-5454502824945863457|140|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "verified-zero": 6
+            },
+            "kiboSp": {
+              "verified-zero": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=4]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:0:0",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "【星携技】离场时触发",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:19900122|0|-1387151147375504543|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1498771669867596146|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1715488869977622004|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3328929433540016876|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3809486317990090417|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-408193470852536619|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-4529113272733101309|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5180294550743404248|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5819740171084359278|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-6147627588750845778|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-634124182066736847|3531931329757559344:37",
+        "semantic-effect:19900122|0|-634124182066736847|4932267420421306928:44",
+        "semantic-effect:19900122|0|-637110086033006477|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-669846950425800112|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7783775984244194322|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7971530825700303086|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8125310485002205|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8148787786042882084|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8162268947497707053|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8204894484040992923|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8555577344516787750|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8695654341717050083|-3171335715372090832:44",
+        "semantic-effect:19900122|0|125057607780389237|-3171335715372090832:44",
+        "semantic-effect:19900122|0|1474042154774785480|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2514429223272924266|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2699138840966960245|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2771922491407305440|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2800522390746114838|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3107436379383955232|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3273457016050714061|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3832800665972728058|4932267420421306928:44",
+        "semantic-effect:19900122|0|3859325085704717590|3531931329757559344:37",
+        "semantic-effect:19900122|0|3859325085704717590|4932267420421306928:44",
+        "semantic-effect:19900122|0|3879285143630828198|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4344804893602023502|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4417196058371087307|-3171335715372090832:44",
+        "semantic-effect:19900122|0|466374251647106866|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5111418560280323002|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5446809546471580023|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5879350489537660978|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6373039348733276258|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6795223062325663446|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6796977011667951284|-3171335715372090832:44",
+        "semantic-effect:19900122|0|8302684673822054363|-3171335715372090832:44"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:0:1",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 0,
+      "clauseIndex": 1,
+      "text": "星临者在周围留下星辉之环，使已有属性调谐印记各增加1枚。",
+      "mechanicKinds": [
+        "team-tuning-mark"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:19900122|0|-1387151147375504543|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1498771669867596146|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1715488869977622004|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3328929433540016876|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3809486317990090417|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-408193470852536619|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-4529113272733101309|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5180294550743404248|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5819740171084359278|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-6147627588750845778|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-634124182066736847|3531931329757559344:37",
+        "semantic-effect:19900122|0|-634124182066736847|4932267420421306928:44",
+        "semantic-effect:19900122|0|-637110086033006477|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-669846950425800112|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7783775984244194322|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7971530825700303086|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8125310485002205|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8148787786042882084|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8162268947497707053|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8204894484040992923|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8555577344516787750|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8695654341717050083|-3171335715372090832:44",
+        "semantic-effect:19900122|0|125057607780389237|-3171335715372090832:44",
+        "semantic-effect:19900122|0|1474042154774785480|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2514429223272924266|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2699138840966960245|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2771922491407305440|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2800522390746114838|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3107436379383955232|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3273457016050714061|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3832800665972728058|4932267420421306928:44",
+        "semantic-effect:19900122|0|3859325085704717590|3531931329757559344:37",
+        "semantic-effect:19900122|0|3859325085704717590|4932267420421306928:44",
+        "semantic-effect:19900122|0|3879285143630828198|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4344804893602023502|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4417196058371087307|-3171335715372090832:44",
+        "semantic-effect:19900122|0|466374251647106866|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5111418560280323002|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5446809546471580023|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5879350489537660978|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6373039348733276258|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6795223062325663446|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6796977011667951284|-3171335715372090832:44",
+        "semantic-effect:19900122|0|8302684673822054363|-3171335715372090832:44",
+        "semantic-effect:19900127|0|-2035055823451510697|3370206144914774221:0",
+        "semantic-effect:19900127|0|3052849975026075505|3370206144914774221:0",
+        "semantic-effect:19900127|0|6263953995482255041|3370206144914774221:0",
+        "verified-tuning-mechanics-catalog"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:0:2",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 0,
+      "clauseIndex": 2,
+      "text": "同时按自身基础攻击力{0}提高附近友方单位的攻击力，该状态持续24秒，切换主控角色时状态继承。",
+      "mechanicKinds": [],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:19900122|0|-1387151147375504543|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1498771669867596146|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1715488869977622004|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3328929433540016876|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3809486317990090417|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-408193470852536619|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-4529113272733101309|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5180294550743404248|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5819740171084359278|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-6147627588750845778|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-634124182066736847|3531931329757559344:37",
+        "semantic-effect:19900122|0|-634124182066736847|4932267420421306928:44",
+        "semantic-effect:19900122|0|-637110086033006477|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-669846950425800112|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7783775984244194322|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7971530825700303086|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8125310485002205|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8148787786042882084|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8162268947497707053|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8204894484040992923|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8555577344516787750|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8695654341717050083|-3171335715372090832:44",
+        "semantic-effect:19900122|0|125057607780389237|-3171335715372090832:44",
+        "semantic-effect:19900122|0|1474042154774785480|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2514429223272924266|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2699138840966960245|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2771922491407305440|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2800522390746114838|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3107436379383955232|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3273457016050714061|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3832800665972728058|4932267420421306928:44",
+        "semantic-effect:19900122|0|3859325085704717590|3531931329757559344:37",
+        "semantic-effect:19900122|0|3859325085704717590|4932267420421306928:44",
+        "semantic-effect:19900122|0|3879285143630828198|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4344804893602023502|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4417196058371087307|-3171335715372090832:44",
+        "semantic-effect:19900122|0|466374251647106866|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5111418560280323002|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5446809546471580023|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5879350489537660978|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6373039348733276258|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6795223062325663446|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6796977011667951284|-3171335715372090832:44",
+        "semantic-effect:19900122|0|8302684673822054363|-3171335715372090832:44",
+        "semantic-effect:19900127|0|-2035055823451510697|3370206144914774221:0",
+        "semantic-effect:19900127|0|3052849975026075505|3370206144914774221:0",
+        "semantic-effect:19900127|0|6263953995482255041|3370206144914774221:0"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:1:0",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 1,
+      "clauseIndex": 0,
+      "text": "【极限反击】造成{1}攻击力的无属性物理伤害。",
+      "mechanicKinds": [
+        "action-form",
+        "action-settlement"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor|199001|19900122|1|19900125|limit-counter",
+        "actor|199001|19900122|1|19900125|limit-counter:default",
+        "hit:19900125|0|elements|0|8503356721650815272|11|1",
+        "hit:19900125|0|elements|3|-1146605992191917512|16|2",
+        "hit:19900125|0|elements|4|3841013968865271614|21|3",
+        "hit:19900125|0|elements|5|-7028821001342606131|26|4"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900122|1|19900125|limit-counter",
+          "publicFormId": "actor|199001|19900122|1|19900125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 19900122,
+          "executionControlSkillId": 19900125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900125|0|elements|0|8503356721650815272|11|1",
+            "hit:19900125|0|elements|3|-1146605992191917512|16|2",
+            "hit:19900125|0|elements|4|3841013968865271614|21|3",
+            "hit:19900125|0|elements|5|-7028821001342606131|26|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=207]"
+        }
+      ],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:2:0",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 2,
+      "clauseIndex": 0,
+      "text": "【完美招架】打断敌方本次攻击，并且可以进行反击。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "semantic-effect:19900127|0|-2035055823451510697|3370206144914774221:0",
+        "semantic-effect:19900127|0|3052849975026075505|3370206144914774221:0",
+        "semantic-effect:19900127|0|6263953995482255041|3370206144914774221:0"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900122:description:2:1",
+      "skillId": 19900122,
+      "skillName": "星辉之环",
+      "paragraphIndex": 2,
+      "clauseIndex": 1,
+      "text": "对敌方造成{2}攻击力的无属性物理伤害，并使破坏其架势的效率提升5%（持续24秒）。",
+      "mechanicKinds": [
+        "action-settlement"
+      ],
+      "status": "static-evidence-gap",
+      "coverageReferences": [
+        "actor:199001:perfect-parry:starborn-199001-perfect-parry-counter",
+        "actor:199001:star-carry:starborn-199001-star-carry",
+        "actor|199001|19900122|0|19900122|star-carry",
+        "actor|199001|19900122|1|19900125|limit-counter",
+        "actor|199001|19900122|1|19900125|limit-counter:default",
+        "actor|199001|19900122|2|19900127|perfect-parry",
+        "hit:19900125|0|elements|0|8503356721650815272|11|1",
+        "hit:19900125|0|elements|3|-1146605992191917512|16|2",
+        "hit:19900125|0|elements|4|3841013968865271614|21|3",
+        "hit:19900125|0|elements|5|-7028821001342606131|26|4",
+        "hit:19900149|1|elements|3|-6617955761898455637|16|1",
+        "hit:19900149|1|elements|3|-6617955761898455637|33|2",
+        "hit:19900149|1|elements|3|-6617955761898455637|38|3",
+        "hit:19900149|1|elements|3|-6617955761898455637|43|4",
+        "semantic-effect:19900122|0|-1387151147375504543|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1498771669867596146|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-1715488869977622004|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3328929433540016876|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-3809486317990090417|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-408193470852536619|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-4529113272733101309|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5180294550743404248|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-5819740171084359278|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-6147627588750845778|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-634124182066736847|3531931329757559344:37",
+        "semantic-effect:19900122|0|-634124182066736847|4932267420421306928:44",
+        "semantic-effect:19900122|0|-637110086033006477|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-669846950425800112|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7783775984244194322|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-7971530825700303086|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8125310485002205|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8148787786042882084|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8162268947497707053|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8204894484040992923|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8555577344516787750|-3171335715372090832:44",
+        "semantic-effect:19900122|0|-8695654341717050083|-3171335715372090832:44",
+        "semantic-effect:19900122|0|125057607780389237|-3171335715372090832:44",
+        "semantic-effect:19900122|0|1474042154774785480|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2514429223272924266|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2699138840966960245|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2771922491407305440|-3171335715372090832:44",
+        "semantic-effect:19900122|0|2800522390746114838|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3107436379383955232|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3273457016050714061|-3171335715372090832:44",
+        "semantic-effect:19900122|0|3832800665972728058|4932267420421306928:44",
+        "semantic-effect:19900122|0|3859325085704717590|3531931329757559344:37",
+        "semantic-effect:19900122|0|3859325085704717590|4932267420421306928:44",
+        "semantic-effect:19900122|0|3879285143630828198|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4344804893602023502|-3171335715372090832:44",
+        "semantic-effect:19900122|0|4417196058371087307|-3171335715372090832:44",
+        "semantic-effect:19900122|0|466374251647106866|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5111418560280323002|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5446809546471580023|-3171335715372090832:44",
+        "semantic-effect:19900122|0|5879350489537660978|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6373039348733276258|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6795223062325663446|-3171335715372090832:44",
+        "semantic-effect:19900122|0|6796977011667951284|-3171335715372090832:44",
+        "semantic-effect:19900122|0|8302684673822054363|-3171335715372090832:44",
+        "semantic-effect:19900127|0|-2035055823451510697|3370206144914774221:0",
+        "semantic-effect:19900127|0|3052849975026075505|3370206144914774221:0",
+        "semantic-effect:19900127|0|6263953995482255041|3370206144914774221:0"
+      ],
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+          "publicFormId": "actor:199001:star-carry:starborn-199001-star-carry",
+          "actionKind": "star-carry",
+          "sourceSkillId": 19900122,
+          "executionControlSkillId": 19900122,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_19900122.asset#skillControlData.skillPlayers[0].frameCount=137"
+        },
+        {
+          "actionIdentity": "actor|199001|19900122|1|19900125|limit-counter",
+          "publicFormId": "actor|199001|19900122|1|19900125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 19900122,
+          "executionControlSkillId": 19900125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900125|0|elements|0|8503356721650815272|11|1",
+            "hit:19900125|0|elements|3|-1146605992191917512|16|2",
+            "hit:19900125|0|elements|4|3841013968865271614|21|3",
+            "hit:19900125|0|elements|5|-7028821001342606131|26|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=199001].skillSlots[group=ground,slot=207]"
+        },
+        {
+          "actionIdentity": "actor|199001|19900122|2|19900127|perfect-parry",
+          "publicFormId": "actor:199001:perfect-parry:starborn-199001-perfect-parry-counter",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 19900122,
+          "executionControlSkillId": 19900149,
+          "executionSubSkillIndex": 1,
+          "hitCount": 4,
+          "settlementEvidence": [
+            "hit:19900149|1|elements|3|-6617955761898455637|16|1",
+            "hit:19900149|1|elements|3|-6617955761898455637|33|2",
+            "hit:19900149|1|elements|3|-6617955761898455637|38|3",
+            "hit:19900149|1|elements|3|-6617955761898455637|43|4"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 4
+            },
+            "toughness": {
+              "applied": 4
+            },
+            "actorSp": {
+              "applied": 4
+            },
+            "kiboSp": {
+              "applied": 4
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900149.asset/MonoBehaviour/skill_control_19900149__-6218509787117951630.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900149.asset/MonoBehaviour/skill_control_19900149__-6218509787117951630.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|skill_control_19900149.asset#skillControlData.skillPlayers[1].frameCount=260"
+        }
+      ],
+      "reasons": [
+        "public-action-damage-settlement-evidence-missing"
+      ],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900161:description:0:0",
+      "skillId": 19900161,
+      "skillName": "星之鸣响",
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "星鸣技命中目标后，降低目标5%防御，全队攻击力提高6%，持续20秒。",
+      "mechanicKinds": [
+        "action-form",
+        "passive-listener"
+      ],
+      "status": "applied",
+      "coverageReferences": [
+        "actor:199001:passive:19900161",
+        "actor|199001|19900112|0|19900112|star-skill:default"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [],
+      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    },
+    {
+      "coverageIdentity": "actor:199001:skill:19900162:description:0:0",
+      "skillId": 19900162,
+      "skillName": null,
+      "paragraphIndex": 0,
+      "clauseIndex": 0,
+      "text": "重击派生命中敌人后，提高自身{0}攻击力，持续10秒。",
+      "mechanicKinds": [
+        "action-form"
+      ],
+      "status": "not-applicable",
+      "coverageReferences": [
+        "actor:199001|control:19900104|sub:0|context:38-97|public-control:19900110|execution-control:19900110|sub:1",
+        "actor:199001|control:19900105|sub:0|context:32-52|public-control:19900110|execution-control:19900110|sub:1"
+      ],
+      "publicFormSettlements": [],
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=199001].skillSlots[group=passive,index=1,skillId=19900162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199001.hero-module.local.json"
+    }
+  ],
+  "summary": {
+    "entryCount": 20,
+    "statusCounts": {
+      "applied": 15,
+      "not-applicable": 1,
+      "static-evidence-gap": 4
+    }
+  },
+  "profileHash": "2888fedae88a3726abf1254b87de8b94b8e8f0078844ab23037cbe25a0edbeb4"
+}

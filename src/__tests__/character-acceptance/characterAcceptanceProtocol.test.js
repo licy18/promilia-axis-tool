@@ -379,6 +379,45 @@ describe('character acceptance protocol', () => {
     ).toBe(false);
   });
 
+  it('allows an explicit empty visual scenario set only while product review is pending', () => {
+    const pendingInput = createManifestInput({
+      productVisualStatus: 'pending',
+    });
+    pendingInput.evidence.productVisualAcceptance.scenarioIdentities = [];
+    pendingInput.evidence.productVisualAcceptance.automatedEvidence = [];
+    const pending = finalizeCharacterAcceptanceManifest(pendingInput);
+
+    expect(pending.validation.issues).not.toContain(
+      'character-acceptance-visual-scenario-set-empty'
+    );
+    expect(pending.validation.issues).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('character-acceptance-visual-evidence-missing'),
+      ])
+    );
+    expect(pending.maturity.currentState).toBe('runtime-integrated');
+
+    const acceptedInput = structuredClone(pendingInput);
+    acceptedInput.evidence.productVisualAcceptance.status = 'accepted';
+    acceptedInput.evidence.productVisualAcceptance.acceptanceCommit =
+      'a'.repeat(40);
+    const acceptedPreview = finalizeCharacterAcceptanceManifest(acceptedInput);
+    const binding =
+      acceptedPreview.evidence.productVisualAcceptance.bindingExpectation;
+    acceptedInput.evidence.productVisualAcceptance.recordIdentity =
+      binding.recordIdentity;
+    acceptedInput.evidence.productVisualAcceptance.qualificationSubjectHash =
+      binding.qualificationSubjectHash;
+    acceptedInput.evidence.productVisualAcceptance.scenarioSetHash =
+      binding.scenarioSetHash;
+    const accepted = finalizeCharacterAcceptanceManifest(acceptedInput);
+
+    expect(accepted.validation.issues).toContain(
+      'character-acceptance-visual-scenario-set-empty'
+    );
+    expect(accepted.maturity.optimizationReady).toBe(false);
+  });
+
   it('rejects N/A, empty-ledger, and fake-signoff qualification forged from a committed manifest', () => {
     const forgedInput = structuredClone(xiaoyuManifest);
     for (const requirement of forgedInput.matrix.requirements) {

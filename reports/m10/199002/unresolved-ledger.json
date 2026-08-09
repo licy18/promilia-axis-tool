@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-unresolved-ledger",
+  "ownerId": 199002,
+  "profileHash": "210946074881e6625b4a7b42328b5c0ceb0a0e9126ce6095c0920ba3b4104f74",
+  "summary": {
+    "semanticRecordCount": 8,
+    "rawRecordCount": 10,
+    "semanticStatusCounts": {
+      "not-applicable": 5,
+      "source-closure-applied": 3
+    },
+    "rawStatusCounts": {
+      "not-applicable": 5,
+      "source-closure-applied": 5
+    },
+    "impactClassificationCounts": {
+      "not-applicable": 5,
+      "source-runtime-resolved": 3
+    },
+    "gameplayImpactingCount": 0,
+    "wrapperOrDuplicateCount": 0,
+    "transitionCandidateSupersededCount": 0,
+    "unreachableOrNotApplicableCount": 5,
+    "sourceClosureAppliedCount": 3,
+    "sourceClosureNotApplicableCount": 1
+  },
+  "records": [
+    {
+      "recordIdentity": "semantic-gap:19bcb2f5b1a7a8b5ec49",
+      "ownerId": 199002,
+      "sourceKind": "control",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "backup-control-is-not-an-executable-combat-effect",
+        "current-client-control-has-no-tracks-or-elements"
+      ],
+      "sourceIdentity": "NewTable/hero.rows[id=199002].backupSkillList#19900242|skill_control_19900242.asset#skillTrackDatas=[];elements=[]",
+      "sourceIdentities": [
+        "NewTable/hero.rows[id=199002].backupSkillList#19900242|skill_control_19900242.asset#skillTrackDatas=[];elements=[]"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:199002:control:19900242:empty-current-client-control"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:1fba3e99a2460644a383",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope-not-applicable",
+        "successful-parry-requires-absent-boss-attack-event"
+      ],
+      "sourceIdentity": "battle-effect:19900249:0:-6692507629448266222:1126606833159172481:3|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_600050.asset/MonoBehaviour/ast_600050__-6692507629448266222.json#elementConfigId=600050|skill_control_19900249.asset#element600050@3F|skill_control_19900249.asset#map0.element600050@3F|skill_control_19900249.asset#element600050@3F",
+      "sourceIdentities": [
+        "battle-effect:19900249:0:-6692507629448266222:1126606833159172481:3|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_600050.asset/MonoBehaviour/ast_600050__-6692507629448266222.json#elementConfigId=600050|skill_control_19900249.asset#element600050@3F|skill_control_19900249.asset#map0.element600050@3F|skill_control_19900249.asset#element600050@3F"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900249|0|elements|2|-6692507629448266222|3|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:48ac606cfab2ededf1be",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "effect-combine-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:-6117208996199980820:909372979915479609:44",
+      "sourceIdentities": [
+        "battle-effect:19900222:0:-6117208996199980820:8010390571579234873:38",
+        "battle-effect:19900222:0:-6117208996199980820:909372979915479609:44"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-container-combine-runtime",
+      "sourceClosurePolicyIdentities": [
+        "starborn-199002-star-carry-container-combine-runtime"
+      ],
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|battle-element:199002261#combineType=2;time=24000",
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|battle-element:199002261#combineType=2;time=24000"
+      ],
+      "sourceClosureReasons": [
+        "combine-type-two-refresh-lifecycle-is-carried-by-runtime-binding",
+        "twenty-four-second-right-open-expiry-and-switch-inheritance-remain-source-driven"
+      ],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900222|0|elements|1|-6117208996199980820|element:-6117208996199980820|44|0",
+        "effect:19900222|0|elements|30|6543718175773635314|element:-6117208996199980820|38|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:88027dad49a513487748",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:1920509610385167669:909372979915479609:44",
+      "sourceIdentities": [
+        "battle-effect:19900222:0:1920509610385167669:909372979915479609:44"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-empty-ally-wrapper",
+      "sourceClosurePolicyIdentities": [
+        "starborn-199002-star-carry-empty-ally-wrapper"
+      ],
+      "sourceClosureSourceIdentity": "ast_199002268.asset#time=1000;injectElementDataList=[];elementDataList=[]|skill_control_19900222.asset#map0.element199002268@44F",
+      "sourceClosureSourceIdentities": [
+        "ast_199002268.asset#time=1000;injectElementDataList=[];elementDataList=[]|skill_control_19900222.asset#map0.element199002268@44F"
+      ],
+      "sourceClosureReasons": [
+        "current-client-element-has-no-damage-resource-property-state-or-mark-payload",
+        "one-second-empty-wrapper-is-not-a-second-star-carry-effect"
+      ],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900222|0|elements|0|1920509610385167669|element:1920509610385167669|44|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:bdc2befa2405b196246b",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "jump-or-airborne-action-is-frozen-out-of-scope",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:19900211:0:4153459280445841627:7428633559088420981:37|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199002053.asset/MonoBehaviour/ast_199002053__4153459280445841627.json#elementConfigId=199002053|skill_control_19900211.asset#element199002053@37F|skill_control_19900211.asset#map0.element199002053@37F|skill_control_19900211.asset#element199002053@37F",
+      "sourceIdentities": [
+        "battle-effect:19900211:0:4153459280445841627:7428633559088420981:37|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199002053.asset/MonoBehaviour/ast_199002053__4153459280445841627.json#elementConfigId=199002053|skill_control_19900211.asset#element199002053@37F|skill_control_19900211.asset#map0.element199002053@37F|skill_control_19900211.asset#element199002053@37F"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900211|0|elements|4|4153459280445841627|37|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:d4859f5603e83aa767ba",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900261:0:8072606077914887740:983023862729438595:0",
+      "sourceIdentities": [
+        "battle-effect:19900261:0:8072606077914887740:983023862729438595:0"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-passive-marker-runtime-contract",
+      "sourceClosurePolicyIdentities": [
+        "starborn-199002-passive-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#passives[actor:199002:passive:19900261]|battle-element:199002343",
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:199002#passives[actor:199002:passive:19900261]|battle-element:199002343"
+      ],
+      "sourceClosureReasons": [
+        "first-star-landed-hit-action-effect-bindings-own-runtime-activation",
+        "persistent-marker-is-required-by-source-driven-passive-profile"
+      ],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900261|0|elements|0|8072606077914887740|element:8072606077914887740|0|0"
+      ],
+      "rawRecordCount": 1
+    },
+    {
+      "recordIdentity": "semantic-gap:e646c279ac875431d093",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:4398455808944654214:909372979915479609:44",
+      "sourceIdentities": [
+        "battle-effect:19900222:0:4398455808944654214:8010390571579234873:38",
+        "battle-effect:19900222:0:4398455808944654214:909372979915479609:44"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-source-stat-formula-runtime",
+      "sourceClosurePolicyIdentities": [
+        "starborn-199002-star-carry-source-stat-formula-runtime"
+      ],
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|NewTable/element_formula.rows[id=2001]",
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|NewTable/element_formula.rows[id=2001]"
+      ],
+      "sourceClosureReasons": [
+        "element-formula-2001-is-validated-against-current-newtable",
+        "runtime-binding-evaluates-selected-alias-source-attack-and-skill-level-coefficient"
+      ],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "effect:19900222|0|elements|1|-6117208996199980820|element:4398455808944654214|44|0",
+        "effect:19900222|0|elements|30|6543718175773635314|element:4398455808944654214|38|0"
+      ],
+      "rawRecordCount": 2
+    },
+    {
+      "recordIdentity": "semantic-gap:f0bbebe62447e39e5735",
+      "ownerId": 199002,
+      "sourceKind": "passive-or-skill",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=199002].skillSlots[group=passive,index=1,skillId=19900262]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199002.hero-module.local.json",
+      "sourceIdentities": [
+        "characters.items[id=199002].skillSlots[group=passive,index=1,skillId=19900262]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199002.hero-module.local.json"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:199002:skill:19900262"
+      ],
+      "rawRecordCount": 1
+    }
+  ],
+  "rawRecords": [
+    {
+      "recordIdentity": "actor:199002:control:19900242:empty-current-client-control",
+      "ownerId": 199002,
+      "sourceKind": "control",
+      "status": "not-applicable",
+      "reasons": [
+        "backup-control-is-not-an-executable-combat-effect",
+        "current-client-control-has-no-tracks-or-elements"
+      ],
+      "sourceIdentity": "NewTable/hero.rows[id=199002].backupSkillList#19900242|skill_control_19900242.asset#skillTrackDatas=[];elements=[]",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null
+    },
+    {
+      "recordIdentity": "actor:199002:skill:19900262",
+      "ownerId": 199002,
+      "sourceKind": "passive-or-skill",
+      "status": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=199002].skillSlots[group=passive,index=1,skillId=19900262]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/199002.hero-module.local.json",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null
+    },
+    {
+      "recordIdentity": "effect:19900211|0|elements|4|4153459280445841627|37|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": [
+        "jump-or-airborne-action-is-frozen-out-of-scope",
+        "scenario-out-of-scope-not-applicable"
+      ],
+      "sourceIdentity": "battle-effect:19900211:0:4153459280445841627:7428633559088420981:37|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199002053.asset/MonoBehaviour/ast_199002053__4153459280445841627.json#elementConfigId=199002053|skill_control_19900211.asset#element199002053@37F|skill_control_19900211.asset#map0.element199002053@37F|skill_control_19900211.asset#element199002053@37F",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null
+    },
+    {
+      "recordIdentity": "effect:19900222|0|elements|0|1920509610385167669|element:1920509610385167669|44|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:1920509610385167669:909372979915479609:44",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-empty-ally-wrapper",
+      "sourceClosureSourceIdentity": "ast_199002268.asset#time=1000;injectElementDataList=[];elementDataList=[]|skill_control_19900222.asset#map0.element199002268@44F",
+      "sourceClosureReasons": [
+        "current-client-element-has-no-damage-resource-property-state-or-mark-payload",
+        "one-second-empty-wrapper-is-not-a-second-star-carry-effect"
+      ],
+      "sourceClosureImpactClassification": "not-applicable"
+    },
+    {
+      "recordIdentity": "effect:19900222|0|elements|1|-6117208996199980820|element:-6117208996199980820|44|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reasons": [
+        "effect-combine-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:-6117208996199980820:909372979915479609:44",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-container-combine-runtime",
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|battle-element:199002261#combineType=2;time=24000",
+      "sourceClosureReasons": [
+        "combine-type-two-refresh-lifecycle-is-carried-by-runtime-binding",
+        "twenty-four-second-right-open-expiry-and-switch-inheritance-remain-source-driven"
+      ],
+      "sourceClosureImpactClassification": "source-runtime-resolved"
+    },
+    {
+      "recordIdentity": "effect:19900222|0|elements|1|-6117208996199980820|element:4398455808944654214|44|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:4398455808944654214:909372979915479609:44",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-source-stat-formula-runtime",
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|NewTable/element_formula.rows[id=2001]",
+      "sourceClosureReasons": [
+        "element-formula-2001-is-validated-against-current-newtable",
+        "runtime-binding-evaluates-selected-alias-source-attack-and-skill-level-coefficient"
+      ],
+      "sourceClosureImpactClassification": "source-runtime-resolved"
+    },
+    {
+      "recordIdentity": "effect:19900222|0|elements|30|6543718175773635314|element:-6117208996199980820|38|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reasons": [
+        "effect-combine-semantics-unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:-6117208996199980820:8010390571579234873:38",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-container-combine-runtime",
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|battle-element:199002261#combineType=2;time=24000",
+      "sourceClosureReasons": [
+        "combine-type-two-refresh-lifecycle-is-carried-by-runtime-binding",
+        "twenty-four-second-right-open-expiry-and-switch-inheritance-remain-source-driven"
+      ],
+      "sourceClosureImpactClassification": "source-runtime-resolved"
+    },
+    {
+      "recordIdentity": "effect:19900222|0|elements|30|6543718175773635314|element:4398455808944654214|38|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reasons": [
+        "property-formula-not-literal-function-5"
+      ],
+      "sourceIdentity": "battle-effect:19900222:0:4398455808944654214:8010390571579234873:38",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-star-carry-source-stat-formula-runtime",
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|NewTable/element_formula.rows[id=2001]",
+      "sourceClosureReasons": [
+        "element-formula-2001-is-validated-against-current-newtable",
+        "runtime-binding-evaluates-selected-alias-source-attack-and-skill-level-coefficient"
+      ],
+      "sourceClosureImpactClassification": "source-runtime-resolved"
+    },
+    {
+      "recordIdentity": "effect:19900249|0|elements|2|-6692507629448266222|3|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "not-applicable",
+      "reasons": [
+        "scenario-out-of-scope-not-applicable",
+        "successful-parry-requires-absent-boss-attack-event"
+      ],
+      "sourceIdentity": "battle-effect:19900249:0:-6692507629448266222:1126606833159172481:3|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_600050.asset/MonoBehaviour/ast_600050__-6692507629448266222.json#elementConfigId=600050|skill_control_19900249.asset#element600050@3F|skill_control_19900249.asset#map0.element600050@3F|skill_control_19900249.asset#element600050@3F",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null
+    },
+    {
+      "recordIdentity": "effect:19900261|0|elements|0|8072606077914887740|element:8072606077914887740|0|0",
+      "ownerId": 199002,
+      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reasons": [
+        "unresolved"
+      ],
+      "sourceIdentity": "battle-effect:19900261:0:8072606077914887740:983023862729438595:0",
+      "referenceKind": null,
+      "sourceEvidenceStatus": null,
+      "scenarioRuntimeStatus": null,
+      "metadata": null,
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentity": "starborn-199002-passive-marker-runtime-contract",
+      "sourceClosureSourceIdentity": "character-combat-owner-contract:199002#passives[actor:199002:passive:19900261]|battle-element:199002343",
+      "sourceClosureReasons": [
+        "first-star-landed-hit-action-effect-bindings-own-runtime-activation",
+        "persistent-marker-is-required-by-source-driven-passive-profile"
+      ],
+      "sourceClosureImpactClassification": "source-runtime-resolved"
+    }
+  ]
+}

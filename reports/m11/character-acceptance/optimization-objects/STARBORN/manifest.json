@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrOptimizationObjectAliasAcceptanceBundle",
+  "kind": "azpr-optimization-object-alias-acceptance-bundle",
+  "optimizationObjectId": "STARBORN",
+  "status": "runtime-integrated-product-visual-pending",
+  "formalAdmission": false,
+  "optimizationReady": false,
+  "productVisualAcceptance": "pending",
+  "requiredSourceCharacterIds": [
+    199001,
+    199002
+  ],
+  "sourceAliases": [
+    {
+      "sourceCharacterId": 199001,
+      "sourceAliasIdentity": "STARBORN:source-alias:199001",
+      "profileIdentity": "actor:199001:character-combat-profile:v1",
+      "profileHash": "2888fedae88a3726abf1254b87de8b94b8e8f0078844ab23037cbe25a0edbeb4",
+      "sourceContractHash": "2ed144048bb942edad39f4137345ebaab2655341b9a1b048c3fdf61930b3bea0",
+      "selectionHash": "e4ef8378fec82ce4",
+      "qualificationSubjectHash": "1372fc0be73371c6",
+      "manifestHash": "80861f8256feef32",
+      "requirementCount": 304,
+      "requiredCount": 177,
+      "passedCount": 177,
+      "notApplicableCount": 127,
+      "blockedCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "scenarioCount": 2,
+      "scenarioPassedCount": 2,
+      "assertionCount": 788,
+      "assertionPassedCount": 788,
+      "canonicalHashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "9eded05a6488fd76",
+        "data": "8be27e5495eb9abe",
+        "trace": "b7c29675c117c971",
+        "evaluation": "857cdbfa08476399",
+        "build": "d1f5cd80effbbdee"
+      },
+      "traceProjectionHash": "5524866cbcbade33",
+      "productVisualAcceptance": "pending",
+      "optimizationReady": false
+    },
+    {
+      "sourceCharacterId": 199002,
+      "sourceAliasIdentity": "STARBORN:source-alias:199002",
+      "profileIdentity": "actor:199002:character-combat-profile:v1",
+      "profileHash": "210946074881e6625b4a7b42328b5c0ceb0a0e9126ce6095c0920ba3b4104f74",
+      "sourceContractHash": "7b2595f919d05fc6cedaa884dfeec427ed455fffaf5a07e527c0ca8a5eacec5d",
+      "selectionHash": "5245ae49fda152a4",
+      "qualificationSubjectHash": "2359491a9880c9d1",
+      "manifestHash": "6308dcf9a4cdb93d",
+      "requirementCount": 303,
+      "requiredCount": 177,
+      "passedCount": 177,
+      "notApplicableCount": 126,
+      "blockedCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "scenarioCount": 2,
+      "scenarioPassedCount": 2,
+      "assertionCount": 781,
+      "assertionPassedCount": 781,
+      "canonicalHashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "1930161382b73937",
+        "data": "4c59f88c86a971bf",
+        "trace": "225c19109d05fe83",
+        "evaluation": "a196830192a2aa28",
+        "build": "4a781a934130686b"
+      },
+      "traceProjectionHash": "15df6e02f6b3c7dc",
+      "productVisualAcceptance": "pending",
+      "optimizationReady": false
+    }
+  ],
+  "summary": {
+    "optimizationObjectCount": 1,
+    "sourceAliasCount": 2,
+    "requirementCount": 607,
+    "requiredCount": 354,
+    "passedCount": 354,
+    "notApplicableCount": 253,
+    "blockedCount": 0,
+    "sourceGapCount": 0,
+    "acceptanceGapCount": 0,
+    "scenarioCount": 4,
+    "scenarioPassedCount": 4,
+    "assertionCount": 1569,
+    "assertionPassedCount": 1569
+  },
+  "validation": {
+    "status": "optimization-object-alias-acceptance-bundle-valid",
+    "issues": []
+  },
+  "bundleHash": "9bd9ca22e91aa53a"
+}

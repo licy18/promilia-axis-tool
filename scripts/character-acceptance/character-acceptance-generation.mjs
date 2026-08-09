@@ -91,7 +91,11 @@ export function createCharacterAcceptanceManifest({
     ),
     productVisualAcceptance: {
       status: recipe.productVisualAcceptance?.status ?? 'pending',
-      scenarioIdentities: [visualScenario.scenarioIdentity],
+      scenarioIdentities: structuredClone(
+        recipe.productVisualAcceptance?.scenarioIdentities ?? [
+          visualScenario.scenarioIdentity,
+        ]
+      ),
       acceptanceCommit:
         recipe.productVisualAcceptance?.acceptanceCommit ?? null,
       recordIdentity: recipe.productVisualAcceptance?.recordIdentity ?? null,
@@ -1787,8 +1791,7 @@ export function hasRepeatedApplyRefreshLifecycle(effects = []) {
 }
 
 function createGoldenTraceProjection(report, profile) {
-  const selectionByActionId =
-    report.actual?.actions?.selectionByActionId ?? {};
+  const selectionByActionId = report.actual?.actions?.selectionByActionId ?? {};
   const selections = Object.entries(selectionByActionId);
   const semanticEffects = profile?.contracts?.effects?.semantic ?? [];
   const effects = report.actual?.trace?.effects ?? [];
@@ -1923,8 +1926,7 @@ function createGoldenEffectProjection({
   const selection = actionId ? selectionByActionId[actionId] : null;
   const controlSkillId = Number(selection?.controlSkillId);
   const subSkillIndex = Number(selection?.subSkillIndex);
-  const effectIdentity =
-    event.effectId ?? event.runtimeEffectId ?? null;
+  const effectIdentity = event.effectId ?? event.runtimeEffectId ?? null;
   const normalizedEffectIdentity = resolveEffectIdentity({
     effectIdentity,
   });
@@ -1953,8 +1955,7 @@ function createGoldenEffectProjection({
   const uniqueSemanticEffect =
     semanticMatches.length === 1 ? semanticMatches[0] : null;
   return {
-    projectionIdentity:
-      prefix + ':' + report.scenarioIdentity + ':' + index,
+    projectionIdentity: prefix + ':' + report.scenarioIdentity + ':' + index,
     actionId,
     effectIdentity,
     operation: event.operation ?? null,
@@ -1962,21 +1963,15 @@ function createGoldenEffectProjection({
     ...(Array.isArray(event.sourceSequencePath)
       ? { sourceSequencePath: [...event.sourceSequencePath] }
       : {}),
-    ...(Number.isInteger(controlSkillId)
-      ? { controlSkillId }
-      : {}),
-    ...(Number.isInteger(subSkillIndex)
-      ? { subSkillIndex }
-      : {}),
+    ...(Number.isInteger(controlSkillId) ? { controlSkillId } : {}),
+    ...(Number.isInteger(subSkillIndex) ? { subSkillIndex } : {}),
     ...(Number.isInteger(Number(uniqueSemanticEffect?.trigger?.startFrame))
       ? { triggerFrame: Number(uniqueSemanticEffect.trigger.startFrame) }
       : {}),
     ...(uniqueSemanticEffect?.trigger?.behaviorPathId == null
       ? {}
       : {
-          behaviorPathId: String(
-            uniqueSemanticEffect.trigger.behaviorPathId
-          ),
+          behaviorPathId: String(uniqueSemanticEffect.trigger.behaviorPathId),
         }),
   };
 }

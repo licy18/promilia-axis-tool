@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "runtimeProfileOverlay": true,
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "scenarioIdentities": [],
+    "automatedEvidence": []
+  },
+  "ownerId": 199001,
+  "optimizationObjectAcceptance": {
+    "optimizationObjectId": "STARBORN",
+    "requiredSourceCharacterIds": [199001, 199002],
+    "sourceCharacterId": 199001,
+    "sourceAliasIdentity": "STARBORN:source-alias:199001"
+  },
+  "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
+  "goldenReports": ["reports/m10/199001/golden-trace.json"],
+  "unnamedSecondaryPassiveSkillId": 19900162,
+  "scenarioScope": {
+    "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+    "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+    "sourceIdentity": "work/m12-b3/parallel-implementation-starborn/SOURCE_LEDGER.md#frozen-scenario-scope",
+    "includedControlSubskills": [
+      { "controlSkillId": 19900101, "subSkillIndex": 0 },
+      { "controlSkillId": 19900102, "subSkillIndex": 0 },
+      { "controlSkillId": 19900103, "subSkillIndex": 0 },
+      { "controlSkillId": 19900103, "subSkillIndex": 1 },
+      { "controlSkillId": 19900104, "subSkillIndex": 0 },
+      { "controlSkillId": 19900105, "subSkillIndex": 0 },
+      { "controlSkillId": 19900110, "subSkillIndex": 0 },
+      { "controlSkillId": 19900110, "subSkillIndex": 1 },
+      { "controlSkillId": 19900112, "subSkillIndex": 0 },
+      { "controlSkillId": 19900113, "subSkillIndex": 0 },
+      { "controlSkillId": 19900122, "subSkillIndex": 0 },
+      { "controlSkillId": 19900149, "subSkillIndex": 0 },
+      { "controlSkillId": 19900161, "subSkillIndex": 0 }
+    ]
+  },
+  "requirementPolicies": { "unselectedControlVariantsFromActionForms": true },
+  "criticalProbe": {
+    "integerThresholdBoundary": { "low": 42, "threshold": 43 },
+    "preHitAttributeChange": {
+      "beforeActionId": "199001-critical-rate-zero",
+      "afterActionId": "199001-critical-rate-one-hundred"
+    },
+    "nonCrittable": {
+      "actionId": "199001-critical-rate-zero",
+      "eventType": "VERIFIED_TUNING_DAMAGE",
+      "elementId": 152
+    }
+  },
+  "buffLifecycle": {
+    "effectIdentity": "battle-element:199001049",
+    "targetId": "actor-199001",
+    "durationFrames": 1440,
+    "requiredOperations": ["apply", "expire"],
+    "startOperations": ["apply"],
+    "rightOpenExpiry": true
+  },
+  "inputWindowBoundary": {
+    "sourceControlSkillId": 19900105,
+    "transitionControlSkillId": 19900110,
+    "sourceWindow": "[32,52) source frames",
+    "cases": [
+      {
+        "actionId": "window-outside-before",
+        "expectedOffset": 31,
+        "expectedControlSkillId": 19900110,
+        "expectedSubSkillIndex": 0
+      },
+      {
+        "actionId": "window-inside-start",
+        "expectedOffset": 32,
+        "expectedControlSkillId": 19900110,
+        "expectedSubSkillIndex": 1
+      },
+      {
+        "actionId": "window-inside-end",
+        "expectedOffset": 51,
+        "expectedControlSkillId": 19900110,
+        "expectedSubSkillIndex": 1
+      },
+      {
+        "actionId": "window-outside-after",
+        "expectedOffset": 52,
+        "expectedControlSkillId": 19900110,
+        "expectedSubSkillIndex": 0
+      }
+    ]
+  },
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-a1",
+      "controlSkillId": 19900101,
+      "subSkillIndex": 0,
+      "semanticName": "A1"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-a2",
+      "controlSkillId": 19900102,
+      "subSkillIndex": 0,
+      "semanticName": "A2"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-a3",
+      "controlSkillId": 19900103,
+      "subSkillIndex": 0,
+      "semanticName": "A3"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-a4",
+      "controlSkillId": 19900104,
+      "subSkillIndex": 0,
+      "semanticName": "A4"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-a5",
+      "controlSkillId": 19900105,
+      "subSkillIndex": 0,
+      "semanticName": "A5"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-charged-derived",
+      "controlSkillId": 19900110,
+      "subSkillIndex": 1,
+      "semanticName": "派生重击"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-derived-thrust",
+      "controlSkillId": 19900101,
+      "subSkillIndex": 1,
+      "semanticName": "派生突刺"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-star",
+      "controlSkillId": 19900112,
+      "subSkillIndex": 0,
+      "semanticName": "星鸣技"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-star-thrust",
+      "controlSkillId": 19900101,
+      "subSkillIndex": 1,
+      "semanticName": "星鸣后突刺"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-charged-default",
+      "controlSkillId": 19900110,
+      "subSkillIndex": 0,
+      "semanticName": "默认重击"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-ultimate",
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "semanticName": "星决技"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-star-carry-apply",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "semanticName": "星携技"
+    },
+    {
+      "kind": "trace-query",
+      "assertionIdentity": "blocked-hit-suppresses-damage",
+      "path": "damage",
+      "where": {
+        "actionId": "199001-blocked-hit-negative",
+        "eventType": "VERIFIED_COMBAT_HIT",
+        "hitIdentity": "19900102|0|elements|0|-6304716636768638044|8|1"
+      },
+      "expectation": { "count": 0 }
+    }
+  ],
+  "negativeActionCases": [
+    {
+      "identity": "ultimate-sp-exact-and-insufficient",
+      "assertionIdentity": "resource-exact-and-insufficient",
+      "durationFrames": 400,
+      "initialActorResources": [{ "slotId": "slot-1", "initialSp": 99 }],
+      "actions": [
+        {
+          "id": "199001-ultimate-sp-insufficient",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "baselineRequiredExecutableActionIds": ["starborn-f-ultimate"],
+      "expectedIssue": {
+        "actionId": "199001-ultimate-sp-insufficient",
+        "code": "machine-axis-action-resource-insufficient"
+      }
+    },
+    {
+      "identity": "star-carry-cooldown-before-expiry",
+      "assertionIdentity": "star-carry-cooldown-before-expiry-rejected",
+      "durationFrames": 3000,
+      "actions": [
+        {
+          "id": "199001-star-carry-cooldown-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900122,
+            "actionKind": "star-carry",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "199001-star-carry-cooldown-early",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900122,
+            "actionKind": "star-carry",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 1439 }
+        }
+      ],
+      "requiredExecutableActionIds": ["199001-star-carry-cooldown-source"],
+      "expectedIssue": {
+        "actionId": "199001-star-carry-cooldown-early",
+        "code": "machine-axis-action-not-executable",
+        "violationCode": "skill-cooldown-active"
+      }
+    }
+  ],
+  "isolatedActionCases": [
+    {
+      "identity": "star-first-hit-miss-condition-insufficient",
+      "assertionIdentity": "condition-insufficient-negative",
+      "durationFrames": 300,
+      "actions": [
+        {
+          "id": "199001-star-first-hit-miss-condition-insufficient",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "19900112|0|elements|4|-7530867443862883934|16|1": {
+              "landed": "miss",
+              "criticalMode": "sampled"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "first-hit-miss-rejects-star-passive",
+          "path": "state.targetEvents",
+          "where": {
+            "actionId": "199001-star-first-hit-miss-condition-insufficient",
+            "type": "VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED",
+            "payload.elementId": 199001211,
+            "payload.applied": false
+          },
+          "expectation": { "count": 1 }
+        }
+      ]
+    },
+    {
+      "identity": "star-follow-up-interrupts-late-hit",
+      "assertionIdentity": "interruption-boundary-late-hit-suppressed",
+      "durationFrames": 300,
+      "actions": [
+        {
+          "id": "199001-interruption-star",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "199001-interruption-thrust",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900101,
+            "actionKind": "normal-attack",
+            "attackInput": {
+              "sequenceIndex": 1,
+              "chainIdentity": "context-form:actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+              "groupId": "199001-interruption-thrust",
+              "contextActionId": "199001-interruption-star"
+            },
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 53 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "pre-interruption-first-hit-lands",
+          "path": "state.targetEvents",
+          "where": {
+            "actionId": "199001-interruption-star",
+            "type": "VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED",
+            "payload.elementId": 199001211,
+            "payload.hitIdentity": "19900112|0|elements|4|-7530867443862883934|16|1",
+            "payload.applied": true
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "post-interruption-late-hit-suppressed",
+          "path": "damage",
+          "where": {
+            "actionId": "199001-interruption-star",
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "hitIdentity": "19900112|0|elements|4|-7530867443862883934|64|9"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "interrupting-follow-up-selected",
+          "path": "variants.selections",
+          "where": {
+            "actionId": "199001-interruption-thrust",
+            "controlSkillId": 19900101,
+            "subSkillIndex": 1
+          },
+          "expectation": { "count": 1 }
+        }
+      ]
+    },
+    {
+      "identity": "star-carry-cooldown-exact-right-open",
+      "assertionIdentity": "star-carry-cooldown-exact-right-open",
+      "durationFrames": 3000,
+      "actions": [
+        {
+          "id": "199001-star-carry-exact-first",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900122,
+            "actionKind": "star-carry",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "199001-star-carry-exact-second",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 19900122,
+            "actionKind": "star-carry",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 1440 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "exact-cooldown-second-action-selected",
+          "path": "variants.selections",
+          "where": {
+            "actionId": "199001-star-carry-exact-second",
+            "controlSkillId": 19900122,
+            "subSkillIndex": 0
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "right-open-expire-before-reapply",
+          "path": "effects.events",
+          "where": {
+            "effectId": "battle-element:199001049",
+            "targetId": "actor-199001",
+            "absoluteFrame": 1477
+          },
+          "expectation": {
+            "count": 2,
+            "orderedValues": { "operation": ["expire", "apply"] }
+          }
+        }
+      ]
+    }
+  ]
+}

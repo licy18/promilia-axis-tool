@@ -760,6 +760,111 @@ describe('verified target-state runtime', () => {
     ]);
   });
 
+  it('evaluates a source-stat property formula from the selected action alias and fails without its stat', () => {
+    const mechanicsPackage = createLandedHitMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.runtimeEffectBindings = [
+      {
+        ownerId: 424242,
+        bindingIdentity: 'synthetic-source-stat-property',
+        triggerKind: 'action-frame',
+        controlSkillId: 424206,
+        subSkillIndex: 0,
+        triggerFrame: 1,
+        frameRate: 60,
+        targetKind: 'team-allies',
+        effectId: 'battle-element:9121',
+        effectName: 'Synthetic Source Attack Ratio',
+        durationMs: 24000,
+        stackMode: 'refresh',
+        stackDelta: 1,
+        maxStacks: 1,
+        modifiers: [
+          {
+            kind: 'battle-property',
+            attributeId: 1,
+            bucket: 'dynamicExtra',
+            valueRaw: 1100,
+            valueRawByLevel: { 1: 1100, 12: 2200 },
+            sourceStatFormula: {
+              formulaId: 2001,
+              expression: '(self.ATK[4]*A)/10000',
+              sourceStatKey: 'attack',
+              divisor: 10000,
+            },
+            propertyTags: [],
+          },
+        ],
+        directSp: null,
+        sourceIdentity: 'fixture:synthetic-source-stat-property',
+        applied: true,
+      },
+    ];
+    const levelOne = {
+      ...createAction('source-stat-level-one', 0, 0),
+      level: 1,
+    };
+    levelOne.actor.stats = { attack: 1000 };
+    const levelTwelve = {
+      ...createAction('source-stat-level-twelve', 1000, 1),
+      level: 12,
+    };
+    levelTwelve.actor.stats = { attack: 1000 };
+    const actionResolutionById = new Map(
+      [levelOne, levelTwelve].map(action => [
+        action.id,
+        createResolution({ controlSkillId: 424206, hits: [] }),
+      ])
+    );
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 26000 },
+        actors: [
+          { id: 'actor-1', characterId: 424242 },
+          { id: 'actor-2', characterId: 424244 },
+        ],
+        enemy: { id: 'enemy-1' },
+        actions: [levelOne, levelTwelve],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.effectCommands.map(command => [
+        command.sourceActionId,
+        command.targetId,
+        command.modifiers[0].valueRaw,
+        command.modifiers[0].formulaEvaluation.sourceActorId,
+      ])
+    ).toEqual([
+      ['source-stat-level-one', 'actor-2', 110, 'actor-1'],
+      ['source-stat-level-twelve', 'actor-2', 220, 'actor-1'],
+    ]);
+
+    const missingStatAction = createAction('source-stat-missing', 0);
+    expect(() =>
+      applyVerifiedTargetStateRuntime({
+        scenario: {
+          time: { durationMs: 1000 },
+          actors: [
+            { id: 'actor-1', characterId: 424242 },
+            { id: 'actor-2', characterId: 424244 },
+          ],
+          enemy: { id: 'enemy-1' },
+          actions: [missingStatAction],
+        },
+        actionResolutionById: new Map([
+          [
+            missingStatAction.id,
+            createResolution({ controlSkillId: 424206, hits: [] }),
+          ],
+        ]),
+        mechanicsPackage,
+      })
+    ).toThrow(/source-stat formula input missing/);
+  });
+
   it('runs periodic direct effects without target-state profiles and truncates the old interval on refresh', () => {
     const mechanicsPackage = createMechanicsPackage();
     mechanicsPackage.actionVariantGraph.targetStateProfiles = [];

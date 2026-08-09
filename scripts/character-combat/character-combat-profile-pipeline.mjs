@@ -135,6 +135,17 @@ export function createCharacterCombatProfileSchema() {
         type: 'object',
         required: ['ownerKind', 'ownerId', 'ownerName'],
       },
+      optimizationObject: {
+        type: 'object',
+        required: [
+          'optimizationObjectId',
+          'sourceCharacterId',
+          'sourceAliasIdentity',
+          'sourceIdentity',
+          'status',
+          'applied',
+        ],
+      },
       sourcePackage: {
         type: 'object',
         required: ['packageId', 'packageHash'],
@@ -446,6 +457,9 @@ export function createCharacterCombatOwnerArtifacts({
   const variantWindowBindings = sortByIdentity(
     compiledContracts.variantWindowBindings ?? []
   );
+  const inputVariantSelectors = sortByIdentity(
+    compiledContracts.inputVariantSelectors ?? []
+  );
   const actionEffectBindings = sortByIdentity(
     compiledContracts.actionEffectBindings ?? []
   );
@@ -584,6 +598,7 @@ export function createCharacterCombatOwnerArtifacts({
       attackInputMechanicWindows,
       controlTransitionWindows,
       variantWindowBindings,
+      inputVariantSelectors,
       actionEffectBindings,
       specialResourceProfiles,
       resourceTransactions,
@@ -716,6 +731,7 @@ export function createCharacterCombatOwnerArtifacts({
     attackInputMechanicWindows,
     controlTransitionWindows,
     variantWindowBindings,
+    inputVariantSelectors,
     actionEffectBindings,
     hits,
     resourceProfiles: specialResourceProfiles,
@@ -791,6 +807,9 @@ export function createCharacterCombatOwnerArtifacts({
       ownerName: character.name ?? null,
       englishName: character.englishName ?? null,
     },
+    ...(compiledOwnerContract.optimizationObject
+      ? { optimizationObject: compiledOwnerContract.optimizationObject }
+      : {}),
     sourcePackage: {
       packageId: mechanicsPackage.packageId,
       packageHash: sourcePackageHash,

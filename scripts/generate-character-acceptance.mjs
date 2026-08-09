@@ -16,6 +16,7 @@ import {
 } from '../src/character-acceptance/characterAcceptanceProtocol.js';
 import { selectConfiguredCriticalProbeEvents } from './character-acceptance/critical-probe-acceptance.mjs';
 import { validateRightOpenLifecycleMatches } from './character-acceptance/effect-lifecycle-acceptance.mjs';
+import { inspectOptimizationObjectSourceAliasSelection } from '../src/character-acceptance/optimizationObjectAliasProtocol.js';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, '..');
@@ -48,6 +49,13 @@ const reportRoot = path.join(
 const writeMode = process.argv.includes('--write');
 const assertClean = process.argv.includes('--assert-clean');
 const requestedOwnerId = readRequestedOwnerId(process.argv.slice(2));
+const runtimeOverlayOutput = readOptionalPathArgument(
+  process.argv.slice(2),
+  '--runtime-overlay-output'
+);
+if (runtimeOverlayOutput && requestedOwnerId == null) {
+  throw new Error('--runtime-overlay-output requires one --owner');
+}
 
 const recipes = (await loadRecipes()).filter(
   recipe =>
@@ -168,6 +176,11 @@ try {
           ': ' +
           packageValidation.issues.join(', ')
       );
+    }
+    if (runtimeOverlayOutput) {
+      const outputPath = path.resolve(projectRoot, runtimeOverlayOutput);
+      await fs.mkdir(path.dirname(outputPath), { recursive: true });
+      await fs.writeFile(outputPath, jsonText(runtimePackage), 'utf8');
     }
     packageModule.installVerifiedCombatMechanicsPackage(runtimePackage);
     const service = serviceModule.createMachineAxisService();
@@ -373,8 +386,70 @@ function createRuntimeProfileOverlay(
   const profileVariantWindowBindings = structuredClone(
     profile.contracts?.variantWindowBindings ?? []
   );
+  const profileContextAttackInputSegments = (
+    profile.contracts?.actionForms ?? []
+  )
+    .filter(
+      form =>
+        form.publicActionKind === 'normal-attack' &&
+        form.selectionKind === 'input-context-derived' &&
+        form.executionTiming?.occupancy?.status === 'applied'
+    )
+    .map(form => {
+      const publicAction = (profile.contracts?.publicActions ?? []).find(
+        action => action.actionKind === form.publicActionKind
+      );
+      const durationFrames = Number(
+        form.executionTiming.occupancy.durationFrames
+      );
+      const selectedSubSkillIndex = Number(form.executionSubSkillIndex ?? 0);
+      const selectedHitIdentities = (form.executionTiming?.hits ?? [])
+        .map(hit => hit.hitIdentity)
+        .filter(Boolean);
+      return {
+        identity: `${String(form.formIdentity)}:context-segment`,
+        sourceSkillId: Number(publicAction?.sourceSkillId),
+        attackInputChainIdentity: `context-form:${String(form.formIdentity)}`,
+        chainSequenceIndex: 1,
+        sequenceIndex: 1,
+        sequenceTotal: 1,
+        controlSkillId: Number(
+          form.publicControlSkillId ?? form.executionControlSkillId
+        ),
+        executionControlSkillId: Number(form.executionControlSkillId),
+        subSkillIndex: selectedSubSkillIndex,
+        selectedSubSkillIndex,
+        durationFrames,
+        effectiveDurationFrames: durationFrames,
+        durationStatus: 'applied',
+        effectiveDurationStatus: 'applied',
+        durationSourceIdentity: form.sourceIdentity,
+        sourceIdentity: form.sourceIdentity,
+        sourceEvidenceStatus: 'applied',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        runtimeReady: true,
+        schedulable: true,
+        selectedHitIdentities,
+        hitCount: selectedHitIdentities.length,
+        executionTiming: structuredClone(form.executionTiming),
+        actionScheduling: {
+          status: 'exact',
+          kind: 'exact-selected-variant-occupancy',
+          durationFrames,
+          planningDurationFrames: null,
+          selectedSubSkillIndex,
+          sourceIdentity: form.sourceIdentity,
+          sourceStatus: 'verified-input-occupancy',
+          variantModelStatus: 'resolved',
+          reasons: [],
+        },
+      };
+    });
   result.actionMappings = result.actionMappings.map(mapping => {
-    const chainSegments = profileAttackInputSegments
+    const chainSegments = [
+      ...profileAttackInputSegments,
+      ...profileContextAttackInputSegments,
+    ]
       .filter(
         segment =>
           Number(segment.sourceSkillId) === Number(mapping.sourceSkillId) &&
@@ -480,6 +555,10 @@ function createRuntimeProfileOverlay(
     graph.runtimeEffectBindings,
     profile.contracts?.runtimeEffectBindings,
     row => String(row?.bindingIdentity ?? '')
+  );
+  graph.derivedControlContracts = applyProfileInputVariantSelectors(
+    graph.derivedControlContracts,
+    profile.contracts?.inputVariantSelectors
   );
   const acceptanceTargetStateProfiles = (
     profile.contracts?.acceptanceTargetStateProfiles ?? []
@@ -643,6 +722,53 @@ function upsertRows(existing = [], additions = [], identity) {
   return result;
 }
 
+function applyProfileInputVariantSelectors(existing = [], bindings = []) {
+  const result = structuredClone(existing ?? []);
+  for (const binding of bindings ?? []) {
+    const index = result.findIndex(
+      contract =>
+        Number(contract.ownerId) === Number(binding.ownerId) &&
+        Number(contract.controlSkillId) === Number(binding.publicControlSkillId)
+    );
+    if (index < 0) {
+      throw new Error(
+        'Runtime profile overlay input selector has no source control contract: ' +
+          `${binding.ownerId}/${binding.publicControlSkillId}`
+      );
+    }
+    const current = result[index];
+    result[index] = {
+      ...current,
+      actionKinds: [
+        ...new Set([
+          ...(current.actionKinds ?? []),
+          ...(binding.actionKinds ?? []),
+        ]),
+      ],
+      controlSource: 'input-controlled',
+      candidateControlSources: [
+        ...new Set([
+          ...(current.candidateControlSources ?? []),
+          'input-controlled',
+        ]),
+      ],
+      decisionFrame: Number(binding.decisionFrame) || 0,
+      inputSelector: structuredClone(binding.inputSelector),
+      chargeTier: structuredClone(binding.options ?? []),
+      selectedSubSkillIndex: null,
+      sourceIdentity: [
+        ...(Array.isArray(current.sourceIdentity)
+          ? current.sourceIdentity
+          : [current.sourceIdentity].filter(Boolean)),
+        binding.sourceIdentity,
+      ],
+      resolutionStatus: 'applied',
+      reasons: [],
+    };
+  }
+  return result;
+}
+
 function countValues(values) {
   return Object.fromEntries(
     [...(values ?? [])].sort().reduce((counts, value) => {
@@ -782,6 +908,15 @@ function executeVisualScenario({
       identity: 'workbench-import-export-round-trip',
       passed: workbenchRoundTrip,
     },
+    ...(recipe.optimizationObjectAcceptance
+      ? [
+          inspectOptimizationObjectSourceAliasSelection({
+            configuration: recipe.optimizationObjectAcceptance,
+            fixture,
+            profile,
+          }),
+        ]
+      : []),
     ...Object.entries(criticalMatrix)
       .filter(([key]) => key !== 'details')
       .map(([key, passed]) => ({ identity: 'critical:' + key, passed })),
@@ -1055,7 +1190,19 @@ function executeVisualScenario({
 
 function inspectCriticalMatrix(ownerId, first, second, probe) {
   const prefix = String(ownerId) + '-critical-';
-  const boundary = { low: 499, threshold: 500 };
+  const configuredBoundary = probe?.integerThresholdBoundary ?? null;
+  const boundary = configuredBoundary
+    ? {
+        low: Number(configuredBoundary.low),
+        threshold: Number(configuredBoundary.threshold),
+      }
+    : { low: 499, threshold: 500 };
+  const validBoundary =
+    Number.isInteger(boundary.low) &&
+    Number.isInteger(boundary.threshold) &&
+    boundary.low >= 0 &&
+    boundary.threshold <= 10000 &&
+    boundary.low + 1 === boundary.threshold;
   const damageEvents = first.trace?.damage ?? [];
   const capturedSample = damageEvents.find(
     event =>
@@ -1143,6 +1290,7 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
   return {
     sameSeedReplay: sameHashes(first.hashes, second.hashes),
     integerThresholdBoundary:
+      validBoundary &&
       sampledLow?.formula?.randomBranch?.criticalRoll === boundary.low &&
       sampledLow?.formula?.randomBranch?.criticalThreshold ===
         boundary.threshold &&
@@ -1948,6 +2096,31 @@ function projectAppliedEffectSourceElements(run, scenarioId) {
       });
     }
   }
+  for (const [eventIndex, event] of (
+    run.trace?.state?.targetEvents ?? []
+  ).entries()) {
+    const elementId = Number(event.payload?.elementId);
+    if (
+      event.type !== 'VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED' ||
+      event.payload?.applied !== true ||
+      !Number.isInteger(elementId)
+    ) {
+      continue;
+    }
+    rows.push({
+      projectionIdentity:
+        'machine-landed-hit-effect-source-element:' +
+        scenarioId +
+        ':' +
+        eventIndex,
+      actionId: event.actionId ?? null,
+      effectIdentity: 'battle-element:' + elementId,
+      operation: 'landed-hit-condition-applied',
+      targetId: event.targetId ?? event.payload?.targetId ?? null,
+      sourceIdentity: event.payload?.sourceIdentity ?? null,
+      hitIdentity: event.payload?.hitIdentity ?? null,
+    });
+  }
   return rows;
 }
 
@@ -1989,6 +2162,41 @@ function projectCharacterRuntimeEffectEvidence(run, profile, scenarioId) {
         beforeValue: event.beforeValue ?? null,
         afterValue: event.afterValue ?? null,
         sourceIdentity: binding.sourceIdentity ?? null,
+      });
+    }
+  }
+  for (const passive of profile.contracts?.passives ?? []) {
+    for (const [triggerIndex, trigger] of (
+      passive.triggerBindings ?? []
+    ).entries()) {
+      const activation = trigger.landedHitActivationCondition;
+      if (!activation?.hitIdentity) continue;
+      const event = (run.trace?.state?.targetEvents ?? []).find(
+        candidate =>
+          candidate.type ===
+            'VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED' &&
+          candidate.payload?.applied === true &&
+          candidate.payload?.hitIdentity === activation.hitIdentity &&
+          Number(
+            selectionsByActionId.get(candidate.actionId)?.controlSkillId
+          ) === Number(trigger.controlSkillId)
+      );
+      if (!event) continue;
+      rows.push({
+        projectionIdentity:
+          'machine-runtime-passive-effect:' +
+          scenarioId +
+          ':' +
+          passive.passiveIdentity +
+          ':' +
+          triggerIndex,
+        actionId: event.actionId ?? null,
+        effectIdentity: passive.effectId,
+        operation: 'landed-hit-passive-trigger',
+        targetId: event.targetId ?? event.payload?.targetId ?? null,
+        sourceIdentity:
+          trigger.sourceIdentity ?? passive.sourceIdentity ?? null,
+        hitIdentity: activation.hitIdentity,
       });
     }
   }
@@ -2042,6 +2250,9 @@ function projectTuningMarkResourceEffects(run, profile, scenarioId) {
         Number(effect.tuningOverlimit.maximumStacks) > 0
     )
   );
+  const controlEffects = (profile.contracts?.controls ?? []).flatMap(
+    control => control.effects ?? []
+  );
   const tuningDamageEvents = (run.trace?.damage ?? []).filter(
     event => event.eventType === 'VERIFIED_TUNING_DAMAGE'
   );
@@ -2073,13 +2284,51 @@ function projectTuningMarkResourceEffects(run, profile, scenarioId) {
       afterValue: event.after ?? null,
       change: event.delta ?? null,
     });
-    if (event.kind !== 'consume' || Number(event.delta) >= 0) continue;
-
-    const tuningProfile = profileByMarkId.get(markId);
     const eventSourceIdentity =
       typeof event.sourceIdentity === 'string'
         ? event.sourceIdentity
         : (event.sourceIdentity?.identity ?? null);
+    const acquiredMarkSourceEffect = controlEffects.find(
+      effect =>
+        eventSourceIdentity != null &&
+        String(effect.sourceIdentity) === String(eventSourceIdentity) &&
+        Number(effect.tuningMark?.markId) === markId
+    );
+    if (event.kind === 'acquire' && acquiredMarkSourceEffect) {
+      for (const componentId of [
+        ...new Set(
+          (acquiredMarkSourceEffect.tuningMark?.additionalHitComponentIds ?? [])
+            .map(Number)
+            .filter(Number.isInteger)
+        ),
+      ]) {
+        rows.push({
+          projectionIdentity:
+            'machine-tuning-mark-component-activation:' +
+            scenarioId +
+            ':' +
+            index +
+            ':' +
+            componentId,
+          actionId: event.actionId ?? null,
+          effectIdentity: 'battle-element:' + componentId,
+          operation: 'activate-tuning-mark-component',
+          targetId: event.targetId ?? event.actorId ?? null,
+          sourceIdentity: [
+            eventSourceIdentity,
+            acquiredMarkSourceEffect.tuningMark?.sourceIdentity,
+          ]
+            .filter(Boolean)
+            .join('|'),
+          beforeValue: event.before ?? null,
+          afterValue: event.after ?? null,
+          change: event.delta ?? null,
+        });
+      }
+    }
+    if (event.kind !== 'consume' || Number(event.delta) >= 0) continue;
+
+    const tuningProfile = profileByMarkId.get(markId);
     const sourceEffect = sourceEffects.find(
       effect =>
         eventSourceIdentity != null &&
@@ -3098,6 +3347,16 @@ async function loadRecipes(ownerId = null) {
 
 function inspectNegativeActionCase(service, fixture, negativeCase) {
   const contract = structuredClone(fixture);
+  for (const resourceOverride of negativeCase.initialActorResources ?? []) {
+    const member = contract.scenario?.team?.find(
+      candidate =>
+        String(candidate.slotId ?? '') === String(resourceOverride.slotId ?? '')
+    );
+    if (!member) continue;
+    if (Number.isFinite(Number(resourceOverride.initialSp))) {
+      member.initialSp = Number(resourceOverride.initialSp);
+    }
+  }
   if (Array.isArray(negativeCase.actions)) {
     contract.actions = structuredClone(negativeCase.actions);
   } else {
@@ -3117,14 +3376,53 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
       return Object.is(actual[key], value);
     })
   );
+  const requiredExecutableActionIds = new Set(
+    (negativeCase.requiredExecutableActionIds ?? []).map(String)
+  );
+  const prerequisiteIssues = (validation.issues ?? []).filter(actual =>
+    requiredExecutableActionIds.has(String(actual.actionId ?? ''))
+  );
+  const baselineRequiredExecutableActionIds = new Set(
+    (negativeCase.baselineRequiredExecutableActionIds ?? []).map(String)
+  );
+  const baselineValidation = service.validate(fixture);
+  const baselinePrerequisiteIssues = (baselineValidation.issues ?? []).filter(
+    actual =>
+      baselineRequiredExecutableActionIds.has(String(actual.actionId ?? ''))
+  );
+  const baselineMissingActionIds = [
+    ...baselineRequiredExecutableActionIds,
+  ].filter(
+    actionId =>
+      !(fixture.actions ?? []).some(
+        action => String(action.id ?? '') === actionId
+      )
+  );
   return {
-    identity: 'negative:' + String(negativeCase.identity),
+    identity:
+      negativeCase.assertionIdentity ??
+      'negative:' + String(negativeCase.identity),
     passed:
       validation.valid === false &&
       Boolean(issue) &&
+      prerequisiteIssues.length === 0 &&
+      baselineValidation.valid === true &&
+      baselinePrerequisiteIssues.length === 0 &&
+      baselineMissingActionIds.length === 0 &&
       validation.hashes?.trace != null,
     actual: {
       issue: issue ?? null,
+      initialActorResources: structuredClone(
+        negativeCase.initialActorResources ?? []
+      ),
+      requiredExecutableActionIds: [...requiredExecutableActionIds],
+      prerequisiteIssues,
+      baselineRequiredExecutableActionIds: [
+        ...baselineRequiredExecutableActionIds,
+      ],
+      baselinePrerequisiteIssues,
+      baselineMissingActionIds,
+      baselineCanonicalHashes: baselineValidation.hashes,
       canonicalHashes: validation.hashes,
       classification: validation.classification,
     },
@@ -3141,7 +3439,9 @@ function inspectIsolatedActionCase(service, fixture, isolatedCase) {
   const validation = service.validate(contract);
   if (!validation.valid) {
     return {
-      identity: 'isolated:' + String(isolatedCase.identity),
+      identity:
+        isolatedCase.assertionIdentity ??
+        'isolated:' + String(isolatedCase.identity),
       passed: false,
       actual: { validation },
     };
@@ -3152,7 +3452,9 @@ function inspectIsolatedActionCase(service, fixture, isolatedCase) {
     inspectRecipeProbe(first, probe)
   );
   return {
-    identity: 'isolated:' + String(isolatedCase.identity),
+    identity:
+      isolatedCase.assertionIdentity ??
+      'isolated:' + String(isolatedCase.identity),
     passed:
       sameHashes(first.hashes, second.hashes) &&
       probeResults.every(result => result.passed),
@@ -3493,6 +3795,14 @@ function readRequestedOwnerId(args) {
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error('Invalid --owner value: ' + String(args[index + 1]));
   }
+  return value;
+}
+
+function readOptionalPathArgument(args, name) {
+  const index = args.indexOf(name);
+  if (index < 0) return null;
+  const value = String(args[index + 1] ?? '').trim();
+  if (!value) throw new Error(`Invalid ${name} value`);
   return value;
 }
 

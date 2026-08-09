@@ -118,7 +118,10 @@ export function collectCharacterAcceptanceFacts(manifest = {}) {
     scenarios.every(scenario => scenario?.workbenchRoundTrip === 'passed');
   const productVisualAccepted =
     manifest.evidence?.productVisualAcceptance?.status === 'accepted' &&
-    manifest.evidence?.productVisualAcceptance?.bindingStatus === 'verified';
+    manifest.evidence?.productVisualAcceptance?.bindingStatus === 'verified' &&
+    hasCompleteProductVisualScreenshotCoverage(
+      manifest.evidence?.productVisualAcceptance
+    );
   const functionalFailureCount =
     goldens.filter(golden => golden?.status !== 'passed').length +
     scenarios.filter(scenario => scenario?.status !== 'passed').length;
@@ -416,6 +419,12 @@ function collectCharacterAcceptanceManifestIssues(
   const visualScenarioIdentities = new Set(
     productVisual.scenarioIdentities ?? []
   );
+  if (
+    productVisual.status === 'accepted' &&
+    visualScenarioIdentities.size === 0
+  ) {
+    issues.push('character-acceptance-visual-scenario-set-empty');
+  }
   const visualEvidenceCounts = new Map();
   for (const evidence of productVisual.automatedEvidence ?? []) {
     const identity = evidence?.scenarioIdentity;
@@ -736,6 +745,33 @@ function deriveProductVisualAcceptance({
     },
     automatedEvidence,
   };
+}
+
+function hasCompleteProductVisualScreenshotCoverage(productVisual) {
+  const scenarioIdentities = productVisual?.scenarioIdentities ?? [];
+  const uniqueScenarioIdentities = new Set(scenarioIdentities);
+  const automatedEvidence = productVisual?.automatedEvidence ?? [];
+  if (
+    scenarioIdentities.length === 0 ||
+    uniqueScenarioIdentities.size !== scenarioIdentities.length ||
+    automatedEvidence.length !== scenarioIdentities.length
+  ) {
+    return false;
+  }
+  return scenarioIdentities.every(scenarioIdentity => {
+    const matchingEvidence = automatedEvidence.filter(
+      evidence => evidence?.scenarioIdentity === scenarioIdentity
+    );
+    if (matchingEvidence.length !== 1) return false;
+    const evidence = matchingEvidence[0];
+    return (
+      evidence?.evidenceKind === PRODUCT_VISUAL_SCREENSHOT_EVIDENCE_KIND &&
+      evidence?.status === 'automated-workbench-import-passed' &&
+      Boolean(evidence?.screenshotPath) &&
+      /^[0-9a-f]{64}$/.test(String(evidence?.screenshotSha256 ?? '')) &&
+      evidence?.traceSha256 == null
+    );
+  });
 }
 
 function collectDuplicateIdentityIssue(

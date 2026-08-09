@@ -1,0 +1,1083 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 199002,
+  "optimizationObject": {
+    "optimizationObjectId": "STARBORN",
+    "sourceCharacterId": 199002,
+    "sourceAliasIdentity": "STARBORN:source-alias:199002",
+    "sourceIdentity": "src/data/generated/characters.json#items[id=199002]|NewTable/hero.rows[id=199002]"
+  },
+  "targetPipelineMaturity": "profile-compiled",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [],
+      "requiredActionEffectBindingIdentities": [
+        "starborn-199002-derived-stance-break",
+        "starborn-199002-star-stance-break",
+        "starborn-199002-star-passive-team-attack",
+        "starborn-199002-star-passive-target-defense",
+        "starborn-199002-derived-input-permission-23",
+        "starborn-199002-derived-input-permission-29",
+        "starborn-199002-derived-input-permission-35",
+        "starborn-199002-derived-input-permission-41",
+        "starborn-199002-derived-input-permission-47",
+        "starborn-199002-derived-input-permission-53",
+        "starborn-199002-derived-input-permission-59",
+        "starborn-199002-derived-input-permission-65",
+        "starborn-199002-derived-input-permission-71",
+        "starborn-199002-star-input-permission-16",
+        "starborn-199002-star-input-permission-22",
+        "starborn-199002-star-input-permission-28",
+        "starborn-199002-star-input-permission-34",
+        "starborn-199002-star-input-permission-40",
+        "starborn-199002-star-input-permission-46",
+        "starborn-199002-star-input-permission-52",
+        "starborn-199002-star-input-permission-58",
+        "starborn-199002-star-input-permission-64"
+      ],
+      "requiredPassiveIdentities": ["actor:199002:passive:19900261"]
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 199002,
+    "normalAttackSkillId": 19900201,
+    "chargedAttackControlSkillId": 19900210,
+    "starSkillControlSkillId": 19900212,
+    "ultimateControlSkillId": 19900213,
+    "starCarryControlSkillId": 19900222,
+    "limitCounterControlSkillId": 19900225,
+    "perfectParryControlSkillId": 19900227,
+    "passiveSkillIds": [19900261]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:199002#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "verified-input-reopen",
+    "reachableControlSkillIds": [
+      19900201, 19900202, 19900203, 19900204, 19900205, 19900210, 19900211,
+      19900212, 19900213, 19900214, 19900215, 19900216, 19900217, 19900221,
+      19900222, 19900224, 19900225, 19900226, 19900227, 19900231, 19900232,
+      19900233, 19900234, 19900235, 19900236, 19900241, 19900242, 19900249,
+      19900261, 19900262
+    ],
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 19900204,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A4",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 19900210,
+        "executionControlSkillId": 19900210,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-derived-charged",
+        "semanticName": "派生重击",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 19900205,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A5",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 19900210,
+        "executionControlSkillId": 19900210,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-derived-charged",
+        "semanticName": "派生重击",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 19900210,
+        "sourceSubSkillIndex": 1,
+        "sourcePublicActionKind": "charged-attack",
+        "sourceSemanticName": "派生重击",
+        "publicActionKind": "normal-attack",
+        "publicControlSkillId": 19900203,
+        "executionControlSkillId": 19900201,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-thrust-follow-up",
+        "semanticName": "突刺追击",
+        "inputCommand": "normal-attack",
+        "condition": { "kind": "always" },
+        "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 19900212,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "star-skill",
+        "sourceSemanticName": "星鸣技",
+        "publicActionKind": "normal-attack",
+        "publicControlSkillId": 19900203,
+        "executionControlSkillId": 19900201,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-thrust-follow-up",
+        "semanticName": "突刺追击",
+        "inputCommand": "normal-attack",
+        "condition": { "kind": "always" },
+        "expectedWindowCount": 1
+      }
+    ],
+    "publicActionDeclarations": [
+      {
+        "sourceSkillId": 19900222,
+        "actionVariantIndex": 0,
+        "actionKind": "star-carry",
+        "controlSkillId": 19900222,
+        "catalogLabel": "星携技",
+        "actionVariantLabel": "星携技",
+        "sourceStatus": "verified-static-evidence",
+        "sourceIdentity": "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]|skill_control_19900222.asset#skillPlayers[0];skillResourceMaps[0]"
+      }
+    ],
+    "publicActionForms": [
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 19900210,
+        "executionControlSkillId": 19900210,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "starborn-199002-default-charged",
+        "semanticName": "普通重击",
+        "selectionKind": "default",
+        "condition": { "kind": "always" }
+      },
+      {
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 19900210,
+        "executionControlSkillId": 19900210,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-derived-charged",
+        "semanticName": "派生重击",
+        "selectionKind": "input-context-derived",
+        "condition": { "kind": "always" }
+      },
+      {
+        "publicActionKind": "normal-attack",
+        "publicControlSkillId": 19900203,
+        "executionControlSkillId": 19900201,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-thrust-follow-up",
+        "semanticName": "突刺追击",
+        "selectionKind": "input-context-derived",
+        "condition": { "kind": "always" }
+      },
+      {
+        "publicActionKind": "star-carry",
+        "publicControlSkillId": 19900222,
+        "executionControlSkillId": 19900222,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "starborn-199002-star-carry",
+        "semanticName": "星携技",
+        "selectionKind": "direct-execution",
+        "executionOccupancy": {
+          "durationFrames": 148,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-control-frame-count",
+          "sourceIdentity": "skill_control_19900222.asset#skillControlData.skillPlayers[0].frameCount=148"
+        },
+        "condition": { "kind": "always" }
+      },
+      {
+        "publicActionKind": "perfect-parry",
+        "publicControlSkillId": 19900227,
+        "executionControlSkillId": 19900249,
+        "executionSubSkillIndex": 1,
+        "semanticIdentity": "starborn-199002-perfect-parry-counter",
+        "semanticName": "完美招架反击",
+        "selectionKind": "wrapper-derived-execution",
+        "executionOccupancy": {
+          "durationFrames": 240,
+          "frameRate": 60,
+          "sourceKind": "declared-verified-control-frame-count",
+          "sourceIdentity": "skill_control_19900249.asset#skillControlData.skillPlayers[1].frameCount=240"
+        },
+        "condition": { "kind": "always" },
+        "executionPrerequisite": {
+          "kind": "scenario-event-at-action-frame",
+          "eventType": "successful-parry",
+          "toleranceFrames": 0,
+          "sourceIdentity": "m12c-zero-distance-passive-boss-v1#enemy-event:successful-parry@action-frame"
+        }
+      }
+    ],
+    "attackInputChains": [
+      {
+        "chainIdentity": "starborn-199002-normal-five-inputs",
+        "sourceSkillId": 19900201,
+        "condition": { "kind": "always" },
+        "segments": [
+          {
+            "controlSkillId": 19900201,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 19900202
+          },
+          {
+            "controlSkillId": 19900202,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 19900203
+          },
+          {
+            "controlSkillId": 19900203,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 19900204
+          },
+          {
+            "controlSkillId": 19900204,
+            "subSkillIndex": 0,
+            "nextControlSkillId": 19900205
+          },
+          {
+            "controlSkillId": 19900205,
+            "subSkillIndex": 0,
+            "nextControlSkillId": null
+          }
+        ]
+      }
+    ],
+    "attackInputMechanicWindows": [],
+    "inputVariantSelectors": [
+      {
+        "selectorIdentity": "starborn-199002-charged-context-selector",
+        "publicControlSkillId": 19900210,
+        "actionKinds": ["charged-attack"],
+        "kind": "input-context",
+        "mode": "press",
+        "decisionFrame": 0,
+        "options": [
+          {
+            "selectorIdentity": "starborn-199002-default-charged",
+            "label": "普通重击",
+            "publicVariantIndex": 0,
+            "executionControlSkillId": 19900210,
+            "executionSubSkillIndex": 0,
+            "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged"
+          },
+          {
+            "selectorIdentity": "starborn-199002-derived-charged",
+            "label": "派生重击",
+            "publicVariantIndex": 1,
+            "executionControlSkillId": 19900210,
+            "executionSubSkillIndex": 1,
+            "sourceIdentity": "skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged"
+          }
+        ],
+        "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0,1]|contextInputEdges[semanticIdentity=starborn-199002-derived-charged]"
+      }
+    ],
+    "variantWindowBindings": [],
+    "targetStateProfiles": [],
+    "targetStateTransactions": [],
+    "actionHitBindings": [],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "starborn-199002-derived-stance-break",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002282,
+        "triggerFrame": 23,
+        "frameCount": 1,
+        "targetKindOverride": "enemy",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 23,
+          "behaviorPathId": "3512580595146958280",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@23F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002282@23F|ast_199002282.asset#time=24000;children=199002277,199002278"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-stance-break",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002282,
+        "triggerFrame": 16,
+        "frameCount": 1,
+        "targetKindOverride": "enemy",
+        "landedHitActivationCondition": {
+          "elementId": 199002112,
+          "pathId": "1956071209993179589",
+          "triggerFrame": 16,
+          "behaviorPathId": "-2228059081001781129",
+          "sourceIdentity": "skill_control_19900212.asset#199002112@16F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002282@16F|ast_199002282.asset#time=24000;children=199002277,199002278"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-passive-team-attack",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002340,
+        "triggerFrame": 16,
+        "frameCount": 1,
+        "targetKindOverride": "team-actors",
+        "landedHitActivationCondition": {
+          "elementId": 199002112,
+          "pathId": "1956071209993179589",
+          "triggerFrame": 16,
+          "behaviorPathId": "-2228059081001781129",
+          "sourceIdentity": "skill_control_19900212.asset#199002112@16F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002340@16F|ast_199002340.asset#tags[1001];time=20000->199002341.attr1+600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-passive-target-defense",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002344,
+        "triggerFrame": 16,
+        "frameCount": 1,
+        "targetKindOverride": "enemy",
+        "landedHitActivationCondition": {
+          "elementId": 199002112,
+          "pathId": "1956071209993179589",
+          "triggerFrame": 16,
+          "behaviorPathId": "-2228059081001781129",
+          "sourceIdentity": "skill_control_19900212.asset#199002112@16F"
+        },
+        "activationConditionScope": "matched-effect-subtree",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002344@16F|ast_199002344.asset#time=20000->199002345.attr3-500,199002346.attr4-500"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-23",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 23,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 23,
+          "behaviorPathId": "3512580595146958280",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@23F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@23F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-29",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 29,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002146,
+          "pathId": "5437449760506671671",
+          "triggerFrame": 29,
+          "behaviorPathId": "1256325415139681736",
+          "sourceIdentity": "skill_control_19900210.asset#199002146@29F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@29F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-35",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 35,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 35,
+          "behaviorPathId": "5254908133523793352",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@35F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@35F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-41",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 41,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002146,
+          "pathId": "5437449760506671671",
+          "triggerFrame": 41,
+          "behaviorPathId": "7742116757931042248",
+          "sourceIdentity": "skill_control_19900210.asset#199002146@41F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@41F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-47",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 47,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 47,
+          "behaviorPathId": "-4905832678913923640",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@47F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@47F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-53",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 53,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002146,
+          "pathId": "5437449760506671671",
+          "triggerFrame": 53,
+          "behaviorPathId": "-5947750339298515512",
+          "sourceIdentity": "skill_control_19900210.asset#199002146@53F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@53F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-59",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 59,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 59,
+          "behaviorPathId": "356971367491315144",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@59F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@59F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-65",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 65,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002146,
+          "pathId": "5437449760506671671",
+          "triggerFrame": 65,
+          "behaviorPathId": "-6937534635545778744",
+          "sourceIdentity": "skill_control_19900210.asset#199002146@65F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@65F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-derived-input-permission-71",
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 199002063,
+        "triggerFrame": 71,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002143,
+          "pathId": "-215733332709764470",
+          "triggerFrame": 71,
+          "behaviorPathId": "-5318251438511282744",
+          "sourceIdentity": "skill_control_19900210.asset#199002143@71F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900210.asset#map1.element199002063@71F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-16",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 16,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002112,
+          "pathId": "1956071209993179589",
+          "triggerFrame": 16,
+          "behaviorPathId": "-2228059081001781129",
+          "sourceIdentity": "skill_control_19900212.asset#199002112@16F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@16F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-22",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 22,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002123,
+          "pathId": "-3683535241080639612",
+          "triggerFrame": 22,
+          "behaviorPathId": "-253145748835059593",
+          "sourceIdentity": "skill_control_19900212.asset#199002123@22F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@22F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-28",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 28,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002062,
+          "pathId": "4918044819487086942",
+          "triggerFrame": 28,
+          "behaviorPathId": "-5974949163663673225",
+          "sourceIdentity": "skill_control_19900212.asset#199002062@28F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@28F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-34",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 34,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002113,
+          "pathId": "-2634147983898004366",
+          "triggerFrame": 34,
+          "behaviorPathId": "7276335683685791863",
+          "sourceIdentity": "skill_control_19900212.asset#199002113@34F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@34F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-40",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 40,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002114,
+          "pathId": "-2165123307516841619",
+          "triggerFrame": 40,
+          "behaviorPathId": "3812329768956409975",
+          "sourceIdentity": "skill_control_19900212.asset#199002114@40F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@40F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-46",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 46,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002283,
+          "pathId": "3701650897633539172",
+          "triggerFrame": 46,
+          "behaviorPathId": "-6504365985879803785",
+          "sourceIdentity": "skill_control_19900212.asset#199002283@46F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@46F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-52",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 52,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002115,
+          "pathId": "2307187133270016821",
+          "triggerFrame": 52,
+          "behaviorPathId": "3205457690046249079",
+          "sourceIdentity": "skill_control_19900212.asset#199002115@52F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@52F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-58",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 58,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002116,
+          "pathId": "7138981111301219597",
+          "triggerFrame": 58,
+          "behaviorPathId": "2298656388890769527",
+          "sourceIdentity": "skill_control_19900212.asset#199002116@58F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@58F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-input-permission-64",
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002063,
+        "triggerFrame": 64,
+        "frameCount": 1,
+        "targetKindOverride": "source-owner",
+        "landedHitActivationCondition": {
+          "elementId": 199002284,
+          "pathId": "-5743057693017663501",
+          "triggerFrame": 64,
+          "behaviorPathId": "-3927481249042581385",
+          "sourceIdentity": "skill_control_19900212.asset#199002284@64F"
+        },
+        "activationConditionScope": "matched-effect",
+        "sourceIdentity": "skill_control_19900212.asset#map0.element199002063@64F|ast_199002063.asset#time=600"
+      },
+      {
+        "bindingIdentity": "starborn-199002-plunge-marker-out-of-scope",
+        "controlSkillId": 19900211,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 199002053,
+        "triggerFrame": 37,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "jump-or-airborne-action-is-frozen-out-of-scope",
+          "sourceIdentity": "skill_control_19900211.asset#element199002053@37F"
+        },
+        "sourceIdentity": "skill_control_19900211.asset#map0.element199002053@37F"
+      },
+      {
+        "bindingIdentity": "starborn-199002-parry-success-marker-out-of-scope",
+        "controlSkillId": 19900249,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 600050,
+        "triggerFrame": 3,
+        "frameCount": 1,
+        "scenarioOutOfScope": {
+          "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+          "reason": "successful-parry-requires-absent-boss-attack-event",
+          "sourceIdentity": "skill_control_19900249.asset#element600050@3F"
+        },
+        "sourceIdentity": "skill_control_19900249.asset#map0.element600050@3F"
+      }
+    ],
+    "conditionalHitGroups": [],
+    "runtimeEffectBindings": [
+      {
+        "bindingIdentity": "starborn-199002-star-carry-self-attack",
+        "triggerKind": "action-frame",
+        "controlSkillId": 19900222,
+        "subSkillIndex": 0,
+        "triggerFrame": 38,
+        "targetKind": "source-actor",
+        "propertyElementId": 199002266,
+        "durationElementId": 199002261,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicExtra",
+        "expectedAssetValueRaw": 800,
+        "propertySkillValues": {
+          "skillId": 19900222,
+          "valueIndex": 0,
+          "unit": "percent-basis-points"
+        },
+        "expectedLevelOneValueRaw": 1100,
+        "expectedLevelTwelveValueRaw": 2200,
+        "sourceStatFormula": {
+          "formulaId": 2001,
+          "formulaFamily": "source-stat-times-a-divisor",
+          "expression": "(self.ATK[4]*A)/10000",
+          "sourceStatKey": "attack",
+          "sourceArray": "ATK",
+          "sourceIndex": 4,
+          "divisor": 10000,
+          "sourceIdentity": "NewTable/element_formula.rows[id=2001]"
+        },
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "maxStacks": 1,
+        "effectId": "battle-element:199002266",
+        "effectName": "星携技自身攻击提升",
+        "sourceIdentity": "skill_control_19900222.asset#map0.element199002261->199002266@38F;target=self|ast_199002261.asset#time=24000;combineType=2;inherit=1;inheritType=2"
+      },
+      {
+        "bindingIdentity": "starborn-199002-star-carry-allies-attack",
+        "triggerKind": "action-frame",
+        "controlSkillId": 19900222,
+        "subSkillIndex": 0,
+        "triggerFrame": 44,
+        "targetKind": "team-allies",
+        "propertyElementId": 199002266,
+        "durationElementId": 199002261,
+        "expectedAttributeId": 1,
+        "expectedBucket": "dynamicExtra",
+        "expectedAssetValueRaw": 800,
+        "propertySkillValues": {
+          "skillId": 19900222,
+          "valueIndex": 0,
+          "unit": "percent-basis-points"
+        },
+        "expectedLevelOneValueRaw": 1100,
+        "expectedLevelTwelveValueRaw": 2200,
+        "sourceStatFormula": {
+          "formulaId": 2001,
+          "formulaFamily": "source-stat-times-a-divisor",
+          "expression": "(self.ATK[4]*A)/10000",
+          "sourceStatKey": "attack",
+          "sourceArray": "ATK",
+          "sourceIndex": 4,
+          "divisor": 10000,
+          "sourceIdentity": "NewTable/element_formula.rows[id=2001]"
+        },
+        "durationMs": 24000,
+        "stackMode": "refresh",
+        "maxStacks": 1,
+        "effectId": "battle-element:199002266",
+        "effectName": "星携技队友攻击提升",
+        "sourceIdentity": "skill_control_19900222.asset#map0.element199002261->199002266@44F;target=ally|ast_199002261.asset#time=24000;combineType=2;inherit=1;inheritType=2"
+      }
+    ],
+    "rawDirectEffectBindings": [],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": [
+      {
+        "skillId": 19900261,
+        "runtimeGenerationMode": "action-effect-runtime",
+        "sourceElementIds": [
+          199002343, 199002340, 199002341, 199002344, 199002345, 199002346
+        ],
+        "actionEffectBindingIdentities": [
+          "starborn-199002-star-passive-team-attack",
+          "starborn-199002-star-passive-target-defense"
+        ],
+        "effectId": "action-effect-runtime:passive:19900261",
+        "effectElementId": 199002340,
+        "markerElementId": 199002343,
+        "propertyElementId": 199002346,
+        "durationMs": 20000,
+        "stackMode": "refresh",
+        "maxStacks": 1,
+        "sourceIdentity": "skill_control_19900261.asset#element199002343@0F|skill_control_19900212.asset#first-landed-hit->199002340,199002344"
+      }
+    ],
+    "scenarioOutOfScopeActions": [
+      {
+        "controlSkillId": 19900211,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:jump-or-airborne-action",
+        "sourceIdentity": "skill_control_19900211.asset#source-retained"
+      },
+      {
+        "controlSkillId": 19900215,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:dedicated-dodge-action",
+        "sourceIdentity": "skill_control_19900215.asset#source-retained"
+      },
+      {
+        "controlSkillId": 19900225,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:requires-boss-attack-event-limit-counter",
+        "sourceIdentity": "skill_control_19900225.asset#source-retained"
+      },
+      {
+        "controlSkillId": 19900227,
+        "status": "not-applicable",
+        "reason": "scenario-out-of-scope:requires-boss-attack-event-perfect-parry",
+        "sourceIdentity": "skill_control_19900227.asset#source-retained"
+      }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "actor:199002:control:19900242:empty-current-client-control",
+      "sourceKind": "control",
+      "status": "not-applicable",
+      "reasons": [
+        "current-client-control-has-no-tracks-or-elements",
+        "backup-control-is-not-an-executable-combat-effect"
+      ],
+      "sourceIdentity": "NewTable/hero.rows[id=199002].backupSkillList#19900242|skill_control_19900242.asset#skillTrackDatas=[];elements=[]"
+    }
+  ],
+  "unresolvedRecordPolicies": [
+    {
+      "policyIdentity": "starborn-199002-passive-marker-runtime-contract",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": ["effect:19900261|0|elements|0|8072606077914887740"],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "persistent-marker-is-required-by-source-driven-passive-profile",
+        "first-star-landed-hit-action-effect-bindings-own-runtime-activation"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:199002#passives[actor:199002:passive:19900261]|battle-element:199002343"
+    },
+    {
+      "policyIdentity": "starborn-199002-star-carry-source-stat-formula-runtime",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["property-formula-not-literal-function-5"],
+      "identityPrefixes": [
+        "effect:19900222|0|elements|1|-6117208996199980820|element:4398455808944654214",
+        "effect:19900222|0|elements|30|6543718175773635314|element:4398455808944654214"
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "element-formula-2001-is-validated-against-current-newtable",
+        "runtime-binding-evaluates-selected-alias-source-attack-and-skill-level-coefficient"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|NewTable/element_formula.rows[id=2001]"
+    },
+    {
+      "policyIdentity": "starborn-199002-star-carry-container-combine-runtime",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["effect-combine-semantics-unresolved"],
+      "identityPrefixes": [
+        "effect:19900222|0|elements|1|-6117208996199980820|element:-6117208996199980820",
+        "effect:19900222|0|elements|30|6543718175773635314|element:-6117208996199980820"
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "combine-type-two-refresh-lifecycle-is-carried-by-runtime-binding",
+        "twenty-four-second-right-open-expiry-and-switch-inheritance-remain-source-driven"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:199002#runtimeEffectBindings[starborn-199002-star-carry-self-attack,starborn-199002-star-carry-allies-attack]|battle-element:199002261#combineType=2;time=24000"
+    },
+    {
+      "policyIdentity": "starborn-199002-star-carry-empty-ally-wrapper",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": ["effect:19900222|0|elements|0|1920509610385167669"],
+      "disposition": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "current-client-element-has-no-damage-resource-property-state-or-mark-payload",
+        "one-second-empty-wrapper-is-not-a-second-star-carry-effect"
+      ],
+      "sourceIdentity": "ast_199002268.asset#time=1000;injectElementDataList=[];elementDataList=[]|skill_control_19900222.asset#map0.element199002268@44F"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m12-b3-starborn:199002:120s-source-alias-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [199002, 101010, 103002],
+    "initialControlledCharacterId": 199002,
+    "initialActorSp": { "199002": 100, "101010": 0, "103002": 0 },
+    "kiboByCharacterId": {},
+    "initialKiboSp": {},
+    "initialTuningMarks": [
+      { "profileKey": "fire", "layerCount": 1, "remainingDurationMs": 20000 },
+      { "profileKey": "wind", "layerCount": 1, "remainingDurationMs": 20000 }
+    ],
+    "actions": [
+      {
+        "actionKey": "starborn-m-a1",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 0,
+        "attackInputControlSkillId": 19900201,
+        "attackSequenceIndex": 1
+      },
+      {
+        "actionKey": "starborn-m-a2",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 260,
+        "attackInputControlSkillId": 19900202,
+        "attackSequenceIndex": 2
+      },
+      {
+        "actionKey": "starborn-m-a3",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 560,
+        "attackInputControlSkillId": 19900203,
+        "attackSequenceIndex": 3
+      },
+      {
+        "actionKey": "starborn-m-a4",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 880,
+        "attackInputControlSkillId": 19900204,
+        "attackSequenceIndex": 4
+      },
+      {
+        "actionKey": "starborn-m-a5",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1160,
+        "attackInputControlSkillId": 19900205,
+        "attackSequenceIndex": 5
+      },
+      {
+        "actionKey": "starborn-m-charged",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 0,
+        "startFrame": 1440
+      },
+      {
+        "actionKey": "starborn-m-charged-derived",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "charged-attack",
+        "actionVariantIndex": 1,
+        "controlSubSkillIndex": 1,
+        "startFrame": 1195,
+        "contextActionId": "starborn-m-a5"
+      },
+      {
+        "actionKey": "starborn-m-derived-thrust",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 1,
+        "startFrame": 1260,
+        "contextActionId": "starborn-m-charged-derived"
+      },
+      {
+        "actionKey": "starborn-m-star",
+        "actorCharacterId": 199002,
+        "skillId": 19900212,
+        "actionKind": "star-skill",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 2020
+      },
+      {
+        "actionKey": "starborn-m-star-thrust",
+        "actorCharacterId": 199002,
+        "skillId": 19900201,
+        "actionKind": "normal-attack",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 1,
+        "startFrame": 2080,
+        "contextActionId": "starborn-m-star"
+      },
+      {
+        "actionKey": "starborn-m-ultimate",
+        "actorCharacterId": 199002,
+        "skillId": 19900213,
+        "actionKind": "ultimate",
+        "actionVariantIndex": 0,
+        "controlSubSkillIndex": 0,
+        "startFrame": 2360
+      },
+      {
+        "actionKey": "starborn-m-switch-out",
+        "type": "switch",
+        "actorCharacterId": 199002,
+        "targetCharacterId": 101010,
+        "startFrame": 3100
+      },
+      {
+        "actionKey": "starborn-m-switch-back",
+        "type": "switch",
+        "actorCharacterId": 101010,
+        "targetCharacterId": 199002,
+        "startFrame": 3400
+      }
+    ],
+    "comparison": {},
+    "traceSelectors": {},
+    "expectedRuntime": {
+      "exact": { "project.durationMs": 120000 },
+      "greaterThan": { "combat.ownerHitTotalHpDamage": 0 }
+    }
+  }
+}

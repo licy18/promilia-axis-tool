@@ -1543,11 +1543,41 @@ function emitRuntimeBinding({
 function resolveRuntimeBindingModifier(modifier, action) {
   const level = resolveVerifiedActionLevelValue(action);
   const levelValue = Number(modifier?.valueRawByLevel?.[level]);
+  const parameterRaw = Number.isFinite(levelValue)
+    ? levelValue
+    : Number(modifier?.valueRaw);
+  const sourceStatFormula = modifier?.sourceStatFormula ?? null;
+  if (sourceStatFormula) {
+    const sourceStatValue = Number(
+      action?.actor?.stats?.[sourceStatFormula.sourceStatKey]
+    );
+    const divisor = Number(sourceStatFormula.divisor);
+    if (
+      !Number.isFinite(sourceStatValue) ||
+      !Number.isFinite(parameterRaw) ||
+      !(divisor > 0)
+    ) {
+      throw new Error(
+        `verified runtime source-stat formula input missing: ${sourceStatFormula.formulaId}/${sourceStatFormula.sourceStatKey}`
+      );
+    }
+    return {
+      ...modifier,
+      valueRaw: (sourceStatValue * parameterRaw) / divisor,
+      formulaEvaluation: {
+        formulaId: sourceStatFormula.formulaId,
+        expression: sourceStatFormula.expression,
+        sourceStatKey: sourceStatFormula.sourceStatKey,
+        sourceStatValue,
+        parameterRaw,
+        divisor,
+        sourceActorId: action.actorId,
+      },
+    };
+  }
   return {
     ...modifier,
-    valueRaw: Number.isFinite(levelValue)
-      ? levelValue
-      : Number(modifier?.valueRaw),
+    valueRaw: parameterRaw,
   };
 }
 
@@ -1585,6 +1615,15 @@ function resolveBindingTargets({
       id: actor.id,
       name: actor.name ?? null,
     }));
+  }
+  if (binding.targetKind === 'team-allies') {
+    return (scenario?.actors ?? [])
+      .filter(actor => String(actor.id) !== String(action.actorId))
+      .map(actor => ({
+        kind: EFFECT_TARGET_KINDS.ACTOR,
+        id: actor.id,
+        name: actor.name ?? null,
+      }));
   }
   if (binding.targetKind === 'enemy') {
     return scenario?.enemy?.id
