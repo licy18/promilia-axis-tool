@@ -10,8 +10,10 @@
       "contractStatus": "applied",
       "impactClassification": "not-applicable",
       "coverageSelector": {
+        "controlSkillId": 10100349,
         "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 1
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100349.asset#element101003205@17F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
@@ -31,7 +33,7 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "9999e4bf1a0f2768"
+      "sourceRecordHash": "0c62104e41b239db"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-carry-fire-tuning-mark",
@@ -41,14 +43,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100322,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100322.asset#elementConfigId=150@57F"
       ],
       "reasons": [],
-      "sourceRecordHash": "83a9e1ae5940d4d6"
+      "sourceRecordHash": "51d842962138e341"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-carry-magical-defense-down",
@@ -58,14 +62,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100322,
         "effectIdentity": "battle-element:101003142",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
       ],
       "reasons": [],
-      "sourceRecordHash": "4a1a90b5543b8ade"
+      "sourceRecordHash": "09d842bd05600345"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-carry-physical-defense-down",
@@ -75,14 +81,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100322,
         "effectIdentity": "battle-element:101003145",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
       ],
       "reasons": [],
-      "sourceRecordHash": "927e817eb4be8d55"
+      "sourceRecordHash": "c6ceeda2907a8df6"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-skill-fire-tuning-mark-1",
@@ -92,14 +100,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100312,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F"
       ],
       "reasons": [],
-      "sourceRecordHash": "46d01d750fd88414"
+      "sourceRecordHash": "857ff7c9dfd0e17a"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-skill-fire-tuning-mark-2",
@@ -109,14 +119,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100312,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F"
       ],
       "reasons": [],
-      "sourceRecordHash": "514a47ab41a5719a"
+      "sourceRecordHash": "ef4871ddc17df0d4"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
@@ -126,14 +138,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100313,
         "effectIdentity": "battle-element:101003207",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
       ],
       "reasons": [],
-      "sourceRecordHash": "2a31c07ea9998e69"
+      "sourceRecordHash": "ad7a28aae28d0166"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-1",
@@ -143,14 +157,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100313,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@193F"
       ],
       "reasons": [],
-      "sourceRecordHash": "033bc51fb097441b"
+      "sourceRecordHash": "f8493de9f60b0a36"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-2",
@@ -160,14 +176,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100313,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@207F"
       ],
       "reasons": [],
-      "sourceRecordHash": "7c497ee90d7bece3"
+      "sourceRecordHash": "2dcd1148e3574d4e"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-3",
@@ -177,14 +195,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100313,
         "effectIdentity": "battle-element:150",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@223F"
       ],
       "reasons": [],
-      "sourceRecordHash": "fffb2fa334eb67e5"
+      "sourceRecordHash": "a0c824b7f8c0efb0"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
@@ -194,14 +214,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10100313,
         "effectIdentity": "battle-element:101003205",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
       ],
       "reasons": [],
-      "sourceRecordHash": "41a38f61d43ca968"
+      "sourceRecordHash": "202f1c3aca5503b3"
     },
     {
       "requirementIdentity": "contract:action-form:actor:101003:perfect-parry:han-focus-dodge-counter",
@@ -5085,5 +5107,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "655e1c2f099fe7aa"
+  "inventoryHash": "e73df1f4f7465b9c"
 }

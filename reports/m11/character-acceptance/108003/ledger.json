@@ -2,8 +2,34 @@
   "schemaVersion": 1,
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [],
-  "acceptanceGaps": [],
-  "records": [],
+  "acceptanceGaps": [
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:miti-star-carry-thunder-mark-two-occurrences",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|skill_control_10800322.asset#directInject@37F.elementDataList[0..1]=path(-3809486317990090417)=element250"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:7e5a4402a17ca81f",
+      "uniqueGapIdentity": "acceptance-gap:7e5a4402a17ca81f"
+    }
+  ],
+  "records": [
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:miti-star-carry-thunder-mark-two-occurrences",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|skill_control_10800322.asset#directInject@37F.elementDataList[0..1]=path(-3809486317990090417)=element250"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:7e5a4402a17ca81f",
+      "uniqueGapIdentity": "acceptance-gap:7e5a4402a17ca81f"
+    }
+  ],
   "nonBlockingRecords": [
     {
       "recordIdentity": "source-gap:012cb81432d73aab",
@@ -1705,15 +1731,21 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 0,
+    "uniqueBlockingCount": 1,
     "sourceGapCount": 0,
-    "acceptanceGapCount": 0,
+    "acceptanceGapCount": 1,
     "nonBlockingCount": 92,
-    "statusCounts": {},
-    "reasonCounts": {},
-    "categoryCounts": {}
+    "statusCounts": {
+      "static-evidence-gap": 1
+    },
+    "reasonCounts": {
+      "acceptance-scenario-coverage-missing": 1
+    },
+    "categoryCounts": {
+      "acceptance-scenario-gap": 1
+    }
   },
-  "ledgerHash": "f95df2bce5c77997",
+  "ledgerHash": "171c4d0e41d28296",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-form:actor|108003|10800301|1|10800310|charged-attack:default",

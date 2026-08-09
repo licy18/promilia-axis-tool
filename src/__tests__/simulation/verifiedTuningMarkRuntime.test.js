@@ -219,6 +219,65 @@ describe('verified tuning mark runtime', () => {
     ]);
   });
 
+  it('publishes every direct consume judgment, including insufficient results', () => {
+    const projectJudgments = count => {
+      const result = createDirectJudgmentGeneration({
+        controlSkillId: 10300213,
+        durationMs: 5_000,
+        initialMarks:
+          count > 0 ? [createInheritedMarkWithCount(250, count)] : [],
+      });
+      return result.consumeJudgmentResults
+        .filter(row => row.judgmentElementId === 103002273)
+        .map(row => ({
+          controlSkillId: row.controlSkillId,
+          subSkillIndex: row.subSkillIndex,
+          judgmentElementId: row.judgmentElementId,
+          triggerFrame: row.triggerFrame,
+          behaviorPathId: row.behaviorPathId,
+          markCountAtJudgment: row.markCountAtJudgment,
+          consumedCount: row.consumedCount,
+          applied: row.applied,
+          status: row.status,
+          sourceIdentity: row.sourceIdentity,
+        }));
+    };
+
+    expect(projectJudgments(2)).toEqual([
+      {
+        controlSkillId: 10300213,
+        subSkillIndex: 0,
+        judgmentElementId: 103002273,
+        triggerFrame: 173,
+        behaviorPathId: '2818728561424649950',
+        markCountAtJudgment: 2,
+        consumedCount: 1,
+        applied: true,
+        status: 'verified-tuning-consume-applied',
+        sourceIdentity:
+          'battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173',
+      },
+      {
+        controlSkillId: 10300213,
+        subSkillIndex: 0,
+        judgmentElementId: 103002273,
+        triggerFrame: 237,
+        behaviorPathId: '8489770418213277406',
+        markCountAtJudgment: 1,
+        consumedCount: 1,
+        applied: true,
+        status: 'verified-tuning-consume-applied',
+        sourceIdentity:
+          'battle-effect:10300213:0:-8725062263845393396:8489770418213277406:237',
+      },
+    ]);
+    expect(projectJudgments(1).map(row => row.status)).toEqual([
+      'verified-tuning-consume-applied',
+      'verified-tuning-consume-insufficient-marks',
+    ]);
+    expect(projectJudgments(0).map(row => row.applied)).toEqual([false, false]);
+  });
+
   it('applies the same priority selection to another real [750,250] judgment', () => {
     const result = createDirectJudgmentGeneration({
       controlSkillId: 11100113,
@@ -1862,6 +1921,10 @@ function createDirectTuningGeneration({
           action.id,
           {
             ready: true,
+            actionBinding: {
+              controlSkillId: controlBinding.controlSkillId ?? null,
+              selectedSubSkillIndex: controlBinding.selectedSubSkillIndex ?? 0,
+            },
             controlBinding,
             effects,
             hits: [],
@@ -1890,6 +1953,8 @@ function createDirectJudgmentGeneration({
     initialMarks,
     effects,
     controlBinding: {
+      controlSkillId,
+      selectedSubSkillIndex: 0,
       frameRate: binding.frameRate ?? 60,
       logic: binding.logic,
     },

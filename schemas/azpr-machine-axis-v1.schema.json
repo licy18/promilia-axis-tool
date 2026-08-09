@@ -482,7 +482,8 @@
       "properties": {
         "sequenceIndex": { "type": "integer", "minimum": 1 },
         "groupId": { "type": ["string", "null"] },
-        "contextActionId": { "type": ["string", "null"] }
+        "contextActionId": { "type": ["string", "null"] },
+        "chainIdentity": { "type": ["string", "null"] }
       }
     },
     "schedule": {

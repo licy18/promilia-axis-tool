@@ -383,6 +383,7 @@ function normalizeAttackInput(value) {
     sequenceIndex,
     groupId: textOrNull(value.groupId),
     contextActionId: textOrNull(value.contextActionId),
+    chainIdentity: textOrNull(value.chainIdentity),
   };
 }
 

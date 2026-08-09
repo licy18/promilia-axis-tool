@@ -1,25 +1,75 @@
 {
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
+  "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "pending",
     "acceptanceCommit": null,
     "recordIdentity": null,
     "automatedEvidence": [
       {
-    "scenarioIdentity": "m11-d-103002-visual-acceptance",
-    "status": "automated-workbench-import-passed",
-    "screenshotPath": "reports/m11-d-character-acceptance-103002-desktop.png",
-      "screenshotSha256": "13a2f1a1fdcee5b264e287c141401293f0d619c325d070708b1ab3b30445b336"
+        "scenarioIdentity": "m11-d-103002-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-103002-desktop.png",
+        "screenshotSha256": "13a2f1a1fdcee5b264e287c141401293f0d619c325d070708b1ab3b30445b336"
       }
     ]
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-  "goldenReports": [
-    "reports/m10/103002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/103002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10300262,
+  "machineEvidence": [
+    {
+      "scenarioIdentity": "m12-b3-103002-active-surface-closure",
+      "evidenceKind": "machine-axis-trace",
+      "status": "automated-machine-axis-passed",
+      "traceHashSource": "machine-axis-canonical-trace"
+    },
+    {
+      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+      "evidenceKind": "machine-axis-trace",
+      "status": "automated-machine-axis-passed",
+      "traceHashSource": "machine-axis-canonical-trace"
+    },
+    {
+      "scenarioIdentity": "m12-b3-103002-marker-expiry-ordering",
+      "evidenceKind": "machine-axis-trace",
+      "status": "automated-machine-axis-passed",
+      "traceHashSource": "machine-axis-canonical-trace"
+    }
+  ],
+  "scenarioScope": {
+    "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+    "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+    "sourceIdentity": "work/m12-b3/parallel-implementation-103002/SOURCE_LEDGER.md#frozen-active-surface",
+    "includedControlSubskills": [
+      { "controlSkillId": 10300201, "subSkillIndex": 0 },
+      { "controlSkillId": 10300201, "subSkillIndex": 1 },
+      { "controlSkillId": 10300201, "subSkillIndex": 2 },
+      { "controlSkillId": 10300201, "subSkillIndex": 3 },
+      { "controlSkillId": 10300202, "subSkillIndex": 0 },
+      { "controlSkillId": 10300202, "subSkillIndex": 1 },
+      { "controlSkillId": 10300202, "subSkillIndex": 2 },
+      { "controlSkillId": 10300202, "subSkillIndex": 3 },
+      { "controlSkillId": 10300203, "subSkillIndex": 0 },
+      { "controlSkillId": 10300203, "subSkillIndex": 1 },
+      { "controlSkillId": 10300203, "subSkillIndex": 2 },
+      { "controlSkillId": 10300203, "subSkillIndex": 3 },
+      { "controlSkillId": 10300204, "subSkillIndex": 0 },
+      { "controlSkillId": 10300204, "subSkillIndex": 1 },
+      { "controlSkillId": 10300204, "subSkillIndex": 2 },
+      { "controlSkillId": 10300210, "subSkillIndex": 0 },
+      { "controlSkillId": 10300212, "subSkillIndex": 0 },
+      { "controlSkillId": 10300213, "subSkillIndex": 0 },
+      { "controlSkillId": 10300221, "subSkillIndex": 0 },
+      { "controlSkillId": 10300226, "subSkillIndex": 0 },
+      { "controlSkillId": 10300261, "subSkillIndex": 0 }
+    ]
+  },
+  "requirementPolicies": {
+    "unselectedControlVariantsFromActionForms": true
+  },
   "probes": [
     {
       "kind": "variant-selection",
@@ -35,6 +85,479 @@
       "beforeValue": 6,
       "afterValue": 5,
       "change": -1
+    }
+  ],
+  "runtimeInterruptionCases": [
+    {
+      "identity": "enhanced-marker-cutoff-at-trigger",
+      "controlSkillId": 10300201,
+      "subSkillIndex": 1,
+      "effectiveEndFrame": 3,
+      "durationFrames": 600,
+      "expectation": {
+        "directSpCount": 0,
+        "effectCommandCountById": {},
+        "targetStateChangeCountByIdentityAndOperation": {},
+        "remainingTuningMarkFrames": [],
+        "conditionResults": [],
+        "landedHitRuntimeMisses": []
+      }
+    },
+    {
+      "identity": "enhanced-marker-survives-post-trigger-interruption",
+      "controlSkillId": 10300201,
+      "subSkillIndex": 1,
+      "effectiveEndFrame": 4,
+      "durationFrames": 600,
+      "expectation": {
+        "directSpCount": 0,
+        "effectCommandCountById": { "battle-element:103002279": 1 },
+        "targetStateChangeCountByIdentityAndOperation": {
+          "ruby-enhanced-limit-counter-marker:expire": 1,
+          "ruby-enhanced-limit-counter-marker:gain": 1
+        },
+        "remainingTuningMarkFrames": [],
+        "conditionResults": [],
+        "landedHitRuntimeMisses": []
+      }
+    },
+    {
+      "identity": "ultimate-thunder-judgment-before-173f",
+      "controlSkillId": 10300213,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 173,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [103002273],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 20000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-seed-1",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              },
+              {
+                "sourceActionId": "interruption-seed-2",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [],
+        "finalTuningMarkStacksById": { "250": 2 }
+      }
+    },
+    {
+      "identity": "ultimate-thunder-judgment-after-173f",
+      "controlSkillId": 10300213,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 174,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [103002273],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 20000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-seed-1",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              },
+              {
+                "sourceActionId": "interruption-seed-2",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [
+          {
+            "frameIndex": 173,
+            "markId": 250,
+            "before": 2,
+            "delta": -1,
+            "after": 1
+          }
+        ],
+        "finalTuningMarkStacksById": { "250": 1 }
+      }
+    },
+    {
+      "identity": "ultimate-thunder-judgment-before-237f",
+      "controlSkillId": 10300213,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 237,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [103002273],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 20000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-seed-1",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              },
+              {
+                "sourceActionId": "interruption-seed-2",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [
+          {
+            "frameIndex": 173,
+            "markId": 250,
+            "before": 2,
+            "delta": -1,
+            "after": 1
+          }
+        ],
+        "finalTuningMarkStacksById": { "250": 1 }
+      }
+    },
+    {
+      "identity": "ultimate-thunder-judgment-after-237f",
+      "controlSkillId": 10300213,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 238,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [103002273],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 20000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-seed-1",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              },
+              {
+                "sourceActionId": "interruption-seed-2",
+                "sourceActorId": "actor-103002",
+                "sourceIdentity": "acceptance-probe:thunder-mark"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [
+          {
+            "frameIndex": 173,
+            "markId": 250,
+            "before": 2,
+            "delta": -1,
+            "after": 1
+          },
+          {
+            "frameIndex": 237,
+            "markId": 250,
+            "before": 1,
+            "delta": -1,
+            "after": 0
+          }
+        ],
+        "finalTuningMarkStacksById": { "250": 0 }
+      }
+    }
+  ],
+  "additionalScenarios": [
+    {
+      "fixturePath": "fixtures/character-acceptance/103002-active-surface-closure.json",
+      "skipCriticalMatrix": false,
+      "criticalProbe": {
+        "preHitAttributeChange": {
+          "beforeActionId": "ruby-pre-star-carry-critical",
+          "afterActionId": "ruby-post-star-carry-critical",
+          "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0"
+        }
+      },
+      "buffLifecycle": {
+        "effectIdentity": "battle-element:103002279",
+        "targetId": "actor-103002",
+        "durationFrames": 240,
+        "requiredOperations": ["apply", "refresh", "expire"],
+        "rightOpenExpiry": true
+      },
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e1",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 1,
+          "semanticName": "强化普攻 E1"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e2",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 2,
+          "semanticName": "强化普攻 E2"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e3",
+          "controlSkillId": 10300201,
+          "subSkillIndex": 3,
+          "semanticName": "强化普攻 E3"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e4",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 1,
+          "semanticName": "强化普攻 E4"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e5",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 2,
+          "semanticName": "强化普攻 E5"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e6",
+          "controlSkillId": 10300202,
+          "subSkillIndex": 3,
+          "semanticName": "强化普攻 E6"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e7",
+          "controlSkillId": 10300203,
+          "subSkillIndex": 1,
+          "semanticName": "强化普攻 E7"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e8",
+          "controlSkillId": 10300203,
+          "subSkillIndex": 2,
+          "semanticName": "强化普攻 E8"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e9",
+          "controlSkillId": 10300203,
+          "subSkillIndex": 3,
+          "semanticName": "强化普攻 E9"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e10",
+          "controlSkillId": 10300204,
+          "subSkillIndex": 0,
+          "semanticName": "强化普攻 E10"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e11",
+          "controlSkillId": 10300204,
+          "subSkillIndex": 1,
+          "semanticName": "强化普攻 E11"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-e12",
+          "controlSkillId": 10300204,
+          "subSkillIndex": 2,
+          "semanticName": "强化普攻 E12"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-star-skill",
+          "controlSkillId": 10300212,
+          "subSkillIndex": 0,
+          "semanticName": "星鸣技"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-ultimate",
+          "controlSkillId": 10300213,
+          "subSkillIndex": 0,
+          "semanticName": "星决技"
+        },
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-star-combo-active",
+          "controlSkillId": 10300226,
+          "subSkillIndex": 0,
+          "semanticName": "星鸣连携"
+        },
+        {
+          "kind": "trace-query",
+          "identity": "blocked-normal-does-not-settle-damage",
+          "path": "damage",
+          "where": { "actionId": "ruby-blocked-normal" },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "star-skill-fire-mark-acquired",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "ruby-star-skill",
+            "markId": 150,
+            "kind": "acquire"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "star-carry-thunder-mark-acquired",
+          "path": "resources.tuningMarks",
+          "where": { "markId": 250, "kind": "acquire" },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "ultimate-thunder-judgments-at-173-and-237",
+          "path": "state.tuningConsumeJudgments",
+          "where": {
+            "actionId": "ruby-ultimate",
+            "judgmentElementId": 103002273
+          },
+          "expectation": {
+            "count": 2,
+            "orderedValues": {
+              "triggerFrame": [173, 237],
+              "absoluteFrame": [1623, 1687],
+              "markCountAtJudgment": [1, 0],
+              "consumedCount": [1, 0],
+              "applied": [true, false],
+              "status": [
+                "verified-tuning-consume-applied",
+                "verified-tuning-consume-insufficient-marks"
+              ],
+              "sourceIdentity": [
+                "battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173",
+                "battle-effect:10300213:0:-8725062263845393396:8489770418213277406:237"
+              ]
+            }
+          },
+          "select": [
+            "actionId",
+            "judgmentElementId",
+            "triggerFrame",
+            "absoluteFrame",
+            "behaviorPathId",
+            "markId",
+            "markCountAtJudgment",
+            "consumedCount",
+            "applied",
+            "status",
+            "sourceIdentity"
+          ]
+        }
+      ]
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/103002-window-boundaries.json",
+      "skipCriticalMatrix": true,
+      "inputWindowBoundary": {
+        "sourceControlSkillId": 10300210,
+        "transitionControlSkillId": 10300201,
+        "sourceWindow": "[24,264) source frames",
+        "cases": [
+          {
+            "actionId": "window-outside-before",
+            "expectedOffset": 23,
+            "expectedControlSkillId": 10300201,
+            "expectedSubSkillIndex": 0
+          },
+          {
+            "actionId": "window-inside-start",
+            "expectedOffset": 24,
+            "expectedControlSkillId": 10300201,
+            "expectedSubSkillIndex": 1
+          },
+          {
+            "actionId": "window-inside-end",
+            "expectedOffset": 263,
+            "expectedControlSkillId": 10300201,
+            "expectedSubSkillIndex": 1
+          },
+          {
+            "actionId": "window-outside-after",
+            "expectedOffset": 264,
+            "expectedControlSkillId": 10300201,
+            "expectedSubSkillIndex": 0
+          }
+        ]
+      },
+      "probes": []
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/103002-marker-expiry-ordering.json",
+      "skipCriticalMatrix": true,
+      "buffLifecycle": {
+        "effectIdentity": "battle-element:103002279",
+        "targetId": "actor-103002",
+        "durationFrames": 240,
+        "requiredOperations": ["apply", "refresh", "expire"],
+        "rightOpenExpiry": true
+      },
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "marker-expiry-precedes-same-frame-reapply",
+          "path": "effects.events",
+          "where": {
+            "effectId": "battle-element:103002279",
+            "absoluteFrame": 343
+          },
+          "expectation": {
+            "count": 2,
+            "orderedValues": { "operation": ["expire", "apply"] }
+          },
+          "select": ["actionId", "operation", "absoluteFrame"]
+        }
+      ]
     }
   ]
 }

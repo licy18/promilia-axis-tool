@@ -6,14 +6,14 @@
   "scenarioIdentity": "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09",
+  "sourcePackageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "085bb9b004a0c226",
-    "traceHash": "063557d47b347b61",
-    "dataHash": "951730da6cb25b43",
+    "inputHash": "36da4712a05273cb",
+    "traceHash": "dd4d0cbc99bd7002",
+    "dataHash": "825cbbfbcff436ac",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -6655,7 +6655,7 @@
           "effectName": "蓄电",
           "targetKind": "actor",
           "targetId": "actor-108003",
-          "operation": "apply",
+          "operation": "refresh",
           "previousTargetId": "actor-108003",
           "nextTargetId": "actor-108003",
           "controlledActorTransitionId": null,
@@ -7798,6 +7798,6 @@
       }
     ]
   },
-  "replayHash": "75c96578f74de7afb54d5823b9fb9c24b672aebaffe6611137f8386c850e3b4a",
-  "profileHash": "a912276c51b76fb3f1c19fadcb348c12869d921e27b1a330c8bb1d45057ca839"
+  "replayHash": "cc8a2e6f30ddf6a6d914cbd18c510f282c718041f12e4c8b9907472a0f4ec453",
+  "profileHash": "ea2947d0d53a4b7201f79a50df30d0360bfd02b70350ff187de77e738d856068"
 }

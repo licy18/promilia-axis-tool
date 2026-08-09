@@ -567,8 +567,8 @@ describe('verified action variant and special resource runtime', () => {
             endFrame: 112,
             durationFrames: 32,
           },
-          startsAtMs: frameTime(80),
-          endsAtMs: frameTime(112),
+          startsAtMs: 1333.333333,
+          endsAtMs: 1866.666667,
         }),
       ])
     );
@@ -682,10 +682,7 @@ describe('verified action variant and special resource runtime', () => {
           actors: [source.actor],
           actions: [source, candidate],
           durationMs: frameTime(endFrame + 120),
-          initialRuntimeState: createRubyAmmoState(
-            source.actorId,
-            initialAmmo
-          ),
+          initialRuntimeState: createRubyAmmoState(source.actorId, initialAmmo),
         });
         expect(runtime.selectionByActionId.get(candidate.id)).toMatchObject(
           enhanced
@@ -753,7 +750,8 @@ describe('verified action variant and special resource runtime', () => {
         .slice(0, previousSequence)
         .map((segment, index) => {
           const source = RUBY_NORMAL_MAPPING.attackInputSourceSegments.find(
-            item => Number(item.controlSkillId) === Number(segment.controlSkillId)
+            item =>
+              Number(item.controlSkillId) === Number(segment.controlSkillId)
           );
           const attackInput = projectVerifiedAttackInputChainSegment(
             source,
@@ -2730,16 +2728,15 @@ function createXiaoyuPublicExecutionFormCase(form) {
     return { focus, actions: [source, focus], initialRuntimeState: null };
   }
 
-  const publicForm =
-    mechanicsPackage.actionVariantGraph.publicActionForms.find(
-      item =>
-        item.publicActionIdentity === form.publicActionIdentity ||
-        (Number(item.executionControlSkillId) ===
-          Number(form.sourceControlSkillId) &&
-          Number(item.executionSubSkillIndex) ===
-            Number(form.sourceSubSkillIndex) &&
-          String(item.publicActionKind) === String(form.actionKind))
-    );
+  const publicForm = mechanicsPackage.actionVariantGraph.publicActionForms.find(
+    item =>
+      item.publicActionIdentity === form.publicActionIdentity ||
+      (Number(item.executionControlSkillId) ===
+        Number(form.sourceControlSkillId) &&
+        Number(item.executionSubSkillIndex) ===
+          Number(form.sourceSubSkillIndex) &&
+        String(item.publicActionKind) === String(form.actionKind))
+  );
   const mapping = mechanicsPackage.actionMappings.find(
     item =>
       Number(item.ownerId) === JADE_ID &&
@@ -2757,8 +2754,7 @@ function createXiaoyuPublicExecutionFormCase(form) {
     actionVariantIndex: mapping.actionVariantIndex,
   });
   const prerequisite =
-    publicForm?.executionPrerequisite?.kind ===
-    'scenario-event-at-action-frame'
+    publicForm?.executionPrerequisite?.kind === 'scenario-event-at-action-frame'
       ? {
           id: `audited-${form.actionKind}-event`,
           type: 'enemyEvent',

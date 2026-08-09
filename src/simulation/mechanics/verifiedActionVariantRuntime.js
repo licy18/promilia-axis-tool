@@ -670,12 +670,16 @@ export function createVerifiedActionVariantRuntime({
     }
     const inputWindow = descriptor.binding.inputWindow;
     const actionStartMs = Number(descriptor.action.startMs) || 0;
-    const startsAtMs = inputWindow
-      ? actionStartMs + framesToMs(inputWindow.startFrame, FRAME_RATE)
-      : descriptor.timeMs;
-    const endsAtMs = inputWindow
-      ? actionStartMs + framesToMs(inputWindow.endFrame, FRAME_RATE)
-      : startsAtMs + Number(descriptor.binding.durationMs);
+    const startsAtMs = normalizeRuntimeMs(
+      inputWindow
+        ? actionStartMs + framesToMs(inputWindow.startFrame, FRAME_RATE)
+        : descriptor.timeMs
+    );
+    const endsAtMs = normalizeRuntimeMs(
+      inputWindow
+        ? actionStartMs + framesToMs(inputWindow.endFrame, FRAME_RATE)
+        : startsAtMs + Number(descriptor.binding.durationMs)
+    );
     const window = {
       ...descriptor.binding,
       actorId: descriptor.action.actorId,
@@ -1444,8 +1448,7 @@ export function createVerifiedActionVariantRuntime({
               .get(characterId)
               ?.has(Number(window.targetControlSkillId)) &&
             action.contextActionId === window.sourceActionId &&
-            window.startsAtMs <= actionTimeMs &&
-            actionTimeMs < window.endsAtMs
+            runtimeWindowContainsTime(window, actionTimeMs)
         );
         if (chaseWindow) {
           const chaseControlBinding = (
@@ -2056,8 +2059,7 @@ function resolveRuntimeDerivedAttackChainEntry({
         (window.compilerBindingIdentity != null ||
           window.relationType === 'attack-chain-continuity-window') &&
         String(window.actorId) === String(actorState.actor.id) &&
-        Number(window.startsAtMs) <= Number(timeMs) &&
-        Number(timeMs) < Number(window.endsAtMs)
+        runtimeWindowContainsTime(window, timeMs)
     )
     .map(window => {
       const segment = chain.segments.find(
@@ -2185,8 +2187,7 @@ function createAttackChainContinuationWindow({
             Number(rule.requiredActiveTargetControlSkillId) &&
           Number(window.targetSubSkillIndex) ===
             Number(rule.requiredActiveTargetSubSkillIndex) &&
-          Number(window.startsAtMs) <= Number(actionTimeMs) &&
-          Number(actionTimeMs) < Number(window.endsAtMs)
+          runtimeWindowContainsTime(window, actionTimeMs)
       )
   );
   if (!matchingRule) return null;
@@ -2809,8 +2810,7 @@ function resolveActiveSwitchSelection({
     window =>
       window.actorId === actorId &&
       window.targetControlSkillId === controlSkillId &&
-      window.startsAtMs <= timeMs &&
-      timeMs < window.endsAtMs
+      runtimeWindowContainsTime(window, timeMs)
   );
   const candidates = selectSwitchWindowsForActionKind(
     allCandidates,
@@ -3184,8 +3184,11 @@ function removeStateSwitchWindows({ windows, actorId, stateElementId }) {
 }
 
 function removeExpiredSwitchWindows(windows, timeMs) {
+  const normalizedTimeMs = normalizeRuntimeMs(timeMs);
   for (let index = windows.length - 1; index >= 0; index -= 1) {
-    if (windows[index].endsAtMs <= timeMs) windows.splice(index, 1);
+    if (normalizeRuntimeMs(windows[index].endsAtMs) <= normalizedTimeMs) {
+      windows.splice(index, 1);
+    }
   }
 }
 
@@ -3221,6 +3224,19 @@ function framesToMs(frame, frameRate = FRAME_RATE) {
   return Number.isFinite(value)
     ? (value * 1000) / (Number(frameRate) || FRAME_RATE)
     : 0;
+}
+
+function normalizeRuntimeMs(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number(number.toFixed(6)) : number;
+}
+
+function runtimeWindowContainsTime(window, timeMs) {
+  const normalizedTimeMs = normalizeRuntimeMs(timeMs);
+  return (
+    normalizeRuntimeMs(window?.startsAtMs) <= normalizedTimeMs &&
+    normalizedTimeMs < normalizeRuntimeMs(window?.endsAtMs)
+  );
 }
 
 function clamp(value, minimum, maximum) {

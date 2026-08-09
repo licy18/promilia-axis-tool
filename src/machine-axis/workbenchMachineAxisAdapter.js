@@ -434,6 +434,10 @@ function createMachineActionFromProject({
             contextActionId: textOrNull(
               action.runtimeContextActionId ?? action.contextActionId
             ),
+            chainIdentity:
+              action.attackInputChainSelectionSource === 'user-explicit'
+                ? textOrNull(action.attackInputChainIdentity)
+                : null,
           }
         : null,
     },

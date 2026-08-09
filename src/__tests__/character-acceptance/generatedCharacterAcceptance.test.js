@@ -211,7 +211,7 @@ describe('generated character acceptance manifests', () => {
       ]);
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
-      } else if (ownerId === 107002) {
+      } else if ([103002, 107002].includes(ownerId)) {
         expect(manifest.maturity.blockers).toEqual([
           'acceptance-product-visual-signoff-pending',
         ]);

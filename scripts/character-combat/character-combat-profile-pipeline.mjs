@@ -455,6 +455,12 @@ export function createCharacterCombatOwnerArtifacts({
   const targetStateTransactions = sortByIdentity(
     compiledContracts.targetStateTransactions ?? []
   );
+  const acceptanceTargetStateProfiles = sortByIdentity(
+    recipe.compiler?.acceptanceTargetStateProfiles ?? []
+  );
+  const acceptanceTargetStateTransactions = sortByIdentity(
+    recipe.compiler?.acceptanceTargetStateTransactions ?? []
+  );
   const conditionalHitGroups = sortByIdentity(
     compiledContracts.conditionalHitGroups ?? []
   );
@@ -467,9 +473,7 @@ export function createCharacterCombatOwnerArtifacts({
   const rawDirectEffectBindings = sortByIdentity(
     compiledContracts.rawDirectEffectBindings ?? []
   );
-  const pickupProfiles = sortByIdentity(
-    compiledContracts.pickupProfiles ?? []
-  );
+  const pickupProfiles = sortByIdentity(compiledContracts.pickupProfiles ?? []);
   const pickupSpawnBindings = sortByIdentity(
     compiledContracts.pickupSpawnBindings ?? []
   );
@@ -583,6 +587,8 @@ export function createCharacterCombatOwnerArtifacts({
       thresholdTransitions,
       targetStateProfiles,
       targetStateTransactions,
+      acceptanceTargetStateProfiles,
+      acceptanceTargetStateTransactions,
       conditionalHitGroups,
       tuningMarkConditionalDamageGroups,
       runtimeEffectBindings,
@@ -608,6 +614,8 @@ export function createCharacterCombatOwnerArtifacts({
     thresholdTransitions,
     targetStateProfiles,
     targetStateTransactions,
+    acceptanceTargetStateProfiles,
+    acceptanceTargetStateTransactions,
     conditionalHitGroups,
     tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
@@ -710,6 +718,8 @@ export function createCharacterCombatOwnerArtifacts({
     stateMachines: thresholdTransitions,
     targetStateProfiles,
     targetStateTransactions,
+    acceptanceTargetStateProfiles,
+    acceptanceTargetStateTransactions,
     conditionalHitGroups,
     tuningMarkConditionalDamageGroups,
     runtimeEffectBindings,
@@ -2998,7 +3008,7 @@ function applyUnresolvedRecordPolicy(record, recipe = {}) {
   };
 }
 
-function unresolvedRecordPolicyMatches(policy, record) {
+export function unresolvedRecordPolicyMatches(policy, record) {
   if (!policy || !policy.policyIdentity || !policy.sourceIdentity) {
     return false;
   }
@@ -3042,6 +3052,17 @@ function unresolvedRecordPolicyMatches(policy, record) {
     return false;
   }
   if (
+    Array.isArray(policy.elementPathIds) &&
+    policy.elementPathIds.length > 0
+  ) {
+    const elementPathIds = resolveUnresolvedRecordElementPathIds(record);
+    if (
+      !policy.elementPathIds.some(pathId => elementPathIds.has(String(pathId)))
+    ) {
+      return false;
+    }
+  }
+  if (
     Array.isArray(policy.controlVariants) &&
     policy.controlVariants.length > 0
   ) {
@@ -3058,6 +3079,25 @@ function unresolvedRecordPolicyMatches(policy, record) {
     });
   }
   return true;
+}
+
+function resolveUnresolvedRecordElementPathIds(record) {
+  const identities = [
+    record.recordIdentity,
+    record.sourceIdentity,
+    ...(record.rawRecordIdentities ?? []),
+    ...(record.sourceIdentities ?? []),
+  ];
+  const pathIds = new Set();
+  for (const identity of identities) {
+    const value = String(identity ?? '');
+    for (const match of value.matchAll(/\|element:(-?\d+)\|/g)) {
+      pathIds.add(String(match[1]));
+    }
+    const battleEffect = value.match(/^battle-effect:\d+:\d+:(-?\d+):/);
+    if (battleEffect) pathIds.add(String(battleEffect[1]));
+  }
+  return pathIds;
 }
 
 function resolveUnresolvedRecordControlVariant(record) {

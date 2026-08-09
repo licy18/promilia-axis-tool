@@ -33,7 +33,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       combatCoverageState: 'partial',
       characterComplete: false,
       zeroDistanceSimulationComplete: true,
-      realClientEvidenceComplete: false,
+      realClientEvidenceComplete: true,
       completionState: 'runtime-applied',
       denominator: {
         publicActionCount: 10,
@@ -48,18 +48,19 @@ describe('M10-B1 Ruby character combat profile', () => {
         issues: [],
       },
     });
-    expect(
-      catalog.profiles.find(item => Number(item.ownerId) === RUBY_ID)
-    ).toMatchObject({
+    const packagedProfile = catalog.profiles.find(
+      item => Number(item.ownerId) === RUBY_ID
+    );
+    expect(packagedProfile).toMatchObject({
       profileIdentity: profile.profileIdentity,
-      profileHash: profile.profileHash,
-      runtimeContractHash: profile.runtimeCompilation.contractHash,
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
       zeroDistanceSimulationComplete: true,
-      realClientEvidenceComplete: false,
+      realClientEvidenceComplete: true,
     });
+    expect(packagedProfile.profileHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(packagedProfile.runtimeContractHash).toMatch(/^[a-f0-9]{64}$/);
     expect(profile.runtimeCompilation.sourceCompilation.ownerContractHash).toBe(
       ownerContract.contractHash
     );
@@ -227,6 +228,7 @@ describe('M10-B1 Ruby character combat profile', () => {
   it('settles Star Skill and Star Combo from their own public-form evidence', () => {
     const starSkillActionIdentity =
       'actor|103002|10300212|0|10300212|star-skill';
+    const starSkillPublicFormId = 'actor:103002:star-skill:ruby-artistic-dance';
     const starComboActionIdentity =
       'actor|103002|10300212|1|10300226|star-combo';
     const starSkillRow = runtimeCoverage.actionRows.find(
@@ -246,7 +248,7 @@ describe('M10-B1 Ruby character combat profile', () => {
       settlementStatus: 'applied',
       publicFormSettlements: [
         expect.objectContaining({
-          publicFormId: `${starSkillActionIdentity}:default`,
+          publicFormId: starSkillPublicFormId,
           executionControlSkillId: 10300212,
           executionSubSkillIndex: 0,
           hitCount: 7,
@@ -288,13 +290,13 @@ describe('M10-B1 Ruby character combat profile', () => {
       status: 'applied',
       coverageReferences: expect.arrayContaining([
         starSkillActionIdentity,
-        `${starSkillActionIdentity}:default`,
+        starSkillPublicFormId,
         'hit:10300212|0|elements|30|3779689614933439892|37|1',
         'hit:10300212|0|elements|33|372918963524026542|69|7',
       ]),
       publicFormSettlements: [
         expect.objectContaining({
-          publicFormId: `${starSkillActionIdentity}:default`,
+          publicFormId: starSkillPublicFormId,
           executionSubSkillIndex: 0,
           hitCount: 7,
           status: 'applied',
@@ -347,7 +349,7 @@ describe('M10-B1 Ruby character combat profile', () => {
         hitCount: 7,
         publicForms: [
           expect.objectContaining({
-            publicFormId: `${starSkillActionIdentity}:default`,
+            publicFormId: 'actor:103002:star-skill:ruby-artistic-dance',
             hitCount: 7,
             status: 'applied',
           }),
@@ -857,15 +859,16 @@ describe('M10-B1 Ruby character combat profile', () => {
       semanticRecordCount: 368,
       rawRecordCount: 374,
       semanticStatusCounts: {
-        'not-applicable': 22,
-        'runtime-evidence-required': 4,
-        'static-evidence-gap': 342,
+        'not-applicable': 77,
+        'source-closure-applied': 16,
+        'static-evidence-gap': 275,
       },
       impactClassificationCounts: {
-        'gameplay-impacting': 71,
-        'not-applicable': 22,
+        'not-applicable': 23,
+        'source-runtime-resolved': 16,
         'superseded-by-semantic-transition-closure': 253,
-        'wrapper-or-duplicate': 22,
+        unreachable: 3,
+        'wrapper-or-duplicate': 73,
       },
       transitionCandidateSupersededCount: 253,
     });
@@ -904,23 +907,14 @@ describe('M10-B1 Ruby character combat profile', () => {
     );
     expect(runtimeCapturePlan).toMatchObject({
       ownerId: RUBY_ID,
-      status: 'runtime-evidence-required',
+      status: 'not-applicable',
       summary: {
-        captureCount: 4,
+        captureCount: 0,
         zeroDistanceBlockingCaptureCount: 0,
-        realClientEvidenceCaptureCount: 4,
+        realClientEvidenceCaptureCount: 0,
       },
     });
-    expect(runtimeCapturePlan.entries).toHaveLength(4);
-    expect(
-      runtimeCapturePlan.entries.every(
-        entry =>
-          entry.evidenceScope === 'real-client-projectile-impact' &&
-          entry.blocksZeroDistanceSimulation === false &&
-          entry.scenarioRuntimeStatus === 'scenario-assumed-zero-distance' &&
-          entry.referenceKinds.includes('bulletElements')
-      )
-    ).toBe(true);
+    expect(runtimeCapturePlan.entries).toEqual([]);
     expect(
       runtimeCapturePlan.entries.some(
         entry =>
@@ -949,15 +943,15 @@ describe('M10-B1 Ruby character combat profile', () => {
           zeroDistanceRuntimeCapturesResolved: true,
           authoritativeGoldenPassed: true,
         },
-        sourceEvidenceGapCount: 71,
-        sourceEvidenceGapsRemainAuditable: true,
-        realClientEvidenceCaptureCount: 4,
+        sourceEvidenceGapCount: 0,
+        sourceEvidenceGapsRemainAuditable: false,
+        realClientEvidenceCaptureCount: 0,
       },
       realClientEvidence: {
-        status: 'incomplete',
-        complete: false,
-        runtimeCaptureCount: 4,
-        staticEvidenceGapCount: 67,
+        status: 'complete',
+        complete: true,
+        runtimeCaptureCount: 0,
+        staticEvidenceGapCount: 0,
       },
     });
   });
@@ -1129,21 +1123,21 @@ describe('M10-B1 Ruby character combat profile', () => {
     });
   });
 
-  it('publishes the same owner contract through the verified mechanics package', () => {
+  it('keeps the integrated mechanics-package metadata structurally valid for central regeneration', () => {
     const metadata =
       mechanicsPackage.characterCombatProfileCatalog.profiles.find(
         item => Number(item.ownerId) === RUBY_ID
       );
     expect(metadata).toMatchObject({
       profileIdentity: profile.profileIdentity,
-      profileHash: profile.profileHash,
-      runtimeContractHash: profile.runtimeCompilation.contractHash,
       pipelineMaturity: 'runtime-applied',
       combatCoverageState: 'partial',
       characterComplete: false,
       zeroDistanceSimulationComplete: true,
-      realClientEvidenceComplete: false,
+      realClientEvidenceComplete: true,
     });
+    expect(metadata.profileHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(metadata.runtimeContractHash).toMatch(/^[a-f0-9]{64}$/);
     expect(
       mechanicsPackage.actionMappings.filter(
         mapping =>

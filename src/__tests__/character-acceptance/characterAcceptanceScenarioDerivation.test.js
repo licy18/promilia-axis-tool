@@ -4,10 +4,13 @@ import xiaoyuGolden from '../../../reports/m10/101010/golden-trace.json';
 import {
   applyCharacterAcceptanceSourceGapDispositions,
   createCharacterAcceptanceMatrix,
+  createCharacterAcceptanceRequirementSources,
   hasRepeatedApplyRefreshLifecycle,
 } from '../../../scripts/character-acceptance/character-acceptance-generation.mjs';
 import {
+  deriveCoverageEdges,
   finalizeScenarioCases,
+  finalizeRequirementInventory,
   finalizeSourceGapInventory,
 } from '../../character-acceptance/characterAcceptanceDerivation';
 
@@ -188,5 +191,113 @@ describe('character acceptance scenario derivation', () => {
         assertion => assertion.assertionIdentity === 'scenario-fact:notObserved'
       )
     ).toBe(false);
+  });
+
+  it('keeps same-element effect requirements isolated by source trigger coordinates', () => {
+    const requirementInventory = finalizeRequirementInventory([
+      {
+        requirementIdentity: 'synthetic:judgment:173',
+        dimension: 'effect',
+        sourceDisposition: 'applied',
+        coverageSelector: {
+          kind: 'effect',
+          effectIdentity: 'battle-element:9001',
+          controlSkillId: 900101,
+          subSkillIndex: 0,
+          triggerFrame: 173,
+          behaviorPathId: 'behavior-a',
+        },
+      },
+      {
+        requirementIdentity: 'synthetic:judgment:237',
+        dimension: 'effect',
+        sourceDisposition: 'applied',
+        coverageSelector: {
+          kind: 'effect',
+          effectIdentity: 'battle-element:9001',
+          controlSkillId: 900101,
+          subSkillIndex: 0,
+          triggerFrame: 237,
+          behaviorPathId: 'behavior-b',
+        },
+      },
+    ]);
+    const scenarioCases = finalizeScenarioCases([
+      {
+        scenarioIdentity: 'synthetic:single-judgment',
+        status: 'passed',
+        traceProjection: {
+          effects: [
+            {
+              projectionIdentity: 'synthetic-effect-173',
+              actionId: 'synthetic-action',
+              effectIdentity: 'battle-element:9001',
+              operation: 'evaluate',
+              controlSkillId: 900101,
+              subSkillIndex: 0,
+              triggerFrame: 173,
+              behaviorPathId: 'behavior-a',
+            },
+          ],
+        },
+      },
+    ]);
+
+    const coverage = deriveCoverageEdges(requirementInventory, scenarioCases);
+
+    expect(coverage.edges.map(edge => edge.requirementIdentity)).toEqual([
+      'synthetic:judgment:173',
+    ]);
+    expect(scenarioCases.records[0].assertions[0].selector).toMatchObject({
+      controlSkillId: 900101,
+      subSkillIndex: 0,
+      triggerFrame: 173,
+      behaviorPathId: 'behavior-a',
+    });
+  });
+
+  it('derives action-effect binding selectors with their owning control coordinate', () => {
+    const sources = createCharacterAcceptanceRequirementSources({
+      profile: {
+        owner: { ownerId: 900001 },
+        contracts: {
+          actionEffectBindings: [
+            {
+              bindingIdentity: 'synthetic-binding-a',
+              controlSkillId: 900101,
+              subSkillIndex: 0,
+              elementId: 9001,
+              sourceIdentity: 'fixture:binding-a',
+              status: 'applied',
+              applied: true,
+            },
+            {
+              bindingIdentity: 'synthetic-binding-b',
+              controlSkillId: 900102,
+              subSkillIndex: 1,
+              elementId: 9001,
+              sourceIdentity: 'fixture:binding-b',
+              status: 'applied',
+              applied: true,
+            },
+          ],
+        },
+      },
+    }).filter(row => row.dimension === 'action-effect-binding');
+
+    expect(sources.map(row => row.coverageSelector)).toEqual([
+      {
+        kind: 'effect',
+        effectIdentity: 'battle-element:9001',
+        controlSkillId: 900101,
+        subSkillIndex: 0,
+      },
+      {
+        kind: 'effect',
+        effectIdentity: 'battle-element:9001',
+        controlSkillId: 900102,
+        subSkillIndex: 1,
+      },
+    ]);
   });
 });

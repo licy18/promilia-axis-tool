@@ -765,17 +765,16 @@ function hasRequiredHit(resolution, transaction, action, scenario) {
     candidate =>
       Number(candidate.elementId) ===
         Number(transaction.requiresHitElementId) &&
-      Number(candidate.trigger?.startFrame) ===
-        Number(transaction.triggerFrame)
+      Number(candidate.trigger?.startFrame) === Number(transaction.triggerFrame)
   );
   return Boolean(
     hit &&
-      resolveActionHitWillHit(
-        action,
-        hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
-        (resolution.hits ?? []).includes(hit) &&
-          resolveScenarioDefaultWillHit(scenario)
-      )
+    resolveActionHitWillHit(
+      action,
+      hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
+      (resolution.hits ?? []).includes(hit) &&
+        resolveScenarioDefaultWillHit(scenario)
+    )
   );
 }
 
@@ -1373,7 +1372,12 @@ function createTargetStateEffectCommand({
     sourceActorName: action?.actor?.name ?? null,
     effectId: `battle-element:${state.profile.elementId}`,
     effectName: state.profile.name,
-    operation: after <= 0 ? EFFECT_OPERATIONS.REMOVE : EFFECT_OPERATIONS.APPLY,
+    operation:
+      after <= 0
+        ? EFFECT_OPERATIONS.REMOVE
+        : operation === 'refresh'
+          ? EFFECT_OPERATIONS.REFRESH
+          : EFFECT_OPERATIONS.APPLY,
     targetKind:
       state.profile.targetKind === 'enemy'
         ? EFFECT_TARGET_KINDS.ENEMY
@@ -1421,7 +1425,11 @@ function resolveTargetStateTransactionSourceSequencePath(descriptor) {
   ) {
     return actionPath;
   }
-  const requiredHit = (descriptor.resolution.allHits ?? descriptor.resolution.hits ?? []).find(
+  const requiredHit = (
+    descriptor.resolution.allHits ??
+    descriptor.resolution.hits ??
+    []
+  ).find(
     hit =>
       Number(hit.elementId) ===
         Number(descriptor.transaction.requiresHitElementId) &&

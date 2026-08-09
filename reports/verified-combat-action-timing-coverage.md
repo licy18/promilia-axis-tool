@@ -1,14 +1,14 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：646（来源占轴已确认 634，尚未确认 12；公开动作均按独立 schedulable 合同判断）
-- 公开变体：676（来源占轴已确认 634，尚未确认 42）
+- 公开动作：646（来源占轴已确认 635，尚未确认 11；公开动作均按独立 schedulable 合同判断）
+- 公开变体：676（来源占轴已确认 635，尚未确认 41）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
 - SkillControl/player 变体：1435
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
 - 精确选中变体占轴：702
-- 来源动画规划长度：28
+- 来源动画规划长度：27
 - 通用规划长度：1
 - control 身份未解析：1
 - 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 204
@@ -42,10 +42,10 @@
 | actor | star-carry | verified-unconditional-attack-reopen-window | applied | 3 |
 | actor | star-combo | skill-control-player-action-range | applied | 13 |
 | actor | star-combo | verified-unconditional-attack-reopen-window | applied | 7 |
+| actor | star-skill | declared-control-frame-count-occupancy | applied | 1 |
 | actor | star-skill | declared-verified-input-reopen-occupancy | applied | 2 |
 | actor | star-skill | declared-wrapper-derived-execution-occupancy | applied | 1 |
 | actor | star-skill | skill-control-player-action-range | applied | 12 |
-| actor | star-skill | unresolved-action-occupancy | unresolved | 1 |
 | actor | star-skill | verified-unconditional-attack-reopen-window | applied | 4 |
 | actor | ultimate | declared-verified-input-reopen-occupancy | applied | 1 |
 | actor | ultimate | skill-control-player-action-range | applied | 13 |
@@ -92,7 +92,6 @@
 - `actor|101007|10100701|0|10100703|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|0|10300203|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|103002|10300201|2|10300215|dodge-attack`：verified-action-effective-occupancy-window-unresolved
-- `actor|103002|10300212|0|10300212|star-skill`：verified-action-effective-occupancy-window-unresolved
 - `actor|107001|10700101|0|10700103|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|107002|10700201|0|10700203|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|107003|10700301|0|10700303|normal-attack`：normal-attack-input-segment-duration-unresolved

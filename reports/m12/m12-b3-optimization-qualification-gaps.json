@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "c45ef6bc9d89c35d",
+  "rosterHash": "349c445f5a02a23e",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "d50e3cfdf5559adf",
-        "c45ef6bc9d89c35d"
+        "e93e3c4bdc778195",
+        "349c445f5a02a23e"
       ]
     },
     {
@@ -138,6 +138,20 @@
       "gapHash": "b25254be6b1fa6fb"
     },
     {
+      "gapIdentity": "character:102001:character-not-optimization-ready",
+      "objectKind": "character",
+      "objectId": "102001",
+      "code": "character-not-optimization-ready",
+      "category": "not-implemented",
+      "blocking": true,
+      "message": "Character acceptance maturity has not reached optimization-ready.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=102001]"
+      ],
+      "details": {},
+      "gapHash": "07b024366cada0a8"
+    },
+    {
       "gapIdentity": "character:103002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "103002",
@@ -152,6 +166,20 @@
       "gapHash": "784a0ea144cf6df0"
     },
     {
+      "gapIdentity": "character:107001:character-not-optimization-ready",
+      "objectKind": "character",
+      "objectId": "107001",
+      "code": "character-not-optimization-ready",
+      "category": "not-implemented",
+      "blocking": true,
+      "message": "Character acceptance maturity has not reached optimization-ready.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=107001]"
+      ],
+      "details": {},
+      "gapHash": "e15d2ad8e5405433"
+    },
+    {
       "gapIdentity": "character:107002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "107002",
@@ -164,6 +192,34 @@
       ],
       "details": {},
       "gapHash": "c99a421e56f2b5e4"
+    },
+    {
+      "gapIdentity": "character:108003:character-not-optimization-ready",
+      "objectKind": "character",
+      "objectId": "108003",
+      "code": "character-not-optimization-ready",
+      "category": "not-implemented",
+      "blocking": true,
+      "message": "Character acceptance maturity has not reached optimization-ready.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=108003]"
+      ],
+      "details": {},
+      "gapHash": "f9a74417015fe730"
+    },
+    {
+      "gapIdentity": "character:109001:character-not-optimization-ready",
+      "objectKind": "character",
+      "objectId": "109001",
+      "code": "character-not-optimization-ready",
+      "category": "not-implemented",
+      "blocking": true,
+      "message": "Character acceptance maturity has not reached optimization-ready.",
+      "sourceIdentities": [
+        "generated/characters.json#items[id=109001]"
+      ],
+      "details": {},
+      "gapHash": "8b52f0586fe42981"
     },
     {
       "gapIdentity": "character:112001:character-acceptance-not-published",
@@ -240,18 +296,18 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 8,
+    "blockingUniqueGapCount": 12,
     "byCategory": {
-      "not-implemented": 8
+      "not-implemented": 12
     },
     "byCode": {
       "actor-static-profile-missing": 1,
       "character-acceptance-not-published": 2,
-      "character-not-optimization-ready": 5
+      "character-not-optimization-ready": 9
     },
     "byObjectKind": {
-      "character": 8
+      "character": 12
     }
   },
-  "ledgerHash": "5f7fb3b3126af83f"
+  "ledgerHash": "21753c59a2a16951"
 }

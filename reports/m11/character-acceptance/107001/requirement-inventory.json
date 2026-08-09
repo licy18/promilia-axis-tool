@@ -10,14 +10,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10700112,
         "effectIdentity": "battle-element:750",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700112.asset#elementConfigId=750@10F"
       ],
       "reasons": [],
-      "sourceRecordHash": "2ff9fa868bccb17d"
+      "sourceRecordHash": "96d379b4f4f2925f"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:sifliya-ultimate-first-hit-wind-mark",
@@ -27,14 +29,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10700113,
         "effectIdentity": "battle-element:750",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700113.asset#elementConfigId=750@133F"
       ],
       "reasons": [],
-      "sourceRecordHash": "a3fbd6299e904658"
+      "sourceRecordHash": "5eca0514c31d09db"
     },
     {
       "requirementIdentity": "contract:action-form:actor|107001|10700101|4|10700110|charged-attack:default",
@@ -9270,5 +9274,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "422fd0e5d2b93fb7"
+  "inventoryHash": "e990853437a87a1f"
 }

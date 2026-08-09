@@ -1724,11 +1724,21 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
     );
     return null;
   }
-  const candidates = (
-    mapping.attackInputSegments ??
-    mapping.attackInputSourceSegments ??
-    []
-  ).filter(segment => Number(segment.sequenceIndex) === sequenceIndex);
+  const defaultSegments =
+    mapping.attackInputSegments ?? mapping.attackInputSourceSegments ?? [];
+  const profileSegments = mapping.profileAttackInputSegments ?? [];
+  const requestedChainIdentity =
+    action.intent.attackInput?.chainIdentity ?? null;
+  const candidatePool = requestedChainIdentity
+    ? profileSegments.filter(
+        segment =>
+          String(segment.attackInputChainIdentity ?? '') ===
+          String(requestedChainIdentity)
+      )
+    : defaultSegments;
+  const candidates = candidatePool.filter(
+    segment => Number(segment.sequenceIndex) === sequenceIndex
+  );
   if (candidates.length !== 1) {
     issues.push(
       createMachineAxisDiagnostic(
@@ -1752,12 +1762,46 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
     contextAction?.intent?.attackInput?.sequenceIndex;
   const contextFrame = absoluteScheduleFrame(contextAction);
   const actionFrame = absoluteScheduleFrame(action);
-  if (
-    !contextSequenceIndex ||
-    !Number.isFinite(contextFrame) ||
-    !Number.isFinite(actionFrame)
-  ) {
+  if (!Number.isFinite(contextFrame) || !Number.isFinite(actionFrame)) {
     return requestedSegment;
+  }
+  if (!contextSequenceIndex) {
+    const contextMapping = getVerifiedCombatActionMapping({
+      type: ACTION_TYPES.SKILL,
+      skillId: contextAction?.intent?.publicActionId,
+      actionKind: contextAction?.intent?.actionKind,
+      actor: { characterId: mapping.ownerId },
+    });
+    if (!contextMapping) return requestedSegment;
+    const offsetFrames = actionFrame - contextFrame;
+    const matchingBindings = (mapping.profileVariantWindowBindings ?? [])
+      .filter(
+        binding =>
+          Number(binding.sourceControlSkillId) ===
+            Number(contextMapping.controlSkillId) &&
+          Number(binding.sourceSubSkillIndex ?? 0) ===
+            Number(contextMapping.selectedSubSkillIndex ?? 0) &&
+          offsetFrames >= Number(binding.inputWindow?.startFrame) &&
+          offsetFrames < Number(binding.inputWindow?.endFrame)
+      )
+      .flatMap(binding =>
+        profileSegments.filter(
+          segment =>
+            Number(segment.sequenceIndex) === Number(sequenceIndex) &&
+            Number(segment.controlSkillId) ===
+              Number(binding.targetControlSkillId) &&
+            Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
+              Number(binding.targetSubSkillIndex ?? 0)
+        )
+      );
+    return selectContextualAttackInputSegment({
+      action,
+      index,
+      issues,
+      requestedChainIdentity,
+      requestedSegment,
+      contextualSegments: matchingBindings,
+    });
   }
   const sourceSegment = (
     mapping.attackInputSegments ??
@@ -1805,7 +1849,59 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
       Number(segment.selectedSubSkillIndex) ===
         Number(window.targetSubSkillIndex ?? 0)
   );
-  return linked.length === 1 ? linked[0] : requestedSegment;
+  return selectContextualAttackInputSegment({
+    action,
+    index,
+    issues,
+    requestedChainIdentity,
+    requestedSegment,
+    contextualSegments: linked,
+  });
+}
+
+function selectContextualAttackInputSegment({
+  action,
+  index,
+  issues,
+  requestedChainIdentity,
+  requestedSegment,
+  contextualSegments,
+}) {
+  if (contextualSegments.length !== 1) return requestedSegment;
+  const contextualSegment = contextualSegments[0];
+  if (
+    requestedChainIdentity &&
+    (String(contextualSegment.attackInputChainIdentity ?? '') !==
+      String(requestedChainIdentity) ||
+      Number(contextualSegment.controlSkillId) !==
+        Number(requestedSegment.controlSkillId) ||
+      Number(
+        contextualSegment.subSkillIndex ??
+          contextualSegment.selectedSubSkillIndex ??
+          0
+      ) !==
+        Number(
+          requestedSegment.subSkillIndex ??
+            requestedSegment.selectedSubSkillIndex ??
+            0
+        ))
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-chain-context-conflict',
+        `actions.${index}.intent.attackInput.chainIdentity`,
+        'Explicit attack input chain conflicts with the contextual window',
+        {
+          actionId: action.id,
+          requestedChainIdentity: String(requestedChainIdentity),
+          contextualChainIdentity:
+            contextualSegment.attackInputChainIdentity ?? null,
+        }
+      )
+    );
+    return null;
+  }
+  return contextualSegment;
 }
 
 function absoluteScheduleFrame(action) {
@@ -1828,10 +1924,13 @@ function createAttackInputFields(action, mapping, segment) {
     attackChainSequenceIndex:
       segment.chainSequenceIndex ?? segment.sequenceIndex,
     attackInputChainIdentity:
+      action.intent.attackInput?.chainIdentity ??
       segment.attackInputChainIdentity ??
       mapping.attackInputChainIdentity ??
       null,
-    attackInputChainSelectionSource: 'runtime-projected',
+    attackInputChainSelectionSource: action.intent.attackInput?.chainIdentity
+      ? 'user-explicit'
+      : 'runtime-projected',
     attackInputIntent: {
       schemaVersion: 1,
       contractName: 'AzPrWorkbenchAttackInputIntent',

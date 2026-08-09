@@ -647,7 +647,7 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001005.asset/MonoBehaviour/ast_102001005__1837964535882290130.json#elementConfigId=102001005|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001005.asset#conditional-direct-sp-source-retained",
         "hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
       ],
-      "sourceRecordHash": "7a9ffa5078339bc8",
+      "sourceRecordHash": "91cbbc8dc6033c0f",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -664,7 +664,7 @@
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001131.asset/MonoBehaviour/ast_102001131__7991633998808797407.json#elementConfigId=102001131|hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite|Battle/Element/ast_102001131.asset->ast_750.asset#conditional-wind-mark-source-retained",
         "hero-module:102001#skill:10200101#precise-defense-super-armor-prerequisite"
       ],
-      "sourceRecordHash": "90c22f1e6aeadc0f",
+      "sourceRecordHash": "e8fb2145c02a22da",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -681,7 +681,7 @@
         "Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200112#will-state-retained-active-state-modeled-separately"
       ],
-      "sourceRecordHash": "6e8213288a72fb01",
+      "sourceRecordHash": "1cee1e68a1b297ce",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -698,7 +698,7 @@
         "Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_102001135.asset/MonoBehaviour/ast_102001135__3418108144318934934.json#elementConfigId=102001135|Battle/Element/ast_102001135.asset#time=7000;trigger-pack=102001110|hero-module:102001#skill:10200113#will-state-retained-active-state-modeled-separately"
       ],
-      "sourceRecordHash": "2d484ec503bccdee",
+      "sourceRecordHash": "5cc4cacc687d346a",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -839,6 +839,126 @@
       }
     },
     {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:0:359d09b0f440f1d0",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_3533563117700098647__3533563117700098647.json#behaviorlineControl[0].behaviorList[pathId=-3066786058839872937]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_-3066786058839872937__-3066786058839872937.json"
+      ],
+      "sourceRecordHash": "fee74a8894bbf58c",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200101,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:11:68956353c8807704",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_2981117811270571617__2981117811270571617.json#behaviorlineControl[0].behaviorList[pathId=-6390837403129981343]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_-6390837403129981343__-6390837403129981343.json"
+      ],
+      "sourceRecordHash": "e7ed715471c9bbbb",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200104,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:12:63147971d0200550",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_-4290330219476105581__-4290330219476105581.json#behaviorlineControl[0].behaviorList[pathId=8447743304954136211]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_8447743304954136211__8447743304954136211.json"
+      ],
+      "sourceRecordHash": "f846b0eda9c63419",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200105,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:13:2ca6042938284e6d",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_-4795301347499260269__-4795301347499260269.json#behaviorlineControl[0].behaviorList[pathId=-4663582906126514541]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200105.asset/MonoBehaviour/MonoBehaviour_-4663582906126514541__-4663582906126514541.json"
+      ],
+      "sourceRecordHash": "bd87ce4a6a4c7e99",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200105,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:14:29a8d71d1f6c8e33",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_2707506950308707445__2707506950308707445.json#behaviorlineControl[0].behaviorList[pathId=7965438761038789749]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_7965438761038789749__7965438761038789749.json"
+      ],
+      "sourceRecordHash": "253ce94fcdbe03fc",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200110,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:15:6abaded5f2e4e158",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_3153357655944477813__3153357655944477813.json#behaviorlineControl[0].behaviorList[pathId=-486327045175165835]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-486327045175165835__-486327045175165835.json"
+      ],
+      "sourceRecordHash": "913cb7eb8689fee6",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200110,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
       "recordIdentity": "not-applicable:contract:control-window:control-window:16:f099e3941f8229c4",
       "status": "not-applicable",
       "reason": "m12c-zero-distance-passive-boss-active-surface-only",
@@ -846,14 +966,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-6515090477782661165__-6515090477782661165.json#behaviorlineControl[0].behaviorList[pathId=8901697739013490643]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_8901697739013490643__8901697739013490643.json"
       ],
-      "sourceRecordHash": "140c59b01745b1d7",
+      "sourceRecordHash": "b4a9fd2d3fbb9354",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -864,14 +986,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_5210196342253881299__5210196342253881299.json#behaviorlineControl[0].behaviorList[pathId=-1105776656446191661]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-1105776656446191661__-1105776656446191661.json"
       ],
-      "sourceRecordHash": "c7d7f034902eef39",
+      "sourceRecordHash": "172e29c0ec245f81",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10200110,
+        "targetSubSkillIndex": 3
       }
     },
     {
@@ -882,14 +1006,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-5829345347224008749__-5829345347224008749.json#behaviorlineControl[0].behaviorList[pathId=-8455406333121329197]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-8455406333121329197__-8455406333121329197.json"
       ],
-      "sourceRecordHash": "80e14925c83f55c1",
+      "sourceRecordHash": "262193391ab0b3b2",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -900,14 +1026,36 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-1035057040271404463__-1035057040271404463.json#behaviorlineControl[0].behaviorList[pathId=2654035551650779729]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_2654035551650779729__2654035551650779729.json"
       ],
-      "sourceRecordHash": "dd0e5199d9bb8165",
+      "sourceRecordHash": "92e0a86102662006",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:2:50533071826f0fdb",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_-780337232569259433__-780337232569259433.json#behaviorlineControl[0].behaviorList[pathId=1189159088839043671]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200101.asset/MonoBehaviour/MonoBehaviour_1189159088839043671__1189159088839043671.json"
+      ],
+      "sourceRecordHash": "8242646dc7055e8c",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200101,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -918,14 +1066,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-4626241631273001708__-4626241631273001708.json#behaviorlineControl[0].behaviorList[pathId=7121562750181203220]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_7121562750181203220__7121562750181203220.json"
       ],
-      "sourceRecordHash": "20a25e5e61355377",
+      "sourceRecordHash": "770922483e982d3e",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 3
+        "subSkillIndex": 3,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -936,14 +1086,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-122654462532035308__-122654462532035308.json#behaviorlineControl[0].behaviorList[pathId=9041442440046402836]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_9041442440046402836__9041442440046402836.json"
       ],
-      "sourceRecordHash": "73b7b67f14babe4e",
+      "sourceRecordHash": "f8dc2f6b9e98fc45",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 3
+        "subSkillIndex": 3,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -954,14 +1106,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_8627302633130646804__8627302633130646804.json#behaviorlineControl[0].behaviorList[pathId=-53041874105770732]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200110.asset/MonoBehaviour/MonoBehaviour_-53041874105770732__-53041874105770732.json"
       ],
-      "sourceRecordHash": "8fde2a2adeb4e5eb",
+      "sourceRecordHash": "e27398116ef566c0",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200110,
-        "subSkillIndex": 3
+        "subSkillIndex": 3,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -972,7 +1126,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200111.asset/MonoBehaviour/MonoBehaviour_-2188455333793747559__-2188455333793747559.json#behaviorlineControl[0].behaviorList[pathId=-4547236568435315303]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200111.asset/MonoBehaviour/MonoBehaviour_-4547236568435315303__-4547236568435315303.json"
       ],
-      "sourceRecordHash": "69199421e61ae426",
+      "sourceRecordHash": "af031427748a8400",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -990,7 +1144,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200111,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1001,7 +1157,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200111.asset/MonoBehaviour/MonoBehaviour_-5908100506767970919__-5908100506767970919.json#behaviorlineControl[0].behaviorList[pathId=-6178634504968589927]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200111.asset/MonoBehaviour/MonoBehaviour_-6178634504968589927__-6178634504968589927.json"
       ],
-      "sourceRecordHash": "01b5678cca18d6fe",
+      "sourceRecordHash": "09e53f4dbf1a5226",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1019,7 +1175,49 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200111,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:25:36159da28a1a11c7",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_2186251693940151742__2186251693940151742.json#behaviorlineControl[0].behaviorList[pathId=-1677411468109605442]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-1677411468109605442__-1677411468109605442.json"
+      ],
+      "sourceRecordHash": "825845435a6247e8",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:26:0fbc6b165c743842",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-7884392172624144962__-7884392172624144962.json#behaviorlineControl[0].behaviorList[pathId=-4773024862318488130]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-4773024862318488130__-4773024862318488130.json"
+      ],
+      "sourceRecordHash": "bc18eb43b4127e42",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1030,14 +1228,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_7705385094022634830__7705385094022634830.json#behaviorlineControl[0].behaviorList[pathId=-4099592143725257394]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-4099592143725257394__-4099592143725257394.json"
       ],
-      "sourceRecordHash": "4d2cda0fe1caba98",
+      "sourceRecordHash": "df2b53636ddd95ec",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200112,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1048,14 +1248,76 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-4318219549249954482__-4318219549249954482.json#behaviorlineControl[0].behaviorList[pathId=-5132726802943697586]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200112.asset/MonoBehaviour/MonoBehaviour_-5132726802943697586__-5132726802943697586.json"
       ],
-      "sourceRecordHash": "e81a6c70b0da8122",
+      "sourceRecordHash": "1506dcb537d07ace",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200112,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:29:e24585877bb825ba",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_8997238209462127275__8997238209462127275.json#behaviorlineControl[0].behaviorList[pathId=-674209930070865237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_-674209930070865237__-674209930070865237.json"
+      ],
+      "sourceRecordHash": "86c22ae1ba51306f",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:3:255d4d43c9e79c2a",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_-5425044203290961162__-5425044203290961162.json#behaviorlineControl[0].behaviorList[pathId=3456279641119316726]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_3456279641119316726__3456279641119316726.json"
+      ],
+      "sourceRecordHash": "c1cb9c4403ff12a9",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200102,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:30:ced40f67d84ba0c2",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_347667169670122155__347667169670122155.json#behaviorlineControl[0].behaviorList[pathId=2097690715283442347]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200113.asset/MonoBehaviour/MonoBehaviour_2097690715283442347__2097690715283442347.json"
+      ],
+      "sourceRecordHash": "d38b44fb4cc30398",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1066,14 +1328,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_5913182176175706207__5913182176175706207.json#behaviorlineControl[0].behaviorList[pathId=1873097280623071327]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_1873097280623071327__1873097280623071327.json"
       ],
-      "sourceRecordHash": "e9082dbcb95131a7",
+      "sourceRecordHash": "2b5ac6074b70ad8c",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200114,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1084,14 +1348,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_-4965423857651494817__-4965423857651494817.json#behaviorlineControl[0].behaviorList[pathId=675154209110347871]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_675154209110347871__675154209110347871.json"
       ],
-      "sourceRecordHash": "3a3646c061f53709",
+      "sourceRecordHash": "9809adf6cc4d7cb0",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200114,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1102,14 +1368,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_-6763096411201548193__-6763096411201548193.json#behaviorlineControl[0].behaviorList[pathId=-323706496650194849]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200114.asset/MonoBehaviour/MonoBehaviour_-323706496650194849__-323706496650194849.json"
       ],
-      "sourceRecordHash": "d94277874b21100f",
+      "sourceRecordHash": "2b86c62e8be9e974",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200114,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1120,7 +1388,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_-8478521269816111340__-8478521269816111340.json#behaviorlineControl[0].behaviorList[pathId=-1904545727025557740]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_-1904545727025557740__-1904545727025557740.json"
       ],
-      "sourceRecordHash": "ce6155cfe9c9393e",
+      "sourceRecordHash": "a532b729aba7acd0",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1138,7 +1406,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200115,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1149,7 +1419,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_-2589253836871545068__-2589253836871545068.json#behaviorlineControl[0].behaviorList[pathId=-8911371385113194732]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_-8911371385113194732__-8911371385113194732.json"
       ],
-      "sourceRecordHash": "6f2935c5ffa9e15f",
+      "sourceRecordHash": "74fbb4b6a94f25ed",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1167,7 +1437,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200115,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1178,7 +1450,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_2742329060699819796__2742329060699819796.json#behaviorlineControl[0].behaviorList[pathId=6541099675304349460]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200115.asset/MonoBehaviour/MonoBehaviour_6541099675304349460__6541099675304349460.json"
       ],
-      "sourceRecordHash": "0359affc333f5d66",
+      "sourceRecordHash": "2d9318ce5f7ffec0",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1196,7 +1468,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200115,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1207,14 +1481,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200116.asset/MonoBehaviour/MonoBehaviour_7318026948822917938__7318026948822917938.json#behaviorlineControl[0].behaviorList[pathId=-5989406841925704910]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200116.asset/MonoBehaviour/MonoBehaviour_-5989406841925704910__-5989406841925704910.json"
       ],
-      "sourceRecordHash": "242dd8002a908681",
+      "sourceRecordHash": "9f23dee6daac5bf1",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200116,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1225,14 +1501,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200116.asset/MonoBehaviour/MonoBehaviour_747800771127698226__747800771127698226.json#behaviorlineControl[0].behaviorList[pathId=-7381481206223641806]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200116.asset/MonoBehaviour/MonoBehaviour_-7381481206223641806__-7381481206223641806.json"
       ],
-      "sourceRecordHash": "4681c0eb0a05400d",
+      "sourceRecordHash": "d5bbf294946767b9",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200116,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1243,14 +1521,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200117.asset/MonoBehaviour/MonoBehaviour_5906465830565651684__5906465830565651684.json#behaviorlineControl[0].behaviorList[pathId=6028024643412829412]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200117.asset/MonoBehaviour/MonoBehaviour_6028024643412829412__6028024643412829412.json"
       ],
-      "sourceRecordHash": "7f34943332e624fb",
+      "sourceRecordHash": "cc1f3f370b7f18f5",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200117,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1261,14 +1541,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_-4226137966579015253__-4226137966579015253.json#behaviorlineControl[0].behaviorList[pathId=-3283370885005106773]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_-3283370885005106773__-3283370885005106773.json"
       ],
-      "sourceRecordHash": "183f6f378d1fba97",
+      "sourceRecordHash": "9ebf413b457a5e72",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200124,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1279,14 +1561,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_1718213857901329609__1718213857901329609.json#behaviorlineControl[0].behaviorList[pathId=-554401064288928567]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_-554401064288928567__-554401064288928567.json"
       ],
-      "sourceRecordHash": "ec8fc971da8f68a9",
+      "sourceRecordHash": "6bc21964925b5196",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200124,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1297,14 +1581,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_4103667609941087187__4103667609941087187.json#behaviorlineControl[0].behaviorList[pathId=4919651047393694675]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_4919651047393694675__4919651047393694675.json"
       ],
-      "sourceRecordHash": "30a94edd1595512d",
+      "sourceRecordHash": "d09482566276f9e7",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200124,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1315,14 +1601,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_8206873750574306259__8206873750574306259.json#behaviorlineControl[0].behaviorList[pathId=6319329823510008787]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200124.asset/MonoBehaviour/MonoBehaviour_6319329823510008787__6319329823510008787.json"
       ],
-      "sourceRecordHash": "87e902410d952873",
+      "sourceRecordHash": "77945a18d4fc192f",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200124,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1333,7 +1621,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-7247997835814985950__-7247997835814985950.json#behaviorlineControl[0].behaviorList[pathId=-6554232194154586334]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-6554232194154586334__-6554232194154586334.json"
       ],
-      "sourceRecordHash": "802fa6ba490c5681",
+      "sourceRecordHash": "fd7e9c0b9562f95d",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1351,7 +1639,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200125,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1362,7 +1652,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-5783506627044401374__-5783506627044401374.json#behaviorlineControl[0].behaviorList[pathId=8259175732807180066]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_8259175732807180066__8259175732807180066.json"
       ],
-      "sourceRecordHash": "1d58c732fec127e6",
+      "sourceRecordHash": "9cb5005d024cd322",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1380,7 +1670,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200125,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1391,7 +1683,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_7765881565220805179__7765881565220805179.json#behaviorlineControl[0].behaviorList[pathId=-8398079004942034373]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-8398079004942034373__-8398079004942034373.json"
       ],
-      "sourceRecordHash": "e478153a77a5ee65",
+      "sourceRecordHash": "1ec8ff688dd22881",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1409,7 +1701,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200125,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1420,7 +1714,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-1860774257277232581__-1860774257277232581.json#behaviorlineControl[0].behaviorList[pathId=-8321970380481848773]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-8321970380481848773__-8321970380481848773.json"
       ],
-      "sourceRecordHash": "7cb824e247d6c563",
+      "sourceRecordHash": "9631f2b531e940b7",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1438,7 +1732,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200125,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1449,7 +1745,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_979319357124876859__979319357124876859.json#behaviorlineControl[0].behaviorList[pathId=-3805538659473122757]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200125.asset/MonoBehaviour/MonoBehaviour_-3805538659473122757__-3805538659473122757.json"
       ],
-      "sourceRecordHash": "64fd4e95b175bf85",
+      "sourceRecordHash": "2fc46f44c0a4ffd9",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1467,7 +1763,49 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200125,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:49:dae91090947b248f",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200126.asset/MonoBehaviour/MonoBehaviour_3436800224306033123__3436800224306033123.json#behaviorlineControl[0].behaviorList[pathId=4501530454733124067]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200126.asset/MonoBehaviour/MonoBehaviour_4501530454733124067__4501530454733124067.json"
+      ],
+      "sourceRecordHash": "58510aefbda84b13",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200126,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:5:3df9d5c2ba04e08a",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_7015104125509622518__7015104125509622518.json#behaviorlineControl[0].behaviorList[pathId=3190196374262635254]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200102.asset/MonoBehaviour/MonoBehaviour_3190196374262635254__3190196374262635254.json"
+      ],
+      "sourceRecordHash": "700a69a711689417",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200102,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1478,7 +1816,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_6670947810615869349__6670947810615869349.json#behaviorlineControl[0].behaviorList[pathId=-7127073126304989275]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-7127073126304989275__-7127073126304989275.json"
       ],
-      "sourceRecordHash": "463dc6966cb0d668",
+      "sourceRecordHash": "4524275704decfd8",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1496,7 +1834,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1507,7 +1847,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_3427430059083022245__3427430059083022245.json#behaviorlineControl[0].behaviorList[pathId=7621509674093363109]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_7621509674093363109__7621509674093363109.json"
       ],
-      "sourceRecordHash": "b73c4a5677b86de7",
+      "sourceRecordHash": "be212cbf2d091f11",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1525,7 +1865,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1536,7 +1878,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-260836087653028193__-260836087653028193.json#behaviorlineControl[0].behaviorList[pathId=1876387711735803551]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_1876387711735803551__1876387711735803551.json"
       ],
-      "sourceRecordHash": "26bf78c854d30e3b",
+      "sourceRecordHash": "f42f06b9434fd602",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1554,7 +1896,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1565,7 +1909,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-7386606849967280481__-7386606849967280481.json#behaviorlineControl[0].behaviorList[pathId=-7540714922339684705]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-7540714922339684705__-7540714922339684705.json"
       ],
-      "sourceRecordHash": "4769134c5690f770",
+      "sourceRecordHash": "4aa2dd249c08326d",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1583,7 +1927,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10200127,
+        "targetSubSkillIndex": 2
       }
     },
     {
@@ -1594,7 +1940,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_2566027524825525919__2566027524825525919.json#behaviorlineControl[0].behaviorList[pathId=-4274639296718590305]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-4274639296718590305__-4274639296718590305.json"
       ],
-      "sourceRecordHash": "11b3d5910814c3ef",
+      "sourceRecordHash": "8514700e1868586c",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1612,7 +1958,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1623,7 +1971,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-3103818834945535402__-3103818834945535402.json#behaviorlineControl[0].behaviorList[pathId=-8187088523802275242]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-8187088523802275242__-8187088523802275242.json"
       ],
-      "sourceRecordHash": "4aecf5fecc98a2b3",
+      "sourceRecordHash": "45431ae337ebf6e4",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1641,7 +1989,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1652,7 +2002,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_1961482978265502294__1961482978265502294.json#behaviorlineControl[0].behaviorList[pathId=-3298893369415527850]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_-3298893369415527850__-3298893369415527850.json"
       ],
-      "sourceRecordHash": "2df1ef62bfb42dc0",
+      "sourceRecordHash": "9bbe381f7c5a4dd7",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1670,7 +2020,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1681,7 +2033,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_1404584761644913238__1404584761644913238.json#behaviorlineControl[0].behaviorList[pathId=1410829362572923478]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200127.asset/MonoBehaviour/MonoBehaviour_1410829362572923478__1410829362572923478.json"
       ],
-      "sourceRecordHash": "fb9681f6b6f3091f",
+      "sourceRecordHash": "dec7c46b79982184",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",
@@ -1699,7 +2051,9 @@
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200127,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1710,14 +2064,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200130.asset/MonoBehaviour/MonoBehaviour_-3194777883753196263__-3194777883753196263.json#behaviorlineControl[0].behaviorList[pathId=2160128464548779289]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200130.asset/MonoBehaviour/MonoBehaviour_2160128464548779289__2160128464548779289.json"
       ],
-      "sourceRecordHash": "2af20ebb9f947b60",
+      "sourceRecordHash": "7f7a591f7e42f6db",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200130,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1728,14 +2084,36 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200130.asset/MonoBehaviour/MonoBehaviour_2707587025759360281__2707587025759360281.json#behaviorlineControl[0].behaviorList[pathId=-8390589002500221671]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200130.asset/MonoBehaviour/MonoBehaviour_-8390589002500221671__-8390589002500221671.json"
       ],
-      "sourceRecordHash": "eadc406aaac8647e",
+      "sourceRecordHash": "ebeb7bfe23b6a465",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200130,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:6:ffac643681d48e84",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_-5698607897313016809__-5698607897313016809.json#behaviorlineControl[0].behaviorList[pathId=159212986884883479]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_159212986884883479__159212986884883479.json"
+      ],
+      "sourceRecordHash": "d4002297563be6db",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200103,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1746,14 +2124,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-3255227666697599960__-3255227666697599960.json#behaviorlineControl[0].behaviorList[pathId=3069677624052040744]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_3069677624052040744__3069677624052040744.json"
       ],
-      "sourceRecordHash": "ab48282ea809cc72",
+      "sourceRecordHash": "9ba4db2a7e3641a6",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1764,14 +2144,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-8096335882005625816__-8096335882005625816.json#behaviorlineControl[0].behaviorList[pathId=3770365008715465768]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_3770365008715465768__3770365008715465768.json"
       ],
-      "sourceRecordHash": "a893a6756e919002",
+      "sourceRecordHash": "b63c9fd503e247b6",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1782,14 +2164,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-9000103763808604805__-9000103763808604805.json#behaviorlineControl[0].behaviorList[pathId=-168916845594006149]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-168916845594006149__-168916845594006149.json"
       ],
-      "sourceRecordHash": "a51b1a24e2c1bd30",
+      "sourceRecordHash": "b7b8d4595442245b",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1800,14 +2184,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-3433272432046690949__-3433272432046690949.json#behaviorlineControl[0].behaviorList[pathId=8503157973206707579]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_8503157973206707579__8503157973206707579.json"
       ],
-      "sourceRecordHash": "047da521a4dfc45d",
+      "sourceRecordHash": "96784236c7feae2e",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1818,14 +2204,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_4587432603275963771__4587432603275963771.json#behaviorlineControl[0].behaviorList[pathId=8660455214257220987]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_8660455214257220987__8660455214257220987.json"
       ],
-      "sourceRecordHash": "518d94f8ae6c9d55",
+      "sourceRecordHash": "a34fd661a243b12e",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 10200125,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1836,14 +2224,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_8683376105330247528__8683376105330247528.json#behaviorlineControl[0].behaviorList[pathId=3700499642415581032]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_3700499642415581032__3700499642415581032.json"
       ],
-      "sourceRecordHash": "d7ade0640169636a",
+      "sourceRecordHash": "a8a21ffdec536429",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1854,14 +2244,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_3234432194824505192__3234432194824505192.json#behaviorlineControl[0].behaviorList[pathId=-661755148931299480]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_-661755148931299480__-661755148931299480.json"
       ],
-      "sourceRecordHash": "2ebe2c9fe913b045",
+      "sourceRecordHash": "e830cdb36f8759ba",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 10900115,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1872,14 +2264,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_2698244750240384872__2698244750240384872.json#behaviorlineControl[0].behaviorList[pathId=2990282961073997672]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200141.asset/MonoBehaviour/MonoBehaviour_2990282961073997672__2990282961073997672.json"
       ],
-      "sourceRecordHash": "0861ac0ad43a57a1",
+      "sourceRecordHash": "23febe85096f78ca",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200141,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 10200125,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1890,14 +2284,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_-995445204026065745__-995445204026065745.json#behaviorlineControl[0].behaviorList[pathId=-7205604800698254161]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_-7205604800698254161__-7205604800698254161.json"
       ],
-      "sourceRecordHash": "781f3069f5f0a1db",
+      "sourceRecordHash": "420d8a799ad49168",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200142,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1908,14 +2304,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_8033319280650878127__8033319280650878127.json#behaviorlineControl[0].behaviorList[pathId=4611073762100051119]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_4611073762100051119__4611073762100051119.json"
       ],
-      "sourceRecordHash": "a897972ae5cb3709",
+      "sourceRecordHash": "c3b3424f2bb1ecc2",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200142,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1926,14 +2324,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_-954188476525654378__-954188476525654378.json#behaviorlineControl[0].behaviorList[pathId=2345831874575191702]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_2345831874575191702__2345831874575191702.json"
       ],
-      "sourceRecordHash": "001bdfe8db040a91",
+      "sourceRecordHash": "94c07f5da3b9da4c",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200142,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1944,14 +2344,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_-7464564827900948842__-7464564827900948842.json#behaviorlineControl[0].behaviorList[pathId=8349711707760283286]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200142.asset/MonoBehaviour/MonoBehaviour_8349711707760283286__8349711707760283286.json"
       ],
-      "sourceRecordHash": "834fc1ed0a82d5f0",
+      "sourceRecordHash": "aa04b04c8b48edc1",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200142,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1962,14 +2364,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_4839758625004124890__4839758625004124890.json#behaviorlineControl[0].behaviorList[pathId=8802875773015292634]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_8802875773015292634__8802875773015292634.json"
       ],
-      "sourceRecordHash": "fc7f176633f118bd",
+      "sourceRecordHash": "2217d835df87b16c",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1980,14 +2384,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-3489590035925763366__-3489590035925763366.json#behaviorlineControl[0].behaviorList[pathId=-9104271336685503782]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-9104271336685503782__-9104271336685503782.json"
       ],
-      "sourceRecordHash": "56fa6c85e12044dd",
+      "sourceRecordHash": "eaceacd196fc096c",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -1998,14 +2404,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_7982423140131076826__7982423140131076826.json#behaviorlineControl[0].behaviorList[pathId=2357352184390154970]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_2357352184390154970__2357352184390154970.json"
       ],
-      "sourceRecordHash": "87bf48449a64b2c6",
+      "sourceRecordHash": "070ebe80614b5662",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 10200149,
+        "targetSubSkillIndex": 1
       }
     },
     {
@@ -2016,14 +2424,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_5995139589157223130__5995139589157223130.json#behaviorlineControl[0].behaviorList[pathId=-4995600029959390502]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-4995600029959390502__-4995600029959390502.json"
       ],
-      "sourceRecordHash": "e9678e4ccb653761",
+      "sourceRecordHash": "f02f08e7344f2e08",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 0
+        "subSkillIndex": 0,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -2034,14 +2444,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-3518486190154144235__-3518486190154144235.json#behaviorlineControl[0].behaviorList[pathId=-2222812611150436843]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-2222812611150436843__-2222812611150436843.json"
       ],
-      "sourceRecordHash": "9c41f4bcf0dc274d",
+      "sourceRecordHash": "0f4e910e9a6fdb40",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -2052,14 +2464,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-7023704688282720747__-7023704688282720747.json#behaviorlineControl[0].behaviorList[pathId=-478064958802057707]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-478064958802057707__-478064958802057707.json"
       ],
-      "sourceRecordHash": "3b888adb359d2ed8",
+      "sourceRecordHash": "26d0492519bcf6f9",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -2070,14 +2484,16 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_-2348278746724588011__-2348278746724588011.json#behaviorlineControl[0].behaviorList[pathId=3413656490719618581]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_3413656490719618581__3413656490719618581.json"
       ],
-      "sourceRecordHash": "8cef3a352df39681",
+      "sourceRecordHash": "9570282c4f340000",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 1
+        "subSkillIndex": 1,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
       }
     },
     {
@@ -2088,14 +2504,56 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_2728984485695087325__2728984485695087325.json#behaviorlineControl[0].behaviorList[pathId=7960613359933088477]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200149.asset/MonoBehaviour/MonoBehaviour_7960613359933088477__7960613359933088477.json"
       ],
-      "sourceRecordHash": "f90c3bd3adce0a11",
+      "sourceRecordHash": "571d57ba879a291c",
       "scenarioScope": {
         "disposition": "not-applicable",
         "policyIdentity": "m12c-zero-distance-passive-boss-v1",
         "reason": "m12c-zero-distance-passive-boss-active-surface-only",
         "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
         "controlSkillId": 10200149,
-        "subSkillIndex": 2
+        "subSkillIndex": 2,
+        "targetControlSkillId": 80102,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:8:a213630e3e619a88",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_4923399188461978647__4923399188461978647.json#behaviorlineControl[0].behaviorList[pathId=4906803143297860631]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200103.asset/MonoBehaviour/MonoBehaviour_4906803143297860631__4906803143297860631.json"
+      ],
+      "sourceRecordHash": "925277d11a804769",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200103,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
+      }
+    },
+    {
+      "recordIdentity": "not-applicable:contract:control-window:control-window:9:1d84052b658c6d25",
+      "status": "not-applicable",
+      "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+      "sourceKind": "requirement-inventory",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_1521363018822800993__1521363018822800993.json#behaviorlineControl[0].behaviorList[pathId=-8942239365840415135]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10200104.asset/MonoBehaviour/MonoBehaviour_-8942239365840415135__-8942239365840415135.json"
+      ],
+      "sourceRecordHash": "d89dd0e401f11776",
+      "scenarioScope": {
+        "disposition": "not-applicable",
+        "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+        "reason": "m12c-zero-distance-passive-boss-active-surface-only",
+        "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
+        "controlSkillId": 10200104,
+        "subSkillIndex": 0,
+        "targetControlSkillId": 0,
+        "targetSubSkillIndex": 0
       }
     },
     {

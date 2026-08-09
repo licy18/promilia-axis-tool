@@ -4,10 +4,10 @@
   "ownerId": 103002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09"
+    "packageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/103002.json",
-  "recipeHash": "01a85424a1e836a11e017a8b05f54caffebc8c5a24cb4298689be7ed51a81125",
+  "recipeHash": "757be7d44832cdf09aea99c9c28ed708183a1708b2d8ecf0d4a16da8c8146091",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -319,6 +319,13 @@
     }
   ],
   "entries": [
+    {
+      "identity": "Battle/Element/ast_103002279.asset#time=4000;combineNumber=0|character-combat-recipe:103002#declared-single-marker-capacity",
+      "sourceIdentity": "Battle/Element/ast_103002279.asset#time=4000;combineNumber=0|character-combat-recipe:103002#declared-single-marker-capacity",
+      "identityHash": "4caccdeea3f10efeacd797b1eaac4b13ff88bbcfd7e1c302484ef480159d7423",
+      "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
     {
       "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387499981690000.asset/MonoBehaviour/ast_17387499981690000__2368552408747777644.json#startFrame|directInjectTargetType",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387499981690000.asset/MonoBehaviour/ast_17387499981690000__2368552408747777644.json#startFrame|directInjectTargetType",
@@ -7383,6 +7390,20 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "identityHash": "bdea9c12e672eec2f756cc2deb5baaa3a3450b6f8f5039bf487e5db1c2b06088",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "identityHash": "dad335ac7d066ace45dc37e084305fc5bcda86ce8e9be36474abe2fdfd931508",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[0]",
       "identityHash": "c7ba59b8232af3213d7287c4dac23b89ab189a6a019a4e7de7126f88b86e6283",
@@ -13375,13 +13396,6 @@
       "status": "evidence-indexed"
     },
     {
-      "identity": "characters.items[id=103002].skillSlots[group=ground,slot=3]",
-      "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]",
-      "identityHash": "d98b448ba71d66ddd5f2f91aff781d0357ab1eba5a19f607b1e799fcb16f6c73",
-      "sourceKind": "other",
-      "status": "evidence-indexed"
-    },
-    {
       "identity": "characters.items[id=103002].skillSlots[group=ground,slot=4]",
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=4]",
       "identityHash": "8a2423e5f4e9a47ffe6f7073c269c5aadf4f36098dce0f6972a449d864d60488",
@@ -13442,6 +13456,13 @@
       "sourceIdentity": "combat-overlimit-mechanics-20260718.json#tuningProfiles[key=thunder]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=250]|battle-element-assets.jsonl#path_id=536980873299289094",
       "identityHash": "791bac810b9c7cdce506975e309870791a93cd05ff69892d2dc6c194d9f5875c",
       "sourceKind": "battle-element",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+      "identityHash": "197cb40934a0efb27d5fde330756127295bc7c36071a898a5478148ef11d7715",
+      "sourceKind": "skill-control",
       "status": "evidence-indexed"
     },
     {
@@ -13579,15 +13600,15 @@
     }
   ],
   "summary": {
-    "identityCount": 1894,
+    "identityCount": 1897,
     "sourceKindCounts": {
-      "battle-element": 66,
+      "battle-element": 67,
       "client-code": 3,
       "new-table": 64,
-      "other": 198,
+      "other": 197,
       "runtime-contract": 27,
-      "skill-control": 1536
+      "skill-control": 1539
     }
   },
-  "profileHash": "4a5fe0c91af3c61574e7567a66fe525506fad61bc8673248aed0b8eb5ffa7f80"
+  "profileHash": "4744329c7f1980061c43fc4711e1b081d04f923b2a08344cccceb3c060783ce9"
 }

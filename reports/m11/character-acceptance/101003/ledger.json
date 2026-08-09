@@ -245,6 +245,102 @@
   "acceptanceGaps": [
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-fire-tuning-mark",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100322.asset#elementConfigId=150@57F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:f40b31012ff71b03",
+      "uniqueGapIdentity": "acceptance-gap:f40b31012ff71b03"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-magical-defense-down",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:7aacaf5d3755b295",
+      "uniqueGapIdentity": "acceptance-gap:7aacaf5d3755b295"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-physical-defense-down",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:1c93dd5963201b74",
+      "uniqueGapIdentity": "acceptance-gap:1c93dd5963201b74"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:16adb13cd4fd5db4",
+      "uniqueGapIdentity": "acceptance-gap:16adb13cd4fd5db4"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-1",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@193F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:dcb4e0d9231759ae",
+      "uniqueGapIdentity": "acceptance-gap:dcb4e0d9231759ae"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-2",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@207F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:e55f05d928007937",
+      "uniqueGapIdentity": "acceptance-gap:e55f05d928007937"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-3",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@223F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:ee162ed92cf429e8",
+      "uniqueGapIdentity": "acceptance-gap:ee162ed92cf429e8"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:ffc512cd792f97a4",
+      "uniqueGapIdentity": "acceptance-gap:ffc512cd792f97a4"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:action-form:actor|101003|10100312|1|10100326|star-combo:default",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -425,6 +521,30 @@
   "records": [
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003207.asset/MonoBehaviour/ast_101003207__-4841411980842434486.json#elementConfigId=101003207|skill_control_10100313.asset#element101003206->101003207@148F|NewTable/element_formula.rows[id=2008]#(self.MASTERY[4]*A)/10000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:16adb13cd4fd5db4",
+      "uniqueGapIdentity": "acceptance-gap:16adb13cd4fd5db4"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-physical-defense-down",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003145.asset/MonoBehaviour/ast_101003145__-7141218965533365560.json#elementConfigId=101003145|skill_control_10100322.asset#element101003141->101003145@57F|Battle/Element/ast_101003141.asset#time8000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:1c93dd5963201b74",
+      "uniqueGapIdentity": "acceptance-gap:1c93dd5963201b74"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "contract:control-window:control-window:35:0218fc54321d238c",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -504,6 +624,18 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:798d84743f84136a",
       "uniqueGapIdentity": "acceptance-gap:798d84743f84136a"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-magical-defense-down",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003142.asset/MonoBehaviour/ast_101003142__-15343624725538709.json#elementConfigId=101003142|skill_control_10100322.asset#element101003141->101003142@57F|Battle/Element/ast_101003141.asset#time8000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:7aacaf5d3755b295",
+      "uniqueGapIdentity": "acceptance-gap:7aacaf5d3755b295"
     },
     {
       "category": "acceptance-scenario-gap",
@@ -591,6 +723,42 @@
     },
     {
       "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-1",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@193F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:dcb4e0d9231759ae",
+      "uniqueGapIdentity": "acceptance-gap:dcb4e0d9231759ae"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-2",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@207F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:e55f05d928007937",
+      "uniqueGapIdentity": "acceptance-gap:e55f05d928007937"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-fire-tuning-mark-3",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100313.asset#elementConfigId=150@223F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:ee162ed92cf429e8",
+      "uniqueGapIdentity": "acceptance-gap:ee162ed92cf429e8"
+    },
+    {
+      "category": "acceptance-scenario-gap",
       "requirementIdentity": "protocol:101003:input-window-inside-outside-boundaries",
       "status": "static-evidence-gap",
       "reason": "acceptance-scenario-coverage-missing",
@@ -600,6 +768,30 @@
       "blocking": true,
       "recordIdentity": "acceptance-gap:f2d0726a6b9a2b68",
       "uniqueGapIdentity": "acceptance-gap:f2d0726a6b9a2b68"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-star-carry-fire-tuning-mark",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100322.asset#elementConfigId=150@57F"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:f40b31012ff71b03",
+      "uniqueGapIdentity": "acceptance-gap:f40b31012ff71b03"
+    },
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "contract:action-effect-binding:han-ultimate-team-tuning-two-stacks",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100313.asset#element101003204->101003205@148F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:ffc512cd792f97a4",
+      "uniqueGapIdentity": "acceptance-gap:ffc512cd792f97a4"
     },
     {
       "recordIdentity": "source-gap:05a24f9f6fef5cf9",
@@ -880,25 +1072,25 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 28,
+    "uniqueBlockingCount": 36,
     "sourceGapCount": 13,
-    "acceptanceGapCount": 15,
+    "acceptanceGapCount": 23,
     "nonBlockingCount": 2,
     "statusCounts": {
       "runtime-evidence-required": 10,
-      "static-evidence-gap": 18
+      "static-evidence-gap": 26
     },
     "reasonCounts": {
-      "acceptance-scenario-coverage-missing": 15,
+      "acceptance-scenario-coverage-missing": 23,
       "runtime-dependent": 10,
       "unresolved": 3
     },
     "categoryCounts": {
-      "acceptance-scenario-gap": 15,
+      "acceptance-scenario-gap": 23,
       "upstream-source-gap": 13
     }
   },
-  "ledgerHash": "bbc399a46edde4a0",
+  "ledgerHash": "2b904949519ee02b",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-effect-binding:han-perfect-dodge-team-tuning",
@@ -908,7 +1100,7 @@
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|skill_control_10100349.asset#element101003205@17F|Battle/Element/ast_101003205.asset#attribute229;+18;max2;time24000"
       ],
-      "sourceRecordHash": "9999e4bf1a0f2768",
+      "sourceRecordHash": "0c62104e41b239db",
       "optimizationScenario": {
         "policyId": "m12c-zero-distance-passive-boss-v1",
         "policyHash": "967b0667f315db5b",

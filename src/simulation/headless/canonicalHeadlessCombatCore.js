@@ -289,6 +289,11 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
         verifiedRuntime.tuningMarkRuntime?.conditionalDamageResults ??
         []
       ).map(projectTuningConditionalHitGroup),
+      tuningConsumeJudgments: (
+        simulation.verifiedTuningMarkGeneration?.consumeJudgmentResults ??
+        verifiedRuntime.tuningMarkRuntime?.consumeJudgmentResults ??
+        []
+      ).map(projectTuningConsumeJudgment),
       ...(kiboPassiveRuntimeStates.length > 0
         ? {
             kiboPassives: kiboPassiveRuntimeStates.map(
@@ -849,6 +854,35 @@ function projectTuningConditionalHitGroup(result = {}) {
     applied: result.applied === true,
     companionUnitId: result.companionUnitId ?? null,
     ownership: result.ownership ?? null,
+    status: result.status ?? null,
+    sourceIdentity: projectSourceIdentity(result.sourceIdentity),
+  };
+}
+
+function projectTuningConsumeJudgment(result = {}) {
+  return {
+    eventIdentity: result.eventIdentity ?? null,
+    actionId: result.actionId ?? null,
+    actorId: result.actorId ?? null,
+    timeMs: result.timeMs ?? null,
+    absoluteFrame: result.absoluteFrame ?? null,
+    controlSkillId: result.controlSkillId ?? null,
+    subSkillIndex: result.subSkillIndex ?? null,
+    effectIdentity: result.effectIdentity ?? null,
+    judgmentGroupIdentity: result.judgmentGroupIdentity ?? null,
+    judgmentElementId: result.judgmentElementId ?? null,
+    judgmentPathId: result.judgmentPathId ?? null,
+    triggerFrame: result.triggerFrame ?? null,
+    behaviorPathId: result.behaviorPathId ?? null,
+    markId: result.markId ?? null,
+    markCountAtJudgment: result.markCountAtJudgment ?? null,
+    minimumStacks: result.minimumStacks ?? null,
+    maximumStacks: result.maximumStacks ?? null,
+    consumedCount: result.consumedCount ?? 0,
+    selectedPriorityCandidate: result.selectedPriorityCandidate ?? null,
+    candidateStates: structuredClone(result.candidateStates ?? []),
+    executed: result.executed === true,
+    applied: result.applied === true,
     status: result.status ?? null,
     sourceIdentity: projectSourceIdentity(result.sourceIdentity),
   };

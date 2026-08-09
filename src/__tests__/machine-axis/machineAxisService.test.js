@@ -2,6 +2,7 @@ import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json'
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
 import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import rubyOwnerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -175,11 +176,7 @@ describe('Machine Axis service', () => {
         Number(event.elementId) === 108003164
     );
     expect(secondStarPeriodic).toHaveLength(30);
-    for (const actorId of [
-      'actor-108003',
-      'actor-101010',
-      'actor-103002',
-    ]) {
+    for (const actorId of ['actor-108003', 'actor-101010', 'actor-103002']) {
       expect(
         secondStarPeriodic
           .filter(event => event.actorId === actorId)
@@ -240,11 +237,11 @@ describe('Machine Axis service', () => {
       ['miti-star-2-exact-cooldown', 'apply'],
     ]);
     expect(run.hashes).toMatchObject({
-      input: 'aff5191ffb37e196',
-      data: 'd4db176176ebd09b',
-      trace: 'fae43a5d8865c76e',
+      input: '213df2842364ca33',
+      data: 'd0b165680225b2e4',
+      trace: 'f73f1834b7358061',
       evaluation: '3c2fb1d6fda5e7b9',
-      build: '167c9d82b18124a2',
+      build: 'd21c09a5fb034910',
     });
   }, 30_000);
 
@@ -701,6 +698,75 @@ describe('Machine Axis service', () => {
     );
   }, 15_000);
 
+  it('fails closed when an explicit attack chain conflicts with a contextual window', () => {
+    installRubyProfileOverlay();
+    const createRubyAxis = chainIdentity => {
+      const axis = createAxis({
+        actions: [
+          {
+            id: 'ruby-ultimate-context',
+            owner: { kind: 'actor', slotId: 'slot-3' },
+            intent: {
+              kind: 'public-action',
+              publicActionId: 10300213,
+              actionKind: 'ultimate',
+            },
+            schedule: { mode: 'absolute', frame: 0 },
+          },
+          {
+            id: 'ruby-explicit-chain-a1',
+            owner: { kind: 'actor', slotId: 'slot-3' },
+            intent: {
+              kind: 'public-action',
+              publicActionId: 10300201,
+              actionKind: 'normal-attack',
+              attackInput: {
+                sequenceIndex: 1,
+                chainIdentity,
+                contextActionId: 'ruby-ultimate-context',
+              },
+            },
+            schedule: { mode: 'absolute', frame: 329 },
+          },
+        ],
+      });
+      axis.scenario.team[2].initialSp = 100;
+      return axis;
+    };
+
+    const conflict = createMachineAxisService().validate(
+      createRubyAxis('ruby-normal-default-three-inputs')
+    );
+    expect(conflict.valid).toBe(false);
+    expect(conflict.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-normal-attack-chain-context-conflict',
+        actionId: 'ruby-explicit-chain-a1',
+        requestedChainIdentity: 'ruby-normal-default-three-inputs',
+        contextualChainIdentity: 'ruby-enhanced-twelve-inputs',
+      })
+    );
+
+    const matching = createMachineAxisService().prepare(
+      createRubyAxis('ruby-enhanced-twelve-inputs')
+    );
+    expect(matching.issues).toEqual([]);
+    expect(
+      matching.project.actions.find(
+        action => action.id === 'ruby-explicit-chain-a1'
+      )
+    ).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackInputChainSelectionSource: 'user-explicit',
+      controlSubSkillIndex: 1,
+      attackInput: {
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 1,
+      },
+    });
+  });
+
   it('rejects illegal loadouts and stale semantic variant identities', () => {
     const service = createMachineAxisService();
     const illegalLoadout = createAxis();
@@ -747,4 +813,55 @@ function findMechanicsHit(hitIdentity) {
     if (hit) return hit;
   }
   throw new Error(`Missing verified hit: ${hitIdentity}`);
+}
+
+function installRubyProfileOverlay() {
+  const runtimePackage = structuredClone(mechanicsPackage);
+  const mapping = runtimePackage.actionMappings.find(
+    candidate =>
+      Number(candidate.ownerId) === 103002 &&
+      candidate.actionKind === 'normal-attack'
+  );
+  const chains = rubyOwnerContract.contracts.attackInputChains ?? [];
+  mapping.profileAttackInputSegments = chains.flatMap(chain =>
+    (chain.segments ?? []).map(segment => {
+      const selectedSubSkillIndex = Number(segment.subSkillIndex ?? 0);
+      const selectedHitIdentities = (segment.executionTiming?.hits ?? [])
+        .map(hit => hit.hitIdentity)
+        .filter(Boolean);
+      return {
+        ...structuredClone(segment),
+        identity: `${chain.chainIdentity}:segment:${segment.sequenceIndex}`,
+        attackInputChainIdentity: chain.chainIdentity,
+        chainSequenceIndex: segment.sequenceIndex,
+        sequenceTotal: segment.sequenceTotal ?? chain.segments.length,
+        selectedSubSkillIndex,
+        effectiveDurationFrames: segment.durationFrames,
+        durationStatus: 'applied',
+        effectiveDurationStatus: 'applied',
+        durationSourceIdentity: segment.sourceIdentity,
+        sourceEvidenceStatus: 'applied',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        runtimeReady: true,
+        schedulable: true,
+        selectedHitIdentities,
+        hitCount: selectedHitIdentities.length,
+        actionScheduling: {
+          status: 'exact',
+          kind: 'exact-selected-variant-occupancy',
+          durationFrames: segment.durationFrames,
+          planningDurationFrames: null,
+          selectedSubSkillIndex,
+          sourceIdentity: segment.sourceIdentity,
+          sourceStatus: 'verified-input-occupancy',
+          variantModelStatus: 'resolved',
+          reasons: [],
+        },
+      };
+    })
+  );
+  mapping.profileVariantWindowBindings = structuredClone(
+    rubyOwnerContract.contracts.variantWindowBindings ?? []
+  );
+  installVerifiedCombatMechanicsPackage(runtimePackage);
 }

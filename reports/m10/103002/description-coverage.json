@@ -1359,8 +1359,8 @@
       ],
       "status": "applied",
       "coverageReferences": [
+        "actor:103002:star-skill:ruby-artistic-dance",
         "actor|103002|10300212|0|10300212|star-skill",
-        "actor|103002|10300212|0|10300212|star-skill:default",
         "hit:10300212|0|elements|30|3779689614933439892|37|1",
         "hit:10300212|0|elements|33|372918963524026542|44|2",
         "hit:10300212|0|elements|33|372918963524026542|49|3",
@@ -1378,7 +1378,7 @@
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
-          "publicFormId": "actor|103002|10300212|0|10300212|star-skill:default",
+          "publicFormId": "actor:103002:star-skill:ruby-artistic-dance",
           "actionKind": "star-skill",
           "sourceSkillId": 10300212,
           "executionControlSkillId": 10300212,
@@ -1409,7 +1409,7 @@
           },
           "status": "applied",
           "reasons": [],
-          "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204"
         }
       ],
       "reasons": [],
@@ -1428,7 +1428,6 @@
       ],
       "status": "applied",
       "coverageReferences": [
-        "actor|103002|10300212|0|10300212|star-skill:default",
         "ruby-enhanced-twelve-inputs:segment:1",
         "ruby-enhanced-twelve-inputs:segment:10",
         "ruby-enhanced-twelve-inputs:segment:11",
@@ -1960,5 +1959,5 @@
       "not-applicable": 1
     }
   },
-  "profileHash": "4a5fe0c91af3c61574e7567a66fe525506fad61bc8673248aed0b8eb5ffa7f80"
+  "profileHash": "4744329c7f1980061c43fc4711e1b081d04f923b2a08344cccceb3c060783ce9"
 }

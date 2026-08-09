@@ -14,7 +14,10 @@ import {
   getWorkbenchGameData,
 } from '../../domain/workbenchProjectFactory';
 import { WORKBENCH_HEADLESS_COMBAT_CORE } from '../../features/workbench/workbenchHeadlessCombatCore';
-import { createCanonicalHeadlessCombatCore } from '../../simulation/headless/canonicalHeadlessCombatCore';
+import {
+  createCanonicalCombatTrace,
+  createCanonicalHeadlessCombatCore,
+} from '../../simulation/headless/canonicalHeadlessCombatCore';
 import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG } from '../../simulation/mechanics/threeValueMechanicsProfileCatalog';
 
 const PANGPANG_CHARACTER_ID = 101007;
@@ -39,6 +42,106 @@ afterEach(() => {
 });
 
 describe('canonical headless combat core', () => {
+  it('preserves applied and insufficient tuning judgments in canonical trace state', () => {
+    const judgments = [
+      {
+        eventIdentity: 'judgment-173',
+        actionId: 'ruby-ultimate',
+        actorId: 'actor-103002',
+        timeMs: 2883.333333,
+        absoluteFrame: 173,
+        controlSkillId: 10300213,
+        subSkillIndex: 0,
+        effectIdentity: 'battle-element:103002273',
+        judgmentElementId: 103002273,
+        judgmentPathId: '-8725062263845393396',
+        triggerFrame: 173,
+        behaviorPathId: '2818728561424649950',
+        markId: 250,
+        markCountAtJudgment: 1,
+        minimumStacks: 1,
+        maximumStacks: 1,
+        consumedCount: 1,
+        executed: true,
+        applied: true,
+        status: 'verified-tuning-consume-judgment-applied',
+        sourceIdentity:
+          'battle-effect:10300213:0:-8725062263845393396:2818728561424649950:173',
+      },
+      {
+        eventIdentity: 'judgment-237',
+        actionId: 'ruby-ultimate',
+        actorId: 'actor-103002',
+        timeMs: 3950,
+        absoluteFrame: 237,
+        controlSkillId: 10300213,
+        subSkillIndex: 0,
+        effectIdentity: 'battle-element:103002273',
+        judgmentElementId: 103002273,
+        judgmentPathId: '-8725062263845393396',
+        triggerFrame: 237,
+        behaviorPathId: '8489770418213277406',
+        markId: 250,
+        markCountAtJudgment: 0,
+        minimumStacks: 1,
+        maximumStacks: 1,
+        consumedCount: 0,
+        executed: true,
+        applied: false,
+        status: 'verified-tuning-consume-judgment-insufficient-marks',
+        sourceIdentity:
+          'battle-effect:10300213:0:-8725062263845393396:8489770418213277406:237',
+      },
+    ];
+    const trace = createCanonicalCombatTrace({
+      compilation: {
+        dataIdentity: { packageId: 'synthetic' },
+        scenario: {
+          time: { fps: 60 },
+          actors: [],
+          enemy: {},
+          actions: [],
+          combatScenario: {},
+        },
+      },
+      simulation: {
+        scenario: { durationMs: 5000 },
+        verifiedTuningMarkGeneration: {
+          consumeJudgmentResults: judgments,
+        },
+      },
+    });
+
+    expect(trace.state.tuningConsumeJudgments).toHaveLength(2);
+    expect(trace.state.tuningConsumeJudgments).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          eventIdentity: 'judgment-173',
+          controlSkillId: 10300213,
+          subSkillIndex: 0,
+          judgmentElementId: 103002273,
+          triggerFrame: 173,
+          behaviorPathId: '2818728561424649950',
+          executed: true,
+          applied: true,
+          consumedCount: 1,
+        }),
+        expect.objectContaining({
+          eventIdentity: 'judgment-237',
+          controlSkillId: 10300213,
+          subSkillIndex: 0,
+          judgmentElementId: 103002273,
+          triggerFrame: 237,
+          behaviorPathId: '8489770418213277406',
+          executed: true,
+          applied: false,
+          consumedCount: 0,
+          status: 'verified-tuning-consume-judgment-insufficient-marks',
+        }),
+      ])
+    );
+  });
+
   it('exposes one deterministic catalog/compile/validate/simulate/evaluate/explain contract', () => {
     const core = createCore();
     const project = createVerifiedProject();

@@ -10,14 +10,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10800342,
         "effectIdentity": "battle-element:250",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_-4957849651940093077__-4957849651940093077.json#startFrame|bulletShootDataConfigs[0].bullets[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_10800311.asset/MonoBehaviour/ast_bullet_10800311__8457900152797066491.json#bulletTargetType|bulletLogicObjects|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/BulletList/ast_bullet_10800311.asset/MonoBehaviour/ast_bullet_10800311__8457900152797066491.json#bulletLogicObjects[1].actionObjects[0].actionElementParameter.elementInfos[0].elementId|ast_bullet_10800311.asset#BulletTriggerInjectOwnElement-250-after-collision|skill_control_10800342.asset#bullet10800311@3F|ast_bullet_10800311.asset#own-element-250-once"
       ],
       "reasons": [],
-      "sourceRecordHash": "7f06eb0c8f86b8d6"
+      "sourceRecordHash": "60eeaf8fac6372b4"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:miti-star-carry-thunder-mark-two-occurrences",
@@ -27,14 +29,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10800322,
         "effectIdentity": "battle-element:250",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|skill_control_10800322.asset#directInject@37F.elementDataList[0..1]=path(-3809486317990090417)=element250"
       ],
       "reasons": [],
-      "sourceRecordHash": "da1527c6250ed3fe"
+      "sourceRecordHash": "92512ebeb547b116"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:miti-ultimate-thunder-mark-two-occurrences",
@@ -44,14 +48,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10800313,
         "effectIdentity": "battle-element:250",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003136|ast_bullet_10800318.asset#repeatTime=175ms;InjectTargetElement108003136;doActionMaxCount=4;frames=142,153,163,174|ast_bullet_10800319.asset#collision-max1|skill_control_10800313.asset#bullet10800319@142F|ast_bullet_10800319.asset#BulletTriggerInjectOwnElement.elementInfos[0..1]=250"
       ],
       "reasons": [],
-      "sourceRecordHash": "96ada4293f97cbb9"
+      "sourceRecordHash": "19c06fe562a32c75"
     },
     {
       "requirementIdentity": "contract:action-form:actor:108003:star-carry:miti-thunder-calling-arrow-exit",
@@ -5238,5 +5244,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "a3673b9ec10805f1"
+  "inventoryHash": "3e48e3a2756f589e"
 }

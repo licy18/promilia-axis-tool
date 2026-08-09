@@ -65,13 +65,15 @@ export function normalizeAttackInputActionFields(source = {}) {
       ...(attackInputChainSelectionSource
         ? { attackInputChainSelectionSource }
         : {}),
-      ...(attackInputExpansionMode
-        ? { attackInputExpansionMode }
-        : {}),
+      ...(attackInputExpansionMode ? { attackInputExpansionMode } : {}),
       ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
     };
   }
+  const contextActionId = normalizeText(
+    source.contextActionId ?? source.attackInput?.contextActionId
+  );
   return {
+    ...(contextActionId ? { contextActionId } : {}),
     attackGroupId:
       normalizeText(source.attackGroupId) ??
       `attack-group-${normalizeText(source.id) ?? 'unresolved'}`,
@@ -83,9 +85,7 @@ export function normalizeAttackInputActionFields(source = {}) {
     ...(attackInputChainSelectionSource
       ? { attackInputChainSelectionSource }
       : {}),
-    ...(attackInputExpansionMode
-      ? { attackInputExpansionMode }
-      : {}),
+    ...(attackInputExpansionMode ? { attackInputExpansionMode } : {}),
     attackInput: segment,
     ...(legacyStatus ? { attackInputLegacyStatus: legacyStatus } : {}),
   };

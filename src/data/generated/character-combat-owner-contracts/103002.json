@@ -5,8 +5,8 @@
   "ownerId": 103002,
   "ownerName": "红宝石",
   "recipeIdentity": "actor:103002:character-combat-recipe:v1",
-  "recipeHash": "0bf1c13c909ddbf833b34c6c684a0161a46e337414034260d9ce68c7152d9039",
-  "compilerInputHash": "4d703499f17034e23ece4538aa11073ce06330722b3384210121f459cf1ce586",
+  "recipeHash": "bf9715c09d40499c6001d46519aa816d79bc3e3a363539bbcd3eeee57d0deb5c",
+  "compilerInputHash": "d1cfc8f362891de8681e8e905b65923de870aea1fd698c83f8d2566a6ed6f112",
   "timingPolicy": "verified-input-reopen",
   "managesResourceContracts": true,
   "reachableControlSkillIds": [
@@ -25967,14 +25967,12 @@
         ],
         "classification": "applied",
         "sourceEvidenceStatus": "applied",
-        "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+        "scenarioRuntimeStatus": "source-verified",
         "scenarioResolvedHitCount": 0,
         "scenarioResolvedEffectCount": 0,
         "scenarioResolvedElementCount": 2,
         "complete": true,
-        "reasons": [
-          "verified-action-effective-occupancy-window-unresolved"
-        ],
+        "reasons": [],
         "dimensionSummary": {
           "hp": {
             "applied": 2,
@@ -26037,16 +26035,14 @@
           },
           "occupancy": {
             "startFrame": 0,
-            "endFrame": null,
-            "durationFrames": null,
+            "endFrame": 204,
+            "durationFrames": 204,
             "frameRate": 60,
-            "status": "unresolved",
-            "sourceKind": "unresolved-action-occupancy",
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-            "conversion": null,
-            "reasons": [
-              "verified-action-effective-occupancy-window-unresolved"
-            ]
+            "status": "applied",
+            "sourceKind": "declared-control-frame-count-occupancy",
+            "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+            "conversion": "204 source frames at 60fps",
+            "reasons": []
           },
           "animation": {
             "startFrame": 0,
@@ -26374,27 +26370,80 @@
               "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
             }
           ],
-          "status": "unresolved",
-          "sourceKind": "selected-skill-control-player-variant",
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-          "reasons": [
-            "verified-action-effective-occupancy-window-unresolved"
-          ]
+          "status": "applied",
+          "sourceKind": "direct-execution",
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+          "reasons": []
         },
-        "timingStatus": "unresolved",
+        "timingStatus": "applied",
         "actionScheduling": {
-          "status": "planning",
-          "kind": "source-animation-planning-duration",
-          "durationFrames": null,
-          "planningDurationFrames": 204,
+          "status": "exact",
+          "kind": "exact-public-action-execution-form-occupancy",
+          "durationFrames": 204,
+          "planningDurationFrames": null,
           "selectedSubSkillIndex": 0,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-          "sourceStatus": "verified-animation-duration",
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+          "sourceStatus": "verified-input-occupancy",
           "variantModelStatus": "resolved",
-          "reasons": [
-            "verified-action-effective-occupancy-window-unresolved"
-          ]
-        }
+          "reasons": []
+        },
+        "publicActionExecutionForms": [
+          {
+            "formIdentity": "actor:103002:star-skill:ruby-artistic-dance",
+            "ownerId": 103002,
+            "publicActionKind": "star-skill",
+            "publicControlSkillId": 10300212,
+            "semanticIdentity": "ruby-artistic-dance",
+            "semanticName": "艺术的舞曲",
+            "executionControlSkillId": 10300212,
+            "executionSubSkillIndex": 0,
+            "selectionKind": "direct-execution",
+            "replaceSelectedEffectIdentities": false,
+            "condition": {
+              "kind": "always"
+            },
+            "executionPrerequisite": null,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "press",
+                "pressFrame": 0,
+                "holdDurationMs": null,
+                "holdFrames": null,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300212].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10300212].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 204,
+                "durationFrames": 204,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "declared-control-frame-count-occupancy",
+                "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+                "conversion": "204 source frames at 60fps",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 204,
+                "durationFrames": 204,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "204 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+            "status": "verified-public-action-form-ready",
+            "reasons": [],
+            "applied": true
+          }
+        ],
+        "publicActionExecutionStatus": "verified-public-action-execution-form-ready"
       },
       {
         "identity": "actor|103002|10300212|1|10300226|star-combo",
@@ -29695,6 +29744,60 @@
         "applied": true
       },
       {
+        "formIdentity": "actor:103002:star-skill:ruby-artistic-dance",
+        "ownerId": 103002,
+        "publicActionKind": "star-skill",
+        "publicControlSkillId": 10300212,
+        "semanticIdentity": "ruby-artistic-dance",
+        "semanticName": "艺术的舞曲",
+        "executionControlSkillId": 10300212,
+        "executionSubSkillIndex": 0,
+        "selectionKind": "direct-execution",
+        "replaceSelectedEffectIdentities": false,
+        "condition": {
+          "kind": "always"
+        },
+        "executionPrerequisite": null,
+        "executionTiming": {
+          "subSkillIndex": 0,
+          "frameRate": 60,
+          "input": {
+            "mode": "press",
+            "pressFrame": 0,
+            "holdDurationMs": null,
+            "holdFrames": null,
+            "status": "applied",
+            "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10300212].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10300212].holdTriggerTime"
+          },
+          "occupancy": {
+            "startFrame": 0,
+            "endFrame": 204,
+            "durationFrames": 204,
+            "frameRate": 60,
+            "status": "applied",
+            "sourceKind": "declared-control-frame-count-occupancy",
+            "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+            "conversion": "204 source frames at 60fps",
+            "reasons": []
+          },
+          "animation": {
+            "startFrame": 0,
+            "endFrame": 204,
+            "durationFrames": 204,
+            "frameRate": 60,
+            "status": "applied",
+            "sourceKind": "skill-control-player-animation-range",
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+            "conversion": "204 source frames at 60fps"
+          },
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
+        "status": "applied",
+        "reasons": [],
+        "applied": true
+      },
+      {
         "formIdentity": "actor|103002|10300201|1|10300210|charged-attack:default",
         "ownerId": 103002,
         "publicActionIdentity": "actor|103002|10300201|1|10300210|charged-attack",
@@ -29744,24 +29847,6 @@
         "semanticName": "跃击",
         "executionTiming": null,
         "sourceIdentity": "characters.items[id=103002].skillSlots[group=aerial,slot=301]",
-        "status": "applied",
-        "applied": true,
-        "reasons": []
-      },
-      {
-        "formIdentity": "actor|103002|10300212|0|10300212|star-skill:default",
-        "ownerId": 103002,
-        "publicActionIdentity": "actor|103002|10300212|0|10300212|star-skill",
-        "publicActionKind": "star-skill",
-        "actionKind": "star-skill",
-        "sourceSkillId": 10300212,
-        "sourceControlSkillId": 10300212,
-        "sourceSubSkillIndex": 0,
-        "executionControlSkillId": 10300212,
-        "executionSubSkillIndex": 0,
-        "semanticName": "星鸣技",
-        "executionTiming": null,
-        "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]",
         "status": "applied",
         "applied": true,
         "reasons": []
@@ -132405,11 +132490,11 @@
       "sourceIdentity": "NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-127131817645696752"
     }
   },
-  "contractHash": "44ab01d9c94ab104f774efd236a0e6e2090189092cf086e14171c20ebd7f9cc7",
+  "contractHash": "180ed8006497b5163c153f7de67e7146e6897269f248a51ab235c60ce9006256",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
-    "publicActionFormCount": 1,
+    "publicActionFormCount": 2,
     "attackInputChainCount": 2,
     "attackInputMechanicWindowCount": 0,
     "inputVariantSelectorCount": 0,
@@ -132433,5 +132518,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "b2bfca677d168ffb9dce470c8a12f6bada5fc8d51e8055cb463ed0ef22b5771e"
+  "recipeContractHash": "0443790a25193274fc32ee728418beb2cf5d68ce4b0874c305f0abea9acb67c0"
 }

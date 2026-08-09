@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09",
+  "sourcePackageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "5ec8b0237a07ed088a27db7b85745b3c050ce57e80af73834a75a40590980010"
+      "profileHash": "7261dd17730c12cd343e042fc8342be10eebf51394c5b57e7442f12aecf995c1"
     },
     {
       "ownerId": 103002,
@@ -113,7 +113,7 @@
       "combatCoverageState": "partial",
       "characterComplete": false,
       "zeroDistanceSimulationComplete": true,
-      "realClientEvidenceComplete": false,
+      "realClientEvidenceComplete": true,
       "publicActionCount": 10,
       "reachableFormCount": 53,
       "indexedControlCount": 12,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "4a5fe0c91af3c61574e7567a66fe525506fad61bc8673248aed0b8eb5ffa7f80"
+      "profileHash": "4744329c7f1980061c43fc4711e1b081d04f923b2a08344cccceb3c060783ce9"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "c0cc6266e21af1ac9be590e70e1140acffc3e5a34aeba2d7d4c0deda54842506"
+      "profileHash": "4126e6a057f901301b0884275d0c100d50feeefd1ba6f7de4acf0e89ea6fb433"
     },
     {
       "ownerId": 101007,
@@ -274,7 +274,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:102001:character-combat-profile:v1",
-      "profileHash": "f6bf3898f9d7eefa00dd2beceb8fc3ce71273ad051eb97e29a586ba190c31976"
+      "profileHash": "4dffa0a98c2d04624b24a2376ff1a41d8a0890537595d7cc0a11fd373174d839"
     },
     {
       "ownerId": 107001,
@@ -325,7 +325,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:107001:character-combat-profile:v1",
-      "profileHash": "f1bd2904825b9b4c24f0feb04f4e3a4d6aa28d759e88b2475892956c48643b8b"
+      "profileHash": "d017ec094267225eedab3fbfdef7578d46ec49b347bc0c5f9fc3dc4ef3418c24"
     },
     {
       "ownerId": 107002,
@@ -367,7 +367,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:107002:character-combat-profile:v1",
-      "profileHash": "161aa8252801c6bf89a2ec57991688c06c4439d6f49b955385c6afb8af3152b5"
+      "profileHash": "49f7e595eacd4d786b45066499463c3526247549ce76f5b2cb711b8168d0e0af"
     },
     {
       "ownerId": 107003,
@@ -537,7 +537,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:108003:character-combat-profile:v1",
-      "profileHash": "a912276c51b76fb3f1c19fadcb348c12869d921e27b1a330c8bb1d45057ca839"
+      "profileHash": "ea2947d0d53a4b7201f79a50df30d0360bfd02b70350ff187de77e738d856068"
     },
     {
       "ownerId": 108005,
@@ -623,7 +623,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "433f1fd414769d96c21fe3d370cd2313a8866b4502bda4fb375a818f5fca9422"
+      "profileHash": "c6d6b7a8db5a2ec7abacc7e790812ae6f4cbaf7627cdfc4edf50d041650363e6"
     },
     {
       "ownerId": 109002,
@@ -927,6 +927,6 @@
     "totalRuntimeReadyActionCount": 186,
     "unnamedSecondaryPassiveCount": 20,
     "zeroDistanceSimulationCompleteCount": 1,
-    "realClientEvidenceCompleteCount": 0
+    "realClientEvidenceCompleteCount": 1
   }
 }

@@ -6,14 +6,14 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09",
+  "sourcePackageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "6dee2365e738769a",
-    "traceHash": "d9db71c977e797da",
-    "dataHash": "5fca52b036962e85",
+    "inputHash": "bf1b5a28544c4db4",
+    "traceHash": "59d9542c3789a043",
+    "dataHash": "89b5bcc8111f06fa",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -156,11 +156,11 @@
         {
           "actionId": "ruby-star-skill",
           "ownerId": 103002,
-          "semanticName": "星鸣技",
+          "semanticName": "艺术的舞曲",
           "controlSkillId": 10300212,
           "subSkillIndex": 0,
           "actualDurationFrames": 204,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         },
         {
           "actionId": "ruby-ultimate",
@@ -273,11 +273,11 @@
         },
         "ruby-star-skill": {
           "ownerId": 103002,
-          "semanticName": "星鸣技",
+          "semanticName": "艺术的舞曲",
           "controlSkillId": 10300212,
           "subSkillIndex": 0,
           "actualDurationFrames": 204,
-          "sourceKind": "workbench-explicit-input-variant"
+          "sourceKind": "verified-public-action-form-direct-execution"
         },
         "ruby-ultimate": {
           "ownerId": 103002,
@@ -6135,7 +6135,7 @@
         }
       ]
     },
-    "summaryHash": "764d8739c1123151ed72fa5bb810826573b4583b2b19ece246a1f8d7eb88cf05"
+    "summaryHash": "1dbeb8319d342e2b14962391db9c4d9a7beb697881625e19a51a51e3f189ba52"
   },
   "expected": {
     "exact": {
@@ -7225,6 +7225,6 @@
       }
     ]
   },
-  "replayHash": "b3b685cb380ee79e84a7daff51ea5867b259708adf418480e45df6b8536aca2c",
-  "profileHash": "4a5fe0c91af3c61574e7567a66fe525506fad61bc8673248aed0b8eb5ffa7f80"
+  "replayHash": "394321c27ec49678e4d77c1eddb1e9b8f0c450cb50868488f738bb12028b5aef",
+  "profileHash": "4744329c7f1980061c43fc4711e1b081d04f923b2a08344cccceb3c060783ce9"
 }

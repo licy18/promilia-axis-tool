@@ -6,14 +6,14 @@
   "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "6d7ed0df1b350752800ab48e9756d9ab95dd2f3a8dbd4e44e203bb346dde4f09",
+  "sourcePackageHash": "14b6d18597ef8ea91cbfc546abe2c972debf2758ba7b27d25e7827a282584f2a",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "71ff335b23a29e83",
-    "traceHash": "b88824e4f568f5f2",
-    "dataHash": "b6d88f66adf5cfd7",
+    "inputHash": "e75ad0578f5a8e2a",
+    "traceHash": "3ae404f6c7d14e01",
+    "dataHash": "26bac0ea158e7708",
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -2682,7 +2682,7 @@
           "effectName": "米砂物理及法术防御降低",
           "targetKind": "enemy",
           "targetId": "enemy-300032",
-          "operation": "apply",
+          "operation": "refresh",
           "previousTargetId": "enemy-300032",
           "nextTargetId": "enemy-300032",
           "controlledActorTransitionId": null,
@@ -2887,7 +2887,7 @@
         {
           "actionId": "misa-charged",
           "frame": 676,
-          "operation": "apply",
+          "operation": "refresh",
           "expiresAtMs": 35266.667
         },
         {
@@ -9978,7 +9978,7 @@
           "effectName": "米砂物理及法术防御降低",
           "targetKind": "enemy",
           "targetId": "enemy-300032",
-          "operation": "apply",
+          "operation": "refresh",
           "previousTargetId": "enemy-300032",
           "nextTargetId": "enemy-300032",
           "controlledActorTransitionId": null,
@@ -11848,7 +11848,7 @@
         }
       ]
     },
-    "summaryHash": "36630178a58fc95b6b05af1cb4824adc153d6212b107bec4774386be4626a5f3"
+    "summaryHash": "fea565d62c101a6fa56500b9522e06cdbb1558219eb0be5f95d451034a557c29"
   },
   "expected": {
     "exact": {
@@ -13711,6 +13711,6 @@
       }
     ]
   },
-  "replayHash": "4f7ca88c9a1789ba303eddfab5c5e8e6d8cfdb9c531cc4fae9310c378a2f9a95",
-  "profileHash": "161aa8252801c6bf89a2ec57991688c06c4439d6f49b955385c6afb8af3152b5"
+  "replayHash": "bf4cbe6eee2d127d7a5dee7a1112cf091831ad91aa4b94cea01080091e7cbfe3",
+  "profileHash": "49f7e595eacd4d786b45066499463c3526247549ce76f5b2cb711b8168d0e0af"
 }

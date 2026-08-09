@@ -37,7 +37,7 @@
 | charged-attack | 是 | applied |  |
 | dodge-attack | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
 | plunging-attack | 是 | applied |  |
-| star-skill | 是 | applied-with-residual-gaps | verified-action-effective-occupancy-window-unresolved |
+| star-skill | 是 | applied |  |
 | star-combo | 是 | applied |  |
 | ultimate | 是 | applied-with-residual-gaps | nested-damage-trigger-lifecycle-not-expanded；nested-effect-wrapper-semantics-unresolved；tuning-consume-current-packet-not-in-candidate-map；tuning-consume-judgment-missing；tuning-consume-mark-identity-ambiguous；tuning-consume-success-branch-unresolved |
 | star-carry | 是 | applied |  |

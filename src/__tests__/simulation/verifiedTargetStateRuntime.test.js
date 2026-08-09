@@ -259,6 +259,45 @@ describe('verified target-state runtime', () => {
     ]);
   });
 
+  it('emits refresh rather than apply when a capped state refreshes its oldest layer', () => {
+    const mechanicsPackage = createMechanicsPackage();
+    mechanicsPackage.actionVariantGraph.targetStateProfiles[0] = {
+      ...mechanicsPackage.actionVariantGraph.targetStateProfiles[0],
+      maxStacks: 1,
+      atCapacityPolicy: 'refresh-oldest',
+    };
+    const actionResolutionById = new Map(
+      ['first', 'second'].map(actionId => [
+        actionId,
+        createResolution({
+          controlSkillId: 424201,
+          hits: [createHit(9001, 5)],
+        }),
+      ])
+    );
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 12000 },
+        actors: [{ id: 'actor-1', characterId: 424242 }],
+        enemy: { id: 'enemy-1' },
+        actions: [createAction('first', 0), createAction('second', 1000)],
+      },
+      actionResolutionById,
+      mechanicsPackage,
+    });
+
+    expect(
+      result.effectCommands.map(command => [
+        command.sourceActionId,
+        command.operation,
+      ])
+    ).toEqual([
+      ['first', 'apply'],
+      ['second', 'refresh'],
+    ]);
+  });
+
   it('does not leak unrelated owner profiles or runtime bindings into the active roster', () => {
     const mechanicsPackage = createMechanicsPackage();
     mechanicsPackage.actionVariantGraph.targetStateProfiles.push({

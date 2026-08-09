@@ -64,6 +64,7 @@ export function createVerifiedTuningMarkGeneration({
   const combatEvents = [];
   const acquisitionGateResults = [];
   const conditionalDamageResults = [];
+  const consumeJudgmentResults = [];
   const unresolved = [];
   let sequence = 0;
 
@@ -395,6 +396,7 @@ export function createVerifiedTuningMarkGeneration({
         events,
         effectCommands,
         combatEvents,
+        consumeJudgmentResults,
         unresolved,
         mechanicsPackage,
         scenario,
@@ -461,6 +463,7 @@ export function createVerifiedTuningMarkGeneration({
     combatEvents,
     acquisitionGateResults,
     conditionalDamageResults,
+    consumeJudgmentResults,
     unresolved,
     initialState: createInitialTuningState(scenario, catalog),
     finalState: createPublishedTuningState(stateByMarkId, durationMs),
@@ -488,6 +491,7 @@ export function createVerifiedTuningMarkGeneration({
       combatEventCount: combatEvents.length,
       acquisitionGateResultCount: acquisitionGateResults.length,
       conditionalDamageResultCount: conditionalDamageResults.length,
+      consumeJudgmentResultCount: consumeJudgmentResults.length,
       unresolvedCount: unresolved.length,
       finalLayerCount: [...stateByMarkId.values()].reduce(
         (sum, state) => sum + state.layers.length,
@@ -504,7 +508,8 @@ function dedupeTuningRuntimeEffects(effects) {
     ...new Map(
       effects.map(effect => {
         const tuning = effect.tuningMark ?? effect.tuningOverlimit;
-        const occurrenceIdentity = effect.tuningMark?.occurrenceIdentity ?? null;
+        const occurrenceIdentity =
+          effect.tuningMark?.occurrenceIdentity ?? null;
         return [
           tuning
             ? [
@@ -1112,6 +1117,7 @@ function applyMarkConsumption({
   events,
   effectCommands,
   combatEvents,
+  consumeJudgmentResults,
   unresolved,
   mechanicsPackage,
   scenario,
@@ -1128,6 +1134,14 @@ function applyMarkConsumption({
       candidate => candidate.current >= candidate.minimumStacks
     );
     if (!selected) {
+      consumeJudgmentResults.push(
+        createTuningConsumeJudgmentResult({
+          descriptor: originalDescriptor,
+          status: 'verified-tuning-consume-no-sufficient-priority-candidate',
+          applied: false,
+          candidateStates: candidates,
+        })
+      );
       unresolved.push({
         kind: 'tuning-consume-no-sufficient-priority-candidate',
         actionId: descriptor.action.id,
@@ -1149,6 +1163,16 @@ function applyMarkConsumption({
       return;
     }
     if (!selected.effect || !selected.profile) {
+      consumeJudgmentResults.push(
+        createTuningConsumeJudgmentResult({
+          descriptor: originalDescriptor,
+          status:
+            'verified-tuning-consume-selected-priority-packet-unavailable',
+          applied: false,
+          candidateStates: candidates,
+          selectedPriorityCandidate: selected,
+        })
+      );
       unresolved.push({
         kind: 'tuning-consume-selected-priority-packet-unavailable',
         actionId: descriptor.action.id,
@@ -1178,10 +1202,29 @@ function applyMarkConsumption({
     };
   }
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
-  if (!state) return;
+  if (!state) {
+    consumeJudgmentResults.push(
+      createTuningConsumeJudgmentResult({
+        descriptor: originalDescriptor,
+        resolvedDescriptor: descriptor,
+        status: 'verified-tuning-consume-profile-unavailable',
+        applied: false,
+      })
+    );
+    return;
+  }
   const contract = descriptor.effect.tuningOverlimit;
   const minimum = positiveInteger(contract.minimumStacks, 1);
   if (state.layers.length < minimum) {
+    consumeJudgmentResults.push(
+      createTuningConsumeJudgmentResult({
+        descriptor: originalDescriptor,
+        resolvedDescriptor: descriptor,
+        state,
+        status: 'verified-tuning-consume-insufficient-marks',
+        applied: false,
+      })
+    );
     unresolved.push({
       kind: 'tuning-consume-insufficient-marks',
       actionId: descriptor.action.id,
@@ -1307,6 +1350,113 @@ function applyMarkConsumption({
     enqueue,
     scenario,
   });
+  consumeJudgmentResults.push(
+    createTuningConsumeJudgmentResult({
+      descriptor: originalDescriptor,
+      resolvedDescriptor: descriptor,
+      state,
+      status: 'verified-tuning-consume-applied',
+      applied: true,
+      markCountAtJudgment: before,
+      consumedCount,
+    })
+  );
+}
+
+function createTuningConsumeJudgmentResult({
+  descriptor,
+  resolvedDescriptor = descriptor,
+  state = null,
+  status,
+  applied,
+  markCountAtJudgment = null,
+  consumedCount = 0,
+  candidateStates = [],
+  selectedPriorityCandidate = resolvedDescriptor?.selectedPriorityCandidate ??
+    null,
+}) {
+  const contract = descriptor?.effect?.tuningOverlimit ?? {};
+  const resolvedContract =
+    resolvedDescriptor?.effect?.tuningOverlimit ?? contract;
+  const actionBinding = descriptor?.resolution?.actionBinding ?? {};
+  const controlBinding = descriptor?.resolution?.controlBinding ?? {};
+  const controlSkillId = firstIntegerOrNull([
+    actionBinding.executionControlSkillId,
+    actionBinding.controlSkillId,
+    controlBinding.controlSkillId,
+  ]);
+  const subSkillIndex = firstIntegerOrNull([
+    actionBinding.selectedSubSkillIndex,
+    controlBinding.selectedSubSkillIndex,
+  ]);
+  const triggerFrame = firstIntegerOrNull([
+    descriptor?.effect?.trigger?.startFrame,
+  ]);
+  const judgmentElementId = firstIntegerOrNull([
+    contract.judgmentElementId,
+    descriptor?.effect?.elementId,
+  ]);
+  const markId = firstIntegerOrNull([
+    resolvedDescriptor?.profile?.markId,
+    resolvedContract.markId,
+  ]);
+  const currentMarkCount =
+    markCountAtJudgment == null
+      ? (state?.layers?.length ?? null)
+      : Number(markCountAtJudgment);
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-tuning-consume-judgment-result',
+    status,
+    eventIdentity: [
+      'tuning-consume-judgment',
+      descriptor?.action?.id ?? '',
+      contract.judgmentGroupIdentity ?? judgmentElementId ?? '',
+      triggerFrame ?? '',
+      roundValue(descriptor?.timeMs),
+    ].join('|'),
+    actionId: descriptor?.action?.id ?? null,
+    actorId: descriptor?.action?.actorId ?? null,
+    timeMs: roundValue(descriptor?.timeMs),
+    absoluteFrame: Math.round(
+      (Number(descriptor?.timeMs ?? 0) * FRAME_RATE) / 1000
+    ),
+    controlSkillId,
+    subSkillIndex,
+    effectIdentity: descriptor?.effect?.effectIdentity ?? null,
+    judgmentGroupIdentity: contract.judgmentGroupIdentity ?? null,
+    judgmentElementId,
+    judgmentPathId: contract.judgmentPathId ?? null,
+    triggerFrame,
+    behaviorPathId: descriptor?.effect?.trigger?.behaviorPathId ?? null,
+    markId,
+    markCountAtJudgment:
+      currentMarkCount == null ? null : Number(currentMarkCount),
+    minimumStacks: positiveInteger(resolvedContract.minimumStacks, 1),
+    maximumStacks: positiveIntegerOrNull(resolvedContract.maximumStacks),
+    consumedCount: Number(consumedCount) || 0,
+    selectedPriorityCandidate: selectedPriorityCandidate
+      ? {
+          priorityIndex: firstIntegerOrNull([
+            selectedPriorityCandidate.priorityIndex,
+          ]),
+          markId: firstIntegerOrNull([selectedPriorityCandidate.markId]),
+          packetElementId: firstIntegerOrNull([
+            selectedPriorityCandidate.packetElementId,
+          ]),
+        }
+      : null,
+    candidateStates: candidateStates.map(candidate => ({
+      priorityIndex: firstIntegerOrNull([candidate.priorityIndex]),
+      markId: firstIntegerOrNull([candidate.markId]),
+      packetElementId: firstIntegerOrNull([candidate.packetElementId]),
+      minimumStacks: positiveInteger(candidate.minimumStacks, 1),
+      current: Number(candidate.current) || 0,
+    })),
+    executed: true,
+    applied: applied === true,
+    sourceIdentity: descriptor?.effect?.sourceIdentity ?? null,
+  };
 }
 
 function applyHeldMarkTriggers({
@@ -2296,6 +2446,7 @@ function createUnavailableGeneration(reason) {
     combatEvents: [],
     acquisitionGateResults: [],
     conditionalDamageResults: [],
+    consumeJudgmentResults: [],
     unresolved: [],
     initialState: [],
     finalState: [],
@@ -2306,6 +2457,7 @@ function createUnavailableGeneration(reason) {
       combatEventCount: 0,
       acquisitionGateResultCount: 0,
       conditionalDamageResultCount: 0,
+      consumeJudgmentResultCount: 0,
       unresolvedCount: 0,
       applied: false,
     },
@@ -2363,4 +2515,13 @@ function positiveIntegerOrNull(value) {
 
 function roundValue(value) {
   return Math.round((Number(value) + Number.EPSILON) * 1e6) / 1e6;
+}
+
+function firstIntegerOrNull(values) {
+  for (const value of values) {
+    if (value == null || value === '') continue;
+    const number = Number(value);
+    if (Number.isInteger(number)) return number;
+  }
+  return null;
 }

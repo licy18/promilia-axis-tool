@@ -10,14 +10,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10900104,
         "effectIdentity": "battle-element:109001362",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001362.asset/MonoBehaviour/ast_109001362__-6711007604037179960.json#elementConfigId=109001362|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001362.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#elementConfigId=109001362@29F|Battle/Element/ast_109001362.asset#consume-element-250-layer-1-after-brilliant-condition"
       ],
       "reasons": [],
-      "sourceRecordHash": "7814c634bed6e4ba"
+      "sourceRecordHash": "ff9ff2511f0b5501"
     },
     {
       "requirementIdentity": "contract:action-effect-binding:moyin-a5-thunder-mark",
@@ -27,14 +29,16 @@
       "contractStatus": "applied",
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "controlSkillId": 10900105,
         "effectIdentity": "battle-element:250",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_109001049.asset/MonoBehaviour/ast_109001049__5485634636675905737.json#elementConfigId=109001049|element_formula[102100]#IF(self.ELEMENT_LAYERS[M]>I,T,F)|Battle/Element/ast_109001049.asset#formula=102100|M=109001270|I=0|T=1|F=0|skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#elementConfigId=109001049@47F|Battle/Element/ast_250.asset#thunder-tuning-mark-x2"
       ],
       "reasons": [],
-      "sourceRecordHash": "52c0fe519930e479"
+      "sourceRecordHash": "057c9d30e8274a11"
     },
     {
       "requirementIdentity": "contract:action-form:actor|109001|10900101|0|10900103|normal-attack:default",
@@ -1629,8 +1633,12 @@
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "behaviorPathId": "2505213732361599632",
+        "controlSkillId": 10900104,
         "effectIdentity": "battle-element:109001362",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0,
+        "triggerFrame": 29
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900104.asset/MonoBehaviour/MonoBehaviour_2505213732361599632__2505213732361599632.json#startFrame|targetType",
@@ -1638,7 +1646,7 @@
         "battle-element-assets.jsonl#path_id=-6711007604037179960"
       ],
       "reasons": [],
-      "sourceRecordHash": "cc3fab2a5ff7cbf5"
+      "sourceRecordHash": "07710d6d1ad80588"
     },
     {
       "requirementIdentity": "contract:effect:effect:10:dfba793be5c0fcc4",
@@ -1996,8 +2004,12 @@
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
       "coverageSelector": {
+        "behaviorPathId": "8524185735560706053",
+        "controlSkillId": 10900113,
         "effectIdentity": "battle-element:109001360",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0,
+        "triggerFrame": 183
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType",
@@ -2005,7 +2017,7 @@
         "battle-element-assets.jsonl#path_id=4475751446751874795"
       ],
       "reasons": [],
-      "sourceRecordHash": "4975ff0641684cb7"
+      "sourceRecordHash": "6aaea8956bb82b31"
     },
     {
       "requirementIdentity": "contract:effect:effect:2:492d63d6130be4f6",
@@ -2034,8 +2046,12 @@
       "contractStatus": null,
       "impactClassification": "not-applicable",
       "coverageSelector": {
+        "behaviorPathId": "8524185735560706053",
+        "controlSkillId": 10900113,
         "effectIdentity": "battle-element:799",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0,
+        "triggerFrame": 183
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType",
@@ -2126,7 +2142,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "8d6fd663b10453e5"
+      "sourceRecordHash": "76374c6a6db97c81"
     },
     {
       "requirementIdentity": "contract:effect:effect:21:bc95c69d1071036a",
@@ -2136,8 +2152,12 @@
       "contractStatus": null,
       "impactClassification": "not-applicable",
       "coverageSelector": {
+        "behaviorPathId": "8524185735560706053",
+        "controlSkillId": 10900113,
         "effectIdentity": "battle-element:109001361",
-        "kind": "effect"
+        "kind": "effect",
+        "subSkillIndex": 0,
+        "triggerFrame": 183
       },
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900113.asset/MonoBehaviour/MonoBehaviour_8524185735560706053__8524185735560706053.json#startFrame|targetType",
@@ -2174,7 +2194,7 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "35e05d5c9edcccd2"
+      "sourceRecordHash": "98367227700da0f6"
     },
     {
       "requirementIdentity": "contract:effect:effect:22:4648127d56465954",
@@ -4732,5 +4752,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "e80f66676baee543"
+  "inventoryHash": "c5811ec91fc7eea1"
 }

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-public-runtime-coverage",
   "status": "verified-public-runtime-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e8249685f9bcbded67100914977dd32a3ee8d7208322c0c9d6403dd6654cf5ef",
+  "packageHash": "71ff1c31f2a09db9781d214b2c4890a6d6fb461e4bc114d669f01e8c3f41027f",
   "fixedProductDenominator": {
     "publicSourceActionCount": 644,
     "actorOwnerCount": 20,
@@ -33,7 +33,7 @@
     "sourceAppliedActionCount": 461,
     "sourceRuntimeDependentActionCount": 173,
     "sourceStaticEvidenceGapActionCount": 12,
-    "scenarioResolvedActionCount": 583,
+    "scenarioResolvedActionCount": 582,
     "verifiedZeroActionCount": 0,
     "unresolvedActionCount": 17,
     "unresolvedStatusCounts": {
@@ -117,12 +117,12 @@
       "unresolved": 791
     },
     "timing": {
-      "appliedActionCount": 634,
-      "unresolvedActionCount": 12,
+      "appliedActionCount": 635,
+      "unresolvedActionCount": 11,
       "appliedAttackInputSegmentCount": 78,
       "unresolvedAttackInputSegmentCount": 17,
-      "appliedPublicVariantCount": 634,
-      "unresolvedPublicVariantCount": 42,
+      "appliedPublicVariantCount": 635,
+      "unresolvedPublicVariantCount": 41,
       "oneFrameCount": 0,
       "abnormalLongCount": 5,
       "unresolvedReasonCounts": {
@@ -131,16 +131,16 @@
         "normal-attack-input-segment-duration-unresolved": 8,
         "selected-control-player-variant-duration-unresolved": 16,
         "skill-control-player-variant-missing": 1,
-        "verified-action-effective-occupancy-window-unresolved": 4
+        "verified-action-effective-occupancy-window-unresolved": 3
       },
       "schedulingKindCounts": {
-        "exact-public-action-execution-form-occupancy": 10,
+        "exact-public-action-execution-form-occupancy": 11,
         "exact-selected-variant-occupancy": 702,
         "generic-planning-duration": 1,
-        "source-animation-planning-duration": 28
+        "source-animation-planning-duration": 27
       },
       "exactSelectedVariantOccupancyCount": 702,
-      "sourceAnimationPlanningDurationCount": 28,
+      "sourceAnimationPlanningDurationCount": 27,
       "genericPlanningDurationCount": 1,
       "unresolvedControlIdentityCount": 1,
       "variantModelStatusCounts": {
@@ -200,7 +200,7 @@
       },
       "contextEdgeCount": 10,
       "appliedContextEdgeCount": 10,
-      "publicActionFormCount": 15,
+      "publicActionFormCount": 16,
       "attackInputChainCount": 8,
       "attackInputMechanicWindowCount": 1,
       "compiledInputVariantSelectorCount": 2,
@@ -325,8 +325,7 @@
         "runnable": 20
       },
       "timingStatusCounts": {
-        "applied": 19,
-        "unresolved": 1
+        "applied": 20
       }
     },
     {
@@ -2684,14 +2683,14 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
-        "status": "unresolved",
-        "durationFrames": null,
-        "sourceKind": "unresolved-action-occupancy",
-        "schedulingKind": "source-animation-planning-duration",
-        "planningDurationFrames": 204,
+        "status": "applied",
+        "durationFrames": 204,
+        "sourceKind": "declared-control-frame-count-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
+        "planningDurationFrames": null,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -2746,7 +2745,7 @@
         "publicForms": [
           {
             "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
-            "publicFormId": "actor|103002|10300212|0|10300212|star-skill:default",
+            "publicFormId": "actor:103002:star-skill:ruby-artistic-dance",
             "actionKind": "star-skill",
             "sourceSkillId": 10300212,
             "executionControlSkillId": 10300212,
@@ -2777,13 +2776,11 @@
             },
             "status": "applied",
             "reasons": [],
-            "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204"
           }
         ]
       },
-      "reasons": [
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
     {
@@ -41548,14 +41545,14 @@
       "rawRuntimeReady": true,
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "source-verified",
       "mechanicsClassification": "applied",
       "timing": {
-        "status": "unresolved",
-        "durationFrames": null,
-        "sourceKind": "unresolved-action-occupancy",
-        "schedulingKind": "source-animation-planning-duration",
-        "planningDurationFrames": 204,
+        "status": "applied",
+        "durationFrames": 204,
+        "sourceKind": "declared-control-frame-count-occupancy",
+        "schedulingKind": "exact-public-action-execution-form-occupancy",
+        "planningDurationFrames": null,
         "variantModelStatus": "resolved"
       },
       "variants": {
@@ -41610,7 +41607,7 @@
         "publicForms": [
           {
             "actionIdentity": "actor|103002|10300212|0|10300212|star-skill",
-            "publicFormId": "actor|103002|10300212|0|10300212|star-skill:default",
+            "publicFormId": "actor:103002:star-skill:ruby-artistic-dance",
             "actionKind": "star-skill",
             "sourceSkillId": 10300212,
             "executionControlSkillId": 10300212,
@@ -41641,13 +41638,11 @@
             },
             "status": "applied",
             "reasons": [],
-            "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204"
           }
         ]
       },
-      "reasons": [
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "reasons": [],
       "sourceIdentity": "characters.items[id=103002].skillSlots[group=ground,slot=3]"
     },
     {

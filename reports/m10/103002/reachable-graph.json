@@ -24,6 +24,12 @@
       "status": "applied"
     },
     {
+      "nodeIdentity": "actor:103002:star-skill:ruby-artistic-dance",
+      "nodeKind": "action-form",
+      "semanticName": "艺术的舞曲",
+      "status": "applied"
+    },
+    {
       "nodeIdentity": "actor|103002|10300201|0|10300203|normal-attack",
       "nodeKind": "public-action",
       "actionKind": "normal-attack",
@@ -74,12 +80,6 @@
       "nodeKind": "public-action",
       "actionKind": "star-skill",
       "sourceSkillId": 10300212,
-      "status": "applied"
-    },
-    {
-      "nodeIdentity": "actor|103002|10300212|0|10300212|star-skill:default",
-      "nodeKind": "action-form",
-      "semanticName": "星鸣技",
       "status": "applied"
     },
     {
@@ -1918,6 +1918,12 @@
       "relation": "executes-control"
     },
     {
+      "edgeIdentity": "actor:103002:star-skill:ruby-artistic-dance->executes-control->control:10300212",
+      "from": "actor:103002:star-skill:ruby-artistic-dance",
+      "to": "control:10300212",
+      "relation": "executes-control"
+    },
+    {
       "edgeIdentity": "actor:103002|control:10300201|sub:1->input-derived->actor:103002|control:10300201|sub:1",
       "from": "actor:103002|control:10300201|sub:1",
       "to": "actor:103002|control:10300201|sub:1",
@@ -3427,18 +3433,6 @@
     {
       "edgeIdentity": "actor|103002|10300212|0|10300212|star-skill->executes-control->control:10300212",
       "from": "actor|103002|10300212|0|10300212|star-skill",
-      "to": "control:10300212",
-      "relation": "executes-control"
-    },
-    {
-      "edgeIdentity": "actor|103002|10300212|0|10300212|star-skill->has-form->actor|103002|10300212|0|10300212|star-skill:default",
-      "from": "actor|103002|10300212|0|10300212|star-skill",
-      "to": "actor|103002|10300212|0|10300212|star-skill:default",
-      "relation": "has-form"
-    },
-    {
-      "edgeIdentity": "actor|103002|10300212|0|10300212|star-skill:default->executes-control->control:10300212",
-      "from": "actor|103002|10300212|0|10300212|star-skill:default",
       "to": "control:10300212",
       "relation": "executes-control"
     },
@@ -5252,7 +5246,7 @@
   ],
   "summary": {
     "nodeCount": 238,
-    "edgeCount": 401,
+    "edgeCount": 400,
     "controlCount": 27,
     "exclusionCount": 6,
     "nodeKindCounts": {
@@ -5270,7 +5264,7 @@
       "derives-star-carry": 1,
       "emits-hit": 124,
       "executes-control": 34,
-      "has-form": 23,
+      "has-form": 22,
       "has-subskill": 50,
       "input-derived": 300,
       "resource-consume": 15,
@@ -5279,5 +5273,5 @@
       "triggers-passive": 15
     }
   },
-  "profileHash": "4a5fe0c91af3c61574e7567a66fe525506fad61bc8673248aed0b8eb5ffa7f80"
+  "profileHash": "4744329c7f1980061c43fc4711e1b081d04f923b2a08344cccceb3c060783ce9"
 }

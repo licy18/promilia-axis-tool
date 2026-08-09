@@ -69,10 +69,54 @@ describe('Machine Axis contract', () => {
         sequenceIndex: 3,
         groupId: null,
         contextActionId: null,
+        chainIdentity: null,
       },
     });
     expect(normalized.actions[0].intent).not.toHaveProperty('controlSkillId');
     expect(normalized.actions[0].intent).not.toHaveProperty('subSkillIndex');
+  });
+
+  it('preserves an explicit attack-input chain identity through canonical JSON', () => {
+    const contract = createContract({
+      actions: [
+        {
+          id: 'explicit-chain-segment',
+          owner: { kind: 'actor', slotId: 'slot-3' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10300201,
+            actionKind: 'normal-attack',
+            attackInput: {
+              sequenceIndex: 7,
+              groupId: 'ruby-chain',
+              contextActionId: 'ruby-chain-root',
+              chainIdentity: 'ruby-enhanced-chain',
+            },
+          },
+          schedule: { mode: 'absolute', frame: 60 },
+        },
+      ],
+    });
+
+    const normalized = normalizeMachineAxisContract(contract);
+    expect(normalized.actions[0].intent.attackInput).toEqual({
+      sequenceIndex: 7,
+      groupId: 'ruby-chain',
+      contextActionId: 'ruby-chain-root',
+      chainIdentity: 'ruby-enhanced-chain',
+    });
+    expect(JSON.parse(JSON.stringify(normalized))).toEqual(normalized);
+
+    contract.actions[0].intent.attackInput.chainIdentity = 7;
+    expect(validateMachineAxisContract(contract)).toMatchObject({
+      valid: false,
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-schema-any-of',
+          path: 'actions.0.intent.attackInput',
+        }),
+      ],
+    });
   });
 
   it('keeps landed and critical overrides independent and requires sampled seed', () => {

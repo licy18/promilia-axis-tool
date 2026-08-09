@@ -675,6 +675,18 @@ function createProjectionAssertionDefinitions(projection) {
       effectIdentity: row.effectIdentity,
       actionId: row.actionId,
       operation: row.operation,
+      ...(Number.isInteger(Number(row.controlSkillId))
+        ? { controlSkillId: Number(row.controlSkillId) }
+        : {}),
+      ...(Number.isInteger(Number(row.subSkillIndex))
+        ? { subSkillIndex: Number(row.subSkillIndex) }
+        : {}),
+      ...(Number.isInteger(Number(row.triggerFrame))
+        ? { triggerFrame: Number(row.triggerFrame) }
+        : {}),
+      ...(row.behaviorPathId == null
+        ? {}
+        : { behaviorPathId: String(row.behaviorPathId) }),
     });
   }
   for (const row of projection.resources) {

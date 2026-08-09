@@ -86,26 +86,6 @@
       "sourceRecordHash": "8d183d2cec8ed71e"
     },
     {
-      "uniqueGapIdentity": "source-gap:017faee49d37a4e3",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:a3d2be6ceeaa6ebb603a"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:-8301357918827043072:1647846397285835820:3",
-        "effect:10300201|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f8ff24e93f874169"
-    },
-    {
       "uniqueGapIdentity": "source-gap:01af400b53434c83",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:2->actor:103002|control:10300204|sub:2->7659847041177413638->missing",
@@ -144,6 +124,102 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "f951e103c79f6dd9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:031f23efcb3ce8b6",
+      "sourceRecordIdentities": [
+        "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:b11cf952d0b2fa2a4ebf"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:0:-8301357918827043072:4833701068495762248:3",
+        "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "e284d5d0738ade55"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:043b333727cb3d08",
+      "sourceRecordIdentities": [
+        "effect:10300211|0|elements|0|4537866354445192595|element:4537866354445192595|30|0",
+        "semantic-gap:881571b477085c02dd7f"
+      ],
+      "status": "not-applicable",
+      "reason": "plunging-action-is-outside-frozen-active-surface|scenario-out-of-scope-not-applicable|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300211:0:4537866354445192595:3136223576992853504:30",
+        "effect:10300211|0|elements|0|4537866354445192595|element:4537866354445192595|30|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-plunge-marker-passive-boss-out-of-scope"
+      ],
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#plunge-excluded|battle-effect:10300211:0:4537866354445192595"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b1fc9e18e5548575"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:0541793b9e98d38d",
+      "sourceRecordIdentities": [
+        "effect:10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:24c931b06fb5045caa8d"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:2:6226025878936021619:4168474814757765775:0",
+        "effect:10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3ca80be956f29deb"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:059c5e6b7f168b86",
+      "sourceRecordIdentities": [
+        "effect:10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:20a0851ebdbe847347ed"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:2:3663436943335475859:28307586741003142:0",
+        "effect:10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "275b548882062b6c"
     },
     {
       "uniqueGapIdentity": "source-gap:05b982a57b5a3fb5",
@@ -204,6 +280,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "540528c31700d1f7"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:07897133511a39c4",
+      "sourceRecordIdentities": [
+        "effect:10300244|1|elements|0|7702275877312494544|element:-8301357918827043072|0|0",
+        "semantic-gap:7ffdd5320724e8565284"
+      ],
+      "status": "not-applicable",
+      "reason": "internal-control-has-no-current-public-action-incoming-path|unreachable-client-container-retained-without-runtime-synthesis|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:1:-8301357918827043072:2953670771364380742:0",
+        "effect:10300244|1|elements|0|7702275877312494544|element:-8301357918827043072|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-internal-marker-current-client-unreachable"
+      ],
+      "sourceClosureSourceIdentities": [
+        "current-public-action-closure:103002#control=10300244/sub=1;incomingReferenceCount=0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "26c94dae2b256e46"
     },
     {
       "uniqueGapIdentity": "source-gap:07caa17fa42f4fc9",
@@ -284,26 +384,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "47607f09a501f154"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:09f2e22e223cfb36",
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|3|9417489454203567|element:9417489454203567|4|0",
-        "semantic-gap:e76577ef218b25821129"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:9417489454203567:-6912769485177868415:4",
-        "effect:10300243|0|elements|3|9417489454203567|element:9417489454203567|4|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "a85ebe55c70ef336"
     },
     {
       "uniqueGapIdentity": "source-gap:0a6150fe0cef9022",
@@ -426,6 +506,30 @@
       "sourceRecordHash": "dec9cbdbf6079f15"
     },
     {
+      "uniqueGapIdentity": "source-gap:0d90e925748e2326",
+      "sourceRecordIdentities": [
+        "effect:10300201|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:86438a3e47b613839470"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:2:-8301357918827043072:4549103858088051343:3",
+        "effect:10300201|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "34281d08fbe6f693"
+    },
+    {
       "uniqueGapIdentity": "source-gap:0dab995512bb7a02",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300202|sub:2->-3687969335963551299->missing",
@@ -506,6 +610,30 @@
       "sourceRecordHash": "594142e4e6e1f7aa"
     },
     {
+      "uniqueGapIdentity": "source-gap:0e9a64acc7935002",
+      "sourceRecordIdentities": [
+        "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:3d188f4449c7eae0cf93"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:3:-8301357918827043072:-8072646126335821659:3",
+        "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "eb575f72b9a3b778"
+    },
+    {
       "uniqueGapIdentity": "source-gap:0f2fdd0fd4255d56",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300204|sub:0->2283290567554247852->missing",
@@ -524,46 +652,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "e63c766419db63fd"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:0f7ae8e7e83739fd",
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:5ab03828c6744a97d2a9"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:6226025878936021619:4168474814757765775:0",
-        "effect:10300201|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "7587a2cd827f1452"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:0ffe2f0133c262b7",
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:d09a4fe014dcba0b96c4"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:6226025878936021619:2975752204161737821:0",
-        "effect:10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d96a18f4984435bf"
     },
     {
       "uniqueGapIdentity": "source-gap:10083dab34389b0d",
@@ -624,6 +712,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "c5b19bbc92a9c213"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:116d1952fbce21ee",
+      "sourceRecordIdentities": [
+        "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:f51b8b494b919e07d754"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:2:-8301357918827043072:1945755192680858453:3",
+        "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "88c04bf7c1a7c4a9"
     },
     {
       "uniqueGapIdentity": "source-gap:1203d8b9f4456bd8",
@@ -706,24 +818,28 @@
       "sourceRecordHash": "be5b2da3e1e778dd"
     },
     {
-      "uniqueGapIdentity": "source-gap:15f2c49051838c56",
+      "uniqueGapIdentity": "source-gap:15a8f8c21c5117d5",
       "sourceRecordIdentities": [
-        "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:44fa94589411a0d5a968"
+        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
+        "semantic-gap:7731b0c58413762d13e5"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|selected-public-action-form-hit-is-canonical-trace-required|zero-distance-projectile-impact-is-immediate",
+      "sourceKind": "hit",
       "sourceIdentities": [
-        "battle-effect:10300202:2:-8301357918827043072:1945755192680858453:3",
-        "effect:10300202|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002",
+        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "906792248ba5aba9"
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-zero-distance-selected-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:103002#normal-chain"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "87f997e949ff279a"
     },
     {
       "uniqueGapIdentity": "source-gap:161b4762227398e2",
@@ -786,44 +902,52 @@
       "sourceRecordHash": "032e0483faa30e22"
     },
     {
-      "uniqueGapIdentity": "source-gap:190a6820d8404d99",
+      "uniqueGapIdentity": "source-gap:1a06f5dc91343d62",
       "sourceRecordIdentities": [
-        "effect:10300225|1|elements|0|3663436943335475859|element:3663436943335475859|15|0",
-        "semantic-gap:1ab15f4de061873f169e"
+        "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:e192a3738396492e088b"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300225:1:3663436943335475859:8716756417110375640:15",
-        "effect:10300225|1|elements|0|3663436943335475859|element:3663436943335475859|15|0"
+        "battle-effect:10300204:0:3663436943335475859:-243149956882255032:0",
+        "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "6c123dd2ec91a7ce"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ea45bf17db7a50aa"
     },
     {
-      "uniqueGapIdentity": "source-gap:1b122bedd5b22eb5",
+      "uniqueGapIdentity": "source-gap:1bff9d8662286fb4",
       "sourceRecordIdentities": [
-        "effect:10300210|2|elements|12|-3943091103073882723|element:6226025878936021619|24|0",
-        "semantic-gap:be6b635014823c1aac30"
+        "effect:10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:597dc1fc9e307ef97801"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300210:2:6226025878936021619:5368306601510636513:24",
-        "effect:10300210|2|elements|12|-3943091103073882723|element:6226025878936021619|24|0"
+        "battle-effect:10300202:1:3663436943335475859:1803843296392014934:0",
+        "effect:10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1051bb347243d174"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "6abe9cb4a244fa98"
     },
     {
       "uniqueGapIdentity": "source-gap:1c92ed64e20b8d92",
@@ -864,46 +988,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "82d637e34e8e09da"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:1d57dc112a5ea8bf",
-      "sourceRecordIdentities": [
-        "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0",
-        "semantic-gap:afb9076f2587206d5a42"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300249:0:3663436943335475859:-6931600855170166043:15",
-        "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "aa553af257e8730d"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:1d883bfeef89fe42",
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
-        "semantic-gap:7b25e7365d97daba5a58"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:4460567758519354701:-4996826262836372537:26",
-        "effect:10300202|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "cc62fbe8992ce2a9"
     },
     {
       "uniqueGapIdentity": "source-gap:1d8f6beba850846c",
@@ -964,26 +1048,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "75eba393c9563812"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:206024223079b179",
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:fbb806e2f84ebe2955f7"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:3663436943335475859:1803843296392014934:0",
-        "effect:10300202|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "43bee6a262c59c94"
     },
     {
       "uniqueGapIdentity": "source-gap:224bc0fcd0258e8f",
@@ -1086,6 +1150,54 @@
       "sourceRecordHash": "0edcb5c72e8a6ddd"
     },
     {
+      "uniqueGapIdentity": "source-gap:254da2e94270a532",
+      "sourceRecordIdentities": [
+        "effect:10300204|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:254b12e9c739c5b3c26b"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:1:-8301357918827043072:6151587402252719464:3",
+        "effect:10300204|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "7770c3b101925e82"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:25ac94e7e5f7ffce",
+      "sourceRecordIdentities": [
+        "effect:10300212|0|elements|25|8812566341439638057|element:6226025878936021619|0|0",
+        "semantic-gap:59772152ca3bc9861176"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300212:0:6226025878936021619:4452502413130359845:0",
+        "effect:10300212|0|elements|25|8812566341439638057|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "22e586c0abe31111"
+    },
+    {
       "uniqueGapIdentity": "source-gap:2686cabc0cd7983e",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300202|sub:2->-3687969335963551299->missing",
@@ -1106,6 +1218,54 @@
       "sourceRecordHash": "2f0dfa02d9991024"
     },
     {
+      "uniqueGapIdentity": "source-gap:27563176e67087e9",
+      "sourceRecordIdentities": [
+        "effect:10300201|1|elements|32|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:a297715d151f05c1946b"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:1:-8301357918827043072:294024852374015007:3",
+        "effect:10300201|1|elements|32|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "bbd81af36c93e852"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:290001a549e5e05d",
+      "sourceRecordIdentities": [
+        "effect:10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:96b432c2caf2986e4a7b"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300205:0:6226025878936021619:1927560234949684376:0",
+        "effect:10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "eb8e93a5cdf7bc8f"
+    },
+    {
       "uniqueGapIdentity": "source-gap:2929d4e7278e1b00",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300202|sub:1->439423875707784691->0",
@@ -1124,46 +1284,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "9478919457cf776c"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:295f7e11ce6dda3b",
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:be7e762b4c2f7465a96b"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:6226025878936021619:8682986315989514405:0",
-        "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "dd47f6862494816a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:2a4773b93ecef59a",
-      "sourceRecordIdentities": [
-        "effect:10300202|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:f96df4710cde1563fdd0"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:1:-8301357918827043072:1515100396380580950:3",
-        "effect:10300202|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "6e5c71e53a1f4975"
     },
     {
       "uniqueGapIdentity": "source-gap:2a6bc32e9cce3c8a",
@@ -1206,24 +1326,28 @@
       "sourceRecordHash": "b07c59da56595566"
     },
     {
-      "uniqueGapIdentity": "source-gap:2b10b3902320877c",
+      "uniqueGapIdentity": "source-gap:2c6d0d5a589d7904",
       "sourceRecordIdentities": [
-        "effect:10300212|0|elements|25|8812566341439638057|element:6226025878936021619|0|0",
-        "semantic-gap:62895d738f80a87b050a"
+        "effect:10300203|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:71e87a03aef8334ba6bb"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300212:0:6226025878936021619:4452502413130359845:0",
-        "effect:10300212|0|elements|25|8812566341439638057|element:6226025878936021619|0|0"
+        "battle-effect:10300203:2:-8301357918827043072:1223338482048131974:3",
+        "effect:10300203|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4095bc15dbd9ac32"
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "c5dd2af93b58f502"
     },
     {
       "uniqueGapIdentity": "source-gap:2cace7e60d15885f",
@@ -1244,26 +1368,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "90f30e9582ddcace"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:2e232edcfa297297",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
-        "semantic-gap:27faf33b51eec0f8cc23"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:4460567758519354701:8674841978468049964:26",
-        "effect:10300201|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "02834c3c86b654a5"
     },
     {
       "uniqueGapIdentity": "source-gap:2e781bde2d447eda",
@@ -1304,6 +1408,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "5198150787f6d680"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2eec78dfe865abda",
+      "sourceRecordIdentities": [
+        "effect:10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:3bb594d81205939a62db"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:2:3663436943335475859:3540093518933148845:0",
+        "effect:10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "7eb279e1c4637e9e"
     },
     {
       "uniqueGapIdentity": "source-gap:2fb3d5d22583441f",
@@ -1349,44 +1477,28 @@
       "sourceRecordHash": "d9b9540eb05fac86"
     },
     {
-      "uniqueGapIdentity": "source-gap:308b9e50dba74a11",
+      "uniqueGapIdentity": "source-gap:308718b6a9759c92",
       "sourceRecordIdentities": [
-        "effect:10300249|0|elements|2|6226025878936021619|element:6226025878936021619|15|0",
-        "semantic-gap:8bf637931d1c7114c269"
+        "effect:10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:86656d0d35c18b8a7ce8"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300249:0:6226025878936021619:-6931600855170166043:15",
-        "effect:10300249|0|elements|2|6226025878936021619|element:6226025878936021619|15|0"
+        "battle-effect:10300204:3:3663436943335475859:7307621539445855302:0",
+        "effect:10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "00fe68076c4ddfd8"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:312a792c1b438e99",
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:33e743999208d6d38f2e"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:6226025878936021619:1927560234949684376:0",
-        "effect:10300205|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "25f55a0b2c3176f5"
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "12fda446a573aacb"
     },
     {
       "uniqueGapIdentity": "source-gap:315492db8ed1a303",
@@ -1427,6 +1539,32 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "95975cd07f45081c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:31c256f320946b40",
+      "sourceRecordIdentities": [
+        "effect:10300241|0|bulletElements|2|element-101003089|element:-3617327089538337445|unresolved-frame|0",
+        "effect:10300241|0|elements|4|-3617327089538337445|element:-3617327089538337445|unresolved-frame|0",
+        "semantic-gap:03636fdec50e49fe123e"
+      ],
+      "status": "not-applicable",
+      "reason": "effect-trigger-frame-missing|foreign-player-skill-id-has-no-current-public-action-reference|missing-trigger-frame-must-not-be-synthesized",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300241:0:-3617327089538337445:unresolved:unresolved",
+        "effect:10300241|0|bulletElements|2|element-101003089|element:-3617327089538337445|unresolved-frame|0",
+        "effect:10300241|0|elements|4|-3617327089538337445|element:-3617327089538337445|unresolved-frame|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-foreign-backup-control-current-client-unreachable"
+      ],
+      "sourceClosureSourceIdentities": [
+        "current-public-action-closure:103002#control=10300241;playerSkillId=10100347;incomingReferenceCount=0"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ac914818c96e2435"
     },
     {
       "uniqueGapIdentity": "source-gap:32b0f0e07d1155b1",
@@ -1569,6 +1707,30 @@
       "sourceRecordHash": "aa58de5ad22a5736"
     },
     {
+      "uniqueGapIdentity": "source-gap:35ab8e59a743e78e",
+      "sourceRecordIdentities": [
+        "effect:10300213|0|elements|28|8812566341439638057|element:3663436943335475859|113|0",
+        "semantic-gap:cb4751a89700d5256424"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:3663436943335475859:-7802993020596138274:113",
+        "effect:10300213|0|elements|28|8812566341439638057|element:3663436943335475859|113|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "721024962a86c91e"
+    },
+    {
       "uniqueGapIdentity": "source-gap:35c96cd8f254ae73",
       "sourceRecordIdentities": [
         "actor:103002:element:103002047|10300202|2|3663436943335475859|gain||missing",
@@ -1587,26 +1749,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "cc97d9e995ff3e66"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:35ccedc353e7bd4b",
-      "sourceRecordIdentities": [
-        "effect:10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:440efb5a9009e71db8dc"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:3:3663436943335475859:7307621539445855302:0",
-        "effect:10300204|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "41b98b6e62963695"
     },
     {
       "uniqueGapIdentity": "source-gap:364ac7db54f4d0eb",
@@ -1647,46 +1789,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "1fb136df83e39629"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:3909ec2cfb13af48",
-      "sourceRecordIdentities": [
-        "effect:10300212|0|elements|25|8812566341439638057|element:3663436943335475859|0|0",
-        "semantic-gap:133565b0639b60193ac6"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300212:0:3663436943335475859:4452502413130359845:0",
-        "effect:10300212|0|elements|25|8812566341439638057|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d08acb5adc60de8b"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:39422536012d5a17",
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:e40271ab233cc76babf5"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:6226025878936021619:28307586741003142:0",
-        "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "66ff4b04b2cbfca0"
     },
     {
       "uniqueGapIdentity": "source-gap:39f19323fbaffb3e",
@@ -1769,24 +1871,28 @@
       "sourceRecordHash": "02d35d0c827d9ebf"
     },
     {
-      "uniqueGapIdentity": "source-gap:3b685b693681c117",
+      "uniqueGapIdentity": "source-gap:3e992418395114e7",
       "sourceRecordIdentities": [
-        "effect:10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:04aa31738e2fc19ceedc"
+        "effect:10300225|0|elements|0|3663436943335475859|element:3663436943335475859|15|0",
+        "semantic-gap:18f9b0f97dc9ef08d10e"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:3:6226025878936021619:7307621539445855302:0",
-        "effect:10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+        "battle-effect:10300225:0:3663436943335475859:-6513216096915397460:15",
+        "effect:10300225|0|elements|0|3663436943335475859|element:3663436943335475859|15|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ababd7b44ba2db31"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "52b4f8d1e1a02316"
     },
     {
       "uniqueGapIdentity": "source-gap:3eb940515252539e",
@@ -1869,6 +1975,30 @@
       "sourceRecordHash": "b4bf761a06b77c86"
     },
     {
+      "uniqueGapIdentity": "source-gap:42011eeae750cb13",
+      "sourceRecordIdentities": [
+        "effect:10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:b73aae166f40d46044da"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:1:6226025878936021619:2975752204161737821:0",
+        "effect:10300203|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "a41f9559a28f6fce"
+    },
+    {
       "uniqueGapIdentity": "source-gap:4249479ea975feeb",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300201|sub:3->6179147025350945402->0",
@@ -1887,26 +2017,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "468e6adfe9fac603"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:4348646c005298f5",
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:91fa1141fea3e41a995e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:3663436943335475859:4168474814757765775:0",
-        "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "058aa750e24257c0"
     },
     {
       "uniqueGapIdentity": "source-gap:4549739d0ed79b3a",
@@ -1929,6 +2039,30 @@
       "sourceRecordHash": "43e02897f6cbc7ac"
     },
     {
+      "uniqueGapIdentity": "source-gap:456eef6f9e70f089",
+      "sourceRecordIdentities": [
+        "effect:10300243|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:0a1bec1292eb1dd37587"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300243:0:3663436943335475859:2070613625777500033:0",
+        "effect:10300243|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "1c9ddf3ff40abd6a"
+    },
+    {
       "uniqueGapIdentity": "source-gap:458d6cf2f0b4c356",
       "sourceRecordIdentities": [
         "actor:103002|control:10300205|sub:0->actor:103002|control:10300224|sub:4->8937739148899246067->missing",
@@ -1949,26 +2083,6 @@
       "sourceRecordHash": "75570ea850b168b3"
     },
     {
-      "uniqueGapIdentity": "source-gap:45a7b7dc294aca68",
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:b111872091d856c19b89"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:6226025878936021619:-568653254920070201:0",
-        "effect:10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f12269e925db0049"
-    },
-    {
       "uniqueGapIdentity": "source-gap:45b5cd36ff64ca43",
       "sourceRecordIdentities": [
         "actor:103002:element:103002047|10300201|1|3663436943335475859|gain||missing",
@@ -1987,26 +2101,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "b4cdf27146033c49"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:4604996883ce0bfd",
-      "sourceRecordIdentities": [
-        "effect:10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:9eb1dadf810b0e0ec281"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300205:0:3663436943335475859:1927560234949684376:0",
-        "effect:10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1475e3ebd803a553"
     },
     {
       "uniqueGapIdentity": "source-gap:4673816b95a529bb",
@@ -2069,44 +2163,28 @@
       "sourceRecordHash": "4b31999f89775bab"
     },
     {
-      "uniqueGapIdentity": "source-gap:4a63c4fd3edbfc36",
+      "uniqueGapIdentity": "source-gap:49636001a57f7ca2",
       "sourceRecordIdentities": [
-        "effect:10300243|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:0eb9a3726a15ec4f6cab"
+        "effect:10300225|1|elements|0|3663436943335475859|element:3663436943335475859|15|0",
+        "semantic-gap:ddb7e135904df585bfcf"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300243:0:6226025878936021619:2070613625777500033:0",
-        "effect:10300243|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+        "battle-effect:10300225:1:3663436943335475859:8716756417110375640:15",
+        "effect:10300225|1|elements|0|3663436943335475859|element:3663436943335475859|15|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "1206f2ff72f61766"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:4b51f16ca2150577",
-      "sourceRecordIdentities": [
-        "effect:10300204|2|elements|13|4460567758519354701|element:4460567758519354701|29|0",
-        "semantic-gap:f2949d589e19cf7411b9"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
       ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:2:4460567758519354701:-6305840928975797075:29",
-        "effect:10300204|2|elements|13|4460567758519354701|element:4460567758519354701|29|0"
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f3d6fb35f78c03c9"
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "fa0013a7f88e6aff"
     },
     {
       "uniqueGapIdentity": "source-gap:4baa2968812a0944",
@@ -2127,6 +2205,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "4d738739c00620d3"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:4be86c0bb8d668fd",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:a4ab031f3296b5a0a217"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:6226025878936021619:-4466651111794072532:0",
+        "effect:10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "33a16c6cfb874505"
     },
     {
       "uniqueGapIdentity": "source-gap:4fc5a77496a1edac",
@@ -2247,6 +2349,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "424b04e4fac003c6"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:516c727d92324ea5",
+      "sourceRecordIdentities": [
+        "effect:10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:769584ed0a04acd00889"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:2:6226025878936021619:-1305692138374085803:0",
+        "effect:10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3a7863156bdfd870"
     },
     {
       "uniqueGapIdentity": "source-gap:5404408c6faa4d57",
@@ -2409,64 +2535,28 @@
       "sourceRecordHash": "f601260957b4e913"
     },
     {
-      "uniqueGapIdentity": "source-gap:5a309966a7bdee63",
+      "uniqueGapIdentity": "source-gap:5a28f2ee45784d6d",
       "sourceRecordIdentities": [
-        "effect:10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:7adc68c3837006e9a572"
+        "hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
+        "semantic-gap:1926603143f3207cf077"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|selected-public-action-form-hit-is-canonical-trace-required|zero-distance-projectile-impact-is-immediate",
+      "sourceKind": "hit",
       "sourceIdentities": [
-        "battle-effect:10300202:2:3663436943335475859:-1305692138374085803:0",
-        "effect:10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002001",
+        "hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4919cae83a2c91da"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:5ab9c018f9756f3b",
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:77c50468cba492873f5b"
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-zero-distance-selected-projectile-hits"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:3663436943335475859:8682986315989514405:0",
-        "effect:10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:103002#normal-chain"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d36fe2d6f3f62d21"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:5b028f7b34ed5264",
-      "sourceRecordIdentities": [
-        "effect:10300225|0|elements|0|3663436943335475859|element:3663436943335475859|15|0",
-        "semantic-gap:35ee35b97a2a56dea9a4"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300225:0:3663436943335475859:-6513216096915397460:15",
-        "effect:10300225|0|elements|0|3663436943335475859|element:3663436943335475859|15|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "7130a5aea5df2282"
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "0853db46580d8fb6"
     },
     {
       "uniqueGapIdentity": "source-gap:5bbcb74e03aa85d4",
@@ -2509,26 +2599,6 @@
       "sourceRecordHash": "23b26f634afbca6d"
     },
     {
-      "uniqueGapIdentity": "source-gap:5d3eeb4fcd6d68c1",
-      "sourceRecordIdentities": [
-        "hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
-        "semantic-gap:cf3bfd67eccd59186bc8"
-      ],
-      "status": "runtime-evidence-required",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300202.asset/MonoBehaviour/skill_control_10300202__5284438624671987443.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002001",
-        "hit:10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f735f739d955094c"
-    },
-    {
       "uniqueGapIdentity": "source-gap:5e13e1ae8f01db2e",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:2->-7614050540243982357->0",
@@ -2569,26 +2639,6 @@
       "sourceRecordHash": "df31e949b75be6f6"
     },
     {
-      "uniqueGapIdentity": "source-gap:5ea988ef98ac3043",
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:c6fbb3bced1289ca4e3e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:3663436943335475859:28307586741003142:0",
-        "effect:10300203|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9d5884f8476e3fb0"
-    },
-    {
       "uniqueGapIdentity": "source-gap:5f022942f714b37c",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300202|sub:2->1026355341380234262->missing",
@@ -2607,26 +2657,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "8d246195eb6e1a80"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:5f23d7dd4afac88f",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:344b01be00efec31a718"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:3663436943335475859:-4466651111794072532:0",
-        "effect:10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9f323ac8c3a2582f"
     },
     {
       "uniqueGapIdentity": "source-gap:5fba88f4dfc0877d",
@@ -2689,26 +2719,6 @@
       "sourceRecordHash": "b05852c96d76e46d"
     },
     {
-      "uniqueGapIdentity": "source-gap:60b6b823435c8fe0",
-      "sourceRecordIdentities": [
-        "effect:10300203|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:2f67d5dbccbb2f7e60cc"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:2:-8301357918827043072:1223338482048131974:3",
-        "effect:10300203|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "07cbe9e6d527ddc8"
-    },
-    {
       "uniqueGapIdentity": "source-gap:60d87ef462cd01ea",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300204|sub:1->6039875630093297246->0",
@@ -2727,6 +2737,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "c3ebde650220627d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:60f27e29475d120f",
+      "sourceRecordIdentities": [
+        "effect:10300210|0|elements|14|-3943091103073882723|element:3663436943335475859|24|0",
+        "semantic-gap:2fc81f6d6b811c815d4e"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300210:0:3663436943335475859:-821589745850868321:24",
+        "effect:10300210|0|elements|14|-3943091103073882723|element:3663436943335475859|24|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d9ac23a8675e206c"
     },
     {
       "uniqueGapIdentity": "source-gap:61cbcf898680dddd",
@@ -2749,24 +2783,28 @@
       "sourceRecordHash": "b2eb9e6410026480"
     },
     {
-      "uniqueGapIdentity": "source-gap:62dd5844f79ec6cb",
+      "uniqueGapIdentity": "source-gap:62a01082367f601f",
       "sourceRecordIdentities": [
-        "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:5c949af514c148db8ec5"
+        "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:c7dafeeb3c14d0dd3c94"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:0:3663436943335475859:-243149956882255032:0",
-        "effect:10300204|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+        "battle-effect:10300203:3:6226025878936021619:8682986315989514405:0",
+        "effect:10300203|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "83d8d81366702f36"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "917c56d73865ddba"
     },
     {
       "uniqueGapIdentity": "source-gap:640d4dca20e38f0c",
@@ -2787,26 +2825,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "59b17b12b433e315"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:6623c0fe864fa97b",
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|32|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:28c08aee38a8e068f945"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:-8301357918827043072:294024852374015007:3",
-        "effect:10300201|1|elements|32|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "0fcaa43db9adb00b"
     },
     {
       "uniqueGapIdentity": "source-gap:666d5063b5cd32e9",
@@ -2849,26 +2867,6 @@
       "sourceRecordHash": "bf664dc59f6aa37e"
     },
     {
-      "uniqueGapIdentity": "source-gap:68cb75ed74eeda0e",
-      "sourceRecordIdentities": [
-        "effect:10300210|0|elements|14|-3943091103073882723|element:6226025878936021619|24|0",
-        "semantic-gap:2a0b956a7203ea315dcf"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:0:6226025878936021619:-821589745850868321:24",
-        "effect:10300210|0|elements|14|-3943091103073882723|element:6226025878936021619|24|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "66d8e95437ce80b9"
-    },
-    {
       "uniqueGapIdentity": "source-gap:68eae3d6511633cf",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300203|sub:1->8413044784871326859->0",
@@ -2887,26 +2885,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "bc358161042cce71"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:68ed5031e645af11",
-      "sourceRecordIdentities": [
-        "effect:10300210|2|elements|12|-3943091103073882723|element:3663436943335475859|24|0",
-        "semantic-gap:3233c38fff39c3bc94bf"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300210:2:3663436943335475859:5368306601510636513:24",
-        "effect:10300210|2|elements|12|-3943091103073882723|element:3663436943335475859|24|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "a62f69c1871da068"
     },
     {
       "uniqueGapIdentity": "source-gap:691e80c05deadf9b",
@@ -2929,24 +2907,28 @@
       "sourceRecordHash": "b5bc6f5db4f3c5d5"
     },
     {
-      "uniqueGapIdentity": "source-gap:694ec2e9d9ddd927",
+      "uniqueGapIdentity": "source-gap:69898bab4722dbff",
       "sourceRecordIdentities": [
-        "effect:10300213|0|elements|28|8812566341439638057|element:6226025878936021619|113|0",
-        "semantic-gap:a115c92e68b8421c8b71"
+        "effect:10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:40fdb716bb2b07244c6d"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300213:0:6226025878936021619:-7802993020596138274:113",
-        "effect:10300213|0|elements|28|8812566341439638057|element:6226025878936021619|113|0"
+        "battle-effect:10300204:2:6226025878936021619:3540093518933148845:0",
+        "effect:10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "45cf4e53384b4d9a"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "0fbcd03376693cd0"
     },
     {
       "uniqueGapIdentity": "source-gap:69ae993f1c36df4b",
@@ -2967,26 +2949,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "f630ec0e212ae83c"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:6a4b1fe0daaeee1a",
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:b8c069bc5904fcb15e7d"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:-8301357918827043072:6151587402252719464:3",
-        "effect:10300204|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "57c927c507d24039"
     },
     {
       "uniqueGapIdentity": "source-gap:6a80553d312338ac",
@@ -3027,6 +2989,54 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "11e5fc8b24bbb825"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:6cbb0fa7eb6e1264",
+      "sourceRecordIdentities": [
+        "effect:10300203|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:80cd1d532e8846d7edb6"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:1:-8301357918827043072:-3199833904520076195:3",
+        "effect:10300203|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "e5f8fc5cb56d37ee"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:6e2679e890ee0f0c",
+      "sourceRecordIdentities": [
+        "effect:10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:598c94945ad6abbe22f6"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300205:0:3663436943335475859:1927560234949684376:0",
+        "effect:10300205|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "030e0ad65337f797"
     },
     {
       "uniqueGapIdentity": "source-gap:6f166792d4bf5301",
@@ -3087,6 +3097,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "6437fc42a3211d04"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:6fa3871ebaee724d",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
+        "semantic-gap:ca6ed153a0ec8b32a540"
+      ],
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:4460567758519354701:8674841978468049964:26",
+        "effect:10300201|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "44f4e3f6c8b53199"
     },
     {
       "uniqueGapIdentity": "source-gap:6ff8aab64ef083b1",
@@ -3187,26 +3221,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "7283d8feb8c9bf61"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:7248dd45efaf5709",
-      "sourceRecordIdentities": [
-        "effect:10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:393b4d92a13eaebc3962"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:3:6226025878936021619:-4466651111794072532:0",
-        "effect:10300201|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4dbe1e2c02d457b5"
     },
     {
       "uniqueGapIdentity": "source-gap:7312722b399b1f24",
@@ -3349,24 +3363,28 @@
       "sourceRecordHash": "26e43ead5f229617"
     },
     {
-      "uniqueGapIdentity": "source-gap:756237faa24da72a",
+      "uniqueGapIdentity": "source-gap:75d4e924998bd9ab",
       "sourceRecordIdentities": [
-        "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:87d96be2e74ebb0217e4"
+        "effect:10300244|1|elements|6|2099292417798859923|element:2099292417798859923|29|0",
+        "semantic-gap:a095e8cbbe6ac8004a4b"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300203:3:-8301357918827043072:-8072646126335821659:3",
-        "effect:10300203|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+        "battle-effect:10300244:1:2099292417798859923:7664034929019633734:29",
+        "effect:10300244|1|elements|6|2099292417798859923|element:2099292417798859923|29|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "bf24caa51fc6e5be"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "edcafb218b80391f"
     },
     {
       "uniqueGapIdentity": "source-gap:762d37ed98b99b76",
@@ -3409,6 +3427,30 @@
       "sourceRecordHash": "9c6e3ed8dda3291f"
     },
     {
+      "uniqueGapIdentity": "source-gap:77d4695e0ced7e68",
+      "sourceRecordIdentities": [
+        "effect:10300244|0|elements|0|2099292417798859923|element:2099292417798859923|29|0",
+        "semantic-gap:54b4a9f28b45aacec54a"
+      ],
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300244:0:2099292417798859923:-2078962768819859382:29",
+        "effect:10300244|0|elements|0|2099292417798859923|element:2099292417798859923|29|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "797f3bd9929b97e0"
+    },
+    {
       "uniqueGapIdentity": "source-gap:788646b8c3a1458f",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300201|sub:3->6179147025350945402->0",
@@ -3447,26 +3489,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "b5fed67920489bc5"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:79b453309735669b",
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:89cd4e37c36452d8ea70"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:6226025878936021619:7071336793222845800:0",
-        "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "c2f6661f8596508d"
     },
     {
       "uniqueGapIdentity": "source-gap:7ad86cf806540922",
@@ -3549,24 +3571,28 @@
       "sourceRecordHash": "1666cb870b923bfe"
     },
     {
-      "uniqueGapIdentity": "source-gap:7d645d3f00a2f57b",
+      "uniqueGapIdentity": "source-gap:7d63d5813bc6dc6f",
       "sourceRecordIdentities": [
-        "effect:10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:052bfaa36a8a355ac269"
+        "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:8cad8f45611e5543660a"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:2:6226025878936021619:3540093518933148845:0",
-        "effect:10300204|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+        "battle-effect:10300202:3:3663436943335475859:-568653254920070201:0",
+        "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9085c0a2aea85501"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ddd00bd9999c0826"
     },
     {
       "uniqueGapIdentity": "source-gap:7e23cff9d9870949",
@@ -3587,26 +3613,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "e1046d9760f7a40a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:7ec98ef19dfc172c",
-      "sourceRecordIdentities": [
-        "effect:10300211|0|elements|0|4537866354445192595|element:4537866354445192595|30|0",
-        "semantic-gap:2a698ae851301bbe7a3e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300211:0:4537866354445192595:3136223576992853504:30",
-        "effect:10300211|0|elements|0|4537866354445192595|element:4537866354445192595|30|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "8ece61e1ec44a6e4"
     },
     {
       "uniqueGapIdentity": "source-gap:7ee67901e89ef2d7",
@@ -3669,6 +3675,30 @@
       "sourceRecordHash": "e91e3e4a9ee8768c"
     },
     {
+      "uniqueGapIdentity": "source-gap:803cefba3efe8dad",
+      "sourceRecordIdentities": [
+        "effect:10300204|2|elements|13|4460567758519354701|element:4460567758519354701|29|0",
+        "semantic-gap:9035071843e9d4a4e0f0"
+      ],
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:2:4460567758519354701:-6305840928975797075:29",
+        "effect:10300204|2|elements|13|4460567758519354701|element:4460567758519354701|29|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "fc09cad0d417c739"
+    },
+    {
       "uniqueGapIdentity": "source-gap:809ebc6e7916aa2c",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300203|sub:2->-7459424710790343456->0",
@@ -3709,24 +3739,28 @@
       "sourceRecordHash": "419fd4e0823d9be2"
     },
     {
-      "uniqueGapIdentity": "source-gap:8342d4dc6a054ae8",
+      "uniqueGapIdentity": "source-gap:83e56ec63d96ac37",
       "sourceRecordIdentities": [
-        "effect:10300244|0|elements|0|2099292417798859923|element:2099292417798859923|29|0",
-        "semantic-gap:2bfd88e682b7f316750a"
+        "effect:10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:b32b770c2f205537417f"
       ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300244:0:2099292417798859923:-2078962768819859382:29",
-        "effect:10300244|0|elements|0|2099292417798859923|element:2099292417798859923|29|0"
+        "battle-effect:10300204:0:6226025878936021619:-243149956882255032:0",
+        "effect:10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "8693fdfbc17042d5"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "85fe49ec5209c3c5"
     },
     {
       "uniqueGapIdentity": "source-gap:84a590d07b11eb2d",
@@ -3809,24 +3843,28 @@
       "sourceRecordHash": "4a739d2f880eb6b1"
     },
     {
-      "uniqueGapIdentity": "source-gap:85c290c7cb0319a2",
+      "uniqueGapIdentity": "source-gap:85bbe7950fe2eef3",
       "sourceRecordIdentities": [
-        "effect:10300225|0|elements|1|6226025878936021619|element:6226025878936021619|15|0",
-        "semantic-gap:576565959a2fbc746c1c"
+        "effect:10300203|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
+        "semantic-gap:94c9e4e872dcd03e6ae7"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300225:0:6226025878936021619:-6513216096915397460:15",
-        "effect:10300225|0|elements|1|6226025878936021619|element:6226025878936021619|15|0"
+        "battle-effect:10300203:3:4460567758519354701:-5774689639772653403:26",
+        "effect:10300203|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f118790b33ed84c6"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "326b0afec3790c45"
     },
     {
       "uniqueGapIdentity": "source-gap:86162954331ab267",
@@ -3867,26 +3905,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "5cc2df652907a950"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:870abf009135bd0f",
-      "sourceRecordIdentities": [
-        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
-        "semantic-gap:f5be6e1adb59385b63b1"
-      ],
-      "status": "runtime-evidence-required",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002",
-        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f8398bbd77c4e3c4"
     },
     {
       "uniqueGapIdentity": "source-gap:87c9ec019a522e34",
@@ -3969,6 +3987,30 @@
       "sourceRecordHash": "2a81f4038ae9678a"
     },
     {
+      "uniqueGapIdentity": "source-gap:890b2088093cd2e1",
+      "sourceRecordIdentities": [
+        "effect:10300210|2|elements|12|-3943091103073882723|element:6226025878936021619|24|0",
+        "semantic-gap:f5f8332d3fc8bec5921d"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300210:2:6226025878936021619:5368306601510636513:24",
+        "effect:10300210|2|elements|12|-3943091103073882723|element:6226025878936021619|24|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "516a6f40b4cc48b4"
+    },
+    {
       "uniqueGapIdentity": "source-gap:89947410a5eb08a4",
       "sourceRecordIdentities": [
         "actor:103002|control:10300202|sub:1->actor:103002|control:10300202|sub:1->-8955405464144620475->missing",
@@ -4007,46 +4049,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "ce0b34c8c97eec4a"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:8b380f017fbbfdf7",
-      "sourceRecordIdentities": [
-        "effect:10300202|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:f997be6a7734c92ba8df"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:3:-8301357918827043072:-9109337220500251705:3",
-        "effect:10300202|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ebea360baa113c09"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:8b3ce1d360c55dd1",
-      "sourceRecordIdentities": [
-        "effect:10300203|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
-        "semantic-gap:63ccffb51e3b823706a9"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:3:4460567758519354701:-5774689639772653403:26",
-        "effect:10300203|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "b81cbbcc00a5341c"
     },
     {
       "uniqueGapIdentity": "source-gap:8b87d7b9e7af4a59",
@@ -4107,6 +4109,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "a2d9210c9035ab54"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:8c4228ea32f369dc",
+      "sourceRecordIdentities": [
+        "effect:10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:3357817374446bb9bda7"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:1:6226025878936021619:5535908167720225823:0",
+        "effect:10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "061545f358ad3661"
     },
     {
       "uniqueGapIdentity": "source-gap:8f3ff403f7fd3340",
@@ -4189,24 +4215,28 @@
       "sourceRecordHash": "f5e5e0d7aeb004c0"
     },
     {
-      "uniqueGapIdentity": "source-gap:92f8ca489e2cffe7",
+      "uniqueGapIdentity": "source-gap:933cb58cf1da30d8",
       "sourceRecordIdentities": [
-        "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:634ec34c4e8c0a2ce32e"
+        "effect:10300210|0|elements|14|-3943091103073882723|element:6226025878936021619|24|0",
+        "semantic-gap:ac754e2d24c412c6d976"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300203:1:3663436943335475859:2975752204161737821:0",
-        "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+        "battle-effect:10300210:0:6226025878936021619:-821589745850868321:24",
+        "effect:10300210|0|elements|14|-3943091103073882723|element:6226025878936021619|24|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4d0be0b062c61626"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "877fec6ff7ec2f74"
     },
     {
       "uniqueGapIdentity": "source-gap:93a1cf7e8ae32f3f",
@@ -4229,24 +4259,28 @@
       "sourceRecordHash": "6f80a30cb19f8edd"
     },
     {
-      "uniqueGapIdentity": "source-gap:953b4662fc2fc773",
+      "uniqueGapIdentity": "source-gap:94714a9dab0b0d20",
       "sourceRecordIdentities": [
-        "effect:10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:e2addb2257bbbc2fc0c1"
+        "effect:10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:ffb2d3079ab31bef75f3"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:2:3663436943335475859:3540093518933148845:0",
-        "effect:10300204|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+        "battle-effect:10300202:2:3663436943335475859:-1305692138374085803:0",
+        "effect:10300202|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4fa9f327dd113a04"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "0e79b1f955740fc1"
     },
     {
       "uniqueGapIdentity": "source-gap:9549193228d903ee",
@@ -4329,26 +4363,6 @@
       "sourceRecordHash": "a548d697e2b057a2"
     },
     {
-      "uniqueGapIdentity": "source-gap:961df53e62e207a3",
-      "sourceRecordIdentities": [
-        "effect:10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:83182dfcf167346acd0e"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:1:3663436943335475859:7071336793222845800:0",
-        "effect:10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "304192852c678937"
-    },
-    {
       "uniqueGapIdentity": "source-gap:965e4f596ca55ecf",
       "sourceRecordIdentities": [
         "actor:103002|control:10300244|sub:1->actor:103002|control:10300204|sub:2->7659847041177413638->missing",
@@ -4367,29 +4381,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "90e404b14328c5c4"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:9755df4359692b67",
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0",
-        "semantic-gap:07aba213bf0bb763595c"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:-6187686510236149564:-1358196052883222818:300",
-        "battle-effect:10300213:0:-6187686510236149564:2083420758843707102:284",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
-        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "b66e0089b2d44608"
     },
     {
       "uniqueGapIdentity": "source-gap:979cced011d84828",
@@ -4450,6 +4441,54 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "14bd6d7882315d2a"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:99755c5774cfd926",
+      "sourceRecordIdentities": [
+        "effect:10300210|2|elements|12|-3943091103073882723|element:3663436943335475859|24|0",
+        "semantic-gap:4539f5a52276d9651dfe"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300210:2:3663436943335475859:5368306601510636513:24",
+        "effect:10300210|2|elements|12|-3943091103073882723|element:3663436943335475859|24|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3283b1cc7a508137"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9a01d72d6976dc48",
+      "sourceRecordIdentities": [
+        "effect:10300225|0|elements|1|6226025878936021619|element:6226025878936021619|15|0",
+        "semantic-gap:6fb0805117674c14d6c9"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300225:0:6226025878936021619:-6513216096915397460:15",
+        "effect:10300225|0|elements|1|6226025878936021619|element:6226025878936021619|15|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "cdb2666d800ef8a6"
     },
     {
       "uniqueGapIdentity": "source-gap:9a7f8bc346e4a342",
@@ -4615,6 +4654,78 @@
       "sourceRecordHash": "c4006b70b93f0884"
     },
     {
+      "uniqueGapIdentity": "source-gap:a06f76fcc7b93032",
+      "sourceRecordIdentities": [
+        "effect:10300202|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:4be033c3cd59aeda44cc"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:1:-8301357918827043072:1515100396380580950:3",
+        "effect:10300202|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "3ecdbff2e24cfd99"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a09bcae87d3c3972",
+      "sourceRecordIdentities": [
+        "effect:10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:93b7cb525280aee0aa2a"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:3:6226025878936021619:-568653254920070201:0",
+        "effect:10300202|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "43be0f7f814e941f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a1dbc854ba86b54c",
+      "sourceRecordIdentities": [
+        "effect:10300243|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:6da4546e2535bbad7ce9"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300243:0:6226025878936021619:2070613625777500033:0",
+        "effect:10300243|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "6810d881c51e569a"
+    },
+    {
       "uniqueGapIdentity": "source-gap:a2ffc4019a9341f6",
       "sourceRecordIdentities": [
         "actor:103002|control:10300204|sub:0->actor:103002|control:10300204|sub:0->-7065099216913915458->missing",
@@ -4653,26 +4764,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "d7e4435b256c8fe3"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:a304f5f16444c43e",
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:a4b3b013b05df411a449"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:6226025878936021619:5535908167720225823:0",
-        "effect:10300201|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "814681303a240098"
     },
     {
       "uniqueGapIdentity": "source-gap:a320441086df6249",
@@ -4733,6 +4824,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "d7f7f1b8d0277f97"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a50cc87e695b5b35",
+      "sourceRecordIdentities": [
+        "effect:10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:d335961ed71c33efda51"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:1:3663436943335475859:5535908167720225823:0",
+        "effect:10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "abb222cdb1fedfe0"
     },
     {
       "uniqueGapIdentity": "source-gap:a5c7ffba3884521b",
@@ -4815,26 +4930,6 @@
       "sourceRecordHash": "5ccb85d5fee829b6"
     },
     {
-      "uniqueGapIdentity": "source-gap:a829ae1138f3d60c",
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|0|7702275877312494544|element:-8301357918827043072|0|0",
-        "semantic-gap:31fd8af5fa656a917fc5"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:-8301357918827043072:2953670771364380742:0",
-        "effect:10300244|1|elements|0|7702275877312494544|element:-8301357918827043072|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4705578f4df94816"
-    },
-    {
       "uniqueGapIdentity": "source-gap:a94f74b8247d97b6",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300203|sub:2->-1147594312107360133->missing",
@@ -4855,24 +4950,28 @@
       "sourceRecordHash": "35c4071effc1f84a"
     },
     {
-      "uniqueGapIdentity": "source-gap:aafa0cc65b162ef0",
+      "uniqueGapIdentity": "source-gap:ab280ef00867075f",
       "sourceRecordIdentities": [
-        "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:1202747a3c770c5816cc"
+        "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:59b5383479bb54cc5fbf"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300202:3:3663436943335475859:-568653254920070201:0",
-        "effect:10300202|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+        "battle-effect:10300204:1:6226025878936021619:7071336793222845800:0",
+        "effect:10300204|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "c00f5476cdaee08d"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c02d479e852e8939"
     },
     {
       "uniqueGapIdentity": "source-gap:abdf75961562d207",
@@ -5015,6 +5114,30 @@
       "sourceRecordHash": "151e3fc82750b8c8"
     },
     {
+      "uniqueGapIdentity": "source-gap:afb6490199209571",
+      "sourceRecordIdentities": [
+        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
+        "semantic-gap:461b9abe3b633fbaa08a"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|selected-public-action-form-hit-is-canonical-trace-required|zero-distance-projectile-impact-is-immediate",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002",
+        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-zero-distance-selected-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:103002#normal-chain"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "fb735a862feb867f"
+    },
+    {
       "uniqueGapIdentity": "source-gap:b08d7058e879ad49",
       "sourceRecordIdentities": [
         "actor:103002|control:10300201|sub:1->actor:103002|control:10300203|sub:3->-5180249669170195019->0",
@@ -5153,26 +5276,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "18814c240c0e2c09"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:b3c969053bb4ffc9",
-      "sourceRecordIdentities": [
-        "effect:10300244|1|elements|6|2099292417798859923|element:2099292417798859923|29|0",
-        "semantic-gap:d23152432bb7e994bfa7"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300244:1:2099292417798859923:7664034929019633734:29",
-        "effect:10300244|1|elements|6|2099292417798859923|element:2099292417798859923|29|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "71cbfb618031cc26"
     },
     {
       "uniqueGapIdentity": "source-gap:b3caff4675076242",
@@ -5355,6 +5458,30 @@
       "sourceRecordHash": "bc260615506b444b"
     },
     {
+      "uniqueGapIdentity": "source-gap:bbb837311032e3c2",
+      "sourceRecordIdentities": [
+        "effect:10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:340d8b06f2cbc3dbc1dc"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:3:3663436943335475859:8682986315989514405:0",
+        "effect:10300203|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "1b513a285e11a8db"
+    },
+    {
       "uniqueGapIdentity": "source-gap:bc6725c9575b135c",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:3->595014340836159563->0",
@@ -5455,24 +5582,28 @@
       "sourceRecordHash": "bb4de98f4ea3e302"
     },
     {
-      "uniqueGapIdentity": "source-gap:bfbcd61dbe56193e",
+      "uniqueGapIdentity": "source-gap:c0f776027a430d51",
       "sourceRecordIdentities": [
-        "effect:10300210|0|elements|14|-3943091103073882723|element:3663436943335475859|24|0",
-        "semantic-gap:cc7ed4b3b64752a67ce3"
+        "effect:10300204|2|elements|3|7702275877312494544|element:-8301357918827043072|0|0",
+        "semantic-gap:4f447e126acf173c9548"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300210:0:3663436943335475859:-821589745850868321:24",
-        "effect:10300210|0|elements|14|-3943091103073882723|element:3663436943335475859|24|0"
+        "battle-effect:10300204:2:-8301357918827043072:-3436032383153191763:0",
+        "effect:10300204|2|elements|3|7702275877312494544|element:-8301357918827043072|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "a0342375ef22d1c7"
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "f37eb49a82c9a480"
     },
     {
       "uniqueGapIdentity": "source-gap:c2468581b5e18e61",
@@ -5615,24 +5746,28 @@
       "sourceRecordHash": "d526cd28684e37d1"
     },
     {
-      "uniqueGapIdentity": "source-gap:c5c38a967cd5fa7f",
+      "uniqueGapIdentity": "source-gap:c4f601788a193a76",
       "sourceRecordIdentities": [
-        "effect:10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:3cf75acbdbb484debeb4"
+        "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:9d0e8e9f25512f3928fa"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:0:6226025878936021619:-243149956882255032:0",
-        "effect:10300204|0|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+        "battle-effect:10300203:1:3663436943335475859:2975752204161737821:0",
+        "effect:10300203|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "f54910231cf46dce"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d08702cb69b45f88"
     },
     {
       "uniqueGapIdentity": "source-gap:c6d1b9414d8958eb",
@@ -5673,6 +5808,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "d715a50edc0203e8"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c7d82ec0b85d9e03",
+      "sourceRecordIdentities": [
+        "hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
+        "semantic-gap:e617b247edbf242b6342"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|selected-public-action-form-hit-is-canonical-trace-required|zero-distance-projectile-impact-is-immediate",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002000",
+        "hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-zero-distance-selected-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#distance=0;projectile=immediate-hit|character-combat-owner-contract:103002#normal-chain"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "93426a06410c0594"
     },
     {
       "uniqueGapIdentity": "source-gap:c80ae1a45cf3a083",
@@ -5775,6 +5934,30 @@
       "sourceRecordHash": "da7f8a11684f9d6d"
     },
     {
+      "uniqueGapIdentity": "source-gap:c9c0b8247ebcc101",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:179e94bb6a36107fdd46"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:-8301357918827043072:1647846397285835820:3",
+        "effect:10300201|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "eedcc9ad7fbd51f4"
+    },
+    {
       "uniqueGapIdentity": "source-gap:c9dac2ff5f7d2967",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300203|sub:3->863602626635902660->0",
@@ -5833,26 +6016,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "bdd3bebea7f89102"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:cac73d669593ebce",
-      "sourceRecordIdentities": [
-        "effect:10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:a520c5452ca305f94c72"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:1:3663436943335475859:5535908167720225823:0",
-        "effect:10300201|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9264b774a4dfda99"
     },
     {
       "uniqueGapIdentity": "source-gap:cad9f2759d3a64df",
@@ -5915,6 +6078,30 @@
       "sourceRecordHash": "dffec891cd6cb23b"
     },
     {
+      "uniqueGapIdentity": "source-gap:cc53208dc3c669a8",
+      "sourceRecordIdentities": [
+        "effect:10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:68ae65470655fea45aeb"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:3:3663436943335475859:-4466651111794072532:0",
+        "effect:10300201|3|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "5a6698117c30d081"
+    },
+    {
       "uniqueGapIdentity": "source-gap:ccc5ac1d4c2dcd8d",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:2->actor:103002|control:10300203|sub:1->8413044784871326859->missing",
@@ -5973,26 +6160,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "8443b6e8d53a6e0c"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:cf6cd93336606d2e",
-      "sourceRecordIdentities": [
-        "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:889197314b4fd8bca19f"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300204:0:-8301357918827043072:4833701068495762248:3",
-        "effect:10300204|0|elements|6|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9879db9a46890279"
     },
     {
       "uniqueGapIdentity": "source-gap:cf9b95fbfc241fe6",
@@ -6075,26 +6242,6 @@
       "sourceRecordHash": "ab69d1f40d17b8a2"
     },
     {
-      "uniqueGapIdentity": "source-gap:d362affc3ad51796",
-      "sourceRecordIdentities": [
-        "effect:10300243|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
-        "semantic-gap:70f0c9a15386456b1eb3"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300243:0:3663436943335475859:2070613625777500033:0",
-        "effect:10300243|0|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "152eaf8fcb6b77b0"
-    },
-    {
       "uniqueGapIdentity": "source-gap:d3c006ea834655ea",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:1->-8955405464144620475->missing",
@@ -6153,26 +6300,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "c11affce7c2f5f7f"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:d4e5f61b0b9e09f3",
-      "sourceRecordIdentities": [
-        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
-        "semantic-gap:4092be04829e73f1ff75"
-      ],
-      "status": "runtime-evidence-required",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300203.asset/MonoBehaviour/skill_control_10300203__20363114795843718.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002002",
-        "hit:10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d969617f20547551"
     },
     {
       "uniqueGapIdentity": "source-gap:d6334c6d87e858e6",
@@ -6255,6 +6382,30 @@
       "sourceRecordHash": "74555b982f4e0d2c"
     },
     {
+      "uniqueGapIdentity": "source-gap:d78deb82f8eb68fa",
+      "sourceRecordIdentities": [
+        "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0",
+        "semantic-gap:81b72602f34d962c8643"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300249:0:3663436943335475859:-6931600855170166043:15",
+        "effect:10300249|0|elements|3|3663436943335475859|element:3663436943335475859|15|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c96a211267aee89d"
+    },
+    {
       "uniqueGapIdentity": "source-gap:d7e23907578e7617",
       "sourceRecordIdentities": [
         "actor:103002|control:10300204|sub:3->actor:103002|control:10300204|sub:0->-7065099216913915458->missing",
@@ -6273,26 +6424,6 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "ee7bbac5ca3b71f2"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:d834f643b053f8d3",
-      "sourceRecordIdentities": [
-        "hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
-        "semantic-gap:0991f97cf60fe3156964"
-      ],
-      "status": "runtime-evidence-required",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300201.asset/MonoBehaviour/skill_control_10300201__-8458222450317534831.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=103002000",
-        "hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "14d048641fef04a3"
     },
     {
       "uniqueGapIdentity": "source-gap:d87ba5c758668cda",
@@ -6375,26 +6506,6 @@
       "sourceRecordHash": "cfb71413d5ccf393"
     },
     {
-      "uniqueGapIdentity": "source-gap:d9baeb7f90f20691",
-      "sourceRecordIdentities": [
-        "effect:10300261|0|elements|0|2509240266934390618|element:2509240266934390618|0|0",
-        "semantic-gap:1a391575ce9748f340c8"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300261:0:2509240266934390618:2368552408747777644:0",
-        "effect:10300261|0|elements|0|2509240266934390618|element:2509240266934390618|0|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "d6157fd321f5ee68"
-    },
-    {
       "uniqueGapIdentity": "source-gap:d9df1073ec975faf",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300204|sub:2->7659847041177413638->missing",
@@ -6433,6 +6544,30 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "86fe9a8e5f844958"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:da37207607256d84",
+      "sourceRecordIdentities": [
+        "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:d2e4a13d8921e6ba9350"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300201:2:3663436943335475859:4168474814757765775:0",
+        "effect:10300201|2|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "9eab81270ccdac33"
     },
     {
       "uniqueGapIdentity": "source-gap:dae9df39db9ad434",
@@ -6515,6 +6650,30 @@
       "sourceRecordHash": "5300dd01e65a34ff"
     },
     {
+      "uniqueGapIdentity": "source-gap:dca7edcc7e963b43",
+      "sourceRecordIdentities": [
+        "effect:10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:d296b78867a606c742d5"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:3:6226025878936021619:7307621539445855302:0",
+        "effect:10300204|3|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "dd4c7b0c9d658c2b"
+    },
+    {
       "uniqueGapIdentity": "source-gap:dcc187d288ec8b3c",
       "sourceRecordIdentities": [
         "actor:103002:element:103002047|10300202|1|3663436943335475859|gain||missing",
@@ -6595,6 +6754,30 @@
       "sourceRecordHash": "35fc9406fe62e47a"
     },
     {
+      "uniqueGapIdentity": "source-gap:dd38696f7b511a64",
+      "sourceRecordIdentities": [
+        "effect:10300243|0|elements|3|9417489454203567|element:9417489454203567|4|0",
+        "semantic-gap:2c8db066aff0e6c7aacb"
+      ],
+      "status": "not-applicable",
+      "reason": "internal-control-has-no-current-public-action-incoming-path|marker-has-no-runtime-element-payload|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300243:0:9417489454203567:-6912769485177868415:4",
+        "effect:10300243|0|elements|3|9417489454203567|element:9417489454203567|4|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-internal-finisher-marker-current-client-unreachable"
+      ],
+      "sourceClosureSourceIdentities": [
+        "current-public-action-closure:103002#control=10300243/sub=0;incomingReferenceCount=0|Battle/Element/ast_103002180.asset#empty-payload-marker"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3eb27493dd17d4cc"
+    },
+    {
       "uniqueGapIdentity": "source-gap:de1e27977fb6f0aa",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:1->439423875707784691->missing",
@@ -6635,26 +6818,6 @@
       "sourceRecordHash": "2c1c6e8bd9e0210a"
     },
     {
-      "uniqueGapIdentity": "source-gap:e000aa0aba86d899",
-      "sourceRecordIdentities": [
-        "effect:10300213|0|elements|28|8812566341439638057|element:3663436943335475859|113|0",
-        "semantic-gap:fde7fee373d0c6abd3a6"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300213:0:3663436943335475859:-7802993020596138274:113",
-        "effect:10300213|0|elements|28|8812566341439638057|element:3663436943335475859|113|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "5827c20501c8ee70"
-    },
-    {
       "uniqueGapIdentity": "source-gap:e012d06f9876b026",
       "sourceRecordIdentities": [
         "actor:103002|control:10300210|sub:0->actor:103002|control:10300204|sub:2->7659847041177413638->0",
@@ -6673,6 +6836,54 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "b46c5fcc56e6cb14"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e04433dc1b56e9c5",
+      "sourceRecordIdentities": [
+        "effect:10300202|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
+        "semantic-gap:8b7434ed2b5b36f8fda9"
+      ],
+      "status": "source-closure-applied",
+      "reason": "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:3:-8301357918827043072:-9109337220500251705:3",
+        "effect:10300202|3|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-limit-counter-marker-runtime-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002279.asset#time=4000|character-combat-owner-contract:103002#targetStateProfiles[ruby-enhanced-limit-counter-marker]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "98bfd4f4e68e3526"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e091e3564dcb2fe6",
+      "sourceRecordIdentities": [
+        "effect:10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0",
+        "semantic-gap:1013aa07a26daa653c9b"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300204:1:3663436943335475859:7071336793222845800:0",
+        "effect:10300204|1|elements|0|-7754027710660938209|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "f473e76a74e5b057"
     },
     {
       "uniqueGapIdentity": "source-gap:e1b5a1552e601578",
@@ -6715,24 +6926,28 @@
       "sourceRecordHash": "b5832551d5e94fcf"
     },
     {
-      "uniqueGapIdentity": "source-gap:e3e1e5d2b6f16a31",
+      "uniqueGapIdentity": "source-gap:e480634903a5345d",
       "sourceRecordIdentities": [
-        "effect:10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:1982bfcc81220036c622"
+        "effect:10300249|0|elements|2|6226025878936021619|element:6226025878936021619|15|0",
+        "semantic-gap:0fcb7296b4f3d3a8b70b"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300202:1:6226025878936021619:1803843296392014934:0",
-        "effect:10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+        "battle-effect:10300249:0:6226025878936021619:-6931600855170166043:15",
+        "effect:10300249|0|elements|2|6226025878936021619|element:6226025878936021619|15|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "7528dbfaad35f70f"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "457a94d0070e0f49"
     },
     {
       "uniqueGapIdentity": "source-gap:e5d1765673fc67b9",
@@ -6875,6 +7090,54 @@
       "sourceRecordHash": "63905dfed97ba50c"
     },
     {
+      "uniqueGapIdentity": "source-gap:e861f948e0b8116f",
+      "sourceRecordIdentities": [
+        "effect:10300213|0|elements|28|8812566341439638057|element:6226025878936021619|113|0",
+        "semantic-gap:97460f3a912a5085c38a"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:6226025878936021619:-7802993020596138274:113",
+        "effect:10300213|0|elements|28|8812566341439638057|element:6226025878936021619|113|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d080b06ff8e8f7e4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:e962e41acf3e4d9f",
+      "sourceRecordIdentities": [
+        "effect:10300212|0|elements|25|8812566341439638057|element:3663436943335475859|0|0",
+        "semantic-gap:e0474f398a4b1d053dc6"
+      ],
+      "status": "not-applicable",
+      "reason": "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300212:0:3663436943335475859:4452502413130359845:0",
+        "effect:10300212|0|elements|25|8812566341439638057|element:3663436943335475859|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-resource-child-wrapper-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002047.asset#resource-child-wrapper|character-combat-owner-contract:103002#specialResources"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "7bee030f0d73d3d3"
+    },
+    {
       "uniqueGapIdentity": "source-gap:e9d5bc685260183c",
       "sourceRecordIdentities": [
         "actor:103002|control:10300213|sub:0->actor:103002|control:10300201|sub:3->-2242732589803386549->missing",
@@ -6913,6 +7176,54 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "31acfa2051cf7b21"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ecb4353197caa1ef",
+      "sourceRecordIdentities": [
+        "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:1c7cf858cfd880aad3d3"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300203:2:6226025878936021619:28307586741003142:0",
+        "effect:10300203|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3a07459782525288"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ed63b0f1c95fdb0d",
+      "sourceRecordIdentities": [
+        "effect:10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
+        "semantic-gap:0f48e2e676ef66b66cde"
+      ],
+      "status": "not-applicable",
+      "reason": "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300202:1:6226025878936021619:1803843296392014934:0",
+        "effect:10300202|1|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-enhanced-arm-visual-child-wrapper"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_103002087.asset#enhanced-arm-visual-child"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "61cf8090c7920899"
     },
     {
       "uniqueGapIdentity": "source-gap:edddcee078b08d08",
@@ -6955,24 +7266,28 @@
       "sourceRecordHash": "1bfed9bcc13325c6"
     },
     {
-      "uniqueGapIdentity": "source-gap:efe2523d127723b3",
+      "uniqueGapIdentity": "source-gap:ee59234b518dfcf0",
       "sourceRecordIdentities": [
-        "effect:10300204|2|elements|3|7702275877312494544|element:-8301357918827043072|0|0",
-        "semantic-gap:a7b6ee0b65352a371537"
+        "effect:10300261|0|elements|0|2509240266934390618|element:2509240266934390618|0|0",
+        "semantic-gap:b7931c694065b8a51376"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
+      "status": "not-applicable",
+      "reason": "fifteen-second-six-stack-runtime-remains-required|raw-passive-marker-is-superseded-by-compiled-passive-contract|unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300204:2:-8301357918827043072:-3436032383153191763:0",
-        "effect:10300204|2|elements|3|7702275877312494544|element:-8301357918827043072|0|0"
+        "battle-effect:10300261:0:2509240266934390618:2368552408747777644:0",
+        "effect:10300261|0|elements|0|2509240266934390618|element:2509240266934390618|0|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "9df4e438a4927211"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-passive-marker-superseded-by-passive-contract"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#passives[actor:103002:passive:10300261]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "67ea045113e3089d"
     },
     {
       "uniqueGapIdentity": "source-gap:f088a9ccc471dba0",
@@ -6995,26 +7310,6 @@
       "sourceRecordHash": "85bb0b75174d9075"
     },
     {
-      "uniqueGapIdentity": "source-gap:f1d423dd9e7f169e",
-      "sourceRecordIdentities": [
-        "effect:10300201|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:57b5d48755b946c53728"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300201:2:-8301357918827043072:4549103858088051343:3",
-        "effect:10300201|2|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "ef38f88a14bc0bac"
-    },
-    {
       "uniqueGapIdentity": "source-gap:f382fb45baad9ecd",
       "sourceRecordIdentities": [
         "actor:103002|control:10300212|sub:0->actor:103002|control:10300202|sub:2->1026355341380234262->missing",
@@ -7033,6 +7328,33 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "6e04ae755c71da10"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:f3fa604d7c3359bd",
+      "sourceRecordIdentities": [
+        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0",
+        "semantic-gap:d9e8a7f12f93ff4d50b8"
+      ],
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:10300213:0:-6187686510236149564:-1358196052883222818:300",
+        "battle-effect:10300213:0:-6187686510236149564:2083420758843707102:284",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|284|1",
+        "effect:10300213|0|elements|36|-6187686510236149564|element:-6187686510236149564|300|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "ab4715656d6be728"
     },
     {
       "uniqueGapIdentity": "source-gap:f51fe24bc077351a",
@@ -7238,46 +7560,28 @@
       "sourceRecordHash": "c44fc15131a347be"
     },
     {
-      "uniqueGapIdentity": "source-gap:fc9b09756de624ac",
+      "uniqueGapIdentity": "source-gap:fcb32aaeef08c44e",
       "sourceRecordIdentities": [
-        "effect:10300241|0|bulletElements|2|element-101003089|element:-3617327089538337445|unresolved-frame|0",
-        "effect:10300241|0|elements|4|-3617327089538337445|element:-3617327089538337445|unresolved-frame|0",
-        "semantic-gap:260c58b777d159cc7139"
+        "effect:10300202|3|elements|15|4460567758519354701|element:4460567758519354701|26|0",
+        "semantic-gap:798f848a04b74459f343"
       ],
-      "status": "static-evidence-gap",
-      "reason": "effect-trigger-frame-missing",
+      "status": "not-applicable",
+      "reason": "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
       "sourceKind": "effect",
       "sourceIdentities": [
-        "battle-effect:10300241:0:-3617327089538337445:unresolved:unresolved",
-        "effect:10300241|0|bulletElements|2|element-101003089|element:-3617327089538337445|unresolved-frame|0",
-        "effect:10300241|0|elements|4|-3617327089538337445|element:-3617327089538337445|unresolved-frame|0"
+        "battle-effect:10300202:3:4460567758519354701:-4996826262836372537:26",
+        "effect:10300202|3|elements|15|4460567758519354701|element:4460567758519354701|26|0"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "0f26339f0b31997d"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:fcb31e08105e5d9d",
-      "sourceRecordIdentities": [
-        "effect:10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0",
-        "semantic-gap:9332917370e08775aa8c"
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "ruby-tuning-judgment-parent-superseded-by-applied-child"
       ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300202:2:6226025878936021619:-1305692138374085803:0",
-        "effect:10300202|2|elements|0|-7754027710660938209|element:6226025878936021619|0|0"
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:103002#semanticEffects[tuningOverlimit.judgmentElementId]"
       ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "fb0466b7383ae747"
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "b803e4e4730782f8"
     },
     {
       "uniqueGapIdentity": "source-gap:fd08889f020229b5",
@@ -7358,55 +7662,40 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "e0314968b3c668be"
-    },
-    {
-      "uniqueGapIdentity": "source-gap:ff285f0603e6bfc0",
-      "sourceRecordIdentities": [
-        "effect:10300203|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0",
-        "semantic-gap:cea87e410d7badc10ebf"
-      ],
-      "status": "static-evidence-gap",
-      "reason": "unresolved",
-      "sourceKind": "effect",
-      "sourceIdentities": [
-        "battle-effect:10300203:1:-8301357918827043072:-3199833904520076195:3",
-        "effect:10300203|1|elements|11|-8301357918827043072|element:-8301357918827043072|3|0"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "gameplay-impacting",
-      "blocking": true,
-      "sourceRecordHash": "4e535300b08519f1"
     }
   ],
   "summary": {
     "uniqueGapCount": 368,
-    "blockingCount": 71,
-    "nonBlockingCount": 297,
+    "blockingCount": 0,
+    "nonBlockingCount": 368,
     "statusCounts": {
-      "not-applicable": 297,
-      "runtime-evidence-required": 4,
-      "static-evidence-gap": 67
+      "not-applicable": 352,
+      "source-closure-applied": 16
     },
     "reasonCounts": {
+      "applied-child-tuning-consume-trace-remains-required|root-judgment-wrapper-is-covered-by-applied-descendant|same-graph-same-trigger-child-points-back-to-judgment-element|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 7,
       "duplicate-variant-window-normalized:ruby-ultimate-end-quick-enhanced-entry": 1,
       "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap": 115,
       "effect-target-static-evidence-gap|effect-trigger-frame-static-evidence-gap|switch-target-control-variant-missing": 6,
-      "effect-trigger-frame-missing": 1,
+      "effect-trigger-frame-missing|foreign-player-skill-id-has-no-current-public-action-reference|missing-trigger-frame-must-not-be-synthesized": 1,
+      "enhanced-chain-canonical-trace-required|source-driven-four-second-target-state-contract|unresolved": 12,
+      "fifteen-second-six-stack-runtime-remains-required|raw-passive-marker-is-superseded-by-compiled-passive-contract|unresolved": 1,
+      "internal-control-has-no-current-public-action-incoming-path|marker-has-no-runtime-element-payload|unresolved": 1,
+      "internal-control-has-no-current-public-action-incoming-path|unreachable-client-container-retained-without-runtime-synthesis|unresolved": 1,
       "legacy-or-unreachable-current-client": 1,
       "nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 8,
       "nested-effect-wrapper-semantics-unresolved": 14,
+      "plunging-action-is-outside-frozen-active-surface|scenario-out-of-scope-not-applicable|unresolved": 1,
+      "raw-resource-child-is-not-a-second-runtime-transaction|typed-resource-contract-remains-runtime-required|unresolved": 22,
       "reexported-subskill-container-unreachable-from-current-skill-list": 1,
       "resource-root-wrapper-reference-not-a-runtime-transaction": 19,
-      "runtime-dependent": 4,
+      "runtime-dependent|selected-public-action-form-hit-is-canonical-trace-required|zero-distance-projectile-impact-is-immediate": 4,
+      "source-container-retained-without-runtime-synthesis|unresolved|visual-child-is-not-a-gameplay-effect": 21,
       "switch-target-control-variant-missing": 6,
       "switch-target-control-variant-missing|switch-wrapper-relation-unresolved": 6,
       "switch-wrapper-relation-unresolved": 119,
-      "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 7,
-      "unnamed-secondary-passive-not-implemented-current-client": 1,
-      "unresolved": 59
+      "unnamed-secondary-passive-not-implemented-current-client": 1
     }
   },
-  "inventoryHash": "1b0d42af6e675d7f"
+  "inventoryHash": "eab6c360c1394cfe"
 }

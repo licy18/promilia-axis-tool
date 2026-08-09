@@ -453,7 +453,13 @@ function createScenarioScopeRequirementClassifier(scope) {
         record?.mapIndex
       ) ?? 0;
     const controlSubskillIdentity = controlSkillId + '|' + subSkillIndex;
-    if (included.has(controlSubskillIdentity)) return null;
+    const sourceIncluded = included.has(controlSubskillIdentity);
+    const targetControlSkillId = firstInteger(record?.targetControlSkillId);
+    const targetSubSkillIndex = firstInteger(record?.targetSubSkillIndex) ?? 0;
+    const targetIncluded =
+      targetControlSkillId == null ||
+      included.has(targetControlSkillId + '|' + targetSubSkillIndex);
+    if (sourceIncluded && targetIncluded) return null;
     return {
       disposition: 'not-applicable',
       policyIdentity,
@@ -461,6 +467,9 @@ function createScenarioScopeRequirementClassifier(scope) {
       sourceIdentity,
       controlSkillId,
       subSkillIndex,
+      ...(targetControlSkillId == null
+        ? {}
+        : { targetControlSkillId, targetSubSkillIndex }),
     };
   };
 }
@@ -1523,7 +1532,43 @@ function createContractCoverageSelector({ record, dimension, ownerId }) {
     )
   ) {
     const effectIdentity = resolveEffectIdentity(record);
-    return effectIdentity ? { kind: 'effect', effectIdentity } : null;
+    if (!effectIdentity) return null;
+    if (
+      dimension === 'effect' &&
+      record.tuningOverlimit != null &&
+      Number.isInteger(Number(record.trigger?.startFrame)) &&
+      record.trigger?.behaviorPathId != null
+    ) {
+      const semanticControlSkillId = firstInteger(
+        controlSkillId,
+        record.controlSkillId
+      );
+      const semanticSubSkillIndex = firstInteger(
+        subSkillIndex,
+        record.mapIndex,
+        ...(record.trigger?.subSkillIndexes ?? [])
+      );
+      if (semanticControlSkillId != null && semanticSubSkillIndex != null) {
+        return {
+          kind: 'effect',
+          effectIdentity,
+          controlSkillId: semanticControlSkillId,
+          subSkillIndex: semanticSubSkillIndex,
+          triggerFrame: Number(record.trigger.startFrame),
+          behaviorPathId: String(record.trigger.behaviorPathId),
+        };
+      }
+    }
+    return dimension === 'action-effect-binding' &&
+      controlSkillId != null &&
+      subSkillIndex != null
+      ? {
+          kind: 'effect',
+          effectIdentity,
+          controlSkillId,
+          subSkillIndex,
+        }
+      : { kind: 'effect', effectIdentity };
   }
   if (
     ['resource-profile', 'resource-transaction'].includes(dimension) &&
