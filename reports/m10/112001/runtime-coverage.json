@@ -1,0 +1,709 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-runtime-coverage",
+  "ownerId": 112001,
+  "sourcePackageHash": "c86e4d52b3552469aa43205644619f3da9919bee35feb69524d17ea45d9d8a6a",
+  "actionRows": [
+    {
+      "actionIdentity": "actor|112001|11200101|0|11200103|normal-attack",
+      "actionKind": "normal-attack",
+      "sourceSkillId": 11200101,
+      "controlSkillIds": [
+        11200101,
+        11200102,
+        11200103,
+        11200104,
+        11200105
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 3,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200101|0|11200103|normal-attack",
+          "publicFormId": "actor|112001|11200101|0|11200103|normal-attack:default",
+          "actionKind": "normal-attack",
+          "sourceSkillId": 11200101,
+          "executionControlSkillId": 11200103,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:11200103|0|elements|0|-5962889671209764033|19|1",
+            "hit:11200103|0|elements|0|-5962889671209764033|44|2",
+            "hit:11200103|0|elements|2|-7196679103069977046|47|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=backup,skillId=11200103]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 2,
+          "verified-zero": 3
+        },
+        "toughness": {
+          "applied": 2,
+          "verified-zero": 3
+        },
+        "actorSp": {
+          "applied": 2,
+          "verified-zero": 3
+        },
+        "kiboSp": {
+          "applied": 2,
+          "verified-zero": 3
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|112001|11200101|1|11200110|charged-attack",
+      "actionKind": "charged-attack",
+      "sourceSkillId": 11200101,
+      "controlSkillIds": [
+        11200110
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 5,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200101|1|11200110|charged-attack",
+          "publicFormId": "actor|112001|11200101|1|11200110|charged-attack:default",
+          "actionKind": "charged-attack",
+          "sourceSkillId": 11200101,
+          "executionControlSkillId": 11200110,
+          "executionSubSkillIndex": 0,
+          "hitCount": 5,
+          "settlementEvidence": [
+            "hit:11200110|0|elements|0|-6476243614539425670|35|1",
+            "hit:11200110|0|elements|0|-6476243614539425670|40|2",
+            "hit:11200110|0|elements|5|4459225510799639859|71|3",
+            "hit:11200110|0|elements|6|8291095951829019132|77|4",
+            "hit:11200110|0|elements|6|8291095951829019132|84|5"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 5
+            },
+            "toughness": {
+              "applied": 5
+            },
+            "actorSp": {
+              "applied": 5
+            },
+            "kiboSp": {
+              "applied": 5
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=2]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 3,
+          "verified-zero": 5
+        },
+        "toughness": {
+          "applied": 3,
+          "verified-zero": 5
+        },
+        "actorSp": {
+          "applied": 3,
+          "verified-zero": 5
+        },
+        "kiboSp": {
+          "applied": 3,
+          "verified-zero": 5
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|112001|11200101|6|11200115|dodge-attack",
+      "actionKind": "dodge-attack",
+      "sourceSkillId": 11200101,
+      "controlSkillIds": [
+        11200115
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "not-applicable",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": false,
+      "notApplicable": true,
+      "hitCount": 3,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "not-applicable",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200101|6|11200115|dodge-attack",
+          "publicFormId": "actor|112001|11200101|6|11200115|dodge-attack:default",
+          "actionKind": "dodge-attack",
+          "sourceSkillId": 11200101,
+          "executionControlSkillId": 11200115,
+          "executionSubSkillIndex": 0,
+          "hitCount": 3,
+          "settlementEvidence": [
+            "hit:11200115|0|elements|0|-8947338566451136949|12|1",
+            "hit:11200115|0|elements|3|2294008358922898646|31|2",
+            "hit:11200115|0|elements|3|2294008358922898646|33|3"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 3
+            },
+            "toughness": {
+              "applied": 3
+            },
+            "actorSp": {
+              "applied": 3
+            },
+            "kiboSp": {
+              "applied": 3
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=204]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "not-applicable": 6
+        },
+        "toughness": {
+          "not-applicable": 6
+        },
+        "actorSp": {
+          "not-applicable": 6
+        },
+        "kiboSp": {
+          "not-applicable": 6
+        }
+      },
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
+    },
+    {
+      "actionIdentity": "actor|112001|11200101|7|11200111|plunging-attack",
+      "actionKind": "plunging-attack",
+      "sourceSkillId": 11200101,
+      "controlSkillIds": [
+        11200111
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "not-applicable",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": false,
+      "notApplicable": true,
+      "hitCount": 1,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "not-applicable",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200101|7|11200111|plunging-attack",
+          "publicFormId": "actor|112001|11200101|7|11200111|plunging-attack:default",
+          "actionKind": "plunging-attack",
+          "sourceSkillId": 11200101,
+          "executionControlSkillId": 11200111,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:11200111|0|elements|0|8293159298096989253|37|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=aerial,slot=301]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "not-applicable": 3
+        },
+        "toughness": {
+          "not-applicable": 3
+        },
+        "actorSp": {
+          "not-applicable": 3
+        },
+        "kiboSp": {
+          "not-applicable": 3
+        }
+      },
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
+    },
+    {
+      "actionIdentity": "actor|112001|11200112|0|11200112|star-skill",
+      "actionKind": "star-skill",
+      "sourceSkillId": 11200112,
+      "controlSkillIds": [
+        11200112
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 6,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200112|0|11200112|star-skill",
+          "publicFormId": "actor|112001|11200112|0|11200112|star-skill:default",
+          "actionKind": "star-skill",
+          "sourceSkillId": 11200112,
+          "executionControlSkillId": 11200112,
+          "executionSubSkillIndex": 0,
+          "hitCount": 6,
+          "settlementEvidence": [
+            "hit:11200112|0|elements|0|6445379183107369286|27|1",
+            "hit:11200112|0|elements|0|6445379183107369286|33|2",
+            "hit:11200112|0|elements|0|6445379183107369286|39|3",
+            "hit:11200112|0|elements|6|2524065670513367618|49|4",
+            "hit:11200112|0|elements|9|-4413376751302110676|55|5",
+            "hit:11200112|0|elements|9|-4413376751302110676|62|6"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 6
+            },
+            "toughness": {
+              "applied": 6
+            },
+            "actorSp": {
+              "applied": 6
+            },
+            "kiboSp": {
+              "applied": 6
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=3]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 4,
+          "verified-zero": 7
+        },
+        "toughness": {
+          "applied": 3,
+          "verified-zero": 8
+        },
+        "actorSp": {
+          "applied": 3,
+          "verified-zero": 8
+        },
+        "kiboSp": {
+          "applied": 3,
+          "verified-zero": 8
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|112001|11200112|1|11200126|star-combo",
+      "actionKind": "star-combo",
+      "sourceSkillId": 11200112,
+      "controlSkillIds": [
+        11200126
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 1,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200112|1|11200126|star-combo",
+          "publicFormId": "actor|112001|11200112|1|11200126|star-combo:default",
+          "actionKind": "star-combo",
+          "sourceSkillId": 11200112,
+          "executionControlSkillId": 11200126,
+          "executionSubSkillIndex": 0,
+          "hitCount": 1,
+          "settlementEvidence": [
+            "hit:11200126|0|elements|0|8607350075110621760|40|1"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 1
+            },
+            "toughness": {
+              "applied": 1
+            },
+            "actorSp": {
+              "applied": 1
+            },
+            "kiboSp": {
+              "applied": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=208]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 1,
+          "verified-zero": 1
+        },
+        "toughness": {
+          "applied": 1,
+          "verified-zero": 1
+        },
+        "actorSp": {
+          "applied": 1,
+          "verified-zero": 1
+        },
+        "kiboSp": {
+          "applied": 1,
+          "verified-zero": 1
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+      "actionKind": "ultimate",
+      "sourceSkillId": 11200113,
+      "controlSkillIds": [
+        11200113
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": true,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 7,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "applied",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200113|0|11200113|ultimate",
+          "publicFormId": "actor|112001|11200113|0|11200113|ultimate:default",
+          "actionKind": "ultimate",
+          "sourceSkillId": 11200113,
+          "executionControlSkillId": 11200113,
+          "executionSubSkillIndex": 0,
+          "hitCount": 7,
+          "settlementEvidence": [
+            "hit:11200113|0|elements|0|-1498145608306293020|128|1",
+            "hit:11200113|0|elements|0|-1498145608306293020|140|2",
+            "hit:11200113|0|elements|0|-1498145608306293020|147|3",
+            "hit:11200113|0|elements|13|920563196063694705|196|4",
+            "hit:11200113|0|elements|13|920563196063694705|202|5",
+            "hit:11200113|0|elements|13|920563196063694705|208|6",
+            "tuning-mark-conditional-damage-group:gisele-ultimate-consumer-191f"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 7
+            },
+            "toughness": {
+              "applied": 7
+            },
+            "actorSp": {
+              "verified-zero": 6,
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "verified-zero": 6,
+              "unresolved": 1
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=4]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 3,
+          "not-applicable": 2,
+          "verified-zero": 9
+        },
+        "toughness": {
+          "applied": 3,
+          "not-applicable": 2,
+          "verified-zero": 9
+        },
+        "actorSp": {
+          "not-applicable": 2,
+          "verified-zero": 12
+        },
+        "kiboSp": {
+          "not-applicable": 2,
+          "verified-zero": 12
+        }
+      },
+      "reasons": [
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "property-formula-not-literal-function-5",
+        "trigger-frame-missing",
+        "tuning-consume-current-packet-not-in-candidate-map",
+        "tuning-consume-judgment-missing",
+        "tuning-consume-mark-identity-ambiguous",
+        "tuning-consume-success-branch-unresolved"
+      ]
+    },
+    {
+      "actionIdentity": "actor|112001|11200121|0|11200121|star-carry",
+      "actionKind": "star-carry",
+      "sourceSkillId": 11200121,
+      "controlSkillIds": [
+        11200121
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": true,
+      "notApplicable": false,
+      "hitCount": 20,
+      "requiresDamageSettlement": false,
+      "settlementStatus": "not-required",
+      "publicFormSettlements": [],
+      "dimensionSummary": {
+        "hp": {
+          "applied": 4,
+          "verified-zero": 5
+        },
+        "toughness": {
+          "applied": 4,
+          "verified-zero": 5
+        },
+        "actorSp": {
+          "verified-zero": 9
+        },
+        "kiboSp": {
+          "verified-zero": 9
+        }
+      },
+      "reasons": []
+    },
+    {
+      "actionIdentity": "actor|112001|11200121|1|11200125|limit-counter",
+      "actionKind": "limit-counter",
+      "sourceSkillId": 11200121,
+      "controlSkillIds": [
+        11200125
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "not-applicable",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": false,
+      "notApplicable": true,
+      "hitCount": 2,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "not-applicable",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200121|1|11200125|limit-counter",
+          "publicFormId": "actor|112001|11200121|1|11200125|limit-counter:default",
+          "actionKind": "limit-counter",
+          "sourceSkillId": 11200121,
+          "executionControlSkillId": 11200125,
+          "executionSubSkillIndex": 0,
+          "hitCount": 2,
+          "settlementEvidence": [
+            "hit:11200125|0|elements|0|4004741631631185620|15|1",
+            "hit:11200125|0|elements|2|-4962287067608044547|18|2"
+          ],
+          "dimensionSummary": {
+            "hp": {
+              "applied": 2
+            },
+            "toughness": {
+              "applied": 2
+            },
+            "actorSp": {
+              "applied": 2
+            },
+            "kiboSp": {
+              "applied": 2
+            }
+          },
+          "status": "applied",
+          "reasons": [],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=207]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "not-applicable": 5
+        },
+        "toughness": {
+          "not-applicable": 5
+        },
+        "actorSp": {
+          "not-applicable": 5
+        },
+        "kiboSp": {
+          "not-applicable": 5
+        }
+      },
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
+    },
+    {
+      "actionIdentity": "actor|112001|11200121|2|11200127|perfect-parry",
+      "actionKind": "perfect-parry",
+      "sourceSkillId": 11200121,
+      "controlSkillIds": [
+        11200127
+      ],
+      "schedulable": true,
+      "sourceEvidenceStatus": "applied",
+      "scenarioRuntimeStatus": "not-applicable",
+      "rawRuntimeReady": true,
+      "sourceDrivenConditionalDamageReady": false,
+      "runtimeReady": false,
+      "notApplicable": true,
+      "hitCount": 0,
+      "requiresDamageSettlement": true,
+      "settlementStatus": "not-applicable",
+      "publicFormSettlements": [
+        {
+          "actionIdentity": "actor|112001|11200121|2|11200127|perfect-parry",
+          "publicFormId": "actor|112001|11200121|2|11200127|perfect-parry:default",
+          "actionKind": "perfect-parry",
+          "sourceSkillId": 11200121,
+          "executionControlSkillId": 11200127,
+          "executionSubSkillIndex": 0,
+          "hitCount": 0,
+          "settlementEvidence": [],
+          "dimensionSummary": {
+            "hp": {
+              "unresolved": 1
+            },
+            "toughness": {
+              "unresolved": 1
+            },
+            "actorSp": {
+              "unresolved": 1
+            },
+            "kiboSp": {
+              "unresolved": 1
+            }
+          },
+          "status": "static-evidence-gap",
+          "reasons": [
+            "public-action-damage-settlement-evidence-missing"
+          ],
+          "sourceIdentity": "characters.items[id=112001].skillSlots[group=ground,slot=209]"
+        }
+      ],
+      "dimensionSummary": {
+        "hp": {
+          "not-applicable": 4
+        },
+        "toughness": {
+          "not-applicable": 4
+        },
+        "actorSp": {
+          "not-applicable": 4
+        },
+        "kiboSp": {
+          "not-applicable": 4
+        }
+      },
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
+    }
+  ],
+  "summary": {
+    "actionCount": 10,
+    "runtimeReadyActionCount": 6,
+    "executionFormCount": 10,
+    "controlCount": 17,
+    "hitCount": 96,
+    "rawEffectCount": 103,
+    "semanticEffectCount": 31,
+    "resourceProfileCount": 0,
+    "resourceTransactionCount": 0,
+    "thresholdTransitionCount": 0,
+    "targetStateProfileCount": 0,
+    "targetStateTransactionCount": 0,
+    "conditionalHitGroupCount": 0,
+    "tuningMarkConditionalDamageGroupCount": 4,
+    "runtimeEffectBindingCount": 0,
+    "passiveCount": 1,
+    "switchTriggerCount": 1,
+    "coverageStatusCounts": {
+      "applied": 18,
+      "not-applicable": 2
+    }
+  },
+  "profileHash": "52fee173b0614026edd2f09679c9072e1296883f616f4434bb2979b9bd2afd97"
+}

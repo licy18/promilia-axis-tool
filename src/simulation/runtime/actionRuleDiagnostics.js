@@ -84,6 +84,7 @@ export function createActionRuleDiagnostics({
   scenario = {},
   cooldownEvaluationAdapter = null,
   externallyBlockedActionIds = [],
+  actionResolutionById = null,
 } = {}) {
   const actions = [...(scenario.actions ?? [])].sort(compareActions);
   const baseNonCooldownDiagnostics = [
@@ -149,6 +150,7 @@ export function createActionRuleDiagnostics({
     scenario,
     cooldownEvaluationAdapter,
     preblockedActionIds,
+    actionResolutionById,
   });
   let preliminaryDiagnostics = [
     ...nonCooldownDiagnostics,
@@ -2034,6 +2036,7 @@ function createSkillCooldownEvaluation(
     scenario = null,
     cooldownEvaluationAdapter = null,
     preblockedActionIds = new Set(),
+    actionResolutionById = null,
   } = {}
 ) {
   const cooldownStateBySkillOwner = new Map();
@@ -2101,6 +2104,7 @@ function createSkillCooldownEvaluation(
         action,
         actionOrderIndex,
         scenario,
+        actionResolutionById,
         pending: pendingCooldownReductionTransactions,
       });
       settleCooldownReductionTransactions({
@@ -2272,6 +2276,7 @@ function createSkillCooldownEvaluation(
       action,
       actionOrderIndex,
       scenario,
+      actionResolutionById,
       pending: pendingCooldownReductionTransactions,
     });
     settleCooldownReductionTransactions({
@@ -2343,12 +2348,15 @@ function enqueueAcceptedCooldownReductionTransactions({
   action,
   actionOrderIndex,
   scenario,
+  actionResolutionById = null,
   pending,
 }) {
   if (action.type !== ACTION_TYPES.SKILL || !action.actorId) return;
-  const resolution = resolveVerifiedCombatActionMechanics(action, {
-    combatScenario: scenario?.combatScenario,
-  });
+  const resolution =
+    actionResolutionById?.get?.(action.id) ??
+    resolveVerifiedCombatActionMechanics(action, {
+      combatScenario: scenario?.combatScenario,
+    });
   const frameRate = Number(resolution?.controlBinding?.frameRate) || 60;
   for (const [effectIndex, effect] of (resolution?.effects ?? []).entries()) {
     const reduction = effect.cooldownReduction;

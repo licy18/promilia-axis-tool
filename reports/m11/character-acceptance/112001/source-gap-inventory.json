@@ -1,0 +1,1287 @@
+{
+  "schemaVersion": 1,
+  "kind": "character-acceptance-source-gap-inventory",
+  "records": [
+    {
+      "uniqueGapIdentity": "source-gap:0b913931373965a0",
+      "sourceRecordIdentities": [
+        "effect:11200141|1|elements|3|3549516589720748751|element:3549516589720748751|21|0",
+        "semantic-gap:b7634cecb59f3f42b4a8"
+      ],
+      "status": "source-closure-applied",
+      "reason": "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:1:3549516589720748751:-2221402581055835730:21",
+        "effect:11200141|1|elements|3|3549516589720748751|element:3549516589720748751|21|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-landed-star-cooldown-recovery-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#actionEffectBindings[gisele-heavy2-release-sub0-landed-star-cd-recovery,gisele-heavy2-release-sub1-landed-star-cd-recovery,gisele-heavy3-charge-sub3-landed-star-cd-recovery,gisele-heavy3-charge-sub4-landed-star-cd-recovery]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "eef9f6de49e0bd09"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:0c5ab103ea61ed26",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:3939720093155976420|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3939720093155976420|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3939720093155976420|46|0",
+        "semantic-gap:091bd68c6599b44a26bb"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:3939720093155976420:-455698713471044834:46",
+        "battle-effect:11200141:3:3939720093155976420:-5184522153576516834:32",
+        "battle-effect:11200141:3:3939720093155976420:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:3939720093155976420|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3939720093155976420|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3939720093155976420|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "542d6923f6de3403"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:0d72843aea7a87df",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:4706408017431577456|32|0",
+        "semantic-gap:3e478b4a4affa16a4955"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:4706408017431577456:-5184522153576516834:32",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:4706408017431577456|32|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "0b15350080c9c6e4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1a0ce247663c3f34",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:8151765006458699337|191|0",
+        "semantic-gap:704c449e17fef1fde037"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:8151765006458699337:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:8151765006458699337|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "0ea3dd7ccac612c5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1c80754aeffdc03e",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4983645826914030750|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4983645826914030750|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4983645826914030750|46|0",
+        "semantic-gap:0d8b4b5e13bfee9a7e28"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-4983645826914030750:-455698713471044834:46",
+        "battle-effect:11200141:3:-4983645826914030750:-5184522153576516834:32",
+        "battle-effect:11200141:3:-4983645826914030750:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4983645826914030750|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4983645826914030750|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4983645826914030750|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "215fec13c7ba5d11"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1d6d47b967853f1a",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|8|4468850874124785724|element:-2476421825297115340|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-2476421825297115340|46|0",
+        "semantic-gap:e2c5aafcc66306e95048"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-2476421825297115340:-455698713471044834:46",
+        "battle-effect:11200141:3:-2476421825297115340:12633754986328862:39",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-2476421825297115340|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-2476421825297115340|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "11a5ce0f27813795"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1dd8aaf7139c84f7",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4987541363161719177|191|0",
+        "semantic-gap:bdbeaecd62e06b60f3ae"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-4987541363161719177:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4987541363161719177|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "10f34efd41374a87"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:20270a1497792ade",
+      "sourceRecordIdentities": [
+        "112001-current-client-orphan-skill-level-2193",
+        "semantic-gap:88389140a9103c67868c"
+      ],
+      "status": "not-applicable",
+      "reason": "current-client-orphan|no-executable-firework-consumer|stale-description",
+      "sourceKind": "passive-description",
+      "sourceIdentities": [
+        "112001-current-client-orphan-skill-level-2193",
+        "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314"
+      ],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentities": [],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "3a188649c4312f24"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:207fbef76edc6ef1",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4305995279707980247|191|0",
+        "semantic-gap:e1f45c1efe80a4e6b122"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-4305995279707980247:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4305995279707980247|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "1b9ecb32fc92d76c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2739af9e18d616bf",
+      "sourceRecordIdentities": [
+        "effect:11200110|3|elements|5|3549516589720748751|element:3549516589720748751|17|0",
+        "semantic-gap:ff12bf0682bf5e6f49b1"
+      ],
+      "status": "source-closure-applied",
+      "reason": "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:3:3549516589720748751:-6246824455983816836:17",
+        "effect:11200110|3|elements|5|3549516589720748751|element:3549516589720748751|17|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-landed-star-cooldown-recovery-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#actionEffectBindings[gisele-heavy2-release-sub0-landed-star-cd-recovery,gisele-heavy2-release-sub1-landed-star-cd-recovery,gisele-heavy3-charge-sub3-landed-star-cd-recovery,gisele-heavy3-charge-sub4-landed-star-cd-recovery]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "6f4354cb22191c85"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2f28af40e67991fd",
+      "sourceRecordIdentities": [
+        "effect:11200110|4|elements|1|2439866480037915627|element:2439866480037915627|97|0",
+        "semantic-gap:ad1c7def225e5dc400b4"
+      ],
+      "status": "not-applicable",
+      "reason": "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:4:2439866480037915627:4016331866367571032:97",
+        "effect:11200110|4|elements|1|2439866480037915627|element:2439866480037915627|97|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-charge-transition-marker-wrappers-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_112001167.asset#100ms-transition-marker|Battle/Element/ast_112001185.asset#100ms-transition-marker|character-combat-owner-contract:112001#chargingReleaseBindings"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c082f6dad0b6bdbf"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:31deaa418e626f33",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:2085743462064840077|191|0",
+        "semantic-gap:6aee1492d55dbc6fed3a"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:2085743462064840077:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:2085743462064840077|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "30e159768a5e6304"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3c16ed6f16c1a62a",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4987541363161719177|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4987541363161719177|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4987541363161719177|46|0",
+        "semantic-gap:e0aee3237ddffd10f15d"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-4987541363161719177:-455698713471044834:46",
+        "battle-effect:11200141:3:-4987541363161719177:-5184522153576516834:32",
+        "battle-effect:11200141:3:-4987541363161719177:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4987541363161719177|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4987541363161719177|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4987541363161719177|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "f35fca1d0d974b3d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:3e2dd095b5b7b659",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-7212963066810547935|191|0",
+        "semantic-gap:4e19d3d254d5b38a3fce"
+      ],
+      "status": "source-closure-applied",
+      "reason": "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-7212963066810547935:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-7212963066810547935|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-priority-tuning-consumers-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f,gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f,gisele-ultimate-consumer-191f]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "f8440ee0d069c2a4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:510b8c445c59df28",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:4308277382311054823|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4308277382311054823|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4308277382311054823|46|0",
+        "semantic-gap:82f28afd775fc9b33d19"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:4308277382311054823:-455698713471044834:46",
+        "battle-effect:11200141:3:4308277382311054823:-5184522153576516834:32",
+        "battle-effect:11200141:3:4308277382311054823:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:4308277382311054823|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4308277382311054823|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4308277382311054823|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "325b717e3e9f395b"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:5b474ec8ee3332ab",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-5022202969777715803|191|0",
+        "semantic-gap:d197d4a403e9104b9ac8"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-5022202969777715803:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-5022202969777715803|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "647fdebd220f307f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:61907aa02113a435",
+      "sourceRecordIdentities": [
+        "effect:11200110|1|elements|2|-4985724019408455853|element:-4985724019408455853|99|0",
+        "semantic-gap:1c5784163133c2d7ca9c"
+      ],
+      "status": "not-applicable",
+      "reason": "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:1:-4985724019408455853:4219179924236121101:99",
+        "effect:11200110|1|elements|2|-4985724019408455853|element:-4985724019408455853|99|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-charge-transition-marker-wrappers-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_112001167.asset#100ms-transition-marker|Battle/Element/ast_112001185.asset#100ms-transition-marker|character-combat-owner-contract:112001#chargingReleaseBindings"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "7299c5dc1f725114"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:68d09f19d913566a",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4305995279707980247|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4305995279707980247|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4305995279707980247|46|0",
+        "semantic-gap:a045fb906ff4e6e72767"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-4305995279707980247:-455698713471044834:46",
+        "battle-effect:11200141:3:-4305995279707980247:-5184522153576516834:32",
+        "battle-effect:11200141:3:-4305995279707980247:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-4305995279707980247|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4305995279707980247|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-4305995279707980247|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "d60afef1c781bf65"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:742ba6aaf70e4ffc",
+      "sourceRecordIdentities": [
+        "scenario-oos:112001:reactive-airborne-and-received-hit-actions",
+        "semantic-gap:ca1c9fd260832225bc39"
+      ],
+      "status": "not-applicable",
+      "reason": "requires-dodge-jump-fall-block-parry-counter-received-hit-or-boss-attack-event|scenario-out-of-scope",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#闪击/闪避/跃击/跳跃/下落/完美闪避/格挡/招架/极限反击/受击",
+        "scenario-oos:112001:reactive-airborne-and-received-hit-actions"
+      ],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentities": [],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "410e3ffb4629d3ce"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:76a0027e73568fd6",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:7312265477123870759|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7312265477123870759|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7312265477123870759|46|0",
+        "semantic-gap:d2f969d9393be143d2fc"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:7312265477123870759:-455698713471044834:46",
+        "battle-effect:11200141:3:7312265477123870759:-5184522153576516834:32",
+        "battle-effect:11200141:3:7312265477123870759:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:7312265477123870759|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7312265477123870759|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7312265477123870759|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "72411fddcdb894fe"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:7a2358fd4c6ca518",
+      "sourceRecordIdentities": [
+        "effect:11200110|2|elements|2|-4985724019408455853|element:-4985724019408455853|99|0",
+        "semantic-gap:70a2ef8ddabe1e668cb7"
+      ],
+      "status": "not-applicable",
+      "reason": "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:2:-4985724019408455853:-7195846656067722336:99",
+        "effect:11200110|2|elements|2|-4985724019408455853|element:-4985724019408455853|99|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-charge-transition-marker-wrappers-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_112001167.asset#100ms-transition-marker|Battle/Element/ast_112001185.asset#100ms-transition-marker|character-combat-owner-contract:112001#chargingReleaseBindings"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "cffee7f75cff528c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:80b2391adb7a2739",
+      "sourceRecordIdentities": [
+        "effect:11200110|3|elements|1|2439866480037915627|element:2439866480037915627|97|0",
+        "semantic-gap:7bc89ce10442c407052c"
+      ],
+      "status": "not-applicable",
+      "reason": "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:3:2439866480037915627:6245517653303926652:97",
+        "effect:11200110|3|elements|1|2439866480037915627|element:2439866480037915627|97|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-charge-transition-marker-wrappers-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_112001167.asset#100ms-transition-marker|Battle/Element/ast_112001185.asset#100ms-transition-marker|character-combat-owner-contract:112001#chargingReleaseBindings"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "70a4fdcd83889f48"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:843cfe6c6b3fa698",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-5022202969777715803|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-5022202969777715803|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-5022202969777715803|46|0",
+        "semantic-gap:da12afa6e197a7db4982"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-5022202969777715803:-455698713471044834:46",
+        "battle-effect:11200141:3:-5022202969777715803:-5184522153576516834:32",
+        "battle-effect:11200141:3:-5022202969777715803:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-5022202969777715803|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-5022202969777715803|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-5022202969777715803|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "678c344a673fcdd6"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:84be875cf29631fb",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:6012521140755665265|191|0",
+        "semantic-gap:679dc154813a00fa4364"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:6012521140755665265:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:6012521140755665265|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "e6e708ec4c8765bd"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9b0c7ad8ded4e017",
+      "sourceRecordIdentities": [
+        "effect:11200110|4|elements|5|3549516589720748751|element:3549516589720748751|17|0",
+        "semantic-gap:a4bc92e0663f2d35dfbb"
+      ],
+      "status": "source-closure-applied",
+      "reason": "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200110:4:3549516589720748751:2145608153295598680:17",
+        "effect:11200110|4|elements|5|3549516589720748751|element:3549516589720748751|17|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-landed-star-cooldown-recovery-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#actionEffectBindings[gisele-heavy2-release-sub0-landed-star-cd-recovery,gisele-heavy2-release-sub1-landed-star-cd-recovery,gisele-heavy3-charge-sub3-landed-star-cd-recovery,gisele-heavy3-charge-sub4-landed-star-cd-recovery]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "e2da550c005548fc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9b48204bcfb7f563",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-3467106530063546693|32|0",
+        "semantic-gap:0cccb4b2e33cad4f3f09"
+      ],
+      "status": "source-closure-applied",
+      "reason": "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-3467106530063546693:-5184522153576516834:32",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-3467106530063546693|32|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-priority-tuning-consumers-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f,gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f,gisele-ultimate-consumer-191f]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "a3eb3ea2bbe1e18e"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9f662917667ee3f7",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:4308277382311054823|191|0",
+        "semantic-gap:8712e2e64024bab07389"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:4308277382311054823:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:4308277382311054823|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "bec2122e5fb6201f"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:9feb323992602947",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:1403965050569036408|191|0",
+        "semantic-gap:497ce63bb3432056f8a8"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:1403965050569036408:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:1403965050569036408|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "8dc0c9f9a918edd4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a324c7b351303f2a",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-1677344282117150831|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-1677344282117150831|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-1677344282117150831|46|0",
+        "semantic-gap:d2d554e45e9d84c69d47"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:-1677344282117150831:-455698713471044834:46",
+        "battle-effect:11200141:3:-1677344282117150831:-5184522153576516834:32",
+        "battle-effect:11200141:3:-1677344282117150831:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:-1677344282117150831|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-1677344282117150831|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:-1677344282117150831|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "a720987c7da0df8a"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a6a75dac00294862",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:2085743462064840077|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:2085743462064840077|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:2085743462064840077|46|0",
+        "semantic-gap:ab5abd2e9f7f3b0b8fe3"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:2085743462064840077:-455698713471044834:46",
+        "battle-effect:11200141:3:2085743462064840077:-5184522153576516834:32",
+        "battle-effect:11200141:3:2085743462064840077:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:2085743462064840077|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:2085743462064840077|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:2085743462064840077|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "7f98a51b87ca23a6"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a80e801418e96f24",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:7861911541119917233|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7861911541119917233|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7861911541119917233|46|0",
+        "semantic-gap:5d8dd54d1d4c40740e54"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:7861911541119917233:-455698713471044834:46",
+        "battle-effect:11200141:3:7861911541119917233:-5184522153576516834:32",
+        "battle-effect:11200141:3:7861911541119917233:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:7861911541119917233|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7861911541119917233|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:7861911541119917233|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "86798835a672ced5"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ad86f5d7359676a7",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:7312265477123870759|191|0",
+        "semantic-gap:a40520c1e9e9d8d3b9ec"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:7312265477123870759:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:7312265477123870759|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "a32a680bbe1c13fe"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:afa56dde4c6c68b1",
+      "sourceRecordIdentities": [
+        "boundary:112001:hero-rank",
+        "semantic-gap:ea0b0d0c65bd572cf533"
+      ],
+      "status": "not-applicable",
+      "reason": "must-not-enter-runtime-input|unimplemented-dead-configuration",
+      "sourceKind": "configuration",
+      "sourceIdentities": [
+        "NewTable/hero_rank.json#owner=112001",
+        "boundary:112001:hero-rank"
+      ],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentities": [],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "22e377919e6a313c"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b1fa58acd39601d7",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:7861911541119917233|191|0",
+        "semantic-gap:baf8f03bfc69c783f01a"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:7861911541119917233:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:7861911541119917233|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "2431451adcca5048"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b644413885127938",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|8|4468850874124785724|element:3182963528892729359|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3182963528892729359|46|0",
+        "semantic-gap:b2fc8db82ca3cfef6d2f"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:3182963528892729359:-455698713471044834:46",
+        "battle-effect:11200141:3:3182963528892729359:12633754986328862:39",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3182963528892729359|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:3182963528892729359|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "5d4033c53ca1b0f9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b6c89e7ee1748d93",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:8667023792951433112|191|0",
+        "semantic-gap:5f26cd1e3744f2b68b85"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:8667023792951433112:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:8667023792951433112|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "12af5d5424d8686b"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:b7eb5c94e2cf6e1c",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:6012521140755665265|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:6012521140755665265|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:6012521140755665265|46|0",
+        "semantic-gap:050dc76f70f66e762f20"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:6012521140755665265:-455698713471044834:46",
+        "battle-effect:11200141:3:6012521140755665265:-5184522153576516834:32",
+        "battle-effect:11200141:3:6012521140755665265:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:6012521140755665265|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:6012521140755665265|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:6012521140755665265|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "95657fea78bf47ca"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:c5fb2837551bd7af",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4983645826914030750|191|0",
+        "semantic-gap:d1cd7ad5693294ca2511"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-4983645826914030750:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-4983645826914030750|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "33da142fc7c1f42a"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cdc5432be98deddc",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:8667023792951433112|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8667023792951433112|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8667023792951433112|46|0",
+        "semantic-gap:f0081f34ff2f0f52c73f"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:8667023792951433112:-455698713471044834:46",
+        "battle-effect:11200141:3:8667023792951433112:-5184522153576516834:32",
+        "battle-effect:11200141:3:8667023792951433112:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:8667023792951433112|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8667023792951433112|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8667023792951433112|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "d371e569a4dfaabc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cdc82b0708eb6e6b",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-2511185242952603503|191|0",
+        "semantic-gap:845369f826f2044b8a77"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-2511185242952603503:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-2511185242952603503|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "6c76d240043e238d"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:cea92440a4378eaf",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:3939720093155976420|191|0",
+        "semantic-gap:af0fbe1de80e96d4264f"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:3939720093155976420:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:3939720093155976420|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "4d18236a7f07c6cc"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d5a91aead20fc71c",
+      "sourceRecordIdentities": [
+        "effect:11200111|0|elements|1|1066013211372865379|element:1066013211372865379|37|0",
+        "semantic-gap:be12fa54bb7484f1b973"
+      ],
+      "status": "not-applicable",
+      "reason": "frozen-zero-distance-passive-boss-scenario-is-grounded|requires-airborne-jump-or-fall-context|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200111:0:1066013211372865379:7368334432187597594:37",
+        "effect:11200111|0|elements|1|1066013211372865379|element:1066013211372865379|37|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-airborne-wrapper-out-of-scope"
+      ],
+      "sourceClosureSourceIdentities": [
+        "m12c-zero-distance-passive-boss-v1#grounded|skill_control_11200111.asset#source-retained"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "c3b6be6070cb9385"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d766a5bb89143567",
+      "sourceRecordIdentities": [
+        "effect:11200141|0|elements|3|3549516589720748751|element:3549516589720748751|26|0",
+        "semantic-gap:5e861dc8965949343c40"
+      ],
+      "status": "source-closure-applied",
+      "reason": "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:0:3549516589720748751:-1951771389325363148:26",
+        "effect:11200141|0|elements|3|3549516589720748751|element:3549516589720748751|26|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-landed-star-cooldown-recovery-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#actionEffectBindings[gisele-heavy2-release-sub0-landed-star-cd-recovery,gisele-heavy2-release-sub1-landed-star-cd-recovery,gisele-heavy3-charge-sub3-landed-star-cd-recovery,gisele-heavy3-charge-sub4-landed-star-cd-recovery]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "1222065dc933d908"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:d9bab24bbd6354eb",
+      "sourceRecordIdentities": [
+        "effect:11200161|0|elements|0|1448394486395976258|element:1448394486395976258|0|0",
+        "semantic-gap:6a3ecafcce5a86d915d8"
+      ],
+      "status": "not-applicable",
+      "reason": "four-landed-hit-112001267-bindings-carry-the-executable-cooldown-semantics|listener-marker-is-not-a-second-gameplay-effect|unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200161:0:1448394486395976258:1502843519162609567:0",
+        "effect:11200161|0|elements|0|1448394486395976258|element:1448394486395976258|0|0"
+      ],
+      "sourceClosureDisposition": "not-applicable",
+      "sourceClosurePolicyIdentities": [
+        "gisele-passive-one-listener-marker-superseded"
+      ],
+      "sourceClosureSourceIdentities": [
+        "Battle/Element/ast_112001132.asset#passive-listener-marker|character-combat-owner-contract:112001#actionEffectBindings"
+      ],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "d693c9bbea6c0a54"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:dcdea6e8cbca81b1",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:8151765006458699337|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8151765006458699337|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8151765006458699337|46|0",
+        "semantic-gap:4f54e371c1b3a7ce2517"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:8151765006458699337:-455698713471044834:46",
+        "battle-effect:11200141:3:8151765006458699337:-5184522153576516834:32",
+        "battle-effect:11200141:3:8151765006458699337:12633754986328862:39",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:8151765006458699337|32|0",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8151765006458699337|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:8151765006458699337|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+        "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F",
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "11dcc5107ee47525"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ed89e84a74acce9b",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|5|-3467106530063546693|element:3531461192192745416|32|0",
+        "semantic-gap:36d6ad6e64dfc13c248c"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:3531461192192745416:-5184522153576516834:32",
+        "effect:11200141|3|elements|5|-3467106530063546693|element:3531461192192745416|32|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-heavy3-consumer-32f-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "584e641ffa46bee4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:f3c6dfe5fbbf8261",
+      "sourceRecordIdentities": [
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-1677344282117150831|191|0",
+        "semantic-gap:4acf14b88925ef191762"
+      ],
+      "status": "source-closure-applied",
+      "reason": "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200113:0:-1677344282117150831:2617385811689971573:191",
+        "effect:11200113|0|elements|7|-7212963066810547935|element:-1677344282117150831|191|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-ultimate-consumer-raw-subtree-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "1be735433e270562"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:fab8197daabf916c",
+      "sourceRecordIdentities": [
+        "effect:11200141|3|elements|8|4468850874124785724|element:4468850874124785724|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4468850874124785724|46|0",
+        "semantic-gap:ce76e18e0386eebf49ad"
+      ],
+      "status": "source-closure-applied",
+      "reason": "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved",
+      "sourceKind": "effect",
+      "sourceIdentities": [
+        "battle-effect:11200141:3:4468850874124785724:-455698713471044834:46",
+        "battle-effect:11200141:3:4468850874124785724:12633754986328862:39",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4468850874124785724|39|1",
+        "effect:11200141|3|elements|8|4468850874124785724|element:4468850874124785724|46|0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "gisele-priority-tuning-consumers-source-closure"
+      ],
+      "sourceClosureSourceIdentities": [
+        "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f,gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f,gisele-ultimate-consumer-191f]"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "6f4d15c7a06eb4c2"
+    }
+  ],
+  "summary": {
+    "uniqueGapCount": 48,
+    "blockingCount": 0,
+    "nonBlockingCount": 48,
+    "statusCounts": {
+      "not-applicable": 9,
+      "source-closure-applied": 39
+    },
+    "reasonCounts": {
+      "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved": 4,
+      "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5": 4,
+      "current-client-orphan|no-executable-firework-consumer|stale-description": 1,
+      "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit": 2,
+      "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit": 1,
+      "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5": 10,
+      "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved": 2,
+      "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome": 4,
+      "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome": 1,
+      "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract|nested-effect-wrapper-semantics-unresolved|normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome|property-formula-not-literal-function-5": 10,
+      "each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit": 2,
+      "four-landed-hit-112001267-bindings-carry-the-executable-cooldown-semantics|listener-marker-is-not-a-second-gameplay-effect|unresolved": 1,
+      "frozen-zero-distance-passive-boss-scenario-is-grounded|requires-airborne-jump-or-fall-context|unresolved": 1,
+      "must-not-enter-runtime-input|unimplemented-dead-configuration": 1,
+      "requires-dodge-jump-fall-block-parry-counter-received-hit-or-boss-attack-event|scenario-out-of-scope": 1,
+      "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 3
+    }
+  },
+  "inventoryHash": "39ed218484fadd35"
+}

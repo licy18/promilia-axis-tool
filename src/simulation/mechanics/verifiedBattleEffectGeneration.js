@@ -1,4 +1,6 @@
-import { resolveVerifiedCombatActionMechanics } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  resolveVerifiedCombatActionMechanics,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   ACTION_TYPES,
   EFFECT_OPERATIONS,
@@ -190,6 +192,7 @@ export function createVerifiedBattleEffectGeneration({
   scenario = {},
   actionExecutionPlan = null,
   actionResolutionById: suppliedActionResolutionById = null,
+  mechanicsPackage = null,
   controlledActorTimeline = null,
   generatedDirectSpEvents = [],
 } = {}) {
@@ -205,6 +208,14 @@ export function createVerifiedBattleEffectGeneration({
   const elementTagLayers = new Map();
   const elementIdsHeld = new Map();
   const stackElementLayers = new Map();
+  const suppressedWatcherEffectIdentities = new Set(
+    (
+      mechanicsPackage?.actionVariantGraph?.breakTriggerWatchers ?? []
+    ).flatMap(watcher => watcher.suppressedEffectIdentities ?? [])
+  );
+  const defaultWillHit =
+    (scenario?.combatScenario?.projectile?.defaultWillHit ??
+      scenario?.projectile?.defaultWillHit) !== false;
 
   for (const action of scenario.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -218,16 +229,30 @@ export function createVerifiedBattleEffectGeneration({
       });
     actionResolutionById.set(action.id, resolution);
     if (!resolution.ready) continue;
+    assertMechanicsPackageBinding({ mechanicsPackage, resolution });
     const runtimeEffects = [
       ...(resolution.semanticEffects ?? []),
       ...(resolution.effects ?? []).filter(
         effect => effect.runtimeGenerationMode === 'raw-direct-effect'
       ),
-    ];
+    ].filter(
+      effect =>
+        !isSuppressedBreakWatcherEffect(
+          effect,
+          suppressedWatcherEffectIdentities
+        )
+    );
     for (const effect of runtimeEffects) {
       if (effect.role && effect.role !== 'gameplay-effect') continue;
       if (effect.tuningMark || effect.tuningOverlimit) continue;
-      if (!isHitBoundEffectEnabled({ action, effect, resolution })) {
+      if (
+        !isHitBoundEffectEnabled({
+          action,
+          effect,
+          resolution,
+          defaultWillHit,
+        })
+      ) {
         continue;
       }
       if (
@@ -401,7 +426,50 @@ export function createVerifiedBattleEffectGeneration({
   };
 }
 
-function isHitBoundEffectEnabled({ action, effect, resolution }) {
+function isSuppressedBreakWatcherEffect(effect, suppressedIdentities) {
+  if (suppressedIdentities.size === 0) return false;
+  if (
+    suppressedIdentities.has(effect?.effectIdentity) ||
+    suppressedIdentities.has(effect?.semanticIdentity)
+  ) {
+    return true;
+  }
+  return (effect?.rawEffectIdentities ?? []).some(identity =>
+    suppressedIdentities.has(identity)
+  );
+}
+
+function isHitBoundEffectEnabled({
+  action,
+  effect,
+  resolution,
+  defaultWillHit,
+}) {
+  const gate = effect.hitGate;
+  if (gate?.kind === 'conditional-damage-group-hit') {
+    return resolveActionHitWillHit(
+      action,
+      `conditional-damage:${gate.groupIdentity}:${Number(gate.hitIndex) || 1}`,
+      defaultWillHit
+    );
+  }
+  if (gate?.kind === 'landed-action-hit') {
+    const hit = (resolution.hits ?? []).find(
+      hit =>
+        Number(hit.elementId) === Number(gate.elementId) &&
+        Number(hit.trigger?.startFrame) === Number(gate.triggerFrame) &&
+        (!gate.behaviorPathId ||
+          hit.trigger?.behaviorPathId === gate.behaviorPathId)
+    );
+    return (
+      hit != null &&
+      resolveActionHitWillHit(
+        action,
+        hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
+        defaultWillHit
+      )
+    );
+  }
   const behaviorPathId = String(effect.trigger?.behaviorPathId ?? '');
   if (!behaviorPathId) return true;
   const hit = (resolution.allHits ?? resolution.hits ?? []).find(
@@ -416,6 +484,23 @@ function isHitBoundEffectEnabled({ action, effect, resolution }) {
     hit.hitIdentity ?? hit.semanticIdentity ?? hit.effectIdentity,
     (resolution.hits ?? []).includes(hit)
   );
+}
+
+function assertMechanicsPackageBinding({ mechanicsPackage, resolution }) {
+  const expectedPackageId = String(mechanicsPackage?.packageId ?? '');
+  const expectedPackageHash = String(mechanicsPackage?.packageHash ?? '');
+  const resolutionPackageId = String(resolution?.packageId ?? '');
+  const resolutionPackageHash = String(resolution?.packageHash ?? '');
+  if (
+    !expectedPackageId ||
+    !expectedPackageHash ||
+    resolutionPackageId !== expectedPackageId ||
+    resolutionPackageHash !== expectedPackageHash
+  ) {
+    throw new Error(
+      'verified-battle-effect-generation-mechanics-package-binding-mismatch'
+    );
+  }
 }
 
 function createPropertyEffectCommand({
@@ -467,6 +552,13 @@ function createPropertyEffectCommand({
     sourceStatus: 'verified-battle-effect-generated',
     confidence: effect.confidence ?? 'high',
     trackingStatus: 'applied',
+    ...(effect.assumptionIdentity
+      ? {
+          appliedAssumptionIdentity: effect.assumptionIdentity,
+          appliedAssumptionVersion: effect.assumptionVersion,
+          appliedAssumptionHash: effect.assumptionHash,
+        }
+      : {}),
     sourceIdentity: {
       packageId: resolution.packageId,
       packageHash: resolution.packageHash,
@@ -476,6 +568,13 @@ function createPropertyEffectCommand({
         ? Number(effect.elementId)
         : null,
       pathId: effect.pathId ?? null,
+      ...(effect.assumptionIdentity
+        ? {
+            assumptionIdentity: effect.assumptionIdentity,
+            assumptionVersion: effect.assumptionVersion,
+            assumptionHash: effect.assumptionHash,
+          }
+        : {}),
       sourceIdentity: effect.sourceIdentity ?? effect.sourceIdentities ?? null,
       ...(triggerSequencePath
         ? {
@@ -524,19 +623,17 @@ function resolveStrictSameFrameEffectSequencePath({
   if (effect.hitSettlementOrder !== 'after-hit') return null;
   const effectElementIndex = Number(effect.sourceOrder?.elementIndex);
   if (!Number.isInteger(effectElementIndex)) return null;
-  const hasEarlierSamePacketHit = (
-    resolution.allHits ??
-    resolution.hits ??
-    []
-  ).some(
-    hit =>
-      String(hit.trigger?.behaviorPathId ?? '') ===
-        String(effect.trigger?.behaviorPathId ?? '') &&
-      Number(hit.trigger?.startFrame) ===
-        Number(effect.trigger?.startFrame) &&
-      Number.isInteger(Number(hit.elementIndex)) &&
-      Number(hit.elementIndex) < effectElementIndex
-  );
+  const hasEarlierSamePacketHit =
+    effect.hitGate?.kind === 'conditional-damage-group-hit' ||
+    (resolution.allHits ?? resolution.hits ?? []).some(
+      hit =>
+        String(hit.trigger?.behaviorPathId ?? '') ===
+          String(effect.trigger?.behaviorPathId ?? '') &&
+        Number(hit.trigger?.startFrame) ===
+          Number(effect.trigger?.startFrame) &&
+        Number.isInteger(Number(hit.elementIndex)) &&
+        Number(hit.elementIndex) < effectElementIndex
+    );
   if (!hasEarlierSamePacketHit) return null;
   return createVerifiedEffectSourceSequencePath({
     action,

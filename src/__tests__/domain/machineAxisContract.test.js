@@ -119,6 +119,43 @@ describe('Machine Axis contract', () => {
     });
   });
 
+  it('preserves an explicit charging release frame through canonical JSON', () => {
+    const contract = createContract({
+      actions: [
+        {
+          id: 'threshold-release',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: {
+            kind: 'public-action',
+            publicActionId: 10100701,
+            actionKind: 'charged-attack',
+            semanticVariant: {
+              selectorKind: 'charging-release-frame',
+              mode: 'release',
+              inputFrame: 59,
+            },
+          },
+          schedule: { mode: 'absolute', frame: 60 },
+        },
+      ],
+    });
+
+    const result = validateMachineAxisContract(contract);
+
+    expect(result.valid).toBe(true);
+    expect(result.normalized.actions[0].intent.semanticVariant).toEqual({
+      selectorKind: 'charging-release-frame',
+      selectorIdentity: null,
+      publicVariantIndex: null,
+      chargeTier: null,
+      mode: 'release',
+      inputFrame: 59,
+    });
+    expect(JSON.parse(JSON.stringify(result.normalized))).toEqual(
+      result.normalized
+    );
+  });
+
   it('keeps landed and critical overrides independent and requires sampled seed', () => {
     const withoutSeed = createContract({
       actions: [

@@ -1,0 +1,915 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-character-combat-profile-recipe",
+  "ownerId": 112001,
+  "characterId": 112001,
+  "sourceBaseline": "ccd9831514112e099cc0d519bd42b29d681f03e0",
+  "productScenario": "m12c-zero-distance-passive-boss-v1",
+  "formalAdmissionClaim": false,
+  "optimizationReadyClaim": false,
+  "targetPipelineMaturity": "runtime-applied",
+  "goldStandard": false,
+  "coveragePolicies": {
+    "semanticTransitionClosureSupersedesRawCandidateGaps": true,
+    "candidateResolutionMode": "selected-root-source-closure-v1",
+    "settlementNodeClosurePolicies": [
+      {
+        "policyIdentity": "gisele-ultimate-base-branch-template-root-no-independent-settlement",
+        "graphIdentity": "11200113|0|elements|8|-2511185242952603503",
+        "nodeCatalogIdentity": "11200113|element:-2511185242952603503",
+        "dimensions": ["hp", "toughness", "actorSp", "kiboSp"],
+        "disposition": "not-applicable",
+        "reason": "conditional-consumer-base-branch-template-has-no-independent-root-settlement",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-2511185242952603503|Battle/Element/ast_112001260.asset#list1=112001265|character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]"
+      },
+      {
+        "policyIdentity": "gisele-ultimate-enhanced-branch-template-root-no-independent-settlement",
+        "graphIdentity": "11200113|0|elements|9|1403965050569036408",
+        "nodeCatalogIdentity": "11200113|element:1403965050569036408",
+        "dimensions": ["hp", "toughness", "actorSp", "kiboSp"],
+        "disposition": "not-applicable",
+        "reason": "conditional-consumer-enhanced-branch-template-has-no-independent-root-settlement",
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200113.asset/MonoBehaviour/skill_control_11200113__7086965772956663434.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=1403965050569036408|Battle/Element/ast_112001260.asset#list2=112001261|character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]"
+      }
+    ]
+  },
+  "simulationScopeRequirements": {
+    "zeroDistance": {
+      "projectileImpactPolicy": "scenario-assumed-zero-distance",
+      "requiredResourceIdentities": [],
+      "requiredActionEffectBindingIdentities": [
+        "gisele-star-first-landed-thunder-mark",
+        "gisele-heavy2-release-sub0-landed-star-cd-recovery",
+        "gisele-heavy2-release-sub1-landed-star-cd-recovery",
+        "gisele-heavy3-charge-sub3-landed-star-cd-recovery",
+        "gisele-heavy3-charge-sub4-landed-star-cd-recovery",
+        "gisele-ultimate-post-hit-wrapper"
+      ],
+      "requiredPassiveIdentities": ["actor:112001:passive:11200162"]
+    }
+  },
+  "mechanicsDiscovery": {
+    "ownerId": 112001,
+    "normalAttackSkillId": 11200101,
+    "chargedAttackControlSkillId": 11200110,
+    "starSkillControlSkillId": 11200112,
+    "ultimateControlSkillId": 11200113,
+    "starCarryControlSkillId": 11200121,
+    "limitCounterControlSkillId": 11200125,
+    "perfectParryControlSkillId": 11200127,
+    "passiveSkillIds": [11200161, 11200162]
+  },
+  "runtimePolicies": {
+    "defaultControlPolicy": {
+      "behaviorTriggerScope": "skill-player",
+      "sourceIdentity": "character-combat-recipe:112001#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
+    }
+  },
+  "compiler": {
+    "timingPolicy": "standalone-animation",
+    "reachableControlSkillIds": [
+      11200101,
+      11200102,
+      11200103,
+      11200104,
+      11200105,
+      11200110,
+      11200111,
+      11200112,
+      11200113,
+      11200115,
+      11200121,
+      11200125,
+      11200126,
+      11200127,
+      11200141,
+      11200161,
+      11200162
+    ],
+    "headlessAssumptionContract": {
+      "contractIdentity": "m12-112001-assumption-runtime-v1",
+      "policyAuthority": "user-approved-headless-assumption",
+      "clientParityReady": false,
+      "assumptionVersion": "1.0.0",
+      "settlementContract": {
+        "contractIdentity": "m12-enemy-settlement-runtime-v2",
+        "contractHash": "2e3095db4b8c9232",
+        "packetOrder": [
+          "read-pre-break-state-for-hp-output",
+          "settle-toughness-and-break-transition",
+          "commit-current-packet-hp-mutation",
+          "publish-updated-break-state-to-later-canonical-packets"
+        ],
+        "clientParityReady": false
+      },
+      "assumptions": [
+        {
+          "identity": "112001-charge-threshold-overlap-order-open",
+          "sourceIdentity": "skill_control_11200110.asset#Charging-right-open-overlap@59F,67F|user-product-decision:M12-B3-112001-S1#A",
+          "resolution": "resolved-by-product-assumption",
+          "selectedSemantics": {
+            "identity": "threshold-inclusive-new-tier",
+            "precedence": "greatest-start-frame",
+            "equivalentTieBreak": "stable-source-identity",
+            "semanticConflictPolicy": "fail-closed"
+          },
+          "alternateSemantics": {
+            "identity": "old-tier-precedence",
+            "thresholdResults": {
+              "59": "11200141/sub0",
+              "67": "11200141/sub2"
+            }
+          },
+          "sensitivity": {
+            "formalThresholdResults": {
+              "59": "11200141/sub1",
+              "67": "11200141/sub3"
+            },
+            "expectedDifference": "selected-control-subskill-and-all-downstream-packets-change"
+          },
+          "preservedFailureToPass": "without an explicit precedence contract, exact 59F and 67F match two right-open windows and must fail closed"
+        },
+        {
+          "identity": "112001-damage-toughness-client-order-open",
+          "sourceIdentity": "m12-enemy-settlement-runtime-v2#contractHash=2e3095db4b8c9232|user-product-decision:M12-B3-112001-S1#B",
+          "resolution": "resolved-by-product-assumption",
+          "selectedSemantics": {
+            "identity": "pre-break-current-packet-post-break-later-packet",
+            "currentPacketBreakMultiplier": false,
+            "laterCanonicalPacketReadsUpdatedBreakState": true
+          },
+          "alternateSemantics": {
+            "identity": "break-before-current-packet-hp-output",
+            "currentPacketBreakMultiplier": true
+          },
+          "sensitivity": {
+            "expectedDifference": "the-break-triggering-packet-hp-output-differs",
+            "sourceSequencePolicy": "canonical-sourceSequencePath-and-eventIdentity"
+          },
+          "preservedFailureToPass": "client HP toughness and break order remains unproven; this closure is product-approved headless policy only"
+        },
+        {
+          "identity": "112001-ultimate-watcher-same-packet-order-open",
+          "sourceIdentity": "skill_control_11200113.asset#128F-damage-and-toOwn-112001271|user-product-decision:M12-B3-112001-S1#C",
+          "resolution": "resolved-by-product-assumption",
+          "selectedSemantics": {
+            "identity": "hit-then-arm-no-retroactive-trigger",
+            "armOrder": "after-128F-landed-settlement",
+            "windowBoundary": "right-open",
+            "triggerCount": 1
+          },
+          "alternateSemantics": {
+            "identity": "arm-before-current-hit",
+            "samePacketBreakCanTrigger": true
+          },
+          "sensitivity": {
+            "expectedDifference": "a-128F-break-triggers-only-under-the-alternate",
+            "formalSamePacketTrigger": false
+          },
+          "preservedFailureToPass": "without an arm cursor, same-frame equality cannot decide whether the 128F packet triggers its newly-created watcher"
+        },
+        {
+          "identity": "112001-ultimate-wrapper-same-packet-order-open",
+          "sourceIdentity": "skill_control_11200113.asset#191F-consumer-and-toOwn-112001255|user-product-decision:M12-B3-112001-S1#D",
+          "resolution": "resolved-by-product-assumption",
+          "selectedSemantics": {
+            "identity": "target-consumer-then-post-hit-wrapper",
+            "currentPacketBenefit": false,
+            "firstEligiblePacket": "next-independent-packet",
+            "windowBoundary": "right-open"
+          },
+          "alternateSemantics": {
+            "identity": "wrapper-before-current-packet",
+            "currentPacketBenefit": true
+          },
+          "sensitivity": {
+            "expectedDifference": "191F-damage-and-toughness-output-differ",
+            "formal196FBenefit": true
+          },
+          "preservedFailureToPass": "without a settlement cursor, same-frame equality cannot decide whether the 191F packet consumes the wrapper"
+        }
+      ],
+      "futureClientEvidencePolicy": "if future client evidence differs, increment assumptionVersion, invalidate this assumptionHash, and recompute every affected profile, input, data, trace, build, acceptance binding, and formal score",
+      "sourceIdentity": "user-product-decision:M12-B3-112001-S1#versioned-auditable-headless-assumption-authority"
+    },
+    "contextInputEdges": [
+      {
+        "sourceControlSkillId": 11200102,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A2",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 1,
+        "executionOccupancy": { "durationFrames": 294, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[1].frameCountDict[key=0]=294; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy2-from-a2",
+        "semanticName": "特殊重击2",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 55, "endFrame": 320, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200102.asset#EventBridge[pathId=3680827837063640949,55F+265F)->11200110/sub1"
+      },
+      {
+        "sourceControlSkillId": 11200103,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A3",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 2,
+        "executionOccupancy": { "durationFrames": 294, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[2].frameCountDict[key=0]=294; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy2-from-a3",
+        "semanticName": "特殊重击2",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 63, "endFrame": 243, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200103.asset#EventBridge[pathId=6793272662003117501,63F+180F)->11200110/sub2"
+      },
+      {
+        "sourceControlSkillId": 11200104,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A4",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 3,
+        "executionOccupancy": { "durationFrames": 156, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[3].frameCountDict[key=0]=156; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy3-from-a4",
+        "semanticName": "特殊重击3",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 36, "endFrame": 266, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200104.asset#EventBridge[pathId=-1628043982540349619,36F+230F)->11200110/sub3"
+      },
+      {
+        "sourceControlSkillId": 11200105,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "普通攻击 A5",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 4,
+        "executionOccupancy": { "durationFrames": 156, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[4].frameCountDict[key=0]=156; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy3-from-a5",
+        "semanticName": "特殊重击3",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 59, "endFrame": 179, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200105.asset#EventBridge[pathId=-8216854629522320996,59F+120F)->11200110/sub4"
+      },
+      {
+        "sourceControlSkillId": 11200112,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "star-skill",
+        "sourceSemanticName": "星鸣技",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 1,
+        "executionOccupancy": { "durationFrames": 294, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[1].frameCountDict[key=0]=294; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy2-from-star",
+        "semanticName": "特殊重击2",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 67, "endFrame": 298, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200112.asset#EventBridge[pathId=5434729759590619730,67F+231F)->11200110/sub1"
+      },
+      {
+        "sourceControlSkillId": 11200113,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "ultimate",
+        "sourceSemanticName": "星决技",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 3,
+        "executionOccupancy": { "durationFrames": 156, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[3].frameCountDict[key=0]=156; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy3-from-ultimate",
+        "semanticName": "特殊重击3",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 216, "endFrame": 461, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200113.asset#EventBridge[pathId=-7179768813052977291,216F+245F)->11200110/sub3"
+      },
+      {
+        "sourceControlSkillId": 11200121,
+        "sourceSubSkillIndex": 0,
+        "sourcePublicActionKind": "star-carry",
+        "sourceSemanticName": "星鸣协战",
+        "publicActionKind": "charged-attack",
+        "publicControlSkillId": 11200110,
+        "executionControlSkillId": 11200110,
+        "executionSubSkillIndex": 1,
+        "executionOccupancy": { "durationFrames": 294, "frameRate": 60, "sourceKind": "declared-source-control-frame-count-before-runtime-charging-release-composition", "sourceIdentity": "skill_control_11200110.asset#skillPlayers[1].frameCountDict[key=0]=294; final occupancy is releaseFrame plus selected 11200141 control duration" },
+        "semanticIdentity": "gisele-special-heavy2-from-star-carry",
+        "semanticName": "特殊重击2",
+        "inputCommand": "charged-attack",
+        "condition": { "kind": "always" },
+        "inputWindow": { "startFrame": 112, "endFrame": 377, "bridgeType": 3 },
+        "expectedWindowCount": 1,
+        "sourceIdentity": "skill_control_11200121.asset#EventBridge[pathId=5933815741903944333,112F+265F)->11200110/sub1"
+      }
+    ],
+    "chargingReleaseBindings": [
+      {
+        "bindingIdentity": "gisele-heavy2-charge-release-sub1",
+        "publicControlSkillId": 11200110,
+        "sourceControlSkillId": 11200110,
+        "sourceSubSkillIndex": 1,
+        "actionKind": "charged-attack",
+        "precedence": "greatest-start-frame",
+        "boundary": "right-open",
+        "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
+        "windows": [
+          { "windowIdentity": "gisele-heavy2-sub1-early", "startFrame": 0, "endFrame": 60, "executionControlSkillId": 11200141, "executionSubSkillIndex": 0, "semanticIdentity": "gisele-heavy2-early", "semanticName": "特殊重击2提前释放", "sourceIdentity": "skill_control_11200110.asset#sub1 Charging[0,60)->11200141/sub0" },
+          { "windowIdentity": "gisele-heavy2-sub1-full", "startFrame": 59, "endFrame": 239, "executionControlSkillId": 11200141, "executionSubSkillIndex": 1, "semanticIdentity": "gisele-heavy2-full", "semanticName": "特殊重击2完全释放", "sourceIdentity": "skill_control_11200110.asset#sub1 Charging[59,239)->11200141/sub1" }
+        ],
+        "sourceIdentity": "skill_control_11200110.asset#sub1 Charging behaviors"
+      },
+      {
+        "bindingIdentity": "gisele-heavy2-charge-release-sub2",
+        "publicControlSkillId": 11200110,
+        "sourceControlSkillId": 11200110,
+        "sourceSubSkillIndex": 2,
+        "actionKind": "charged-attack",
+        "precedence": "greatest-start-frame",
+        "boundary": "right-open",
+        "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
+        "windows": [
+          { "windowIdentity": "gisele-heavy2-sub2-early", "startFrame": 0, "endFrame": 60, "executionControlSkillId": 11200141, "executionSubSkillIndex": 0, "semanticIdentity": "gisele-heavy2-early", "semanticName": "特殊重击2提前释放", "sourceIdentity": "skill_control_11200110.asset#sub2 Charging[0,60)->11200141/sub0" },
+          { "windowIdentity": "gisele-heavy2-sub2-full", "startFrame": 59, "endFrame": 239, "executionControlSkillId": 11200141, "executionSubSkillIndex": 1, "semanticIdentity": "gisele-heavy2-full", "semanticName": "特殊重击2完全释放", "sourceIdentity": "skill_control_11200110.asset#sub2 Charging[59,239)->11200141/sub1" }
+        ],
+        "sourceIdentity": "skill_control_11200110.asset#sub2 Charging behaviors"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-charge-release-sub3",
+        "publicControlSkillId": 11200110,
+        "sourceControlSkillId": 11200110,
+        "sourceSubSkillIndex": 3,
+        "actionKind": "charged-attack",
+        "precedence": "greatest-start-frame",
+        "boundary": "right-open",
+        "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
+        "windows": [
+          { "windowIdentity": "gisele-heavy3-sub3-early", "startFrame": 0, "endFrame": 68, "executionControlSkillId": 11200141, "executionSubSkillIndex": 2, "semanticIdentity": "gisele-heavy3-early", "semanticName": "特殊重击3提前释放", "sourceIdentity": "skill_control_11200110.asset#sub3 Charging[0,68)->11200141/sub2" },
+          { "windowIdentity": "gisele-heavy3-sub3-full", "startFrame": 67, "endFrame": 134, "executionControlSkillId": 11200141, "executionSubSkillIndex": 3, "semanticIdentity": "gisele-heavy3-full", "semanticName": "特殊重击3完全释放", "sourceIdentity": "skill_control_11200110.asset#sub3 Charging[67,134)->11200141/sub3" }
+        ],
+        "sourceIdentity": "skill_control_11200110.asset#sub3 Charging behaviors"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-charge-release-sub4",
+        "publicControlSkillId": 11200110,
+        "sourceControlSkillId": 11200110,
+        "sourceSubSkillIndex": 4,
+        "actionKind": "charged-attack",
+        "precedence": "greatest-start-frame",
+        "boundary": "right-open",
+        "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
+        "windows": [
+          { "windowIdentity": "gisele-heavy3-sub4-early", "startFrame": 0, "endFrame": 68, "executionControlSkillId": 11200141, "executionSubSkillIndex": 2, "semanticIdentity": "gisele-heavy3-early", "semanticName": "特殊重击3提前释放", "sourceIdentity": "skill_control_11200110.asset#sub4 Charging[0,68)->11200141/sub2" },
+          { "windowIdentity": "gisele-heavy3-sub4-full", "startFrame": 67, "endFrame": 135, "executionControlSkillId": 11200141, "executionSubSkillIndex": 3, "semanticIdentity": "gisele-heavy3-full", "semanticName": "特殊重击3完全释放", "sourceIdentity": "skill_control_11200110.asset#sub4 Charging[67,135)->11200141/sub3" }
+        ],
+        "sourceIdentity": "skill_control_11200110.asset#sub4 Charging behaviors"
+      }
+    ],
+    "tuningMarkConditionalDamageGroups": [
+      {
+        "groupIdentity": "gisele-heavy3-consumer-32f",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "triggerFrames": [32],
+        "judgmentElementId": 112001258,
+        "baseElementId": 112001264,
+        "enhancedElementId": 112001259,
+        "tuningMarkProfileKey": "thunder",
+        "branchSelectionMode": "same-consume-judgment-outcome",
+        "expectedJudgmentType": 4,
+        "expectedCanConsume": 0,
+        "consumeJudgmentGroupIdentity": "tuning-consume-judgment:11200141:3:112001258:-3467106530063546693",
+        "expectedCandidateMarkIds": [250, 450],
+        "noCandidatePolicy": "base-branch-no-overlimit",
+        "sourceIdentity": "Battle/Element/ast_112001258.asset#Priority[250,450],consume=1,list1=112001264,list2=112001259"
+      },
+      {
+        "groupIdentity": "gisele-heavy3-consumer-39f",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "triggerFrames": [39],
+        "judgmentElementId": 112001268,
+        "baseElementId": 112001196,
+        "enhancedElementId": 112001270,
+        "tuningMarkProfileKey": "thunder",
+        "branchSelectionMode": "same-consume-judgment-outcome",
+        "expectedJudgmentType": 4,
+        "expectedCanConsume": 0,
+        "consumeJudgmentGroupIdentity": "tuning-consume-judgment:11200141:3:112001268:4468850874124785724",
+        "expectedCandidateMarkIds": [250, 450],
+        "noCandidatePolicy": "base-branch-no-overlimit",
+        "sourceIdentity": "Battle/Element/ast_112001268.asset#Priority[250,450],consume=1,list1=112001196,list2=112001270@39F"
+      },
+      {
+        "groupIdentity": "gisele-heavy3-consumer-46f",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "triggerFrames": [46],
+        "judgmentElementId": 112001268,
+        "baseElementId": 112001196,
+        "enhancedElementId": 112001270,
+        "tuningMarkProfileKey": "thunder",
+        "branchSelectionMode": "same-consume-judgment-outcome",
+        "expectedJudgmentType": 4,
+        "expectedCanConsume": 0,
+        "consumeJudgmentGroupIdentity": "tuning-consume-judgment:11200141:3:112001268:4468850874124785724",
+        "expectedCandidateMarkIds": [250, 450],
+        "noCandidatePolicy": "base-branch-no-overlimit",
+        "sourceIdentity": "Battle/Element/ast_112001268.asset#Priority[250,450],consume=1,list1=112001196,list2=112001270@46F"
+      },
+      {
+        "groupIdentity": "gisele-ultimate-consumer-191f",
+        "controlSkillId": 11200113,
+        "subSkillIndex": 0,
+        "triggerFrames": [191],
+        "judgmentElementId": 112001260,
+        "baseElementId": 112001265,
+        "enhancedElementId": 112001261,
+        "tuningMarkProfileKey": "thunder",
+        "branchSelectionMode": "same-consume-judgment-outcome",
+        "expectedJudgmentType": 4,
+        "expectedCanConsume": 0,
+        "consumeJudgmentGroupIdentity": "tuning-consume-judgment:11200113:0:112001260:-7212963066810547935",
+        "expectedCandidateMarkIds": [250, 450],
+        "noCandidatePolicy": "base-branch-no-overlimit",
+        "sourceIdentity": "Battle/Element/ast_112001260.asset#Priority[250,450],consume=2,list1=112001265,list2=112001261"
+      }
+    ],
+    "breakTriggerWatchers": [
+      {
+        "watcherIdentity": "gisele-ultimate-128f-break-watcher",
+        "controlSkillId": 11200113,
+        "subSkillIndex": 0,
+        "triggerFrame": 128,
+        "requiresHitElementId": 112001241,
+        "armEffectElementId": 112001271,
+        "triggeredEffectElementId": 112001272,
+        "triggerEvent": "enemy-break",
+        "triggerCount": 1,
+        "armOrder": "hit-then-arm",
+        "boundary": "right-open",
+        "expectedArmDurationMs": 8000,
+        "expectedEffectDurationMs": 11000,
+        "expectedAttributeId": 8,
+        "expectedBucket": "dynamicExtra",
+        "expectedValueRaw": 1000,
+        "targetKind": "team-actors",
+        "assumptionIdentity": "112001-ultimate-watcher-same-packet-order-open",
+        "sourceIdentity": "skill_control_11200113.asset#128F target=112001241,toOwn=112001271|Battle/Element/ast_112001271.asset#8000ms,once->112001272|ast_112001272.asset#attr8,raw1000,11000ms"
+      }
+    ],
+    "publicActionDeclarations": [],
+    "publicActionForms": [],
+    "attackInputChains": [],
+    "attackInputMechanicWindows": [],
+    "inputVariantSelectors": [],
+    "variantWindowBindings": [],
+    "targetStateProfiles": [],
+    "targetStateTransactions": [],
+    "conditionalHitGroups": [],
+    "actionHitBindings": [],
+    "actionEffectBindings": [
+      {
+        "bindingIdentity": "gisele-star-first-landed-thunder-mark",
+        "controlSkillId": 11200112,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 250,
+        "triggerFrame": 27,
+        "frameCount": 1,
+        "tuningMarkProfileKey": "thunder",
+        "stackDelta": 1,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitSettlementOrder": "after-hit",
+        "landedHitActivationCondition": {
+          "elementId": 112001056,
+          "triggerFrame": 27,
+          "behaviorPathId": "5182973323990506066",
+          "sourceIdentity": "skill_control_11200112.asset#first-collision-112001056@27F"
+        },
+        "sourceIdentity": "skill_control_11200112.asset#27F first collision landed -> toOwn ast_250"
+      },
+      {
+        "bindingIdentity": "gisele-heavy2-release-sub0-landed-star-cd-recovery",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 112001267,
+        "triggerFrame": 26,
+        "behaviorPathId": "-1951771389325363148",
+        "frameCount": 1,
+        "projectionOnly": true,
+        "hitSettlementOrder": "after-hit",
+        "landedHitActivationCondition": {
+          "elementId": 112001163,
+          "triggerFrame": 26,
+          "behaviorPathId": "-1951771389325363148",
+          "sourceIdentity": "skill_control_11200141.asset#sub0 first collision landed@26F"
+        },
+        "sourceIdentity": "skill_control_11200141.asset#sub0 path=-1951771389325363148,collision112001163,toOwn112001267@26F|Battle/Element/ast_112001267.asset#slot3,-3s"
+      },
+      {
+        "bindingIdentity": "gisele-heavy2-release-sub1-landed-star-cd-recovery",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 1,
+        "mapIndex": 1,
+        "elementId": 112001267,
+        "triggerFrame": 21,
+        "behaviorPathId": "-2221402581055835730",
+        "frameCount": 1,
+        "projectionOnly": true,
+        "hitSettlementOrder": "after-hit",
+        "landedHitActivationCondition": {
+          "elementId": 112001207,
+          "triggerFrame": 21,
+          "behaviorPathId": "-2221402581055835730",
+          "sourceIdentity": "skill_control_11200141.asset#sub1 first collision landed@21F"
+        },
+        "sourceIdentity": "skill_control_11200141.asset#sub1 path=-2221402581055835730,collision112001207,toOwn112001267@21F|Battle/Element/ast_112001267.asset#slot3,-3s"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-charge-sub3-landed-star-cd-recovery",
+        "controlSkillId": 11200110,
+        "subSkillIndex": 3,
+        "mapIndex": 3,
+        "elementId": 112001267,
+        "triggerFrame": 17,
+        "behaviorPathId": "-6246824455983816836",
+        "frameCount": 1,
+        "projectionOnly": true,
+        "hitSettlementOrder": "after-hit",
+        "landedHitActivationCondition": {
+          "elementId": 112001180,
+          "triggerFrame": 17,
+          "behaviorPathId": "-6246824455983816836",
+          "sourceIdentity": "skill_control_11200110.asset#sub3 first collision landed@17F"
+        },
+        "sourceIdentity": "skill_control_11200110.asset#sub3 ast_112001267@17F|Battle/Element/ast_112001267.asset#slot3,-3s"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-charge-sub4-landed-star-cd-recovery",
+        "controlSkillId": 11200110,
+        "subSkillIndex": 4,
+        "mapIndex": 4,
+        "elementId": 112001267,
+        "triggerFrame": 17,
+        "behaviorPathId": "2145608153295598680",
+        "frameCount": 1,
+        "projectionOnly": true,
+        "hitSettlementOrder": "after-hit",
+        "landedHitActivationCondition": {
+          "elementId": 112001180,
+          "triggerFrame": 17,
+          "behaviorPathId": "2145608153295598680",
+          "sourceIdentity": "skill_control_11200110.asset#sub4 first collision landed@17F"
+        },
+        "sourceIdentity": "skill_control_11200110.asset#sub4 ast_112001267@17F|Battle/Element/ast_112001267.asset#slot3,-3s"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-consumer-32f-hit-gate",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "mapIndex": 3,
+        "elementId": 112001258,
+        "triggerFrame": 32,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitGate": { "kind": "conditional-damage-group-hit", "groupIdentity": "gisele-heavy3-consumer-32f", "hitIndex": 1, "sourceIdentity": "conditional-damage-group:gisele-heavy3-consumer-32f#hit1" },
+        "sourceIdentity": "skill_control_11200141.asset#sub3 consumer 112001258@32F"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-consumer-39f-hit-gate",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "mapIndex": 3,
+        "elementId": 112001268,
+        "triggerFrame": 39,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitGate": { "kind": "conditional-damage-group-hit", "groupIdentity": "gisele-heavy3-consumer-39f", "hitIndex": 1, "sourceIdentity": "conditional-damage-group:gisele-heavy3-consumer-39f#hit1" },
+        "sourceIdentity": "skill_control_11200141.asset#sub3 consumer 112001268@39F"
+      },
+      {
+        "bindingIdentity": "gisele-heavy3-consumer-46f-hit-gate",
+        "controlSkillId": 11200141,
+        "subSkillIndex": 3,
+        "mapIndex": 3,
+        "elementId": 112001268,
+        "triggerFrame": 46,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitGate": { "kind": "conditional-damage-group-hit", "groupIdentity": "gisele-heavy3-consumer-46f", "hitIndex": 1, "sourceIdentity": "conditional-damage-group:gisele-heavy3-consumer-46f#hit1" },
+        "sourceIdentity": "skill_control_11200141.asset#sub3 consumer 112001268@46F"
+      },
+      {
+        "bindingIdentity": "gisele-ultimate-consumer-191f-hit-gate",
+        "controlSkillId": 11200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 112001260,
+        "triggerFrame": 191,
+        "frameCount": 1,
+        "projectionOnly": true,
+        "activationConditionScope": "matched-effect-subtree",
+        "hitGate": { "kind": "conditional-damage-group-hit", "groupIdentity": "gisele-ultimate-consumer-191f", "hitIndex": 1, "sourceIdentity": "conditional-damage-group:gisele-ultimate-consumer-191f#hit1" },
+        "sourceIdentity": "skill_control_11200113.asset#consumer 112001260@191F"
+      },
+      {
+        "bindingIdentity": "gisele-ultimate-post-hit-wrapper",
+        "controlSkillId": 11200113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "elementId": 112001255,
+        "triggerFrame": 191,
+        "frameCount": 1,
+        "lifecycleStackDelta": 1,
+        "lifecycleMaxStacks": 1,
+        "durationMsOverride": 12000,
+        "targetKindOverride": "source-owner",
+        "activationConditionScope": "matched-effect-subtree",
+        "hitSettlementOrder": "after-hit",
+        "assumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
+        "hitGate": { "kind": "conditional-damage-group-hit", "groupIdentity": "gisele-ultimate-consumer-191f", "hitIndex": 1, "sourceIdentity": "conditional-damage-group:gisele-ultimate-consumer-191f#hit1" },
+        "sourceIdentity": "skill_control_11200113.asset#191F target consumer then toOwn 112001255|Battle/Element/ast_112001255.asset#12000ms,children=112001256,112001257|assumption:112001-ultimate-wrapper-same-packet-order-open"
+      }
+    ],
+    "runtimeEffectBindings": [],
+    "rawDirectEffectBindings": [],
+    "pickupProfiles": [],
+    "pickupSpawnBindings": [],
+    "pickupAbsorbBindings": [],
+    "specialResources": [],
+    "thresholdTransitions": [],
+    "passiveEffects": [
+      {
+        "skillId": 11200162,
+        "runtimeGenerationMode": "controlled-entry-property-runtime",
+        "sourceElementIds": [112001133, 112001134],
+        "expectedDurationMs": 8000,
+        "sourceIdentity": "skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314|Battle/Element/ast_112001133.asset#controlled-entry,+8%-crit-rate,8000ms->ast_112001134|not-the-stale-firework-description"
+      }
+    ],
+    "scenarioOutOfScopeActions": [
+      { "controlSkillId": 11200115, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-evade-context", "sourceIdentity": "skill_control_11200115.asset#source-retained|m12c-zero-distance-passive-boss-v1#boss-does-not-attack" },
+      { "controlSkillId": 11200111, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-aerial-or-fall-context", "sourceIdentity": "skill_control_11200111.asset#source-retained|m12c-zero-distance-passive-boss-v1#grounded" },
+      { "controlSkillId": 11200125, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-enemy-attack-derived-counter-window", "sourceIdentity": "skill_control_11200125.asset#source-retained|m12c-zero-distance-passive-boss-v1#boss-does-not-attack" },
+      { "controlSkillId": 11200127, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-enemy-attack-and-perfect-defense-event", "sourceIdentity": "skill_control_11200127.asset#source-retained|m12c-zero-distance-passive-boss-v1#boss-does-not-attack" }
+    ]
+  },
+  "unresolvedRecords": [
+    {
+      "identity": "112001-charge-threshold-overlap-order-open",
+      "sourceKind": "product-assumption-boundary",
+      "status": "applied",
+      "reasons": ["resolved-by-product-assumption", "m12-112001-assumption-runtime-v1"],
+      "impactClassification": "resolved-by-product-assumption",
+      "blocksReadiness": false,
+      "sourceIdentity": "skill_control_11200110.asset#Charging-overlap@59F,67F|headless-assumption:m12-112001-assumption-runtime-v1"
+    },
+    {
+      "identity": "112001-damage-toughness-client-order-open",
+      "sourceKind": "product-assumption-boundary",
+      "status": "applied",
+      "reasons": ["resolved-by-product-assumption", "m12-enemy-settlement-runtime-v2"],
+      "impactClassification": "resolved-by-product-assumption",
+      "blocksReadiness": false,
+      "sourceIdentity": "m12-enemy-settlement-runtime-v2#contractHash=2e3095db4b8c9232|headless-assumption:m12-112001-assumption-runtime-v1"
+    },
+    {
+      "identity": "112001-ultimate-watcher-same-packet-order-open",
+      "sourceKind": "product-assumption-boundary",
+      "status": "applied",
+      "reasons": ["resolved-by-product-assumption", "hit-then-arm-no-retroactive-trigger"],
+      "impactClassification": "resolved-by-product-assumption",
+      "blocksReadiness": false,
+      "sourceIdentity": "skill_control_11200113.asset#128F|headless-assumption:m12-112001-assumption-runtime-v1"
+    },
+    {
+      "identity": "112001-ultimate-wrapper-same-packet-order-open",
+      "sourceKind": "product-assumption-boundary",
+      "status": "applied",
+      "reasons": ["resolved-by-product-assumption", "target-consumer-then-post-hit-wrapper"],
+      "impactClassification": "resolved-by-product-assumption",
+      "blocksReadiness": false,
+      "sourceIdentity": "skill_control_11200113.asset#191F|headless-assumption:m12-112001-assumption-runtime-v1"
+    },
+    {
+      "identity": "112001-current-client-orphan-skill-level-2193",
+      "sourceKind": "passive-description",
+      "skillId": 11200162,
+      "status": "not-applicable",
+      "classification": "current-client-orphan",
+      "descriptionStatus": "stale-description",
+      "applicability": "not-applicable",
+      "gameplayMechanic": false,
+      "runtimeGenerationMode": "none",
+      "required": false,
+      "blocksReadiness": false,
+      "reasons": ["current-client-orphan", "stale-description", "no-executable-firework-consumer"],
+      "sourceIdentity": "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314"
+    },
+    {
+      "identity": "boundary:112001:hero-rank",
+      "sourceKind": "configuration",
+      "status": "not-applicable",
+      "reasons": ["unimplemented-dead-configuration", "must-not-enter-runtime-input"],
+      "sourceIdentity": "NewTable/hero_rank.json#owner=112001"
+    },
+    {
+      "identity": "scenario-oos:112001:reactive-airborne-and-received-hit-actions",
+      "sourceKind": "public-action",
+      "status": "not-applicable",
+      "reasons": ["scenario-out-of-scope", "requires-dodge-jump-fall-block-parry-counter-received-hit-or-boss-attack-event"],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#闪击/闪避/跃击/跳跃/下落/完美闪避/格挡/招架/极限反击/受击"
+    }
+  ],
+  "unresolvedRecordPolicies": [
+    {
+      "policyIdentity": "gisele-landed-star-cooldown-recovery-source-closure",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["sp-formula-not-literal-function-5"],
+      "controlVariants": [
+        { "controlSkillId": 11200110, "subSkillIndexes": [3, 4] },
+        { "controlSkillId": 11200141, "subSkillIndexes": [0, 1] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "explicit-landed-hit-action-effect-binding-projects-112001267",
+        "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:112001#actionEffectBindings[gisele-heavy2-release-sub0-landed-star-cd-recovery,gisele-heavy2-release-sub1-landed-star-cd-recovery,gisele-heavy3-charge-sub3-landed-star-cd-recovery,gisele-heavy3-charge-sub4-landed-star-cd-recovery]"
+    },
+    {
+      "policyIdentity": "gisele-priority-tuning-consumers-source-closure",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "reasonIncludes": ["tuning-consume-judgment-missing"],
+      "controlVariants": [
+        { "controlSkillId": 11200141, "subSkillIndexes": [3] },
+        { "controlSkillId": 11200113, "subSkillIndexes": [0] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "source-driven-priority-candidate-order-250-before-450",
+        "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f,gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f,gisele-ultimate-consumer-191f]"
+    },
+    {
+      "policyIdentity": "gisele-ultimate-consumer-raw-subtree-source-closure",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200113|0|elements|7|-7212963066810547935"
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "each-raw-191f-conditional-node-is-bound-to-the-source-driven-ultimate-consumer-contract",
+        "normal-enhanced-damage-mark-consume-and-overlimit-share-the-selected-candidate-outcome"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-ultimate-consumer-191f]|skill_control_11200113.asset#112001260@191F"
+    },
+    {
+      "policyIdentity": "gisele-heavy3-consumer-32f-raw-subtree-source-closure",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200141|3|elements|5|-3467106530063546693"
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract",
+        "one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-32f]|skill_control_11200141.asset#112001258@32F"
+    },
+    {
+      "policyIdentity": "gisele-heavy3-consumer-39f-46f-raw-subtree-source-closure",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200141|3|elements|8|4468850874124785724"
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract",
+        "each-consumer-removes-at-most-one-layer-from-the-selected-candidate"
+      ],
+      "sourceIdentity": "character-combat-owner-contract:112001#tuningMarkConditionalDamageGroups[gisele-heavy3-consumer-39f,gisele-heavy3-consumer-46f]|skill_control_11200141.asset#112001268@39F,46F"
+    },
+    {
+      "policyIdentity": "gisele-charge-transition-marker-wrappers-superseded",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200110|1|elements|2|-4985724019408455853",
+        "effect:11200110|2|elements|2|-4985724019408455853",
+        "effect:11200110|3|elements|1|2439866480037915627",
+        "effect:11200110|4|elements|1|2439866480037915627"
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "100ms-client-charge-transition-marker-has-no-calculator-output",
+        "source-driven-charging-release-binding-supersedes-marker-wrapper"
+      ],
+      "sourceIdentity": "Battle/Element/ast_112001167.asset#100ms-transition-marker|Battle/Element/ast_112001185.asset#100ms-transition-marker|character-combat-owner-contract:112001#chargingReleaseBindings"
+    },
+    {
+      "policyIdentity": "gisele-passive-one-listener-marker-superseded",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200161|0|elements|0|1448394486395976258"
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "wrapper-or-duplicate",
+      "reasons": [
+        "listener-marker-is-not-a-second-gameplay-effect",
+        "four-landed-hit-112001267-bindings-carry-the-executable-cooldown-semantics"
+      ],
+      "sourceIdentity": "Battle/Element/ast_112001132.asset#passive-listener-marker|character-combat-owner-contract:112001#actionEffectBindings"
+    },
+    {
+      "policyIdentity": "gisele-airborne-wrapper-out-of-scope",
+      "sourceKinds": ["effect"],
+      "statuses": ["static-evidence-gap"],
+      "identityPrefixes": [
+        "effect:11200111|0|elements|1|1066013211372865379"
+      ],
+      "disposition": "not-applicable",
+      "impactClassification": "unreachable",
+      "reasons": [
+        "requires-airborne-jump-or-fall-context",
+        "frozen-zero-distance-passive-boss-scenario-is-grounded"
+      ],
+      "sourceIdentity": "m12c-zero-distance-passive-boss-v1#grounded|skill_control_11200111.asset#source-retained"
+    }
+  ],
+  "goldenScenario": {
+    "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-golden",
+    "durationFrames": 7200,
+    "frameRate": 60,
+    "teamCharacterIds": [112001, 101010, 103002],
+    "initialControlledCharacterId": 112001,
+    "initialActorSp": { "112001": 100, "101010": 0, "103002": 0 },
+    "kiboByCharacterId": {},
+    "initialKiboSp": {},
+    "initialTuningMarks": [
+      { "profileKey": "thunder", "layerCount": 3, "remainingDurationMs": 20000 },
+      { "profileKey": "dark", "layerCount": 2, "remainingDurationMs": 20000 }
+    ],
+    "loadoutByCharacterId": {},
+    "actions": [
+      { "actionKey": "gisele-a1", "actorCharacterId": 112001, "skillId": 11200101, "actionKind": "normal-attack", "actionVariantIndex": 0, "controlSubSkillIndex": 0, "startFrame": 0, "attackInputControlSkillId": 11200101, "attackSequenceIndex": 1 },
+      { "actionKey": "gisele-a2", "actorCharacterId": 112001, "skillId": 11200101, "actionKind": "normal-attack", "actionVariantIndex": 0, "controlSubSkillIndex": 0, "startFrame": 400, "attackInputControlSkillId": 11200102, "attackSequenceIndex": 2 },
+      { "actionKey": "gisele-heavy2-threshold59", "actorCharacterId": 112001, "skillId": 11200101, "actionKind": "charged-attack", "actionVariantIndex": 1, "startFrame": 455, "contextActionId": "gisele-a2", "variantInputSelection": { "mode": "release", "inputFrame": 59 } },
+      { "actionKey": "gisele-star", "actorCharacterId": 112001, "skillId": 11200112, "actionKind": "star-skill", "actionVariantIndex": 0, "controlSubSkillIndex": 0, "startFrame": 1200 },
+      { "actionKey": "gisele-a4", "actorCharacterId": 112001, "skillId": 11200101, "actionKind": "normal-attack", "actionVariantIndex": 0, "controlSubSkillIndex": 0, "startFrame": 2000, "attackInputControlSkillId": 11200104, "attackSequenceIndex": 4 },
+      { "actionKey": "gisele-heavy3-threshold67", "actorCharacterId": 112001, "skillId": 11200101, "actionKind": "charged-attack", "actionVariantIndex": 1, "startFrame": 2036, "contextActionId": "gisele-a4", "variantInputSelection": { "mode": "release", "inputFrame": 67 } },
+      { "actionKey": "gisele-ultimate", "actorCharacterId": 112001, "skillId": 11200113, "actionKind": "ultimate", "actionVariantIndex": 0, "controlSubSkillIndex": 0, "startFrame": 3200 }
+    ],
+    "switchEvents": [
+      { "eventKey": "gisele-switch-away", "sourceCharacterId": 112001, "targetCharacterId": 101010, "startFrame": 4100 },
+      { "eventKey": "gisele-switch-back", "sourceCharacterId": 101010, "targetCharacterId": 112001, "startFrame": 4300 }
+    ],
+    "comparison": {},
+    "traceSelectors": {
+      "stateEffectIds": ["battle-element:112001255", "battle-element:112001272"]
+    },
+    "expectedRuntime": {
+      "exact": {
+        "project.durationMs": 120000
+      },
+      "greaterThan": {
+        "combat.ownerHitTotalHpDamage": 0
+      }
+    }
+  }
+}

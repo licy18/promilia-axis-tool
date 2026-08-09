@@ -35,6 +35,7 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import { msToFrame } from '../../domain/timebase';
+import { getInstalledVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 
 export function simulateScenario(
   inputScenario,
@@ -77,6 +78,7 @@ export function simulateScenario(
     scenario,
     cooldownEvaluationAdapter: actionCooldownEvaluationAdapter,
     criticalRuntime,
+    actionResolutionById: actionVariantPreflight?.actionResolutionById,
   });
   const {
     actionRuleDiagnostics,
@@ -275,6 +277,7 @@ function createStableVerifiedAdmission({
   scenario,
   cooldownEvaluationAdapter,
   criticalRuntime,
+  actionResolutionById = null,
 }) {
   const executionBlockByKey = new Map();
   const actionById = new Map(
@@ -292,6 +295,7 @@ function createStableVerifiedAdmission({
       externallyBlockedActionIds: verifiedExecutionBlocks.map(
         block => block.actionId
       ),
+      actionResolutionById,
     });
     if (verifiedExecutionBlocks.length > 0) {
       actionRuleDiagnostics = applyVerifiedResourceExecutionBlocks({
@@ -411,6 +415,7 @@ function createVerifiedRuntimeBundle({
         scenario,
         actionExecutionPlan,
         actionResolutionById: actionVariantRuntime?.actionResolutionById,
+        mechanicsPackage: getInstalledVerifiedCombatMechanicsPackage(),
         controlledActorTimeline,
         generatedDirectSpEvents: actionVariantRuntime?.directSpEvents ?? [],
       })

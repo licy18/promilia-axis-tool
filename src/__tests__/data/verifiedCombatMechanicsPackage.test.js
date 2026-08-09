@@ -20,6 +20,11 @@ import {
   resolveVerifiedCombatActionMechanics,
   validateVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
+import {
+  HEADLESS_ASSUMPTION_HASH_ALGORITHM,
+  computeHeadlessAssumptionHash,
+  sha256Utf8,
+} from '../../domain/headlessAssumptionContract';
 
 afterEach(() => {
   clearInstalledVerifiedCombatMechanicsPackage();
@@ -540,17 +545,42 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 634,
-        unresolvedActionCount: 12,
+        appliedActionCount: 635,
+        unresolvedActionCount: 11,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
         exactSelectedVariantOccupancyCount: 702,
-        sourceAnimationPlanningDurationCount: 28,
+        sourceAnimationPlanningDurationCount: 27,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
         oneFrameCount: 0,
       },
       oneFrame: [],
+    });
+
+    expect(
+      actionTimingCoverage.actions.find(
+        action =>
+          action.identity ===
+          'actor|112001|11200112|0|11200112|star-skill'
+      )
+    ).toMatchObject({
+      status: 'applied',
+      durationFrames: 271,
+      frameRate: 60,
+      sourceKind: 'skill-control-player-action-range',
+      sourceIdentity:
+        'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/skill_control_11200112__2244200307259366473.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]',
+      occupancy: {
+        startFrame: 0,
+        endFrame: 271,
+        durationFrames: 271,
+        status: 'applied',
+        sourceKind: 'skill-control-player-action-range',
+      },
+      schedulingStatus: 'exact',
+      schedulingKind: 'exact-selected-variant-occupancy',
+      schedulingSourceStatus: 'verified-input-occupancy',
     });
 
     const ruby = findNormalAttackMapping(103002);
@@ -870,6 +900,15 @@ describe('verified combat mechanics package', () => {
         canonicalInput: 25,
         executionStart: 25,
         predecessorEnd: 25,
+      },
+      {
+        source: '10700112/sub0',
+        window: [62, 135],
+        semantics: 'immediate-interrupt',
+        genericEnd: 117,
+        canonicalInput: 117,
+        executionStart: 117,
+        predecessorEnd: 117,
       },
     ]);
     expect(contextualInputSchedulingAudit).toMatchObject({
@@ -1832,6 +1871,154 @@ describe('verified combat mechanics package', () => {
     expect(second).toBe(mechanicsPackage);
     expect(getInstalledVerifiedCombatMechanicsPackage()).toBe(mechanicsPackage);
     expect(requestCount).toBe(1);
+  });
+
+  it('fails closed when a data-driven headless assumption binding loses its contract', () => {
+    const contracted = structuredClone(mechanicsPackage);
+    const contract = {
+      schemaVersion: 1,
+      ownerId: 777001,
+      contractIdentity: 'test-headless-assumption-v1',
+      policyAuthority: 'user-approved-headless-assumption',
+      clientParityReady: false,
+      assumptionVersion: '1.0.0',
+      assumptionHashAlgorithm: HEADLESS_ASSUMPTION_HASH_ALGORITHM,
+      settlementContract: {
+        contractIdentity: 'test-enemy-settlement-v1',
+        contractHash: 'test-settlement-hash',
+        clientParityReady: false,
+        semantics: { packetStateRead: 'pre-break' },
+        formalScoring: { permitted: false },
+        declaredPacketOrder: ['damage-read', 'break-settle', 'hp-commit'],
+      },
+      assumptions: [
+        {
+          identity: 'test-order-open',
+          sourceIdentity: 'fixture:test-order-open',
+          resolution: 'resolved-by-product-assumption',
+          selectedSemantics: { precedence: 'new-tier' },
+          alternateSemantics: { precedence: 'old-tier' },
+          sensitivity: { changesResult: true },
+          preservedFailureToPass: 'fixture:old-threshold-overlap-open',
+        },
+        {
+          identity: 'test-watcher-order-open',
+          sourceIdentity: 'fixture:test-watcher-order-open',
+          resolution: 'resolved-by-product-assumption',
+          selectedSemantics: { order: ['hit', 'arm'] },
+          alternateSemantics: { order: ['arm', 'hit'] },
+          sensitivity: { changesResult: true },
+          preservedFailureToPass: 'fixture:old-watcher-order-open',
+        },
+      ],
+      futureClientEvidencePolicy: 'version-invalidate-and-recompute',
+      sourceIdentity: 'fixture:test-headless-assumption-contract',
+      status: 'headless-assumption-contract-applied',
+      applied: true,
+    };
+    contract.assumptionHash = computeHeadlessAssumptionHash(contract);
+    const binding = {
+      ownerId: 777001,
+      bindingIdentity: 'test-charging-release',
+      assumptionIdentity: 'test-order-open',
+      assumptionVersion: contract.assumptionVersion,
+      assumptionHash: contract.assumptionHash,
+      applied: true,
+    };
+    contracted.actionVariantGraph.headlessAssumptionContracts = [contract];
+    contracted.actionVariantGraph.chargingReleaseBindings = [binding];
+    contracted.actionVariantGraph.breakTriggerWatchers = [];
+
+    expect(validateVerifiedCombatMechanicsPackage(contracted)).toMatchObject({
+      valid: true,
+      issues: [],
+    });
+    expect(sha256Utf8('abc')).toBe(
+      'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'
+    );
+
+    const missing = structuredClone(contracted);
+    missing.actionVariantGraph.headlessAssumptionContracts = [];
+    expect(validateVerifiedCombatMechanicsPackage(missing)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const renamed = structuredClone(contracted);
+    renamed.actionVariantGraph.headlessAssumptionContracts[0].assumptions[0].identity =
+      'test-order-renamed';
+    expect(validateVerifiedCombatMechanicsPackage(renamed)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const semanticTamper = structuredClone(contracted);
+    semanticTamper.actionVariantGraph.headlessAssumptionContracts[0].assumptions[0].selectedSemantics.precedence =
+      'old-tier';
+    expect(validateVerifiedCombatMechanicsPackage(semanticTamper)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const deletedAssumption = structuredClone(contracted);
+    deletedAssumption.actionVariantGraph.headlessAssumptionContracts[0].assumptions.splice(
+      1,
+      1
+    );
+    expect(validateVerifiedCombatMechanicsPackage(deletedAssumption)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const reordered = structuredClone(contracted);
+    reordered.actionVariantGraph.headlessAssumptionContracts[0].assumptions.reverse();
+    expect(validateVerifiedCombatMechanicsPackage(reordered)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const versioned = structuredClone(contracted);
+    versioned.actionVariantGraph.headlessAssumptionContracts[0].assumptionVersion =
+      '1.0.1';
+    expect(validateVerifiedCombatMechanicsPackage(versioned)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const rehashed = structuredClone(contracted);
+    rehashed.actionVariantGraph.headlessAssumptionContracts[0].assumptionHash =
+      'b'.repeat(64);
+    expect(validateVerifiedCombatMechanicsPackage(rehashed)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    const staleBinding = structuredClone(contracted);
+    const staleBindingContract =
+      staleBinding.actionVariantGraph.headlessAssumptionContracts[0];
+    staleBindingContract.assumptions[0].selectedSemantics.precedence =
+      'recomputed-new-tier';
+    staleBindingContract.assumptionHash =
+      computeHeadlessAssumptionHash(staleBindingContract);
+    expect(validateVerifiedCombatMechanicsPackage(staleBinding)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
+
+    staleBinding.actionVariantGraph.chargingReleaseBindings[0].assumptionHash =
+      staleBindingContract.assumptionHash;
+    expect(validateVerifiedCombatMechanicsPackage(staleBinding)).toMatchObject({
+      valid: true,
+      issues: [],
+    });
+
+    const parityClaim = structuredClone(contracted);
+    parityClaim.actionVariantGraph.headlessAssumptionContracts[0].clientParityReady =
+      true;
+    expect(validateVerifiedCombatMechanicsPackage(parityClaim)).toMatchObject({
+      valid: false,
+      issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
+    });
   });
 
   it('rejects packages that lose the verified evidence gate', () => {

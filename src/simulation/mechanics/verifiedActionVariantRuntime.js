@@ -27,6 +27,7 @@ import {
 import { msToFrame } from '../../domain/timebase';
 import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
+import { resolveVerifiedChargingReleaseWindow } from '../../domain/verifiedChargingReleaseSelection';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -147,7 +148,8 @@ export function createVerifiedActionVariantRuntime({
       profile.applied &&
       (profile.runtimeGenerationMode == null ||
         profile.runtimeGenerationMode === 'action-variant-runtime' ||
-        profile.runtimeGenerationMode === 'persistent-property-runtime')
+        profile.runtimeGenerationMode === 'persistent-property-runtime' ||
+        profile.runtimeGenerationMode === 'controlled-entry-property-runtime')
   );
   const graph = mechanicsPackage.actionVariantGraph;
   const publicControlSkillIdsByOwner = new Map();
@@ -166,6 +168,9 @@ export function createVerifiedActionVariantRuntime({
     .sort(compareBindings);
   const contextBindings = (graph.contextEdges ?? [])
     .filter(edge => edge.applied)
+    .sort(compareBindings);
+  const chargingReleaseBindings = (graph.chargingReleaseBindings ?? [])
+    .filter(binding => binding.applied)
     .sort(compareBindings);
   const publicActionForms = (graph.publicActionForms ?? []).filter(
     form => form.applied
@@ -1067,6 +1072,38 @@ export function createVerifiedActionVariantRuntime({
     }
   }
 
+  for (const interval of controlledActorTimeline?.intervals ?? []) {
+    const actorState =
+      variantActorStateById.get(String(interval.actorId)) ??
+      [...variantActorStateById.values()].find(
+        candidate =>
+          Number(candidate.actor?.characterId) === Number(interval.characterId)
+      );
+    if (!actorState) continue;
+    for (const passiveProfile of passiveEffects) {
+      if (
+        passiveProfile.runtimeGenerationMode !==
+          'controlled-entry-property-runtime' ||
+        Number(passiveProfile.ownerId) !== Number(interval.characterId)
+      ) {
+        continue;
+      }
+      for (const trigger of passiveProfile.triggerBindings ?? []) {
+        effectCommands.push(
+          createPersistentPassiveEffectCommand({
+            mechanicsPackage,
+            actorState,
+            profile: passiveProfile,
+            trigger,
+            timeMs: Number(interval.startMs) || 0,
+            sourceKind: 'controlled-entry',
+            sourceTransitionId: interval.sourceTransitionId,
+          })
+        );
+      }
+    }
+  }
+
   for (const { action } of actions) {
     const actionTimeMs = Number(action.startMs) || 0;
     flushPending(actionTimeMs);
@@ -1265,10 +1302,33 @@ export function createVerifiedActionVariantRuntime({
       const defaultSelection = defaultSelectionByControl.get(
         `${characterId}|${publicControlSkillId}`
       );
-      const inputSelection = resolveDerivedInputSelection({
+      const resolvedInputSelection = resolveDerivedInputSelection({
         action: runtimeAction,
         contract: derivedControlContract,
       });
+      const delegatedChargingBinding =
+        resolvedInputSelection.status === 'invalid' &&
+        resolvedInputSelection.selection?.mode === 'release' &&
+        contextSelection.binding
+          ? chargingReleaseBindings.find(
+              binding =>
+                Number(binding.ownerId) === Number(characterId) &&
+                Number(binding.sourceControlSkillId) ===
+                  Number(contextSelection.binding.executionControlSkillId) &&
+                Number(binding.sourceSubSkillIndex) ===
+                  Number(contextSelection.binding.targetSubSkillIndex) &&
+                String(binding.actionKind) === String(mapping?.actionKind)
+            )
+          : null;
+      const inputSelection = delegatedChargingBinding
+        ? {
+            ...resolvedInputSelection,
+            status: 'delegated-to-charging-release',
+            reason: 'release-frame-owned-by-charging-release-binding',
+            delegatedBindingIdentity:
+              delegatedChargingBinding.bindingIdentity,
+          }
+        : resolvedInputSelection;
       if (inputSelection.status === 'invalid') {
         const block = createInputVariantExecutionBlock({
           action,
@@ -1535,7 +1595,105 @@ export function createVerifiedActionVariantRuntime({
       }
     }
 
-    const resolution = applyAttackInputChainTimingResolution({
+    const chargingBinding = chargingReleaseBindings.find(
+      binding =>
+        Number(binding.ownerId) === Number(characterId) &&
+        Number(binding.sourceControlSkillId) ===
+          Number(executionControlSkillId) &&
+        Number(binding.sourceSubSkillIndex) === Number(selectedSubSkillIndex) &&
+        String(binding.actionKind) === String(mapping?.actionKind)
+    );
+    let chargingSelection = null;
+    let sourceChargingResolution = null;
+    if (chargingBinding) {
+      const normalizedReleaseInput = normalizeActionVariantInputSelection(
+        runtimeAction.variantInputSelection
+      );
+      chargingSelection = resolveVerifiedChargingReleaseWindow({
+        windows: chargingBinding.windows,
+        releaseFrame: normalizedReleaseInput?.inputFrame,
+        precedence: chargingBinding.precedence,
+      });
+      if (!chargingSelection.ready) {
+        const block = createChargingReleaseExecutionBlock({
+          action,
+          actorState,
+          binding: chargingBinding,
+          selection: chargingSelection,
+        });
+        executionBlocks.push(block);
+        actionResolutionById.set(action.id, {
+          ...resolveVerifiedCombatActionMechanics(runtimeAction, {
+            selectedControlSkillId: executionControlSkillId,
+            selectedSubSkillIndex,
+            selectionSource,
+            combatScenario: scenario.combatScenario,
+          }),
+          ready: false,
+          applied: false,
+          status: block.reason,
+          reasons: block.reasons,
+        });
+        selectionByActionId.set(action.id, {
+          actionId: action.id,
+          actorId: action.actorId,
+          ownerId: characterId || null,
+          controlSkillId: executionControlSkillId,
+          selectedSubSkillIndex,
+          chargingReleaseSelection: chargingSelection,
+          appliedAssumptionIdentity: chargingBinding.assumptionIdentity,
+          status: block.reason,
+        });
+        lastResolvedActionByActorId.delete(action.actorId);
+        continue;
+      }
+      sourceChargingResolution = resolveVerifiedCombatActionMechanics(
+        runtimeAction,
+        {
+          selectedControlSkillId: executionControlSkillId,
+          selectedSubSkillIndex,
+          selectionSource,
+          combatScenario: scenario.combatScenario,
+        }
+      );
+      const selectedRelease = chargingSelection.selected;
+      const inheritedSource = selectionSource;
+      executionControlSkillId = Number(
+        selectedRelease.executionControlSkillId
+      );
+      selectedSubSkillIndex = Number(selectedRelease.executionSubSkillIndex);
+      selectionSource = {
+        ...(inheritedSource ?? {}),
+        sourceKind: 'verified-charging-release-window',
+        sourceIdentity: [
+          inheritedSource?.sourceIdentity,
+          chargingBinding.sourceIdentity,
+          selectedRelease.sourceIdentity,
+        ]
+          .filter(Boolean)
+          .join('|'),
+        decisionFrame: chargingSelection.releaseFrame,
+        executionTiming: selectedRelease.executionTiming,
+        semanticIdentity: selectedRelease.semanticIdentity,
+        semanticName: selectedRelease.semanticName,
+        chargingRelease: {
+          bindingIdentity: chargingBinding.bindingIdentity,
+          sourceControlSkillId: chargingBinding.sourceControlSkillId,
+          sourceSubSkillIndex: chargingBinding.sourceSubSkillIndex,
+          releaseFrame: chargingSelection.releaseFrame,
+          selectedWindowIdentity: chargingSelection.selectedWindowIdentity,
+          candidateWindowIdentities:
+            chargingSelection.candidateWindowIdentities,
+          precedence: chargingBinding.precedence,
+          boundary: chargingBinding.boundary,
+          assumptionIdentity: chargingBinding.assumptionIdentity,
+          assumptionVersion: chargingBinding.assumptionVersion,
+          assumptionHash: chargingBinding.assumptionHash,
+        },
+      };
+    }
+
+    let resolution = applyAttackInputChainTimingResolution({
       resolution: resolveVerifiedCombatActionMechanics(runtimeAction, {
         selectedControlSkillId: executionControlSkillId,
         selectedSubSkillIndex,
@@ -1546,6 +1704,14 @@ export function createVerifiedActionVariantRuntime({
       segment: attackChainSelection.segment,
       attackInputSegment: runtimeAction.attackInput,
     });
+    if (chargingBinding && chargingSelection?.ready) {
+      resolution = composeVerifiedChargingReleaseResolution({
+        resolution,
+        sourceResolution: sourceChargingResolution,
+        binding: chargingBinding,
+        selection: chargingSelection,
+      });
+    }
     if (
       mapping?.actionKind === 'perfect-parry' &&
       Number(characterId) === 109001 &&
@@ -2545,10 +2711,14 @@ function createPersistentPassiveEffectCommand({
   profile,
   trigger,
   timeMs,
+  sourceKind = 'battle-start',
+  sourceTransitionId = null,
 }) {
   const effectIdentity = profile.passiveIdentity;
   return {
-    id: `verified-passive|battle-start|${effectIdentity}|${trigger.triggerIdentity}`,
+    id: `verified-passive|${sourceKind}|${effectIdentity}|${
+      sourceTransitionId ?? trigger.triggerIdentity
+    }|${timeMs}`,
     sourceActionId: null,
     sourceActionName: null,
     sourceActorId: actorState.actor.id,
@@ -2571,7 +2741,7 @@ function createPersistentPassiveEffectCommand({
     sourceIdentity: {
       packageId: mechanicsPackage.packageId,
       packageHash: mechanicsPackage.packageHash,
-      actionBindingIdentity: 'battle-start',
+      actionBindingIdentity: sourceKind,
       effectIdentity,
       sourceIdentity: [profile.sourceIdentity, trigger.sourceIdentity].join(
         '|'
@@ -2730,6 +2900,13 @@ function createVariantSelectionRecord({
     predecessorEffectiveEndMs:
       selectionSource?.contextualInputScheduling?.predecessorEffectiveEndMs ??
       null,
+    chargingRelease: selectionSource?.chargingRelease ?? null,
+    appliedAssumptionIdentity:
+      selectionSource?.chargingRelease?.assumptionIdentity ?? null,
+    appliedAssumptionVersion:
+      selectionSource?.chargingRelease?.assumptionVersion ?? null,
+    appliedAssumptionHash:
+      selectionSource?.chargingRelease?.assumptionHash ?? null,
     attackInputChainIdentity: selectionSource?.chainIdentity ?? null,
     attackChainSequenceIndex: selectionSource?.chainSequenceIndex ?? null,
     ...(action.attackGroupId == null
@@ -2774,6 +2951,198 @@ function createVariantSelectionRecord({
       (resolution?.ready
         ? 'verified-action-variant-selection-ready'
         : 'unresolved-action-variant-selection'),
+  };
+}
+
+function composeVerifiedChargingReleaseResolution({
+  resolution,
+  sourceResolution,
+  binding,
+  selection,
+}) {
+  if (!resolution?.ready || !sourceResolution?.ready || !selection?.ready) {
+    return {
+      ...(resolution ?? {}),
+      ready: false,
+      applied: false,
+      status: 'verified-charging-release-composition-unresolved',
+      reasons: [
+        ...(resolution?.reasons ?? []),
+        ...(sourceResolution?.reasons ?? []),
+        'charging-release-source-or-target-resolution-unready',
+      ],
+    };
+  }
+  const releaseFrame = Number(selection.releaseFrame);
+  const releaseDurationFrames = Number(
+    resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ??
+      resolution.actionBinding?.actualDurationFrames ??
+      0
+  );
+  const durationFrames = releaseFrame + releaseDurationFrames;
+  const frameRate = Number(resolution.controlBinding?.frameRate) || FRAME_RATE;
+  const sourceHits = (sourceResolution.hits ?? []).filter(
+    hit => Number(hit.trigger?.startFrame) < releaseFrame
+  );
+  const sourceAllHits = (sourceResolution.allHits ?? sourceResolution.hits ?? [])
+    .filter(hit => Number(hit.trigger?.startFrame) < releaseFrame);
+  const sourceEffects = (sourceResolution.effects ?? []).filter(
+    effect => Number(effect.trigger?.startFrame) < releaseFrame
+  );
+  const releaseHits = (resolution.hits ?? []).map(hit =>
+    shiftChargingReleaseRecord(hit, releaseFrame, binding.bindingIdentity)
+  );
+  const releaseAllHits = (resolution.allHits ?? resolution.hits ?? []).map(
+    hit => shiftChargingReleaseRecord(hit, releaseFrame, binding.bindingIdentity)
+  );
+  const releaseEffects = (resolution.effects ?? []).map(effect =>
+    shiftChargingReleaseRecord(effect, releaseFrame, binding.bindingIdentity)
+  );
+  const hits = [...sourceHits, ...releaseHits];
+  const allHits = [...sourceAllHits, ...releaseAllHits];
+  const effects = [...sourceEffects, ...releaseEffects];
+  const chargingRelease = {
+    bindingIdentity: binding.bindingIdentity,
+    sourceControlSkillId: binding.sourceControlSkillId,
+    sourceSubSkillIndex: binding.sourceSubSkillIndex,
+    executionControlSkillId: Number(
+      selection.selected.executionControlSkillId
+    ),
+    executionSubSkillIndex: Number(
+      selection.selected.executionSubSkillIndex
+    ),
+    releaseFrame,
+    releaseDurationFrames,
+    durationFrames,
+    selectedWindowIdentity: selection.selectedWindowIdentity,
+    candidateWindowIdentities: selection.candidateWindowIdentities,
+    overlappingCandidateCount: selection.overlappingCandidateCount,
+    precedence: binding.precedence,
+    boundary: binding.boundary,
+    assumptionIdentity: binding.assumptionIdentity,
+    assumptionVersion: binding.assumptionVersion,
+    assumptionHash: binding.assumptionHash,
+    status: 'verified-charging-release-composition-ready',
+    applied: true,
+  };
+  return {
+    ...resolution,
+    status: 'verified-combat-action-mechanics-charging-release-ready',
+    hits,
+    allHits,
+    effects,
+    controlBinding: {
+      ...resolution.controlBinding,
+      hits,
+      effects,
+      compositeControlSegments: [
+        {
+          controlSkillId: binding.sourceControlSkillId,
+          subSkillIndex: binding.sourceSubSkillIndex,
+          startFrame: 0,
+          endFrame: releaseFrame,
+          boundary: 'right-open',
+        },
+        {
+          controlSkillId: Number(
+            selection.selected.executionControlSkillId
+          ),
+          subSkillIndex: Number(
+            selection.selected.executionSubSkillIndex
+          ),
+          startFrame: releaseFrame,
+          endFrame: durationFrames,
+          boundary: 'right-open',
+        },
+      ],
+    },
+    actionBinding: {
+      ...resolution.actionBinding,
+      actualDurationFrames: durationFrames,
+      actualDurationMs: framesToMs(durationFrames, frameRate),
+      effectiveOccupancyFrames: durationFrames,
+      selectedHitIdentities: hits.map(hit => hit.hitIdentity),
+      selectedEffectIdentities: effects.map(effect => effect.effectIdentity),
+      runtimeHitCount: hits.length,
+      runtimeEffectCount: effects.filter(
+        effect => effect.classification === 'applied'
+      ).length,
+      actionTiming: {
+        ...(resolution.actionBinding?.actionTiming ?? {}),
+        status: 'applied',
+        occupancy: {
+          ...(resolution.actionBinding?.actionTiming?.occupancy ?? {}),
+          startFrame: 0,
+          endFrame: durationFrames,
+          durationFrames,
+          frameRate,
+          status: 'applied',
+          sourceKind: 'verified-charging-release-composition',
+          sourceIdentity: binding.sourceIdentity,
+        },
+      },
+      chargingRelease,
+      appliedAssumptionIdentities: [binding.assumptionIdentity],
+    },
+    chargingRelease,
+    appliedAssumptionIdentities: [binding.assumptionIdentity],
+  };
+}
+
+function shiftChargingReleaseRecord(record, frameOffset, bindingIdentity) {
+  const trigger = record?.trigger ?? {};
+  const shift = value =>
+    Number.isFinite(Number(value)) ? Number(value) + frameOffset : value;
+  return {
+    ...record,
+    trigger: {
+      ...trigger,
+      startFrame: shift(trigger.startFrame),
+      impactFrame: shift(trigger.impactFrame),
+      endFrame: shift(trigger.endFrame),
+      sourceIdentity: [
+        trigger.sourceIdentity,
+        `charging-release:${bindingIdentity}:offset=${frameOffset}`,
+      ]
+        .filter(Boolean)
+        .join('|'),
+    },
+    chargingReleaseFrameOffset: frameOffset,
+    sourceIdentity: [
+      record.sourceIdentity,
+      `charging-release:${bindingIdentity}:offset=${frameOffset}`,
+    ]
+      .filter(Boolean)
+      .join('|'),
+  };
+}
+
+function createChargingReleaseExecutionBlock({
+  action,
+  actorState,
+  binding,
+  selection,
+}) {
+  return {
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-charging-release-execution-block',
+    code: 'verified-charging-release-selection-unresolved',
+    status: 'unresolved',
+    executable: false,
+    actionId: action.id,
+    actionName: action.name ?? action.id,
+    actorId: action.actorId ?? null,
+    ownerId: actorState?.profile?.ownerId ?? binding.ownerId,
+    controlSkillId: binding.sourceControlSkillId,
+    selectedSubSkillIndex: binding.sourceSubSkillIndex,
+    bindingIdentity: binding.bindingIdentity,
+    appliedAssumptionIdentity: binding.assumptionIdentity,
+    releaseFrame: selection.releaseFrame,
+    candidateWindowIdentities: selection.candidateWindowIdentities ?? [],
+    reason: selection.status,
+    reasons: selection.reasons ?? [selection.status],
+    sourceIdentity: binding.sourceIdentity,
+    appliedToCalculators: true,
   };
 }
 

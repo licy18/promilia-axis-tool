@@ -40,6 +40,13 @@ const generatedManifestIndexPath = path.join(
   'generated',
   'character-acceptance-manifest-index.json'
 );
+const verifiedMechanicsPackagePath = path.join(
+  projectRoot,
+  'src',
+  'data',
+  'generated',
+  'verified-combat-mechanics-package.json'
+);
 const reportRoot = path.join(
   projectRoot,
   'reports',
@@ -56,6 +63,9 @@ const runtimeOverlayOutput = readOptionalPathArgument(
 if (runtimeOverlayOutput && requestedOwnerId == null) {
   throw new Error('--runtime-overlay-output requires one --owner');
 }
+const runtimePackageOutputPath = readRuntimePackageOutputPath(
+  process.argv.slice(2)
+);
 
 const recipes = (await loadRecipes()).filter(
   recipe =>
@@ -67,17 +77,11 @@ if (requestedOwnerId != null && recipes.length !== 1) {
   );
 }
 for (const recipe of recipes) {
-  await verifyProductVisualEvidenceFiles(recipe, { projectRoot });
+  if (!runtimePackageOutputPath) {
+    await verifyProductVisualEvidenceFiles(recipe, { projectRoot });
+  }
 }
-const mechanicsPackage = await readJson(
-  path.join(
-    projectRoot,
-    'src',
-    'data',
-    'generated',
-    'verified-combat-mechanics-package.json'
-  )
-);
+const mechanicsPackage = await readJson(verifiedMechanicsPackagePath);
 const vite = await createServer({
   root: projectRoot,
   server: { middlewareMode: true },
@@ -109,6 +113,7 @@ try {
   );
   const manifests = [];
   const visualRuns = [];
+  let exportedRuntimePackage = null;
 
   for (const recipe of recipes) {
     const ownerId = Number(recipe.ownerId);
@@ -167,6 +172,28 @@ try {
           fixture.dataIdentity?.verifiedMechanicsPackageHash
         )
       : mechanicsPackage;
+    if (runtimePackageOutputPath) {
+      if (recipes.length !== 1 || requestedOwnerId == null) {
+        throw new Error(
+          '--runtime-package-output requires exactly one explicit --owner'
+        );
+      }
+      await fs.mkdir(path.dirname(runtimePackageOutputPath), {
+        recursive: true,
+      });
+      await fs.writeFile(
+        runtimePackageOutputPath,
+        jsonText(runtimePackage),
+        'utf8'
+      );
+      exportedRuntimePackage = {
+        ownerId,
+        packageId: runtimePackage.packageId,
+        packageHash: runtimePackage.packageHash,
+        outputPath: runtimePackageOutputPath,
+      };
+      continue;
+    }
     const packageValidation =
       packageModule.validateVerifiedCombatMechanicsPackage(runtimePackage);
     if (!packageValidation.valid) {
@@ -262,14 +289,18 @@ try {
     visualRuns.push(visualScenario);
   }
 
-  const result =
-    requestedOwnerId == null
-      ? createPublishedAcceptanceResult(manifests, visualRuns)
-      : createOwnerAcceptanceResult(manifests, visualRuns);
-  const { report, outputs } = result;
-  if (writeMode) await writeOutputs(outputs);
-  if (assertClean) await assertOutputsClean(outputs);
-  console.log(JSON.stringify(report.summary, null, 2));
+  if (runtimePackageOutputPath) {
+    console.log(JSON.stringify(exportedRuntimePackage, null, 2));
+  } else {
+    const result =
+      requestedOwnerId == null
+        ? createPublishedAcceptanceResult(manifests, visualRuns)
+        : createOwnerAcceptanceResult(manifests, visualRuns);
+    const { report, outputs } = result;
+    if (writeMode) await writeOutputs(outputs);
+    if (assertClean) await assertOutputsClean(outputs);
+    console.log(JSON.stringify(report.summary, null, 2));
+  }
 } finally {
   await vite.close();
 }
@@ -522,6 +553,29 @@ function createRuntimeProfileOverlay(
         Number(row?.controlSkillId),
       ].join('|')
   );
+  const runtimeFormulaIdentities = new Set(
+    result.semanticEffectCatalog.formulas.map(entry => entry.formulaIdentity)
+  );
+  const overlaySemanticEffects = (
+    profile.contracts?.effects?.semantic ?? []
+  ).filter(
+    effect =>
+      effect.role === 'gameplay-effect' &&
+      effect.classification === 'applied' &&
+      effect.placementResolution === 'static-resolved' &&
+      runtimeFormulaIdentities.has(effect.formulaIdentity)
+  );
+  result.semanticEffectCatalog.semanticEffects = upsertRows(
+    result.semanticEffectCatalog.semanticEffects,
+    overlaySemanticEffects,
+    row => String(row?.semanticIdentity ?? '')
+  );
+  result.semanticEffectCatalog.summary = {
+    ...(result.semanticEffectCatalog.summary ?? {}),
+    runtimeEffectCount:
+      result.semanticEffectCatalog.semanticEffects.length,
+    runtimeFormulaCount: result.semanticEffectCatalog.formulas.length,
+  };
   const graph = result.actionVariantGraph;
   graph.publicActionForms = upsertRows(
     graph.publicActionForms,
@@ -532,6 +586,23 @@ function createRuntimeProfileOverlay(
     graph.contextEdges,
     profile.contracts?.timingInputEdges,
     row => String(row?.edgeIdentity ?? '')
+  );
+  graph.headlessAssumptionContracts = upsertRows(
+    graph.headlessAssumptionContracts,
+    profile.contracts?.headlessAssumptionContract
+      ? [profile.contracts.headlessAssumptionContract]
+      : [],
+    row => Number(row?.ownerId)
+  );
+  graph.chargingReleaseBindings = upsertRows(
+    graph.chargingReleaseBindings,
+    profile.contracts?.chargingReleaseBindings,
+    row => `${Number(row?.ownerId)}|${String(row?.bindingIdentity ?? '')}`
+  );
+  graph.breakTriggerWatchers = upsertRows(
+    graph.breakTriggerWatchers,
+    profile.contracts?.breakTriggerWatchers,
+    row => `${Number(row?.ownerId)}|${String(row?.watcherIdentity ?? '')}`
   );
   graph.edges = upsertRows(graph.edges, profile.contracts?.variantEdges, row =>
     String(row?.edgeIdentity ?? '')
@@ -848,7 +919,8 @@ function executeVisualScenario({
     negativeCase => inspectNegativeActionCase(service, fixture, negativeCase)
   );
   const isolatedActionCases = (recipe.isolatedActionCases ?? []).map(
-    isolatedCase => inspectIsolatedActionCase(service, fixture, isolatedCase)
+    isolatedCase =>
+      inspectIsolatedActionCase(service, fixture, isolatedCase, profile)
   );
   const runtimeInterruptionCases = (recipe.runtimeInterruptionCases ?? []).map(
     interruptionCase =>
@@ -898,7 +970,12 @@ function executeVisualScenario({
     fixture.scenario.id
   );
   const sourceHitAliases = projectSourceHitAliases(first, fixture.scenario.id);
-  const assertionResults = [
+  const isolatedTraceProjections = isolatedActionCases.flatMap(result =>
+    result.actual?.traceProjection ? [result.actual.traceProjection] : []
+  );
+  const collectIsolatedProjectionRows = key =>
+    isolatedTraceProjections.flatMap(projection => projection[key] ?? []);
+  const baseAssertionResults = [
     {
       identity: 'machine-axis-validation',
       passed: validation.valid,
@@ -967,6 +1044,57 @@ function executeVisualScenario({
     ...actionLevelCases,
     ...probeResults,
   ];
+  const baseAssertionByIdentity = new Map(
+    baseAssertionResults.map(result => [String(result.identity), result])
+  );
+  if (baseAssertionByIdentity.size !== baseAssertionResults.length) {
+    throw new Error(
+      'Duplicate base assertion identity in character acceptance recipe for ' +
+        recipe.ownerId
+    );
+  }
+  const scenarioFactAliases = (recipe.scenarioFactAliases ?? []).map(alias => {
+    const factIdentity = String(alias?.factIdentity ?? '').trim();
+    const sourceAssertionIdentities = (alias?.allOfAssertionIdentities ?? []).map(
+      identity => String(identity).trim()
+    );
+    if (!factIdentity || sourceAssertionIdentities.length === 0) {
+      throw new Error(
+        'Invalid scenario fact alias in character acceptance recipe for ' +
+          recipe.ownerId
+      );
+    }
+    const sourceStatuses = sourceAssertionIdentities.map(identity => {
+      const source = baseAssertionByIdentity.get(identity);
+      return {
+        assertionIdentity: identity,
+        status:
+          source == null ? 'missing' : source.passed ? 'passed' : 'blocked',
+      };
+    });
+    return {
+      identity: factIdentity,
+      passed: sourceStatuses.every(source => source.status === 'passed'),
+      actual: {
+        derivation: 'all-source-assertions-passed',
+        sourceAssertionIdentities,
+        sourceStatuses,
+      },
+    };
+  });
+  const assertionResults = [
+    ...baseAssertionResults,
+    ...scenarioFactAliases,
+  ];
+  if (
+    new Set(assertionResults.map(result => String(result.identity))).size !==
+    assertionResults.length
+  ) {
+    throw new Error(
+      'Duplicate assertion or scenario fact identity in character acceptance recipe for ' +
+        recipe.ownerId
+    );
+  }
   const failed = assertionResults.filter(result => !result.passed);
   const selectionRows = first.trace?.variants?.selections ?? [];
   const selectionByActionId = new Map(
@@ -1074,6 +1202,7 @@ function executeVisualScenario({
           actualDurationFrames: selection.actualDurationFrames,
         })),
         ...sourceActionBindingForms,
+        ...collectIsolatedProjectionRows('actionForms'),
       ],
       hits: [
         ...(first.trace?.damage ?? [])
@@ -1088,6 +1217,7 @@ function executeVisualScenario({
             sourceSequencePath: event.sourceSequencePath ?? null,
           })),
         ...sourceHitAliases,
+        ...collectIsolatedProjectionRows('hits'),
       ],
       resources: [
         ...(first.trace?.variants?.resourceEvents ?? []).map(
@@ -1103,6 +1233,7 @@ function executeVisualScenario({
             afterValue: event.payload?.afterValue ?? null,
           })
         ),
+        ...collectIsolatedProjectionRows('resources'),
       ],
       states: (first.trace?.state?.targetEvents ?? []).map((event, index) => ({
         projectionIdentity:
@@ -1152,6 +1283,7 @@ function executeVisualScenario({
         ...verifiedDirectEffectSources,
         ...tuningMarkResourceEffects,
         ...runtimeEffectEvidence,
+        ...collectIsolatedProjectionRows('effects'),
       ].map(withActionCoordinate),
       diagnostics: [
         ...(first.trace?.diagnostics?.validationWarnings ?? []),
@@ -1163,9 +1295,10 @@ function executeVisualScenario({
         code: diagnostic.code ?? null,
         status: diagnostic.status ?? null,
       })),
-      criticalDecisions: (first.trace?.damage ?? [])
-        .filter(event => event.formula?.randomBranch)
-        .map((event, index) => ({
+      criticalDecisions: [
+        ...(first.trace?.damage ?? [])
+          .filter(event => event.formula?.randomBranch)
+          .map((event, index) => ({
           projectionIdentity:
             'machine-critical:' + fixture.scenario.id + ':' + index,
           actionId: event.actionId ?? null,
@@ -1178,9 +1311,42 @@ function executeVisualScenario({
           effectiveThresholdBasisPoints:
             event.formula.randomBranch.criticalThreshold ?? null,
           criticalRoll: event.formula.randomBranch.criticalRoll ?? null,
-          critical: event.formula.randomBranch.critical ?? null,
-        })),
-      ...profileRows,
+            critical: event.formula.randomBranch.critical ?? null,
+          })),
+        ...collectIsolatedProjectionRows('criticalDecisions'),
+      ],
+      attackInputChains: [
+        ...profileRows.attackInputChains,
+        ...collectIsolatedProjectionRows('attackInputChains'),
+      ],
+      stateMachines: [
+        ...profileRows.stateMachines,
+        ...collectIsolatedProjectionRows('stateMachines'),
+      ],
+      controlWindows: [
+        ...profileRows.controlWindows,
+        ...collectIsolatedProjectionRows('controlWindows'),
+      ],
+      variantEdges: [
+        ...profileRows.variantEdges,
+        ...collectIsolatedProjectionRows('variantEdges'),
+      ],
+      variantWindows: [
+        ...profileRows.variantWindows,
+        ...collectIsolatedProjectionRows('variantWindows'),
+      ],
+      conditionalHitGroups: [
+        ...profileRows.conditionalHitGroups,
+        ...collectIsolatedProjectionRows('conditionalHitGroups'),
+      ],
+      passives: [
+        ...profileRows.passives,
+        ...collectIsolatedProjectionRows('passives'),
+      ],
+      switchTriggers: [
+        ...profileRows.switchTriggers,
+        ...collectIsolatedProjectionRows('switchTriggers'),
+      ],
       facts: Object.fromEntries(
         assertionResults.map(result => [result.identity, result.passed])
       ),
@@ -1988,6 +2154,54 @@ function projectVerifiedTuningJudgmentEffects(run, profile, scenarioId) {
     if (judgment.executed !== true || !acceptedStatuses.has(judgment.status)) {
       continue;
     }
+    if (
+      judgment.applied === true &&
+      judgment.status === 'verified-tuning-consume-applied'
+    ) {
+      const delegatedEffects = semanticEffects.filter(effect => {
+        const delegation = effect.formulaRuntime?.delegation;
+        const semanticSubSkillIndex = firstInteger(
+          effect.subSkillIndex,
+          effect.selectedSubSkillIndex,
+          effect.mapIndex,
+          ...(effect.trigger?.subSkillIndexes ?? [])
+        );
+        return (
+          delegation?.kind ===
+            'verified-tuning-overlimit-consumption-runtime' &&
+          delegation.applied === true &&
+          Number(effect.controlSkillId) === Number(judgment.controlSkillId) &&
+          semanticSubSkillIndex === Number(judgment.subSkillIndex) &&
+          String(delegation.judgmentGroupIdentity ?? '') ===
+            String(judgment.judgmentGroupIdentity ?? '')
+        );
+      });
+      for (const delegatedEffect of delegatedEffects) {
+        rows.push({
+          projectionIdentity:
+            'machine-delegated-tuning-effect:' +
+            scenarioId +
+            ':' +
+            index +
+            ':' +
+            delegatedEffect.semanticIdentity,
+          actionId: judgment.actionId ?? null,
+          controlSkillId: judgment.controlSkillId,
+          subSkillIndex: judgment.subSkillIndex,
+          effectIdentity: 'battle-element:' + Number(delegatedEffect.elementId),
+          operation: 'delegated-tuning-consume-runtime',
+          absoluteFrame: judgment.absoluteFrame ?? null,
+          triggerFrame: judgment.triggerFrame ?? null,
+          behaviorPathId: judgment.behaviorPathId ?? null,
+          applied: true,
+          status: judgment.status,
+          sourceIdentity:
+            delegatedEffect.formulaRuntime?.delegation?.sourceIdentity ??
+            judgment.sourceIdentity ??
+            null,
+        });
+      }
+    }
     const semanticEffect = semanticEffects.find(effect => {
       const semanticSubSkillIndex = firstInteger(
         effect.subSkillIndex,
@@ -2009,10 +2223,12 @@ function projectVerifiedTuningJudgmentEffects(run, profile, scenarioId) {
         semanticSubSkillIndex === Number(judgment.subSkillIndex) &&
         Number(effect.elementId) === Number(judgment.judgmentElementId) &&
         String(effect.pathId ?? '') === String(judgment.judgmentPathId ?? '') &&
-        Number(effect.trigger?.startFrame) === Number(judgment.triggerFrame) &&
         String(effect.trigger?.behaviorPathId ?? '') ===
           String(judgment.behaviorPathId ?? '') &&
-        String(judgment.sourceIdentity ?? '') === expectedRuntimeSourceIdentity
+        matchesRuntimeSourceIdentity(
+          judgment.sourceIdentity,
+          expectedRuntimeSourceIdentity
+        )
       );
     });
     if (!semanticEffect) continue;
@@ -2165,6 +2381,81 @@ function projectCharacterRuntimeEffectEvidence(run, profile, scenarioId) {
       });
     }
   }
+  const effectEvents = run.trace?.effects?.events ?? [];
+  for (const binding of profile.contracts?.actionEffectBindings ?? []) {
+    if (
+      !binding.assumptionIdentity ||
+      !Number.isInteger(Number(binding.elementId))
+    ) {
+      continue;
+    }
+    const seenActions = new Set();
+    for (const event of effectEvents) {
+      if (
+        !['apply', 'refresh'].includes(String(event.operation)) ||
+        String(event.appliedAssumptionIdentity ?? '') !==
+          String(binding.assumptionIdentity)
+      ) {
+        continue;
+      }
+      const selection = selectionsByActionId.get(event.actionId);
+      if (
+        Number(selection?.controlSkillId) !== Number(binding.controlSkillId) ||
+        Number(selection?.subSkillIndex) !== Number(binding.subSkillIndex) ||
+        seenActions.has(String(event.actionId))
+      ) {
+        continue;
+      }
+      seenActions.add(String(event.actionId));
+      rows.push({
+        projectionIdentity:
+          'machine-runtime-assumption-container-effect:' +
+          scenarioId +
+          ':' +
+          binding.bindingIdentity +
+          ':' +
+          event.actionId,
+        actionId: event.actionId ?? null,
+        controlSkillId: binding.controlSkillId,
+        subSkillIndex: binding.subSkillIndex,
+        effectIdentity: 'battle-element:' + Number(binding.elementId),
+        operation: event.operation,
+        targetId: event.targetId ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        sourceIdentity: binding.sourceIdentity ?? event.sourceIdentity ?? null,
+        appliedAssumptionIdentity: binding.assumptionIdentity,
+      });
+    }
+  }
+  for (const [eventIndex, event] of (run.trace?.events ?? []).entries()) {
+    if (event.type !== 'VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED') continue;
+    const appliedEffectIdentities = event.payload?.effectId
+      ? [event.payload.effectId]
+      : (event.payload?.appliedEffectIdentities ?? []).map(identity =>
+          String(identity).replace(/:actor-[^:]+$/, '')
+        );
+    for (const [effectIndex, effectIdentity] of [
+      ...new Set(appliedEffectIdentities),
+    ].entries()) {
+      rows.push({
+        projectionIdentity:
+          'machine-runtime-break-watcher-effect:' +
+          scenarioId +
+          ':' +
+          eventIndex +
+          ':' +
+          effectIndex,
+        actionId: event.actionId ?? null,
+        effectIdentity: String(effectIdentity),
+        operation: 'watcher-trigger-apply',
+        targetId: event.targetId ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        sourceIdentity: event.payload?.sourceIdentity ?? null,
+        appliedAssumptionIdentity:
+          event.payload?.appliedAssumptionIdentity ?? null,
+      });
+    }
+  }
   for (const passive of profile.contracts?.passives ?? []) {
     for (const [triggerIndex, trigger] of (
       passive.triggerBindings ?? []
@@ -2246,8 +2537,9 @@ function projectTuningMarkResourceEffects(run, profile, scenarioId) {
   const sourceEffects = (profile.contracts?.controls ?? []).flatMap(control =>
     (control.effects ?? []).filter(
       effect =>
-        effect.tuningOverlimit?.maximumStacks != null &&
-        Number(effect.tuningOverlimit.maximumStacks) > 0
+        effect.tuningOverlimit != null &&
+        Number(effect.tuningOverlimit?.minimumStacks) > 0 &&
+        Number.isInteger(Number(effect.tuningOverlimit?.judgmentElementId))
     )
   );
   const controlEffects = (profile.contracts?.controls ?? []).flatMap(
@@ -2332,7 +2624,10 @@ function projectTuningMarkResourceEffects(run, profile, scenarioId) {
     const sourceEffect = sourceEffects.find(
       effect =>
         eventSourceIdentity != null &&
-        String(effect.sourceIdentity) === String(eventSourceIdentity) &&
+        matchesRuntimeSourceIdentity(
+          eventSourceIdentity,
+          effect.sourceIdentity
+        ) &&
         Number(effect.tuningOverlimit?.markId) === markId
     );
     const overlimitDamageElementIds = new Set(
@@ -2599,16 +2894,27 @@ function collectActionBindingEvidence(run) {
 
 function parseActionBindingIdentity(value) {
   const match = String(value ?? '').match(
-    /^actor\|(\d+)\|\d+\|\d+\|(\d+)\|([^|]+)\|execution-control:(\d+)\|sub:(\d+)$/
+    /^actor\|(\d+)\|(\d+)\|(\d+)\|(\d+)\|([^|]+)\|execution-control:(\d+)\|sub:(\d+)$/
   );
   if (!match) return null;
   return {
     ownerId: Number(match[1]),
-    controlSkillId: Number(match[2]),
-    actionKind: match[3],
-    executionControlSkillId: Number(match[4]),
-    subSkillIndex: Number(match[5]),
+    publicActionId: Number(match[2]),
+    publicVariantIndex: Number(match[3]),
+    controlSkillId: Number(match[4]),
+    actionKind: match[5],
+    executionControlSkillId: Number(match[6]),
+    subSkillIndex: Number(match[7]),
   };
+}
+
+function matchesRuntimeSourceIdentity(actual, expected) {
+  const actualText = String(actual ?? '');
+  const expectedText = String(expected ?? '');
+  return (
+    actualText === expectedText ||
+    actualText.startsWith(expectedText + '|charging-release:')
+  );
 }
 
 function extractBattleElementIds(sourceText) {
@@ -3429,13 +3735,25 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
   };
 }
 
-function inspectIsolatedActionCase(service, fixture, isolatedCase) {
+function inspectIsolatedActionCase(service, fixture, isolatedCase, profile) {
   const contract = structuredClone(fixture);
   contract.actions = structuredClone(isolatedCase.actions ?? []);
   contract.scenario.id += '--isolated--' + String(isolatedCase.identity);
   contract.scenario.durationFrames = Number(
     isolatedCase.durationFrames ?? fixture.scenario.durationFrames
   );
+  for (const key of [
+    'team',
+    'initialRuntimeState',
+    'enemy',
+    'target',
+    'critical',
+    'projectile',
+  ]) {
+    if (isolatedCase[key] != null) {
+      contract.scenario[key] = structuredClone(isolatedCase[key]);
+    }
+  }
   const validation = service.validate(contract);
   if (!validation.valid) {
     return {
@@ -3462,7 +3780,176 @@ function inspectIsolatedActionCase(service, fixture, isolatedCase) {
       canonicalHashes: first.hashes,
       stableReplay: sameHashes(first.hashes, second.hashes),
       probeResults,
+      traceProjection: createIsolatedMachineTraceProjection({
+        run: first,
+        profile,
+        scenarioId: contract.scenario.id,
+      }),
     },
+  };
+}
+
+function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
+  const selectionRows = run.trace?.variants?.selections ?? [];
+  const selectionByActionId = new Map(
+    selectionRows.map(selection => [String(selection.actionId), selection])
+  );
+  const withActionCoordinate = row => {
+    const selection = selectionByActionId.get(String(row?.actionId ?? ''));
+    return selection
+      ? {
+          ...row,
+          controlSkillId: selection.controlSkillId,
+          subSkillIndex: selection.subSkillIndex,
+        }
+      : row;
+  };
+  const resourceBackedEffects = projectResourceBackedEffects(run, scenarioId);
+  const appliedEffectSourceElements = projectAppliedEffectSourceElements(
+    run,
+    scenarioId
+  );
+  const tuningComponentEffects = projectVerifiedTuningComponentEffects(
+    run,
+    scenarioId
+  );
+  const tuningJudgmentEffects = projectVerifiedTuningJudgmentEffects(
+    run,
+    profile,
+    scenarioId
+  );
+  const verifiedDirectEffectSources = projectVerifiedDirectEffectSources(
+    run,
+    scenarioId
+  );
+  const tuningMarkResourceEffects = projectTuningMarkResourceEffects(
+    run,
+    profile,
+    scenarioId
+  );
+  const runtimeEffectEvidence = projectCharacterRuntimeEffectEvidence(
+    run,
+    profile,
+    scenarioId
+  );
+  const observedEffectIds = [
+    ...(run.trace?.effects?.events ?? []).map(event => event.effectId),
+    ...resourceBackedEffects.map(event => event.effectIdentity),
+    ...appliedEffectSourceElements.map(event => event.effectIdentity),
+    ...tuningComponentEffects.map(event => event.effectIdentity),
+    ...tuningJudgmentEffects.map(event => event.effectIdentity),
+    ...verifiedDirectEffectSources.map(event => event.effectIdentity),
+    ...tuningMarkResourceEffects.map(event => event.effectIdentity),
+    ...runtimeEffectEvidence.map(event => event.effectIdentity),
+  ];
+  const profileRows = createScenarioProfileProjectionRows({
+    profile,
+    exercisedControls: collectRuntimeExercisedControls(run),
+    exercisedFromHitAndEffectIdentities: [
+      ...(run.trace?.damage ?? []).map(event => event.hitIdentity),
+      ...(run.trace?.effects?.events ?? []).map(event => event.effectId),
+    ],
+    observedEffectIds,
+    observedResourceEvents: run.trace?.variants?.resourceEvents ?? [],
+    observedVariantSelections: selectionRows,
+    scenarioId,
+    prefix: 'machine-isolated',
+  });
+  return {
+    actionForms: selectionRows.map(selection => ({
+      projectionIdentity:
+        'machine-isolated-action-form:' +
+        scenarioId +
+        ':' +
+        selection.actionId,
+      actionId: selection.actionId,
+      ownerId: selection.ownerId,
+      semanticName: selection.semanticName,
+      controlSkillId: selection.controlSkillId,
+      subSkillIndex: selection.subSkillIndex,
+      actualDurationFrames: selection.actualDurationFrames,
+    })),
+    hits: (run.trace?.damage ?? [])
+      .filter(event => event.hitIdentity)
+      .map((event, index) => ({
+        projectionIdentity:
+          'machine-isolated-hit:' + scenarioId + ':' + index,
+        actionId: event.actionId ?? null,
+        hitIdentity: event.hitIdentity,
+        frame: event.frame ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        sourceSequencePath: event.sourceSequencePath ?? null,
+      })),
+    effects: [
+      ...(run.trace?.effects?.events ?? []).map((event, index) => ({
+        projectionIdentity:
+          'machine-isolated-effect:' + scenarioId + ':' + index,
+        actionId: event.actionId ?? null,
+        effectIdentity: event.effectId ?? event.runtimeEffectId ?? null,
+        operation: event.operation ?? null,
+        targetId: event.targetId ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        frameIndex:
+          event.frameIndex ?? event.absoluteFrame ?? event.frame ?? null,
+        timeMs: event.timeMs ?? null,
+        expiresAtMs: event.expiresAtMs ?? null,
+        durationFrames: event.durationFrames ?? null,
+        expiresAtFrame: event.expiresAtFrame ?? event.expireFrame ?? null,
+        sourceIdentity: event.sourceIdentity ?? null,
+        modifiers: structuredClone(event.modifiers ?? []),
+      })),
+      ...(run.trace?.damage ?? [])
+        .filter(event => Number.isInteger(Number(event.elementId)))
+        .map((event, index) => ({
+          projectionIdentity:
+            'machine-isolated-damage-effect:' + scenarioId + ':' + index,
+          actionId: event.actionId ?? null,
+          effectIdentity: 'battle-element:' + Number(event.elementId),
+          operation: 'damage',
+          targetId: event.targetId ?? null,
+          sourceSequencePath: Array.isArray(event.sourceSequencePath)
+            ? [...event.sourceSequencePath]
+            : null,
+        })),
+      ...tuningComponentEffects,
+      ...tuningJudgmentEffects,
+      ...resourceBackedEffects,
+      ...appliedEffectSourceElements,
+      ...verifiedDirectEffectSources,
+      ...tuningMarkResourceEffects,
+      ...runtimeEffectEvidence,
+    ].map(withActionCoordinate),
+    resources: (run.trace?.variants?.resourceEvents ?? []).map(
+      (event, index) => ({
+        projectionIdentity:
+          'machine-isolated-resource:' + scenarioId + ':' + index,
+        actionId: event.actionId ?? null,
+        resourceIdentity: event.payload?.resourceIdentity ?? null,
+        operation: event.payload?.operation ?? event.type ?? null,
+        absoluteFrame: event.absoluteFrame ?? null,
+        beforeValue: event.payload?.beforeValue ?? null,
+        change: event.payload?.change ?? null,
+        afterValue: event.payload?.afterValue ?? null,
+      })
+    ),
+    criticalDecisions: (run.trace?.damage ?? [])
+      .filter(event => event.formula?.randomBranch)
+      .map((event, index) => ({
+        projectionIdentity:
+          'machine-isolated-critical:' + scenarioId + ':' + index,
+        actionId: event.actionId ?? null,
+        hitIdentity: event.hitIdentity ?? null,
+        mode: event.formula.randomBranch.mode ?? null,
+        sourceCriticalBasisPoints:
+          event.formula.randomBranch.sourceCriticalBasisPoints ?? null,
+        targetCriticalDefenseBasisPoints:
+          event.formula.randomBranch.targetCriticalDefenseBasisPoints ?? null,
+        effectiveThresholdBasisPoints:
+          event.formula.randomBranch.criticalThreshold ?? null,
+        criticalRoll: event.formula.randomBranch.criticalRoll ?? null,
+        critical: event.formula.randomBranch.critical ?? null,
+      })),
+    ...profileRows,
   };
 }
 
@@ -3687,6 +4174,7 @@ function inspectRuntimeInterruptionCase({
         delta: event.delta,
         after: event.after,
       })),
+    tuningUnresolved: structuredClone(tuningRuntime.unresolved ?? []),
     finalTuningMarkStacksById: Object.fromEntries(
       seededTuningMarkIds.map(markId => [
         String(markId),
@@ -3804,6 +4292,22 @@ function readOptionalPathArgument(args, name) {
   const value = String(args[index + 1] ?? '').trim();
   if (!value) throw new Error(`Invalid ${name} value`);
   return value;
+}
+
+function readRuntimePackageOutputPath(args) {
+  const index = args.indexOf('--runtime-package-output');
+  if (index < 0) return null;
+  const value = String(args[index + 1] ?? '').trim();
+  if (!value) {
+    throw new Error('--runtime-package-output requires a path');
+  }
+  const outputPath = path.resolve(projectRoot, value);
+  if (outputPath === path.resolve(verifiedMechanicsPackagePath)) {
+    throw new Error(
+      '--runtime-package-output cannot overwrite the global generated package'
+    );
+  }
+  return outputPath;
 }
 
 async function readJson(filePath) {

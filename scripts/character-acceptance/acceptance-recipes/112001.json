@@ -1,0 +1,2078 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrCharacterAcceptanceRecipe",
+  "ownerId": 112001,
+  "runtimeProfileOverlay": true,
+  "skipCriticalMatrix": true,
+  "sourceNotApplicableControlSubskills": [
+    {
+      "identity": "11200101-sub1-unselected-client-control-variant",
+      "controlSkillId": 11200101,
+      "subSkillIndex": 1,
+      "dimensions": ["control-window", "hit"],
+      "reason": "the public normal-attack chain selects sub0 and the charged public action binds control 11200110; no source-backed public selector reaches skill_control_11200101 sub1",
+      "sourceIdentity": "skill_control_11200101.asset#skillPlayers[1]|profile.actionForms=11200103/sub0,11200110/sub0|profile.attackInputChains=11200101/sub0",
+      "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1"
+    },
+    {
+      "identity": "11200121-sub1-unselected-entry-control-variant",
+      "controlSkillId": 11200121,
+      "subSkillIndex": 1,
+      "dimensions": ["control-window", "hit"],
+      "reason": "the source-backed on-enter trigger binds the star-carry action to control 11200121 sub0 and exposes no public or variant edge selecting sub1",
+      "sourceIdentity": "characters.items[id=112001].skillSlots[slot=203,skillId=11200121]|profile.switchTriggers[on-enter].actionVariantIndex=0|skill_control_11200121.asset#skillPlayers[1]",
+      "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1"
+    }
+  ],
+  "fixturePath": "fixtures/character-acceptance/112001-visual.json",
+  "goldenReports": [
+    "reports/m10/112001/golden-trace.json"
+  ],
+  "productVisualAcceptance": {
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
+    "scenarioIdentities": [
+      "m12-b3-112001-assumption-v1-focused-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "fixturePath": "fixtures/character-acceptance/112001-visual.json",
+        "fixtureSha256": "99494ed986ab4dab5c72c96addf54bb35887ab54d4e9dbc082aa50a1026ec22a",
+        "screenshotPath": "reports/m12-b3-112001-workbench-visual-evidence.png",
+        "screenshotSha256": "ca0e8df4693c141c586f178506d3e9c5cfb76004d73892779935f92faad059a7"
+      }
+    ]
+  },
+  "runtimeInterruptionCases": [
+    {
+      "identity": "ultimate-consumer-cutoff-before-191f",
+      "controlSkillId": 11200113,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 191,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [299, 499],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": "acceptance-probe:112001:thunder:1"
+              },
+              {
+                "sourceActionId": "interruption-thunder-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": "acceptance-probe:112001:thunder:2"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [],
+        "finalTuningMarkStacksById": { "250": 2 }
+      }
+    },
+    {
+      "identity": "ultimate-consumer-survives-through-191f",
+      "controlSkillId": 11200113,
+      "subSkillIndex": 0,
+      "actionType": "skill",
+      "effectiveEndFrame": 192,
+      "durationFrames": 600,
+      "effectSelection": {
+        "kind": "element-id",
+        "elementIds": [299, 499],
+        "classification": "applied"
+      },
+      "initialRuntimeState": {
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "interruption-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": "acceptance-probe:112001:thunder:1"
+              },
+              {
+                "sourceActionId": "interruption-thunder-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": "acceptance-probe:112001:thunder:2"
+              }
+            ]
+          }
+        ]
+      },
+      "expectation": {
+        "tuningConsumeEvents": [
+          {
+            "frameIndex": 191,
+            "markId": 250,
+            "before": 2,
+            "delta": -2,
+            "after": 0
+          }
+        ],
+        "finalTuningMarkStacksById": { "250": 0 }
+      }
+    }
+  ],
+  "isolatedActionCases": [
+    {
+      "identity": "heavy2-release-58f-old-tier",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "isolated-heavy2-context-star-58",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-heavy2-release-58",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 58
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy2-58",
+              "contextActionId": "isolated-heavy2-context-star-58"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 67 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "heavy2-58f-remains-early-tier",
+          "actionId": "isolated-heavy2-release-58",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 0
+        }
+      ]
+    },
+    {
+      "identity": "heavy2-release-60f-unique-new-tier",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "isolated-heavy2-context-star-60",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200112,
+            "actionKind": "star-skill",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-heavy2-release-60",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 60
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy2-60",
+              "contextActionId": "isolated-heavy2-context-star-60"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 67 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "heavy2-60f-has-unique-full-tier",
+          "actionId": "isolated-heavy2-release-60",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 1
+        }
+      ]
+    },
+    {
+      "identity": "heavy3-release-66f-old-tier",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "isolated-heavy3-context-a4-66",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 4,
+              "groupId": "isolated-heavy3-a4-66"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-heavy3-release-66",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 66
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy3-66",
+              "contextActionId": "isolated-heavy3-context-a4-66"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 36 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "heavy3-66f-remains-early-tier",
+          "actionId": "isolated-heavy3-release-66",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 2
+        }
+      ]
+    },
+    {
+      "identity": "heavy3-release-68f-unique-new-tier",
+      "durationFrames": 500,
+      "actions": [
+        {
+          "id": "isolated-heavy3-context-a4-68",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 4,
+              "groupId": "isolated-heavy3-a4-68"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-heavy3-release-68",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 68
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy3-68",
+              "contextActionId": "isolated-heavy3-context-a4-68"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 36 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "heavy3-68f-has-unique-full-tier",
+          "actionId": "isolated-heavy3-release-68",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 3
+        }
+      ]
+    },
+    {
+      "identity": "watcher-128f-break-no-retroactive-trigger",
+      "durationFrames": 1000,
+      "enemy": {
+        "enemyId": 300032,
+        "level": 80,
+        "hpMultiplier": 100,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 0.1,
+        "initialToughnessRatio": 0.06,
+        "elementDefenseOverrides": {}
+      },
+      "target": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-watcher-same-packet",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-arm-hit-breaks-using-pre-arm-state",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-watcher-same-packet",
+            "absoluteFrame": 128,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "breakTriggered": true,
+            "inBreakForHpDamage": false
+          },
+          "expectation": { "count": 1 },
+          "select": [
+            "hitIdentity",
+            "effectiveHpDamage",
+            "toughnessBefore",
+            "toughnessAfter",
+            "settlementCursor.sourceSequencePath"
+          ]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-arms-after-128f-landed-hit",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_ARMED",
+            "actionId": "isolated-watcher-same-packet",
+            "payload.appliedAssumptionIdentity": "112001-ultimate-watcher-same-packet-order-open",
+            "payload.appliedAssumptionVersion": "1.0.0",
+            "payload.appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
+            "payload.armOrder": "hit-then-arm",
+            "payload.remainingTriggerCount": 1
+          },
+          "expectation": { "count": 1 },
+          "select": [
+            "timeMs",
+            "sourceSequencePath",
+            "payload.armHitIdentity",
+            "payload.armedAtMs",
+            "payload.expiresAtMs",
+            "payload.boundary"
+          ]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-does-not-retroactively-trigger-on-arm-packet",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED",
+            "actionId": "isolated-watcher-same-packet"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "watcher-later-break-triggers-team-buff-once",
+      "durationFrames": 1000,
+      "enemy": {
+        "enemyId": 300032,
+        "level": 80,
+        "hpMultiplier": 100,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 0.1,
+        "initialToughnessRatio": 0.14,
+        "elementDefenseOverrides": {}
+      },
+      "target": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-watcher-later-break",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-later-break-arms-on-128f",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_ARMED",
+            "actionId": "isolated-watcher-later-break"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-first-later-break-triggers-once",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED",
+            "actionId": "isolated-watcher-later-break",
+            "payload.appliedAssumptionIdentity": "112001-ultimate-watcher-same-packet-order-open",
+            "payload.remainingTriggerCount": 0,
+            "payload.effectId": "battle-element:112001272",
+            "payload.effectDurationMs": 11000,
+            "payload.effectBoundary": "right-open"
+          },
+          "expectation": { "count": 1 },
+          "select": [
+            "timeMs",
+            "sourceSequencePath",
+            "payload.triggerTimeMs",
+            "payload.appliedTargetIds",
+            "payload.appliedEffectIdentities"
+          ]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-break-occurs-after-arm-packet",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-watcher-later-break",
+            "absoluteFrame": 147,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "breakTriggered": true
+          },
+          "expectation": { "count": 1 },
+          "select": ["hitIdentity", "inBreakForHpDamage"]
+        }
+      ]
+    },
+    {
+      "identity": "watcher-128f-miss-does-not-arm",
+      "durationFrames": 1000,
+      "enemy": {
+        "enemyId": 300032,
+        "level": 80,
+        "hpMultiplier": 100,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 0.1,
+        "initialToughnessRatio": 0.14,
+        "elementDefenseOverrides": {}
+      },
+      "target": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-watcher-arm-miss",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "11200113|0|elements|0|-1498145608306293020|128|1": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-128f-miss-suppresses-arm-damage",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-watcher-arm-miss",
+            "absoluteFrame": 128,
+            "eventType": "VERIFIED_COMBAT_HIT"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-128f-miss-suppresses-arm",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_ARMED",
+            "actionId": "isolated-watcher-arm-miss"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-128f-miss-suppresses-trigger",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED",
+            "actionId": "isolated-watcher-arm-miss"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "watcher-right-open-exact-8s-end",
+      "durationFrames": 1000,
+      "enemy": {
+        "enemyId": 300032,
+        "level": 80,
+        "hpMultiplier": 100,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 0.1,
+        "initialToughnessRatio": 0.1,
+        "elementDefenseOverrides": {}
+      },
+      "target": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-watcher-exact-end-ultimate",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "11200113|0|elements|0|-1498145608306293020|140|2": { "landed": "miss", "criticalMode": "inherit" },
+            "11200113|0|elements|0|-1498145608306293020|147|3": { "landed": "miss", "criticalMode": "inherit" },
+            "conditional-damage:gisele-ultimate-consumer-191f:1": { "landed": "miss", "criticalMode": "inherit" },
+            "11200113|0|elements|13|920563196063694705|196|4": { "landed": "miss", "criticalMode": "inherit" },
+            "11200113|0|elements|13|920563196063694705|202|5": { "landed": "miss", "criticalMode": "inherit" },
+            "11200113|0|elements|13|920563196063694705|208|6": { "landed": "miss", "criticalMode": "inherit" }
+          }
+        },
+        {
+          "id": "isolated-watcher-exact-end-a1",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-watcher-exact-end-a1"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 600 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-exact-end-still-arms-at-128f",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_ARMED",
+            "actionId": "isolated-watcher-exact-end-ultimate",
+            "payload.expiresAtMs": 10133.333333333334,
+            "payload.boundary": "right-open"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-exact-end-packet-breaks",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-watcher-exact-end-a1",
+            "absoluteFrame": 608,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "breakTriggered": true
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "watcher-right-open-end-does-not-trigger",
+          "path": "events",
+          "where": {
+            "type": "VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED",
+            "actionId": "isolated-watcher-exact-end-ultimate"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-consumer-split-one-one-no-cross-element",
+      "durationFrames": 1000,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "profileKey": "thunder",
+            "elementName": "雷",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "split-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:split:thunder:1" }
+              }
+            ]
+          },
+          {
+            "markId": 450,
+            "profileKey": "dark",
+            "elementName": "暗",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "split-dark-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:split:dark:1" }
+              }
+            ]
+          }
+        ],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-consumer-split-one-one",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "split-one-one-is-not-a-sufficient-candidate",
+          "path": "state.tuningConsumeJudgments",
+          "where": {
+            "actionId": "isolated-consumer-split-one-one",
+            "triggerFrame": 191,
+            "status": "verified-tuning-consume-no-sufficient-priority-candidate",
+            "applied": false,
+            "consumedCount": 0,
+            "selectedPriorityCandidate": null
+          },
+          "expectation": { "count": 1 },
+          "select": ["candidateStates", "sourceIdentity"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "split-one-one-does-not-consume-any-mark",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-split-one-one",
+            "kind": "consume"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "split-one-one-still-uses-normal-list1-hit",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-split-one-one",
+            "absoluteFrame": 191,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "elementId": 112001265
+          },
+          "expectation": { "count": 1 },
+          "select": ["hitIdentity", "effectiveHpDamage"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "split-one-one-does-not-inject-overlimit",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-split-one-one",
+            "eventType": "VERIFIED_TUNING_DAMAGE",
+            "elementId": { "$in": [296, 498] }
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-consumer-two-two-prefers-thunder-and-settles-order",
+      "durationFrames": 1000,
+      "enemy": {
+        "enemyId": 300032,
+        "level": 80,
+        "hpMultiplier": 100,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 0.1,
+        "initialToughnessRatio": 0.3,
+        "elementDefenseOverrides": {}
+      },
+      "target": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "profileKey": "thunder",
+            "elementName": "雷",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "priority-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:priority:thunder:1" }
+              },
+              {
+                "sourceActionId": "priority-thunder-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:priority:thunder:2" }
+              }
+            ]
+          },
+          {
+            "markId": 450,
+            "profileKey": "dark",
+            "elementName": "暗",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "priority-dark-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:priority:dark:1" }
+              },
+              {
+                "sourceActionId": "priority-dark-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:priority:dark:2" }
+              }
+            ]
+          }
+        ],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-consumer-two-two",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "two-two-selects-thunder-priority-candidate",
+          "path": "state.tuningConsumeJudgments",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "triggerFrame": 191,
+            "status": "verified-tuning-consume-applied",
+            "applied": true,
+            "consumedCount": 2,
+            "markId": 250,
+            "selectedPriorityCandidate.markId": 250,
+            "selectedPriorityCandidate.priorityIndex": 0
+          },
+          "expectation": { "count": 1 },
+          "select": ["selectedPriorityCandidate.packetElementId", "sourceIdentity"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "two-two-consumes-exactly-two-thunder-marks",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "kind": "consume",
+            "markId": 250,
+            "before": 2,
+            "delta": -2,
+            "after": 0
+          },
+          "expectation": { "count": 1 },
+          "select": ["frameIndex", "sourceSequencePath"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "two-two-does-not-consume-dark-after-thunder-selection",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "kind": "consume",
+            "markId": 450
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "breaking-191f-packet-reads-pre-break-state",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "absoluteFrame": 191,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "elementId": 112001261,
+            "effectiveHpDamage": 29,
+            "breakTriggered": true,
+            "inBreakForHpDamage": false
+          },
+          "expectation": { "count": 1 },
+          "select": [
+            "toughnessBefore",
+            "toughnessAfter",
+            "settlementCursor.sourceSequencePath",
+            "settlementOrder"
+          ]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "same-frame-overlimit-packet-reads-post-break-state",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "absoluteFrame": 191,
+            "eventType": "VERIFIED_TUNING_DAMAGE",
+            "elementId": 296,
+            "effectiveHpDamage": 11856,
+            "breakTriggered": false,
+            "inBreakForHpDamage": true,
+            "formula.randomBranch": null,
+            "formula.status": "verified-tuning-formula-applied"
+          },
+          "expectation": { "count": 1 },
+          "select": ["settlementCursor.sourceSequencePath", "settlementOrder"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "post-191f-independent-packet-remains-post-break",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "absoluteFrame": 196,
+            "eventType": "VERIFIED_COMBAT_HIT",
+            "elementId": 112001245,
+            "effectiveHpDamage": 231,
+            "inBreakForHpDamage": true
+          },
+          "expectation": { "count": 1 },
+          "select": ["hitIdentity", "settlementCursor.sourceSequencePath"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-applies-after-landed-191f-packet",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "operation": "apply",
+            "absoluteFrame": 191,
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
+            "appliedAssumptionVersion": "1.0.0",
+            "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
+            "sameFrameVisibility": "strict-source-sequence"
+          },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "sourceSequencePath", "modifiers"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-expires-at-right-open-12s-boundary",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-consumer-two-two",
+            "operation": "expire",
+            "absoluteFrame": 911,
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open"
+          },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "timeMs", "sourceSequencePath"]
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-consumer-dark-only-two",
+      "durationFrames": 1000,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [
+          {
+            "markId": 450,
+            "profileKey": "dark",
+            "elementName": "暗",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "dark-only-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:dark-only:1" }
+              },
+              {
+                "sourceActionId": "dark-only-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:dark-only:2" }
+              }
+            ]
+          }
+        ],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-consumer-dark-only-two",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "dark-only-two-selects-dark-candidate",
+          "path": "state.tuningConsumeJudgments",
+          "where": {
+            "actionId": "isolated-consumer-dark-only-two",
+            "status": "verified-tuning-consume-applied",
+            "consumedCount": 2,
+            "markId": 450,
+            "selectedPriorityCandidate.markId": 450
+          },
+          "expectation": { "count": 1 },
+          "select": ["selectedPriorityCandidate.packetElementId", "selectedPriorityCandidate.priorityIndex"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "dark-only-two-consumes-two-dark-marks",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-dark-only-two",
+            "kind": "consume",
+            "markId": 450,
+            "before": 2,
+            "delta": -2,
+            "after": 0
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "dark-only-two-injects-dark-overlimit",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-consumer-dark-only-two",
+            "eventType": "VERIFIED_TUNING_DAMAGE",
+            "elementId": 498
+          },
+          "expectation": { "count": 1 },
+          "select": ["effectiveHpDamage", "settlementCursor.sourceSequencePath"]
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-consumer-191f-miss-suppresses-consume-and-wrapper",
+      "durationFrames": 1000,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "profileKey": "thunder",
+            "elementName": "雷",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "miss-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:miss:thunder:1" }
+              },
+              {
+                "sourceActionId": "miss-thunder-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:miss:thunder:2" }
+              }
+            ]
+          }
+        ],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-consumer-191f-miss",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "conditional-damage:gisele-ultimate-consumer-191f:1": {
+              "landed": "miss",
+              "criticalMode": "inherit"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "191f-miss-does-not-consume",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-191f-miss",
+            "kind": "consume"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "191f-miss-does-not-apply-wrapper",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-consumer-191f-miss",
+            "operation": "apply",
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-consumer-191f-blocked-suppresses-consume-and-wrapper",
+      "durationFrames": 1000,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [
+          {
+            "markId": 250,
+            "profileKey": "thunder",
+            "elementName": "雷",
+            "decayRemainingMs": 30000,
+            "heldReadyRemainingMs": 0,
+            "layers": [
+              {
+                "sourceActionId": "blocked-thunder-1",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:blocked:thunder:1" }
+              },
+              {
+                "sourceActionId": "blocked-thunder-2",
+                "sourceActorId": "actor-112001",
+                "sourceIdentity": { "profile": "acceptance:blocked:thunder:2" }
+              }
+            ]
+          }
+        ],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-consumer-191f-blocked",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": {
+            "conditional-damage:gisele-ultimate-consumer-191f:1": {
+              "landed": "blocked",
+              "criticalMode": "inherit"
+            }
+          }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "191f-blocked-does-not-consume",
+          "path": "resources.tuningMarks",
+          "where": {
+            "actionId": "isolated-consumer-191f-blocked",
+            "kind": "consume"
+          },
+          "expectation": { "count": 0 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "191f-blocked-does-not-apply-wrapper",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-consumer-191f-blocked",
+            "operation": "apply",
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "wrapper-right-open-exact-12s-end",
+      "durationFrames": 1100,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-wrapper-exact-end-ultimate",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200113,
+            "actionKind": "ultimate",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-wrapper-exact-end-a1",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-wrapper-exact-end-a1"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 903 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-applies-on-191f-landed-hit",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-wrapper-exact-end-ultimate",
+            "operation": "apply",
+            "absoluteFrame": 191,
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open"
+          },
+          "expectation": { "count": 2 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-expires-before-exact-end-packet",
+          "path": "effects.events",
+          "where": {
+            "actionId": "isolated-wrapper-exact-end-ultimate",
+            "operation": "expire",
+            "absoluteFrame": 911,
+            "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open"
+          },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "timeMs", "sourceSequencePath"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-exact-end-packet-settles-at-911f",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-wrapper-exact-end-a1",
+            "absoluteFrame": 911,
+            "eventType": "VERIFIED_COMBAT_HIT"
+          },
+          "expectation": { "count": 1 },
+          "select": ["hitIdentity", "effectiveHpDamage", "settlementCursor.sourceSequencePath"]
+        }
+      ]
+    },
+    {
+      "identity": "critical-five-percent-integer-boundary-and-hit-modes",
+      "durationFrames": 600,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": [
+          {
+            "instanceKey": "protocol:112001:critical-five-percent:actor-112001",
+            "effectId": "protocol:112001:critical-five-percent",
+            "effectName": "姬瑟贝露 5% 暴击整数边界",
+            "sourceActorId": "actor-112001",
+            "targetKind": "actor",
+            "targetId": "actor-112001",
+            "remainingDurationMs": 20000,
+            "stacks": 1,
+            "maxStacks": 1,
+            "modifiers": [
+              {
+                "kind": "battle-property",
+                "attributeId": 7,
+                "bucket": "dynamicExtra",
+                "valueRaw": -800,
+                "propertyTags": []
+              }
+            ],
+            "sourceStatus": "product-assumption-acceptance-fixture",
+            "sourceIdentity": {
+              "packageId": "azpr-tc-2026-07-18",
+              "actionBindingIdentity": "protocol:112001:critical-five-percent",
+              "effectIdentity": "protocol:112001:critical-five-percent"
+            },
+            "appliedToCalculators": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "isolated-critical-sampled-low",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-low" } },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 499 } }
+        },
+        {
+          "id": "isolated-critical-sampled-boundary",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-boundary" } },
+          "schedule": { "mode": "absolute", "frame": 80 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 500 } }
+        },
+        {
+          "id": "isolated-critical-expected",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-expected" } },
+          "schedule": { "mode": "absolute", "frame": 160 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "expected" } }
+        },
+        {
+          "id": "isolated-critical-forced-critical",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-forced-critical" } },
+          "schedule": { "mode": "absolute", "frame": 240 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "critical" } }
+        },
+        {
+          "id": "isolated-critical-forced-non-critical",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-forced-non-critical" } },
+          "schedule": { "mode": "absolute", "frame": 320 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "non-critical" } }
+        },
+        {
+          "id": "isolated-critical-miss",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-miss" } },
+          "schedule": { "mode": "absolute", "frame": 400 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "miss", "criticalMode": "critical" } }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-499-is-below-five-percent-threshold",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-sampled-low",
+            "formula.randomBranch.mode": "captured-critical-roll",
+            "formula.randomBranch.criticalRoll": 499,
+            "formula.randomBranch.criticalThreshold": 500,
+            "formula.randomBranch.critical": true
+          },
+          "expectation": { "count": 1 },
+          "select": ["effectiveHpDamage", "formula.randomBranch.sourceCriticalRateBasisPoints"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-500-is-right-open-threshold-boundary",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-sampled-boundary",
+            "formula.randomBranch.mode": "captured-critical-roll",
+            "formula.randomBranch.criticalRoll": 500,
+            "formula.randomBranch.criticalThreshold": 500,
+            "formula.randomBranch.critical": false
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-expected-mode-does-not-materialize-event",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-expected",
+            "formula.randomBranch.mode": "expected",
+            "formula.verifiedResult.expectedCritical.criticalEventMaterialized": false
+          },
+          "expectation": { "count": 1 },
+          "select": ["formula.verifiedResult.expectedCritical.weightedValue"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-forced-critical-mode-is-honored",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-forced-critical",
+            "formula.randomBranch.mode": "critical",
+            "formula.randomBranch.critical": true
+          },
+          "expectation": { "count": 1 },
+          "select": ["effectiveHpDamage"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-forced-non-critical-mode-is-honored",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-forced-non-critical",
+            "formula.randomBranch.mode": "non-critical",
+            "formula.randomBranch.critical": false
+          },
+          "expectation": { "count": 1 },
+          "select": ["effectiveHpDamage"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-miss-does-not-materialize-damage",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-miss",
+            "eventType": "VERIFIED_COMBAT_HIT"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
+      "identity": "critical-rate-zero-clamps-before-roll",
+      "durationFrames": 200,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": [
+          {
+            "instanceKey": "protocol:112001:critical-zero:actor-112001",
+            "effectId": "protocol:112001:critical-zero",
+            "effectName": "姬瑟贝露 0% 暴击边界",
+            "sourceActorId": "actor-112001",
+            "targetKind": "actor",
+            "targetId": "actor-112001",
+            "remainingDurationMs": 10000,
+            "stacks": 1,
+            "maxStacks": 1,
+            "modifiers": [{ "kind": "battle-property", "attributeId": 7, "bucket": "dynamicExtra", "valueRaw": -1300, "propertyTags": [] }],
+            "sourceStatus": "product-assumption-acceptance-fixture",
+            "sourceIdentity": { "packageId": "azpr-tc-2026-07-18", "actionBindingIdentity": "protocol:112001:critical-zero", "effectIdentity": "protocol:112001:critical-zero" },
+            "appliedToCalculators": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "isolated-critical-rate-zero",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-rate-zero" } },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 0 } }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-zero-rate-rejects-roll-zero",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-rate-zero",
+            "formula.randomBranch.criticalThreshold": 0,
+            "formula.randomBranch.criticalRoll": 0,
+            "formula.randomBranch.critical": false
+          },
+          "expectation": { "count": 1 }
+        }
+      ]
+    },
+    {
+      "identity": "critical-rate-one-hundred-accepts-9999",
+      "durationFrames": 200,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": [
+          {
+            "instanceKey": "protocol:112001:critical-full:actor-112001",
+            "effectId": "protocol:112001:critical-full",
+            "effectName": "姬瑟贝露 100% 暴击边界",
+            "sourceActorId": "actor-112001",
+            "targetKind": "actor",
+            "targetId": "actor-112001",
+            "remainingDurationMs": 10000,
+            "stacks": 1,
+            "maxStacks": 1,
+            "modifiers": [{ "kind": "battle-property", "attributeId": 7, "bucket": "dynamicExtra", "valueRaw": 8700, "propertyTags": [] }],
+            "sourceStatus": "product-assumption-acceptance-fixture",
+            "sourceIdentity": { "packageId": "azpr-tc-2026-07-18", "actionBindingIdentity": "protocol:112001:critical-full", "effectIdentity": "protocol:112001:critical-full" },
+            "appliedToCalculators": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "isolated-critical-rate-full",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-critical-rate-full" } },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 9999 } }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "critical-full-rate-accepts-roll-9999",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-critical-rate-full",
+            "formula.randomBranch.criticalThreshold": 10000,
+            "formula.randomBranch.criticalRoll": 9999,
+            "formula.randomBranch.critical": true
+          },
+          "expectation": { "count": 1 }
+        }
+      ]
+    },
+    {
+      "identity": "passive-critical-pre-hit-and-right-open-expiry",
+      "durationFrames": 700,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-passive-critical-active",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-passive-critical-active" } },
+          "schedule": { "mode": "absolute", "frame": 0 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 9999 } }
+        },
+        {
+          "id": "isolated-passive-critical-expired",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200101, "actionKind": "normal-attack", "level": 1, "attackInput": { "sequenceIndex": 1, "groupId": "isolated-passive-critical-expired" } },
+          "schedule": { "mode": "absolute", "frame": 600 },
+          "hitOverrides": { "11200101|0|elements|0|-7332396199243874878|8|1": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 9999 } }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "passive-critical-effect-applies-on-initial-controlled-entry",
+          "path": "effects.events",
+          "where": { "effectId": "battle-element:112001133", "targetId": "actor-112001", "operation": "apply", "absoluteFrame": 0 },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "passive-critical-effect-expires-at-right-open-end",
+          "path": "effects.events",
+          "where": { "effectId": "battle-element:112001133", "targetId": "actor-112001", "operation": "expire", "absoluteFrame": 480 },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "passive-critical-rate-is-read-before-active-hit",
+          "path": "damage",
+          "where": { "actionId": "isolated-passive-critical-active", "formula.randomBranch.sourceCriticalRateBasisPoints": 1300, "formula.randomBranch.criticalThreshold": 1300 },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "passive-critical-rate-is-removed-before-post-expiry-hit",
+          "path": "damage",
+          "where": { "actionId": "isolated-passive-critical-expired", "formula.randomBranch.sourceCriticalRateBasisPoints": 500, "formula.randomBranch.criticalThreshold": 500 },
+          "expectation": { "count": 1 }
+        }
+      ]
+    },
+    {
+      "identity": "ultimate-wrapper-inherited-refresh-cap-and-right-open-expiry",
+      "durationFrames": 1000,
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [],
+        "tuningMarks": [],
+        "activeEffects": [
+          {
+            "instanceKey": "actor|actor-112001|battle-element:-316037334899252934/source:isolated-wrapper-lifecycle-refresh|verified-calculator",
+            "effectId": "battle-element:-316037334899252934|source:isolated-wrapper-lifecycle-refresh",
+            "effectName": "星决 wrapper 属性 113 继承快照",
+            "sourceActorId": "actor-112001",
+            "targetKind": "actor",
+            "targetId": "actor-112001",
+            "remainingDurationMs": 6000,
+            "stacks": 1,
+            "maxStacks": 1,
+            "modifiers": [
+              { "kind": "battle-property", "attributeId": 113, "bucket": "dynamicExtra", "valueRaw": 99, "propertyTags": [] }
+            ],
+            "sourceStatus": "product-assumption-acceptance-fixture",
+            "sourceIdentity": {
+              "packageId": "azpr-tc-2026-07-18",
+              "actionBindingIdentity": "gisele-ultimate-post-hit-wrapper",
+              "effectIdentity": "semantic-effect:11200113|0|-316037334899252934|2617385811689971573:191",
+              "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
+              "appliedAssumptionVersion": "1.0.0",
+              "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+            },
+            "appliedToCalculators": true
+          },
+          {
+            "instanceKey": "actor|actor-112001|battle-element:3913813892884989758|verified-calculator",
+            "effectId": "battle-element:3913813892884989758",
+            "effectName": "星决 wrapper 属性 222 继承快照",
+            "sourceActorId": "actor-112001",
+            "targetKind": "actor",
+            "targetId": "actor-112001",
+            "remainingDurationMs": 6000,
+            "stacks": 1,
+            "maxStacks": 1,
+            "modifiers": [
+              { "kind": "battle-property", "attributeId": 222, "bucket": "dynamicExtra", "valueRaw": 3000, "propertyTags": [] }
+            ],
+            "sourceStatus": "product-assumption-acceptance-fixture",
+            "sourceIdentity": {
+              "packageId": "azpr-tc-2026-07-18",
+              "actionBindingIdentity": "gisele-ultimate-post-hit-wrapper",
+              "effectIdentity": "semantic-effect:11200113|0|3913813892884989758|2617385811689971573:191",
+              "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
+              "appliedAssumptionVersion": "1.0.0",
+              "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+            },
+            "appliedToCalculators": true
+          }
+        ]
+      },
+      "actions": [
+        {
+          "id": "isolated-wrapper-lifecycle-refresh",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "public-action", "publicActionId": 11200113, "actionKind": "ultimate", "level": 1 },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-lifecycle-inherited-snapshot-is-active",
+          "path": "effects.events",
+          "where": { "targetId": "actor-112001", "operation": "inherit", "absoluteFrame": 0, "after.stacks": 1 },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "after.expiresAtMs"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-lifecycle-current-apply-refreshes-inherited-cap",
+          "path": "effects.events",
+          "where": { "targetId": "actor-112001", "operation": "apply", "absoluteFrame": 191, "actionId": "isolated-wrapper-lifecycle-refresh", "before.stacks": 1, "after.stacks": 1, "after.expiresAtMs": 15183.333, "stackChange": 0 },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "before.expiresAtMs", "after.expiresAtMs"]
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "wrapper-lifecycle-expires-at-refreshed-right-open-end",
+          "path": "effects.events",
+          "where": { "targetId": "actor-112001", "operation": "expire", "absoluteFrame": 911, "before.stacks": 1 },
+          "expectation": { "count": 2 },
+          "select": ["effectId", "before.expiresAtMs"]
+        }
+      ]
+    },
+    {
+      "identity": "residual-public-action-and-full-charge-surface",
+      "durationFrames": 2100,
+      "team": [
+        {
+          "slotId": "slot-1",
+          "characterId": 112001,
+          "level": 1,
+          "initialSp": 100,
+          "loadout": { "kiboId": 500001 },
+          "cultivation": {}
+        },
+        {
+          "slotId": "slot-2",
+          "characterId": 101010,
+          "level": 1,
+          "initialSp": 0,
+          "loadout": {},
+          "cultivation": {}
+        },
+        {
+          "slotId": "slot-3",
+          "characterId": 103002,
+          "level": 1,
+          "initialSp": 0,
+          "loadout": {},
+          "cultivation": {}
+        }
+      ],
+      "initialRuntimeState": {
+        "specialResourcesByActor": [],
+        "kiboEnergyBySlot": [
+          {
+            "slotId": "slot-1",
+            "actorId": "actor-112001",
+            "characterId": 112001,
+            "kiboId": 500001,
+            "kiboName": "迅狼",
+            "currentValue": 100,
+            "maxValue": 100
+          }
+        ],
+        "tuningMarks": [],
+        "activeEffects": []
+      },
+      "actions": [
+        {
+          "id": "isolated-residual-a5-context",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 5,
+              "groupId": "isolated-residual-a5"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-residual-a5-heavy3-full",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 100
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-residual-a5-heavy3",
+              "contextActionId": "isolated-residual-a5-context"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 59 }
+        },
+        {
+          "id": "isolated-residual-default-normal",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 3,
+              "groupId": "isolated-residual-default-normal"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 400 }
+        },
+        {
+          "id": "isolated-residual-default-charged",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 700 }
+        },
+        {
+          "id": "isolated-residual-star-combo",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200112,
+            "actionKind": "star-combo",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 1100 }
+        },
+        {
+          "id": "isolated-residual-star-combo-kibo-pair",
+          "owner": { "kind": "kibo", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 50000112,
+            "actionKind": "break",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 1100 }
+        },
+        {
+          "id": "isolated-residual-a4-context",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 4,
+              "groupId": "isolated-residual-a4"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 1400 }
+        },
+        {
+          "id": "isolated-residual-a4-heavy3-full",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "semanticVariant": {
+              "selectorKind": "charging-release-frame",
+              "mode": "release",
+              "inputFrame": 100
+            },
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-residual-a4-heavy3",
+              "contextActionId": "isolated-residual-a4-context"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 1436 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-a5-public-surface",
+          "actionId": "isolated-residual-a5-context",
+          "controlSkillId": 11200105,
+          "subSkillIndex": 0
+        },
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-default-normal-public-surface",
+          "actionId": "isolated-residual-default-normal",
+          "controlSkillId": 11200103,
+          "subSkillIndex": 0
+        },
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-default-charged-public-surface",
+          "actionId": "isolated-residual-default-charged",
+          "controlSkillId": 11200110,
+          "subSkillIndex": 0
+        },
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-star-combo-public-surface",
+          "actionId": "isolated-residual-star-combo",
+          "controlSkillId": 11200126,
+          "subSkillIndex": 0
+        },
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-a5-heavy3-release-full-tier",
+          "actionId": "isolated-residual-a5-heavy3-full",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 3
+        },
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-a4-heavy3-release-full-tier",
+          "actionId": "isolated-residual-a4-heavy3-full",
+          "controlSkillId": 11200141,
+          "subSkillIndex": 3
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "residual-a5-full-source-control-reaches-last-hit",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-residual-a5-heavy3-full",
+            "hitIdentity": "11200110|4|elements|6|-921608818467044463|92|9"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "residual-a4-full-source-control-reaches-last-hit",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-residual-a4-heavy3-full",
+            "hitIdentity": "11200110|3|elements|6|-921608818467044463|92|9"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "assertionIdentity": "residual-star-combo-hit-lands",
+          "path": "damage",
+          "where": {
+            "actionId": "isolated-residual-star-combo",
+            "hitIdentity": "11200126|0|elements|0|8607350075110621760|40|1"
+          },
+          "expectation": { "count": 1 }
+        }
+      ]
+    }
+  ],
+  "scenarioFactAliases": [
+    {
+      "factIdentity": "buff-apply-refresh-stack-expire",
+      "allOfAssertionIdentities": [
+        "isolated:wrapper-right-open-exact-12s-end",
+        "isolated:ultimate-wrapper-inherited-refresh-cap-and-right-open-expiry"
+      ]
+    },
+    {
+      "factIdentity": "condition-insufficient-negative",
+      "allOfAssertionIdentities": [
+        "isolated:ultimate-consumer-split-one-one-no-cross-element"
+      ]
+    },
+    {
+      "factIdentity": "critical:expectedNoCriticalEvent",
+      "allOfAssertionIdentities": [
+        "isolated:critical-five-percent-integer-boundary-and-hit-modes"
+      ]
+    },
+    {
+      "factIdentity": "critical:integerThresholdBoundary",
+      "allOfAssertionIdentities": [
+        "isolated:critical-five-percent-integer-boundary-and-hit-modes"
+      ]
+    },
+    {
+      "factIdentity": "critical:missSuppressesHit",
+      "allOfAssertionIdentities": [
+        "isolated:critical-five-percent-integer-boundary-and-hit-modes"
+      ]
+    },
+    {
+      "factIdentity": "critical:nonCrittableRejection",
+      "allOfAssertionIdentities": [
+        "isolated:ultimate-consumer-two-two-prefers-thunder-and-settles-order"
+      ]
+    },
+    {
+      "factIdentity": "critical:perHitModes",
+      "allOfAssertionIdentities": [
+        "isolated:critical-five-percent-integer-boundary-and-hit-modes"
+      ]
+    },
+    {
+      "factIdentity": "critical:preHitAttributeChange",
+      "allOfAssertionIdentities": [
+        "isolated:passive-critical-pre-hit-and-right-open-expiry"
+      ]
+    },
+    {
+      "factIdentity": "critical:sameSeedReplay",
+      "allOfAssertionIdentities": [
+        "canonical-same-input-replay"
+      ]
+    },
+    {
+      "factIdentity": "input-window-inside-outside-boundaries",
+      "allOfAssertionIdentities": [
+        "isolated:heavy2-release-58f-old-tier",
+        "assumption-v1-heavy2-59f-selects-new-tier",
+        "isolated:heavy2-release-60f-unique-new-tier",
+        "isolated:heavy3-release-66f-old-tier",
+        "assumption-v1-heavy3-67f-selects-new-tier",
+        "isolated:heavy3-release-68f-unique-new-tier"
+      ]
+    },
+    {
+      "factIdentity": "resource-exact-and-insufficient",
+      "allOfAssertionIdentities": [
+        "isolated:ultimate-consumer-split-one-one-no-cross-element",
+        "isolated:ultimate-consumer-two-two-prefers-thunder-and-settles-order"
+      ]
+    }
+  ],
+  "probes": [
+    {
+      "kind": "variant-selection",
+      "assertionIdentity": "assumption-v1-heavy2-59f-selects-new-tier",
+      "actionId": "gisele-heavy2-threshold59",
+      "controlSkillId": 11200141,
+      "subSkillIndex": 1,
+      "semanticName": "特殊重击2完全释放"
+    },
+    {
+      "kind": "variant-selection",
+      "assertionIdentity": "assumption-v1-heavy3-67f-selects-new-tier",
+      "actionId": "gisele-heavy3-threshold67",
+      "controlSkillId": 11200141,
+      "subSkillIndex": 3,
+      "semanticName": "特殊重击3完全释放"
+    },
+    {
+      "kind": "variant-selection",
+      "assertionIdentity": "star-carry-active-entry-is-runtime-reachable",
+      "actionId": "gisele-switch-back--on-enter--actor-112001--star-carry",
+      "controlSkillId": 11200121,
+      "subSkillIndex": 0,
+      "semanticName": "星鸣协战"
+    },
+    {
+      "kind": "variant-selection",
+      "assertionIdentity": "star-carry-derived-heavy2-uses-assumption-v1",
+      "actionId": "gisele-star-carry-heavy2-threshold59",
+      "controlSkillId": 11200141,
+      "subSkillIndex": 1,
+      "semanticName": "星鸣协战派生特殊重击2"
+    },
+    {
+      "kind": "trace-query",
+      "assertionIdentity": "charging-traces-bind-assumption-v1",
+      "identity": "charging-traces-bind-assumption-v1",
+      "path": "variants.selections",
+      "where": {
+        "appliedAssumptionIdentity": "112001-charge-threshold-overlap-order-open",
+        "appliedAssumptionVersion": "1.0.0",
+        "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+      },
+      "expectation": {
+        "count": 3
+      },
+      "select": [
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "chargingRelease.releaseFrame",
+        "chargingRelease.selectedWindowIdentity"
+      ]
+    }
+  ]
+}

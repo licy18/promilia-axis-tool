@@ -225,6 +225,7 @@ describe('verified Battle effect generation', () => {
     const generation = createVerifiedBattleEffectGeneration({
       scenario,
       actionExecutionPlan,
+      mechanicsPackage: verifiedCombatMechanicsPackage,
     });
     const timeline = createEffectRuntimeTimeline({
       scenario,
@@ -366,6 +367,7 @@ describe('verified Battle effect generation', () => {
     const scenario = createFireKiboScenario();
     const generation = createVerifiedBattleEffectGeneration({
       scenario,
+      mechanicsPackage: verifiedCombatMechanicsPackage,
       actionExecutionPlan: {
         actions: [
           {
@@ -406,6 +408,7 @@ describe('verified Battle effect generation', () => {
         ],
         combatScenario: {},
       },
+      mechanicsPackage: createFixtureMechanicsPackage(),
       controlledActorTimeline: {
         initialActor: {
           actorId: 'actor-101007',
@@ -512,6 +515,8 @@ describe('verified Battle effect generation', () => {
           action.id,
           {
             ready: true,
+            packageId: 'fixture-package',
+            packageHash: 'fixture-hash',
             controlBinding: { frameRate: 60 },
             semanticEffects: [
               {
@@ -536,11 +541,185 @@ describe('verified Battle effect generation', () => {
           },
         ],
       ]),
+      mechanicsPackage: createFixtureMechanicsPackage(),
     });
 
     expect(generation.unresolved.map(effect => effect.effectIdentity)).toEqual([
       'effect-before-interrupt',
     ]);
+  });
+
+  it('uses scenario hit defaults and explicit overrides for every hit-gated effect', () => {
+    const conditionalHitIdentity =
+      'conditional-damage:fixture-conditional-group:1';
+    const landedHitIdentity = 'fixture-landed-hit';
+    const baseAction = {
+      id: 'hit-gated-effects',
+      type: 'skill',
+      actorId: 'actor-fixture',
+      actor: { id: 'actor-fixture', stats: { tuningStrength: 100 } },
+      startMs: 0,
+      durationMs: frameToMs(180),
+    };
+    const effects = [
+      {
+        ...createPropertyEffect({
+          semanticIdentity: 'fixture-conditional-wrapper',
+          elementId: 700001,
+          pathId: 'fixture-conditional-wrapper-path',
+          targetKind: 'source-owner',
+          durationMs: 12000,
+          a: 100,
+        }),
+        hitGate: {
+          kind: 'conditional-damage-group-hit',
+          groupIdentity: 'fixture-conditional-group',
+          hitIndex: 1,
+        },
+      },
+      {
+        ...createPropertyEffect({
+          semanticIdentity: 'fixture-landed-wrapper',
+          elementId: 700002,
+          pathId: 'fixture-landed-wrapper-path',
+          targetKind: 'source-owner',
+          durationMs: 12000,
+          a: 100,
+        }),
+        hitGate: {
+          kind: 'landed-action-hit',
+          elementId: 700099,
+          triggerFrame: 148,
+          maximumMatches: 1,
+        },
+      },
+    ];
+    const mechanicsPackage = createFixtureMechanicsPackage();
+    const generate = ({ defaultWillHit, hitOverrides = undefined }) => {
+      const action = { ...baseAction, hitOverrides };
+      return createVerifiedBattleEffectGeneration({
+        scenario: {
+          actions: [action],
+          actors: [action.actor],
+          combatScenario: { projectile: { defaultWillHit } },
+        },
+        mechanicsPackage,
+        actionResolutionById: new Map([
+          [
+            action.id,
+            createFixtureResolution({
+              semanticEffects: effects,
+              hits: [
+                {
+                  hitIdentity: landedHitIdentity,
+                  elementId: 700099,
+                  trigger: { startFrame: 148 },
+                },
+              ],
+            }),
+          ],
+        ]),
+      });
+    };
+
+    expect(generate({ defaultWillHit: false }).effectCommands).toEqual([]);
+    expect(
+      generate({
+        defaultWillHit: false,
+        hitOverrides: {
+          [conditionalHitIdentity]: { willHit: true },
+          [landedHitIdentity]: { willHit: true },
+        },
+      }).effectCommands.map(command => command.sourceIdentity.effectIdentity)
+    ).toEqual([
+      'fixture-conditional-wrapper',
+      'fixture-landed-wrapper',
+    ]);
+    expect(
+      generate({
+        defaultWillHit: true,
+        hitOverrides: {
+          [conditionalHitIdentity]: { willHit: false },
+          [landedHitIdentity]: { willHit: false },
+        },
+      }).effectCommands
+    ).toEqual([]);
+  });
+
+  it('binds watcher suppression to the explicitly supplied mechanics package', () => {
+    const action = {
+      id: 'package-bound-watchers',
+      type: 'skill',
+      actorId: 'actor-fixture',
+      actor: { id: 'actor-fixture', stats: { tuningStrength: 100 } },
+      startMs: 0,
+      durationMs: frameToMs(180),
+    };
+    const watcherEffects = ['fixture-watcher-a', 'fixture-watcher-b'].map(
+      (semanticIdentity, index) =>
+        createPropertyEffect({
+          semanticIdentity,
+          elementId: 710000 + index,
+          pathId: `fixture-watcher-path-${index}`,
+          targetKind: 'source-owner',
+          durationMs: 8000,
+          a: 100,
+        })
+    );
+    const packageA = createFixtureMechanicsPackage({
+      packageId: 'fixture-package-a',
+      packageHash: 'fixture-hash-a',
+      suppressedEffectIdentities: ['fixture-watcher-a'],
+    });
+    const packageB = createFixtureMechanicsPackage({
+      packageId: 'fixture-package-b',
+      packageHash: 'fixture-hash-b',
+      suppressedEffectIdentities: ['fixture-watcher-b'],
+    });
+    const generate = mechanicsPackage =>
+      createVerifiedBattleEffectGeneration({
+        scenario: { actions: [action], actors: [action.actor] },
+        mechanicsPackage,
+        actionResolutionById: new Map([
+          [
+            action.id,
+            createFixtureResolution({
+              packageId: mechanicsPackage.packageId,
+              packageHash: mechanicsPackage.packageHash,
+              semanticEffects: watcherEffects,
+            }),
+          ],
+        ]),
+      });
+
+    expect(
+      generate(packageA).effectCommands.map(
+        command => command.sourceIdentity.effectIdentity
+      )
+    ).toEqual(['fixture-watcher-b']);
+    expect(
+      generate(packageB).effectCommands.map(
+        command => command.sourceIdentity.effectIdentity
+      )
+    ).toEqual(['fixture-watcher-a']);
+    expect(() =>
+      createVerifiedBattleEffectGeneration({
+        scenario: { actions: [action], actors: [action.actor] },
+        mechanicsPackage: packageB,
+        actionResolutionById: new Map([
+          [
+            action.id,
+            createFixtureResolution({
+              packageId: packageA.packageId,
+              packageHash: packageA.packageHash,
+              semanticEffects: watcherEffects,
+            }),
+          ],
+        ]),
+      })
+    ).toThrow(
+      'verified-battle-effect-generation-mechanics-package-binding-mismatch'
+    );
   });
 });
 
@@ -635,6 +814,44 @@ function createPropertyEffect({
       },
     },
     sourceIdentities: [`fixture:${semanticIdentity}`],
+  };
+}
+
+function createFixtureMechanicsPackage({
+  packageId = 'fixture-package',
+  packageHash = 'fixture-hash',
+  suppressedEffectIdentities = [],
+} = {}) {
+  return {
+    packageId,
+    packageHash,
+    actionVariantGraph: {
+      breakTriggerWatchers: suppressedEffectIdentities.length
+        ? [{ suppressedEffectIdentities }]
+        : [],
+    },
+  };
+}
+
+function createFixtureResolution({
+  packageId = 'fixture-package',
+  packageHash = 'fixture-hash',
+  semanticEffects = [],
+  hits = [],
+} = {}) {
+  return {
+    ready: true,
+    packageId,
+    packageHash,
+    actionBinding: {
+      identity: 'fixture-action-binding',
+      controlVariantSkillLevel: 1,
+    },
+    controlBinding: { frameRate: 60 },
+    hits,
+    allHits: hits,
+    semanticEffects,
+    effects: [],
   };
 }
 

@@ -8900,9 +8900,26 @@ function createPackage({
       }
     }
   }
+  const nodeClassificationControlSkillIds = new Set(
+    characterCombatOwnerCompilations
+      .filter(
+        compilation =>
+          compilation.coverageCandidateMode ===
+          'selected-root-source-closure-v1'
+      )
+      .flatMap(compilation => compilation.reachableControlSkillIds ?? [])
+      .map(Number)
+      .filter(Number.isInteger)
+  );
   const packagedControlBindings = preparedControlBindings
     .filter(binding => publishedControlSkillIds.has(binding.controlSkillId))
-    .map(createPublishedControlBinding);
+    .map(binding =>
+      createPublishedControlBinding(binding, {
+        publishNodeClassifications: nodeClassificationControlSkillIds.has(
+          Number(binding.controlSkillId)
+        ),
+      })
+    );
   const supportControlSkillIds = new Set([
     ...(specialResourceCatalog.operationBindings ?? [])
       .map(operation => operation.controlSkillId)
@@ -8921,7 +8938,13 @@ function createPackage({
         !packagedControlSkillIds.has(binding.controlSkillId)
     ),
     binding => binding.controlSkillId
-  ).map(createPublishedControlBinding);
+  ).map(binding =>
+    createPublishedControlBinding(binding, {
+      publishNodeClassifications: nodeClassificationControlSkillIds.has(
+        Number(binding.controlSkillId)
+      ),
+    })
+  );
   const sourceFiles = [
     ['calculator', CALCULATOR_PATH],
     ['validator', VALIDATOR_PATH],
@@ -9322,7 +9345,10 @@ function assertPublishedDisplayLabels(packageValue) {
   }
 }
 
-function createPublishedControlBinding(binding) {
+function createPublishedControlBinding(
+  binding,
+  { publishNodeClassifications = false } = {}
+) {
   return {
     controlSkillId: binding.controlSkillId,
     runtimePolicy: binding.runtimePolicy ?? null,
@@ -9352,6 +9378,24 @@ function createPublishedControlBinding(binding) {
           node.nodeIdentity
         )
       ),
+      ...(publishNodeClassifications
+        ? {
+            nodeClassifications: nodes.map(node => ({
+              nodeCatalogIdentity: createBattleEffectCatalogIdentity(
+                binding.controlSkillId,
+                node.nodeIdentity
+              ),
+              nodeIdentity: node.nodeIdentity,
+              sourceTraversalIndex: node.sourceTraversalIndex,
+              elementId: node.elementId,
+              kind: node.kind,
+              classification: node.classification,
+              reasons: [...(node.reasons ?? [])],
+              sourceIdentity: node.sourceIdentity,
+              dimensions: createPublishedEffectDimensions(node.dimensions),
+            })),
+          }
+        : {}),
     })),
     status: binding.status,
     confidence: binding.confidence,
@@ -9724,6 +9768,13 @@ function createSemanticEffectCandidate({
       effect.sourceOrder?.status ===
         'verified-battle-effect-source-order-ready'
   );
+  const runtimeBoundEffect = rawEffects.find(
+    effect =>
+      effect.assumptionIdentity != null ||
+      effect.hitGate != null ||
+      effect.landedHitActivationCondition != null
+  );
+  const assumptionBinding = resolveSemanticEffectAssumption(rawEffects);
   return {
     semanticKey,
     semanticIdentity: `semantic-effect:${semanticKey}`,
@@ -9752,6 +9803,10 @@ function createSemanticEffectCandidate({
     sourceOrder: settlementOrderedEffect?.sourceOrder ?? null,
     hitSettlementOrder:
       settlementOrderedEffect?.hitSettlementOrder ?? null,
+    hitGate: runtimeBoundEffect?.hitGate ?? null,
+    landedHitActivationCondition:
+      runtimeBoundEffect?.landedHitActivationCondition ?? null,
+    ...(assumptionBinding ?? {}),
     target,
     placementResolution: resolution,
     staticallyResolvable: resolution === 'static-resolved',
@@ -9830,6 +9885,26 @@ function createSemanticEffectCandidate({
     publicActions,
     calculationMultiplicity: resolveSemanticCalculationMultiplicity(target),
   };
+}
+
+function resolveSemanticEffectAssumption(rawEffects) {
+  const bindings = dedupeBy(
+    (rawEffects ?? [])
+      .filter(effect => effect.assumptionIdentity != null)
+      .map(effect => ({
+        assumptionIdentity: String(effect.assumptionIdentity),
+        assumptionVersion: String(effect.assumptionVersion),
+        assumptionHash: String(effect.assumptionHash),
+      })),
+    binding => JSON.stringify(binding)
+  );
+  if (bindings.length > 1) {
+    throw new Error(
+      'Semantic effect assumption binding conflict: ' +
+        bindings.map(binding => binding.assumptionIdentity).join(', ')
+    );
+  }
+  return bindings[0] ?? null;
 }
 
 function classifySemanticEffectRole(node, root) {
@@ -10169,6 +10244,7 @@ function resolveSemanticCalculationMultiplicity(target) {
 
 function mergeSemanticEffectCandidates(candidates) {
   const first = candidates[0];
+  const assumptionBinding = resolveSemanticEffectAssumption(candidates);
   const rawEffectIdentities = dedupeBy(
     candidates.flatMap(candidate => candidate.rawEffectIdentities),
     value => value
@@ -10184,6 +10260,7 @@ function mergeSemanticEffectCandidates(candidates) {
   const classifications = candidates.map(candidate => candidate.classification);
   return {
     ...first,
+    ...(assumptionBinding ?? {}),
     graphIdentities: dedupeBy(
       candidates.flatMap(candidate => candidate.graphIdentities),
       value => value
@@ -14661,7 +14738,7 @@ function injectStackOverLimitElementFactor(source) {
   const insertion = [
     '  if (Number(input.attackerElementUp ?? 0) !== 0) {',
     '    const element = calculateElementFactor(input);',
-    "    raw = applyFactor(raw, BigInt(element.raw), 'element', trace);",
+    '    raw = applyFactor(raw, BigInt(element.raw), \'element\', trace);',
     '  }',
     marker,
   ].join('\n');

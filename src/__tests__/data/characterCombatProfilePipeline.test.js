@@ -24,7 +24,10 @@ import {
 import { validateCharacterCombatGoldenRuntime } from '../../../scripts/character-combat/character-combat-golden-validation.mjs';
 import catalog from '../../data/generated/character-combat-profile-catalog.json';
 import ownerContract from '../../data/generated/character-combat-owner-contracts/101010.json';
+import giseleOwnerContract from '../../data/generated/character-combat-owner-contracts/112001.json';
 import profile from '../../data/generated/character-combat-profiles/101010.json';
+import giseleProfile from '../../data/generated/character-combat-profiles/112001.json';
+import giseleRecipe from '../../../scripts/character-combat/profile-recipes/112001.json';
 import schema from '../../data/generated/character-combat-profile-schema.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
@@ -33,6 +36,7 @@ import {
   installVerifiedCombatMechanicsPackage,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
+import { validateCharacterCombatCoverageCandidateClosure } from '../../../scripts/character-combat/character-combat-profile-pipeline.mjs';
 
 const CURRENT_PUBLIC_CHARACTER_IDS = [
   101010, 103002, 101003, 101007, 102001, 107001, 107002, 107003, 108001,
@@ -64,6 +68,418 @@ afterEach(() => {
 });
 
 describe('M10 character combat profile pipeline', () => {
+  it('fails closed when per-candidate source closure is removed or blanket-promoted', () => {
+    expect(
+      giseleRecipe.coveragePolicies
+        .sourceClosureSupersedesResolvedRawCandidateGaps
+    ).toBeUndefined();
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(giseleProfile)
+    ).toEqual({ valid: true, issues: [] });
+    expect(
+      giseleProfile.contracts.publicActions.reduce(
+        (sum, action) =>
+          sum + Number(action.rawDimensionSummary?.hp?.unresolved ?? 0),
+        0
+      )
+    ).toBe(45);
+    expect(
+      giseleProfile.contracts.publicActions.reduce(
+        (sum, action) =>
+          sum + Number(action.dimensionSummary?.hp?.unresolved ?? 0),
+        0
+      )
+    ).toBe(0);
+
+    const removedCandidates = structuredClone(giseleProfile);
+    removedCandidates.contracts.coverageCandidates.settlement = [];
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(removedCandidates)
+        .issues
+    ).toEqual(
+      expect.arrayContaining([
+        'settlement-coverage-candidates-missing',
+        'settlement-coverage-raw-candidate-count-mismatch',
+        'coverage-candidate-binding-invalid:hpDamage',
+      ])
+    );
+
+    const deletedEffectCandidate = structuredClone(giseleProfile);
+    deletedEffectCandidate.contracts.coverageCandidates.effects.pop();
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(deletedEffectCandidate)
+        .issues
+    ).toEqual(
+      expect.arrayContaining([
+        'effect-coverage-candidate-count-mismatch',
+        'coverage-candidate-binding-invalid:buffsAndDebuffs',
+      ])
+    );
+
+    const blanketPromotion = structuredClone(giseleProfile);
+    const hpCoverage = blanketPromotion.coverage.find(
+      item => item.dimension === 'hpDamage'
+    );
+    hpCoverage.status = 'applied';
+    hpCoverage.unresolvedCount = 45;
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(blanketPromotion).issues
+    ).toContain('applied-coverage-has-unresolved-candidates');
+
+    const countTamper = structuredClone(giseleProfile);
+    countTamper.coverage.find(
+      item => item.dimension === 'hpDamage'
+    ).notApplicableCount -= 1;
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(countTamper).issues
+    ).toContain('coverage-candidate-binding-invalid:hpDamage');
+
+    const genericNa = structuredClone(giseleProfile);
+    const notApplicableCandidate =
+      genericNa.contracts.coverageCandidates.settlement.find(
+        candidate => candidate.dimensions.hp.status === 'not-applicable'
+      );
+    notApplicableCandidate.dimensions.hp.sourceIdentities = [];
+    notApplicableCandidate.dimensions.hp.reasons = [];
+    delete notApplicableCandidate.dimensions.hp.scenarioIdentity;
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(genericNa).issues
+    ).toContain('settlement-coverage-candidate-resolution-invalid');
+  });
+
+  it('binds selected-root settlement closure to per-node source classifications', () => {
+    const exactCandidateIdentity =
+      'settlement-coverage:actor|112001|11200101|0|11200103|normal-attack:11200103|0|elements|1|-7394849788543465206';
+    const exactGraphIdentity =
+      '11200103|0|elements|1|-7394849788543465206';
+    const exactNodeIdentity =
+      '11200103|element:-7394849788543465206';
+    const candidate = giseleProfile.contracts.coverageCandidates.settlement.find(
+      item => item.candidateIdentity === exactCandidateIdentity
+    );
+    expect(candidate).toMatchObject({
+      graphIdentity: exactGraphIdentity,
+      rootElementId: 112001008,
+      rawGraphClassification: {
+        appliedNodeCount: 0,
+        verifiedZeroNodeCount: 0,
+        unresolvedNodeCount: 1,
+      },
+      hitIdentities: [],
+      semanticEffectIdentities: [],
+      conditionalDamageGroupIdentities: [],
+      dimensions: {
+        hp: { status: 'verified-zero' },
+        toughness: { status: 'verified-zero' },
+        actorSp: { status: 'verified-zero' },
+        kiboSp: { status: 'verified-zero' },
+      },
+    });
+    expect(candidate.nodeClassifications).toEqual([
+      expect.objectContaining({
+        nodeCatalogIdentity: exactNodeIdentity,
+        elementId: 112001008,
+        classification: 'unresolved',
+        sourceIdentity:
+          'battle-element-assets.jsonl#path_id=-7394849788543465206',
+        dimensions: expect.objectContaining({
+          hp: expect.objectContaining({
+            sourceDimensionStatus: 'verified-zero',
+            sourceClosureDisposition: 'verified-zero',
+            sourceClosureAuthorityKind:
+              'battle-effect-node-dimension-classification',
+          }),
+        }),
+      }),
+    ]);
+    const graph = giseleProfile.contracts.controls
+      .flatMap(control => control.effectGraph ?? [])
+      .find(item => item.graphIdentity === exactGraphIdentity);
+    expect(graph.nodeClassifications).toEqual([
+      expect.objectContaining({
+        nodeCatalogIdentity: exactNodeIdentity,
+        classification: 'unresolved',
+        dimensions: expect.objectContaining({
+          damage: { status: 'verified-zero', sourceField: null },
+          toughness: { status: 'verified-zero', sourceField: null },
+          sp: { status: 'verified-zero', sourceField: null },
+        }),
+      }),
+    ]);
+
+    const missingDisposition = structuredClone(giseleProfile);
+    delete missingDisposition.contracts.coverageCandidates.settlement
+      .find(item => item.candidateIdentity === exactCandidateIdentity)
+      .nodeClassifications[0].dimensions.hp.sourceClosureDisposition;
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(missingDisposition).issues
+    ).toContain('settlement-coverage-node-source-closure-invalid');
+
+    const sourceBindingTamper = structuredClone(giseleProfile);
+    sourceBindingTamper.contracts.coverageCandidates.settlement
+      .find(item => item.candidateIdentity === exactCandidateIdentity)
+      .nodeClassifications[0].dimensions.hp.sourceDimensionStatus = 'applied';
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(sourceBindingTamper).issues
+    ).toContain('settlement-coverage-node-source-binding-invalid');
+
+    const graphCountTamper = structuredClone(giseleProfile);
+    const tamperedGraph = graphCountTamper.contracts.controls
+      .flatMap(control => control.effectGraph ?? [])
+      .find(item => item.graphIdentity === exactGraphIdentity);
+    tamperedGraph.verifiedZeroNodeCount = 1;
+    tamperedGraph.unresolvedNodeCount = 0;
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(graphCountTamper).issues
+    ).toContain(
+      'settlement-coverage-graph-node-classification-count-mismatch'
+    );
+
+    const genericNa = structuredClone(giseleProfile);
+    const genericCandidate = genericNa.contracts.coverageCandidates.settlement.find(
+      item => item.candidateIdentity === exactCandidateIdentity
+    );
+    genericCandidate.dimensions.hp = {
+      status: 'not-applicable',
+      reasons: ['reachable-graph-has-no-output-for-coverage-dimension'],
+      sourceIdentities: [...genericCandidate.dimensions.hp.sourceIdentities],
+      scenarioIdentity: genericCandidate.scenarioIdentity,
+      notApplicableAuthorityKind: 'explicit-node-root-source-policy',
+      sourceClosurePolicyIdentities: ['fixture:blanket-na'],
+    };
+    Object.assign(genericCandidate.nodeClassifications[0].dimensions.hp, {
+      sourceClosureDisposition: 'not-applicable',
+      sourceClosureAuthorityKind: 'explicit-node-root-source-policy',
+      sourceClosurePolicyIdentity: 'fixture:blanket-na',
+      sourceClosureSourceIdentity: genericCandidate.sourceIdentity,
+      reasons: ['reachable-graph-has-no-output-for-coverage-dimension'],
+    });
+    const genericAction = genericNa.contracts.publicActions.find(
+      action => action.identity === genericCandidate.actionIdentity
+    );
+    genericAction.dimensionSummary.hp['verified-zero'] -= 1;
+    genericAction.dimensionSummary.hp['not-applicable'] =
+      Number(genericAction.dimensionSummary.hp['not-applicable'] ?? 0) + 1;
+    const genericCoverage = genericNa.coverage.find(
+      item => item.dimension === 'hpDamage'
+    );
+    genericCoverage.verifiedZeroCount -= 1;
+    genericCoverage.notApplicableCount += 1;
+    const genericIssues = validateCharacterCombatCoverageCandidateClosure(
+      genericNa
+    ).issues;
+    expect(genericIssues).toEqual(
+      expect.arrayContaining([
+        'settlement-coverage-node-source-closure-invalid',
+        'settlement-coverage-not-applicable-authority-invalid',
+      ])
+    );
+    expect(genericIssues).not.toContain(
+      'settlement-coverage-action-summary-mismatch'
+    );
+    expect(genericIssues).not.toContain(
+      'coverage-candidate-binding-invalid:hpDamage'
+    );
+
+    const deletedPolicy = structuredClone(giseleProfile);
+    deletedPolicy.contracts.coverageCandidates.settlementNodeClosurePolicies = [];
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(deletedPolicy).issues
+    ).toContain('settlement-coverage-node-source-closure-invalid');
+
+    const generalizedPolicy = structuredClone(giseleProfile);
+    const policy =
+      generalizedPolicy.contracts.coverageCandidates
+        .settlementNodeClosurePolicies[0];
+    policy.sourceIdentity =
+      'm12c-zero-distance-passive-boss-v1#no-recognized-output';
+    const policyCandidate =
+      generalizedPolicy.contracts.coverageCandidates.settlement.find(
+        item => item.graphIdentity === policy.graphIdentity
+      );
+    const policyNode = policyCandidate.nodeClassifications.find(
+      item => item.nodeCatalogIdentity === policy.nodeCatalogIdentity
+    );
+    for (const dimension of policy.dimensions) {
+      policyNode.dimensions[dimension].sourceClosureSourceIdentity =
+        policy.sourceIdentity;
+    }
+    expect(
+      validateCharacterCombatCoverageCandidateClosure(generalizedPolicy).issues
+    ).toContain('settlement-coverage-node-source-closure-invalid');
+  });
+  it('recomputes runtime-applied node source bindings and rejects forged identities', () => {
+    const ultimateCandidateIdentity =
+      'settlement-coverage:actor|112001|11200113|0|11200113|ultimate:11200113|0|elements|7|-7212963066810547935';
+    const ultimateGraphIdentity =
+      '11200113|0|elements|7|-7212963066810547935';
+    const runtimeBindings = [
+      {
+        nodeIdentity: '11200113|element:-2511185242952603503',
+        authorityKind: 'source-driven-conditional-damage-contract',
+        bindingIdentity: 'gisele-ultimate-consumer-191f',
+        sourcePathId: '-2511185242952603503',
+      },
+      {
+        nodeIdentity: '11200113|element:1403965050569036408',
+        authorityKind: 'source-driven-conditional-damage-contract',
+        bindingIdentity: 'gisele-ultimate-consumer-191f',
+        sourcePathId: '1403965050569036408',
+      },
+      {
+        nodeIdentity: '11200113|element:-5022202969777715803',
+        authorityKind: 'semantic-effect-runtime-binding',
+        bindingIdentity:
+          'semantic-effect:11200113|0|-5022202969777715803|2617385811689971573:191',
+        sourcePathId: '-5022202969777715803',
+      },
+      {
+        nodeIdentity: '11200113|element:2085743462064840077',
+        authorityKind: 'semantic-effect-runtime-binding',
+        bindingIdentity:
+          'semantic-effect:11200113|0|2085743462064840077|2617385811689971573:191',
+        sourcePathId: '2085743462064840077',
+      },
+    ];
+    const ultimateCandidate =
+      giseleProfile.contracts.coverageCandidates.settlement.find(
+        item => item.candidateIdentity === ultimateCandidateIdentity
+      );
+    expect(ultimateCandidate.graphIdentity).toBe(ultimateGraphIdentity);
+    for (const expected of runtimeBindings) {
+      const node = ultimateCandidate.nodeClassifications.find(
+        item => item.nodeCatalogIdentity === expected.nodeIdentity
+      );
+      expect(node.classification).toBe('unresolved');
+      expect(node.dimensions.hp).toMatchObject({
+        sourceDimensionStatus: 'unresolved',
+        sourceClosureDisposition: 'runtime-applied',
+        sourceClosureAuthorityKind: expected.authorityKind,
+        sourceClosureBindingIdentities: [expected.bindingIdentity],
+      });
+      expect(node.dimensions.hp.sourceClosureSourceIdentity).toContain(
+        expected.sourcePathId
+      );
+      expect(node.dimensions.hp.sourceClosureRelationIdentities).toEqual([
+        expect.stringContaining(expected.nodeIdentity),
+      ]);
+    }
+
+    const findUltimateClosure = profileValue =>
+      profileValue.contracts.coverageCandidates.settlement
+        .find(item => item.candidateIdentity === ultimateCandidateIdentity)
+        .nodeClassifications.find(
+          item =>
+            item.nodeCatalogIdentity ===
+            '11200113|element:-2511185242952603503'
+        ).dimensions.hp;
+    const expectClosureFailure = profileValue => {
+      expect(
+        validateCharacterCombatCoverageCandidateClosure(profileValue).issues
+      ).toContain('settlement-coverage-node-source-closure-invalid');
+    };
+
+    const forgedNonemptySource = structuredClone(giseleProfile);
+    findUltimateClosure(forgedNonemptySource).sourceClosureSourceIdentity =
+      'fixture:forged-nonempty-source';
+    expectClosureFailure(forgedNonemptySource);
+
+    const deletedTrueSource = structuredClone(giseleProfile);
+    const deletedSourceClosure = findUltimateClosure(deletedTrueSource);
+    deletedSourceClosure.sourceClosureSourceIdentity =
+      deletedSourceClosure.sourceClosureSourceIdentity
+        .split('|')
+        .slice(1)
+        .join('|');
+    expectClosureFailure(deletedTrueSource);
+
+    const unrelatedSource = structuredClone(giseleProfile);
+    findUltimateClosure(unrelatedSource).sourceClosureSourceIdentity +=
+      '|fixture:unrelated-source';
+    expectClosureFailure(unrelatedSource);
+
+    const authoritySwap = structuredClone(giseleProfile);
+    findUltimateClosure(authoritySwap).sourceClosureAuthorityKind =
+      'semantic-effect-runtime-binding';
+    expectClosureFailure(authoritySwap);
+
+    const otherGroupGraft = structuredClone(giseleProfile);
+    const otherGroup = otherGroupGraft.contracts.tuningMarkConditionalDamageGroups.find(
+      group => group.groupIdentity === 'gisele-heavy3-consumer-32f'
+    );
+    const graftedUltimateCandidate =
+      otherGroupGraft.contracts.coverageCandidates.settlement.find(
+        item => item.candidateIdentity === ultimateCandidateIdentity
+      );
+    graftedUltimateCandidate.conditionalDamageGroupIdentities.push(
+      otherGroup.groupIdentity
+    );
+    const graftedGroupClosure = findUltimateClosure(otherGroupGraft);
+    graftedGroupClosure.sourceClosureBindingIdentities.push(
+      otherGroup.groupIdentity
+    );
+    graftedGroupClosure.sourceClosureSourceIdentity +=
+      `|${otherGroup.sourceIdentity}`;
+    const otherGroupIssues = validateCharacterCombatCoverageCandidateClosure(
+      otherGroupGraft
+    ).issues;
+    expect(otherGroupIssues).toEqual(
+      expect.arrayContaining([
+        'settlement-coverage-conditional-damage-binding-invalid',
+        'settlement-coverage-node-source-closure-invalid',
+      ])
+    );
+
+    const starCandidateIdentity =
+      'settlement-coverage:actor|112001|11200112|0|11200112|star-skill:11200112|0|elements|3|-3809486317990090417';
+    const starNodeIdentity = '11200112|element:-637110086033006477';
+    const findStarClosure = profileValue =>
+      profileValue.contracts.coverageCandidates.settlement
+        .find(item => item.candidateIdentity === starCandidateIdentity)
+        .nodeClassifications.find(
+          item => item.nodeCatalogIdentity === starNodeIdentity
+        ).dimensions.hp;
+    const forgedSemanticSource = structuredClone(giseleProfile);
+    findStarClosure(forgedSemanticSource).sourceClosureSourceIdentity =
+      'fixture:forged-semantic-source';
+    expectClosureFailure(forgedSemanticSource);
+
+    const otherEffectGraft = structuredClone(giseleProfile);
+    const otherEffect = otherEffectGraft.contracts.effects.semantic.find(
+      effect =>
+        effect.semanticIdentity &&
+        !(effect.graphIdentities ?? []).includes(
+          '11200112|0|elements|3|-3809486317990090417'
+        )
+    );
+    const graftedStarCandidate =
+      otherEffectGraft.contracts.coverageCandidates.settlement.find(
+        item => item.candidateIdentity === starCandidateIdentity
+      );
+    graftedStarCandidate.semanticEffectIdentities.push(
+      otherEffect.semanticIdentity
+    );
+    const graftedEffectClosure = findStarClosure(otherEffectGraft);
+    graftedEffectClosure.sourceClosureBindingIdentities.push(
+      otherEffect.semanticIdentity
+    );
+    graftedEffectClosure.sourceClosureSourceIdentity += `|${[
+      otherEffect.sourceIdentity,
+      ...(otherEffect.sourceIdentities ?? []),
+    ]
+      .filter(Boolean)
+      .sort()
+      .join('|')}`;
+    const otherEffectIssues = validateCharacterCombatCoverageCandidateClosure(
+      otherEffectGraft
+    ).issues;
+    expect(otherEffectIssues).toEqual(
+      expect.arrayContaining([
+        'settlement-coverage-semantic-effect-binding-invalid',
+        'settlement-coverage-node-source-closure-invalid',
+      ])
+    );
+  });
   it('keeps matched-effect-subtree activation conditions isolated by trigger branch', () => {
     const createEffect = ({
       elementId,
@@ -1874,10 +2290,11 @@ describe('M10 character combat profile pipeline', () => {
       semanticRecordCount: 162,
       rawRecordCount: 205,
       impactClassificationCounts: {
-        'gameplay-impacting': 72,
-        'not-applicable': 37,
-        unreachable: 22,
-        'wrapper-or-duplicate': 31,
+        'not-applicable': 38,
+        'source-runtime-resolved': 50,
+        'superseded-by-semantic-transition-closure': 21,
+        unreachable: 34,
+        'wrapper-or-duplicate': 19,
       },
     });
     expect(unresolvedLedger.records).toHaveLength(162);
@@ -1885,8 +2302,14 @@ describe('M10 character combat profile pipeline', () => {
     expect(
       unresolvedLedger.records.every(
         record =>
-          PROFILE_STATUSES.has(record.status) &&
-          record.status !== 'applied' &&
+          [
+            'not-applicable',
+            'static-evidence-gap',
+            'source-closure-applied',
+          ].includes(record.status) &&
+          (record.status !== 'source-closure-applied' ||
+            (record.sourceClosureDisposition === 'applied' &&
+              String(record.sourceClosureSourceIdentity ?? '').length > 0)) &&
           record.recordIdentity &&
           record.impactClassification &&
           Array.isArray(record.reasons) &&
@@ -2028,7 +2451,7 @@ describe('M10 character combat profile pipeline', () => {
       goldenTrace.actual.resources.actorSpByActorId['actor-101010']
     ).toMatchObject({
       initialValue: 100,
-      currentValue: 35.418732,
+      currentValue: 37.818695,
       autoRecovery: [
         {
           reason: 'verified-auto-sp-background',
@@ -2084,7 +2507,7 @@ describe('M10 character combat profile pipeline', () => {
         [
           scriptPath,
           '--owner',
-          '101010',
+          '112001',
           '--write',
           '--output-root',
           outputRoot,
@@ -2104,14 +2527,14 @@ describe('M10 character combat profile pipeline', () => {
               outputRoot,
               'src',
               'data',
-              'generated',
-              'character-combat-owner-contracts',
-              '101010.json'
+               'generated',
+               'character-combat-owner-contracts',
+               '112001.json'
             ),
             'utf8'
           )
         ).contractHash
-      ).toBe(ownerContract.contractHash);
+      ).toBe(giseleOwnerContract.contractHash);
       expect(hashFile(VERIFIED_PACKAGE_PATH)).toBe(packageHashBefore);
     } finally {
       fs.rmSync(outputRoot, { recursive: true, force: true });

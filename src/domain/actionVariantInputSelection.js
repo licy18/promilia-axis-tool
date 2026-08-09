@@ -3,14 +3,21 @@ export const ACTION_VARIANT_INPUT_SELECTION_SCHEMA_VERSION = 1;
 export function normalizeActionVariantInputSelection(value = null) {
   if (!value || typeof value !== 'object') return null;
   const selectorIdentity = textOrNull(value.selectorIdentity);
-  if (!selectorIdentity) return null;
+  const inputFrame = nonNegativeIntegerOrNull(
+    value.inputFrame ?? value.releaseFrame
+  );
+  const mode = normalizeInputMode(value.mode);
+  if (!selectorIdentity && !(mode === 'release' && inputFrame != null)) {
+    return null;
+  }
   return {
     schemaVersion: ACTION_VARIANT_INPUT_SELECTION_SCHEMA_VERSION,
     selectorIdentity,
     selectorKind: textOrNull(value.selectorKind),
     publicVariantIndex: nonNegativeIntegerOrNull(value.publicVariantIndex),
     chargeTier: positiveIntegerOrNull(value.chargeTier),
-    mode: normalizeInputMode(value.mode),
+    inputFrame,
+    mode,
   };
 }
 
@@ -20,6 +27,7 @@ export function createActionVariantInputSelection({ selector, option } = {}) {
     selectorKind: selector?.kind,
     publicVariantIndex: option?.publicVariantIndex,
     chargeTier: option?.chargeTier,
+    inputFrame: option?.inputFrame,
     mode: selector?.mode,
   });
 }
@@ -35,7 +43,7 @@ export function resolveActionVariantInputOption(contract, selection) {
 }
 
 function normalizeInputMode(value) {
-  return ['press', 'hold'].includes(value) ? value : null;
+  return ['press', 'hold', 'release'].includes(value) ? value : null;
 }
 
 function textOrNull(value) {

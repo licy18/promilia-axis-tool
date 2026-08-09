@@ -3193,6 +3193,7 @@ describe('verified soul essence effect generation', () => {
     ];
     const generated = createVerifiedBattleEffectGeneration({
       scenario,
+      mechanicsPackage: verifiedCombatMechanicsPackage,
       actionExecutionPlan: projection.actionExecutionPlan,
       actionResolutionById: new Map([
         [
@@ -3221,6 +3222,7 @@ describe('verified soul essence effect generation', () => {
     );
     const reversedGeneration = createVerifiedBattleEffectGeneration({
       scenario,
+      mechanicsPackage: verifiedCombatMechanicsPackage,
       actionExecutionPlan: projection.actionExecutionPlan,
       actionResolutionById: new Map([
         [

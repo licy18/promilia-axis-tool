@@ -504,7 +504,8 @@
           "minimum": 0
         },
         "chargeTier": { "type": ["integer", "null"], "minimum": 1 },
-        "mode": { "enum": ["press", "hold", null] }
+        "inputFrame": { "type": ["integer", "null"], "minimum": 0 },
+        "mode": { "enum": ["press", "hold", "release", null] }
       }
     },
     "attackInput": {

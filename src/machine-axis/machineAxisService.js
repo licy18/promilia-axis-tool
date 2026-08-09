@@ -2190,6 +2190,46 @@ function resolveSemanticVariantSelection({
   const requested = action.intent.semanticVariant;
   if (!requested) return null;
   const mechanicsPackage = requireMechanicsPackage();
+  if (
+    requested.mode === 'release' &&
+    Number.isInteger(Number(requested.inputFrame)) &&
+    Number(requested.inputFrame) >= 0
+  ) {
+    const releaseBindings = (
+      mechanicsPackage.actionVariantGraph?.chargingReleaseBindings ?? []
+    ).filter(
+      binding =>
+        binding.applied === true &&
+        Number(binding.ownerId) === Number(ownerId) &&
+        Number(binding.publicControlSkillId) === Number(mapping.controlSkillId) &&
+        String(binding.actionKind) === String(mapping.actionKind)
+    );
+    if (releaseBindings.length === 0) {
+      issues.push(
+        createMachineAxisDiagnostic(
+          'machine-axis-charging-release-binding-missing',
+          `actions.${index}.intent.semanticVariant`,
+          'Release-frame input has no source-driven charging binding',
+          {
+            actionId: action.id,
+            ownerId,
+            controlSkillId: mapping.controlSkillId,
+            inputFrame: requested.inputFrame,
+          }
+        )
+      );
+      return null;
+    }
+    return {
+      selection: {
+        ...requested,
+        selectorKind: requested.selectorKind ?? 'charging-release-frame',
+        sourceIdentity: releaseBindings.map(binding => binding.sourceIdentity),
+        resolutionStatus: 'applied',
+      },
+      selectedOption: null,
+    };
+  }
   const contracts = (
     mechanicsPackage.actionVariantGraph?.derivedControlContracts ?? []
   ).filter(

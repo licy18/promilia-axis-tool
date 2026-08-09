@@ -1,257 +1,264 @@
-# 112001 资源图与 consumer 证据
+# 112001 资源图、consumer 与时序合同
 
-## 1. 主动可达控制图
+本图绑定 `m12-112001-assumption-runtime-v1@1.0.0`、`sha256-canonical-json-v1:3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71`；四条 assumption 仍是 `resolved-by-product-assumption`，不是客户端事实。
 
-### 1.1 特殊重击入口
+## 1. 主动动作图
 
-`EventBridgeBehaviorData` 的 `startFrame + frameCount` 被规范化为右开窗。下表的核心入口均不需要敌方攻击、受击、闪避成功、格挡成功或反击事件，因此在 `m12c-zero-distance-passive-boss-v1` 中主动可达。
+以下 EventBridge 均采用右开输入窗，且不需要 Boss 攻击、角色受击、闪避或格挡事件。
 
-| 来源动作 | source control/sub | 重击输入窗 | target control/sub | 特殊重击 | behavior pathId | 主动可达 |
-| --- | --- | --- | --- | --- | ---: | --- |
-| 普攻 A2 | `11200102/sub0` | `[55,320)` | `11200110/sub1` | 2 | `3680827837063640949` | 是 |
-| 普攻 A3 | `11200103/sub0` | `[63,243)` | `11200110/sub2` | 2 | `6793272662003117501` | 是 |
-| 普攻 A4 | `11200104/sub0` | `[36,266)` | `11200110/sub3` | 3 | `-1628043982540349619` | 是 |
-| 普攻 A5 | `11200105/sub0` | `[59,179)` | `11200110/sub4` | 3 | `-8216854629522320996` | 是 |
-| 星鸣技 | `11200112/sub0` | `[67,298)` | `11200110/sub1` | 2 | `5434729759590619730` | 是 |
-| 星决技 | `11200113/sub0` | `[216,461)` | `11200110/sub3` | 3 | `-7179768813052977291` | 是 |
-| 星鸣协战 | `11200121/sub0` | `[112,377)` | `11200110/sub1` | 2 | `5933815741903944333` | 是；作为相邻主动入口记录 |
-| 极限反击 | `11200125/sub0` | `[24,194)` | `11200110/sub1` | 2 | `2313703050033028770` | 否；scenario-n/a |
-| 完美格挡/招架反击 | `11200127` | 来源存在 | `11200110/sub3` | 3 | 见该 control 资源 | 否；scenario-n/a |
-
-核心 `bridge=3 (InterruptSkill)` 窗口同时给出 `allowSkill1=1`；星鸣入口的 `frameIndex=0`，普攻 A2/A3 与星决入口记录的 `frameIndex=8`。实现必须匹配 control、subskill、input command 与右开窗，不能只凭公开文本在任意时间切入。
-
-主动调度最小前置：
-
-```text
-normal A2/A3 + heavy in window -> 11200110/sub1 or sub2
-normal A4/A5 + heavy in window -> 11200110/sub3 or sub4
-star landed or action-progress + heavy in [67,298) -> 11200110/sub1
-ultimate action-progress + heavy in [216,461) -> 11200110/sub3
-```
-
-入口窗口是动作控制窗口，不要求前一个伤害包命中；由入口之后产生的印记、CD 恢复、observer/buff 等效果仍各自要求对应碰撞落地。
-
-### 1.2 重击控制与 Charging 释放
-
-`skill_control_11200110__-3020379679137028416.json` 含五个 subskill：
-
-| sub | 含义 | control 时长 |
-| ---: | --- | ---: |
-| 0 | 默认重击；不是本任务的特殊重击 2/3 | 309F |
-| 1 | 由 A2/星鸣/协战进入的特殊重击 2 charge | 294F |
-| 2 | 由 A3 进入的特殊重击 2 charge | 294F |
-| 3 | 由 A4/星决进入的特殊重击 3 charge | 156F |
-| 4 | 由 A5 进入的特殊重击 3 charge | 156F |
-
-Charging bridge（`ESkillEventType.Charging=4`）进入 `11200141`：
-
-| source | 提前释放 | 完全释放 | 重叠点 |
-| --- | --- | --- | --- |
-| `11200110/sub1` | `[0,60) -> 11200141/sub0` | `[59,239) -> 11200141/sub1` | `59F` |
-| `11200110/sub2` | `[0,60) -> 11200141/sub0` | `[59,239) -> 11200141/sub1` | `59F` |
-| `11200110/sub3` | `[0,68) -> 11200141/sub2` | `[67,134) -> 11200141/sub3` | `67F` |
-| `11200110/sub4` | `[0,68) -> 11200141/sub2` | `[67,135) -> 11200141/sub3` | `67F` |
-
-`11200141` 的 release subskill 时长：提前重击 2 `sub0=274F`、完全重击 2 `sub1=265F`、提前重击 3 `sub2=236F`、完全重击 3 `sub3=258F`。
-
-注意：两个 release window 在阈值各重叠一帧。`allowCountermeasuresSkill=1` 只是该 behavior 的一个许可字段，不能覆盖 `bridge=Charging` 并把它误判为反击入口。实现必须保留原始 bridge predicate 和来源顺序；正式动作调度可以精确落在 `59F/67F`，而当前既没有客户端 Charging evaluator 的同帧裁决，也没有冻结场景政策排除这些帧，因此必须返回 `112001-charge-threshold-overlap-order-open` 并拒绝 formal scheduling，不得按数组顺序猜测。
-
-## 2. 星鸣：雷印记与末击
-
-`11200112/sub0` 总长 271F，碰撞帧为：
-
-```text
-27F, 33F, 39F, 49F, 55F, 62F
-```
-
-### 2.1 雷印记 250
-
-首次碰撞 `[27,28)` 的 collision behavior pathId 为 `5182973323990506066`，target damage 为 `112001056`；同一 collision 的 `toOwnElementBaseDatas` 挂载 element pathId `-3809486317990090417`，向现有队伍调谐印记容器执行：
-
-```text
-elementConfigId = 250
-stackDelta = +1
-profile = thunder tuning mark
-```
-
-所以正确事务为：
-
-```text
-star action -> hit-created@27F -> hit-landed -> team tuning mark 250 +1
-```
-
-它不是 `action-start` 事务。Unity 的注入路径是 source actor 的 `toOwn`，PUBLIC 语义是队伍获得印记；集成时应进入现有共享 tuning-mark 容器，而不是新造普通 actor buff。若 27F 首碰撞未命中，即使 33F 之后的伤害命中，也没有来源允许补发这 1 层印记。距离 0/投射物立即命中只使产品 golden 场景可稳定得到 landed，不得删除通用 runtime 的 miss gate。
-
-### 2.2 `11200162` current-client-orphan / stale-description 裁决
-
-原始来源事实必须原样保留：NewTable `skill_level` row `2193`、`skillId=11200162` 指向 CHS `9418863283712`，描述确实写有星鸣技末次伤害命中施加 1 层 `焰火`、持续 15 秒。这只证明描述行存在。
-
-当前可执行客户端给出的机制边界是：
-
-- 星鸣最后 collision 是 `[62,63)`，target damage `112001064`，但该 collision 没有与描述对应的 toOwn/toTarget consumer。
-- `skill_control_11200162__-3629621280326451238.json` 的 `skillResourceMaps.elements` 只有 path `-1181925444607214156` 与 `1138707259999444314`。
-- 两个 path 实际对应 `112001133 -> 112001134`：上场触发、暴击率 `+8%`、持续 8 秒；它不是描述中的机制。
-- 112001 可达 Battle Element 图没有能与该描述唯一绑定的元素。
-- 全局搜索得到的 `101003/480xxx` `焰火` 元素属于其他角色链，只能作为防止跨角色误借的负例。
-
-当前客户端资源是权威机制边界。因此这里不是“consumer 尚待补齐”，也不建立末击 landed/miss/interruption 生命周期。统一记录为：
-
-```json
-{
-  "recordIdentity": "112001-current-client-orphan-skill-level-2193",
-  "classification": "current-client-orphan",
-  "descriptionStatus": "stale-description",
-  "applicability": "not-applicable",
-  "gameplayMechanic": false,
-  "runtimeGenerationMode": "none",
-  "required": false,
-  "blocksReadiness": false
-}
-```
-
-任何把 62F landed、miss、中断或同帧游标映射成该描述效果的正向合同都没有客户端来源，必须拒绝。该记录不进入 production recipe/runtime、不进入 required、不阻断 readiness，也没有后续“等待 consumer”实现阶段。
-
-## 3. 被动 11200161：落地重击减少星鸣 CD
-
-Battle Element `112001267`（pathId `3549516589720748751`）：
-
-- 名称/描述：`减少CD`。
-- `recoverType=3`、`slot=3`、`cdRecoveryType=0`。
-- formula 值 `G=-3`，由永久 passive marker `112001132` 门控。
-- 目标槽位 3 对应星鸣技。
-
-四个实际落地入口：
-
-| 重击形态 | control/sub | collision window | target damage | collision behavior pathId | 结果 |
-| --- | --- | --- | --- | ---: | --- |
-| 提前重击 2 | `11200141/sub0` | `[26,27)` | `112001163` | `-1951771389325363148` | landed 后星鸣 CD `-3s` |
-| 完全重击 2 | `11200141/sub1` | `[21,22)` | `112001207` | `-2221402581055835730` | landed 后星鸣 CD `-3s` |
-| 重击 3（由 sub3 charge） | `11200110/sub3` | `[17,18)` | `112001180` | `-6246824455983816836` | landed 后星鸣 CD `-3s` |
-| 重击 3（由 sub4 charge） | `11200110/sub4` | `[17,18)` | `112001180` | `2145608153295598680` | landed 后星鸣 CD `-3s` |
-
-重击 3 的 CD 恢复发生在 charge control 的首个落地碰撞，早于提前/完全 release 选择。它对该次重击 3 只能触发一次，不能在 `11200141/sub2/sub3` 再补发。action 被启动但首碰撞未命中时不得减 CD；命中后再中断不回滚。
-
-当前通用生成器能识别 cooldownReduction 字段，但会把该公式归入 `sp-formula-not-literal-function-5`；集成时需要显式 passive/landed-hit override，不能把 unresolved generic parse 当作数值 0。
-
-## 4. 完全重击 3：三次逐层消费
-
-以下图只描述 `11200141/sub3`（完全重击 3）：
-
-```text
-19F: damage 112001190, weakBreakDamageRate=22000, no mark consumer
-32F: screen/freeze + consumer 112001258
-39F: consumer 112001268
-46F: consumer 112001268
-```
-
-### 4.1 consumer 结构
-
-| frame | consumer | consume mode | candidates | required/max | 无成功消费 damage | 成功消费 damage | weakBreak 普通/强化 |
-| ---: | --- | --- | --- | --- | --- | --- | --- |
-| 32 | `112001258` path `-3467106530063546693` | `Priority=0` | `[250,450]` | `1 / 0` | `112001264` | `112001259` | `22000 / 25000` |
-| 39 | `112001268` path `4468850874124785724` | `Priority=0` | `[250,450]` | `1 / 1` | `112001196` | `112001270` | `22000 / 25000` |
-| 46 | `112001268` path `4468850874124785724` | `Priority=0` | `[250,450]` | `1 / 1` | `112001196` | `112001270` | `22000 / 25000` |
-
-三次都是一层 transaction，所以总消费量是 `min(3, 每次执行时可满足条件的印记层数)`，并且每一击都重新读取消费后的状态。不能在 32F 一次性预扣 3 层，也不能把三击的资源选择快照固定为 action-start 状态。
-
-### 4.2 每个 consumer 的客户端顺序
-
-对每个 32F/39F/46F consumer：
-
-```text
-1. CalculateConsumeCount
-   - 按 elementArr 索引升序检查 250，再检查 450
-   - 选择首个当前层数 >= consumeLayerNum 的候选
-2. DoConsume
-   - 从所选的单一候选扣 1 层
-3. DoInject
-   - 无成功消费走 list_1 普通伤害；成功消费走 list_2 强化伤害
-   - 随后按所选 element id 查表并注入超限包：250 -> 299，450 -> 499
-```
-
-可据此得到以下确定顺序：
-
-```text
-consume mark -> branch damage (HP + weakBreak payload) -> selected-mark overlimit packet
-```
-
-其中“branch damage 的 HP 与 toughness 谁先结算、它自身触发 break 的游标位置”仍是 optimizer toughness 客户端证据任务的责任；本侧车只保证 branch damage 在所选超限包之前。
-
-### 4.3 资源示例
-
-| 32F 前状态 `(雷250,暗450)` | 32F | 39F | 46F | 总消费 |
+| 来源 | 输入窗 | 执行 control/sub | 语义 | pathId |
 | --- | --- | --- | --- | ---: |
-| `(3,0)` | 雷 | 雷 | 雷 | 3 |
-| `(2,2)` | 雷 | 雷 | 暗 | 3 |
-| `(1,2)` | 雷 | 暗 | 暗 | 3 |
-| `(0,2)` | 暗 | 暗 | 无 | 2 |
-| `(0,0)` | 无 | 无 | 无 | 0 |
+| A2 `11200102/sub0` | `[55,320)` | `11200110/sub1` | 特殊重击2 | `3680827837063640949` |
+| A3 `11200103/sub0` | `[63,243)` | `11200110/sub2` | 特殊重击2 | `6793272662003117501` |
+| A4 `11200104/sub0` | `[36,266)` | `11200110/sub3` | 特殊重击3 | `-1628043982540349619` |
+| A5 `11200105/sub0` | `[59,179)` | `11200110/sub4` | 特殊重击3 | `-8216854629522320996` |
+| 星鸣 `11200112/sub0` | `[67,298)` | `11200110/sub1` | 特殊重击2 | `5434729759590619730` |
+| 星决 `11200113/sub0` | `[216,461)` | `11200110/sub3` | 特殊重击3 | `-7179768813052977291` |
+| 星鸣协战 `11200121/sub0` | `[112,377)` | `11200110/sub1` | 特殊重击2 | `5933815741903944333` |
 
-“无”只表示没有成功选择/消费印记且没有所选印记超限包；普通 damage 分支仍由 `injectElementDataList_1` 表达。
+入口窗回答“何时可切入 charge-control”；入口不要求前一伤害命中。印记、CD、watcher 和 wrapper 仍分别受对应碰撞 landed gate 控制。
 
-## 5. 星决：两层消费、属性 wrapper 与破韧观察器
+### 1.1 Charging 组合
 
-`11200113/sub0` 的关键碰撞：
+```text
+source action/input window
+  -> 11200110/sub1..4 charge segment [0, releaseFrame)
+  -> 11200141 selected release segment shifted by releaseFrame
+  -> final occupancy = releaseFrame + release-control duration
+```
 
-| frame | 资源 | 结论 |
-| ---: | --- | --- |
-| 128 | target damage `112001241` + toOwn `112001271` | 首次碰撞落地时挂 8 秒破韧观察器 |
-| 140/147 | 后续 target damage | 继续星决伤害序列 |
-| 191 | target consumer `112001260` + toOwn wrapper `112001255` | 两层印记消费/普通强化分支；命中后 12 秒属性 wrapper |
-| 196 | 后续 target damage | consumer 后仍有伤害包 |
+| charge source | early | full | release control 时长 |
+| --- | --- | --- | --- |
+| `11200110/sub1,sub2` | `[0,60) -> 11200141/sub0` | `[59,239) -> sub1` | sub0 `274F`；sub1 `265F` |
+| `11200110/sub3` | `[0,68) -> 11200141/sub2` | `[67,134) -> sub3` | sub2 `236F`；sub3 `258F` |
+| `11200110/sub4` | `[0,68) -> 11200141/sub2` | `[67,135) -> sub3` | sub2 `236F`；sub3 `258F` |
+
+assumption A `112001-charge-threshold-overlap-order-open` 的 v1 选择是 `greatest-start-frame`：
+
+```text
+58F -> sub0   59F -> sub1   60F -> sub1
+66F -> sub2   67F -> sub3   68F -> sub3
+```
+
+选择器不能依赖 JSON 数组顺序。等 startFrame 的候选只有执行 control/sub 与 semantic identity 均一致时，才按稳定 source identity 决胜；语义冲突返回 `charging-release-same-threshold-semantic-conflict`。
+
+## 2. 星鸣雷印记
+
+`11200112/sub0` 碰撞帧为 `27/33/39/49/55/62F`。27F 首碰撞：
+
+```text
+hit element 112001056
+behavior path 5182973323990506066
+landed
+  -> toOwn tuning mark 250 +1
+miss/cancelled/blocked
+  -> no mark
+```
+
+雷印记进入共享队伍 tuning 容器，不是普通 actor buff。27F miss 后，33F 以后 landed 没有“补发首碰撞印记”的来源。
+
+62F 末碰撞没有“焰火” consumer；它不能生成任何 stack、duration 或 effect cursor。`11200162` 实际可执行链另见第 7 节。
+
+## 3. 特殊重击 CD 被动
+
+Battle Element `112001267`：槽3、`recoverType=3`、`cdRecoveryType=0`、formula `G=-3`。四个唯一 landed 入口：
+
+| 形态 | control/sub | 碰撞 | hit element | behavior pathId |
+| --- | --- | --- | ---: | ---: |
+| 重击2 early | `11200141/sub0` | `[26,27)` | `112001163` | `-1951771389325363148` |
+| 重击2 full | `11200141/sub1` | `[21,22)` | `112001207` | `-2221402581055835730` |
+| 重击3 source3 | `11200110/sub3` | `[17,18)` | `112001180` | `-6246824455983816836` |
+| 重击3 source4 | `11200110/sub4` | `[17,18)` | `112001180` | `2145608153295598680` |
+
+```text
+hit-landed -> star cooldown -3000ms
+hit-missed/cancelled -> no cooldown change
+landed then interrupted -> keep committed recovery
+```
+
+重击3 的恢复发生在 charge-control 17F，不在 release-control 补发；同一次动作只触发一次。
+
+## 4. 完全重击3：三次独立消费
+
+`11200141/sub3` 的关键图：
+
+```text
+19F: damage 112001190, weakBreak 22000, no consumer
+32F: judgment 112001258 -> base 112001264 / enhanced 112001259
+39F: judgment 112001268 -> base 112001196 / enhanced 112001270
+46F: judgment 112001268 -> base 112001196 / enhanced 112001270
+```
+
+每个 judgment 均为同一通用事务：
+
+```text
+1. CalculateConsumeCount：按 Priority [250,450] 找首个至少 1 层的单一候选
+2. DoConsume：从选中候选扣 1 层
+3. DoInject：
+   - 无候选 -> list1 普通 damage，weakBreak 22000
+   - 成功 -> list2 强化 damage，weakBreak 25000
+4. 成功时在 branch damage 后发所选印记 overlimit：250->299，450->499
+```
+
+三个 consumer 每次重读当前资源，所以初始 `(雷1,暗2)` 会依次选择 `250,450,450`。不得 action-start 预扣三层，也不得一次 consumer 跨元素拼层。
+
+稳定 source sequence 必须满足：
+
+```text
+consume(selected mark) < branch damage < selected-mark overlimit
+32F packet < 39F packet < 46F packet
+```
+
+## 5. 星决 191F consumer 与 wrapper
 
 ### 5.1 两层消费
 
-`112001260`（pathId `-7212963066810547935`）：
+`11200113/sub0 @191F`：judgment `112001260`，候选 `[250,450]`，同一候选需要 2 层。
 
 ```text
-consumeMode = Priority(0)
-elementArr = [250,450]
-consumeLayerNum = 2
-consumeLayerMaxNum = 2
-list_1 = 112001265, weakBreakDamageRate=16000
-list_2 = 112001261, weakBreakDamageRate=19000
-selected overlimit = 250 -> 299, 450 -> 499
+无候选 -> list1 112001265
+成功 -> consume 2 -> list2 112001261 -> selected overlimit 299/499
 ```
 
-选择条件是“同一个候选至少 2 层”。状态 `(1,1)` 不能拼接消费；状态 `(2,2)` 选雷 `250`；状态 `(0,2)` 选暗 `450`。成功时顺序与重击 3 相同：先扣 2 层，再发强化 damage，最后发对应超限包。
+| 初始 `(250,450)` | 结果 |
+| --- | --- |
+| `(1,1)` | 无候选、normal list1、不发 overlimit |
+| `(2,2)` | 选 250、扣2、enhanced、发299 |
+| `(0,2)` | 选 450、扣2、enhanced、发499 |
 
-### 5.2 命中后 12 秒 wrapper
+### 5.2 assumption D：post-hit wrapper
 
-同一 191F collision 的 toOwn `112001255` 持续 `12000ms`，子属性为：
+同碰撞还挂 `112001255`，其子元素为：
 
-- `112001257`：attribute `113`，raw `99`。
-- `112001256`：attribute `222`，raw `3000`。
+- `112001257`：attribute `113` raw `99`
+- `112001256`：attribute `222` raw `3000`
+- lifecycle：`[applyTime,applyTime+12000ms)`
 
-PUBLIC 语义将该命中后 bundle 描述为破韧效率 `+30%/12s`。正确生命周期是 191F 对应碰撞 landed 后才激活，结束为右开边界。当前证据没有闭合 target consumer 与 toOwn wrapper 的同帧客户端先后，所以不能让 wrapper 在没有游标证据时影响 191F 自身 damage/weakBreak，也不能用时间相等强行排除；这项由 settlement 接口返回权威 active-state cursor。
+v1 固定顺序：
 
-### 5.3 8 秒破韧观察器与 11 秒全队暴伤
+```text
+191F target consumer -> consume -> normal/enhanced damage -> overlimit
+191F landed
+  -> post-hit apply 112001255 wrapper
+196F and later independent packet
+  -> may read wrapper
+```
 
-`112001271`（pathId `-4310182546344143382`）：
+191F 自身不受益；191F miss 不应用；恰好 `+12000ms` 不可见。alternate `wrapper-before-current-packet` 会改变 191F 输出，作为敏感性负例保留。
 
-- 在 128F 首次 collision 的 `toOwnElementBaseDatas` 上。
-- `duration=8000`。
-- `triggerCounter=1`，一次性。
-- condition tuple `(conditionParam1=12, conditionParam2=40)`；结合 PUBLIC 文本与 elementName `burst伤害命中break敌人时`，目标事件是星决后破韧。
-- trigger target type `15`，注入 `112001272`。
+## 6. 星决 128F break watcher
 
-`112001272`（pathId `8180705944172128032`）：
+来源图：
 
-- attribute `8`（暴击伤害）。
-- raw `1000`，即 `+10%`。
-- `time=11000`。
-- 全队目标。
+```text
+128F hit element 112001241
+landed -> arm 112001271 for 8000ms, triggerCount=1
+first eligible enemy-break -> consume watcher
+  -> team actors apply 112001272
+  -> attribute 8 raw 1000, duration 11000ms
+```
 
-对于 128F 同一 collision：damage 与观察器挂载孰先尚无客户端证据。实现不得写成 `event.time >= armTime` 就自动让本包破韧触发；必须由 optimizer toughness 合同返回该 break 发生时观察器是否已激活。对之后的独立事件，观察窗为 `[authoritativeArmTime, authoritativeArmTime+8000ms)`；触发后的团队 buff 为 `[breakEventTime, breakEventTime+11000ms)`。
+assumption C `hit-then-arm-no-retroactive-trigger` 的时序：
 
-## 6. 场景 N/A 边界
+```text
+128F damage/toughness/break settlement
+  -> if landed, arm watcher after packet
+  -> 128F packet cannot trigger the watcher it creates
+later canonical packet in [armTime, armTime+8000ms)
+  -> first break triggers once
+```
 
-以下资源保留来源，但不进入产品场景调度：
+128F miss 不 arm；128F landed 后在 191F 前中断不回滚；恰好 `armTime+8000ms` 不触发；buff 恰好 `breakTime+11000ms` 失效。alternate `arm-before-current-hit` 只用于证明敏感性。
 
-- `11200115` 闪击/闪避攻击。
-- `11200111` 跃击、跳跃或下落派生。
-- `11200125` 极限反击，以及其重击转特殊重击 2/普通攻击接续。
-- `11200127` 完美闪避/格挡/招架反击，以及其重击转特殊重击 3。
-- 所有要求敌方攻击、角色受击、闪避成功、格挡成功、招架成功、反击窗口或 Boss 主动事件的 listener/transaction。
+## 7. 单包 enemy settlement
 
-`11200121` 星鸣协战本身不依赖敌攻，其 `[112,377)` 特殊重击 2 入口作为相邻主动路径保留。`11200126` 星鸣连携未在本侧车被判为敌攻专属，也没有被扩大到本任务的重击核心范围。
+assumption B 直接引用中央 `m12-enemy-settlement-runtime-v2@2e3095db4b8c9232`，不得建立 112001 专属排序：
+
+```text
+1. HP damage output/multiplier 读取 packet 前 break state
+2. 结算 toughness 并产生 break transition
+3. 提交当前 packet 的 HP mutation
+4. 后续同帧 packet 按 canonical sourceSequencePath/eventIdentity 读取新 break state
+```
+
+因此破韧触发包自身不吃 break multiplier，后续独立包可吃。改动 sourceSequencePath 顺序必须改变 input/data/trace/build hash，或在不具备稳定身份时 fail closed。
+
+## 8. `11200162` 实际链与 orphan 防线
+
+当前资源只闭合：
+
+```text
+controlled actor enters
+  -> 112001133 (8000ms wrapper)
+  -> 112001134 attribute 7 raw 800
+  -> crit rate +8%, refresh, right-open
+```
+
+NewTable row 2193/CHS 9418863283712 的“焰火”描述继续保留为 `current-client-orphan/stale-description`：`gameplayMechanic=false`、`runtimeGenerationMode=none`、`required=false`、`blocksReadiness=false`。`101003/480xxx` 同名图仅为“禁止把孤立文案伪造成机制”的负例。
+
+## 9. 场景路由
+
+冻结场景只调度主动动作面：普攻链、特殊重击2/3、星鸣、星决、星鸣协战/星携。以下控制保留来源但 N/A：
+
+| control | 结构化原因 |
+| --- | --- |
+| `11200115` | `requires-evade-context` |
+| `11200111` | `requires-aerial-or-fall-context` |
+| `11200125` | `requires-enemy-attack-derived-counter-window` |
+| `11200127` | `requires-enemy-attack-and-perfect-defense-event` |
+
+受击、闪避、格挡、反击专属 listener 同样不得出现在 golden 调度或改变资源状态。
+
+## 10. R4 generation authority 与 coverage 图
+
+### 10.1 hit-gated effect 必须与 landed packet 同源
+
+```text
+scenario.combatScenario.projectile.defaultWillHit
+  ?? scenario.projectile.defaultWillHit
+  -> resolveActionHitWillHit(action, exactHitIdentity, defaultWillHit)
+  -> damage/tuning/effect use the same landed decision
+```
+
+`conditional-damage-group-hit` 使用 `conditional-damage:<groupIdentity>:<hitIndex>`；`landed-action-hit` 先按 element/frame/behaviorPath 找到 resolution hit，再使用该 hit 的 source identity。scenario 默认 miss 时不得应用 wrapper/watcher/effect；显式 hit 可覆盖默认 miss，显式 miss 可覆盖默认 hit。
+
+### 10.2 watcher suppression authority
+
+```text
+explicit mechanics package (packageId + packageHash)
+  == action resolution package binding
+  -> read only this package.breakTriggerWatchers[].suppressedEffectIdentities
+  -> suppress matching semantic/raw watcher effect
+otherwise
+  -> fail closed: verified-battle-effect-generation-mechanics-package-binding-mismatch
+```
+
+不得从进程全局 installed package 偷读 suppression 后再消费另一 package/hash 的 action resolution。这样 formal 与 alternate/sensitivity replay 各自使用自己的 watcher 集合。
+
+### 10.3 coverage candidate 映射
+
+```text
+recipe candidateResolutionMode opt-in
+  -> published control root compact nodeClassifications
+  -> exact graph.nodeIdentities + raw counts
+  -> each node damage/toughness/sp source status
+  -> each product dimension sourceClosureDisposition
+  -> exact runtime binding identity + node relation identity + source identity
+  -> candidate result
+  -> action summary / coverage summary
+```
+
+67 个 selected-root graph 各映射为一个 settlement candidate，并对 `hp/toughness/actorSp/kiboSp` 分别裁决；31 个 semantic effect 各映射为 effect candidate，另加 1 个 passive。compact node snapshot 必须来自本次 owner 编译实际使用的 control graph，不能用缺少 support control 或版本不同的全局 catalog 代替。
+
+94 个 candidate node reference 中，50 个 node 的总分类仍是 unresolved；逐维 closure 后未闭合数为 0。终态只能是：
+
+- `runtime-applied`：真实 hit、semantic runtime 或 conditional consumer；
+- `verified-zero`：具体 node source dimension 明确为 zero；
+- `not-applicable`：精确冻结场景排除，或两个星决 branch-template graph/node/dimension policy；
+- `unresolved`：任何其余情况，包括“没找到 output”。
+
+runtime node 不允许共享 graph 级来源集合。星决 root `112001260` 的 base/enhanced damage node 只可分别通过 conditional group 的 `baseTemplate(path=-251118..., element=112001265)` / `enhancedTemplate(path=140396..., element=112001261)` 闭合；overlimit node `-502220.../296` 与 `208574.../498` 只可通过同 graph、同 path、同 element、`damage=applied` 的各自 semantic effect 闭合。validator 从 `contracts.tuningMarkConditionalDamageGroups` 与 `contracts.effects.semantic` 重算这四条关系，并要求 closure 三组字段完全等值。
+
+最终 settlement 分布为 `hp 17/30/20/0`、`toughness 16/31/20/0`、`actorSp 9/38/20/0`、`kiboSp 9/38/20/0`（applied/zero/N/A/unresolved）。只要任一 node closure unresolved，所属 candidate 与 coverage dimension 都不得是 applied。
+
+中央精确 root `11200103|0|elements|1|-7394849788543465206` 的 root `112001008` 没有 edge/hit/semantic/conditional，raw node 总分类仍为 unresolved；其 source node 的 `damage/toughness/sp` 各自明确 zero，因此四个产品维均为 `verified-zero`。该例证明“总分类 unresolved”不能整体提升，也证明“无识别输出”不能变成 N/A。

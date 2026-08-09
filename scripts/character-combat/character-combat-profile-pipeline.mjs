@@ -438,7 +438,9 @@ export function createCharacterCombatOwnerArtifacts({
     );
   }
   const compiledContracts = compiledOwnerContract.contracts ?? {};
-  const publicActions = sortByIdentity(compiledContracts.publicActions ?? []);
+  const rawPublicActions = sortByIdentity(
+    compiledContracts.publicActions ?? []
+  );
   const ownerContextEdges = sortByIdentity(
     compiledContracts.timingInputEdges ?? []
   );
@@ -459,6 +461,14 @@ export function createCharacterCombatOwnerArtifacts({
   );
   const inputVariantSelectors = sortByIdentity(
     compiledContracts.inputVariantSelectors ?? []
+  );
+  const headlessAssumptionContract =
+    compiledContracts.headlessAssumptionContract ?? null;
+  const chargingReleaseBindings = sortByIdentity(
+    compiledContracts.chargingReleaseBindings ?? []
+  );
+  const breakTriggerWatchers = sortByIdentity(
+    compiledContracts.breakTriggerWatchers ?? []
   );
   const actionEffectBindings = sortByIdentity(
     compiledContracts.actionEffectBindings ?? []
@@ -519,6 +529,34 @@ export function createCharacterCombatOwnerArtifacts({
     static: [],
     dynamic: [],
   };
+  const coverageCandidateMode =
+    recipe.coveragePolicies?.candidateResolutionMode ?? null;
+  const settlementNodeClosurePolicies =
+    coverageCandidateMode === 'selected-root-source-closure-v1'
+      ? normalizeSettlementNodeClosurePolicies(
+          recipe.coveragePolicies?.settlementNodeClosurePolicies ?? []
+        )
+      : [];
+  const settlementCoverageCandidates =
+    coverageCandidateMode === 'selected-root-source-closure-v1'
+      ? createSettlementCoverageCandidates({
+          publicActions: rawPublicActions,
+          controls,
+          hits,
+          semanticEffects,
+          tuningMarkConditionalDamageGroups,
+          scenarioOutOfScopeActions,
+          settlementNodeClosurePolicies,
+          scenarioIdentity: recipe.productScenario,
+        })
+      : [];
+  const publicActions =
+    coverageCandidateMode === 'selected-root-source-closure-v1'
+      ? applySettlementCoverageCandidates({
+          publicActions: rawPublicActions,
+          settlementCoverageCandidates,
+        })
+      : rawPublicActions;
   const hiddenAudit = reports.hiddenInputDerivation ?? null;
   const occupancyAudit = reports.actionOccupancy ?? null;
   const reachable = discoverReachableControls({
@@ -537,6 +575,7 @@ export function createCharacterCombatOwnerArtifacts({
     ownerId,
     publicActions,
     attackInputChains,
+    contextEdges: ownerContextEdges,
     controlTransitionWindows,
     variantEdges: ownerVariantEdges,
     variantWindowBindings,
@@ -560,6 +599,14 @@ export function createCharacterCombatOwnerArtifacts({
     tuningMarkConditionalDamageGroups,
   });
   const unresolvedRecords = unresolvedLedger.records;
+  const effectCoverageCandidates =
+    coverageCandidateMode === 'selected-root-source-closure-v1'
+      ? createEffectCoverageCandidates({
+          semanticEffects,
+          rawUnresolvedRecords: unresolvedLedger.rawRecords,
+          scenarioIdentity: recipe.productScenario,
+        })
+      : [];
   const coverage = createCoverage({
     publicActions,
     actionForms,
@@ -570,6 +617,9 @@ export function createCharacterCombatOwnerArtifacts({
     hits,
     rawEffects,
     semanticEffects,
+    coverageCandidateMode,
+    settlementCoverageCandidates,
+    effectCoverageCandidates,
     specialResourceProfiles,
     resourceTransactions,
     thresholdTransitions,
@@ -584,6 +634,7 @@ export function createCharacterCombatOwnerArtifacts({
     unresolvedRecords,
     mechanicsPackage,
     ownerId,
+    recipe,
   });
   const sourceManifest = createSourceManifest({
     ownerId,
@@ -599,6 +650,9 @@ export function createCharacterCombatOwnerArtifacts({
       controlTransitionWindows,
       variantWindowBindings,
       inputVariantSelectors,
+      headlessAssumptionContract ? [headlessAssumptionContract] : [],
+      chargingReleaseBindings,
+      breakTriggerWatchers,
       actionEffectBindings,
       specialResourceProfiles,
       resourceTransactions,
@@ -618,6 +672,9 @@ export function createCharacterCombatOwnerArtifacts({
       passives,
       switchTriggers,
       semanticEffects,
+      settlementNodeClosurePolicies,
+      settlementCoverageCandidates,
+      effectCoverageCandidates,
     ],
     recipe,
   });
@@ -689,6 +746,7 @@ export function createCharacterCombatOwnerArtifacts({
     runtimeEffectBindings,
     passives,
     switchTriggers,
+    scenarioOutOfScopeActions,
     coverage,
     descriptionCoverage,
   });
@@ -732,6 +790,9 @@ export function createCharacterCombatOwnerArtifacts({
     controlTransitionWindows,
     variantWindowBindings,
     inputVariantSelectors,
+    headlessAssumptionContract,
+    chargingReleaseBindings,
+    breakTriggerWatchers,
     actionEffectBindings,
     hits,
     resourceProfiles: specialResourceProfiles,
@@ -756,6 +817,12 @@ export function createCharacterCombatOwnerArtifacts({
     passives,
     switchTriggers,
     statDependencies,
+    coverageCandidates: {
+      mode: coverageCandidateMode,
+      settlementNodeClosurePolicies,
+      settlement: settlementCoverageCandidates,
+      effects: effectCoverageCandidates,
+    },
   };
   const profileIdentity = `actor:${ownerId}:character-combat-profile:v${CHARACTER_COMBAT_PROFILE_SCHEMA_VERSION}`;
   const runtimeCompilation = createRuntimeCompilation({
@@ -775,6 +842,7 @@ export function createCharacterCombatOwnerArtifacts({
   });
   const simulationScopes = deriveCharacterCombatSimulationScopes({
     recipe,
+    headlessAssumptionContract,
     publicActions,
     actionForms,
     specialResourceProfiles,
@@ -966,6 +1034,14 @@ export function validateCharacterCombatProfile({
   ) {
     issues.push('coverage-dimension-contract-invalid');
   }
+  if (
+    recipe.coveragePolicies?.candidateResolutionMode != null &&
+    profile.contracts?.coverageCandidates?.mode !==
+      recipe.coveragePolicies.candidateResolutionMode
+  ) {
+    issues.push('coverage-candidate-mode-binding-invalid');
+  }
+  issues.push(...validateCharacterCombatCoverageCandidateClosure(profile).issues);
   if (
     profile.contracts.publicActions.some(
       action =>
@@ -1198,6 +1274,1463 @@ function discoverReachableControls({
   return { controlIds, exclusions };
 }
 
+const SETTLEMENT_COVERAGE_DIMENSIONS = [
+  'hp',
+  'toughness',
+  'actorSp',
+  'kiboSp',
+];
+
+const SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS = Object.freeze({
+  hp: 'damage',
+  toughness: 'toughness',
+  actorSp: 'sp',
+  kiboSp: 'sp',
+});
+
+function normalizeSettlementNodeClosurePolicies(values) {
+  if (!Array.isArray(values)) {
+    throw new Error('settlement node closure policies must be an array');
+  }
+  const validDispositions = new Set([
+    'runtime-applied',
+    'verified-zero',
+    'not-applicable',
+  ]);
+  const normalized = values.map(value => {
+    const policy = {
+      policyIdentity: String(value?.policyIdentity ?? '').trim(),
+      graphIdentity: String(value?.graphIdentity ?? '').trim(),
+      nodeCatalogIdentity: String(value?.nodeCatalogIdentity ?? '').trim(),
+      dimensions: uniqueStrings(value?.dimensions ?? []),
+      disposition: String(value?.disposition ?? '').trim(),
+      reason: String(value?.reason ?? '').trim(),
+      sourceIdentity: String(value?.sourceIdentity ?? '').trim(),
+    };
+    if (
+      !policy.policyIdentity ||
+      !policy.graphIdentity ||
+      !policy.nodeCatalogIdentity ||
+      policy.dimensions.length === 0 ||
+      policy.dimensions.some(
+        dimension => !SETTLEMENT_COVERAGE_DIMENSIONS.includes(dimension)
+      ) ||
+      !validDispositions.has(policy.disposition) ||
+      !policy.reason ||
+      !policy.sourceIdentity
+    ) {
+      throw new Error(
+        `settlement node closure policy invalid: ${policy.policyIdentity || 'missing'}`
+      );
+    }
+    return policy;
+  });
+  const policyKeys = normalized.flatMap(policy =>
+    policy.dimensions.map(
+      dimension =>
+        `${policy.graphIdentity}|${policy.nodeCatalogIdentity}|${dimension}`
+    )
+  );
+  if (new Set(policyKeys).size !== policyKeys.length) {
+    throw new Error('settlement node closure policy target duplicated');
+  }
+  return normalized.sort(compareIdentity);
+}
+
+function createSettlementCoverageCandidates({
+  publicActions,
+  controls,
+  hits,
+  semanticEffects,
+  tuningMarkConditionalDamageGroups,
+  scenarioOutOfScopeActions,
+  settlementNodeClosurePolicies,
+  scenarioIdentity,
+}) {
+  const controlBySkillId = new Map(
+    controls.map(control => [Number(control.controlSkillId), control])
+  );
+  const outOfScopeByControlSkillId = new Map(
+    scenarioOutOfScopeActions
+      .filter(record => record.status === 'not-applicable')
+      .map(record => [Number(record.controlSkillId), record])
+  );
+  const candidates = [];
+  for (const action of publicActions) {
+    const control = controlBySkillId.get(Number(action.controlSkillId));
+    const selectedSubSkillIndex = Number(
+      action.selectedSubSkillIndex ?? action.controlSubSkillIndex ?? 0
+    );
+    const outOfScope = outOfScopeByControlSkillId.get(
+      Number(action.controlSkillId)
+    );
+    for (const graph of (control?.effectGraph ?? []).filter(
+      entry => Number(entry.mapIndex) === selectedSubSkillIndex
+    )) {
+      const graphHits = hits.filter(hit =>
+        String(hit.hitIdentity ?? '').startsWith(`${graph.graphIdentity}|`)
+      );
+      const graphEffects = semanticEffects.filter(effect =>
+        (effect.graphIdentities ?? [effect.graphIdentity])
+          .filter(Boolean)
+          .includes(graph.graphIdentity)
+      );
+      const graphConditionalDamageGroups =
+        tuningMarkConditionalDamageGroups.filter(
+          group =>
+            Number(group.controlSkillId) === Number(graph.controlSkillId) &&
+            Number(group.subSkillIndex) === Number(graph.mapIndex) &&
+            Number(group.judgmentElementId) === Number(graph.rootElementId)
+        );
+      const sourceIdentities = [
+        graph.sourceIdentity,
+        ...graphHits.map(hit => hit.sourceIdentity),
+        ...graphEffects.flatMap(effect => [
+          effect.sourceIdentity,
+          ...(effect.sourceIdentities ?? []),
+        ]),
+        ...graphConditionalDamageGroups.map(group => group.sourceIdentity),
+        outOfScope?.sourceIdentity,
+        scenarioIdentity,
+      ]
+        .filter(Boolean)
+        .map(String);
+      const nodeClassifications = createSettlementCoverageNodeClassifications({
+        graph,
+        graphEffects,
+        graphConditionalDamageGroups,
+        outOfScope,
+        settlementNodeClosurePolicies,
+        scenarioIdentity,
+      });
+      const nodeSourceIdentities = nodeClassifications.flatMap(node => [
+        node.sourceIdentity,
+        ...Object.values(node.dimensions ?? {}).flatMap(dimension => [
+          dimension.sourceClosureSourceIdentity,
+        ]),
+      ]);
+      sourceIdentities.push(...nodeSourceIdentities.filter(Boolean).map(String));
+      candidates.push({
+        candidateIdentity: `settlement-coverage:${action.identity}:${graph.graphIdentity}`,
+        actionIdentity: action.identity,
+        actionKind: action.actionKind,
+        controlSkillId: Number(graph.controlSkillId),
+        subSkillIndex: Number(graph.mapIndex),
+        graphIdentity: graph.graphIdentity,
+        rootElementId: Number(graph.rootElementId),
+        scenarioIdentity: String(scenarioIdentity ?? ''),
+        rawGraphClassification: {
+          appliedNodeCount: Number(graph.appliedNodeCount ?? 0),
+          verifiedZeroNodeCount: Number(graph.verifiedZeroNodeCount ?? 0),
+          unresolvedNodeCount: Number(graph.unresolvedNodeCount ?? 0),
+        },
+        nodeClassifications,
+        hitIdentities: graphHits.map(hit => hit.hitIdentity).sort(),
+        semanticEffectIdentities: graphEffects
+          .map(effect => effect.semanticIdentity)
+          .sort(),
+        conditionalDamageGroupIdentities: graphConditionalDamageGroups
+          .map(group => group.groupIdentity)
+          .sort(),
+        dimensions: Object.fromEntries(
+          SETTLEMENT_COVERAGE_DIMENSIONS.map(dimension => [
+            dimension,
+            resolveSettlementCoverageCandidateDimension({
+              dimension,
+              graphHits,
+              graphEffects,
+              graphConditionalDamageGroups,
+              outOfScope,
+              nodeClassifications,
+              sourceIdentities,
+              scenarioIdentity,
+            }),
+          ])
+        ),
+        sourceIdentity: [...new Set(sourceIdentities)].sort().join('|'),
+      });
+    }
+  }
+  return candidates.sort(compareIdentity);
+}
+
+function createSettlementCoverageNodeClassifications({
+  graph,
+  graphEffects,
+  graphConditionalDamageGroups,
+  outOfScope,
+  settlementNodeClosurePolicies,
+  scenarioIdentity,
+}) {
+  const graphNodeClassifications = new Map(
+    (graph.nodeClassifications ?? []).map(node => [
+      String(node.nodeCatalogIdentity),
+      node,
+    ])
+  );
+  return (graph.nodeIdentities ?? []).map(nodeCatalogIdentity => {
+    const node = graphNodeClassifications.get(String(nodeCatalogIdentity));
+    const sourceIdentity = String(
+      node?.sourceIdentity ?? graph.sourceIdentity ?? ''
+    );
+    return {
+      nodeCatalogIdentity: String(nodeCatalogIdentity),
+      nodeIdentity: String(node?.nodeIdentity ?? nodeCatalogIdentity),
+      sourceTraversalIndex: Number.isInteger(Number(node?.sourceTraversalIndex))
+        ? Number(node.sourceTraversalIndex)
+        : null,
+      elementId: Number.isInteger(Number(node?.elementId))
+        ? Number(node.elementId)
+        : null,
+      kind: String(node?.kind ?? 'missing'),
+      classification: ['applied', 'verified-zero', 'unresolved'].includes(
+        node?.classification
+      )
+        ? node.classification
+        : 'unresolved',
+      reasons: uniqueStrings(
+        node?.reasons ?? ['battle-effect-node-catalog-record-missing']
+      ),
+      sourceIdentity,
+      dimensions: Object.fromEntries(
+        SETTLEMENT_COVERAGE_DIMENSIONS.map(dimension => [
+          dimension,
+          resolveSettlementCoverageNodeDimension({
+            dimension,
+            graph,
+            node,
+            nodeCatalogIdentity: String(nodeCatalogIdentity),
+            graphEffects,
+            graphConditionalDamageGroups,
+            outOfScope,
+            settlementNodeClosurePolicies,
+            scenarioIdentity,
+            sourceIdentity,
+          }),
+        ])
+      ),
+    };
+  });
+}
+
+function resolveSettlementCoverageNodeDimension({
+  dimension,
+  graph,
+  node,
+  nodeCatalogIdentity,
+  graphEffects,
+  graphConditionalDamageGroups,
+  outOfScope,
+  settlementNodeClosurePolicies,
+  scenarioIdentity,
+  sourceIdentity,
+}) {
+  const sourceDimension = SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS[dimension];
+  const sourceDimensionStatus = ['applied', 'verified-zero', 'unresolved'].includes(
+    node?.dimensions?.[sourceDimension]?.status
+  )
+    ? node.dimensions[sourceDimension].status
+    : 'unresolved';
+  const sourceDimensionSourceField =
+    node?.dimensions?.[sourceDimension]?.sourceField ?? null;
+  const base = {
+    sourceDimension,
+    sourceDimensionStatus,
+    sourceDimensionSourceField,
+  };
+  if (outOfScope) {
+    return {
+      ...base,
+      sourceClosureDisposition: 'not-applicable',
+      sourceClosureAuthorityKind: 'frozen-scenario-exclusion',
+      sourceClosurePolicyIdentity: outOfScope.identity,
+      sourceClosureSourceIdentity: [
+        outOfScope.sourceIdentity,
+        scenarioIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      reasons: uniqueStrings([
+        outOfScope.reason ?? 'scenario-out-of-scope',
+        'frozen-product-scenario-node-closure',
+      ]),
+    };
+  }
+  const explicitPolicy = settlementNodeClosurePolicies.find(
+    policy =>
+      policy.graphIdentity === graph.graphIdentity &&
+      policy.nodeCatalogIdentity === nodeCatalogIdentity &&
+      policy.dimensions.includes(dimension)
+  );
+  if (explicitPolicy) {
+    return {
+      ...base,
+      sourceClosureDisposition: explicitPolicy.disposition,
+      sourceClosureAuthorityKind: 'explicit-node-root-source-policy',
+      sourceClosurePolicyIdentity: explicitPolicy.policyIdentity,
+      sourceClosureSourceIdentity: explicitPolicy.sourceIdentity,
+      reasons: [explicitPolicy.reason],
+    };
+  }
+  if (sourceDimensionStatus === 'verified-zero') {
+    return {
+      ...base,
+      sourceClosureDisposition: 'verified-zero',
+      sourceClosureAuthorityKind:
+        'battle-effect-node-dimension-classification',
+      sourceClosurePolicyIdentity: null,
+      sourceClosureSourceIdentity: `${sourceIdentity}#dimensions.${sourceDimension}.status=verified-zero`,
+      reasons: ['battle-effect-node-dimension-verified-zero'],
+    };
+  }
+  const runtimeBinding = resolveSettlementNodeRuntimeBinding({
+    dimension,
+    graph,
+    node,
+    nodeCatalogIdentity,
+    graphEffects,
+    graphConditionalDamageGroups,
+  });
+  if (runtimeBinding) {
+    return {
+      ...base,
+      sourceClosureDisposition: 'runtime-applied',
+      sourceClosureAuthorityKind: runtimeBinding.authorityKind,
+      sourceClosurePolicyIdentity: null,
+      sourceClosureSourceIdentity: runtimeBinding.sourceIdentities.join('|'),
+      sourceClosureBindingIdentities: runtimeBinding.bindingIdentities,
+      sourceClosureRelationIdentities: runtimeBinding.relationIdentities,
+      reasons: [
+        runtimeBinding.authorityKind ===
+        'source-driven-conditional-damage-contract'
+          ? 'node-dimension-closed-by-conditional-damage-contract'
+          : 'node-dimension-closed-by-semantic-effect-runtime',
+      ],
+    };
+  }
+  return {
+    ...base,
+    sourceClosureDisposition: 'unresolved',
+    sourceClosureAuthorityKind: 'unresolved',
+    sourceClosurePolicyIdentity: null,
+    sourceClosureSourceIdentity: null,
+    reasons: uniqueStrings([
+      ...(node?.reasons ?? []),
+      'battle-effect-node-dimension-closure-missing',
+    ]),
+  };
+}
+
+function resolveSettlementNodeRuntimeBinding({
+  dimension,
+  graph,
+  node,
+  nodeCatalogIdentity,
+  graphEffects,
+  graphConditionalDamageGroups,
+}) {
+  const sourceDimension = SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS[dimension];
+  const nodePathId = resolveSettlementNodePathId(node);
+  if (!nodePathId) return null;
+  const conditionalBindings = ['hp', 'toughness'].includes(dimension)
+    ? graphConditionalDamageGroups
+        .map(group => {
+          const templateEntry = [
+            ['baseTemplate', group.baseTemplate],
+            ['enhancedTemplate', group.enhancedTemplate],
+          ].find(
+            ([, template]) =>
+              String(template?.pathId ?? '') === nodePathId &&
+              Number(template?.elementConfigId) === Number(node?.elementId)
+          );
+          if (
+            !templateEntry ||
+            !isConditionalDamageGroupBoundToGraph(group, graph) ||
+            !isConditionalDamageTemplateDimensionApplied(
+              templateEntry[1],
+              dimension
+            ) ||
+            !String(group.sourceIdentity ?? '').trim()
+          ) {
+            return null;
+          }
+          const [templateKind, template] = templateEntry;
+          return {
+            bindingIdentity: String(group.groupIdentity),
+            relationIdentity: createSettlementConditionalNodeRelationIdentity({
+              group,
+              graph,
+              nodeCatalogIdentity,
+              dimension,
+              templateKind,
+              template,
+            }),
+            sourceIdentity: String(group.sourceIdentity),
+          };
+        })
+        .filter(Boolean)
+    : [];
+  if (conditionalBindings.length > 0) {
+    return {
+      authorityKind: 'source-driven-conditional-damage-contract',
+      bindingIdentities: uniqueStrings(
+        conditionalBindings.map(binding => binding.bindingIdentity)
+      ),
+      relationIdentities: uniqueStrings(
+        conditionalBindings.map(binding => binding.relationIdentity)
+      ),
+      sourceIdentities: uniqueStrings(
+        conditionalBindings.map(binding => binding.sourceIdentity)
+      ),
+    };
+  }
+  const semanticBindings = graphEffects
+    .filter(
+      effect =>
+        isSemanticEffectBoundToSettlementNode({
+          effect,
+          graph,
+          node,
+          nodePathId,
+          sourceDimension,
+        })
+    )
+    .map(effect => ({
+      bindingIdentity: String(effect.semanticIdentity),
+      relationIdentity: createSettlementSemanticNodeRelationIdentity({
+        effect,
+        graph,
+        nodeCatalogIdentity,
+        sourceDimension,
+      }),
+      sourceIdentities: uniqueStrings([
+        effect.sourceIdentity,
+        ...(effect.sourceIdentities ?? []),
+      ]),
+    }));
+  if (semanticBindings.length === 0) return null;
+  return {
+    authorityKind: 'semantic-effect-runtime-binding',
+    bindingIdentities: uniqueStrings(
+      semanticBindings.map(binding => binding.bindingIdentity)
+    ),
+    relationIdentities: uniqueStrings(
+      semanticBindings.map(binding => binding.relationIdentity)
+    ),
+    sourceIdentities: uniqueStrings(
+      semanticBindings.flatMap(binding => binding.sourceIdentities)
+    ),
+  };
+}
+
+function isConditionalDamageGroupBoundToGraph(group, graph) {
+  return Boolean(
+    group?.applied === true &&
+      group.status === 'verified-tuning-mark-conditional-damage-group-ready' &&
+      String(group.groupIdentity ?? '').trim() &&
+      Number(group.controlSkillId) === Number(graph.controlSkillId) &&
+      Number(group.subSkillIndex) === Number(graph.mapIndex) &&
+      Number(group.judgmentElementId) === Number(graph.rootElementId)
+  );
+}
+
+function isConditionalDamageTemplateDimensionApplied(template, dimension) {
+  const value =
+    dimension === 'hp'
+      ? template?.coefficientRaw
+      : template?.weakBreakDamageRateBasisPoints;
+  return Number.isFinite(Number(value)) && Number(value) !== 0;
+}
+
+function isSemanticEffectBoundToSettlementNode({
+  effect,
+  graph,
+  node,
+  nodePathId,
+  sourceDimension,
+}) {
+  const graphIdentities = uniqueStrings(
+    effect?.graphIdentities ?? [effect?.graphIdentity]
+  );
+  const battleIdentities = uniqueStrings(effect?.battleIdentities ?? []);
+  const relationTargets = uniqueStrings(
+    (effect?.relationPath ?? []).map(relation => relation?.to)
+  );
+  const nodeRelationIdentity = `element:${nodePathId}`;
+  return Boolean(
+    effect?.classification === 'applied' &&
+      effect?.dimensions?.[sourceDimension]?.status === 'applied' &&
+      Number(effect.controlSkillId) === Number(graph.controlSkillId) &&
+      Number(effect.mapIndex) === Number(graph.mapIndex) &&
+      graphIdentities.includes(String(graph.graphIdentity)) &&
+      String(effect.pathId ?? '') === nodePathId &&
+      Number(effect.elementId) === Number(node?.elementId) &&
+      battleIdentities.includes(nodePathId) &&
+      ((effect.relationPath ?? []).length === 0 ||
+        relationTargets.includes(nodeRelationIdentity)) &&
+      String(effect.semanticIdentity ?? '').trim() &&
+      uniqueStrings([
+        effect.sourceIdentity,
+        ...(effect.sourceIdentities ?? []),
+      ]).length > 0
+  );
+}
+
+function resolveSettlementNodePathId(node) {
+  const nodeIdentity = String(node?.nodeIdentity ?? '');
+  return nodeIdentity.startsWith('element:')
+    ? nodeIdentity.slice('element:'.length)
+    : null;
+}
+
+function createSettlementConditionalNodeRelationIdentity({
+  group,
+  graph,
+  nodeCatalogIdentity,
+  dimension,
+  templateKind,
+  template,
+}) {
+  return [
+    'conditional-damage-node-binding',
+    group.groupIdentity,
+    graph.graphIdentity,
+    nodeCatalogIdentity,
+    dimension,
+    templateKind,
+    `path:${template.pathId}`,
+    `element:${template.elementConfigId}`,
+  ].join('|');
+}
+
+function createSettlementSemanticNodeRelationIdentity({
+  effect,
+  graph,
+  nodeCatalogIdentity,
+  sourceDimension,
+}) {
+  return [
+    'semantic-effect-node-binding',
+    effect.semanticIdentity,
+    graph.graphIdentity,
+    nodeCatalogIdentity,
+    sourceDimension,
+    `path:${effect.pathId}`,
+    `element:${effect.elementId}`,
+  ].join('|');
+}
+
+function resolveSettlementCoverageCandidateDimension({
+  dimension,
+  graphHits,
+  graphEffects,
+  graphConditionalDamageGroups,
+  outOfScope,
+  nodeClassifications,
+  sourceIdentities,
+  scenarioIdentity,
+}) {
+  const sources = [...new Set(sourceIdentities)].sort();
+  const nodeDimensions = nodeClassifications.map(
+    node => node.dimensions?.[dimension]
+  );
+  if (nodeDimensions.length === 0) {
+    return createUnresolvedCoverageCandidateDimension(
+      'settlement-node-classification-missing',
+      sources
+    );
+  }
+  if (outOfScope) {
+    return {
+      status: 'not-applicable',
+      reasons: [
+        outOfScope.reason ?? 'scenario-out-of-scope',
+        'frozen-product-scenario-structured-na',
+      ],
+      sourceIdentities: sources,
+      scenarioIdentity: String(scenarioIdentity ?? ''),
+      notApplicableAuthorityKind: 'frozen-scenario-exclusion',
+      sourceClosurePolicyIdentities: uniqueStrings(
+        nodeDimensions.map(node => node?.sourceClosurePolicyIdentity)
+      ),
+    };
+  }
+  if (
+    nodeDimensions.some(
+      node => node?.sourceClosureDisposition === 'unresolved'
+    )
+  ) {
+    return createUnresolvedCoverageCandidateDimension(
+      'unclosed-battle-effect-node-dimension',
+      sources
+    );
+  }
+  const nodeDispositionCounts = countBy(
+    nodeDimensions,
+    node => node?.sourceClosureDisposition
+  );
+  let outputResolution = null;
+  if (graphHits.length > 0) {
+    if (dimension === 'hp') {
+      outputResolution = graphHits.every(hit => hit.formula && hit.damage)
+        ? createResolvedCoverageCandidateDimension(
+            'runtime-applied',
+            'verified-hit-damage-runtime',
+            sources
+          )
+        : createUnresolvedCoverageCandidateDimension(
+            'hit-damage-formula-or-packet-missing',
+            sources
+          );
+    } else {
+      const field =
+        dimension === 'toughness'
+          ? 'weakBreakDamageRateBasisPoints'
+          : dimension === 'actorSp'
+            ? 'recoverSp'
+            : 'petRecoverSp';
+      const values = graphHits.map(hit =>
+        dimension === 'toughness'
+          ? hit.damage?.[field]
+          : hit.energy?.[field]
+      );
+      outputResolution = values.some(
+        value => value == null || !Number.isFinite(Number(value))
+      )
+        ? createUnresolvedCoverageCandidateDimension(
+            `${dimension}-hit-value-missing`,
+            sources
+          )
+        : createResolvedCoverageCandidateDimension(
+            values.some(value => Number(value) !== 0)
+              ? 'runtime-applied'
+              : 'verified-zero',
+            values.some(value => Number(value) !== 0)
+              ? `verified-hit-${dimension}-runtime`
+              : `verified-hit-${dimension}-zero`,
+            sources
+          );
+    }
+  } else if (graphConditionalDamageGroups.length > 0) {
+    outputResolution = createResolvedCoverageCandidateDimension(
+      ['hp', 'toughness'].includes(dimension)
+        ? 'runtime-applied'
+        : 'verified-zero',
+      ['hp', 'toughness'].includes(dimension)
+        ? 'source-driven-conditional-damage-runtime'
+        : 'conditional-damage-contract-has-no-sp-output',
+      sources
+    );
+  } else {
+    const semanticDimension = SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS[dimension];
+    const semanticStatuses = graphEffects
+      .filter(effect => effect.classification === 'applied')
+      .map(effect => effect.dimensions?.[semanticDimension]?.status)
+      .filter(Boolean);
+    if (semanticStatuses.includes('applied')) {
+      outputResolution = createResolvedCoverageCandidateDimension(
+        'runtime-applied',
+        `semantic-effect-${semanticDimension}-runtime`,
+        sources
+      );
+    } else if (
+      semanticStatuses.length > 0 &&
+      semanticStatuses.every(status => status === 'verified-zero')
+    ) {
+      outputResolution = createResolvedCoverageCandidateDimension(
+        'verified-zero',
+        `semantic-effect-${semanticDimension}-zero`,
+        sources
+      );
+    }
+  }
+  if (outputResolution) return outputResolution;
+  if (Number(nodeDispositionCounts['runtime-applied'] ?? 0) > 0) {
+    return createResolvedCoverageCandidateDimension(
+      'runtime-applied',
+      'battle-effect-node-dimension-runtime-applied',
+      sources
+    );
+  }
+  if (
+    Number(nodeDispositionCounts['not-applicable'] ?? 0) ===
+    nodeDimensions.length
+  ) {
+    return {
+      status: 'not-applicable',
+      reasons: ['explicit-node-root-policy-structured-na'],
+      sourceIdentities: sources,
+      scenarioIdentity: String(scenarioIdentity ?? ''),
+      notApplicableAuthorityKind: 'explicit-node-root-source-policy',
+      sourceClosurePolicyIdentities: uniqueStrings(
+        nodeDimensions.map(node => node?.sourceClosurePolicyIdentity)
+      ),
+    };
+  }
+  if (
+    Number(nodeDispositionCounts['verified-zero'] ?? 0) > 0 &&
+    Number(nodeDispositionCounts['verified-zero'] ?? 0) +
+      Number(nodeDispositionCounts['not-applicable'] ?? 0) ===
+      nodeDimensions.length
+  ) {
+    return createResolvedCoverageCandidateDimension(
+      'verified-zero',
+      'battle-effect-node-dimensions-verified-zero',
+      sources
+    );
+  }
+  return createUnresolvedCoverageCandidateDimension(
+    'settlement-output-source-closure-unresolved',
+    sources
+  );
+}
+
+export function validateCharacterCombatCoverageCandidateClosure(profile) {
+  const issues = [];
+  if (
+    profile?.contracts?.coverageCandidates?.mode !==
+    'selected-root-source-closure-v1'
+  ) {
+    return { valid: true, issues: [] };
+  }
+  const settlementCandidates =
+    profile?.contracts?.coverageCandidates?.settlement;
+  const settlementNodeClosurePolicies =
+    profile?.contracts?.coverageCandidates?.settlementNodeClosurePolicies;
+  const effectCandidates = profile?.contracts?.coverageCandidates?.effects;
+  if (!Array.isArray(settlementCandidates) || settlementCandidates.length === 0) {
+    issues.push('settlement-coverage-candidates-missing');
+  }
+  if (!Array.isArray(effectCandidates)) {
+    issues.push('effect-coverage-candidates-missing');
+  }
+  if (!Array.isArray(settlementNodeClosurePolicies)) {
+    issues.push('settlement-node-closure-policies-missing');
+  }
+  const settlementIdentities = (settlementCandidates ?? []).map(
+    candidate => candidate.candidateIdentity
+  );
+  if (
+    settlementIdentities.some(identity => !String(identity ?? '').trim()) ||
+    new Set(settlementIdentities).size !== settlementIdentities.length
+  ) {
+    issues.push('settlement-coverage-candidate-identity-invalid');
+  }
+  const validCandidateStatuses = new Set([
+    'runtime-applied',
+    'verified-zero',
+    'not-applicable',
+    'unresolved',
+  ]);
+  if (
+    (settlementCandidates ?? []).some(candidate =>
+      SETTLEMENT_COVERAGE_DIMENSIONS.some(dimension => {
+        const resolution = candidate.dimensions?.[dimension];
+        return (
+          !validCandidateStatuses.has(resolution?.status) ||
+          !Array.isArray(resolution?.sourceIdentities) ||
+          resolution.sourceIdentities.length === 0 ||
+          resolution.sourceIdentities.some(
+            sourceIdentity => !String(sourceIdentity ?? '').trim()
+          ) ||
+          !Array.isArray(resolution?.reasons) ||
+          resolution.reasons.length === 0 ||
+          (resolution.status === 'not-applicable' &&
+            (!String(candidate.scenarioIdentity ?? '').trim() ||
+              !String(candidate.sourceIdentity ?? '').trim() ||
+              resolution.scenarioIdentity !== candidate.scenarioIdentity))
+        );
+      })
+    )
+  ) {
+    issues.push('settlement-coverage-candidate-resolution-invalid');
+  }
+  issues.push(
+    ...validateSettlementCoverageNodeClosures({
+      profile,
+      settlementCandidates: settlementCandidates ?? [],
+      settlementNodeClosurePolicies: settlementNodeClosurePolicies ?? [],
+    })
+  );
+  for (const action of profile?.contracts?.publicActions ?? []) {
+    const actionCandidates = (settlementCandidates ?? []).filter(
+      candidate => candidate.actionIdentity === action.identity
+    );
+    for (const dimension of SETTLEMENT_COVERAGE_DIMENSIONS) {
+      const rawRecordCount = Object.values(
+        action.rawDimensionSummary?.[dimension] ?? {}
+      ).reduce((sum, count) => sum + Number(count ?? 0), 0);
+      if (rawRecordCount !== actionCandidates.length) {
+        issues.push('settlement-coverage-raw-candidate-count-mismatch');
+        break;
+      }
+      const expectedSummary = countBy(actionCandidates, candidate =>
+        mapCoverageCandidateStatusToDimensionStatus(
+          candidate.dimensions?.[dimension]?.status
+        )
+      );
+      const actualSummary = action.dimensionSummary?.[dimension] ?? {};
+      if (
+        ['applied', 'verified-zero', 'not-applicable', 'unresolved'].some(
+          status =>
+            Number(expectedSummary[status] ?? 0) !==
+            Number(actualSummary[status] ?? 0)
+        )
+      ) {
+        issues.push('settlement-coverage-action-summary-mismatch');
+        break;
+      }
+    }
+  }
+  const coverageByDimension = new Map(
+    (profile?.coverage ?? []).map(item => [item.dimension, item])
+  );
+  for (const [coverageDimension, candidateDimension] of [
+    ['hpDamage', 'hp'],
+    ['toughnessDamage', 'toughness'],
+    ['actorSp', 'actorSp'],
+    ['kiboSp', 'kiboSp'],
+  ]) {
+    const expected = statusFromCoverageCandidates(
+      settlementCandidates ?? [],
+      candidateDimension
+    );
+    const actual = coverageByDimension.get(coverageDimension);
+    if (
+      !actual ||
+      actual.status !== expected.status ||
+      ['record', 'applied', 'verifiedZero', 'notApplicable', 'unresolved'].some(
+        countKind =>
+          Number(actual[`${countKind}Count`] ?? 0) !==
+          Number(expected[`${countKind}Count`] ?? 0)
+      )
+    ) {
+      issues.push(`coverage-candidate-binding-invalid:${coverageDimension}`);
+    }
+  }
+  const effectIdentities = (effectCandidates ?? []).map(
+    candidate => candidate.candidateIdentity
+  );
+  if (
+    effectIdentities.some(identity => !String(identity ?? '').trim()) ||
+    new Set(effectIdentities).size !== effectIdentities.length ||
+    (effectCandidates ?? []).some(
+      candidate =>
+        !validCandidateStatuses.has(candidate.status) ||
+        !String(candidate.sourceIdentity ?? '').trim() ||
+        !Array.isArray(candidate.sourceIdentities) ||
+        candidate.sourceIdentities.length === 0 ||
+        candidate.sourceIdentities.some(
+          sourceIdentity => !String(sourceIdentity ?? '').trim()
+        ) ||
+        !Array.isArray(candidate.reasons) ||
+        candidate.reasons.length === 0 ||
+        (candidate.status === 'not-applicable' &&
+          !String(candidate.scenarioIdentity ?? '').trim())
+    )
+  ) {
+    issues.push('effect-coverage-candidate-resolution-invalid');
+  }
+  if (
+    (effectCandidates ?? []).length !==
+    (profile?.contracts?.effects?.semantic ?? []).length
+  ) {
+    issues.push('effect-coverage-candidate-count-mismatch');
+  }
+  const expectedBuffCoverage = statusFromCoverageCandidates([
+    ...(effectCandidates ?? []),
+    ...(profile?.contracts?.passives ?? []).map(item => ({
+      candidateIdentity: `passive-coverage:${item.passiveIdentity}`,
+      status: item.applied ? 'runtime-applied' : 'unresolved',
+      sourceIdentity: item.sourceIdentity,
+    })),
+    ...(profile?.contracts?.runtimeEffectBindings ?? []).map(item => ({
+      candidateIdentity: `runtime-effect-coverage:${item.bindingIdentity}`,
+      status: item.applied ? 'runtime-applied' : 'unresolved',
+      sourceIdentity: item.sourceIdentity,
+    })),
+  ]);
+  const actualBuffCoverage = coverageByDimension.get('buffsAndDebuffs');
+  if (
+    !actualBuffCoverage ||
+    actualBuffCoverage.status !== expectedBuffCoverage.status ||
+    ['record', 'applied', 'verifiedZero', 'notApplicable', 'unresolved'].some(
+      countKind =>
+        Number(actualBuffCoverage[`${countKind}Count`] ?? 0) !==
+        Number(expectedBuffCoverage[`${countKind}Count`] ?? 0)
+    )
+  ) {
+    issues.push('coverage-candidate-binding-invalid:buffsAndDebuffs');
+  }
+  if (
+    (profile?.coverage ?? []).some(
+      item => item.status === 'applied' && Number(item.unresolvedCount ?? 0) > 0
+    )
+  ) {
+    issues.push('applied-coverage-has-unresolved-candidates');
+  }
+  return {
+    valid: issues.length === 0,
+    issues: [...new Set(issues)].sort(),
+  };
+}
+
+function validateSettlementCoverageNodeClosures({
+  profile,
+  settlementCandidates,
+  settlementNodeClosurePolicies,
+}) {
+  const issues = [];
+  const graphByIdentity = new Map(
+    (profile?.contracts?.controls ?? []).flatMap(control =>
+      (control.effectGraph ?? []).map(graph => [graph.graphIdentity, graph])
+    )
+  );
+  const outOfScopeByControlSkillId = new Map(
+    (profile?.contracts?.scenarioOutOfScopeActions ?? [])
+      .filter(record => record.status === 'not-applicable')
+      .map(record => [Number(record.controlSkillId), record])
+  );
+  const semanticEffects = profile?.contracts?.effects?.semantic ?? [];
+  const tuningMarkConditionalDamageGroups =
+    profile?.contracts?.tuningMarkConditionalDamageGroups ?? [];
+  const policyByTarget = new Map();
+  const consumedPolicyTargets = new Set();
+  for (const policy of settlementNodeClosurePolicies) {
+    for (const dimension of policy.dimensions ?? []) {
+      const key = createSettlementNodeClosureTargetKey({
+        graphIdentity: policy.graphIdentity,
+        nodeCatalogIdentity: policy.nodeCatalogIdentity,
+        dimension,
+      });
+      if (
+        !policy.policyIdentity ||
+        !policy.graphIdentity ||
+        !policy.nodeCatalogIdentity ||
+        !SETTLEMENT_COVERAGE_DIMENSIONS.includes(dimension) ||
+        !['runtime-applied', 'verified-zero', 'not-applicable'].includes(
+          policy.disposition
+        ) ||
+        !policy.reason ||
+        !policy.sourceIdentity ||
+        policyByTarget.has(key)
+      ) {
+        issues.push('settlement-node-closure-policy-invalid');
+        continue;
+      }
+      policyByTarget.set(key, policy);
+    }
+  }
+  for (const candidate of settlementCandidates) {
+    const graph = graphByIdentity.get(candidate.graphIdentity);
+    const nodes = candidate.nodeClassifications;
+    const graphNodes = graph?.nodeClassifications;
+    if (
+      !graph ||
+      !Array.isArray(nodes) ||
+      nodes.length === 0 ||
+      !Array.isArray(graphNodes) ||
+      graphNodes.length === 0
+    ) {
+      issues.push('settlement-coverage-node-classification-missing');
+      continue;
+    }
+    const expectedNodeIdentities = [...(graph.nodeIdentities ?? [])]
+      .map(String)
+      .sort();
+    const actualNodeIdentities = nodes
+      .map(node => String(node.nodeCatalogIdentity ?? ''))
+      .sort();
+    if (
+      expectedNodeIdentities.length !== actualNodeIdentities.length ||
+      expectedNodeIdentities.some(
+        (identity, index) => identity !== actualNodeIdentities[index]
+      )
+    ) {
+      issues.push('settlement-coverage-node-identity-mismatch');
+    }
+    const graphNodeIdentities = graphNodes
+      .map(node => String(node.nodeCatalogIdentity ?? ''))
+      .sort();
+    if (
+      expectedNodeIdentities.length !== graphNodeIdentities.length ||
+      new Set(graphNodeIdentities).size !== graphNodeIdentities.length ||
+      expectedNodeIdentities.some(
+        (identity, index) => identity !== graphNodeIdentities[index]
+      )
+    ) {
+      issues.push('settlement-coverage-graph-node-identity-mismatch');
+    }
+    const graphNodeByIdentity = new Map(
+      graphNodes.map(node => [String(node.nodeCatalogIdentity), node])
+    );
+    const classificationCounts = countBy(
+      graphNodes,
+      node => node.classification
+    );
+    if (
+      Number(graph.appliedNodeCount ?? 0) !==
+        Number(classificationCounts.applied ?? 0) ||
+      Number(graph.verifiedZeroNodeCount ?? 0) !==
+        Number(classificationCounts['verified-zero'] ?? 0) ||
+      Number(graph.unresolvedNodeCount ?? 0) !==
+        Number(classificationCounts.unresolved ?? 0)
+    ) {
+      issues.push(
+        'settlement-coverage-graph-node-classification-count-mismatch'
+      );
+    }
+    if (
+      Number(candidate.rawGraphClassification?.appliedNodeCount ?? 0) !==
+        Number(classificationCounts.applied ?? 0) ||
+      Number(candidate.rawGraphClassification?.verifiedZeroNodeCount ?? 0) !==
+        Number(classificationCounts['verified-zero'] ?? 0) ||
+      Number(candidate.rawGraphClassification?.unresolvedNodeCount ?? 0) !==
+        Number(classificationCounts.unresolved ?? 0)
+    ) {
+      issues.push('settlement-coverage-node-classification-count-mismatch');
+    }
+    const outOfScope = outOfScopeByControlSkillId.get(
+      Number(candidate.controlSkillId)
+    );
+    const graphEffects = semanticEffects.filter(effect =>
+      isSemanticEffectBoundToSettlementGraph(effect, graph)
+    );
+    const graphConditionalDamageGroups =
+      tuningMarkConditionalDamageGroups.filter(group =>
+        isConditionalDamageGroupBoundToGraph(group, graph)
+      );
+    if (
+      Number(candidate.controlSkillId) !== Number(graph.controlSkillId) ||
+      Number(candidate.subSkillIndex) !== Number(graph.mapIndex) ||
+      Number(candidate.rootElementId) !== Number(graph.rootElementId)
+    ) {
+      issues.push('settlement-coverage-candidate-graph-binding-invalid');
+    }
+    if (
+      !areExactUniqueStringIdentities(
+        candidate.semanticEffectIdentities,
+        graphEffects.map(effect => effect.semanticIdentity)
+      )
+    ) {
+      issues.push('settlement-coverage-semantic-effect-binding-invalid');
+    }
+    if (
+      !areExactUniqueStringIdentities(
+        candidate.conditionalDamageGroupIdentities,
+        graphConditionalDamageGroups.map(group => group.groupIdentity)
+      )
+    ) {
+      issues.push('settlement-coverage-conditional-damage-binding-invalid');
+    }
+    for (const node of nodes) {
+      const sourceNode = graphNodeByIdentity.get(
+        String(node.nodeCatalogIdentity)
+      );
+      if (
+        !node.nodeCatalogIdentity ||
+        !['applied', 'verified-zero', 'unresolved'].includes(
+          node.classification
+        ) ||
+        !node.sourceIdentity ||
+        !Array.isArray(node.reasons)
+      ) {
+        issues.push('settlement-coverage-node-classification-invalid');
+      }
+      if (!isSettlementCoverageCandidateNodeBoundToGraph(node, sourceNode)) {
+        issues.push('settlement-coverage-node-source-binding-invalid');
+      }
+      for (const dimension of SETTLEMENT_COVERAGE_DIMENSIONS) {
+        const closure = node.dimensions?.[dimension];
+        if (
+          !isSettlementNodeDimensionClosureValid({
+            candidate,
+            graph,
+            node,
+            sourceNode,
+            dimension,
+            closure,
+            outOfScope,
+            policyByTarget,
+            expectedRuntimeBinding: resolveSettlementNodeRuntimeBinding({
+              dimension,
+              graph,
+              node: sourceNode,
+              nodeCatalogIdentity: sourceNode?.nodeCatalogIdentity,
+              graphEffects,
+              graphConditionalDamageGroups,
+            }),
+          })
+        ) {
+          issues.push('settlement-coverage-node-source-closure-invalid');
+        }
+        if (
+          closure?.sourceClosureAuthorityKind ===
+          'explicit-node-root-source-policy'
+        ) {
+          consumedPolicyTargets.add(
+            createSettlementNodeClosureTargetKey({
+              graphIdentity: candidate.graphIdentity,
+              nodeCatalogIdentity: node.nodeCatalogIdentity,
+              dimension,
+            })
+          );
+        }
+        if (
+          candidate.dimensions?.[dimension]?.status !== 'unresolved' &&
+          closure?.sourceClosureDisposition === 'unresolved'
+        ) {
+          issues.push('settlement-coverage-unresolved-node-closure-invalid');
+        }
+      }
+    }
+    for (const dimension of SETTLEMENT_COVERAGE_DIMENSIONS) {
+      const resolution = candidate.dimensions?.[dimension];
+      const closures = nodes.map(node => node.dimensions?.[dimension]);
+      const dispositions = closures.map(
+        closure => closure?.sourceClosureDisposition
+      );
+      if (resolution?.status === 'not-applicable') {
+        const expectedPolicyIdentities = uniqueStrings(
+          closures.map(closure => closure?.sourceClosurePolicyIdentity)
+        );
+        const validAuthority =
+          (resolution.notApplicableAuthorityKind ===
+            'frozen-scenario-exclusion' &&
+            outOfScope &&
+            dispositions.every(disposition => disposition === 'not-applicable') &&
+            closures.every(
+              closure =>
+                closure?.sourceClosureAuthorityKind ===
+                'frozen-scenario-exclusion'
+            )) ||
+          (resolution.notApplicableAuthorityKind ===
+            'explicit-node-root-source-policy' &&
+            !outOfScope &&
+            dispositions.every(disposition => disposition === 'not-applicable') &&
+            closures.every(
+              closure =>
+                closure?.sourceClosureAuthorityKind ===
+                'explicit-node-root-source-policy'
+            ));
+        if (
+          !validAuthority ||
+          JSON.stringify(expectedPolicyIdentities) !==
+            JSON.stringify(
+              uniqueStrings(resolution.sourceClosurePolicyIdentities ?? [])
+            ) ||
+          (resolution.reasons ?? []).includes(
+            'reachable-graph-has-no-output-for-coverage-dimension'
+          )
+        ) {
+          issues.push('settlement-coverage-not-applicable-authority-invalid');
+        }
+      }
+      if (
+        resolution?.status === 'verified-zero' &&
+        (!dispositions.includes('verified-zero') ||
+          dispositions.some(
+            disposition =>
+              !['verified-zero', 'not-applicable'].includes(disposition)
+          ))
+      ) {
+        issues.push('settlement-coverage-verified-zero-authority-invalid');
+      }
+      if (
+        resolution?.status === 'runtime-applied' &&
+        ![
+          ...(candidate.hitIdentities ?? []),
+          ...(candidate.semanticEffectIdentities ?? []),
+          ...(candidate.conditionalDamageGroupIdentities ?? []),
+        ].length &&
+        !dispositions.includes('runtime-applied')
+      ) {
+        issues.push('settlement-coverage-runtime-authority-invalid');
+      }
+    }
+  }
+  if (
+    [...policyByTarget.keys()].some(key => !consumedPolicyTargets.has(key))
+  ) {
+    issues.push('settlement-node-closure-policy-unused');
+  }
+  return [...new Set(issues)].sort();
+}
+
+function isSettlementNodeDimensionClosureValid({
+  candidate,
+  graph,
+  node,
+  sourceNode,
+  dimension,
+  closure,
+  outOfScope,
+  policyByTarget,
+  expectedRuntimeBinding,
+}) {
+  const sourceDimension = SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS[dimension];
+  const sourceDimensionContract = sourceNode?.dimensions?.[sourceDimension];
+  if (
+    !closure ||
+    !sourceNode ||
+    closure.sourceDimension !== sourceDimension ||
+    !['applied', 'verified-zero', 'unresolved'].includes(
+      closure.sourceDimensionStatus
+    ) ||
+    closure.sourceDimensionStatus !== sourceDimensionContract?.status ||
+    closure.sourceDimensionSourceField !==
+      (sourceDimensionContract?.sourceField ?? null) ||
+    !['runtime-applied', 'verified-zero', 'not-applicable', 'unresolved'].includes(
+      closure.sourceClosureDisposition
+    ) ||
+    !Array.isArray(closure.reasons) ||
+    closure.reasons.length === 0
+  ) {
+    return false;
+  }
+  if (closure.sourceClosureDisposition === 'unresolved') {
+    return (
+      closure.sourceClosureAuthorityKind === 'unresolved' &&
+      !closure.sourceClosureSourceIdentity
+    );
+  }
+  if (!String(closure.sourceClosureSourceIdentity ?? '').trim()) return false;
+  if (closure.sourceClosureDisposition === 'verified-zero') {
+    return (
+      closure.sourceDimensionStatus === 'verified-zero' &&
+      closure.sourceClosureAuthorityKind ===
+        'battle-effect-node-dimension-classification' &&
+      closure.sourceClosureSourceIdentity ===
+        `${sourceNode.sourceIdentity}#dimensions.${closure.sourceDimension}.status=verified-zero`
+    );
+  }
+  if (closure.sourceClosureDisposition === 'runtime-applied') {
+    return (
+      expectedRuntimeBinding &&
+      closure.sourceClosureAuthorityKind ===
+        expectedRuntimeBinding.authorityKind &&
+      closure.sourceClosurePolicyIdentity == null &&
+      closure.sourceClosureSourceIdentity ===
+        expectedRuntimeBinding.sourceIdentities.join('|') &&
+      areExactUniqueStringIdentities(
+        closure.sourceClosureBindingIdentities,
+        expectedRuntimeBinding.bindingIdentities
+      ) &&
+      areExactUniqueStringIdentities(
+        closure.sourceClosureRelationIdentities,
+        expectedRuntimeBinding.relationIdentities
+      )
+    );
+  }
+  if (closure.sourceClosureAuthorityKind === 'frozen-scenario-exclusion') {
+    return Boolean(
+      outOfScope &&
+        closure.sourceClosurePolicyIdentity === outOfScope.identity &&
+        closure.sourceClosureSourceIdentity.includes(outOfScope.sourceIdentity) &&
+        closure.sourceClosureSourceIdentity.includes(candidate.scenarioIdentity)
+    );
+  }
+  if (
+    closure.sourceClosureAuthorityKind === 'explicit-node-root-source-policy'
+  ) {
+    const policy = policyByTarget.get(
+      createSettlementNodeClosureTargetKey({
+        graphIdentity: candidate.graphIdentity,
+        nodeCatalogIdentity: node.nodeCatalogIdentity,
+        dimension,
+      })
+    );
+    return Boolean(
+      policy &&
+        policy.policyIdentity === closure.sourceClosurePolicyIdentity &&
+        policy.disposition === closure.sourceClosureDisposition &&
+        policy.sourceIdentity === closure.sourceClosureSourceIdentity &&
+        closure.reasons.includes(policy.reason) &&
+        policy.sourceIdentity.includes(graph.sourceIdentity) &&
+        policy.sourceIdentity.includes(sourceNode.sourceIdentity)
+    );
+  }
+  return false;
+}
+
+function isSemanticEffectBoundToSettlementGraph(effect, graph) {
+  return Boolean(
+    Number(effect?.controlSkillId) === Number(graph?.controlSkillId) &&
+      Number(effect?.mapIndex) === Number(graph?.mapIndex) &&
+      uniqueStrings(effect?.graphIdentities ?? [effect?.graphIdentity]).includes(
+        String(graph?.graphIdentity)
+      ) &&
+      String(effect?.semanticIdentity ?? '').trim()
+  );
+}
+
+function areExactUniqueStringIdentities(actual, expected) {
+  if (!Array.isArray(actual) || !Array.isArray(expected)) return false;
+  const normalizedActual = actual.map(String).sort();
+  const normalizedExpected = expected.map(String).sort();
+  return Boolean(
+    normalizedActual.length === normalizedExpected.length &&
+      new Set(normalizedActual).size === normalizedActual.length &&
+      new Set(normalizedExpected).size === normalizedExpected.length &&
+      normalizedActual.every(
+        (identity, index) => identity === normalizedExpected[index]
+      )
+  );
+}
+
+function isSettlementCoverageCandidateNodeBoundToGraph(node, sourceNode) {
+  if (!sourceNode) return false;
+  for (const key of [
+    'nodeCatalogIdentity',
+    'nodeIdentity',
+    'sourceTraversalIndex',
+    'elementId',
+    'kind',
+    'classification',
+    'sourceIdentity',
+  ]) {
+    if ((node?.[key] ?? null) !== (sourceNode?.[key] ?? null)) return false;
+  }
+  if (
+    JSON.stringify(uniqueStrings(node.reasons ?? [])) !==
+    JSON.stringify(uniqueStrings(sourceNode.reasons ?? []))
+  ) {
+    return false;
+  }
+  return Object.entries(SETTLEMENT_COVERAGE_SOURCE_DIMENSIONS).every(
+    ([dimension, sourceDimension]) => {
+      const candidateDimension = node.dimensions?.[dimension];
+      const sourceDimensionContract = sourceNode.dimensions?.[sourceDimension];
+      return (
+        candidateDimension?.sourceDimensionStatus ===
+          sourceDimensionContract?.status &&
+        candidateDimension?.sourceDimensionSourceField ===
+          (sourceDimensionContract?.sourceField ?? null)
+      );
+    }
+  );
+}
+
+function createSettlementNodeClosureTargetKey({
+  graphIdentity,
+  nodeCatalogIdentity,
+  dimension,
+}) {
+  return `${graphIdentity}|${nodeCatalogIdentity}|${dimension}`;
+}
+
+function createResolvedCoverageCandidateDimension(status, reason, sources) {
+  return {
+    status,
+    reasons: [reason],
+    sourceIdentities: sources,
+  };
+}
+
+function createUnresolvedCoverageCandidateDimension(reason, sources) {
+  return {
+    status: 'unresolved',
+    reasons: [reason],
+    sourceIdentities: sources,
+  };
+}
+
+function applySettlementCoverageCandidates({
+  publicActions,
+  settlementCoverageCandidates,
+}) {
+  return publicActions.map(action => {
+    const candidates = settlementCoverageCandidates.filter(
+      candidate => candidate.actionIdentity === action.identity
+    );
+    return {
+      ...action,
+      rawDimensionSummary: structuredClone(action.dimensionSummary ?? {}),
+      dimensionSummary: Object.fromEntries(
+        SETTLEMENT_COVERAGE_DIMENSIONS.map(dimension => [
+          dimension,
+          countBy(candidates, candidate =>
+            mapCoverageCandidateStatusToDimensionStatus(
+              candidate.dimensions?.[dimension]?.status
+            )
+          ),
+        ])
+      ),
+      settlementCoverageCandidateIdentities: candidates
+        .map(candidate => candidate.candidateIdentity)
+        .sort(),
+    };
+  });
+}
+
+function mapCoverageCandidateStatusToDimensionStatus(status) {
+  if (status === 'runtime-applied') return 'applied';
+  if (status === 'verified-zero') return 'verified-zero';
+  if (status === 'not-applicable') return 'not-applicable';
+  return 'unresolved';
+}
+
+function createEffectCoverageCandidates({
+  semanticEffects,
+  rawUnresolvedRecords,
+  scenarioIdentity,
+}) {
+  const rawRecordByIdentity = new Map(
+    rawUnresolvedRecords.map(record => [record.recordIdentity, record])
+  );
+  return semanticEffects
+    .map(effect => {
+      const rawRecords = (effect.rawEffectIdentities ?? [])
+        .map(identity => rawRecordByIdentity.get(`effect:${identity}`))
+        .filter(Boolean);
+      const sourceIdentities = [
+        effect.sourceIdentity,
+        ...(effect.sourceIdentities ?? []),
+        ...rawRecords.flatMap(record => [
+          record.sourceIdentity,
+          record.sourceClosureSourceIdentity,
+        ]),
+        scenarioIdentity,
+      ]
+        .filter(Boolean)
+        .map(String);
+      let status = 'unresolved';
+      let reasons = effect.reasons ?? [];
+      if (effect.classification === 'applied') {
+        status = 'runtime-applied';
+        reasons = ['semantic-effect-runtime-applied'];
+      } else if (
+        rawRecords.length > 0 &&
+        rawRecords.every(record => record.sourceClosureDisposition === 'applied')
+      ) {
+        status = 'runtime-applied';
+        reasons = ['exact-raw-effect-source-closure-runtime-applied'];
+      } else if (
+        effect.classification === 'structural' ||
+        (rawRecords.length > 0 &&
+          rawRecords.every(record => record.status === 'not-applicable'))
+      ) {
+        status = 'not-applicable';
+        reasons = ['structural-wrapper-has-no-independent-gameplay-output'];
+      }
+      return {
+        candidateIdentity: `effect-coverage:${effect.semanticIdentity}`,
+        semanticIdentity: effect.semanticIdentity,
+        classification: effect.classification,
+        status,
+        reasons: [...new Set(reasons)].sort(),
+        rawEffectIdentities: [...(effect.rawEffectIdentities ?? [])].sort(),
+        rawRecordIdentities: rawRecords
+          .map(record => record.recordIdentity)
+          .sort(),
+        sourceIdentities: [...new Set(sourceIdentities)].sort(),
+        sourceIdentity: [...new Set(sourceIdentities)].sort().join('|'),
+        scenarioIdentity: String(scenarioIdentity ?? ''),
+      };
+    })
+    .sort(compareIdentity);
+}
+
 function createCoverage(input) {
   const dimensions = {
     publicActions: statusForRecords(
@@ -1231,13 +2764,34 @@ function createCoverage(input) {
         !hit.reasons?.length,
       hit => hit.reasons
     ),
-    hpDamage: statusFromActionDimension(input.publicActions, 'hp'),
-    toughnessDamage: statusFromActionDimension(
-      input.publicActions,
-      'toughness'
-    ),
-    actorSp: statusFromActionDimension(input.publicActions, 'actorSp'),
-    kiboSp: statusFromActionDimension(input.publicActions, 'kiboSp'),
+    hpDamage:
+      input.coverageCandidateMode === 'selected-root-source-closure-v1'
+        ? statusFromCoverageCandidates(
+            input.settlementCoverageCandidates,
+            'hp'
+          )
+        : statusFromActionDimension(input.publicActions, 'hp'),
+    toughnessDamage:
+      input.coverageCandidateMode === 'selected-root-source-closure-v1'
+        ? statusFromCoverageCandidates(
+            input.settlementCoverageCandidates,
+            'toughness'
+          )
+        : statusFromActionDimension(input.publicActions, 'toughness'),
+    actorSp:
+      input.coverageCandidateMode === 'selected-root-source-closure-v1'
+        ? statusFromCoverageCandidates(
+            input.settlementCoverageCandidates,
+            'actorSp'
+          )
+        : statusFromActionDimension(input.publicActions, 'actorSp'),
+    kiboSp:
+      input.coverageCandidateMode === 'selected-root-source-closure-v1'
+        ? statusFromCoverageCandidates(
+            input.settlementCoverageCandidates,
+            'kiboSp'
+          )
+        : statusFromActionDimension(input.publicActions, 'kiboSp'),
     cooldowns: statusForRecords(
       input.controls,
       control =>
@@ -1265,15 +2819,33 @@ function createCoverage(input) {
           'verified-combat-mechanics-package.tuningMechanicsCatalog',
         ])
       : createCoverageStatus('static-evidence-gap', []),
-    buffsAndDebuffs: statusForRecords(
-      [
-        ...input.semanticEffects,
-        ...input.passives,
-        ...input.runtimeEffectBindings,
-      ],
-      item => item.classification === 'applied' || item.applied === true,
-      item => item.reasons
-    ),
+    buffsAndDebuffs:
+      input.coverageCandidateMode === 'selected-root-source-closure-v1'
+        ? statusFromCoverageCandidates(
+            [
+              ...input.effectCoverageCandidates,
+              ...input.passives.map(item => ({
+                candidateIdentity: `passive-coverage:${item.passiveIdentity}`,
+                status: item.applied ? 'runtime-applied' : 'unresolved',
+                sourceIdentity: item.sourceIdentity,
+              })),
+              ...input.runtimeEffectBindings.map(item => ({
+                candidateIdentity: `runtime-effect-coverage:${item.bindingIdentity}`,
+                status: item.applied ? 'runtime-applied' : 'unresolved',
+                sourceIdentity: item.sourceIdentity,
+              })),
+            ],
+            null
+          )
+        : statusForRecords(
+            [
+              ...input.semanticEffects,
+              ...input.passives,
+              ...input.runtimeEffectBindings,
+            ],
+            item => item.classification === 'applied' || item.applied === true,
+            item => item.reasons
+          ),
     passives: statusForRecords(
       input.passives,
       item => item.applied === true,
@@ -2216,9 +3788,16 @@ function createRuntimeCoverage({
   runtimeEffectBindings,
   passives,
   switchTriggers,
+  scenarioOutOfScopeActions = [],
   coverage,
   descriptionCoverage,
 }) {
+  const scenarioOutOfScopeControlIds = new Set(
+    scenarioOutOfScopeActions
+      .filter(record => record.status === 'not-applicable')
+      .map(record => Number(record.controlSkillId))
+      .filter(Number.isInteger)
+  );
   const actionRows = publicActions.map(action => {
     const actionControlIds = new Set([
       Number(action.controlSkillId),
@@ -2233,6 +3812,9 @@ function createRuntimeCoverage({
       tuningMarkConditionalDamageGroups.filter(group =>
         actionControlIds.has(Number(group.controlSkillId))
       );
+    const scenarioOutOfScope = [...actionControlIds].some(controlSkillId =>
+      scenarioOutOfScopeControlIds.has(controlSkillId)
+    );
     const settlementClauses = (descriptionCoverage?.entries ?? []).filter(
       entry =>
         entry.mechanicKinds?.includes('action-settlement') &&
@@ -2254,19 +3836,22 @@ function createRuntimeCoverage({
     const requiresDamageSettlement =
       settlementClauses.length > 0 &&
       applicablePublicFormSettlements.length > 0;
-    const settlementStatus = requiresDamageSettlement
-      ? applicablePublicFormSettlements.every(row => row.status === 'applied')
+    const settlementStatus = scenarioOutOfScope
+      ? 'not-applicable'
+      : requiresDamageSettlement
+        ? applicablePublicFormSettlements.every(row => row.status === 'applied')
         ? 'applied'
         : applicablePublicFormSettlements.some(
               row => row.status === 'runtime-evidence-required'
             )
           ? 'runtime-evidence-required'
           : 'static-evidence-gap'
-      : 'not-required';
+        : 'not-required';
     const sourceDrivenConditionalDamageReady =
       actionConditionalDamageGroups.length > 0 &&
       actionConditionalDamageGroups.every(group => group.applied === true);
     const runtimeReady =
+      !scenarioOutOfScope &&
       (action.runtimeReady === true || sourceDrivenConditionalDamageReady) &&
       (!requiresDamageSettlement || settlementStatus === 'applied');
     return {
@@ -2283,7 +3868,7 @@ function createRuntimeCoverage({
       rawRuntimeReady: action.runtimeReady === true,
       sourceDrivenConditionalDamageReady,
       runtimeReady,
-      notApplicable: settlementStatus === 'not-applicable',
+      notApplicable: scenarioOutOfScope || settlementStatus === 'not-applicable',
       hitCount:
         publicFormSettlements.length > 0
           ? publicFormSettlements.reduce(
@@ -2298,6 +3883,9 @@ function createRuntimeCoverage({
       reasons: [
         ...new Set([
           ...(action.reasons ?? []),
+          ...(scenarioOutOfScope
+            ? ['scenario-out-of-scope-action-not-scheduled']
+            : []),
           ...(!runtimeReady &&
           requiresDamageSettlement &&
           settlementStatus !== 'not-applicable'
@@ -2406,6 +3994,7 @@ function deriveCharacterCombatLifecycle({
 
 function deriveCharacterCombatSimulationScopes({
   recipe,
+  headlessAssumptionContract = null,
   publicActions,
   actionForms,
   specialResourceProfiles,
@@ -2527,6 +4116,9 @@ function deriveCharacterCombatSimulationScopes({
     runtimeCapturePlanEmpty:
       Number(capturePlan?.summary?.captureCount ?? 0) === 0,
     sourceGameplayGapCountIsZero: sourceGameplayGapCount === 0,
+    headlessAssumptionClientParityReady:
+      headlessAssumptionContract == null ||
+      headlessAssumptionContract.clientParityReady === true,
   };
   return {
     zeroDistance: {
@@ -3504,6 +5096,7 @@ export function createActionTransitionCoverage({
   ownerId,
   publicActions = [],
   attackInputChains = [],
+  contextEdges = [],
   controlTransitionWindows = [],
   variantEdges = [],
   variantWindowBindings = [],
@@ -3689,6 +5282,44 @@ export function createActionTransitionCoverage({
         status: binding.status,
         applied: binding.applied === true,
         verification: binding.verification,
+        resourceTransactions,
+        actionEffectBindings,
+        rawEffects,
+      })
+    );
+  }
+
+  for (const edge of contextEdges) {
+    transitions.push(
+      createTransitionCoverageRow({
+        ownerId,
+        identity: edge.edgeIdentity,
+        sourceControlSkillId: edge.sourceControlSkillId,
+        sourceSubSkillIndex: edge.sourceSubSkillIndex,
+        sourcePublicAction: publicActionByControl.get(
+          `${Number(edge.sourceControlSkillId)}|${Number(
+            edge.sourceSubSkillIndex
+          )}`
+        ),
+        triggerPhase: 'input-window',
+        inputCommand: edge.inputCommand,
+        inputWindow: edge.inputWindow,
+        targetChain: null,
+        targetSegment: {
+          controlSkillId:
+            edge.executionControlSkillId ?? edge.targetControlSkillId,
+          subSkillIndex: edge.targetSubSkillIndex,
+          semanticName: edge.semanticName,
+        },
+        transitionSemantics: 'input-context-derived',
+        exitRules: {
+          kind: edge.inputScheduling?.inputSemantics ?? 'immediate-interrupt',
+        },
+        condition: edge.condition,
+        evidenceKind: 'compiled-input-context-edge',
+        sourceIdentity: edge.sourceIdentity,
+        status: edge.status,
+        applied: edge.applied === true,
         resourceTransactions,
         actionEffectBindings,
         rawEffects,
@@ -4528,6 +6159,51 @@ function createOwnerSummaryMarkdown({
   return lines.join('\n');
 }
 
+function statusFromCoverageCandidates(candidates, dimension = null) {
+  if (!Array.isArray(candidates) || candidates.length === 0) {
+    return createCoverageStatus('not-applicable', []);
+  }
+  const statusOf = candidate =>
+    dimension == null
+      ? candidate.status
+      : candidate.dimensions?.[dimension]?.status;
+  const applied = candidates.filter(
+    candidate => statusOf(candidate) === 'runtime-applied'
+  ).length;
+  const verifiedZero = candidates.filter(
+    candidate => statusOf(candidate) === 'verified-zero'
+  ).length;
+  const notApplicable = candidates.filter(
+    candidate => statusOf(candidate) === 'not-applicable'
+  ).length;
+  const unresolved =
+    candidates.length - applied - verifiedZero - notApplicable;
+  return {
+    status:
+      unresolved > 0
+        ? 'static-evidence-gap'
+        : applied > 0 || verifiedZero > 0
+          ? 'applied'
+          : 'not-applicable',
+    recordCount: candidates.length,
+    appliedCount: applied,
+    verifiedZeroCount: verifiedZero,
+    notApplicableCount: notApplicable,
+    unresolvedCount: unresolved,
+    sourceIdentities: candidates
+      .flatMap(candidate => [
+        candidate.sourceIdentity,
+        ...(candidate.sourceIdentities ?? []),
+        ...(dimension == null
+          ? []
+          : candidate.dimensions?.[dimension]?.sourceIdentities ?? []),
+      ])
+      .filter(Boolean)
+      .map(String)
+      .sort(),
+  };
+}
+
 function statusFromActionDimension(actions, dimension) {
   const summaries = actions.map(
     action => action.dimensionSummary?.[dimension] ?? {}
@@ -4772,6 +6448,7 @@ function compareIdentity(left, right) {
 function resolveIdentity(value) {
   return String(
     value?.profileIdentity ??
+      value?.candidateIdentity ??
       value?.recordIdentity ??
       value?.coverageIdentity ??
       value?.nodeIdentity ??

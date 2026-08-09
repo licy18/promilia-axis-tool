@@ -445,6 +445,7 @@ function createMachineActionFromProject({
             selectorKind: action.variantInputSelection.selectorKind,
             publicVariantIndex: action.variantInputSelection.publicVariantIndex,
             chargeTier: action.variantInputSelection.chargeTier,
+            inputFrame: action.variantInputSelection.inputFrame,
             mode: action.variantInputSelection.mode,
           }
         : null,

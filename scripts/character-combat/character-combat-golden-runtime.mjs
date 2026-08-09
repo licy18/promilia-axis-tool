@@ -100,6 +100,10 @@ export async function createCharacterCombatGoldenRuntime({
         inputHash: primary.headlessRun.inputHash,
         traceHash: primary.headlessRun.traceHash,
         dataHash: primary.headlessRun.dataHash,
+        buildHash: primary.headlessRun.hashes?.build ?? null,
+        headlessAssumptionContracts:
+          primary.headlessRun.compilation?.dataIdentity
+            ?.headlessAssumptionContracts ?? [],
         criticalPolicy:
           primary.compiledScenario.combatScenario?.critical?.policy ?? null,
       },
@@ -598,6 +602,12 @@ function createGoldenActualProjection({
             : (selection.animationDurationFrames ??
                 selection.actualDurationFrames)
         ),
+        chargingRelease: selection.chargingRelease ?? null,
+        appliedAssumptionIdentity:
+          selection.appliedAssumptionIdentity ?? null,
+        appliedAssumptionVersion:
+          selection.appliedAssumptionVersion ?? null,
+        appliedAssumptionHash: selection.appliedAssumptionHash ?? null,
         sourceKind: selection.sourceKind ?? null,
       };
     })
@@ -777,7 +787,7 @@ function createGoldenActualProjection({
     ...(executedActionIds.includes('moyin-ultimate')
       ? [
           {
-            eventId: `synthesized:cooldown-reduction:moyin-ultimate:0`,
+            eventId: 'synthesized:cooldown-reduction:moyin-ultimate:0',
             actionId: 'moyin-ultimate',
             frame: 0,
             effectId: 'battle-element:109001171',
@@ -886,6 +896,21 @@ function createGoldenActualProjection({
         afterStacks: numberOrNull(event.after?.stacks),
         stackChange: numberOrNull(event.stackChange),
         expiresAtMs: numberOrNull(event.after?.expiresAtMs),
+        appliedAssumptionIdentity:
+          event.appliedAssumptionIdentity ??
+          event.after?.appliedAssumptionIdentity ??
+          event.before?.appliedAssumptionIdentity ??
+          null,
+        appliedAssumptionVersion:
+          event.appliedAssumptionVersion ??
+          event.after?.appliedAssumptionVersion ??
+          event.before?.appliedAssumptionVersion ??
+          null,
+        appliedAssumptionHash:
+          event.appliedAssumptionHash ??
+          event.after?.appliedAssumptionHash ??
+          event.before?.appliedAssumptionHash ??
+          null,
         modifiers: (event.modifiers ?? []).map(modifier => ({
           kind: modifier.kind ?? null,
           attributeId: numberOrNull(modifier.attributeId),

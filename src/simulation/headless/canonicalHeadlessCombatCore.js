@@ -172,6 +172,8 @@ export function createCanonicalHeadlessCombatCore({
         compilation.dataIdentity?.kiboAutoCastDerivationAuthority ?? null,
       switchTriggerGenerationAuthority:
         compilation.dataIdentity?.switchTriggerGenerationAuthority ?? null,
+      headlessAssumptionContracts:
+        compilation.dataIdentity.headlessAssumptionContracts ?? [],
       inputHash: compilation.hashes.input,
       dataHash: compilation.hashes.data,
       traceHash,
@@ -303,6 +305,8 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       ),
     },
     critical: effectiveScenario.combatScenario?.critical ?? null,
+    headlessAssumptionContracts:
+      compilation.dataIdentity.headlessAssumptionContracts ?? [],
     actions: (effectiveScenario.actions ?? []).map(projectTraceAction),
     executionPlan: projectExecutionPlan(simulation.actionExecutionPlan),
     readiness: projectReadinessTimeline(simulation.actionReadinessTimeline),
@@ -767,6 +771,19 @@ function projectRuntimePayload(payload = null) {
     'stacks',
     'appliedToCalculators',
     'applied',
+    'watcherIdentity',
+    'armHitIdentity',
+    'armedAtMs',
+    'triggerTimeMs',
+    'remainingTriggerCount',
+    'triggerEvent',
+    'armOrder',
+    'boundary',
+    'effectBoundary',
+    'effectDurationMs',
+    'appliedAssumptionIdentity',
+    'appliedAssumptionVersion',
+    'appliedAssumptionHash',
   ];
   for (const key of scalarKeys) {
     if (payload[key] !== undefined) result[key] = payload[key];
@@ -776,6 +793,13 @@ function projectRuntimePayload(payload = null) {
     'violationCodes',
     'unresolvedCodes',
     'unresolvedReasons',
+  ]) {
+    if (Array.isArray(payload[key])) result[key] = payload[key];
+  }
+  for (const key of [
+    'appliedTargetIds',
+    'appliedEffectIdentities',
+    'candidateWindowIdentities',
   ]) {
     if (Array.isArray(payload[key])) result[key] = payload[key];
   }
@@ -890,6 +914,10 @@ function projectEffectEvent(event = {}) {
     runtimePhase: event.runtimePhase ?? null,
     runtimePriority: event.runtimePriority ?? null,
     runtimeSequenceIndex: event.runtimeSequenceIndex ?? null,
+    sourceSequencePath: Array.isArray(event.sourceSequencePath)
+      ? [...event.sourceSequencePath]
+      : null,
+    sameFrameVisibility: event.sameFrameVisibility ?? null,
     effectId: event.effectId ?? null,
     effectName: event.effectName ?? null,
     operation: event.operation ?? event.kind ?? null,
@@ -900,6 +928,9 @@ function projectEffectEvent(event = {}) {
     nextTargetId: event.nextTargetId ?? event.after?.targetId ?? null,
     controlledActorTransitionId: event.controlledActorTransitionId ?? null,
     stackChange: event.stackChange ?? null,
+    appliedAssumptionIdentity: event.appliedAssumptionIdentity ?? null,
+    appliedAssumptionVersion: event.appliedAssumptionVersion ?? null,
+    appliedAssumptionHash: event.appliedAssumptionHash ?? null,
     before: projectEffectState(event.before),
     after: projectEffectState(event.after),
     modifiers: (event.modifiers ?? []).map(projectEffectModifier),
@@ -934,6 +965,9 @@ function projectEffectState(state = null) {
     formulaSourceActorId: state.formulaSourceActorId ?? null,
     effectAdderActorId: state.effectAdderActorId ?? null,
     effectInstanceId: state.effectInstanceId ?? null,
+    appliedAssumptionIdentity: state.appliedAssumptionIdentity ?? null,
+    appliedAssumptionVersion: state.appliedAssumptionVersion ?? null,
+    appliedAssumptionHash: state.appliedAssumptionHash ?? null,
   };
 }
 
@@ -1183,6 +1217,11 @@ function projectVariantSelections(value) {
             : null,
         }
       : null,
+    chargingRelease: selection?.chargingRelease ?? null,
+    appliedAssumptionIdentity:
+      selection?.appliedAssumptionIdentity ?? null,
+    appliedAssumptionVersion: selection?.appliedAssumptionVersion ?? null,
+    appliedAssumptionHash: selection?.appliedAssumptionHash ?? null,
     sourceKind: selection?.sourceKind ?? null,
     sourceIdentity: projectSourceIdentity(selection?.sourceIdentity),
   }));
@@ -1518,6 +1557,14 @@ function createCatalogProjection(gameData) {
 
 function createDataIdentity({ scenario, gameData }) {
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
+  const scenarioOwnerIds = new Set(
+    (scenario.actors ?? []).map(actor => Number(actor.characterId))
+  );
+  const headlessAssumptionContracts = (
+    mechanicsPackage?.actionVariantGraph?.headlessAssumptionContracts ?? []
+  )
+    .filter(contract => scenarioOwnerIds.has(Number(contract.ownerId)))
+    .map(projectHeadlessAssumptionContractIdentity);
   return canonicalizeValue({
     verifiedMechanicsPackageId: mechanicsPackage?.packageId ?? null,
     verifiedMechanicsPackageHash: mechanicsPackage?.packageHash ?? null,
@@ -1540,6 +1587,7 @@ function createDataIdentity({ scenario, gameData }) {
       .map(action =>
         projectVerifiedSwitchExitTailPolicy(action.switchExitTailPolicy)
       ),
+    headlessAssumptionContracts,
     enemyProfile: projectEnemyProfileIdentity(scenario.enemy?.profile),
     gameDataReferenceIdentity:
       scenario.gameDataCatalog?.referenceIdentity ?? null,
@@ -1562,6 +1610,23 @@ function projectSwitchTriggerGenerationAuthority(value) {
     generationHash: value.generationHash ?? null,
     mechanicsPackage: value.mechanicsPackage ?? null,
     summary: value.summary ?? null,
+  };
+}
+
+function projectHeadlessAssumptionContractIdentity(contract) {
+  return {
+    ownerId: Number(contract.ownerId),
+    contractIdentity: contract.contractIdentity,
+    policyAuthority: contract.policyAuthority,
+    clientParityReady: contract.clientParityReady === true,
+    assumptionVersion: contract.assumptionVersion,
+    assumptionHash: contract.assumptionHash,
+    assumptionIdentities: (contract.assumptions ?? []).map(
+      assumption => assumption.identity
+    ),
+    settlementContract: contract.settlementContract ?? null,
+    futureClientEvidencePolicy: contract.futureClientEvidencePolicy,
+    status: contract.status,
   };
 }
 

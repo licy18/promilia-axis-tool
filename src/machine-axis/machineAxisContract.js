@@ -361,12 +361,17 @@ function normalizeSemanticVariant(value) {
   const selectorIdentity = textOrNull(value.selectorIdentity);
   const publicVariantIndex = nonNegativeIntegerOrNull(value.publicVariantIndex);
   const chargeTier = positiveIntegerOrNull(value.chargeTier);
-  const mode = ['press', 'hold'].includes(value.mode) ? value.mode : null;
+  const inputFrame = nonNegativeIntegerOrNull(
+    value.inputFrame ?? value.releaseFrame
+  );
+  const mode = ['press', 'hold', 'release'].includes(value.mode)
+    ? value.mode
+    : null;
   if (
     !selectorIdentity &&
     publicVariantIndex == null &&
     chargeTier == null &&
-    !mode
+    !(mode === 'release' && inputFrame != null)
   ) {
     return null;
   }
@@ -375,6 +380,7 @@ function normalizeSemanticVariant(value) {
     selectorKind: textOrNull(value.selectorKind),
     publicVariantIndex,
     chargeTier,
+    inputFrame,
     mode,
   };
 }

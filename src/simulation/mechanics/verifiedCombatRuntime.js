@@ -186,6 +186,9 @@ export function createVerifiedCombatRuntime({
         transaction,
       ])
   );
+  const breakTriggerWatchers = (
+    mechanicsPackage.actionVariantGraph?.breakTriggerWatchers ?? []
+  ).filter(watcher => watcher.applied === true);
   const descriptors = [];
   for (const action of scenario?.actions ?? []) {
     if (executionByActionId.get(action.id)?.execute === false) continue;
@@ -236,6 +239,9 @@ export function createVerifiedCombatRuntime({
       ) {
         continue;
       }
+      const damageEventTransaction = ordinaryDamageTransactionByKey.get(
+        `${action.id}|${resolveCriticalHitIdentity(hit)}`
+      );
       descriptors.push({
         kind: 'hit',
         timeMs:
@@ -244,10 +250,36 @@ export function createVerifiedCombatRuntime({
         action,
         resolution,
         hit,
-        damageEventTransaction: ordinaryDamageTransactionByKey.get(
-          `${action.id}|${resolveCriticalHitIdentity(hit)}`
-        ),
+        damageEventTransaction,
       });
+      for (const watcher of breakTriggerWatchers) {
+        if (
+          Number(watcher.ownerId) !==
+            Number(resolution.actionBinding?.ownerId) ||
+          Number(watcher.controlSkillId) !==
+            Number(resolution.actionBinding?.controlSkillId) ||
+          Number(watcher.subSkillIndex) !==
+            Number(resolution.actionBinding?.selectedSubSkillIndex) ||
+          String(watcher.armHitIdentity) !== String(hit.hitIdentity)
+        ) {
+          continue;
+        }
+        const settlementPath =
+          damageEventTransaction?.settlementSourceSequencePath;
+        descriptors.push({
+          kind: 'break-watcher-arm',
+          timeMs:
+            Number(action.startMs) +
+            (Number(hit.trigger.startFrame) * 1000) / frameRate,
+          action,
+          resolution,
+          hit,
+          watcher,
+          sourceSequencePath: Array.isArray(settlementPath)
+            ? [...settlementPath, 1]
+            : null,
+        });
+      }
     }
   }
 
@@ -383,6 +415,7 @@ export function createVerifiedCombatRuntime({
   const kiboResourceEvents = [];
   const vitalEvents = [];
   const eventLog = [];
+  const breakWatcherEvents = [];
   const hitRecoveryAtByIdentity = new Map();
   const executionBlocks = [...(actionVariantRuntime?.executionBlocks ?? [])];
   const blockedActionIds = new Set(
@@ -450,6 +483,14 @@ export function createVerifiedCombatRuntime({
       if (stateEvent) {
         appendRuntimeEvent(damageEvents, stateEvent, state);
         eventLog.push(stateEvent);
+        appendVerifiedBreakWatcherEvents({
+          descriptor,
+          damageEvent: stateEvent,
+          scenario,
+          state,
+          breakWatcherEvents,
+          eventLog,
+        });
       }
       continue;
     }
@@ -497,6 +538,14 @@ export function createVerifiedCombatRuntime({
       }
       continue;
     }
+    if (descriptor.kind === 'break-watcher-arm') {
+      const event = armVerifiedBreakTriggerWatcher({ descriptor, state });
+      if (event) {
+        appendRuntimeEvent(breakWatcherEvents, event, state);
+        eventLog.push(event);
+      }
+      continue;
+    }
     if (descriptor.kind === 'passive-periodic-heal') {
       const event = applyKiboPassivePeriodicHealDescriptor({
         descriptor,
@@ -535,6 +584,14 @@ export function createVerifiedCombatRuntime({
       });
       appendRuntimeEvent(damageEvents, event, state);
       eventLog.push(event);
+      appendVerifiedBreakWatcherEvents({
+        descriptor,
+        damageEvent: event,
+        scenario,
+        state,
+        breakWatcherEvents,
+        eventLog,
+      });
       continue;
     }
     if (descriptor.kind === 'passive-retaliation-hit') {
@@ -555,6 +612,14 @@ export function createVerifiedCombatRuntime({
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
+      appendVerifiedBreakWatcherEvents({
+        descriptor,
+        damageEvent: hitResult.damageEvent,
+        scenario,
+        state,
+        breakWatcherEvents,
+        eventLog,
+      });
       continue;
     }
     if (descriptor.kind === 'passive-derived-self-heal') {
@@ -632,6 +697,14 @@ export function createVerifiedCombatRuntime({
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
+      appendVerifiedBreakWatcherEvents({
+        descriptor,
+        damageEvent: hitResult.damageEvent,
+        scenario,
+        state,
+        breakWatcherEvents,
+        eventLog,
+      });
       if (descriptor.kind === 'hit') {
         applyHitRecovery({
           descriptor,
@@ -656,6 +729,14 @@ export function createVerifiedCombatRuntime({
       if (tuningResult?.damageEvent) {
         appendRuntimeEvent(damageEvents, tuningResult.damageEvent, state);
         eventLog.push(tuningResult.damageEvent);
+        appendVerifiedBreakWatcherEvents({
+          descriptor,
+          damageEvent: tuningResult.damageEvent,
+          scenario,
+          state,
+          breakWatcherEvents,
+          eventLog,
+        });
       }
       if (tuningResult?.event) {
         if (tuningResult.event.type === 'VERIFIED_TUNING_PERIODIC_HEAL') {
@@ -689,6 +770,11 @@ export function createVerifiedCombatRuntime({
     resourceEvents,
     kiboResourceEvents,
     vitalEvents,
+    breakWatcherEvents,
+    runtimeDynamicEffects: state.runtimeDynamicEffects.map(effect => ({
+      ...effect,
+      modifiers: effect.modifiers.map(modifier => ({ ...modifier })),
+    })),
     eventLog,
     executionBlocks,
     effectGeneration,
@@ -751,6 +837,12 @@ export function createVerifiedCombatRuntime({
       ).length,
       breakTriggerCount: damageEvents.filter(
         event => event.payload.breakState?.triggered
+      ).length,
+      breakWatcherArmCount: breakWatcherEvents.filter(
+        event => event.type === 'VERIFIED_BREAK_TRIGGER_WATCHER_ARMED'
+      ).length,
+      breakWatcherTriggerCount: breakWatcherEvents.filter(
+        event => event.type === 'VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED'
       ).length,
       shieldedHitCount: damageEvents.filter(
         event => event.payload.shieldState?.absorbed > 0
@@ -1678,6 +1770,8 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     attributeDefinitionById,
     attributeIdByKey,
     effectTimeline,
+    activeBreakTriggerWatchers: [],
+    runtimeDynamicEffects: [],
     vitalDiagnostics: [],
     nextRuntimeSequenceIndex: 0,
     enemy: {
@@ -1781,6 +1875,167 @@ function createActorRuntimeAttributeMap(actor, attributeDefinitionById) {
   );
 }
 
+function armVerifiedBreakTriggerWatcher({ descriptor, state }) {
+  const watcher = descriptor.watcher;
+  if (!watcher?.applied) return null;
+  const armedAtMs = Number(descriptor.timeMs);
+  const active = {
+    runtimeWatcherIdentity: `${watcher.watcherIdentity}|${descriptor.action.id}`,
+    watcherIdentity: watcher.watcherIdentity,
+    sourceActionId: descriptor.action.id,
+    sourceActorId: descriptor.action.actorId,
+    armedAtMs,
+    expiresAtMs: armedAtMs + Number(watcher.durationMs),
+    remainingTriggerCount: Number(watcher.triggerCount),
+    watcher,
+  };
+  state.activeBreakTriggerWatchers = state.activeBreakTriggerWatchers.filter(
+    candidate =>
+      candidate.runtimeWatcherIdentity !== active.runtimeWatcherIdentity
+  );
+  state.activeBreakTriggerWatchers.push(active);
+  return {
+    type: 'VERIFIED_BREAK_TRIGGER_WATCHER_ARMED',
+    timeMs: armedAtMs,
+    actionId: descriptor.action.id,
+    actorId: descriptor.action.actorId,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
+    payload: {
+      watcherIdentity: watcher.watcherIdentity,
+      armHitIdentity: watcher.armHitIdentity,
+      armedAtMs,
+      expiresAtMs: active.expiresAtMs,
+      boundary: watcher.boundary,
+      triggerEvent: watcher.triggerEvent,
+      remainingTriggerCount: active.remainingTriggerCount,
+      armOrder: watcher.armOrder,
+      appliedAssumptionIdentity: watcher.assumptionIdentity,
+      appliedAssumptionVersion: watcher.assumptionVersion,
+      appliedAssumptionHash: watcher.assumptionHash,
+      sourceIdentity: watcher.sourceIdentity,
+      appliedToCalculators: true,
+    },
+  };
+}
+
+function triggerVerifiedBreakWatchers({
+  descriptor,
+  damageEvent,
+  scenario,
+  state,
+}) {
+  if (damageEvent?.payload?.breakState?.triggered !== true) return [];
+  const timeMs = Number(descriptor.timeMs);
+  const triggered = state.activeBreakTriggerWatchers.filter(
+    active =>
+      active.remainingTriggerCount > 0 &&
+      timeMs >= active.armedAtMs &&
+      timeMs < active.expiresAtMs
+  );
+  const events = [];
+  for (const active of triggered) {
+    active.remainingTriggerCount -= 1;
+    const effect = active.watcher.effect;
+    const targetIds =
+      effect.targetKind === 'team-actors'
+        ? (scenario.actors ?? []).map(actor => actor.id)
+        : [active.sourceActorId];
+    const appliedEffectIdentities = [];
+    for (const targetId of targetIds) {
+      const runtimeEffect = {
+        instanceKey: `${effect.effectId}:${targetId}`,
+        effectId: effect.effectId,
+        effectName: effect.effectName,
+        sourceActionId: active.sourceActionId,
+        sourceActorId: active.sourceActorId,
+        targetKind: EFFECT_TARGET_KINDS.ACTOR,
+        targetId,
+        startsAtMs: timeMs,
+        expiresAtMs: timeMs + Number(effect.durationMs),
+        stacks: 1,
+        maxStacks: Number(effect.maxStacks) || 1,
+        modifiers: effect.modifiers.map(modifier => ({ ...modifier })),
+        sourceIdentity: {
+          sourceKind: 'verified-break-trigger-watcher',
+          watcherIdentity: active.watcherIdentity,
+          assumptionIdentity: active.watcher.assumptionIdentity,
+          identity: effect.sourceIdentity,
+        },
+        appliedToCalculators: true,
+      };
+      state.runtimeDynamicEffects = state.runtimeDynamicEffects.filter(
+        candidate => candidate.instanceKey !== runtimeEffect.instanceKey
+      );
+      state.runtimeDynamicEffects.push(runtimeEffect);
+      appliedEffectIdentities.push(runtimeEffect.instanceKey);
+    }
+    events.push({
+      type: 'VERIFIED_BREAK_TRIGGER_WATCHER_TRIGGERED',
+      timeMs,
+      actionId: active.sourceActionId,
+      actorId: active.sourceActorId,
+      targetId: damageEvent.targetId ?? null,
+      sourceSequencePath: descriptor.sourceSequencePath ?? null,
+      payload: {
+        watcherIdentity: active.watcherIdentity,
+        triggeringDamageEventIdentity:
+          damageEvent.hitKey ?? damageEvent.payload?.hitKey ?? null,
+        triggeringSourceActionId: descriptor.action?.id ?? null,
+        armedAtMs: active.armedAtMs,
+        expiresAtMs: active.expiresAtMs,
+        triggerTimeMs: timeMs,
+        remainingTriggerCount: active.remainingTriggerCount,
+        effectId: effect.effectId,
+        effectDurationMs: effect.durationMs,
+        effectBoundary: 'right-open',
+        appliedTargetIds: targetIds,
+        appliedEffectIdentities,
+        appliedAssumptionIdentity: active.watcher.assumptionIdentity,
+        appliedAssumptionVersion: active.watcher.assumptionVersion,
+        appliedAssumptionHash: active.watcher.assumptionHash,
+        sourceIdentity: active.watcher.sourceIdentity,
+        appliedToCalculators: true,
+      },
+    });
+  }
+  return events;
+}
+
+function appendVerifiedBreakWatcherEvents({
+  descriptor,
+  damageEvent,
+  scenario,
+  state,
+  breakWatcherEvents,
+  eventLog,
+}) {
+  const watcherEvents = triggerVerifiedBreakWatchers({
+    descriptor,
+    damageEvent,
+    scenario,
+    state,
+  });
+  for (const watcherEvent of watcherEvents) {
+    appendRuntimeEvent(breakWatcherEvents, watcherEvent, state);
+    eventLog.push(watcherEvent);
+  }
+}
+
+function resolveActiveRuntimeDynamicEffects(
+  state,
+  timeMs,
+  { targetKind = null, targetId = null } = {}
+) {
+  return (state.runtimeDynamicEffects ?? []).filter(
+    effect =>
+      Number(timeMs) >= Number(effect.startsAtMs) &&
+      Number(timeMs) < Number(effect.expiresAtMs) &&
+      (targetKind == null || effect.targetKind === targetKind) &&
+      (targetId == null || String(effect.targetId) === String(targetId)) &&
+      effect.appliedToCalculators === true
+  );
+}
+
 function resolveRuntimeAttribute({
   state,
   targetKind,
@@ -1806,13 +2061,19 @@ function resolveRuntimeAttribute({
       ready: false,
     };
   }
-  const activeEffects = resolveActiveEffectsAt(state.effectTimeline, timeMs, {
-    targetKind,
-    targetId,
-    calculatorOnly: true,
-    settlingActionId,
-    settlingSourceSequencePath,
-  });
+  const activeEffects = [
+    ...resolveActiveEffectsAt(state.effectTimeline, timeMs, {
+      targetKind,
+      targetId,
+      calculatorOnly: true,
+      settlingActionId,
+      settlingSourceSequencePath,
+    }),
+    ...resolveActiveRuntimeDynamicEffects(state, timeMs, {
+      targetKind,
+      targetId,
+    }),
+  ];
   const modifiers = activeEffects.flatMap(effect =>
     (effect.modifiers ?? [])
       .filter(
@@ -6562,6 +6823,7 @@ function resolveDescriptorOrder(kind) {
     'passive-derived-self-heal': 2,
     'passive-derived-periodic-contract-unresolved': 2,
     hit: 3,
+    'break-watcher-arm': 3,
     'passive-derived-hit': 3,
     'passive-derived-dot': 3,
     'passive-retaliation-hit': 3,
@@ -6581,6 +6843,7 @@ function resolveDescriptorOrder(kind) {
     'passive-derived-self-heal': ['direct-effect', 2],
     'passive-derived-periodic-contract-unresolved': ['direct-effect', 2],
     hit: ['combat-hit', 3],
+    'break-watcher-arm': ['combat-hit', 3],
     'passive-derived-hit': ['combat-hit', 3],
     'passive-derived-dot': ['combat-hit', 3],
     'passive-retaliation-hit': ['combat-hit', 3],

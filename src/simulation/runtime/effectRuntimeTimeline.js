@@ -654,6 +654,16 @@ function normalizeEffectRuntimeCommand(entry, validationIssues, scenario) {
     icon: command.icon ?? null,
     confidence: command.confidence ?? null,
     trackingStatus: command.trackingStatus ?? null,
+    appliedAssumptionIdentity: command.appliedAssumptionIdentity ?? null,
+    appliedAssumptionVersion: command.appliedAssumptionVersion ?? null,
+    appliedAssumptionHash: command.appliedAssumptionHash ?? null,
+    sourceSequencePath: Array.isArray(command.sourceSequencePath)
+      ? [...command.sourceSequencePath]
+      : null,
+    sameFrameVisibility:
+      command.sameFrameVisibility ??
+      command.sourceIdentity?.sameFrameVisibility ??
+      null,
     sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
     semanticTargetKind:
       command.semanticTargetKind ??
@@ -1086,6 +1096,13 @@ function createRuntimeEffectState(command) {
     icon: command.icon,
     confidence: command.confidence,
     trackingStatus: command.trackingStatus,
+    appliedAssumptionIdentity: command.appliedAssumptionIdentity ?? null,
+    appliedAssumptionVersion: command.appliedAssumptionVersion ?? null,
+    appliedAssumptionHash: command.appliedAssumptionHash ?? null,
+    sourceSequencePath: Array.isArray(command.sourceSequencePath)
+      ? [...command.sourceSequencePath]
+      : null,
+    sameFrameVisibility: command.sameFrameVisibility ?? null,
     sourceIdentity: cloneSourceIdentity(command.sourceIdentity),
     semanticTargetKind: command.semanticTargetKind,
     inheritOnControlledActorSwitch:
@@ -1153,6 +1170,23 @@ function refreshRuntimeEffectState(existing, command) {
     icon: command.icon ?? existing.icon ?? null,
     confidence: command.confidence ?? existing.confidence ?? null,
     trackingStatus: command.trackingStatus ?? existing.trackingStatus ?? null,
+    appliedAssumptionIdentity:
+      command.appliedAssumptionIdentity ??
+      existing.appliedAssumptionIdentity ??
+      null,
+    appliedAssumptionVersion:
+      command.appliedAssumptionVersion ??
+      existing.appliedAssumptionVersion ??
+      null,
+    appliedAssumptionHash:
+      command.appliedAssumptionHash ?? existing.appliedAssumptionHash ?? null,
+    sourceSequencePath: Array.isArray(command.sourceSequencePath)
+      ? [...command.sourceSequencePath]
+      : Array.isArray(existing.sourceSequencePath)
+        ? [...existing.sourceSequencePath]
+        : null,
+    sameFrameVisibility:
+      command.sameFrameVisibility ?? existing.sameFrameVisibility ?? null,
     sourceIdentity:
       cloneSourceIdentity(command.sourceIdentity) ??
       cloneSourceIdentity(existing.sourceIdentity),
@@ -1353,6 +1387,23 @@ function createEffectRuntimeEvent({
     icon: command?.icon ?? state?.icon ?? null,
     confidence: command?.confidence ?? state?.confidence ?? null,
     trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
+    appliedAssumptionIdentity:
+      command?.appliedAssumptionIdentity ??
+      state?.appliedAssumptionIdentity ??
+      null,
+    appliedAssumptionVersion:
+      command?.appliedAssumptionVersion ??
+      state?.appliedAssumptionVersion ??
+      null,
+    appliedAssumptionHash:
+      command?.appliedAssumptionHash ?? state?.appliedAssumptionHash ?? null,
+    sourceSequencePath: Array.isArray(
+      command?.sourceSequencePath ?? state?.sourceSequencePath
+    )
+      ? [...(command?.sourceSequencePath ?? state?.sourceSequencePath)]
+      : null,
+    sameFrameVisibility:
+      command?.sameFrameVisibility ?? state?.sameFrameVisibility ?? null,
     tags: uniqueValues(command?.tags ?? state?.tags),
     sourceIdentity: cloneSourceIdentity(
       command?.sourceIdentity ?? state?.sourceIdentity
@@ -1371,6 +1422,23 @@ function createEffectRuntimeEvent({
       expiresAtMs: after?.expiresAtMs ?? null,
       appliedToCalculators: state?.appliedToCalculators === true,
       trackingStatus: command?.trackingStatus ?? state?.trackingStatus ?? null,
+      appliedAssumptionIdentity:
+        command?.appliedAssumptionIdentity ??
+        state?.appliedAssumptionIdentity ??
+        null,
+      appliedAssumptionVersion:
+        command?.appliedAssumptionVersion ??
+        state?.appliedAssumptionVersion ??
+        null,
+      appliedAssumptionHash:
+        command?.appliedAssumptionHash ?? state?.appliedAssumptionHash ?? null,
+      sourceSequencePath: Array.isArray(
+        command?.sourceSequencePath ?? state?.sourceSequencePath
+      )
+        ? [...(command?.sourceSequencePath ?? state?.sourceSequencePath)]
+        : null,
+      sameFrameVisibility:
+        command?.sameFrameVisibility ?? state?.sameFrameVisibility ?? null,
       previousTargetId: before?.targetId ?? null,
       nextTargetId: after?.targetId ?? null,
       inheritType: state?.inheritType ?? null,

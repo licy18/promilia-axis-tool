@@ -1,44 +1,70 @@
-# M12-B3 / 112001 姬瑟贝露：并行只读证据侧车
+# M12-B3 / 112001 姬瑟贝露：assumption-v1 权威证据入口
 
-## 冻结坐标
+本目录记录 112001 在 `m12c-zero-distance-passive-boss-v1` 下的来源、版本化无头假设、实现规格与反例。旧“必须等待 controlled client capture 才能实现”的冻结已被用户产品决策替代；当前功能闭合可以消费 `m12-112001-assumption-runtime-v1`，但这些选择不是客户端事实，`clientParityReady=false` 始终成立。
 
-- 基线：`140eefcd233cd9c1d136728f1c94b91aff632278`
-- 工作树：`C:\Codex\AzPr Axis\.worktrees\promilia-m12-b3-112001-evidence`
-- 分支：`research/m12-b3-112001-evidence`
-- 产品场景：`m12c-zero-distance-passive-boss-v1`
-- 场景约束：距离 0、投射物立即命中、Boss 静止且不攻击。
-- 正式 roster 分母仍为 9；`Kibo DNA=[]`；`hero_rank` 仍是未实装死配置。
+权威合同：
 
-本目录只交付来源账本、资源/consumer 图、验收反例和后续实现规格。它没有修改 production runtime/compiler、112001 正式 recipe、`src/data/generated/**`、全局报告或正式资格状态，也不构成 formal admission、optimization-ready 或 M12-C 解锁声明。
+- identity：`m12-112001-assumption-runtime-v1`
+- version：`1.0.0`
+- hash algorithm：`sha256-canonical-json-v1`
+- assumption hash：`3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71`
+- authority：`user-approved-headless-assumption`
+- settlement dependency：`m12-enemy-settlement-runtime-v2@2e3095db4b8c9232`
+- future evidence policy：未来客户端证据若不同，必须升版并作废、重算所有受影响的 profile/input/data/trace/build/acceptance binding/formal score。
 
-## 交付物
+配套材料：
 
-- [SOURCE_LEDGER.md](SOURCE_LEDGER.md)：来源快照、证据等级、已闭合与仍开放的事实。
-- [RESOURCE_CONSUMER_GRAPH.md](RESOURCE_CONSUMER_GRAPH.md)：主动派生窗口、重击释放、印记消费、CD 恢复、星决观察器和 `11200162` 孤立文案裁决。
-- [ACCEPTANCE_COUNTEREXAMPLES.md](ACCEPTANCE_COUNTEREXAMPLES.md)：右开边界、未命中/中断、同帧、资源不足和 scenario-out-of-scope N/A 反例。
-- [IMPLEMENTATION_SPEC.md](IMPLEMENTATION_SPEC.md)：集成线可直接执行的分阶段 recipe/compiler/runtime/test 规格，以及必须等待客户端韧性证据的部分。
+- [SOURCE_LEDGER.md](SOURCE_LEDGER.md)：来源层级、四条原 open 的保留与产品假设裁决。
+- [RESOURCE_CONSUMER_GRAPH.md](RESOURCE_CONSUMER_GRAPH.md)：动作、印记、consumer、watcher、wrapper、CD 与属性图。
+- [IMPLEMENTATION_SPEC.md](IMPLEMENTATION_SPEC.md)：已执行的分阶段 production/acceptance 合同。
+- [ACCEPTANCE_COUNTEREXAMPLES.md](ACCEPTANCE_COUNTEREXAMPLES.md)：正式 v1、alternate 敏感性与 failure-to-pass。
 
-## 结论摘要
+## 当前裁决
 
-| 主题 | 证据结论 | 集成状态 |
+| 主题 | 来源事实 | assumption-v1 可执行语义 |
 | --- | --- | --- |
-| 特殊重击 2 主动入口 | 普攻 A2/A3、星鸣技、星鸣协战后的重击输入可进入 `11200110/sub1` 或 `sub2`；请求核心入口均有 Unity `EventBridgeBehaviorData` 半开窗口 | 可进入 recipe/compiler 阶段 |
-| 特殊重击 3 主动入口 | 普攻 A4/A5、星决技后的重击输入可进入 `11200110/sub3` 或 `sub4` | 可进入 recipe/compiler 阶段 |
-| 蓄力释放 | 重击 2 的提前/完全释放分别进入 `11200141/sub0`、`sub1`；重击 3 分别进入 `sub2`、`sub3`。阈值处存在一帧重叠，且正式动作调度可精确落在 `59F/67F` | 主路径可建模；客户端 Charging evaluator 顺序闭合前，精确阈值保持 `112001-charge-threshold-overlap-order-open`、稳定 fail-closed |
-| 星鸣印记 | 星鸣首次碰撞在 `27F` 落地时给自己 `+1` 雷印记 `250`，不是 action-start 事务 | 可实现 landed-hit 事务 |
-| 重击 3 消耗 | 完全重击 3 在 `32F/39F/46F` 执行三个独立的一层 consumer，因而最多消耗 3 层；每次按 `250 -> 450` 优先选首个满足条件的候选 | 可实现资源选择和跨包顺序 |
-| consumer 顺序 | TC 客户端 `Execute` 的顺序为 `CalculateConsumeCount -> DoConsume -> DoInject`；`DoInject` 先注入普通/强化伤害分支，再注入所选印记的超限包 | 可实现跨包顺序；单伤害包内部 HP/韧性顺序仍等待客户端证据 |
-| 星决消费与效率 | 星决最终 consumer 要求同一种候选印记达到 2 层；普通/强化伤害的 `weakBreakDamageRate` 为 `16000/19000`，成功消费后再发所选印记超限包；同次落地另给 12 秒属性 wrapper | 资源分支可实现；wrapper 与当前命中包的同帧先后不得猜测 |
-| 星决后破韧增益 | 首次命中落地时挂 8 秒、一次性破韧观察器；命中破韧后给全队暴伤 `+10%` 持续 11 秒 | 必须等待 optimizer toughness 的客户端结算事件合同后才可实现 |
-| 重击减星鸣 CD | 重击 2/3 的指定首个碰撞落地才触发 `112001267`，目标槽位为 3，值为 `-3s`；重击 3 在进入释放分支前的 charge-control 首碰撞已经触发 | 可实现 landed-hit CD 恢复 |
-| `11200162` 孤立文案 | NewTable row `2193` 与 CHS `9418863283712` 确实写有星鸣末击 1 层 `焰火`、15 秒；当前客户端 `11200162` 只连接 `112001133 -> 112001134` 上场暴击率 `+8%/8s`，星鸣 `62F` 末碰撞无 consumer，可达图也无唯一对应元素 | `current-client-orphan/stale-description`；结构化 N/A，`runtimeGenerationMode=none`、`required=false`、`blocksReadiness=false` |
-| 敌攻派生动作 | 闪击/闪避、跃击/下落、极限反击、完美闪避/格挡/招架/反击及需要 Boss 攻击或受击事件的分支 | 结构化 `scenario-out-of-scope` N/A，永不进入本场景调度 |
+| 特殊重击入口 | A2/A3、星鸣、星鸣协战派生重击2；A4/A5、星决派生重击3 | 7 条 `EventBridge` 入口均保留右开输入窗；随后组合 charge-control 与 release-control |
+| Charging 阈值 | 重击2 `[0,60)`/`[59,239)`；重击3 `[0,68)`/`[67,134/135)` | `greatest-start-frame`：`59F -> 11200141/sub1`，`67F -> sub3`；同 startFrame 语义冲突仍 fail closed |
+| 星鸣印记 | 27F 首碰撞 landed 后 toOwn 雷印记 `250` | landed `+1`，miss/blocked/中断不加；右开生命周期 |
+| 完全重击3 | 32/39/46F 三个独立 consumer | 每个只从首个满足的同一候选取 1 层，候选 `250 -> 450`；最多 3 层 |
+| 星决 consumer | 191F 要求同候选 2 层 | `(1,1)` 不拼；`(2,2)` 选 250；`(0,2)` 选 450；消费后分支 damage，再发所选印记 overlimit |
+| damage/toughness/break | 客户端同包顺序仍未证实 | 消费中央 v2：当前破韧包 HP 读 pre-break，随后 toughness/break，再提交 HP；后续 canonical packet 读 post-break |
+| 128F watcher | landed 后挂 8s 一次性观察器，破韧后全队暴伤 `+10%/11s` | `hit-then-arm`；128F 自身 break 不触发，新观察器从后续独立 packet 起生效；右开、一次性 |
+| 191F wrapper | toOwn `112001255`，属性 113 raw99、222 raw3000，12s | target consumer 先结算，wrapper 后应用；191F 自身不受益，196F 起可受益；右开 |
+| 星鸣 CD | 四个指定首碰撞 toOwn `112001267`，槽3，`-3s` | 仅 landed 后应用：重击2 release sub0/sub1 与重击3 charge sub3/sub4 |
+| `11200162` 实际链 | `112001133 -> 112001134` | 受控角色上场时暴击率 `+8%/8s`，refresh、右开 |
+| `焰火` 文案 | NewTable 2193 / CHS 9418863283712 的确存在 | `current-client-orphan/stale-description`；N/A、`gameplayMechanic=false`、`runtimeGenerationMode=none`、`required=false`、`blocksReadiness=false` |
+| 敌攻/受击派生 | 来源保留 | Boss 不攻击的冻结场景下结构化 scenario-out-of-scope N/A；不进入调度 |
 
-## 最小集成原则
+## R4 节点级来源等值闭合
 
-1. 每个时间窗统一使用 `[startFrame,endFrame)`；不能把右边界当作可输入帧。
-2. action-start、hit-created、hit-landed、effect-applied 和 settlement-complete 必须是不同事件游标。
-3. 同帧先后使用来源序列或客户端结算游标；时间相等本身不能裁决。
-4. 当前 `verifiedCombatRuntime` 的 HP/韧性顺序只是 `m12-enemy-settlement-runtime-v1` 诊断实现，不得反向当作客户端证据。
-5. open blocker 包括 Charging `59F/67F` evaluator 顺序，以及客户端 HP/韧性/break 和星决同包 wrapper/watcher 顺序；都必须保留稳定 fail-closed reason。
-6. 孤立/过期描述只能保留为来源事实；不得生成 gameplay/runtime 合同、不得进入 required，也不得阻断 readiness。该 N/A 裁决不改变其他真实未闭合边界。
+R2 已删除 owner recipe 的 `sourceClosureSupersedesResolvedRawCandidateGaps` 开关与 pipeline 的五维 blanket promotion，但它仍把“编译器没识别到该维输出”误当 structured N/A。R3 进一步把该次编译实际使用的 compact `nodeClassifications` 固化到启用 `selected-root-source-closure-v1` 的 owner control root；raw 图审计仍原样保留 `hp/toughness = 22 applied + 45 unresolved`、`actorSp/kiboSp = 14 applied + 8 verified-zero + 45 unresolved`，每个 candidate 再逐 node、逐 dimension 绑定 source status 与 closure disposition。
+
+R3 仍留下一个来源伪造口：`runtime-applied` closure 只要写非空 source，且 candidate 中存在任意 conditional/semantic identity，就可能通过。R4 要求生成器为每个 runtime node 记录精确 `sourceClosureBindingIdentities`、`sourceClosureRelationIdentities` 与来源串；validator 从 profile 的 group/effect 合同重新筛选当前 control/subSkill/root/graph/node/source dimension，并与三者完全等值。任意非空 source、删一条真实来源、加无关来源、互换 authority 或嫁接同 owner 另一 graph 均 fail closed。
+
+星决 graph 中 4 个 raw-unresolved/runtime-applied hp node 的实际绑定为：
+
+| node | authority | 精确 binding |
+| --- | --- | --- |
+| `element:-2511185242952603503` / `112001265` | conditional | `gisele-ultimate-consumer-191f` 的 `baseTemplate` |
+| `element:1403965050569036408` / `112001261` | conditional | 同 group 的 `enhancedTemplate` |
+| `element:-5022202969777715803` / `296` | semantic | 同 path 的 `semantic-effect:11200113...-5022202969777715803...:191` |
+| `element:2085743462064840077` / `498` | semantic | 同 path 的 `semantic-effect:11200113...2085743462064840077...:191` |
+
+67 个 selected-root candidate 共引用 94 个 graph node，其中 50 个 node 的总分类仍是 `unresolved`；这 50 个不能被整体改名。它们只有在具体 `damage/toughness/sp` source dimension 是 `verified-zero`、有真实 runtime hit/semantic/conditional consumer、被明确冻结场景排除，或命中两个精确 branch-template root policy 时才逐维闭合。最终没有未闭合的 node dimension：
+
+| coverage dimension | runtime-applied | verified-zero | structured N/A | unresolved | status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| hpDamage | 17 | 30 | 20 | 0 | applied |
+| toughnessDamage | 16 | 31 | 20 | 0 | applied |
+| actorSp | 9 | 38 | 20 | 0 | applied |
+| kiboSp | 9 | 38 | 20 | 0 | applied |
+| buffsAndDebuffs | 28 | 0 | 4 | 0 | applied |
+
+中央给出的精确 root `11200103|0|elements|1|-7394849788543465206` 仍如实记录 `unresolvedNodeCount=1`、无 hit/semantic/conditional；其节点 `112001008` 的 `damage/toughness/sp` source dimensions 均是独立 `verified-zero`，因此四维终态是 `verified-zero`，不是 N/A。`buffsAndDebuffs` 仍由 31 个 effect candidate（27 runtime-applied、4 structured N/A）加 1 个 passive candidate 构成。任何 graph node snapshot 缺失或漂移、closure disposition/source identity 缺失或不等值、泛化 N/A、跨 graph binding、candidate/aggregate 不守恒，或 applied coverage 仍有 unresolved，都会 fail closed。
+
+假设 hash 也不再只校验格式：compiler 与 runtime validator 对同一唯一 canonical payload 重算 SHA-256；改 selected/alternate/sensitivity、删除或重排 assumption、改 version/authority/parity 等 canonical 字段，都会使旧 binding 失效。hit-gated effect 统一消费 scenario `defaultWillHit` 与 action override；watcher suppression 只可来自本次 generation 显式绑定且与 action resolution 的 package id/hash 一致的 mechanics package，不一致直接拒绝。
+
+当前 owner acceptance 为 `248 total / 191 required passed / 57 source-backed N/A / 0 blocked`，`sourceGap=0`、`acceptanceGap=0`、`functionalFailure=0`，canonical replay 与 Workbench round-trip 均稳定。自动截图 SHA-256 为 `ca0e8df4693c141c586f178506d3e9c5cfb76004d73892779935f92faad059a7`；它仍不等于产品视觉签收。
+
+四条原 open identity 没有删除、改名或降为 N/A；它们以 `resolved-by-product-assumption` 保留原 provenance 与 failure-to-pass。当前 functional blocker 为 0，产品视觉仍停在 `product-visual-manual-review-pending`，不得据此宣称客户端一致、optimization-ready 或 formal admission。

@@ -1,4 +1,10 @@
 import crypto from 'node:crypto';
+import { getMachineAxisEnemySettlementContract } from '../../src/machine-axis/machineAxisEnemySettlementContract.js';
+import {
+  HEADLESS_ASSUMPTION_HASH_ALGORITHM,
+  computeHeadlessAssumptionHash,
+  createHeadlessAssumptionCanonicalPayload,
+} from '../../src/domain/headlessAssumptionContract.js';
 
 export const CHARACTER_COMBAT_COMPILER_VERSION = 6;
 const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
@@ -159,6 +165,24 @@ export function compileCharacterCombatRecipeContracts({
     resourceProfiles: compiledResourceProfiles,
     operators: normalizedOperators,
   });
+  const headlessAssumptionContract = compileHeadlessAssumptionContract({
+    ownerId,
+    definition: compilerRecipe.headlessAssumptionContract,
+  });
+  const chargingReleaseBindings = compileChargingReleaseBindings({
+    ownerId,
+    definitions: compilerRecipe.chargingReleaseBindings ?? [],
+    controlBySkillId,
+    assumptionContract: headlessAssumptionContract,
+    operators: normalizedOperators,
+  });
+  const breakTriggerWatchers = compileBreakTriggerWatchers({
+    ownerId,
+    definitions: compilerRecipe.breakTriggerWatchers ?? [],
+    controlBySkillId,
+    assumptionContract: headlessAssumptionContract,
+    operators: normalizedOperators,
+  });
   const targetStateProfiles = compileTargetStateProfiles({
     ownerId,
     definitions: compilerRecipe.targetStateProfiles ?? [],
@@ -204,6 +228,7 @@ export function compileCharacterCombatRecipeContracts({
     targetStateProfiles,
     tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
     actionHitBindings,
+    assumptionContract: headlessAssumptionContract,
     operators: normalizedOperators,
   });
   validateActionEffectHitGates({
@@ -270,6 +295,7 @@ export function compileCharacterCombatRecipeContracts({
     operators: normalizedOperators,
   });
   const contracts = {
+    headlessAssumptionContract,
     contextEdges,
     publicActionForms,
     attackInputChains,
@@ -277,6 +303,8 @@ export function compileCharacterCombatRecipeContracts({
     inputVariantSelectors,
     controlTransitionWindows,
     variantWindowBindings,
+    chargingReleaseBindings,
+    breakTriggerWatchers,
     actionEffectBindings,
     actionHitBindings,
     targetStateProfiles,
@@ -319,6 +347,8 @@ export function compileCharacterCombatRecipeContracts({
     recipeHash: sha256Json(recipe),
     compilerInputHash: sha256Json(compilerInput),
     timingPolicy: compilerRecipe.timingPolicy ?? 'standalone-animation',
+    coverageCandidateMode:
+      recipe.coveragePolicies?.candidateResolutionMode ?? null,
     managesResourceContracts,
     reachableControlSkillIds: [
       ...new Set(
@@ -339,6 +369,11 @@ export function compileCharacterCombatRecipeContracts({
       inputVariantSelectorCount: contracts.inputVariantSelectors.length,
       controlTransitionWindowCount: contracts.controlTransitionWindows.length,
       variantWindowBindingCount: contracts.variantWindowBindings.length,
+      chargingReleaseBindingCount: contracts.chargingReleaseBindings.length,
+      breakTriggerWatcherCount: contracts.breakTriggerWatchers.length,
+      headlessAssumptionContractCount: contracts.headlessAssumptionContract
+        ? 1
+        : 0,
       actionEffectBindingCount: contracts.actionEffectBindings.length,
       actionHitBindingCount: contracts.actionHitBindings.length,
       targetStateProfileCount: contracts.targetStateProfiles.length,
@@ -400,6 +435,22 @@ export function mergeCharacterCombatOwnerCompilations({
   );
   const variantWindowBindings = compilations.flatMap(
     item => item.contracts.variantWindowBindings
+  );
+  const headlessAssumptionContracts = replaceOwnerRecords(
+    actionVariantGraph.headlessAssumptionContracts ?? [],
+    compilations
+      .map(item => item.contracts.headlessAssumptionContract)
+      .filter(Boolean)
+  );
+  const chargingReleaseBindings = replaceOwnerRecords(
+    actionVariantGraph.chargingReleaseBindings ?? [],
+    compilations.flatMap(
+      item => item.contracts.chargingReleaseBindings ?? []
+    )
+  );
+  const breakTriggerWatchers = replaceOwnerRecords(
+    actionVariantGraph.breakTriggerWatchers ?? [],
+    compilations.flatMap(item => item.contracts.breakTriggerWatchers ?? [])
   );
   const actionEffectBindings = compilations.flatMap(
     item => item.contracts.actionEffectBindings
@@ -486,6 +537,10 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.pickupProfiles = pickupProfiles;
   actionVariantGraph.pickupSpawnBindings = pickupSpawnBindings;
   actionVariantGraph.pickupAbsorbBindings = pickupAbsorbBindings;
+  actionVariantGraph.headlessAssumptionContracts =
+    headlessAssumptionContracts;
+  actionVariantGraph.chargingReleaseBindings = chargingReleaseBindings;
+  actionVariantGraph.breakTriggerWatchers = breakTriggerWatchers;
   actionVariantGraph.derivedControlContracts =
     applyCompiledInputVariantSelectors({
       contracts: actionVariantGraph.derivedControlContracts ?? [],
@@ -506,6 +561,9 @@ export function mergeCharacterCombatOwnerCompilations({
     appliedEdgeCount: actionVariantGraph.edges.filter(edge => edge.applied)
       .length,
     compiledVariantWindowBindingCount: variantWindowBindings.length,
+    headlessAssumptionContractCount: headlessAssumptionContracts.length,
+    chargingReleaseBindingCount: chargingReleaseBindings.length,
+    breakTriggerWatcherCount: breakTriggerWatchers.length,
     targetStateProfileCount: targetStateProfiles.length,
     targetStateTransactionCount: targetStateTransactions.length,
     conditionalHitGroupCount: conditionalHitGroups.length,
@@ -553,6 +611,9 @@ export function mergeCharacterCombatOwnerCompilations({
     pickupProfiles,
     pickupSpawnBindings,
     pickupAbsorbBindings,
+    headlessAssumptionContracts,
+    chargingReleaseBindings,
+    breakTriggerWatchers,
   };
 }
 
@@ -774,7 +835,10 @@ export function applyCharacterCombatActionEffectBindings({
         effect =>
           Number(effect.mapIndex) === Number(binding.sourceSubSkillIndex) &&
           Number(effect.elementId) === Number(binding.elementId) &&
-          Number(effect.trigger?.startFrame) === Number(binding.triggerFrame)
+          Number(effect.trigger?.startFrame) === Number(binding.triggerFrame) &&
+          (binding.behaviorPathId == null ||
+            String(effect.trigger?.behaviorPathId) ===
+              String(binding.behaviorPathId))
       );
       if (sourceMatches.length !== 1) {
         throw new Error(
@@ -794,6 +858,7 @@ export function applyCharacterCombatActionEffectBindings({
       const projected = sourceSubtree
         .map(effect => ({
           ...effect,
+          ...projectActionEffectAssumption(binding),
           mapIndex: Number(binding.subSkillIndex),
           effectIdentity: `${effect.effectIdentity}|projected:${binding.bindingIdentity}`,
           semanticIdentity: effect.semanticIdentity
@@ -814,6 +879,9 @@ export function applyCharacterCombatActionEffectBindings({
       effect =>
         Number(effect.mapIndex) === Number(binding.mapIndex) &&
         Number(effect.elementId) === Number(binding.elementId) &&
+        (binding.behaviorPathId == null ||
+          String(effect.trigger?.behaviorPathId) ===
+            String(binding.behaviorPathId)) &&
         (!binding.sourceReferenceKind ||
           effect.sourceOrder?.referenceKind === binding.sourceReferenceKind)
     );
@@ -842,12 +910,25 @@ export function applyCharacterCombatActionEffectBindings({
           )
         : [];
     if (binding.bindingKind === 'projection-only') {
-      if (binding.hitSettlementOrder) {
+      if (
+        binding.hitSettlementOrder ||
+        binding.hitGate ||
+        binding.landedHitActivationCondition
+      ) {
         control.effects = control.effects.map(effect =>
           effect === matchedEffect || activationDescendants.includes(effect)
             ? {
                 ...effect,
-                hitSettlementOrder: binding.hitSettlementOrder,
+                ...projectActionEffectAssumption(binding),
+                hitSettlementOrder:
+                  binding.hitSettlementOrder ??
+                  effect.hitSettlementOrder ??
+                  null,
+                hitGate: binding.hitGate ?? effect.hitGate ?? null,
+                landedHitActivationCondition:
+                  binding.landedHitActivationCondition ??
+                  effect.landedHitActivationCondition ??
+                  null,
               }
             : effect
         );
@@ -1393,12 +1474,16 @@ function applyActionEffectBinding(effect, binding) {
   if (binding.bindingKind === 'tuning-consume') {
     return {
       ...effect,
+      ...projectActionEffectAssumption(binding),
       effectIdentity: `${effect.effectIdentity}|bound:${binding.bindingIdentity}`,
       trigger,
       tuningOverlimit: {
         ...(effect.tuningOverlimit ?? {}),
         successEffect: binding.tuningConsumeSuccessEffect,
       },
+      hitGate: binding.hitGate ?? effect.hitGate ?? null,
+      hitSettlementOrder:
+        binding.hitSettlementOrder ?? effect.hitSettlementOrder ?? null,
       sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
@@ -1412,6 +1497,7 @@ function applyActionEffectBinding(effect, binding) {
   if (binding.bindingKind === 'lifecycle-override') {
     return {
       ...effect,
+      ...projectActionEffectAssumption(binding),
       effectIdentity: `${effect.effectIdentity}|bound:${binding.bindingIdentity}`,
       trigger,
       lifecycle: {
@@ -1430,6 +1516,9 @@ function applyActionEffectBinding(effect, binding) {
         binding.targetStateActivationCondition ?? null,
       landedHitActivationCondition:
         binding.landedHitActivationCondition ?? null,
+      hitGate: binding.hitGate ?? effect.hitGate ?? null,
+      hitSettlementOrder:
+        binding.hitSettlementOrder ?? effect.hitSettlementOrder ?? null,
       sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
         .filter(Boolean)
         .join('|'),
@@ -1456,6 +1545,7 @@ function applyActionEffectBinding(effect, binding) {
     return applyActionEffectActivationBinding(
       {
         ...effect,
+        ...projectActionEffectAssumption(binding),
         effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
         trigger,
         target: {
@@ -1471,6 +1561,7 @@ function applyActionEffectBinding(effect, binding) {
     return applyActionEffectScenarioOutOfScopeBinding(
       {
         ...effect,
+        ...projectActionEffectAssumption(binding),
         effectIdentity: `${effect.graphIdentity}|${binding.triggerFrame}|${effect.depth ?? 0}`,
         trigger,
         target: {
@@ -1493,6 +1584,8 @@ function applyActionEffectBinding(effect, binding) {
     },
     tuningMark: binding.tuningMark,
     hitGate: binding.hitGate ?? null,
+    hitSettlementOrder:
+      binding.hitSettlementOrder ?? effect.hitSettlementOrder ?? null,
     targetStateActivationCondition:
       binding.targetStateActivationCondition ?? null,
     hitActivation: binding.hitActivation ?? null,
@@ -1986,7 +2079,16 @@ export function createCharacterCombatOwnerRuntimeContracts({
   statDependencies,
 }) {
   const ownerId = Number(compilation.ownerId);
+  const ownerControls = (controls ?? []).map(control =>
+    projectOwnerRuntimeControl(control, {
+      includeSettlementNodeClassifications:
+        compilation.coverageCandidateMode ===
+        'selected-root-source-closure-v1',
+    })
+  );
   const contracts = {
+    headlessAssumptionContract:
+      compilation.contracts.headlessAssumptionContract,
     publicActions: sortByIdentity(publicActions ?? []),
     actionForms: createCompiledActionForms({
       ownerId,
@@ -1994,7 +2096,7 @@ export function createCharacterCombatOwnerRuntimeContracts({
       publicActionForms: compilation.contracts.publicActionForms,
       attackInputChains: compilation.contracts.attackInputChains,
     }),
-    controls: sortByIdentity(controls ?? []),
+    controls: sortByIdentity(ownerControls),
     timingInputEdges: compilation.contracts.contextEdges,
     variantEdges: sortByIdentity(variantEdges ?? []),
     attackInputChains: compilation.contracts.attackInputChains,
@@ -2003,6 +2105,9 @@ export function createCharacterCombatOwnerRuntimeContracts({
     inputVariantSelectors: compilation.contracts.inputVariantSelectors,
     controlTransitionWindows: compilation.contracts.controlTransitionWindows,
     variantWindowBindings: compilation.contracts.variantWindowBindings,
+    chargingReleaseBindings:
+      compilation.contracts.chargingReleaseBindings,
+    breakTriggerWatchers: compilation.contracts.breakTriggerWatchers,
     actionEffectBindings: compilation.contracts.actionEffectBindings,
     actionHitBindings: compilation.contracts.actionHitBindings,
     targetStateProfiles: compilation.contracts.targetStateProfiles,
@@ -2033,6 +2138,19 @@ export function createCharacterCombatOwnerRuntimeContracts({
     recipeContractHash: compilation.contractHash,
     contracts,
     contractHash: sha256Json(contracts),
+  };
+}
+
+function projectOwnerRuntimeControl(
+  control,
+  { includeSettlementNodeClassifications }
+) {
+  if (includeSettlementNodeClassifications) return control;
+  return {
+    ...control,
+    effectGraph: (control.effectGraph ?? []).map(
+      ({ nodeClassifications: _nodeClassifications, ...root }) => root
+    ),
   };
 }
 
@@ -2610,6 +2728,355 @@ function compileInputVariantSelectors({
       inputSelector,
       sourceIdentity: inputSelector.sourceIdentity,
       resolutionStatus: 'applied',
+      applied: true,
+    };
+  });
+}
+
+function compileHeadlessAssumptionContract({ ownerId, definition }) {
+  if (definition == null) return null;
+  const enemySettlementContract = getMachineAxisEnemySettlementContract();
+  const declaredSettlementContract = definition.settlementContract ?? null;
+  const assumptions = (definition.assumptions ?? []).map(assumption => ({
+    identity: String(assumption.identity ?? '').trim(),
+    sourceIdentity: String(assumption.sourceIdentity ?? '').trim(),
+    resolution: assumption.resolution ?? 'resolved-by-product-assumption',
+    selectedSemantics: structuredClone(assumption.selectedSemantics ?? null),
+    alternateSemantics: structuredClone(assumption.alternateSemantics ?? null),
+    sensitivity: structuredClone(assumption.sensitivity ?? null),
+    preservedFailureToPass: String(
+      assumption.preservedFailureToPass ?? ''
+    ).trim(),
+  }));
+  const identities = assumptions.map(assumption => assumption.identity);
+  if (
+    !String(definition.contractIdentity ?? '').trim() ||
+    !String(definition.assumptionVersion ?? '').trim() ||
+    definition.policyAuthority !== 'user-approved-headless-assumption' ||
+    definition.clientParityReady !== false ||
+    assumptions.length === 0 ||
+    new Set(identities).size !== identities.length ||
+    assumptions.some(
+      assumption =>
+        !assumption.identity ||
+        !assumption.sourceIdentity ||
+        assumption.resolution !== 'resolved-by-product-assumption' ||
+        assumption.selectedSemantics == null ||
+        assumption.alternateSemantics == null ||
+        assumption.sensitivity == null ||
+        !assumption.preservedFailureToPass
+    ) ||
+    !String(definition.futureClientEvidencePolicy ?? '').trim()
+    || declaredSettlementContract?.contractIdentity !==
+      enemySettlementContract.contractId
+    || declaredSettlementContract?.contractHash !==
+      enemySettlementContract.contractHash
+    || declaredSettlementContract?.clientParityReady !== false
+  ) {
+    throw new Error(
+      `character combat headless assumption contract invalid: ${ownerId}`
+    );
+  }
+  const payload = createHeadlessAssumptionCanonicalPayload({
+    schemaVersion: 1,
+    ownerId,
+    contractIdentity: String(definition.contractIdentity),
+    policyAuthority: definition.policyAuthority,
+    clientParityReady: false,
+    assumptionVersion: String(definition.assumptionVersion),
+    assumptionHashAlgorithm: HEADLESS_ASSUMPTION_HASH_ALGORITHM,
+    settlementContract: {
+      contractIdentity: enemySettlementContract.contractId,
+      contractHash: enemySettlementContract.contractHash,
+      clientParityReady: enemySettlementContract.evidence.clientParityReady,
+      semantics: structuredClone(enemySettlementContract.semantics),
+      formalScoring: structuredClone(enemySettlementContract.formalScoring),
+      declaredPacketOrder: structuredClone(
+        declaredSettlementContract.packetOrder ?? []
+      ),
+    },
+    assumptions,
+    futureClientEvidencePolicy: String(
+      definition.futureClientEvidencePolicy
+    ),
+    sourceIdentity: String(definition.sourceIdentity ?? '').trim(),
+  });
+  if (!payload.sourceIdentity) {
+    throw new Error(
+      `character combat headless assumption source missing: ${ownerId}`
+    );
+  }
+  return {
+    ...payload,
+    assumptionHash: computeHeadlessAssumptionHash(payload),
+    status: 'headless-assumption-contract-applied',
+    applied: true,
+  };
+}
+
+function compileChargingReleaseBindings({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  assumptionContract,
+  operators,
+}) {
+  return definitions.map(definition => {
+    const sourceControl = requireControl(
+      controlBySkillId,
+      definition.sourceControlSkillId,
+      'charging release source control'
+    );
+    const sourceSubSkillIndex = Number(definition.sourceSubSkillIndex);
+    const sourceVariant = sourceControl.variants?.find(
+      variant => Number(variant.subSkillIndex) === sourceSubSkillIndex
+    );
+    const assumptionIdentity = String(
+      definition.assumptionIdentity ?? ''
+    ).trim();
+    const assumption = assumptionContract?.assumptions?.find(
+      item => item.identity === assumptionIdentity
+    );
+    const windows = (definition.windows ?? []).map((window, index) => {
+      const executionControl = requireControl(
+        controlBySkillId,
+        window.executionControlSkillId,
+        'charging release execution control'
+      );
+      const executionSubSkillIndex = Number(
+        window.executionSubSkillIndex
+      );
+      const executionTiming = operators.resolveControlVariantTiming({
+        control: executionControl,
+        subSkillIndex: executionSubSkillIndex,
+        actionKind: definition.actionKind ?? 'charged-attack',
+      });
+      const startFrame = Number(window.startFrame);
+      const endFrame = Number(window.endFrame);
+      if (
+        !Number.isInteger(startFrame) ||
+        !Number.isInteger(endFrame) ||
+        startFrame < 0 ||
+        endFrame <= startFrame ||
+        executionTiming?.occupancy?.status !== 'applied' ||
+        !String(window.sourceIdentity ?? '').trim()
+      ) {
+        throw new Error(
+          `character combat charging release window invalid: ${ownerId}/${definition.bindingIdentity}/${index}`
+        );
+      }
+      return {
+        windowIdentity:
+          window.windowIdentity ??
+          `${definition.bindingIdentity}:window:${index + 1}`,
+        startFrame,
+        endFrame,
+        boundary: 'right-open',
+        executionControlSkillId: Number(window.executionControlSkillId),
+        executionSubSkillIndex,
+        semanticIdentity: String(window.semanticIdentity ?? ''),
+        semanticName: window.semanticName ?? null,
+        executionTiming: toRuntimeExecutionTiming(executionTiming),
+        sourceIdentity: String(window.sourceIdentity),
+      };
+    });
+    if (
+      !String(definition.bindingIdentity ?? '').trim() ||
+      !sourceVariant ||
+      !assumption ||
+      definition.precedence !== 'greatest-start-frame' ||
+      definition.boundary !== 'right-open' ||
+      windows.length < 2
+    ) {
+      throw new Error(
+        `character combat charging release binding invalid: ${ownerId}/${definition.bindingIdentity}`
+      );
+    }
+    return {
+      bindingIdentity: String(definition.bindingIdentity),
+      ownerId,
+      publicControlSkillId: Number(
+        definition.publicControlSkillId ?? definition.sourceControlSkillId
+      ),
+      sourceControlSkillId: Number(definition.sourceControlSkillId),
+      sourceSubSkillIndex,
+      actionKind: definition.actionKind ?? 'charged-attack',
+      inputField: definition.inputField ?? 'variantInputSelection.inputFrame',
+      precedence: 'greatest-start-frame',
+      boundary: 'right-open',
+      compositionMode: 'source-before-release-plus-shifted-release',
+      assumptionIdentity,
+      assumptionVersion: assumptionContract.assumptionVersion,
+      assumptionHash: assumptionContract.assumptionHash,
+      windows,
+      sourceIdentity: [
+        sourceVariant.sourceIdentity,
+        definition.sourceIdentity,
+        assumption.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-charging-release-binding-ready',
+      applied: true,
+    };
+  });
+}
+
+function compileBreakTriggerWatchers({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  assumptionContract,
+}) {
+  return definitions.map(definition => {
+    const control = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'break trigger watcher control'
+    );
+    const subSkillIndex = Number(definition.subSkillIndex);
+    const triggerFrame = Number(definition.triggerFrame);
+    const armEffectElementId = Number(definition.armEffectElementId);
+    const triggeredEffectElementId = Number(
+      definition.triggeredEffectElementId
+    );
+    const hitElementId = Number(definition.requiresHitElementId);
+    const hit = resolveCompilerVerifiedHits(control).find(
+      candidate =>
+        Number(candidate.mapIndex) === subSkillIndex &&
+        Number(candidate.elementId) === hitElementId &&
+        Number(candidate.trigger?.startFrame) === triggerFrame
+    );
+    const armEffect = (control.effects ?? []).find(
+      effect =>
+        Number(effect.mapIndex) === subSkillIndex &&
+        Number(effect.elementId) === armEffectElementId &&
+        Number(effect.trigger?.startFrame) === triggerFrame
+    );
+    const triggeredEffect = (control.effects ?? []).find(
+      effect =>
+        Number(effect.mapIndex) === subSkillIndex &&
+        Number(effect.elementId) === triggeredEffectElementId &&
+        Number(effect.trigger?.startFrame) === triggerFrame &&
+        effect.graphIdentity === armEffect?.graphIdentity
+    );
+    const assumptionIdentity = String(
+      definition.assumptionIdentity ?? ''
+    ).trim();
+    const assumption = assumptionContract?.assumptions?.find(
+      item => item.identity === assumptionIdentity
+    );
+    const modifier = triggeredEffect?.propertyChange;
+    const durationMs = Number(armEffect?.lifecycle?.durationMs);
+    const effectDurationMs = Number(
+      triggeredEffect?.lifecycle?.durationMs
+    );
+    if (
+      !String(definition.watcherIdentity ?? '').trim() ||
+      !hit ||
+      !armEffect ||
+      !triggeredEffect ||
+      !assumption ||
+      durationMs !== Number(definition.expectedArmDurationMs) ||
+      effectDurationMs !== Number(definition.expectedEffectDurationMs) ||
+      Number(modifier?.attributeId) !==
+        Number(definition.expectedAttributeId) ||
+      Number(modifier?.valueByLevel?.['1']) !==
+        Number(definition.expectedValueRaw) ||
+      modifier?.bucket !== definition.expectedBucket ||
+      definition.triggerEvent !== 'enemy-break' ||
+      Number(definition.triggerCount) !== 1 ||
+      definition.armOrder !== 'hit-then-arm' ||
+      definition.boundary !== 'right-open'
+    ) {
+      throw new Error(
+        `character combat break trigger watcher invalid: ${ownerId}/${
+          definition.watcherIdentity
+        }; evidence=${JSON.stringify({
+          hit: hit
+            ? {
+                elementId: hit.elementId,
+                triggerFrame: hit.trigger?.startFrame,
+              }
+            : null,
+          armEffect: armEffect
+            ? {
+                elementId: armEffect.elementId,
+                durationMs,
+                graphIdentity: armEffect.graphIdentity,
+              }
+            : null,
+          triggeredEffect: triggeredEffect
+            ? {
+                elementId: triggeredEffect.elementId,
+                durationMs: effectDurationMs,
+                graphIdentity: triggeredEffect.graphIdentity,
+                attributeId: modifier?.attributeId,
+                valueRaw: modifier?.valueByLevel?.['1'],
+                bucket: modifier?.bucket,
+              }
+            : null,
+          assumption: assumption?.identity ?? null,
+        })}`
+      );
+    }
+    const suppressedEffectIdentities = (control.effects ?? [])
+      .filter(
+        effect =>
+          effect.graphIdentity === armEffect.graphIdentity &&
+          Number(effect.trigger?.startFrame) === triggerFrame &&
+          Number(effect.depth) >= Number(armEffect.depth)
+      )
+      .map(effect => effect.effectIdentity);
+    return {
+      watcherIdentity: String(definition.watcherIdentity),
+      ownerId,
+      controlSkillId: Number(definition.controlSkillId),
+      subSkillIndex,
+      triggerFrame,
+      frameRate: Number(control.frameRate) || 60,
+      armHitIdentity: hit.hitIdentity,
+      armHitElementId: hitElementId,
+      armEffectElementId,
+      triggeredEffectElementId,
+      suppressedEffectIdentities,
+      triggerEvent: 'enemy-break',
+      triggerCount: 1,
+      armOrder: 'hit-then-arm',
+      boundary: 'right-open',
+      durationMs,
+      effect: {
+        effectId: `battle-element:${triggeredEffectElementId}`,
+        effectName: triggeredEffect.name,
+        targetKind: definition.targetKind ?? 'team-actors',
+        durationMs: effectDurationMs,
+        stackMode: 'refresh',
+        maxStacks: 1,
+        modifiers: [
+          {
+            kind: 'battle-property',
+            attributeId: Number(modifier.attributeId),
+            bucket: modifier.bucket,
+            valueRaw: Number(modifier.valueByLevel['1']),
+            propertyTags: modifier.defaultPropertyTags ?? [],
+            sourceIdentity: triggeredEffect.sourceIdentity,
+          },
+        ],
+        sourceIdentity: triggeredEffect.sourceIdentity,
+      },
+      assumptionIdentity,
+      assumptionVersion: assumptionContract.assumptionVersion,
+      assumptionHash: assumptionContract.assumptionHash,
+      sourceIdentity: [
+        hit.sourceIdentity,
+        armEffect.sourceIdentity,
+        triggeredEffect.sourceIdentity,
+        definition.sourceIdentity,
+        assumption.sourceIdentity,
+      ]
+        .filter(Boolean)
+        .join('|'),
+      status: 'verified-break-trigger-watcher-ready',
       applied: true,
     };
   });
@@ -3279,6 +3746,7 @@ function compileActionEffectBindings({
   targetStateProfiles,
   tuningMarkProfiles,
   actionHitBindings,
+  assumptionContract,
   operators,
 }) {
   const targetStateProfileByIdentity = new Map(
@@ -3293,6 +3761,10 @@ function compileActionEffectBindings({
     const sourceControlSkillId = Number(
       definition.sourceControlSkillId ?? definition.controlSkillId
     );
+    const behaviorPathId =
+      definition.behaviorPathId == null
+        ? null
+        : String(definition.behaviorPathId);
     const sourceSubSkillIndex = Number(
       definition.sourceSubSkillIndex ?? definition.subSkillIndex
     );
@@ -3354,6 +3826,14 @@ function compileActionEffectBindings({
       bindingIdentity: definition.bindingIdentity,
       definition: definition.scenarioOutOfScope,
     });
+    const assumptionIdentity = String(
+      definition.assumptionIdentity ?? ''
+    ).trim();
+    const assumption = assumptionIdentity
+      ? assumptionContract?.assumptions?.find(
+          item => item.identity === assumptionIdentity
+        )
+      : null;
     if (
       !element ||
       !Number.isInteger(triggerFrame) ||
@@ -3365,7 +3845,8 @@ function compileActionEffectBindings({
         !landedHitActivationCondition?.applied &&
         !scenarioOutOfScope &&
         !projectionOnly &&
-        !tuningConsumeSuccessEffect?.applied)
+        !tuningConsumeSuccessEffect?.applied) ||
+      (assumptionIdentity && !assumption)
     ) {
       throw new Error(
         `character combat action effect evidence missing: ${ownerId}/${definition.bindingIdentity}`
@@ -3381,6 +3862,7 @@ function compileActionEffectBindings({
       mapIndex: Number(definition.mapIndex),
       elementId: Number(definition.elementId),
       triggerFrame,
+      behaviorPathId,
       frameCount: Math.max(1, Number(definition.frameCount) || 1),
       sourceIdentity: [
         element.sourceIdentity,
@@ -3424,6 +3906,13 @@ function compileActionEffectBindings({
           : Number(definition.durationMsOverride),
       targetKindOverride: definition.targetKindOverride ?? null,
       hitSettlementOrder: definition.hitSettlementOrder ?? null,
+      ...(assumption
+        ? {
+            assumptionIdentity,
+            assumptionVersion: assumptionContract.assumptionVersion,
+            assumptionHash: assumptionContract.assumptionHash,
+          }
+        : {}),
       targetStateActivationCondition,
       hitActivation,
       sourceReferenceKind: definition.sourceReferenceKind ?? null,
@@ -5611,11 +6100,26 @@ function compileTuningMarkConditionalDamageGroup({
       'tuning mark conditional damage group'
     );
   }
+  const branchSelectionMode =
+    definition.branchSelectionMode ?? 'current-mark-count';
+  const expectedJudgmentType = Number(
+    definition.expectedJudgmentType ?? 5
+  );
+  const expectedCanConsume = Number(
+    definition.expectedCanConsume ??
+      (branchSelectionMode === 'same-consume-judgment-outcome' ? 1 : 0)
+  );
+  const candidateMarkIds = (definition.expectedCandidateMarkIds ?? []).map(
+    Number
+  );
   const profile = (tuningMarkProfiles ?? []).find(
     candidate =>
       (candidate.profileKey ?? candidate.key) ===
       definition.tuningMarkProfileKey
-  );
+  ) ??
+    (tuningMarkProfiles ?? []).find(candidate =>
+      candidateMarkIds.includes(Number(candidate.markId))
+    );
   const judgment = operators.readElementAsset(definition.judgmentElementId);
   const base = operators.readElementAsset(definition.baseElementId);
   const enhanced = operators.readElementAsset(definition.enhancedElementId);
@@ -5640,12 +6144,24 @@ function compileTuningMarkConditionalDamageGroup({
     !judgment ||
     !base ||
     !enhanced ||
-    Number(judgment.tree?.judgmentType) !== 5 ||
+    ![4, 5].includes(expectedJudgmentType) ||
+    Number(judgment.tree?.judgmentType) !== expectedJudgmentType ||
     !Array.isArray(judgment.tree?.elementArr) ||
     !judgment.tree.elementArr.map(Number).includes(markId) ||
     !Number.isInteger(minimumStacks) ||
     minimumStacks <= 0 ||
-    Number(judgment.tree?.canConsume) !== 0 ||
+    ![0, 1].includes(expectedCanConsume) ||
+    Number(judgment.tree?.canConsume) !== expectedCanConsume ||
+    (branchSelectionMode === 'same-consume-judgment-outcome' &&
+      (candidateMarkIds.length === 0 ||
+        judgment.tree.elementArr.map(Number).join('|') !==
+          candidateMarkIds.join('|') ||
+        !String(definition.consumeJudgmentGroupIdentity ?? '').trim() ||
+        definition.noCandidatePolicy !== 'base-branch-no-overlimit')) ||
+    ![
+      'current-mark-count',
+      'same-consume-judgment-outcome',
+    ].includes(branchSelectionMode) ||
     !basePathIds.includes(String(base.pathId)) ||
     !enhancedPathIds.includes(String(enhanced.pathId)) ||
     triggerFrames.length === 0 ||
@@ -5670,7 +6186,15 @@ function compileTuningMarkConditionalDamageGroup({
     tuningMarkProfileKey: profile.profileKey ?? profile.key,
     markId,
     minimumStacks,
-    consumesStacks: false,
+    consumesStacks:
+      branchSelectionMode === 'same-consume-judgment-outcome',
+    branchSelectionMode,
+    judgmentType: expectedJudgmentType,
+    canConsume: expectedCanConsume,
+    consumeJudgmentGroupIdentity:
+      definition.consumeJudgmentGroupIdentity ?? null,
+    candidateMarkIds,
+    noCandidatePolicy: definition.noCandidatePolicy ?? null,
     baseTemplate: compileConditionalDamageTemplate(base),
     enhancedTemplate: compileConditionalDamageTemplate(enhanced),
     sourceIdentity: [
@@ -6169,7 +6693,12 @@ function compilePassiveEffects({
         operators,
       });
     }
-    if (definition.runtimeGenerationMode === 'persistent-property-runtime') {
+    if (
+      [
+        'persistent-property-runtime',
+        'controlled-entry-property-runtime',
+      ].includes(definition.runtimeGenerationMode)
+    ) {
       return compilePersistentPropertyPassiveEffect({
         ownerId,
         definition,
@@ -6871,9 +7400,13 @@ function compileTargetStateRuntimePassiveEffect({
 function applyActionEffectActivationBinding(effect, binding) {
   return {
     ...effect,
+    ...projectActionEffectAssumption(binding),
     targetStateActivationCondition:
       binding.targetStateActivationCondition ?? null,
     landedHitActivationCondition: binding.landedHitActivationCondition ?? null,
+    hitGate: binding.hitGate ?? effect.hitGate ?? null,
+    hitSettlementOrder:
+      binding.hitSettlementOrder ?? effect.hitSettlementOrder ?? null,
     sourceIdentity: [effect.sourceIdentity, binding.sourceIdentity]
       .filter(Boolean)
       .join('|'),
@@ -6888,6 +7421,7 @@ function applyActionEffectActivationBinding(effect, binding) {
 function applyActionEffectScenarioOutOfScopeBinding(effect, binding) {
   return {
     ...effect,
+    ...projectActionEffectAssumption(binding),
     scenarioOutOfScope: binding.scenarioOutOfScope,
     sourceIdentity: [
       effect.sourceIdentity,
@@ -6908,6 +7442,16 @@ function applyActionEffectScenarioOutOfScopeBinding(effect, binding) {
   };
 }
 
+function projectActionEffectAssumption(binding) {
+  return binding?.assumptionIdentity
+    ? {
+        assumptionIdentity: binding.assumptionIdentity,
+        assumptionVersion: binding.assumptionVersion,
+        assumptionHash: binding.assumptionHash,
+      }
+    : {};
+}
+
 function compilePersistentPropertyPassiveEffect({
   ownerId,
   definition,
@@ -6921,6 +7465,13 @@ function compilePersistentPropertyPassiveEffect({
     .filter(Number.isInteger);
   const sourceAssets = sourceElementIds.map(elementId =>
     operators.readElementAsset(elementId)
+  );
+  const controlledEntry =
+    definition.runtimeGenerationMode === 'controlled-entry-property-runtime';
+  const rootAsset = sourceAssets[0];
+  const durationMs = controlledEntry ? Number(rootAsset?.tree?.time) : null;
+  const injectedPathIds = new Set(
+    readElementPathIds(rootAsset?.tree?.injectElementDataList)
   );
   const derivedModifiers = (passiveControl?.effects ?? [])
     .filter(
@@ -6965,7 +7516,10 @@ function compilePersistentPropertyPassiveEffect({
   );
   const triggerBindings = [
     {
-      triggerIdentity: `${definition.skillId}|battle-start|0`,
+      triggerIdentity: `${definition.skillId}|${
+        controlledEntry ? 'controlled-entry' : 'battle-start'
+      }|0`,
+      triggerKind: controlledEntry ? 'controlled-entry' : 'battle-start',
       controlSkillId: null,
       subSkillIndex: null,
       triggerFrame: 0,
@@ -6977,7 +7531,9 @@ function compilePersistentPropertyPassiveEffect({
         passiveControl?.sourcePath ??
         definition.sourceIdentity ??
         `character-combat-recipe:${ownerId}#passiveEffects[skillId=${definition.skillId}]`,
-      status: 'verified-persistent-passive-battle-start-trigger-ready',
+      status: controlledEntry
+        ? 'verified-controlled-entry-passive-trigger-ready'
+        : 'verified-persistent-passive-battle-start-trigger-ready',
       applied: true,
     },
   ];
@@ -6985,7 +7541,14 @@ function compilePersistentPropertyPassiveEffect({
     passiveControl != null &&
     sourceElementIds.length > 0 &&
     sourceAssets.every(Boolean) &&
-    modifiers.length > 0;
+    modifiers.length > 0 &&
+    (!controlledEntry ||
+      (durationMs > 0 &&
+        (definition.expectedDurationMs == null ||
+          durationMs === Number(definition.expectedDurationMs)) &&
+        sourceAssets
+          .slice(1)
+          .every(asset => injectedPathIds.has(String(asset.pathId)))));
   return {
     passiveIdentity: `actor:${ownerId}:passive:${definition.skillId}`,
     ownerId,
@@ -6997,11 +7560,13 @@ function compilePersistentPropertyPassiveEffect({
     effectElementId: sourceElementIds[0],
     markerElementId: null,
     propertyElementId: sourceElementIds[0],
-    durationMs: null,
-    stackMode: 'persistent',
+    durationMs,
+    stackMode: controlledEntry ? 'refresh' : 'persistent',
     maxStacks: 1,
     stackDelta: 1,
-    runtimeGenerationMode: 'persistent-property-runtime',
+    runtimeGenerationMode: controlledEntry
+      ? 'controlled-entry-property-runtime'
+      : 'persistent-property-runtime',
     triggerBindings,
     unresolvedTriggerBindings: [],
     modifiers,
@@ -7013,14 +7578,27 @@ function compilePersistentPropertyPassiveEffect({
       .filter(Boolean)
       .join('|'),
     status: applied
-      ? 'verified-persistent-passive-effect-profile-ready'
-      : 'unresolved-persistent-passive-effect-profile',
+      ? controlledEntry
+        ? 'verified-controlled-entry-passive-effect-profile-ready'
+        : 'verified-persistent-passive-effect-profile-ready'
+      : controlledEntry
+        ? 'unresolved-controlled-entry-passive-effect-profile'
+        : 'unresolved-persistent-passive-effect-profile',
     reasons: [
       ...(passiveControl ? [] : ['passive-skill-control-missing']),
       ...(sourceElementIds.length > 0 && sourceAssets.every(Boolean)
         ? []
         : ['passive-source-element-missing']),
       ...(modifiers.length > 0 ? [] : ['passive-persistent-modifier-missing']),
+      ...(!controlledEntry ||
+      (durationMs > 0 &&
+        (definition.expectedDurationMs == null ||
+          durationMs === Number(definition.expectedDurationMs)) &&
+        sourceAssets
+          .slice(1)
+          .every(asset => injectedPathIds.has(String(asset.pathId))))
+        ? []
+        : ['controlled-entry-duration-or-injection-evidence-mismatch']),
     ],
     applied,
   };

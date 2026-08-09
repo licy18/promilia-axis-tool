@@ -183,7 +183,15 @@ export function createVerifiedTuningMarkGeneration({
     const enqueuedConsumeGroups = new Set();
     for (const effect of tuningEffects) {
       if (effect.classification !== 'applied') continue;
-      if (!isHitBoundTuningEffectEnabled({ action, effect, resolution })) {
+      if (
+        !isHitBoundTuningEffectEnabled({
+          action,
+          effect,
+          resolution,
+          conditionalDamageGroups: tuningMarkConditionalDamageGroups,
+          scenario,
+        })
+      ) {
         continue;
       }
       if (
@@ -374,6 +382,7 @@ export function createVerifiedTuningMarkGeneration({
         scenario,
         enqueue,
         emitThresholdPassiveCommands,
+        conditionalDamageGroups: tuningMarkConditionalDamageGroups,
       });
     } else if (descriptor.kind === 'acquire') {
       applyLayerAcquisition({
@@ -434,6 +443,7 @@ export function createVerifiedTuningMarkGeneration({
         stateByMarkId,
         combatEvents,
         conditionalDamageResults,
+        consumeJudgmentResults,
         scenario,
       });
     } else if (descriptor.kind === 'combat') {
@@ -802,13 +812,29 @@ function applyTuningMarkConditionalDamage({
   stateByMarkId,
   combatEvents,
   conditionalDamageResults,
+  consumeJudgmentResults,
   scenario,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (!state) return;
   const group = descriptor.group;
   const markCountAtJudgment = state.layers.length;
-  const enhanced = markCountAtJudgment >= Number(group.minimumStacks);
+  const consumeOutcome =
+    group.branchSelectionMode === 'same-consume-judgment-outcome'
+      ? [...consumeJudgmentResults]
+          .reverse()
+          .find(
+            result =>
+              result.actionId === descriptor.action?.id &&
+              result.timeMs === roundValue(descriptor.timeMs) &&
+              result.judgmentGroupIdentity ===
+                group.consumeJudgmentGroupIdentity
+          )
+      : null;
+  const enhanced =
+    group.branchSelectionMode === 'same-consume-judgment-outcome'
+      ? consumeOutcome?.applied === true
+      : markCountAtJudgment >= Number(group.minimumStacks);
   const template = enhanced ? group.enhancedTemplate : group.baseTemplate;
   const sourceHitIdentity = createConditionalDamageHitIdentity({
     group,
@@ -852,6 +878,10 @@ function applyTuningMarkConditionalDamage({
     markId: state.profile.markId,
     markCountAtJudgment,
     minimumStacks: group.minimumStacks,
+    branchSelectionMode: group.branchSelectionMode,
+    consumeJudgmentGroupIdentity: group.consumeJudgmentGroupIdentity ?? null,
+    consumeJudgmentEventIdentity: consumeOutcome?.eventIdentity ?? null,
+    consumeApplied: consumeOutcome?.applied ?? null,
     selectedBranch: enhanced ? 'enhanced' : 'base',
     selectedElementId: template.elementConfigId,
     landed,
@@ -902,6 +932,11 @@ function applyTuningMarkConditionalDamage({
       selectedBranch: result.selectedBranch,
       markCountAtJudgment,
       minimumStacks: group.minimumStacks,
+      branchSelectionMode: group.branchSelectionMode,
+      consumeJudgmentGroupIdentity:
+        group.consumeJudgmentGroupIdentity ?? null,
+      consumeJudgmentEventIdentity: consumeOutcome?.eventIdentity ?? null,
+      consumeApplied: consumeOutcome?.applied ?? null,
       propertyTags: [...(template.propertyTags ?? [])],
       companionUnitId: result.companionUnitId,
       ownership: result.ownership,
@@ -1123,6 +1158,7 @@ function applyMarkConsumption({
   scenario,
   enqueue,
   emitThresholdPassiveCommands,
+  conditionalDamageGroups,
 }) {
   let descriptor = originalDescriptor;
   if (Array.isArray(descriptor.priorityCandidates)) {
@@ -1134,6 +1170,13 @@ function applyMarkConsumption({
       candidate => candidate.current >= candidate.minimumStacks
     );
     if (!selected) {
+      const branchGroup = (conditionalDamageGroups ?? []).find(
+        group =>
+          group.branchSelectionMode ===
+            'same-consume-judgment-outcome' &&
+          group.consumeJudgmentGroupIdentity ===
+            descriptor.effect.tuningOverlimit.judgmentGroupIdentity
+      );
       consumeJudgmentResults.push(
         createTuningConsumeJudgmentResult({
           descriptor: originalDescriptor,
@@ -1142,24 +1185,26 @@ function applyMarkConsumption({
           candidateStates: candidates,
         })
       );
-      unresolved.push({
-        kind: 'tuning-consume-no-sufficient-priority-candidate',
-        actionId: descriptor.action.id,
-        judgmentGroupIdentity:
-          descriptor.effect.tuningOverlimit.judgmentGroupIdentity,
-        candidates: candidates.map(candidate => ({
-          priorityIndex: candidate.priorityIndex,
-          markId: candidate.markId,
-          required: candidate.minimumStacks,
-          current: candidate.current,
-        })),
-        timeMs: descriptor.timeMs,
-        sourceIdentity:
-          descriptor.effect.tuningOverlimit.priorityRuntimeEvidence
-            ?.sourceIdentity ?? descriptor.effect.sourceIdentity,
-        status: 'verified-tuning-consume-not-executed',
-        applied: false,
-      });
+      if (branchGroup?.noCandidatePolicy !== 'base-branch-no-overlimit') {
+        unresolved.push({
+          kind: 'tuning-consume-no-sufficient-priority-candidate',
+          actionId: descriptor.action.id,
+          judgmentGroupIdentity:
+            descriptor.effect.tuningOverlimit.judgmentGroupIdentity,
+          candidates: candidates.map(candidate => ({
+            priorityIndex: candidate.priorityIndex,
+            markId: candidate.markId,
+            required: candidate.minimumStacks,
+            current: candidate.current,
+          })),
+          timeMs: descriptor.timeMs,
+          sourceIdentity:
+            descriptor.effect.tuningOverlimit.priorityRuntimeEvidence
+              ?.sourceIdentity ?? descriptor.effect.sourceIdentity,
+          status: 'verified-tuning-consume-not-executed',
+          applied: false,
+        });
+      }
       return;
     }
     if (!selected.effect || !selected.profile) {
@@ -2233,7 +2278,38 @@ function createTuningSourceSequencePath({
     : [Number.MAX_SAFE_INTEGER, ...suffix];
 }
 
-function isHitBoundTuningEffectEnabled({ action, effect, resolution }) {
+function isHitBoundTuningEffectEnabled({
+  action,
+  effect,
+  resolution,
+  conditionalDamageGroups = [],
+  scenario = null,
+}) {
+  const gate = effect.hitGate;
+  if (gate?.kind === 'conditional-damage-group-hit') {
+    const group = conditionalDamageGroups.find(
+      candidate => candidate.groupIdentity === gate.groupIdentity
+    );
+    if (!group) return false;
+    const identity = createConditionalDamageHitIdentity({
+      group,
+      hitIndex: gate.hitIndex,
+    });
+    const defaultWillHit =
+      (scenario?.combatScenario?.projectile?.defaultWillHit ??
+        scenario?.projectile?.defaultWillHit) !== false;
+    return resolveActionHitWillHit(action, identity, defaultWillHit);
+  }
+  if (gate?.kind === 'landed-action-hit') {
+    const hits = (resolution.hits ?? []).filter(
+      hit =>
+        Number(hit.elementId) === Number(gate.elementId) &&
+        Number(hit.trigger?.startFrame) === Number(gate.triggerFrame) &&
+        (!gate.behaviorPathId ||
+          hit.trigger?.behaviorPathId === gate.behaviorPathId)
+    );
+    return hits.length > 0;
+  }
   const behaviorPathId = String(effect.trigger?.behaviorPathId ?? '');
   if (!behaviorPathId) return true;
   const hit = (resolution.allHits ?? resolution.hits ?? []).find(

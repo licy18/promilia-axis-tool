@@ -2,6 +2,10 @@ import { normalizeAttackInputSegments } from '../domain/workbenchAttackInputChai
 import { resolveActionHitWillHit } from '../domain/actionHitOverrides';
 import { normalizeCombatScenario } from '../domain/combatScenario';
 import { isSourceDisplayTextSafe } from '../domain/sourceDisplayText';
+import {
+  HEADLESS_ASSUMPTION_HASH_ALGORITHM,
+  computeHeadlessAssumptionHash,
+} from '../domain/headlessAssumptionContract';
 
 const packageUrl = new URL(
   './generated/verified-combat-mechanics-package.json',
@@ -619,6 +623,15 @@ function getVerifiedRuntimeEffectBindings(actionBinding) {
 }
 
 function isEffectTriggeredByDisabledHit(effect, disabledHits) {
+  const landedCondition = effect?.landedHitActivationCondition;
+  if (
+    landedCondition?.applied === true &&
+    disabledHits.some(
+      hit => String(hit.hitIdentity) === String(landedCondition.hitIdentity)
+    )
+  ) {
+    return true;
+  }
   const launchIdentity = String(effect?.trigger?.launchIdentity ?? '');
   const launchEventIdentity = createLaunchEventIdentity(launchIdentity);
   if (
@@ -966,7 +979,10 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     ].some(binding =>
       (binding.effectGraph ?? []).some(
         root =>
-          !Array.isArray(root.nodeIdentities) || Object.hasOwn(root, 'nodes')
+          !Array.isArray(root.nodeIdentities) ||
+          Object.hasOwn(root, 'nodes') ||
+          (Object.hasOwn(root, 'nodeClassifications') &&
+            !isPublishedControlRootNodeClassificationValid(root))
       )
     )
   ) {
@@ -1047,6 +1063,59 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     )
   ) {
     issues.push('action-variant-graph-invalid');
+  }
+  const assumptionContracts =
+    value?.actionVariantGraph?.headlessAssumptionContracts ?? [];
+  const chargingReleaseBindings =
+    value?.actionVariantGraph?.chargingReleaseBindings ?? [];
+  const breakTriggerWatchers =
+    value?.actionVariantGraph?.breakTriggerWatchers ?? [];
+  const assumptionContractByOwnerId = new Map(
+    assumptionContracts.map(contract => [Number(contract.ownerId), contract])
+  );
+  const recomputedAssumptionHashByOwnerId = new Map(
+    assumptionContracts.map(contract => [
+      Number(contract.ownerId),
+      computeHeadlessAssumptionHash(contract),
+    ])
+  );
+  if (
+    assumptionContracts.some(
+      contract =>
+        contract.applied !== true ||
+        contract.policyAuthority !== 'user-approved-headless-assumption' ||
+        contract.clientParityReady !== false ||
+        !String(contract.assumptionVersion ?? '').trim() ||
+        contract.assumptionHashAlgorithm !==
+          HEADLESS_ASSUMPTION_HASH_ALGORITHM ||
+        !/^[a-f0-9]{64}$/.test(String(contract.assumptionHash ?? '')) ||
+        contract.assumptionHash !==
+          recomputedAssumptionHashByOwnerId.get(Number(contract.ownerId)) ||
+        !Array.isArray(contract.assumptions) ||
+        contract.assumptions.length === 0 ||
+        contract.assumptions.some(
+          assumption =>
+            assumption.resolution !== 'resolved-by-product-assumption' ||
+            !String(assumption.identity ?? '').trim()
+        )
+    ) ||
+    [...chargingReleaseBindings, ...breakTriggerWatchers].some(binding => {
+      const contract = assumptionContractByOwnerId.get(Number(binding.ownerId));
+      const recomputedAssumptionHash = recomputedAssumptionHashByOwnerId.get(
+        Number(binding.ownerId)
+      );
+      return (
+        binding.applied !== true ||
+        !contract ||
+        binding.assumptionVersion !== contract.assumptionVersion ||
+        binding.assumptionHash !== recomputedAssumptionHash ||
+        !contract.assumptions.some(
+          assumption => assumption.identity === binding.assumptionIdentity
+        )
+      );
+    })
+  ) {
+    issues.push('headless-assumption-contract-invalid');
   }
   if (!hasValidSwitchTriggerCatalog(value?.switchTriggerCatalog)) {
     issues.push('switch-trigger-catalog-invalid');
@@ -1171,6 +1240,60 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       : 'verified-combat-mechanics-package-valid',
     issues,
   };
+}
+
+function isPublishedControlRootNodeClassificationValid(root) {
+  if (
+    !Array.isArray(root.nodeClassifications) ||
+    root.nodeClassifications.length !== root.nodeIdentities.length
+  ) {
+    return false;
+  }
+  const expectedIdentities = [...root.nodeIdentities].map(String).sort();
+  const actualIdentities = root.nodeClassifications
+    .map(node => String(node?.nodeCatalogIdentity ?? ''))
+    .sort();
+  if (
+    new Set(actualIdentities).size !== actualIdentities.length ||
+    expectedIdentities.some(
+      (identity, index) => identity !== actualIdentities[index]
+    )
+  ) {
+    return false;
+  }
+  const counts = {
+    applied: 0,
+    'verified-zero': 0,
+    unresolved: 0,
+  };
+  for (const node of root.nodeClassifications) {
+    if (
+      !node?.nodeCatalogIdentity ||
+      !node.nodeIdentity ||
+      !Number.isInteger(node.sourceTraversalIndex) ||
+      node.sourceTraversalIndex < 0 ||
+      !Number.isInteger(node.elementId) ||
+      node.elementId <= 0 ||
+      !String(node.kind ?? '').trim() ||
+      !Object.hasOwn(counts, node.classification) ||
+      !Array.isArray(node.reasons) ||
+      !String(node.sourceIdentity ?? '').trim() ||
+      ['damage', 'toughness', 'sp'].some(
+        dimension =>
+          !['applied', 'verified-zero', 'unresolved'].includes(
+            node.dimensions?.[dimension]?.status
+          )
+      )
+    ) {
+      return false;
+    }
+    counts[node.classification] += 1;
+  }
+  return (
+    counts.applied === Number(root.appliedNodeCount ?? 0) &&
+    counts['verified-zero'] === Number(root.verifiedZeroNodeCount ?? 0) &&
+    counts.unresolved === Number(root.unresolvedNodeCount ?? 0)
+  );
 }
 
 function hasValidSwitchTriggerCatalog(catalog) {
