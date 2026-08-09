@@ -1,12 +1,14 @@
-import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
 
-export const MACHINE_AXIS_ENEMY_SETTLEMENT_SCHEMA_VERSION = 1;
+export const MACHINE_AXIS_ENEMY_SETTLEMENT_SCHEMA_VERSION = 2;
 export const MACHINE_AXIS_ENEMY_SETTLEMENT_CONTRACT_NAME =
   'AzPrMachineAxisEnemySettlementTiming';
 export const MACHINE_AXIS_ENEMY_SETTLEMENT_CONTRACT_ID =
-  'm12-enemy-settlement-runtime-v1';
+  'm12-enemy-settlement-runtime-v2';
 export const MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE =
   'machine-axis-enemy-settlement-client-order-open';
+export const MACHINE_AXIS_ENEMY_SETTLEMENT_CLIENT_PARITY_PENDING_CODE =
+  'machine-axis-enemy-settlement-client-parity-pending';
 
 const CONTRACT_PAYLOAD = deepFreeze({
   schemaVersion: MACHINE_AXIS_ENEMY_SETTLEMENT_SCHEMA_VERSION,
@@ -21,11 +23,24 @@ const CONTRACT_PAYLOAD = deepFreeze({
     toughnessAdvanceResolution: 'fixed-100ms-runtime-tick',
     finiteDeathTruncation:
       'stop-enemy-hp-and-toughness-settlement-after-first-lethal-packet',
+    formalScenarioExecutionPath: 'local-controlled',
+    fastestKillScoreBoundary:
+      'first-lethal-settlement-cursor-inclusive-tail-non-scoring',
+  },
+  formalScoring: {
+    formalReady: true,
+    formalStatus: 'formal-score-ready-runtime-baseline',
+    scoreAuthority: 'formal-for-current-runtime-contract',
+    scoreBasis: 'product-approved-versioned-headless-runtime-semantics',
+    clientParityStatus: 'controlled-capture-pending-nonblocking',
+    clientParityRequiredForCurrentFormalScore: false,
+    replacementPolicy:
+      'new-client-evidence-contract-version-invalidates-and-recomputes-affected-scores',
   },
   evidence: {
     evidenceStatus: 'client-static-partial-controlled-capture-required',
-    formalReady: false,
-    blockerCode: MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,
+    clientParityReady: false,
+    pendingCode: MACHINE_AXIS_ENEMY_SETTLEMENT_CLIENT_PARITY_PENDING_CODE,
     clientStaticFindings: {
       breakingPacketHpMultiplierRead: 'pre-break-state',
       packetInternalSettlementOrder:
@@ -44,6 +59,14 @@ const CONTRACT_PAYLOAD = deepFreeze({
       'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
       'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
     ],
+    scoreSensitiveLeavesOpen: [
+      'same-frame-damage-element-queue-order-and-immediate-weak-state-visibility',
+      'break-end-state-update-versus-hit-order-in-the-same-client-frame',
+    ],
+    nonBlockingLeavesOpen: [
+      'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
+      'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
+    ],
     sources: [
       {
         kind: 'client-static-evidence-report',
@@ -51,9 +74,9 @@ const CONTRACT_PAYLOAD = deepFreeze({
           'reports/m12/m12-b3-enemy-toughness-settlement-evidence-20260808.json',
         bytes: 19799,
         sha256:
-          'c2c746bd9462838e626c68dc533e9ac47dbfc84d4770a42d177dc009a35946cc',
+          '4999f4201c92f7e281bd4dbc3bfb8e84fb8573c68c688eaf295ee3fdcec13bfb',
         reportHash:
-          '54336a6032a07777838313fe3d8991d77b3d11aa34d2fc3ed778cd68c8d07487',
+          'a54468f259bb2e4d1ad0e8981048a72855add385f2417a5488d8f135a991bd5d',
         closes: [
           'single-packet-break-multiplier-order',
           'break-damage-up-property-source-and-route-scope',
@@ -119,20 +142,24 @@ export function getMachineAxisEnemySettlementContract() {
 export function getMachineAxisEnemySettlementFormalReadiness() {
   const contract = getMachineAxisEnemySettlementContract();
   return deepFreeze({
-    formalReady: contract.evidence.formalReady,
+    formalReady: contract.formalScoring.formalReady,
+    formalStatus: contract.formalScoring.formalStatus,
+    scoreAuthority: contract.formalScoring.scoreAuthority,
+    scoreBasis: contract.formalScoring.scoreBasis,
     evidenceStatus: contract.evidence.evidenceStatus,
-    issues: contract.evidence.formalReady
-      ? []
-      : [
-          {
-            code: contract.evidence.blockerCode,
-            path: 'runtime.enemySettlementTiming',
-            message:
-              'Native static evidence closes single-packet and local timer semantics, but controlled client capture is still required for cross-packet/frame, lethal-tail, and authoritative execution-path ordering',
-            contractId: contract.contractId,
-            contractHash: contract.contractHash,
-          },
-        ],
+    clientParityReady: contract.evidence.clientParityReady,
+    issues: [],
+    warnings: [
+      {
+        severity: 'warning',
+        code: contract.evidence.pendingCode,
+        path: 'runtime.enemySettlementTiming.clientParity',
+        message:
+          'Formal scoring currently follows the versioned headless runtime baseline; controlled client capture remains pending and a differing future contract invalidates affected scores for recomputation',
+        contractId: contract.contractId,
+        contractHash: contract.contractHash,
+      },
+    ],
   });
 }
 

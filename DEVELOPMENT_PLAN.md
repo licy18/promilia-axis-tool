@@ -1099,7 +1099,7 @@ npm run test -- --run
 - 正式主指标固定为 `cycle-dps-no-toughness`、`cycle-dps-with-toughness`、`fastest-kill`，默认值为 `cycle-dps-no-toughness`。旧 `damage`、`burst`、`toughness` 仅保留为 `legacy-diagnostic`，不能进入 formal admission、trial release 或 M12-C。
 - 无韧性循环使用无限 HP、权威等级与实际防御，关闭韧性、击破和死亡截断；有韧性循环使用无限 HP、实际防御/韧性/恢复/破韧规则；最快击杀使用实际 HP、防御、韧性与首次致死 cursor。三者均固定距离 0、目标静止且不攻击。
 - `AzPrEnemyProfile` 严格绑定 enemyId、level、来源身份/hash、实际 HP/DEF/MDEF/元素防御/韧性与 break rules。等级成长由已合并的 enemy-level pipeline 提供，优化器不得补默认值或伪造档案。
-- 当前可审计运行时按“破韧发生包 1x、同帧后续 broken 包 2x、破韧结束右开”结算；客户端原生同帧与恢复顺序证据尚未闭合，因此有韧循环与最快击杀保持 `machine-axis-enemy-settlement-client-order-open`，诊断 proof 的 `formalScore` 为 null。
+- 当前可审计运行时按“破韧发生包使用 packet 前状态、同帧后续包按 canonical source sequence 读取已更新 broken、破韧结束右开且 state tick 先于 hit”结算。产品现批准该版本化无头 runtime 作为当前 formal-score 基线；客户端同帧与恢复顺序仍标记为 parity pending，未来证据若不一致必须升版合同并使受影响分数失效重算。
 - batch/search/cycle/kill 统一统计 requested/effective healing、overhealing、effective HPS、settlement count，以及 source actor/action 贡献。护盾、suppressed 事件与生命伤害不混入治疗统计。
 - objective、target policy、enemy profile 与 settlement contract 进入 canonical input/data/trace/build hash。M12-C 与正式搜索继续锁定，本阶段只收口合同与组合运行时。
 
@@ -1120,7 +1120,7 @@ npm run test -- --run
 - local-controlled WeakBreakSystem 以每次 update 的 deltaTime 推进 `m_curWeakTime/m_curWeakEndTime`，在 `>=` 边界转换，区间右开；remote-controlled 路径仅作 performance mirror。这也证明现 runtime 固定 100ms tick 与 local 路径存在已登记差异，但正式 passive boss 的权威 local/remote/network 路径尚未闭合，不能据此改成另一条猜测路径。
 - 通用 runtime 已把普通/调谐 packet 修为“pre-break 计算 HP output → 韧性/破韧状态 → HP”，并将顺序投影到 canonical/cycle/kill hash。没有 enemyId/actionId 特判；无韧目标仍完全不产生 toughness/broken 状态。
 - `runtime-capture` v3 已准备同帧单调序列与状态前后 hook。当前环境没有运行中的获准客户端进程，且工具禁止自动启动/附加/绕过反作弊，所以没有伪造 capture。
-- blocker 未解除：同帧多 DamageElement 的刚破韧状态可见性、break 结束帧 state update/hit phase、致死包后同队列尾包以及正式场景 authoritative execution path 仍为 `leavesOpen`。`cycle-dps-with-toughness` 与 `fastest-kill` 的 `formalScore` 继续为 null；M12-C/formal search 保持锁定。
+- 截至 OPT-T2，该批 blocker 尚未解除：同帧多 DamageElement 的刚破韧状态可见性、break 结束帧 state update/hit phase、致死包后同队列尾包以及正式场景 authoritative execution path 均记录为 evidence `leavesOpen`。后续产品政策已将“当前 formal-score 可用性”与“客户端 parity 是否闭合”拆分，见第 16 节。
 
 ## 15. M12-B3-OPT-T3 有韧敌人 controlled capture 预检（2026-08-09）
 
@@ -1129,4 +1129,12 @@ npm run test -- --run
 - production audit 对丢包、重复 hook、entry/exit 不完整、线程切换、帧号缺失、缺 session-end 或 agent diagnostic 全部 fail closed；normalizer v3 输出逐字节可重复、移除本机 PID/模块路径/加载基址与输入绝对路径，并绑定原始 JSONL 精确 bytes/hash。self-test 与 synthetic fixture 只能验证工具，不能关闭客户端 blocker。
 - 112001 消费接口要求同一 eventIdentity/sourceSequencePath 下观测 damage/overlimit 单包顺序、191F wrapper、128F watcher、权威 break cursor 与 observer-active-at-break；没有真实动作时只接受带等价调用链证明的探针。目前这些观察均未执行。
 - 下一步需要 operator 手动启动并登录绑定 TC 客户端、进入 0 距离静止不攻击 Boss 场景、准备 112001 或有调用链证明的等价 probe，再提供 PID 并显式确认本次受控 attach。随后执行破韧、同帧后续包、break-end 边界和有限 HP 致死尾包探针。
-- 四条动态 `leavesOpen` 尚未闭合，`formalReady=false`、`formalScore=null`、`machine-axis-enemy-settlement-client-order-open`、M12-C 与正式搜索锁保持不变。
+- 四条动态 `leavesOpen` 尚未闭合；该 preflight 产物仍如实记录当时的 evidence gate 状态，不能冒充真实 capture。后续 runtime-baseline formal-score 产品政策不改变这份历史证据，也不解锁 M12-C。
+
+## 16. M12-B3 优化器 runtime-baseline formal score（2026-08-09）
+
+- `m12-enemy-settlement-runtime-v2` 将 formal scoring 与客户端 parity 分为两条状态：`formalScoring.formalReady=true`、`scoreAuthority=formal-for-current-runtime-contract`，同时 `evidence.clientParityReady=false` 并保留 controlled-capture pending warning。
+- 有韧循环只在两轮 replay 与敌人韧性/break/recovery 相位严格闭合后输出 `formalScore=loopHpDamage/loopDurationSeconds`；最快击杀只在真实首次致死 cursor 存在时输出精确 TTK formal score。默认调用不再需要内部 `allowUnverifiedRuntimeTiming` 开关。
+- 当前 score 冻结使用现有无头语义：fixed 100ms weakness tick、breaking packet 读取 pre-break、同帧后续包按 canonical source sequence、break end 右开且 tick-before-hit。正式场景执行路径按产品决定选 `local-controlled`，但未声称 fixed 100ms 已与客户端 local per-update deltaTime 达成 parity。
+- 首次致死 cursor 是 fastest-kill 的评分截止点；其后的 HP/韧性尾包只作诊断，不改变 kill 可行性或 TTK。现 runtime 仍主动截断尾包，但客户端尾包处置不再是 formal-score blocker。
+- 客户端 capture 若证明任一评分相关顺序不同，必须创建新 settlement contract，旧合同下受影响的 formal scores 全部失效并重算。当前未运行正式优化；M12-C、角色/资格总门和 trial-release 总门继续锁定。

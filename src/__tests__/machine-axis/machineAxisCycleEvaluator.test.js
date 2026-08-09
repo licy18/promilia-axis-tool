@@ -1239,7 +1239,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(highReport.hashes.build).not.toBe(lowReport.hashes.build);
   }, 30_000);
 
-  it('diagnoses a closed toughness loop packet-by-packet but withholds its formal score', () => {
+  it('scores a closed toughness loop against the versioned runtime baseline', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.options.objective = 'cycle-dps-with-toughness';
     envelope.contract.scenario.enemy.profile = createResolvedCycleEnemyProfile(
@@ -1252,9 +1252,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         breakEndTimeMs: 0,
       }
     );
-    const report = createMachineAxisService().evaluateCycle(envelope, {
-      allowUnverifiedRuntimeTiming: true,
-    });
+    const report = createMachineAxisService().evaluateCycle(envelope);
     const highDefenseEnvelope = structuredClone(envelope);
     highDefenseEnvelope.contract.scenario.enemy.profile =
       createResolvedCycleEnemyProfile(5000, {
@@ -1264,24 +1262,28 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         breakTimeMs: 100,
         breakEndTimeMs: 0,
       });
-    const highDefenseReport = createMachineAxisService().evaluateCycle(
-      highDefenseEnvelope,
-      { allowUnverifiedRuntimeTiming: true }
-    );
+    const highDefenseReport =
+      createMachineAxisService().evaluateCycle(highDefenseEnvelope);
 
     expect(report.valid).toBe(true);
     expect(highDefenseReport.valid).toBe(true);
     expect(highDefenseReport.metrics.cycleDps).toBeLessThan(
       report.metrics.cycleDps
     );
-    expect(report.formalScore).toBeNull();
-    expect(report.formalStatus).toBe('blocked-runtime-semantics-evidence-open');
+    expect(report.formalScore).toBe(report.metrics.cycleDps);
+    expect(report.formalStatus).toBe('formal-score-ready-runtime-baseline');
+    expect(report.warnings).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-enemy-settlement-client-parity-pending',
+      })
+    );
     expect(report.enemySettlementTiming).toMatchObject({
       semantics: {
         breakingPacketHpDamagePhase: 'pre-break',
         breakIntervalEnd: 'right-open',
       },
-      evidence: { formalReady: false },
+      formalScoring: { formalReady: true },
+      evidence: { clientParityReady: false },
     });
     const packets = report.samples[0].firstCycle.enemySettlementPackets;
     const breakingPackets = packets.filter(packet => packet.breakTriggered);

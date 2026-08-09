@@ -1366,7 +1366,7 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(prepared.project).toBeNull();
   });
 
-  it('rejects legacy objectives and evidence-open toughness timing at formal admission', () => {
+  it('rejects legacy objectives but admits runtime-baseline toughness timing', () => {
     const legacy = createAxis({ mode: 'formal' });
     legacy.scenario.objectiveContract =
       createMachineAxisObjectiveContract('damage');
@@ -1384,12 +1384,10 @@ describe('M12-B3 strict cultivation profile', () => {
     withToughness.scenario.target = structuredClone(
       withToughness.scenario.objectiveContract.targetPolicy
     );
-    expect(
-      createOptimizationQualificationIssuesForContract(withToughness)
-    ).toContainEqual(
-      expect.objectContaining({
-        code: 'machine-axis-enemy-settlement-client-order-open',
-      })
+    const withToughnessIssues =
+      createOptimizationQualificationIssuesForContract(withToughness);
+    expect(withToughnessIssues.map(issue => issue.code)).not.toContain(
+      'machine-axis-enemy-settlement-client-order-open'
     );
 
     const fastestKill = createAxis({ mode: 'formal' });
@@ -1398,17 +1396,17 @@ describe('M12-B3 strict cultivation profile', () => {
     fastestKill.scenario.target = structuredClone(
       fastestKill.scenario.objectiveContract.targetPolicy
     );
-    expect(
-      createOptimizationQualificationIssuesForContract(fastestKill)
-    ).toEqual(
+    const fastestKillIssues =
+      createOptimizationQualificationIssuesForContract(fastestKill);
+    expect(fastestKillIssues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           code: 'machine-axis-enemy-profile-object-required',
         }),
-        expect.objectContaining({
-          code: 'machine-axis-enemy-settlement-client-order-open',
-        }),
       ])
+    );
+    expect(fastestKillIssues.map(issue => issue.code)).not.toContain(
+      'machine-axis-enemy-settlement-client-order-open'
     );
   });
 

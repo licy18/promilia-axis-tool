@@ -2161,7 +2161,7 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 正式目标现为 `cycle-dps-no-toughness`、`cycle-dps-with-toughness` 与 `fastest-kill`；旧 `damage/burst/toughness` 降为诊断项，正式流程在模拟前拒绝 legacy 或漂移的 objective contract。
 - 两个循环指标只接受半开区间且连续两轮闭合的循环 proof；最快击杀按首次致死 frame、time 与完整 runtime cursor 排序，并保存致死 action/hit、requested/effective damage 和 overkill。
 - 优化器严格消费 enemy-level pipeline 产出的权威敌人档案，不自行计算等级成长。无来源、缺字段或 hash 不一致时 fail closed。
-- 破韧发生包、同帧后续包与恢复帧的客户端原生排序证据仍 open；因此有韧循环和最快击杀暂不具备 formal score，诊断结果不得冒充正式准入。
+- 破韧发生包、同帧后续包与恢复帧的客户端原生 parity 证据仍 open；当前产品政策允许按版本化无头 runtime 合同产生 formal score，并要求未来客户端证据若有差异则升版、作废并重算受影响结果。
 - 治疗统计已加入 batch/search/cycle/kill 报告，包含 requested/effective/overheal/HPS 与 source actor/action 聚合；护盾和 suppressed 事件保持独立。
 - 合并不解锁 M12-C 或正式搜索；Kibo DNA 继续固定 `[]`。
 
@@ -2186,7 +2186,7 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 客户端单包裁决：普通与真实伤害均在削韧前读取 packet 前 weak state 与 property 221，破韧包 HP output 因而为 pre-break；`WeaknessPointChange` 的 setter 调用早于 `ChangeHP`。breakDmgUp 是 profile 属性，不是全敌人固定 2 倍；pure toughness 不套 HP break multiplier。
 - local WeakBreakSystem 的计时来自每次 update deltaTime，`WeakBreaking/WeakBreakEnding` 以 `>=` 退出；remote update 仅镜像表现。现 runtime 固定 100ms 与 local 路径的差异已公开登记，需由正式场景真实 capture 先选择 authoritative local/remote/network 路径后再修正。
 - runtime-capture manifest v3 与 Frida agent 可记录同帧 `captureSequence/frameCount/deltaTime/threadId`，覆盖 DamageElement、三条 output、HP/韧性 setter、weak state 与 WeakBreakSystem update。当前未运行客户端、未取得真实 capture；工具不自动启动/附加客户端且不提供反作弊绕过。
-- formal gate 继续拒绝 `machine-axis-enemy-settlement-client-order-open`。未闭合的是同帧跨包可见性、结束帧 state update/hit、致死后尾包和 passive boss 执行路径；有韧循环/最快击杀只能输出诊断 proof，不能形成正式分数。三主指标、legacy/healing、Kibo DNA `[]` 和 M12-C 锁均未回退。
+- 该批当时的 formal gate 继续拒绝 `machine-axis-enemy-settlement-client-order-open`。未闭合的是同帧跨包可见性、结束帧 state update/hit、致死后尾包和 passive boss 执行路径；后续 runtime-baseline 产品政策只改变评分准入，不改写这份静态/捕获证据。
 
 ### M12-B3-OPT-T3 controlled capture 操作边界（2026-08-09）
 
@@ -2194,4 +2194,13 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 真实 capture 只能在 operator 已手动启动并登录绑定 TC 客户端、已进入 `m12c-zero-distance-passive-boss-v1` 场景后执行。命令必须给出 PID、`--capture-kind toughness`、action/actor/target identity、独立输出路径与 `--confirm-controlled-session`；禁止自动启动或反作弊绕过。
 - 一次可采信会话必须有连续 `captureSequence`、完整 client frame/delta/thread、稳定 event/source/hook identity、无重复 hook/线程漂移，以及唯一 `capture-session-end`。end 中 agent/host event count、final sequence、open stack 和 diagnostic 必须全部一致；任一缺口令 Workbench production audit 拒绝。normalizer v3 逐字节可重复并移除本机 PID、模块绝对路径/加载基址和输入绝对路径，同时对原始 bytes 计算 SHA-256。
 - 正式探针至少覆盖：破韧包及同帧后续包、break 结束前/当时/之后与 state update/hit 相位、破韧或致死同包及 post-death 尾包、实际 local/remote/network consumer。112001 还需记录 damage/overlimit 单包、191F wrapper、128F watcher、权威 break cursor 与 observer-active-at-break；等价探针必须附同 consumer/同 phase 调用链证明。
-- 当前本机未发现运行中的客户端，因而只提交 blocked preflight 和可复用 capture 门禁。未取得真实记录前不得改 `formalReady=false`、不得产生有韧循环/最快击杀正式分数，也不得进入 M12-C 或正式搜索。
+- 当前本机未发现运行中的客户端，因而只提交 blocked preflight 和可复用 capture 门禁。该产物不能被解释为真实记录；后续产品政策可独立批准 runtime-baseline formal score，但仍不得据此宣称 client parity、进入 M12-C 或执行正式搜索。
+
+### M12-B3 runtime-baseline formal-score 政策（2026-08-09）
+
+- 当前评分合同为 `m12-enemy-settlement-runtime-v2`。`formalScoring.formalReady=true` 表示有韧循环与最快击杀可按当前无头核心形成正式分数；`evidence.clientParityReady=false` 和 `machine-axis-enemy-settlement-client-parity-pending` warning 同时保留，二者不可混写。
+- 固定评分语义是：breaking packet 以 packet 前 weak state 计算 HP output，随后结算 toughness/break，再结算 HP；同帧后续包按 canonical source sequence 读取新状态；weakness 使用 fixed 100ms tick，break end 右开，state tick 先于同帧 hit。`formalScenarioExecutionPath=local-controlled` 是产品选择，不是已经取得的客户端运行记录。
+- fastest-kill 的唯一正式截止点是首次致死完整 cursor。之后的 HP/韧性 settlement 若出现，仅写入 `machine-axis-fastest-kill-post-death-settlement-ignored` 诊断，不再拒绝或改变 TTK；现 runtime 继续执行死亡截断以保持输出整洁。
+- `runtime-capture:preflight` 也同步拆为 `formalScoringPolicy` 与 `clientParityGate`：它可报告当前 runtime 合同允许评分，但永远不会把 preflight 冒充一次 score evaluation 或真实 capture。
+- 新合同的 score authority 只覆盖当前 runtime 版本。未来 controlled capture 若推翻同帧可见性、break-end 顺序或时钟语义，必须发布新合同，并按 `replacementPolicy` 使旧合同下受影响分数失效重算。
+- objective formal admission 不再产生旧 `machine-axis-enemy-settlement-client-order-open` issue；legacy objective、敌人档案、循环闭合、资源/CD/充能、场景政策与 qualification stage gate 仍 fail closed。M12-C 继续锁定，本批不运行正式优化。

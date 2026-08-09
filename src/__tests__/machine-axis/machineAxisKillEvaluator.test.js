@@ -108,14 +108,13 @@ function createRun(damage, events = []) {
 function prove(run, contract = createContract()) {
   return createFastestKillProof(run, contract, {
     objectiveContract: createMachineAxisObjectiveContract('fastest-kill'),
-    allowUnverifiedRuntimeTiming: true,
   });
 }
 
 describe('Machine Axis fastest-kill proof', () => {
   installVerifiedCombatMechanicsPackage(mechanicsPackage);
 
-  it('structurally blocks formal use while client settlement ordering is open', () => {
+  it('publishes a formal score from the current runtime while client parity remains pending', () => {
     const lethal = damagePacket({
       frame: 60,
       sequence: 1,
@@ -123,29 +122,27 @@ describe('Machine Axis fastest-kill proof', () => {
       requested: 120,
       lethal: true,
     });
-    const blocked = createFastestKillProof(
+    const report = createFastestKillProof(
       createRun([lethal]),
       createContract(),
       {
         objectiveContract: createMachineAxisObjectiveContract('fastest-kill'),
       }
     );
-    const diagnostic = prove(createRun([lethal]));
-
-    expect(blocked).toMatchObject({
-      valid: false,
-      status: 'rejected',
-      issues: [
-        expect.objectContaining({
-          code: 'machine-axis-enemy-settlement-client-order-open',
-        }),
-      ],
-    });
-    expect(diagnostic).toMatchObject({
+    expect(report).toMatchObject({
       valid: true,
       status: 'killed',
-      formalScore: null,
-      formalStatus: 'blocked-runtime-semantics-evidence-open',
+      formalScore: 1000,
+      formalStatus: 'formal-score-ready-runtime-baseline',
+      formalScorePolicy: {
+        scoreAuthority: 'formal-for-current-runtime-contract',
+        clientParityStatus: 'controlled-capture-pending-nonblocking',
+      },
+      warnings: [
+        expect.objectContaining({
+          code: 'machine-axis-enemy-settlement-client-parity-pending',
+        }),
+      ],
     });
   });
 
@@ -181,7 +178,7 @@ describe('Machine Axis fastest-kill proof', () => {
     });
   });
 
-  it('rejects HP or toughness settlement after death', () => {
+  it('keeps post-lethal tail packets diagnostic without changing first-lethal score', () => {
     const lethal = damagePacket({
       frame: 30,
       sequence: 1,
@@ -196,13 +193,25 @@ describe('Machine Axis fastest-kill proof', () => {
     afterDeath.toughnessDamage = 1;
 
     expect(prove(createRun([lethal, afterDeath]))).toMatchObject({
-      valid: false,
-      status: 'rejected',
-      issues: [
+      valid: true,
+      status: 'killed',
+      formalScore: 500,
+      warnings: [
         expect.objectContaining({
-          code: 'machine-axis-fastest-kill-post-death-settlement',
+          code: 'machine-axis-enemy-settlement-client-parity-pending',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-fastest-kill-post-death-settlement-ignored',
         }),
       ],
+      killProof: {
+        firstLethal: { frame: 30 },
+        stopAfterDeath: {
+          verified: false,
+          postLethalSettlementCount: 1,
+          scoreImpact: 'none-after-first-lethal-cursor',
+        },
+      },
     });
   });
 
@@ -337,12 +346,8 @@ describe('Machine Axis fastest-kill proof', () => {
       };
     };
     const service = createMachineAxisService();
-    const lowDefense = service.evaluateKill(createEnvelope(0), {
-      allowUnverifiedRuntimeTiming: true,
-    });
-    const highDefense = service.evaluateKill(createEnvelope(1_000_000), {
-      allowUnverifiedRuntimeTiming: true,
-    });
+    const lowDefense = service.evaluateKill(createEnvelope(0));
+    const highDefense = service.evaluateKill(createEnvelope(1_000_000));
 
     expect(lowDefense.issues).toEqual([]);
     expect(lowDefense).toMatchObject({

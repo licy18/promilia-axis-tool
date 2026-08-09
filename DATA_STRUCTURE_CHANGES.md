@@ -27840,7 +27840,7 @@ Machine Axis 新增严格、版本化的 `AzPrMachineAxisObjectiveContract` 与 
 
 `scenario.enemy.profile` 使用 `AzPrEnemyProfile` consumer contract，保存 enemyId、level、profileHash、来源 identity/hash/status、实际 maxHp/DEF/MDEF/maxToughness/元素防御与 break rules。该结构不重复计算等级成长；合并后的 enemy-level pipeline 负责构造权威输入。
 
-`AzPrMachineAxisFastestKill` v1 输出首次致死 proof：`lethalFrame/timeMs/cursor/sourceActorId/sourceActionId/hitIdentity/requestedHpDamage/effectiveHpDamage/overkill`。未击杀候选不生成正式 TTK；致死后不再接受 HP 或 toughness settlement。
+`AzPrMachineAxisFastestKill` v1 输出首次致死 proof：`lethalFrame/timeMs/cursor/sourceActorId/sourceActionId/hitIdentity/requestedHpDamage/effectiveHpDamage/overkill`。未击杀候选不生成正式 TTK；首次致死 cursor 后的 HP 或 toughness settlement 仅进入 `stopAfterDeath` 与 warning 诊断，不改变 kill 可行性或 TTK。
 
 canonical damage event 增加 `preDefenseValue/requestedHpDamage/effectiveHpDamage/overkill/inBreakForHpDamage/hpDamageMultiplier/toughnessBefore/toughnessAfter/breakTriggered/deathTriggered/deathState/settlementCursor`。Cycle 报告保存逐包 settlement 与敌人状态迁移，边界包括 HP/韧性、defeated、break phase、恢复计时与 profile 来源。
 
@@ -27863,7 +27863,9 @@ settlementOrder = [
 ]
 ```
 
-该数组进入 canonical damage、cycle settlement packet、kill proof 与对应 hash。普通和调谐伤害都先以 packet 前 weak state 计算 HP output，再结算韧性/破韧状态，最后结算 HP，匹配已闭合的客户端单包调用顺序。`m12-enemy-settlement-runtime-v1` 仍保持 `formalReady=false`：同帧跨 DamageElement 可见性、break 结束同帧 update/hit、致死尾包以及正式 passive boss 的 local/remote 路径仍需真实受控 capture。
+该数组进入 canonical damage、cycle settlement packet、kill proof 与对应 hash。普通和调谐伤害都先以 packet 前 weak state 计算 HP output，再结算韧性/破韧状态，最后结算 HP，匹配已闭合的客户端单包调用顺序。
+
+`m12-enemy-settlement-runtime-v2` 新增顶层 `formalScoring`，字段为 `formalReady/formalStatus/scoreAuthority/scoreBasis/clientParityStatus/clientParityRequiredForCurrentFormalScore/replacementPolicy`；`evidence` 改为独立的 `clientParityReady/pendingCode/leavesOpen/scoreSensitiveLeavesOpen/nonBlockingLeavesOpen`。当前 `formalReady=true` 只授权版本化无头 runtime 分数，`clientParityReady=false` 仍要求真实受控 capture。`semantics` 还固定 `formalScenarioExecutionPath=local-controlled` 与 `fastestKillScoreBoundary=first-lethal-settlement-cursor-inclusive-tail-non-scoring`。该完整合同及 hash 进入 cycle/kill proof 与确定性 hash。
 
 ## 460. Enemy toughness controlled capture integrity / preflight
 
@@ -27884,4 +27886,4 @@ capture-session-end
 
 Workbench production audit 对 toughness capture 强制检查 sequence 从 1 连续、frame/delta/thread 完整、hook invocation entry/exit 成对且无重复、同 packet/invocation 不跨线程、agent/host 数量一致、无未清栈与 agent diagnostic。缺失结束记录、丢包、重复 hook、线程漂移或帧号缺失均 fail closed。normalizer v3 移除非确定性生成时间、本机 PID、模块路径/基址和输入绝对路径，重复运行逐字节一致；结果按原始 bytes 绑定精确大小与 SHA-256。synthetic/self-test 只可验证工具，不可成为客户端证据。
 
-`runtime-capture:preflight` 仅核对 manifest、GameAssembly/dump/script 身份并枚举可附加进程，不启动或附加客户端。其 blocked 报告明确保留四条 `leavesOpen`、112001 所需观察接口和最小 operator steps；在真实受控会话记录闭合前，`formalReady=false`、`formalScore=null` 与 `machine-axis-enemy-settlement-client-order-open` 不变。
+`runtime-capture:preflight` 仅核对 manifest、GameAssembly/dump/script 身份并枚举可附加进程，不启动或附加客户端。新输出将 `formalScoringPolicy` 与 `clientParityGate` 分开：前者绑定 `m12-enemy-settlement-runtime-v2` 且明确 preflight 不计算分数，后者保留四条 `leavesOpen`、112001 所需观察接口和最小 operator steps。已提交的 2026-08-09 blocked 报告中的旧 `formalReady=false/formalScore=null` 是政策变更前的 evidence-gate 快照，不能反向把 runtime-baseline 分数描述成已取得客户端 capture。

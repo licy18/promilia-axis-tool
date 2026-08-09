@@ -84,7 +84,7 @@ describe('Machine Axis native enemy toughness settlement evidence', () => {
             'tuning-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
           ],
           differs: [
-            'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v1-uses-fixed-100ms-ticks',
+            'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v2-uses-fixed-100ms-ticks',
           ],
           pendingControlledCapture: expect.any(Array),
           correctionStatus:
@@ -99,11 +99,16 @@ describe('Machine Axis native enemy toughness settlement evidence', () => {
 
   it('binds ordinary hit and tuning mutation paths to the executable shared settlement', () => {
     for (const [start, end] of [
-      ['function applyTuningCombatDescriptor({', 'function applyTuningPeriodicHeal({'],
+      [
+        'function applyTuningCombatDescriptor({',
+        'function applyTuningPeriodicHeal({',
+      ],
       ['function applyHitDescriptor({', 'function createVerifiedCombatHitKey('],
     ]) {
       const body = extractRuntimeFunction(runtimeSource, start, end);
-      expect(body.match(/settleVerifiedEnemyDamagePacket\(\{/g)).toHaveLength(1);
+      expect(body.match(/settleVerifiedEnemyDamagePacket\(\{/g)).toHaveLength(
+        1
+      );
       expect(body).not.toMatch(/enemy\.(?:hp|toughness)\s*=/);
     }
   });

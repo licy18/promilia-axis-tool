@@ -6,7 +6,7 @@
   "evidenceArtifact": {
     "path": "scripts/machine-axis/evidence/enemy-toughness-settlement-runtime-evidence.json",
     "bytes": 18807,
-    "sha256": "0129a1dc0227ab5d67dd399b05d51d1006b294f33cbb2126266f06bd232b8be9",
+    "sha256": "7d162ce61cc7c3dec1dafb48e590b61be45e27ad29e0bcf4d8b39e3b87b2f951",
     "evidenceId": "azpr-tc-20260709-enemy-toughness-settlement-static-v1"
   },
   "clientSources": {
@@ -442,7 +442,7 @@
         "tuning-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order"
       ],
       "differs": [
-        "native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v1-uses-fixed-100ms-ticks"
+        "native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v2-uses-fixed-100ms-ticks"
       ],
       "pendingControlledCapture": [
         "same-frame-damage-element-queue-order-and-immediate-weak-state-visibility",
@@ -496,5 +496,5 @@
     ],
     "acceptance": "real controlled-session records only; no synthetic capture may close leavesOpen"
   },
-  "reportHash": "54336a6032a07777838313fe3d8991d77b3d11aa34d2fc3ed778cd68c8d07487"
+  "reportHash": "a54468f259bb2e4d1ad0e8981048a72855add385f2417a5488d8f135a991bd5d"
 }

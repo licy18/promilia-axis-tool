@@ -258,10 +258,17 @@ def run_capture_preflight(options: argparse.Namespace) -> int:
             "equivalentProbeAllowed": True,
             "equivalentCallChainProofRequired": True,
         },
-        "formalGate": {
-            "formalReady": False,
-            "formalScore": None,
-            "blockerCode": "machine-axis-enemy-settlement-client-order-open",
+        "formalScoringPolicy": {
+            "contractId": "m12-enemy-settlement-runtime-v2",
+            "formalReady": True,
+            "formalScoreEvaluatedByPreflight": False,
+            "scoreAuthority": "formal-for-current-runtime-contract",
+            "scoreBasis": "product-approved-versioned-headless-runtime-semantics",
+        },
+        "clientParityGate": {
+            "clientParityReady": False,
+            "pendingCode": "machine-axis-enemy-settlement-client-parity-pending",
+            "leavesOpen": evidence["conclusion"]["leavesOpen"],
         },
         "requiredOperatorSteps": [
             "Launch the bound TC client manually and complete login without disabling or bypassing anti-cheat.",

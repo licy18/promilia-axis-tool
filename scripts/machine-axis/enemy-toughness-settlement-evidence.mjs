@@ -439,7 +439,7 @@ const REQUIRED_RUNTIME_COMPARISON = Object.freeze({
     'tuning-runtime-single-packet-mutation-order-now-matches-client-static-dispatch-order',
   ],
   differs: [
-    'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v1-uses-fixed-100ms-ticks',
+    'native-local-state-machine-uses-per-update-delta-while-m12-enemy-settlement-runtime-v2-uses-fixed-100ms-ticks',
   ],
   pendingControlledCapture: [...REQUIRED_LEAVES_OPEN],
   correctionStatus:

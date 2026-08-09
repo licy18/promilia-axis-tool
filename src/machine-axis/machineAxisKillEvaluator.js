@@ -170,23 +170,22 @@ export function createFastestKillProof(
       (Number(event.effectiveHpDamage ?? event.rawDamage) > 0 ||
         Number(event.toughnessDamage) > 0)
   );
-  if (postLethalSettlements.length > 0) {
-    return createRejectedKillReport(
-      { contract, objectiveContract },
-      [
-        killIssue(
-          'machine-axis-fastest-kill-post-death-settlement',
-          'trace.damage',
-          'Enemy HP or toughness settled after the first lethal packet',
-          {
-            eventCount: postLethalSettlements.length,
-            eventCursors: postLethalSettlements.map(projectRuntimeCursor),
-          }
-        ),
-      ],
-      run?.hashes
-    );
-  }
+  const warnings = [
+    ...(settlementReadiness.warnings ?? []),
+    ...(postLethalSettlements.length > 0
+      ? [
+          killWarning(
+            'machine-axis-fastest-kill-post-death-settlement-ignored',
+            'trace.damage',
+            'Enemy HP or toughness settlements after the first lethal cursor are diagnostic only and do not affect fastest-kill scoring',
+            {
+              eventCount: postLethalSettlements.length,
+              eventCursors: postLethalSettlements.map(projectRuntimeCursor),
+            }
+          ),
+        ]
+      : []),
+  ];
   const fps = Number(contract.scenario?.fps) || 60;
   const timeMs = Number(lethal.timeMs);
   const frame = Number(lethal.absoluteFrame);
@@ -240,6 +239,7 @@ export function createFastestKillProof(
     stopAfterDeath: {
       verified: postLethalSettlements.length === 0,
       postLethalSettlementCount: postLethalSettlements.length,
+      scoreImpact: 'none-after-first-lethal-cursor',
     },
   };
   const report = {
@@ -249,6 +249,7 @@ export function createFastestKillProof(
     valid: true,
     status: 'killed',
     issues: [],
+    warnings,
     objectiveContract,
     enemySettlementTiming: settlementContract,
     enemyProfile: createEnemyProfileIdentity(profileValidation.normalized),
@@ -262,8 +263,9 @@ export function createFastestKillProof(
     formalScore: settlementReadiness.formalReady === true ? timeMs : null,
     formalStatus:
       settlementReadiness.formalReady === true
-        ? 'formal-score-ready'
+        ? settlementReadiness.formalStatus
         : 'blocked-runtime-semantics-evidence-open',
+    formalScorePolicy: settlementContract.formalScoring,
     killProof: proof,
     diagnostics,
     healing,
@@ -278,6 +280,10 @@ export function createFastestKillProof(
     enemyProfile: report.enemyProfile,
     targetPolicy: report.targetPolicy,
     score: report.score,
+    formalScore: report.formalScore,
+    formalStatus: report.formalStatus,
+    formalScorePolicy: report.formalScorePolicy,
+    warnings: report.warnings,
     killProof: report.killProof,
     diagnostics: report.diagnostics,
     healing: report.healing,
@@ -411,6 +417,7 @@ function validateKillEnvelope(raw, normalized, objectiveContract) {
 
 function createUnkilledReport({ run, contract, objectiveContract, profile }) {
   const settlementContract = getMachineAxisEnemySettlementContract();
+  const settlementReadiness = getMachineAxisEnemySettlementFormalReadiness();
   const diagnostics = createKillDiagnostics(run);
   const healing = createMachineAxisHealingStatistics(run.trace?.events ?? [], {
     durationMs: run.trace?.scenario?.durationMs ?? 0,
@@ -423,6 +430,7 @@ function createUnkilledReport({ run, contract, objectiveContract, profile }) {
     valid: true,
     status: 'not-killed',
     issues: [],
+    warnings: settlementReadiness.warnings,
     objectiveContract,
     enemySettlementTiming: settlementContract,
     enemyProfile: createEnemyProfileIdentity(profile),
@@ -434,10 +442,8 @@ function createUnkilledReport({ run, contract, objectiveContract, profile }) {
       frame: null,
     },
     formalScore: null,
-    formalStatus:
-      settlementContract.evidence.formalReady === true
-        ? 'not-killed'
-        : 'blocked-runtime-semantics-evidence-open',
+    formalStatus: 'not-killed',
+    formalScorePolicy: settlementContract.formalScoring,
     killProof: {
       feasible: false,
       reason: 'enemy-not-killed-within-axis-horizon',
@@ -453,6 +459,10 @@ function createUnkilledReport({ run, contract, objectiveContract, profile }) {
     enemyProfile: report.enemyProfile,
     targetPolicy: report.targetPolicy,
     score: report.score,
+    formalScore: report.formalScore,
+    formalStatus: report.formalStatus,
+    formalScorePolicy: report.formalScorePolicy,
+    warnings: report.warnings,
     killProof: report.killProof,
     diagnostics,
     healing,
@@ -469,6 +479,7 @@ function createRejectedKillReport(source, issues, hashes = null) {
     valid: false,
     status: 'rejected',
     issues,
+    warnings: [],
     objectiveContract: source?.objectiveContract ?? null,
     enemySettlementTiming:
       source?.settlementContract ?? getMachineAxisEnemySettlementContract(),
@@ -477,6 +488,11 @@ function createRejectedKillReport(source, issues, hashes = null) {
       : null,
     targetPolicy: FASTEST_KILL_TARGET_POLICY,
     score: null,
+    formalScore: null,
+    formalStatus: 'rejected',
+    formalScorePolicy:
+      source?.settlementContract?.formalScoring ??
+      getMachineAxisEnemySettlementContract().formalScoring,
     killProof: null,
     diagnostics: null,
     healing: null,
@@ -547,6 +563,10 @@ function normalizeErrorIssues(error) {
 
 function killIssue(code, path, message, details = {}) {
   return { severity: 'error', code, path, message, ...details };
+}
+
+function killWarning(code, path, message, details = {}) {
+  return { severity: 'warning', code, path, message, ...details };
 }
 
 function isRecord(value) {

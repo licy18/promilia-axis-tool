@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
 import {
-  MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,
+  MACHINE_AXIS_ENEMY_SETTLEMENT_CLIENT_PARITY_PENDING_CODE,
   MACHINE_AXIS_ENEMY_SETTLEMENT_CONTRACT_NAME,
   getMachineAxisEnemySettlementContract,
   getMachineAxisEnemySettlementFormalReadiness,
@@ -13,8 +13,9 @@ describe('Machine Axis enemy settlement timing contract', () => {
     const { contractHash, ...payload } = contract;
 
     expect(contract).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       contractName: MACHINE_AXIS_ENEMY_SETTLEMENT_CONTRACT_NAME,
+      contractId: 'm12-enemy-settlement-runtime-v2',
       semantics: {
         breakingPacketHpDamagePhase: 'pre-break',
         breakActivation: 'after-breaking-packet-toughness-settlement',
@@ -24,11 +25,22 @@ describe('Machine Axis enemy settlement timing contract', () => {
         toughnessAdvanceResolution: 'fixed-100ms-runtime-tick',
         finiteDeathTruncation:
           'stop-enemy-hp-and-toughness-settlement-after-first-lethal-packet',
+        formalScenarioExecutionPath: 'local-controlled',
+        fastestKillScoreBoundary:
+          'first-lethal-settlement-cursor-inclusive-tail-non-scoring',
+      },
+      formalScoring: {
+        formalReady: true,
+        formalStatus: 'formal-score-ready-runtime-baseline',
+        scoreAuthority: 'formal-for-current-runtime-contract',
+        scoreBasis: 'product-approved-versioned-headless-runtime-semantics',
+        clientParityStatus: 'controlled-capture-pending-nonblocking',
+        clientParityRequiredForCurrentFormalScore: false,
       },
       evidence: {
         evidenceStatus: 'client-static-partial-controlled-capture-required',
-        formalReady: false,
-        blockerCode: MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,
+        clientParityReady: false,
+        pendingCode: MACHINE_AXIS_ENEMY_SETTLEMENT_CLIENT_PARITY_PENDING_CODE,
         clientStaticFindings: {
           breakingPacketHpMultiplierRead: 'pre-break-state',
           packetInternalSettlementOrder:
@@ -43,6 +55,14 @@ describe('Machine Axis enemy settlement timing contract', () => {
           'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
           'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
         ],
+        scoreSensitiveLeavesOpen: [
+          'same-frame-damage-element-queue-order-and-immediate-weak-state-visibility',
+          'break-end-state-update-versus-hit-order-in-the-same-client-frame',
+        ],
+        nonBlockingLeavesOpen: [
+          'finite-hp-lethal-packet-and-post-death-tail-packet-disposition',
+          'authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario',
+        ],
       },
     });
     expect(contractHash).toBe(hashCanonicalValue(payload));
@@ -53,16 +73,20 @@ describe('Machine Axis enemy settlement timing contract', () => {
     expect(Object.isFrozen(contract.semantics)).toBe(true);
   });
 
-  it('fails formal readiness closed while native client ordering is open', () => {
+  it('releases formal scoring against the current runtime while preserving client-parity warnings', () => {
     const readiness = getMachineAxisEnemySettlementFormalReadiness();
 
     expect(readiness).toMatchObject({
-      formalReady: false,
+      formalReady: true,
+      formalStatus: 'formal-score-ready-runtime-baseline',
+      scoreAuthority: 'formal-for-current-runtime-contract',
       evidenceStatus: 'client-static-partial-controlled-capture-required',
-      issues: [
+      clientParityReady: false,
+      issues: [],
+      warnings: [
         {
-          code: MACHINE_AXIS_ENEMY_SETTLEMENT_BLOCKER_CODE,
-          path: 'runtime.enemySettlementTiming',
+          code: MACHINE_AXIS_ENEMY_SETTLEMENT_CLIENT_PARITY_PENDING_CODE,
+          path: 'runtime.enemySettlementTiming.clientParity',
           contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
         },
       ],

@@ -450,6 +450,10 @@ export function createMachineAxisCycleEvaluator({
         normalized.options.objective === 'cycle-dps-with-toughness'
           ? settlementContract
           : null,
+      settlementReadiness:
+        normalized.options.objective === 'cycle-dps-with-toughness'
+          ? settlementReadiness
+          : null,
     });
   }
 
@@ -1404,6 +1408,7 @@ function createAcceptedReport({
   samples,
   objectiveContract,
   settlementContract,
+  settlementReadiness,
 }) {
   const fps = Number(envelope.contract.scenario.fps) || 60;
   const durationFrames = envelope.loop.endFrame - envelope.loop.startFrame;
@@ -1413,12 +1418,18 @@ function createAcceptedReport({
     durationSeconds: durationFrames / fps,
     aggregate,
   });
-  const warnings = dedupeIssues(
-    samples.flatMap(sample => [
+  const warnings = dedupeIssues([
+    ...samples.flatMap(sample => [
       ...(sample.evidence?.firstCycle?.warnings ?? []),
       ...(sample.evidence?.replay?.warnings ?? []),
-    ])
-  );
+    ]),
+    ...(settlementReadiness?.warnings ?? []).map(entry =>
+      cycleWarning(entry.code, entry.path, entry.message, {
+        contractId: entry.contractId,
+        contractHash: entry.contractHash,
+      })
+    ),
+  ]);
   const value = {
     schemaVersion: MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_CYCLE_CONTRACT_NAME,
@@ -1459,15 +1470,20 @@ function createAcceptedReport({
       healing: aggregate.healing,
     },
     formalScore:
-      settlementContract?.evidence?.formalReady === false
+      settlementReadiness?.formalReady === false
         ? null
         : roundMetric(
             aggregate.hpDamage / Math.max(VALUE_TOLERANCE, durationFrames / fps)
           ),
     formalStatus:
-      settlementContract?.evidence?.formalReady === false
-        ? 'blocked-runtime-semantics-evidence-open'
-        : 'formal-score-ready',
+      settlementReadiness?.formalReady === true
+        ? settlementReadiness.formalStatus
+        : settlementReadiness?.formalReady === false
+          ? 'blocked-runtime-semantics-evidence-open'
+          : 'formal-score-ready',
+    ...(settlementContract == null
+      ? {}
+      : { formalScorePolicy: settlementContract.formalScoring }),
     sampleStatistics,
     contributions: aggregate.contributions,
     replayProof:
@@ -1508,6 +1524,9 @@ function createAcceptedReport({
   };
   value.hashes.build = hashCanonicalValue({
     objectiveContract,
+    ...(settlementContract == null
+      ? {}
+      : { enemySettlementTiming: settlementContract }),
     optimizationScenarioPolicy:
       envelope.contract.scenario?.optimizationScenarioPolicy ?? null,
     enemyProfile: envelope.contract.scenario?.enemy?.profile ?? null,
@@ -2735,6 +2754,10 @@ function dedupeIssues(issues) {
 
 function cycleIssue(code, path, message, details = {}) {
   return createMachineAxisDiagnostic(code, path, message, details);
+}
+
+function cycleWarning(code, path, message, details = {}) {
+  return { severity: 'warning', code, path, message, ...details };
 }
 
 function normalizeSeeds(value) {

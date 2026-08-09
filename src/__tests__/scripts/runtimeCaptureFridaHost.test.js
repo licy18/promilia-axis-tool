@@ -94,7 +94,7 @@ describe('controlled Frida runtime capture host', () => {
     );
   });
 
-  it('performs a no-attach client preflight and preserves the formal blocker', async () => {
+  it('performs a no-attach client preflight without blocking runtime-baseline scores', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'promilia-preflight-'));
     temporaryDirectories.push(directory);
     const outputPath = join(directory, 'preflight.json');
@@ -124,10 +124,19 @@ describe('controlled Frida runtime capture host', () => {
         status: 'blocked-no-real-controlled-action-executed',
         equivalentCallChainProofRequired: true,
       },
-      formalGate: {
-        formalReady: false,
-        formalScore: null,
-        blockerCode: 'machine-axis-enemy-settlement-client-order-open',
+      formalScoringPolicy: {
+        contractId: 'm12-enemy-settlement-runtime-v2',
+        formalReady: true,
+        formalScoreEvaluatedByPreflight: false,
+        scoreAuthority: 'formal-for-current-runtime-contract',
+      },
+      clientParityGate: {
+        clientParityReady: false,
+        pendingCode: 'machine-axis-enemy-settlement-client-parity-pending',
+        leavesOpen: expect.arrayContaining([
+          'same-frame-damage-element-queue-order-and-immediate-weak-state-visibility',
+          'break-end-state-update-versus-hit-order-in-the-same-client-frame',
+        ]),
       },
     });
     expect(report.clientIdentities).toHaveLength(3);
