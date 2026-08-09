@@ -633,6 +633,19 @@ describe('controlled Kibo auto-cast scheduler', () => {
       durationMs: 6000,
       actions: [
         {
+          id: 'pre-switch-wait',
+          type: 'wait',
+          startMs: 0,
+          durationMs: 500,
+          note: 'preserve first plain source position',
+        },
+        {
+          id: 'pre-switch-annotation',
+          type: 'annotation',
+          startMs: 1000,
+          note: 'preserve second plain source position',
+        },
+        {
           id: 'switch-at-kibo-action-end',
           type: 'switch',
           actorCharacterId: firstSlot.characterId,
@@ -684,6 +697,7 @@ describe('controlled Kibo auto-cast scheduler', () => {
       expect.objectContaining({
         switchActionId: 'switch-at-kibo-action-end',
         frame: 160,
+        sourceSequencePath: [2],
         fromActorId: `actor-${firstSlot.characterId}`,
         toActorId: `actor-${secondSlot.characterId}`,
       }),

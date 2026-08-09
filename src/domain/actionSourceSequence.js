@@ -81,6 +81,7 @@ function normalizeSourceSequencePath(value) {
 }
 
 function nonNegativeIntegerOrNull(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isInteger(number) && number >= 0 ? number : null;
 }

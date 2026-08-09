@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   DEFAULT_WORKBENCH_TEAM_SLOTS,
@@ -13,6 +14,7 @@ import {
   normalizeWorkbenchTeamSlots,
 } from '../../domain/workbenchProjectFactory';
 import { ACTION_TYPES, validateProject } from '../../domain/projectSchema';
+import { getActionSourceSequencePath } from '../../domain/actionSourceSequence';
 import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 import { createToughnessRuntimeSampleFixture } from '../../simulation/fixtures/toughnessRuntimeSampleFixture';
@@ -22,6 +24,10 @@ import {
   installProjectSimulationSkillDiagnostics,
   resetProjectSimulationSkillDiagnostics,
 } from '../../simulation/projection/projectSimulationResult';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 
 beforeAll(() => {
   installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
@@ -473,8 +479,15 @@ describe('workbench project actor configuration', () => {
         },
       ],
     });
-    const scenario = compileProject(project, getWorkbenchGameData());
-    const result = simulateScenario(scenario);
+    let scenario;
+    let result;
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    try {
+      scenario = compileProject(project, getWorkbenchGameData());
+      result = simulateScenario(scenario);
+    } finally {
+      clearInstalledVerifiedCombatMechanicsPackage();
+    }
     const kiboEvent = result.eventLog.find(
       event => event.type === 'KIBO_EVENT'
     );
@@ -969,6 +982,9 @@ describe('workbench project actor configuration', () => {
     });
 
     it('keeps a zero root sequence distinct from a missing one', () => {
+      expect(getActionSourceSequencePath({})).toBeNull();
+      expect(getActionSourceSequencePath({}, 3)).toEqual([3]);
+
       const draft = createWorkbenchActionDraft({
         id: 'first-action',
         type: ACTION_TYPES.SKILL,

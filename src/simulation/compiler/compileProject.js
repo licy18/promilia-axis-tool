@@ -16,7 +16,10 @@ import {
   createThreeValueMechanicsProfileCatalog,
   resolveThreeValueMechanicsProfileCatalogSelection,
 } from '../mechanics/threeValueMechanicsProfileCatalog';
-import { compareActionSourceSequence } from '../../domain/actionSourceSequence';
+import {
+  attachActionSourceSequence,
+  compareActionSourceSequence,
+} from '../../domain/actionSourceSequence';
 import { resolveEnemyLevelStats } from '../mechanics/enemyLevelStats';
 import { materializeVerifiedKiboAutoCastDerivationRegistry } from '../../domain/verifiedBackgroundActionDerivation';
 import { createCompiledProjectKiboAutoCastGeneration } from '../../machine-axis/kiboAutoCastScheduler';
@@ -176,9 +179,9 @@ export function compileProject(
 
   const team = compileTeam(project.team, actorsById);
   const compiledBaseActions = sortActionsByStartAndSourceSequence(
-    project.actions.map(action =>
+    project.actions.map((action, sourceIndex) =>
       compileAction(
-        action,
+        attachActionSourceSequence(action, sourceIndex),
         actorsById,
         enemy,
         skillsById,

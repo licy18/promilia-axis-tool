@@ -58,7 +58,7 @@ describe('workbench joint attack insertion', () => {
       formalEligible: false,
       triggerEvidence: {
         code: 'joint-attack-trigger-unresolved',
-        status: 'exist-pet-break-target-authority-unresolved',
+        status: 'preweakbreak-static-predicate-partially-closed',
         skillTag: 15,
         mechanicsPackageHash: mechanicsPackage.packageHash,
       },
