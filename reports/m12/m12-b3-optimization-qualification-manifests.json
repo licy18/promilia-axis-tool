@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "317990e3d1bd6d9c",
+  "rosterHash": "c45ef6bc9d89c35d",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "a196e798f64ad81b"
+          "fa78a704e3448dec"
         ]
       },
-      "manifestHash": "34cf78a04debfc72"
+      "manifestHash": "2800da613ae6d9f8"
     },
     {
       "objectKind": "character",
@@ -48,10 +48,10 @@
         ],
         "mechanismHash": "5b81beb6a20b273f",
         "characterAcceptanceManifestHashes": [
-          "4adaf3092255898f"
+          "a008f53e269a68d6"
         ]
       },
-      "manifestHash": "2197bc090aa7f7f0"
+      "manifestHash": "a642c1a6ff00bb13"
     },
     {
       "objectKind": "character",
@@ -75,10 +75,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "6bbdf6b15fbcc4ab"
+          "062ef5c178b25c53"
         ]
       },
-      "manifestHash": "5fd5fedfbbb4d61b"
+      "manifestHash": "64c1811904eb81d9"
     },
     {
       "objectKind": "character",
@@ -96,10 +96,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "04686fb11162fc5f"
+          "c63a420308f79cab"
         ]
       },
-      "manifestHash": "9b3cb405aac68f8f"
+      "manifestHash": "5b0e8a3bdead88c6"
     },
     {
       "objectKind": "character",
@@ -110,17 +110,23 @@
       ],
       "maturityState": "runtime-integrated",
       "optimizationReady": false,
-      "blockers": [],
+      "blockers": [
+        {
+          "code": "character-not-optimization-ready",
+          "category": "not-implemented",
+          "message": "Character acceptance maturity has not reached optimization-ready."
+        }
+      ],
       "evidence": {
         "sourceCharacterIds": [
           107002
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "b9bb7e016ce8b939"
+          "898bc051938a7745"
         ]
       },
-      "manifestHash": "10dd5b4b1522b5bd"
+      "manifestHash": "c73b7b3ffdffde4a"
     },
     {
       "objectKind": "character",
@@ -138,10 +144,10 @@
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "c447314345b856c1"
+          "450cc5b9f0a69a7a"
         ]
       },
-      "manifestHash": "e000ffe1601f6213"
+      "manifestHash": "4116ceb0de8cc0cc"
     },
     {
       "objectKind": "character",
@@ -159,10 +165,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "9a4cc0e56eaf3135"
+          "76a2af1ddb36f61c"
         ]
       },
-      "manifestHash": "a15e4af56118c4fc"
+      "manifestHash": "dcfbf3b295eaa031"
     },
     {
       "objectKind": "character",
@@ -30874,5 +30880,5 @@
     },
     "optimizationReadyTotal": 211
   },
-  "manifestsHash": "cdb098f1489d12d4"
+  "manifestsHash": "e9de19ebf10a4b1e"
 }

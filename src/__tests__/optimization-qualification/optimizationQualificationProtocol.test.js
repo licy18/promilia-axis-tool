@@ -267,9 +267,9 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 7,
+      blockingUniqueGapCount: 8,
       byCategory: {
-        'not-implemented': 7,
+        'not-implemented': 8,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({

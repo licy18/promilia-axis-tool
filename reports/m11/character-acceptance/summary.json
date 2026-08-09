@@ -794,15 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "e48869c74b7cefda",
-      "sourceOfTruthHash": "597813ca1590e929",
+      "manifestHash": "0d23f77726ad3a6c",
+      "sourceOfTruthHash": "42cc8658f2f8dd8f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "57b10936500878ee",
         "data": "b440bc9b4b54b129",
-        "trace": "585e03009581cd25",
+        "trace": "893b4abb36384c56",
         "evaluation": "53eb57b729f3a7e6",
-        "build": "de54117de767da8c"
+        "build": "43872c151afb6fb8"
       }
     },
     {
@@ -856,15 +856,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "a196e798f64ad81b",
-      "sourceOfTruthHash": "9e2d18164edf42f3",
+      "manifestHash": "fa78a704e3448dec",
+      "sourceOfTruthHash": "d710d6988b846ee2",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "f147e78096d4d20b",
         "data": "3b8bb557372914b5",
-        "trace": "74b9d24b5c31017a",
+        "trace": "e6bac2db579efb30",
         "evaluation": "204c04b2ab3f5fb4",
-        "build": "8ebacaa2ebddd168"
+        "build": "8c1822989f39d4b9"
       }
     },
     {
@@ -912,15 +912,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "4adaf3092255898f",
-      "sourceOfTruthHash": "5892d8b1a434612b",
+      "manifestHash": "a008f53e269a68d6",
+      "sourceOfTruthHash": "4a612486c19723f3",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "9855ed5c17054ced",
         "data": "832053fbd0b79614",
-        "trace": "b7c743e23f9fd15b",
+        "trace": "7e3f4962f31dcc7b",
         "evaluation": "f509878645099689",
-        "build": "81992075fe892579"
+        "build": "eb0b6dc4cbf3f5df"
       }
     },
     {
@@ -975,15 +975,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "6bbdf6b15fbcc4ab",
-      "sourceOfTruthHash": "a64d6fffafd61acd",
+      "manifestHash": "062ef5c178b25c53",
+      "sourceOfTruthHash": "4e41746c70a27a3e",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "ea69464c7f73a0b4",
         "data": "8877ff0d3b4793e3",
-        "trace": "29a4e607e16717b3",
+        "trace": "7085a8ebcfdf33d1",
         "evaluation": "208849308c4ec837",
-        "build": "a5a95604d772815d"
+        "build": "d0655f44525e36e9"
       }
     },
     {
@@ -1033,23 +1033,25 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "04686fb11162fc5f",
-      "sourceOfTruthHash": "7f43f2864d89e57a",
+      "manifestHash": "c63a420308f79cab",
+      "sourceOfTruthHash": "d3430932810e79a3",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "cc6d34edb146795e",
         "data": "dc5a135a8f76f994",
-        "trace": "fea5d9b565c7fb42",
+        "trace": "ee731d765a1bd7be",
         "evaluation": "2c0c08d984a44393",
-        "build": "81ea513bae697b02"
+        "build": "149b44226989aa17"
       }
     },
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "optimization-ready",
-      "optimizationReady": true,
-      "blockers": [],
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1086,15 +1088,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b9bb7e016ce8b939",
-      "sourceOfTruthHash": "60d2fbb446ef0999",
+      "manifestHash": "898bc051938a7745",
+      "sourceOfTruthHash": "b6194b34b12c34e8",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "97373dec94e398af",
         "data": "53a3caff8a4d6807",
-        "trace": "eb19cdb36f308850",
+        "trace": "c02b3d3c7756351c",
         "evaluation": "620d8da34c9edd60",
-        "build": "b9dd3fc1a3fa1a5f"
+        "build": "3612336856100ecf"
       }
     },
     {
@@ -1143,15 +1145,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c447314345b856c1",
-      "sourceOfTruthHash": "908652fdbc06691a",
+      "manifestHash": "450cc5b9f0a69a7a",
+      "sourceOfTruthHash": "96b6fbf36a78cbf7",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "aff5191ffb37e196",
         "data": "d4db176176ebd09b",
-        "trace": "aeccd313e0454208",
+        "trace": "fae43a5d8865c76e",
         "evaluation": "3c2fb1d6fda5e7b9",
-        "build": "63de7bb1f05cfbb8"
+        "build": "167c9d82b18124a2"
       }
     },
     {
@@ -1199,27 +1201,27 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "9a4cc0e56eaf3135",
-      "sourceOfTruthHash": "84de9d6788014d0f",
+      "manifestHash": "76a2af1ddb36f61c",
+      "sourceOfTruthHash": "76e504d941f37b63",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
         "input": "90dc587bb8e9a311",
         "data": "8bda8706dd24d259",
-        "trace": "c757c39709a05c0d",
+        "trace": "e9f4bed443b5ca8c",
         "evaluation": "855dd5b0926bf110",
-        "build": "70ea3b63075960f3"
+        "build": "21b05f8ea0f37571"
       }
     }
   ],
-  "catalogHash": "df45d211d4bbe10f",
-  "manifestIndexHash": "6f9574d90bdb975d",
+  "catalogHash": "6a753a6066faa723",
+  "manifestIndexHash": "7868b570db9fabc8",
   "summary": {
     "ownerCount": 8,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 8,
-    "visuallyAcceptedCount": 5,
-    "optimizationReadyCount": 5,
+    "visuallyAcceptedCount": 4,
+    "optimizationReadyCount": 4,
     "machineScenarioPassCount": 8,
     "workbenchRoundTripPassCount": 8,
     "sourceGapCount": 156,

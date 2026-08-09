@@ -43,7 +43,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     expect(first.hashes).toMatchObject({
       input: '97373dec94e398af',
       data: '53a3caff8a4d6807',
-      trace: 'eb19cdb36f308850',
+      trace: 'c02b3d3c7756351c',
       evaluation: '620d8da34c9edd60',
     });
     expect(second.hashes).toEqual(first.hashes);
@@ -162,10 +162,15 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       blockingLedgerCount: 0,
       functionalFailureCount: 0,
     });
-    expect(misaManifest.evidence.productVisualAcceptance.status).toBe(
-      'accepted'
-    );
-    expect(misaManifest.maturity.optimizationReady).toBe(true);
+    expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
+      status: 'pending',
+      acceptanceCommit: null,
+      bindingStatus: 'not-requested',
+    });
+    expect(misaManifest.maturity).toMatchObject({
+      optimizationReady: false,
+      blockers: ['acceptance-product-visual-signoff-pending'],
+    });
 
     const sourceSubskillBoundaries = misaManifest.requirementInventory.records
       .filter(record =>

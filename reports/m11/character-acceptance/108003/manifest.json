@@ -53,14 +53,14 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "aff5191ffb37e196",
           "data": "d4db176176ebd09b",
-          "trace": "aeccd313e0454208",
+          "trace": "fae43a5d8865c76e",
           "evaluation": "3c2fb1d6fda5e7b9",
-          "build": "63de7bb1f05cfbb8"
+          "build": "167c9d82b18124a2"
         },
         "actionCount": 29,
         "executedActionCount": 71,
         "traceIndex": {
-          "traceHash": "aeccd313e0454208",
+          "traceHash": "fae43a5d8865c76e",
           "actionCount": 71,
           "hitCount": 270,
           "effectEventCount": 126,
@@ -223,15 +223,15 @@
       "scenarioIdentities": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
       ],
-      "acceptanceCommit": "b0f6dcba70b710072079ed9ee79c26fe199bd913",
-      "recordIdentity": "character-product-acceptance:108003:b0f6dcba70b710072079ed9ee79c26fe199bd913:3c2258faf53d57e5",
-      "qualificationSubjectHash": "3c2258faf53d57e5",
-      "scenarioSetHash": "01b7982889004476",
+      "acceptanceCommit": "1a56e0a295f31298da6c3ddb5d70db90183971fb",
+      "recordIdentity": "character-product-acceptance:108003:1a56e0a295f31298da6c3ddb5d70db90183971fb:b85f50c27ba0a434",
+      "qualificationSubjectHash": "b85f50c27ba0a434",
+      "scenarioSetHash": "b65304e654db21d0",
       "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:108003:b0f6dcba70b710072079ed9ee79c26fe199bd913:3c2258faf53d57e5",
-        "qualificationSubjectHash": "3c2258faf53d57e5",
-        "scenarioSetHash": "01b7982889004476",
+        "recordIdentity": "character-product-acceptance:108003:1a56e0a295f31298da6c3ddb5d70db90183971fb:b85f50c27ba0a434",
+        "qualificationSubjectHash": "b85f50c27ba0a434",
+        "scenarioSetHash": "b65304e654db21d0",
         "scenarioIdentities": [
           "m12-b3-e20-2-108003-s1-visual-acceptance"
         ]
@@ -7419,9 +7419,9 @@
             "algorithm": "fnv1a64-utf8-v1",
             "input": "aff5191ffb37e196",
             "data": "d4db176176ebd09b",
-            "trace": "aeccd313e0454208",
+            "trace": "fae43a5d8865c76e",
             "evaluation": "3c2fb1d6fda5e7b9",
-            "build": "63de7bb1f05cfbb8"
+            "build": "167c9d82b18124a2"
           }
         },
         "traceProjection": {
@@ -84675,7 +84675,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "28c10236e0e9b25f"
+        "scenarioCaseHash": "2d2dd55f88e6ea86"
       },
       {
         "schemaVersion": 1,
@@ -91704,7 +91704,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "8a80b00740b0b06b"
+    "scenarioSetHash": "1649192a006d2154"
   },
   "coverageContext": {
     "denominator": {
@@ -110797,9 +110797,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "908652fdbc06691a"
+    "sourceOfTruthHash": "96b6fbf36a78cbf7"
   },
-  "qualificationSubjectHash": "3c2258faf53d57e5",
+  "qualificationSubjectHash": "b85f50c27ba0a434",
   "maturity": {
     "currentState": "optimization-ready",
     "earnedStates": [
@@ -110837,5 +110837,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "c447314345b856c1"
+  "manifestHash": "450cc5b9f0a69a7a"
 }

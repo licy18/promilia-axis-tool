@@ -67,14 +67,14 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "57b10936500878ee",
           "data": "b440bc9b4b54b129",
-          "trace": "585e03009581cd25",
+          "trace": "893b4abb36384c56",
           "evaluation": "53eb57b729f3a7e6",
-          "build": "de54117de767da8c"
+          "build": "43872c151afb6fb8"
         },
         "actionCount": 8,
         "executedActionCount": 8,
         "traceIndex": {
-          "traceHash": "585e03009581cd25",
+          "traceHash": "893b4abb36384c56",
           "actionCount": 8,
           "hitCount": 22,
           "effectEventCount": 29,
@@ -194,9 +194,9 @@
       "scenarioSetHash": null,
       "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:101003::c66c798d94aae271",
-        "qualificationSubjectHash": "c66c798d94aae271",
-        "scenarioSetHash": "bcf3be414a923986",
+        "recordIdentity": "character-product-acceptance:101003::0fa6d7d145ff2e74",
+        "qualificationSubjectHash": "0fa6d7d145ff2e74",
+        "scenarioSetHash": "efc2a82673784f43",
         "scenarioIdentities": [
           "m11-d-101003-visual-acceptance"
         ]
@@ -14111,9 +14111,9 @@
             "algorithm": "fnv1a64-utf8-v1",
             "input": "57b10936500878ee",
             "data": "b440bc9b4b54b129",
-            "trace": "585e03009581cd25",
+            "trace": "893b4abb36384c56",
             "evaluation": "53eb57b729f3a7e6",
-            "build": "de54117de767da8c"
+            "build": "43872c151afb6fb8"
           }
         },
         "traceProjection": {
@@ -18753,7 +18753,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "5ffb7bd2a5423094"
+        "scenarioCaseHash": "d0ee14e928ab4717"
       }
     ],
     "summary": {
@@ -18766,7 +18766,7 @@
         "machine-axis": 1
       }
     },
-    "scenarioSetHash": "958cb16e51b35cc3"
+    "scenarioSetHash": "31dffca199cd2499"
   },
   "coverageContext": {
     "denominator": {
@@ -33031,9 +33031,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "597813ca1590e929"
+    "sourceOfTruthHash": "42cc8658f2f8dd8f"
   },
-  "qualificationSubjectHash": "c66c798d94aae271",
+  "qualificationSubjectHash": "0fa6d7d145ff2e74",
   "maturity": {
     "currentState": "runtime-integrated",
     "earnedStates": [
@@ -33073,5 +33073,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "e48869c74b7cefda"
+  "manifestHash": "0d23f77726ad3a6c"
 }
