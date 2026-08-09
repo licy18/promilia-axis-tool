@@ -238,9 +238,9 @@
       "requirementIdentity": "contract:action-form:actor|103002|10300212|1|10300226|star-combo:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|103002|10300212|1|10300226|star-combo:default",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "applied",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10300226,
         "kind": "action-form",
@@ -248,10 +248,15 @@
         "subSkillIndex": 0
       },
       "sourceIdentities": [
-        "characters.items[id=103002].skillSlots[group=ground,slot=208]"
+        "characters.items[id=103002].skillSlots[group=ground,slot=208]",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": [],
-      "sourceRecordHash": "4ce6c0667b93450b"
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "29507bdf02e0a7f8"
     },
     {
       "requirementIdentity": "contract:action-form:actor|103002|10300213|0|10300213|ultimate:default",
@@ -1715,7 +1720,9 @@
         "windowIdentity": "actor:103002|control:10300226|sub:0|0-59|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_5478681376661758581__5478681376661758581.json#behaviorlineControl[0].behaviorList[pathId=7564976824569225845]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_7564976824569225845__7564976824569225845.json"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_5478681376661758581__5478681376661758581.json#behaviorlineControl[0].behaviorList[pathId=7564976824569225845]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_7564976824569225845__7564976824569225845.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_5478681376661758581__5478681376661758581.json#behaviorlineControl[0].behaviorList[pathId=7564976824569225845]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_7564976824569225845__7564976824569225845.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
       "scenarioScope": {
         "disposition": "not-applicable",
@@ -1728,10 +1735,11 @@
         "targetSubSkillIndex": 0
       },
       "reasons": [
+        "joint-attack-trigger-unresolved",
         "m12c-zero-distance-passive-boss-active-surface-only",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "4390afeba6a7fe9c"
+      "sourceRecordHash": "9b5b606f99612fbe"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:126:d05c10bbfcc406a7",
@@ -1745,7 +1753,9 @@
         "windowIdentity": "actor:103002|control:10300226|sub:0|57-280|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_-5913722225953021323__-5913722225953021323.json#behaviorlineControl[0].behaviorList[pathId=2535566735885460085]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_2535566735885460085__2535566735885460085.json"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_-5913722225953021323__-5913722225953021323.json#behaviorlineControl[0].behaviorList[pathId=2535566735885460085]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_2535566735885460085__2535566735885460085.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_-5913722225953021323__-5913722225953021323.json#behaviorlineControl[0].behaviorList[pathId=2535566735885460085]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_2535566735885460085__2535566735885460085.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
       "scenarioScope": {
         "disposition": "not-applicable",
@@ -1758,10 +1768,11 @@
         "targetSubSkillIndex": 0
       },
       "reasons": [
+        "joint-attack-trigger-unresolved",
         "m12c-zero-distance-passive-boss-active-surface-only",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "6b188be1e4ea3220"
+      "sourceRecordHash": "97e3cdd3a38c7fde"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:127:abfebf03dba5c076",
@@ -5800,9 +5811,9 @@
       "sourceRecordHash": "3f3428f58fe2dc22"
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:33e527d73198d407",
+      "requirementIdentity": "contract:effect:effect:0:620bf68d12cf78d1",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:33e527d73198d407",
+      "subjectIdentity": "effect:0:620bf68d12cf78d1",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -5818,12 +5829,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "34b2dbbc7a7a36e4"
+      "sourceRecordHash": "011c88d5519b2b7c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:5227fe78410afdbb",
+      "requirementIdentity": "contract:effect:effect:1:9713979a41b7da9b",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:5227fe78410afdbb",
+      "subjectIdentity": "effect:1:9713979a41b7da9b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "source-runtime-resolved",
@@ -5862,12 +5873,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "b414f681c3d4d9ce"
+      "sourceRecordHash": "acd83f4731c80fb6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:10:32c179f99e28826d",
+      "requirementIdentity": "contract:effect:effect:10:b001a9581e52a29b",
       "dimension": "effect",
-      "subjectIdentity": "effect:10:32c179f99e28826d",
+      "subjectIdentity": "effect:10:b001a9581e52a29b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -5933,12 +5944,12 @@
         "semantic-wrapper-not-gameplay-effect",
         "unresolved"
       ],
-      "sourceRecordHash": "b76eda001ec00b64"
+      "sourceRecordHash": "d02e78b774c93522"
     },
     {
-      "requirementIdentity": "contract:effect:effect:11:2e1c3aef4a763d53",
+      "requirementIdentity": "contract:effect:effect:11:fe54656f03f51d31",
       "dimension": "effect",
-      "subjectIdentity": "effect:11:2e1c3aef4a763d53",
+      "subjectIdentity": "effect:11:fe54656f03f51d31",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -5952,12 +5963,12 @@
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
       "reasons": [],
-      "sourceRecordHash": "c84f3aa344dbac2b"
+      "sourceRecordHash": "1b1a8ff5028f29bd"
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:f33a75447df52739",
+      "requirementIdentity": "contract:effect:effect:12:e3eb018927698269",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:f33a75447df52739",
+      "subjectIdentity": "effect:12:e3eb018927698269",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -5999,12 +6010,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "ec2d40dfdfff30d5"
+      "sourceRecordHash": "1d493b87f11d1455"
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:a0c94a28d18b7ac0",
+      "requirementIdentity": "contract:effect:effect:13:c0b9ae74ee1af0a6",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:a0c94a28d18b7ac0",
+      "subjectIdentity": "effect:13:c0b9ae74ee1af0a6",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6018,12 +6029,12 @@
         "battle-element-assets.jsonl#path_id=3879285143630828198"
       ],
       "reasons": [],
-      "sourceRecordHash": "251a6196552718ad"
+      "sourceRecordHash": "81cb8e7dd3cf97ad"
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:c5bbc6646c355cc6",
+      "requirementIdentity": "contract:effect:effect:14:2e28c921c01982ac",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:c5bbc6646c355cc6",
+      "subjectIdentity": "effect:14:2e28c921c01982ac",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6037,12 +6048,12 @@
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
       "reasons": [],
-      "sourceRecordHash": "c7085c067a5e7ebd"
+      "sourceRecordHash": "8626b74bccca5e99"
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:29e97af7b729f4b4",
+      "requirementIdentity": "contract:effect:effect:15:d5a00c9b5763595c",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:29e97af7b729f4b4",
+      "subjectIdentity": "effect:15:d5a00c9b5763595c",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6084,12 +6095,12 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "0f53447de9adf89b"
+      "sourceRecordHash": "8c489f96a1ae9bc1"
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:16fdef0980038683",
+      "requirementIdentity": "contract:effect:effect:16:69b3943275277fed",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:16fdef0980038683",
+      "subjectIdentity": "effect:16:69b3943275277fed",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6105,12 +6116,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "a4dd7c5209485b36"
+      "sourceRecordHash": "5cfe460329c2260a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:37aa460c99e061de",
+      "requirementIdentity": "contract:effect:effect:17:91058158cec7560a",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:37aa460c99e061de",
+      "subjectIdentity": "effect:17:91058158cec7560a",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6166,12 +6177,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "ec40975e47bdfabf"
+      "sourceRecordHash": "387ce92fecd3bc29"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:5960db9e8d0b5a46",
+      "requirementIdentity": "contract:effect:effect:18:53cb73788434f1d2",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:5960db9e8d0b5a46",
+      "subjectIdentity": "effect:18:53cb73788434f1d2",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6227,12 +6238,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "7daf05331c339893"
+      "sourceRecordHash": "9a2a710a86ff58d7"
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:516aab68c67d37b1",
+      "requirementIdentity": "contract:effect:effect:19:6703734c66c801a5",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:516aab68c67d37b1",
+      "subjectIdentity": "effect:19:6703734c66c801a5",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6273,12 +6284,12 @@
         "nonblocking-source-record-projection",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "63eaa3cc718a684c"
+      "sourceRecordHash": "186518b052bea394"
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:700077e4c1f315ad",
+      "requirementIdentity": "contract:effect:effect:2:0317f866e6095e9b",
       "dimension": "effect",
-      "subjectIdentity": "effect:2:700077e4c1f315ad",
+      "subjectIdentity": "effect:2:0317f866e6095e9b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6323,12 +6334,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "46790816b0b80b7d"
+      "sourceRecordHash": "5050ea4a8307e239"
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:64ccedeb1d3af6e7",
+      "requirementIdentity": "contract:effect:effect:20:96e80a455630591b",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:64ccedeb1d3af6e7",
+      "subjectIdentity": "effect:20:96e80a455630591b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6369,12 +6380,12 @@
         "nonblocking-source-record-projection",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "22ee281960f4179e"
+      "sourceRecordHash": "8496693fa066053a"
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:df79b9dd7acf5ddc",
+      "requirementIdentity": "contract:effect:effect:21:9cb719a1d4521c9a",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:df79b9dd7acf5ddc",
+      "subjectIdentity": "effect:21:9cb719a1d4521c9a",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6390,12 +6401,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "c3ff12344cdb1e53"
+      "sourceRecordHash": "2320b57e0bcbf757"
     },
     {
-      "requirementIdentity": "contract:effect:effect:22:2e2e85825c8a907c",
+      "requirementIdentity": "contract:effect:effect:22:a637d8d18fc9f8d4",
       "dimension": "effect",
-      "subjectIdentity": "effect:22:2e2e85825c8a907c",
+      "subjectIdentity": "effect:22:a637d8d18fc9f8d4",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6449,12 +6460,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "324f4ac92c469799"
+      "sourceRecordHash": "6cd2999005067a93"
     },
     {
-      "requirementIdentity": "contract:effect:effect:23:6d352b5e5185937a",
+      "requirementIdentity": "contract:effect:effect:23:7c15d4c247ce8e12",
       "dimension": "effect",
-      "subjectIdentity": "effect:23:6d352b5e5185937a",
+      "subjectIdentity": "effect:23:7c15d4c247ce8e12",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6508,12 +6519,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "0b0f5406bf307b1e"
+      "sourceRecordHash": "97e572b8f122ba88"
     },
     {
-      "requirementIdentity": "contract:effect:effect:24:238227e151652c9e",
+      "requirementIdentity": "contract:effect:effect:24:b18a8f936df95540",
       "dimension": "effect",
-      "subjectIdentity": "effect:24:238227e151652c9e",
+      "subjectIdentity": "effect:24:b18a8f936df95540",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6531,12 +6542,12 @@
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
       "reasons": [],
-      "sourceRecordHash": "9b7d0c5d872699be"
+      "sourceRecordHash": "ba3ec58d3e03dc94"
     },
     {
-      "requirementIdentity": "contract:effect:effect:25:e05f31e62af7fdac",
+      "requirementIdentity": "contract:effect:effect:25:a8b1ae0af0c7f59a",
       "dimension": "effect",
-      "subjectIdentity": "effect:25:e05f31e62af7fdac",
+      "subjectIdentity": "effect:25:a8b1ae0af0c7f59a",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6554,12 +6565,12 @@
         "battle-element-assets.jsonl#path_id=-8725062263845393396"
       ],
       "reasons": [],
-      "sourceRecordHash": "9ec512cacce45cc2"
+      "sourceRecordHash": "6c6d34dfe9e9f358"
     },
     {
-      "requirementIdentity": "contract:effect:effect:26:102d56fbd66951f4",
+      "requirementIdentity": "contract:effect:effect:26:34c0b1654ff1d3bc",
       "dimension": "effect",
-      "subjectIdentity": "effect:26:102d56fbd66951f4",
+      "subjectIdentity": "effect:26:34c0b1654ff1d3bc",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6614,12 +6625,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "d5e96c7e12af2f72"
+      "sourceRecordHash": "ae6f761ebbd3a1ca"
     },
     {
-      "requirementIdentity": "contract:effect:effect:27:295c65e5883ff866",
+      "requirementIdentity": "contract:effect:effect:27:6a5f62a7876eb5ee",
       "dimension": "effect",
-      "subjectIdentity": "effect:27:295c65e5883ff866",
+      "subjectIdentity": "effect:27:6a5f62a7876eb5ee",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6674,12 +6685,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "7196b32d21c0e8f5"
+      "sourceRecordHash": "de5d7c02a8c0b8e5"
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:224ee8046fb23e2a",
+      "requirementIdentity": "contract:effect:effect:28:6933cd22fd504ad2",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:224ee8046fb23e2a",
+      "subjectIdentity": "effect:28:6933cd22fd504ad2",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6721,12 +6732,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "eee6643d1b6b14b6"
+      "sourceRecordHash": "fdad8f8f0a2013e6"
     },
     {
-      "requirementIdentity": "contract:effect:effect:29:716c35eaff672fb9",
+      "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
       "dimension": "effect",
-      "subjectIdentity": "effect:29:716c35eaff672fb9",
+      "subjectIdentity": "effect:29:4cf13c0754a96981",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6740,12 +6751,12 @@
         "battle-element-assets.jsonl#path_id=4227003560910032429"
       ],
       "reasons": [],
-      "sourceRecordHash": "cf3ec9c85c2ec5fd"
+      "sourceRecordHash": "18781ecc2af54e15"
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:97fe0aad6ec3886f",
+      "requirementIdentity": "contract:effect:effect:3:39e7626fc55105f7",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:97fe0aad6ec3886f",
+      "subjectIdentity": "effect:3:39e7626fc55105f7",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6759,12 +6770,12 @@
         "battle-element-assets.jsonl#path_id=4227003560910032429"
       ],
       "reasons": [],
-      "sourceRecordHash": "0aba942170659186"
+      "sourceRecordHash": "0ac49e8417065c06"
     },
     {
-      "requirementIdentity": "contract:effect:effect:30:d025a29ee9da490d",
+      "requirementIdentity": "contract:effect:effect:30:0533edf0e3df3d2d",
       "dimension": "effect",
-      "subjectIdentity": "effect:30:d025a29ee9da490d",
+      "subjectIdentity": "effect:30:0533edf0e3df3d2d",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6780,12 +6791,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "188409bd29674c76"
+      "sourceRecordHash": "e4747a2d377388a8"
     },
     {
-      "requirementIdentity": "contract:effect:effect:31:c2d73bdc7c16f903",
+      "requirementIdentity": "contract:effect:effect:31:73deab64d8c83a23",
       "dimension": "effect",
-      "subjectIdentity": "effect:31:c2d73bdc7c16f903",
+      "subjectIdentity": "effect:31:73deab64d8c83a23",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6827,12 +6838,12 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "248ceb648bbac650"
+      "sourceRecordHash": "3bcdc4b19d070118"
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:5521dede68b0a681",
+      "requirementIdentity": "contract:effect:effect:32:3e66d2a98ee5119d",
       "dimension": "effect",
-      "subjectIdentity": "effect:32:5521dede68b0a681",
+      "subjectIdentity": "effect:32:3e66d2a98ee5119d",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6886,12 +6897,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "ce3d229485c03027"
+      "sourceRecordHash": "b8db1c757f25523f"
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:f110954d25c1b58f",
+      "requirementIdentity": "contract:effect:effect:33:3816e38cdcf47beb",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:f110954d25c1b58f",
+      "subjectIdentity": "effect:33:3816e38cdcf47beb",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -6945,12 +6956,12 @@
         "tuning-consume-mark-identity-ambiguous",
         "tuning-consume-success-branch-unresolved"
       ],
-      "sourceRecordHash": "c8baa25896963749"
+      "sourceRecordHash": "650428e2eed1aecd"
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:b2d887db4a2b5604",
+      "requirementIdentity": "contract:effect:effect:34:d85784db6d9472ce",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:b2d887db4a2b5604",
+      "subjectIdentity": "effect:34:d85784db6d9472ce",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -6966,12 +6977,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "3b3c908bae770a2e"
+      "sourceRecordHash": "4b6207beb4bdb928"
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:cc6b34cb43094c43",
+      "requirementIdentity": "contract:effect:effect:35:a88be607535ece83",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:cc6b34cb43094c43",
+      "subjectIdentity": "effect:35:a88be607535ece83",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7026,12 +7037,12 @@
         "tuning-consume-success-branch-unresolved",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "4d55c75906340a35"
+      "sourceRecordHash": "9e4323b36ed26831"
     },
     {
-      "requirementIdentity": "contract:effect:effect:36:b8c0f956b1f60839",
+      "requirementIdentity": "contract:effect:effect:36:09bdeaa1557955f9",
       "dimension": "effect",
-      "subjectIdentity": "effect:36:b8c0f956b1f60839",
+      "subjectIdentity": "effect:36:09bdeaa1557955f9",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7086,12 +7097,12 @@
         "tuning-consume-success-branch-unresolved",
         "wrapper-condition-semantics-unresolved"
       ],
-      "sourceRecordHash": "045c2e2ef6ccbadf"
+      "sourceRecordHash": "71e33b70717878fb"
     },
     {
-      "requirementIdentity": "contract:effect:effect:37:4b2fa4aee71309b6",
+      "requirementIdentity": "contract:effect:effect:37:1683c7630b775444",
       "dimension": "effect",
-      "subjectIdentity": "effect:37:4b2fa4aee71309b6",
+      "subjectIdentity": "effect:37:1683c7630b775444",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -7105,12 +7116,12 @@
         "battle-element-assets.jsonl#path_id=-1715488869977622004"
       ],
       "reasons": [],
-      "sourceRecordHash": "db4806e7328de270"
+      "sourceRecordHash": "c27376d4da8ec6c8"
     },
     {
-      "requirementIdentity": "contract:effect:effect:38:c1721764b2f72192",
+      "requirementIdentity": "contract:effect:effect:38:ceb05068e4792142",
       "dimension": "effect",
-      "subjectIdentity": "effect:38:c1721764b2f72192",
+      "subjectIdentity": "effect:38:ceb05068e4792142",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -7124,12 +7135,12 @@
         "battle-element-assets.jsonl#path_id=-3809486317990090417"
       ],
       "reasons": [],
-      "sourceRecordHash": "b0b238ce133b7aeb"
+      "sourceRecordHash": "df42485e6223043b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:39:06c324b13d3dd8e8",
+      "requirementIdentity": "contract:effect:effect:39:07fa148533990612",
       "dimension": "effect",
-      "subjectIdentity": "effect:39:06c324b13d3dd8e8",
+      "subjectIdentity": "effect:39:07fa148533990612",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -7143,12 +7154,12 @@
         "battle-element-assets.jsonl#path_id=-637110086033006477"
       ],
       "reasons": [],
-      "sourceRecordHash": "f67430b970b440f4"
+      "sourceRecordHash": "5a16f777c843bb9e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:e7d1d5d6b0f864d0",
+      "requirementIdentity": "contract:effect:effect:4:262a846a84521352",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:e7d1d5d6b0f864d0",
+      "subjectIdentity": "effect:4:262a846a84521352",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7193,12 +7204,12 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "56123de270358a4a"
+      "sourceRecordHash": "bf815bb62bc44c72"
     },
     {
-      "requirementIdentity": "contract:effect:effect:40:e7bd521a1ee70754",
+      "requirementIdentity": "contract:effect:effect:40:ed567969d89de934",
       "dimension": "effect",
-      "subjectIdentity": "effect:40:e7bd521a1ee70754",
+      "subjectIdentity": "effect:40:ed567969d89de934",
       "sourceDisposition": "applied",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -7212,12 +7223,12 @@
         "battle-element-assets.jsonl#path_id=-7783775984244194322"
       ],
       "reasons": [],
-      "sourceRecordHash": "b38fc852a6a80fc9"
+      "sourceRecordHash": "8ad1e2e5cff69271"
     },
     {
-      "requirementIdentity": "contract:effect:effect:41:ec896fd507492c83",
+      "requirementIdentity": "contract:effect:effect:41:ed7427f84bbe843b",
       "dimension": "effect",
-      "subjectIdentity": "effect:41:ec896fd507492c83",
+      "subjectIdentity": "effect:41:ed7427f84bbe843b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7284,12 +7295,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "39ae36518e182a7d"
+      "sourceRecordHash": "d0dfbb53b9dd8647"
     },
     {
-      "requirementIdentity": "contract:effect:effect:42:507fd38bf0e108e3",
+      "requirementIdentity": "contract:effect:effect:42:aa380907e7881c83",
       "dimension": "effect",
-      "subjectIdentity": "effect:42:507fd38bf0e108e3",
+      "subjectIdentity": "effect:42:aa380907e7881c83",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7355,12 +7366,12 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "20fa343348dc6003"
+      "sourceRecordHash": "7c0c3b4ba342e97d"
     },
     {
-      "requirementIdentity": "contract:effect:effect:43:bec082adb34df941",
+      "requirementIdentity": "contract:effect:effect:43:82ef7cf2af831149",
       "dimension": "effect",
-      "subjectIdentity": "effect:43:bec082adb34df941",
+      "subjectIdentity": "effect:43:82ef7cf2af831149",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7401,12 +7412,12 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "77b68d2e5adf0514"
+      "sourceRecordHash": "46b89f2d00c0814c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:44:b89590b09efe9d83",
+      "requirementIdentity": "contract:effect:effect:44:b6894ea43f595377",
       "dimension": "effect",
-      "subjectIdentity": "effect:44:b89590b09efe9d83",
+      "subjectIdentity": "effect:44:b6894ea43f595377",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7447,12 +7458,12 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "619d2a4601b54164"
+      "sourceRecordHash": "ef96cb6cc9994ab8"
     },
     {
-      "requirementIdentity": "contract:effect:effect:45:0f34a541c7fa8b91",
+      "requirementIdentity": "contract:effect:effect:45:c7a3871d49397851",
       "dimension": "effect",
-      "subjectIdentity": "effect:45:0f34a541c7fa8b91",
+      "subjectIdentity": "effect:45:c7a3871d49397851",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7493,12 +7504,12 @@
         "m12c-zero-distance-passive-boss-out-of-scope",
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "779d44db0090a2f8"
+      "sourceRecordHash": "3a7e2905587c062c"
     },
     {
-      "requirementIdentity": "contract:effect:effect:5:6e8c47c8378ce4db",
+      "requirementIdentity": "contract:effect:effect:5:dabec9737ec5267b",
       "dimension": "effect",
-      "subjectIdentity": "effect:5:6e8c47c8378ce4db",
+      "subjectIdentity": "effect:5:dabec9737ec5267b",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7549,12 +7560,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "e84f6baf2c1b7a9e"
+      "sourceRecordHash": "ae4641ba21c926a4"
     },
     {
-      "requirementIdentity": "contract:effect:effect:6:1bf5effc97ec2f28",
+      "requirementIdentity": "contract:effect:effect:6:1a7586b78b9b8130",
       "dimension": "effect",
-      "subjectIdentity": "effect:6:1bf5effc97ec2f28",
+      "subjectIdentity": "effect:6:1a7586b78b9b8130",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7605,12 +7616,12 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "6545edd2af890a8f"
+      "sourceRecordHash": "a25085d339d8f9c3"
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:e005e42bbaaf08dd",
+      "requirementIdentity": "contract:effect:effect:7:bfceb9b3bd37c70d",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:e005e42bbaaf08dd",
+      "subjectIdentity": "effect:7:bfceb9b3bd37c70d",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "gameplay-impacting",
@@ -7626,12 +7637,12 @@
       "reasons": [
         "semantic-wrapper-not-gameplay-effect"
       ],
-      "sourceRecordHash": "baa1bbb4bff07026"
+      "sourceRecordHash": "a1dea2f29228235e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:5b1fd2902b8da99d",
+      "requirementIdentity": "contract:effect:effect:8:a6334b5757dbbfcb",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:5b1fd2902b8da99d",
+      "subjectIdentity": "effect:8:a6334b5757dbbfcb",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7674,12 +7685,12 @@
         "typed-resource-contract-remains-runtime-required",
         "unresolved"
       ],
-      "sourceRecordHash": "4bfc64b2228ae06b"
+      "sourceRecordHash": "0939c4289b8a6c53"
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:7ccb455eb1d4b282",
+      "requirementIdentity": "contract:effect:effect:9:362122325b60fe9c",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:7ccb455eb1d4b282",
+      "subjectIdentity": "effect:9:362122325b60fe9c",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
@@ -7722,7 +7733,7 @@
         "unresolved",
         "visual-child-is-not-a-gameplay-effect"
       ],
-      "sourceRecordHash": "29e363bff075360f"
+      "sourceRecordHash": "f1928a5cb837f613"
     },
     {
       "requirementIdentity": "contract:hit:10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
@@ -10187,18 +10198,23 @@
       "requirementIdentity": "contract:hit:10300226|0|elements|2|7932730177002622605|40|1",
       "dimension": "hit",
       "subjectIdentity": "10300226|0|elements|2|7932730177002622605|40|1",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "hitIdentity": "10300226|0|elements|2|7932730177002622605|40|1",
         "kind": "hit"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/skill_control_10300226__-4587123624396746755.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=7932730177002622605"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/skill_control_10300226__-4587123624396746755.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=7932730177002622605",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": [],
-      "sourceRecordHash": "c6e2f3933ab79d39"
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "4a96fa473932895a"
     },
     {
       "requirementIdentity": "contract:hit:10300243|0|elements|11|-1878797682393190778|26|1",
@@ -10834,18 +10850,24 @@
       "requirementIdentity": "contract:public-action:actor|103002|10300212|1|10300226|star-combo",
       "dimension": "public-action",
       "subjectIdentity": "actor|103002|10300212|1|10300226|star-combo",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": null,
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "controlSkillId": 10300226,
         "kind": "action-form",
         "ownerId": 103002,
         "subSkillIndex": 0
       },
-      "sourceIdentities": [],
-      "reasons": [],
-      "sourceRecordHash": "ad99b8914fa416cf"
+      "sourceIdentities": [
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
+      ],
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "8906c899e60acc10"
     },
     {
       "requirementIdentity": "contract:public-action:actor|103002|10300213|0|10300213|ultimate",
@@ -11028,21 +11050,21 @@
       "sourceRecordHash": "94997456873c45ec"
     },
     {
-      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:adf68e72b0e4a3ba",
+      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:676a6fc11ebfbec2",
       "dimension": "stat-dependency",
-      "subjectIdentity": "stat-dependency:0:adf68e72b0e4a3ba",
+      "subjectIdentity": "stat-dependency:0:676a6fc11ebfbec2",
       "sourceDisposition": "not-applicable",
       "contractStatus": null,
       "impactClassification": "not-applicable",
       "coverageSelector": null,
       "sourceIdentities": [
-        "NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-127131817645696752"
+        "NewTable/hero.rows[id=103002].propertyId=103002|NewTable/unit_property.rows[id=103002].baseAttributeId=103002|NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_value.rows[id=103002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10300203:1:4227003560910032429:-1496705248257481635:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/MonoBehaviour_-2222897544586480824__-2222897544586480824.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300204.asset/MonoBehaviour/skill_control_10300204__804763857142498236.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17425494451660000.asset/MonoBehaviour/ast_17425494451660000__-6096481972427987931.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300212.asset/MonoBehaviour/skill_control_10300212__7278402266204618343.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/MonoBehaviour_1259665864203226846__1259665864203226846.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300213.asset/MonoBehaviour/skill_control_10300213__-2103229855271526826.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=4227003560910032429|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/MonoBehaviour_-8618896082664585117__-8618896082664585117.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300221.asset/MonoBehaviour/skill_control_10300221__-5696725500005821739.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/Program/Battle/Character/Config/Hero/103002/SubSkill/ast_17387500083290000.asset/MonoBehaviour/ast_17387500083290000__166774690136961000.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300227.asset/MonoBehaviour/skill_control_10300227__7789061356429068888.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-127131817645696752"
       ],
       "reasons": [
         "aggregate-stat-dependency-index-not-standalone-requirement",
         "source-confirmed-not-applicable"
       ],
-      "sourceRecordHash": "c0b02dc5bfa95ebd"
+      "sourceRecordHash": "44c1b311b7c938b0"
     },
     {
       "requirementIdentity": "contract:switch-trigger:actor:103002|switch-trigger:on-enter|skill:10300221",
@@ -19471,18 +19493,23 @@
       "requirementIdentity": "contract:variant-edge:variant-edge:286:2680e1fe90df7853",
       "dimension": "variant-edge",
       "subjectIdentity": "variant-edge:286:2680e1fe90df7853",
-      "sourceDisposition": "applied",
+      "sourceDisposition": "not-applicable",
       "contractStatus": "verified-action-variant-edge-ready",
-      "impactClassification": "gameplay-impacting",
+      "impactClassification": "not-applicable",
       "coverageSelector": {
         "edgeIdentity": "actor:103002|control:10300226|sub:0->actor:103002|control:10300201|sub:1->-4356077336397377105->35",
         "kind": "variant-edge"
       },
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/skill_control_10300226__-4587123624396746755.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_-2662099853081124235__-2662099853081124235.json#startFrame|directInjectTargetType"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/skill_control_10300226__-4587123624396746755.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-4356077336397377105|IL2CPP:4215197971971398012|skillID|subSkillIndex|duration|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300226.asset/MonoBehaviour/MonoBehaviour_-2662099853081124235__-2662099853081124235.json#startFrame|directInjectTargetType",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": [],
-      "sourceRecordHash": "18eed18ab876e76a"
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ],
+      "sourceRecordHash": "ffcce4484777be41"
     },
     {
       "requirementIdentity": "contract:variant-edge:variant-edge:287:864aa6fe1891b62f",
@@ -23111,9 +23138,9 @@
   ],
   "summary": {
     "recordCount": 696,
-    "appliedCount": 194,
+    "appliedCount": 190,
     "gapCount": 0,
-    "notApplicableCount": 502,
+    "notApplicableCount": 506,
     "dimensionCounts": {
       "action-effect-binding": 3,
       "action-form": 24,
@@ -23141,5 +23168,5 @@
       "window-boundary": 1
     }
   },
-  "inventoryHash": "ccdb83c4bf948023"
+  "inventoryHash": "c679e4449da8c4ac"
 }

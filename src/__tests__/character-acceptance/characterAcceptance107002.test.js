@@ -41,9 +41,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: 'f14dabb7e5b4795f',
-      data: '59da78cd92e24d54',
-      trace: '1dd3042b896d7a2f',
+      input: '36ea193752df20e5',
+      data: 'f5452dec2a5982df',
+      trace: '016132ffd7fc9cfc',
       evaluation: '5238bf8119e66446',
     });
     expect(second.hashes).toEqual(first.hashes);
@@ -256,10 +256,10 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     ).toMatchObject({ valid: true, issues: [] });
     expect(misaMatrix.summary).toMatchObject({
       requirementCount: 181,
-      requiredCount: 111,
-      passedCount: 111,
+      requiredCount: 98,
+      passedCount: 98,
       blockedCount: 0,
-      notApplicableCount: 70,
+      notApplicableCount: 83,
     });
     expect(misaLedger.summary).toMatchObject({
       uniqueBlockingCount: 0,
@@ -267,7 +267,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       acceptanceGapCount: 0,
     });
     expect(misaCoverage.summary).toMatchObject({
-      coveredRequirementCount: 111,
+      coveredRequirementCount: 98,
     });
     expect(misaManifest.maturity.facts).toMatchObject({
       headlessReplayPassed: true,
@@ -286,6 +286,11 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       optimizationReady: false,
       blockers: ['acceptance-product-visual-signoff-pending'],
     });
+    expect(
+      misaMatrix.requirements.filter(requirement =>
+        requirement.reasons.includes('joint-attack-trigger-unresolved')
+      )
+    ).toHaveLength(13);
 
     const sourceSubskillBoundaries = misaManifest.requirementInventory.records
       .filter(record =>

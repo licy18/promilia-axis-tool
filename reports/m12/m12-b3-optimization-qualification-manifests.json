@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "96e4a9f5a3dba438",
+  "rosterHash": "82d5cda1f687d994",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "4d380f3d08c7a632"
+          "49afdf0f3a774778"
         ]
       },
-      "manifestHash": "86f2be3091424c3c"
+      "manifestHash": "cbe761d6c6adec02"
     },
     {
       "objectKind": "character",
@@ -39,8 +39,8 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=102001]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
@@ -48,10 +48,10 @@
         ],
         "mechanismHash": "5b81beb6a20b273f",
         "characterAcceptanceManifestHashes": [
-          "db75a691603c5e9f"
+          "91b1124192b6b1a7"
         ]
       },
-      "manifestHash": "079aaef6742d9beb"
+      "manifestHash": "c68457121c530b8a"
     },
     {
       "objectKind": "character",
@@ -75,10 +75,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "a12044f1b78c2686"
+          "9ba8847f611d49fe"
         ]
       },
-      "manifestHash": "2eb88c45b07cf48d"
+      "manifestHash": "d7000212beb01a71"
     },
     {
       "objectKind": "character",
@@ -87,8 +87,8 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=107001]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
@@ -96,10 +96,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "0eb0e388332329df"
+          "07cf471b4a27e79e"
         ]
       },
-      "manifestHash": "3b2753d02a7dbe95"
+      "manifestHash": "82b55cdcbc2ff6d2"
     },
     {
       "objectKind": "character",
@@ -123,10 +123,10 @@
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "eedc62da7dff6c90"
+          "7619a08ae6041613"
         ]
       },
-      "manifestHash": "e32f4fafcc310853"
+      "manifestHash": "1be151d484b80a17"
     },
     {
       "objectKind": "character",
@@ -135,8 +135,8 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=108003]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
@@ -144,10 +144,10 @@
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "e23242e691303d7a"
+          "7a2cc54256a800aa"
         ]
       },
-      "manifestHash": "ee9cc722d7ef5347"
+      "manifestHash": "a8f8368fe92a6131"
     },
     {
       "objectKind": "character",
@@ -156,8 +156,8 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=109001]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
@@ -165,10 +165,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "c87c8477b4756415"
+          "c481ffa658363130"
         ]
       },
-      "manifestHash": "bea3e394454e919f"
+      "manifestHash": "6c81fde578186da2"
     },
     {
       "objectKind": "character",
@@ -177,14 +177,9 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=112001]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
         {
           "code": "character-not-optimization-ready",
           "category": "not-implemented",
@@ -196,9 +191,11 @@
           112001
         ],
         "mechanismHash": "23f9684b4aa8bc6f",
-        "characterAcceptanceManifestHashes": []
+        "characterAcceptanceManifestHashes": [
+          "799a3192574a9c4b"
+        ]
       },
-      "manifestHash": "f97685fbe5c6e4af"
+      "manifestHash": "12d4901722acb786"
     },
     {
       "objectKind": "character",
@@ -208,19 +205,9 @@
         "generated/characters.json#items[id=199001]",
         "generated/characters.json#items[id=199002]"
       ],
-      "maturityState": "extracted",
+      "maturityState": "runtime-integrated",
       "optimizationReady": false,
       "blockers": [
-        {
-          "code": "actor-static-profile-missing",
-          "category": "not-implemented",
-          "message": "Verified static actor profile is missing for at least one source identity."
-        },
-        {
-          "code": "character-acceptance-not-published",
-          "category": "not-implemented",
-          "message": "No published M11-D acceptance manifest covers every source identity."
-        },
         {
           "code": "character-not-optimization-ready",
           "category": "not-implemented",
@@ -233,9 +220,12 @@
           199002
         ],
         "mechanismHash": "320b1011f76b0f8f",
-        "characterAcceptanceManifestHashes": []
+        "characterAcceptanceManifestHashes": [
+          "bffaa74ee0507946",
+          "32cd423236d55c45"
+        ]
       },
-      "manifestHash": "dbbf27bb089c0700"
+      "manifestHash": "e957229c3e86d4be"
     },
     {
       "objectKind": "equipment",
@@ -3944,8 +3934,8 @@
         "generated/kibos.json#items[id=500001]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500001]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500001,
@@ -3958,7 +3948,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "34a1a559194abf4f"
+      "manifestHash": "4f06f5fc98c2cbeb"
     },
     {
       "objectKind": "kibo",
@@ -3968,8 +3958,8 @@
         "generated/kibos.json#items[id=500025]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500025]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500025,
@@ -3982,7 +3972,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "ad991441fd19baa7"
+      "manifestHash": "374a83c36b01779b"
     },
     {
       "objectKind": "kibo",
@@ -3992,8 +3982,8 @@
         "generated/kibos.json#items[id=500043]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500043]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500043,
@@ -4006,7 +3996,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "240df29f2afbb768"
+      "manifestHash": "cec33797624c1580"
     },
     {
       "objectKind": "kibo",
@@ -4016,8 +4006,8 @@
         "generated/kibos.json#items[id=500044]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500044]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500044,
@@ -4030,7 +4020,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "df294b3ca375332e"
+      "manifestHash": "24b8022cd8b90184"
     },
     {
       "objectKind": "kibo",
@@ -4040,8 +4030,8 @@
         "generated/kibos.json#items[id=500045]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500045]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500045,
@@ -4054,7 +4044,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3ed612f64a026fab"
+      "manifestHash": "7cf1dbf720125baf"
     },
     {
       "objectKind": "kibo",
@@ -4064,8 +4054,8 @@
         "generated/kibos.json#items[id=500057]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500057]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500057,
@@ -4078,7 +4068,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "698438fc47116fb3"
+      "manifestHash": "a6fe40a8a8920f99"
     },
     {
       "objectKind": "kibo",
@@ -4088,8 +4078,8 @@
         "generated/kibos.json#items[id=500064]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500064]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500064,
@@ -4102,7 +4092,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "72f563e6a39faac5"
+      "manifestHash": "2669d939b84f48db"
     },
     {
       "objectKind": "kibo",
@@ -4112,8 +4102,8 @@
         "generated/kibos.json#items[id=500065]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500065]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500065,
@@ -4126,7 +4116,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "20e3eba5ca7492dd"
+      "manifestHash": "970939e403be67c9"
     },
     {
       "objectKind": "kibo",
@@ -4136,8 +4126,8 @@
         "generated/kibos.json#items[id=500082]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500082]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500082,
@@ -4150,7 +4140,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3e117c2c47efdb3f"
+      "manifestHash": "d07ce547bef89cdb"
     },
     {
       "objectKind": "kibo",
@@ -4160,8 +4150,8 @@
         "generated/kibos.json#items[id=500120]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500120]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500120,
@@ -4174,7 +4164,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "5327de8d6cf45768"
+      "manifestHash": "357456ba3f6aa2de"
     },
     {
       "objectKind": "kibo",
@@ -4184,8 +4174,8 @@
         "generated/kibos.json#items[id=500123]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500123]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500123,
@@ -4198,7 +4188,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "2a285c8b11a20b2c"
+      "manifestHash": "61a6e31befc449a6"
     },
     {
       "objectKind": "kibo",
@@ -4208,8 +4198,8 @@
         "generated/kibos.json#items[id=500124]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500124]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500124,
@@ -4222,7 +4212,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "76d57822f3813b34"
+      "manifestHash": "bc69c4cb78d60510"
     },
     {
       "objectKind": "kibo",
@@ -4232,8 +4222,8 @@
         "generated/kibos.json#items[id=500125]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500125]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500125,
@@ -4246,7 +4236,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a11e8d2399609962"
+      "manifestHash": "ff1a8c4202b90c9c"
     },
     {
       "objectKind": "kibo",
@@ -4256,8 +4246,8 @@
         "generated/kibos.json#items[id=500126]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500126]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500126,
@@ -4270,7 +4260,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "63a477cb9ca85e2e"
+      "manifestHash": "ccda1cf29a913d72"
     },
     {
       "objectKind": "kibo",
@@ -4280,8 +4270,8 @@
         "generated/kibos.json#items[id=500127]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500127]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500127,
@@ -4294,7 +4284,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3d8f7210c5d12723"
+      "manifestHash": "3279163e8fe3d7d9"
     },
     {
       "objectKind": "kibo",
@@ -4304,8 +4294,8 @@
         "generated/kibos.json#items[id=500128]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500128]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500128,
@@ -4318,7 +4308,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "14a5d9d796cc69a3"
+      "manifestHash": "9578a781a3efbb3f"
     },
     {
       "objectKind": "kibo",
@@ -4328,8 +4318,8 @@
         "generated/kibos.json#items[id=500129]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500129]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500129,
@@ -4342,7 +4332,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "94fffcdc1e0e5035"
+      "manifestHash": "52a4be4ed036170b"
     },
     {
       "objectKind": "kibo",
@@ -4352,8 +4342,8 @@
         "generated/kibos.json#items[id=500130]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500130]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500130,
@@ -4366,7 +4356,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "f7162cb4e39bff63"
+      "manifestHash": "8e96000742b9a447"
     },
     {
       "objectKind": "kibo",
@@ -4376,8 +4366,8 @@
         "generated/kibos.json#items[id=500131]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500131]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500131,
@@ -4390,7 +4380,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "5add1c3382c75ced"
+      "manifestHash": "948701b3a107ed75"
     },
     {
       "objectKind": "kibo",
@@ -4400,8 +4390,8 @@
         "generated/kibos.json#items[id=500164]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500164]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500164,
@@ -4414,7 +4404,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "277fd7544a18ef11"
+      "manifestHash": "5441cde2c354bf51"
     },
     {
       "objectKind": "kibo",
@@ -4424,8 +4414,8 @@
         "generated/kibos.json#items[id=500165]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500165]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500165,
@@ -4438,7 +4428,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "a38f2b0843baacde"
+      "manifestHash": "fe32e6181a590028"
     },
     {
       "objectKind": "kibo",
@@ -4448,8 +4438,8 @@
         "generated/kibos.json#items[id=500166]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500166]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500166,
@@ -4462,7 +4452,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "78979fc6cce5e9c1"
+      "manifestHash": "7a54857752b299d9"
     },
     {
       "objectKind": "kibo",
@@ -4472,8 +4462,8 @@
         "generated/kibos.json#items[id=500173]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500173]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500173,
@@ -4486,7 +4476,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3b2cc36c3853b77f"
+      "manifestHash": "b59247b0ffc4a4bf"
     },
     {
       "objectKind": "kibo",
@@ -4496,8 +4486,8 @@
         "generated/kibos.json#items[id=500174]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500174]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500174,
@@ -4510,7 +4500,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "b54246b1b6098623"
+      "manifestHash": "4a7779588fdb41cf"
     },
     {
       "objectKind": "kibo",
@@ -4520,8 +4510,8 @@
         "generated/kibos.json#items[id=500175]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500175]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500175,
@@ -4534,7 +4524,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "0689a1f2fdd5d432"
+      "manifestHash": "3272db17e899900c"
     },
     {
       "objectKind": "kibo",
@@ -4544,8 +4534,8 @@
         "generated/kibos.json#items[id=500185]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500185]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500185,
@@ -4558,7 +4548,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "f15549ace90fcc3d"
+      "manifestHash": "301bbd3e2a184a4d"
     },
     {
       "objectKind": "kibo",
@@ -4568,8 +4558,8 @@
         "generated/kibos.json#items[id=500220]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500220]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500220,
@@ -4582,7 +4572,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "00d6ec292b23e09a"
+      "manifestHash": "d7a29383077548e8"
     },
     {
       "objectKind": "kibo",
@@ -4592,8 +4582,8 @@
         "generated/kibos.json#items[id=500231]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500231]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500231,
@@ -4606,7 +4596,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "e861408a281247ac"
+      "manifestHash": "159026ef114640a6"
     },
     {
       "objectKind": "kibo",
@@ -4616,8 +4606,8 @@
         "generated/kibos.json#items[id=500296]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500296]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500296,
@@ -4630,7 +4620,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "bb726e1bdaa2ef5e"
+      "manifestHash": "16d97ca8f0b5bc70"
     },
     {
       "objectKind": "kibo",
@@ -4640,8 +4630,8 @@
         "generated/kibos.json#items[id=500304]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500304]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500304,
@@ -4654,7 +4644,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "4d4cd426cd30ec7a"
+      "manifestHash": "8e95ceae1aecd20a"
     },
     {
       "objectKind": "kibo",
@@ -4664,8 +4654,8 @@
         "generated/kibos.json#items[id=500305]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500305]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500305,
@@ -4678,7 +4668,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "1544108a050ae6f8"
+      "manifestHash": "92ba3839a9aa8e3e"
     },
     {
       "objectKind": "kibo",
@@ -4688,8 +4678,8 @@
         "generated/kibos.json#items[id=500306]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500306]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500306,
@@ -4702,7 +4692,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "7c69a8ddc2d83d47"
+      "manifestHash": "77b4bdf2aba61053"
     },
     {
       "objectKind": "kibo",
@@ -4712,8 +4702,8 @@
         "generated/kibos.json#items[id=500322]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500322]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500322,
@@ -4726,7 +4716,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3363f745e53be16e"
+      "manifestHash": "d8729e4e455f796a"
     },
     {
       "objectKind": "kibo",
@@ -4736,8 +4726,8 @@
         "generated/kibos.json#items[id=500323]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500323]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500323,
@@ -4750,7 +4740,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "5b4ca3d71a7fecb3"
+      "manifestHash": "cc20a04a05a460d3"
     },
     {
       "objectKind": "kibo",
@@ -4760,8 +4750,8 @@
         "generated/kibos.json#items[id=500324]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500324]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500324,
@@ -4774,7 +4764,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "4d5ec8584843c37a"
+      "manifestHash": "da36f517fcdc1694"
     },
     {
       "objectKind": "kibo",
@@ -4784,8 +4774,8 @@
         "generated/kibos.json#items[id=500357]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500357]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500357,
@@ -4798,7 +4788,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "cc4122c9b1d3779d"
+      "manifestHash": "aff3667384fc5aa9"
     },
     {
       "objectKind": "kibo",
@@ -4808,8 +4798,8 @@
         "generated/kibos.json#items[id=500358]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500358]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500358,
@@ -4822,7 +4812,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "c205eef9f95df30a"
+      "manifestHash": "b00e130b6df2e0dc"
     },
     {
       "objectKind": "kibo",
@@ -4832,8 +4822,8 @@
         "generated/kibos.json#items[id=500360]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500360]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500360,
@@ -4846,7 +4836,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "3191287c7df1a4bf"
+      "manifestHash": "84442df6d88c5e37"
     },
     {
       "objectKind": "kibo",
@@ -4856,8 +4846,8 @@
         "generated/kibos.json#items[id=500368]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500368]"
       ],
-      "maturityState": "extracted",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500368,
@@ -4870,7 +4860,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "4b29cfb047ac841e"
+      "manifestHash": "df12be1c524b36fa"
     },
     {
       "objectKind": "kibo",
@@ -4880,8 +4870,8 @@
         "generated/kibos.json#items[id=500369]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500369]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500369,
@@ -4894,7 +4884,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "5358bcdf22afbe0d"
+      "manifestHash": "9654bab1e714c299"
     },
     {
       "objectKind": "kibo",
@@ -4904,8 +4894,8 @@
         "generated/kibos.json#items[id=500370]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500370]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500370,
@@ -4918,7 +4908,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "e15923d40a093a8f"
+      "manifestHash": "477f317954cf1567"
     },
     {
       "objectKind": "kibo",
@@ -4928,8 +4918,8 @@
         "generated/kibos.json#items[id=500469]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500469]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500469,
@@ -4942,7 +4932,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "921984226f129d1f"
+      "manifestHash": "fbbc18ac5a742d3b"
     },
     {
       "objectKind": "kibo",
@@ -4952,8 +4942,8 @@
         "generated/kibos.json#items[id=500470]",
         "reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=500470]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
       "blockers": [],
       "evidence": {
         "kiboId": 500470,
@@ -4966,7 +4956,7 @@
           "canonicalValue": []
         }
       },
-      "manifestHash": "d810ff9ddf0eab2f"
+      "manifestHash": "9cfc53662359657f"
     },
     {
       "objectKind": "set-skill",
@@ -30867,18 +30857,17 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "extracted": 17,
-      "optimization-ready": 211,
-      "runtime-integrated": 35
+      "optimization-ready": 258,
+      "runtime-integrated": 5
     },
     "optimizationReadyCounts": {
-      "character": 0,
-      "kibo": 0,
+      "character": 4,
+      "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 211
+    "optimizationReadyTotal": 258
   },
-  "manifestsHash": "c01158034ff0b9a5"
+  "manifestsHash": "ab5da91bde26fec8"
 }

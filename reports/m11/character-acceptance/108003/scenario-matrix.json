@@ -18,12 +18,12 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:04d15a79bb4f23f9",
-        "coverage-edge:15a523dc9049b32b",
-        "coverage-edge:6ea93c12bbf325b3",
-        "coverage-edge:af5d0968eec7876c",
-        "coverage-edge:c6f594947015129f",
-        "coverage-edge:f275f8997a625709"
+        "coverage-edge:1de5d86d530e4ede",
+        "coverage-edge:2852560ffaad5415",
+        "coverage-edge:37e060283e259ab7",
+        "coverage-edge:e3554a6b1e8f0d77",
+        "coverage-edge:f2d7b78c2c0988b0",
+        "coverage-edge:f7f83c580d0a7e4d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -50,7 +50,7 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:8a64aa35c59ead80"
+        "coverage-edge:e7e5db4758eb4faa"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden"
@@ -76,9 +76,9 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:44117cd3971116ef",
-        "coverage-edge:9fcb3a1122bc4696",
-        "coverage-edge:ab0b3367bc718b65"
+        "coverage-edge:04f24b7e37a52225",
+        "coverage-edge:5c50ee68014d8a5c",
+        "coverage-edge:d557e34d5277e634"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -105,8 +105,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:7592e20362633506",
-        "coverage-edge:ca7c0cea03d09b5f"
+        "coverage-edge:bc7019ce67e5c53e",
+        "coverage-edge:e7d4517add2e8cb1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -133,13 +133,13 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:055db71e35ddf1fe",
-        "coverage-edge:0ab2700ec1fc76b6",
-        "coverage-edge:9764e10cb5c90852",
-        "coverage-edge:ae8d6217f108d468",
-        "coverage-edge:b1bc9f91862256d0",
-        "coverage-edge:b3ea1b1e2ef16683",
-        "coverage-edge:ba70c638c311e21a"
+        "coverage-edge:056266431b9ce8c8",
+        "coverage-edge:35d96f85f1d96b60",
+        "coverage-edge:377e3ca8d582558e",
+        "coverage-edge:4c962dddb31ab446",
+        "coverage-edge:5cf4a422d2aa3320",
+        "coverage-edge:8b0d0b518d4bfbeb",
+        "coverage-edge:cd763222a38318d8"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -166,9 +166,9 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:543746f0c426ff01",
-        "coverage-edge:6be98677dd2e41b4",
-        "coverage-edge:d8187e68ba5fdd23"
+        "coverage-edge:393d8d436a199a77",
+        "coverage-edge:63b694ecf154f08b",
+        "coverage-edge:a60f29c1502ef324"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -329,27 +329,28 @@
       "requirementIdentity": "contract:action-form:actor|108003|10800312|1|10800326|star-combo:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|108003|10800312|1|10800326|star-combo:default",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "e9b2ca8374d06dbb",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "a2a805c19ca1d08c",
       "coverageSelector": {
         "controlSkillId": 10800326,
         "kind": "action-form",
         "ownerId": 108003,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:840e3d8c40f94d7a"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-e20-2-108003-s1-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "characters.items[id=108003].skillSlots[group=ground,slot=208]"
+        "characters.items[id=108003].skillSlots[group=ground,slot=208]",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:action-form:actor|108003|10800322|1|10800325|limit-counter:default",
@@ -447,16 +448,16 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:24e18d3c7bde9f78",
-        "coverage-edge:485b9f8b27079f12",
-        "coverage-edge:565bb2e853bbb2c8",
-        "coverage-edge:71213ac8bf7774c5",
-        "coverage-edge:8a09f90c96a0864b",
-        "coverage-edge:a35680b01d59ccc7",
-        "coverage-edge:a69a820981cc6ccc",
-        "coverage-edge:bad1ca564bbe5251",
-        "coverage-edge:e3d7b04230afed5f",
-        "coverage-edge:e8f1286f869c5fa7"
+        "coverage-edge:1698cd4e289c3c00",
+        "coverage-edge:46d7a09b2f86428f",
+        "coverage-edge:5de59709b514844c",
+        "coverage-edge:7449e7efd802d405",
+        "coverage-edge:7758c3ef2659b4a2",
+        "coverage-edge:901e8838332f3632",
+        "coverage-edge:abaec9a1c9cb6ac3",
+        "coverage-edge:b6e21d116900cba7",
+        "coverage-edge:e946bc880921db07",
+        "coverage-edge:fe078540cdc46219"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -483,8 +484,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:add74baa4964dfe1",
-        "coverage-edge:fc8d149551759b97"
+        "coverage-edge:d4b451789b208817",
+        "coverage-edge:ffe5c55601bffa57"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -511,8 +512,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:7937b1100359ab04",
-        "coverage-edge:df29f6d5f306b66a"
+        "coverage-edge:073e2ae27d9d14d8",
+        "coverage-edge:2d342c861ba24094"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -537,8 +538,8 @@
         "kind": "attack-input-chain"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3049b6f384755a1a",
-        "coverage-edge:693f2d84cb6065d2"
+        "coverage-edge:07b3bbfe0770c8e0",
+        "coverage-edge:e2f3a536bc5ff64a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -563,8 +564,8 @@
         "kind": "conditional-hit-group"
       },
       "coverageEdgeIds": [
-        "coverage-edge:69b97a0b80f909bc",
-        "coverage-edge:91166a6ba49544b9"
+        "coverage-edge:3455073a9f9f89af",
+        "coverage-edge:bb23de398bcd8c5c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -852,8 +853,8 @@
         "windowIdentity": "actor:108003|control:10800312|sub:0|0-145|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_2046103481814992988__2046103481814992988.json#behaviorlineControl[0].behaviorList[pathId=-3006056100286117796]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_-3006056100286117796__-3006056100286117796.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:11fd1cbe9863f5b3",
-        "coverage-edge:291490ed37b23ae3"
+        "coverage-edge:1a0e7c2648315c45",
+        "coverage-edge:a3389d3b1b7552bb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -878,8 +879,8 @@
         "windowIdentity": "actor:108003|control:10800312|sub:0|112-189|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_-5671660318867994532__-5671660318867994532.json#behaviorlineControl[0].behaviorList[pathId=-7098548401080514468]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_-7098548401080514468__-7098548401080514468.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:7ac6d1f17d938f15",
-        "coverage-edge:e5b549babe41f9f0"
+        "coverage-edge:02343a38b53708f8",
+        "coverage-edge:31b27e74e9c0dd2b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -927,8 +928,8 @@
         "windowIdentity": "actor:108003|control:10800312|sub:0|112-189|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_2229605825992312924__2229605825992312924.json#behaviorlineControl[0].behaviorList[pathId=1444753821302048860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_1444753821302048860__1444753821302048860.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:70e53904b802ec8d",
-        "coverage-edge:cba1e5f52ba5d0cf"
+        "coverage-edge:65bb1c99eb9b7261",
+        "coverage-edge:d84d9eb80c9ed75d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -953,8 +954,8 @@
         "windowIdentity": "actor:108003|control:10800313|sub:0|200-299|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/MonoBehaviour_1872579427448173680__1872579427448173680.json#behaviorlineControl[0].behaviorList[pathId=-2054651667298405264]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/MonoBehaviour_-2054651667298405264__-2054651667298405264.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:39ef7a09739eff6a",
-        "coverage-edge:5bd6d87e806220d2"
+        "coverage-edge:6203ae15fe355dd8",
+        "coverage-edge:9c3813eb95dc6d72"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1280,49 +1281,51 @@
       "requirementIdentity": "contract:control-window:control-window:32:16bf35e81cac3181",
       "dimension": "control-window",
       "subjectIdentity": "control-window:32:16bf35e81cac3181",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "9452fe8e9c182eec",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "577e598fcf2a08b5",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:108003|control:10800326|sub:0|50-145|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-878920384566484842__-878920384566484842.json#behaviorlineControl[0].behaviorList[pathId=8564376622547312790]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_8564376622547312790__8564376622547312790.json"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:ff8c05608d69f065"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-e20-2-108003-s1-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-878920384566484842__-878920384566484842.json#behaviorlineControl[0].behaviorList[pathId=8564376622547312790]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_8564376622547312790__8564376622547312790.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-878920384566484842__-878920384566484842.json#behaviorlineControl[0].behaviorList[pathId=8564376622547312790]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_8564376622547312790__8564376622547312790.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:control-window:control-window:33:eb7114c799de9143",
       "dimension": "control-window",
       "subjectIdentity": "control-window:33:eb7114c799de9143",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "d7f12ae3b8843edf",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "836095e8c260d8ca",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:108003|control:10800326|sub:0|85-180|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-4944165202306555754__-4944165202306555754.json#behaviorlineControl[0].behaviorList[pathId=-2510884587575598954]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-2510884587575598954__-2510884587575598954.json"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:ca374fbbea95ea59"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-e20-2-108003-s1-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-4944165202306555754__-4944165202306555754.json#behaviorlineControl[0].behaviorList[pathId=-2510884587575598954]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-2510884587575598954__-2510884587575598954.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-4944165202306555754__-4944165202306555754.json#behaviorlineControl[0].behaviorList[pathId=-2510884587575598954]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/MonoBehaviour_-2510884587575598954__-2510884587575598954.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:control-window:control-window:34:a15470628fab2013",
@@ -1406,8 +1409,8 @@
         "windowIdentity": "actor:108003|control:10800341|sub:0|0-57|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_-3423723951888464749__-3423723951888464749.json#behaviorlineControl[0].behaviorList[pathId=5642684837223728275]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_5642684837223728275__5642684837223728275.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:93c858f46ba515a6",
-        "coverage-edge:cf71d60c43c5964a"
+        "coverage-edge:2ec192d87d03d804",
+        "coverage-edge:fafbb73e30ca109a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1432,8 +1435,8 @@
         "windowIdentity": "actor:108003|control:10800341|sub:0|25-82|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_-3469514366861114221__-3469514366861114221.json#behaviorlineControl[0].behaviorList[pathId=-8577122844378594157]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_-8577122844378594157__-8577122844378594157.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:546022cc12bd2e6e",
-        "coverage-edge:bf8c6e3bf1507b56"
+        "coverage-edge:64249b86f4dbb12e",
+        "coverage-edge:a7391b293ffcaccc"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1458,8 +1461,8 @@
         "windowIdentity": "actor:108003|control:10800341|sub:0|44-112|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_-8133321469525293933__-8133321469525293933.json#behaviorlineControl[0].behaviorList[pathId=3806582363400635539]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/MonoBehaviour_3806582363400635539__3806582363400635539.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:38fa6135eb64e227",
-        "coverage-edge:c9e7107a8a101b02"
+        "coverage-edge:2c231c0976431450",
+        "coverage-edge:394ff54e6dea5d87"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1484,8 +1487,8 @@
         "windowIdentity": "actor:108003|control:10800342|sub:0|0-50|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_-7019682312016817301__-7019682312016817301.json#behaviorlineControl[0].behaviorList[pathId=-1445457329547111573]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_-1445457329547111573__-1445457329547111573.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:28253bb01b1c14cf",
-        "coverage-edge:30ad59e559a082b5"
+        "coverage-edge:44bee37ff4353acb",
+        "coverage-edge:ffb4be993fd3b41f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1533,8 +1536,8 @@
         "windowIdentity": "actor:108003|control:10800342|sub:0|25-75|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_7385797053889188715__7385797053889188715.json#behaviorlineControl[0].behaviorList[pathId=4949143052078158699]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_4949143052078158699__4949143052078158699.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:09ec36602e3aa466",
-        "coverage-edge:28f829f44388104a"
+        "coverage-edge:54820b26308c8a9a",
+        "coverage-edge:c611c80a79aa33c4"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1559,8 +1562,8 @@
         "windowIdentity": "actor:108003|control:10800342|sub:0|44-117|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_2430139894664532843__2430139894664532843.json#behaviorlineControl[0].behaviorList[pathId=5063472751607878507]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/MonoBehaviour_5063472751607878507__5063472751607878507.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:9ddcd63c13f64f09",
-        "coverage-edge:9def45b1ddcdaf49"
+        "coverage-edge:1e397086069a3ce1",
+        "coverage-edge:5e6aa5957b73737f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -1987,8 +1990,8 @@
         "windowIdentity": "actor:108003|control:10800303|sub:0|0-85|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_-7131686679408207994__-7131686679408207994.json#behaviorlineControl[0].behaviorList[pathId=-6248440887370836090]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_-6248440887370836090__-6248440887370836090.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6525ab5fb770b16d",
-        "coverage-edge:e9bc566e81036941"
+        "coverage-edge:4cf21703407900b7",
+        "coverage-edge:8537453e888b9b3d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -2013,8 +2016,8 @@
         "windowIdentity": "actor:108003|control:10800303|sub:0|70-214|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_3326986919345854342__3326986919345854342.json#behaviorlineControl[0].behaviorList[pathId=6543793637146040198]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800303.asset/MonoBehaviour/MonoBehaviour_6543793637146040198__6543793637146040198.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3905db7999a192a8",
-        "coverage-edge:df57dbc5beb39cb1"
+        "coverage-edge:7fb20fd0cb4038e0",
+        "coverage-edge:c55f661806fb7067"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -2072,14 +2075,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:a51669e3455f890e",
+      "requirementIdentity": "contract:effect:effect:0:91c9b97c066f51a6",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:a51669e3455f890e",
+      "subjectIdentity": "effect:0:91c9b97c066f51a6",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "4595da02fbf109b5",
+      "sourceRecordHash": "6312d7b411c6fc85",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003114",
         "kind": "effect"
@@ -2133,14 +2136,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:936de19835b71283",
+      "requirementIdentity": "contract:effect:effect:1:925206b0cee795cb",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:936de19835b71283",
+      "subjectIdentity": "effect:1:925206b0cee795cb",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "8cc97ebf3102f64d",
+      "sourceRecordHash": "df83354d02b0c377",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003143",
         "kind": "effect"
@@ -2157,14 +2160,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:10:5e66505895e88844",
+      "requirementIdentity": "contract:effect:effect:10:ce5d29a82b5d02b4",
       "dimension": "effect",
-      "subjectIdentity": "effect:10:5e66505895e88844",
+      "subjectIdentity": "effect:10:ce5d29a82b5d02b4",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "fca75af8b0fa4cd2",
+      "sourceRecordHash": "ff42059581986e08",
       "coverageSelector": {
         "effectIdentity": "battle-element:250",
         "kind": "effect"
@@ -2202,14 +2205,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:11:b007f7e8a1364761",
+      "requirementIdentity": "contract:effect:effect:11:661d58bb8587298f",
       "dimension": "effect",
-      "subjectIdentity": "effect:11:b007f7e8a1364761",
+      "subjectIdentity": "effect:11:661d58bb8587298f",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "f9fd54a088cd31c7",
+      "sourceRecordHash": "2b0b829a322a1797",
       "coverageSelector": {
         "effectIdentity": "battle-element:251",
         "kind": "effect"
@@ -2251,14 +2254,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:3e33db92cead14d8",
+      "requirementIdentity": "contract:effect:effect:12:f902e4c1392dedbe",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:3e33db92cead14d8",
+      "subjectIdentity": "effect:12:f902e4c1392dedbe",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "987b928be406c9ed",
+      "sourceRecordHash": "e6160e5275bc358f",
       "coverageSelector": {
         "effectIdentity": "battle-element:251",
         "kind": "effect"
@@ -2300,14 +2303,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:1a4b0e952fdc1859",
+      "requirementIdentity": "contract:effect:effect:13:3b01a89799b46b81",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:1a4b0e952fdc1859",
+      "subjectIdentity": "effect:13:3b01a89799b46b81",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "1c4ac86a9a8e6462",
+      "sourceRecordHash": "224c71f5adcac3a8",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
@@ -2349,14 +2352,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:ee2ad644b2ae224d",
+      "requirementIdentity": "contract:effect:effect:14:e85e78498a735e8f",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:ee2ad644b2ae224d",
+      "subjectIdentity": "effect:14:e85e78498a735e8f",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "67fab5ff1a5dfe33",
+      "sourceRecordHash": "d1b1eb09a18cd295",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
@@ -2396,14 +2399,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:54e2bab4e796abf7",
+      "requirementIdentity": "contract:effect:effect:15:8d673fc6f797918f",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:54e2bab4e796abf7",
+      "subjectIdentity": "effect:15:8d673fc6f797918f",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "119658044acd8847",
+      "sourceRecordHash": "5a015aa6c1fe96c7",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
@@ -2447,14 +2450,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:0d074c739e384f15",
+      "requirementIdentity": "contract:effect:effect:16:9a9151738fcacfe3",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:0d074c739e384f15",
+      "subjectIdentity": "effect:16:9a9151738fcacfe3",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "4a323236f3114ede",
+      "sourceRecordHash": "4c04bff4f04b0a32",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003118",
         "kind": "effect"
@@ -2492,23 +2495,23 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:5658549cbf26c6d4",
+      "requirementIdentity": "contract:effect:effect:17:23b15076a55d416c",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:5658549cbf26c6d4",
+      "subjectIdentity": "effect:17:23b15076a55d416c",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "d440d62f618fb981",
+      "sourceRecordHash": "6ee7e6dde08c62ff",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:17aa9f4512517ca3",
-        "coverage-edge:251e44a1fc566685",
-        "coverage-edge:6024359af4c481b4",
-        "coverage-edge:855ec5ee238bf902"
+        "coverage-edge:0fef722f7a24f823",
+        "coverage-edge:26748b24d26732a0",
+        "coverage-edge:ecb4fc7c06b9ef1e",
+        "coverage-edge:f6d770a84e0dcec8"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -2521,29 +2524,29 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:14350358f8cebd73",
+      "requirementIdentity": "contract:effect:effect:18:86f4fad1dcaa096d",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:14350358f8cebd73",
+      "subjectIdentity": "effect:18:86f4fad1dcaa096d",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "b45ef4f88126d48c",
+      "sourceRecordHash": "c3b813ad31958eda",
       "coverageSelector": {
         "effectIdentity": "battle-element:250",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0cc8f68ec3191072",
-        "coverage-edge:3ee7000ef5195b37",
-        "coverage-edge:51b77ae940ecfc70",
-        "coverage-edge:68b99cea6fb499ac",
-        "coverage-edge:9045531217b0c17c",
-        "coverage-edge:992980f4b070e507",
-        "coverage-edge:b83b047325310a18",
-        "coverage-edge:bfcbb87dfd803fe1",
-        "coverage-edge:ce8741330cbe6fc2",
-        "coverage-edge:e4c1ad269a63d55b"
+        "coverage-edge:021f41d06a944df8",
+        "coverage-edge:0289045f047513d9",
+        "coverage-edge:1e570d1e2cf3c778",
+        "coverage-edge:6ae2ac37dc2ca3f3",
+        "coverage-edge:82f80998f95acbc2",
+        "coverage-edge:aa724a3a5e74669b",
+        "coverage-edge:b463f32d0c30bcbd",
+        "coverage-edge:e381207bb654e956",
+        "coverage-edge:e4f03cda71e861d5",
+        "coverage-edge:f5b6d4b7479e5cdb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -2557,61 +2560,48 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:e9e0f9d7e51b5d20",
+      "requirementIdentity": "contract:effect:effect:19:35cc86794eda236c",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:e9e0f9d7e51b5d20",
+      "subjectIdentity": "effect:19:35cc86794eda236c",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "289216b39bab1eb3",
+      "sourceRecordHash": "7f135e7719ba854b",
       "coverageSelector": {
         "effectIdentity": "battle-element:251",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0767b5193b719b5e",
-        "coverage-edge:089032afc1f4bdf8",
-        "coverage-edge:0b33352340d6048b",
-        "coverage-edge:10d6cb9522967d7a",
-        "coverage-edge:16b83aad366ae8c2",
-        "coverage-edge:1df5ca0815b59d50",
-        "coverage-edge:2000dcfa0f85b7a7",
-        "coverage-edge:200915c85d8e5de8",
-        "coverage-edge:209997eef0fedda3",
-        "coverage-edge:218dfd73ec4ec4c8",
-        "coverage-edge:26e574600d73056e",
-        "coverage-edge:287bae80a7124baa",
-        "coverage-edge:2de1fec852b766f3",
-        "coverage-edge:34b7553becb06618",
-        "coverage-edge:4e6725bd0c7fc550",
-        "coverage-edge:5a41306f19aa8924",
-        "coverage-edge:64251024e7b19633",
-        "coverage-edge:66cff1d2dbc15654",
-        "coverage-edge:69826a0ce31cbc58",
-        "coverage-edge:6e35d01c105ef256",
-        "coverage-edge:7aae08e377391f5a",
-        "coverage-edge:7b8f1d92b5c9e90c",
-        "coverage-edge:7e172fe73aef0d9e",
-        "coverage-edge:806f9d4779946ea2",
-        "coverage-edge:8d822ae3d2817902",
-        "coverage-edge:97e1ee127145c19f",
-        "coverage-edge:988908f5a2810b9b",
-        "coverage-edge:994cc22b9f2094dd",
-        "coverage-edge:a0e8cad337d887bc",
-        "coverage-edge:a7544d8399a350b8",
-        "coverage-edge:a855095b0a1802e3",
-        "coverage-edge:a8617dde1364c8b4",
-        "coverage-edge:b202b85ad1d58822",
-        "coverage-edge:ba09d181a7ddeb89",
-        "coverage-edge:bbc87576a058df8b",
-        "coverage-edge:dd762c9fe62bb681",
-        "coverage-edge:ddc850460fea265c",
-        "coverage-edge:e5feac9d41b5b4e9",
-        "coverage-edge:e73141097f413196",
-        "coverage-edge:eb12df44d9845eb9",
-        "coverage-edge:f8c5e457a9c4c235",
-        "coverage-edge:fa2f54fb236862cf"
+        "coverage-edge:182641383d3c3d6f",
+        "coverage-edge:1aa80ce0ba2afde0",
+        "coverage-edge:1c4e067f9ed673ef",
+        "coverage-edge:1cb24ad6717c4401",
+        "coverage-edge:20ddcb8779f99f0a",
+        "coverage-edge:2157f84c40bc0177",
+        "coverage-edge:29115806cca5086c",
+        "coverage-edge:45fa430c17e5d651",
+        "coverage-edge:4a8d97e96c502385",
+        "coverage-edge:4b116b7322cf81a3",
+        "coverage-edge:4f08f7954879a1a6",
+        "coverage-edge:53711d710330887d",
+        "coverage-edge:58a5576ab244b5af",
+        "coverage-edge:65b8fd13a4b9b9b5",
+        "coverage-edge:67bfde011711292b",
+        "coverage-edge:6c72c2ce7d4268bc",
+        "coverage-edge:6dd79c03b20d7cc7",
+        "coverage-edge:6fbce7cbf5058271",
+        "coverage-edge:868dbef3d3b5ced2",
+        "coverage-edge:8d0e18b6b06f7484",
+        "coverage-edge:a24ade0a23e30b02",
+        "coverage-edge:af04a142c7eb9095",
+        "coverage-edge:be4f6d7b403b1886",
+        "coverage-edge:caac13e3a25d2469",
+        "coverage-edge:d2b55c4556474a8b",
+        "coverage-edge:d62a4b399ea8ca68",
+        "coverage-edge:e1ef3956f36b7bb4",
+        "coverage-edge:e607af909c913bb2",
+        "coverage-edge:fa24ed08ceed89ba"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -2625,27 +2615,27 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:1c645caa235048da",
+      "requirementIdentity": "contract:effect:effect:2:7a54ca397eddb61a",
       "dimension": "effect",
-      "subjectIdentity": "effect:2:1c645caa235048da",
+      "subjectIdentity": "effect:2:7a54ca397eddb61a",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "ad98c4ccd683b202",
+      "sourceRecordHash": "ab71dad2b64c89ee",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003164",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:33745c7e3c2bc61b",
-        "coverage-edge:357ce2df9a21749d",
-        "coverage-edge:70c86eeda0092dbe",
-        "coverage-edge:779c2b525ed908e2",
-        "coverage-edge:831b47aa6b18b573",
-        "coverage-edge:acc6c89a3ed6c30d",
-        "coverage-edge:c30bc90e3f476036",
-        "coverage-edge:e65e220d9c492d3f"
+        "coverage-edge:00d60d5116c7525b",
+        "coverage-edge:0bee9bdc1f2257dd",
+        "coverage-edge:1c77f808a32b3239",
+        "coverage-edge:3501e614d744fa25",
+        "coverage-edge:37db05b878f0a038",
+        "coverage-edge:5fb1f6798e71639c",
+        "coverage-edge:60d1754449522910",
+        "coverage-edge:81c2f038d180f26b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -2658,23 +2648,23 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:3f526b4337c5fa12",
+      "requirementIdentity": "contract:effect:effect:20:7e99bacf255383d8",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:3f526b4337c5fa12",
+      "subjectIdentity": "effect:20:7e99bacf255383d8",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "605b51e1e88a2d0c",
+      "sourceRecordHash": "ec4cf5e13488a4d6",
       "coverageSelector": {
         "effectIdentity": "battle-element:252",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8950822e0e10d3c3",
-        "coverage-edge:926cc50fbbc09eb2",
-        "coverage-edge:999b84d95c97a7bf",
-        "coverage-edge:bba332c30c0212ae"
+        "coverage-edge:4fad93befd87259a",
+        "coverage-edge:87675881d0887457",
+        "coverage-edge:92969daaca44e189",
+        "coverage-edge:edbd08d9b98fd63f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -2687,14 +2677,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:ad236ceb03710b5c",
+      "requirementIdentity": "contract:effect:effect:21:d5efd4ba5e82a15e",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:ad236ceb03710b5c",
+      "subjectIdentity": "effect:21:d5efd4ba5e82a15e",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "8b108841c8ce1427",
+      "sourceRecordHash": "1f207b54be46eef7",
       "coverageSelector": {
         "effectIdentity": "battle-element:102001093",
         "kind": "effect"
@@ -2727,14 +2717,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:22:2323ec2a2659bcf9",
+      "requirementIdentity": "contract:effect:effect:22:83944fe591a597c9",
       "dimension": "effect",
-      "subjectIdentity": "effect:22:2323ec2a2659bcf9",
+      "subjectIdentity": "effect:22:83944fe591a597c9",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "17ea567cede2187f",
+      "sourceRecordHash": "e3ac2cb2aa4ea1f5",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003001",
         "kind": "effect"
@@ -2767,14 +2757,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:23:db76be929c1708b7",
+      "requirementIdentity": "contract:effect:effect:23:4bf87cd28dfef647",
       "dimension": "effect",
-      "subjectIdentity": "effect:23:db76be929c1708b7",
+      "subjectIdentity": "effect:23:4bf87cd28dfef647",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "4cc08ed6ae56e889",
+      "sourceRecordHash": "0abb297c4b0e95f5",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003000",
         "kind": "effect"
@@ -2807,29 +2797,29 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:727f608510f1c28a",
+      "requirementIdentity": "contract:effect:effect:3:7df3335c476917b8",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:727f608510f1c28a",
+      "subjectIdentity": "effect:3:7df3335c476917b8",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "b92057328040c1b1",
+      "sourceRecordHash": "ecb58d4b75035975",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003144",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:03e36472f97c8653",
-        "coverage-edge:05d4f9814c49d83f",
-        "coverage-edge:17d75ab6ee43deda",
-        "coverage-edge:3d7e8d0c8c9161d4",
-        "coverage-edge:708a45f820b4fb10",
-        "coverage-edge:8409a57c92f043c8",
-        "coverage-edge:a997e4a50b20eac4",
-        "coverage-edge:b3c38efc6af32d8d",
-        "coverage-edge:d837d1f430841d34",
-        "coverage-edge:ffd233fc55688be5"
+        "coverage-edge:0a1a05691415a5ac",
+        "coverage-edge:0e0cb026bd8d499b",
+        "coverage-edge:16a8ea53e49f4957",
+        "coverage-edge:1afb23aa1b9618a6",
+        "coverage-edge:3c50da58ada025b3",
+        "coverage-edge:7772dcd733f9ff09",
+        "coverage-edge:94e2c91fbcc8ad7b",
+        "coverage-edge:a13731c59ca196ad",
+        "coverage-edge:c060cfbff11f7042",
+        "coverage-edge:e64739cf87ca6a87"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -2842,14 +2832,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:ee64575af34bac12",
+      "requirementIdentity": "contract:effect:effect:4:a133f6abc6273bec",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:ee64575af34bac12",
+      "subjectIdentity": "effect:4:a133f6abc6273bec",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "863aa0876b7f07c1",
+      "sourceRecordHash": "1255d7a11c0146f5",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003118",
         "kind": "effect"
@@ -2887,14 +2877,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:5:915ef7a1bc169ddf",
+      "requirementIdentity": "contract:effect:effect:5:9169d66a4b303011",
       "dimension": "effect",
-      "subjectIdentity": "effect:5:915ef7a1bc169ddf",
+      "subjectIdentity": "effect:5:9169d66a4b303011",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "0ff04090b450a4be",
+      "sourceRecordHash": "7fe610c557d8aa0e",
       "coverageSelector": {
         "effectIdentity": "battle-element:108003163",
         "kind": "effect"
@@ -2911,14 +2901,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:6:838642cf1fd84ba1",
+      "requirementIdentity": "contract:effect:effect:6:e7e6deae1dd35001",
       "dimension": "effect",
-      "subjectIdentity": "effect:6:838642cf1fd84ba1",
+      "subjectIdentity": "effect:6:e7e6deae1dd35001",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "4888e34628b38961",
+      "sourceRecordHash": "88c682dff5181f49",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
@@ -2958,14 +2948,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:a964501837c16759",
+      "requirementIdentity": "contract:effect:effect:7:07ace81d9d8e4d43",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:a964501837c16759",
+      "subjectIdentity": "effect:7:07ace81d9d8e4d43",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "5c24bcf460c0f191",
+      "sourceRecordHash": "8b07b0e1217183d5",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
@@ -3007,14 +2997,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:66d2a7920655a314",
+      "requirementIdentity": "contract:effect:effect:8:75d0ba33eee5171c",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:66d2a7920655a314",
+      "subjectIdentity": "effect:8:75d0ba33eee5171c",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "accd116b235f2ee4",
+      "sourceRecordHash": "030b7b43b0248d20",
       "coverageSelector": {
         "effectIdentity": "battle-element:253",
         "kind": "effect"
@@ -3058,14 +3048,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:5b732a942fad5522",
+      "requirementIdentity": "contract:effect:effect:9:69a20480f91f5194",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:5b732a942fad5522",
+      "subjectIdentity": "effect:9:69a20480f91f5194",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "7a00aecb3d99bf71",
+      "sourceRecordHash": "0102598050ae11db",
       "coverageSelector": {
         "effectIdentity": "battle-element:250",
         "kind": "effect"
@@ -3326,8 +3316,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4a7851d028277068",
-        "coverage-edge:942f5a1b15651f17"
+        "coverage-edge:97149905df6bb3a5",
+        "coverage-edge:bfabec81de2519d2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3352,8 +3342,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0794af778965aae6",
-        "coverage-edge:19a434189606e178"
+        "coverage-edge:0583aa4a6814f1bb",
+        "coverage-edge:6c1b6acb4081f6a2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3378,8 +3368,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:12c16278000dff00",
-        "coverage-edge:c041e646719ccf88"
+        "coverage-edge:70429389935aa12a",
+        "coverage-edge:9e49f01c7c2dd7da"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3404,8 +3394,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:d7e18cf835eb8879",
-        "coverage-edge:eb1ddeccb99f7e35"
+        "coverage-edge:e8a752b0307b0bb2",
+        "coverage-edge:f7c9c6125f35976f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3506,13 +3496,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0035f7181e4e9537",
-        "coverage-edge:1714a2914eb740d2",
-        "coverage-edge:2b625df554948746",
-        "coverage-edge:38cf68a6abba28cd",
-        "coverage-edge:57a61979d1e77eb7",
-        "coverage-edge:972e888afc2598e9",
-        "coverage-edge:a7627037691e5514"
+        "coverage-edge:4f490667f32d2a7b",
+        "coverage-edge:5886588f4dc77bec",
+        "coverage-edge:75a748a3cb1a5117",
+        "coverage-edge:b589310a8ac7a3e0",
+        "coverage-edge:b8284d9ab005b1ad",
+        "coverage-edge:d94c3bc4bb040129",
+        "coverage-edge:de7e15067beed52b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3537,13 +3527,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:169c0bf4eee7c67a",
-        "coverage-edge:666d6f6fea0dcc23",
-        "coverage-edge:814b7ce40041a2b6",
-        "coverage-edge:aabf534682ff5632",
-        "coverage-edge:adfa20825bfc8683",
-        "coverage-edge:bb44d180e9b59ae5",
-        "coverage-edge:ec5eb5771178cf8d"
+        "coverage-edge:1fbef25b877fea33",
+        "coverage-edge:28c0b4706d7e0007",
+        "coverage-edge:491e409a1fd8d1de",
+        "coverage-edge:4f54ae491fc2ca78",
+        "coverage-edge:6ba2f46caa9cd386",
+        "coverage-edge:f13dbfab10415183",
+        "coverage-edge:fdef9937325aab40"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3568,13 +3558,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0f821840d276ae75",
-        "coverage-edge:29809c4147b9c9ed",
-        "coverage-edge:85b51e5602251f63",
-        "coverage-edge:9a3a5e66a6058a86",
-        "coverage-edge:cd73d1645f183503",
-        "coverage-edge:dc27d9182b6e74e4",
-        "coverage-edge:f92a97897f91219b"
+        "coverage-edge:247f4d895ad90304",
+        "coverage-edge:3badfa03b585b0b3",
+        "coverage-edge:5ba5088458fe160a",
+        "coverage-edge:6694d3b31541838b",
+        "coverage-edge:66c4f666e5b0321f",
+        "coverage-edge:b8a84bb749cfeebd",
+        "coverage-edge:cc30798083cc1f6b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3599,13 +3589,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:08c0c40cbd2601c4",
-        "coverage-edge:231d94076ad1f1fb",
-        "coverage-edge:7213727f54579740",
-        "coverage-edge:96c5d5b6ac6368b3",
-        "coverage-edge:99af431991af4472",
-        "coverage-edge:d1e127019807efda",
-        "coverage-edge:fb9154211eba326c"
+        "coverage-edge:16ebb8c436a0f223",
+        "coverage-edge:320493988e06761d",
+        "coverage-edge:48e160fcb7274154",
+        "coverage-edge:59ac749fa4ce3c9d",
+        "coverage-edge:6f6fd734f0ba8a89",
+        "coverage-edge:a27bd7df3e84a090",
+        "coverage-edge:d885758b771056ce"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3630,13 +3620,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1d984e11e7a72fa0",
-        "coverage-edge:510efaeccbf18ee5",
-        "coverage-edge:541d0596cb2ca9b0",
-        "coverage-edge:778e0782dc118e7c",
-        "coverage-edge:849973c14b3ab05e",
-        "coverage-edge:eec5dd09264b134f",
-        "coverage-edge:f07d94c8e9dc74ef"
+        "coverage-edge:78228aca2ad990ed",
+        "coverage-edge:8284fc271ba9dcc4",
+        "coverage-edge:82e30774d48c0dc2",
+        "coverage-edge:88df13ade640b4e1",
+        "coverage-edge:b953ee18dec6b92c",
+        "coverage-edge:da1769333a2e7152",
+        "coverage-edge:f5b665280f667901"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3661,13 +3651,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:29d77ecacd69988f",
-        "coverage-edge:79f6ea33d7637cc1",
-        "coverage-edge:8d1052e15784dfd9",
-        "coverage-edge:98c2903ad3ea80b8",
-        "coverage-edge:f3366572d81ed988",
-        "coverage-edge:fa20a5072f28ec58",
-        "coverage-edge:fc848932fe846f37"
+        "coverage-edge:1474e351b008be72",
+        "coverage-edge:55adfd473d6b7997",
+        "coverage-edge:71c7532f572c29ed",
+        "coverage-edge:80a85b9e7bf20acd",
+        "coverage-edge:8e5eb179aee4a828",
+        "coverage-edge:d9d464a552f91a3b",
+        "coverage-edge:dd2caac896d91437"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3692,13 +3682,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:27bb20a82785df1e",
-        "coverage-edge:6dd70e7ec308c0a5",
-        "coverage-edge:6fa1a894d844f708",
-        "coverage-edge:7534e88985e77942",
-        "coverage-edge:7e9ae786387ebb2b",
-        "coverage-edge:956f2975fc334c3c",
-        "coverage-edge:f9696454fe039bfb"
+        "coverage-edge:02afffc25083a03c",
+        "coverage-edge:2399280ce8f84790",
+        "coverage-edge:27cf86cbd7516a26",
+        "coverage-edge:4852da15ccb2d3f6",
+        "coverage-edge:686f2c82256dceff",
+        "coverage-edge:d909f2c4bca6412d",
+        "coverage-edge:dbaa7b6fcead8857"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3723,13 +3713,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:64277c1c800a3abf",
-        "coverage-edge:84da48b45cf0f3c3",
-        "coverage-edge:bc258b12761d1cf6",
-        "coverage-edge:c009463b495caf4e",
-        "coverage-edge:e4b3d7f6de8a76ec",
-        "coverage-edge:edba21658dea318b",
-        "coverage-edge:f8d31cbf96a8ee2a"
+        "coverage-edge:0e252ae86b240956",
+        "coverage-edge:414f2d2debbd6abf",
+        "coverage-edge:44823c20e62b4e49",
+        "coverage-edge:90e118c9fe59ce46",
+        "coverage-edge:be8e9e93669611ba",
+        "coverage-edge:c2b395217efc806a",
+        "coverage-edge:c99175f0177e4898"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3754,13 +3744,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:22a1ab4323e8c5ef",
-        "coverage-edge:56855e98e5e3261c",
-        "coverage-edge:5c162c2a12ade602",
-        "coverage-edge:5cbfaac5db253eb3",
-        "coverage-edge:9453ca7ffdafc822",
-        "coverage-edge:d34314612e656cab",
-        "coverage-edge:e90f355545a02e47"
+        "coverage-edge:4836557b5b6ca71a",
+        "coverage-edge:59429bbc360d0470",
+        "coverage-edge:7020a6308e4b2086",
+        "coverage-edge:7c6712c4892d6ae4",
+        "coverage-edge:ca24678c7414a715",
+        "coverage-edge:cd04d0ac0fdd0844",
+        "coverage-edge:dfa98a1146684aae"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3785,12 +3775,12 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:243825cc0aca7d62",
-        "coverage-edge:4f8621371429b9ee",
-        "coverage-edge:6889e492239500c7",
-        "coverage-edge:7e2d29e1c410d564",
-        "coverage-edge:bddabe32b7e4f16f",
-        "coverage-edge:f433d1aa53a5c833"
+        "coverage-edge:16d4c1168fd43d45",
+        "coverage-edge:31be4904118d4f07",
+        "coverage-edge:36ea21aa78466d13",
+        "coverage-edge:77c4d9de7c9f3cb0",
+        "coverage-edge:b975981500e79970",
+        "coverage-edge:fce52f45a6f439f9"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3815,13 +3805,13 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1be277ae0d30d1b8",
-        "coverage-edge:2ed0519d76b7eb0a",
-        "coverage-edge:4b1a7d47c7ffdd8c",
-        "coverage-edge:789cf2ae368714ff",
-        "coverage-edge:791f95e1c073b977",
-        "coverage-edge:beebdb633b4e2d63",
-        "coverage-edge:f4204e39f0617373"
+        "coverage-edge:0dbcdfe47f9151af",
+        "coverage-edge:2d7679f0b0878e9c",
+        "coverage-edge:59caf1d196fd9751",
+        "coverage-edge:61ed17471f862b4d",
+        "coverage-edge:e4cf0844670eb7ab",
+        "coverage-edge:ec580b372630be8f",
+        "coverage-edge:fca74b6a896fb6e2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3846,8 +3836,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:132bcfd84ceec61b",
-        "coverage-edge:6e870f18b4a6d6e3"
+        "coverage-edge:5f80fa51c525f845",
+        "coverage-edge:93870dc3ced05bd3"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3872,8 +3862,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3cb893598b698f2b",
-        "coverage-edge:b594834528a3018b"
+        "coverage-edge:35ecea3c5e8bc1ad",
+        "coverage-edge:56b367a14bab3076"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3898,8 +3888,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:09de343313f87e86",
-        "coverage-edge:e509d3e313e3f90f"
+        "coverage-edge:95b97d4d8c5d8ae4",
+        "coverage-edge:9c8b2249ba1330bb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3924,8 +3914,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:06e7f9ac482996bc",
-        "coverage-edge:cf785dd7daa1958b"
+        "coverage-edge:091a8de2e4a524b6",
+        "coverage-edge:4fd0c4cf108a55ad"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -3992,8 +3982,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4cdc4e691da0a8ca",
-        "coverage-edge:688b6e0251db12cd"
+        "coverage-edge:471aca1de1d033ec",
+        "coverage-edge:948ba5a42a0eba38"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4018,8 +4008,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:01ffc90d419f12b0",
-        "coverage-edge:eb6cba21d37aac0c"
+        "coverage-edge:3d2fd0e2dc653899",
+        "coverage-edge:6e81531bd145025a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4044,8 +4034,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8332e9db533f97f3",
-        "coverage-edge:cfcc745fe852bb5e"
+        "coverage-edge:72e69844ea79e855",
+        "coverage-edge:fa7308db884b597b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4070,8 +4060,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:57e664efb5c60139",
-        "coverage-edge:efbec133fc31233f"
+        "coverage-edge:0cff0090ea1736f3",
+        "coverage-edge:fb2501beb0d0462f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4096,8 +4086,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:5351e995282f5d20",
-        "coverage-edge:db91b3dd5dc2626c"
+        "coverage-edge:7e510bc1924e854a",
+        "coverage-edge:90459f398d461f42"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4122,8 +4112,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:198e8fea818c3ab9",
-        "coverage-edge:2dfb5aad6d5c9148"
+        "coverage-edge:57fb05325b572ded",
+        "coverage-edge:9af55f55b4a2cb32"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4148,8 +4138,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:63fd88a8495c34d4",
-        "coverage-edge:8c5c4430302c9536"
+        "coverage-edge:32cb12f4ec9317f1",
+        "coverage-edge:3effcd7084f9381e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4174,8 +4164,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:7f4090bbd2ac4cf0",
-        "coverage-edge:8f158017e03f7bd9"
+        "coverage-edge:5f0fbe052f1fe99a",
+        "coverage-edge:910a72ed0a08fadb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4200,8 +4190,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3f9cba7aaf04f374",
-        "coverage-edge:afc169ad121bb376"
+        "coverage-edge:646562646458fd14",
+        "coverage-edge:90eca421d9c2dd31"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4226,8 +4216,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1c01d15027d5f1fa",
-        "coverage-edge:ac60b3c13890f4ad"
+        "coverage-edge:2ec6735a6c999045",
+        "coverage-edge:cb7d30a9a9520128"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4252,8 +4242,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0e054b8142f62e2d",
-        "coverage-edge:689d3d1a743279b2"
+        "coverage-edge:1c4080fbfa4c8423",
+        "coverage-edge:fb082ff1637bb2e6"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4438,25 +4428,26 @@
       "requirementIdentity": "contract:hit:10800326|0|elements|0|1626240869891328654|40|1",
       "dimension": "hit",
       "subjectIdentity": "10800326|0|elements|0|1626240869891328654|40|1",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "772f8e5eeb9bcac8",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "db8d7faeb289bf63",
       "coverageSelector": {
         "hitIdentity": "10800326|0|elements|0|1626240869891328654|40|1",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:35253e3345688505"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-e20-2-108003-s1-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/skill_control_10800326__6157052116591042155.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=1626240869891328654"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800326.asset/MonoBehaviour/skill_control_10800326__6157052116591042155.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=1626240869891328654",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10800341|0|bulletElements|1|-5157550345730700713|1|2",
@@ -4472,10 +4463,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2e2df14c9e68e862",
-        "coverage-edge:9b73d696d5a43edd",
-        "coverage-edge:e1fb447ba30cfa82",
-        "coverage-edge:e6f7c839353011ca"
+        "coverage-edge:2ea71f74419e2338",
+        "coverage-edge:4437500a8f3ff3d0",
+        "coverage-edge:dfa6eb38600f77d8",
+        "coverage-edge:fe9dacb7826c1eba"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4500,10 +4491,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:55ae7a753c378fea",
-        "coverage-edge:6d556b6d9ac3047e",
-        "coverage-edge:a6d38b30972df34a",
-        "coverage-edge:de442c5d8aed1e46"
+        "coverage-edge:7dc2ae81c6cdee58",
+        "coverage-edge:8744a188939d6d5e",
+        "coverage-edge:d68e58e027acb8fb",
+        "coverage-edge:f17712ea631f75a4"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4528,10 +4519,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:391de3b3c1e3771f",
-        "coverage-edge:451fe4ce8be55087",
-        "coverage-edge:ab92a90a1efce4eb",
-        "coverage-edge:eacace4fed579065"
+        "coverage-edge:71c6bdac17388652",
+        "coverage-edge:af0baea4bdcf54e6",
+        "coverage-edge:ce0895f87b7a7c71",
+        "coverage-edge:d23a2ad5358dafb9"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4556,10 +4547,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:46610bbbc34527bb",
-        "coverage-edge:595123dc059f383d",
-        "coverage-edge:bcd6f77ba1207574",
-        "coverage-edge:ecc9137f5fddc7d2"
+        "coverage-edge:b80ce5f1de5bd9e6",
+        "coverage-edge:bc851352446b42dd",
+        "coverage-edge:d5a66ed40a3e6533",
+        "coverage-edge:f0a2e5d80f25305d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4584,10 +4575,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0cf5f80692820b81",
-        "coverage-edge:3dca29b8e7ab4a19",
-        "coverage-edge:7219d0049a13636f",
-        "coverage-edge:ff7b27fbb2156111"
+        "coverage-edge:37b112ad5a0c223d",
+        "coverage-edge:7230d48893e7490f",
+        "coverage-edge:e1497bc5a7944165",
+        "coverage-edge:f1fc3e593874a6f7"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4612,10 +4603,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:080a377f02522525",
-        "coverage-edge:be08f531f51b5264",
-        "coverage-edge:c53f63093481a0a5",
-        "coverage-edge:eac04671f3148842"
+        "coverage-edge:3e46f19edc87ff57",
+        "coverage-edge:599fd0421507b0ee",
+        "coverage-edge:5fdfcb1171784793",
+        "coverage-edge:cbe681a0e343bafb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4682,8 +4673,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:23c18358bad64a5d",
-        "coverage-edge:3d411f38cbbe51e5"
+        "coverage-edge:7e20b17587fa5d53",
+        "coverage-edge:9a0f4b71dff3342f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4708,8 +4699,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:06cecfbde92840a3",
-        "coverage-edge:d17851ea988ad214"
+        "coverage-edge:8fb0383a40d644d1",
+        "coverage-edge:f2fa81d8c7bb0205"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4734,8 +4725,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0d11933056356185",
-        "coverage-edge:78f039f25109079d"
+        "coverage-edge:19e4a987f648b67d",
+        "coverage-edge:3e17c3220c3c5793"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4760,8 +4751,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2d51245d1476d592",
-        "coverage-edge:717ccda1bf9ba3ea"
+        "coverage-edge:24b7f96bb98ee4a0",
+        "coverage-edge:2e03cfadb2df0292"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4786,11 +4777,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:05109b9ae185dc8f",
-        "coverage-edge:0b2ed84d4ef64a48",
-        "coverage-edge:6854251684e1c39d",
-        "coverage-edge:ac4254f21c1c6b28",
-        "coverage-edge:c80da91234a1eca4"
+        "coverage-edge:652bb85424fb4949",
+        "coverage-edge:7828dcf5963c8432",
+        "coverage-edge:7c8c97b22c0c1492",
+        "coverage-edge:9c46206ef27bfd24",
+        "coverage-edge:b99f2aec4000e884"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4815,8 +4806,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2bd02f8c428aab8d",
-        "coverage-edge:cd33da53865a70a9"
+        "coverage-edge:18180094bc6f736b",
+        "coverage-edge:30af39c041532d83"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4841,8 +4832,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:a59d96748bb918df",
-        "coverage-edge:c727b06ebcce2248"
+        "coverage-edge:1a255cf65bf39443",
+        "coverage-edge:c2f5db0565170a31"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4867,11 +4858,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:39cc263cb2aa7273",
-        "coverage-edge:57490360963ac6c5",
-        "coverage-edge:831cf015367a332b",
-        "coverage-edge:9a1b48ec45ba63fc",
-        "coverage-edge:f9df79b652c7de78"
+        "coverage-edge:297fd4a649e4c2d5",
+        "coverage-edge:2f9440395d8938a9",
+        "coverage-edge:65700890b33afe4d",
+        "coverage-edge:8ddd3f347b65aae6",
+        "coverage-edge:c589ce1a05af64e7"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4896,8 +4887,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1d151066f8fb169e",
-        "coverage-edge:6c7e73cd82f16b6f"
+        "coverage-edge:b152359c9092647c",
+        "coverage-edge:f3b694e1409c0173"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4922,8 +4913,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:19eb24578780cb9a",
-        "coverage-edge:e907fa8056f360b7"
+        "coverage-edge:4a39c783268fb3d7",
+        "coverage-edge:6aae1ccb400fe329"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4948,11 +4939,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:039808e5a763d39c",
-        "coverage-edge:1f69d789e8edc859",
-        "coverage-edge:3d64cd7015b9c78f",
-        "coverage-edge:734c7f1e3c3d3d79",
-        "coverage-edge:ba0c7a5c02fa0f29"
+        "coverage-edge:1d33507d4fcbce06",
+        "coverage-edge:21ccef53d3d6a04f",
+        "coverage-edge:48e16e1aa7c12550",
+        "coverage-edge:aaa13199eade7790",
+        "coverage-edge:b5aef9c294391d5d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -4977,8 +4968,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:389be55088463865",
-        "coverage-edge:84c169289b5c0d65"
+        "coverage-edge:140f187d85a64ea8",
+        "coverage-edge:9f3afda3f9540e3b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5003,8 +4994,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:b26121fe15a1447c",
-        "coverage-edge:dcc9fe35d6e4e10e"
+        "coverage-edge:43b43d1553d8e0e7",
+        "coverage-edge:9e081d895e7dfe66"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5029,11 +5020,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:141713acabeea2f3",
-        "coverage-edge:5e50f8ef86da74e5",
-        "coverage-edge:bea0bde59afdfcd7",
-        "coverage-edge:c81566f7503ce9c7",
-        "coverage-edge:d4ea1a7ed2a3f795"
+        "coverage-edge:752b9b87eec9bba7",
+        "coverage-edge:784bc51af297dc16",
+        "coverage-edge:8bd5c7023ed145ab",
+        "coverage-edge:95274c802176402f",
+        "coverage-edge:afb0997ea3a60249"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5058,8 +5049,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:7d1b503cd8792b15",
-        "coverage-edge:9fff4cdf626a9a9c"
+        "coverage-edge:7aa2751653d676e2",
+        "coverage-edge:b99a94770ad29506"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5084,8 +5075,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2c35b0d7e0ef4f2d",
-        "coverage-edge:5967ea377e264e52"
+        "coverage-edge:3a70e6529845a523",
+        "coverage-edge:582e2c933389d8f6"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5110,11 +5101,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1f24a8c2814ae49c",
-        "coverage-edge:36b109a54d192cd0",
-        "coverage-edge:5920b741480072b2",
-        "coverage-edge:7643745b3797cef9",
-        "coverage-edge:b624a44529f2ccf2"
+        "coverage-edge:38bff05a29b2df06",
+        "coverage-edge:3d3720801b5e248f",
+        "coverage-edge:85792a4e19f56c3e",
+        "coverage-edge:ac50fd31f75bc7c0",
+        "coverage-edge:da8c04c04f61a6d1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5139,8 +5130,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:86d55a161632148e",
-        "coverage-edge:88b6236da8b2f8e6"
+        "coverage-edge:44dbb517f4228844",
+        "coverage-edge:b3d0d181aab3716f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5165,8 +5156,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:20ed805b155e166f",
-        "coverage-edge:d5bc6f4d01dd9765"
+        "coverage-edge:262650ba3ae81a81",
+        "coverage-edge:5428cd859dd67c4c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5191,11 +5182,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:295ead79284d0826",
-        "coverage-edge:3e6df99421d790ee",
-        "coverage-edge:c81e378532ceafea",
-        "coverage-edge:d6f06ce72f74e2a7",
-        "coverage-edge:f26ca2a419f7976d"
+        "coverage-edge:2ffa331d857c0d8a",
+        "coverage-edge:7ad2e3d953da8aa9",
+        "coverage-edge:9146f1f14f170f4c",
+        "coverage-edge:c457e75d39abca84",
+        "coverage-edge:e7ae8ebd09a4c2e8"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5220,8 +5211,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:17dcb3350b4ab02e",
-        "coverage-edge:300166d79255e351"
+        "coverage-edge:259fa13b6027f087",
+        "coverage-edge:ed0f53802cc14623"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5246,8 +5237,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:559655b8d28ef03e",
-        "coverage-edge:7a25faad4a4726d0"
+        "coverage-edge:0a847b0f03420802",
+        "coverage-edge:27802552903b719c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5272,11 +5263,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1428e2e558a2196c",
-        "coverage-edge:82382673c37458eb",
-        "coverage-edge:a767f2e8d14ec7b2",
-        "coverage-edge:c26159b339acbfe1",
-        "coverage-edge:dffa07a32efeec27"
+        "coverage-edge:09caa4565716bd0d",
+        "coverage-edge:3e8eb0ea28b04c05",
+        "coverage-edge:51152f1d86498a7f",
+        "coverage-edge:f436f8081e2f65f6",
+        "coverage-edge:fa9838d980aa1cc0"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5301,8 +5292,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:012e9c19780b7835",
-        "coverage-edge:915c285b54b7c199"
+        "coverage-edge:880dd0634542e6c1",
+        "coverage-edge:c5c2d32b00f3c08f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5327,8 +5318,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:5ddd0d06bd977e31",
-        "coverage-edge:d06c12fb57a4be6d"
+        "coverage-edge:6c96697b4edd1ad6",
+        "coverage-edge:80e6cf3a96570b63"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5353,11 +5344,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:03d7c6385d7be355",
-        "coverage-edge:6a075724848fd839",
-        "coverage-edge:7377f392fb3002b4",
-        "coverage-edge:ab3371f10ecac57a",
-        "coverage-edge:c22c73ffa9d6d08a"
+        "coverage-edge:0d45f3f37f9a1d2f",
+        "coverage-edge:217b0b00faeb0d2a",
+        "coverage-edge:30d107f4b6e90d44",
+        "coverage-edge:5aaed14a9046d4a8",
+        "coverage-edge:c2357cfdeb217a35"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5382,8 +5373,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:a35aa6d8e9067e61",
-        "coverage-edge:b511aa8f56e6912d"
+        "coverage-edge:c34ce00a0e3ce723",
+        "coverage-edge:d774da7926b5e29f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5408,8 +5399,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:21cc000ad767bd14",
-        "coverage-edge:c6fd780b6776bbb3"
+        "coverage-edge:4f764a27ae00040a",
+        "coverage-edge:77af718f190bf45e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5434,11 +5425,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:747ed2f5c04b4089",
-        "coverage-edge:a2a00e52ce418f8a",
-        "coverage-edge:c4e4343bc04cfcf0",
-        "coverage-edge:de5be0fffee1049b",
-        "coverage-edge:fd1310b3b6d59826"
+        "coverage-edge:0ca9391a0b45d1d6",
+        "coverage-edge:2408c5f5f86fb3f8",
+        "coverage-edge:3b828f06294506bf",
+        "coverage-edge:41de20a909555214",
+        "coverage-edge:7c4538554942fe9e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5463,8 +5454,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:748e951eae71690d",
-        "coverage-edge:7de0f39f2046f167"
+        "coverage-edge:796d9f52ad39eb03",
+        "coverage-edge:f3b0e9826259feb5"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5489,8 +5480,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:22d94e4a542658c7",
-        "coverage-edge:ea26e7d7d746f4c0"
+        "coverage-edge:1032a73ae05dd2ea",
+        "coverage-edge:c778c87e5f2d0eea"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5515,11 +5506,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2af2d1b73a5c452f",
-        "coverage-edge:59bb3d76a81599bb",
-        "coverage-edge:899bc9e9a02baff3",
-        "coverage-edge:ab3052f6d5248433",
-        "coverage-edge:f8bd9215d57cd1e4"
+        "coverage-edge:03fd1792f3f5a25d",
+        "coverage-edge:76e543a617de17d6",
+        "coverage-edge:794f785337660055",
+        "coverage-edge:c21d1d1805b37e61",
+        "coverage-edge:df4996ed093f037e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5544,8 +5535,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:05174591e95e4e4a",
-        "coverage-edge:09406ebe826b1ebd"
+        "coverage-edge:5a7466ed0c202ae7",
+        "coverage-edge:8595b9b6870a4bb3"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5570,8 +5561,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2073bc133220d086",
-        "coverage-edge:3dd02e0d64356b78"
+        "coverage-edge:053411400500c539",
+        "coverage-edge:904764c00eb080a2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5596,11 +5587,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1f84a3f69af7ce6d",
-        "coverage-edge:2f859108b19898f0",
-        "coverage-edge:693a2268da7529d7",
-        "coverage-edge:7db3bd9282528d08",
-        "coverage-edge:96e4e49db612159c"
+        "coverage-edge:0f54be520e0c359a",
+        "coverage-edge:300a5ece98297785",
+        "coverage-edge:7c52fc2c0a97958c",
+        "coverage-edge:c4c96c408d20314d",
+        "coverage-edge:cfff6035d9aa1b63"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5625,8 +5616,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:06531c2ed40cb721",
-        "coverage-edge:25d51409028d1001"
+        "coverage-edge:0adb5a5ba87fab77",
+        "coverage-edge:215287c54cb3300f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5651,8 +5642,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:30b4d38e08056df9",
-        "coverage-edge:f6c00fe5b3eb2fa5"
+        "coverage-edge:20b490f8290de5d4",
+        "coverage-edge:ba9c5a0794dcc57b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5677,11 +5668,11 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2a2bdeb0545524b3",
-        "coverage-edge:42b04731e9f3740f",
-        "coverage-edge:65c21ffe2ed9075a",
-        "coverage-edge:75d2f9daaaaf737f",
-        "coverage-edge:d601788dbbcdfe5b"
+        "coverage-edge:1993e72efe63fba1",
+        "coverage-edge:4eaf2e2fdffa9308",
+        "coverage-edge:793ade4147be0b5d",
+        "coverage-edge:bdabaccd47dc5f4f",
+        "coverage-edge:c9667abf516cbc33"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5790,8 +5781,8 @@
         "passiveIdentity": "actor:108003:passive:10800361"
       },
       "coverageEdgeIds": [
-        "coverage-edge:f89dffab4d66a2bf",
-        "coverage-edge:feb200a8c8431796"
+        "coverage-edge:778b371e32e61511",
+        "coverage-edge:ed94febd1f0b16ee"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -5816,7 +5807,7 @@
         "passiveIdentity": "actor:108003:passive:10800362"
       },
       "coverageEdgeIds": [
-        "coverage-edge:c6ac59fa8602e144"
+        "coverage-edge:0ee55213aa1bf754"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -5842,16 +5833,16 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:2ee3b26911e22d03",
-        "coverage-edge:368f5c4183de409b",
-        "coverage-edge:60144bb9aac1824c",
-        "coverage-edge:614cfff539edf263",
-        "coverage-edge:7f4b9c53c776fded",
-        "coverage-edge:83e0568c5969d357",
-        "coverage-edge:e1967403d0227971",
-        "coverage-edge:e1e77acda0b158a8",
-        "coverage-edge:e393142e8b0a2d8e",
-        "coverage-edge:fe7fb1f0513829f4"
+        "coverage-edge:0606a29c703cc26b",
+        "coverage-edge:19ab6848658503f6",
+        "coverage-edge:2893af24d24ffee0",
+        "coverage-edge:2bdb7d81661fd8e4",
+        "coverage-edge:52d707afbec13fb9",
+        "coverage-edge:771e8ad254917436",
+        "coverage-edge:7ec35db7623a13b3",
+        "coverage-edge:9f5d36329891e7bd",
+        "coverage-edge:b5e4cb016d94e557",
+        "coverage-edge:c24e4f87eae26a4b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6014,13 +6005,13 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:b125069ec1998b3e",
-        "coverage-edge:b8879d23c0a35670",
-        "coverage-edge:b97645b341400038",
-        "coverage-edge:b9df88235fd9ed76",
-        "coverage-edge:c2a1c2fc42d369a0",
-        "coverage-edge:e574be75aa867428",
-        "coverage-edge:ecb2977ba85dd26d"
+        "coverage-edge:0265119834c32808",
+        "coverage-edge:0cc4315a7978bc3d",
+        "coverage-edge:9856ca6d1d16f31a",
+        "coverage-edge:b3c76abccbd8f190",
+        "coverage-edge:b5bf0135ba761d92",
+        "coverage-edge:c692a424493f6106",
+        "coverage-edge:e3541d26c0e2aece"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6033,25 +6024,27 @@
       "requirementIdentity": "contract:public-action:actor|108003|10800312|1|10800326|star-combo",
       "dimension": "public-action",
       "subjectIdentity": "actor|108003|10800312|1|10800326|star-combo",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "f9c086708350af7b",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "08ce9f42dd34af00",
       "coverageSelector": {
         "controlSkillId": 10800326,
         "kind": "action-form",
         "ownerId": 108003,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:25a6234f4f9132a8"
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
+      "sourceIdentities": [
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "evidenceScenarioIds": [
-        "m12-b3-e20-2-108003-s1-visual-acceptance"
-      ],
-      "sourceIdentities": [],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:public-action:actor|108003|10800313|0|10800313|ultimate",
@@ -6069,9 +6062,9 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:3eaed6a793b3b685",
-        "coverage-edge:53de0d367044a29c",
-        "coverage-edge:64d70334bdd867d4"
+        "coverage-edge:3fd947fcf9756b1e",
+        "coverage-edge:96ad4336da71c745",
+        "coverage-edge:d6846485b1b0b83c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6096,8 +6089,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:46409422afc7f2f6",
-        "coverage-edge:62f4a9be4cdf3d23"
+        "coverage-edge:ee92c04283d4508b",
+        "coverage-edge:fae48cda02053c94"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6196,20 +6189,20 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:002e0ab7b71332dc",
-        "coverage-edge:05634b4f04250f1a",
-        "coverage-edge:07a51080a000842a",
-        "coverage-edge:28069bec2860bcca",
-        "coverage-edge:28ad350e18509260",
-        "coverage-edge:2bb94df2584ce47f",
-        "coverage-edge:53ea63b087c8d48d",
-        "coverage-edge:59d7b538463e8a9c",
-        "coverage-edge:7fad3ebd6cb7c968",
-        "coverage-edge:8d8bc552a78ae168",
-        "coverage-edge:b6b980c95bf4e450",
-        "coverage-edge:bd86ec09690b5688",
-        "coverage-edge:ceeb3dfb739c143e",
-        "coverage-edge:dfbb3b6ff6d82691"
+        "coverage-edge:02bf60045d888ad2",
+        "coverage-edge:35f7b78db49ebb6b",
+        "coverage-edge:369e6fc41084fb34",
+        "coverage-edge:37586b0a0db46eaf",
+        "coverage-edge:3c34ec29d1dcbb40",
+        "coverage-edge:45e757ce86c0e55d",
+        "coverage-edge:57a9a5f3f1bd1e50",
+        "coverage-edge:64c260f3ba0ca67c",
+        "coverage-edge:6fb5f32734cece38",
+        "coverage-edge:7019b23895dbe373",
+        "coverage-edge:a0d50d953148959c",
+        "coverage-edge:d243ae592a23011a",
+        "coverage-edge:eb58105b06e9e0d7",
+        "coverage-edge:f4e0d96f22b572d2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6234,14 +6227,14 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0e1894f56d0a9a1c",
-        "coverage-edge:1387a2dce324f008",
-        "coverage-edge:218b19adf427d89e",
-        "coverage-edge:5006f7bf70814de5",
-        "coverage-edge:6a6ee26591d30909",
-        "coverage-edge:793cb916afac5a4e",
-        "coverage-edge:a27740e8fa9fecf0",
-        "coverage-edge:e9df8583395be201"
+        "coverage-edge:3e3c9229cbb28f36",
+        "coverage-edge:494e4e1941366569",
+        "coverage-edge:57dba9ee9499a4e6",
+        "coverage-edge:84a16a8796b16ec0",
+        "coverage-edge:90beec44ae76afbc",
+        "coverage-edge:a9ee0fd5ebb4e4a5",
+        "coverage-edge:bef63166f194fbf8",
+        "coverage-edge:eacb7caf8476f6e1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6265,12 +6258,12 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:912b986cc6c0200f",
-        "coverage-edge:a02a703026231389",
-        "coverage-edge:b801264aa3d52440",
-        "coverage-edge:ee8a46f00b9be75a",
-        "coverage-edge:ef7c3f57c9c67ffc",
-        "coverage-edge:f571283604186ffd"
+        "coverage-edge:1416dab931ad78df",
+        "coverage-edge:16ffd22dd000612d",
+        "coverage-edge:1fa849e75d0e031c",
+        "coverage-edge:20870a7a18c70161",
+        "coverage-edge:9058871979976928",
+        "coverage-edge:bbc8b03ee9fb830a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6281,19 +6274,19 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:506c8e6421c6c983",
+      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:e3a44651d8fa0161",
       "dimension": "stat-dependency",
-      "subjectIdentity": "stat-dependency:0:506c8e6421c6c983",
+      "subjectIdentity": "stat-dependency:0:e3a44651d8fa0161",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "a660e7cff2f42a45",
+      "sourceRecordHash": "360645a0dc445874",
       "coverageSelector": null,
       "coverageEdgeIds": [],
       "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "NewTable/template_value.rows[id=108003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003144.asset/MonoBehaviour/ast_108003144__-7381482709713523381.json#elementConfigId=108003144#attributeID=1;function=3;A=800|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003164.asset/MonoBehaviour/ast_108003164__-3500475719908626889.json#elementConfigId=108003164#function_2=5;A=2;shareType=2;stopSharing=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003147.asset/MonoBehaviour/ast_108003147__-8281505352016338752.json#elementConfigId=108003147#function_2=3;A=50000;shareType=0;stopSharing=1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_2478544102430459996__2478544102430459996.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/skill_control_10800312__2653349801109799750.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-7381482709713523381|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[2]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800327.asset/MonoBehaviour/MonoBehaviour_-2570800870560300188__-2570800870560300188.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800327.asset/MonoBehaviour/skill_control_10800327__-4018422389919717477.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-4769007772377475842"
+        "NewTable/hero.rows[id=108003].propertyId=108003|NewTable/unit_property.rows[id=108003].baseAttributeId=108003|NewTable/template_value.rows[id=108003].baseAttribute|NewTable/template_value.rows[id=108003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003144.asset/MonoBehaviour/ast_108003144__-7381482709713523381.json#elementConfigId=108003144#attributeID=1;function=3;A=800|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003164.asset/MonoBehaviour/ast_108003164__-3500475719908626889.json#elementConfigId=108003164#function_2=5;A=2;shareType=2;stopSharing=0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_108003147.asset/MonoBehaviour/ast_108003147__-8281505352016338752.json#elementConfigId=108003147#function_2=3;A=50000;shareType=0;stopSharing=1|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/MonoBehaviour_2478544102430459996__2478544102430459996.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800312.asset/MonoBehaviour/skill_control_10800312__2653349801109799750.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-7381482709713523381|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[2]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[1]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].bulletElements[3]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[3]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800313.asset/MonoBehaviour/skill_control_10800313__-4773821196395200247.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/MonoBehaviour_-1452338477606785728__-1452338477606785728.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800322.asset/MonoBehaviour/skill_control_10800322__2362855589858081211.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800327.asset/MonoBehaviour/MonoBehaviour_-2570800870560300188__-2570800870560300188.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800327.asset/MonoBehaviour/skill_control_10800327__-4018422389919717477.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-4769007772377475842"
       ],
       "reasons": [
         "aggregate-stat-dependency-index-not-standalone-requirement",
@@ -6314,8 +6307,8 @@
         "profileIdentity": "actor:108003|switch-trigger:on-exit|skill:10800322"
       },
       "coverageEdgeIds": [
-        "coverage-edge:74d7bbf05d766bcc",
-        "coverage-edge:deb5cc92d48dbf45"
+        "coverage-edge:2c22d0f090be834c",
+        "coverage-edge:e3584b26ec275a9b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6343,21 +6336,21 @@
         "stateIdentity": "miti-electrified"
       },
       "coverageEdgeIds": [
-        "coverage-edge:00174c1c06049cbf",
-        "coverage-edge:045361e948cd912e",
-        "coverage-edge:13535963fd8651a0",
-        "coverage-edge:2f5ad0bcb8dd1cdb",
-        "coverage-edge:352ffd0d908814bd",
-        "coverage-edge:4181e06afaab2dbf",
-        "coverage-edge:79c4386eff3c1e94",
-        "coverage-edge:a343948b4dbcf903",
-        "coverage-edge:a54304f988643c0a",
-        "coverage-edge:b552e0d17d3f557f",
-        "coverage-edge:b88ef020da35fbf0",
-        "coverage-edge:bff34b55beb78188",
-        "coverage-edge:c769b761e332b203",
-        "coverage-edge:d48a91c6bdcb3a27",
-        "coverage-edge:fe2ada0d902bdaac"
+        "coverage-edge:193c8c6da93a60da",
+        "coverage-edge:310d130072440040",
+        "coverage-edge:5316a7ffef761008",
+        "coverage-edge:59ca6c2a4d2f0e84",
+        "coverage-edge:7a6684beac178e6b",
+        "coverage-edge:7f04838eeb840f11",
+        "coverage-edge:9680dff4ddb5d7d1",
+        "coverage-edge:9e8ca795418d476b",
+        "coverage-edge:a5afa68c7cb92616",
+        "coverage-edge:b1854805952741b3",
+        "coverage-edge:b9eed991fc2fdd16",
+        "coverage-edge:c06f17dde02aa011",
+        "coverage-edge:d4e025df4050b587",
+        "coverage-edge:d50de09ed12b0af8",
+        "coverage-edge:e9ec0153bf5ef273"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6382,21 +6375,21 @@
         "stateIdentity": "miti-electrified"
       },
       "coverageEdgeIds": [
-        "coverage-edge:34206914bf92710a",
-        "coverage-edge:3496ac9ffa2bebe5",
-        "coverage-edge:3b1b2ce89f07b262",
-        "coverage-edge:3f5c7a438be1c7c5",
-        "coverage-edge:51099adedd478a0a",
-        "coverage-edge:604587c66feb8294",
-        "coverage-edge:8b8011dc3e4d3369",
-        "coverage-edge:9397f615383c15bd",
-        "coverage-edge:a7f54f7303bfc5d6",
-        "coverage-edge:a8f1a57ff8ee04ab",
-        "coverage-edge:b7c1bee35826239a",
-        "coverage-edge:c06bfb91ce91afda",
-        "coverage-edge:e3545bd160fbb827",
-        "coverage-edge:fad1d8ccc4cd149a",
-        "coverage-edge:fce2c6cd1859eccd"
+        "coverage-edge:02b35eedb0b12a48",
+        "coverage-edge:37d823da6f3a5ae2",
+        "coverage-edge:43fef8d7a37b631b",
+        "coverage-edge:45c378d71d581b48",
+        "coverage-edge:4c8d7cbe074afbae",
+        "coverage-edge:65a3d84ea033116d",
+        "coverage-edge:8e7dc4b6755f82a5",
+        "coverage-edge:a819f088e06895da",
+        "coverage-edge:a95909c37fb33b88",
+        "coverage-edge:abd1016cd2f90641",
+        "coverage-edge:b628f94ab18fb9de",
+        "coverage-edge:bc7e2b9869c2f6a3",
+        "coverage-edge:c5032252fe1daeda",
+        "coverage-edge:dbfb534b5f5d961d",
+        "coverage-edge:e3a9efe9e3813387"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6421,21 +6414,21 @@
         "stateIdentity": "miti-electrified"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0c0938b29653f66b",
-        "coverage-edge:1427dc5489544b75",
-        "coverage-edge:3a7f24d04f7d7152",
-        "coverage-edge:48c8b3296e89a433",
-        "coverage-edge:68e0d7f8bd595b3e",
-        "coverage-edge:698e08d6daf0132f",
-        "coverage-edge:703ac8f8b6405098",
-        "coverage-edge:76e9f227b0c5c035",
-        "coverage-edge:8110147bcf52bf8b",
-        "coverage-edge:8459489ca3a700e2",
-        "coverage-edge:9cc239c5dd293e2a",
-        "coverage-edge:b00f9ee1e00d2b0c",
-        "coverage-edge:d8fb08ea3e7f0e2c",
-        "coverage-edge:e28457a770cc0133",
-        "coverage-edge:fe936f9762b4e075"
+        "coverage-edge:01e6144c97413883",
+        "coverage-edge:33c247b101a1e870",
+        "coverage-edge:55a62b09a57fb58b",
+        "coverage-edge:6b3a97c6cc1f208b",
+        "coverage-edge:6f2b03404ef1ecfa",
+        "coverage-edge:73bfd823f3dd5e3b",
+        "coverage-edge:756f0d9af7833a0c",
+        "coverage-edge:7ae0603d64f7bdf2",
+        "coverage-edge:7e4e757e44ff3106",
+        "coverage-edge:807fd5692b0c5996",
+        "coverage-edge:81163f8e73d9a962",
+        "coverage-edge:8afb7bc24b5a784b",
+        "coverage-edge:9123f7840674517f",
+        "coverage-edge:939bb69529f65a8d",
+        "coverage-edge:da0433a5f19b013b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6460,21 +6453,21 @@
         "stateIdentity": "miti-electrified"
       },
       "coverageEdgeIds": [
-        "coverage-edge:12f7dbdc9bfaf5b1",
-        "coverage-edge:150ccc474ddb9914",
-        "coverage-edge:1e8eac70e0c77c07",
-        "coverage-edge:2134da1e3a7bae14",
-        "coverage-edge:2b27d2a9fa4d72cc",
-        "coverage-edge:41b64782db1f0e7a",
-        "coverage-edge:63f2c87f292eb04b",
-        "coverage-edge:671ae543c5c1ae79",
-        "coverage-edge:8f3d01f1e793817a",
-        "coverage-edge:a3ecbdac48f129ff",
-        "coverage-edge:b4eeaa69d72ceaba",
-        "coverage-edge:d43ec8a936a1ff58",
-        "coverage-edge:f325170c34b4f450",
-        "coverage-edge:f4298f270fb899e5",
-        "coverage-edge:f63a84a385629ea9"
+        "coverage-edge:013b0dd9886e9e04",
+        "coverage-edge:087ed31454038379",
+        "coverage-edge:09d6cf4a591f6b01",
+        "coverage-edge:0edea99d5215b658",
+        "coverage-edge:3eb8614b690f90a8",
+        "coverage-edge:4e10a73d8aec30a5",
+        "coverage-edge:685512da3a03d102",
+        "coverage-edge:851abccfa967ac51",
+        "coverage-edge:859799145c5994c3",
+        "coverage-edge:88001df2092a9bb1",
+        "coverage-edge:9338d5637dc21167",
+        "coverage-edge:ac1a9eee54b087e8",
+        "coverage-edge:e272e7aa2d958a4c",
+        "coverage-edge:f131a6dc5c9b1da8",
+        "coverage-edge:f51300029bce8904"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6500,7 +6493,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:ccd02860291b9195"
+        "coverage-edge:83bbd4e39548dfab"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden"
@@ -6525,7 +6518,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0de9b5d7756e4585"
+        "coverage-edge:728a1c207da801db"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden"
@@ -6550,8 +6543,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:396d3b01838c034e",
-        "coverage-edge:478343a974cc4c5b"
+        "coverage-edge:021474407b4e21f3",
+        "coverage-edge:fe6d14149f923836"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6576,8 +6569,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:735da9e38099c465",
-        "coverage-edge:c07a0c93e90bb225"
+        "coverage-edge:c603dafa3233ac65",
+        "coverage-edge:cd44c1f9fbcd5b25"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6602,8 +6595,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:247124a989863c1b",
-        "coverage-edge:2cffd49eda0f8695"
+        "coverage-edge:196fb85298a56ab5",
+        "coverage-edge:6ca5261f67e20f33"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6628,8 +6621,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:24b0a5d897c4e202",
-        "coverage-edge:2eb2b6388f6b2b5c"
+        "coverage-edge:359f71139a41087c",
+        "coverage-edge:4e4d6e5a781a8d82"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6654,8 +6647,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:53b6fb06bfe63dae",
-        "coverage-edge:f7796f11e4375a5e"
+        "coverage-edge:095272af73488996",
+        "coverage-edge:a0272e73accf2926"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6680,8 +6673,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6c41609e3d7eab55",
-        "coverage-edge:993c912eaac05241"
+        "coverage-edge:c221ff4da8788529",
+        "coverage-edge:fccaaeb5bb7524f5"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6705,8 +6698,8 @@
         "kind": "critical-effective-threshold"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8fc12e9a792f5a7c",
-        "coverage-edge:be976b4b4b59ceb4"
+        "coverage-edge:a5d73ecd2d927e09",
+        "coverage-edge:c38a2806279b56b3"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6730,8 +6723,8 @@
         "kind": "critical-effective-threshold"
       },
       "coverageEdgeIds": [
-        "coverage-edge:108bba2234338cc3",
-        "coverage-edge:8a3c46ce94819cb9"
+        "coverage-edge:87d3d1deaaea39ab",
+        "coverage-edge:bf1879661faeb471"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6756,8 +6749,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:61cf9d2a786c6a29",
-        "coverage-edge:e1b61d7e3cf3a872"
+        "coverage-edge:756be7d14c293681",
+        "coverage-edge:e5c2498125fdd292"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6782,9 +6775,9 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:11d762bf4fe65c93",
-        "coverage-edge:53cac1ec3e71f202",
-        "coverage-edge:6254d18ee62a85da"
+        "coverage-edge:2f933addc48a218a",
+        "coverage-edge:9195bf804d5a241b",
+        "coverage-edge:b606cd7b2aa4eb50"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -6810,8 +6803,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3639c593efa6ce95",
-        "coverage-edge:75d52a9d395f13eb"
+        "coverage-edge:22a9a947ae3cb2b5",
+        "coverage-edge:e8c1137495abc063"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6836,8 +6829,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:5f6e68d80db47d08",
-        "coverage-edge:e2d1c68f52c3783b"
+        "coverage-edge:ce7fefe5f480291e",
+        "coverage-edge:d0883082c140fbc0"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6862,7 +6855,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:878f0d5d2190e348"
+        "coverage-edge:f489120568d71d32"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden"
@@ -6887,7 +6880,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:a9f6e040f2c9d815"
+        "coverage-edge:60e28cc45ef7262b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden"
@@ -6912,8 +6905,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:116f7ae8ab14cc78",
-        "coverage-edge:fa366a05605e7b3f"
+        "coverage-edge:02d20a5fc50f0f50",
+        "coverage-edge:1e4b031b60410aef"
       ],
       "evidenceScenarioIds": [
         "m12-b3-e20-2-108003-s1-visual-acceptance"
@@ -6926,13 +6919,13 @@
   ],
   "summary": {
     "requirementCount": 225,
-    "requiredCount": 139,
-    "passedCount": 139,
+    "requiredCount": 134,
+    "passedCount": 134,
     "blockedCount": 0,
-    "notApplicableCount": 86,
+    "notApplicableCount": 91,
     "statusCounts": {
-      "not-applicable": 86,
-      "passed": 139
+      "not-applicable": 91,
+      "passed": 134
     },
     "dimensionCounts": {
       "action-effect-binding": 3,
@@ -6960,5 +6953,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "a0f74c1ab86f43f1"
+  "matrixHash": "6dc031f65a224122"
 }

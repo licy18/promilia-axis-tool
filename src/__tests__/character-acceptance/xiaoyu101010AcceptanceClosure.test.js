@@ -55,16 +55,16 @@ describe('Xiaoyu 101010 acceptance closure', () => {
   it('passes all required rows while retaining frozen reactive and movement sources as structured N/A', () => {
     expect(requirementInventory.summary).toMatchObject({
       recordCount: 383,
-      appliedCount: 205,
+      appliedCount: 202,
       gapCount: 0,
-      notApplicableCount: 178,
+      notApplicableCount: 181,
     });
     expect(scenarioMatrix.summary).toMatchObject({
       requirementCount: 383,
-      requiredCount: 205,
-      passedCount: 205,
+      requiredCount: 202,
+      passedCount: 202,
       blockedCount: 0,
-      notApplicableCount: 178,
+      notApplicableCount: 181,
     });
     expect(
       scenarioMatrix.requirements.every(
@@ -99,6 +99,28 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       sourceGapCount: 0,
       acceptanceGapCount: 0,
     });
+    const formalJointAttackRows = scenarioMatrix.requirements.filter(
+      requirement =>
+        requirement.sourceIdentities.includes(
+          'src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS'
+        )
+    );
+    expect(formalJointAttackRows).toHaveLength(4);
+    expect(
+      formalJointAttackRows.every(
+        requirement =>
+          requirement.status === 'not-applicable' &&
+          requirement.required === false &&
+          requirement.reasons.includes('joint-attack-trigger-unresolved')
+      )
+    ).toBe(true);
+    expect(
+      acceptanceLedger.records.some(record =>
+        record.sourceIdentities.includes(
+          'src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS'
+        )
+      )
+    ).toBe(false);
   });
 
   it('proves threshold ordering, right-open expiry, input windows, and miss or blocked suppression', () => {
@@ -108,7 +130,7 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     const threshold = findProbe(main, 'resource-exact-and-insufficient');
     const a4Positive = findProbe(
       main,
-      'a4-four-landed-hits-produce-four-direct-sp-events'
+      'a4-four-landed-hits-share-direct-sp-to-two-allies'
     );
     const blocked = findProbe(main, 'blocked-hit-suppresses-damage');
     const insufficient = findProbe(main, 'condition-insufficient-negative');
@@ -157,12 +179,16 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     expect(a4Positive).toMatchObject({
       passed: true,
       actual: {
-        count: 4,
+        count: 8,
         rows: [
-          expect.objectContaining({ absoluteFrame: 2410, change: 0.599991 }),
-          expect.objectContaining({ absoluteFrame: 2414, change: 0.599991 }),
-          expect.objectContaining({ absoluteFrame: 2418, change: 0.599991 }),
-          expect.objectContaining({ absoluteFrame: 2422, change: 0.599991 }),
+          expect.objectContaining({ absoluteFrame: 1125, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1125, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1129, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1129, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1133, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1133, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1137, change: 0.299988 }),
+          expect.objectContaining({ absoluteFrame: 1137, change: 0.299988 }),
         ],
       },
     });
@@ -215,7 +241,8 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     expect(
       mainTuningEffects.filter(
         effect =>
-          effect.actionId === 'xiaoyu-star-carry-default' &&
+          effect.actionId ===
+            'xiaoyu-switch-back-for-star-carry--on-enter--actor-101010--star-carry' &&
           effect.operation === 'tuning-consume-packet'
       )
     ).toEqual([
@@ -267,8 +294,8 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 4,
       executionPassedCount: 4,
-      assertionCount: 1285,
-      assertionPassedCount: 1285,
+      assertionCount: 1301,
+      assertionPassedCount: 1301,
     });
     expect(
       scenarioCases.records.every(

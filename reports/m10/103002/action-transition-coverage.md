@@ -2,7 +2,7 @@
 
 - 公开动作：10
 - 原始控制窗口：159
-- 语义转移：37/37
+- 语义转移：38/38
 - 仅索引未接入窗口：19
 - 玩法影响缺口：0
 
@@ -47,6 +47,7 @@
 | dodge-attack 10300215/sub0 | input-window | [30,246) | - | ruby-enhanced-twelve-inputs / null | resume-next-chain-segment | applied |
 | star-carry 10300221/sub0 | input-window | [80,112) | tuning-mark:thunder@54F | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | applied |
 | star-combo 10300226/sub0 | state-activation | [35,155) | - | ruby-enhanced-twelve-inputs / 强化普攻 E1 | direct-entry | verified-action-variant-edge-ready |
+| hidden-control 10300249/sub0 | input-window | [25,166) | gain@15F | 10300249/sub1 | input-context-derived | verified-input-context-variant-edge-ready |
 
 ## 公开动作覆盖
 

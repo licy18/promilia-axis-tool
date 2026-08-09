@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "9ff00f8a0522d9ea",
+        "reportHash": "f0400d04943bc242",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "2279fc69346917c9",
-          "data": "6aed0190d0a34506",
-          "trace": "138e6fc4ece98b76",
+          "input": "d7fc6511f7b0d3e8",
+          "data": "7f877968b4e63110",
+          "trace": "310a3d645d4ab474",
           "evaluation": null
         }
       },
@@ -199,7 +199,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               0,
               3,
               0
@@ -214,7 +214,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               0,
               4,
               0
@@ -229,7 +229,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               1,
               1,
               0
@@ -244,7 +244,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               0,
               5,
               0
@@ -259,7 +259,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               1,
               2,
               0
@@ -274,7 +274,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              4,
+              2,
               1,
               0
             ],
@@ -288,7 +288,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              2,
               50,
               19,
               152,
@@ -304,7 +304,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              5,
+              3,
               1,
               0
             ],
@@ -318,7 +318,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              3,
               50,
               20,
               152,
@@ -420,7 +420,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               0,
               1,
               0
@@ -435,7 +435,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              1,
               0,
               2,
               0
@@ -715,7 +715,7 @@
           "resource-exact-and-insufficient": false
         }
       },
-      "traceProjectionHash": "f25c1af3260d88d8",
+      "traceProjectionHash": "d6b5c9a650359314",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:foreground-background-switch",
@@ -1623,7 +1623,7 @@
           "assertionHash": "1be842279270d75b"
         }
       ],
-      "scenarioCaseHash": "4c040e4faf6ee48d"
+      "scenarioCaseHash": "cbe1d5959e447c20"
     },
     {
       "schemaVersion": 1,
@@ -1631,7 +1631,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "39f1245a41efa920",
+        "reportHash": "fd99acba9f80d556",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -1639,9 +1639,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "4e77898db4705599",
-          "data": "fd824446e5fe1ecf",
-          "trace": "7d29079842f64d0f",
+          "input": "8ef97019eb7c3b05",
+          "data": "3796b151c730eb09",
+          "trace": "d2fe6de77ddadcc9",
           "evaluation": null
         }
       },
@@ -1662,14 +1662,6 @@
             "subSkillIndex": 0,
             "semanticName": "重击2段",
             "projectionIdentity": "golden-action-form:m10-b2:101003:120s-three-actor-golden:han-charged-stage-two"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "ownerId": 101003,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "semanticName": "跳跳稻草人事件",
-            "projectionIdentity": "golden-action-form:m10-b2:101003:120s-three-actor-golden:han-kibo-signature"
           },
           {
             "actionId": "han-limit-counter",
@@ -2137,36 +2129,6 @@
             "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:62"
           },
           {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|2|-6736157915999571924|27|1",
-            "frame": 3327,
-            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:63"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|38|2",
-            "frame": 3338,
-            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:64"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|49|3",
-            "frame": 3349,
-            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:65"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|5|8963641323797659805|138|4",
-            "frame": 3438,
-            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:66"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|5|8963641323797659805|142|5",
-            "frame": 3442,
-            "projectionIdentity": "golden-hit:m10-b2:101003:120s-three-actor-golden:67"
-          },
-          {
             "actionId": "han-normal-a1",
             "hitIdentity": "10100301|0|projectile|101003087|101003011|0|0|control:10100301|sub:0|behavior:-5864916095348272157|config:0|bullet:101003011:0:0|element:101003087:0",
             "frame": 513,
@@ -2453,7 +2415,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              3,
               50,
               13,
               152,
@@ -2795,7 +2757,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              10,
               50,
               59,
               152,
@@ -3029,7 +2991,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               1,
               0
@@ -3044,7 +3006,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               50,
               63,
@@ -3063,7 +3025,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               2,
               0
@@ -3078,7 +3040,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               3,
               0
@@ -3093,7 +3055,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               4,
               0
@@ -3108,7 +3070,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               1,
               1,
               0
@@ -3123,7 +3085,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               0,
               5,
               0
@@ -3138,7 +3100,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              11,
               1,
               2,
               0
@@ -3162,124 +3124,92 @@
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:18"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:500469062",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              14,
-              1,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:152",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              0,
-              50,
-              71,
-              152,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:500469008",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              14,
-              2,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:500469008",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              14,
-              3,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:183"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:500469072",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              14,
-              4,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:500469072",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "sourceSequencePath": [
-              14,
-              5,
-              0
-            ],
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:185"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:186"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:187"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:188"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:189"
           },
@@ -3298,92 +3228,92 @@
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:19"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:190"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:191"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:192"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:193"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:194"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:195"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:196"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:197"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:198"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:199"
           },
@@ -3416,94 +3346,58 @@
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:20"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:200"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:201"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:202"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:203"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:204"
           },
           {
-            "actionId": "han-kibo-signature",
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
             "effectIdentity": "battle-element:0",
             "operation": "damage",
             "targetId": null,
-            "controlSkillId": 50046903,
+            "controlSkillId": 10101021,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:205"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:206"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:207"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:208"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:209"
           },
           {
             "actionId": "han-normal-a5",
@@ -3518,33 +3412,6 @@
             "controlSkillId": 10100305,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:21"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:210"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:211"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:0",
-            "operation": "damage",
-            "targetId": null,
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:212"
           },
           {
             "actionId": "han-normal-a5",
@@ -3580,7 +3447,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              6,
               50,
               26,
               152,
@@ -4049,7 +3916,7 @@
             "operation": "damage",
             "targetId": null,
             "sourceSequencePath": [
-              0,
+              8,
               50,
               43,
               152,
@@ -4856,42 +4723,6 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:41"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:540070",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:43"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:44"
-          },
-          {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 50046903,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
-          },
-          {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "effectIdentity": "battle-element:101003142",
             "operation": "expire",
@@ -4900,7 +4731,7 @@
             "subSkillIndex": 0,
             "triggerFrame": 57,
             "behaviorPathId": "-5797025868792535592",
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
           },
           {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
@@ -4911,23 +4742,59 @@
             "subSkillIndex": 0,
             "triggerFrame": 57,
             "behaviorPathId": "-5797025868792535592",
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:43"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:101003205",
+            "operation": "expire",
+            "targetId": "actor-101003",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:44"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:101003205",
+            "operation": "expire",
+            "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:45"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:480124006",
+            "operation": "expire",
+            "targetId": "actor-101010",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
+          },
+          {
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:101003205",
+            "operation": "expire",
+            "targetId": "actor-103002",
+            "controlSkillId": 10100341,
+            "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
+            "actionId": "han-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
-            "controlSkillId": 50046903,
+            "controlSkillId": 10100313,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:48"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
+            "actionId": "han-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
             "targetId": "actor-101003",
-            "controlSkillId": 50046903,
+            "controlSkillId": 10100313,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
           },
@@ -4941,45 +4808,45 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:5"
           },
           {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
-            "operation": "expire",
+            "actionId": "han-ultimate",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
             "targetId": "actor-101003",
-            "controlSkillId": 10100341,
+            "controlSkillId": 10100313,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:50"
-          },
-          {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
-            "operation": "expire",
-            "targetId": "actor-101010",
-            "controlSkillId": 10100341,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:51"
-          },
-          {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:480124006",
-            "operation": "expire",
-            "targetId": "actor-101010",
-            "controlSkillId": 10100341,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
-          },
-          {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:101003205",
-            "operation": "expire",
-            "targetId": "actor-103002",
-            "controlSkillId": 10100341,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           },
           {
             "actionId": "han-ultimate",
             "effectIdentity": "tuning-mark:150:persistent",
             "operation": "apply",
+            "targetId": "actor-101003",
+            "controlSkillId": 10100313,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:51"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "tuning-mark:150:persistent",
+            "operation": "apply",
+            "targetId": "actor-101003",
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
+          },
+          {
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
             "controlSkillId": 10100313,
             "subSkillIndex": 0,
@@ -4987,46 +4854,46 @@
           },
           {
             "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
             "controlSkillId": 10100313,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:55"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "battle-element:540070",
-            "operation": "expire",
+            "actionId": "han-ultimate",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
-            "controlSkillId": 50046903,
+            "controlSkillId": 10100313,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
           },
           {
-            "actionId": "han-kibo-signature",
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "operation": "expire",
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
-            "controlSkillId": 50046903,
+            "controlSkillId": 10100312,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
           },
           {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
-            "controlSkillId": 10100313,
+            "controlSkillId": 10100312,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:58"
           },
           {
-            "actionId": "han-ultimate",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
+            "actionId": "han-charged-stage-two",
+            "effectIdentity": "battle-element:250",
+            "operation": "acquire",
             "targetId": "actor-101003",
-            "controlSkillId": 10100313,
+            "controlSkillId": 10100341,
             "subSkillIndex": 0,
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
           },
@@ -5040,85 +4907,13 @@
             "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:6"
           },
           {
-            "actionId": "han-star-skill",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100312,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:60"
-          },
-          {
-            "actionId": "han-star-skill",
-            "effectIdentity": "tuning-mark:150:persistent",
-            "operation": "apply",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100312,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
-          },
-          {
-            "actionId": "han-ultimate",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100313,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:62"
-          },
-          {
-            "actionId": "han-ultimate",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100313,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:63"
-          },
-          {
-            "actionId": "han-ultimate",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100313,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
-          },
-          {
-            "actionId": "han-star-skill",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100312,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:65"
-          },
-          {
-            "actionId": "han-star-skill",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100312,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
-          },
-          {
-            "actionId": "han-charged-stage-two",
-            "effectIdentity": "battle-element:250",
-            "operation": "acquire",
-            "targetId": "actor-101003",
-            "controlSkillId": 10100341,
-            "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
-          },
-          {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "effectIdentity": "battle-element:250",
             "operation": "acquire",
             "targetId": "actor-101003",
             "controlSkillId": 10100322,
             "subSkillIndex": 0,
-            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
+            "projectionIdentity": "golden-effect:m10-b2:101003:120s-three-actor-golden:60"
           },
           {
             "actionId": "han-ultimate",
@@ -5455,17 +5250,23 @@
             "projectionIdentity": "golden-switchTriggers-m10-b2:101003:120s-three-actor-golden-1"
           }
         ],
-        "diagnostics": [],
+        "diagnostics": [
+          {
+            "actionId": "han-kibo-signature",
+            "code": "golden-action-blocked",
+            "projectionIdentity": "golden-blocked:m10-b2:101003:120s-three-actor-golden:han-kibo-signature"
+          }
+        ],
         "criticalDecisions": [],
         "facts": {
           "buff-apply-refresh-stack-expire": true,
-          "condition-insufficient-negative": false,
+          "condition-insufficient-negative": true,
           "foreground-background-switch": true,
           "normal-trigger-positive": true,
-          "resource-exact-and-insufficient": false
+          "resource-exact-and-insufficient": true
         }
       },
-      "traceProjectionHash": "ee7e1bf2043c5ef2",
+      "traceProjectionHash": "e1627b083d844813",
       "assertions": [
         {
           "assertionIdentity": "scenario-fact:buff-apply-refresh-stack-expire",
@@ -5483,6 +5284,23 @@
           ],
           "reasons": [],
           "assertionHash": "70ac503c6ac0d236"
+        },
+        {
+          "assertionIdentity": "scenario-fact:condition-insufficient-negative",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "condition-insufficient-negative",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:condition-insufficient-negative"
+          ],
+          "reasons": [],
+          "assertionHash": "8dcbd8bfae14e266"
         },
         {
           "assertionIdentity": "scenario-fact:foreground-background-switch",
@@ -5517,6 +5335,23 @@
           ],
           "reasons": [],
           "assertionHash": "21786c93092c79ff"
+        },
+        {
+          "assertionIdentity": "scenario-fact:resource-exact-and-insufficient",
+          "selector": {
+            "expectedValue": true,
+            "factIdentity": "resource-exact-and-insufficient",
+            "kind": "scenario-fact"
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "fact:resource-exact-and-insufficient"
+          ],
+          "reasons": [],
+          "assertionHash": "2e3cbdabad081057"
         },
         {
           "assertionIdentity": "trace-action-form:golden-action-form:m10-b2:101003:120s-three-actor-golden:han-charged-stage-one",
@@ -5555,25 +5390,6 @@
           ],
           "reasons": [],
           "assertionHash": "b1cb5f59eb0474b0"
-        },
-        {
-          "assertionIdentity": "trace-action-form:golden-action-form:m10-b2:101003:120s-three-actor-golden:han-kibo-signature",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "kind": "action-form",
-            "ownerId": 101003,
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-action-form:m10-b2:101003:120s-three-actor-golden:han-kibo-signature"
-          ],
-          "reasons": [],
-          "assertionHash": "5afc06d751c6f04b"
         },
         {
           "assertionIdentity": "trace-action-form:golden-action-form:m10-b2:101003:120s-three-actor-golden:han-limit-counter",
@@ -6864,90 +6680,8 @@
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180",
           "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:500469062",
-            "kind": "effect",
-            "operation": "damage",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180"
-          ],
-          "reasons": [],
-          "assertionHash": "d5ed0d41adaa23cc"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:152",
-            "kind": "effect",
-            "operation": "damage",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181"
-          ],
-          "reasons": [],
-          "assertionHash": "49b2bd8bcb9cb8e2"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:500469008",
-            "kind": "effect",
-            "operation": "damage",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:183"
-          ],
-          "reasons": [],
-          "assertionHash": "d188c4deb101e8d8"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:500469072",
-            "kind": "effect",
-            "operation": "damage",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:185"
-          ],
-          "reasons": [],
-          "assertionHash": "cbf3aee492115387"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:186",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
+            "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+            "controlSkillId": 10101021,
             "effectIdentity": "battle-element:0",
             "kind": "effect",
             "operation": "damage",
@@ -6958,6 +6692,12 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:180",
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:181",
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:182",
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:183",
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:184",
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:185",
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:186",
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:187",
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:188",
@@ -6977,17 +6717,10 @@
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:202",
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:203",
             "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:204",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:205",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:206",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:207",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:208",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:209",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:210",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:211",
-            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:212"
+            "golden-damage-effect:m10-b2:101003:120s-three-actor-golden:205"
           ],
           "reasons": [],
-          "assertionHash": "3262b8d856939b15"
+          "assertionHash": "1e233934dcee54de"
         },
         {
           "assertionIdentity": "trace-effect:golden-damage-effect:m10-b2:101003:120s-three-actor-golden:19",
@@ -7396,18 +7129,18 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:11",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:12",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:4",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:49",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:5",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:58",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:59",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:51",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:6",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:7",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:8",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:9"
           ],
           "reasons": [],
-          "assertionHash": "ace07ce96cd5a39b"
+          "assertionHash": "3226228b14d23c09"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:13",
@@ -7478,11 +7211,11 @@
             "golden-effect:m10-b2:101003:120s-three-actor-golden:18",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:20",
             "golden-effect:m10-b2:101003:120s-three-actor-golden:21",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:60",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:61"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:52",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
           ],
           "reasons": [],
-          "assertionHash": "24bffd86959ac06c"
+          "assertionHash": "6dcad59f7e455b9e"
         },
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:27",
@@ -7696,50 +7429,6 @@
         {
           "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:42",
           "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:540070",
-            "kind": "effect",
-            "operation": "apply",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
-          ],
-          "reasons": [],
-          "assertionHash": "67afeb99cbcf5783"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:43",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "kind": "effect",
-            "operation": "apply",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:43",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:48",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:49"
-          ],
-          "reasons": [],
-          "assertionHash": "79a751117441d02f"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
-          "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "behaviorPathId": "-5797025868792535592",
             "controlSkillId": 10100322,
@@ -7754,13 +7443,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:42"
           ],
           "reasons": [],
-          "assertionHash": "487ecb45bc8fa8f3"
+          "assertionHash": "98caebc5fc0f756b"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:47",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:43",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "behaviorPathId": "-5797025868792535592",
@@ -7776,13 +7465,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:43"
           ],
           "reasons": [],
-          "assertionHash": "51b241d783e24180"
+          "assertionHash": "d3a5ecf2ceaaeb38"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:50",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:44",
           "selector": {
             "actionId": "han-charged-stage-two",
             "controlSkillId": 10100341,
@@ -7796,15 +7485,15 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:50",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:51",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:53"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:44",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:45",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:47"
           ],
           "reasons": [],
-          "assertionHash": "4ac5100b23ddac1f"
+          "assertionHash": "e2bad7c08d44c657"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:52",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:46",
           "selector": {
             "actionId": "han-charged-stage-two",
             "controlSkillId": 10100341,
@@ -7818,53 +7507,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:52"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:46"
           ],
           "reasons": [],
-          "assertionHash": "09bc292244cd2b56"
+          "assertionHash": "6f8342194c72f948"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:56",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "battle-element:540070",
-            "kind": "effect",
-            "operation": "expire",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
-          ],
-          "reasons": [],
-          "assertionHash": "637f8a92f4ea2644"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:57",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "controlSkillId": 50046903,
-            "effectIdentity": "kibo-passive:520090:520090002",
-            "kind": "effect",
-            "operation": "expire",
-            "subSkillIndex": 0
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:57"
-          ],
-          "reasons": [],
-          "assertionHash": "3b3218423f7499ac"
-        },
-        {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:62",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:54",
           "selector": {
             "actionId": "han-ultimate",
             "controlSkillId": 10100313,
@@ -7878,15 +7527,15 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:62",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:63",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:64"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:54",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:55",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:56"
           ],
           "reasons": [],
-          "assertionHash": "1c0a88f55d6be066"
+          "assertionHash": "710fdf93440c4232"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:65",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:57",
           "selector": {
             "actionId": "han-star-skill",
             "controlSkillId": 10100312,
@@ -7900,14 +7549,14 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:65",
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:66"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:57",
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:58"
           ],
           "reasons": [],
-          "assertionHash": "bdc40ba06a67133f"
+          "assertionHash": "eaaf95772dc72a5e"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:67",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:59",
           "selector": {
             "actionId": "han-charged-stage-two",
             "controlSkillId": 10100341,
@@ -7921,13 +7570,13 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:67"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:59"
           ],
           "reasons": [],
-          "assertionHash": "bbf5004f9e70bdf1"
+          "assertionHash": "956af18a0230f237"
         },
         {
-          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:68",
+          "assertionIdentity": "trace-effect:golden-effect:m10-b2:101003:120s-three-actor-golden:60",
           "selector": {
             "actionId": "switch-away-from-han--on-exit--actor-101003--star-carry",
             "controlSkillId": 10100322,
@@ -7941,10 +7590,10 @@
           },
           "status": "passed",
           "actualProjectionIdentities": [
-            "golden-effect:m10-b2:101003:120s-three-actor-golden:68"
+            "golden-effect:m10-b2:101003:120s-three-actor-golden:60"
           ],
           "reasons": [],
-          "assertionHash": "0412fed9a00a4917"
+          "assertionHash": "04f7c48cb3af4747"
         },
         {
           "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:0",
@@ -8967,91 +8616,6 @@
           "assertionHash": "895cdc1574ca25f6"
         },
         {
-          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:63",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|2|-6736157915999571924|27|1",
-            "kind": "hit"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-hit:m10-b2:101003:120s-three-actor-golden:63"
-          ],
-          "reasons": [],
-          "assertionHash": "3731ddf66371dec8"
-        },
-        {
-          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:64",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|38|2",
-            "kind": "hit"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-hit:m10-b2:101003:120s-three-actor-golden:64"
-          ],
-          "reasons": [],
-          "assertionHash": "c382b28eb8372ab7"
-        },
-        {
-          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:65",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|0|-8346828456206637760|49|3",
-            "kind": "hit"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-hit:m10-b2:101003:120s-three-actor-golden:65"
-          ],
-          "reasons": [],
-          "assertionHash": "c392aef13d97379e"
-        },
-        {
-          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:66",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|5|8963641323797659805|138|4",
-            "kind": "hit"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-hit:m10-b2:101003:120s-three-actor-golden:66"
-          ],
-          "reasons": [],
-          "assertionHash": "98e8511d17dc8f6c"
-        },
-        {
-          "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:67",
-          "selector": {
-            "actionId": "han-kibo-signature",
-            "hitIdentity": "50046903|0|elements|5|8963641323797659805|142|5",
-            "kind": "hit"
-          },
-          "expectation": {
-            "minimumCount": 1
-          },
-          "status": "passed",
-          "actualProjectionIdentities": [
-            "golden-hit:m10-b2:101003:120s-three-actor-golden:67"
-          ],
-          "reasons": [],
-          "assertionHash": "3ce08db29e78805c"
-        },
-        {
           "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:7",
           "selector": {
             "actionId": "han-normal-a1",
@@ -9198,7 +8762,7 @@
           "assertionHash": "14aedd3a456ce1ad"
         }
       ],
-      "scenarioCaseHash": "fad70fd7ec04040e"
+      "scenarioCaseHash": "4024a3e5625eef19"
     },
     {
       "schemaVersion": 1,
@@ -9206,7 +8770,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/101003-visual.json",
-        "inputHash": "7579c65678d0a8af",
+        "inputHash": "cc3d6c0efc1bfc83",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/101003-visual.json"
       },
       "execution": {
@@ -9215,11 +8779,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "7579c65678d0a8af",
-          "data": "d25f91810fa6c738",
-          "trace": "32f1a82df771b21e",
+          "input": "cc3d6c0efc1bfc83",
+          "data": "665403a4382b63df",
+          "trace": "127e2cbd0bd9c3f5",
           "evaluation": "53eb57b729f3a7e6",
-          "build": "047a9c32b70be9ee"
+          "build": "fca9f6db03de2aed"
         }
       },
       "traceProjection": {
@@ -9423,7 +8987,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9443,7 +9007,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9463,7 +9027,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9483,7 +9047,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9503,7 +9067,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9523,7 +9087,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9543,7 +9107,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9563,7 +9127,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9583,7 +9147,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9603,7 +9167,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9623,7 +9187,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9643,7 +9207,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9663,7 +9227,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9683,7 +9247,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9703,7 +9267,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9723,7 +9287,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9743,7 +9307,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9763,7 +9327,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9783,7 +9347,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9803,7 +9367,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9823,7 +9387,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9843,7 +9407,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9863,7 +9427,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9883,7 +9447,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9903,7 +9467,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9923,7 +9487,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9943,7 +9507,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9963,7 +9527,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -9983,7 +9547,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10003,7 +9567,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10023,7 +9587,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10043,7 +9607,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10063,7 +9627,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10083,7 +9647,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10103,7 +9667,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10123,7 +9687,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10143,7 +9707,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10163,7 +9727,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10183,7 +9747,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10203,7 +9767,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10223,7 +9787,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10243,7 +9807,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10263,7 +9827,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10283,7 +9847,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10303,7 +9867,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10323,7 +9887,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10343,7 +9907,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10363,7 +9927,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10594,7 +10158,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10621,7 +10185,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10657,7 +10221,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10684,7 +10248,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10711,7 +10275,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10738,7 +10302,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10765,7 +10329,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10801,7 +10365,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10837,7 +10401,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10873,7 +10437,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10909,7 +10473,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10936,7 +10500,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -10972,7 +10536,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11008,7 +10572,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11044,7 +10608,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0|layer|6|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11080,7 +10644,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11116,7 +10680,7 @@
               "effectIdentity": "han-firework-explosion-controlled-attack-passive",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11152,7 +10716,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11188,7 +10752,7 @@
               "effectIdentity": "han-firework-explosion-team-tuning-stage-one",
               "elementId": null,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11224,7 +10788,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11260,7 +10824,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11296,7 +10860,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0|layer|5|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11332,7 +10896,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|63|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11368,7 +10932,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11395,7 +10959,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11431,7 +10995,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11467,7 +11031,7 @@
               "effectIdentity": "10100312|0|elements|3|-1498771669867596146|70|0",
               "elementId": null,
               "identity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11503,7 +11067,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11530,7 +11094,7 @@
               "effectIdentity": "enemy:firework",
               "elementId": 101003079,
               "identity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F",
-              "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+              "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
               "packageId": "azpr-tc-2026-07-18",
               "pathId": null,
               "sourceKind": null,
@@ -11551,6 +11115,32 @@
             "controlSkillId": 10100312,
             "subSkillIndex": 0,
             "projectionIdentity": "machine-tuning-damage-effect:m11-d-101003-visual-acceptance:7"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:152",
+            "operation": "activate-tuning-mark-component",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:2749505792865494576:63|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897",
+            "beforeValue": 0,
+            "afterValue": 1,
+            "change": 1,
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "projectionIdentity": "machine-tuning-mark-component-activation:m11-d-101003-visual-acceptance:0:152"
+          },
+          {
+            "actionId": "han-star-skill",
+            "effectIdentity": "battle-element:152",
+            "operation": "activate-tuning-mark-component",
+            "targetId": null,
+            "sourceIdentity": "battle-effect:10100312:0:-1498771669867596146:1011852803228526128:70|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F|combat-overlimit-mechanics-20260718.json#tuningProfiles[key=fire]|combat-overlimit-mechanics-20260718.json#markContainers[elementConfigId=150]|battle-element-assets.jsonl#path_id=2917355649561243897",
+            "beforeValue": 1,
+            "afterValue": 2,
+            "change": 1,
+            "controlSkillId": 10100312,
+            "subSkillIndex": 0,
+            "projectionIdentity": "machine-tuning-mark-component-activation:m11-d-101003-visual-acceptance:2:152"
           },
           {
             "actionId": "han-star-skill",
@@ -11983,10 +11573,34 @@
         "switchTriggers": [],
         "diagnostics": [
           {
-            "actionId": "101003-critical-sampled-low",
-            "code": "attack-input-chain-incomplete",
+            "actionId": "101003-critical-sampled-boundary",
+            "code": "attack-input-chain-order-invalid",
             "status": "unresolved",
             "projectionIdentity": "machine-diagnostic:m11-d-101003-visual-acceptance:0"
+          },
+          {
+            "actionId": "101003-critical-expected",
+            "code": "attack-input-chain-order-invalid",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-101003-visual-acceptance:1"
+          },
+          {
+            "actionId": "101003-critical-critical",
+            "code": "attack-input-chain-order-invalid",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-101003-visual-acceptance:2"
+          },
+          {
+            "actionId": "101003-critical-non-critical",
+            "code": "attack-input-chain-order-invalid",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-101003-visual-acceptance:3"
+          },
+          {
+            "actionId": "101003-critical-miss-critical",
+            "code": "attack-input-chain-order-invalid",
+            "status": "unresolved",
+            "projectionIdentity": "machine-diagnostic:m11-d-101003-visual-acceptance:4"
           }
         ],
         "criticalDecisions": [
@@ -12157,7 +11771,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "496a82f883e62263",
+      "traceProjectionHash": "d551cf460731cf45",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -13750,6 +13364,27 @@
           "assertionHash": "fac6b8edb331185b"
         },
         {
+          "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m11-d-101003-visual-acceptance:0:152",
+          "selector": {
+            "actionId": "han-star-skill",
+            "controlSkillId": 10100312,
+            "effectIdentity": "battle-element:152",
+            "kind": "effect",
+            "operation": "activate-tuning-mark-component",
+            "subSkillIndex": 0
+          },
+          "expectation": {
+            "minimumCount": 1
+          },
+          "status": "passed",
+          "actualProjectionIdentities": [
+            "machine-tuning-mark-component-activation:m11-d-101003-visual-acceptance:0:152",
+            "machine-tuning-mark-component-activation:m11-d-101003-visual-acceptance:2:152"
+          ],
+          "reasons": [],
+          "assertionHash": "781e4ee7350fd7ac"
+        },
+        {
           "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m11-d-101003-visual-acceptance:0",
           "selector": {
             "actionId": "han-star-skill",
@@ -14153,18 +13788,18 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "19836883b1ef5d21"
+      "scenarioCaseHash": "7588ee0296a2d44b"
     }
   ],
   "summary": {
     "scenarioCount": 3,
     "executionPassedCount": 3,
-    "assertionCount": 340,
-    "assertionPassedCount": 340,
+    "assertionCount": 329,
+    "assertionPassedCount": 329,
     "runnerKindCounts": {
       "canonical-character-golden": 2,
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "dd3f362c2800af95"
+  "scenarioSetHash": "e6b675f734a898d5"
 }

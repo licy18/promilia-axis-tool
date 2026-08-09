@@ -674,6 +674,8 @@ export async function createVerifiedCombatMechanicsBuild({
     templateHeroRows: readJson(TEMPLATE_HERO_PATH).rows,
     publicCharacters: seed?.gameData?.characters ?? [],
     publicKibos: seed?.gameData?.kibos ?? [],
+    optimizationObjectSourceAliases:
+      createOptimizationObjectStaticSourceAliases(recipes),
     propertySourceSnapshot: readJson(PROPERTY_SOURCES_PATH),
     spUnitContract,
   });
@@ -8127,6 +8129,7 @@ function createStaticPropertyCatalog({
   templateHeroRows,
   publicCharacters,
   publicKibos,
+  optimizationObjectSourceAliases,
   propertySourceSnapshot,
   spUnitContract,
 }) {
@@ -8142,22 +8145,75 @@ function createStaticPropertyCatalog({
   const skillById = new Map(
     (tables.skill ?? []).map(row => [Number(row.id), row])
   );
+  const heroById = new Map(
+    (tables.hero ?? []).map(hero => [Number(hero.id), hero])
+  );
+  const publicCharacterIds = new Set(
+    (publicCharacters ?? []).map(character => Number(character.id))
+  );
   const verifiedHeroes = (tables.hero ?? []).filter(
     row => Number(row.isCollect) === 1 && Number(row.isUsable) === 1
   );
+  const optimizationAliasByCharacterId = new Map();
+  for (const alias of optimizationObjectSourceAliases ?? []) {
+    const characterId = Number(alias.sourceCharacterId);
+    const hero = heroById.get(characterId);
+    const expectedCharacterSource =
+      `src/data/generated/characters.json#items[id=${characterId}]`;
+    const expectedHeroSource = `NewTable/hero.rows[id=${characterId}]`;
+    if (
+      !Number.isInteger(characterId) ||
+      Number(alias.ownerId) !== characterId ||
+      !hero ||
+      Number(hero.isUsable) !== 1 ||
+      !publicCharacterIds.has(characterId) ||
+      !String(alias.optimizationObjectId ?? '').trim() ||
+      !String(alias.sourceAliasIdentity ?? '').trim() ||
+      !String(alias.sourceIdentity ?? '').includes(expectedCharacterSource) ||
+      !String(alias.sourceIdentity ?? '').includes(expectedHeroSource) ||
+      optimizationAliasByCharacterId.has(characterId)
+    ) {
+      throw new Error(
+        `optimization object static source alias invalid: ${characterId || 'missing'}`
+      );
+    }
+    optimizationAliasByCharacterId.set(characterId, {
+      optimizationObjectId: String(alias.optimizationObjectId),
+      sourceCharacterId: characterId,
+      sourceAliasIdentity: String(alias.sourceAliasIdentity),
+      sourceIdentity: String(alias.sourceIdentity),
+    });
+  }
+  const staticProfileHeroes = [
+    ...new Map(
+      [
+        ...verifiedHeroes,
+        ...optimizationAliasByCharacterId.keys().map(characterId =>
+          heroById.get(characterId)
+        ),
+      ].map(hero => [Number(hero.id), hero])
+    ).values(),
+  ].sort((left, right) => Number(left.id) - Number(right.id));
   const verifiedKibos = (tables.pet ?? []).filter(
     row => row.isBattle === true && templateById.has(Number(row.id))
   );
-  const actorProfiles = verifiedHeroes.map(hero => {
+  const actorProfiles = staticProfileHeroes.map(hero => {
     const property = unitPropertyById.get(Number(hero.propertyId));
     const baseTemplateId = Number(property?.baseAttributeId);
     const baseTemplate = templateById.get(baseTemplateId);
+    const optimizationObject = optimizationAliasByCharacterId.get(
+      Number(hero.id)
+    );
+    const baseSourceIdentity = `NewTable/hero.rows[id=${hero.id}].propertyId=${hero.propertyId}|NewTable/unit_property.rows[id=${hero.propertyId}].baseAttributeId=${baseTemplateId}|NewTable/template_value.rows[id=${baseTemplateId}].baseAttribute`;
     return {
       characterId: Number(hero.id),
       propertyId: Number(hero.propertyId),
       baseTemplateId,
       templateAttributes: parseAttributeEntries(baseTemplate?.baseAttribute),
-      sourceIdentity: `NewTable/hero.rows[id=${hero.id}].propertyId=${hero.propertyId}|NewTable/unit_property.rows[id=${hero.propertyId}].baseAttributeId=${baseTemplateId}|NewTable/template_value.rows[id=${baseTemplateId}].baseAttribute`,
+      ...(optimizationObject ? { optimizationObject } : {}),
+      sourceIdentity: [baseSourceIdentity, optimizationObject?.sourceIdentity]
+        .filter(Boolean)
+        .join('|'),
       status: baseTemplate
         ? 'verified-static-actor-profile-ready'
         : 'verified-static-actor-profile-unresolved',
@@ -8177,7 +8233,7 @@ function createStaticPropertyCatalog({
       sourceIdentity: `NewTable/template_hero.rows[type=1,level=${row.level}].baseAttribute=${row.baseAttribute}|NewTable/template_value.rows[id=${row.baseAttribute}].baseAttribute`,
     }))
     .sort((left, right) => left.level - right.level);
-  const starGiftProfiles = verifiedHeroes.map(hero => ({
+  const starGiftProfiles = staticProfileHeroes.map(hero => ({
     characterId: Number(hero.id),
     ranks: (tables.talent_rank ?? [])
       .filter(row => Number(row.heroId) === Number(hero.id))
@@ -8197,7 +8253,7 @@ function createStaticPropertyCatalog({
         };
       }),
   }));
-  const favorabilityProfiles = verifiedHeroes.map(hero => ({
+  const favorabilityProfiles = staticProfileHeroes.map(hero => ({
     characterId: Number(hero.id),
     levels: (tables.hero_favorability_info ?? [])
       .filter(row => Number(row.heroId) === Number(hero.id))
@@ -8399,6 +8455,7 @@ function createStaticPropertyCatalog({
     publicCharacters,
     publicKibos,
     verifiedHeroes,
+    optimizationObjectSourceAliases,
     verifiedKibos,
     actorProfiles,
     kiboProfiles,
@@ -8467,6 +8524,7 @@ function createStaticPropertyIdentityAudit({
   publicCharacters,
   publicKibos,
   verifiedHeroes,
+  optimizationObjectSourceAliases,
   verifiedKibos,
   actorProfiles,
   kiboProfiles,
@@ -8478,6 +8536,11 @@ function createStaticPropertyIdentityAudit({
     (publicKibos ?? []).map(item => [Number(item.kiboId ?? item.id), item])
   );
   const verifiedActorIds = new Set(verifiedHeroes.map(item => Number(item.id)));
+  const optimizationAliasIds = new Set(
+    (optimizationObjectSourceAliases ?? []).map(item =>
+      Number(item.sourceCharacterId)
+    )
+  );
   const verifiedKiboIds = new Set(verifiedKibos.map(item => Number(item.id)));
   const actorProfileById = new Map(
     actorProfiles.map(item => [Number(item.characterId), item])
@@ -8485,15 +8548,26 @@ function createStaticPropertyIdentityAudit({
   const kiboProfileById = new Map(
     kiboProfiles.map(item => [Number(item.kiboId), item])
   );
-  const actors = [...new Set([...workbenchActors.keys(), ...verifiedActorIds])]
+  const actors = [
+    ...new Set([
+      ...workbenchActors.keys(),
+      ...verifiedActorIds,
+      ...optimizationAliasIds,
+    ]),
+  ]
     .sort((left, right) => left - right)
     .map(id => ({
       id,
       name: workbenchActors.get(id)?.name ?? null,
       inWorkbenchCatalog: workbenchActors.has(id),
       inVerifiedCollectibleSet: verifiedActorIds.has(id),
+      inOptimizationObjectSourceAliasSet: optimizationAliasIds.has(id),
       classification:
-        workbenchActors.has(id) && verifiedActorIds.has(id)
+        optimizationAliasIds.has(id)
+          ? actorProfileById.get(id)?.applied
+            ? 'optimization-object-source-alias-applicable'
+            : 'optimization-object-source-alias-unresolved'
+          : workbenchActors.has(id) && verifiedActorIds.has(id)
           ? actorProfileById.get(id)?.applied
             ? 'applicable'
             : 'unresolved'
@@ -8521,6 +8595,8 @@ function createStaticPropertyIdentityAudit({
     status: 'verified-static-property-identity-audit-ready',
     workbenchActorCount: workbenchActors.size,
     verifiedActorCount: verifiedActorIds.size,
+    staticActorProfileCount: actorProfiles.length,
+    optimizationObjectSourceAliasCount: optimizationAliasIds.size,
     workbenchKiboCount: workbenchKibos.size,
     verifiedKiboCount: verifiedKiboIds.size,
     actorClassifications: countValues(actors.map(item => item.classification)),
@@ -8528,6 +8604,28 @@ function createStaticPropertyIdentityAudit({
     actors,
     kibos,
   };
+}
+
+function createOptimizationObjectStaticSourceAliases(recipes = []) {
+  return recipes
+    .filter(recipe => recipe?.optimizationObject != null)
+    .map(recipe => ({
+      ownerId: Number(recipe.ownerId),
+      optimizationObjectId: recipe.optimizationObject.optimizationObjectId,
+      sourceCharacterId: Number(
+        recipe.optimizationObject.sourceCharacterId
+      ),
+      sourceAliasIdentity: recipe.optimizationObject.sourceAliasIdentity,
+      sourceIdentity: recipe.optimizationObject.sourceIdentity,
+    }))
+    .sort(
+      (left, right) =>
+        left.sourceCharacterId - right.sourceCharacterId ||
+        String(left.sourceAliasIdentity).localeCompare(
+          String(right.sourceAliasIdentity),
+          'en'
+        )
+    );
 }
 
 function parseAttributeEntries(value) {
@@ -9147,6 +9245,10 @@ function createPackage({
       enemyProfileCount: enemyProfiles.length,
       collectibleActorProfileCount:
         staticPropertyCatalog.identityAudit.verifiedActorCount,
+      staticActorProfileCount:
+        staticPropertyCatalog.identityAudit.staticActorProfileCount,
+      optimizationObjectSourceAliasCount:
+        staticPropertyCatalog.identityAudit.optimizationObjectSourceAliasCount,
       battleKiboProfileCount:
         staticPropertyCatalog.identityAudit.verifiedKiboCount,
       workbenchActorIdentityCount:

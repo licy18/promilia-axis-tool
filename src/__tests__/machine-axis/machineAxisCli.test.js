@@ -47,6 +47,8 @@ function createCycleEnvelope() {
   contract.scenario.team[2] = { ...first, slotId: 'slot-3' };
   contract.scenario.durationFrames = 900;
   contract.scenario.critical = { policy: 'expected', seed: null };
+  for (const slot of contract.scenario.team) slot.loadout = {};
+  contract.scenario.initialRuntimeState.kiboEnergyBySlot = [];
   contract.actions = [1, 2, 3].map(sequenceIndex => ({
     id: `cycle-ruby-a${sequenceIndex}`,
     owner: { kind: 'actor', slotId: 'slot-1' },

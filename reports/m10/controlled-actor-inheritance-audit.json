@@ -20,8 +20,8 @@
       "source|team-element-false": 6,
       "source|team-element-true": 4
     },
-    "reachableRecordCount": 19,
-    "legacyUnreachableRecordCount": 63
+    "reachableRecordCount": 22,
+    "legacyUnreachableRecordCount": 60
   },
   "nonMigratingRegressionEvidence": [
     {
@@ -929,7 +929,7 @@
       "inheritTypeRaw": 2,
       "isTeamElement": true,
       "teamElementRaw": 1,
-      "reachabilityStatus": "legacy-unreachable-evidence",
+      "reachabilityStatus": "reachable-battle-effect-graph",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=3859325085704717590"
     },
     {
@@ -951,7 +951,7 @@
       "inheritTypeRaw": 2,
       "isTeamElement": true,
       "teamElementRaw": 1,
-      "reachabilityStatus": "legacy-unreachable-evidence",
+      "reachabilityStatus": "reachable-battle-effect-graph",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=-6117208996199980820"
     },
     {
@@ -962,7 +962,7 @@
       "inheritTypeRaw": 1,
       "isTeamElement": true,
       "teamElementRaw": 1,
-      "reachabilityStatus": "legacy-unreachable-evidence",
+      "reachabilityStatus": "reachable-battle-effect-graph",
       "sourceIdentity": "battle-element-assets.jsonl#path_id=1920509610385167669"
     },
     {

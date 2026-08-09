@@ -3,7 +3,7 @@
   "kind": "azpr-verified-combat-mechanics-sync-audit",
   "status": "verified-combat-mechanics-sync-audit-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+  "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
   "evidenceStatus": "reverse-engineered-verified",
   "validation": {
     "passed": 18,
@@ -85,11 +85,14 @@
     "status": "verified-static-property-identity-audit-ready",
     "workbenchActorCount": 20,
     "verifiedActorCount": 17,
+    "staticActorProfileCount": 19,
+    "optimizationObjectSourceAliasCount": 2,
     "workbenchKiboCount": 122,
     "verifiedKiboCount": 147,
     "actorClassifications": {
       "applicable": 17,
-      "non-current-public-directory": 3
+      "non-current-public-directory": 1,
+      "optimization-object-source-alias-applicable": 2
     },
     "kiboClassifications": {
       "applicable": 122,
@@ -101,6 +104,7 @@
         "name": "寒悠悠",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -108,6 +112,7 @@
         "name": "芃芃",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -115,6 +120,7 @@
         "name": "涂山小玉",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -122,6 +128,7 @@
         "name": "莉莉",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -129,6 +136,7 @@
         "name": "红宝石",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -136,6 +144,7 @@
         "name": "西芙莉雅",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -143,6 +152,7 @@
         "name": "米砂",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -150,6 +160,7 @@
         "name": "阿比",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -157,6 +168,7 @@
         "name": "忒拉拉",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -164,6 +176,7 @@
         "name": "璐璐卡",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -171,6 +184,7 @@
         "name": "米蒂",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -178,6 +192,7 @@
         "name": "卡塔露",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -185,6 +200,7 @@
         "name": "末音",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -192,6 +208,7 @@
         "name": "夏儿",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -199,6 +216,7 @@
         "name": "法兰塔",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -206,6 +224,7 @@
         "name": "姬瑟贝露",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -213,6 +232,7 @@
         "name": "艾妮丝",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": true,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "applicable"
       },
       {
@@ -220,20 +240,23 @@
         "name": "女主角",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": false,
-        "classification": "non-current-public-directory"
+        "inOptimizationObjectSourceAliasSet": true,
+        "classification": "optimization-object-source-alias-applicable"
       },
       {
         "id": 199002,
         "name": "男主角",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": false,
-        "classification": "non-current-public-directory"
+        "inOptimizationObjectSourceAliasSet": true,
+        "classification": "optimization-object-source-alias-applicable"
       },
       {
         "id": 199003,
         "name": "诺诺",
         "inWorkbenchCatalog": true,
         "inVerifiedCollectibleSet": false,
+        "inOptimizationObjectSourceAliasSet": false,
         "classification": "non-current-public-directory"
       }
     ],
@@ -1270,22 +1293,22 @@
     ]
   },
   "sourceCoverage": {
-    "candidateActionCount": 646,
-    "classifiedActionCount": 646,
-    "foundControlCount": 681,
-    "indexedElementPathCount": 2307,
-    "appliedActionBindingCount": 695,
-    "appliedHitBindingCount": 3465,
-    "uniqueControlBindingCount": 584,
-    "uniqueControlHitBindingCount": 5765,
-    "appliedEffectBindingCount": 1794,
+    "candidateActionCount": 648,
+    "classifiedActionCount": 648,
+    "foundControlCount": 715,
+    "indexedElementPathCount": 2370,
+    "appliedActionBindingCount": 697,
+    "appliedHitBindingCount": 3454,
+    "uniqueControlBindingCount": 586,
+    "uniqueControlHitBindingCount": 5726,
+    "appliedEffectBindingCount": 1906,
     "verifiedZeroEffectBindingCount": 12,
-    "unresolvedEffectBindingCount": 1307,
+    "unresolvedEffectBindingCount": 1271,
     "unresolvedActionBindingCount": 12,
     "enemyProfileCount": 208,
     "appliedEnemyProfileCount": 204,
     "appliedHitDamageTypeCounts": {
-      "1": 1584,
+      "1": 1545,
       "2": 316,
       "3": 2773,
       "4": 1082,

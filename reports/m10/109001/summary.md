@@ -2,7 +2,7 @@
 
 - Owner: `109001`
 - Profile: `actor:109001:character-combat-profile:v1`
-- Hash: `a603cbb99deebec04d164eede5bb3156ee152bf8cd900c3ec0e319e69415e10d`
+- Hash: `835e01180cb08af6ef6a5d46afa77f25c49c33d2b67994e0343e73727318ef0b`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -44,7 +44,7 @@
 | stateMachines | applied | 3 | 0 | 3 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |
 | frontBackDifferences | applied | 1 | 0 | 1 |
-| loadoutAndTeamStatPropagation | applied | 1 | 0 | 1 |
+| loadoutAndTeamStatPropagation | applied | 2 | 0 | 2 |
 
 ## 未闭环
 

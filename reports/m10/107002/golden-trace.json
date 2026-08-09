@@ -6,14 +6,16 @@
   "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
+  "sourcePackageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "2f18fb2e626f75c0",
-    "traceHash": "f38335132c08ff62",
-    "dataHash": "7fbc7266cd6dfb2e",
+    "inputHash": "aaa1ec757a42cac4",
+    "traceHash": "d19b0259a02696d6",
+    "dataHash": "c9056ed82f33b529",
+    "buildHash": "7884ee27f495e2ad",
+    "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -67,6 +69,10 @@
           "controlSkillId": 10700203,
           "subSkillIndex": 0,
           "actualDurationFrames": 100,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -76,6 +82,10 @@
           "controlSkillId": 10700203,
           "subSkillIndex": 0,
           "actualDurationFrames": 100,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -85,6 +95,10 @@
           "controlSkillId": 10700204,
           "subSkillIndex": 0,
           "actualDurationFrames": 289,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -94,6 +108,10 @@
           "controlSkillId": 10700204,
           "subSkillIndex": 0,
           "actualDurationFrames": 289,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -103,6 +121,10 @@
           "controlSkillId": 10700210,
           "subSkillIndex": 0,
           "actualDurationFrames": 330,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -112,6 +134,10 @@
           "controlSkillId": 10700226,
           "subSkillIndex": 0,
           "actualDurationFrames": 218,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
         {
@@ -121,6 +147,10 @@
           "controlSkillId": 10700226,
           "subSkillIndex": 0,
           "actualDurationFrames": 218,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
         {
@@ -130,6 +160,10 @@
           "controlSkillId": 10700226,
           "subSkillIndex": 0,
           "actualDurationFrames": 218,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
         {
@@ -139,6 +173,10 @@
           "controlSkillId": 10700213,
           "subSkillIndex": 0,
           "actualDurationFrames": 298,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -148,6 +186,10 @@
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-direct-execution"
         },
         {
@@ -157,6 +199,10 @@
           "controlSkillId": 10700222,
           "subSkillIndex": 0,
           "actualDurationFrames": 150,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         }
       ],
@@ -309,8 +355,8 @@
             336,
             342
           ],
-          "totalHpDamage": 1334,
-          "totalToughnessDamage": 934
+          "totalHpDamage": 1321,
+          "totalToughnessDamage": 925
         },
         "misa-a4-required-hit-miss": {
           "hitCount": 8,
@@ -490,12 +536,12 @@
           "maximumHpSubjects": []
         }
       },
-      "ownerHitTotalHpDamage": 16621,
-      "ownerHitTotalToughnessDamage": 8836,
+      "ownerHitTotalHpDamage": 16608,
+      "ownerHitTotalToughnessDamage": 8827,
       "selectedHpDamageByActionId": {
         "misa-a3": 2391,
         "misa-a3-pickup-hits-miss": 2448,
-        "misa-a4": 2636,
+        "misa-a4": 2623,
         "misa-a4-required-hit-miss": 2993,
         "misa-charged": 2261,
         "misa-star": 37884,
@@ -506,14 +552,14 @@
         "switch-away-from-misa": 0,
         "switch-away-from-misa--on-exit--actor-107002--star-carry": 0
       },
-      "totalHpDamage": 89361,
+      "totalHpDamage": 89348,
       "totalToughnessDamage": 2640,
-      "ownerTotalHpDamage": 86264,
+      "ownerTotalHpDamage": 86251,
       "ownerTotalToughnessDamage": 28763,
       "enemy": {
         "pointCount": 378,
         "initialHp": 8677869.84,
-        "finalHp": 8588508.84,
+        "finalHp": 8588521.84,
         "maxHp": 8677869.84,
         "initialToughness": 26822.0077,
         "finalToughness": 24182.0077,
@@ -1886,7 +1932,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            1,
             6,
             2
           ],
@@ -1906,6 +1952,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 29400,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1935,7 +1984,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            2,
             5,
             2
           ],
@@ -1955,6 +2004,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 35266.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1984,7 +2036,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            2,
             5,
             2
           ],
@@ -2004,6 +2056,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2043,7 +2098,7 @@
           "firstAppliedFrame": 324,
           "firstExpiredFrame": 2116,
           "firstAppliedSourceSequencePath": [
-            0,
+            1,
             6,
             2
           ],
@@ -2080,7 +2135,7 @@
           "firstAppliedFrame": 1282,
           "firstExpiredFrame": 4522,
           "firstAppliedSourceSequencePath": [
-            0,
+            3,
             31,
             31,
             107002265
@@ -2473,7 +2528,7 @@
       "baselineEffectFormulaValuesById": {
         "battle-element:107002256": []
       },
-      "baselineReplayHash": "19ca64ccd6a93fd76da92a68dc17dd02cfe044fddfde08b244b4c0f7d2d09c4c"
+      "baselineReplayHash": "d6ef2ce3915465d5076aa74294a9e66c04e3bdbbc3f1a87e1ae776d489e4ca2d"
     },
     "trace": {
       "damage": [
@@ -2817,9 +2872,9 @@
             6,
             0
           ],
-          "rawDamage": 273,
-          "hpDamage": 273,
-          "toughnessDamage": 191,
+          "rawDamage": 260,
+          "hpDamage": 260,
+          "toughnessDamage": 182,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -2885,7 +2940,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            1,
             50,
             22,
             552,
@@ -2905,7 +2960,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            1,
             50,
             22,
             752,
@@ -2943,7 +2998,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            2,
             50,
             23,
             552,
@@ -2963,7 +3018,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            2,
             50,
             23,
             752,
@@ -3109,7 +3164,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            3,
             50,
             32,
             552,
@@ -3129,7 +3184,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            3,
             50,
             32,
             752,
@@ -3167,7 +3222,7 @@
           "hitIdentity": null,
           "elementId": 596,
           "sourceSequencePath": [
-            0,
+            3,
             60,
             31,
             596,
@@ -3175,7 +3230,7 @@
           ],
           "rawDamage": 30814,
           "hpDamage": 30814,
-          "toughnessDamage": 19567.0077,
+          "toughnessDamage": 19576.0077,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4845,7 +4900,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            5,
             50,
             40,
             752,
@@ -4883,7 +4938,7 @@
           "hitIdentity": null,
           "elementId": 796,
           "sourceSequencePath": [
-            0,
+            5,
             60,
             39,
             796,
@@ -4993,7 +5048,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            7,
             50,
             48,
             552,
@@ -5013,7 +5068,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            7,
             50,
             48,
             752,
@@ -5177,7 +5232,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            8,
             50,
             56,
             552,
@@ -5197,7 +5252,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            8,
             50,
             56,
             752,
@@ -5289,7 +5344,7 @@
           "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
           "elementId": 101010178,
           "sourceSequencePath": [
-            0,
+            9,
             1,
             1,
             0
@@ -5308,7 +5363,7 @@
           "hitIdentity": null,
           "elementId": 552,
           "sourceSequencePath": [
-            0,
+            9,
             1,
             50,
             62,
@@ -5455,7 +5510,7 @@
           "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
           "elementId": 101010177,
           "sourceSequencePath": [
-            0,
+            9,
             1,
             2,
             0
@@ -6916,7 +6971,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             1,
             0
           ],
@@ -6934,7 +6989,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             2,
             0
           ],
@@ -6952,7 +7007,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             3,
             0
           ],
@@ -6970,7 +7025,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             4,
             0
           ],
@@ -6988,7 +7043,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            11,
             50,
             69,
             752,
@@ -7008,7 +7063,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             5,
             0
           ],
@@ -7026,7 +7081,7 @@
           "hitIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
           "elementId": 107002253,
           "sourceSequencePath": [
-            13,
+            11,
             6,
             0
           ],
@@ -8920,6 +8975,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8957,6 +9015,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8978,7 +9039,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            1,
             6,
             2
           ],
@@ -8998,6 +9059,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 29400,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9043,6 +9107,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9080,6 +9147,9 @@
           "afterStacks": 4,
           "stackChange": 0,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9117,6 +9187,9 @@
           "afterStacks": 4,
           "stackChange": 0,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9154,6 +9227,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9191,6 +9267,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9228,6 +9307,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": 35166.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9249,7 +9331,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            2,
             5,
             2
           ],
@@ -9269,6 +9351,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 35266.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9298,7 +9383,7 @@
           "runtimeEffectId": "battle-element:107002265",
           "sourceElementId": 107002265,
           "sourceSequencePath": [
-            0,
+            3,
             31,
             31,
             107002265
@@ -9319,6 +9404,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 51366.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9364,6 +9452,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 25366.668,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9401,6 +9492,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 25366.668,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9438,6 +9532,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9475,6 +9572,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9512,6 +9612,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9549,6 +9652,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9586,6 +9692,9 @@
           "afterStacks": null,
           "stackChange": -4,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9607,7 +9716,7 @@
           "runtimeEffectId": "battle-element:107002256",
           "sourceElementId": 107002256,
           "sourceSequencePath": [
-            0,
+            2,
             5,
             2
           ],
@@ -9627,6 +9736,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9672,6 +9784,9 @@
           "afterStacks": 1,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9709,6 +9824,9 @@
           "afterStacks": 1,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9730,7 +9848,7 @@
           "runtimeEffectId": "battle-element:107002265",
           "sourceElementId": 107002265,
           "sourceSequencePath": [
-            0,
+            5,
             31,
             39,
             107002265
@@ -9751,6 +9869,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 75366.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9796,6 +9917,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9833,6 +9957,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9870,6 +9997,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9907,6 +10037,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9944,6 +10077,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9981,6 +10117,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -10002,7 +10141,7 @@
           "runtimeEffectId": "battle-element:107002265",
           "sourceElementId": 107002265,
           "sourceSequencePath": [
-            0,
+            5,
             31,
             39,
             107002265
@@ -10023,6 +10162,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -10068,6 +10210,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -10105,6 +10250,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -10202,7 +10350,7 @@
         }
       ]
     },
-    "summaryHash": "11104902c7e63e1aee9b6ca1cb202e9723958123eb4908dc6a6effb8d147eef3"
+    "summaryHash": "90c3bb67ce8d933d55627da6d3ae6f85da14f542e0c3a73bde518e10693caaa2"
   },
   "expected": {
     "exact": {
@@ -10598,7 +10746,7 @@
         "firstAppliedFrame": 324,
         "firstExpiredFrame": 2116,
         "firstAppliedSourceSequencePath": [
-          0,
+          1,
           6,
           2
         ],
@@ -10635,7 +10783,7 @@
         "firstAppliedFrame": 1282,
         "firstExpiredFrame": 4522,
         "firstAppliedSourceSequencePath": [
-          0,
+          3,
           31,
           31,
           107002265
@@ -11746,7 +11894,7 @@
           "firstAppliedFrame": 324,
           "firstExpiredFrame": 2116,
           "firstAppliedSourceSequencePath": [
-            0,
+            1,
             6,
             2
           ],
@@ -11783,7 +11931,7 @@
           "firstAppliedFrame": 324,
           "firstExpiredFrame": 2116,
           "firstAppliedSourceSequencePath": [
-            0,
+            1,
             6,
             2
           ],
@@ -11825,7 +11973,7 @@
           "firstAppliedFrame": 1282,
           "firstExpiredFrame": 4522,
           "firstAppliedSourceSequencePath": [
-            0,
+            3,
             31,
             31,
             107002265
@@ -11863,7 +12011,7 @@
           "firstAppliedFrame": 1282,
           "firstExpiredFrame": 4522,
           "firstAppliedSourceSequencePath": [
-            0,
+            3,
             31,
             31,
             107002265
@@ -11950,6 +12098,6 @@
       }
     ]
   },
-  "replayHash": "6b43e992ada32db3c8fcdab9fa70d2dae71f41a32ec7bd1b5ee1c901f81f4928",
-  "profileHash": "1614d5179ab633e22d01605931d535cdab322604111def062145447d976d5a71"
+  "replayHash": "d748ef7e1fabff6ad9e26b58c5d20bbb42a7fa718fa3884f8123517f590c37e0",
+  "profileHash": "92228dfec0da9c1adeaa4f5540d740c1d4b00e66dbc00574c5ff156dca5115ef"
 }

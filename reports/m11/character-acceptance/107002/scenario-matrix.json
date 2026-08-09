@@ -18,8 +18,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:85cfcc3212309c2e",
-        "coverage-edge:bccd4aad00484999"
+        "coverage-edge:5a4fe9a268bd0da7",
+        "coverage-edge:8e756a2025716a00"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -46,11 +46,11 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:11f10fb69825eb0d",
-        "coverage-edge:13ff21d795f8e4a9",
-        "coverage-edge:5dfec3e00cb69759",
-        "coverage-edge:ac31e32fb2122e50",
-        "coverage-edge:c7782b2f43eb9e52"
+        "coverage-edge:1e863bec43b2920b",
+        "coverage-edge:7c4343d20540e3a7",
+        "coverage-edge:94581f4fb40a9b97",
+        "coverage-edge:e7d716a7118fbd24",
+        "coverage-edge:e810a183f0438a6e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -65,99 +65,82 @@
       "requirementIdentity": "contract:action-effect-binding:misa-star-independent-wind-mark",
       "dimension": "action-effect-binding",
       "subjectIdentity": "misa-star-independent-wind-mark",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "5ab37feb3fa2e02c",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "dbab8e4868df77ff",
       "coverageSelector": {
         "controlSkillId": 10700226,
         "effectIdentity": "battle-element:750",
         "kind": "effect",
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:0217e20a2fb06ce9",
-        "coverage-edge:0b8bdfbcee8374f3",
-        "coverage-edge:1d55a002a7058541",
-        "coverage-edge:87785635c9806792",
-        "coverage-edge:8bd654c016a57e68",
-        "coverage-edge:934aeb80d821fbc0",
-        "coverage-edge:b0eedbc31d154334",
-        "coverage-edge:b9143626769df1ff",
-        "coverage-edge:ef91060917643bc1"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#90F-toOwn-wind-mark-before-SP-summon"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#90F-toOwn-wind-mark-before-SP-summon",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:action-effect-binding:misa-star-wood-priority-consume",
       "dimension": "action-effect-binding",
       "subjectIdentity": "misa-star-wood-priority-consume",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "155643fc0f5c7d96",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "b1370b7f00ca4019",
       "coverageSelector": {
         "controlSkillId": 10700226,
         "effectIdentity": "battle-element:599",
         "kind": "effect",
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:49bbb6695ca93f9d",
-        "coverage-edge:630b5f35e8f44a17",
-        "coverage-edge:66f331943e360f87",
-        "coverage-edge:7fc954394f0328ce",
-        "coverage-edge:926e0b1a0296a3ff",
-        "coverage-edge:dc92e0f5bb57f462",
-        "coverage-edge:e586699785279bdd"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_599.asset/MonoBehaviour/ast_599__2120617582505955581.json#elementConfigId=599|skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#82F-priority-consume-wood-packet-599",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:action-form:actor:107002:star-skill:misa-star-main-combo",
       "dimension": "action-form",
       "subjectIdentity": "actor:107002:star-skill:misa-star-main-combo",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "320043ee708f9983",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "1d9fa5b0eac53caa",
       "coverageSelector": {
         "controlSkillId": 10700226,
         "kind": "action-form",
         "ownerId": 107002,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:272860825bf99f39",
-        "coverage-edge:2aa6ea1ee1ba17fa",
-        "coverage-edge:441eff2a42031b4e",
-        "coverage-edge:95160fab68aae3d2",
-        "coverage-edge:e6aadd1a2c6890fb",
-        "coverage-edge:e6e3bb62a55fe70e"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/skill_control_10700226__-5271208345239718437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10700226.asset#sub0-selected-main-combo|animation-occupancy=218F",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:action-form:actor|107002|10700201|0|10700203|normal-attack:default",
@@ -175,18 +158,18 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:034f12eefa54cf8d",
-        "coverage-edge:0daeadc720413299",
-        "coverage-edge:302069ba67d56864",
-        "coverage-edge:31f310dd8479ba8b",
-        "coverage-edge:3de0385669a7fbb5",
-        "coverage-edge:7203c79caa80b6be",
-        "coverage-edge:8049e3f8f484dea5",
-        "coverage-edge:9f7c3f902009b25b",
-        "coverage-edge:a70de4fd9d9c61c8",
-        "coverage-edge:d3c467422ca4d356",
-        "coverage-edge:ef094ae0e7e6772c",
-        "coverage-edge:efcfd5df2e09f21d"
+        "coverage-edge:09ed8de1dbed1c5e",
+        "coverage-edge:1295bf3f5a332e13",
+        "coverage-edge:2e4511fce95a21d7",
+        "coverage-edge:368eb2d37beb6d1b",
+        "coverage-edge:50bcc9717cc5f0b9",
+        "coverage-edge:56e7bd54c4d6e266",
+        "coverage-edge:8d1181399aaff9a3",
+        "coverage-edge:c2b6d472e6c4e449",
+        "coverage-edge:c3fac406eba5e9a2",
+        "coverage-edge:e90bbeb50e4c6c50",
+        "coverage-edge:fb5a7fcbc6962748",
+        "coverage-edge:fba21b9b6510079b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -213,10 +196,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0b4fb2c2c91638c7",
-        "coverage-edge:732b6fedc0119414",
-        "coverage-edge:c27b0daf7152c251",
-        "coverage-edge:cc3cba5d1a7b2747"
+        "coverage-edge:1951634d2e312849",
+        "coverage-edge:37bc62dda21c7c35",
+        "coverage-edge:d77fc8cb16ad67ce",
+        "coverage-edge:f8bc85708f42a20f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -332,33 +315,28 @@
       "requirementIdentity": "contract:action-form:actor|107002|10700212|1|10700226|star-combo:default",
       "dimension": "action-form",
       "subjectIdentity": "actor|107002|10700212|1|10700226|star-combo:default",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "ca38657723789dbf",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "9fd6f2733f0880dc",
       "coverageSelector": {
         "controlSkillId": 10700226,
         "kind": "action-form",
         "ownerId": 107002,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:416487d3d803d077",
-        "coverage-edge:4360dc343b453044",
-        "coverage-edge:743b02b5c162d22d",
-        "coverage-edge:930d5c2ec352c850",
-        "coverage-edge:f30c3e33dafd8bd8",
-        "coverage-edge:f8226cd9f53703cc"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "characters.items[id=107002].skillSlots[group=ground,slot=208]"
+        "characters.items[id=107002].skillSlots[group=ground,slot=208]",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:action-form:actor|107002|10700213|0|10700213|ultimate:default",
@@ -376,8 +354,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:698535a21e736b1e",
-        "coverage-edge:c6df3d5f85d374fc"
+        "coverage-edge:4456db3a3ea05528",
+        "coverage-edge:aebed803414e3ef6"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -404,8 +382,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:26a89cf5c5e16c27",
-        "coverage-edge:8c8d2c08719d6842"
+        "coverage-edge:8f438eec1a6d9e95",
+        "coverage-edge:f2b96ef4c3d396f4"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -556,8 +534,8 @@
         "windowIdentity": "actor:107002|control:10700204|sub:0|85-208|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_1466893522427481681__1466893522427481681.json#behaviorlineControl[0].behaviorList[pathId=9152799218939694673]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_9152799218939694673__9152799218939694673.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4191d328ad384cee",
-        "coverage-edge:7374bd39db585f20"
+        "coverage-edge:8913d681933510fa",
+        "coverage-edge:eb8f6f6efe8c7218"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -582,8 +560,8 @@
         "windowIdentity": "actor:107002|control:10700204|sub:0|96-311|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-3611797126667661743__-3611797126667661743.json#behaviorlineControl[0].behaviorList[pathId=-8054487118780002735]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-8054487118780002735__-8054487118780002735.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1d91008275e0af0a",
-        "coverage-edge:5656094ac76468c0"
+        "coverage-edge:0ec31059ab1a001a",
+        "coverage-edge:268fe6f8195f239c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -608,8 +586,8 @@
         "windowIdentity": "actor:107002|control:10700210|sub:0|0-208|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_3462768335433949364__3462768335433949364.json#behaviorlineControl[0].behaviorList[pathId=-2675839698510880588]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-2675839698510880588__-2675839698510880588.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3175401b5868cff4",
-        "coverage-edge:a3fee159d898dd9f"
+        "coverage-edge:e539b6d2a693502d",
+        "coverage-edge:e747adbafe6b9dfa"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -634,8 +612,8 @@
         "windowIdentity": "actor:107002|control:10700210|sub:0|96-340|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-6823727149174431564__-6823727149174431564.json#behaviorlineControl[0].behaviorList[pathId=1445712293676572852]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_1445712293676572852__1445712293676572852.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:c9bce75e1375aaef",
-        "coverage-edge:da1a0580db10c790"
+        "coverage-edge:b9807be596d4d03d",
+        "coverage-edge:e8ee9ad8bf3dd72e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -728,7 +706,7 @@
         "windowIdentity": "actor:107002|control:10700212|sub:0|0-257|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-5369460366357035418__-5369460366357035418.json#behaviorlineControl[0].behaviorList[pathId=2665663051999872614]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_2665663051999872614__2665663051999872614.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:041c2cc7eddcea11"
+        "coverage-edge:877e87a182d54dcf"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -752,7 +730,7 @@
         "windowIdentity": "actor:107002|control:10700212|sub:0|104-407|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_8774948698827196006__8774948698827196006.json#behaviorlineControl[0].behaviorList[pathId=-3650649530310654362]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_-3650649530310654362__-3650649530310654362.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:d1c2bfb5ad2a4a6e"
+        "coverage-edge:f67f170cb465f640"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -847,8 +825,8 @@
         "windowIdentity": "actor:107002|control:10700213|sub:0|216-319|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_5215929054372805091__5215929054372805091.json#behaviorlineControl[0].behaviorList[pathId=-6377107262215964189]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700213.asset/MonoBehaviour/MonoBehaviour_-6377107262215964189__-6377107262215964189.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:306c6721df85cf1d",
-        "coverage-edge:a57febe05314d412"
+        "coverage-edge:51437997d2ae3274",
+        "coverage-edge:c34bf587ef12d9c3"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1197,53 +1175,51 @@
       "requirementIdentity": "contract:control-window:control-window:30:8bc27828040bfe0a",
       "dimension": "control-window",
       "subjectIdentity": "control-window:30:8bc27828040bfe0a",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "f9d3f80605b9c49c",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "1f725f38abc9c6e1",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:107002|control:10700226|sub:0|0-113|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_8258725651783070232__8258725651783070232.json#behaviorlineControl[0].behaviorList[pathId=3771721699373265432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_3771721699373265432__3771721699373265432.json"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:06b57550065319d8",
-        "coverage-edge:f8649df396302252"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_8258725651783070232__8258725651783070232.json#behaviorlineControl[0].behaviorList[pathId=3771721699373265432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_3771721699373265432__3771721699373265432.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_8258725651783070232__8258725651783070232.json#behaviorlineControl[0].behaviorList[pathId=3771721699373265432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_3771721699373265432__3771721699373265432.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:control-window:control-window:31:595554c539def5bf",
       "dimension": "control-window",
       "subjectIdentity": "control-window:31:595554c539def5bf",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": "applied",
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "4115e640e0f1fec9",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "b07f6e1a2c593bba",
       "coverageSelector": {
         "kind": "control-window",
         "windowIdentity": "actor:107002|control:10700226|sub:0|85-285|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_7275194593066660376__7275194593066660376.json#behaviorlineControl[0].behaviorList[pathId=6110312879469670936]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_6110312879469670936__6110312879469670936.json"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:1db31d67fc9486c0",
-        "coverage-edge:46a18b786c759306"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_7275194593066660376__7275194593066660376.json#behaviorlineControl[0].behaviorList[pathId=6110312879469670936]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_6110312879469670936__6110312879469670936.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_7275194593066660376__7275194593066660376.json#behaviorlineControl[0].behaviorList[pathId=6110312879469670936]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700226.asset/MonoBehaviour/MonoBehaviour_6110312879469670936__6110312879469670936.json",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:control-window:control-window:32:ab8ce1c0e201e948",
@@ -1421,8 +1397,8 @@
         "windowIdentity": "actor:107002|control:10700203|sub:0|0-113|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_-5565542970211152275__-5565542970211152275.json#behaviorlineControl[0].behaviorList[pathId=2617456694535802477]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_2617456694535802477__2617456694535802477.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4fbe71edbf479c65",
-        "coverage-edge:57ee9b0c489b2ae7"
+        "coverage-edge:18de233404097863",
+        "coverage-edge:a5e6d87ca3566be9"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1447,8 +1423,8 @@
         "windowIdentity": "actor:107002|control:10700203|sub:0|104-446|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_-8372311003881189779__-8372311003881189779.json#behaviorlineControl[0].behaviorList[pathId=5181928711023709805]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_5181928711023709805__5181928711023709805.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:34356e61da38b5c0",
-        "coverage-edge:dbc994fbaa963942"
+        "coverage-edge:425d890bbaca9abe",
+        "coverage-edge:85659d3070106824"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1473,8 +1449,8 @@
         "windowIdentity": "actor:107002|control:10700203|sub:0|87-126|target:10700204/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_4485833625214275181__4485833625214275181.json#behaviorlineControl[0].behaviorList[pathId=8105045345158975085]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700203.asset/MonoBehaviour/MonoBehaviour_8105045345158975085__8105045345158975085.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:32f31ca0a9b3a9bd",
-        "coverage-edge:d512f4e5352b50c2"
+        "coverage-edge:1e3be8b88771c23b",
+        "coverage-edge:3b3f37d187617f74"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1499,8 +1475,8 @@
         "windowIdentity": "actor:107002|control:10700204|sub:0|0-123|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-5678959423580107183__-5678959423580107183.json#behaviorlineControl[0].behaviorList[pathId=1439794779560906321]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_1439794779560906321__1439794779560906321.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0e80a8f2f84d3793",
-        "coverage-edge:5d6868320f3bf144"
+        "coverage-edge:1bb25a76726144be",
+        "coverage-edge:c3082341c5b63b9d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1512,23 +1488,23 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:f6e9eddd4aa53b48",
+      "requirementIdentity": "contract:effect:effect:0:3cbc9946eb193b22",
       "dimension": "effect",
-      "subjectIdentity": "effect:0:f6e9eddd4aa53b48",
+      "subjectIdentity": "effect:0:3cbc9946eb193b22",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "7f19fb5164a2e92e",
+      "sourceRecordHash": "865756ab24f80a62",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002258",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1fe34513085d9d94",
-        "coverage-edge:2289c641e2954d13",
-        "coverage-edge:70849406cb042948",
-        "coverage-edge:8eb9b077c1433e82"
+        "coverage-edge:113bfcc6108b9b80",
+        "coverage-edge:8f7e7fc2c1cecfbb",
+        "coverage-edge:dce1a4a76e25c834",
+        "coverage-edge:e0d3b1175c9378e2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -1541,23 +1517,23 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:1:e6e29c2ec42a2840",
+      "requirementIdentity": "contract:effect:effect:1:a2d280358b207c8c",
       "dimension": "effect",
-      "subjectIdentity": "effect:1:e6e29c2ec42a2840",
+      "subjectIdentity": "effect:1:a2d280358b207c8c",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "ba06630f764ca23e",
+      "sourceRecordHash": "7bc6c428f1dc9c6a",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002257",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:168de854355a1225",
-        "coverage-edge:1b452910b68f70f9",
-        "coverage-edge:5161285619c610c9",
-        "coverage-edge:dc76b8be6327bd40"
+        "coverage-edge:75f55a09e6b4b123",
+        "coverage-edge:78a66f0b0f07316e",
+        "coverage-edge:8720d20c808a0b32",
+        "coverage-edge:dbd13894acc6715e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -1570,25 +1546,25 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:10:7d61a1d6a4332671",
+      "requirementIdentity": "contract:effect:effect:10:c7ce184d050ff8f9",
       "dimension": "effect",
-      "subjectIdentity": "effect:10:7d61a1d6a4332671",
+      "subjectIdentity": "effect:10:c7ce184d050ff8f9",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "be594545aa036e83",
+      "sourceRecordHash": "743efeb0a0366d73",
       "coverageSelector": {
         "effectIdentity": "battle-element:751",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:164997ae2affc537",
-        "coverage-edge:18ed6feb02b24c4e",
-        "coverage-edge:54e5b2f47e7ea081",
-        "coverage-edge:6c7a189deaeb2658",
-        "coverage-edge:7086da1ce730a3cf",
-        "coverage-edge:d1cfe190058408fb"
+        "coverage-edge:013169c18368f055",
+        "coverage-edge:52638edb0fb77bf9",
+        "coverage-edge:5ce199cda161ca3b",
+        "coverage-edge:93a1edcaa5135df8",
+        "coverage-edge:949820ab5b5f0daa",
+        "coverage-edge:da38e64dc42567b1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -1601,14 +1577,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:11:e702c2abf9738a87",
+      "requirementIdentity": "contract:effect:effect:11:8c1834ea881ff8c1",
       "dimension": "effect",
-      "subjectIdentity": "effect:11:e702c2abf9738a87",
+      "subjectIdentity": "effect:11:8c1834ea881ff8c1",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "3a9e4745db3bff8b",
+      "sourceRecordHash": "096615ab6dbf2abd",
       "coverageSelector": {
         "behaviorPathId": "3929844140260263526",
         "controlSkillId": 10700212,
@@ -1656,14 +1632,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:12:fbd1c0adf9509994",
+      "requirementIdentity": "contract:effect:effect:12:aa6491c9427c51b2",
       "dimension": "effect",
-      "subjectIdentity": "effect:12:fbd1c0adf9509994",
+      "subjectIdentity": "effect:12:aa6491c9427c51b2",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "c2e037c63af86785",
+      "sourceRecordHash": "dab10269b449f931",
       "coverageSelector": {
         "effectIdentity": "battle-element:796",
         "kind": "effect"
@@ -1715,49 +1691,52 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:13:7d5e6b81e90c5da8",
+      "requirementIdentity": "contract:effect:effect:13:81746f1046bd5236",
       "dimension": "effect",
-      "subjectIdentity": "effect:13:7d5e6b81e90c5da8",
+      "subjectIdentity": "effect:13:81746f1046bd5236",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "60a62db1376cc907",
+      "sourceRecordHash": "72d657eeb22d0b07",
       "coverageSelector": {
         "effectIdentity": "battle-element:752",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:02cde5ca6a424d41",
-        "coverage-edge:083021d9fc0f7821",
-        "coverage-edge:0845c74db3300ca4",
-        "coverage-edge:188b8faf0a91622e",
-        "coverage-edge:1b622beeff47c782",
-        "coverage-edge:32979382a59472b1",
-        "coverage-edge:47360070ec8c3129",
-        "coverage-edge:498b55e4f0e8e4bc",
-        "coverage-edge:50fe535b2d7a4500",
-        "coverage-edge:5758f7f8442f8569",
-        "coverage-edge:5a857a828a3b594f",
-        "coverage-edge:5e5df6fedc631f52",
-        "coverage-edge:66211013e7887296",
-        "coverage-edge:73ad739ece0449e5",
-        "coverage-edge:73f7abc97ae814d0",
-        "coverage-edge:744c7bfeb623aa19",
-        "coverage-edge:8009418638782372",
-        "coverage-edge:855a0066a7b2b84d",
-        "coverage-edge:863aa354d954cb93",
-        "coverage-edge:877a7968c2cc354a",
-        "coverage-edge:8b7329d2ec25a112",
-        "coverage-edge:a9f61b01e47b61ce",
-        "coverage-edge:afe022e81b8c39e4",
-        "coverage-edge:ba2a13565b2a2d15",
-        "coverage-edge:cec8bdb16d3d21a2",
-        "coverage-edge:df82cce4e2f78347",
-        "coverage-edge:e75cdc138fb009e5",
-        "coverage-edge:ebe3e9e4f956702f",
-        "coverage-edge:f41767140fcf7436",
-        "coverage-edge:f7695de84456ee32"
+        "coverage-edge:063c03470f00fbec",
+        "coverage-edge:10d707998b22087e",
+        "coverage-edge:15f87993a96e1c60",
+        "coverage-edge:1bb4071d83a93f7c",
+        "coverage-edge:2251dc072cfe8a5a",
+        "coverage-edge:2b0771c1f14f24e1",
+        "coverage-edge:2edf3c266761a386",
+        "coverage-edge:4f36d679a69636ed",
+        "coverage-edge:53afaea918ad999d",
+        "coverage-edge:5bb440764e2f082a",
+        "coverage-edge:60566fc6c09e3dc2",
+        "coverage-edge:637785106be316e3",
+        "coverage-edge:687e60a89ba3467a",
+        "coverage-edge:6cac830656e30a60",
+        "coverage-edge:80e49b8042449ccb",
+        "coverage-edge:88fd2539ca1b1065",
+        "coverage-edge:9588d8e51052b269",
+        "coverage-edge:95b6ae969c83f981",
+        "coverage-edge:975821a362441b4f",
+        "coverage-edge:9e320b967f9fc9ea",
+        "coverage-edge:b9270e21c9f9c825",
+        "coverage-edge:bd6c72a8794a6767",
+        "coverage-edge:beb7f4a9bd1cdc6a",
+        "coverage-edge:c7dd02ccac6a3a2c",
+        "coverage-edge:d0dfe832ff64b5a9",
+        "coverage-edge:d2b2c6ecbbe3f05e",
+        "coverage-edge:d6f92a9ccdebd626",
+        "coverage-edge:dfe75b72f5061b42",
+        "coverage-edge:e124659d8c113aaa",
+        "coverage-edge:e7ffea5a12a69e91",
+        "coverage-edge:f05e04773188d34d",
+        "coverage-edge:f79fcfefa0586f04",
+        "coverage-edge:fdbcf9b72cefe999"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -1771,28 +1750,28 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:14:5acb2311f5293753",
+      "requirementIdentity": "contract:effect:effect:14:d13a98bbecf3c563",
       "dimension": "effect",
-      "subjectIdentity": "effect:14:5acb2311f5293753",
+      "subjectIdentity": "effect:14:d13a98bbecf3c563",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "e05c94c42f2cb6de",
+      "sourceRecordHash": "90ed5e27238ff89a",
       "coverageSelector": {
         "effectIdentity": "battle-element:750",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:156d6d74e8ebf040",
-        "coverage-edge:4c2170ae034a31c3",
-        "coverage-edge:81295c231567555e",
-        "coverage-edge:918156a041638d4b",
-        "coverage-edge:c19a15566201fb43",
-        "coverage-edge:cb307b6cd0c4597a",
-        "coverage-edge:da72cc1b4e610545",
-        "coverage-edge:df6e935ab06c6972",
-        "coverage-edge:ef83f6546a9e6d91"
+        "coverage-edge:2a8f329b7e296128",
+        "coverage-edge:31db51d1b58131b3",
+        "coverage-edge:701311a907158ebb",
+        "coverage-edge:791f2453c2c94509",
+        "coverage-edge:88cbe1bf33feddf6",
+        "coverage-edge:8c11685ca7707072",
+        "coverage-edge:c147d7f17a6b4a9a",
+        "coverage-edge:fa9a6d00a85dc53b",
+        "coverage-edge:fba9a3948010fdbd"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -1805,14 +1784,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:15:599d0b3f4f3c2f97",
+      "requirementIdentity": "contract:effect:effect:15:68f644219112f1dd",
       "dimension": "effect",
-      "subjectIdentity": "effect:15:599d0b3f4f3c2f97",
+      "subjectIdentity": "effect:15:68f644219112f1dd",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "c78927e432abea90",
+      "sourceRecordHash": "7279dd02bc2dcfc2",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002267",
         "kind": "effect"
@@ -1854,14 +1833,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:5185bfe25ec11c20",
+      "requirementIdentity": "contract:effect:effect:16:5518078547aa11c0",
       "dimension": "effect",
-      "subjectIdentity": "effect:16:5185bfe25ec11c20",
+      "subjectIdentity": "effect:16:5518078547aa11c0",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "1498c82012451d48",
+      "sourceRecordHash": "ef29d13b65788c1c",
       "coverageSelector": {
         "behaviorPathId": "3929844140260263526",
         "controlSkillId": 10700212,
@@ -1910,14 +1889,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:d4a0069801b701f6",
+      "requirementIdentity": "contract:effect:effect:17:47d1c098601818d4",
       "dimension": "effect",
-      "subjectIdentity": "effect:17:d4a0069801b701f6",
+      "subjectIdentity": "effect:17:47d1c098601818d4",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "5a51e6a6801661d6",
+      "sourceRecordHash": "7f4364cb2c1e7ce0",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002265",
         "kind": "effect"
@@ -1960,14 +1939,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:5c91d63da6c78367",
+      "requirementIdentity": "contract:effect:effect:18:01f79bcb95ccdecd",
       "dimension": "effect",
-      "subjectIdentity": "effect:18:5c91d63da6c78367",
+      "subjectIdentity": "effect:18:01f79bcb95ccdecd",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "3ab744777ee5db93",
+      "sourceRecordHash": "9bfeb42d48746ec7",
       "coverageSelector": {
         "effectIdentity": "battle-element:594",
         "kind": "effect"
@@ -2016,14 +1995,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:19:cbd1258ed4abefe9",
+      "requirementIdentity": "contract:effect:effect:19:cae9d0b5ba397701",
       "dimension": "effect",
-      "subjectIdentity": "effect:19:cbd1258ed4abefe9",
+      "subjectIdentity": "effect:19:cae9d0b5ba397701",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "fe4353d7932dd62f",
+      "sourceRecordHash": "e3ea91f49c33fd47",
       "coverageSelector": {
         "behaviorPathId": "3929844140260263526",
         "controlSkillId": 10700212,
@@ -2072,14 +2051,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:f5f731b9dc41caa8",
+      "requirementIdentity": "contract:effect:effect:2:e98c0408acb5318e",
       "dimension": "effect",
-      "subjectIdentity": "effect:2:f5f731b9dc41caa8",
+      "subjectIdentity": "effect:2:e98c0408acb5318e",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "90989dcb8f225ba2",
+      "sourceRecordHash": "7cc434f0ae2ccae8",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002256",
         "kind": "effect"
@@ -2096,14 +2075,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:20:dceec84c411b43c8",
+      "requirementIdentity": "contract:effect:effect:20:01557ff86e60d418",
       "dimension": "effect",
-      "subjectIdentity": "effect:20:dceec84c411b43c8",
+      "subjectIdentity": "effect:20:01557ff86e60d418",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "da17b2fda1e33a5f",
+      "sourceRecordHash": "6bd47bab2952e437",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002266",
         "kind": "effect"
@@ -2145,14 +2124,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:21:b284370cfeea20f4",
+      "requirementIdentity": "contract:effect:effect:21:95b1e86e109c75fe",
       "dimension": "effect",
-      "subjectIdentity": "effect:21:b284370cfeea20f4",
+      "subjectIdentity": "effect:21:95b1e86e109c75fe",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "7af6a135d06529a0",
+      "sourceRecordHash": "75107481aabfde70",
       "coverageSelector": {
         "effectIdentity": "battle-element:596",
         "kind": "effect"
@@ -2202,14 +2181,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:22:8b3925f61033463a",
+      "requirementIdentity": "contract:effect:effect:22:af9385c0deb3e7f2",
       "dimension": "effect",
-      "subjectIdentity": "effect:22:8b3925f61033463a",
+      "subjectIdentity": "effect:22:af9385c0deb3e7f2",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "c1d212a9d2e8bd27",
+      "sourceRecordHash": "74f757433785d41d",
       "coverageSelector": {
         "effectIdentity": "battle-element:595",
         "kind": "effect"
@@ -2258,20 +2237,20 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:23:9a2a497fc62e134c",
+      "requirementIdentity": "contract:effect:effect:23:c0cec42eac92dd20",
       "dimension": "effect",
-      "subjectIdentity": "effect:23:9a2a497fc62e134c",
+      "subjectIdentity": "effect:23:c0cec42eac92dd20",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "b7dfd479a93087b1",
+      "sourceRecordHash": "6633580c1f45e559",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002022",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:c08b7f3c51630539"
+        "coverage-edge:54a57359d777cad7"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2284,20 +2263,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:24:987a9526ab6beb88",
+      "requirementIdentity": "contract:effect:effect:24:7681504a8179824c",
       "dimension": "effect",
-      "subjectIdentity": "effect:24:987a9526ab6beb88",
+      "subjectIdentity": "effect:24:7681504a8179824c",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "dca835b6638a3411",
+      "sourceRecordHash": "459f466c5b96f2d3",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002022",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:cbe69723137cf605"
+        "coverage-edge:f85b50500b1fb20e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2310,20 +2289,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:25:edd383a62445f518",
+      "requirementIdentity": "contract:effect:effect:25:34adc75b8bbeeee4",
       "dimension": "effect",
-      "subjectIdentity": "effect:25:edd383a62445f518",
+      "subjectIdentity": "effect:25:34adc75b8bbeeee4",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "65b4e733882a429d",
+      "sourceRecordHash": "45e029d7b502bb19",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002022",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:89fe62b36c1b7062"
+        "coverage-edge:2b60b37ab06b26cc"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2336,20 +2315,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:26:745e73295ccfadc1",
+      "requirementIdentity": "contract:effect:effect:26:7d0a4fee37817555",
       "dimension": "effect",
-      "subjectIdentity": "effect:26:745e73295ccfadc1",
+      "subjectIdentity": "effect:26:7d0a4fee37817555",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "21b80f081419bd0b",
+      "sourceRecordHash": "50b8c5031511dbdd",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002022",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3d9d40159a883360"
+        "coverage-edge:69c5213791095309"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2362,20 +2341,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:27:89b143776d2ad49c",
+      "requirementIdentity": "contract:effect:effect:27:68a7e1ddc77528d8",
       "dimension": "effect",
-      "subjectIdentity": "effect:27:89b143776d2ad49c",
+      "subjectIdentity": "effect:27:68a7e1ddc77528d8",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "509fef43a74af6c1",
+      "sourceRecordHash": "7ebdae73c5c45091",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002022",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:eb7c7e06a4136eef"
+        "coverage-edge:3088be78c573523f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2388,21 +2367,21 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:28:a06aadf43151e791",
+      "requirementIdentity": "contract:effect:effect:28:d5c9201737c348d5",
       "dimension": "effect",
-      "subjectIdentity": "effect:28:a06aadf43151e791",
+      "subjectIdentity": "effect:28:d5c9201737c348d5",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "0145d76506c2a1b4",
+      "sourceRecordHash": "c71b9894eb293500",
       "coverageSelector": {
         "effectIdentity": "battle-element:553",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3b8a2ea1b4f0279b",
-        "coverage-edge:b467835bf7a8a857"
+        "coverage-edge:754971df0874d686",
+        "coverage-edge:e0229a9daabdf14a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2415,21 +2394,21 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:29:a06eb8ed617bb1f8",
+      "requirementIdentity": "contract:effect:effect:29:0516f28d04c40454",
       "dimension": "effect",
-      "subjectIdentity": "effect:29:a06eb8ed617bb1f8",
+      "subjectIdentity": "effect:29:0516f28d04c40454",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "1856800e394681c0",
+      "sourceRecordHash": "69b9ded75fe0cf6c",
       "coverageSelector": {
         "effectIdentity": "battle-element:553",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:52d75905b155ff6d",
-        "coverage-edge:f0d4b34ba75bf169"
+        "coverage-edge:79778b00ca767551",
+        "coverage-edge:918ab96fa4c44405"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2442,23 +2421,23 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:145e560be426e097",
+      "requirementIdentity": "contract:effect:effect:3:9679c5ed06fc8aa5",
       "dimension": "effect",
-      "subjectIdentity": "effect:3:145e560be426e097",
+      "subjectIdentity": "effect:3:9679c5ed06fc8aa5",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "cc4748202bfadf16",
+      "sourceRecordHash": "ecd342a2f0b80c76",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002258",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:11ea9dd2972f1a12",
-        "coverage-edge:79346625cb9ed58c",
-        "coverage-edge:7a9c7f244b4c9b29",
-        "coverage-edge:d168a66140f290ee"
+        "coverage-edge:3160fa144e89bf36",
+        "coverage-edge:65fee447208dfa0b",
+        "coverage-edge:c48dcf2ffd5c7ffc",
+        "coverage-edge:ca0470cb394d0b00"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2471,22 +2450,22 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:30:9428f300ca43083a",
+      "requirementIdentity": "contract:effect:effect:30:a7ca42fbb07a4d4a",
       "dimension": "effect",
-      "subjectIdentity": "effect:30:9428f300ca43083a",
+      "subjectIdentity": "effect:30:a7ca42fbb07a4d4a",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "4aa56485bcc6ec02",
+      "sourceRecordHash": "10990f5da6f2ec4e",
       "coverageSelector": {
         "effectIdentity": "battle-element:550",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0c6905c1c49a1858",
-        "coverage-edge:43f3902400745067",
-        "coverage-edge:57be41da6806294e"
+        "coverage-edge:06eeab0cf0b53812",
+        "coverage-edge:0a54065c5f1a1d08",
+        "coverage-edge:6c6a858488b2df57"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2499,22 +2478,22 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:31:39f44d6773061bd1",
+      "requirementIdentity": "contract:effect:effect:31:3c5f4c95ee01a321",
       "dimension": "effect",
-      "subjectIdentity": "effect:31:39f44d6773061bd1",
+      "subjectIdentity": "effect:31:3c5f4c95ee01a321",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "f17d990e88c7c48a",
+      "sourceRecordHash": "99e79fd0ebf1b6b2",
       "coverageSelector": {
         "effectIdentity": "battle-element:550",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:213659a6f672246b",
-        "coverage-edge:2ce2641cc35202dc",
-        "coverage-edge:db380a1886b91c39"
+        "coverage-edge:3ece076d5961822b",
+        "coverage-edge:6087db707c73ec62",
+        "coverage-edge:cdb1be496e9b8aac"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2527,14 +2506,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:32:e81284736d0d0a74",
+      "requirementIdentity": "contract:effect:effect:32:0350aebfee8ef184",
       "dimension": "effect",
-      "subjectIdentity": "effect:32:e81284736d0d0a74",
+      "subjectIdentity": "effect:32:0350aebfee8ef184",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "abf9dc0b97d06687",
+      "sourceRecordHash": "e59d88fd69b14e0b",
       "coverageSelector": {
         "effectIdentity": "battle-element:551",
         "kind": "effect"
@@ -2551,14 +2530,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:33:f98de7e0a09c5e2f",
+      "requirementIdentity": "contract:effect:effect:33:f790a7cd7459ae3f",
       "dimension": "effect",
-      "subjectIdentity": "effect:33:f98de7e0a09c5e2f",
+      "subjectIdentity": "effect:33:f790a7cd7459ae3f",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "545a3edec640a79f",
+      "sourceRecordHash": "9ce53dd3af1b6917",
       "coverageSelector": {
         "effectIdentity": "battle-element:551",
         "kind": "effect"
@@ -2575,34 +2554,35 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:34:213752681e7fdf5c",
+      "requirementIdentity": "contract:effect:effect:34:48df78ebbfc4e992",
       "dimension": "effect",
-      "subjectIdentity": "effect:34:213752681e7fdf5c",
+      "subjectIdentity": "effect:34:48df78ebbfc4e992",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "03dbe18e8b073a67",
+      "sourceRecordHash": "d92d088deb040e27",
       "coverageSelector": {
         "effectIdentity": "battle-element:552",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1992300cb967e97d",
-        "coverage-edge:2f719d81ee074669",
-        "coverage-edge:3bf2fbea3015f449",
-        "coverage-edge:4b3ffb5cddf8f14d",
-        "coverage-edge:62f9042bda289484",
-        "coverage-edge:74f0480d8c8d274e",
-        "coverage-edge:8174b911f1a97052",
-        "coverage-edge:870e77f23b4becab",
-        "coverage-edge:8f72e6ef4351f172",
-        "coverage-edge:94d69bcbb0ac0e8a",
-        "coverage-edge:9a58d6ac59c55533",
-        "coverage-edge:b02e5f22765e40a3",
-        "coverage-edge:b04b68bc869509b0",
-        "coverage-edge:d72bdf287504f023",
-        "coverage-edge:e6906ff47e29e6b5"
+        "coverage-edge:07529c11177232a3",
+        "coverage-edge:0e25fca9f93ea7b4",
+        "coverage-edge:0e60298828fa4cee",
+        "coverage-edge:0f259410b5561bba",
+        "coverage-edge:1388ecdcc04e3dda",
+        "coverage-edge:2e7a6693a62cf72c",
+        "coverage-edge:3750a649d32f2b57",
+        "coverage-edge:4d2d082b706cd62f",
+        "coverage-edge:6c675b7bc0d9ebb6",
+        "coverage-edge:9e68728493e1e439",
+        "coverage-edge:a93105715b06f285",
+        "coverage-edge:b7aa10614f1ffdc6",
+        "coverage-edge:c10ad5e23f56908a",
+        "coverage-edge:c3f2d081b6e1de03",
+        "coverage-edge:cfa2a242866ad4e4",
+        "coverage-edge:f7ac888fb20403ab"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -2616,34 +2596,35 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:35:565a9d6864ae6d39",
+      "requirementIdentity": "contract:effect:effect:35:3030cc7010d6519b",
       "dimension": "effect",
-      "subjectIdentity": "effect:35:565a9d6864ae6d39",
+      "subjectIdentity": "effect:35:3030cc7010d6519b",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "4cfe88eff8138943",
+      "sourceRecordHash": "f947570edebe95d7",
       "coverageSelector": {
         "effectIdentity": "battle-element:552",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:00c04ff9a8513511",
-        "coverage-edge:0fe2e30c9c0f7aa3",
-        "coverage-edge:2e9fb7e980aa33d0",
-        "coverage-edge:38c897d7ec8f4039",
-        "coverage-edge:3c09b387743ee67b",
-        "coverage-edge:5312890332a40ce8",
-        "coverage-edge:755b209a1806caef",
-        "coverage-edge:8a86215389737532",
-        "coverage-edge:95acd993747e98a4",
-        "coverage-edge:a5bb260f983f6acf",
-        "coverage-edge:b80c4ab5694c14a9",
-        "coverage-edge:c1f4fb24d91241a5",
-        "coverage-edge:cc9307a8b25efbeb",
-        "coverage-edge:d8d2b97aa95c91b0",
-        "coverage-edge:f3c8d8db90a6de16"
+        "coverage-edge:0222fae074a35d82",
+        "coverage-edge:051c33f3f7466d84",
+        "coverage-edge:0aa40211135329c8",
+        "coverage-edge:10be5e4c2530a970",
+        "coverage-edge:3124c0ee9ff411b4",
+        "coverage-edge:39351e9a104dc8dd",
+        "coverage-edge:5748f8294fdd82bc",
+        "coverage-edge:62ecb60e0f311fa8",
+        "coverage-edge:69ee818b324a1da1",
+        "coverage-edge:7bc8957502646d6b",
+        "coverage-edge:85b562ce1c3514f2",
+        "coverage-edge:8e527128b7ef002a",
+        "coverage-edge:9022949b27ed7bd9",
+        "coverage-edge:d35469680e4d8881",
+        "coverage-edge:fd192981ec8dfd8f",
+        "coverage-edge:fd6aba03228cfefd"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -2657,20 +2638,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:36:85e1b0a6ff706448",
+      "requirementIdentity": "contract:effect:effect:36:fbfea01c604fcb44",
       "dimension": "effect",
-      "subjectIdentity": "effect:36:85e1b0a6ff706448",
+      "subjectIdentity": "effect:36:fbfea01c604fcb44",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "26680fcb7a37bdef",
+      "sourceRecordHash": "7b0c4a513f4c2d1f",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002240",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:037003bb06de0c54"
+        "coverage-edge:ef55f19fc4d82562"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2683,20 +2664,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:37:7a0bbecfac7cde5b",
+      "requirementIdentity": "contract:effect:effect:37:67ab7fca6f131d17",
       "dimension": "effect",
-      "subjectIdentity": "effect:37:7a0bbecfac7cde5b",
+      "subjectIdentity": "effect:37:67ab7fca6f131d17",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "68c5db62f37b918b",
+      "sourceRecordHash": "ab8f928850a141cf",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002240",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:74d505d5c193db64"
+        "coverage-edge:f25a062b4545ac1e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2709,20 +2690,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:38:11638d466c4c043b",
+      "requirementIdentity": "contract:effect:effect:38:5721262dd587a03f",
       "dimension": "effect",
-      "subjectIdentity": "effect:38:11638d466c4c043b",
+      "subjectIdentity": "effect:38:5721262dd587a03f",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "afbd2a95ae49923d",
+      "sourceRecordHash": "7fda7f590c928a1b",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002240",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:e43444a8e4f80ab9"
+        "coverage-edge:4fe2e2eaf88fb354"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2735,20 +2716,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:39:7470e2da28551965",
+      "requirementIdentity": "contract:effect:effect:39:3da85d6048c396a9",
       "dimension": "effect",
-      "subjectIdentity": "effect:39:7470e2da28551965",
+      "subjectIdentity": "effect:39:3da85d6048c396a9",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "0f800a83fe30ba21",
+      "sourceRecordHash": "9f36b72f6c389ce7",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002240",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:05f7c168d6d53b97"
+        "coverage-edge:84abba97e9779a42"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2761,23 +2742,23 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:4:5a566968757cb1fd",
+      "requirementIdentity": "contract:effect:effect:4:ea08fbcf2dde5dd1",
       "dimension": "effect",
-      "subjectIdentity": "effect:4:5a566968757cb1fd",
+      "subjectIdentity": "effect:4:ea08fbcf2dde5dd1",
       "required": true,
       "status": "passed",
       "contractStatus": null,
       "sourceDisposition": "applied",
-      "sourceRecordHash": "f843fbd28d519e9c",
+      "sourceRecordHash": "d3402213f5315752",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002257",
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:04614c6767dda86d",
-        "coverage-edge:7a446bd7705a3f30",
-        "coverage-edge:95d76d578f31e260",
-        "coverage-edge:ef4d0d5f2a41ce14"
+        "coverage-edge:30c4b6443541a8ab",
+        "coverage-edge:61dc8c43681536af",
+        "coverage-edge:d7625e99e1d9569f",
+        "coverage-edge:dee54cae0c636ae6"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -2790,14 +2771,14 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:effect:effect:40:a1df02a636d954bb",
+      "requirementIdentity": "contract:effect:effect:40:52cd038d9af5ac71",
       "dimension": "effect",
-      "subjectIdentity": "effect:40:a1df02a636d954bb",
+      "subjectIdentity": "effect:40:52cd038d9af5ac71",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "92b866fac97cca1d",
+      "sourceRecordHash": "56ffec9149278855",
       "coverageSelector": {
         "effectIdentity": "battle-element:102001093",
         "kind": "effect"
@@ -2830,14 +2811,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:41:ca0320f2d070560d",
+      "requirementIdentity": "contract:effect:effect:41:6919750be0dc00a7",
       "dimension": "effect",
-      "subjectIdentity": "effect:41:ca0320f2d070560d",
+      "subjectIdentity": "effect:41:6919750be0dc00a7",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "2cfa0ccdfc34ce20",
+      "sourceRecordHash": "533ce0e89edbdb04",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002175",
         "kind": "effect"
@@ -2870,14 +2851,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:5:e553d07b11780345",
+      "requirementIdentity": "contract:effect:effect:5:83d383524f53ce47",
       "dimension": "effect",
-      "subjectIdentity": "effect:5:e553d07b11780345",
+      "subjectIdentity": "effect:5:83d383524f53ce47",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "9e4900fffa99a452",
+      "sourceRecordHash": "9578dc91c9de137a",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002256",
         "kind": "effect"
@@ -2894,14 +2875,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:6:7bfdab000d02de43",
+      "requirementIdentity": "contract:effect:effect:6:4a2974f11b536fa3",
       "dimension": "effect",
-      "subjectIdentity": "effect:6:7bfdab000d02de43",
+      "subjectIdentity": "effect:6:4a2974f11b536fa3",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "a016d601ac469465",
+      "sourceRecordHash": "fcb77e1dbd4cd315",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002130",
         "kind": "effect"
@@ -2955,14 +2936,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:7:15a1781e94d7fda0",
+      "requirementIdentity": "contract:effect:effect:7:dccde4580b17dd00",
       "dimension": "effect",
-      "subjectIdentity": "effect:7:15a1781e94d7fda0",
+      "subjectIdentity": "effect:7:dccde4580b17dd00",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "3d9fed9b9920ef4c",
+      "sourceRecordHash": "5dceffc78b46f1b8",
       "coverageSelector": {
         "effectIdentity": "battle-element:794",
         "kind": "effect"
@@ -3013,14 +2994,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:8:205f1df49dd94266",
+      "requirementIdentity": "contract:effect:effect:8:65f5230338fc873c",
       "dimension": "effect",
-      "subjectIdentity": "effect:8:205f1df49dd94266",
+      "subjectIdentity": "effect:8:65f5230338fc873c",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "ed4d7402a17b757b",
+      "sourceRecordHash": "83fd3c4d69ff001b",
       "coverageSelector": {
         "effectIdentity": "battle-element:793",
         "kind": "effect"
@@ -3071,14 +3052,14 @@
       ]
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:e0e9a7a8dae4f57b",
+      "requirementIdentity": "contract:effect:effect:9:4b7fead8b2362e1f",
       "dimension": "effect",
-      "subjectIdentity": "effect:9:e0e9a7a8dae4f57b",
+      "subjectIdentity": "effect:9:4b7fead8b2362e1f",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "c510bf38983ebfbc",
+      "sourceRecordHash": "0f63b616bb2425ac",
       "coverageSelector": {
         "effectIdentity": "battle-element:107002272",
         "kind": "effect"
@@ -3129,18 +3110,18 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:01e7a8e0b5b68e22",
-        "coverage-edge:04df2e9aa88ae72e",
-        "coverage-edge:0699399581a6e2e8",
-        "coverage-edge:0ae90c2f0de7d54f",
-        "coverage-edge:12f2d05d0201c7bc",
-        "coverage-edge:2960b647fd3b2b5d",
-        "coverage-edge:5dbc9a887c1e318e",
-        "coverage-edge:6caf9794377901ae",
-        "coverage-edge:952a5d310ba6c48d",
-        "coverage-edge:9d1cfca4d9b4355a",
-        "coverage-edge:ab9417659f6c3b81",
-        "coverage-edge:fc6a2b65d61a283f"
+        "coverage-edge:0d84cc88bbcbb500",
+        "coverage-edge:243bc354bf785060",
+        "coverage-edge:4131b7dd3922d05b",
+        "coverage-edge:43cb2c95f5117a58",
+        "coverage-edge:48893a6dde067984",
+        "coverage-edge:7a9546e56f88accd",
+        "coverage-edge:9194a0f9efecd342",
+        "coverage-edge:9275aea197a4b01d",
+        "coverage-edge:a43bb997ec298bb6",
+        "coverage-edge:a47109816b852313",
+        "coverage-edge:af0b3dfd0ad712bf",
+        "coverage-edge:f48e97c586f9d99c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3165,15 +3146,15 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:00b2d7fbbe1cd464",
-        "coverage-edge:2690250e221b6cec",
-        "coverage-edge:2ec09aa7a23ee09a",
-        "coverage-edge:47f5882c47a649a2",
-        "coverage-edge:4d4f8cc1e5852a3d",
-        "coverage-edge:cd79ace6008112c3",
-        "coverage-edge:ceba3ead1a08011e",
-        "coverage-edge:f215911cd2b08936",
-        "coverage-edge:fa1c9cc07fc2d846"
+        "coverage-edge:389858d9c34342bb",
+        "coverage-edge:85dc81523c795726",
+        "coverage-edge:8b36e3466b23a460",
+        "coverage-edge:8e9719b96ff63504",
+        "coverage-edge:abca59828b994b38",
+        "coverage-edge:c1ea6e0514da0131",
+        "coverage-edge:da7ffc233234885e",
+        "coverage-edge:e1fcb253d5f0cadc",
+        "coverage-edge:f7e4fded873b9430"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3198,16 +3179,16 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:04c47f4814b8019a",
-        "coverage-edge:1aa571f1bf4741a7",
-        "coverage-edge:1b39f5c896b8bc3c",
-        "coverage-edge:271fa47fbf372809",
-        "coverage-edge:2c7d15accd084857",
-        "coverage-edge:9fd6832cd50fbdec",
-        "coverage-edge:cb2fa5f172b1e03c",
-        "coverage-edge:cd6a8a1657cc523c",
-        "coverage-edge:d6253c8ca71f6a09",
-        "coverage-edge:d8741c766d0b0f89"
+        "coverage-edge:188474716af5e985",
+        "coverage-edge:4391820f22613529",
+        "coverage-edge:4e61b12e89dc4307",
+        "coverage-edge:5c788f2c5cd9a436",
+        "coverage-edge:5eb3735141f41636",
+        "coverage-edge:ac82df0380e08036",
+        "coverage-edge:b80096f44869ebdc",
+        "coverage-edge:fd67493b71c48507",
+        "coverage-edge:ff22df70ef6da826",
+        "coverage-edge:ffb6292537b02a87"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3232,16 +3213,16 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4eff0efc09ce1460",
-        "coverage-edge:62afc5c0c1437b72",
-        "coverage-edge:794a8b1d66744167",
-        "coverage-edge:7ffa00ba8027afa9",
-        "coverage-edge:912e0adb7cb25376",
-        "coverage-edge:92add80ad723f368",
-        "coverage-edge:a08d40f3cb1cc92e",
-        "coverage-edge:d31e47d9f10d67e1",
-        "coverage-edge:d8393b1c715b9614",
-        "coverage-edge:f3836b5de246e3a6"
+        "coverage-edge:1da93f6f4569e3c2",
+        "coverage-edge:30dcd952b5b759c4",
+        "coverage-edge:3c8d93f9c7f769ce",
+        "coverage-edge:41bd374e32ec403a",
+        "coverage-edge:5028f4fa8e9a3a18",
+        "coverage-edge:54e03cc58966c2e8",
+        "coverage-edge:a932dee1de5d9700",
+        "coverage-edge:e3872aad5dc5079f",
+        "coverage-edge:e83e22b4ef6faea7",
+        "coverage-edge:ec984feeec73bbd5"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3266,16 +3247,16 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:07a794eba916893d",
-        "coverage-edge:0928841e8af4399e",
-        "coverage-edge:1e65fc66c2172392",
-        "coverage-edge:3350564633eff2f1",
-        "coverage-edge:70662f04f2982835",
-        "coverage-edge:8d24bb19f63dca27",
-        "coverage-edge:966d3e25647d9495",
-        "coverage-edge:b1ef5be57133ebfe",
-        "coverage-edge:c281418419c87882",
-        "coverage-edge:e5e1f5106f69b8fa"
+        "coverage-edge:018c320357ad2d90",
+        "coverage-edge:16b729225020a664",
+        "coverage-edge:3253435ef827ccb0",
+        "coverage-edge:48f711987c4508bc",
+        "coverage-edge:606135f9cd6c80af",
+        "coverage-edge:7a104ab992e49933",
+        "coverage-edge:8dd2ebdf1268857b",
+        "coverage-edge:ca298a1e41b081f4",
+        "coverage-edge:f2f0610386d4a1bb",
+        "coverage-edge:f5bfad104ac9fc95"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3300,16 +3281,16 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:013a179211026f8b",
-        "coverage-edge:25140dfa70f90f7d",
-        "coverage-edge:4da6683462de29d6",
-        "coverage-edge:4e89203b258d4c33",
-        "coverage-edge:62948a67f36a8bd4",
-        "coverage-edge:6e7ab1cdcbadd77c",
-        "coverage-edge:933e685ccce7eb04",
-        "coverage-edge:9c886b0ebf07bff0",
-        "coverage-edge:b6546bf78f8a4bec",
-        "coverage-edge:fe6d8c400ec730ce"
+        "coverage-edge:064c021b2d1325a0",
+        "coverage-edge:15a0c83ba9e83626",
+        "coverage-edge:2003d026094ea5b9",
+        "coverage-edge:4e576935c9b705ca",
+        "coverage-edge:753c80bdfccf7dc8",
+        "coverage-edge:813a0a3e67f06902",
+        "coverage-edge:a75421fd73d887a1",
+        "coverage-edge:a8c9a727c7e7497e",
+        "coverage-edge:ba9288eb1c5ec1fb",
+        "coverage-edge:eea14764c6b87e8e"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3334,16 +3315,16 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1878d07f06ed3148",
-        "coverage-edge:2114c986ae318477",
-        "coverage-edge:796fb9064c3e5bcb",
-        "coverage-edge:94d1969cf3d20857",
-        "coverage-edge:be7480efc2748758",
-        "coverage-edge:c73599e8037b6b51",
-        "coverage-edge:d902518e646adc49",
-        "coverage-edge:e98cc950917d6eb8",
-        "coverage-edge:f0808c5c83d00dee",
-        "coverage-edge:ff5a51716bb6b473"
+        "coverage-edge:0f286f8f8e538ee1",
+        "coverage-edge:153ce3b38b0bb9c0",
+        "coverage-edge:3565af8854f6b922",
+        "coverage-edge:4533e5e5614d5147",
+        "coverage-edge:80d8f56191bfa985",
+        "coverage-edge:a3a9f351ccfedd32",
+        "coverage-edge:a965016792d3b7b6",
+        "coverage-edge:c0be5dcec6e53cf9",
+        "coverage-edge:fbc20370df58ec25",
+        "coverage-edge:fd7711a9216b4b0f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3368,18 +3349,18 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:13f404521291919b",
-        "coverage-edge:2c23f4a7d0c41455",
-        "coverage-edge:342ab10f9fb8b648",
-        "coverage-edge:46962a50a4e98a90",
-        "coverage-edge:4829cc160358ba04",
-        "coverage-edge:6491cd9a0d6b9367",
-        "coverage-edge:77b94779be264585",
-        "coverage-edge:844a6be8575d5a95",
-        "coverage-edge:871ee9be422812e9",
-        "coverage-edge:8f1a3f612a8be01d",
-        "coverage-edge:96d0c93e9c538f0d",
-        "coverage-edge:a819624814a8505a"
+        "coverage-edge:1102acbc2e7b9553",
+        "coverage-edge:20b70eacaca9998b",
+        "coverage-edge:24aca6cb0d61c093",
+        "coverage-edge:51179018edc23e22",
+        "coverage-edge:5db50ae0fe58187e",
+        "coverage-edge:6ff1dc21349c87ea",
+        "coverage-edge:a365f57447e0360b",
+        "coverage-edge:ca5b5d03da80a3e7",
+        "coverage-edge:d3921e7a42bc1ba5",
+        "coverage-edge:d5d91c55786d5b1b",
+        "coverage-edge:d7df926b936b0dd5",
+        "coverage-edge:ff8afd68c1edf49c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3404,18 +3385,18 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0a7c51369a164ab4",
-        "coverage-edge:12ce05ab7eac77dd",
-        "coverage-edge:325ca68641121117",
-        "coverage-edge:41a6d3f6bf86dec8",
-        "coverage-edge:615beffddde2bf8c",
-        "coverage-edge:61e62411c1546edc",
-        "coverage-edge:7901b2c9624638ab",
-        "coverage-edge:85993aa230e2b5bd",
-        "coverage-edge:c73dfbb36afb0cf1",
-        "coverage-edge:d4120085e4e303f1",
-        "coverage-edge:ea2dd71f9693959a",
-        "coverage-edge:fcc861cac669d7b9"
+        "coverage-edge:0122e0397e5f91af",
+        "coverage-edge:1236b77060a76f45",
+        "coverage-edge:29508cc8127f2b03",
+        "coverage-edge:57e06d3865f2fe77",
+        "coverage-edge:5e93b3000d9066a2",
+        "coverage-edge:70e206ba0ea0ce3b",
+        "coverage-edge:9021355505125e56",
+        "coverage-edge:9d69eecbca457fdc",
+        "coverage-edge:b0c99839f15b9d6e",
+        "coverage-edge:cd5bb4e76d3b9432",
+        "coverage-edge:e3cf5f07e27565d9",
+        "coverage-edge:f44edb6704779aaf"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3440,18 +3421,18 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:423bdae18e4e818f",
-        "coverage-edge:4c35039d5650c43c",
-        "coverage-edge:622f816572abd12e",
-        "coverage-edge:66c585f3e2d8eb0d",
-        "coverage-edge:7cff3b8cb0d7c3f5",
-        "coverage-edge:82f48d70dcf83663",
-        "coverage-edge:8a13193331ec7fd0",
-        "coverage-edge:9ef232bf9bdb590d",
-        "coverage-edge:a34b50af759673f8",
-        "coverage-edge:c195d84578be4d34",
-        "coverage-edge:e02fa37a80914094",
-        "coverage-edge:f398a54363dc977d"
+        "coverage-edge:394b1667304449d8",
+        "coverage-edge:4483fc57d72d144e",
+        "coverage-edge:579e22a5df94e52a",
+        "coverage-edge:67e31f48d0039fee",
+        "coverage-edge:760c324442b74993",
+        "coverage-edge:891720340f4249fb",
+        "coverage-edge:97e6db7fcf09fdf3",
+        "coverage-edge:a9599f81e02d0fd1",
+        "coverage-edge:ab875ef54768000b",
+        "coverage-edge:c6cc9830c818b2d2",
+        "coverage-edge:dd7decd840788836",
+        "coverage-edge:ee296a144f0be45d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3476,18 +3457,18 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:09995bc1c2d49042",
-        "coverage-edge:0afae3a9de8d5d19",
-        "coverage-edge:3319f5f02ccd61ce",
-        "coverage-edge:35a9c5cc5af7d2f3",
-        "coverage-edge:65350dd5422ae0a2",
-        "coverage-edge:67abac08c5ebc0cf",
-        "coverage-edge:6941e47f140fa3e8",
-        "coverage-edge:776ee16793c9811b",
-        "coverage-edge:84f019283c3cb70e",
-        "coverage-edge:b54d715d27fd55a4",
-        "coverage-edge:bc679c1058963c5a",
-        "coverage-edge:ee9e38ee4c1c6f08"
+        "coverage-edge:13d9373105dbe09c",
+        "coverage-edge:2c6c0859594fda09",
+        "coverage-edge:3af86bcb4b1956a0",
+        "coverage-edge:48b5573d96186be2",
+        "coverage-edge:4b6f41f47f96d5e0",
+        "coverage-edge:93bfe0337688969e",
+        "coverage-edge:a87d829f47022127",
+        "coverage-edge:abd69f626a7acc04",
+        "coverage-edge:b33563f6884ebf24",
+        "coverage-edge:ef384e7b4fa89b9d",
+        "coverage-edge:f43d4be382559442",
+        "coverage-edge:ff3249d562e7597d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3512,10 +3493,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0d91e410d5c5428e",
-        "coverage-edge:2db12356149bc010",
-        "coverage-edge:69c5241730d25118",
-        "coverage-edge:a14240f03ea54dd8"
+        "coverage-edge:3d4e7144a915a496",
+        "coverage-edge:4d85d0a4fc8928d6",
+        "coverage-edge:570cd526a44ebd6a",
+        "coverage-edge:d4110cdd191f6160"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3540,10 +3521,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:7840bd4ca9436e27",
-        "coverage-edge:f55b3094886758ea",
-        "coverage-edge:f693f967658c7788",
-        "coverage-edge:f723fca1b6d2ae1f"
+        "coverage-edge:385ed21a84cd20ad",
+        "coverage-edge:50ab17b6af887462",
+        "coverage-edge:a12ccd6a0c5d61a9",
+        "coverage-edge:ace1e875e791c57c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3568,10 +3549,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:18bc9703768cd314",
-        "coverage-edge:45671e410d628b45",
-        "coverage-edge:a689a6e8c966e7c4",
-        "coverage-edge:dbc71c7baed682cc"
+        "coverage-edge:7d10efe0cd28a6ce",
+        "coverage-edge:854249db9a4e66aa",
+        "coverage-edge:9284a3aefd3855c3",
+        "coverage-edge:d3c5698a81ff5ef2"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3596,10 +3577,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1134a197f7e86b79",
-        "coverage-edge:1699ea6b32dc690a",
-        "coverage-edge:bf8477e5aa0e4309",
-        "coverage-edge:d3d10d3d8c5d5c61"
+        "coverage-edge:1f98d0e0d65add9c",
+        "coverage-edge:d1f8db7810316007",
+        "coverage-edge:e439f010f914fc1f",
+        "coverage-edge:e6c6849474b35e07"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3624,10 +3605,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:399e424dadfb8ee9",
-        "coverage-edge:647e38f5e1334d3d",
-        "coverage-edge:ddb204a794053c9d",
-        "coverage-edge:f1afa68b0c77630b"
+        "coverage-edge:1f3f92fd5f4128f5",
+        "coverage-edge:2470e19be1e6b79b",
+        "coverage-edge:7cdab59346541fe7",
+        "coverage-edge:c1dc16628af6d763"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3652,10 +3633,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:90d275fdbedee095",
-        "coverage-edge:b8b960b20dbbfa4c",
-        "coverage-edge:c052251114bf1368",
-        "coverage-edge:d3cf73782c4cb16d"
+        "coverage-edge:19ac332385ec5386",
+        "coverage-edge:733a79b35ef2596b",
+        "coverage-edge:883823b76cc9d17b",
+        "coverage-edge:cda79372b51cd486"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3680,10 +3661,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:308eb1675c426ecb",
-        "coverage-edge:8a254d17acb57e52",
-        "coverage-edge:abb5fac940fe8e84",
-        "coverage-edge:ca8deca5f3cbdee7"
+        "coverage-edge:18862a164e871fe9",
+        "coverage-edge:66d8dd82917ec335",
+        "coverage-edge:c14139943bfdecfe",
+        "coverage-edge:df5229665afbd6b4"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3708,10 +3689,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:23a6f71b5974142e",
-        "coverage-edge:d4b1e1eb6354f88a",
-        "coverage-edge:d99fafc87d7ed911",
-        "coverage-edge:fee76e67fe2a17e3"
+        "coverage-edge:254c8079015ef151",
+        "coverage-edge:a9a5d3c2ba4d45cc",
+        "coverage-edge:f0640f60bea2e57f",
+        "coverage-edge:fac28c1d170c8cd8"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3736,8 +3717,8 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:860334e72242d5bd",
-        "coverage-edge:aef68e4dd305222f"
+        "coverage-edge:7cea4131f4ede27d",
+        "coverage-edge:e3611253cc065fe3"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3762,9 +3743,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6ae80a03f1749d64",
-        "coverage-edge:982f80969fdb8101",
-        "coverage-edge:daa8d04b4e4d85d3"
+        "coverage-edge:9ba6a72e0b46583f",
+        "coverage-edge:d302758066ddd14a",
+        "coverage-edge:e2f8fcf44db162c1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3789,9 +3770,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2b8c792f86905025",
-        "coverage-edge:5dc73f2bd8684ce3",
-        "coverage-edge:a5af890b3feb5fd1"
+        "coverage-edge:385416702cbb6b23",
+        "coverage-edge:842c513cdb9d2651",
+        "coverage-edge:9c123daebf9049bf"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3816,9 +3797,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:b536b5a14ce9880f",
-        "coverage-edge:d805c6080c2f2125",
-        "coverage-edge:e74cc1bc0b7de7b2"
+        "coverage-edge:28b0e44a2dbce52b",
+        "coverage-edge:612444d40da6eadd",
+        "coverage-edge:cafa3dfb25dc0614"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3843,9 +3824,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1b7c0fdcd0a7ff31",
-        "coverage-edge:2805f4d8319d713c",
-        "coverage-edge:d480fea7b27ae4f8"
+        "coverage-edge:2cd770deee774cef",
+        "coverage-edge:b94ede131bc53536",
+        "coverage-edge:c841cdfb8125d876"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3870,9 +3851,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3cab7602e9a18d9a",
-        "coverage-edge:7cdc60ed471fb6e6",
-        "coverage-edge:ef22c1c71a2806f8"
+        "coverage-edge:12a409486caa45d2",
+        "coverage-edge:638e7d9e9bb710b0",
+        "coverage-edge:efe78daf1d5377dc"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3897,9 +3878,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4a0eaa9aa4ea9e13",
-        "coverage-edge:5b32aeafdbaca948",
-        "coverage-edge:90bae8a338b29774"
+        "coverage-edge:2c9e9edc8497922e",
+        "coverage-edge:781f8db929b63122",
+        "coverage-edge:fe9624e97253a21d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3924,9 +3905,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:b5cf47428da79455",
-        "coverage-edge:df5a6b4b99022047",
-        "coverage-edge:f2860e9af9222d19"
+        "coverage-edge:0bc71b66720863b5",
+        "coverage-edge:131c72d0c23b1c57",
+        "coverage-edge:f384b207622396bb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -3985,9 +3966,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:544243926ba92325",
-        "coverage-edge:acbc703848aeeb3f",
-        "coverage-edge:e7536fef152e6130"
+        "coverage-edge:2ae78bb7e21d6fcd",
+        "coverage-edge:6109e0d311d43e23",
+        "coverage-edge:734a8db32c9c620a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4011,9 +3992,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:076ab227b78f4127",
-        "coverage-edge:377364cb1295f203",
-        "coverage-edge:a8f600de5256d85f"
+        "coverage-edge:512e14b1096c6eed",
+        "coverage-edge:7005a41e0c1b7395",
+        "coverage-edge:ea157a816b3ed771"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4037,9 +4018,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:389c7518da1f1849",
-        "coverage-edge:83794e644f49c5d4",
-        "coverage-edge:cbf04cd313ba05c7"
+        "coverage-edge:0f860b612297b88e",
+        "coverage-edge:a4ce096fd7018d47",
+        "coverage-edge:f85cfcedecc04935"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4063,9 +4044,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:19a793acf07038dd",
-        "coverage-edge:3e88a06278d51887",
-        "coverage-edge:7526741e920574e2"
+        "coverage-edge:317895422c57dddb",
+        "coverage-edge:63a2f9fce84e68f5",
+        "coverage-edge:c06d505a94c8ed44"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4089,9 +4070,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:158f5fa3540647b7",
-        "coverage-edge:a9f4b758300d6835",
-        "coverage-edge:d1d482683e647a8d"
+        "coverage-edge:3eed482fb6b17065",
+        "coverage-edge:b39ed30cd059d933",
+        "coverage-edge:de69ae9de9f1218b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4115,9 +4096,9 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3550647fda7292f9",
-        "coverage-edge:608ec7038f5e2baf",
-        "coverage-edge:6e4bc02a9f778a5f"
+        "coverage-edge:1683d3fd568d20ed",
+        "coverage-edge:2e8279e7b146ebfd",
+        "coverage-edge:a62d6727583a34b7"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4605,181 +4586,151 @@
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|107|5",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "9371066e4da92a13",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "a78efeeb577487f8",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|107|5",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:0e019f00408519a6",
-        "coverage-edge:391b3db0ae48a8d7",
-        "coverage-edge:463491e77400749e",
-        "coverage-edge:5198b9c5f7bde474",
-        "coverage-edge:7181a60cebba13b3",
-        "coverage-edge:feef83adcf9290a1"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|114|6",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "4f1c092868d894b8",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "51e19e5c9a25acd5",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|114|6",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:178f26e3ecf98133",
-        "coverage-edge:94225ce7a13d169f",
-        "coverage-edge:9f7b7c0d319119af",
-        "coverage-edge:abfb8cfd5be6d3c9",
-        "coverage-edge:e519e5f3c65f5fdd",
-        "coverage-edge:e9862e1e6d3f785e"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|74|1",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "4da6e820ce149408",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "0d7e350238531691",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|74|1",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:1f9a98ba1e30d276",
-        "coverage-edge:6ba3057fbd2560c4",
-        "coverage-edge:741ac87559688fc7",
-        "coverage-edge:dac78e92d12a5518",
-        "coverage-edge:e0cfe58bb0a08cf5",
-        "coverage-edge:ff4e9fdca8d024f3"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|82|2",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "6dff3a78cfd4f400",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "ea604fd773f622f9",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|82|2",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:372485ff1b88c8e5",
-        "coverage-edge:45660652e4a9bd28",
-        "coverage-edge:5d00142b8d2873d0",
-        "coverage-edge:6d922afaad66a072",
-        "coverage-edge:8664181e091ab707",
-        "coverage-edge:8e0f7e3955ef8c6b"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|90|3",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "9a343e9d6481a550",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "c321a8a84b87a4d9",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|90|3",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:3dfb98db26aaa2e2",
-        "coverage-edge:6b883476961774b3",
-        "coverage-edge:770367afed30520d",
-        "coverage-edge:eabb55e00774c369",
-        "coverage-edge:ee93a03bb9412693",
-        "coverage-edge:f1a37b7d697b14e7"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|0|elements|1|-3883846112050479707|99|4",
       "dimension": "hit",
       "subjectIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "b68efcd96fdcb78e",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "de3a602253f2180f",
       "coverageSelector": {
         "hitIdentity": "10700226|0|elements|1|-3883846112050479707|99|4",
         "kind": "hit"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:1719154f3221f89f",
-        "coverage-edge:52326c4dcd7311af",
-        "coverage-edge:52f127563463c084",
-        "coverage-edge:573365695d93f818",
-        "coverage-edge:ee3499248c8829d1",
-        "coverage-edge:f5464e2381a263ad"
-      ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-3883846112050479707|skill_control_10700212.asset#sub0-hit-frames=74,82,90,99,107,114|selected-execution=10700226/sub0",
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "source-confirmed-not-applicable"
+      ]
     },
     {
       "requirementIdentity": "contract:hit:10700226|1|elements|0|-1477398542504158327|40|1",
@@ -4821,18 +4772,18 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0a9427336edbfbe9",
-        "coverage-edge:0bf3163f9b43a50b",
-        "coverage-edge:227532c25e660f3c",
-        "coverage-edge:644bf3d12f13c0e9",
-        "coverage-edge:7098ad6817aafe22",
-        "coverage-edge:9e73271098a1f124",
-        "coverage-edge:ab60c9dd2b9ad48a",
-        "coverage-edge:c0c77d86b3e44c81",
-        "coverage-edge:cd53494eb5da8a28",
-        "coverage-edge:e491409aaaf2ecd1",
-        "coverage-edge:ef237fe6a8ce15db",
-        "coverage-edge:fb562e7877c57e9d"
+        "coverage-edge:07ec5ab2d0eb5e8f",
+        "coverage-edge:125e14c96f8947c9",
+        "coverage-edge:1ad2b85bc8e2cc8f",
+        "coverage-edge:2abcced3938fdb39",
+        "coverage-edge:3c97efd6d4666297",
+        "coverage-edge:42150b6cc5a6f99b",
+        "coverage-edge:7ce595e6e72d321e",
+        "coverage-edge:8054bbb4829321cc",
+        "coverage-edge:a7886716c76c51e7",
+        "coverage-edge:b3be1bfd488dd336",
+        "coverage-edge:b73a3ef53ffae984",
+        "coverage-edge:c8d7a3b4f8af1c82"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -4857,10 +4808,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:1f9aed9ac9699cb5",
-        "coverage-edge:4474ac1e99d10657",
-        "coverage-edge:c12bf3b30aee12c9",
-        "coverage-edge:c98cd7ad4e0d2b36"
+        "coverage-edge:2d5d880a07d087c7",
+        "coverage-edge:307c0ae337bea785",
+        "coverage-edge:7b52b6db608dcca8",
+        "coverage-edge:dd5cd0dfc4d1a89b"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -4981,9 +4932,9 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:073a8f3eb14b1d1b",
-        "coverage-edge:0e7e196c21b5c123",
-        "coverage-edge:4379c15d805cf0e9"
+        "coverage-edge:0354a11486c18691",
+        "coverage-edge:86b634a318b581e7",
+        "coverage-edge:bc37b63076d17609"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -4995,31 +4946,29 @@
       "requirementIdentity": "contract:public-action:actor|107002|10700212|1|10700226|star-combo",
       "dimension": "public-action",
       "subjectIdentity": "actor|107002|10700212|1|10700226|star-combo",
-      "required": true,
-      "status": "passed",
+      "required": false,
+      "status": "not-applicable",
       "contractStatus": null,
-      "sourceDisposition": "applied",
-      "sourceRecordHash": "e35f1a7f263d9e47",
+      "sourceDisposition": "not-applicable",
+      "sourceRecordHash": "ffd2bf7f227cf378",
       "coverageSelector": {
         "controlSkillId": 10700226,
         "kind": "action-form",
         "ownerId": 107002,
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:2d657f83c4eed026",
-        "coverage-edge:434501d1daa0848a",
-        "coverage-edge:5944754286abdfae",
-        "coverage-edge:62c285a9627594ff",
-        "coverage-edge:81a24417c06d6e35",
-        "coverage-edge:dcc691c5747e6e0a"
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
+      "sourceIdentities": [
+        "src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS",
+        "work/m12-axis-legality/STATE.md#formal-candidate-surface"
       ],
-      "evidenceScenarioIds": [
-        "m12-b3-107002-reduced-action-surface-acceptance",
-        "m12-b3:107002:120s-reduced-action-surface-golden"
-      ],
-      "sourceIdentities": [],
-      "reasons": []
+      "reasons": [
+        "joint-attack-trigger-unresolved",
+        "nested-damage-trigger-lifecycle-not-expanded",
+        "nested-effect-wrapper-semantics-unresolved",
+        "sp-formula-not-literal-function-5"
+      ]
     },
     {
       "requirementIdentity": "contract:public-action:actor|107002|10700213|0|10700213|ultimate",
@@ -5037,8 +4986,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:27755773e1ee90ea",
-        "coverage-edge:e81e99198bdf6274"
+        "coverage-edge:8adc25cce782d12c",
+        "coverage-edge:9df106b931e2307a"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5063,8 +5012,8 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0491088441ba023d",
-        "coverage-edge:fc5c369647f4e350"
+        "coverage-edge:383af4ea86263f6e",
+        "coverage-edge:efd9d49c1f781abb"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5150,19 +5099,19 @@
       ]
     },
     {
-      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:04195ee128f5c366",
+      "requirementIdentity": "contract:stat-dependency:stat-dependency:0:a560c1bcf4aebde4",
       "dimension": "stat-dependency",
-      "subjectIdentity": "stat-dependency:0:04195ee128f5c366",
+      "subjectIdentity": "stat-dependency:0:a560c1bcf4aebde4",
       "required": false,
       "status": "not-applicable",
       "contractStatus": null,
       "sourceDisposition": "not-applicable",
-      "sourceRecordHash": "8f0ffe07b5048d46",
+      "sourceRecordHash": "1eded246388ff1a3",
       "coverageSelector": null,
       "coverageEdgeIds": [],
       "evidenceScenarioIds": [],
       "sourceIdentities": [
-        "NewTable/template_value.rows[id=107002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=623176689467243005|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1913468686735845945"
+        "NewTable/hero.rows[id=107002].propertyId=107002|NewTable/unit_property.rows[id=107002].baseAttributeId=107002|NewTable/template_value.rows[id=107002].baseAttribute|NewTable/template_value.rows[id=107002].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/MonoBehaviour_-1291223460462752175__-1291223460462752175.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700204.asset/MonoBehaviour/skill_control_10700204__-8452743699475359044.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-3902053340404252506|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_6704838959614714036__6704838959614714036.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/skill_control_10700210__3396078897271172964.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=1466117413664505892|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_304217500998239846__304217500998239846.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-4529113272733101309|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=623176689467243005|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/MonoBehaviour_3929844140260263526__3929844140260263526.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700212.asset/MonoBehaviour/skill_control_10700212__6607307865547800973.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=1913468686735845945"
       ],
       "reasons": [
         "aggregate-stat-dependency-index-not-standalone-requirement",
@@ -5183,8 +5132,8 @@
         "profileIdentity": "actor:107002|switch-trigger:on-exit|skill:10700222"
       },
       "coverageEdgeIds": [
-        "coverage-edge:55cf420cfe80b45e",
-        "coverage-edge:8eaf351e7cdee05b"
+        "coverage-edge:44097722600fca70",
+        "coverage-edge:d7797415e5c746e5"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5212,13 +5161,13 @@
         "stateIdentity": "misa-def-down"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0a72c54c9d4da04c",
-        "coverage-edge:1f8acfd5feadd74f",
-        "coverage-edge:8ec8dd80fcd7b17f",
-        "coverage-edge:a06b68d511ac4d0e",
-        "coverage-edge:c0c8fd2adfcfe851",
-        "coverage-edge:c29bdb82eab591f7",
-        "coverage-edge:c4d00e6d8c4991eb"
+        "coverage-edge:0271125b70767c72",
+        "coverage-edge:0d2b145f3bb5180d",
+        "coverage-edge:5ac38aaba7d99419",
+        "coverage-edge:623f34d8c6b94119",
+        "coverage-edge:66ea91a155066be0",
+        "coverage-edge:9f41bcf8372f7851",
+        "coverage-edge:f70a74ebfdbfc80f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5243,13 +5192,13 @@
         "stateIdentity": "misa-def-down"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1358d68a71f96a06",
-        "coverage-edge:3824cdb20392fdd3",
-        "coverage-edge:4cd48472dc3b1faa",
-        "coverage-edge:9de78a265db0af2c",
-        "coverage-edge:b82e0780f0255078",
-        "coverage-edge:bb87bf1e0f2b72b2",
-        "coverage-edge:e6108456eec30c43"
+        "coverage-edge:05c5fc9a3aa11a66",
+        "coverage-edge:5d6b360d623f78f8",
+        "coverage-edge:a3388fd46700f284",
+        "coverage-edge:da814576031bfab1",
+        "coverage-edge:dbaf4f0242a78f52",
+        "coverage-edge:e28dd94e97b27fbc",
+        "coverage-edge:e7240592c828a45d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5274,13 +5223,13 @@
         "stateIdentity": "misa-def-down"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1f0a4f8ff5d83989",
-        "coverage-edge:21f6543fc6d013a8",
-        "coverage-edge:41a2f5ec4c711daa",
-        "coverage-edge:4c20c8cb7eea2375",
-        "coverage-edge:5369136ee86c7b4f",
-        "coverage-edge:5ce3a4df573ee55d",
-        "coverage-edge:fae0c506623cf4b5"
+        "coverage-edge:1d7aaea609a4a602",
+        "coverage-edge:464c5c3ec07d5487",
+        "coverage-edge:670868be9d1c5d73",
+        "coverage-edge:73662bfbeb119883",
+        "coverage-edge:b8a2a84b5da5009b",
+        "coverage-edge:d75c4ac807e87dbc",
+        "coverage-edge:daf5b5e17229561d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance",
@@ -5306,7 +5255,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:b623392960fa8b58"
+        "coverage-edge:6266c8de1ede6656"
       ],
       "evidenceScenarioIds": [
         "m12-b3:107002:120s-reduced-action-surface-golden"
@@ -5331,7 +5280,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8802109e35a8655c"
+        "coverage-edge:3de62d6961ae37e2"
       ],
       "evidenceScenarioIds": [
         "m12-b3:107002:120s-reduced-action-surface-golden"
@@ -5356,8 +5305,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6b7809e11d4bfe0d",
-        "coverage-edge:91117d62e709c3da"
+        "coverage-edge:780d3616c8d8a50b",
+        "coverage-edge:e8831883944f681c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5382,8 +5331,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:aa66f4ffed443e8f",
-        "coverage-edge:c5fefea2491067cf"
+        "coverage-edge:4d8ba114d2cd429d",
+        "coverage-edge:56548432ae01a15d"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5408,8 +5357,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:55b69f5d43853425",
-        "coverage-edge:886d7eb23548d863"
+        "coverage-edge:627e3c9de9b04f23",
+        "coverage-edge:aed290c3387db1d1"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5434,8 +5383,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:22d13ff042e842ba",
-        "coverage-edge:74657d02607acf50"
+        "coverage-edge:41f086750e2334aa",
+        "coverage-edge:97d0af3449f3fa7c"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5460,8 +5409,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:27670e594e8b3c7e",
-        "coverage-edge:e8126d983f81dbae"
+        "coverage-edge:7703e47735047e10",
+        "coverage-edge:f0b80b8652c2a980"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5486,8 +5435,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:2bffaf68c9245a8b",
-        "coverage-edge:474d9c2f346054f7"
+        "coverage-edge:21fad6196587bca5",
+        "coverage-edge:4ac967fcc17090b9"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5511,23 +5460,23 @@
         "kind": "critical-effective-threshold"
       },
       "coverageEdgeIds": [
-        "coverage-edge:102180f1175a9d93",
-        "coverage-edge:18b01aeacf5ffb96",
-        "coverage-edge:28662019084051da",
-        "coverage-edge:3c054420dbae8154",
-        "coverage-edge:4d555b8050edd6ea",
-        "coverage-edge:50c3105372074bdc",
-        "coverage-edge:51b36070e4c84b08",
-        "coverage-edge:58e9e193a6bd36de",
-        "coverage-edge:66993815b9fd363d",
-        "coverage-edge:87d8482bb9738cb1",
-        "coverage-edge:a7c40490fb4abfa0",
-        "coverage-edge:abd19569b985f9b1",
-        "coverage-edge:bc510e818bfdba0e",
-        "coverage-edge:be18ad2d369503b1",
-        "coverage-edge:d2bc3d96e1bd0a35",
-        "coverage-edge:ece0f0acf2607d83",
-        "coverage-edge:ed2d1335d19ff1e5"
+        "coverage-edge:17b1101d98036f88",
+        "coverage-edge:472416a9084c4cf0",
+        "coverage-edge:51e2042d97bb4ebb",
+        "coverage-edge:7efe2196b5c53b56",
+        "coverage-edge:7fd7bb39b585f61c",
+        "coverage-edge:82d0374dcf57d8e0",
+        "coverage-edge:9933a92dd742da6f",
+        "coverage-edge:9f8306634b0962f1",
+        "coverage-edge:abca7ec02ec447e2",
+        "coverage-edge:b0bc29d95682172c",
+        "coverage-edge:b64cc47c1661cde3",
+        "coverage-edge:bd2cf66bd755476f",
+        "coverage-edge:bd631dd8b327717a",
+        "coverage-edge:c812011daefc740e",
+        "coverage-edge:cf740e2f5464516f",
+        "coverage-edge:dc66594b82097b33",
+        "coverage-edge:ed2eb87a596d8881"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5551,17 +5500,17 @@
         "kind": "critical-effective-threshold"
       },
       "coverageEdgeIds": [
-        "coverage-edge:059e83fc5e8b3a27",
-        "coverage-edge:42008a4e4a2aaa0f",
-        "coverage-edge:497bdd7093b88b28",
-        "coverage-edge:781338aa70f62154",
-        "coverage-edge:7c16d386f366a5db",
-        "coverage-edge:b0be3e7bcda540bd",
-        "coverage-edge:b477784f618d8259",
-        "coverage-edge:e1812ef9bc279247",
-        "coverage-edge:e246c785f8a26f6c",
-        "coverage-edge:e457a42c25f5db61",
-        "coverage-edge:ef42fb38d8e3c922"
+        "coverage-edge:041ff5a74444140e",
+        "coverage-edge:0deddf14952dd5b5",
+        "coverage-edge:35e48cc60133b484",
+        "coverage-edge:419323ca130059a6",
+        "coverage-edge:450037d6d68d1d82",
+        "coverage-edge:6e3975f2b3176c95",
+        "coverage-edge:9c070a93ab63593b",
+        "coverage-edge:9f516869ba21d7c9",
+        "coverage-edge:ead0d3bf08e18697",
+        "coverage-edge:edee19810ae80cdd",
+        "coverage-edge:f4c086ff92ad7b1f"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5586,8 +5535,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:650bec17c57ef931",
-        "coverage-edge:ff2259480635a9dc"
+        "coverage-edge:2d5d6a8b49f39956",
+        "coverage-edge:76674d19e34e46ef"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5612,7 +5561,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8b334d5e644ee05f"
+        "coverage-edge:1096eb1464d474c1"
       ],
       "evidenceScenarioIds": [
         "m12-b3:107002:120s-reduced-action-surface-golden"
@@ -5637,8 +5586,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:82e84b699e9387fd",
-        "coverage-edge:f7e0fbd4a5b73823"
+        "coverage-edge:1866c65a49f93a7b",
+        "coverage-edge:ecb7837d0ac2fd91"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5663,8 +5612,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:30c7dcc2219fde72",
-        "coverage-edge:aebbcdfc058b1fb0"
+        "coverage-edge:3ab2ebc01cf9208a",
+        "coverage-edge:dbd349c02e9c0fd4"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5689,7 +5638,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:a08a2134311bcee9"
+        "coverage-edge:d28de9d796a63597"
       ],
       "evidenceScenarioIds": [
         "m12-b3:107002:120s-reduced-action-surface-golden"
@@ -5714,7 +5663,7 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:c73ae822b31fdf48"
+        "coverage-edge:2dad243599435a66"
       ],
       "evidenceScenarioIds": [
         "m12-b3:107002:120s-reduced-action-surface-golden"
@@ -5739,8 +5688,8 @@
         "kind": "scenario-fact"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3c0255c5e097b79d",
-        "coverage-edge:6364746de0ec722c"
+        "coverage-edge:82c132ba2e79329b",
+        "coverage-edge:cb42e6e1bddcdd66"
       ],
       "evidenceScenarioIds": [
         "m12-b3-107002-reduced-action-surface-acceptance"
@@ -5753,13 +5702,13 @@
   ],
   "summary": {
     "requirementCount": 181,
-    "requiredCount": 111,
-    "passedCount": 111,
+    "requiredCount": 98,
+    "passedCount": 98,
     "blockedCount": 0,
-    "notApplicableCount": 70,
+    "notApplicableCount": 83,
     "statusCounts": {
-      "not-applicable": 70,
-      "passed": 111
+      "not-applicable": 83,
+      "passed": 98
     },
     "dimensionCounts": {
       "action-effect-binding": 4,
@@ -5783,5 +5732,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "aff4d5622fe3d5d8"
+  "matrixHash": "40bde66599a43a1f"
 }

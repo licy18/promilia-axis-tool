@@ -8,7 +8,7 @@
     "kind": "azpr-machine-axis",
     "dataIdentity": {
       "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "71ff1c31f2a09db9781d214b2c4890a6d6fb461e4bc114d669f01e8c3f41027f",
+      "verifiedMechanicsPackageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
       "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
       "mechanicsProfileVersion": 1
     },
@@ -23,7 +23,7 @@
           "characterId": 103002,
           "level": 1,
           "initialSp": 80,
-          "loadout": { "kiboId": 500003 },
+          "loadout": {},
           "cultivation": {}
         },
         {
@@ -31,7 +31,7 @@
           "characterId": 101010,
           "level": 1,
           "initialSp": 50,
-          "loadout": { "kiboId": 500002 },
+          "loadout": {},
           "cultivation": {}
         },
         {
@@ -39,7 +39,7 @@
           "characterId": 101007,
           "level": 1,
           "initialSp": 35,
-          "loadout": { "kiboId": 500001 },
+          "loadout": {},
           "cultivation": {}
         }
       ],
@@ -53,35 +53,7 @@
         "elementDefenseOverrides": {}
       },
       "initialRuntimeState": {
-        "kiboEnergyBySlot": [
-          {
-            "slotId": "slot-1",
-            "actorId": "actor-103002",
-            "characterId": 103002,
-            "kiboId": 500003,
-            "kiboName": "水灵偶",
-            "currentValue": 60,
-            "maxValue": 100
-          },
-          {
-            "slotId": "slot-2",
-            "actorId": "actor-101010",
-            "characterId": 101010,
-            "kiboId": 500002,
-            "kiboName": "水灵仔",
-            "currentValue": 20,
-            "maxValue": 100
-          },
-          {
-            "slotId": "slot-3",
-            "actorId": "actor-101007",
-            "characterId": 101007,
-            "kiboId": 500001,
-            "kiboName": "迅狼",
-            "currentValue": 100,
-            "maxValue": 100
-          }
-        ],
+        "kiboEnergyBySlot": [],
         "specialResourcesByActor": [
           {
             "actorId": "actor-103002",

@@ -3,7 +3,7 @@
   "kind": "azpr-verified-switch-trigger-coverage",
   "status": "verified-switch-trigger-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+  "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
   "sourceDenominator": {
     "kind": "current-client-public-actor-switch-skill-slots",
     "actorOwnerCount": 20,
@@ -13,16 +13,14 @@
   },
   "summary": {
     "profileCount": 20,
-    "appliedProfileCount": 18,
-    "unresolvedProfileCount": 2,
+    "appliedProfileCount": 20,
+    "unresolvedProfileCount": 0,
     "onEnterProfileCount": 11,
     "onExitProfileCount": 9,
     "appliedOnEnterProfileCount": 11,
-    "appliedOnExitProfileCount": 7,
+    "appliedOnExitProfileCount": 9,
     "switchTriggeredOnlyCount": 20,
-    "reasonCounts": {
-      "star-carry-action-mapping-missing": 2
-    }
+    "reasonCounts": {}
   },
   "profiles": [
     {
@@ -539,25 +537,27 @@
       "triggerLabel": "退场",
       "skillSlot": 201,
       "sourceSkillId": 19900122,
-      "starCarryActionIdentity": null,
-      "controlSkillId": null,
-      "actionVariantIndex": null,
+      "starCarryActionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "controlSkillId": 19900122,
+      "actionVariantIndex": 0,
       "triggerFrameOffset": 0,
       "conditions": [],
       "manualReleaseStatus": "switch-trigger-only",
-      "mechanicsClassification": "unresolved",
-      "mechanicsReasons": [],
+      "mechanicsClassification": "applied",
+      "mechanicsReasons": [
+        "trigger-frame-missing",
+        "property-formula-not-literal-function-5"
+      ],
       "sourceIdentity": "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]",
       "sourceIdentities": [
         "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]",
         "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=199001].skillList[slot=201]",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201"
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201",
+        "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]|skill_control_19900122.asset#skillPlayers[0];skillResourceMaps[0]"
       ],
-      "resolutionStatus": "static-evidence-gap",
-      "reasons": [
-        "star-carry-action-mapping-missing"
-      ],
-      "applied": false
+      "resolutionStatus": "applied",
+      "reasons": [],
+      "applied": true
     },
     {
       "profileIdentity": "actor:199002|switch-trigger:on-exit|skill:19900222",
@@ -568,25 +568,28 @@
       "triggerLabel": "退场",
       "skillSlot": 201,
       "sourceSkillId": 19900222,
-      "starCarryActionIdentity": null,
-      "controlSkillId": null,
-      "actionVariantIndex": null,
+      "starCarryActionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "controlSkillId": 19900222,
+      "actionVariantIndex": 0,
       "triggerFrameOffset": 0,
       "conditions": [],
       "manualReleaseStatus": "switch-trigger-only",
-      "mechanicsClassification": "unresolved",
-      "mechanicsReasons": [],
+      "mechanicsClassification": "applied",
+      "mechanicsReasons": [
+        "trigger-frame-missing",
+        "effect-combine-semantics-unresolved",
+        "property-formula-not-literal-function-5"
+      ],
       "sourceIdentity": "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]",
       "sourceIdentities": [
         "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]",
         "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=199002].skillList[slot=201]",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201"
+        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201",
+        "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]|skill_control_19900222.asset#skillPlayers[0];skillResourceMaps[0]"
       ],
-      "resolutionStatus": "static-evidence-gap",
-      "reasons": [
-        "star-carry-action-mapping-missing"
-      ],
-      "applied": false
+      "resolutionStatus": "applied",
+      "reasons": [],
+      "applied": true
     },
     {
       "profileIdentity": "actor:199003|switch-trigger:on-enter|skill:19900321",
@@ -617,64 +620,5 @@
       "applied": true
     }
   ],
-  "unresolvedProfiles": [
-    {
-      "profileIdentity": "actor:199001|switch-trigger:on-exit|skill:19900122",
-      "ownerKind": "actor",
-      "ownerId": 199001,
-      "ownerName": "女主角",
-      "triggerPhase": "on-exit",
-      "triggerLabel": "退场",
-      "skillSlot": 201,
-      "sourceSkillId": 19900122,
-      "starCarryActionIdentity": null,
-      "controlSkillId": null,
-      "actionVariantIndex": null,
-      "triggerFrameOffset": 0,
-      "conditions": [],
-      "manualReleaseStatus": "switch-trigger-only",
-      "mechanicsClassification": "unresolved",
-      "mechanicsReasons": [],
-      "sourceIdentity": "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]",
-      "sourceIdentities": [
-        "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]",
-        "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=199001].skillList[slot=201]",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201"
-      ],
-      "resolutionStatus": "static-evidence-gap",
-      "reasons": [
-        "star-carry-action-mapping-missing"
-      ],
-      "applied": false
-    },
-    {
-      "profileIdentity": "actor:199002|switch-trigger:on-exit|skill:19900222",
-      "ownerKind": "actor",
-      "ownerId": 199002,
-      "ownerName": "男主角",
-      "triggerPhase": "on-exit",
-      "triggerLabel": "退场",
-      "skillSlot": 201,
-      "sourceSkillId": 19900222,
-      "starCarryActionIdentity": null,
-      "controlSkillId": null,
-      "actionVariantIndex": null,
-      "triggerFrameOffset": 0,
-      "conditions": [],
-      "manualReleaseStatus": "switch-trigger-only",
-      "mechanicsClassification": "unresolved",
-      "mechanicsReasons": [],
-      "sourceIdentity": "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]",
-      "sourceIdentities": [
-        "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]",
-        "C:/PC2/Codex/AzPr/Assets/ResourcesAssets/Config/NewTable/hero.json#rows[id=199002].skillList[slot=201]",
-        "C:/PC2/Codex/AzPr/outputs/il2cpp-tc-catch-20260709/dump.cs#ESkillSlotType.ExitSkill=201"
-      ],
-      "resolutionStatus": "static-evidence-gap",
-      "reasons": [
-        "star-carry-action-mapping-missing"
-      ],
-      "applied": false
-    }
-  ]
+  "unresolvedProfiles": []
 }

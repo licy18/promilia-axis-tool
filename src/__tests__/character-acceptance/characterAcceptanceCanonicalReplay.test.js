@@ -15,19 +15,19 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: 'e6c765a6238562d2',
-      data: '7501592a8f12b2a6',
-      trace: '54ddf0a9eefe2886',
-      evaluation: '204c04b2ab3f5fb4',
+      input: 'ddf8023c5df6168f',
+      data: 'c4adb18b45ef12d4',
+      trace: '197ff74152b8bc75',
+      evaluation: 'fd30dcfbaa6144f0',
     },
   },
   {
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: '8661e4b71b02255d',
-      data: '65e1fa1a81e0d62c',
-      trace: '769c610a11e6b7f6',
+      input: '2bd40cea97b9435b',
+      data: '275b6030a0654001',
+      trace: '1196d09295ac8c60',
       evaluation: '208849308c4ec837',
     },
   },
@@ -35,9 +35,9 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: 'cbc8758697bd36f9',
-      data: 'd8276e62e2d4fe22',
-      trace: 'fbb88fbfb26e23f2',
+      input: 'cc3d6c0efc1bfc83',
+      data: '665403a4382b63df',
+      trace: '127e2cbd0bd9c3f5',
       evaluation: '53eb57b729f3a7e6',
     },
   },
@@ -45,9 +45,9 @@ const cases = [
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: '99cf0796f924af22',
-      data: 'bb7a5fc27fa5be12',
-      trace: 'b47a6860f675f23c',
+      input: '526ab757142cf86c',
+      data: '6bb2168ad1dc2103',
+      trace: '0af55dab9b226e34',
       evaluation: '855dd5b0926bf110',
     },
   },
@@ -55,20 +55,20 @@ const cases = [
     ownerId: 108003,
     fixture: mitiFixture,
     hashes: {
-      input: '213df2842364ca33',
-      data: 'd0b165680225b2e4',
-      trace: 'f73f1834b7358061',
-      evaluation: '3c2fb1d6fda5e7b9',
+      input: 'b875d8187268e30c',
+      data: '71b6957912903650',
+      trace: 'bf79a47c463d642a',
+      evaluation: '466ef3ebad8eb8af',
     },
   },
   {
     ownerId: 107002,
     fixture: misaFixture,
     hashes: {
-      input: 'b839f93538c3aa9c',
-      data: '79adfdcb4c98efa8',
-      trace: 'f3416a9d4773e651',
-      evaluation: '620d8da34c9edd60',
+      input: '36ea193752df20e5',
+      data: 'f5452dec2a5982df',
+      trace: '016132ffd7fc9cfc',
+      evaluation: '5238bf8119e66446',
     },
   },
 ];
@@ -162,10 +162,36 @@ describe('M11-D canonical character scenario batch', () => {
     const ruby = service.simulate(rubyFixture);
     const han = service.simulate(hanFixture);
 
-    expect(findSelection(xiaoyu, 'xiaoyu-burst-a1')).toMatchObject({
-      controlSkillId: 10101001,
-      subSkillIndex: 1,
-    });
+    expect(
+      [
+        ['xiaoyu-insufficient-a1', 10101001],
+        ['xiaoyu-insufficient-a2', 10101002],
+        ['xiaoyu-insufficient-a3', 10101003],
+        ['xiaoyu-a4-source-effects', 10101004],
+        ['xiaoyu-insufficient-a5-source', 10101005],
+      ].map(([actionId, controlSkillId]) => ({
+        actionId,
+        selection: findSelection(xiaoyu, actionId),
+        expectedControlSkillId: controlSkillId,
+      }))
+    ).toEqual(
+      expect.arrayContaining(
+        [
+          ['xiaoyu-insufficient-a1', 10101001],
+          ['xiaoyu-insufficient-a2', 10101002],
+          ['xiaoyu-insufficient-a3', 10101003],
+          ['xiaoyu-a4-source-effects', 10101004],
+          ['xiaoyu-insufficient-a5-source', 10101005],
+        ].map(([actionId, controlSkillId]) => ({
+          actionId,
+          expectedControlSkillId: controlSkillId,
+          selection: expect.objectContaining({
+            controlSkillId,
+            subSkillIndex: 0,
+          }),
+        }))
+      )
+    );
     expect(findSelection(ruby, 'ruby-chain-e1')).toMatchObject({
       controlSkillId: 10300201,
       subSkillIndex: 1,

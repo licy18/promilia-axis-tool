@@ -6,6 +6,9 @@ import sifliyaManifest from '../../../reports/m11/character-acceptance/107001/ma
 import moyinManifest from '../../../reports/m11/character-acceptance/109001/manifest.json';
 import mitiManifest from '../../../reports/m11/character-acceptance/108003/manifest.json';
 import misaManifest from '../../../reports/m11/character-acceptance/107002/manifest.json';
+import giseleManifest from '../../../reports/m11/character-acceptance/112001/manifest.json';
+import femaleStarbornManifest from '../../../reports/m11/character-acceptance/199001/manifest.json';
+import maleStarbornManifest from '../../../reports/m11/character-acceptance/199002/manifest.json';
 import xiaoyuProfile from '../../data/generated/character-combat-profiles/101010.json';
 import rubyProfile from '../../data/generated/character-combat-profiles/103002.json';
 import hanProfile from '../../data/generated/character-combat-profiles/101003.json';
@@ -14,6 +17,9 @@ import sifliyaProfile from '../../data/generated/character-combat-profiles/10700
 import moyinProfile from '../../data/generated/character-combat-profiles/109001.json';
 import mitiProfile from '../../data/generated/character-combat-profiles/108003.json';
 import misaProfile from '../../data/generated/character-combat-profiles/107002.json';
+import giseleProfile from '../../data/generated/character-combat-profiles/112001.json';
+import femaleStarbornProfile from '../../data/generated/character-combat-profiles/199001.json';
+import maleStarbornProfile from '../../data/generated/character-combat-profiles/199002.json';
 import generatedCatalog from '../../data/generated/character-acceptance-catalog.json';
 import generatedManifestIndex from '../../data/generated/character-acceptance-manifest-index.json';
 import { hashCanonicalValue } from '../../simulation/headless/canonicalSerialization';
@@ -79,17 +85,41 @@ const owners = [
     manifest: moyinManifest,
     profile: moyinProfile,
   },
+  {
+    ownerId: 112001,
+    passiveId: 11200162,
+    manifest: giseleManifest,
+    profile: giseleProfile,
+    unnamedSecondaryPassiveBoundary: false,
+  },
+  {
+    ownerId: 199001,
+    passiveId: 19900162,
+    manifest: femaleStarbornManifest,
+    profile: femaleStarbornProfile,
+    automatedEvidenceExpected: false,
+  },
+  {
+    ownerId: 199002,
+    passiveId: 19900262,
+    manifest: maleStarbornManifest,
+    profile: maleStarbornProfile,
+    automatedEvidenceExpected: false,
+  },
 ];
 
 describe('generated character acceptance manifests', () => {
-  it('publishes exactly the eight integrated owners with a valid hashed catalog', () => {
+  it('publishes every source owner while preserving the nine-object formal denominator', () => {
     expect(generatedCatalog.entries.map(entry => entry.ownerId)).toEqual([
       101003, 101010, 102001, 103002, 107001, 107002, 108003, 109001,
+      112001, 199001, 199002,
     ]);
     expect(generatedCatalog.summary).toMatchObject({
-      ownerCount: 8,
+      ownerCount: 11,
+      formalCharacterDenominator: 9,
+      productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 4,
+        'runtime-integrated': 7,
         'optimization-ready': 4,
       },
       optimizationReadyCount: 4,
@@ -99,6 +129,7 @@ describe('generated character acceptance manifests', () => {
     );
     expect(generatedManifestIndex.entries.map(entry => entry.ownerId)).toEqual([
       101003, 101010, 102001, 103002, 107001, 107002, 108003, 109001,
+      112001, 199001, 199002,
     ]);
     for (const entry of generatedCatalog.entries) {
       const indexed = generatedManifestIndex.entries.find(
@@ -160,7 +191,7 @@ describe('generated character acceptance manifests', () => {
 
   it.each(owners)(
     'derives $ownerId from the current product acceptance record',
-    ({ ownerId, manifest }) => {
+    ({ ownerId, manifest, profile, automatedEvidenceExpected = true }) => {
       expect(validateCharacterAcceptanceManifest(manifest)).toMatchObject({
         valid: true,
         issues: [],
@@ -202,16 +233,28 @@ describe('generated character acceptance manifests', () => {
               bindingStatus: 'not-requested',
             }
       );
-      expect(
-        manifest.evidence.productVisualAcceptance.automatedEvidence
-      ).toEqual([
-        expect.objectContaining({
-          scenarioIdentity:
-            manifest.evidence.machineScenarios[0].scenarioIdentity,
-          status: 'automated-workbench-import-passed',
-          screenshotSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
-        }),
-      ]);
+      if (automatedEvidenceExpected) {
+        expect(
+          manifest.evidence.productVisualAcceptance.automatedEvidence
+        ).toEqual([
+          expect.objectContaining({
+            scenarioIdentity:
+              manifest.evidence.machineScenarios[0].scenarioIdentity,
+            status: 'automated-workbench-import-passed',
+            screenshotSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
+          }),
+        ]);
+      } else {
+        expect(
+          manifest.evidence.productVisualAcceptance.automatedEvidence
+        ).toEqual([]);
+        expect(profile.optimizationObject).toMatchObject({
+          optimizationObjectId: 'STARBORN',
+          sourceCharacterId: ownerId,
+          status: 'verified-optimization-object-source-alias-ready',
+          applied: true,
+        });
+      }
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
       } else if (functionallyComplete) {

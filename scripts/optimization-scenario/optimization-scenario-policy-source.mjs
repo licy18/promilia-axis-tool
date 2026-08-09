@@ -194,6 +194,27 @@ const FROZEN_EVIDENCE_COMPATIBILITY = Object.freeze([
       stackDelta: 1,
     },
   },
+  {
+    characterId: 112001,
+    currentEffectIdentity: '11200112|0|elements|3|-3809486317990090417|27|0',
+    requiredCurrent: {
+      actionIdentity: 'actor|112001|11200112|0|11200112|star-skill',
+      actionKind: 'star-skill',
+      controlSkillId: 11200112,
+      elementId: 250,
+      markId: 250,
+      stackDelta: 1,
+      depth: 0,
+      startFrame: 27,
+      relationPath: [],
+      sourceIdentity:
+        'C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/skill_control_11200112__2244200307259366473.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-3809486317990090417|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200112.asset/MonoBehaviour/MonoBehaviour_5182973323990506066__5182973323990506066.json#startFrame|toOwnElementBaseDatas',
+    },
+    frozenProjection: {
+      effectIdentity:
+        '11200112|0|elements|3|-3809486317990090417|element:-3809486317990090417|27|0',
+    },
+  },
 ]);
 
 const POLICY_SOURCE = Object.freeze({
@@ -276,7 +297,9 @@ export function createOptimizationScenarioPolicy() {
     policyHash: hashCanonicalValue(policy),
   };
   if (frozenPolicy.policyHash !== FROZEN_POLICY_HASH) {
-    throw new Error('optimization-scenario-frozen-policy-contract-drift');
+    throw new Error(
+      `optimization-scenario-frozen-policy-contract-drift:expected=${FROZEN_POLICY_HASH}:actual=${frozenPolicy.policyHash}`
+    );
   }
   return frozenPolicy;
 }
@@ -378,7 +401,9 @@ function createCandidateRosterPolicy() {
     rosterHash: hashCanonicalValue(frozenRoster),
   };
   if (rosterWithHash.rosterHash !== FROZEN_ROSTER_HASH) {
-    throw new Error('optimization-roster-frozen-contract-drift');
+    throw new Error(
+      `optimization-roster-frozen-contract-drift:expected=${FROZEN_ROSTER_HASH}:actual=${rosterWithHash.rosterHash}`
+    );
   }
   return rosterWithHash;
 }

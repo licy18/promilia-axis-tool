@@ -6,8 +6,8 @@
   "summary": {
     "publicActionCount": 10,
     "rawWindowCount": 82,
-    "semanticTransitionCount": 2,
-    "appliedTransitionCount": 2,
+    "semanticTransitionCount": 3,
+    "appliedTransitionCount": 3,
     "staticEvidenceOnlyWindowCount": 8,
     "gameplayGapCount": 1,
     "notApplicableActionCount": 7
@@ -109,6 +109,58 @@
       "e2eCoverage": "not-covered",
       "status": "applied",
       "applied": true
+    },
+    {
+      "transitionIdentity": "actor:107001|control:10700112|sub:0|context:62-135|public-control:10700113|execution-control:10700113|sub:0",
+      "ownerId": 107001,
+      "sourcePublicActionIdentity": "actor|107001|10700112|0|10700112|star-skill",
+      "sourceActionKind": "star-skill",
+      "sourceControlSkillId": 10700112,
+      "sourceSubSkillIndex": 0,
+      "triggerPhase": "input-window",
+      "resourceTransactions": [
+        {
+          "operation": "transform-remove",
+          "triggerFrame": 53,
+          "value": 0,
+          "resourceIdentity": "actor:107001:element:107001006",
+          "sourceIdentity": "skill_control_10700112.asset#element107001134@53F|Battle/Element/ast_107001134.asset#清除免疫叠层"
+        }
+      ],
+      "actionEffects": [
+        {
+          "kind": "tuning-mark",
+          "triggerFrame": 10,
+          "profileKey": "wind",
+          "stackDelta": 1,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|skill_control_10700112.asset#elementConfigId=750@10F"
+        }
+      ],
+      "inputCommand": "ultimate",
+      "inputWindow": {
+        "startFrame": 62,
+        "endFrame": 135,
+        "durationFrames": 73
+      },
+      "condition": {
+        "kind": "always"
+      },
+      "targetChainIdentity": null,
+      "targetSequenceIndex": null,
+      "targetControlSkillId": 10700113,
+      "targetSubSkillIndex": 0,
+      "targetSemanticName": "星鸣技转星决技",
+      "transitionSemantics": "input-context-derived",
+      "exitRules": {
+        "kind": "immediate-interrupt"
+      },
+      "evidenceKind": "compiled-input-context-edge",
+      "sourceIdentity": "skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|skill_control_10700112.asset#sub0:EventBridge[62,135);bridgeType=3;allowedInputCommands includes ultimate|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700113.asset/MonoBehaviour/skill_control_10700113__-4780504530561126012.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "runtimeCoverage": "applied",
+      "workbenchCoverage": "generic-runtime-projection",
+      "e2eCoverage": "not-covered",
+      "status": "verified-input-context-variant-edge-ready",
+      "applied": true
     }
   ],
   "publicActionCoverage": [
@@ -184,8 +236,8 @@
       "sourceSkillId": 10700112,
       "controlSkillId": 10700112,
       "subSkillIndex": 0,
-      "transitionCount": 0,
-      "appliedTransitionCount": 0,
+      "transitionCount": 1,
+      "appliedTransitionCount": 1,
       "directWindowCount": 5,
       "appliedResourceTransactionCount": 1,
       "appliedTuningEffectCount": 2,
@@ -3185,5 +3237,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "c9ae44808c965b1d26d9e1c0006314df76acb2474cde31815062c02bb300d575"
+  "profileHash": "598c51952118f75871e334cd5226abf5cbf66af2bd6130093e6154e885c83210"
 }

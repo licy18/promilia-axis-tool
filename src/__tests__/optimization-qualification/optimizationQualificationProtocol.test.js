@@ -186,8 +186,13 @@ describe('M12-B3 optimization qualification generation', () => {
       sourceCharacterIds: [199001, 199002],
       aliasHashesEqual: true,
     });
-    expect(artifacts.catalog.admission.characters).toEqual([]);
-    expect(artifacts.catalog.admission.kibos).toEqual([]);
+    expect(artifacts.catalog.admission.characters).toEqual([
+      '102001',
+      '107001',
+      '108003',
+      '109001',
+    ]);
+    expect(artifacts.catalog.admission.kibos).toHaveLength(43);
     expect(artifacts.catalog.admission.soulEssences).toHaveLength(62);
     expect(artifacts.catalog.admission.equipment).toHaveLength(137);
     expect(artifacts.catalog.admission.setSkills).toHaveLength(12);
@@ -267,14 +272,14 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 8,
+      blockingUniqueGapCount: 5,
       byCategory: {
-        'not-implemented': 8,
+        'not-implemented': 5,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
-      character: 0,
-      kibo: 0,
+      character: 4,
+      kibo: 43,
       'soul-essence': 62,
       equipment: 137,
       'set-skill': 12,
@@ -1286,6 +1291,8 @@ describe('M12-B3 strict cultivation profile', () => {
     const service = createMachineAxisService();
     const createDamageAxis = levelBreakthroughRank => {
       const axis = createAxis();
+      axis.scenario.objectiveContract =
+        createMachineAxisObjectiveContract('damage');
       axis.scenario.cultivationProfile.actors.forEach(actor => {
         actor.character.levelBreakthroughRank = levelBreakthroughRank;
       });
@@ -1337,6 +1344,8 @@ describe('M12-B3 strict cultivation profile', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
     const axis = createAxis();
+    axis.scenario.objectiveContract =
+      createMachineAxisObjectiveContract('damage');
     const imported = adapter.importContract(axis);
     const exported = adapter.exportProject(imported.project);
     const replay = service.simulate(exported);

@@ -399,6 +399,55 @@
     "healingBySourceActor": [],
     "healingBySourceAction": []
   },
+  "actionLegalityProof": {
+    "passed": true,
+    "firstCycle": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisActionLegalityProof",
+      "status": "axis-action-legality-passed",
+      "passed": true,
+      "finalScoreEligible": true,
+      "objectiveId": "cycle-dps-no-toughness",
+      "actionCount": 4,
+      "skippedActionCount": 0,
+      "unresolvedActionCount": 0,
+      "rejectionCodes": [],
+      "rejectionCounts": {},
+      "rejectionCountsByCategory": {},
+      "issues": [],
+      "minimalCounterexamples": [],
+      "hashBindings": {
+        "input": "9eb8105d46bf8056",
+        "data": "d677dd1a1d9c301e",
+        "trace": "6b319715e7f33500",
+        "build": "30a94e6ab441b6a6"
+      },
+      "proofHash": "82dacbfc7a9f2611"
+    },
+    "replay": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisActionLegalityProof",
+      "status": "axis-action-legality-passed",
+      "passed": true,
+      "finalScoreEligible": true,
+      "objectiveId": "cycle-dps-no-toughness",
+      "actionCount": 7,
+      "skippedActionCount": 0,
+      "unresolvedActionCount": 0,
+      "rejectionCodes": [],
+      "rejectionCounts": {},
+      "rejectionCountsByCategory": {},
+      "issues": [],
+      "minimalCounterexamples": [],
+      "hashBindings": {
+        "input": "ea0d6b7fa005c8aa",
+        "data": "171fec0161c9e7f4",
+        "trace": "5de57a208abe98d1",
+        "build": "91c9f1404d164930"
+      },
+      "proofHash": "1e0aafdb99e799e3"
+    }
+  },
   "replayProof": {
     "stable": true,
     "issues": [],
@@ -431,27 +480,6 @@
           "startValue": 80.187,
           "endValue": 83.129,
           "delta": 2.942,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:actor-101007:500001:sp",
-          "startValue": 100,
-          "endValue": 100,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:actor-101010:500002:sp",
-          "startValue": 20.187,
-          "endValue": 28.639,
-          "delta": 8.452,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:actor-103002:500003:sp",
-          "startValue": 60.187,
-          "endValue": 68.639,
-          "delta": 8.452,
           "closed": true
         },
         {
@@ -488,27 +516,6 @@
           "endValue": 1003,
           "delta": 0,
           "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-1:500003:hp",
-          "startValue": 6726,
-          "endValue": 6726,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-2:500002:hp",
-          "startValue": 6241,
-          "endValue": 6241,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-3:500001:hp",
-          "startValue": 6358,
-          "endValue": 6358,
-          "delta": 0,
-          "closed": true
         }
       ],
       "tuningMarkDiffs": [],
@@ -527,6 +534,12 @@
         },
         {
           "dimension": "effects",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "attackChains",
           "equal": true,
           "start": [],
           "end": []
@@ -629,27 +642,6 @@
           "closed": true
         },
         {
-          "resourceIdentity": "kibo:actor-101007:500001:sp",
-          "startValue": 100,
-          "endValue": 100,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:actor-101010:500002:sp",
-          "startValue": 28.639,
-          "endValue": 29.68,
-          "delta": 1.041,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:actor-103002:500003:sp",
-          "startValue": 68.639,
-          "endValue": 69.68,
-          "delta": 1.041,
-          "closed": true
-        },
-        {
           "resourceIdentity": "actor:101010:element:101010115",
           "startValue": 0,
           "endValue": 0,
@@ -683,27 +675,6 @@
           "endValue": 1003,
           "delta": 0,
           "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-1:500003:hp",
-          "startValue": 6726,
-          "endValue": 6726,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-2:500002:hp",
-          "startValue": 6241,
-          "endValue": 6241,
-          "delta": 0,
-          "closed": true
-        },
-        {
-          "resourceIdentity": "kibo:team-slot-3:500001:hp",
-          "startValue": 6358,
-          "endValue": 6358,
-          "delta": 0,
-          "closed": true
         }
       ],
       "tuningMarkDiffs": [],
@@ -722,6 +693,12 @@
         },
         {
           "dimension": "effects",
+          "equal": true,
+          "start": [],
+          "end": []
+        },
+        {
+          "dimension": "attackChains",
           "equal": true,
           "start": [],
           "end": []
@@ -923,26 +900,7 @@
             "max": 100
           }
         ],
-        "kibos": [
-          {
-            "actorId": "actor-101007",
-            "kiboId": 500001,
-            "energy": 100,
-            "max": 100
-          },
-          {
-            "actorId": "actor-101010",
-            "kiboId": 500002,
-            "energy": 20.187,
-            "max": 100
-          },
-          {
-            "actorId": "actor-103002",
-            "kiboId": 500003,
-            "energy": 60.187,
-            "max": 100
-          }
-        ],
+        "kibos": [],
         "cooldowns": [],
         "chargeCooldowns": [],
         "effects": [],
@@ -963,6 +921,7 @@
             "activeStates": []
           }
         ],
+        "attackChains": [],
         "pendingEvents": [],
         "enemy": {
           "hp": 690.24,
@@ -1020,35 +979,7 @@
             "hitCountShields": []
           }
         ],
-        "kiboVitals": [
-          {
-            "actorId": "actor-101007",
-            "slotId": "team-slot-3",
-            "kiboId": 500001,
-            "currentHp": 6358,
-            "maximumHp": 6358,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-101010",
-            "slotId": "team-slot-2",
-            "kiboId": 500002,
-            "currentHp": 6241,
-            "maximumHp": 6241,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-103002",
-            "slotId": "team-slot-1",
-            "kiboId": 500003,
-            "currentHp": 6726,
-            "maximumHp": 6726,
-            "valueShields": [],
-            "hitCountShields": []
-          }
-        ]
+        "kiboVitals": []
       },
       "firstEnd": {
         "schemaVersion": 1,
@@ -1076,26 +1007,7 @@
             "max": 100
           }
         ],
-        "kibos": [
-          {
-            "actorId": "actor-101007",
-            "kiboId": 500001,
-            "energy": 100,
-            "max": 100
-          },
-          {
-            "actorId": "actor-101010",
-            "kiboId": 500002,
-            "energy": 28.639,
-            "max": 100
-          },
-          {
-            "actorId": "actor-103002",
-            "kiboId": 500003,
-            "energy": 68.639,
-            "max": 100
-          }
-        ],
+        "kibos": [],
         "cooldowns": [],
         "chargeCooldowns": [],
         "effects": [],
@@ -1116,6 +1028,7 @@
             "activeStates": []
           }
         ],
+        "attackChains": [],
         "pendingEvents": [],
         "enemy": {
           "hp": 690.24,
@@ -1173,35 +1086,7 @@
             "hitCountShields": []
           }
         ],
-        "kiboVitals": [
-          {
-            "actorId": "actor-101007",
-            "slotId": "team-slot-3",
-            "kiboId": 500001,
-            "currentHp": 6358,
-            "maximumHp": 6358,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-101010",
-            "slotId": "team-slot-2",
-            "kiboId": 500002,
-            "currentHp": 6241,
-            "maximumHp": 6241,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-103002",
-            "slotId": "team-slot-1",
-            "kiboId": 500003,
-            "currentHp": 6726,
-            "maximumHp": 6726,
-            "valueShields": [],
-            "hitCountShields": []
-          }
-        ]
+        "kiboVitals": []
       },
       "secondEnd": {
         "schemaVersion": 1,
@@ -1229,26 +1114,7 @@
             "max": 100
           }
         ],
-        "kibos": [
-          {
-            "actorId": "actor-101007",
-            "kiboId": 500001,
-            "energy": 100,
-            "max": 100
-          },
-          {
-            "actorId": "actor-101010",
-            "kiboId": 500002,
-            "energy": 29.68,
-            "max": 100
-          },
-          {
-            "actorId": "actor-103002",
-            "kiboId": 500003,
-            "energy": 69.68,
-            "max": 100
-          }
-        ],
+        "kibos": [],
         "cooldowns": [],
         "chargeCooldowns": [],
         "effects": [],
@@ -1269,6 +1135,7 @@
             "activeStates": []
           }
         ],
+        "attackChains": [],
         "pendingEvents": [],
         "enemy": {
           "hp": 690.24,
@@ -1326,35 +1193,7 @@
             "hitCountShields": []
           }
         ],
-        "kiboVitals": [
-          {
-            "actorId": "actor-101007",
-            "slotId": "team-slot-3",
-            "kiboId": 500001,
-            "currentHp": 6358,
-            "maximumHp": 6358,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-101010",
-            "slotId": "team-slot-2",
-            "kiboId": 500002,
-            "currentHp": 6241,
-            "maximumHp": 6241,
-            "valueShields": [],
-            "hitCountShields": []
-          },
-          {
-            "actorId": "actor-103002",
-            "slotId": "team-slot-1",
-            "kiboId": 500003,
-            "currentHp": 6726,
-            "maximumHp": 6726,
-            "valueShields": [],
-            "hitCountShields": []
-          }
-        ]
+        "kiboVitals": []
       }
     }
   ],
@@ -1366,19 +1205,19 @@
       "issues": [],
       "hashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "69f8198f6154c6a9",
-        "data": "5fb4771549d80f62",
-        "trace": "b9208a79bcd67189",
+        "input": "ea0d6b7fa005c8aa",
+        "data": "171fec0161c9e7f4",
+        "trace": "5de57a208abe98d1",
         "evaluation": "6eafa465898dbceb",
-        "build": "10750e397d71fad4"
+        "build": "91c9f1404d164930"
       },
       "proofHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "69f8198f6154c6a9",
-        "data": "5fb4771549d80f62",
-        "trace": "b9208a79bcd67189",
+        "input": "ea0d6b7fa005c8aa",
+        "data": "171fec0161c9e7f4",
+        "trace": "5de57a208abe98d1",
         "evaluation": "6eafa465898dbceb",
-        "build": "10750e397d71fad4"
+        "build": "91c9f1404d164930"
       },
       "firstCycle": {
         "interval": "[start,end)",
@@ -1465,7 +1304,7 @@
             "timeMs": 1183.333333,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 55,
+            "runtimeSequenceIndex": 33,
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
             "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
@@ -1492,7 +1331,7 @@
             "timeMs": 1466.666667,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 76,
+            "runtimeSequenceIndex": 46,
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
             "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
@@ -1519,7 +1358,7 @@
             "timeMs": 1933.333333,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 107,
+            "runtimeSequenceIndex": 65,
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
@@ -1546,7 +1385,7 @@
             "timeMs": 2016.666666,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 118,
+            "runtimeSequenceIndex": 72,
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
@@ -1665,7 +1504,7 @@
             "timeMs": 6183.333333,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 324,
+            "runtimeSequenceIndex": 196,
             "actionId": "cycle-ruby-a1",
             "actorId": "actor-103002",
             "hitIdentity": "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0",
@@ -1692,7 +1531,7 @@
             "timeMs": 6466.666667,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 340,
+            "runtimeSequenceIndex": 206,
             "actionId": "cycle-ruby-a2",
             "actorId": "actor-103002",
             "hitIdentity": "10300202|0|projectile|103002001|103002004|0|0|control:10300202|sub:0|behavior:3227083005636823572|config:0|bullet:103002004:0:0|element:103002001:0",
@@ -1719,7 +1558,7 @@
             "timeMs": 6933.333333,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 366,
+            "runtimeSequenceIndex": 222,
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-6674858885631177272|config:0|bullet:103002005:0:0|element:103002002:0",
@@ -1746,7 +1585,7 @@
             "timeMs": 7016.666666,
             "runtimePhasePriority": 0,
             "runtimePriority": 0,
-            "runtimeSequenceIndex": 372,
+            "runtimeSequenceIndex": 226,
             "actionId": "cycle-ruby-a3",
             "actorId": "actor-103002",
             "hitIdentity": "10300203|0|projectile|103002002|103002005|0|0|control:10300203|sub:0|behavior:-1603399913834803768|config:0|bullet:103002005:0:0|element:103002002:0",
@@ -1815,27 +1654,6 @@
               "closed": true
             },
             {
-              "resourceIdentity": "kibo:actor-101007:500001:sp",
-              "startValue": 100,
-              "endValue": 100,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:actor-101010:500002:sp",
-              "startValue": 20.187,
-              "endValue": 28.639,
-              "delta": 8.452,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:actor-103002:500003:sp",
-              "startValue": 60.187,
-              "endValue": 68.639,
-              "delta": 8.452,
-              "closed": true
-            },
-            {
               "resourceIdentity": "actor:101010:element:101010115",
               "startValue": 0,
               "endValue": 0,
@@ -1869,27 +1687,6 @@
               "endValue": 1003,
               "delta": 0,
               "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-1:500003:hp",
-              "startValue": 6726,
-              "endValue": 6726,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-2:500002:hp",
-              "startValue": 6241,
-              "endValue": 6241,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-3:500001:hp",
-              "startValue": 6358,
-              "endValue": 6358,
-              "delta": 0,
-              "closed": true
             }
           ],
           "tuningMarkDiffs": [],
@@ -1908,6 +1705,12 @@
             },
             {
               "dimension": "effects",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "attackChains",
               "equal": true,
               "start": [],
               "end": []
@@ -2010,27 +1813,6 @@
               "closed": true
             },
             {
-              "resourceIdentity": "kibo:actor-101007:500001:sp",
-              "startValue": 100,
-              "endValue": 100,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:actor-101010:500002:sp",
-              "startValue": 28.639,
-              "endValue": 29.68,
-              "delta": 1.041,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:actor-103002:500003:sp",
-              "startValue": 68.639,
-              "endValue": 69.68,
-              "delta": 1.041,
-              "closed": true
-            },
-            {
               "resourceIdentity": "actor:101010:element:101010115",
               "startValue": 0,
               "endValue": 0,
@@ -2064,27 +1846,6 @@
               "endValue": 1003,
               "delta": 0,
               "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-1:500003:hp",
-              "startValue": 6726,
-              "endValue": 6726,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-2:500002:hp",
-              "startValue": 6241,
-              "endValue": 6241,
-              "delta": 0,
-              "closed": true
-            },
-            {
-              "resourceIdentity": "kibo:team-slot-3:500001:hp",
-              "startValue": 6358,
-              "endValue": 6358,
-              "delta": 0,
-              "closed": true
             }
           ],
           "tuningMarkDiffs": [],
@@ -2103,6 +1864,12 @@
             },
             {
               "dimension": "effects",
+              "equal": true,
+              "start": [],
+              "end": []
+            },
+            {
+              "dimension": "attackChains",
               "equal": true,
               "start": [],
               "end": []
@@ -2274,6 +2041,55 @@
             "runnable": true
           }
         ]
+      },
+      "actionLegalityProof": {
+        "passed": true,
+        "firstCycle": {
+          "schemaVersion": 1,
+          "contractName": "AzPrMachineAxisActionLegalityProof",
+          "status": "axis-action-legality-passed",
+          "passed": true,
+          "finalScoreEligible": true,
+          "objectiveId": "cycle-dps-no-toughness",
+          "actionCount": 4,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "rejectionCodes": [],
+          "rejectionCounts": {},
+          "rejectionCountsByCategory": {},
+          "issues": [],
+          "minimalCounterexamples": [],
+          "hashBindings": {
+            "input": "9eb8105d46bf8056",
+            "data": "d677dd1a1d9c301e",
+            "trace": "6b319715e7f33500",
+            "build": "30a94e6ab441b6a6"
+          },
+          "proofHash": "82dacbfc7a9f2611"
+        },
+        "replay": {
+          "schemaVersion": 1,
+          "contractName": "AzPrMachineAxisActionLegalityProof",
+          "status": "axis-action-legality-passed",
+          "passed": true,
+          "finalScoreEligible": true,
+          "objectiveId": "cycle-dps-no-toughness",
+          "actionCount": 7,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "rejectionCodes": [],
+          "rejectionCounts": {},
+          "rejectionCountsByCategory": {},
+          "issues": [],
+          "minimalCounterexamples": [],
+          "hashBindings": {
+            "input": "ea0d6b7fa005c8aa",
+            "data": "171fec0161c9e7f4",
+            "trace": "5de57a208abe98d1",
+            "build": "91c9f1404d164930"
+          },
+          "proofHash": "1e0aafdb99e799e3"
+        }
       },
       "loopPlan": {
         "sourceActionIds": [
@@ -2665,11 +2481,11 @@
     ]
   },
   "hashes": {
-    "input": "69f8198f6154c6a9",
-    "data": "5fb4771549d80f62",
-    "trace": "b9208a79bcd67189",
+    "input": "ea0d6b7fa005c8aa",
+    "data": "171fec0161c9e7f4",
+    "trace": "5de57a208abe98d1",
     "evaluation": "6eafa465898dbceb",
-    "cycle": "a6d54b1f32a93853",
-    "build": "76296a9463241959"
+    "cycle": "c3a9478c0c5a4ccf",
+    "build": "fb7f489e9ac64e97"
   }
 }

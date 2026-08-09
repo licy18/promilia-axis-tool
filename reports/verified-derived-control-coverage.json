@@ -3,7 +3,7 @@
   "kind": "azpr-verified-derived-control-coverage",
   "status": "verified-derived-control-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+  "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
   "sourceDenominator": {
     "kind": "current-client-public-actor-derived-control-candidates",
     "actorOwnerCount": 20,
@@ -20495,56 +20495,158 @@
       ],
       "decisionFrame": 0,
       "inputSelector": {
-        "kind": "charge-tier",
-        "mode": "hold",
-        "holdRange": {
-          "minimumHoldMs": 250,
-          "maximumHoldMs": null,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
-          "resolutionStatus": "partially-resolved"
-        },
+        "selectorIdentity": "starborn-199001-charged-context-selector",
+        "kind": "input-context",
+        "mode": "press",
+        "holdRange": null,
         "options": [
           {
-            "selectorIdentity": "actor:199001|control:19900110|public-variant:1",
-            "label": "重击",
-            "publicVariantIndex": 1,
+            "selectorIdentity": "starborn-199001-default-charged",
+            "label": "普通重击",
+            "publicVariantIndex": 0,
+            "executionControlSkillId": 19900110,
+            "executionSubSkillIndex": 0,
             "subSkillIndex": 0,
             "playerSkillId": 19900110,
-            "durationFrames": 170,
-            "chargeTier": 1,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=19900101].level.labels[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
+            "durationFrames": 55,
+            "chargeTier": null,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "hold",
+                "pressFrame": 0,
+                "holdDurationMs": 250,
+                "holdFrames": 15,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 55,
+                "durationFrames": 55,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "verified-unconditional-attack-reopen-window",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_-494166529998740487__-494166529998740487.json#behaviorlineControl[0].behaviorList[pathId=8993781303438189561]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8993781303438189561__8993781303438189561.json",
+                "conversion": "55 source frames at 60fps",
+                "animationDurationFrames": 170,
+                "lastHitFrame": 39,
+                "reopenWindow": {
+                  "kind": "attack-reopen-window",
+                  "startFrame": 55,
+                  "endFrame": 60,
+                  "durationFrames": 5,
+                  "targetControlSkillId": null,
+                  "targetSubSkillIndex": 0,
+                  "allowAttack": true,
+                  "baseOnInput": false,
+                  "inputToIndex": false,
+                  "bridgeType": 3,
+                  "continuousAttackType": 0,
+                  "interruptBehavior": 0,
+                  "frameIndex": 0,
+                  "allowedInputCommands": [
+                    "normal-attack",
+                    "perfect-parry"
+                  ],
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_-494166529998740487__-494166529998740487.json#behaviorlineControl[0].behaviorList[pathId=8993781303438189561]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8993781303438189561__8993781303438189561.json"
+                },
+                "windowRole": "unconditional-attack-reopen",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 170,
+                "durationFrames": 170,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "170 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+            },
+            "sourceIdentity": "skill_control_19900110.asset#skillPlayers[0]|public-action-form:starborn-199001-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
             "resolutionStatus": "applied"
           },
           {
-            "selectorIdentity": "actor:199001|control:19900110|public-variant:2",
-            "label": "重击派生",
-            "publicVariantIndex": 2,
+            "selectorIdentity": "starborn-199001-derived-charged",
+            "label": "派生重击",
+            "publicVariantIndex": 1,
+            "executionControlSkillId": 19900110,
+            "executionSubSkillIndex": 1,
             "subSkillIndex": 1,
             "playerSkillId": 19900110,
-            "durationFrames": 220,
-            "chargeTier": 2,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=19900101].level.labels[2]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
+            "durationFrames": 90,
+            "chargeTier": null,
+            "executionTiming": {
+              "subSkillIndex": 1,
+              "frameRate": 60,
+              "input": {
+                "mode": "hold",
+                "pressFrame": 0,
+                "holdDurationMs": 250,
+                "holdFrames": 15,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 90,
+                "durationFrames": 90,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "verified-unconditional-attack-reopen-window",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json",
+                "conversion": "90 source frames at 60fps",
+                "animationDurationFrames": 220,
+                "lastHitFrame": 72,
+                "reopenWindow": {
+                  "kind": "attack-reopen-window",
+                  "startFrame": 90,
+                  "endFrame": 220,
+                  "durationFrames": 130,
+                  "targetControlSkillId": null,
+                  "targetSubSkillIndex": 0,
+                  "allowAttack": true,
+                  "baseOnInput": false,
+                  "inputToIndex": false,
+                  "bridgeType": 3,
+                  "continuousAttackType": 0,
+                  "interruptBehavior": 0,
+                  "frameIndex": 0,
+                  "allowedInputCommands": [
+                    "normal-attack",
+                    "charged-attack",
+                    "star-skill",
+                    "ultimate",
+                    "dodge",
+                    "jump",
+                    "perfect-parry"
+                  ],
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json"
+                },
+                "windowRole": "unconditional-attack-reopen",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 220,
+                "durationFrames": 220,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+                "conversion": "220 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+            },
+            "sourceIdentity": "skill_control_19900110.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199001-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
             "resolutionStatus": "applied"
           }
         ],
-        "eventBridgeRelations": [
-          {
-            "sourceSubSkillIndex": 1,
-            "targetControlSkillId": 19900101,
-            "targetSubSkillIndex": null,
-            "startFrame": 60,
-            "endFrame": 90,
-            "baseOnInput": false,
-            "inputToIndex": false,
-            "bridgeType": 3,
-            "continuousAttackType": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json"
-          }
-        ],
-        "sourceIdentity": [
-          "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json"
-        ],
+        "sourceIdentity": "skill_control_19900110.asset#skillPlayers[0,1]|contextInputEdges[semanticIdentity=starborn-199001-derived-charged]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json|skill_control_19900110.asset#skillPlayers[0]|public-action-form:starborn-199001-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_19900110.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199001-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
         "resolutionStatus": "applied"
       },
       "inputRelations": [
@@ -20561,33 +20663,151 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json"
         }
       ],
-      "holdRange": {
-        "minimumHoldMs": 250,
-        "maximumHoldMs": null,
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
-        "resolutionStatus": "partially-resolved"
-      },
+      "holdRange": null,
       "chargeTier": [
         {
-          "selectorIdentity": "actor:199001|control:19900110|public-variant:1",
-          "label": "重击",
-          "publicVariantIndex": 1,
+          "selectorIdentity": "starborn-199001-default-charged",
+          "label": "普通重击",
+          "publicVariantIndex": 0,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 0,
           "subSkillIndex": 0,
           "playerSkillId": 19900110,
-          "durationFrames": 170,
-          "chargeTier": 1,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=19900101].level.labels[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
+          "durationFrames": 55,
+          "chargeTier": null,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "holdDurationMs": 250,
+              "holdFrames": 15,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 55,
+              "durationFrames": 55,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "verified-unconditional-attack-reopen-window",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_-494166529998740487__-494166529998740487.json#behaviorlineControl[0].behaviorList[pathId=8993781303438189561]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8993781303438189561__8993781303438189561.json",
+              "conversion": "55 source frames at 60fps",
+              "animationDurationFrames": 170,
+              "lastHitFrame": 39,
+              "reopenWindow": {
+                "kind": "attack-reopen-window",
+                "startFrame": 55,
+                "endFrame": 60,
+                "durationFrames": 5,
+                "targetControlSkillId": null,
+                "targetSubSkillIndex": 0,
+                "allowAttack": true,
+                "baseOnInput": false,
+                "inputToIndex": false,
+                "bridgeType": 3,
+                "continuousAttackType": 0,
+                "interruptBehavior": 0,
+                "frameIndex": 0,
+                "allowedInputCommands": [
+                  "normal-attack",
+                  "perfect-parry"
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_-494166529998740487__-494166529998740487.json#behaviorlineControl[0].behaviorList[pathId=8993781303438189561]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8993781303438189561__8993781303438189561.json"
+              },
+              "windowRole": "unconditional-attack-reopen",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 170,
+              "durationFrames": 170,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "170 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          },
+          "sourceIdentity": "skill_control_19900110.asset#skillPlayers[0]|public-action-form:starborn-199001-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
           "resolutionStatus": "applied"
         },
         {
-          "selectorIdentity": "actor:199001|control:19900110|public-variant:2",
-          "label": "重击派生",
-          "publicVariantIndex": 2,
+          "selectorIdentity": "starborn-199001-derived-charged",
+          "label": "派生重击",
+          "publicVariantIndex": 1,
+          "executionControlSkillId": 19900110,
+          "executionSubSkillIndex": 1,
           "subSkillIndex": 1,
           "playerSkillId": 19900110,
-          "durationFrames": 220,
-          "chargeTier": 2,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=19900101].level.labels[2]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime",
+          "durationFrames": 90,
+          "chargeTier": null,
+          "executionTiming": {
+            "subSkillIndex": 1,
+            "frameRate": 60,
+            "input": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "holdDurationMs": 250,
+              "holdFrames": 15,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 90,
+              "durationFrames": 90,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "verified-unconditional-attack-reopen-window",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json",
+              "conversion": "90 source frames at 60fps",
+              "animationDurationFrames": 220,
+              "lastHitFrame": 72,
+              "reopenWindow": {
+                "kind": "attack-reopen-window",
+                "startFrame": 90,
+                "endFrame": 220,
+                "durationFrames": 130,
+                "targetControlSkillId": null,
+                "targetSubSkillIndex": 0,
+                "allowAttack": true,
+                "baseOnInput": false,
+                "inputToIndex": false,
+                "bridgeType": 3,
+                "continuousAttackType": 0,
+                "interruptBehavior": 0,
+                "frameIndex": 0,
+                "allowedInputCommands": [
+                  "normal-attack",
+                  "charged-attack",
+                  "star-skill",
+                  "ultimate",
+                  "dodge",
+                  "jump",
+                  "perfect-parry"
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_7644043554656965950__7644043554656965950.json#behaviorlineControl[0].behaviorList[pathId=8512635167709025598]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_8512635167709025598__8512635167709025598.json"
+              },
+              "windowRole": "unconditional-attack-reopen",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 220,
+              "durationFrames": 220,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+              "conversion": "220 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+          },
+          "sourceIdentity": "skill_control_19900110.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199001-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
           "resolutionStatus": "applied"
         }
       ],
@@ -20607,16 +20827,18 @@
       },
       "variants": [
         {
+          "executionControlSkillId": 19900110,
           "subSkillIndex": 0,
           "playerSkillId": 19900110,
-          "durationFrames": 170,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          "durationFrames": 55,
+          "sourceIdentity": "skill_control_19900110.asset#skillPlayers[0]|public-action-form:starborn-199001-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
         },
         {
+          "executionControlSkillId": 19900110,
           "subSkillIndex": 1,
           "playerSkillId": 19900110,
-          "durationFrames": 220,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+          "durationFrames": 90,
+          "sourceIdentity": "skill_control_19900110.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199001-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
         }
       ],
       "sourceIdentity": [
@@ -20624,12 +20846,11 @@
         "NewTable/skillsub_logic.rows[skillId=19900110]",
         "workbench-seed.gameData.skills[id=19900101].level.labels[1]",
         "workbench-seed.gameData.skills[id=19900101].level.labels[2]",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_5548931573720503614__5548931573720503614.json#behaviorlineControl[0].behaviorList[pathId=6305343969295947070]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/MonoBehaviour_6305343969295947070__6305343969295947070.json",
+        "skill_control_19900110.asset#skillPlayers[0,1]|contextInputEdges[semanticIdentity=starborn-199001-derived-charged]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json|skill_control_19900110.asset#skillPlayers[0]|public-action-form:starborn-199001-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_19900110.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199001-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900110.asset/MonoBehaviour/skill_control_19900110__-7081191383875319440.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
       ],
       "resolutionStatus": "applied",
-      "reasons": [
-        "variant-condition-source-families-audited-not-yet-modeled"
-      ]
+      "reasons": []
     },
     {
       "contractIdentity": "actor:199001|control:19900112|derived-control",
@@ -21200,56 +21421,158 @@
       ],
       "decisionFrame": 0,
       "inputSelector": {
-        "kind": "charge-tier",
-        "mode": "hold",
-        "holdRange": {
-          "minimumHoldMs": 250,
-          "maximumHoldMs": null,
-          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
-          "resolutionStatus": "partially-resolved"
-        },
+        "selectorIdentity": "starborn-199002-charged-context-selector",
+        "kind": "input-context",
+        "mode": "press",
+        "holdRange": null,
         "options": [
           {
-            "selectorIdentity": "actor:199002|control:19900210|public-variant:1",
-            "label": "重击",
-            "publicVariantIndex": 1,
+            "selectorIdentity": "starborn-199002-default-charged",
+            "label": "普通重击",
+            "publicVariantIndex": 0,
+            "executionControlSkillId": 19900210,
+            "executionSubSkillIndex": 0,
             "subSkillIndex": 0,
             "playerSkillId": 19900210,
-            "durationFrames": 240,
-            "chargeTier": 1,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=19900201].level.labels[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
+            "durationFrames": 55,
+            "chargeTier": null,
+            "executionTiming": {
+              "subSkillIndex": 0,
+              "frameRate": 60,
+              "input": {
+                "mode": "hold",
+                "pressFrame": 0,
+                "holdDurationMs": 250,
+                "holdFrames": 15,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 55,
+                "durationFrames": 55,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "verified-unconditional-attack-reopen-window",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4240664099513025063__-4240664099513025063.json#behaviorlineControl[0].behaviorList[pathId=-4172657052756656679]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4172657052756656679__-4172657052756656679.json",
+                "conversion": "55 source frames at 60fps",
+                "animationDurationFrames": 240,
+                "lastHitFrame": 39,
+                "reopenWindow": {
+                  "kind": "attack-reopen-window",
+                  "startFrame": 55,
+                  "endFrame": 61,
+                  "durationFrames": 6,
+                  "targetControlSkillId": null,
+                  "targetSubSkillIndex": 0,
+                  "allowAttack": true,
+                  "baseOnInput": false,
+                  "inputToIndex": false,
+                  "bridgeType": 3,
+                  "continuousAttackType": 0,
+                  "interruptBehavior": 0,
+                  "frameIndex": 0,
+                  "allowedInputCommands": [
+                    "normal-attack",
+                    "perfect-parry"
+                  ],
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4240664099513025063__-4240664099513025063.json#behaviorlineControl[0].behaviorList[pathId=-4172657052756656679]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4172657052756656679__-4172657052756656679.json"
+                },
+                "windowRole": "unconditional-attack-reopen",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 240,
+                "durationFrames": 240,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+                "conversion": "240 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+            },
+            "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
             "resolutionStatus": "applied"
           },
           {
-            "selectorIdentity": "actor:199002|control:19900210|public-variant:2",
-            "label": "重击派生",
-            "publicVariantIndex": 2,
+            "selectorIdentity": "starborn-199002-derived-charged",
+            "label": "派生重击",
+            "publicVariantIndex": 1,
+            "executionControlSkillId": 19900210,
+            "executionSubSkillIndex": 1,
             "subSkillIndex": 1,
             "playerSkillId": 19900210,
-            "durationFrames": 213,
-            "chargeTier": 2,
-            "sourceIdentity": "workbench-seed.gameData.skills[id=19900201].level.labels[2]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
+            "durationFrames": 90,
+            "chargeTier": null,
+            "executionTiming": {
+              "subSkillIndex": 1,
+              "frameRate": 60,
+              "input": {
+                "mode": "hold",
+                "pressFrame": 0,
+                "holdDurationMs": 250,
+                "holdFrames": 15,
+                "status": "applied",
+                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
+              },
+              "occupancy": {
+                "startFrame": 0,
+                "endFrame": 90,
+                "durationFrames": 90,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "verified-unconditional-attack-reopen-window",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-6288774642016836152__-6288774642016836152.json#behaviorlineControl[0].behaviorList[pathId=7077742903364953544]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7077742903364953544__7077742903364953544.json",
+                "conversion": "90 source frames at 60fps",
+                "animationDurationFrames": 213,
+                "lastHitFrame": 71,
+                "reopenWindow": {
+                  "kind": "attack-reopen-window",
+                  "startFrame": 90,
+                  "endFrame": 220,
+                  "durationFrames": 130,
+                  "targetControlSkillId": null,
+                  "targetSubSkillIndex": 0,
+                  "allowAttack": true,
+                  "baseOnInput": false,
+                  "inputToIndex": false,
+                  "bridgeType": 3,
+                  "continuousAttackType": 0,
+                  "interruptBehavior": 0,
+                  "frameIndex": 0,
+                  "allowedInputCommands": [
+                    "normal-attack",
+                    "charged-attack",
+                    "star-skill",
+                    "ultimate",
+                    "dodge",
+                    "jump",
+                    "perfect-parry"
+                  ],
+                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-6288774642016836152__-6288774642016836152.json#behaviorlineControl[0].behaviorList[pathId=7077742903364953544]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7077742903364953544__7077742903364953544.json"
+                },
+                "windowRole": "unconditional-attack-reopen",
+                "reasons": []
+              },
+              "animation": {
+                "startFrame": 0,
+                "endFrame": 213,
+                "durationFrames": 213,
+                "frameRate": 60,
+                "status": "applied",
+                "sourceKind": "skill-control-player-animation-range",
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+                "conversion": "213 source frames at 60fps"
+              },
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+            },
+            "sourceIdentity": "skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
             "resolutionStatus": "applied"
           }
         ],
-        "eventBridgeRelations": [
-          {
-            "sourceSubSkillIndex": 1,
-            "targetControlSkillId": 19900201,
-            "targetSubSkillIndex": null,
-            "startFrame": 60,
-            "endFrame": 90,
-            "baseOnInput": false,
-            "inputToIndex": false,
-            "bridgeType": 3,
-            "continuousAttackType": 0,
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4683830101859162680__-4683830101859162680.json#behaviorlineControl[0].behaviorList[pathId=7147102369188685256]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7147102369188685256__7147102369188685256.json"
-          }
-        ],
-        "sourceIdentity": [
-          "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
-          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4683830101859162680__-4683830101859162680.json#behaviorlineControl[0].behaviorList[pathId=7147102369188685256]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7147102369188685256__7147102369188685256.json"
-        ],
+        "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0,1]|contextInputEdges[semanticIdentity=starborn-199002-derived-charged]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json|skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
         "resolutionStatus": "applied"
       },
       "inputRelations": [
@@ -21266,33 +21589,151 @@
           "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4683830101859162680__-4683830101859162680.json#behaviorlineControl[0].behaviorList[pathId=7147102369188685256]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7147102369188685256__7147102369188685256.json"
         }
       ],
-      "holdRange": {
-        "minimumHoldMs": 250,
-        "maximumHoldMs": null,
-        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
-        "resolutionStatus": "partially-resolved"
-      },
+      "holdRange": null,
       "chargeTier": [
         {
-          "selectorIdentity": "actor:199002|control:19900210|public-variant:1",
-          "label": "重击",
-          "publicVariantIndex": 1,
+          "selectorIdentity": "starborn-199002-default-charged",
+          "label": "普通重击",
+          "publicVariantIndex": 0,
+          "executionControlSkillId": 19900210,
+          "executionSubSkillIndex": 0,
           "subSkillIndex": 0,
           "playerSkillId": 19900210,
-          "durationFrames": 240,
-          "chargeTier": 1,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=19900201].level.labels[1]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
+          "durationFrames": 55,
+          "chargeTier": null,
+          "executionTiming": {
+            "subSkillIndex": 0,
+            "frameRate": 60,
+            "input": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "holdDurationMs": 250,
+              "holdFrames": 15,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 55,
+              "durationFrames": 55,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "verified-unconditional-attack-reopen-window",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4240664099513025063__-4240664099513025063.json#behaviorlineControl[0].behaviorList[pathId=-4172657052756656679]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4172657052756656679__-4172657052756656679.json",
+              "conversion": "55 source frames at 60fps",
+              "animationDurationFrames": 240,
+              "lastHitFrame": 39,
+              "reopenWindow": {
+                "kind": "attack-reopen-window",
+                "startFrame": 55,
+                "endFrame": 61,
+                "durationFrames": 6,
+                "targetControlSkillId": null,
+                "targetSubSkillIndex": 0,
+                "allowAttack": true,
+                "baseOnInput": false,
+                "inputToIndex": false,
+                "bridgeType": 3,
+                "continuousAttackType": 0,
+                "interruptBehavior": 0,
+                "frameIndex": 0,
+                "allowedInputCommands": [
+                  "normal-attack",
+                  "perfect-parry"
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4240664099513025063__-4240664099513025063.json#behaviorlineControl[0].behaviorList[pathId=-4172657052756656679]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4172657052756656679__-4172657052756656679.json"
+              },
+              "windowRole": "unconditional-attack-reopen",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 240,
+              "durationFrames": 240,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
+              "conversion": "240 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          },
+          "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
           "resolutionStatus": "applied"
         },
         {
-          "selectorIdentity": "actor:199002|control:19900210|public-variant:2",
-          "label": "重击派生",
-          "publicVariantIndex": 2,
+          "selectorIdentity": "starborn-199002-derived-charged",
+          "label": "派生重击",
+          "publicVariantIndex": 1,
+          "executionControlSkillId": 19900210,
+          "executionSubSkillIndex": 1,
           "subSkillIndex": 1,
           "playerSkillId": 19900210,
-          "durationFrames": 213,
-          "chargeTier": 2,
-          "sourceIdentity": "workbench-seed.gameData.skills[id=19900201].level.labels[2]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime",
+          "durationFrames": 90,
+          "chargeTier": null,
+          "executionTiming": {
+            "subSkillIndex": 1,
+            "frameRate": 60,
+            "input": {
+              "mode": "hold",
+              "pressFrame": 0,
+              "holdDurationMs": 250,
+              "holdFrames": 15,
+              "status": "applied",
+              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
+            },
+            "occupancy": {
+              "startFrame": 0,
+              "endFrame": 90,
+              "durationFrames": 90,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "verified-unconditional-attack-reopen-window",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-6288774642016836152__-6288774642016836152.json#behaviorlineControl[0].behaviorList[pathId=7077742903364953544]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7077742903364953544__7077742903364953544.json",
+              "conversion": "90 source frames at 60fps",
+              "animationDurationFrames": 213,
+              "lastHitFrame": 71,
+              "reopenWindow": {
+                "kind": "attack-reopen-window",
+                "startFrame": 90,
+                "endFrame": 220,
+                "durationFrames": 130,
+                "targetControlSkillId": null,
+                "targetSubSkillIndex": 0,
+                "allowAttack": true,
+                "baseOnInput": false,
+                "inputToIndex": false,
+                "bridgeType": 3,
+                "continuousAttackType": 0,
+                "interruptBehavior": 0,
+                "frameIndex": 0,
+                "allowedInputCommands": [
+                  "normal-attack",
+                  "charged-attack",
+                  "star-skill",
+                  "ultimate",
+                  "dodge",
+                  "jump",
+                  "perfect-parry"
+                ],
+                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-6288774642016836152__-6288774642016836152.json#behaviorlineControl[0].behaviorList[pathId=7077742903364953544]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7077742903364953544__7077742903364953544.json"
+              },
+              "windowRole": "unconditional-attack-reopen",
+              "reasons": []
+            },
+            "animation": {
+              "startFrame": 0,
+              "endFrame": 213,
+              "durationFrames": 213,
+              "frameRate": 60,
+              "status": "applied",
+              "sourceKind": "skill-control-player-animation-range",
+              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1].frameCountDict[key=0]",
+              "conversion": "213 source frames at 60fps"
+            },
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+          },
+          "sourceIdentity": "skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]",
           "resolutionStatus": "applied"
         }
       ],
@@ -21312,16 +21753,18 @@
       },
       "variants": [
         {
+          "executionControlSkillId": 19900210,
           "subSkillIndex": 0,
           "playerSkillId": 19900210,
-          "durationFrames": 240,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+          "durationFrames": 55,
+          "sourceIdentity": "skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
         },
         {
+          "executionControlSkillId": 19900210,
           "subSkillIndex": 1,
           "playerSkillId": 19900210,
-          "durationFrames": 213,
-          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+          "durationFrames": 90,
+          "sourceIdentity": "skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
         }
       ],
       "sourceIdentity": [
@@ -21329,12 +21772,11 @@
         "NewTable/skillsub_logic.rows[skillId=19900210]",
         "workbench-seed.gameData.skills[id=19900201].level.labels[1]",
         "workbench-seed.gameData.skills[id=19900201].level.labels[2]",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4683830101859162680__-4683830101859162680.json#behaviorlineControl[0].behaviorList[pathId=7147102369188685256]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7147102369188685256__7147102369188685256.json"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_-4683830101859162680__-4683830101859162680.json#behaviorlineControl[0].behaviorList[pathId=7147102369188685256]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/MonoBehaviour_7147102369188685256__7147102369188685256.json",
+        "skill_control_19900210.asset#skillPlayers[0,1]|contextInputEdges[semanticIdentity=starborn-199002-derived-charged]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json|skill_control_19900210.asset#skillPlayers[0]|public-action-form:starborn-199002-default-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_19900210.asset#skillPlayers[1]|context-edge:A5[32,52)->starborn-199002-derived-charged|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900210.asset/MonoBehaviour/skill_control_19900210__6183672799185604772.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
       ],
       "resolutionStatus": "applied",
-      "reasons": [
-        "variant-condition-source-families-audited-not-yet-modeled"
-      ]
+      "reasons": []
     },
     {
       "contractIdentity": "actor:199002|control:19900212|derived-control",

@@ -6,14 +6,16 @@
   "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
+  "sourcePackageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "4e77898db4705599",
-    "traceHash": "7d29079842f64d0f",
-    "dataHash": "fd824446e5fe1ecf",
+    "inputHash": "8ef97019eb7c3b05",
+    "traceHash": "d2fe6de77ddadcc9",
+    "dataHash": "3796b151c730eb09",
+    "buildHash": "294f37c71a8252c4",
+    "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -30,7 +32,6 @@
       "executedActionIds": [
         "han-charged-stage-one",
         "han-charged-stage-two",
-        "han-kibo-signature",
         "han-limit-counter",
         "han-normal-a1",
         "han-normal-a2",
@@ -44,8 +45,23 @@
         "switch-away-from-han--on-enter--actor-101010--star-carry",
         "switch-away-from-han--on-exit--actor-101003--star-carry"
       ],
-      "blockedActionIds": [],
-      "blockedActionDetails": [],
+      "blockedActionIds": [
+        "han-kibo-signature"
+      ],
+      "blockedActionDetails": [
+        {
+          "actionId": "han-kibo-signature",
+          "contextActionId": null,
+          "skipReason": "confirmed-action-rule-violation",
+          "unresolvedCodes": [],
+          "violationCodes": [
+            "controlled-actor-action-unavailable"
+          ],
+          "diagnosticIds": [
+            "controlled-actor-action-unavailable|han-kibo-signature|actor-101010"
+          ]
+        }
+      ],
       "selections": [
         {
           "actionId": "han-charged-stage-one",
@@ -54,6 +70,10 @@
           "controlSkillId": 10100310,
           "subSkillIndex": 0,
           "actualDurationFrames": 65,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-public-action-input-variant"
         },
         {
@@ -63,16 +83,11 @@
           "controlSkillId": 10100341,
           "subSkillIndex": 0,
           "actualDurationFrames": 71,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-semantic-input-variant"
-        },
-        {
-          "actionId": "han-kibo-signature",
-          "ownerId": 101003,
-          "semanticName": "跳跳稻草人事件",
-          "controlSkillId": 50046903,
-          "subSkillIndex": 0,
-          "actualDurationFrames": 345,
-          "sourceKind": "workbench-explicit-input-variant"
         },
         {
           "actionId": "han-limit-counter",
@@ -81,6 +96,10 @@
           "controlSkillId": 10100325,
           "subSkillIndex": 0,
           "actualDurationFrames": 43,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -90,6 +109,10 @@
           "controlSkillId": 10100301,
           "subSkillIndex": 0,
           "actualDurationFrames": 18,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -99,6 +122,10 @@
           "controlSkillId": 10100302,
           "subSkillIndex": 0,
           "actualDurationFrames": 38,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -108,6 +135,10 @@
           "controlSkillId": 10100303,
           "subSkillIndex": 0,
           "actualDurationFrames": 32,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -117,6 +148,10 @@
           "controlSkillId": 10100304,
           "subSkillIndex": 0,
           "actualDurationFrames": 51,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -126,6 +161,10 @@
           "controlSkillId": 10100305,
           "subSkillIndex": 0,
           "actualDurationFrames": 85,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -135,6 +174,10 @@
           "controlSkillId": 10100349,
           "subSkillIndex": 1,
           "actualDurationFrames": 60,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
         {
@@ -144,6 +187,10 @@
           "controlSkillId": 10100312,
           "subSkillIndex": 0,
           "actualDurationFrames": 93,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -153,6 +200,10 @@
           "controlSkillId": 10100313,
           "subSkillIndex": 0,
           "actualDurationFrames": 241,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -162,6 +213,10 @@
           "controlSkillId": 10101021,
           "subSkillIndex": 0,
           "actualDurationFrames": 295,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-public-action-form-direct-execution"
         },
         {
@@ -171,6 +226,10 @@
           "controlSkillId": 10100322,
           "subSkillIndex": 0,
           "actualDurationFrames": 140,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         }
       ],
@@ -190,14 +249,6 @@
           "subSkillIndex": 0,
           "actualDurationFrames": 71,
           "sourceKind": "workbench-semantic-input-variant"
-        },
-        "han-kibo-signature": {
-          "ownerId": 101003,
-          "semanticName": "跳跳稻草人事件",
-          "controlSkillId": 50046903,
-          "subSkillIndex": 0,
-          "actualDurationFrames": 345,
-          "sourceKind": "workbench-explicit-input-variant"
         },
         "han-limit-counter": {
           "ownerId": 101003,
@@ -290,13 +341,12 @@
       }
     },
     "combat": {
-      "damageEventCount": 213,
-      "ownerDamageEventCount": 211,
-      "ownerHitEventCount": 66,
+      "damageEventCount": 206,
+      "ownerDamageEventCount": 178,
+      "ownerHitEventCount": 61,
       "ownerHitCountByActionId": {
         "han-charged-stage-one": 9,
         "han-charged-stage-two": 11,
-        "han-kibo-signature": 5,
         "han-limit-counter": 3,
         "han-normal-a1": 1,
         "han-normal-a2": 2,
@@ -342,18 +392,6 @@
           ],
           "totalHpDamage": 57907,
           "totalToughnessDamage": 0
-        },
-        "han-kibo-signature": {
-          "hitCount": 5,
-          "frames": [
-            3327,
-            3338,
-            3349,
-            3438,
-            3442
-          ],
-          "totalHpDamage": 1148,
-          "totalToughnessDamage": 229
         },
         "han-limit-counter": {
           "hitCount": 3,
@@ -468,25 +506,25 @@
         }
       },
       "ownerDirectHealSummaryByActionId": {},
-      "ownerHitTotalHpDamage": 103250,
-      "ownerHitTotalToughnessDamage": 21270.0077,
+      "ownerHitTotalHpDamage": 102102,
+      "ownerHitTotalToughnessDamage": 21041.0077,
       "selectedHpDamageByActionId": {
         "han-charged-stage-one": 20091,
         "han-charged-stage-two": 71356,
         "han-star-skill": 6504,
         "han-ultimate": 11195
       },
-      "totalHpDamage": 160972,
-      "totalToughnessDamage": 6347.384107,
-      "ownerTotalHpDamage": 160349,
-      "ownerTotalToughnessDamage": 5911.384107,
+      "totalHpDamage": 150502,
+      "totalToughnessDamage": 0,
+      "ownerTotalHpDamage": 149879,
+      "ownerTotalToughnessDamage": 6398,
       "enemy": {
-        "pointCount": 288,
+        "pointCount": 275,
         "initialHp": 8677869.84,
-        "finalHp": 8516897.84,
+        "finalHp": 8527367.84,
         "maxHp": 8677869.84,
         "initialToughness": 26822.0077,
-        "finalToughness": 20474.623593,
+        "finalToughness": 26822.0077,
         "maxToughness": 26822.0077
       }
     },
@@ -958,28 +996,11 @@
           "actorId": "actor-101003",
           "kiboId": 500469,
           "initialValue": 100,
-          "currentValue": 13.559189,
+          "currentValue": 100,
           "maxValue": 100,
-          "eventCount": 652,
-          "autoRecovery": [
-            {
-              "reason": "verified-auto-sp-background",
-              "count": 651,
-              "totalChange": 13.559028,
-              "firstTimeMs": 55000,
-              "lastTimeMs": 120000
-            }
-          ],
-          "actionTransactions": [
-            {
-              "timeMs": 55000,
-              "actionId": "han-kibo-signature",
-              "reason": "verified-skill-cost",
-              "beforeValue": 100,
-              "change": -100,
-              "afterValue": 0
-            }
-          ]
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
         },
         {
           "kind": "kibo",
@@ -1473,28 +1494,11 @@
           "actorId": "actor-101003",
           "kiboId": 500469,
           "initialValue": 100,
-          "currentValue": 13.559189,
+          "currentValue": 100,
           "maxValue": 100,
-          "eventCount": 652,
-          "autoRecovery": [
-            {
-              "reason": "verified-auto-sp-background",
-              "count": 651,
-              "totalChange": 13.559028,
-              "firstTimeMs": 55000,
-              "lastTimeMs": 120000
-            }
-          ],
-          "actionTransactions": [
-            {
-              "timeMs": 55000,
-              "actionId": "han-kibo-signature",
-              "reason": "verified-skill-cost",
-              "beforeValue": 100,
-              "change": -100,
-              "afterValue": 0
-            }
-          ]
+          "eventCount": 0,
+          "autoRecovery": [],
+          "actionTransactions": []
         },
         "team-slot-2": {
           "kind": "kibo",
@@ -1682,21 +1686,7 @@
           ]
         }
       },
-      "ownerKiboSpTransactionsByActionId": {
-        "han-kibo-signature": {
-          "eventCount": 1,
-          "frames": [
-            3300
-          ],
-          "changes": [
-            -100
-          ],
-          "totalChange": -100,
-          "reasons": [
-            "verified-skill-cost"
-          ]
-        }
-      },
+      "ownerKiboSpTransactionsByActionId": {},
       "directSpSummaryByActionId": {
         "han-charged-stage-one": {
           "eventCount": 1,
@@ -1798,7 +1788,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|24716.666667|78",
+          "eventIdentity": "tuning-mark|150|expire|24716.666667|73",
           "actionId": "han-ultimate",
           "frame": 1483,
           "kind": "expire",
@@ -1906,19 +1896,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|150|55450|50046903|0|elements|2|-6736157915999571924|27|1",
-          "actionId": "han-kibo-signature",
-          "frame": 3327,
-          "kind": "held-trigger",
-          "profileKey": "fire",
-          "markId": 150,
-          "before": 5,
-          "delta": 0,
-          "after": 5,
-          "maximum": 5
-        },
-        {
-          "eventIdentity": "tuning-mark|150|expire|69283.333333|83",
+          "eventIdentity": "tuning-mark|150|expire|69283.333333|78",
           "actionId": "han-ultimate",
           "frame": 4157,
           "kind": "expire",
@@ -1930,7 +1908,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|89283.333333|84",
+          "eventIdentity": "tuning-mark|150|expire|89283.333333|79",
           "actionId": "han-ultimate",
           "frame": 5357,
           "kind": "expire",
@@ -1942,7 +1920,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|109283.333333|85",
+          "eventIdentity": "tuning-mark|150|expire|109283.333333|80",
           "actionId": "han-star-skill",
           "frame": 6557,
           "kind": "expire",
@@ -2166,6 +2144,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2203,6 +2184,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2240,6 +2224,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2277,6 +2264,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2322,6 +2312,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 18466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2359,6 +2352,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2396,6 +2392,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2433,6 +2432,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2470,6 +2472,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2507,6 +2512,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2544,6 +2552,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2581,6 +2592,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2618,6 +2632,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2646,6 +2663,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 41016.666,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2674,6 +2694,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2702,6 +2725,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2730,6 +2756,9 @@
           "afterStacks": 5,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2758,6 +2787,9 @@
           "afterStacks": 6,
           "stackChange": 1,
           "expiresAtMs": 41016.666,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2786,6 +2818,9 @@
           "afterStacks": 7,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2814,6 +2849,9 @@
           "afterStacks": 1,
           "stackChange": -6,
           "expiresAtMs": 41816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2842,6 +2880,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2879,6 +2920,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2916,6 +2960,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -2953,6 +3000,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -2981,6 +3031,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3018,6 +3071,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3055,6 +3111,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3092,6 +3151,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57283.333,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3129,6 +3191,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57283.333,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3166,6 +3231,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3203,6 +3271,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3240,6 +3311,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3277,6 +3351,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3314,6 +3391,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3327,39 +3407,6 @@
         }
       ],
       "selectedEffectSummaryByElementId": {
-        "540070": {
-          "effectId": "battle-element:540070",
-          "effectNames": [
-            "break效率提升1"
-          ],
-          "targetKinds": [
-            "actor"
-          ],
-          "targetIds": [
-            "actor-101003"
-          ],
-          "appliedEventCount": 1,
-          "blockedEventCount": 0,
-          "transferredEventCount": 0,
-          "expiredEventCount": 1,
-          "firstAppliedFrame": 3300,
-          "firstExpiredFrame": 4260,
-          "firstAppliedSourceSequencePath": null,
-          "sameFrameVisibilityModes": [],
-          "maxStacks": 1,
-          "attributeIds": [
-            222
-          ],
-          "modifierSignatures": [
-            "222:dynamicExtra:794"
-          ],
-          "formulaFamilies": [
-            "literal-a-with-common-ratio"
-          ],
-          "formulaValues": [
-            794
-          ]
-        },
         "101003079": {
           "effectId": "battle-element:101003079",
           "effectNames": [
@@ -4072,7 +4119,7 @@
           1019.9066162109375
         ]
       },
-      "baselineReplayHash": "70dc1f72c64094717211a87ba0d493191a37cb24e63987877d4fa316c44262aa"
+      "baselineReplayHash": "80e80a7a7c268ae141d404b47bece499af7cce1e9020e4c86c6bbf1101aa43f3"
     },
     "trace": {
       "damage": [
@@ -4302,7 +4349,7 @@
           "hitIdentity": null,
           "elementId": 152,
           "sourceSequencePath": [
-            0,
+            3,
             50,
             13,
             152,
@@ -4520,7 +4567,7 @@
           "hitIdentity": null,
           "elementId": 152,
           "sourceSequencePath": [
-            0,
+            6,
             50,
             26,
             152,
@@ -5094,7 +5141,7 @@
           "hitIdentity": null,
           "elementId": 152,
           "sourceSequencePath": [
-            0,
+            8,
             50,
             43,
             152,
@@ -6438,7 +6485,7 @@
           "hitIdentity": null,
           "elementId": 152,
           "sourceSequencePath": [
-            0,
+            10,
             50,
             59,
             152,
@@ -6746,7 +6793,7 @@
           "hitIdentity": "10100322|0|elements|0|-2962000887134298392|29|1",
           "elementId": 101003071,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             1,
             0
@@ -6765,7 +6812,7 @@
           "hitIdentity": null,
           "elementId": 152,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             50,
             63,
@@ -6786,7 +6833,7 @@
           "hitIdentity": "10100322|0|elements|0|-2962000887134298392|33|2",
           "elementId": 101003071,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             2,
             0
@@ -6805,7 +6852,7 @@
           "hitIdentity": "10100322|0|elements|0|-2962000887134298392|37|3",
           "elementId": 101003071,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             3,
             0
@@ -6824,7 +6871,7 @@
           "hitIdentity": "10100322|0|elements|0|-2962000887134298392|41|4",
           "elementId": 101003071,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             4,
             0
@@ -6843,7 +6890,7 @@
           "hitIdentity": "10101021|0|projectile|101010178|101010211|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|execution:bullet:101010211|logic:1|action:0|element:0|element:101010178:0",
           "elementId": 101010178,
           "sourceSequencePath": [
-            0,
+            11,
             1,
             1,
             0
@@ -6862,7 +6909,7 @@
           "hitIdentity": "10100322|0|elements|1|8048974219024052735|57|5",
           "elementId": 101003074,
           "sourceSequencePath": [
-            0,
+            11,
             0,
             5,
             0
@@ -6881,7 +6928,7 @@
           "hitIdentity": "10101021|0|projectile|101010177|101010212|0|0|control:10101021|sub:0|behavior:-7178919562725074255|config:0|bullet:101010211:0:0|nested-bullet:101010212|execution:bullet:101010212|logic:1|action:0|element:0|element:101010177:2",
           "elementId": 101010177,
           "sourceSequencePath": [
-            0,
+            11,
             1,
             2,
             0
@@ -6894,119 +6941,9 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-kibo-signature",
-          "frame": 3327,
-          "hitIdentity": "50046903|0|elements|2|-6736157915999571924|27|1",
-          "elementId": 500469062,
-          "sourceSequencePath": [
-            14,
-            1,
-            0
-          ],
-          "rawDamage": 331,
-          "hpDamage": 331,
-          "toughnessDamage": 66,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TUNING_DAMAGE",
-          "actionId": "han-kibo-signature",
-          "frame": 3327,
-          "hitIdentity": null,
-          "elementId": 152,
-          "sourceSequencePath": [
-            0,
-            50,
-            71,
-            152,
-            0
-          ],
-          "rawDamage": 9322,
-          "hpDamage": 9322,
-          "toughnessDamage": 6525,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-kibo-signature",
-          "frame": 3338,
-          "hitIdentity": "50046903|0|elements|0|-8346828456206637760|38|2",
-          "elementId": 500469008,
-          "sourceSequencePath": [
-            14,
-            2,
-            0
-          ],
-          "rawDamage": 197,
-          "hpDamage": 197,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-kibo-signature",
-          "frame": 3349,
-          "hitIdentity": "50046903|0|elements|0|-8346828456206637760|49|3",
-          "elementId": 500469008,
-          "sourceSequencePath": [
-            14,
-            3,
-            0
-          ],
-          "rawDamage": 205,
-          "hpDamage": 205,
-          "toughnessDamage": 41,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-kibo-signature",
-          "frame": 3438,
-          "hitIdentity": "50046903|0|elements|5|8963641323797659805|138|4",
-          "elementId": 500469072,
-          "sourceSequencePath": [
-            14,
-            4,
-            0
-          ],
-          "rawDamage": 204,
-          "hpDamage": 204,
-          "toughnessDamage": 41,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "han-kibo-signature",
-          "frame": 3442,
-          "hitIdentity": "50046903|0|elements|5|8963641323797659805|142|5",
-          "elementId": 500469072,
-          "sourceSequencePath": [
-            14,
-            5,
-            0
-          ],
-          "rawDamage": 211,
-          "hpDamage": 211,
-          "toughnessDamage": 42,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7044,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6612,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7019,8 +6956,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7050,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6618,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7033,8 +6970,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7056,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6624,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7047,8 +6984,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7062,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6630,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7061,8 +6998,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7068,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6636,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7075,8 +7012,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7074,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6642,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7089,8 +7026,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7080,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6648,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7103,8 +7040,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7086,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6654,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7117,8 +7054,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7092,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6660,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7131,8 +7068,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7098,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6666,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7145,8 +7082,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7104,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6672,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7159,8 +7096,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7110,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6678,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7173,8 +7110,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7116,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6684,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7187,8 +7124,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7122,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6690,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7201,8 +7138,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7128,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6696,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7215,8 +7152,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7134,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6702,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7229,8 +7166,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7140,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6708,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7243,8 +7180,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7146,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6714,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7257,8 +7194,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7152,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6720,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7271,8 +7208,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7158,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6726,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7285,8 +7222,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7164,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6732,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7299,8 +7236,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7170,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6738,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7313,8 +7250,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7176,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6744,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7327,8 +7264,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7182,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6750,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7341,8 +7278,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7188,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6756,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
@@ -7355,28 +7292,14 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7194,
+          "actionId": "switch-away-from-han--on-enter--actor-101010--star-carry",
+          "frame": 6762,
           "hitIdentity": null,
           "elementId": null,
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -268.170959,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "han-kibo-signature",
-          "frame": 7200,
-          "hitIdentity": null,
-          "elementId": null,
-          "sourceSequencePath": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": -268.170959,
+          "toughnessDamage": -129.726025,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         }
@@ -7446,7 +7369,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|24716.666667|78",
+          "eventIdentity": "tuning-mark|150|expire|24716.666667|73",
           "actionId": "han-ultimate",
           "frame": 1483,
           "kind": "expire",
@@ -7554,19 +7477,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|150|55450|50046903|0|elements|2|-6736157915999571924|27|1",
-          "actionId": "han-kibo-signature",
-          "frame": 3327,
-          "kind": "held-trigger",
-          "profileKey": "fire",
-          "markId": 150,
-          "before": 5,
-          "delta": 0,
-          "after": 5,
-          "maximum": 5
-        },
-        {
-          "eventIdentity": "tuning-mark|150|expire|69283.333333|83",
+          "eventIdentity": "tuning-mark|150|expire|69283.333333|78",
           "actionId": "han-ultimate",
           "frame": 4157,
           "kind": "expire",
@@ -7578,7 +7489,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|89283.333333|84",
+          "eventIdentity": "tuning-mark|150|expire|89283.333333|79",
           "actionId": "han-ultimate",
           "frame": 5357,
           "kind": "expire",
@@ -7590,7 +7501,7 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|150|expire|109283.333333|85",
+          "eventIdentity": "tuning-mark|150|expire|109283.333333|80",
           "actionId": "han-star-skill",
           "frame": 6557,
           "kind": "expire",
@@ -7763,6 +7674,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 18466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7800,6 +7714,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7837,6 +7754,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7874,6 +7794,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": 27466.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7911,6 +7834,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7948,6 +7874,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -7985,6 +7914,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8022,6 +7954,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8059,6 +7994,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8096,6 +8034,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8133,6 +8074,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8170,6 +8114,9 @@
           "afterStacks": 2,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8207,6 +8154,9 @@
           "afterStacks": 2,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8244,6 +8194,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8281,6 +8234,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8318,6 +8274,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8355,6 +8314,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8383,6 +8345,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8420,6 +8385,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8457,6 +8425,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 41016.666,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8485,6 +8456,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8522,6 +8496,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8559,6 +8536,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8587,6 +8567,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8615,6 +8598,9 @@
           "afterStacks": 5,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8643,6 +8629,9 @@
           "afterStacks": 6,
           "stackChange": 1,
           "expiresAtMs": 41016.666,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8671,6 +8660,9 @@
           "afterStacks": 7,
           "stackChange": 1,
           "expiresAtMs": 41016.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8699,6 +8691,9 @@
           "afterStacks": 1,
           "stackChange": -6,
           "expiresAtMs": 41816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8727,6 +8722,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8764,6 +8762,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8801,6 +8802,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8838,6 +8842,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57816.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8875,6 +8882,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -8903,6 +8913,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8940,6 +8953,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -8977,6 +8993,9 @@
           "afterStacks": 5,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9014,6 +9033,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9051,6 +9073,9 @@
           "afterStacks": 2,
           "stackChange": 1,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9088,6 +9113,9 @@
           "afterStacks": 5,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9125,6 +9153,9 @@
           "afterStacks": 1,
           "stackChange": 0,
           "expiresAtMs": 60250,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9162,6 +9193,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57283.333,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9199,6 +9233,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 57283.333,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9207,154 +9244,6 @@
               "valueRaw": -800,
               "formulaFamily": "basis-point-property-a-with-common-ratio",
               "formulaValue": -800
-            }
-          ]
-        },
-        {
-          "eventId": "actor/actor-101003/battle-element:6476968579193987947/verified-calculator|EFFECT_APPLIED|55000|1",
-          "eventType": "EFFECT_APPLIED",
-          "status": "effect-runtime-applied",
-          "actionId": "han-kibo-signature",
-          "frame": 3300,
-          "effectId": "battle-element:540070",
-          "runtimeEffectId": "battle-element:6476968579193987947",
-          "sourceElementId": 540070,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "break效率提升1",
-          "targetKind": "actor",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": null,
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "battle-element:6476968579193987947|han-kibo-signature|55000",
-          "beforeStacks": null,
-          "afterStacks": 1,
-          "stackChange": 1,
-          "expiresAtMs": 71000,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 222,
-              "bucket": "dynamicExtra",
-              "valueRaw": 794,
-              "formulaFamily": "literal-a-with-common-ratio",
-              "formulaValue": 794
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_APPLIED|55450.001|1",
-          "eventType": "EFFECT_APPLIED",
-          "status": "effect-runtime-applied",
-          "actionId": "han-kibo-signature",
-          "frame": 3327,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": null,
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": null,
-          "afterStacks": 1,
-          "stackChange": 1,
-          "expiresAtMs": 75450.001,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|55633.334|2",
-          "eventType": "EFFECT_REFRESHED",
-          "status": "effect-runtime-refreshed",
-          "actionId": "han-kibo-signature",
-          "frame": 3338,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": 1,
-          "afterStacks": 2,
-          "stackChange": 1,
-          "expiresAtMs": 75633.334,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|55816.668|3",
-          "eventType": "EFFECT_REFRESHED",
-          "status": "effect-runtime-refreshed",
-          "actionId": "han-kibo-signature",
-          "frame": 3349,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": 2,
-          "afterStacks": 3,
-          "stackChange": 1,
-          "expiresAtMs": 75816.668,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
-              "formulaFamily": null,
-              "formulaValue": null
             }
           ]
         },
@@ -9384,6 +9273,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9421,6 +9313,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9429,80 +9324,6 @@
               "valueRaw": -800,
               "formulaFamily": "basis-point-property-a-with-common-ratio",
               "formulaValue": -800
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|57300.001|4",
-          "eventType": "EFFECT_REFRESHED",
-          "status": "effect-runtime-refreshed",
-          "actionId": "han-kibo-signature",
-          "frame": 3438,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": 3,
-          "afterStacks": 4,
-          "stackChange": 1,
-          "expiresAtMs": 77300.001,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_REFRESHED|57366.668|5",
-          "eventType": "EFFECT_REFRESHED",
-          "status": "effect-runtime-refreshed",
-          "actionId": "han-kibo-signature",
-          "frame": 3442,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "apply",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": "actor-101003",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": 4,
-          "afterStacks": 5,
-          "stackChange": 1,
-          "expiresAtMs": 77366.668,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
-              "formulaFamily": null,
-              "formulaValue": null
             }
           ]
         },
@@ -9532,6 +9353,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9569,6 +9393,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9606,6 +9433,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9643,6 +9473,9 @@
           "afterStacks": null,
           "stackChange": -2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9680,6 +9513,9 @@
           "afterStacks": 4,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9717,86 +9553,15 @@
           "afterStacks": 4,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
               "attributeId": 1,
               "bucket": "dynamicPercent",
               "valueRaw": 60,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "actor/actor-101003/battle-element:6476968579193987947/verified-calculator|EFFECT_EXPIRED|71000|1",
-          "eventType": "EFFECT_EXPIRED",
-          "status": "effect-runtime-expired",
-          "actionId": "han-kibo-signature",
-          "frame": 4260,
-          "effectId": "battle-element:540070",
-          "runtimeEffectId": "battle-element:6476968579193987947",
-          "sourceElementId": 540070,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "break效率提升1",
-          "targetKind": "actor",
-          "targetId": "actor-101003",
-          "operation": "expire",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": null,
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "battle-element:6476968579193987947|han-kibo-signature|55000",
-          "beforeStacks": 1,
-          "afterStacks": null,
-          "stackChange": -1,
-          "expiresAtMs": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 222,
-              "bucket": "dynamicExtra",
-              "valueRaw": 794,
-              "formulaFamily": "literal-a-with-common-ratio",
-              "formulaValue": 794
-            }
-          ]
-        },
-        {
-          "eventId": "kibo/actor-101003/kibo-passive:520090:520090002/verified-calculator|EFFECT_EXPIRED|77366.668|5",
-          "eventType": "EFFECT_EXPIRED",
-          "status": "effect-runtime-expired",
-          "actionId": "han-kibo-signature",
-          "frame": 4642,
-          "effectId": "kibo-passive:520090:520090002",
-          "runtimeEffectId": "kibo-passive:520090:520090002",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "锐利武器",
-          "targetKind": "kibo",
-          "targetId": "actor-101003",
-          "operation": "expire",
-          "previousTargetId": "actor-101003",
-          "nextTargetId": null,
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-101003",
-          "effectAdderActorId": "actor-101003",
-          "effectInstanceId": "kibo-passive:520090:520090002|han-kibo-signature|55450.001",
-          "beforeStacks": 5,
-          "afterStacks": null,
-          "stackChange": -5,
-          "expiresAtMs": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 1,
-              "bucket": "dynamicPercent",
-              "valueRaw": 400,
               "formulaFamily": null,
               "formulaValue": null
             }
@@ -9828,6 +9593,9 @@
           "afterStacks": 3,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9865,6 +9633,9 @@
           "afterStacks": 3,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9902,6 +9673,9 @@
           "afterStacks": 2,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -9939,6 +9713,9 @@
           "afterStacks": 2,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -10036,7 +9813,7 @@
         }
       ]
     },
-    "summaryHash": "c2732bf77b823ff9f3d485b54069afef74a4fa9810b66131e958a1364bfc636a"
+    "summaryHash": "137a834ffd2962fda13490990c7c3c89fd0668c62ebc33d4727d04f9f88b7bf6"
   },
   "expected": {
     "exact": {
@@ -10046,6 +9823,13 @@
         101003,
         101010,
         103002
+      ],
+      "actions.blockedActionIds": [
+        "han-kibo-signature"
+      ],
+      "actions.blockedActionDetails.0.skipReason": "confirmed-action-rule-violation",
+      "actions.blockedActionDetails.0.violationCodes": [
+        "controlled-actor-action-unavailable"
       ],
       "actions.selectionByActionId.han-normal-a1.semanticName": "普通攻击 A1",
       "actions.selectionByActionId.han-normal-a5.semanticName": "普通攻击 A5",
@@ -10059,8 +9843,8 @@
       "combat.ownerHitCountByActionId.han-charged-stage-two": 11,
       "combat.ownerHitCountByActionId.han-star-skill": 7,
       "combat.ownerHitCountByActionId.han-ultimate": 7,
-      "combat.ownerTotalHpDamage": 160349,
-      "combat.ownerTotalToughnessDamage": 5911.384107,
+      "combat.ownerTotalHpDamage": 149879,
+      "combat.ownerTotalToughnessDamage": 6398,
       "resources.targetStateSummary.profileCount": 3,
       "resources.targetStateSummary.eventCount": 9,
       "resources.targetStateSummary.appliedGroupCount": 2,
@@ -10145,7 +9929,7 @@
   "validation": {
     "status": "authoritative-golden-runtime-expectation-passed",
     "passed": true,
-    "assertionCount": 76,
+    "assertionCount": 79,
     "failedCount": 0,
     "assertions": [
       {
@@ -10174,6 +9958,35 @@
           101003,
           101010,
           103002
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.blockedActionIds",
+        "operator": "exact",
+        "expected": [
+          "han-kibo-signature"
+        ],
+        "actual": [
+          "han-kibo-signature"
+        ],
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.blockedActionDetails.0.skipReason",
+        "operator": "exact",
+        "expected": "confirmed-action-rule-violation",
+        "actual": "confirmed-action-rule-violation",
+        "passed": true
+      },
+      {
+        "jsonPath": "actions.blockedActionDetails.0.violationCodes",
+        "operator": "exact",
+        "expected": [
+          "controlled-actor-action-unavailable"
+        ],
+        "actual": [
+          "controlled-actor-action-unavailable"
         ],
         "passed": true
       },
@@ -10264,15 +10077,15 @@
       {
         "jsonPath": "combat.ownerTotalHpDamage",
         "operator": "exact",
-        "expected": 160349,
-        "actual": 160349,
+        "expected": 149879,
+        "actual": 149879,
         "passed": true
       },
       {
         "jsonPath": "combat.ownerTotalToughnessDamage",
         "operator": "exact",
-        "expected": 5911.384107,
-        "actual": 5911.384107,
+        "expected": 6398,
+        "actual": 6398,
         "passed": true
       },
       {
@@ -10714,7 +10527,7 @@
         "jsonPath": "resources.kiboSpBySlotId.team-slot-1.currentValue",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 13.559189,
+        "actual": 100,
         "passed": true
       },
       {
@@ -10726,6 +10539,6 @@
       }
     ]
   },
-  "replayHash": "62e4370714c0a132ee155af5ba99c9658bb7a9a78f678d6d6a65a4c53fd90320",
-  "profileHash": "d34dabfd67218ece5665392199a83e05d0ff10acb79192e2593a5b0e8424464d"
+  "replayHash": "ed5dd56bee71b05622c2f52b51e5844a7a468bff5dc00078fd089122babd507c",
+  "profileHash": "0377517e401cfef262e25a1065ea8898fc5e48e71964d4047393b0fe421135e7"
 }

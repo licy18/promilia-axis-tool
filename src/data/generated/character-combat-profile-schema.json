@@ -83,6 +83,17 @@
         "ownerName"
       ]
     },
+    "optimizationObject": {
+      "type": "object",
+      "required": [
+        "optimizationObjectId",
+        "sourceCharacterId",
+        "sourceAliasIdentity",
+        "sourceIdentity",
+        "status",
+        "applied"
+      ]
+    },
     "sourcePackage": {
       "type": "object",
       "required": [

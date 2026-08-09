@@ -2924,7 +2924,9 @@ function createStatDependencies({
   semanticEffects,
 }) {
   const staticActor = (
-    mechanicsPackage.staticPropertyCatalog?.actorProfiles ?? []
+    mechanicsPackage.staticPropertyCatalog?.actor?.profiles ??
+    mechanicsPackage.staticPropertyCatalog?.actorProfiles ??
+    []
   ).find(profile => Number(profile.characterId) === ownerId);
   const actorSp = (mechanicsPackage.ownerProfiles?.actor ?? []).find(
     profile => Number(profile.characterId) === ownerId

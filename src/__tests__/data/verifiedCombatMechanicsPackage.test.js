@@ -43,27 +43,29 @@ describe('verified combat mechanics package', () => {
       clientBuild: 'il2cpp-tc-catch-20260709',
       validation: { status: 'verified-18-of-18', passed: 18, failed: 0 },
       summary: {
-        candidateActionCount: 646,
-        classifiedActionCount: 646,
-        appliedActionBindingCount: 695,
-        appliedHitBindingCount: 3465,
-        appliedEffectBindingCount: 1794,
+        candidateActionCount: 648,
+        classifiedActionCount: 648,
+        appliedActionBindingCount: 697,
+        appliedHitBindingCount: 3454,
+        appliedEffectBindingCount: 1906,
         verifiedZeroEffectBindingCount: 12,
-        unresolvedEffectBindingCount: 1307,
-        actionVariantSupportControlBindingCount: 82,
+        unresolvedEffectBindingCount: 1271,
+        actionVariantSupportControlBindingCount: 114,
         specialResourceProfileCount: 3,
         specialResourceOperationCount: 53,
-        actionVariantNodeCount: 736,
+        actionVariantNodeCount: 779,
         actionVariantEdgeCount: 64,
         switchTriggerProfileCount: 20,
-        appliedSwitchTriggerProfileCount: 18,
-        unresolvedSwitchTriggerProfileCount: 2,
-        battleEffectNodeCount: 3731,
+        appliedSwitchTriggerProfileCount: 20,
+        unresolvedSwitchTriggerProfileCount: 0,
+        battleEffectNodeCount: 3817,
         unresolvedActionCount: 12,
         actorProfileCount: 20,
         kiboProfileCount: 122,
         enemyProfileCount: 208,
         collectibleActorProfileCount: 17,
+        staticActorProfileCount: 19,
+        optimizationObjectSourceAliasCount: 2,
         battleKiboProfileCount: 147,
         workbenchActorIdentityCount: 20,
         workbenchKiboIdentityCount: 122,
@@ -74,10 +76,10 @@ describe('verified combat mechanics package', () => {
         unresolvedAttackInputSegmentCount: 15,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
-        semanticEffectCount: 3440,
-        semanticGameplayEffectCount: 1863,
-        semanticAppliedEffectCount: 1065,
-        characterCombatProfileCount: 8,
+        semanticEffectCount: 3580,
+        semanticGameplayEffectCount: 1983,
+        semanticAppliedEffectCount: 1123,
+        characterCombatProfileCount: 11,
         characterCombatUiVerifiedProfileCount: 0,
       },
       excludedDeadBranches: expect.arrayContaining([
@@ -114,11 +116,14 @@ describe('verified combat mechanics package', () => {
           status: 'verified-static-property-identity-audit-ready',
           workbenchActorCount: 20,
           verifiedActorCount: 17,
+          staticActorProfileCount: 19,
+          optimizationObjectSourceAliasCount: 2,
           workbenchKiboCount: 122,
           verifiedKiboCount: 147,
           actorClassifications: {
             applicable: 17,
-            'non-current-public-directory': 3,
+            'non-current-public-directory': 1,
+            'optimization-object-source-alias-applicable': 2,
           },
           kiboClassifications: {
             applicable: 122,
@@ -129,10 +134,10 @@ describe('verified combat mechanics package', () => {
       battleEffectCatalog: {
         status: 'verified-battle-effect-node-catalog-ready',
         summary: {
-          nodeCount: 3731,
-          appliedNodeCount: 1027,
+          nodeCount: 3817,
+          appliedNodeCount: 1107,
           verifiedZeroNodeCount: 879,
-          unresolvedNodeCount: 1825,
+          unresolvedNodeCount: 1831,
         },
       },
       semanticEffectCatalog: {
@@ -165,7 +170,7 @@ describe('verified combat mechanics package', () => {
         profileSchema: 'azpr://schemas/character-combat-profile/v1',
         summary: {
           publicCharacterCount: 20,
-          compiledProfileCount: 8,
+          compiledProfileCount: 11,
           uiVerifiedProfileCount: 0,
         },
       },
@@ -198,30 +203,30 @@ describe('verified combat mechanics package', () => {
         .some(modifier => modifier.attributeId === 0)
     ).toBe(false);
     expect(effectCoverage.summary).toMatchObject({
-      semanticEffectCount: 3440,
-      semanticGameplayEffectCount: 1863,
-      semanticStructuralCount: 1577,
-      semanticAppliedCount: 1065,
+      semanticEffectCount: 3580,
+      semanticGameplayEffectCount: 1983,
+      semanticStructuralCount: 1597,
+      semanticAppliedCount: 1123,
       semanticVerifiedZeroCount: 7,
-      semanticUnresolvedCount: 791,
+      semanticUnresolvedCount: 853,
       semanticPlacementCounts: {
-        'runtime-dependent': 106,
-        'static-evidence-gap': 447,
-        'static-resolved': 1310,
+        'runtime-dependent': 108,
+        'static-evidence-gap': 507,
+        'static-resolved': 1368,
       },
-      effectBindingCount: 3132,
-      appliedEffectBindingCount: 1794,
+      effectBindingCount: 3210,
+      appliedEffectBindingCount: 1906,
       verifiedZeroEffectBindingCount: 12,
-      unresolvedEffectBindingCount: 1307,
+      unresolvedEffectBindingCount: 1271,
       bindingKindCounts: {
-        damage: 467,
-        inject: 1311,
+        damage: 489,
+        inject: 1331,
         judgment: 107,
-        pack: 177,
-        'property-change': 830,
+        pack: 175,
+        'property-change': 852,
         shield: 15,
-        sp: 89,
-        stack: 136,
+        sp: 87,
+        stack: 154,
       },
       dimensions: expect.objectContaining({
         damage: expect.any(Object),
@@ -230,9 +235,9 @@ describe('verified combat mechanics package', () => {
         hp: expect.any(Object),
         shield: expect.any(Object),
         dynamicProperty: expect.objectContaining({
-          applied: 697,
-          unresolved: 118,
-          'verified-zero': 2317,
+          applied: 716,
+          unresolved: 122,
+          'verified-zero': 2372,
         }),
         mark: expect.any(Object),
       }),
@@ -311,13 +316,13 @@ describe('verified combat mechanics package', () => {
       status: 'verified-action-variant-graph-ready',
       summary: {
         ownerCount: 142,
-        nodeCount: 736,
+        nodeCount: 779,
         edgeCount: 346,
         appliedEdgeCount: 64,
         unresolvedEdgeCount: 286,
       },
     });
-    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1809);
+    expect(effectCoverage.sourceDenominator.rawReferenceEdgeCount).toBe(1919);
     expect(variantResourceCoverage.summary).toMatchObject({
       profileCount: 3,
       appliedProfileCount: 3,
@@ -540,16 +545,16 @@ describe('verified combat mechanics package', () => {
     expect(actionTimingCoverage).toMatchObject({
       status: 'verified-combat-action-timing-coverage-ready',
       sourceDenominator: {
-        publicActionCount: 646,
-        publicVariantCount: 676,
+        publicActionCount: 648,
+        publicVariantCount: 678,
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 635,
+        appliedActionCount: 637,
         unresolvedActionCount: 11,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 702,
+        exactSelectedVariantOccupancyCount: 700,
         sourceAnimationPlanningDurationCount: 27,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
@@ -703,7 +708,7 @@ describe('verified combat mechanics package', () => {
     ]);
     expect(mechanicsPackage.actionVariantGraph.summary).toMatchObject({
       ownerCount: 142,
-      nodeCount: 736,
+      nodeCount: 779,
       modeledOwnerCount: 4,
       conditionDiscoveryCount: 216,
       conditionDiscoveryStatusCounts: {
@@ -910,6 +915,141 @@ describe('verified combat mechanics package', () => {
         executionStart: 117,
         predecessorEnd: 117,
       },
+      {
+        source: '11200102/sub0',
+        window: [55, 320],
+        semantics: 'immediate-interrupt',
+        genericEnd: 60,
+        canonicalInput: 60,
+        executionStart: 60,
+        predecessorEnd: 60,
+      },
+      {
+        source: '11200103/sub0',
+        window: [63, 243],
+        semantics: 'immediate-interrupt',
+        genericEnd: 70,
+        canonicalInput: 70,
+        executionStart: 70,
+        predecessorEnd: 70,
+      },
+      {
+        source: '11200104/sub0',
+        window: [36, 266],
+        semantics: 'immediate-interrupt',
+        genericEnd: 50,
+        canonicalInput: 50,
+        executionStart: 50,
+        predecessorEnd: 50,
+      },
+      {
+        source: '11200105/sub0',
+        window: [59, 179],
+        semantics: 'immediate-interrupt',
+        genericEnd: 65,
+        canonicalInput: 65,
+        executionStart: 65,
+        predecessorEnd: 65,
+      },
+      {
+        source: '11200112/sub0',
+        window: [67, 298],
+        semantics: 'immediate-interrupt',
+        genericEnd: 86,
+        canonicalInput: 86,
+        executionStart: 86,
+        predecessorEnd: 86,
+      },
+      {
+        source: '11200113/sub0',
+        window: [216, 461],
+        semantics: 'immediate-interrupt',
+        genericEnd: 220,
+        canonicalInput: 220,
+        executionStart: 220,
+        predecessorEnd: 220,
+      },
+      {
+        source: '11200121/sub0',
+        window: [112, 377],
+        semantics: 'immediate-interrupt',
+        genericEnd: 119,
+        canonicalInput: 119,
+        executionStart: 119,
+        predecessorEnd: 119,
+      },
+      {
+        source: '19900104/sub0',
+        window: [38, 97],
+        semantics: 'immediate-interrupt',
+        genericEnd: 74,
+        canonicalInput: 74,
+        executionStart: 74,
+        predecessorEnd: 74,
+      },
+      {
+        source: '19900105/sub0',
+        window: [32, 52],
+        semantics: 'immediate-interrupt',
+        genericEnd: 38,
+        canonicalInput: 38,
+        executionStart: 38,
+        predecessorEnd: 38,
+      },
+      {
+        source: '19900110/sub1',
+        window: [60, 90],
+        semantics: 'immediate-interrupt',
+        genericEnd: 90,
+        canonicalInput: 89,
+        executionStart: 89,
+        predecessorEnd: 89,
+      },
+      {
+        source: '19900112/sub0',
+        window: [53, 83],
+        semantics: 'immediate-interrupt',
+        genericEnd: 83,
+        canonicalInput: 82,
+        executionStart: 82,
+        predecessorEnd: 82,
+      },
+      {
+        source: '19900204/sub0',
+        window: [38, 87],
+        semantics: 'immediate-interrupt',
+        genericEnd: 74,
+        canonicalInput: 74,
+        executionStart: 74,
+        predecessorEnd: 74,
+      },
+      {
+        source: '19900205/sub0',
+        window: [32, 52],
+        semantics: 'immediate-interrupt',
+        genericEnd: 38,
+        canonicalInput: 38,
+        executionStart: 38,
+        predecessorEnd: 38,
+      },
+      {
+        source: '19900210/sub1',
+        window: [60, 90],
+        semantics: 'immediate-interrupt',
+        genericEnd: 90,
+        canonicalInput: 89,
+        executionStart: 89,
+        predecessorEnd: 89,
+      },
+      {
+        source: '19900212/sub0',
+        window: [54, 84],
+        semantics: 'immediate-interrupt',
+        genericEnd: 83,
+        canonicalInput: 83,
+        executionStart: 83,
+        predecessorEnd: 83,
+      },
     ]);
     expect(contextualInputSchedulingAudit).toMatchObject({
       kind: 'verified-contextual-input-scheduling-audit',
@@ -918,7 +1058,7 @@ describe('verified combat mechanics package', () => {
         sourceWindowInterval: '[start,end)',
       },
       summary: {
-        publicTimingSourceCount: 1550,
+        publicTimingSourceCount: 1552,
         verifiedWindowCount: 1735,
         resolvedInputSemanticsCount: 1698,
         unresolvedInputSemanticsCount: 37,
@@ -1396,17 +1536,17 @@ describe('verified combat mechanics package', () => {
       sourceDenominator: {
         actorOwnerCount: 20,
         kiboOwnerCount: 122,
-        actionCount: 646,
+        actionCount: 648,
       },
       summary: {
-        directoryActionCount: 646,
-        classifiedActionCount: 646,
+        directoryActionCount: 648,
+        classifiedActionCount: 648,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
       },
       missingRequiredActorActions: [],
     });
-    expect(mechanicsPackage.actionMappings).toHaveLength(646);
+    expect(mechanicsPackage.actionMappings).toHaveLength(648);
     expect(
       mechanicsPackage.actionMappings.every(mapping =>
         ['applied', 'verified-zero', 'unresolved'].includes(
@@ -1682,10 +1822,10 @@ describe('verified combat mechanics package', () => {
     });
 
     expect(mechanicsPackage.semanticEffectCatalog.summary).toMatchObject({
-      fullSemanticEffectCount: 3440,
-      runtimeEffectCount: 403,
+      fullSemanticEffectCount: 3580,
+      runtimeEffectCount: 415,
       compiledPassiveEffectCount: 41,
-      runtimeFormulaCount: 165,
+      runtimeFormulaCount: 177,
     });
     expect(
       mechanicsPackage.semanticEffectCatalog.semanticEffects.every(
@@ -1794,22 +1934,9 @@ describe('verified combat mechanics package', () => {
     });
   });
 
-  it('validates switch-trigger summaries from their profiles instead of a frozen resolution count', () => {
+  it('validates switch-trigger summaries from their all-applied profiles', () => {
     const upgraded = structuredClone(mechanicsPackage);
     const profiles = upgraded.switchTriggerCatalog.profiles;
-    const candidateIndex = profiles.findIndex(
-      profile => profile.applied !== true
-    );
-    expect(candidateIndex).toBeGreaterThanOrEqual(0);
-    profiles[candidateIndex] = {
-      ...profiles[candidateIndex],
-      starCarryActionIdentity: 'fixture:resolved-star-carry-action',
-      mechanicsClassification: 'applied',
-      mechanicsReasons: [],
-      resolutionStatus: 'applied',
-      reasons: [],
-      applied: true,
-    };
     const appliedProfiles = profiles.filter(
       profile => profile.applied === true
     );
@@ -1839,6 +1966,8 @@ describe('verified combat mechanics package', () => {
         profile => profile.manualReleaseStatus === 'switch-trigger-only'
       ).length,
     };
+
+    expect(unresolvedProfiles).toEqual([]);
 
     expect(validateVerifiedCombatMechanicsPackage(upgraded)).toMatchObject({
       valid: true,

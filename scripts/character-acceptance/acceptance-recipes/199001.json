@@ -41,7 +41,7 @@
   },
   "requirementPolicies": { "unselectedControlVariantsFromActionForms": true },
   "criticalProbe": {
-    "integerThresholdBoundary": { "low": 42, "threshold": 43 },
+    "integerThresholdBoundary": { "low": 499, "threshold": 500 },
     "preHitAttributeChange": {
       "beforeActionId": "199001-critical-rate-zero",
       "afterActionId": "199001-critical-rate-one-hundred"
@@ -49,7 +49,7 @@
     "nonCrittable": {
       "actionId": "199001-critical-rate-zero",
       "eventType": "VERIFIED_TUNING_DAMAGE",
-      "elementId": 152
+      "elementId": 752
     }
   },
   "buffLifecycle": {
@@ -171,7 +171,7 @@
     },
     {
       "kind": "variant-selection",
-      "actionId": "starborn-f-star-carry-apply",
+      "actionId": "starborn-f-switch-out-for-star-carry--on-exit--actor-199001--star-carry",
       "controlSkillId": 19900122,
       "subSkillIndex": 0,
       "semanticName": "星携技"
@@ -212,41 +212,6 @@
         "actionId": "199001-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
       }
-    },
-    {
-      "identity": "star-carry-cooldown-before-expiry",
-      "assertionIdentity": "star-carry-cooldown-before-expiry-rejected",
-      "durationFrames": 3000,
-      "actions": [
-        {
-          "id": "199001-star-carry-cooldown-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900122,
-            "actionKind": "star-carry",
-            "level": 1
-          },
-          "schedule": { "mode": "absolute", "frame": 0 }
-        },
-        {
-          "id": "199001-star-carry-cooldown-early",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900122,
-            "actionKind": "star-carry",
-            "level": 1
-          },
-          "schedule": { "mode": "absolute", "frame": 1439 }
-        }
-      ],
-      "requiredExecutableActionIds": ["199001-star-carry-cooldown-source"],
-      "expectedIssue": {
-        "actionId": "199001-star-carry-cooldown-early",
-        "code": "machine-axis-action-not-executable",
-        "violationCode": "skill-cooldown-active"
-      }
     }
   ],
   "isolatedActionCases": [
@@ -275,6 +240,12 @@
       ],
       "probes": [
         {
+          "kind": "variant-selection",
+          "actionId": "199001-star-first-hit-miss-condition-insufficient",
+          "controlSkillId": 19900112,
+          "subSkillIndex": 0
+        },
+        {
           "kind": "trace-query",
           "identity": "first-hit-miss-rejects-star-passive",
           "path": "state.targetEvents",
@@ -282,9 +253,9 @@
             "actionId": "199001-star-first-hit-miss-condition-insufficient",
             "type": "VERIFIED_ACTION_EFFECT_LANDED_HIT_CONDITION_EVALUATED",
             "payload.elementId": 199001211,
-            "payload.applied": false
+            "payload.applied": true
           },
-          "expectation": { "count": 1 }
+          "expectation": { "count": 0 }
         }
       ]
     },
@@ -361,30 +332,85 @@
       ]
     },
     {
+      "identity": "star-carry-cooldown-before-expiry",
+      "assertionIdentity": "star-carry-cooldown-before-expiry-rejected",
+      "durationFrames": 3000,
+      "actions": [
+        {
+          "id": "199001-star-carry-cooldown-source-switch",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "199001-star-carry-cooldown-return-switch",
+          "owner": { "kind": "actor", "slotId": "slot-2" },
+          "intent": { "kind": "switch", "targetSlotId": "slot-1" },
+          "schedule": { "mode": "absolute", "frame": 400 }
+        },
+        {
+          "id": "199001-star-carry-cooldown-early-switch",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
+          "schedule": { "mode": "absolute", "frame": 1439 }
+        }
+      ],
+      "probes": [
+        {
+          "kind": "trace-query",
+          "identity": "early-switch-executes",
+          "path": "controlledActors.transitions",
+          "where": {
+            "actionId": "199001-star-carry-cooldown-early-switch",
+            "applied": true
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "first-switch-materializes-star-carry",
+          "path": "actions",
+          "where": {
+            "derivation.parentActionId": "199001-star-carry-cooldown-source-switch",
+            "derivation.ownerCharacterId": 199001,
+            "derivation.triggerPhase": "on-exit"
+          },
+          "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "cooldown-suppresses-second-star-carry",
+          "path": "actions",
+          "where": {
+            "derivation.parentActionId": "199001-star-carry-cooldown-early-switch",
+            "derivation.ownerCharacterId": 199001,
+            "derivation.triggerPhase": "on-exit"
+          },
+          "expectation": { "count": 0 }
+        }
+      ]
+    },
+    {
       "identity": "star-carry-cooldown-exact-right-open",
       "assertionIdentity": "star-carry-cooldown-exact-right-open",
       "durationFrames": 3000,
       "actions": [
         {
-          "id": "199001-star-carry-exact-first",
+          "id": "199001-star-carry-exact-first-switch",
           "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900122,
-            "actionKind": "star-carry",
-            "level": 1
-          },
+          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
           "schedule": { "mode": "absolute", "frame": 0 }
         },
         {
-          "id": "199001-star-carry-exact-second",
+          "id": "199001-star-carry-exact-return-switch",
+          "owner": { "kind": "actor", "slotId": "slot-2" },
+          "intent": { "kind": "switch", "targetSlotId": "slot-1" },
+          "schedule": { "mode": "absolute", "frame": 400 }
+        },
+        {
+          "id": "199001-star-carry-exact-second-switch",
           "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 19900122,
-            "actionKind": "star-carry",
-            "level": 1
-          },
+          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
           "schedule": { "mode": "absolute", "frame": 1440 }
         }
       ],
@@ -394,7 +420,7 @@
           "identity": "exact-cooldown-second-action-selected",
           "path": "variants.selections",
           "where": {
-            "actionId": "199001-star-carry-exact-second",
+            "actionId": "199001-star-carry-exact-second-switch--on-exit--actor-199001--star-carry",
             "controlSkillId": 19900122,
             "subSkillIndex": 0
           },

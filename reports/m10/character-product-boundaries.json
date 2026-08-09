@@ -476,7 +476,7 @@
       }
     },
     {
-      "boundaryIdentity": "actor:112001:skill:11200162:product-boundary",
+      "boundaryIdentity": "actor:112001:skill:11200162:implemented",
       "ownerId": 112001,
       "ownerName": "姬瑟贝露",
       "passiveSlotIndex": 1,
@@ -492,17 +492,17 @@
         "skillId": 11200161,
         "name": "女仆的花招"
       },
-      "classification": "not-applicable",
-      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "classification": "implemented",
+      "reason": null,
       "sourceIdentities": [
         "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]",
         "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
       ],
       "runtimeContractPolicy": {
-        "passiveProfile": false,
+        "passiveProfile": true,
         "listener": false,
-        "effectBinding": false,
-        "captureRequirement": false,
+        "effectBinding": true,
+        "captureRequirement": true,
         "gameplayImpactingGap": false
       }
     },
@@ -635,8 +635,8 @@
   "summary": {
     "publicCharacterCount": 20,
     "matchedCharacterCount": 20,
-    "implementedCharacterCount": 2,
-    "notApplicableCharacterCount": 18,
+    "implementedCharacterCount": 3,
+    "notApplicableCharacterCount": 17,
     "unresolvedCharacterCount": 0,
     "matchedSkillIds": [
       10100362,

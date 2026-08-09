@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 199001,
-  "sourcePackageHash": "e47d4176b3a495bb7f09d3c7356e76a4d70143352ea511ba76e5d694fd32c1de",
+  "sourcePackageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
   "actionRows": [
     {
       "actionIdentity": "actor|199001|19900101|0|19900103|normal-attack",
@@ -354,14 +354,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 1,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|199001|19900101|4|19900115|dodge-attack",
@@ -411,7 +411,9 @@
           "unresolved": 2
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     },
     {
       "actionIdentity": "actor|199001|19900101|5|19900111|plunging-attack",
@@ -422,14 +424,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 1,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|199001|19900101|5|19900111|plunging-attack",
@@ -479,7 +481,9 @@
           "unresolved": 3
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     },
     {
       "actionIdentity": "actor|199001|19900112|0|19900112|star-skill",
@@ -780,14 +784,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 4,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|199001|19900122|1|19900125|limit-counter",
@@ -840,7 +844,9 @@
           "unresolved": 3
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     },
     {
       "actionIdentity": "actor|199001|19900122|2|19900127|perfect-parry",
@@ -851,14 +857,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "source-verified",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 4,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|199001|19900122|2|19900127|perfect-parry",
@@ -907,12 +913,14 @@
           "unresolved": 4
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     }
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 8,
+    "runtimeReadyActionCount": 4,
     "executionFormCount": 16,
     "controlCount": 28,
     "hitCount": 58,
@@ -934,5 +942,5 @@
       "static-evidence-gap": 5
     }
   },
-  "profileHash": "2888fedae88a3726abf1254b87de8b94b8e8f0078844ab23037cbe25a0edbeb4"
+  "profileHash": "01392fe87abedb9a0c8f71e3d8e0acacd7ccc085927d6a3bd870b4820cf8ddd7"
 }

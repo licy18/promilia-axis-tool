@@ -30,6 +30,20 @@ export function compileVerifiedStaticActorProperties({
   const indexes = getCatalogIndexes(catalog);
   const characterId = Number(actor?.characterId);
   const profile = indexes.actorProfiles.get(characterId);
+  if (
+    profile?.optimizationObject &&
+    !isOptimizationObjectSourceAliasProfileBound(profile, characterId)
+  ) {
+    return createUnavailableResult(
+      actor,
+      'verified-static-actor-source-alias-binding-invalid',
+      {
+        sourceIdentity: profile?.sourceIdentity ?? null,
+        sourceAliasIdentity:
+          profile?.optimizationObject?.sourceAliasIdentity ?? null,
+      }
+    );
+  }
   if (!profile?.applied) {
     return createUnavailableResult(
       actor,
@@ -1552,6 +1566,21 @@ function createAppliedSource({ kind, sourceId, sourceIdentity, attributes }) {
     status: 'applied',
     applied: true,
   };
+}
+
+function isOptimizationObjectSourceAliasProfileBound(profile, characterId) {
+  const alias = profile?.optimizationObject;
+  const sourceIdentity = String(alias?.sourceIdentity ?? '');
+  return Boolean(
+    String(alias?.optimizationObjectId ?? '').trim() &&
+      Number(alias?.sourceCharacterId) === Number(characterId) &&
+      String(alias?.sourceAliasIdentity ?? '').trim() &&
+      sourceIdentity.includes(
+        `src/data/generated/characters.json#items[id=${characterId}]`
+      ) &&
+      sourceIdentity.includes(`NewTable/hero.rows[id=${characterId}]`) &&
+      String(profile?.sourceIdentity ?? '').includes(sourceIdentity)
+  );
 }
 
 function getCatalogIndexes(catalog) {

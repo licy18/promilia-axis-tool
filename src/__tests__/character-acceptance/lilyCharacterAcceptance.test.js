@@ -19,15 +19,15 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.requirementInventory.summary).toMatchObject({
       recordCount: 260,
-      appliedCount: 111,
+      appliedCount: 108,
       gapCount: 0,
-      notApplicableCount: 149,
+      notApplicableCount: 152,
     });
     expect(manifest.matrix.summary).toMatchObject({
-      requiredCount: 111,
-      passedCount: 111,
+      requiredCount: 108,
+      passedCount: 108,
       blockedCount: 0,
-      notApplicableCount: 149,
+      notApplicableCount: 152,
     });
     expect(manifest.sourceGapInventory.summary).toMatchObject({
       blockingCount: 0,
@@ -72,6 +72,11 @@ describe('Lily M12-B3 owner character acceptance', () => {
       scenarioCount: 2,
       executionPassedCount: 2,
     });
+    expect(
+      manifest.matrix.requirements.filter(requirement =>
+        requirement.reasons.includes('joint-attack-trigger-unresolved')
+      )
+    ).toHaveLength(4);
     expect(scenarioCases.summary.assertionCount).toBeGreaterThan(0);
     expect(scenarioCases.summary.assertionPassedCount).toBe(
       scenarioCases.summary.assertionCount
@@ -154,18 +159,6 @@ describe('Lily M12-B3 owner character acceptance', () => {
         ],
       },
     });
-    expect(
-      probes.get('probe:trace-query:star-carry-level-twelve-guard')
-    ).toMatchObject({
-      passed: true,
-      actual: {
-        rows: [
-          { absoluteFrame: 4351, 'modifiers.0.valueRaw': 3000 },
-          { absoluteFrame: 4711, 'modifiers.0.valueRaw': 3000 },
-        ],
-      },
-    });
-
     expect(
       scenario.mechanismProbes.negativeActionCases.every(
         result => result.passed

@@ -602,7 +602,7 @@ describe('verified static combat properties', () => {
     ]);
   });
 
-  it('propagates one three-actor loadout change through actor, kibo, and hit results', () => {
+  it('propagates a loadout through actor, Kibo, and legal foreground hit results', () => {
     const bare = simulateLoadoutScenario({});
     const equipped = simulateLoadoutScenario({
       soulessenceId: 10001,
@@ -634,8 +634,19 @@ describe('verified static combat properties', () => {
     expect(actionDamage(equipped.result, 'loadout-actor-hit')).toBeGreaterThan(
       actionDamage(bare.result, 'loadout-actor-hit')
     );
-    expect(actionDamage(equipped.result, 'loadout-kibo-hit')).toBeGreaterThan(
-      actionDamage(bare.result, 'loadout-kibo-hit')
+    expect(
+      bare.scenario.actions.filter(action => action.type === 'kiboEvent')
+    ).toEqual([]);
+    expect(
+      equipped.scenario.kiboAutoCastDerivationRegistry.scheduleExclusions
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ownerCharacterId: 101007,
+          kiboId: 500001,
+          code: 'kibo-auto-cast-schedule-unresolved',
+        }),
+      ])
     );
     expect(equippedActor.verifiedStaticProperties.sources).toEqual(
       expect.arrayContaining([
@@ -798,17 +809,55 @@ describe('verified static combat properties', () => {
     );
   });
 
-  it('keeps identities outside the verified collectible set unresolved', () => {
-    const result = compileVerifiedStaticActorProperties({
+  it('binds explicit optimization-object source aliases without admitting unrelated identities', () => {
+    const aliasResults = [199001, 199002].map(characterId =>
+      compileVerifiedStaticActorProperties({
+        actor: {
+          characterId,
+          level: 80,
+          cultivation: {},
+          loadout: {},
+        },
+      })
+    );
+
+    for (const result of aliasResults) {
+      expect(result).toMatchObject({
+        status: 'verified-static-actor-properties-ready',
+        ready: true,
+        applied: true,
+        unresolved: [],
+        stats: {
+          attack: expect.any(Number),
+          critRate: expect.any(Number),
+          critDamage: expect.any(Number),
+        },
+      });
+      expect(result.stats.attack).toBeGreaterThan(0);
+    }
+    expect(aliasResults[0].stats).toEqual(aliasResults[1].stats);
+    expect(aliasResults[0].sources[0].sourceIdentity).toContain(
+      'src/data/generated/characters.json#items[id=199001]'
+    );
+    expect(aliasResults[0].sources[0].sourceIdentity).not.toContain(
+      'src/data/generated/characters.json#items[id=199002]'
+    );
+    expect(aliasResults[1].sources[0].sourceIdentity).toContain(
+      'src/data/generated/characters.json#items[id=199002]'
+    );
+    expect(aliasResults[1].sources[0].sourceIdentity).not.toContain(
+      'src/data/generated/characters.json#items[id=199001]'
+    );
+
+    const unrelated = compileVerifiedStaticActorProperties({
       actor: {
-        characterId: 199001,
+        characterId: 199003,
         level: 80,
         cultivation: {},
         loadout: {},
       },
     });
-
-    expect(result).toMatchObject({
+    expect(unrelated).toMatchObject({
       status: 'verified-static-actor-profile-unresolved',
       ready: false,
       applied: false,
@@ -816,6 +865,60 @@ describe('verified static combat properties', () => {
       unresolved: [
         expect.objectContaining({
           identityClassification: 'non-current-public-directory',
+        }),
+      ],
+    });
+  });
+
+  it('fails closed when an optimization-object alias profile is missing or cross-bound', () => {
+    const missingAliasPackage = structuredClone(mechanicsPackage);
+    missingAliasPackage.staticPropertyCatalog.actor.profiles =
+      missingAliasPackage.staticPropertyCatalog.actor.profiles.filter(
+        profile => Number(profile.characterId) !== 199001
+      );
+    const missing = compileVerifiedStaticActorProperties({
+      actor: {
+        characterId: 199001,
+        level: 80,
+        cultivation: {},
+        loadout: {},
+      },
+      mechanicsPackage: missingAliasPackage,
+    });
+    expect(missing).toMatchObject({
+      status: 'verified-static-actor-profile-unresolved',
+      ready: false,
+      applied: false,
+    });
+
+    const crossBoundPackage = structuredClone(mechanicsPackage);
+    const profiles = crossBoundPackage.staticPropertyCatalog.actor.profiles;
+    const femaleIndex = profiles.findIndex(
+      profile => Number(profile.characterId) === 199001
+    );
+    const maleProfile = profiles.find(
+      profile => Number(profile.characterId) === 199002
+    );
+    profiles[femaleIndex] = {
+      ...structuredClone(maleProfile),
+      characterId: 199001,
+    };
+    const crossBound = compileVerifiedStaticActorProperties({
+      actor: {
+        characterId: 199001,
+        level: 80,
+        cultivation: {},
+        loadout: {},
+      },
+      mechanicsPackage: crossBoundPackage,
+    });
+    expect(crossBound).toMatchObject({
+      status: 'verified-static-actor-source-alias-binding-invalid',
+      ready: false,
+      applied: false,
+      unresolved: [
+        expect.objectContaining({
+          sourceAliasIdentity: 'STARBORN:source-alias:199002',
         }),
       ],
     });
@@ -905,17 +1008,6 @@ function simulateActorLoadoutScenario({
     ...(repeatActorAction
       ? [createActorAction('loadout-actor-hit-cycle-2', 3000)]
       : []),
-    createWorkbenchActionDraft({
-      id: 'loadout-kibo-hit',
-      type: 'kiboEvent',
-      actorCharacterId: characterId,
-      kiboId: 500001,
-      skillId: 504004,
-      actionVariantIndex: 0,
-      eventType: 'active',
-      startMs: repeatActorAction ? 6000 : 2000,
-      durationMs: 3000,
-    }),
   ];
   const project = createWorkbenchProject(selection, {
     durationMs: repeatActorAction ? 10000 : 8000,

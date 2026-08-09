@@ -76,16 +76,16 @@ describe('Sifliya 107001 acceptance closure', () => {
   it('passes every required row and leaves only structured nonblocking source records', () => {
     expect(requirementInventory.summary).toMatchObject({
       recordCount: 266,
-      appliedCount: 86,
+      appliedCount: 80,
       gapCount: 0,
-      notApplicableCount: 180,
+      notApplicableCount: 186,
     });
     expect(scenarioMatrix.summary).toMatchObject({
       requirementCount: 266,
-      requiredCount: 86,
-      passedCount: 86,
+      requiredCount: 80,
+      passedCount: 80,
       blockedCount: 0,
-      notApplicableCount: 180,
+      notApplicableCount: 186,
     });
     expect(
       scenarioMatrix.requirements.every(
@@ -102,14 +102,36 @@ describe('Sifliya 107001 acceptance closure', () => {
       sourceGapCount: 0,
       acceptanceGapCount: 0,
     });
+    const formalJointAttackRows = scenarioMatrix.requirements.filter(
+      requirement =>
+        requirement.sourceIdentities.includes(
+          'src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS'
+        )
+    );
+    expect(formalJointAttackRows).toHaveLength(6);
+    expect(
+      formalJointAttackRows.every(
+        requirement =>
+          requirement.status === 'not-applicable' &&
+          requirement.required === false &&
+          requirement.reasons.includes('joint-attack-trigger-unresolved')
+      )
+    ).toBe(true);
+    expect(
+      acceptanceLedger.records.some(record =>
+        record.sourceIdentities.includes(
+          'src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS'
+        )
+      )
+    ).toBe(false);
   });
 
   it('publishes stable visual and machine evidence for central product acceptance', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 3,
       executionPassedCount: 3,
-      assertionCount: 805,
-      assertionPassedCount: 805,
+      assertionCount: 654,
+      assertionPassedCount: 654,
     });
     expect(
       scenarioCases.records.every(
@@ -155,7 +177,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: 'a8c9bdd29e54fe7a',
+        canonicalTraceHash: 'b7c97968689bf645',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

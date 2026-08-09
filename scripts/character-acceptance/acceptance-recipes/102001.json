@@ -8,9 +8,9 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:102001:eb06acc456ee309245a78455e7691738a2ee808b:30b8cd0730bded62",
-    "qualificationSubjectHash": "30b8cd0730bded62",
-    "scenarioSetHash": "ee1b2fe71ae8df6d",
+    "recordIdentity": "character-product-acceptance:102001:eb06acc456ee309245a78455e7691738a2ee808b:285ed6a365cb7a7a",
+    "qualificationSubjectHash": "285ed6a365cb7a7a",
+    "scenarioSetHash": "d8d5bd542621bbcf",
     "scenarioIdentities": [
       "m12-b3-102001-zero-distance-acceptance"
     ],
@@ -634,7 +634,7 @@
     },
     {
       "kind": "variant-selection",
-      "actionId": "lily-star-carry-level-12",
+      "actionId": "lily-switch-out--on-exit--actor-102001--star-carry",
       "controlSkillId": 10200122,
       "subSkillIndex": 0
     },
@@ -826,7 +826,9 @@
       "kind": "trace-query",
       "identity": "star-carry-eighty-one-frame-occupancy",
       "path": "variants.selections",
-      "where": { "actionId": "lily-star-carry-level-12" },
+      "where": {
+        "actionId": "lily-switch-out--on-exit--actor-102001--star-carry"
+      },
       "expectation": {
         "count": 1,
         "orderedValues": { "actualDurationFrames": [81] }
@@ -848,25 +850,6 @@
           "absoluteFrame": [2851, 3211],
           "modifiers.0.valueRaw": [1900, 1900],
           "targetId": ["actor-101010", "actor-101010"]
-        }
-      },
-      "select": ["expiresAtMs"]
-    },
-    {
-      "kind": "trace-query",
-      "identity": "star-carry-level-twelve-guard",
-      "path": "effects.events",
-      "where": {
-        "actionId": "lily-star-carry-level-12",
-        "effectId": "battle-element:480122004"
-      },
-      "expectation": {
-        "count": 2,
-        "orderedValues": {
-          "operation": ["apply", "expire"],
-          "absoluteFrame": [4351, 4711],
-          "modifiers.0.valueRaw": [3000, 3000],
-          "targetId": ["actor-102001", "actor-102001"]
         }
       },
       "select": ["expiresAtMs"]

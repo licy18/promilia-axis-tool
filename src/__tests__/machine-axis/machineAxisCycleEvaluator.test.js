@@ -1807,14 +1807,26 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(run.trace.state.final.enemy.inBreak).toBe(false);
   }, 30_000);
 
-  it('keeps Kibo-free cycle replay deterministic and blocks the historical equipped-Kibo fixture', () => {
+  it('keeps Kibo-free cycle replay deterministic and blocks an equipped-Kibo variant', () => {
     const service = createMachineAxisService();
     const first = service.evaluateCycle(createNormalAttackCycleEnvelope());
     const replay = service.evaluateCycle(createNormalAttackCycleEnvelope());
-    const historical = structuredClone(cycleFixture);
-    historical.contract.dataIdentity.verifiedMechanicsPackageHash =
+    const equipped = structuredClone(cycleFixture);
+    equipped.contract.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;
-    const blocked = service.evaluateCycle(historical);
+    equipped.contract.scenario.team[0].loadout = { kiboId: 500003 };
+    equipped.contract.scenario.initialRuntimeState.kiboEnergyBySlot = [
+      {
+        slotId: 'slot-1',
+        actorId: 'actor-103002',
+        characterId: 103002,
+        kiboId: 500003,
+        kiboName: '水灵偶',
+        currentValue: 60,
+        maxValue: 100,
+      },
+    ];
+    const blocked = service.evaluateCycle(equipped);
 
     expect(first.valid).toBe(true);
     expect(replay).toEqual(first);

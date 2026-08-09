@@ -1,6 +1,6 @@
 # M12-B2 可持续循环 DPS 验收说明
 
-状态：M12-B2-R2 整改完成，等待产品复验。M12-B3/M12-C 未启动。
+状态：M12-B2-R2 历史验收完成；权威示例已在 M12-B3 重新绑定并复验。M12-C 仍锁定。
 
 ## 合同
 
@@ -21,13 +21,14 @@
 - 命令：`npm run machine-axis -- cycle --input fixtures/machine-axis/m12-cycle-dps-example.json --output reports/m12/m12-b2-cycle-dps-example-20260801.json`
 - 暖机：`[0,60)`；循环：`[60,360)`，300F / 5s。
 - 循环动作：红宝石普通攻击 A1、A2、A3。
-- 首轮与第二轮均为 `22.44996643` HP 伤害、4 个 combat hit；`cycleDps=4.48999329`。
-- actor/action/hit 三层贡献各自合计 `22.44996643`。
-- canonical hash：input `06083e73632e9e4d`，data `7b865d8e1825995a`，trace `db903427dcd1ecac`，evaluation `412605349bbf2fe3`；cycle `3950fd090a8634e1`。仅 cycle hash 因新增随机证明与统计字段更新。
+- 当前正例不装备奇波，不为未闭合的 AI 出手时序猜测 cadence；带自动奇波的变体继续以 `kibo-auto-cast-schedule-unresolved` 阻断。
+- 首轮与第二轮均为 `212.19998169` HP 伤害、4 个 combat hit；`cycleDps=42.43999634`。
+- actor/action/hit 三层贡献各自合计 `212.19998169`。
+- canonical hash：input `ea0d6b7fa005c8aa`，data `171fec0161c9e7f4`，trace `5de57a208abe98d1`，evaluation `6eafa465898dbceb`；cycle `c3a9478c0c5a4ccf`，build `fb7f489e9ac64e97`。
 - 两轮结束于 `660F`，replay horizon 保留原合同 `900F`，用于检查第二轮尾部仍待结算的延迟事件。
 - 红宝石投射物仍保留 `scenario-assumed-zero-distance` 与 `evidence-open`，循环 evaluator 没有把场景假设提升为实机证据闭合。
 
-## Sampled 64-seed 证明
+## Sampled 64-seed 证明（M12-B2-R2 历史基线）
 
 - seed 集：`seed-0..seed-63`；64/64 均通过资源、CD、状态、动作形态和连续重放门，没有 `machine-axis-cycle-damage-not-stable` 误拒绝。
 - 循环伤害：均值 `22.59375`、样本方差 `1.07043651`、范围 `22..26`，p5/p25/p50/p75/p95 为 `22/22/22/24/24`。

@@ -936,30 +936,31 @@
   "qualification": {
     "denominators": {
       "characterOptimizationObjects": 9,
+      "sourceCharacterAliases": 10,
       "kibos": 43,
       "soulEssences": 62,
       "equipment": 137,
       "setSkills": 12
     },
-    "blockingUniqueGapCount": 14,
+    "blockingUniqueGapCount": 5,
     "blockingByCategory": {
-      "not-implemented": 14
+      "not-implemented": 5
     },
     "formalAdmissions": {
-      "characters": 0,
-      "kibos": 0,
+      "characters": 4,
+      "kibos": 43,
       "soulEssences": 62,
       "equipment": 137,
       "setSkills": 12
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "a05fb6ac9d69ef39",
-    "rosterHash": "3cefe94ad6cdfc51",
-    "manifestsHash": "d8b13f84544c3a6b",
-    "ledgerHash": "e6a38a3d3698941e",
-    "bindingMatrixHash": "347fd814cbf4bf3f",
-    "qualificationCatalogHash": "f0d43745d05e1472",
+    "sourceSnapshotHash": "09859bb63b9cd549",
+    "rosterHash": "82d5cda1f687d994",
+    "manifestsHash": "ab5da91bde26fec8",
+    "ledgerHash": "074b21f45a4acddd",
+    "bindingMatrixHash": "56c95cae0ac5fede",
+    "qualificationCatalogHash": "95be7754177b8823",
     "dynamicLoadoutEffectCensusHash": "bf1b9ef761ed1db5",
     "soulEssenceEffectCatalogHash": "6febc556edfa8073",
     "soulEssenceSourceSnapshotHash": "648a0c60af46daa3",

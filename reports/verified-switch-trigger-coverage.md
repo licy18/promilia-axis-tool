@@ -2,8 +2,8 @@
 
 - 包：`azpr-tc-2026-07-18`
 - 固定分母：20 名公开角色 / 11 个入场槽 / 9 个退场槽
-- 可确定派生：18/20
-- 静态证据缺口：2
+- 可确定派生：20/20
+- 静态证据缺口：0
 
 | 角色 | 阶段 | 技能槽 | 技能 | 触发绑定 | 机制状态 |
 | --- | --- | ---: | ---: | --- | --- |
@@ -24,13 +24,12 @@
 | 法兰塔 (111001) | 入场 | 203 | 11100121 | applied | applied |
 | 姬瑟贝露 (112001) | 入场 | 203 | 11200121 | applied | applied |
 | 艾妮丝 (112002) | 退场 | 201 | 11200222 | applied | applied |
-| 女主角 (199001) | 退场 | 201 | 19900122 | static-evidence-gap | unresolved |
-| 男主角 (199002) | 退场 | 201 | 19900222 | static-evidence-gap | unresolved |
+| 女主角 (199001) | 退场 | 201 | 19900122 | applied | applied |
+| 男主角 (199002) | 退场 | 201 | 19900222 | applied | applied |
 | 诺诺 (199003) | 入场 | 203 | 19900321 | applied | applied |
 
 ## 静态证据缺口
 
-- `actor:199001|switch-trigger:on-exit|skill:19900122`：star-carry-action-mapping-missing
-- `actor:199002|switch-trigger:on-exit|skill:19900222`：star-carry-action-mapping-missing
+- 无。
 
 > 入场/退场阶段来自 `hero.skillList` 的 201/203 槽位与客户端 `ESkillSlotType` 枚举；动作机制自身的 applied/unresolved 状态单独保留，不因切人触发关系成立而升级。

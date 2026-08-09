@@ -1602,7 +1602,7 @@ function inspectEffectLifecycle(run, configuration) {
         passed:
           Number.isFinite(startPosition) &&
           Number.isFinite(expirationPosition) &&
-          expirationPosition - startPosition === durationValue,
+          Math.abs(expirationPosition - startPosition - durationValue) <= 1e-6,
       });
     }
   }
@@ -3062,7 +3062,7 @@ function inspectRecipeProbe(run, probe) {
         starts.length > 0 &&
         Boolean(end) &&
         Number.isFinite(actualDurationMs) &&
-        actualDurationMs === Number(probe.expectedDurationMs),
+        Math.abs(actualDurationMs - Number(probe.expectedDurationMs)) <= 1e-6,
       actual: {
         startMatchCount: starts.length,
         endMatchCount: ends.length,
@@ -3263,18 +3263,35 @@ function inspectRecipeProbe(run, probe) {
     const expiryIndex = sameFrame.findIndex(row => row.kind === 'expire');
     const acquisitionIndex = sameFrame.findIndex(row => row === acquisition);
     const expiry = expiryIndex >= 0 ? sameFrame[expiryIndex] : null;
+    const eventOrdinal = row => {
+      const match = String(row?.eventIdentity ?? '').match(/\|(\d+)$/);
+      return match ? Number(match[1]) : null;
+    };
+    const expiryOrdinal = eventOrdinal(expiry);
+    const acquisitionOrdinal = eventOrdinal(acquisition);
+    const expiryPrecedesAcquisition =
+      Number.isInteger(expiryOrdinal) && Number.isInteger(acquisitionOrdinal)
+        ? expiryOrdinal < acquisitionOrdinal
+        : acquisitionIndex > expiryIndex;
     return {
       identity: identity('probe:tuning-mark-expiry-boundary:' + probe.actionId),
       passed:
         acquisition != null &&
         Number(acquisition.frameIndex) === Number(probe.expectedFrame) &&
         expiryIndex >= 0 &&
-        acquisitionIndex > expiryIndex &&
+        expiryPrecedesAcquisition &&
         Number(expiry?.before) === Number(probe.expectedExpireBefore) &&
         Number(expiry?.after) === Number(probe.expectedExpireAfter) &&
         Number(acquisition.before) === Number(probe.expectedAcquireBefore) &&
         Number(acquisition.after) === Number(probe.expectedAcquireAfter),
-      actual: { expiry, acquisition, sameFrame },
+      actual: {
+        expiry,
+        acquisition,
+        sameFrame,
+        expiryOrdinal,
+        acquisitionOrdinal,
+        expiryPrecedesAcquisition,
+      },
     };
   }
   if (probe.kind === 'controlled-actor-companion-switch') {

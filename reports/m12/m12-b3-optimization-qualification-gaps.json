@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "96e4a9f5a3dba438",
+  "rosterHash": "82d5cda1f687d994",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "af70a11eb43a3efe",
-        "96e4a9f5a3dba438"
+        "09859bb63b9cd549",
+        "82d5cda1f687d994"
       ]
     },
     {
@@ -166,20 +166,6 @@
       "gapHash": "c99a421e56f2b5e4"
     },
     {
-      "gapIdentity": "character:112001:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "112001",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=112001]"
-      ],
-      "details": {},
-      "gapHash": "4cb729f1f2e7cd95"
-    },
-    {
       "gapIdentity": "character:112001:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "112001",
@@ -192,36 +178,6 @@
       ],
       "details": {},
       "gapHash": "498f9a205680a929"
-    },
-    {
-      "gapIdentity": "character:STARBORN:actor-static-profile-missing",
-      "objectKind": "character",
-      "objectId": "STARBORN",
-      "code": "actor-static-profile-missing",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Verified static actor profile is missing for at least one source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=199001]",
-        "generated/characters.json#items[id=199002]"
-      ],
-      "details": {},
-      "gapHash": "ffada720bed60d17"
-    },
-    {
-      "gapIdentity": "character:STARBORN:character-acceptance-not-published",
-      "objectKind": "character",
-      "objectId": "STARBORN",
-      "code": "character-acceptance-not-published",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "No published M11-D acceptance manifest covers every source identity.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=199001]",
-        "generated/characters.json#items[id=199002]"
-      ],
-      "details": {},
-      "gapHash": "45783aa9c3dda4dc"
     },
     {
       "gapIdentity": "character:STARBORN:character-not-optimization-ready",
@@ -240,18 +196,16 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 8,
+    "blockingUniqueGapCount": 5,
     "byCategory": {
-      "not-implemented": 8
+      "not-implemented": 5
     },
     "byCode": {
-      "actor-static-profile-missing": 1,
-      "character-acceptance-not-published": 2,
       "character-not-optimization-ready": 5
     },
     "byObjectKind": {
-      "character": 8
+      "character": 5
     }
   },
-  "ledgerHash": "6d62070b49814d6f"
+  "ledgerHash": "074b21f45a4acddd"
 }

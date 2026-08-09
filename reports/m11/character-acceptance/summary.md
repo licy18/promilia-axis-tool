@@ -8,13 +8,16 @@
 
 | 角色 | 成熟度 | 矩阵通过/必需 | source gap | acceptance gap | optimization-ready |
 |---|---:|---:|---:|---:|---:|
-| 寒悠悠 (101003) | runtime-integrated | 133/159 | 13 | 19 | 否 |
-| 涂山小玉 (101010) | runtime-integrated | 205/205 | 0 | 0 | 否 |
-| 莉莉 (102001) | optimization-ready | 111/111 | 0 | 0 | 是 |
-| 红宝石 (103002) | runtime-integrated | 194/194 | 0 | 0 | 否 |
-| 西芙莉雅 (107001) | optimization-ready | 86/86 | 0 | 0 | 是 |
-| 米砂 (107002) | runtime-integrated | 111/111 | 0 | 0 | 否 |
-| 米蒂 (108003) | optimization-ready | 139/139 | 0 | 0 | 是 |
-| 末音 (109001) | optimization-ready | 138/138 | 0 | 0 | 是 |
+| 寒悠悠 (101003) | runtime-integrated | 135/155 | 13 | 13 | 否 |
+| 涂山小玉 (101010) | runtime-integrated | 202/202 | 0 | 0 | 否 |
+| 莉莉 (102001) | optimization-ready | 108/108 | 0 | 0 | 是 |
+| 红宝石 (103002) | runtime-integrated | 190/190 | 0 | 0 | 否 |
+| 西芙莉雅 (107001) | optimization-ready | 80/80 | 0 | 0 | 是 |
+| 米砂 (107002) | runtime-integrated | 98/98 | 0 | 0 | 否 |
+| 米蒂 (108003) | optimization-ready | 134/134 | 0 | 0 | 是 |
+| 末音 (109001) | optimization-ready | 134/134 | 0 | 0 | 是 |
+| 姬瑟贝露 (112001) | runtime-integrated | 186/186 | 0 | 0 | 否 |
+| 女主角 (199001) | runtime-integrated | 177/177 | 0 | 0 | 否 |
+| 男主角 (199002) | runtime-integrated | 177/177 | 0 | 0 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

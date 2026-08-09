@@ -191,13 +191,13 @@ describe('Machine Axis external audit boundaries', () => {
       expect(after.startFrame).toBe(ruby.startFrame + ruby.durationFrames);
     }, 30_000);
 
-    it('uses a state-selected Xiaoyu burst form before resolving the next action', () => {
+    it('uses a state-selected Xiaoyu charged form before resolving the next action', () => {
       const axis = structuredClone(xiaoyuVisualFixture);
       axis.actions.push({
-        ...createWaitAction('after-xiaoyu-burst-a1', null, 1),
+        ...createWaitAction('after-xiaoyu-enhanced-charged', null, 1),
         schedule: {
           mode: 'after-action-end',
-          actionId: 'xiaoyu-burst-a1',
+          actionId: 'xiaoyu-enhanced-charged',
           frame: null,
           offsetFrames: 0,
         },
@@ -205,17 +205,17 @@ describe('Machine Axis external audit boundaries', () => {
 
       const prepared = createMachineAxisService().prepare(axis);
       const burst = prepared.actionResolutions.find(
-        action => action.actionId === 'xiaoyu-burst-a1'
+        action => action.actionId === 'xiaoyu-enhanced-charged'
       );
       const after = prepared.actionResolutions.find(
-        action => action.actionId === 'after-xiaoyu-burst-a1'
+        action => action.actionId === 'after-xiaoyu-enhanced-charged'
       );
 
       expect(prepared.valid).toBe(true);
       expect(burst).toMatchObject({
-        resolvedControlSkillId: 10101001,
-        resolvedSubSkillIndex: 1,
-        durationFrames: 72,
+        resolvedControlSkillId: 10101010,
+        resolvedSubSkillIndex: 2,
+        durationFrames: 64,
       });
       expect(after.startFrame).toBe(burst.startFrame + burst.durationFrames);
     }, 30_000);
@@ -399,10 +399,10 @@ describe('Machine Axis external audit boundaries', () => {
       );
 
       expect(evaluation.totals).toMatchObject({
-        combatHitCount: 64,
-        projectedHitCount: 64,
+        combatHitCount: 34,
+        projectedHitCount: 34,
         stateEventCount: 0,
-        hpDamage: 27762.79998779297,
+        hpDamage: 3836.7999877929688,
         inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
@@ -448,10 +448,24 @@ describe('Machine Axis external audit boundaries', () => {
       axis.actions = [
         first,
         {
+          id: 'switch-to-slot-2',
+          owner: { kind: 'actor', slotId: 'slot-1' },
+          intent: { kind: 'switch', targetSlotId: 'slot-2' },
+          schedule: {
+            mode: 'after-action-end',
+            actionId: first.id,
+            offsetFrames: 0,
+          },
+        },
+        {
           ...structuredClone(first),
           id: 'xunlang-signature-slot-2',
           owner: { kind: 'kibo', slotId: 'slot-2' },
-          schedule: { mode: 'absolute', frame: 60 },
+          schedule: {
+            mode: 'after-action-end',
+            actionId: 'switch-to-slot-2',
+            offsetFrames: 0,
+          },
         },
       ];
 
@@ -462,7 +476,9 @@ describe('Machine Axis external audit boundaries', () => {
         action => action.publicActionId === 50000102
       );
       const cooldownStarts = run.trace.events.filter(
-        event => event.type === 'COOLDOWN_START'
+        event =>
+          event.type === 'COOLDOWN_START' &&
+          event.payload.runtimeOwnerIdentity?.endsWith('|kibo:500001')
       );
 
       expect(validation.valid).toBe(true);
@@ -478,7 +494,6 @@ describe('Machine Axis external audit boundaries', () => {
       expect(
         cooldownStarts
           .map(event => event.payload.runtimeOwnerIdentity)
-          .slice(0, 2)
       ).toEqual([
         'actor-101007|kibo:500001',
         'actor-101010|kibo:500001',
@@ -630,7 +645,7 @@ describe('Machine Axis external audit boundaries', () => {
       expect(
         projectSameFrameCombatSemantics(actorIdSortsFirst)
           .executionOwnerOrder
-      ).toEqual(['kibo', 'actor', ...Array(28).fill('kibo')]);
+      ).toEqual(['kibo', 'actor']);
       expect(
         actorIdSortsFirst.trace.executionPlan.actions.map(action => ({
           sourceSequenceIndex: action.sourceSequenceIndex,
@@ -639,16 +654,12 @@ describe('Machine Axis external audit boundaries', () => {
       ).toEqual([
         { sourceSequenceIndex: 0, sourceSequencePath: [0] },
         { sourceSequenceIndex: 1, sourceSequencePath: [1] },
-        ...Array.from({ length: 28 }, (_, index) => ({
-          sourceSequenceIndex: index + 2,
-          sourceSequencePath: [index + 2],
-        })),
       ]);
-      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(22244);
-      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(22244);
+      expect(actorIdSortsFirst.evaluation.totals.hpDamage).toBe(2252);
+      expect(kiboIdSortsFirst.evaluation.totals.hpDamage).toBe(2252);
     }, 30_000);
 
-    it('points unresolved condition warnings at canonical plan indices', () => {
+    it('points unresolved warnings at canonical indices without inventing closed warnings', () => {
       const validation = createMachineAxisService().validate(cloneFixture());
       const warningsByActionId = new Map(
         validation.warnings
@@ -662,9 +673,7 @@ describe('Machine Axis external audit boundaries', () => {
       expect(warningsByActionId.get('a3-inherit')?.path).toBe(
         'executionPlan.actions.1'
       );
-      expect(
-        warningsByActionId.get('ruby-enhanced-e1-intent')?.path
-      ).toBe('executionPlan.actions.18');
+      expect(warningsByActionId.has('ruby-enhanced-e1-intent')).toBe(false);
     }, 30_000);
   });
 });

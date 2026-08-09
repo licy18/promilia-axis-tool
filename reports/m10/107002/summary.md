@@ -2,7 +2,7 @@
 
 - Owner: `107002`
 - Profile: `actor:107002:character-combat-profile:v1`
-- Hash: `1614d5179ab633e22d01605931d535cdab322604111def062145447d976d5a71`
+- Hash: `92228dfec0da9c1adeaa4f5540d740c1d4b00e66dbc00574c5ff156dca5115ef`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -14,7 +14,7 @@
 - 来源 identity：493
 - 战斗图：112 nodes / 107 edges
 - 描述覆盖：23
-- Runtime ready 动作：7/10
+- Runtime ready 动作：4/10
 - Runtime capture：0
 - 零距离模拟完整：no
 - 实机证据完整：no
@@ -44,7 +44,7 @@
 | stateMachines | applied | 3 | 0 | 3 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |
 | frontBackDifferences | applied | 1 | 0 | 1 |
-| loadoutAndTeamStatPropagation | applied | 1 | 0 | 1 |
+| loadoutAndTeamStatPropagation | applied | 2 | 0 | 2 |
 
 ## 未闭环
 

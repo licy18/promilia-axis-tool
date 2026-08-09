@@ -72,7 +72,7 @@ export const FROZEN_B3_SOURCE_HASHES = Object.freeze({
   soulessences:
     'cd455e6cab217c5898e35e290b7d7e9d65b42a20bd0f71250a90377dfb93badd',
   verifiedMechanics:
-    'ed28c3d46132a84798ae7c8a3034abbae43e3ff67337b5d372b966c27b611309',
+    '7494e2cfe7a1f05d648369f04ced50e87c2579346449d0d250a91d3d9db6d90b',
   'newTable:accessory.json':
     '449ed58b7e0d034c7c1fb48114468078810a97e4a61fe596cea53c19208c4b39',
   'newTable:accessory_customed.json':
@@ -1138,7 +1138,11 @@ function createQualificationManifests({
         ),
         maturityState:
           acceptanceEntries.length === sourceIds.length
-            ? 'runtime-integrated'
+            ? acceptanceEntries.every(
+                entry => entry.optimizationReady === true
+              )
+              ? 'optimization-ready'
+              : 'runtime-integrated'
             : 'extracted',
         blockers,
         evidence: {
@@ -1154,9 +1158,10 @@ function createQualificationManifests({
   for (const kibo of targetKibos) {
     const maturity = kiboMaturityById.get(kibo.kiboId);
     const unresolvedPassive = unresolvedPassiveByKiboId.get(kibo.kiboId);
+    const kiboVisual = visualAcceptanceById.get(`kibo:${kibo.kiboId}`);
     const blockers = [
       ...createVisualAcceptanceBlocker(
-        visualAcceptanceById.get(`kibo:${kibo.kiboId}`),
+        kiboVisual,
         'kibo-visual-acceptance-not-published',
         'Kibo',
         'kibo-visual-acceptance-evidence-blocked'
@@ -1192,8 +1197,10 @@ function createQualificationManifests({
           `reports/kibo-headless/kibo-maturity-matrix.json#rows[kiboId=${kibo.kiboId}]`,
         ],
         maturityState:
-          maturity?.actions &&
-          Object.values(maturity.actions).every(action => action?.runnable)
+          blockers.length === 0
+            ? 'optimization-ready'
+            : maturity?.actions &&
+                Object.values(maturity.actions).every(action => action?.runnable)
             ? 'runtime-integrated'
             : 'extracted',
         blockers,

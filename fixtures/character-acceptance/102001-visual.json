@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+    "verifiedMechanicsPackageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -174,7 +174,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-low" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1250 },
@@ -193,7 +193,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-boundary" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1300 },
@@ -212,7 +212,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-expected" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1350 },
@@ -230,7 +230,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-critical" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1400 },
@@ -248,7 +248,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-non-critical" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1450 },
@@ -266,7 +266,7 @@
         "kind": "public-action",
         "publicActionId": 10200101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-miss-critical" },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1500 },
@@ -300,6 +300,18 @@
       "schedule": { "mode": "absolute", "frame": 2000 }
     },
     {
+      "id": "lily-normal-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10200101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "lily-normal" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2300 }
+    },
+    {
       "id": "lily-normal-a2",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
@@ -309,7 +321,7 @@
         "attackInput": { "sequenceIndex": 2, "groupId": "lily-normal" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2300 }
+      "schedule": { "mode": "absolute", "frame": 2320 }
     },
     {
       "id": "lily-normal-a3",
@@ -321,7 +333,7 @@
         "attackInput": { "sequenceIndex": 3, "groupId": "lily-normal" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2400 }
+      "schedule": { "mode": "absolute", "frame": 2352 }
     },
     {
       "id": "lily-normal-a4",
@@ -333,7 +345,7 @@
         "attackInput": { "sequenceIndex": 4, "groupId": "lily-normal" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2500 }
+      "schedule": { "mode": "absolute", "frame": 2392 }
     },
     {
       "id": "lily-normal-a5",
@@ -345,7 +357,7 @@
         "attackInput": { "sequenceIndex": 5, "groupId": "lily-normal" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2600 }
+      "schedule": { "mode": "absolute", "frame": 2434 }
     },
     {
       "id": "lily-charged",
@@ -368,7 +380,7 @@
       "id": "lily-switch-back",
       "owner": { "kind": "actor", "slotId": "slot-2" },
       "intent": { "kind": "switch", "targetSlotId": "slot-1" },
-      "schedule": { "mode": "absolute", "frame": 2900 }
+      "schedule": { "mode": "absolute", "frame": 3000 }
     },
     {
       "id": "lily-star-last-only",
@@ -398,17 +410,6 @@
           "criticalMode": "inherit"
         }
       }
-    },
-    {
-      "id": "lily-star-carry-level-12",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10200122,
-        "actionKind": "star-carry",
-        "level": 12
-      },
-      "schedule": { "mode": "absolute", "frame": 4300 }
     },
     {
       "id": "lily-star-all-miss",

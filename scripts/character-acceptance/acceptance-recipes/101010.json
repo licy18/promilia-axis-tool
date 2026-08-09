@@ -156,14 +156,7 @@
     },
     {
       "kind": "variant-selection",
-      "actionId": "xiaoyu-star-combo-default",
-      "controlSkillId": 10101026,
-      "subSkillIndex": 0,
-      "semanticName": "星结合击"
-    },
-    {
-      "kind": "variant-selection",
-      "actionId": "xiaoyu-star-carry-default",
+      "actionId": "xiaoyu-switch-back-for-star-carry--on-enter--actor-101010--star-carry",
       "controlSkillId": 10101021,
       "subSkillIndex": 0,
       "semanticName": "星携技"
@@ -202,17 +195,36 @@
     },
     {
       "kind": "trace-query",
-      "assertionIdentity": "a4-four-landed-hits-produce-four-direct-sp-events",
+      "assertionIdentity": "a4-four-landed-hits-share-direct-sp-to-two-allies",
       "path": "resources.actors",
       "where": {
         "actionId": "xiaoyu-a4-source-effects",
-        "reason": "verified-direct-sp"
+        "reason": "verified-direct-sp-shared"
       },
       "expectation": {
-        "count": 4,
+        "count": 8,
         "orderedValues": {
-          "absoluteFrame": [2410, 2414, 2418, 2422],
-          "change": [0.599991, 0.599991, 0.599991, 0.599991]
+          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
+          "actorId": [
+            "actor-103002",
+            "actor-101003",
+            "actor-103002",
+            "actor-101003",
+            "actor-103002",
+            "actor-101003",
+            "actor-103002",
+            "actor-101003"
+          ],
+          "change": [
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988,
+            0.299988
+          ]
         }
       }
     },
@@ -221,7 +233,7 @@
       "assertionIdentity": "star-carry-consumes-live-wind-mark",
       "path": "resources.tuningMarks",
       "where": {
-        "actionId": "xiaoyu-star-carry-default",
+        "actionId": "xiaoyu-switch-back-for-star-carry--on-enter--actor-101010--star-carry",
         "markId": 750,
         "kind": "consume"
       },
@@ -540,7 +552,7 @@
           "path": "resources.actors",
           "where": {
             "actionId": "isolated-a4-miss-blocked",
-            "reason": "verified-direct-sp"
+            "reason": "verified-direct-sp-shared"
           },
           "expectation": { "count": 0 }
         }

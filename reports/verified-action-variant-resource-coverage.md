@@ -4,7 +4,7 @@
 - Resource profiles: 3/3
 - Resource operations: 53/79
 - Variant edges: 64/346
-- Variant nodes: 736
+- Variant nodes: 779
 
 | Owner | Resource | Capacity | Operations | Variant edges |
 | --- | --- | ---: | --- | ---: |

@@ -752,20 +752,20 @@
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 32,
+      "blockingLedgerCount": 26,
       "sourceGapCount": 13,
-      "acceptanceGapCount": 19,
+      "acceptanceGapCount": 13,
       "nonBlockingSourceCount": 2,
       "matrix": {
         "requirementCount": 239,
-        "requiredCount": 159,
-        "passedCount": 133,
-        "blockedCount": 26,
-        "notApplicableCount": 80,
+        "requiredCount": 155,
+        "passedCount": 135,
+        "blockedCount": 20,
+        "notApplicableCount": 84,
         "statusCounts": {
-          "blocked": 26,
-          "not-applicable": 80,
-          "passed": 133
+          "blocked": 20,
+          "not-applicable": 84,
+          "passed": 135
         },
         "dimensionCounts": {
           "action-effect-binding": 11,
@@ -794,15 +794,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c90f957addd889ec",
-      "sourceOfTruthHash": "f1755d0b9ab66fe8",
+      "manifestHash": "ab88ed04b694f3bf",
+      "sourceOfTruthHash": "775d9a1452b960e8",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "7579c65678d0a8af",
-        "data": "d25f91810fa6c738",
-        "trace": "32f1a82df771b21e",
+        "input": "cc3d6c0efc1bfc83",
+        "data": "665403a4382b63df",
+        "trace": "127e2cbd0bd9c3f5",
         "evaluation": "53eb57b729f3a7e6",
-        "build": "047a9c32b70be9ee"
+        "build": "fca9f6db03de2aed"
       }
     },
     {
@@ -819,13 +819,13 @@
       "nonBlockingSourceCount": 162,
       "matrix": {
         "requirementCount": 383,
-        "requiredCount": 205,
-        "passedCount": 205,
+        "requiredCount": 202,
+        "passedCount": 202,
         "blockedCount": 0,
-        "notApplicableCount": 178,
+        "notApplicableCount": 181,
         "statusCounts": {
-          "not-applicable": 178,
-          "passed": 205
+          "not-applicable": 181,
+          "passed": 202
         },
         "dimensionCounts": {
           "action-form": 21,
@@ -854,15 +854,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "4d380f3d08c7a632",
-      "sourceOfTruthHash": "7158d63b45fec976",
+      "manifestHash": "49afdf0f3a774778",
+      "sourceOfTruthHash": "43e7379d8a17668a",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "aae584cbe731003c",
-        "data": "49fe4be77e750f25",
-        "trace": "24ecd748e6c5ac8c",
-        "evaluation": "09e7ae5a8f1c7904",
-        "build": "475c656ed7421292"
+        "input": "ddf8023c5df6168f",
+        "data": "c4adb18b45ef12d4",
+        "trace": "197ff74152b8bc75",
+        "evaluation": "fd30dcfbaa6144f0",
+        "build": "a94fecb9038d5584"
       }
     },
     {
@@ -877,13 +877,13 @@
       "nonBlockingSourceCount": 33,
       "matrix": {
         "requirementCount": 260,
-        "requiredCount": 111,
-        "passedCount": 111,
+        "requiredCount": 108,
+        "passedCount": 108,
         "blockedCount": 0,
-        "notApplicableCount": 149,
+        "notApplicableCount": 152,
         "statusCounts": {
-          "not-applicable": 149,
-          "passed": 111
+          "not-applicable": 152,
+          "passed": 108
         },
         "dimensionCounts": {
           "action-effect-binding": 12,
@@ -910,15 +910,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "db75a691603c5e9f",
-      "sourceOfTruthHash": "3fdb0db9361a5194",
+      "manifestHash": "91b1124192b6b1a7",
+      "sourceOfTruthHash": "ab7c8d3e63195d99",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "0cc04aa4775e8fa0",
-        "data": "47c297ec1a32e7d1",
-        "trace": "4464607524e7402c",
-        "evaluation": "f509878645099689",
-        "build": "f8300f3196f5461d"
+        "input": "db1db7d10c84b77c",
+        "data": "b4c3845d34c31869",
+        "trace": "10f8d95a64428e2e",
+        "evaluation": "bc359ac3d0e7e77a",
+        "build": "9360816e89a1e0b2"
       }
     },
     {
@@ -935,13 +935,13 @@
       "nonBlockingSourceCount": 368,
       "matrix": {
         "requirementCount": 696,
-        "requiredCount": 194,
-        "passedCount": 194,
+        "requiredCount": 190,
+        "passedCount": 190,
         "blockedCount": 0,
-        "notApplicableCount": 502,
+        "notApplicableCount": 506,
         "statusCounts": {
-          "not-applicable": 502,
-          "passed": 194
+          "not-applicable": 506,
+          "passed": 190
         },
         "dimensionCounts": {
           "action-effect-binding": 3,
@@ -970,15 +970,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "a12044f1b78c2686",
-      "sourceOfTruthHash": "30b2afc584752461",
+      "manifestHash": "9ba8847f611d49fe",
+      "sourceOfTruthHash": "65ba4ed2b24a7833",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "109b15989ed9f523",
-        "data": "c82de89fd7800ba6",
-        "trace": "ee1769ae61a8ddd0",
+        "input": "2bd40cea97b9435b",
+        "data": "275b6030a0654001",
+        "trace": "79765ae0966b7474",
         "evaluation": "208849308c4ec837",
-        "build": "8ed9038f03e0b413"
+        "build": "680e22daeedaa100"
       }
     },
     {
@@ -993,13 +993,13 @@
       "nonBlockingSourceCount": 116,
       "matrix": {
         "requirementCount": 266,
-        "requiredCount": 86,
-        "passedCount": 86,
+        "requiredCount": 80,
+        "passedCount": 80,
         "blockedCount": 0,
-        "notApplicableCount": 180,
+        "notApplicableCount": 186,
         "statusCounts": {
-          "not-applicable": 180,
-          "passed": 86
+          "not-applicable": 186,
+          "passed": 80
         },
         "dimensionCounts": {
           "action-effect-binding": 2,
@@ -1028,15 +1028,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "0eb0e388332329df",
-      "sourceOfTruthHash": "7f583677a22baac2",
+      "manifestHash": "07cf471b4a27e79e",
+      "sourceOfTruthHash": "1d3563bd50256c5b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "94a3a06d2f482005",
-        "data": "a0fc574ad8f24b51",
-        "trace": "ee9209e2035cc59d",
-        "evaluation": "2c0c08d984a44393",
-        "build": "1bb07a48207536c4"
+        "input": "0c50c4471d71111b",
+        "data": "3d415202f1180377",
+        "trace": "52b8b1dc0d1a9641",
+        "evaluation": "bbc36b9d38e36ced",
+        "build": "3b0e84bfa6a46e98"
       }
     },
     {
@@ -1053,13 +1053,13 @@
       "nonBlockingSourceCount": 19,
       "matrix": {
         "requirementCount": 181,
-        "requiredCount": 111,
-        "passedCount": 111,
+        "requiredCount": 98,
+        "passedCount": 98,
         "blockedCount": 0,
-        "notApplicableCount": 70,
+        "notApplicableCount": 83,
         "statusCounts": {
-          "not-applicable": 70,
-          "passed": 111
+          "not-applicable": 83,
+          "passed": 98
         },
         "dimensionCounts": {
           "action-effect-binding": 4,
@@ -1083,15 +1083,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "eedc62da7dff6c90",
-      "sourceOfTruthHash": "b31ef0cd14a31e8a",
+      "manifestHash": "7619a08ae6041613",
+      "sourceOfTruthHash": "665514870c9791d4",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "f14dabb7e5b4795f",
-        "data": "59da78cd92e24d54",
-        "trace": "1dd3042b896d7a2f",
+        "input": "36ea193752df20e5",
+        "data": "f5452dec2a5982df",
+        "trace": "016132ffd7fc9cfc",
         "evaluation": "5238bf8119e66446",
-        "build": "70d88aa47a83f759"
+        "build": "622c7e6de93fe879"
       }
     },
     {
@@ -1106,13 +1106,13 @@
       "nonBlockingSourceCount": 92,
       "matrix": {
         "requirementCount": 225,
-        "requiredCount": 139,
-        "passedCount": 139,
+        "requiredCount": 134,
+        "passedCount": 134,
         "blockedCount": 0,
-        "notApplicableCount": 86,
+        "notApplicableCount": 91,
         "statusCounts": {
-          "not-applicable": 86,
-          "passed": 139
+          "not-applicable": 91,
+          "passed": 134
         },
         "dimensionCounts": {
           "action-effect-binding": 3,
@@ -1140,15 +1140,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "e23242e691303d7a",
-      "sourceOfTruthHash": "b75e12c7215e234d",
+      "manifestHash": "7a2cc54256a800aa",
+      "sourceOfTruthHash": "afa5fe2049fa315c",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "1fbf9526bf91b8e1",
-        "data": "c8f789c02770121e",
-        "trace": "05fa38ead5e71e31",
-        "evaluation": "3c2fb1d6fda5e7b9",
-        "build": "c5b95ea23475352b"
+        "input": "b875d8187268e30c",
+        "data": "71b6957912903650",
+        "trace": "bf79a47c463d642a",
+        "evaluation": "466ef3ebad8eb8af",
+        "build": "b575a2641f901693"
       }
     },
     {
@@ -1163,13 +1163,13 @@
       "nonBlockingSourceCount": 13,
       "matrix": {
         "requirementCount": 207,
-        "requiredCount": 138,
-        "passedCount": 138,
+        "requiredCount": 134,
+        "passedCount": 134,
         "blockedCount": 0,
-        "notApplicableCount": 69,
+        "notApplicableCount": 73,
         "statusCounts": {
-          "not-applicable": 69,
-          "passed": 138
+          "not-applicable": 73,
+          "passed": 134
         },
         "dimensionCounts": {
           "action-effect-binding": 2,
@@ -1196,33 +1196,202 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "c87c8477b4756415",
-      "sourceOfTruthHash": "be4c1bd26fc2008c",
+      "manifestHash": "c481ffa658363130",
+      "sourceOfTruthHash": "4c775e5a016b0fd6",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "f5358e6cd95278a0",
-        "data": "2de3283aa4188de8",
-        "trace": "e6ce0f36d8c6a096",
+        "input": "526ab757142cf86c",
+        "data": "6bb2168ad1dc2103",
+        "trace": "0af55dab9b226e34",
         "evaluation": "855dd5b0926bf110",
-        "build": "356cc8b98c55288e"
+        "build": "73f7fef9b36cfd22"
+      }
+    },
+    {
+      "ownerId": 112001,
+      "ownerName": "姬瑟贝露",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
+      "blockingLedgerCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "nonBlockingSourceCount": 48,
+      "matrix": {
+        "requirementCount": 248,
+        "requiredCount": 186,
+        "passedCount": 186,
+        "blockedCount": 0,
+        "notApplicableCount": 62,
+        "statusCounts": {
+          "not-applicable": 62,
+          "passed": 186
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 10,
+          "action-form": 10,
+          "buff-lifecycle": 1,
+          "control-window": 70,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 31,
+          "hit": 96,
+          "hit-override": 1,
+          "input-timing": 1,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "799a3192574a9c4b",
+      "sourceOfTruthHash": "e229f9d8221c203d",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "24b865ed6ff30604",
+        "data": "1f2fd662b0eed3a4",
+        "trace": "5913e870cb9d8908",
+        "evaluation": "19c6115580d2ae5b",
+        "build": "992429b5d6eb70bd"
+      }
+    },
+    {
+      "ownerId": 199001,
+      "ownerName": "女主角",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
+      "blockingLedgerCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "nonBlockingSourceCount": 7,
+      "matrix": {
+        "requirementCount": 304,
+        "requiredCount": 177,
+        "passedCount": 177,
+        "blockedCount": 0,
+        "notApplicableCount": 127,
+        "statusCounts": {
+          "not-applicable": 127,
+          "passed": 177
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 24,
+          "action-form": 16,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "control-window": 67,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 104,
+          "hit": 58,
+          "hit-override": 1,
+          "input-timing": 2,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "runtime-effect-binding": 2,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "bffaa74ee0507946",
+      "sourceOfTruthHash": "38de5096e7b86a36",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "ce251251ff1a80f8",
+        "data": "c16b8ec3e497cffd",
+        "trace": "16be297bece1147b",
+        "evaluation": "341d71ce5939399e",
+        "build": "adf9adb11abda350"
+      }
+    },
+    {
+      "ownerId": 199002,
+      "ownerName": "男主角",
+      "maturityState": "runtime-integrated",
+      "optimizationReady": false,
+      "blockers": [
+        "acceptance-product-visual-signoff-pending"
+      ],
+      "blockingLedgerCount": 0,
+      "sourceGapCount": 0,
+      "acceptanceGapCount": 0,
+      "nonBlockingSourceCount": 8,
+      "matrix": {
+        "requirementCount": 303,
+        "requiredCount": 177,
+        "passedCount": 177,
+        "blockedCount": 0,
+        "notApplicableCount": 126,
+        "statusCounts": {
+          "not-applicable": 126,
+          "passed": 177
+        },
+        "dimensionCounts": {
+          "action-effect-binding": 24,
+          "action-form": 16,
+          "attack-input-chain": 1,
+          "buff-lifecycle": 1,
+          "control-window": 67,
+          "controlled-actor": 1,
+          "critical": 9,
+          "effect": 104,
+          "hit": 57,
+          "hit-override": 1,
+          "input-timing": 2,
+          "passive": 1,
+          "persistence-replay": 1,
+          "public-action": 10,
+          "resource-boundary": 1,
+          "runtime-effect-binding": 2,
+          "scenario-negative": 1,
+          "scenario-positive": 1,
+          "stat-dependency": 1,
+          "switch-trigger": 1,
+          "window-boundary": 1
+        }
+      },
+      "manifestHash": "32cd423236d55c45",
+      "sourceOfTruthHash": "ab69226ab12aa1ca",
+      "machineScenario": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "94134428444c69bc",
+        "data": "84920b94858cc916",
+        "trace": "a0beb2b8bdfeee7b",
+        "evaluation": "c2d5be18733d961f",
+        "build": "ffb99f74fe058079"
       }
     }
   ],
-  "catalogHash": "189746211b2a87ef",
-  "manifestIndexHash": "6a08bc78fcb7504d",
+  "catalogHash": "5f3386a38042ca60",
+  "manifestIndexHash": "e202c455922a7d5f",
   "summary": {
-    "ownerCount": 8,
+    "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
-    "runtimeIntegratedCount": 8,
+    "runtimeIntegratedCount": 11,
     "visuallyAcceptedCount": 4,
     "optimizationReadyCount": 4,
-    "machineScenarioPassCount": 8,
-    "workbenchRoundTripPassCount": 8,
+    "machineScenarioPassCount": 11,
+    "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,
-    "acceptanceGapCount": 19,
-    "nonBlockingSourceCount": 805,
-    "functionalBlockers": 32,
+    "acceptanceGapCount": 13,
+    "nonBlockingSourceCount": 868,
+    "functionalBlockers": 26,
     "performanceAndBundleRisksBlocking": false
   }
 }

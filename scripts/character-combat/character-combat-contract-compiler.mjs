@@ -2161,7 +2161,11 @@ export function createCharacterCombatStatDependencies({
   passiveEffects,
   semanticEffects,
 }) {
-  const staticActor = (staticPropertyCatalog?.actorProfiles ?? []).find(
+  const staticActor = (
+    staticPropertyCatalog?.actor?.profiles ??
+    staticPropertyCatalog?.actorProfiles ??
+    []
+  ).find(
     profile => Number(profile.characterId) === Number(ownerId)
   );
   const actorSp = (actorProfiles ?? []).find(

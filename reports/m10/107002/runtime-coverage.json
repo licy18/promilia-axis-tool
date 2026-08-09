@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 107002,
-  "sourcePackageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
+  "sourcePackageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
   "actionRows": [
     {
       "actionIdentity": "actor|107002|10700201|0|10700203|normal-attack",
@@ -17,14 +17,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 11,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107002|10700201|0|10700203|normal-attack",
@@ -85,7 +85,8 @@
         }
       },
       "reasons": [
-        "normal-attack-input-segment-duration-unresolved"
+        "normal-attack-input-segment-duration-unresolved",
+        "scenario-out-of-scope-action-not-scheduled"
       ]
     },
     {
@@ -171,14 +172,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "static-evidence-gap",
-      "scenarioRuntimeStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": false,
       "sourceDrivenConditionalDamageReady": false,
       "runtimeReady": false,
-      "notApplicable": false,
+      "notApplicable": true,
       "hitCount": 0,
       "requiresDamageSettlement": true,
-      "settlementStatus": "static-evidence-gap",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107002|10700201|2|10700215|dodge-attack",
@@ -230,7 +231,7 @@
       },
       "reasons": [
         "projectile-impact-frame-runtime-dependent",
-        "public-action-damage-settlement-evidence-missing",
+        "scenario-out-of-scope-action-not-scheduled",
         "trigger-frame-missing"
       ]
     },
@@ -243,14 +244,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 1,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107002|10700201|3|10700211|plunging-attack",
@@ -300,7 +301,9 @@
           "unresolved": 3
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     },
     {
       "actionIdentity": "actor|107002|10700212|0|10700212|star-skill",
@@ -565,14 +568,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
-      "runtimeReady": true,
-      "notApplicable": false,
+      "runtimeReady": false,
+      "notApplicable": true,
       "hitCount": 4,
       "requiresDamageSettlement": true,
-      "settlementStatus": "applied",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107002|10700222|1|10700225|limit-counter",
@@ -621,7 +624,9 @@
           "applied": 1
         }
       },
-      "reasons": []
+      "reasons": [
+        "scenario-out-of-scope-action-not-scheduled"
+      ]
     },
     {
       "actionIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
@@ -632,14 +637,14 @@
       ],
       "schedulable": true,
       "sourceEvidenceStatus": "applied",
-      "scenarioRuntimeStatus": "static-evidence-gap",
+      "scenarioRuntimeStatus": "not-applicable",
       "rawRuntimeReady": true,
       "sourceDrivenConditionalDamageReady": false,
       "runtimeReady": false,
-      "notApplicable": false,
+      "notApplicable": true,
       "hitCount": 0,
       "requiresDamageSettlement": true,
-      "settlementStatus": "static-evidence-gap",
+      "settlementStatus": "not-applicable",
       "publicFormSettlements": [
         {
           "actionIdentity": "actor|107002|10700222|2|10700227|perfect-parry",
@@ -686,13 +691,13 @@
         }
       },
       "reasons": [
-        "public-action-damage-settlement-evidence-missing"
+        "scenario-out-of-scope-action-not-scheduled"
       ]
     }
   ],
   "summary": {
     "actionCount": 10,
-    "runtimeReadyActionCount": 7,
+    "runtimeReadyActionCount": 4,
     "executionFormCount": 10,
     "controlCount": 15,
     "hitCount": 57,
@@ -715,5 +720,5 @@
       "static-evidence-gap": 6
     }
   },
-  "profileHash": "1614d5179ab633e22d01605931d535cdab322604111def062145447d976d5a71"
+  "profileHash": "92228dfec0da9c1adeaa4f5540d740c1d4b00e66dbc00574c5ff156dca5115ef"
 }

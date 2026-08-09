@@ -3,12 +3,12 @@
   "kind": "azpr-verified-combat-action-coverage",
   "status": "verified-combat-action-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "e4f894eee88dfd98114c81627068117219abba070af9f09b60c4ebaedd2443d0",
+  "packageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
   "sourceDenominator": {
     "kind": "current-client-public-actor-and-kibo-action-catalogs",
     "actorOwnerCount": 20,
     "kiboOwnerCount": 122,
-    "actionCount": 646,
+    "actionCount": 648,
     "requiredActorKinds": [
       "normal-attack",
       "star-skill",
@@ -17,41 +17,41 @@
   },
   "complete": true,
   "summary": {
-    "directoryActionCount": 646,
-    "classifiedActionCount": 646,
-    "linkedActionCount": 646,
-    "runnableActionCount": 634,
-    "sourceAppliedActionCount": 461,
+    "directoryActionCount": 648,
+    "classifiedActionCount": 648,
+    "linkedActionCount": 648,
+    "runnableActionCount": 636,
+    "sourceAppliedActionCount": 463,
     "sourceRuntimeDependentActionCount": 173,
     "sourceStaticEvidenceGapActionCount": 12,
     "scenarioResolvedActionCount": 583,
     "verifiedZeroActionCount": 0,
     "unresolvedActionCount": 12,
-    "hitNodeCount": 3230,
+    "hitNodeCount": 3228,
     "dimensions": {
       "hp": {
-        "nonzero": 895,
+        "nonzero": 897,
         "verified-zero": 0,
-        "unresolved": 2052
+        "unresolved": 2112
       },
       "toughness": {
         "nonzero": 869,
-        "verified-zero": 26,
-        "unresolved": 2052
+        "verified-zero": 28,
+        "unresolved": 2112
       },
       "actorSp": {
         "nonzero": 267,
-        "verified-zero": 645,
-        "unresolved": 2035
+        "verified-zero": 647,
+        "unresolved": 2095
       },
       "kiboSp": {
         "nonzero": 267,
-        "verified-zero": 645,
-        "unresolved": 2035
+        "verified-zero": 647,
+        "unresolved": 2095
       }
     },
-    "controlVariantCount": 1112,
-    "unresolvedControlVariantCount": 602,
+    "controlVariantCount": 1155,
+    "unresolvedControlVariantCount": 643,
     "nonzeroRecoveryElementCount": 667,
     "unresolvedNonzeroRecoveryElementCount": 465,
     "scenarioResolvedNonzeroRecoveryElementCount": 211,
@@ -60,8 +60,8 @@
     "unresolvedProjectileLaunchCount": 68,
     "unresolvedProjectileFormulaCount": 7,
     "unresolvedProjectileTargetCount": 0,
-    "unresolvedReferenceCount": 2391,
-    "publicVariantCount": 676,
+    "unresolvedReferenceCount": 2453,
+    "publicVariantCount": 678,
     "unresolvedPublicVariantCount": 42,
     "attackInputChainCount": 20,
     "attackInputSegmentCount": 95,
@@ -232,7 +232,7 @@
       "scenarioResolvedActionCount": 0,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 10,
+      "hitNodeCount": 18,
       "dimensions": {
         "hp": {
           "nonzero": 0,
@@ -296,37 +296,37 @@
     {
       "ownerKind": "actor",
       "actionKind": "star-carry",
-      "directoryActionCount": 18,
-      "classifiedActionCount": 18,
-      "linkedActionCount": 18,
-      "runnableActionCount": 17,
-      "sourceAppliedActionCount": 17,
+      "directoryActionCount": 20,
+      "classifiedActionCount": 20,
+      "linkedActionCount": 20,
+      "runnableActionCount": 19,
+      "sourceAppliedActionCount": 19,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 1,
       "scenarioResolvedActionCount": 13,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 1,
-      "hitNodeCount": 90,
+      "hitNodeCount": 80,
       "dimensions": {
         "hp": {
-          "nonzero": 41,
+          "nonzero": 43,
           "verified-zero": 0,
-          "unresolved": 72
+          "unresolved": 132
         },
         "toughness": {
           "nonzero": 40,
-          "verified-zero": 1,
-          "unresolved": 72
+          "verified-zero": 3,
+          "unresolved": 132
         },
         "actorSp": {
           "nonzero": 2,
-          "verified-zero": 41,
-          "unresolved": 70
+          "verified-zero": 43,
+          "unresolved": 130
         },
         "kiboSp": {
           "nonzero": 2,
-          "verified-zero": 41,
-          "unresolved": 70
+          "verified-zero": 43,
+          "unresolved": 130
         }
       }
     },
@@ -1353,7 +1353,7 @@
       "scenarioResolvedActionCount": 9,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 47,
+      "hitNodeCount": 37,
       "dimensions": {
         "hp": {
           "nonzero": 22,
@@ -1443,37 +1443,37 @@
     },
     {
       "ownerKind": "actor",
-      "directoryActionCount": 9,
-      "classifiedActionCount": 9,
-      "linkedActionCount": 9,
-      "runnableActionCount": 9,
-      "sourceAppliedActionCount": 9,
+      "directoryActionCount": 10,
+      "classifiedActionCount": 10,
+      "linkedActionCount": 10,
+      "runnableActionCount": 10,
+      "sourceAppliedActionCount": 10,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
       "scenarioResolvedActionCount": 8,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 31,
+      "hitNodeCount": 35,
       "dimensions": {
         "hp": {
-          "nonzero": 24,
+          "nonzero": 25,
           "verified-zero": 0,
-          "unresolved": 57
+          "unresolved": 87
         },
         "toughness": {
           "nonzero": 23,
-          "verified-zero": 1,
-          "unresolved": 57
+          "verified-zero": 2,
+          "unresolved": 87
         },
         "actorSp": {
           "nonzero": 17,
-          "verified-zero": 7,
-          "unresolved": 57
+          "verified-zero": 8,
+          "unresolved": 87
         },
         "kiboSp": {
           "nonzero": 17,
-          "verified-zero": 7,
-          "unresolved": 57
+          "verified-zero": 8,
+          "unresolved": 87
         }
       },
       "ownerId": 199001,
@@ -1485,6 +1485,7 @@
         "normal-attack": 1,
         "perfect-parry": 1,
         "plunging-attack": 1,
+        "star-carry": 1,
         "star-combo": 1,
         "star-skill": 1,
         "ultimate": 1
@@ -1492,37 +1493,37 @@
     },
     {
       "ownerKind": "actor",
-      "directoryActionCount": 9,
-      "classifiedActionCount": 9,
-      "linkedActionCount": 9,
-      "runnableActionCount": 9,
-      "sourceAppliedActionCount": 9,
+      "directoryActionCount": 10,
+      "classifiedActionCount": 10,
+      "linkedActionCount": 10,
+      "runnableActionCount": 10,
+      "sourceAppliedActionCount": 10,
       "sourceRuntimeDependentActionCount": 0,
       "sourceStaticEvidenceGapActionCount": 0,
       "scenarioResolvedActionCount": 8,
       "verifiedZeroActionCount": 0,
       "unresolvedActionCount": 0,
-      "hitNodeCount": 31,
+      "hitNodeCount": 35,
       "dimensions": {
         "hp": {
-          "nonzero": 31,
+          "nonzero": 32,
           "verified-zero": 0,
-          "unresolved": 59
+          "unresolved": 89
         },
         "toughness": {
           "nonzero": 30,
-          "verified-zero": 1,
-          "unresolved": 59
+          "verified-zero": 2,
+          "unresolved": 89
         },
         "actorSp": {
           "nonzero": 24,
-          "verified-zero": 7,
-          "unresolved": 59
+          "verified-zero": 8,
+          "unresolved": 89
         },
         "kiboSp": {
           "nonzero": 24,
-          "verified-zero": 7,
-          "unresolved": 59
+          "verified-zero": 8,
+          "unresolved": 89
         }
       },
       "ownerId": 199002,
@@ -1534,6 +1535,7 @@
         "normal-attack": 1,
         "perfect-parry": 1,
         "plunging-attack": 1,
+        "star-carry": 1,
         "star-combo": 1,
         "star-skill": 1,
         "ultimate": 1
@@ -57157,6 +57159,1354 @@
         "kiboSp:petRecoverSP-field-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-4356077336397377105"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "3832800665972728058",
+      "elementId": 199001191,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=3832800665972728058"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "3859325085704717590",
+      "elementId": 199001048,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=3859325085704717590"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-634124182066736847",
+      "elementId": 199001049,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-634124182066736847"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-5180294550743404248",
+      "elementId": 199001096,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=-5180294550743404248"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-1498771669867596146",
+      "elementId": 150,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-1498771669867596146"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "466374251647106866",
+      "elementId": 151,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=466374251647106866"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "6796977011667951284",
+      "elementId": 199001097,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=6796977011667951284"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-3809486317990090417",
+      "elementId": 250,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-3809486317990090417"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-1715488869977622004",
+      "elementId": 253,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1715488869977622004"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-7783775984244194322",
+      "elementId": 252,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-7783775984244194322"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "8302684673822054363",
+      "elementId": 199001098,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=8302684673822054363"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "3273457016050714061",
+      "elementId": 350,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=3273457016050714061"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "4344804893602023502",
+      "elementId": 353,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[12]|battle-element-assets.jsonl#path_id=4344804893602023502"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-8125310485002205",
+      "elementId": 352,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[13]|battle-element-assets.jsonl#path_id=-8125310485002205"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "4417196058371087307",
+      "elementId": 199001099,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[14]|battle-element-assets.jsonl#path_id=4417196058371087307"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-5819740171084359278",
+      "elementId": 450,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[15]|battle-element-assets.jsonl#path_id=-5819740171084359278"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-7971530825700303086",
+      "elementId": 452,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[16]|battle-element-assets.jsonl#path_id=-7971530825700303086"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "2514429223272924266",
+      "elementId": 199001100,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[17]|battle-element-assets.jsonl#path_id=2514429223272924266"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-669846950425800112",
+      "elementId": 550,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-669846950425800112"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-8162268947497707053",
+      "elementId": 551,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=-8162268947497707053"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-408193470852536619",
+      "elementId": 553,
+      "referenceKind": "elements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[20]|battle-element-assets.jsonl#path_id=-408193470852536619"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "6373039348733276258",
+      "elementId": 199001101,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=6373039348733276258"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "2699138840966960245",
+      "elementId": 650,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[22]|battle-element-assets.jsonl#path_id=2699138840966960245"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-3328929433540016876",
+      "elementId": 199001102,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[23]|battle-element-assets.jsonl#path_id=-3328929433540016876"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "1474042154774785480",
+      "elementId": 750,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=1474042154774785480"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-4529113272733101309",
+      "elementId": 751,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=-4529113272733101309"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-8204894484040992923",
+      "elementId": 199001103,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[26]|battle-element-assets.jsonl#path_id=-8204894484040992923"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "3107436379383955232",
+      "elementId": 850,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=3107436379383955232"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-1387151147375504543",
+      "elementId": 199001104,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=-1387151147375504543"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-8695654341717050083",
+      "elementId": 950,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[29]|battle-element-assets.jsonl#path_id=-8695654341717050083"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "pathId": "-4752714358193761395",
+      "elementId": 199001240,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillResourceMaps[0].elements[30]|battle-element-assets.jsonl#path_id=-4752714358193761395"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "1920509610385167669",
+      "elementId": 199002268,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=1920509610385167669"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-6117208996199980820",
+      "elementId": 199002261,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=-6117208996199980820"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "4398455808944654214",
+      "elementId": 199002266,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=4398455808944654214"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "4491892371913068288",
+      "elementId": 199002071,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=4491892371913068288"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-1498771669867596146",
+      "elementId": 150,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-1498771669867596146"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "466374251647106866",
+      "elementId": 151,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[5]|battle-element-assets.jsonl#path_id=466374251647106866"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "5059322838523308571",
+      "elementId": 199002072,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=5059322838523308571"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-3809486317990090417",
+      "elementId": 250,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-3809486317990090417"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-1715488869977622004",
+      "elementId": 253,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[8]|battle-element-assets.jsonl#path_id=-1715488869977622004"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-7783775984244194322",
+      "elementId": 252,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[9]|battle-element-assets.jsonl#path_id=-7783775984244194322"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-2160765616408892720",
+      "elementId": 199002073,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[10]|battle-element-assets.jsonl#path_id=-2160765616408892720"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "3273457016050714061",
+      "elementId": 350,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[11]|battle-element-assets.jsonl#path_id=3273457016050714061"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "4344804893602023502",
+      "elementId": 353,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[12]|battle-element-assets.jsonl#path_id=4344804893602023502"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-8125310485002205",
+      "elementId": 352,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[13]|battle-element-assets.jsonl#path_id=-8125310485002205"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "4787997725396827389",
+      "elementId": 199002074,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[14]|battle-element-assets.jsonl#path_id=4787997725396827389"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-5819740171084359278",
+      "elementId": 450,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[15]|battle-element-assets.jsonl#path_id=-5819740171084359278"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-7971530825700303086",
+      "elementId": 452,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[16]|battle-element-assets.jsonl#path_id=-7971530825700303086"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "2672612632162399185",
+      "elementId": 199002075,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[17]|battle-element-assets.jsonl#path_id=2672612632162399185"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-669846950425800112",
+      "elementId": 550,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[18]|battle-element-assets.jsonl#path_id=-669846950425800112"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-8162268947497707053",
+      "elementId": 551,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[19]|battle-element-assets.jsonl#path_id=-8162268947497707053"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-408193470852536619",
+      "elementId": 553,
+      "referenceKind": "elements",
+      "threeValueRelevant": true,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "trigger-frame-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[20]|battle-element-assets.jsonl#path_id=-408193470852536619"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-6168063251986037281",
+      "elementId": 199002076,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[21]|battle-element-assets.jsonl#path_id=-6168063251986037281"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "2699138840966960245",
+      "elementId": 650,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[22]|battle-element-assets.jsonl#path_id=2699138840966960245"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-5322461368626554474",
+      "elementId": 199002077,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[23]|battle-element-assets.jsonl#path_id=-5322461368626554474"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "1474042154774785480",
+      "elementId": 750,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[24]|battle-element-assets.jsonl#path_id=1474042154774785480"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-4529113272733101309",
+      "elementId": 751,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[25]|battle-element-assets.jsonl#path_id=-4529113272733101309"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "4127842919077191830",
+      "elementId": 199002078,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[26]|battle-element-assets.jsonl#path_id=4127842919077191830"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "3107436379383955232",
+      "elementId": 850,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[27]|battle-element-assets.jsonl#path_id=3107436379383955232"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-8655803157876877121",
+      "elementId": 199002079,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "common-function-unverified",
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[28]|battle-element-assets.jsonl#path_id=-8655803157876877121"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "-8695654341717050083",
+      "elementId": 950,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "trigger-frame-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[29]|battle-element-assets.jsonl#path_id=-8695654341717050083"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "pathId": "6543718175773635314",
+      "elementId": 199002353,
+      "referenceKind": "elements",
+      "threeValueRelevant": false,
+      "scenarioClassification": "unresolved",
+      "reasons": [
+        "damage-type-missing",
+        "hp:damage-type-missing",
+        "toughness:weak-break-damage-rate-missing",
+        "actorSp:recoverSP-field-missing",
+        "kiboSp:petRecoverSP-field-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillResourceMaps[0].elements[30]|battle-element-assets.jsonl#path_id=6543718175773635314"
     }
   ],
   "publicVariantCoverage": [
@@ -66274,6 +67624,32 @@
       "classification": "applied",
       "reasons": [],
       "sourceIdentity": "NewTable/character_skill.rows[characterId=103002,slot=normal-attack]|NewTable/skillsub_logic.rows[skillId=10300201]|skill_control_10300210.asset#reload-control"
+    },
+    {
+      "actionIdentity": "actor|199001|19900122|0|19900122|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199001,
+      "actionKind": "star-carry",
+      "sourceSkillId": 19900122,
+      "publicVariantIndex": 0,
+      "publicVariantLabel": "星携技",
+      "selected": true,
+      "classification": "applied",
+      "reasons": [],
+      "sourceIdentity": "characters.items[id=199001].skillSlots[slot=201,skillId=19900122]|skill_control_19900122.asset#skillPlayers[0];skillResourceMaps[0]"
+    },
+    {
+      "actionIdentity": "actor|199002|19900222|0|19900222|star-carry",
+      "ownerKind": "actor",
+      "ownerId": 199002,
+      "actionKind": "star-carry",
+      "sourceSkillId": 19900222,
+      "publicVariantIndex": 0,
+      "publicVariantLabel": "星携技",
+      "selected": true,
+      "classification": "applied",
+      "reasons": [],
+      "sourceIdentity": "characters.items[id=199002].skillSlots[slot=201,skillId=19900222]|skill_control_19900222.asset#skillPlayers[0];skillResourceMaps[0]"
     }
   ],
   "controlVariantCoverage": [
@@ -78135,6 +79511,32 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/skill_control_10300210__3888027669815558692.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
     },
     {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900122,
+      "elementCount": 31,
+      "runnableElementCount": 0,
+      "actionIdentities": [
+        "actor|199001|19900122|0|19900122|star-carry"
+      ],
+      "classification": "applied",
+      "reasons": [],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900122.asset/MonoBehaviour/skill_control_19900122__1276759174650811710.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900222,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900222,
+      "elementCount": 31,
+      "runnableElementCount": 0,
+      "actionIdentities": [
+        "actor|199002|19900222|0|19900222|star-carry"
+      ],
+      "classification": "applied",
+      "reasons": [],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900222.asset/MonoBehaviour/skill_control_19900222__4747078735590764210.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
       "controlSkillId": 10100301,
       "subSkillIndex": 0,
       "playerSkillId": 0,
@@ -80876,6 +82278,539 @@
         "public-action-variant-association-missing"
       ],
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900161.asset/MonoBehaviour/skill_control_10900161__2111014539659534776.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 11200141,
+      "subSkillIndex": 0,
+      "playerSkillId": 0,
+      "elementCount": 4,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200141.asset/MonoBehaviour/skill_control_11200141__-7151722051826886332.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 11200141,
+      "subSkillIndex": 1,
+      "playerSkillId": 1,
+      "elementCount": 11,
+      "runnableElementCount": 3,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200141.asset/MonoBehaviour/skill_control_11200141__-7151722051826886332.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 11200141,
+      "subSkillIndex": 2,
+      "playerSkillId": 2,
+      "elementCount": 3,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200141.asset/MonoBehaviour/skill_control_11200141__-7151722051826886332.json#skillControlData.skillPlayers[2]|skillResourceMaps[2]"
+    },
+    {
+      "controlSkillId": 11200141,
+      "subSkillIndex": 3,
+      "playerSkillId": 3,
+      "elementCount": 11,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200141.asset/MonoBehaviour/skill_control_11200141__-7151722051826886332.json#skillControlData.skillPlayers[3]|skillResourceMaps[3]"
+    },
+    {
+      "controlSkillId": 11200161,
+      "subSkillIndex": 0,
+      "playerSkillId": 10900261,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200161.asset/MonoBehaviour/skill_control_11200161__-3699253550000027903.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 11200162,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 2,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200162.asset/MonoBehaviour/skill_control_11200162__-3629621280326451238.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900114,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900114,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900114.asset/MonoBehaviour/skill_control_19900114__2485237617869909541.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900114,
+      "subSkillIndex": 1,
+      "playerSkillId": 19900115,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900114.asset/MonoBehaviour/skill_control_19900114__2485237617869909541.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900116,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900116,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900116.asset/MonoBehaviour/skill_control_19900116__-6664817978057292457.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900117,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900117,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900117.asset/MonoBehaviour/skill_control_19900117__4778182357426635713.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900121,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900121,
+      "elementCount": 4,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900121.asset/MonoBehaviour/skill_control_19900121__8711435284570175711.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900124,
+      "subSkillIndex": 0,
+      "playerSkillId": 0,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900124.asset/MonoBehaviour/skill_control_19900124__7861910366548082289.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900131,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900131,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900131.asset/MonoBehaviour/skill_control_19900131__-6570835615131003437.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900132,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900132,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900132.asset/MonoBehaviour/skill_control_19900132__6356563023606144527.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900133,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900133,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900133.asset/MonoBehaviour/skill_control_19900133__2439294521606410898.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900134,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900134,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900134.asset/MonoBehaviour/skill_control_19900134__-9205700765420862438.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900135,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900135,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900135.asset/MonoBehaviour/skill_control_19900135__1514360369043716588.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900136,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900136,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900136.asset/MonoBehaviour/skill_control_19900136__673745848093862371.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900141,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900141.asset/MonoBehaviour/skill_control_19900141__5018467392217450895.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900141,
+      "subSkillIndex": 1,
+      "playerSkillId": 2,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900141.asset/MonoBehaviour/skill_control_19900141__5018467392217450895.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900149,
+      "subSkillIndex": 0,
+      "playerSkillId": 0,
+      "elementCount": 3,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900149.asset/MonoBehaviour/skill_control_19900149__-6218509787117951630.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900149,
+      "subSkillIndex": 1,
+      "playerSkillId": 1,
+      "elementCount": 6,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900149.asset/MonoBehaviour/skill_control_19900149__-6218509787117951630.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900161,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900161.asset/MonoBehaviour/skill_control_19900161__7363493575177582715.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900214,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900214,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900214.asset/MonoBehaviour/skill_control_19900214__319649604221913895.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900214,
+      "subSkillIndex": 1,
+      "playerSkillId": 19900215,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900214.asset/MonoBehaviour/skill_control_19900214__319649604221913895.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900216,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900216,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900216.asset/MonoBehaviour/skill_control_19900216__6952006529368758747.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900217,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900217,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900217.asset/MonoBehaviour/skill_control_19900217__3198767982752170691.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900221,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900221,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900221.asset/MonoBehaviour/skill_control_19900221__6763218738649968374.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900224,
+      "subSkillIndex": 0,
+      "playerSkillId": 0,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900224.asset/MonoBehaviour/skill_control_19900224__-4057029898616243774.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900231,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900231,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900231.asset/MonoBehaviour/skill_control_19900231__2963310830026867596.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900232,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900232,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900232.asset/MonoBehaviour/skill_control_19900232__2114034008169174266.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900233,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900233,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900233.asset/MonoBehaviour/skill_control_19900233__-5473122568341188320.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900234,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900234,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900234.asset/MonoBehaviour/skill_control_19900234__3323405175855281543.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900235,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900235,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900235.asset/MonoBehaviour/skill_control_19900235__-215853598008065457.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900236,
+      "subSkillIndex": 0,
+      "playerSkillId": 19900236,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900236.asset/MonoBehaviour/skill_control_19900236__-3999416508565984567.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900241,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900241.asset/MonoBehaviour/skill_control_19900241__381984564618931612.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900241,
+      "subSkillIndex": 1,
+      "playerSkillId": 2,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900241.asset/MonoBehaviour/skill_control_19900241__381984564618931612.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900242,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 0,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900242.asset/MonoBehaviour/skill_control_19900242__-2453009954775202735.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900249,
+      "subSkillIndex": 0,
+      "playerSkillId": 0,
+      "elementCount": 3,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900249.asset/MonoBehaviour/skill_control_19900249__7695790415323053491.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
+      "controlSkillId": 19900249,
+      "subSkillIndex": 1,
+      "playerSkillId": 1,
+      "elementCount": 6,
+      "runnableElementCount": 1,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900249.asset/MonoBehaviour/skill_control_19900249__7695790415323053491.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+    },
+    {
+      "controlSkillId": 19900261,
+      "subSkillIndex": 0,
+      "playerSkillId": 1,
+      "elementCount": 1,
+      "runnableElementCount": 0,
+      "actionIdentities": [],
+      "classification": "unresolved",
+      "reasons": [
+        "public-action-variant-association-missing"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900261.asset/MonoBehaviour/skill_control_19900261__5592883985173357518.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
     },
     {
       "controlSkillId": 48005601,
@@ -168210,8 +170145,8 @@
           "animationDurationFrames": 230,
           "animationDurationStatus": "applied",
           "animationDurationSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/skill_control_11200101__7595468804470346376.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-          "hitEndFrame": 15,
-          "hitEndSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType",
+          "hitEndFrame": 8,
+          "hitEndSourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
           "effectiveDurationFrames": 18,
           "effectiveDurationStatus": "applied",
           "durationFrames": 18,
@@ -168334,22 +170269,14 @@
                 "pathId": "-7332396199243874878",
                 "frame": 8,
                 "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
-              },
-              {
-                "hitIdentity": "11200101|0|elements|0|-7332396199243874878|15|2",
-                "elementId": 112001000,
-                "pathId": "-7332396199243874878",
-                "frame": 15,
-                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
               }
             ],
             "hitEnvelope": {
               "firstFrame": 8,
-              "lastFrame": 15,
+              "lastFrame": 8,
               "status": "applied",
               "sourceIdentities": [
-                "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
-                "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
+                "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
               ]
             },
             "windows": [
@@ -168489,22 +170416,14 @@
                     "pathId": "-7332396199243874878",
                     "frame": 8,
                     "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
-                  },
-                  {
-                    "hitIdentity": "11200101|0|elements|0|-7332396199243874878|15|2",
-                    "elementId": 112001000,
-                    "pathId": "-7332396199243874878",
-                    "frame": 15,
-                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
                   }
                 ],
                 "hitEnvelope": {
                   "firstFrame": 8,
-                  "lastFrame": 15,
+                  "lastFrame": 8,
                   "status": "applied",
                   "sourceIdentities": [
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
+                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
                   ]
                 },
                 "windows": [
@@ -168640,14 +170559,7 @@
                 },
                 "hits": [
                   {
-                    "hitIdentity": "11200101|1|elements|0|-7332396199243874878|8|1",
-                    "elementId": 112001000,
-                    "pathId": "-7332396199243874878",
-                    "frame": 8,
-                    "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
-                  },
-                  {
-                    "hitIdentity": "11200101|1|elements|0|-7332396199243874878|15|2",
+                    "hitIdentity": "11200101|1|elements|0|-7332396199243874878|15|1",
                     "elementId": 112001000,
                     "pathId": "-7332396199243874878",
                     "frame": 15,
@@ -168655,11 +170567,10 @@
                   }
                 ],
                 "hitEnvelope": {
-                  "firstFrame": 8,
+                  "firstFrame": 15,
                   "lastFrame": 15,
                   "status": "applied",
                   "sourceIdentities": [
-                    "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
                     "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
                   ]
                 },
@@ -168808,22 +170719,14 @@
                   "pathId": "-7332396199243874878",
                   "frame": 8,
                   "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
-                },
-                {
-                  "hitIdentity": "11200101|0|elements|0|-7332396199243874878|15|2",
-                  "elementId": 112001000,
-                  "pathId": "-7332396199243874878",
-                  "frame": 15,
-                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
                 }
               ],
               "hitEnvelope": {
                 "firstFrame": 8,
-                "lastFrame": 15,
+                "lastFrame": 8,
                 "status": "applied",
                 "sourceIdentities": [
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
+                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
                 ]
               },
               "windows": [
@@ -168959,14 +170862,7 @@
               },
               "hits": [
                 {
-                  "hitIdentity": "11200101|1|elements|0|-7332396199243874878|8|1",
-                  "elementId": 112001000,
-                  "pathId": "-7332396199243874878",
-                  "frame": 8,
-                  "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType"
-                },
-                {
-                  "hitIdentity": "11200101|1|elements|0|-7332396199243874878|15|2",
+                  "hitIdentity": "11200101|1|elements|0|-7332396199243874878|15|1",
                   "elementId": 112001000,
                   "pathId": "-7332396199243874878",
                   "frame": 15,
@@ -168974,11 +170870,10 @@
                 }
               ],
               "hitEnvelope": {
-                "firstFrame": 8,
+                "firstFrame": 15,
                 "lastFrame": 15,
                 "status": "applied",
                 "sourceIdentities": [
-                  "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-8100616645894346983__-8100616645894346983.json#startFrame|targetType",
                   "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200101.asset/MonoBehaviour/MonoBehaviour_-578622204235383694__-578622204235383694.json#startFrame|targetType"
                 ]
               },
@@ -169062,11 +170957,10 @@
             }
           ],
           "selectedHitIdentities": [
-            "11200101|0|elements|0|-7332396199243874878|8|1",
-            "11200101|0|elements|0|-7332396199243874878|15|2"
+            "11200101|0|elements|0|-7332396199243874878|8|1"
           ],
           "selectedEffectIdentities": [],
-          "hitCount": 2,
+          "hitCount": 1,
           "effectCount": 0,
           "effectDimensionSummary": {
             "damage": {},

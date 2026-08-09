@@ -5,16 +5,16 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:ceeeac1c90cbcaa9",
-    "qualificationSubjectHash": "ceeeac1c90cbcaa9",
-    "scenarioSetHash": "27dd44bc77c7c724",
+    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:facd8a9d0a97263a",
+    "qualificationSubjectHash": "facd8a9d0a97263a",
+    "scenarioSetHash": "00f4a1a74fe026d2",
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "fixturePath": "fixtures/character-acceptance/107001-visual.json",
-        "fixtureSha256": "bb4bed72ded4dd3f2feb232a58601dbb4b532ffe16cd1a9be2b19184730bb338",
+        "fixtureSha256": "afe81b364ede64540d762b63d5ff68930fdfce887decc24ba7be65838cdb2694",
         "screenshotPath": "reports/m12-b3-107001-workbench-visual-evidence.png",
         "screenshotSha256": "cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260"
       }
@@ -126,18 +126,16 @@
       "semanticName": "星决技"
     },
     {
-      "kind": "tuning-hit-gate",
+      "kind": "tuning-conditional-group",
       "assertionIdentity": "condition-insufficient-negative",
-      "actionId": "sifliya-star-response-missed-first-hit",
-      "groupIdentity": "sifliya-star-hit-1",
-      "hitIndex": 1,
-      "markId": 750,
-      "expectedGatePassed": false,
-      "expectedLandedCount": 0,
-      "expectedLanded": false,
-      "expectedApplied": false,
+      "actionId": "sifliya-charged-with-lumi",
+      "groupIdentity": "sifliya-lumi-charged-response-damage",
+      "expectedCount": 5,
       "expectedBranch": "base",
-      "expectedAcquisitionCount": 0
+      "expectedMarkCountAtJudgment": 2,
+      "expectedLanded": true,
+      "companionUnitId": 480056,
+      "ownership": "summoning-actor"
     },
     {
       "kind": "resource-boundary",
@@ -191,18 +189,6 @@
       "expectedAfter": 3,
       "expectedDelta": 1,
       "sameFrame": true
-    },
-    {
-      "kind": "tuning-conditional-group",
-      "assertionIdentity": "lumi-charged-below-three-marks-base-branch",
-      "actionId": "sifliya-charged-with-lumi",
-      "groupIdentity": "sifliya-lumi-charged-response-damage",
-      "expectedCount": 5,
-      "expectedBranch": "base",
-      "expectedMarkCountAtJudgment": 2,
-      "expectedLanded": true,
-      "companionUnitId": 480056,
-      "ownership": "summoning-actor"
     },
     {
       "kind": "tuning-conditional-group",

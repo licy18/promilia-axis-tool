@@ -6,14 +6,16 @@
   "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "17f10659ea32e9c1d402b5e23859c4c835592c6532ae316974160a1a62ccea29",
+  "sourcePackageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "59604d53c1855a5e",
-    "traceHash": "642caca8b367a6b9",
-    "dataHash": "f66e5cb7d6e5c77b",
+    "inputHash": "2fca74dd4fe32e41",
+    "traceHash": "adfe53f3f660f374",
+    "dataHash": "b0190eea34ddc2bb",
+    "buildHash": "46cf1f7807921673",
+    "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -48,6 +50,10 @@
           "controlSkillId": 10700101,
           "subSkillIndex": 0,
           "actualDurationFrames": 20,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -57,6 +63,10 @@
           "controlSkillId": 10700101,
           "subSkillIndex": 0,
           "actualDurationFrames": 20,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -66,6 +76,10 @@
           "controlSkillId": 10700102,
           "subSkillIndex": 4,
           "actualDurationFrames": 23,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -75,6 +89,10 @@
           "controlSkillId": 10700102,
           "subSkillIndex": 4,
           "actualDurationFrames": 23,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -84,6 +102,10 @@
           "controlSkillId": 10700103,
           "subSkillIndex": 4,
           "actualDurationFrames": 60,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -93,6 +115,10 @@
           "controlSkillId": 10700103,
           "subSkillIndex": 4,
           "actualDurationFrames": 60,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "verified-active-attack-input-chain"
         },
         {
@@ -102,6 +128,10 @@
           "controlSkillId": 10700110,
           "subSkillIndex": 0,
           "actualDurationFrames": 38,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -111,6 +141,10 @@
           "controlSkillId": 10700112,
           "subSkillIndex": 0,
           "actualDurationFrames": 117,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         },
         {
@@ -120,6 +154,10 @@
           "controlSkillId": 10700113,
           "subSkillIndex": 0,
           "actualDurationFrames": 170,
+          "chargingRelease": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
         }
       ],
@@ -1032,6 +1070,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1069,6 +1110,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1113,6 +1157,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 22516.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -1141,6 +1188,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 34516.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1178,6 +1228,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -1206,6 +1259,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -1454,7 +1510,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            3,
             50,
             8,
             752,
@@ -1582,7 +1638,7 @@
           "hitIdentity": null,
           "elementId": 752,
           "sourceSequencePath": [
-            0,
+            6,
             50,
             14,
             752,
@@ -1602,7 +1658,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-charged-response-damage:sifliya-lumi|1|sifliya-lumi-charged-response|1|12050.000000333333",
           "elementId": 107001157,
           "sourceSequencePath": [
-            0,
+            6,
             35,
             31,
             1,
@@ -1640,7 +1696,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-charged-response-damage:sifliya-lumi|1|sifliya-lumi-charged-response|2|12150.000000333333",
           "elementId": 107001157,
           "sourceSequencePath": [
-            0,
+            6,
             35,
             32,
             2,
@@ -1660,7 +1716,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-charged-response-damage:sifliya-lumi|1|sifliya-lumi-charged-response|3|12250.000000333333",
           "elementId": 107001157,
           "sourceSequencePath": [
-            0,
+            6,
             35,
             33,
             3,
@@ -1680,7 +1736,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-charged-response-damage:sifliya-lumi|1|sifliya-lumi-charged-response|4|12350.000000333333",
           "elementId": 107001157,
           "sourceSequencePath": [
-            0,
+            6,
             35,
             34,
             4,
@@ -1700,7 +1756,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-charged-response-damage:sifliya-lumi|1|sifliya-lumi-charged-response|5|12450.000000333333",
           "elementId": 107001157,
           "sourceSequencePath": [
-            0,
+            6,
             35,
             35,
             5,
@@ -1720,7 +1776,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-hit-1:1",
           "elementId": 107001219,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             17,
             1,
@@ -1740,7 +1796,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-hit-2:1",
           "elementId": 107001221,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             18,
             1,
@@ -1760,7 +1816,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-hit-3:1",
           "elementId": 107001223,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             19,
             1,
@@ -1780,7 +1836,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-hit-4:1",
           "elementId": 107001225,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             20,
             1,
@@ -1800,7 +1856,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-star-response-damage:sifliya-lumi|1|sifliya-lumi-star-response|1|16333.333333333334",
           "elementId": 107001159,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             36,
             1,
@@ -1820,7 +1876,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-star-response-damage:sifliya-lumi|1|sifliya-lumi-star-response|2|16416.666666666668",
           "elementId": 107001159,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             37,
             2,
@@ -1840,7 +1896,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-final-projectiles:1",
           "elementId": 107001227,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             21,
             1,
@@ -1860,7 +1916,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-star-response-damage:sifliya-lumi|1|sifliya-lumi-star-response|3|16500",
           "elementId": 107001159,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             38,
             3,
@@ -1880,7 +1936,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-final-projectiles:2",
           "elementId": 107001227,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             22,
             2,
@@ -1900,7 +1956,7 @@
           "hitIdentity": "conditional-damage:sifliya-star-final-projectiles:3",
           "elementId": 107001227,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             23,
             3,
@@ -1920,7 +1976,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-star-response-damage:sifliya-lumi|1|sifliya-lumi-star-response|4|16583.333333333332",
           "elementId": 107001159,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             39,
             4,
@@ -1940,7 +1996,7 @@
           "hitIdentity": "conditional-damage:sifliya-lumi-star-response-damage:sifliya-lumi|1|sifliya-lumi-star-response|5|16666.666666666668",
           "elementId": 107001159,
           "sourceSequencePath": [
-            0,
+            7,
             35,
             40,
             5,
@@ -1960,7 +2016,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hit-1:1",
           "elementId": 107001150,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             25,
             1,
@@ -1980,7 +2036,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hits-2-to-5:1",
           "elementId": 107001206,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             26,
             1,
@@ -2000,7 +2056,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hits-2-to-5:2",
           "elementId": 107001206,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             27,
             2,
@@ -2020,7 +2076,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hits-2-to-5:3",
           "elementId": 107001206,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             28,
             3,
@@ -2040,7 +2096,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hits-2-to-5:4",
           "elementId": 107001206,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             29,
             4,
@@ -2060,7 +2116,7 @@
           "hitIdentity": "conditional-damage:sifliya-ultimate-hit-6:1",
           "elementId": 107001151,
           "sourceSequencePath": [
-            0,
+            8,
             35,
             30,
             1,
@@ -3095,6 +3151,9 @@
           "afterStacks": 2,
           "stackChange": 2,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3132,6 +3191,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 22516.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -3160,6 +3222,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3197,6 +3262,9 @@
           "afterStacks": 1,
           "stackChange": 1,
           "expiresAtMs": 34516.667,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3234,6 +3302,9 @@
           "afterStacks": 3,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3271,6 +3342,9 @@
           "afterStacks": 4,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3308,6 +3382,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": []
         },
         {
@@ -3336,6 +3413,9 @@
           "afterStacks": 5,
           "stackChange": 1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3373,6 +3453,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3410,6 +3493,9 @@
           "afterStacks": 4,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3447,6 +3533,9 @@
           "afterStacks": 3,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3484,6 +3573,9 @@
           "afterStacks": null,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3521,6 +3613,9 @@
           "afterStacks": 2,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3558,6 +3653,9 @@
           "afterStacks": 1,
           "stackChange": -1,
           "expiresAtMs": null,
+          "appliedAssumptionIdentity": null,
+          "appliedAssumptionVersion": null,
+          "appliedAssumptionHash": null,
           "modifiers": [
             {
               "kind": "battle-property",
@@ -3607,7 +3705,7 @@
         }
       ]
     },
-    "summaryHash": "15f6be4850d5c864bc7bb41d9131f71b2d9d2b74280f1fb54f84b3a7ab42802d"
+    "summaryHash": "214c481a82e6fda26f22ae6245d96a885337ef453a25b6abf88c60c250716939"
   },
   "expected": {
     "exact": {
@@ -3629,6 +3727,6 @@
       }
     ]
   },
-  "replayHash": "1fc50c98196ff296015c855a1ed5b6b8b618c5fc234ea782531c73263c505245",
-  "profileHash": "c9ae44808c965b1d26d9e1c0006314df76acb2474cde31815062c02bb300d575"
+  "replayHash": "9f7844ff8e3d2e79b0a0fb601e09cfa48c9eacb25d7e5b537ddd1f0a0cae5e09",
+  "profileHash": "598c51952118f75871e334cd5226abf5cbf66af2bd6130093e6154e885c83210"
 }

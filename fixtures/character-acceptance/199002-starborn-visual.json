@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "fcd64c6b5c86cd18b480039fd8096659b5a9fafdfa7a35eeee3f6f8405360b37",
+    "verifiedMechanicsPackageHash": "1ce67afbe1cf2a70db1c4f2e4a4a0e869e88b9ab14086fcd8f18b4242f61666b",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -12,7 +12,7 @@
     "id": "m12-b3-starborn-199002-focused-acceptance",
     "name": "M12-B3 STARBORN 男主角零距离静态 Boss 聚焦验收轴",
     "fps": 60,
-    "durationFrames": 4300,
+    "durationFrames": 5000,
     "team": [
       {
         "slotId": "slot-1",
@@ -85,7 +85,7 @@
           "sourceActorId": "actor-199002",
           "targetKind": "actor",
           "targetId": "actor-199002",
-          "remainingDurationMs": 28500,
+          "remainingDurationMs": 2000,
           "stacks": 1,
           "maxStacks": 1,
           "modifiers": [
@@ -119,7 +119,7 @@
           "sourceActorId": "actor-199002",
           "targetKind": "actor",
           "targetId": "actor-199002",
-          "remainingDurationMs": 27500,
+          "remainingDurationMs": 1000,
           "stacks": 1,
           "maxStacks": 1,
           "modifiers": [
@@ -127,7 +127,7 @@
               "kind": "battle-property",
               "attributeId": 7,
               "bucket": "dynamicExtra",
-              "valueRaw": -10000,
+              "valueRaw": -10500,
               "propertyTags": []
             },
             {
@@ -152,7 +152,10 @@
       "policy": "sampled",
       "seed": "m12-b3-starborn-199002-focused-critical"
     },
-    "projectile": { "targetDistance": 0, "defaultWillHit": true },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
     "target": {
       "hpMode": "infinite",
       "toughnessMode": "disabled",
@@ -174,98 +177,468 @@
       "sourceCharacterId": 199002,
       "sourceAliasIdentity": "STARBORN:source-alias:199002",
       "profileIdentity": "actor:199002:character-combat-profile:v1",
-      "profileHash": "210946074881e6625b4a7b42328b5c0ceb0a0e9126ce6095c0920ba3b4104f74",
-      "sourceContractHash": "7b2595f919d05fc6cedaa884dfeec427ed455fffaf5a07e527c0ca8a5eacec5d",
+      "profileHash": "004c227208e780d5dc27416e245c2ae508202a5d4a1620db50b3277f62c5681b",
+      "sourceContractHash": "77adfdcae7ca908cdf2574c0e9d18b4cdf67add7a99ec91d4ad881a6016ec51c",
       "sourceIdentity": "src/data/generated/characters.json#items[id=199002]|NewTable/hero.rows[id=199002]",
       "status": "verified-single-source-alias-selected"
     }
   },
   "actions": [
     {
-      "id": "starborn-m-star-carry-apply",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "id": "199002-critical-rate-zero",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 19900222,
-        "actionKind": "star-carry",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-rate-zero"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 0 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 0
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 0
+        }
+      }
+    },
+    {
+      "id": "199002-critical-rate-one-hundred",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-rate-one-hundred"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 70
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 9999
+        }
+      }
+    },
+    {
+      "id": "199002-critical-sampled-low",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-sampled-low"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 130
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 499
+        }
+      }
+    },
+    {
+      "id": "199002-critical-sampled-boundary",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-sampled-boundary"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 190
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 500
+        }
+      }
+    },
+    {
+      "id": "199002-critical-expected",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-expected"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 250
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "expected"
+        }
+      }
+    },
+    {
+      "id": "199002-critical-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 310
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "199002-critical-non-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-non-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 370
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "hit",
+          "criticalMode": "non-critical"
+        }
+      }
+    },
+    {
+      "id": "199002-critical-miss-critical",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "199002-critical-miss-critical"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 430
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "miss",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "199002-blocked-hit-negative",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "starborn-199002-default-charged",
+          "selectorKind": "input-context",
+          "publicVariantIndex": 0,
+          "mode": "press"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 490
+      },
+      "hitOverrides": {
+        "19900210|0|elements|0|8784144614085975838|16|1": {
+          "landed": "blocked",
+          "criticalMode": "sampled"
+        }
+      }
+    },
+    {
+      "id": "starborn-m-switch-out-for-star-carry",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "switch",
+        "targetSlotId": "slot-2"
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 550
+      }
+    },
+    {
+      "id": "starborn-m-switch-back-for-star-carry",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-2"
+      },
+      "intent": {
+        "kind": "switch",
+        "targetSlotId": "slot-1"
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 950
+      }
     },
     {
       "id": "starborn-m-ultimate",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900213,
         "actionKind": "ultimate",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 250 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1000
+      }
     },
     {
       "id": "starborn-m-a1",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "starborn-m-chain" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "starborn-m-chain"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 500 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1250
+      }
     },
     {
       "id": "starborn-m-a2",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 2, "groupId": "starborn-m-chain" },
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "starborn-m-chain"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 530 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1280
+      }
     },
     {
       "id": "starborn-m-a3",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 3, "groupId": "starborn-m-chain" },
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "starborn-m-chain"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 580 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1330
+      }
     },
     {
       "id": "starborn-m-a4",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 4, "groupId": "starborn-m-chain" },
+        "attackInput": {
+          "sequenceIndex": 4,
+          "groupId": "starborn-m-chain"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 640 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1390
+      }
     },
     {
       "id": "starborn-m-a5",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "starborn-m-chain" },
+        "attackInput": {
+          "sequenceIndex": 5,
+          "groupId": "starborn-m-chain"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 700 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1450
+      }
     },
     {
       "id": "starborn-m-charged-derived",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -283,11 +656,17 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 740 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1490
+      }
     },
     {
       "id": "starborn-m-derived-thrust",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -300,22 +679,34 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 813 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1563
+      }
     },
     {
       "id": "starborn-m-star",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900212,
         "actionKind": "star-skill",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1020 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1770
+      }
     },
     {
       "id": "starborn-m-star-thrust",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -328,222 +719,17 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1085 }
-    },
-    {
-      "id": "199002-critical-rate-zero",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1600 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "sampled",
-          "criticalRoll": 0
-        }
-      }
-    },
-    {
-      "id": "199002-critical-rate-one-hundred",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1660 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "sampled",
-          "criticalRoll": 9999
-        }
-      }
-    },
-    {
-      "id": "199002-critical-sampled-low",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1720 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "sampled",
-          "criticalRoll": 42
-        }
-      }
-    },
-    {
-      "id": "199002-critical-sampled-boundary",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1780 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "sampled",
-          "criticalRoll": 43
-        }
-      }
-    },
-    {
-      "id": "199002-critical-expected",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1840 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "expected"
-        }
-      }
-    },
-    {
-      "id": "199002-critical-critical",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1900 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "critical"
-        }
-      }
-    },
-    {
-      "id": "199002-critical-non-critical",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1960 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "hit",
-          "criticalMode": "non-critical"
-        }
-      }
-    },
-    {
-      "id": "199002-critical-miss-critical",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2020 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "miss",
-          "criticalMode": "critical"
-        }
-      }
-    },
-    {
-      "id": "199002-blocked-hit-negative",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 19900201,
-        "actionKind": "charged-attack",
-        "semanticVariant": {
-          "selectorIdentity": "starborn-199002-default-charged",
-          "selectorKind": "input-context",
-          "publicVariantIndex": 0,
-          "mode": "press"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2080 },
-      "hitOverrides": {
-        "19900210|0|elements|0|8784144614085975838|16|1": {
-          "landed": "blocked",
-          "criticalMode": "sampled"
-        }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1835
       }
     },
     {
       "id": "starborn-m-charged-default",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -556,11 +742,101 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2300 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 2300
+      }
+    },
+    {
+      "id": "window-before-source-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-before-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 2820
+      }
+    },
+    {
+      "id": "window-before-source-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-before-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 2850
+      }
+    },
+    {
+      "id": "window-before-source-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-before-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 2895
+      }
+    },
+    {
+      "id": "window-before-source-a4",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 4,
+          "groupId": "window-before-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 2950
+      }
     },
     {
       "id": "window-before-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -571,11 +847,17 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3000 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3000
+      }
     },
     {
       "id": "window-outside-before",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -593,23 +875,122 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3031 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3031
+      }
     },
     {
-      "id": "window-start-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "id": "window-start-source-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "window-start-source" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-start-source"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3300 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3320
+      }
+    },
+    {
+      "id": "window-start-source-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-start-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3350
+      }
+    },
+    {
+      "id": "window-start-source-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-start-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3395
+      }
+    },
+    {
+      "id": "window-start-source-a4",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 4,
+          "groupId": "window-start-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3450
+      }
+    },
+    {
+      "id": "window-start-source",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 5,
+          "groupId": "window-start-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3500
+      }
     },
     {
       "id": "window-inside-start",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -627,23 +1008,122 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3332 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3532
+      }
     },
     {
-      "id": "window-end-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "id": "window-end-source-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "window-end-source" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-end-source"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3600 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3820
+      }
+    },
+    {
+      "id": "window-end-source-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-end-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3850
+      }
+    },
+    {
+      "id": "window-end-source-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-end-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3895
+      }
+    },
+    {
+      "id": "window-end-source-a4",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 4,
+          "groupId": "window-end-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 3950
+      }
+    },
+    {
+      "id": "window-end-source",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 5,
+          "groupId": "window-end-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4000
+      }
     },
     {
       "id": "window-inside-end",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -661,23 +1141,122 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3651 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4051
+      }
     },
     {
-      "id": "window-after-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "id": "window-after-source-a1",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "window-after-source" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-after-source"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3900 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4320
+      }
+    },
+    {
+      "id": "window-after-source-a2",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-after-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4350
+      }
+    },
+    {
+      "id": "window-after-source-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-after-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4395
+      }
+    },
+    {
+      "id": "window-after-source-a4",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 4,
+          "groupId": "window-after-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4450
+      }
+    },
+    {
+      "id": "window-after-source",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 5,
+          "groupId": "window-after-source"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4500
+      }
     },
     {
       "id": "window-outside-after",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
       "intent": {
         "kind": "public-action",
         "publicActionId": 19900201,
@@ -695,7 +1274,10 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3952 }
+      "schedule": {
+        "mode": "absolute",
+        "frame": 4552
+      }
     }
   ]
 }

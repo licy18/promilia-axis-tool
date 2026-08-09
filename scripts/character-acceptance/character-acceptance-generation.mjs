@@ -198,6 +198,8 @@ export function createCharacterAcceptanceRequirementSources({
   );
   const classifyUnselectedControlVariant =
     createUnselectedControlVariantClassifier({ profile, recipe });
+  const classifyFormalJointAttackBoundary =
+    createFormalJointAttackBoundaryClassifier(profile);
   for (const [dimension, contractKey] of CONTRACT_DIMENSIONS) {
     const records = flattenContractRecords(
       profile.contracts?.[contractKey],
@@ -213,6 +215,10 @@ export function createCharacterAcceptanceRequirementSources({
       const sourceNotApplicableControlSubskill =
         classifySourceNotApplicableControlSubskill(record, dimension);
       const unselectedControlVariant = classifyUnselectedControlVariant(
+        record,
+        dimension
+      );
+      const formalJointAttackBoundary = classifyFormalJointAttackBoundary(
         record,
         dimension
       );
@@ -234,6 +240,7 @@ export function createCharacterAcceptanceRequirementSources({
         sourceNotApplicableControlSubskill != null ||
         sourceGapDisposition?.disposition === 'not-applicable' ||
         unselectedControlVariant != null ||
+        formalJointAttackBoundary != null ||
         aggregateStatDependency;
       requirements.push({
         requirementIdentity: 'contract:' + dimension + ':' + subjectIdentity,
@@ -261,6 +268,7 @@ export function createCharacterAcceptanceRequirementSources({
         sourceIdentities: uniqueStrings([
           ...collectSourceIdentities(record),
           sourceNotApplicableControlSubskill?.sourceIdentity,
+          ...(formalJointAttackBoundary?.sourceIdentities ?? []),
         ]),
         ...(optimizationScenario == null ? {} : { optimizationScenario }),
         ...(scenarioScope == null ? {} : { scenarioScope }),
@@ -271,6 +279,9 @@ export function createCharacterAcceptanceRequirementSources({
         ...(unselectedControlVariant == null
           ? {}
           : { unselectedControlVariant }),
+        ...(formalJointAttackBoundary == null
+          ? {}
+          : { formalJointAttackBoundary }),
         ...(productBoundaryEvidence == null ? {} : { productBoundaryEvidence }),
         reasons: notApplicable
           ? [
@@ -281,6 +292,7 @@ export function createCharacterAcceptanceRequirementSources({
               ...(sourceGapDisposition?.reasons ?? []),
               ...(sourceNotApplicableControlSubskill?.reasons ?? []),
               ...(unselectedControlVariant?.reasons ?? []),
+              ...(formalJointAttackBoundary?.reasons ?? []),
               ...(aggregateStatDependency
                 ? ['aggregate-stat-dependency-index-not-standalone-requirement']
                 : []),
@@ -825,6 +837,77 @@ function createUnselectedControlVariantClassifier({ profile, recipe }) {
       ],
     };
   };
+}
+
+function createFormalJointAttackBoundaryClassifier(profile) {
+  const jointControlSubskills = new Set();
+  const add = (controlSkillId, subSkillIndex) => {
+    const control = Number(controlSkillId);
+    const sub = Number(subSkillIndex ?? 0);
+    if (Number.isInteger(control) && Number.isInteger(sub)) {
+      jointControlSubskills.add(`${control}|${sub}`);
+    }
+  };
+  for (const action of flattenContractRecords(
+    profile?.contracts?.publicActions,
+    'publicActions'
+  )) {
+    if (String(action?.actionKind) !== 'star-combo') continue;
+    add(action.controlSkillId, action.selectedSubSkillIndex);
+  }
+  for (const form of flattenContractRecords(
+    profile?.contracts?.actionForms,
+    'actionForms'
+  )) {
+    if (
+      String(form?.actionKind ?? form?.publicActionKind) !== 'star-combo'
+    ) {
+      continue;
+    }
+    add(form.executionControlSkillId, form.executionSubSkillIndex);
+    add(form.sourceControlSkillId, form.sourceSubSkillIndex);
+  }
+  return (record, dimension) => {
+    const matched = collectRecordControlSubskillIdentities(record, dimension)
+      .filter(identity => jointControlSubskills.has(identity))
+      .sort();
+    if (matched.length === 0) return null;
+    return {
+      disposition: 'not-applicable',
+      policyIdentity: 'm12-axis-joint-attack-formal-exclusion-v1',
+      status: 'preweakbreak-static-predicate-partially-closed',
+      controlSubskillIdentities: matched,
+      sourceIdentities: [
+        'src/domain/verifiedJointAttackContract.js#JOINT_ATTACK_TRIGGER_STATUS',
+        'work/m12-axis-legality/STATE.md#formal-candidate-surface',
+      ],
+      reasons: ['joint-attack-trigger-unresolved'],
+    };
+  };
+}
+
+function collectRecordControlSubskillIdentities(record, dimension) {
+  const identities = new Set();
+  const add = (controlSkillId, subSkillIndex) => {
+    const control = Number(controlSkillId);
+    const sub = Number(subSkillIndex ?? 0);
+    if (Number.isInteger(control) && Number.isInteger(sub)) {
+      identities.add(`${control}|${sub}`);
+    }
+  };
+  if (dimension === 'hit') {
+    const match = String(record?.hitIdentity ?? '').match(/^(\d+)\|(\d+)\|/);
+    if (match) add(match[1], match[2]);
+  }
+  add(
+    record?.controlSkillId,
+    record?.subSkillIndex ?? record?.selectedSubSkillIndex ?? record?.mapIndex
+  );
+  add(record?.executionControlSkillId, record?.executionSubSkillIndex);
+  add(record?.sourceControlSkillId, record?.sourceSubSkillIndex);
+  add(record?.publicControlSkillId, record?.selectedSubSkillIndex);
+  add(record?.targetControlSkillId, record?.targetSubSkillIndex);
+  return [...identities];
 }
 
 function collectRuntimeReachableControlSubskills(profile) {

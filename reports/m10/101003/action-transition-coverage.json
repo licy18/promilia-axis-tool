@@ -6,8 +6,8 @@
   "summary": {
     "publicActionCount": 10,
     "rawWindowCount": 57,
-    "semanticTransitionCount": 4,
-    "appliedTransitionCount": 4,
+    "semanticTransitionCount": 5,
+    "appliedTransitionCount": 5,
     "staticEvidenceOnlyWindowCount": 0,
     "gameplayGapCount": 0,
     "notApplicableActionCount": 6
@@ -159,6 +159,42 @@
       "workbenchCoverage": "generic-runtime-projection",
       "e2eCoverage": "not-covered",
       "status": "applied",
+      "applied": true
+    },
+    {
+      "transitionIdentity": "actor:101003|control:10100349|sub:0|context:19-160|public-control:10100327|execution-control:10100349|sub:1",
+      "ownerId": 101003,
+      "sourcePublicActionIdentity": null,
+      "sourceActionKind": "hidden-control",
+      "sourceControlSkillId": 10100349,
+      "sourceSubSkillIndex": 0,
+      "triggerPhase": "input-window",
+      "resourceTransactions": [],
+      "actionEffects": [],
+      "inputCommand": "normal-attack",
+      "inputWindow": {
+        "startFrame": 19,
+        "endFrame": 160,
+        "durationFrames": 141
+      },
+      "condition": {
+        "kind": "always"
+      },
+      "targetChainIdentity": null,
+      "targetSequenceIndex": null,
+      "targetControlSkillId": 10100349,
+      "targetSubSkillIndex": 1,
+      "targetSemanticName": "集中闪避反击",
+      "transitionSemantics": "input-context-derived",
+      "exitRules": {
+        "kind": "buffered-until-frame"
+      },
+      "evidenceKind": "compiled-input-context-edge",
+      "sourceIdentity": "skill_control_10100327.asset#listener-wrapper->10100349|skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json#control-transition[19,160)->10100349/sub1|skill_control_10100327.asset#listener-wrapper->10100349|skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json#control-transition[19,160)->10100349/sub1|skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json#control-transition[19,160)->10100349/sub1|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/skill_control_10100349__-5645879531883966019.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]|skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_4229464481616893525__4229464481616893525.json#attack-reopen-window[60,200)",
+      "runtimeCoverage": "applied",
+      "workbenchCoverage": "generic-runtime-projection",
+      "e2eCoverage": "not-covered",
+      "status": "verified-input-context-variant-edge-ready",
       "applied": true
     }
   ],
@@ -2288,14 +2324,14 @@
       "behaviorLineName": "连击桥接 37f",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_-7810248299032638131__-7810248299032638131.json#behaviorlineControl[0].behaviorList[pathId=7123295481686101325]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_7123295481686101325__7123295481686101325.json",
       "status": "applied",
-      "applied": false,
+      "applied": true,
       "sourcePublicActionIdentity": null,
       "sourceActionKind": "hidden-control",
       "targetChainIdentity": null,
       "targetSequenceIndex": null,
       "targetSemanticName": null,
-      "runtimeBindingIdentity": null,
-      "runtimeStatus": "not-runtime-transition"
+      "runtimeBindingIdentity": "actor:101003|control:10100349|sub:0|context:19-160|public-control:10100327|execution-control:10100349|sub:1",
+      "runtimeStatus": "applied"
     },
     {
       "windowIdentity": "actor:101003|control:10100349|sub:0|33-160|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_-1855722559609402035__-1855722559609402035.json#behaviorlineControl[0].behaviorList[pathId=194861652152192333]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100349.asset/MonoBehaviour/MonoBehaviour_194861652152192333__194861652152192333.json",
@@ -2413,5 +2449,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "d34dabfd67218ece5665392199a83e05d0ff10acb79192e2593a5b0e8424464d"
+  "profileHash": "0377517e401cfef262e25a1065ea8898fc5e48e71964d4047393b0fe421135e7"
 }
