@@ -1434,13 +1434,19 @@ function resolveActionBinding(actionMapping, action) {
     action.attackInputChainIdentity ??
     action.attackInput?.attackInputChainIdentity ??
     null;
+  const baseSegments =
+    actionMapping.attackInputSourceSegments ??
+    actionMapping.attackInputSegments ??
+    [];
+  const profileSegments = actionMapping.profileAttackInputSegments ?? [];
   const segmentPool =
-    requestedChainIdentity &&
-    requestedChainIdentity !== actionMapping.attackInputChainIdentity
-      ? (actionMapping.attackInputSourceSegments ??
-        actionMapping.attackInputSegments ??
-        [])
-      : (actionMapping.attackInputSegments ?? []);
+    requestedChainIdentity != null &&
+    requestedChainIdentity === actionMapping.attackInputChainIdentity
+      ? baseSegments
+      : requestedChainIdentity != null &&
+          String(requestedChainIdentity).startsWith('context-form:')
+        ? [...baseSegments, ...profileSegments]
+        : baseSegments;
   const candidates = segmentPool.filter(
     segment =>
       (segmentIdentity &&

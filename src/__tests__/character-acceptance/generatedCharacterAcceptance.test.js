@@ -119,7 +119,7 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 7,
+        'runtime-integrated': 6,
         'optimization-ready': 4,
       },
       optimizationReadyCount: 4,
@@ -205,7 +205,7 @@ describe('generated character acceptance manifests', () => {
       const acceptanceCommit = productAccepted
         ? 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
-      const runtimeIntegrated = true;
+      const runtimeIntegrated = ownerId !== 112001;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'
@@ -258,9 +258,15 @@ describe('generated character acceptance manifests', () => {
       if (productAccepted) {
         expect(manifest.maturity.blockers).toEqual([]);
       } else if (functionallyComplete) {
-        expect(manifest.maturity.blockers).toEqual([
-          'acceptance-product-visual-signoff-pending',
-        ]);
+        expect(manifest.maturity.blockers).toEqual(
+          runtimeIntegrated
+            ? ['acceptance-product-visual-signoff-pending']
+            : [
+                'acceptance-headless-replay-gate-failed',
+                'acceptance-functional-failure-present',
+                'acceptance-product-visual-signoff-pending',
+              ]
+        );
       } else {
         expect(manifest.maturity.blockers).toEqual(
           expect.arrayContaining([

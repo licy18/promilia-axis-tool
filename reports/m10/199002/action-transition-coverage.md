@@ -2,8 +2,8 @@
 
 - 公开动作：10
 - 原始控制窗口：67
-- 语义转移：8/8
-- 仅索引未接入窗口：1
+- 语义转移：9/9
+- 仅索引未接入窗口：0
 - 玩法影响缺口：0
 
 ## 已归一转移
@@ -11,6 +11,7 @@
 | 来源 | 触发 | 输入窗 | 资源/印记 | 目标 | 语义 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
 | hidden-control 19900201/sub0 | input-window | [20,50) | - | starborn-199002-normal-five-inputs / A2 | continue-chain | applied |
+| hidden-control 19900201/sub1 | input-window | [22,52) | - | 19900203/sub0 | input-context-derived | verified-input-context-variant-edge-ready |
 | hidden-control 19900202/sub0 | input-window | [39,69) | - | starborn-199002-normal-five-inputs / A3 | continue-chain | applied |
 | normal-attack 19900203/sub0 | input-window | [48,78) | - | starborn-199002-normal-five-inputs / A4 | continue-chain | applied |
 | hidden-control 19900204/sub0 | input-window | [38,87) | - | 19900210/sub1 | input-context-derived | verified-input-context-variant-edge-ready |

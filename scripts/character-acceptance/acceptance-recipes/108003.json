@@ -4,9 +4,9 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:108003:eb06acc456ee309245a78455e7691738a2ee808b:248fec491f96b217",
-    "qualificationSubjectHash": "248fec491f96b217",
-    "scenarioSetHash": "2c4c099b1a98bf59",
+    "recordIdentity": "character-product-acceptance:108003:eb06acc456ee309245a78455e7691738a2ee808b:00a58fd4a6f47aa0",
+    "qualificationSubjectHash": "00a58fd4a6f47aa0",
+    "scenarioSetHash": "1ea4584b737b6717",
     "scenarioIdentities": [
       "m12-b3-e20-2-108003-s1-visual-acceptance"
     ],
@@ -15,7 +15,7 @@
         "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
         "status": "automated-workbench-import-passed",
         "screenshotPath": "reports/m11-d-character-acceptance-108003-desktop.png",
-      "screenshotSha256": "3b346bbb606b74878c5011fdf18293d7a23879b672d83337aa574206c5342292"
+        "screenshotSha256": "3b346bbb606b74878c5011fdf18293d7a23879b672d83337aa574206c5342292"
       }
     ]
   },
@@ -78,9 +78,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

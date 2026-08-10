@@ -2,17 +2,17 @@
 
 - Owner: `199001`
 - Profile: `actor:199001:character-combat-profile:v1`
-- Hash: `e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7`
+- Hash: `076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
 - 公开动作：10
 - 执行形态：16
 - 可达 control：28
-- 窗口：4
+- 窗口：5
 - Hit：58
-- 来源 identity：959
-- 战斗图：149 nodes / 136 edges
+- 来源 identity：961
+- 战斗图：149 nodes / 137 edges
 - 描述覆盖：20
 - Runtime ready 动作：4/10
 - Runtime capture：0
@@ -27,7 +27,7 @@
 | --- | --- | ---: | ---: | ---: |
 | publicActions | applied | 10 | 0 | 10 |
 | hiddenAndDerivedForms | applied | 16 | 0 | 16 |
-| inputAndExecutionTiming | applied | 4 | 0 | 4 |
+| inputAndExecutionTiming | applied | 5 | 0 | 5 |
 | effectiveOccupancy | applied | 16 | 0 | 16 |
 | hitsAndProjectiles | applied | 58 | 0 | 58 |
 | hpDamage | static-evidence-gap | 25 | 87 | 112 |

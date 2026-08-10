@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-m10-character-combat-coverage-manifest",
   "status": "m10-character-combat-coverage-manifest-ready",
-  "sourcePackageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
+  "sourcePackageHash": "91d6221075036137ef49ed09e9e42d8b92e6c90994d21532d5eb974d76bda3cd",
   "denominator": {
     "sourceKind": "current-client-public-character-catalog",
     "publicCharacterCount": 20,
@@ -92,7 +92,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101010:character-combat-profile:v1",
-      "profileHash": "5bcd52dc00a30877791adf351ba5a38c62734001dbb83917074770fb41a2f51d"
+      "profileHash": "c072539c987de627a0554b11ac44903744b210721f614ba5e1613520d494294d"
     },
     {
       "ownerId": 103002,
@@ -141,7 +141,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:103002:character-combat-profile:v1",
-      "profileHash": "3746ced515297a4130cdc2c754822baef5a7b668044bc590b0b275e13875aed7"
+      "profileHash": "034d9f36ddb224729562ee6b653af321f28f044abab05491cce2edb32feec3c0"
     },
     {
       "ownerId": 101003,
@@ -188,7 +188,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:101003:character-combat-profile:v1",
-      "profileHash": "a57963c653069bfc0e4b6a5386103424ded49553c397e3423c48414367f5d2d0"
+      "profileHash": "39e3fa83fe95556e985ee7c8c6faae3d0c12ee89e89d9533aff0516ee94b65fd"
     },
     {
       "ownerId": 101007,
@@ -274,7 +274,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:102001:character-combat-profile:v1",
-      "profileHash": "b6a05bd76a45c6d21370ff2f9526ad41d3d0b4081147dbc36bd83cdb66948de1"
+      "profileHash": "b45d9c8ff507705dbaf217cd9f27763ba5131ac5056a05e97c625d6bcb028b2a"
     },
     {
       "ownerId": 107001,
@@ -325,7 +325,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:107001:character-combat-profile:v1",
-      "profileHash": "7c22958c798f228db4f7c62a579c499a170b8655e3c1af01f7d035e7f6c10b90"
+      "profileHash": "0dec8640d1371b19209f2c7806fc104b3806492ac6be9ce9d5e73a61bc77ad66"
     },
     {
       "ownerId": 107002,
@@ -367,7 +367,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:107002:character-combat-profile:v1",
-      "profileHash": "bb7147820196ff062079ddab2a6d63b91e9c4d00aab834912bbda54ac5afea06"
+      "profileHash": "b4d9cbb26b0e07b8b70237281d23b9e8f284bb32262826bdba722b282a94bfab"
     },
     {
       "ownerId": 107003,
@@ -537,7 +537,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:108003:character-combat-profile:v1",
-      "profileHash": "96f726a92e7ff35304795e04fb87390b0028623dfd240a4fa1c1af1fa5d99771"
+      "profileHash": "2205bd32a317fbf1710e8d28e30bb9dc78eb1163ec40ab92815f2d83e121071f"
     },
     {
       "ownerId": 108005,
@@ -623,7 +623,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:109001:character-combat-profile:v1",
-      "profileHash": "3c3b84d0d77b21a8e0064b33d9a6950e2697ace35139318f7b7b74f3355857d8"
+      "profileHash": "7789f59426939ccb8224500486a986b96fdeca6d330852f03856ba97e2e50a62"
     },
     {
       "ownerId": 109002,
@@ -752,7 +752,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:112001:character-combat-profile:v1",
-      "profileHash": "b0b27c09499616e4d29f1c9bed966eaffcc50f4c8d9ebcf19993c3c9ee17706b"
+      "profileHash": "16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22"
     },
     {
       "ownerId": 112002,
@@ -818,7 +818,7 @@
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 4,
+      "derivedEdgeCount": 5,
       "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 19900162,
@@ -839,7 +839,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:199001:character-combat-profile:v1",
-      "profileHash": "e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7"
+      "profileHash": "076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08"
     },
     {
       "ownerId": 199002,
@@ -863,7 +863,7 @@
       "indexedControlCount": 14,
       "specialResourceCount": 0,
       "stateMachineCount": 0,
-      "derivedEdgeCount": 4,
+      "derivedEdgeCount": 5,
       "passiveCount": 1,
       "unnamedSecondaryPassive": {
         "skillId": 19900262,
@@ -884,7 +884,7 @@
         "switch-trigger"
       ],
       "profileIdentity": "actor:199002:character-combat-profile:v1",
-      "profileHash": "ea7e5abf6edaac6bb132b578eb15ec54e6aba3c13db04198d904ad66e4bed86c"
+      "profileHash": "2e559b7d5e5c98e1b254edeb942712b90178e5edee934af20ffa4ee66043cbd8"
     },
     {
       "ownerId": 199003,

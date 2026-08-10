@@ -62,7 +62,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
       expect(projectBindingSemantics(ultimateBindings)).toEqual(
         MARKS.map((mark, index) => ({
           ...mark,
-          stackDelta: 2,
+          stackDelta: 1,
           sourceElementId: alias.ultimateWrapperStart + index,
           commonFunctionId: 1007,
           snapshotTiming: 'action-start-before-effects',
@@ -87,7 +87,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
       const starCarry = runAliasAction({ alias, actionKind: 'star-carry' });
 
       expect(projectOutcome(ultimate)).toEqual(
-        desiredOutcome({}, 2, { acquireAtCap: true })
+        desiredOutcome({}, 1, { acquireAtCap: true })
       );
       expect(projectOutcome(starCarry)).toEqual(
         desiredOutcome({}, 1, { acquireAtCap: true })
@@ -96,7 +96,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
   );
 
   it.each(ALIASES)(
-    'adds 2 on ultimate and 1 on star-carry only to present marks for alias $ownerId',
+    'adds 1 on ultimate and 1 on star-carry only to present marks for alias $ownerId',
     alias => {
       const ultimate = runAliasAction({
         alias,
@@ -110,7 +110,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
       });
 
       expect(projectOutcome(ultimate)).toEqual(
-        desiredOutcome(MIXED_COUNTS, 2, { acquireAtCap: true })
+        desiredOutcome(MIXED_COUNTS, 1, { acquireAtCap: true })
       );
       expect(projectOutcome(starCarry)).toEqual(
         desiredOutcome(MIXED_COUNTS, 1, { acquireAtCap: true })
@@ -138,10 +138,10 @@ describe('STARBORN existing tuning mark product semantics', () => {
       });
 
       expect(projectOutcome(fourToFive)).toEqual(
-        desiredOutcome({ fire: 4 }, 2, { acquireAtCap: true })
+        desiredOutcome({ fire: 4 }, 1, { acquireAtCap: true })
       );
       expect(projectOutcome(ultimateAtFive)).toEqual(
-        desiredOutcome({ fire: 5 }, 2, { acquireAtCap: true })
+        desiredOutcome({ fire: 5 }, 1, { acquireAtCap: true })
       );
       expect(projectOutcome(starCarryAtFive)).toEqual(
         desiredOutcome({ fire: 5 }, 1, { acquireAtCap: true })
@@ -181,7 +181,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
       });
 
       expect(projectOutcome(result)).toEqual(
-        desiredOutcome({}, 2)
+        desiredOutcome({}, 1)
       );
       expect(result.events[0]).toMatchObject({
         kind: 'expire',
@@ -220,14 +220,14 @@ describe('STARBORN existing tuning mark product semantics', () => {
             tuningMarkActivationCondition: null,
           })),
       });
-      const oldPlusOne = runAliasAction({
+      const oldPlusTwo = runAliasAction({
         alias,
         actionKind: 'ultimate',
         counts: MIXED_COUNTS,
         mutateEffects: effects =>
           effects.map(effect => ({
             ...effect,
-            tuningMark: { ...effect.tuningMark, stackDelta: 1 },
+            tuningMark: { ...effect.tuningMark, stackDelta: 2 },
           })),
       });
       const oneAbsentBecomesPresent = runAliasAction({
@@ -241,9 +241,9 @@ describe('STARBORN existing tuning mark product semantics', () => {
           ),
       });
 
-      expect(matchesDesired(noParentCondition, {}, 2)).toBe(false);
-      expect(matchesDesired(oldPlusOne, MIXED_COUNTS, 2)).toBe(false);
-      expect(matchesDesired(oneAbsentBecomesPresent, {}, 2)).toBe(false);
+      expect(matchesDesired(noParentCondition, {}, 1)).toBe(false);
+      expect(matchesDesired(oldPlusTwo, MIXED_COUNTS, 1)).toBe(false);
+      expect(matchesDesired(oneAbsentBecomesPresent, {}, 1)).toBe(false);
     }
 
     const oneAliasUnfixed = ALIASES.map(alias =>
@@ -256,13 +256,13 @@ describe('STARBORN existing tuning mark product semantics', () => {
             ? effects =>
                 effects.map(effect => ({
                   ...effect,
-                  tuningMark: { ...effect.tuningMark, stackDelta: 1 },
+                  tuningMark: { ...effect.tuningMark, stackDelta: 2 },
                 }))
             : effects => effects,
       })
     );
     expect(
-      oneAliasUnfixed.every(result => matchesDesired(result, MIXED_COUNTS, 2))
+      oneAliasUnfixed.every(result => matchesDesired(result, MIXED_COUNTS, 1))
     ).toBe(false);
   });
 });

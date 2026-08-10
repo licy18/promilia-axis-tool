@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "52b013a830ee8239e9683737f29694d5e90c2b62bc04ab78359f3a3e74cc4a19",
+    "verifiedMechanicsPackageHash": "ce12fb0d2ee3f847026b4b9e1e2ae83312b6632754e7cf44244ecc7fb2cac9ca",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -177,8 +177,8 @@
       "sourceCharacterId": 199001,
       "sourceAliasIdentity": "STARBORN:source-alias:199001",
       "profileIdentity": "actor:199001:character-combat-profile:v1",
-      "profileHash": "e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7",
-      "sourceContractHash": "fb810c3db434d9992c11e0027a7fb5313bc601e6bef3f52c28da8db856f4f737",
+      "profileHash": "076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08",
+      "sourceContractHash": "45d02a6ae1c70d47ec5d70dc4d88cb7220cd6edd817f138600c6e199c800fa78",
       "sourceIdentity": "src/data/generated/characters.json#items[id=199001]|NewTable/hero.rows[id=199001]",
       "status": "verified-single-source-alias-selected"
     }
@@ -682,6 +682,28 @@
       "schedule": {
         "mode": "absolute",
         "frame": 1563
+      }
+    },
+    {
+      "id": "starborn-f-thrust-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "starborn-f-thrust-a3",
+          "contextActionId": "starborn-f-derived-thrust"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1588
       }
     },
     {

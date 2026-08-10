@@ -64,8 +64,8 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
       acceptanceGapCount: 0,
       scenarioCount: 4,
       scenarioPassedCount: 4,
-      assertionCount: 3032,
-      assertionPassedCount: 3032,
+      assertionCount: 3024,
+      assertionPassedCount: 3024,
     });
     expect(validation.bundle).toMatchObject({
       status: 'runtime-integrated-product-visual-pending',

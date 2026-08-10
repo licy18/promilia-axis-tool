@@ -128,10 +128,10 @@ describe('Sifliya 107001 acceptance closure', () => {
 
   it('publishes stable visual and machine evidence for central product acceptance', () => {
     expect(scenarioCases.summary).toMatchObject({
-      scenarioCount: 3,
-      executionPassedCount: 3,
-      assertionCount: 654,
-      assertionPassedCount: 654,
+      scenarioCount: 5,
+      executionPassedCount: 5,
+      assertionCount: 692,
+      assertionPassedCount: 692,
     });
     expect(
       scenarioCases.records.every(
@@ -163,7 +163,11 @@ describe('Sifliya 107001 acceptance closure', () => {
         expect.objectContaining({
           scenarioIdentity: 'm12-b3-107001-focused-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
-          fixturePath: 'fixtures/character-acceptance/107001-visual.json',
+          status: 'automated-workbench-import-passed',
+          fixturePath:
+            'fixtures/character-acceptance/107001-active-surface-closure.json',
+          fixtureSha256:
+            '4b34482d906bd984fbfdfc4f602f23a9126d3118a85fdcecdbf51b77fa44ad53',
           screenshotPath: 'reports/m12-b3-107001-workbench-visual-evidence.png',
           screenshotSha256:
             'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260',
@@ -177,7 +181,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: 'b7c97968689bf645',
+        canonicalTraceHash: 'c66f939bc5bb933a',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

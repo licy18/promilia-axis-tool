@@ -1337,6 +1337,56 @@
       "relation": "has-subskill"
     },
     {
+      "edgeIdentity": "control:19900201:sub:1->context-input-derived->control:19900203:sub:0",
+      "from": "control:19900201:sub:1",
+      "to": "control:19900203:sub:0",
+      "relation": "context-input-derived",
+      "inputWindow": {
+        "startFrame": 22,
+        "endFrame": 52,
+        "frameRate": 60,
+        "bridgeType": 0,
+        "continuousAttackType": 1,
+        "interruptBehavior": 0,
+        "frameIndex": 0,
+        "baseOnInput": false,
+        "inputToIndex": false,
+        "allowedInputCommands": [
+          "perfect-parry"
+        ],
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-241885330528660817__-241885330528660817.json#behaviorlineControl[0].behaviorList[pathId=-1136507956764732753]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-1136507956764732753__-1136507956764732753.json"
+      },
+      "inputScheduling": {
+        "schemaVersion": 1,
+        "kind": "verified-context-input-scheduling",
+        "status": "applied",
+        "inputSemantics": "immediate-continuous",
+        "interval": "[start,end)",
+        "predecessorGenericEndFrame": 32,
+        "predecessorAnimationDurationFrames": 240,
+        "predecessorHitEnvelope": {
+          "firstFrame": null,
+          "lastFrame": null,
+          "status": "unresolved",
+          "sourceIdentities": []
+        },
+        "windowClassification": "generic-occupancy-inside-window",
+        "bufferUntilFrame": null,
+        "edgeIntent": {
+          "status": "applied",
+          "predecessorGenericEndFrame": 32,
+          "canonicalInputFrame": 32,
+          "canonicalExecutionStartFrame": 32,
+          "canonicalPredecessorEndFrame": 32,
+          "policy": "latest-verified-immediate-input-at-or-before-generic-edge"
+        },
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-241885330528660817__-241885330528660817.json#behaviorlineControl[0].behaviorList[pathId=-1136507956764732753]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-1136507956764732753__-1136507956764732753.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_7679661869408785071__7679661869408785071.json#behaviorlineControl[0].behaviorList[pathId=3185041866402828975]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_3185041866402828975__3185041866402828975.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update",
+        "reasons": []
+      },
+      "status": "applied",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-241885330528660817__-241885330528660817.json#behaviorlineControl[0].behaviorList[pathId=-1136507956764732753]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-1136507956764732753__-1136507956764732753.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-241885330528660817__-241885330528660817.json#behaviorlineControl[0].behaviorList[pathId=-1136507956764732753]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_-1136507956764732753__-1136507956764732753.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_7679661869408785071__7679661869408785071.json#behaviorlineControl[0].behaviorList[pathId=3185041866402828975]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900201.asset/MonoBehaviour/MonoBehaviour_3185041866402828975__3185041866402828975.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900203.asset/MonoBehaviour/skill_control_19900203__8548001967744941688.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+    },
+    {
       "edgeIdentity": "control:19900202->has-subskill->control:19900202:sub:0",
       "from": "control:19900202",
       "to": "control:19900202:sub:0",
@@ -2226,7 +2276,7 @@
   ],
   "summary": {
     "nodeCount": 150,
-    "edgeCount": 136,
+    "edgeCount": 137,
     "controlCount": 29,
     "exclusionCount": 8,
     "nodeKindCounts": {
@@ -2240,7 +2290,7 @@
       "switch-trigger": 1
     },
     "edgeRelationCounts": {
-      "context-input-derived": 4,
+      "context-input-derived": 5,
       "derives-star-carry": 1,
       "emits-hit": 57,
       "executes-control": 26,
@@ -2250,5 +2300,5 @@
       "triggers-runtime-effect": 2
     }
   },
-  "profileHash": "ea7e5abf6edaac6bb132b578eb15ec54e6aba3c13db04198d904ad66e4bed86c"
+  "profileHash": "2e559b7d5e5c98e1b254edeb942712b90178e5edee934af20ffa4ee66043cbd8"
 }

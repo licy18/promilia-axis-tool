@@ -21,6 +21,7 @@
       "status": "static-evidence-gap",
       "coverageReferences": [
         "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+        "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
         "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
         "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
         "actor|199001|19900101|0|19900103|normal-attack",
@@ -365,6 +366,7 @@
         "actor:199001:charged-attack:starborn-199001-default-charged",
         "actor:199001:charged-attack:starborn-199001-derived-charged",
         "actor:199001:normal-attack:starborn-199001-thrust-follow-up",
+        "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
         "actor:199001|control:19900104|sub:0|context:38-97|public-control:19900110|execution-control:19900110|sub:1",
         "actor:199001|control:19900105|sub:0|context:32-52|public-control:19900110|execution-control:19900110|sub:1",
         "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
@@ -1067,6 +1069,7 @@
       ],
       "status": "applied",
       "coverageReferences": [
+        "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
         "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
         "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
         "starborn-199001-normal-five-inputs:segment:1",
@@ -1362,6 +1365,7 @@
       ],
       "status": "applied",
       "coverageReferences": [
+        "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
         "actor:199001|control:19900110|sub:1|context:60-90|public-control:19900103|execution-control:19900101|sub:1",
         "actor:199001|control:19900112|sub:0|context:53-83|public-control:19900103|execution-control:19900101|sub:1",
         "starborn-199001-normal-five-inputs:segment:1",
@@ -2015,5 +2019,5 @@
       "static-evidence-gap": 4
     }
   },
-  "profileHash": "e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7"
+  "profileHash": "076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08"
 }

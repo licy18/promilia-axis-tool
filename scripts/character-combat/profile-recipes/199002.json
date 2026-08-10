@@ -130,6 +130,21 @@
         "inputCommand": "normal-attack",
         "condition": { "kind": "always" },
         "expectedWindowCount": 1
+      },
+      {
+        "sourceControlSkillId": 19900201,
+        "sourceSubSkillIndex": 1,
+        "sourcePublicActionKind": "normal-attack",
+        "sourceSemanticName": "突刺追击",
+        "publicActionKind": "normal-attack",
+        "publicControlSkillId": 19900203,
+        "executionControlSkillId": 19900203,
+        "executionSubSkillIndex": 0,
+        "semanticIdentity": "starborn-199002-thrust-to-a3",
+        "semanticName": "A3",
+        "inputCommand": "normal-attack",
+        "condition": { "kind": "always" },
+        "expectedWindowCount": 1
       }
     ],
     "publicActionDeclarations": [
@@ -762,8 +777,8 @@
           "water",
           "light"
         ],
-        "stackDelta": 2,
-        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900213.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+        "stackDelta": 1,
+        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R2:2026-08-10#ultimate-existing-mark-plus-1-cap-5|skill_control_19900213.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
       },
       {
         "groupIdentity": "starborn-199002-star-carry-existing-tuning-marks",
@@ -794,7 +809,7 @@
           "light"
         ],
         "stackDelta": 1,
-        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900222.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R2:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900222.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
       }
     ],
     "runtimeEffectBindings": [

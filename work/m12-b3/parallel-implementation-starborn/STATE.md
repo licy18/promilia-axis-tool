@@ -1,4 +1,8 @@
-# M12-B3 STARBORN S1 / MARK-R1 state
+# M12-B3 STARBORN S1 / MARK-R2 state
+
+> 2026-08-10 product correction: MARK-R2 supersedes MARK-R1 — STARBORN ultimate adds one layer (not two) to each already-present elemental tuning mark; star-carry stays `+1`. Recipes, generated contracts/profiles/mechanics package, fixtures, m11 reports, optimization-object manifest and desired-semantic tests were regenerated to the new ruling.
+
+> 2026-08-10 thrust-to-A3 closure: both aliases publish a fifth context edge `19900101/sub1 [22,52) -> 19900103/sub0` (A3); a normal-attack input inside the window auto-selects A3, and a mismatched input (e.g. A1) is rejected fail-closed by `machine-axis-normal-attack-context-window-conflict` in the post-compile legality collector, with the runtime `VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT` block as the same-rule safety net. Acceptance fixtures carry the positive `starborn-{f,m}-thrust-a3` action and negative `thrust-window-a1-rejected` cases (offset 25F); both alias scenarios and the STARBORN object bundle pass.
 
 ## Goal
 
@@ -18,8 +22,8 @@ Close the formal `STARBORN` optimization object over both current-client source 
 - Before this correction, both aliases acquired all nine tuning marks from zero; ultimate and star-carry both used `stackDelta=1` and did not execute the `common function 1007` existing-layer condition.
 - Compiler v7 now expands four source-declared groups into 36 alias-local action-effect bindings. Every binding verifies its wrapper asset (`function_1=1007`, `function_2=5`, mark parameter, zero threshold, injected child path) and publishes `snapshotTiming=action-start-before-effects`.
 - Runtime captures one mark-count snapshot at action start after exact-boundary expiry and before any same-action child mutation. A conditioned acquisition is rejected when its mark count in that snapshot is zero.
-- Correct product outcomes are now: ultimate adds two only to present marks, star-carry adds one only to present marks, both cap at five, and a cap refresh emits `delta=0` without creating a missing mark.
-- Independent desired-semantic tests reject removal of the parent condition, ultimate `+1`, any absent `0 -> 1`, uniform nine-mark acquisition, and either alias remaining on the old rule.
+- Correct product outcomes are now: ultimate adds one only to present marks, star-carry adds one only to present marks, both cap at five, and a cap refresh emits `delta=0` without creating a missing mark.
+- Independent desired-semantic tests reject removal of the parent condition, ultimate `+2`, any absent `0 -> 1`, uniform nine-mark acquisition, and either alias remaining on the old rule.
 
 ## Failure-to-pass baseline
 
@@ -54,7 +58,7 @@ Close the formal `STARBORN` optimization object over both current-client source 
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | `199001` | 322 | 195 / 195 | 127 | 0 | 0 | 0 | 2 / 2 | 1495 / 1495 |
 | `199002` | 321 | 195 / 195 | 126 | 0 | 0 | 0 | 2 / 2 | 1537 / 1537 |
-| `STARBORN` | 643 | 390 / 390 | 253 | 0 | 0 | 0 | 4 / 4 | 3032 / 3032 |
+| `STARBORN` | 643 | 390 / 390 | 253 | 0 | 0 | 0 | 4 / 4 | 3024 / 3024 |
 
 - Object bundle hash: `1ec70edf17e62d71`.
 - Female profile/source-contract/selection hashes: `e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7` / `fb810c3db434d9992c11e0027a7fb5313bc601e6bef3f52c28da8db856f4f737` / `ad3092526ebdb42e`.
@@ -65,7 +69,7 @@ Close the formal `STARBORN` optimization object over both current-client source 
 - Owner profile `--assert-clean`: `199001` and `199002` passed (14 outputs each) after the final runtime ordering change.
 - Owner acceptance `--assert-clean`: both passed; stable replay and Workbench adapter round-trip are true.
 - Focused Vitest: desired-semantic plus alias closure 2 files / 22 tests, and Workbench Machine Axis adapter 1 file / 9 tests. All 31 passed.
-- The dedicated desired-semantic suite is independent of generated golden expectations and covers all-zero, mixed counts, cap-4/cap-5, exact right-open expiry, interruption, same-action precondition snapshot, wrong `+1`, absent acquisition, missing parent condition and either alias left stale.
+- The dedicated desired-semantic suite is independent of generated golden expectations and covers all-zero, mixed counts, cap-4/cap-5, exact right-open expiry, interruption, same-action precondition snapshot, wrong `+2`, absent acquisition, missing parent condition and either alias left stale.
 - The broader pre-existing `verifiedTuningMarkRuntime.test.js` currently reports 26/30 on this baseline branch: four legacy helper scenarios submit `101003`/`101007` actions while `109001` remains the controlled actor, so the integrated axis-legality gate correctly skips them with `controlled-actor-action-unavailable` before tuning runtime. This branch does not bypass or weaken that gate.
 - An unsupported object-only CLI spelling was ignored by the acceptance generator and therefore reached full-roster visual verification; it failed closed on the base `107001` fixture SHA mismatch before generation and wrote nothing. STARBORN aggregation is instead verified by its two owner manifests, object manifest and dedicated alias-closure test.
 - `node --check`, JSON parsing, `git diff --check` and the shared-production role-ID/name scan all pass.
@@ -73,7 +77,7 @@ Close the formal `STARBORN` optimization object over both current-client source 
 
 ## Product visual stop point
 
-No new STARBORN screenshot is claimed by MARK-R1. The two existing visual fixtures bind the corrected owner profile/source-contract hashes, while their global mechanics-package binding must be refreshed only after central compiler-v7 package regeneration. Product visual acceptance remains explicitly `pending`, and `optimizationReady=false`.
+No new STARBORN screenshot is claimed by MARK-R2. The two existing visual fixtures bind the corrected owner profile/source-contract hashes and the regenerated mechanics-package hash. Product visual acceptance remains explicitly `pending`, and `optimizationReady=false`.
 
 ## Central integration obligations
 

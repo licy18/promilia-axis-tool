@@ -6,9 +6,9 @@
   "summary": {
     "publicActionCount": 10,
     "rawWindowCount": 67,
-    "semanticTransitionCount": 8,
-    "appliedTransitionCount": 8,
-    "staticEvidenceOnlyWindowCount": 1,
+    "semanticTransitionCount": 9,
+    "appliedTransitionCount": 9,
+    "staticEvidenceOnlyWindowCount": 0,
     "gameplayGapCount": 0,
     "notApplicableActionCount": 6
   },
@@ -48,6 +48,42 @@
       "workbenchCoverage": "generic-runtime-projection",
       "e2eCoverage": "not-covered",
       "status": "applied",
+      "applied": true
+    },
+    {
+      "transitionIdentity": "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
+      "ownerId": 199001,
+      "sourcePublicActionIdentity": null,
+      "sourceActionKind": "hidden-control",
+      "sourceControlSkillId": 19900101,
+      "sourceSubSkillIndex": 1,
+      "triggerPhase": "input-window",
+      "resourceTransactions": [],
+      "actionEffects": [],
+      "inputCommand": "normal-attack",
+      "inputWindow": {
+        "startFrame": 22,
+        "endFrame": 52,
+        "durationFrames": 30
+      },
+      "condition": {
+        "kind": "always"
+      },
+      "targetChainIdentity": null,
+      "targetSequenceIndex": null,
+      "targetControlSkillId": 19900103,
+      "targetSubSkillIndex": 0,
+      "targetSemanticName": "A3",
+      "transitionSemantics": "input-context-derived",
+      "exitRules": {
+        "kind": "immediate-continuous"
+      },
+      "evidenceKind": "compiled-input-context-edge",
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_5495754891619045858__5495754891619045858.json#behaviorlineControl[0].behaviorList[pathId=7381877178409587170]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_7381877178409587170__7381877178409587170.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_5495754891619045858__5495754891619045858.json#behaviorlineControl[0].behaviorList[pathId=7381877178409587170]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_7381877178409587170__7381877178409587170.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_8679538261917405666__8679538261917405666.json#behaviorlineControl[0].behaviorList[pathId=-8836989813015146014]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_-8836989813015146014__-8836989813015146014.json|client-runtime:EventBridgeBehavior.Start/OnEvent/Update|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900103.asset/MonoBehaviour/skill_control_19900103__-1598843656001977908.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
+      "runtimeCoverage": "applied",
+      "workbenchCoverage": "generic-runtime-projection",
+      "e2eCoverage": "not-covered",
+      "status": "verified-input-context-variant-edge-ready",
       "applied": true
     },
     {
@@ -721,14 +757,14 @@
       "behaviorLineName": "普攻跳转",
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_5495754891619045858__5495754891619045858.json#behaviorlineControl[0].behaviorList[pathId=7381877178409587170]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_7381877178409587170__7381877178409587170.json",
       "status": "applied",
-      "applied": false,
+      "applied": true,
       "sourcePublicActionIdentity": null,
       "sourceActionKind": "hidden-control",
       "targetChainIdentity": "starborn-199001-normal-five-inputs",
       "targetSequenceIndex": 3,
       "targetSemanticName": "A3",
-      "runtimeBindingIdentity": null,
-      "runtimeStatus": "static-evidence-indexed"
+      "runtimeBindingIdentity": "actor:199001|control:19900101|sub:1|context:22-52|public-control:19900103|execution-control:19900103|sub:0",
+      "runtimeStatus": "applied"
     },
     {
       "windowIdentity": "actor:199001|control:19900101|sub:1|32-186|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_8679538261917405666__8679538261917405666.json#behaviorlineControl[0].behaviorList[pathId=-8836989813015146014]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900101.asset/MonoBehaviour/MonoBehaviour_-8836989813015146014__-8836989813015146014.json",
@@ -3037,5 +3073,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7"
+  "profileHash": "076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08"
 }

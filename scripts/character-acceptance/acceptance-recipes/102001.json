@@ -3,14 +3,16 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "ownerId": 102001,
   "fixturePath": "fixtures/character-acceptance/102001-visual.json",
-  "goldenReports": ["reports/m10/102001/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/102001/golden-trace.json"
+  ],
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:102001:eb06acc456ee309245a78455e7691738a2ee808b:7552e2972fb0f1f8",
-    "qualificationSubjectHash": "7552e2972fb0f1f8",
-    "scenarioSetHash": "5d76bdeca7fbc3f2",
+    "recordIdentity": "character-product-acceptance:102001:eb06acc456ee309245a78455e7691738a2ee808b:c64db4b55d4187fb",
+    "qualificationSubjectHash": "c64db4b55d4187fb",
+    "scenarioSetHash": "ab49c1fabb8042bf",
     "scenarioIdentities": [
       "m12-b3-102001-zero-distance-acceptance"
     ],
@@ -28,16 +30,46 @@
     "reason": "m12c-zero-distance-passive-boss-active-surface-only",
     "sourceIdentity": "work/m12-b3/parallel-implementation-102001/SOURCE_LEDGER.md#缩减动作面-inventory",
     "includedControlSubskills": [
-      { "controlSkillId": 10200101, "subSkillIndex": 0 },
-      { "controlSkillId": 10200102, "subSkillIndex": 0 },
-      { "controlSkillId": 10200103, "subSkillIndex": 0 },
-      { "controlSkillId": 10200104, "subSkillIndex": 0 },
-      { "controlSkillId": 10200105, "subSkillIndex": 0 },
-      { "controlSkillId": 10200110, "subSkillIndex": 0 },
-      { "controlSkillId": 10200112, "subSkillIndex": 0 },
-      { "controlSkillId": 10200113, "subSkillIndex": 0 },
-      { "controlSkillId": 10200122, "subSkillIndex": 0 },
-      { "controlSkillId": 10200126, "subSkillIndex": 0 }
+      {
+        "controlSkillId": 10200101,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200102,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200103,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200104,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200105,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200110,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200112,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200113,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200122,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10200126,
+        "subSkillIndex": 0
+      }
     ]
   },
   "sourceGapDispositionIdentityMigration": "verified-mechanics-package-e8249685f9bcbded",
@@ -193,37 +225,55 @@
       "actions": [
         {
           "id": "negative-star-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200112,
             "actionKind": "star-skill",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "lily-star-cooldown-blocked",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200112,
             "actionKind": "star-skill",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 200 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 200
+          }
         }
       ],
       "action": {
         "id": "lily-star-cooldown-blocked",
-        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "owner": {
+          "kind": "actor",
+          "slotId": "slot-1"
+        },
         "intent": {
           "kind": "public-action",
           "publicActionId": 10200112,
           "actionKind": "star-skill",
           "level": 1
         },
-        "schedule": { "mode": "absolute", "frame": 2200 }
+        "schedule": {
+          "mode": "absolute",
+          "frame": 2200
+        }
       },
       "expectedIssue": {
         "actionId": "lily-star-cooldown-blocked",
@@ -237,26 +287,38 @@
       "actions": [
         {
           "id": "lily-star-combo",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200112,
             "actionKind": "star-combo",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         }
       ],
       "action": {
         "id": "lily-star-combo",
-        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "owner": {
+          "kind": "actor",
+          "slotId": "slot-1"
+        },
         "intent": {
           "kind": "public-action",
           "publicActionId": 10200112,
           "actionKind": "star-combo",
           "level": 1
         },
-        "schedule": { "mode": "absolute", "frame": 3100 }
+        "schedule": {
+          "mode": "absolute",
+          "frame": 3100
+        }
       },
       "expectedIssue": {
         "actionId": "lily-star-combo",
@@ -270,37 +332,55 @@
       "actions": [
         {
           "id": "negative-ultimate-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "lily-ultimate-cooldown-blocked",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 300 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 300
+          }
         }
       ],
       "action": {
         "id": "lily-ultimate-cooldown-blocked",
-        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "owner": {
+          "kind": "actor",
+          "slotId": "slot-1"
+        },
         "intent": {
           "kind": "public-action",
           "publicActionId": 10200113,
           "actionKind": "ultimate",
           "level": 1
         },
-        "schedule": { "mode": "absolute", "frame": 54800 }
+        "schedule": {
+          "mode": "absolute",
+          "frame": 54800
+        }
       },
       "expectedIssue": {
         "actionId": "lily-ultimate-cooldown-blocked",
@@ -314,37 +394,55 @@
       "actions": [
         {
           "id": "negative-resource-source",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "lily-ultimate-resource-blocked",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 700 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 700
+          }
         }
       ],
       "action": {
         "id": "lily-ultimate-resource-blocked",
-        "owner": { "kind": "actor", "slotId": "slot-1" },
+        "owner": {
+          "kind": "actor",
+          "slotId": "slot-1"
+        },
         "intent": {
           "kind": "public-action",
           "publicActionId": 10200113,
           "actionKind": "ultimate",
           "level": 1
         },
-        "schedule": { "mode": "absolute", "frame": 55500 }
+        "schedule": {
+          "mode": "absolute",
+          "frame": 55500
+        }
       },
       "expectedIssue": {
         "actionId": "lily-ultimate-resource-blocked",
@@ -355,7 +453,9 @@
   "actionLevelCases": [
     {
       "identity": "canonical-level-one",
-      "action": { "level": 1 },
+      "action": {
+        "level": 1
+      },
       "expectedResult": {
         "level": 1,
         "source": "action.level",
@@ -364,7 +464,9 @@
     },
     {
       "identity": "canonical-level-twelve",
-      "action": { "level": 12 },
+      "action": {
+        "level": 12
+      },
       "expectedResult": {
         "level": 12,
         "source": "action.level",
@@ -373,7 +475,9 @@
     },
     {
       "identity": "legacy-fallback-level-twelve",
-      "action": { "skillLevel": 12 },
+      "action": {
+        "skillLevel": 12
+      },
       "expectedResult": {
         "level": 12,
         "source": "action.skillLevel",
@@ -382,7 +486,10 @@
     },
     {
       "identity": "matching-canonical-and-legacy",
-      "action": { "level": 12, "skillLevel": 12 },
+      "action": {
+        "level": 12,
+        "skillLevel": 12
+      },
       "expectedResult": {
         "level": 12,
         "source": "action.level",
@@ -401,17 +508,25 @@
     },
     {
       "identity": "canonical-legacy-conflict",
-      "action": { "level": 12, "skillLevel": 1 },
+      "action": {
+        "level": 12,
+        "skillLevel": 1
+      },
       "expectedErrorCode": "verified-action-level-conflict"
     },
     {
       "identity": "invalid-canonical-does-not-fallback",
-      "action": { "level": 0, "skillLevel": 12 },
+      "action": {
+        "level": 0,
+        "skillLevel": 12
+      },
       "expectedErrorCode": "verified-action-level-invalid"
     },
     {
       "identity": "invalid-legacy",
-      "action": { "skillLevel": 0 },
+      "action": {
+        "skillLevel": 0
+      },
       "expectedErrorCode": "verified-action-level-invalid"
     }
   ],
@@ -468,7 +583,10 @@
       "expectation": {
         "directSpCount": 0,
         "effectCommandCountById": {},
-        "remainingTuningMarkFrames": [211, 216],
+        "remainingTuningMarkFrames": [
+          211,
+          216
+        ],
         "conditionResults": [
           {
             "triggerFrame": 211,
@@ -497,14 +615,20 @@
       "actions": [
         {
           "id": "isolated-ultimate-last-only",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          },
           "hitOverrides": {
             "10200113|0|elements|6|8236903294079356132|211|6": {
               "landed": "miss",
@@ -529,9 +653,18 @@
           },
           "expectation": {
             "count": 1,
-            "orderedValues": { "frameIndex": [220] }
+            "orderedValues": {
+              "frameIndex": [
+                220
+              ]
+            }
           },
-          "select": ["before", "after", "frameIndex", "sourceSequencePath"]
+          "select": [
+            "before",
+            "after",
+            "frameIndex",
+            "sourceSequencePath"
+          ]
         }
       ]
     },
@@ -541,14 +674,20 @@
       "actions": [
         {
           "id": "isolated-ultimate-all-miss",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200113,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          },
           "hitOverrides": {
             "10200113|0|elements|6|8236903294079356132|211|6": {
               "landed": "miss",
@@ -575,7 +714,9 @@
             "markId": 750,
             "kind": "acquire"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     },
@@ -585,14 +726,20 @@
       "actions": [
         {
           "id": "isolated-star-at-cap",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10200112,
             "actionKind": "star-skill",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         }
       ],
       "probes": [
@@ -604,7 +751,9 @@
             "actionId": "isolated-star-at-cap",
             "reason": "verified-direct-sp"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         },
         {
           "kind": "trace-query",
@@ -614,7 +763,9 @@
             "actionId": "isolated-star-at-cap",
             "eventType": "VERIFIED_COMBAT_HIT"
           },
-          "expectation": { "count": 5 }
+          "expectation": {
+            "count": 5
+          }
         }
       ]
     }
@@ -649,9 +800,20 @@
       },
       "expectation": {
         "minCount": 7,
-        "contains": [{ "operation": "apply" }, { "operation": "expire" }]
+        "contains": [
+          {
+            "operation": "apply"
+          },
+          {
+            "operation": "expire"
+          }
+        ]
       },
-      "select": ["actionId", "absoluteFrame", "operation"]
+      "select": [
+        "actionId",
+        "absoluteFrame",
+        "operation"
+      ]
     },
     {
       "kind": "trace-query",
@@ -664,10 +826,19 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ]
         }
       },
-      "select": ["hitIdentity", "sourceSequencePath"]
+      "select": [
+        "hitIdentity",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -681,15 +852,30 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
-          "modifiers.0.valueRaw": [400, 400, 400, 400, 400]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ],
+          "modifiers.0.valueRaw": [
+            400,
+            400,
+            400,
+            400,
+            400
+          ]
         },
         "every": {
           "modifiers.0.attributeId": 1,
           "modifiers.0.bucket": "dynamicPercent"
         }
       },
-      "select": ["expiresAtMs", "targetId"]
+      "select": [
+        "expiresAtMs",
+        "targetId"
+      ]
     },
     {
       "kind": "trace-query",
@@ -702,11 +888,26 @@
       "expectation": {
         "count": 5,
         "orderedValues": {
-          "absoluteFrame": [2032, 2037, 2042, 2048, 2054],
-          "change": [0.5, 0.5, 0.5, 0.5, 0.5]
+          "absoluteFrame": [
+            2032,
+            2037,
+            2042,
+            2048,
+            2054
+          ],
+          "change": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
         }
       },
-      "select": ["beforeValue", "afterValue"]
+      "select": [
+        "beforeValue",
+        "afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -719,11 +920,18 @@
       "expectation": {
         "count": 1,
         "orderedValues": {
-          "absoluteFrame": [3754],
-          "change": [0.5]
+          "absoluteFrame": [
+            3754
+          ],
+          "change": [
+            0.5
+          ]
         }
       },
-      "select": ["beforeValue", "afterValue"]
+      "select": [
+        "beforeValue",
+        "afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -733,7 +941,9 @@
         "actionId": "lily-star-all-miss",
         "reason": "verified-direct-sp"
       },
-      "expectation": { "count": 0 }
+      "expectation": {
+        "count": 0
+      }
     },
     {
       "kind": "trace-query",
@@ -747,12 +957,27 @@
       "expectation": {
         "count": 3,
         "orderedValues": {
-          "frameIndex": [1861, 1866, 1870],
-          "before": [0, 1, 2],
-          "after": [1, 2, 3]
+          "frameIndex": [
+            1861,
+            1866,
+            1870
+          ],
+          "before": [
+            0,
+            1,
+            2
+          ],
+          "after": [
+            1,
+            2,
+            3
+          ]
         }
       },
-      "select": ["frameIndex", "sourceSequencePath"]
+      "select": [
+        "frameIndex",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -766,10 +991,17 @@
       "expectation": {
         "count": 2,
         "orderedValues": {
-          "kind": ["acquire", "held-trigger"]
+          "kind": [
+            "acquire",
+            "held-trigger"
+          ]
         }
       },
-      "select": ["before", "after", "sourceSequencePath"]
+      "select": [
+        "before",
+        "after",
+        "sourceSequencePath"
+      ]
     },
     {
       "kind": "trace-query",
@@ -784,7 +1016,11 @@
       "expectation": {
         "count": 1
       },
-      "select": ["timeMs", "payload.beforeValue", "payload.afterValue"]
+      "select": [
+        "timeMs",
+        "payload.beforeValue",
+        "payload.afterValue"
+      ]
     },
     {
       "kind": "trace-query",
@@ -795,7 +1031,9 @@
         "payload.stateIdentity": "lily-will",
         "payload.operation": "expire"
       },
-      "expectation": { "count": 4 },
+      "expectation": {
+        "count": 4
+      },
       "select": [
         "actionId",
         "timeMs",
@@ -831,9 +1069,16 @@
       },
       "expectation": {
         "count": 1,
-        "orderedValues": { "actualDurationFrames": [81] }
+        "orderedValues": {
+          "actualDurationFrames": [
+            81
+          ]
+        }
       },
-      "select": ["controlSkillId", "subSkillIndex"]
+      "select": [
+        "controlSkillId",
+        "subSkillIndex"
+      ]
     },
     {
       "kind": "trace-query",
@@ -846,13 +1091,27 @@
       "expectation": {
         "count": 2,
         "orderedValues": {
-          "operation": ["apply", "expire"],
-          "absoluteFrame": [2851, 3211],
-          "modifiers.0.valueRaw": [1900, 1900],
-          "targetId": ["actor-101010", "actor-101010"]
+          "operation": [
+            "apply",
+            "expire"
+          ],
+          "absoluteFrame": [
+            2851,
+            3211
+          ],
+          "modifiers.0.valueRaw": [
+            1900,
+            1900
+          ],
+          "targetId": [
+            "actor-101010",
+            "actor-101010"
+          ]
         }
       },
-      "select": ["expiresAtMs"]
+      "select": [
+        "expiresAtMs"
+      ]
     },
     {
       "kind": "trace-query",
@@ -865,11 +1124,28 @@
       "expectation": {
         "count": 6,
         "orderedValues": {
-          "operation": ["apply", "apply", "apply", "apply", "apply", "expire"],
-          "absoluteFrame": [6732, 6737, 6742, 6748, 6754, 7114]
+          "operation": [
+            "apply",
+            "apply",
+            "apply",
+            "apply",
+            "apply",
+            "expire"
+          ],
+          "absoluteFrame": [
+            6732,
+            6737,
+            6742,
+            6748,
+            6754,
+            7114
+          ]
         }
       },
-      "select": ["modifiers.0.valueRaw", "targetId"]
+      "select": [
+        "modifiers.0.valueRaw",
+        "targetId"
+      ]
     }
   ]
 }

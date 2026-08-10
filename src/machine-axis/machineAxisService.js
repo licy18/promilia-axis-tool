@@ -522,6 +522,10 @@ export function createMachineAxisService({
       canonicalRun,
       compilation.actionResolutions
     );
+    const contextWindowIssues = collectContextWindowConflictIssues({
+      contract: compilation.contract,
+      project: compilation.project,
+    });
     const warnings = collectExecutionWarnings({
       compilation,
       run: canonicalRun,
@@ -550,6 +554,7 @@ export function createMachineAxisService({
       'primary';
     const issues = dedupeMachineAxisIssues([
       ...executionIssues,
+      ...contextWindowIssues,
       ...((requiresFormalProof || executionIssues.length > 0) &&
       actionLegalityProof.passed !== true
         ? actionLegalityProof.issues
@@ -1847,10 +1852,10 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
   const contextAction = (contract.actions ?? []).find(
     candidate => String(candidate.id) === String(contextActionId)
   );
-  const contextSequenceIndex =
-    contextAction?.intent?.attackInput?.sequenceIndex;
   const contextFrame = absoluteScheduleFrame(contextAction);
   const actionFrame = absoluteScheduleFrame(action);
+  const contextSequenceIndex =
+    contextAction?.intent?.attackInput?.sequenceIndex;
   if (!Number.isFinite(contextFrame) || !Number.isFinite(actionFrame)) {
     return requestedSegment;
   }
@@ -2594,6 +2599,136 @@ function collectExecutionIssues(run, actionResolutions) {
       ),
     ];
   });
+}
+
+function collectContextWindowConflictIssues({ contract, project }) {
+  const issues = [];
+  const projectActionByContractId = new Map(
+    (project?.actions ?? []).map(action => [String(action.id), action])
+  );
+  const mechanicsPackage = requireMechanicsPackage();
+  const actions = contract?.actions ?? [];
+  const characterIdBySlotId = new Map(
+    (contract?.scenario?.team ?? []).map(slot => [
+      String(slot.slotId),
+      Number(slot.characterId),
+    ])
+  );
+  for (const action of actions) {
+    const attackInput = action.intent?.attackInput ?? {};
+    const contextActionId = attackInput.contextActionId;
+    if (!contextActionId || action.intent?.actionKind !== 'normal-attack') {
+      continue;
+    }
+    const previousContractAction = actions.find(
+      candidate => String(candidate.id) === String(contextActionId)
+    );
+    const previousProjectAction = projectActionByContractId.get(
+      String(contextActionId)
+    );
+    if (!previousContractAction || !previousProjectAction) continue;
+    const chainIdentity =
+      previousContractAction.intent?.attackInput?.chainIdentity ??
+      previousProjectAction.attackInputChainIdentity ??
+      previousProjectAction.attackInput?.attackInputChainIdentity ??
+      null;
+    if (!String(chainIdentity).startsWith('context-form:')) continue;
+    const mapping = getVerifiedCombatActionMapping({
+      type: ACTION_TYPES.SKILL,
+      skillId: action.intent?.publicActionId,
+      actionKind: action.intent?.actionKind,
+      actor: {
+        characterId: (() => {
+          const bySlot = characterIdBySlotId.get(
+            String(action.owner?.slotId ?? '')
+          );
+          if (Number.isInteger(bySlot)) return bySlot;
+          const actorCharacterId = Number(action.actorCharacterId);
+          return Number.isFinite(actorCharacterId) ? actorCharacterId : null;
+        })(),
+      },
+    });
+    const contextSegments = (mapping?.profileAttackInputSegments ?? []).filter(
+      segment =>
+        String(segment.attackInputChainIdentity ?? '') ===
+          String(chainIdentity) &&
+        Number(segment.sequenceIndex) ===
+          Number(
+            previousContractAction.intent?.attackInput?.sequenceIndex ??
+              previousProjectAction.attackSequenceIndex
+          )
+    );
+    if (contextSegments.length !== 1) continue;
+    const contextSegment = contextSegments[0];
+    const sourceControlSkillId = Number(
+      contextSegment.executionControlSkillId ?? contextSegment.controlSkillId
+    );
+    const sourceSubSkillIndex = Number(
+      contextSegment.selectedSubSkillIndex ??
+        contextSegment.subSkillIndex ??
+        0
+    );
+    const contextFrame = absoluteScheduleFrame(previousContractAction);
+    const actionFrame = absoluteScheduleFrame(action);
+    if (!Number.isFinite(contextFrame) || !Number.isFinite(actionFrame)) {
+      continue;
+    }
+    const offsetFrames = Number(actionFrame) - Number(contextFrame);
+    const edges = (
+      mechanicsPackage.actionVariantGraph?.contextEdges ?? []
+    ).filter(
+      edge =>
+        edge.applied === true &&
+        Number(edge.sourceControlSkillId) === sourceControlSkillId &&
+        Number(edge.sourceSubSkillIndex) === sourceSubSkillIndex &&
+        String(edge.inputCommand ?? '') ===
+          String(action.intent?.actionKind) &&
+        offsetFrames >= Number(edge.inputWindow?.startFrame) &&
+        offsetFrames < Number(edge.inputWindow?.endFrame)
+    );
+    if (edges.length === 0) continue;
+    const projectAction = projectActionByContractId.get(String(action.id));
+    const requestedControlSkillId = Number(
+      projectAction?.attackInput?.controlSkillId ??
+        projectAction?.controlSubSkillId ??
+        action.intent?.publicActionId
+    );
+    const requestedSubSkillIndex = Number(
+      projectAction?.attackInput?.selectedSubSkillIndex ??
+        projectAction?.controlSubSkillIndex ??
+        0
+    );
+    const matched = edges.some(
+      edge =>
+        Number(edge.targetControlSkillId) === requestedControlSkillId &&
+        Number(edge.targetSubSkillIndex) === requestedSubSkillIndex
+    );
+    if (matched) continue;
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-window-conflict',
+        `actions.${actions.indexOf(action)}.intent.attackInput.sequenceIndex`,
+        'Normal attack input falls inside an open derived window but targets a different form',
+        {
+          actionId: action.id,
+          contextActionId,
+          sourceControlSkillId,
+          sourceSubSkillIndex,
+          requestedControlSkillId,
+          requestedSubSkillIndex,
+          expectedTargetControlSkillIds: [
+            ...new Set(edges.map(edge => Number(edge.targetControlSkillId))),
+          ],
+          expectedTargetSubSkillIndexes: [
+            ...new Set(edges.map(edge => Number(edge.targetSubSkillIndex))),
+          ],
+          inputWindow: edges[0].inputWindow,
+          offsetFrames,
+        }
+      )
+    );
+  }
+  return issues;
 }
 
 function createExecutionBlockIssue({

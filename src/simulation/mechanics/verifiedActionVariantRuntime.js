@@ -1274,8 +1274,43 @@ export function createVerifiedActionVariantRuntime({
             actorState,
             controlSkillId: publicControlSkillId,
             timeMs: actionTimeMs,
+            inputCommand: mapping?.actionKind ?? null,
           })
         : { status: 'none', binding: null };
+      if (contextSelection.status === 'conflict') {
+        const block = createContextWindowConflictBlock({
+          action,
+          actorState,
+          controlSkillId: publicControlSkillId,
+          contextSelection,
+        });
+        executionBlocks.push(block);
+        actionResolutionById.set(action.id, {
+          ...resolveVerifiedCombatActionMechanics(action, {
+            combatScenario: scenario.combatScenario,
+          }),
+          ready: false,
+          applied: false,
+          status: block.reason,
+          reasons: block.reasons,
+        });
+        selectionByActionId.set(
+          action.id,
+          createVariantSelectionRecord({
+            action,
+            characterId,
+            publicControlSkillId,
+            executionControlSkillId: null,
+            contract: null,
+            inputSelection: null,
+            selectedSubSkillIndex: null,
+            selectionSource: null,
+            resolution: null,
+            status: block.reason,
+          })
+        );
+        continue;
+      }
       if (
         activeSelection.status === 'ambiguous' &&
         !attackChainSelection.segment &&
@@ -2468,24 +2503,50 @@ function resolveContextVariantSelection({
   actorState,
   controlSkillId,
   timeMs,
+  inputCommand = null,
 }) {
   if (!previous?.ready) {
     return { status: 'none', binding: null, previous: null };
   }
-  const candidates = (contextBindings ?? []).filter(binding => {
+  const sourceCandidates = (contextBindings ?? []).filter(binding => {
     if (
       Number(binding.ownerId) !== Number(actorState.profile.ownerId) ||
       Number(binding.sourceControlSkillId) !==
         Number(previous.controlSkillId) ||
       Number(binding.sourceSubSkillIndex) !==
         Number(previous.selectedSubSkillIndex) ||
-      Number(binding.targetControlSkillId) !== Number(controlSkillId) ||
+      (inputCommand != null &&
+        String(binding.inputCommand ?? '') !== String(inputCommand)) ||
       !isRuntimeConditionSatisfied(binding.condition, actorState)
     ) {
       return false;
     }
     return true;
   });
+  if (!sourceCandidates.length) {
+    return { status: 'none', binding: null, previous };
+  }
+  const sourceScheduling = resolveVerifiedContextInputScheduling({
+    edges: sourceCandidates,
+    predecessorStartMs: previous.startMs,
+    predecessorEffectiveEndFrame: previous.effectiveDurationFrames,
+    requestedExecutionStartMs: timeMs,
+  });
+  if (!sourceScheduling) {
+    return { status: 'none', binding: null, previous };
+  }
+  const candidates = sourceCandidates.filter(
+    binding => Number(binding.targetControlSkillId) === Number(controlSkillId)
+  );
+  if (!candidates.length) {
+    return {
+      status: 'conflict',
+      binding: null,
+      previous,
+      inputScheduling: sourceScheduling,
+      conflictingEdges: sourceCandidates,
+    };
+  }
   const inputScheduling = resolveVerifiedContextInputScheduling({
     edges: candidates,
     predecessorStartMs: previous.startMs,
@@ -3473,6 +3534,55 @@ function createVariantExecutionBlock({
     requiredValue: null,
     currentValue: actorState.current,
     maxValue: actorState.profile.capacity,
+  };
+}
+
+function createContextWindowConflictBlock({
+  action,
+  actorState,
+  controlSkillId,
+  contextSelection,
+}) {
+  const edges = contextSelection.conflictingEdges ?? [];
+  const scheduling = contextSelection.inputScheduling ?? null;
+  const expectedTargets = [
+    ...new Set(
+      edges.map(
+        edge =>
+          `${edge.targetControlSkillId ?? ''}/${
+            edge.targetSubSkillIndex ?? 0
+          }`
+      )
+    ),
+  ].sort();
+  return {
+    ...createActionSourceSequenceFields(action),
+    code: 'VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT',
+    status: 'blocked',
+    reason: 'verified-context-window-input-conflict',
+    reasons: [
+      'open-context-window-target-mismatch',
+      `requested-control:${controlSkillId ?? ''}`,
+      `expected-targets:${expectedTargets.join(',') || 'none'}`,
+    ],
+    message: `${action.name ?? '动作'}落在前动作的派生衔接窗口内，但输入目标不是窗口允许的形态`,
+    sourceKind: 'azpr-verified-action-variant-runtime',
+    sourceIdentity: edges.map(edge => edge.sourceIdentity).filter(Boolean),
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId,
+    requestedControlSkillId: controlSkillId,
+    expectedControlSkillIds: expectedTargets,
+    contextActionId: contextSelection.previous?.actionId ?? null,
+    inputWindow:
+      scheduling?.edge?.inputWindow ?? null,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredValue: null,
+    currentValue: actorState?.current ?? null,
+    maxValue: actorState?.profile?.capacity ?? null,
   };
 }
 
