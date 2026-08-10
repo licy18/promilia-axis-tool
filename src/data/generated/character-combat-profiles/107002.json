@@ -70,7 +70,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
+    "packageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -25345,6 +25345,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -25377,6 +25378,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -25409,6 +25411,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -25475,6 +25478,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -46358,12 +46362,12 @@
     "profileIdentity": "actor:107002:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 6,
+      "compilerVersion": 7,
       "recipeIdentity": "actor:107002:character-combat-recipe:v1",
       "recipeHash": "a8ad9435cf85ac3fc68cb3d448972384a74e28ff9d62ae344ced0e71807872df",
       "compilerInputHash": "f6c3b6fd4f8aaeb1a7b014edc0104095d06404d96da3176f86122b6a54c6514c",
-      "recipeContractHash": "23d4a5580eb401239ef30486fe572d98bcd225aadda17644f109f534e9838d27",
-      "ownerContractHash": "44a4da7f363de0d52a364bdcc31fcb90d94c9f141e4e90f45c90019ee90e2aae"
+      "recipeContractHash": "cd25aaa3500f21560b6542671c5784e39a43f1f54904db2843194f8d45925500",
+      "ownerContractHash": "e0c957ed18a384e8aaa27c65d72b9f326598ec3361b984ca8ec857f59b18422f"
     },
     "operators": [
       "public-action-binding",
@@ -47407,7 +47411,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "534f68f5d320d3ac43a14a1be978b0ab7be0391d780f2777310a3207c791ee8c"
+    "deterministicInputHash": "32116947a666b03e92c681fc01664b108ab68dab65e1cc6a2e4ddb088bd3d42b"
   },
-  "profileHash": "92228dfec0da9c1adeaa4f5540d740c1d4b00e66dbc00574c5ff156dca5115ef"
+  "profileHash": "bb7147820196ff062079ddab2a6d63b91e9c4d00aab834912bbda54ac5afea06"
 }

@@ -76,7 +76,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
+    "packageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -19275,6 +19275,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": null,
             "hitSettlementOrder": "after-hit",
             "targetStateActivationCondition": null,
@@ -50428,6 +50429,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -50471,6 +50473,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -50653,6 +50656,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -50696,6 +50700,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -50736,6 +50741,7 @@
         "assumptionVersion": "1.0.0",
         "assumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -50773,6 +50779,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -50816,6 +50823,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": "after-hit",
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -50859,6 +50867,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -50896,6 +50905,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -50933,6 +50943,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -59866,6 +59877,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": null,
           "hitSettlementOrder": "after-hit",
           "targetStateActivationCondition": null,
@@ -92618,12 +92630,12 @@
     "profileIdentity": "actor:112001:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 6,
+      "compilerVersion": 7,
       "recipeIdentity": "actor:112001:character-combat-recipe:v1",
       "recipeHash": "f6ff375bcb7139b92ab9220d285206376a280e71703034692f62f5affe2e7a28",
       "compilerInputHash": "4019d929f94aff848041590372ca4a58b5da30c1b0fb5fc9f170393601126f1f",
-      "recipeContractHash": "4722d878e444b74ab105356231278bd3c436327d75844afd686499034b3c892c",
-      "ownerContractHash": "6cbd220f64cf32d1bb32c048aa8bafcd0b9b58dd1de2999bae4639075b5c27a0"
+      "recipeContractHash": "7906549508d8d0d03339d37b714441ca3ec7187d8612cde15ee620ce58aa4595",
+      "ownerContractHash": "1467a89229df04360fe45b25b56c5f1732db8ed1b146114734ea8d43bbee5595"
     },
     "operators": [
       "public-action-binding",
@@ -97463,7 +97475,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "8dd690e44b7a06c9dedc49dd016c5d463a784124ce43f386bef2e5dd96f3caf6"
+    "deterministicInputHash": "866937d958da5caafa3bae82f7e1134557b808f1a91d511af1f001f32e2d1f10"
   },
-  "profileHash": "786981f7de6ebaa81de46d9ce98f03a5939b8da5a29b8fa0250cc177867a67b3"
+  "profileHash": "b0b27c09499616e4d29f1c9bed966eaffcc50f4c8d9ebcf19993c3c9ee17706b"
 }

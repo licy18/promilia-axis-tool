@@ -78,7 +78,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
+    "packageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -58243,6 +58243,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58281,6 +58282,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58319,6 +58321,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58362,6 +58365,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58405,6 +58409,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58448,6 +58453,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58491,6 +58497,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58534,6 +58541,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58572,6 +58580,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58615,6 +58624,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58658,6 +58668,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -58701,6 +58712,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -99067,12 +99079,12 @@
     "profileIdentity": "actor:102001:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 6,
+      "compilerVersion": 7,
       "recipeIdentity": "actor:102001:character-combat-recipe:v1",
       "recipeHash": "f7b14847a2aa5673380dd737f75c821c505bf3c26f1fbf2f46c3f5685ea0b4ae",
       "compilerInputHash": "13bb85e74c05a1a0d9f4814b9adaf6041a8261d37555baceb85efbc7864ea2fe",
-      "recipeContractHash": "2f6e45e652e0bd20afc0c5cafaa5b9ebc2302b0fc1cd57cae5f3fd8beb05644b",
-      "ownerContractHash": "a1bb575b0b9ceb44f44a4d0eef0c72651fc4752274e0adfc8d333a943692f458"
+      "recipeContractHash": "3b7dd52e27fda552e7a613d9c9928a49136aaca8ea2a899c609f29e95318436a",
+      "ownerContractHash": "4ce2abf0c08e5bfc2a3ab23ff5870d83f4fe2857a6285ce45d194cda8db2d4f7"
     },
     "operators": [
       "public-action-binding",
@@ -100625,7 +100637,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "6ee3ba7ae694462888a8baa37292f2380e4517e57a4fe91c0fad1c55b18dd8ee"
+    "deterministicInputHash": "b07431156689b04c4213e78aade3ac92ddb16a12a5148a6e29788230e75a2d9d"
   },
-  "profileHash": "b309b34de004d4d0ebfbc8d7f7df100bf4fa14e973c76eee52b6b4df4349d64d"
+  "profileHash": "28a5ee98e42ca2ceb1198184566e11097b1e931631ebc050cc22de4a9192aaf2"
 }

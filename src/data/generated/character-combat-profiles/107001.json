@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
+    "packageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -33638,6 +33638,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": {
               "kind": "conditional-damage-group-hit",
               "groupIdentity": "sifliya-star-hit-1",
@@ -41772,6 +41773,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": {
               "kind": "conditional-damage-group-hit",
               "groupIdentity": "sifliya-ultimate-hit-1",
@@ -50978,6 +50980,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -51133,6 +51136,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": {
@@ -69836,6 +69840,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": {
             "kind": "conditional-damage-group-hit",
             "groupIdentity": "sifliya-star-hit-1",
@@ -74848,6 +74853,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": {
             "kind": "conditional-damage-group-hit",
             "groupIdentity": "sifliya-ultimate-hit-1",
@@ -94822,12 +94828,12 @@
     "profileIdentity": "actor:107001:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 6,
+      "compilerVersion": 7,
       "recipeIdentity": "actor:107001:character-combat-recipe:v1",
       "recipeHash": "6126eea19e5ed8d69c73580b47ac7e837837c70711381eb0f4d574025c6d4d63",
       "compilerInputHash": "35178111e81a21acc29d79aafdce9a875c75cd1e4062f1200412c3947be09aac",
-      "recipeContractHash": "c03ce0e42ee4173c5b7c9f4ae788fc48ea94523d44d55f921abeb989b18d3159",
-      "ownerContractHash": "c69837e9c5a35e02e98e02ef9a7616eb37afb7e1d6c7812dea1b056b82b706ba"
+      "recipeContractHash": "0ecf07b6ad35677438741428472709c9f1f4d2b7794fd68b398c594dcf66d16d",
+      "ownerContractHash": "e708b8110b574396e393f49687746c8c07c92d91e70821c48cfaf5504c4035a1"
     },
     "operators": [
       "public-action-binding",
@@ -99407,7 +99413,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "24995322b45634aee270e5028920528b6ed1ef1bead8438a4b62685ab4f08f17"
+    "deterministicInputHash": "60262390f940a752f75c8326ca36bd5c608e283d9492a8f0edf52c5a5826223a"
   },
-  "profileHash": "598c51952118f75871e334cd5226abf5cbf66af2bd6130093e6154e885c83210"
+  "profileHash": "7c22958c798f228db4f7c62a579c499a170b8655e3c1af01f7d035e7f6c10b90"
 }

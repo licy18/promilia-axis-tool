@@ -74,7 +74,7 @@
   },
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "58364bafa8235c192b27664e66dee5986b61b42c14259db392bbae6b7de30fe7",
+    "packageHash": "8b9877b750e5e763ee163f18ae37287b11ca5708b267687755c193272bab69fb",
     "region": "TC",
     "clientBuild": "il2cpp-tc-catch-20260709"
   },
@@ -11959,6 +11959,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": null,
             "hitSettlementOrder": null,
             "targetStateActivationCondition": null,
@@ -14397,6 +14398,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": null,
             "hitSettlementOrder": null,
             "targetStateActivationCondition": null,
@@ -22686,6 +22688,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": null,
             "hitSettlementOrder": null,
             "targetStateActivationCondition": null,
@@ -29335,6 +29338,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": {
           "kind": "landed-hit-cardinality",
           "elementId": 108003136,
@@ -29522,6 +29526,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": "elements",
         "hitGate": null,
@@ -29693,6 +29698,7 @@
         "targetKindOverride": null,
         "hitSettlementOrder": null,
         "targetStateActivationCondition": null,
+        "tuningMarkActivationCondition": null,
         "hitActivation": {
           "kind": "landed-hit-cardinality",
           "elementId": 108003126,
@@ -39947,6 +39953,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": null,
           "hitSettlementOrder": null,
           "targetStateActivationCondition": null,
@@ -41372,6 +41379,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": null,
           "hitSettlementOrder": null,
           "targetStateActivationCondition": null,
@@ -43075,6 +43083,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": null,
           "hitSettlementOrder": null,
           "targetStateActivationCondition": null,
@@ -50870,12 +50879,12 @@
     "profileIdentity": "actor:108003:character-combat-profile:v1",
     "operatorContractVersion": 1,
     "sourceCompilation": {
-      "compilerVersion": 6,
+      "compilerVersion": 7,
       "recipeIdentity": "actor:108003:character-combat-recipe:v1",
       "recipeHash": "6217b3d969d19ee6781e1d70e1837c5872e9daf1bc4cdf395fc90398cdf2c8c0",
       "compilerInputHash": "769747a84a4bf1f9a10b4c45b09c4cd27353a374f3666b811718a1982df1e751",
-      "recipeContractHash": "69292d960264b9815e5961e791b459921bf7ca64f696b7b7c4aba24e38db84ef",
-      "ownerContractHash": "864dcddf939ab73f95eb70a7d42abfe4751dd659117fae09858d5eec095f4344"
+      "recipeContractHash": "9f6360a1797152cb0fcd48aca6b84f7b18cfe048a7c92d948546a24df4636d95",
+      "ownerContractHash": "12237a54f87aa2f633f261c4e34f82385fab5ab9c599aa3d5d57be8d13c5a46a"
     },
     "operators": [
       "public-action-binding",
@@ -54140,7 +54149,7 @@
   "validation": {
     "status": "character-combat-profile-valid",
     "issues": [],
-    "deterministicInputHash": "b79eaa94114ab385760b0e57644964d556f86f9c2eca111fd617ef5339a316f9"
+    "deterministicInputHash": "3400e6e4d4b60b743d6e3e2ecc05560d64d84c32db85600e975622332fe79280"
   },
-  "profileHash": "23eba5e3fee5c9619bd47afad5cf24cba2c75a652050911a434048cb14fc75bf"
+  "profileHash": "96f726a92e7ff35304795e04fb87390b0028623dfd240a4fa1c1af1fa5d99771"
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 6,
+  "compilerVersion": 7,
   "ownerId": 109001,
   "ownerName": "末音",
   "recipeIdentity": "actor:109001:character-combat-recipe:v1",
@@ -18199,6 +18199,7 @@
             "status": "verified-action-effect-binding-applied",
             "confidence": "high",
             "applied": true,
+            "tuningMarkActivationCondition": null,
             "hitGate": null,
             "hitSettlementOrder": null,
             "targetStateActivationCondition": {
@@ -23853,6 +23854,7 @@
           "status": "verified-element-layer-formula-activation-condition-ready",
           "applied": true
         },
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -23901,6 +23903,7 @@
           "status": "verified-element-layer-formula-activation-condition-ready",
           "applied": true
         },
+        "tuningMarkActivationCondition": null,
         "hitActivation": null,
         "sourceReferenceKind": null,
         "hitGate": null,
@@ -29761,6 +29764,7 @@
           "status": "verified-action-effect-binding-applied",
           "confidence": "high",
           "applied": true,
+          "tuningMarkActivationCondition": null,
           "hitGate": null,
           "hitSettlementOrder": null,
           "targetStateActivationCondition": {
@@ -38887,7 +38891,7 @@
       "sourceIdentity": "NewTable/hero.rows[id=109001].propertyId=109001|NewTable/unit_property.rows[id=109001].baseAttributeId=109001|NewTable/template_value.rows[id=109001].baseAttribute|NewTable/template_value.rows[id=109001].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|battle-effect:10900161:0:-2193895459641539428:-2633118252501932489:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-1715488869977622004|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/MonoBehaviour_7759936102957048157__7759936102957048157.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900105.asset/MonoBehaviour/skill_control_10900105__1562824798995844947.json#skillResourceMaps[0].elements[7]|battle-element-assets.jsonl#path_id=-7783775984244194322|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/MonoBehaviour_8340818065355282527__8340818065355282527.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10900127.asset/MonoBehaviour/skill_control_10900127__4167699101078258301.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=2840539820446947370"
     }
   },
-  "contractHash": "bd50be020b0d98e94309c56d06b2f0707111b4f8ca3752920f17d00700c18358",
+  "contractHash": "17a2b6fc98a933182dd723aefa9dd7138bd87cf179ba8f6cf38c1420be9d970a",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 0,
@@ -38919,5 +38923,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "2e3865b401752913b7969e13687b774e411ded29083ec9b9edce6e035fc12d24"
+  "recipeContractHash": "754de6f217671d826f074c5bc57a37bea0f9a4316478c89f0bde12fe3b568cd6"
 }
