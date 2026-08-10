@@ -1038,11 +1038,9 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1079,7 +1077,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "dd5987db05834fc6",
+      "manifestHash": "e66325e482f4f3c7",
       "sourceOfTruthHash": "0b1b42921cde90b5",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1371,15 +1369,15 @@
       }
     }
   ],
-  "catalogHash": "5c846a9f26ad14c8",
-  "manifestIndexHash": "f6e572669dce82d3",
+  "catalogHash": "5d11d1c03f080269",
+  "manifestIndexHash": "3b6f4f9013e8fc25",
   "summary": {
     "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 10,
-    "visuallyAcceptedCount": 8,
-    "optimizationReadyCount": 8,
+    "visuallyAcceptedCount": 9,
+    "optimizationReadyCount": 9,
     "machineScenarioPassCount": 11,
     "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,

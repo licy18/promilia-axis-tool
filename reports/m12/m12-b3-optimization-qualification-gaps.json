@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "da49f445b69f863f",
+  "rosterHash": "7cbb26ffeb3e6d90",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "8ab64f0937013ce0",
-        "da49f445b69f863f"
+        "5f0347f65a8dd845",
+        "7cbb26ffeb3e6d90"
       ]
     },
     {
@@ -124,20 +124,6 @@
   ],
   "records": [
     {
-      "gapIdentity": "character:107002:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "107002",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=107002]"
-      ],
-      "details": {},
-      "gapHash": "c99a421e56f2b5e4"
-    },
-    {
       "gapIdentity": "character:112001:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "112001",
@@ -153,16 +139,16 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 2,
+    "blockingUniqueGapCount": 1,
     "byCategory": {
-      "not-implemented": 2
+      "not-implemented": 1
     },
     "byCode": {
-      "character-not-optimization-ready": 2
+      "character-not-optimization-ready": 1
     },
     "byObjectKind": {
-      "character": 2
+      "character": 1
     }
   },
-  "ledgerHash": "bac9d536a2bc9993"
+  "ledgerHash": "69e14c13cf7a2217"
 }

@@ -13,7 +13,7 @@
 | 莉莉 (102001) | optimization-ready | 108/108 | 0 | 0 | 是 |
 | 红宝石 (103002) | optimization-ready | 190/190 | 0 | 0 | 是 |
 | 西芙莉雅 (107001) | optimization-ready | 80/80 | 0 | 0 | 是 |
-| 米砂 (107002) | runtime-integrated | 98/98 | 0 | 0 | 否 |
+| 米砂 (107002) | optimization-ready | 98/98 | 0 | 0 | 是 |
 | 米蒂 (108003) | optimization-ready | 134/134 | 0 | 0 | 是 |
 | 末音 (109001) | optimization-ready | 134/134 | 0 | 0 | 是 |
 | 姬瑟贝露 (112001) | extracted | 186/186 | 0 | 0 | 否 |

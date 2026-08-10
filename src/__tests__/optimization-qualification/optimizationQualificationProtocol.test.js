@@ -191,6 +191,7 @@ describe('M12-B3 optimization qualification generation', () => {
       '102001',
       '103002',
       '107001',
+      '107002',
       '108003',
       '109001',
       'STARBORN',
@@ -275,13 +276,13 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 2,
+      blockingUniqueGapCount: 1,
       byCategory: {
-        'not-implemented': 2,
+        'not-implemented': 1,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
-      character: 7,
+      character: 8,
       kibo: 43,
       'soul-essence': 62,
       equipment: 137,

@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "da49f445b69f863f",
+  "rosterHash": "7cbb26ffeb3e6d90",
   "records": [
     {
       "objectKind": "character",
@@ -96,25 +96,19 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=107002]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           107002
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "dd5987db05834fc6"
+          "e66325e482f4f3c7"
         ]
       },
-      "manifestHash": "6afbbcf69fe53db4"
+      "manifestHash": "f779db778e6ac8f3"
     },
     {
       "objectKind": "character",
@@ -30839,17 +30833,17 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "optimization-ready": 261,
-      "runtime-integrated": 2
+      "optimization-ready": 262,
+      "runtime-integrated": 1
     },
     "optimizationReadyCounts": {
-      "character": 7,
+      "character": 8,
       "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 261
+    "optimizationReadyTotal": 262
   },
-  "manifestsHash": "73a6979dd5f443c6"
+  "manifestsHash": "c95546aa75e8bbcd"
 }

@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "f6e572669dce82d3",
+  "manifestIndexHash": "3b6f4f9013e8fc25",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -843,19 +843,19 @@
     {
       "ownerId": 107002,
       "ownerName": "米砂",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 98,
       "matrixPassedCount": 98,
-      "manifestHash": "dd5987db05834fc6",
+      "manifestHash": "e66325e482f4f3c7",
       "qualificationSubjectHash": "d7f3536cf74d1fad",
       "sourceOfTruthHash": "0b1b42921cde90b5",
       "profileHash": "b4d9cbb26b0e07b8b70237281d23b9e8f284bb32262826bdba722b282a94bfab",
@@ -986,10 +986,10 @@
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
       "extracted": 1,
-      "optimization-ready": 8,
-      "runtime-integrated": 2
+      "optimization-ready": 9,
+      "runtime-integrated": 1
     },
-    "optimizationReadyCount": 8
+    "optimizationReadyCount": 9
   },
-  "catalogHash": "5c846a9f26ad14c8"
+  "catalogHash": "5d11d1c03f080269"
 }
