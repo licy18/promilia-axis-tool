@@ -191,6 +191,7 @@ describe('M12-B3 optimization qualification generation', () => {
       '107001',
       '108003',
       '109001',
+      'STARBORN',
     ]);
     expect(artifacts.catalog.admission.kibos).toHaveLength(43);
     expect(artifacts.catalog.admission.soulEssences).toHaveLength(62);
@@ -272,13 +273,13 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 5,
+      blockingUniqueGapCount: 4,
       byCategory: {
-        'not-implemented': 5,
+        'not-implemented': 4,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
-      character: 4,
+      character: 5,
       kibo: 43,
       'soul-essence': 62,
       equipment: 137,

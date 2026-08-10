@@ -1267,11 +1267,9 @@
     {
       "ownerId": 199001,
       "ownerName": "女主角",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1310,7 +1308,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "20c8f5fde2c44a86",
+      "manifestHash": "5f66cef64df67ef1",
       "sourceOfTruthHash": "48aebda4c9eaeb14",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1324,11 +1322,9 @@
     {
       "ownerId": 199002,
       "ownerName": "男主角",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1367,7 +1363,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b84b76e5a1a2c805",
+      "manifestHash": "f989093501e96f5c",
       "sourceOfTruthHash": "72633ff73db8dbec",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1379,15 +1375,15 @@
       }
     }
   ],
-  "catalogHash": "99069b2d2cb3310f",
-  "manifestIndexHash": "a13c3d5917b48944",
+  "catalogHash": "23ee25d61253b7be",
+  "manifestIndexHash": "5c2a1fcfa1c556f3",
   "summary": {
     "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 10,
-    "visuallyAcceptedCount": 4,
-    "optimizationReadyCount": 4,
+    "visuallyAcceptedCount": 6,
+    "optimizationReadyCount": 6,
     "machineScenarioPassCount": 11,
     "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,

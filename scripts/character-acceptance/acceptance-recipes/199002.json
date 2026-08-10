@@ -3,45 +3,108 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
-    "scenarioIdentities": [],
-    "automatedEvidence": []
+    "status": "accepted",
+    "acceptanceCommit": "c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee",
+    "recordIdentity": "character-product-acceptance:199002:c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee:c1a95a44c8fde71c",
+    "scenarioIdentities": [
+      "m12-b3-starborn-199002-focused-acceptance"
+    ],
+    "automatedEvidence": [
+      {
+        "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
+        "status": "automated-workbench-import-passed",
+        "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
+        "fixtureSha256": "8eeef8400f6000b416b353439cb21929a8a0769a2855d8d9dbd4b772bef52ebc",
+        "screenshotPath": "reports/m12-b3-199002-workbench-visual-evidence.png",
+        "screenshotSha256": "236f6964b1e9c4c7d91895bdcc2cdcd4086dc5d3d3cee12f7da39e7e7528d415"
+      }
+    ],
+    "qualificationSubjectHash": "c1a95a44c8fde71c",
+    "scenarioSetHash": "07c051800b274138"
   },
   "ownerId": 199002,
   "optimizationObjectAcceptance": {
     "optimizationObjectId": "STARBORN",
-    "requiredSourceCharacterIds": [199001, 199002],
+    "requiredSourceCharacterIds": [
+      199001,
+      199002
+    ],
     "sourceCharacterId": 199002,
     "sourceAliasIdentity": "STARBORN:source-alias:199002"
   },
   "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
-  "goldenReports": ["reports/m10/199002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/199002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 19900262,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
     "reason": "m12c-zero-distance-passive-boss-active-surface-only",
     "sourceIdentity": "work/m12-b3/parallel-implementation-starborn/SOURCE_LEDGER.md#frozen-scenario-scope",
     "includedControlSubskills": [
-      { "controlSkillId": 19900201, "subSkillIndex": 0 },
-      { "controlSkillId": 19900202, "subSkillIndex": 0 },
-      { "controlSkillId": 19900203, "subSkillIndex": 0 },
-      { "controlSkillId": 19900203, "subSkillIndex": 1 },
-      { "controlSkillId": 19900204, "subSkillIndex": 0 },
-      { "controlSkillId": 19900205, "subSkillIndex": 0 },
-      { "controlSkillId": 19900210, "subSkillIndex": 0 },
-      { "controlSkillId": 19900210, "subSkillIndex": 1 },
-      { "controlSkillId": 19900212, "subSkillIndex": 0 },
-      { "controlSkillId": 19900213, "subSkillIndex": 0 },
-      { "controlSkillId": 19900222, "subSkillIndex": 0 },
-      { "controlSkillId": 19900249, "subSkillIndex": 0 },
-      { "controlSkillId": 19900261, "subSkillIndex": 0 }
+      {
+        "controlSkillId": 19900201,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900202,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900203,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900203,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 19900204,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900205,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900210,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900210,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 19900212,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900213,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900222,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900249,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 19900261,
+        "subSkillIndex": 0
+      }
     ]
   },
-  "requirementPolicies": { "unselectedControlVariantsFromActionForms": true },
+  "requirementPolicies": {
+    "unselectedControlVariantsFromActionForms": true
+  },
   "criticalProbe": {
-    "integerThresholdBoundary": { "low": 499, "threshold": 500 },
+    "integerThresholdBoundary": {
+      "low": 499,
+      "threshold": 500
+    },
     "preHitAttributeChange": {
       "beforeActionId": "199002-critical-rate-zero",
       "afterActionId": "199002-critical-rate-one-hundred"
@@ -56,8 +119,13 @@
     "effectIdentity": "battle-element:199002266",
     "targetId": "actor-199002",
     "durationFrames": 1440,
-    "requiredOperations": ["apply", "expire"],
-    "startOperations": ["apply"],
+    "requiredOperations": [
+      "apply",
+      "expire"
+    ],
+    "startOperations": [
+      "apply"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -185,7 +253,9 @@
         "eventType": "VERIFIED_COMBAT_HIT",
         "hitIdentity": "19900202|0|elements|0|3571624123866341096|10|1"
       },
-      "expectation": { "count": 0 }
+      "expectation": {
+        "count": 0
+      }
     }
   ],
   "negativeActionCases": [
@@ -193,21 +263,34 @@
       "identity": "ultimate-sp-exact-and-insufficient",
       "assertionIdentity": "resource-exact-and-insufficient",
       "durationFrames": 400,
-      "initialActorResources": [{ "slotId": "slot-1", "initialSp": 99 }],
+      "initialActorResources": [
+        {
+          "slotId": "slot-1",
+          "initialSp": 99
+        }
+      ],
       "actions": [
         {
           "id": "199002-ultimate-sp-insufficient",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900213,
             "actionKind": "ultimate",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-m-ultimate"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-m-ultimate"
+      ],
       "expectedIssue": {
         "actionId": "199002-ultimate-sp-insufficient",
         "code": "machine-axis-action-resource-insufficient"
@@ -219,7 +302,10 @@
       "actions": [
         {
           "id": "starborn-m-a5",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900201,
@@ -230,11 +316,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 1450 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1450
+          }
         },
         {
           "id": "starborn-m-charged-derived",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900201,
@@ -252,11 +344,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 1490 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1490
+          }
         },
         {
           "id": "starborn-m-derived-thrust",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900201,
@@ -269,11 +367,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 1563 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1563
+          }
         },
         {
           "id": "199002-thrust-window-a1",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900201,
@@ -285,10 +389,15 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 1588 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1588
+          }
         }
       ],
-      "baselineRequiredExecutableActionIds": ["starborn-m-derived-thrust"],
+      "baselineRequiredExecutableActionIds": [
+        "starborn-m-derived-thrust"
+      ],
       "expectedIssue": {
         "actionId": "199002-thrust-window-a1",
         "code": "machine-axis-normal-attack-context-window-conflict"
@@ -301,20 +410,66 @@
     "expectedProfileCount": 9,
     "maximumStacks": 5,
     "markProfiles": [
-      { "markId": 150, "profileKey": "fire", "elementName": "火" },
-      { "markId": 250, "profileKey": "thunder", "elementName": "雷" },
-      { "markId": 350, "profileKey": "ice", "elementName": "冰" },
-      { "markId": 450, "profileKey": "dark", "elementName": "暗" },
-      { "markId": 550, "profileKey": "wood", "elementName": "木" },
-      { "markId": 650, "profileKey": "earth", "elementName": "土" },
-      { "markId": 750, "profileKey": "wind", "elementName": "风" },
-      { "markId": 850, "profileKey": "water", "elementName": "水" },
-      { "markId": 950, "profileKey": "light", "elementName": "光" }
+      {
+        "markId": 150,
+        "profileKey": "fire",
+        "elementName": "火"
+      },
+      {
+        "markId": 250,
+        "profileKey": "thunder",
+        "elementName": "雷"
+      },
+      {
+        "markId": 350,
+        "profileKey": "ice",
+        "elementName": "冰"
+      },
+      {
+        "markId": 450,
+        "profileKey": "dark",
+        "elementName": "暗"
+      },
+      {
+        "markId": 550,
+        "profileKey": "wood",
+        "elementName": "木"
+      },
+      {
+        "markId": 650,
+        "profileKey": "earth",
+        "elementName": "土"
+      },
+      {
+        "markId": 750,
+        "profileKey": "wind",
+        "elementName": "风"
+      },
+      {
+        "markId": 850,
+        "profileKey": "water",
+        "elementName": "水"
+      },
+      {
+        "markId": 950,
+        "profileKey": "light",
+        "elementName": "光"
+      }
     ],
-    "mixedInitialCounts": { "fire": 2, "wind": 4, "dark": 1 },
+    "mixedInitialCounts": {
+      "fire": 2,
+      "wind": 4,
+      "dark": 1
+    },
     "capProfileKey": "fire",
-    "ultimate": { "publicActionId": 19900213, "stackDelta": 1 },
-    "starCarry": { "switchTargetSlotId": "slot-2", "stackDelta": 1 },
+    "ultimate": {
+      "publicActionId": 19900213,
+      "stackDelta": 1
+    },
+    "starCarry": {
+      "switchTargetSlotId": "slot-2",
+      "stackDelta": 1
+    },
     "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R2:2026-08-10#existing-mark-only-nine-profile-acceptance"
   },
   "isolatedActionCases": [
@@ -325,14 +480,20 @@
       "actions": [
         {
           "id": "199002-star-first-hit-miss-condition-insufficient",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900212,
             "actionKind": "star-skill",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          },
           "hitOverrides": {
             "19900212|0|elements|0|1956071209993179589|16|1": {
               "landed": "miss",
@@ -358,7 +519,9 @@
             "payload.elementId": 199002340,
             "payload.applied": true
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     },
@@ -369,18 +532,27 @@
       "actions": [
         {
           "id": "199002-interruption-star",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900212,
             "actionKind": "star-skill",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "199002-interruption-thrust",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 19900201,
@@ -393,7 +565,10 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 54 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 54
+          }
         }
       ],
       "probes": [
@@ -408,7 +583,9 @@
             "payload.hitIdentity": "19900212|0|elements|0|1956071209993179589|16|1",
             "payload.applied": true
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -419,7 +596,9 @@
             "eventType": "VERIFIED_COMBAT_HIT",
             "hitIdentity": "19900212|0|elements|18|-5743057693017663501|64|9"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         },
         {
           "kind": "trace-query",
@@ -430,7 +609,9 @@
             "controlSkillId": 19900201,
             "subSkillIndex": 1
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         }
       ]
     },
@@ -441,21 +622,48 @@
       "actions": [
         {
           "id": "199002-star-carry-cooldown-source-switch",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-2"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "199002-star-carry-cooldown-return-switch",
-          "owner": { "kind": "actor", "slotId": "slot-2" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-1" },
-          "schedule": { "mode": "absolute", "frame": 400 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-2"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-1"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 400
+          }
         },
         {
           "id": "199002-star-carry-cooldown-early-switch",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
-          "schedule": { "mode": "absolute", "frame": 1439 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-2"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1439
+          }
         }
       ],
       "probes": [
@@ -467,7 +675,9 @@
             "actionId": "199002-star-carry-cooldown-early-switch",
             "applied": true
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -478,7 +688,9 @@
             "derivation.ownerCharacterId": 199002,
             "derivation.triggerPhase": "on-exit"
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -489,7 +701,9 @@
             "derivation.ownerCharacterId": 199002,
             "derivation.triggerPhase": "on-exit"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     },
@@ -500,21 +714,48 @@
       "actions": [
         {
           "id": "199002-star-carry-exact-first-switch",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-2"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "199002-star-carry-exact-return-switch",
-          "owner": { "kind": "actor", "slotId": "slot-2" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-1" },
-          "schedule": { "mode": "absolute", "frame": 400 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-2"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-1"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 400
+          }
         },
         {
           "id": "199002-star-carry-exact-second-switch",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": { "kind": "switch", "targetSlotId": "slot-2" },
-          "schedule": { "mode": "absolute", "frame": 1440 }
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-2"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 1440
+          }
         }
       ],
       "probes": [
@@ -527,7 +768,9 @@
             "controlSkillId": 19900222,
             "subSkillIndex": 0
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -540,7 +783,12 @@
           },
           "expectation": {
             "count": 2,
-            "orderedValues": { "operation": ["expire", "apply"] }
+            "orderedValues": {
+              "operation": [
+                "expire",
+                "apply"
+              ]
+            }
           }
         }
       ]

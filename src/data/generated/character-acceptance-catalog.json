@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "a13c3d5917b48944",
+  "manifestIndexHash": "5c2a1fcfa1c556f3",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -936,44 +936,48 @@
     {
       "ownerId": 199001,
       "ownerName": "女主角",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 195,
       "matrixPassedCount": 195,
-      "manifestHash": "20c8f5fde2c44a86",
+      "manifestHash": "5f66cef64df67ef1",
       "qualificationSubjectHash": "338d37a86f45b6c7",
       "sourceOfTruthHash": "48aebda4c9eaeb14",
       "profileHash": "076ade0a5e726c48c8147bba181a7f703b8a3afa874204299f32087fa60e4a08",
-      "visualScenarioIds": []
+      "visualScenarioIds": [
+        "m12-b3-starborn-199001-focused-acceptance"
+      ]
     },
     {
       "ownerId": 199002,
       "ownerName": "男主角",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 195,
       "matrixPassedCount": 195,
-      "manifestHash": "b84b76e5a1a2c805",
+      "manifestHash": "f989093501e96f5c",
       "qualificationSubjectHash": "c1a95a44c8fde71c",
       "sourceOfTruthHash": "72633ff73db8dbec",
       "profileHash": "2e559b7d5e5c98e1b254edeb942712b90178e5edee934af20ffa4ee66043cbd8",
-      "visualScenarioIds": []
+      "visualScenarioIds": [
+        "m12-b3-starborn-199002-focused-acceptance"
+      ]
     }
   ],
   "summary": {
@@ -982,10 +986,10 @@
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
       "extracted": 1,
-      "optimization-ready": 4,
-      "runtime-integrated": 6
+      "optimization-ready": 6,
+      "runtime-integrated": 4
     },
-    "optimizationReadyCount": 4
+    "optimizationReadyCount": 6
   },
-  "catalogHash": "99069b2d2cb3310f"
+  "catalogHash": "23ee25d61253b7be"
 }

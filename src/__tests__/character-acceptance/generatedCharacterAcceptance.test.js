@@ -97,14 +97,12 @@ const owners = [
     passiveId: 19900162,
     manifest: femaleStarbornManifest,
     profile: femaleStarbornProfile,
-    automatedEvidenceExpected: false,
   },
   {
     ownerId: 199002,
     passiveId: 19900262,
     manifest: maleStarbornManifest,
     profile: maleStarbornProfile,
-    automatedEvidenceExpected: false,
   },
 ];
 
@@ -119,10 +117,10 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 6,
-        'optimization-ready': 4,
+        'runtime-integrated': 4,
+        'optimization-ready': 6,
       },
-      optimizationReadyCount: 4,
+      optimizationReadyCount: 6,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -196,14 +194,16 @@ describe('generated character acceptance manifests', () => {
         valid: true,
         issues: [],
       });
-      const productAccepted = [102001, 107001, 108003, 109001].includes(
-        ownerId
-      );
+      const productAccepted = [
+        102001, 107001, 108003, 109001, 199001, 199002,
+      ].includes(ownerId);
       const functionallyComplete =
         manifest.matrix.summary.blockedCount === 0 &&
         manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
-        ? 'eb06acc456ee309245a78455e7691738a2ee808b'
+        ? [199001, 199002].includes(ownerId)
+          ? 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee'
+          : 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
       const runtimeIntegrated = ownerId !== 112001;
       expect(manifest.maturity).toMatchObject({

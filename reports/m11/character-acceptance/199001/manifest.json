@@ -63944,20 +63944,34 @@
     ],
     "machineEvidence": [],
     "productVisualAcceptance": {
-      "status": "pending",
-      "scenarioIdentities": [],
-      "acceptanceCommit": null,
-      "recordIdentity": null,
-      "qualificationSubjectHash": null,
-      "scenarioSetHash": null,
-      "bindingStatus": "not-requested",
+      "status": "accepted",
+      "scenarioIdentities": [
+        "m12-b3-starborn-199001-focused-acceptance"
+      ],
+      "acceptanceCommit": "c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee",
+      "recordIdentity": "character-product-acceptance:199001:c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee:338d37a86f45b6c7",
+      "qualificationSubjectHash": "338d37a86f45b6c7",
+      "scenarioSetHash": "8fdaa987c513a478",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:199001::338d37a86f45b6c7",
+        "recordIdentity": "character-product-acceptance:199001:c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee:338d37a86f45b6c7",
         "qualificationSubjectHash": "338d37a86f45b6c7",
-        "scenarioSetHash": "09612b07b5ecb5a5",
-        "scenarioIdentities": []
+        "scenarioSetHash": "8fdaa987c513a478",
+        "scenarioIdentities": [
+          "m12-b3-starborn-199001-focused-acceptance"
+        ]
       },
-      "automatedEvidence": []
+      "automatedEvidence": [
+        {
+          "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
+          "evidenceKind": "workbench-playwright-screenshot",
+          "status": "automated-workbench-import-passed",
+          "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
+          "fixtureSha256": "da1cb1cf88d62fcb500bc85452ac9c980c20c8f1e7427c3196f631adb267bea2",
+          "screenshotPath": "reports/m12-b3-199001-workbench-visual-evidence.png",
+          "screenshotSha256": "f4f7fea0227dfed34c14bb746a4f9d4c373ba5acf5da50ceb652091291561f5a"
+        }
+      ]
     }
   },
   "requirementInventory": {
@@ -300284,12 +300298,14 @@
   },
   "qualificationSubjectHash": "338d37a86f45b6c7",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
@@ -300299,7 +300315,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 195,
       "matrixPassedCount": 195,
       "matrixComplete": true,
@@ -300309,16 +300325,14 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "20c8f5fde2c44a86"
+  "manifestHash": "5f66cef64df67ef1"
 }

@@ -1015,6 +1015,15 @@ describe('verified combat mechanics package', () => {
         predecessorEnd: 82,
       },
       {
+        source: '19900101/sub1',
+        window: [22, 52],
+        semantics: 'immediate-continuous',
+        genericEnd: 32,
+        canonicalInput: 32,
+        executionStart: 32,
+        predecessorEnd: 32,
+      },
+      {
         source: '19900204/sub0',
         window: [38, 87],
         semantics: 'immediate-interrupt',
@@ -1049,6 +1058,15 @@ describe('verified combat mechanics package', () => {
         canonicalInput: 83,
         executionStart: 83,
         predecessorEnd: 83,
+      },
+      {
+        source: '19900201/sub1',
+        window: [22, 52],
+        semantics: 'immediate-continuous',
+        genericEnd: 32,
+        canonicalInput: 32,
+        executionStart: 32,
+        predecessorEnd: 32,
       },
     ]);
     expect(contextualInputSchedulingAudit).toMatchObject({

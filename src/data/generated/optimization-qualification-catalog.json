@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "f7829b9424011e23",
-  "manifestsHash": "2d8cf7723c7d5c30",
-  "gapLedgerHash": "b1e548d0c2fc3942",
-  "bindingMatrixHash": "3f7e7b0c515af982",
-  "sourceSnapshotHash": "109b39ef75ccadb9",
+  "rosterHash": "396062529d292c6a",
+  "manifestsHash": "079f7f5aa6394e25",
+  "gapLedgerHash": "ef4863124e50f86a",
+  "bindingMatrixHash": "6a18f24bdf6c7cbf",
+  "sourceSnapshotHash": "d2f1d4e1ee60ec3c",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -26,7 +26,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "b9ca6b199bb6f6c5"
+      "manifestHash": "03ea6a0c2ef8b931"
     },
     {
       "objectKind": "character",
@@ -35,7 +35,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "d90f6f4065bdbfd9"
+      "manifestHash": "482d840569edc0a8"
     },
     {
       "objectKind": "character",
@@ -46,7 +46,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "8bbe2cfb7ae54005"
+      "manifestHash": "33b483df8d623fe1"
     },
     {
       "objectKind": "character",
@@ -55,7 +55,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "fdec22f6fe1d39bc"
+      "manifestHash": "c769d9d375b74eed"
     },
     {
       "objectKind": "character",
@@ -66,7 +66,7 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "d73ccb8f85068ec6"
+      "manifestHash": "6afbbcf69fe53db4"
     },
     {
       "objectKind": "character",
@@ -75,7 +75,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "5650f321c255b1c3"
+      "manifestHash": "1e3eb83420b74a72"
     },
     {
       "objectKind": "character",
@@ -84,7 +84,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "16f0005520a9f0c8"
+      "manifestHash": "f8dff8344efe4874"
     },
     {
       "objectKind": "character",
@@ -95,18 +95,16 @@
       "blockerCodes": [
         "character-not-optimization-ready"
       ],
-      "manifestHash": "07201f12bf4fd914"
+      "manifestHash": "83453322248b1ed5"
     },
     {
       "objectKind": "character",
       "objectId": "STARBORN",
       "displayName": "星临者",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "61c3b328d0316b80"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "47c0a09c9a968476"
     },
     {
       "objectKind": "equipment",
@@ -2400,7 +2398,8 @@
       "102001",
       "107001",
       "108003",
-      "109001"
+      "109001",
+      "STARBORN"
     ],
     "kibos": [
       500001,
@@ -2670,7 +2669,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "f7829b9424011e23",
+    "rosterHash": "396062529d292c6a",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -5090,301 +5089,301 @@
         "actorObjectId": "STARBORN",
         "kiboId": 500001,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500025,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500043,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500044,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500045,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500057,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500064,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500065,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500082,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500120,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500123,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500124,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500125,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500126,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500127,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500128,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500129,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500130,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500131,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500164,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500165,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500166,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500173,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500174,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500175,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500185,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500220,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500231,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500296,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500304,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500305,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500306,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500322,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500323,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500324,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500357,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500358,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500360,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500368,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500369,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500370,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500469,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "STARBORN",
         "kiboId": 500470,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       }
     ],
@@ -8894,7 +8893,7 @@
         "soulEssenceId": 10018,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -8915,7 +8914,7 @@
         "soulEssenceId": 10034,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -8929,7 +8928,7 @@
         "soulEssenceId": 10043,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -8943,91 +8942,91 @@
         "soulEssenceId": 10047,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10048,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10050,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10052,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10055,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10056,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10057,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10058,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10059,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10060,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10061,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10062,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10063,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9062,7 +9061,7 @@
         "soulEssenceId": 10093,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9076,7 +9075,7 @@
         "soulEssenceId": 10095,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9132,7 +9131,7 @@
         "soulEssenceId": 10124,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9195,7 +9194,7 @@
         "soulEssenceId": 10149,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9244,14 +9243,14 @@
         "soulEssenceId": 10169,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10170,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -9272,28 +9271,28 @@
         "soulEssenceId": 10196,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10197,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10198,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
         "soulEssenceId": 10216,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       }
     ],
     "actorEquipment": [
@@ -19168,7 +19167,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19177,7 +19176,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19186,7 +19185,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19195,7 +19194,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19204,7 +19203,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19213,7 +19212,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19222,7 +19221,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19231,7 +19230,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19240,7 +19239,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19249,7 +19248,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19258,7 +19257,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19267,7 +19266,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19276,7 +19275,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19285,7 +19284,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19294,7 +19293,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19303,7 +19302,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19312,7 +19311,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19321,7 +19320,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19330,7 +19329,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19339,7 +19338,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19348,7 +19347,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19357,7 +19356,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19366,7 +19365,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19375,7 +19374,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19384,7 +19383,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19393,7 +19392,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19402,7 +19401,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19411,7 +19410,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19420,7 +19419,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19429,7 +19428,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19438,7 +19437,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19447,7 +19446,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19456,7 +19455,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19465,7 +19464,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19474,7 +19473,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19483,7 +19482,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19492,7 +19491,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19501,7 +19500,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19510,7 +19509,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19519,7 +19518,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19528,7 +19527,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19537,7 +19536,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19546,7 +19545,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19555,7 +19554,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19564,7 +19563,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19573,7 +19572,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19582,7 +19581,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19591,7 +19590,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19600,7 +19599,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19609,7 +19608,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19618,7 +19617,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19627,7 +19626,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19636,7 +19635,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19645,7 +19644,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19654,7 +19653,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19663,7 +19662,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19672,7 +19671,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19681,7 +19680,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19690,7 +19689,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19699,7 +19698,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19708,7 +19707,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19717,7 +19716,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19726,7 +19725,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19735,7 +19734,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19744,7 +19743,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19753,7 +19752,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19762,7 +19761,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19771,7 +19770,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19780,7 +19779,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19789,7 +19788,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19798,7 +19797,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19807,7 +19806,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19816,7 +19815,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19825,7 +19824,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19834,7 +19833,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19843,7 +19842,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19852,7 +19851,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19861,7 +19860,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19870,7 +19869,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19879,7 +19878,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19888,7 +19887,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19897,7 +19896,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19906,7 +19905,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19915,7 +19914,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19924,7 +19923,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19933,7 +19932,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19942,7 +19941,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19951,7 +19950,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19960,7 +19959,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19969,7 +19968,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19978,7 +19977,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19987,7 +19986,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -19996,7 +19995,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20005,7 +20004,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20014,7 +20013,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20023,7 +20022,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20032,7 +20031,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20041,7 +20040,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20050,7 +20049,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20059,7 +20058,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20068,7 +20067,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20077,7 +20076,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20086,7 +20085,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20095,7 +20094,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20104,7 +20103,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20113,7 +20112,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20122,7 +20121,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20131,7 +20130,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20140,7 +20139,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20149,7 +20148,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20158,7 +20157,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20167,7 +20166,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20176,7 +20175,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20185,7 +20184,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20194,7 +20193,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20203,7 +20202,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20212,7 +20211,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20221,7 +20220,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20230,7 +20229,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20239,7 +20238,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20248,7 +20247,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20257,7 +20256,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20266,7 +20265,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20275,7 +20274,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20284,7 +20283,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20293,7 +20292,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20302,7 +20301,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20311,7 +20310,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20320,7 +20319,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20329,7 +20328,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20338,7 +20337,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20347,7 +20346,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20356,7 +20355,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20365,7 +20364,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20374,7 +20373,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20383,7 +20382,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "STARBORN",
@@ -20392,7 +20391,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       }
     ],
     "setSkillThresholds": [
@@ -20632,17 +20631,17 @@
     },
     "summary": {
       "actorKiboEdgeCount": 387,
-      "actorKiboQualifiedEdgeCount": 172,
+      "actorKiboQualifiedEdgeCount": 215,
       "actorSoulEssenceEdgeCount": 558,
       "actorSoulEssenceCompatibleEdgeCount": 244,
-      "actorSoulEssenceQualifiedEdgeCount": 106,
+      "actorSoulEssenceQualifiedEdgeCount": 132,
       "actorEquipmentEdgeCount": 1233,
-      "actorEquipmentQualifiedEdgeCount": 548,
+      "actorEquipmentQualifiedEdgeCount": 685,
       "setSkillThresholdCount": 12,
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "3f7e7b0c515af982"
+    "bindingMatrixHash": "6a18f24bdf6c7cbf"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38237,19 +38236,19 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "optimization-ready": 258,
-      "runtime-integrated": 5
+      "optimization-ready": 259,
+      "runtime-integrated": 4
     },
     "optimizationReadyCounts": {
-      "character": 4,
+      "character": 5,
       "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 258,
-    "gameplayBlockingGapCount": 5,
-    "bindingQualifiedEdgeCount": 838,
+    "optimizationReadyTotal": 259,
+    "gameplayBlockingGapCount": 4,
+    "bindingQualifiedEdgeCount": 1044,
     "qualificationStage": {
       "schemaVersion": 1,
       "contractName": "AzPrOptimizationQualificationStageGate",
@@ -38257,8 +38256,8 @@
         "character": {
           "total": 9,
           "denominator": 9,
-          "ready": 4,
-          "admission": 4
+          "ready": 5,
+          "admission": 5
         },
         "kibo": {
           "total": 43,
@@ -38290,21 +38289,21 @@
           "total": 387,
           "expected": 387,
           "unique": 387,
-          "qualified": 172,
+          "qualified": 215,
           "readinessMismatch": 0
         },
         "actorSoulEssence": {
           "total": 558,
           "expected": 558,
           "unique": 558,
-          "qualified": 106,
+          "qualified": 132,
           "readinessMismatch": 0
         },
         "actorEquipment": {
           "total": 1233,
           "expected": 1233,
           "unique": 1233,
-          "qualified": 548,
+          "qualified": 685,
           "readinessMismatch": 0
         },
         "setSkillThresholds": {
@@ -38329,5 +38328,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "7c15497ba5819a91"
+  "catalogHash": "101bba8b81436d93"
 }

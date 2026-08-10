@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "f7829b9424011e23",
+  "rosterHash": "396062529d292c6a",
   "records": [
     {
       "objectKind": "character",
@@ -27,10 +27,10 @@
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "ac3f762fb245d7af"
+          "97263600bfe41109"
         ]
       },
-      "manifestHash": "b9ca6b199bb6f6c5"
+      "manifestHash": "03ea6a0c2ef8b931"
     },
     {
       "objectKind": "character",
@@ -48,10 +48,10 @@
         ],
         "mechanismHash": "5b81beb6a20b273f",
         "characterAcceptanceManifestHashes": [
-          "4848865b0db17735"
+          "64a56f2bf765f6a8"
         ]
       },
-      "manifestHash": "d90f6f4065bdbfd9"
+      "manifestHash": "482d840569edc0a8"
     },
     {
       "objectKind": "character",
@@ -75,10 +75,10 @@
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "d5a0f5e1e89f13c3"
+          "8c3af2315edcf502"
         ]
       },
-      "manifestHash": "8bbe2cfb7ae54005"
+      "manifestHash": "33b483df8d623fe1"
     },
     {
       "objectKind": "character",
@@ -96,10 +96,10 @@
         ],
         "mechanismHash": "d430860c91304d4d",
         "characterAcceptanceManifestHashes": [
-          "aad3801301e69758"
+          "1e33c6c961d4f4e8"
         ]
       },
-      "manifestHash": "fdec22f6fe1d39bc"
+      "manifestHash": "c769d9d375b74eed"
     },
     {
       "objectKind": "character",
@@ -123,10 +123,10 @@
         ],
         "mechanismHash": "538073a51f10e5f1",
         "characterAcceptanceManifestHashes": [
-          "9c8c73f13ecef006"
+          "dd5987db05834fc6"
         ]
       },
-      "manifestHash": "d73ccb8f85068ec6"
+      "manifestHash": "6afbbcf69fe53db4"
     },
     {
       "objectKind": "character",
@@ -144,10 +144,10 @@
         ],
         "mechanismHash": "bddf60c09a08e7f7",
         "characterAcceptanceManifestHashes": [
-          "c28d1779f649dad2"
+          "f1353c1cb24cc17e"
         ]
       },
-      "manifestHash": "5650f321c255b1c3"
+      "manifestHash": "1e3eb83420b74a72"
     },
     {
       "objectKind": "character",
@@ -165,10 +165,10 @@
         ],
         "mechanismHash": "fd47d5ed36224b04",
         "characterAcceptanceManifestHashes": [
-          "26863588b28e0bb9"
+          "6aa3b80edd993801"
         ]
       },
-      "manifestHash": "16f0005520a9f0c8"
+      "manifestHash": "f8dff8344efe4874"
     },
     {
       "objectKind": "character",
@@ -192,10 +192,10 @@
         ],
         "mechanismHash": "23f9684b4aa8bc6f",
         "characterAcceptanceManifestHashes": [
-          "3229116b360ed95d"
+          "75dbbd72894615c8"
         ]
       },
-      "manifestHash": "07201f12bf4fd914"
+      "manifestHash": "83453322248b1ed5"
     },
     {
       "objectKind": "character",
@@ -205,15 +205,9 @@
         "generated/characters.json#items[id=199001]",
         "generated/characters.json#items[id=199002]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           199001,
@@ -221,11 +215,11 @@
         ],
         "mechanismHash": "320b1011f76b0f8f",
         "characterAcceptanceManifestHashes": [
-          "988b6df12367c8fa",
-          "0e05045b26670866"
+          "5f66cef64df67ef1",
+          "f989093501e96f5c"
         ]
       },
-      "manifestHash": "61c3b328d0316b80"
+      "manifestHash": "47c0a09c9a968476"
     },
     {
       "objectKind": "equipment",
@@ -30857,17 +30851,17 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "optimization-ready": 258,
-      "runtime-integrated": 5
+      "optimization-ready": 259,
+      "runtime-integrated": 4
     },
     "optimizationReadyCounts": {
-      "character": 4,
+      "character": 5,
       "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 258
+    "optimizationReadyTotal": 259
   },
-  "manifestsHash": "2d8cf7723c7d5c30"
+  "manifestsHash": "079f7f5aa6394e25"
 }
