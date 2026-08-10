@@ -3,7 +3,7 @@
   "contractName": "AzPrCharacterAcceptanceCatalog",
   "kind": "azpr-character-acceptance-catalog",
   "protocolIdentity": "m11-d-character-acceptance-v1",
-  "manifestIndexHash": "0f18483334c27360",
+  "manifestIndexHash": "495602dbc8c40b10",
   "optimizationScenarioPolicy": {
     "policyId": "m12c-zero-distance-passive-boss-v1",
     "policyHash": "967b0667f315db5b"
@@ -912,19 +912,19 @@
     {
       "ownerId": 112001,
       "ownerName": "姬瑟贝露",
-      "maturityState": "runtime-integrated",
+      "maturityState": "optimization-ready",
       "earnedStates": [
         "extracted",
-        "runtime-integrated"
+        "runtime-integrated",
+        "visually-accepted",
+        "optimization-ready"
       ],
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "matrixRequiredCount": 184,
       "matrixPassedCount": 184,
-      "manifestHash": "61bdb3019aaeb090",
+      "manifestHash": "9c5baab279401355",
       "qualificationSubjectHash": "4ff41b6eb35e5977",
       "sourceOfTruthHash": "c36881269630a22b",
       "profileHash": "fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344",
@@ -984,10 +984,10 @@
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "maturityCounts": {
-      "optimization-ready": 9,
-      "runtime-integrated": 2
+      "optimization-ready": 10,
+      "runtime-integrated": 1
     },
-    "optimizationReadyCount": 9
+    "optimizationReadyCount": 10
   },
-  "catalogHash": "7e5894cdf3645fcc"
+  "catalogHash": "6c886d23ef08d497"
 }

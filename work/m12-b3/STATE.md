@@ -324,3 +324,12 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - 审计链全绿：character-acceptance、verified-combat、character-combat(--all)、optimization-scenario-policy、optimization-qualification、visual-acceptance(254/254)、production-imports、workbench-data、action-status、applied-source-bindings、runtime-capture-manifest、machine-axis-enemy-settlement-evidence、STARBORN object acceptance；`npm run build` 通过。
 - 基线对照 worktree 已清理；两份全量输出存于 `work/m12-b3/full-vitest-after-112001-rerun.txt`（改判前）与 `full-vitest-after-112001-final.txt`（修复后）。
 - 工作区仍未提交；等 112001 产品视觉签收后落账（9/9）再提交。
+
+## M12-B3 112001 产品视觉签收落账（2026-08-11，9/9 optimization-ready）
+
+- 用户签收 112001。视觉证据已在当前实现上重截：`reports/m12-b3-112001-workbench-visual-evidence.png`，SHA-256=`15ad47c214c7572d6a16a86777ff16edca18a5606258ba6b8ca5e55420b10d46`；新增 `e2e/character-acceptance-112001-visual.spec.js`（trace 哈希 `7df581ed9bbdabcb` 验证通过）。
+- 实现基线提交：`79ec6297a42314d49cf4f10345a7a6975f488278`（feat: close 112001 joint attack runtime and reclassify 11200162 second passive）。
+- 验收记录：`recordIdentity=character-product-acceptance:112001:79ec6297a42314d49cf4f10345a7a6975f488278:4ff41b6eb35e5977`，qualificationSubjectHash=`4ff41b6eb35e5977`，scenarioSetHash=`df8659d33b2637b0`；112001 现为 `optimization-ready`、blocker=`[]`。
+- 资格重算：character 9/9、blockingUniqueGapCount=0、`m12cLocked=false`（M12-C 解锁）；E21 动态装载验收报告哈希与 production-import 报告已同步。
+- 测试：全量 Vitest 96 failed / 1743 passed（比基线 97 少 1；新增失败 1 条 production-import 报告过期已修复；存量失败保持未处理）。
+- 本提交为验收记录提交（chore），实现基线 `79ec6297` 为 acceptanceCommit。

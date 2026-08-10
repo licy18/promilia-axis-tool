@@ -1204,11 +1204,9 @@
     {
       "ownerId": 112001,
       "ownerName": "姬瑟贝露",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -1244,7 +1242,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "61bdb3019aaeb090",
+      "manifestHash": "9c5baab279401355",
       "sourceOfTruthHash": "c36881269630a22b",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1366,15 +1364,15 @@
       }
     }
   ],
-  "catalogHash": "7e5894cdf3645fcc",
-  "manifestIndexHash": "0f18483334c27360",
+  "catalogHash": "6c886d23ef08d497",
+  "manifestIndexHash": "495602dbc8c40b10",
   "summary": {
     "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 11,
-    "visuallyAcceptedCount": 9,
-    "optimizationReadyCount": 9,
+    "visuallyAcceptedCount": 10,
+    "optimizationReadyCount": 10,
     "machineScenarioPassCount": 11,
     "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,

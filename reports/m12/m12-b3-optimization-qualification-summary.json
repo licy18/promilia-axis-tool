@@ -9,34 +9,27 @@
     "equipment": 137,
     "setSkills": 12
   },
-  "sourceSnapshotHash": "2114835028045268",
-  "rosterHash": "9945b2497cf18f4a",
-  "manifestsHash": "1483840cf8b717e4",
-  "ledgerHash": "71ebec9703506862",
-  "bindingMatrixHash": "9daa9b7d490f1a4b",
-  "catalogHash": "c6f11162783db99a",
+  "sourceSnapshotHash": "b22dcfb761cc58d4",
+  "rosterHash": "6e4843984a9f435d",
+  "manifestsHash": "d08e4a0bc73b464f",
+  "ledgerHash": "7b7cb20e220da974",
+  "bindingMatrixHash": "bd4084ac0882820f",
+  "catalogHash": "b26dede46b58f714",
   "maturityCounts": {
-    "optimization-ready": 262,
-    "runtime-integrated": 1
+    "optimization-ready": 263
   },
   "optimizationReadyCounts": {
-    "character": 8,
+    "character": 9,
     "kibo": 43,
     "soul-essence": 62,
     "equipment": 137,
     "set-skill": 12
   },
   "gapCounts": {
-    "blockingUniqueGapCount": 1,
-    "byCategory": {
-      "not-implemented": 1
-    },
-    "byCode": {
-      "character-not-optimization-ready": 1
-    },
-    "byObjectKind": {
-      "character": 1
-    }
+    "blockingUniqueGapCount": 0,
+    "byCategory": {},
+    "byCode": {},
+    "byObjectKind": {}
   },
-  "m12cLocked": true
+  "m12cLocked": false
 }

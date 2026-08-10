@@ -116,10 +116,10 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 2,
-        'optimization-ready': 9,
+        'runtime-integrated': 1,
+        'optimization-ready': 10,
       },
-      optimizationReadyCount: 9,
+      optimizationReadyCount: 10,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -203,7 +203,7 @@ describe('generated character acceptance manifests', () => {
       });
       const productAccepted = [
         101010, 102001, 103002, 107001, 107002, 108003, 109001, 199001,
-        199002,
+        199002, 112001,
       ].includes(ownerId);
       const functionallyComplete =
         manifest.matrix.summary.blockedCount === 0 &&
@@ -215,6 +215,7 @@ describe('generated character acceptance manifests', () => {
             107002: '5ee914e2f5134d280f2a5da0ea6a28604242957c',
             199001: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
             199002: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
+            112001: '79ec6297a42314d49cf4f10345a7a6975f488278',
           })[ownerId] ?? 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
       const runtimeIntegrated = true;

@@ -194,6 +194,7 @@ describe('M12-B3 optimization qualification generation', () => {
       '107002',
       '108003',
       '109001',
+      '112001',
       'STARBORN',
     ]);
     expect(artifacts.catalog.admission.kibos).toHaveLength(43);
@@ -276,13 +277,11 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 1,
-      byCategory: {
-        'not-implemented': 1,
-      },
+      blockingUniqueGapCount: 0,
+      byCategory: {},
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
-      character: 8,
+      character: 9,
       kibo: 43,
       'soul-essence': 62,
       equipment: 137,
@@ -318,7 +317,7 @@ describe('M12-B3 optimization qualification generation', () => {
         record => record.code === 'kibo-headless-maturity-not-ready'
       )
     ).toHaveLength(0);
-    expect(artifacts.summary.m12cLocked).toBe(true);
+    expect(artifacts.summary.m12cLocked).toBe(false);
     expect(
       artifacts.gaps.records.filter(
         record => record.code === 'kibo-passive-static-evidence-gap'
@@ -1371,8 +1370,8 @@ describe('M12-B3 strict cultivation profile', () => {
     expect(prepared.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'optimization-qualification-stage-locked',
-          formalOptimizationUnlocked: false,
+          code: 'machine-axis-optimization-binding-not-qualified',
+          qualificationReady: false,
         }),
       ])
     );
@@ -1522,7 +1521,7 @@ describe('M12-B3 strict cultivation profile', () => {
       prepared.issues.some(issue => issue.code.includes('kibo-duplicate'))
     ).toBe(false);
     expect(service.catalog().optimizationQualification.summary.m12cLocked).toBe(
-      true
+      false
     );
   });
 

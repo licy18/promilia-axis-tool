@@ -267,7 +267,6 @@ describe('frozen M12-C optimization scenario policy', () => {
       expect.arrayContaining([
         'machine-axis-formal-character-product-scenario-excluded',
         'machine-axis-formal-action-scenario-out-of-scope',
-        'optimization-qualification-stage-locked',
       ])
     );
   });
