@@ -291,3 +291,36 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - 中央重新生成 cycle acceptance 与 M11 三人轴 canonical 锁；结算顺序进入 trace 后仅 `trace/build` 漂移，input/data/evaluation 与所有行为断言保持不变。`scripts/machine-axis/evidence/*.json` 已固定 LF，避免 Windows checkout 造成证据字节哈希漂移。
 - 中央聚焦回归：首轮 `159/162` 仅暴露 3 个陈旧锁，修正后相关 `55/55`；search/CLI/Workbench/Machine Axis 扩展首轮 `67/69` 仅暴露 2 个陈旧 trace/build 锁，修正后 `22/22`。runtime capture manifest、enemy settlement evidence、scenario policy、qualification、Workbench data 与 production imports 双轮只读审计全绿；Machine Axis build 与 production build `1889 modules` 通过。
 - 当前 qualification 分母仍为 `9/43/62/137/12`，角色级 ready 为 `102001/107001/107002/108003/109001` 共 `5/9`；blocking unique=`7`，全部为角色 not-implemented。101010 与 103002 closure 并行 active；112001 production 仍受真实客户端机制顺序证据约束；STARBORN 未启动。`m12cLocked=true`，未运行正式搜索，Kibo DNA=`[]`。
+
+## M12-B3 112001 姬瑟贝露合击功能闭合检查点（2026-08-10，功能完成、待产品视觉签收）
+
+- 用户指令：先完成全部功能实现，验收通过后再跑全量测试/审计。当前已停在验收关键验证之后、全量测试/审计之前。
+- 合击功能已闭合：`m12-b3-112001-joint-attack-runtime` 场景由 failed 转 passed。根因不是 59F/67F 运行时选阶，而是主场景 `scenarioFactAliases` 被强制挂到不运行源探针的附加合击场景，`assumption-v1-heavy2-59f-selects-new-tier` / `assumption-v1-heavy3-67f-selects-new-tier` 被判 missing。
+- 修复：`scripts/generate-character-acceptance.mjs` 在附加场景构造处显式清空 `scenarioFactAliases`（仅 112001 使用该机制，其他角色不受影响）。附加场景只断言其真实执行的 probes/边界。
+- 重新生成后 112001：required/pass/N/A/blocked=`186/186/62/0`，source/acceptance gap=`0/0`，functionalFailure=`0`，headlessReplayPassed=`true`，两个机器场景（assumption-v1-focused-acceptance、joint-attack-runtime）均 passed，maturity=`runtime-integrated`，blocker 仅剩 `acceptance-product-visual-signoff-pending`。
+- 已同步产物：112001 manifest/coverage/scenario-cases/scenario-matrix、m11 summary、character-acceptance-catalog、manifest-index、optimization-qualification roster/manifests/gaps/binding-matrix/summary/catalog。验收关键 6 文件 `114/114` 通过；characterAcceptanceCanonicalReplay 的 6 个失败经 stash 基线验证为 HEAD 存量问题（非本次引入）。
+- 工作区未提交，diff 集中在 112001 生成物 + catalog/索引 + qualification 产物 + 生成器 + 一个测试断言。视觉证据仍为 `reports/m12-b3-112001-workbench-visual-evidence.png`（SHA-256=`ca0e8df4693c141c586f178506d3e9c5cfb76004d73892779935f92faad059a7`）。
+- 下一步：等用户对 112001 产品视觉签收 → 两阶段落账（写 acceptance + 绑定重算）→ 9/9 optimization-ready → 再跑全量测试/审计。
+
+## M12-B3 11200162 无名第二被动改判检查点（2026-08-10，功能已改判、待产品视觉签收）
+
+- 用户口径确认：第二被动/无名被动一律按废案/未实装处理。11200162 在 hero-module 里 `name="0"`、`skillName=null`、`skillDisplayType=null`，确属无名第二被动。
+- 已从 recipe 移除 11200162 的已实现声明（`passiveSkillIds=[11200161]`、`requiredPassiveIdentities=[]`、reachable 去掉 11200162、`passiveEffects=[]`）；验收 recipe 增加 `unnamedSecondaryPassiveSkillId=11200162`，删除依赖被动的 `passive-critical-pre-hit-and-right-open-expiry` 隔离用例与 `critical:preHitAttributeChange` 别名，新增该需求的场景外 N/A disposition；两个 critical 隔离用例改为无被动基线（5% 用 500bp、0% 用 -500、100% 用 +9500）。
+- 全链路已重跑：`sync-character-combat-profile --all --write`、`sync-verified-combat-mechanics --write`、29 个 fixture 的 `verifiedMechanicsPackageHash` 更新（`ce12fb0d…` → `fb3fafcd…`）、FROZEN_B3_SOURCE_HASHES.verifiedMechanics 更新为 `799d5a28…`、4 个 recipe fixtureSha256 重算、starborn fixture profileHash 重算、9 个已验收角色按两阶段流程重绑定（acceptanceCommit 不变，qualificationSubjectHash/scenarioSetHash/recordIdentity 更新）、acceptance 全量重生成、optimization-qualification 重生成。
+- 当前 112001：runtime-integrated，两个机器场景 passed，required/pass/N/A/blocked=`184/184/63/0`，functionalFailure=`0`，blocker 仅剩 `acceptance-product-visual-signoff-pending`；`reports/m10/character-product-boundaries.json` 中 11200162 已为 `not-applicable / unnamed-secondary-passive-not-implemented-current-client`。
+- 已验收 9 角色重绑定后仍为 optimization-ready（visuallyAcceptedCount=9）；机制包哈希变化使相关测试的硬编码期望（如 verifiedCombatMechanicsPackage nodeCount 779→778）需要后续更新，属测试期望过期，不是功能失败。按用户指令：全量测试/审计暂停，等产品视觉签收后再做。
+- 工作区未提交。备份：`work/m12-b3/acceptance-binding-backup-2026-08-10T14-36-27-375Z.json`。
+- 下一步：用户对 112001 截图签收 → 落账（写 accepted + 绑定）→ 9/9 → 更新过期测试期望 → 全量测试/审计。
+
+## M12-B3 重击2/重击3 派生接线复验 + 全量测试/审计（2026-08-10）
+
+- 用户要求：先复验重击2/重击3 派生接线，无误后再跑全量测试和审计。
+- 接线复验结论（正确）：
+  - 派生入口 7 条：A2(55-320)/A3(63-243)/星鸣(67-298)/星鸣协战(112-377)→11200110/sub1|sub2 特殊重击2；A4(36-266)/A5(59-179)/星决(216-461)→11200110/sub3|sub4 特殊重击3；均右开 + 250ms 蓄力。
+  - 释放窗口：重击2 early [0,60)→11200141/sub0、full [59,239)→sub1；重击3 early [0,68)→sub2、full [67,134/135)→sub3；greatest-start-frame。
+  - 运行选中：58F→sub0、59F→sub1、60F→sub1；66F→sub2、67F→sub3、68F→sub3；星鸣协战派生重击2 59F→sub1；残余 A4/A5 满蓄重击3→sub3。6 条边界探针 + 星鸣协战探针全部 passed。
+- 全量 Vitest（223 文件 / 1839 用例）：97 failed / 1742 passed，与 HEAD `8b925e48` 基线（97 failed / 1741 passed）失败名单完全一致，0 新增、0 修复（profile-pipeline 一条存在顺序性波动，属存量）。
+- 本次改判新增的 4 个测试期望已修复：verifiedCombatMechanicsPackage（nodeCount 779→778、support binding 114→113）、starbornOptimizationObjectAliasClosure（bundle 哈希，重生成 `reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json`）、sifliya107001AcceptanceClosure（fixtureSha256、canonicalTraceHash）。
+- 审计链全绿：character-acceptance、verified-combat、character-combat(--all)、optimization-scenario-policy、optimization-qualification、visual-acceptance(254/254)、production-imports、workbench-data、action-status、applied-source-bindings、runtime-capture-manifest、machine-axis-enemy-settlement-evidence、STARBORN object acceptance；`npm run build` 通过。
+- 基线对照 worktree 已清理；两份全量输出存于 `work/m12-b3/full-vitest-after-112001-rerun.txt`（改判前）与 `full-vitest-after-112001-final.txt`（修复后）。
+- 工作区仍未提交；等 112001 产品视觉签收后落账（9/9）再提交。

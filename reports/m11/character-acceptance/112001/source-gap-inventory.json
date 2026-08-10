@@ -190,26 +190,6 @@
       "sourceRecordHash": "10f34efd41374a87"
     },
     {
-      "uniqueGapIdentity": "source-gap:20270a1497792ade",
-      "sourceRecordIdentities": [
-        "112001-current-client-orphan-skill-level-2193",
-        "semantic-gap:88389140a9103c67868c"
-      ],
-      "status": "not-applicable",
-      "reason": "current-client-orphan|no-executable-firework-consumer|stale-description",
-      "sourceKind": "passive-description",
-      "sourceIdentities": [
-        "112001-current-client-orphan-skill-level-2193",
-        "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314"
-      ],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentities": [],
-      "impactClassification": "not-applicable",
-      "blocking": false,
-      "sourceRecordHash": "3a188649c4312f24"
-    },
-    {
       "uniqueGapIdentity": "source-gap:207fbef76edc6ef1",
       "sourceRecordIdentities": [
         "effect:11200113|0|elements|7|-7212963066810547935|element:-4305995279707980247|191|0",
@@ -360,6 +340,26 @@
       "impactClassification": "source-runtime-resolved",
       "blocking": false,
       "sourceRecordHash": "f8440ee0d069c2a4"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:50baaf1be3727479",
+      "sourceRecordIdentities": [
+        "actor:112001:skill:11200162",
+        "semantic-gap:72e1b41751c4b6805be1"
+      ],
+      "status": "not-applicable",
+      "reason": "unnamed-secondary-passive-not-implemented-current-client",
+      "sourceKind": "passive-or-skill",
+      "sourceIdentities": [
+        "actor:112001:skill:11200162",
+        "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
+      ],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentities": [],
+      "impactClassification": "not-applicable",
+      "blocking": false,
+      "sourceRecordHash": "8aa98c77f2a9c362"
     },
     {
       "uniqueGapIdentity": "source-gap:510b8c445c59df28",
@@ -1267,7 +1267,6 @@
     "reasonCounts": {
       "100ms-client-charge-transition-marker-has-no-calculator-output|source-driven-charging-release-binding-supersedes-marker-wrapper|unresolved": 4,
       "battle-element-112001267-targets-star-slot-3-with-minus-3-seconds|explicit-landed-hit-action-effect-binding-projects-112001267|sp-formula-not-literal-function-5": 4,
-      "current-client-orphan|no-executable-firework-consumer|stale-description": 1,
       "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-damage-trigger-lifecycle-not-expanded|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit": 2,
       "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit": 1,
       "each-consumer-removes-at-most-one-layer-from-the-selected-candidate|each-raw-32f-conditional-node-is-bound-to-the-source-driven-heavy3-consumer-contract|each-raw-39f-or-46f-conditional-node-is-bound-to-its-source-driven-heavy3-consumer-contract|nested-effect-wrapper-semantics-unresolved|one-layer-same-candidate-consume-drives-enhanced-damage-and-selected-mark-overlimit|property-formula-not-literal-function-5": 10,
@@ -1280,8 +1279,9 @@
       "frozen-zero-distance-passive-boss-scenario-is-grounded|requires-airborne-jump-or-fall-context|unresolved": 1,
       "must-not-enter-runtime-input|unimplemented-dead-configuration": 1,
       "requires-dodge-jump-fall-block-parry-counter-received-hit-or-boss-attack-event|scenario-out-of-scope": 1,
-      "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 3
+      "same-consume-judgment-outcome-drives-damage-branch-and-selected-mark-overlimit|source-driven-priority-candidate-order-250-before-450|tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 3,
+      "unnamed-secondary-passive-not-implemented-current-client": 1
     }
   },
-  "inventoryHash": "39ed218484fadd35"
+  "inventoryHash": "78107dca45b2de75"
 }

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-unresolved-ledger",
   "ownerId": 112001,
-  "profileHash": "16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22",
+  "profileHash": "fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344",
   "summary": {
     "semanticRecordCount": 48,
     "rawRecordCount": 77,
@@ -751,6 +751,34 @@
       "rawRecordCount": 1
     },
     {
+      "recordIdentity": "semantic-gap:72e1b41751c4b6805be1",
+      "ownerId": 112001,
+      "sourceKind": "passive-or-skill",
+      "status": "not-applicable",
+      "impactClassification": "not-applicable",
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json",
+      "sourceIdentities": [
+        "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
+      ],
+      "referenceKinds": [],
+      "sourceEvidenceStatuses": [],
+      "scenarioRuntimeStatuses": [],
+      "sourceClosureDisposition": null,
+      "sourceClosurePolicyIdentity": null,
+      "sourceClosurePolicyIdentities": [],
+      "sourceClosureSourceIdentity": null,
+      "sourceClosureSourceIdentities": [],
+      "sourceClosureReasons": [],
+      "metadata": null,
+      "rawRecordIdentities": [
+        "actor:112001:skill:11200162"
+      ],
+      "rawRecordCount": 1
+    },
+    {
       "recordIdentity": "semantic-gap:7bc89ce10442c407052c",
       "ownerId": 112001,
       "sourceKind": "effect",
@@ -898,36 +926,6 @@
       "metadata": null,
       "rawRecordIdentities": [
         "effect:11200113|0|elements|7|-7212963066810547935|element:4308277382311054823|191|0"
-      ],
-      "rawRecordCount": 1
-    },
-    {
-      "recordIdentity": "semantic-gap:88389140a9103c67868c",
-      "ownerId": 112001,
-      "sourceKind": "passive-description",
-      "status": "not-applicable",
-      "impactClassification": "not-applicable",
-      "reasons": [
-        "current-client-orphan",
-        "no-executable-firework-consumer",
-        "stale-description"
-      ],
-      "sourceIdentity": "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314",
-      "sourceIdentities": [
-        "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314"
-      ],
-      "referenceKinds": [],
-      "sourceEvidenceStatuses": [],
-      "scenarioRuntimeStatuses": [],
-      "sourceClosureDisposition": null,
-      "sourceClosurePolicyIdentity": null,
-      "sourceClosurePolicyIdentities": [],
-      "sourceClosureSourceIdentity": null,
-      "sourceClosureSourceIdentities": [],
-      "sourceClosureReasons": [],
-      "metadata": null,
-      "rawRecordIdentities": [
-        "112001-current-client-orphan-skill-level-2193"
       ],
       "rawRecordCount": 1
     },
@@ -1843,16 +1841,14 @@
   ],
   "rawRecords": [
     {
-      "recordIdentity": "112001-current-client-orphan-skill-level-2193",
+      "recordIdentity": "actor:112001:skill:11200162",
       "ownerId": 112001,
-      "sourceKind": "passive-description",
+      "sourceKind": "passive-or-skill",
       "status": "not-applicable",
       "reasons": [
-        "current-client-orphan",
-        "no-executable-firework-consumer",
-        "stale-description"
+        "unnamed-secondary-passive-not-implemented-current-client"
       ],
-      "sourceIdentity": "NewTable/skill_level.rows[id=2193,skillId=11200162]|CHS/lang_skill_level[id=9418863283712]|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314",
+      "sourceIdentity": "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json",
       "referenceKind": null,
       "sourceEvidenceStatus": null,
       "scenarioRuntimeStatus": null,

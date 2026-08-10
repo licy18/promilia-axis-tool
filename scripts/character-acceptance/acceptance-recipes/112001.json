@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "ownerId": 112001,
+  "unnamedSecondaryPassiveSkillId": 11200162,
   "runtimeProfileOverlay": true,
   "skipCriticalMatrix": true,
   "sourceNotApplicableControlSubskills": [
@@ -30,6 +31,15 @@
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1"
     }
   ],
+  "protocolRequirementDispositions": [
+    {
+      "subjectIdentity": "critical-pre-hit-attribute-change",
+      "status": "not-applicable",
+      "policyIdentity": "m12c-zero-distance-passive-boss-v1",
+      "reason": "frozen-active-surface-has-no-critical-attribute-mutating-effect",
+      "sourceIdentity": "work/m12-b3/parallel-evidence-112001/SOURCE_LEDGER.md#11200162-无名第二被动-未实装-无暴击属性变更"
+    }
+  ],
   "fixturePath": "fixtures/character-acceptance/112001-visual.json",
   "goldenReports": [
     "reports/m10/112001/golden-trace.json"
@@ -49,9 +59,9 @@
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "fixturePath": "fixtures/character-acceptance/112001-visual.json",
-        "fixtureSha256": "76ac90ba8d28adf73b34ad48515ac7c2a3f20329033dcfec4737bc435728df38",
+        "fixtureSha256": "abab0b4b2e508611a2515612de1fd200f83320b8c81a6f47c46a42a3467f725b",
         "screenshotPath": "reports/m12-b3-112001-workbench-visual-evidence.png",
-        "screenshotSha256": "ca0e8df4693c141c586f178506d3e9c5cfb76004d73892779935f92faad059a7"
+        "screenshotSha256": "15ad47c214c7572d6a16a86777ff16edca18a5606258ba6b8ca5e55420b10d46"
       }
     ]
   },
@@ -1610,15 +1620,7 @@
             "remainingDurationMs": 20000,
             "stacks": 1,
             "maxStacks": 1,
-            "modifiers": [
-              {
-                "kind": "battle-property",
-                "attributeId": 7,
-                "bucket": "dynamicExtra",
-                "valueRaw": -800,
-                "propertyTags": []
-              }
-            ],
+        "modifiers": [],
             "sourceStatus": "product-assumption-acceptance-fixture",
             "sourceIdentity": {
               "packageId": "azpr-tc-2026-07-18",
@@ -1915,7 +1917,7 @@
                 "kind": "battle-property",
                 "attributeId": 7,
                 "bucket": "dynamicExtra",
-                "valueRaw": -1300,
+                "valueRaw": -500,
                 "propertyTags": []
               }
             ],
@@ -1999,7 +2001,7 @@
                 "kind": "battle-property",
                 "attributeId": 7,
                 "bucket": "dynamicExtra",
-                "valueRaw": 8700,
+                "valueRaw": 9500,
                 "propertyTags": []
               }
             ],
@@ -2053,130 +2055,6 @@
             "formula.randomBranch.criticalThreshold": 10000,
             "formula.randomBranch.criticalRoll": 9999,
             "formula.randomBranch.critical": true
-          },
-          "expectation": {
-            "count": 1
-          }
-        }
-      ]
-    },
-    {
-      "identity": "passive-critical-pre-hit-and-right-open-expiry",
-      "durationFrames": 700,
-      "initialRuntimeState": {
-        "specialResourcesByActor": [],
-        "kiboEnergyBySlot": [],
-        "tuningMarks": [],
-        "activeEffects": []
-      },
-      "actions": [
-        {
-          "id": "isolated-passive-critical-active",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 11200101,
-            "actionKind": "normal-attack",
-            "level": 1,
-            "attackInput": {
-              "sequenceIndex": 1,
-              "groupId": "isolated-passive-critical-active"
-            }
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 0
-          },
-          "hitOverrides": {
-            "11200101|0|elements|0|-7332396199243874878|8|1": {
-              "landed": "hit",
-              "criticalMode": "sampled",
-              "criticalRoll": 9999
-            }
-          }
-        },
-        {
-          "id": "isolated-passive-critical-expired",
-          "owner": {
-            "kind": "actor",
-            "slotId": "slot-1"
-          },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 11200101,
-            "actionKind": "normal-attack",
-            "level": 1,
-            "attackInput": {
-              "sequenceIndex": 1,
-              "groupId": "isolated-passive-critical-expired"
-            }
-          },
-          "schedule": {
-            "mode": "absolute",
-            "frame": 600
-          },
-          "hitOverrides": {
-            "11200101|0|elements|0|-7332396199243874878|8|1": {
-              "landed": "hit",
-              "criticalMode": "sampled",
-              "criticalRoll": 9999
-            }
-          }
-        }
-      ],
-      "probes": [
-        {
-          "kind": "trace-query",
-          "assertionIdentity": "passive-critical-effect-applies-on-initial-controlled-entry",
-          "path": "effects.events",
-          "where": {
-            "effectId": "battle-element:112001133",
-            "targetId": "actor-112001",
-            "operation": "apply",
-            "absoluteFrame": 0
-          },
-          "expectation": {
-            "count": 1
-          }
-        },
-        {
-          "kind": "trace-query",
-          "assertionIdentity": "passive-critical-effect-expires-at-right-open-end",
-          "path": "effects.events",
-          "where": {
-            "effectId": "battle-element:112001133",
-            "targetId": "actor-112001",
-            "operation": "expire",
-            "absoluteFrame": 480
-          },
-          "expectation": {
-            "count": 1
-          }
-        },
-        {
-          "kind": "trace-query",
-          "assertionIdentity": "passive-critical-rate-is-read-before-active-hit",
-          "path": "damage",
-          "where": {
-            "actionId": "isolated-passive-critical-active",
-            "formula.randomBranch.sourceCriticalRateBasisPoints": 1300,
-            "formula.randomBranch.criticalThreshold": 1300
-          },
-          "expectation": {
-            "count": 1
-          }
-        },
-        {
-          "kind": "trace-query",
-          "assertionIdentity": "passive-critical-rate-is-removed-before-post-expiry-hit",
-          "path": "damage",
-          "where": {
-            "actionId": "isolated-passive-critical-expired",
-            "formula.randomBranch.sourceCriticalRateBasisPoints": 500,
-            "formula.randomBranch.criticalThreshold": 500
           },
           "expectation": {
             "count": 1
@@ -2795,12 +2673,6 @@
       "factIdentity": "critical:perHitModes",
       "allOfAssertionIdentities": [
         "isolated:critical-five-percent-integer-boundary-and-hit-modes"
-      ]
-    },
-    {
-      "factIdentity": "critical:preHitAttributeChange",
-      "allOfAssertionIdentities": [
-        "isolated:passive-critical-pre-hit-and-right-open-expiry"
       ]
     },
     {

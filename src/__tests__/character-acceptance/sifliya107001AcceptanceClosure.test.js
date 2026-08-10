@@ -167,7 +167,7 @@ describe('Sifliya 107001 acceptance closure', () => {
           fixturePath:
             'fixtures/character-acceptance/107001-active-surface-closure.json',
           fixtureSha256:
-            '82818eb1089f9d4a7a15a0b2109d98588e94d532ef28fbbeab490c93b38cf420',
+            'c0076775d267ae7314d561471f9e26d07a797f122ab768fe1ef632d3a4fbc06a',
           screenshotPath: 'reports/m12-b3-107001-workbench-visual-evidence.png',
           screenshotSha256:
             'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260',
@@ -181,7 +181,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: 'e614b6f14d0682b6',
+        canonicalTraceHash: 'bff623d319b94a16',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

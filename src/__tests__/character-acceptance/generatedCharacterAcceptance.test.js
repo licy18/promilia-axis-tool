@@ -90,7 +90,6 @@ const owners = [
     passiveId: 11200162,
     manifest: giseleManifest,
     profile: giseleProfile,
-    unnamedSecondaryPassiveBoundary: false,
   },
   {
     ownerId: 199001,
@@ -117,7 +116,7 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 1,
+        'runtime-integrated': 2,
         'optimization-ready': 9,
       },
       optimizationReadyCount: 9,
@@ -218,7 +217,7 @@ describe('generated character acceptance manifests', () => {
             199002: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
           })[ownerId] ?? 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
-      const runtimeIntegrated = ownerId !== 112001;
+      const runtimeIntegrated = true;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'

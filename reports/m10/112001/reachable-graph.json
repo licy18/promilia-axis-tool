@@ -4,13 +4,6 @@
   "ownerId": 112001,
   "nodes": [
     {
-      "nodeIdentity": "actor:112001:passive:11200162",
-      "nodeKind": "passive-listener",
-      "skillId": 11200162,
-      "status": "applied",
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200162.asset/MonoBehaviour/skill_control_11200162__-3629621280326451238.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_112001133.asset/MonoBehaviour/ast_112001133__-1181925444607214156.json#elementConfigId=112001133|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_112001134.asset/MonoBehaviour/ast_112001134__1138707259999444314.json#elementConfigId=112001134|skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314|Battle/Element/ast_112001133.asset#controlled-entry,+8%-crit-rate,8000ms->ast_112001134|not-the-stale-firework-description"
-    },
-    {
       "nodeIdentity": "actor|112001|11200101|0|11200103|normal-attack",
       "nodeKind": "public-action",
       "actionKind": "normal-attack",
@@ -466,21 +459,6 @@
       "controlSkillId": 11200161,
       "subSkillIndex": 0,
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200161.asset/MonoBehaviour/skill_control_11200161__-3699253550000027903.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
-      "status": "applied"
-    },
-    {
-      "nodeIdentity": "control:11200162",
-      "nodeKind": "control",
-      "controlSkillId": 11200162,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200162.asset/MonoBehaviour/skill_control_11200162__-3629621280326451238.json",
-      "status": "applied"
-    },
-    {
-      "nodeIdentity": "control:11200162:sub:0",
-      "nodeKind": "control-variant",
-      "controlSkillId": 11200162,
-      "subSkillIndex": 0,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200162.asset/MonoBehaviour/skill_control_11200162__-3629621280326451238.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]",
       "status": "applied"
     },
     {
@@ -2643,21 +2621,6 @@
       "relation": "has-subskill"
     },
     {
-      "edgeIdentity": "control:11200162->has-subskill->control:11200162:sub:0",
-      "from": "control:11200162",
-      "to": "control:11200162:sub:0",
-      "relation": "has-subskill"
-    },
-    {
-      "edgeIdentity": "control:null:sub:null->triggers-passive->actor:112001:passive:11200162",
-      "from": "control:null:sub:null",
-      "to": "actor:112001:passive:11200162",
-      "relation": "triggers-passive",
-      "triggerFrame": 0,
-      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_11200162.asset/MonoBehaviour/skill_control_11200162__-3629621280326451238.json",
-      "status": "applied"
-    },
-    {
       "edgeIdentity": "switch-trigger:112001:on-enter->derives-star-carry->actor|112001|11200121|0|11200121|star-carry",
       "from": "switch-trigger:112001:on-enter",
       "to": "actor|112001|11200121|0|11200121|star-carry",
@@ -2731,16 +2694,15 @@
     }
   ],
   "summary": {
-    "nodeCount": 167,
-    "edgeCount": 167,
-    "controlCount": 17,
+    "nodeCount": 164,
+    "edgeCount": 165,
+    "controlCount": 16,
     "exclusionCount": 9,
     "nodeKindCounts": {
       "action-form": 10,
-      "control": 17,
-      "control-variant": 28,
+      "control": 16,
+      "control-variant": 27,
       "hit": 96,
-      "passive-listener": 1,
       "public-action": 10,
       "switch-trigger": 1,
       "tuning-mark-conditional-damage-group": 4
@@ -2751,10 +2713,9 @@
       "emits-hit": 96,
       "executes-control": 20,
       "has-form": 10,
-      "has-subskill": 28,
-      "materializes-tuning-mark-conditional-damage": 4,
-      "triggers-passive": 1
+      "has-subskill": 27,
+      "materializes-tuning-mark-conditional-damage": 4
     }
   },
-  "profileHash": "16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22"
+  "profileHash": "fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344"
 }

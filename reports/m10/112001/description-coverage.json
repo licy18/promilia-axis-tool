@@ -1617,25 +1617,26 @@
       "clauseIndex": 0,
       "text": "星鸣技最后1击命中敌方时将为其附加{0}层「焰火」状态（持续15秒）",
       "mechanicKinds": [
-        "action-form",
-        "passive-listener"
+        "action-form"
       ],
-      "status": "applied",
+      "status": "not-applicable",
       "coverageReferences": [
-        "actor:112001:passive:11200162",
         "actor|112001|11200112|0|11200112|star-skill:default"
       ],
       "publicFormSettlements": [],
-      "reasons": [],
-      "sourceIdentity": "C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
+      "reasons": [
+        "unnamed-secondary-passive-not-implemented-current-client"
+      ],
+      "sourceIdentity": "characters.items[id=112001].skillSlots[group=passive,index=1,skillId=11200162]|C:/PC2/Codex/AzPr/BWiki/data/hero-modules/local-all/112001.hero-module.local.json"
     }
   ],
   "summary": {
     "entryCount": 27,
     "statusCounts": {
-      "applied": 26,
+      "applied": 25,
+      "not-applicable": 1,
       "static-evidence-gap": 1
     }
   },
-  "profileHash": "16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22"
+  "profileHash": "fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344"
 }

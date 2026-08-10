@@ -237,6 +237,10 @@ try {
             buffLifecycle: definition.buffLifecycle ?? null,
             inputWindowBoundary: definition.inputWindowBoundary ?? null,
             skipCriticalMatrix: definition.skipCriticalMatrix !== false,
+            // Additional scenarios only assert the probes and boundaries they
+            // actually exercise. Main-scenario fact aliases must not be forced
+            // onto scenarios whose source assertions never run.
+            scenarioFactAliases: [],
           },
           fixture: additionalFixtures[index],
           service,

@@ -2,17 +2,17 @@
 
 - Owner: `112001`
 - Profile: `actor:112001:character-combat-profile:v1`
-- Hash: `16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22`
+- Hash: `fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：complete
 - 角色完成：no
 - 公开动作：10
 - 执行形态：10
-- 可达 control：17
+- 可达 control：16
 - 窗口：7
 - Hit：96
-- 来源 identity：1294
-- 战斗图：167 nodes / 167 edges
+- 来源 identity：1280
+- 战斗图：164 nodes / 165 edges
 - 描述覆盖：27
 - Runtime ready 动作：6/10
 - Runtime capture：0
@@ -34,12 +34,12 @@
 | toughnessDamage | applied | 16 | 0 | 67 |
 | actorSp | applied | 9 | 0 | 67 |
 | kiboSp | applied | 9 | 0 | 67 |
-| cooldowns | applied | 17 | 0 | 17 |
+| cooldowns | applied | 16 | 0 | 16 |
 | personalResources | not-applicable | 0 | 0 | 0 |
 | teamResourcesAndMarks | applied | 1 | 0 | 1 |
-| buffsAndDebuffs | applied | 28 | 0 | 32 |
-| passives | applied | 1 | 0 | 1 |
-| dynamicProperties | applied | 7 | 0 | 7 |
+| buffsAndDebuffs | applied | 27 | 0 | 31 |
+| passives | not-applicable | 0 | 0 | 0 |
+| dynamicProperties | applied | 6 | 0 | 6 |
 | healingAndShields | not-applicable | 0 | 0 | 0 |
 | stateMachines | applied | 4 | 0 | 4 |
 | switchAndStarCarry | applied | 1 | 0 | 1 |

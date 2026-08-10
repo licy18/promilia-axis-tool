@@ -45,7 +45,7 @@
         "gisele-heavy3-charge-sub4-landed-star-cd-recovery",
         "gisele-ultimate-post-hit-wrapper"
       ],
-      "requiredPassiveIdentities": ["actor:112001:passive:11200162"]
+      "requiredPassiveIdentities": []
     }
   },
   "mechanicsDiscovery": {
@@ -57,7 +57,7 @@
     "starCarryControlSkillId": 11200121,
     "limitCounterControlSkillId": 11200125,
     "perfectParryControlSkillId": 11200127,
-    "passiveSkillIds": [11200161, 11200162]
+    "passiveSkillIds": [11200161]
   },
   "runtimePolicies": {
     "defaultControlPolicy": {
@@ -83,8 +83,7 @@
       11200126,
       11200127,
       11200141,
-      11200161,
-      11200162
+      11200161
     ],
     "headlessAssumptionContract": {
       "contractIdentity": "m12-112001-assumption-runtime-v1",
@@ -660,15 +659,7 @@
     "pickupAbsorbBindings": [],
     "specialResources": [],
     "thresholdTransitions": [],
-    "passiveEffects": [
-      {
-        "skillId": 11200162,
-        "runtimeGenerationMode": "controlled-entry-property-runtime",
-        "sourceElementIds": [112001133, 112001134],
-        "expectedDurationMs": 8000,
-        "sourceIdentity": "skill_control_11200162.asset#paths=-1181925444607214156,1138707259999444314|Battle/Element/ast_112001133.asset#controlled-entry,+8%-crit-rate,8000ms->ast_112001134|not-the-stale-firework-description"
-      }
-    ],
+    "passiveEffects": [],
     "scenarioOutOfScopeActions": [
       { "controlSkillId": 11200115, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-evade-context", "sourceIdentity": "skill_control_11200115.asset#source-retained|m12c-zero-distance-passive-boss-v1#boss-does-not-attack" },
       { "controlSkillId": 11200111, "status": "not-applicable", "reason": "scenario-out-of-scope:requires-aerial-or-fall-context", "sourceIdentity": "skill_control_11200111.asset#source-retained|m12c-zero-distance-passive-boss-v1#grounded" },

@@ -6,15 +6,15 @@
   "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "91d6221075036137ef49ed09e9e42d8b92e6c90994d21532d5eb974d76bda3cd",
+  "sourcePackageHash": "35a91e5ddf4da39b63234c26a5d7102b37aa42222c59983a930266921a1c52db",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "5f11aaa69fb57b54",
-    "traceHash": "cd35610de7e1153f",
-    "dataHash": "9ecd31cb15fda45b",
-    "buildHash": "4750527415bd0407",
+    "inputHash": "8c101b4d3192cd83",
+    "traceHash": "4367f7e6ddf404a6",
+    "dataHash": "9cdcafaa5c96153b",
+    "buildHash": "770ae0ba71580ad0",
     "headlessAssumptionContracts": [
       {
         "assumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
@@ -1565,27 +1565,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 800,
-          "effectIds": [
-            "battle-element:112001133"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 86,
           "effectIds": [
-            "tuning-mark:250:persistent"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 929,
-          "effectIds": [
-            "battle-element:112001133",
             "tuning-mark:250:persistent"
           ]
         },
@@ -1659,9 +1640,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 929,
+            "dynamicExtraRaw": 129,
             "effectIds": [
-              "battle-element:112001133",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1698,9 +1678,8 @@
             "attributeId": 7,
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 929,
+            "dynamicExtraRaw": 129,
             "effectIds": [
-              "battle-element:112001133",
               "tuning-mark:250:persistent"
             ]
           },
@@ -1903,27 +1882,15 @@
           }
         ],
         "gisele-switch-away": [],
-        "gisele-switch-back--on-enter--actor-112001--star-carry": [
-          {
-            "attributeId": 7,
-            "dynamicBaseRaw": 0,
-            "dynamicPercentRaw": 0,
-            "dynamicExtraRaw": 800,
-            "effectIds": [
-              "battle-element:112001133"
-            ]
-          }
-        ],
+        "gisele-switch-back--on-enter--actor-112001--star-carry": [],
         "gisele-ultimate": []
       },
       "effectIdsByActionId": {
         "gisele-a1": [
-          "battle-element:112001133",
           "tuning-mark:250:persistent",
           "tuning-mark:450:persistent"
         ],
         "gisele-a2": [
-          "battle-element:112001133",
           "tuning-mark:250:persistent",
           "tuning-mark:450:persistent"
         ],
@@ -1944,9 +1911,7 @@
           "tuning-mark:450:persistent"
         ],
         "gisele-switch-away": [],
-        "gisele-switch-back--on-enter--actor-112001--star-carry": [
-          "battle-element:112001133"
-        ],
+        "gisele-switch-back--on-enter--actor-112001--star-carry": [],
         "gisele-ultimate": []
       },
       "maxPercentRawByAttributeId": {
@@ -1956,7 +1921,7 @@
         "60": 0
       },
       "maxExtraRawByAttributeId": {
-        "7": 929,
+        "7": 129,
         "8": 258,
         "58": 162,
         "60": 162
@@ -2001,27 +1966,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 800,
-          "effectIds": [
-            "battle-element:112001133"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 86,
           "effectIds": [
-            "tuning-mark:250:persistent"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 929,
-          "effectIds": [
-            "battle-element:112001133",
             "tuning-mark:250:persistent"
           ]
         },
@@ -2130,27 +2076,8 @@
           "attributeId": 7,
           "dynamicBaseRaw": 0,
           "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 800,
-          "effectIds": [
-            "battle-element:112001133"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
           "dynamicExtraRaw": 86,
           "effectIds": [
-            "tuning-mark:250:persistent"
-          ]
-        },
-        {
-          "attributeId": 7,
-          "dynamicBaseRaw": 0,
-          "dynamicPercentRaw": 0,
-          "dynamicExtraRaw": 929,
-          "effectIds": [
-            "battle-element:112001133",
             "tuning-mark:250:persistent"
           ]
         },
@@ -5118,46 +5045,6 @@
       "conditionalHitGroups": [],
       "effects": [
         {
-          "eventId": "actor/actor-112001/battle-element:112001133/verified-calculator|EFFECT_APPLIED|0|1",
-          "eventType": "EFFECT_APPLIED",
-          "status": "effect-runtime-applied",
-          "actionId": null,
-          "frame": 0,
-          "effectId": "battle-element:112001133",
-          "runtimeEffectId": "battle-element:112001133",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "被动 11200162",
-          "targetKind": "actor",
-          "targetId": "actor-112001",
-          "operation": "apply",
-          "previousTargetId": null,
-          "nextTargetId": "actor-112001",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-112001",
-          "effectAdderActorId": "actor-112001",
-          "effectInstanceId": "battle-element:112001133|unknown-action|0",
-          "beforeStacks": null,
-          "afterStacks": 1,
-          "stackChange": 1,
-          "expiresAtMs": 8000,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 7,
-              "bucket": "dynamicExtra",
-              "valueRaw": 800,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
           "eventId": "actor/actor-112001/tuning-mark:250:persistent/verified-calculator|EFFECT_APPLIED|0|1",
           "eventType": "EFFECT_APPLIED",
           "status": "effect-runtime-applied",
@@ -5312,46 +5199,6 @@
               "attributeId": 60,
               "bucket": "dynamicExtra",
               "valueRaw": 81,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "actor/actor-112001/battle-element:112001133/verified-calculator|EFFECT_EXPIRED|8000|1",
-          "eventType": "EFFECT_EXPIRED",
-          "status": "effect-runtime-expired",
-          "actionId": null,
-          "frame": 480,
-          "effectId": "battle-element:112001133",
-          "runtimeEffectId": "battle-element:112001133",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "被动 11200162",
-          "targetKind": "actor",
-          "targetId": "actor-112001",
-          "operation": "expire",
-          "previousTargetId": "actor-112001",
-          "nextTargetId": null,
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-112001",
-          "effectAdderActorId": "actor-112001",
-          "effectInstanceId": "battle-element:112001133|unknown-action|0",
-          "beforeStacks": 1,
-          "afterStacks": null,
-          "stackChange": -1,
-          "expiresAtMs": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 7,
-              "bucket": "dynamicExtra",
-              "valueRaw": 800,
               "formulaFamily": null,
               "formulaValue": null
             }
@@ -6022,86 +5869,6 @@
           ]
         },
         {
-          "eventId": "actor/actor-112001/battle-element:112001133/verified-calculator|EFFECT_APPLIED|71666.667|1",
-          "eventType": "EFFECT_APPLIED",
-          "status": "effect-runtime-applied",
-          "actionId": null,
-          "frame": 4300,
-          "effectId": "battle-element:112001133",
-          "runtimeEffectId": "battle-element:112001133",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "被动 11200162",
-          "targetKind": "actor",
-          "targetId": "actor-112001",
-          "operation": "apply",
-          "previousTargetId": null,
-          "nextTargetId": "actor-112001",
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-112001",
-          "effectAdderActorId": "actor-112001",
-          "effectInstanceId": "battle-element:112001133|unknown-action|71666.667",
-          "beforeStacks": null,
-          "afterStacks": 1,
-          "stackChange": 1,
-          "expiresAtMs": 79666.667,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 7,
-              "bucket": "dynamicExtra",
-              "valueRaw": 800,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
-          "eventId": "actor/actor-112001/battle-element:112001133/verified-calculator|EFFECT_EXPIRED|79666.667|1",
-          "eventType": "EFFECT_EXPIRED",
-          "status": "effect-runtime-expired",
-          "actionId": null,
-          "frame": 4780,
-          "effectId": "battle-element:112001133",
-          "runtimeEffectId": "battle-element:112001133",
-          "sourceElementId": null,
-          "sourceSequencePath": null,
-          "sameFrameVisibility": null,
-          "effectName": "被动 11200162",
-          "targetKind": "actor",
-          "targetId": "actor-112001",
-          "operation": "expire",
-          "previousTargetId": "actor-112001",
-          "nextTargetId": null,
-          "controlledActorTransitionId": null,
-          "inheritType": null,
-          "formulaSourceActorId": "actor-112001",
-          "effectAdderActorId": "actor-112001",
-          "effectInstanceId": "battle-element:112001133|unknown-action|71666.667",
-          "beforeStacks": 1,
-          "afterStacks": null,
-          "stackChange": -1,
-          "expiresAtMs": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "modifiers": [
-            {
-              "kind": "battle-property",
-              "attributeId": 7,
-              "bucket": "dynamicExtra",
-              "valueRaw": 800,
-              "formulaFamily": null,
-              "formulaValue": null
-            }
-          ]
-        },
-        {
           "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|20450|10:1227",
           "actionId": "gisele-star",
           "frame": 1227,
@@ -6151,7 +5918,7 @@
         }
       ]
     },
-    "summaryHash": "10d4164019ada992dfe6dfda8717eb084e0c7ef94628d3a670d72480b77c722e"
+    "summaryHash": "fd89acc964c4a92ca32c921ef4d751ea34ba2048b429e351664f374ce3a305d3"
   },
   "expected": {
     "exact": {
@@ -6183,6 +5950,6 @@
       }
     ]
   },
-  "replayHash": "7c88a36189f30e0bc03884b687bfcc57c05af4b68fdab26eea4ec14f4e6b14c7",
-  "profileHash": "16b2a06edd95e4009c3a76601db26a85ee203d43b0104bea9576c557e9496f22"
+  "replayHash": "82d72a7adf40f42c23bd8fcda5d24acbd788ea89dcc65c44116b98ba4f7fded8",
+  "profileHash": "fce1af78d112bfca7e06e2ca521616b53d4ddedf6333e3fabbb579c762825344"
 }
