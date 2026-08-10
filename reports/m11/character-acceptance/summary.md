@@ -17,7 +17,7 @@
 | 米蒂 (108003) | optimization-ready | 134/134 | 0 | 0 | 是 |
 | 末音 (109001) | optimization-ready | 134/134 | 0 | 0 | 是 |
 | 姬瑟贝露 (112001) | runtime-integrated | 186/186 | 0 | 0 | 否 |
-| 女主角 (199001) | runtime-integrated | 177/177 | 0 | 0 | 否 |
-| 男主角 (199002) | runtime-integrated | 177/177 | 0 | 0 | 否 |
+| 女主角 (199001) | runtime-integrated | 195/195 | 0 | 0 | 否 |
+| 男主角 (199002) | runtime-integrated | 195/195 | 0 | 0 | 否 |
 
 三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。

@@ -5,16 +5,17 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:facd8a9d0a97263a",
-    "qualificationSubjectHash": "facd8a9d0a97263a",
-    "scenarioSetHash": "00f4a1a74fe026d2",
+    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:7a9aa3a4a2b6a487",
+    "qualificationSubjectHash": "7a9aa3a4a2b6a487",
+    "scenarioSetHash": "7e4420f092ca6531",
+    "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "fixturePath": "fixtures/character-acceptance/107001-visual.json",
-        "fixtureSha256": "afe81b364ede64540d762b63d5ff68930fdfce887decc24ba7be65838cdb2694",
+        "fixtureSha256": "d105e58e30fb874c185484a13bcf545c62d57ea2d6202f3bcdfd476b4520ae26",
         "screenshotPath": "reports/m12-b3-107001-workbench-visual-evidence.png",
         "screenshotSha256": "cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260"
       }
