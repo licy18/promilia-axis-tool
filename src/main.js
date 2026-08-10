@@ -5,6 +5,7 @@ import { ElMessage } from 'element-plus';
 import App from './App.vue';
 import router from './router';
 import i18n from './i18n';
+import { loadVerifiedCombatMechanicsPackage } from './data/verifiedCombatMechanicsPackage';
 import './styles/index.scss';
 
 const app = createApp(App);
@@ -40,4 +41,18 @@ window.addEventListener('unhandledrejection', event => {
   });
 });
 
-app.mount('#app');
+async function bootstrap() {
+  try {
+    await loadVerifiedCombatMechanicsPackage();
+    app.mount('#app');
+  } catch (error) {
+    app.config.errorHandler(error, null, 'bootstrap');
+    const root = document.getElementById('app');
+    if (root) {
+      root.dataset.bootstrapStatus = 'failed';
+      root.textContent = '战斗机制数据加载失败，请刷新页面重试';
+    }
+  }
+}
+
+void bootstrap();
