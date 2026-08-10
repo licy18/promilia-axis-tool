@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createWorkbenchJointAttackInsertion } from '../../domain/workbenchJointAttackInsertion';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 
 const actorEntry = {
   kind: 'star-combo',
@@ -55,12 +56,24 @@ describe('workbench joint attack insertion', () => {
 
     expect(result.status).toBe('paired');
     expect(result).toMatchObject({
-      formalEligible: false,
+      formalEligible: true,
+      jointAttackRuntime: {
+        contractId: 'm12-joint-attack-runtime-v1',
+        formalReady: true,
+        clientParityReady: false,
+        bindingHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      },
       triggerEvidence: {
-        code: 'joint-attack-trigger-unresolved',
-        status: 'preweakbreak-static-predicate-partially-closed',
-        skillTag: 15,
+        code: 'joint-attack-runtime-assumption-ready',
+        status: 'resolved-by-product-assumption',
+        formalEligible: true,
+        clientParityReady: false,
         mechanicsPackageHash: mechanicsPackage.packageHash,
+        mappingIdentity: 'kibo|500001|50000112|0|50000112|break',
+        leavesOpen: expect.arrayContaining([
+          'client-server-parity-for-product-fallback-gates',
+          'client-server-parity-for-kibo-hit-anchored-post-damage-toughness-clear-order',
+        ]),
       },
     });
     expect(result.draftPatches).toEqual([
@@ -164,6 +177,55 @@ describe('workbench joint attack insertion', () => {
     expect(result).toEqual({
       status: 'not-joint-attack',
       draftPatches: [{ id: 'ordinary-break' }],
+    });
+  });
+
+  it('preserves explicit product gates and fail-closes a tampered existing binding', () => {
+    const explicit = createVerifiedJointAttackRuntimeBinding({
+      cannotBeJointStrike: true,
+    });
+    const common = {
+      entry: {
+        type: 'skill',
+        skillId: actorEntry.skillId,
+        actionVariantIndex: actorEntry.actionVariantIndex,
+      },
+      actorCharacterId: 101007,
+      actorActionEntries: [actorEntry],
+      kiboActionEntries: [kiboEntry],
+      equippedKiboId: 500001,
+      baseDraftPatches: [
+        {
+          id: 'actor-combo',
+          type: 'skill',
+          actorCharacterId: 101007,
+          skillId: actorEntry.skillId,
+          actionVariantIndex: actorEntry.actionVariantIndex,
+          startMs: 2000,
+        },
+      ],
+      startMs: 2000,
+      companionActionId: 'kibo-combo',
+      relationId: 'joint-relation',
+    };
+    expect(
+      createWorkbenchJointAttackInsertion({
+        ...common,
+        jointAttackRuntime: explicit,
+      }).jointAttackRuntime
+    ).toEqual(explicit);
+    expect(
+      createWorkbenchJointAttackInsertion({
+        ...common,
+        jointAttackRuntime: {
+          ...explicit,
+          bindingHash: 'tampered',
+        },
+      })
+    ).toMatchObject({
+      status: 'blocked',
+      draftPatches: [],
+      message: expect.stringContaining('不能静默覆盖'),
     });
   });
 });

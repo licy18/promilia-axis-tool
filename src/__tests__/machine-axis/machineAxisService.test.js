@@ -12,6 +12,18 @@ import { createSearchStateSnapshot } from '../../machine-axis/machineAxisSearchS
 
 const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
 
+function createMitiProjectileFixture() {
+  const axis = structuredClone(mitiFixture);
+  axis.actions = axis.actions.filter(
+    action =>
+      ![
+        'miti-star-combo-active',
+        'miti-star-combo-kibo-break',
+      ].includes(action.id)
+  );
+  return axis;
+}
+
 function createAxis({
   critical = { policy: 'non-critical', seed: null },
   hitOverrides = {},
@@ -143,7 +155,8 @@ describe('Machine Axis service', () => {
   }, 30_000);
 
   it('gates Miti spawned lightning-orb packets on each landed parent arrow', () => {
-    const run = createMachineAxisService().simulate(mitiFixture);
+    const axis = createMitiProjectileFixture();
+    const run = createMachineAxisService().simulate(axis);
     const damageCounts = actionId =>
       run.trace.damage
         .filter(event => event.actionId === actionId)
@@ -235,7 +248,7 @@ describe('Machine Axis service', () => {
       ['miti-star-2-exact-cooldown', 'apply'],
       ['miti-star-2-exact-cooldown', 'apply'],
     ]);
-    const replay = createMachineAxisService().simulate(mitiFixture);
+    const replay = createMachineAxisService().simulate(axis);
     expect(replay.hashes).toEqual(run.hashes);
     expect(replay.actionLegalityProof.proofHash).toBe(
       run.actionLegalityProof.proofHash

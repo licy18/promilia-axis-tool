@@ -2,9 +2,12 @@ import { msToFrame } from '../domain/timebase';
 import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import {
-  JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
   resolveVerifiedKiboJointAttackBinding,
 } from '../domain/verifiedJointAttackContract';
+import {
+  VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE,
+  validateVerifiedJointAttackRuntimeBinding,
+} from '../domain/verifiedJointAttackRuntimeContract';
 import { createSearchAttackChainProjection } from './machineAxisSearchState';
 import {
   isOptimizationCandidateCharacterInScope,
@@ -169,6 +172,25 @@ export function createMachineAxisSearchGenerator({
       const limited = maxActorActions
         ? characterCandidates.slice(0, maxActorActions)
         : characterCandidates;
+      const activeSlot = slotsByCharacterId.get(activeCharacterId);
+      const kiboId = Number(activeSlot?.loadout?.kiboId);
+      const kiboCandidates =
+        options.includeKibo === false
+          ? []
+          : getKiboActionCandidates(kiboId, activeCharacterId);
+      const maxKiboActions = positiveIntegerOrNull(options.maxKiboActions);
+      const limitedKibo = maxKiboActions
+        ? kiboCandidates.slice(0, maxKiboActions)
+        : kiboCandidates;
+      const verifiedJointKiboEntries = limitedKibo.filter(entry =>
+        resolveGeneratorJointAttackBinding({
+          entry,
+          kiboId,
+          activeCharacterId,
+        })
+      );
+      const jointRuntimeValidation =
+        validateVerifiedJointAttackRuntimeBinding(scenario.jointAttackRuntime);
       for (const entry of limited) {
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
@@ -248,18 +270,55 @@ export function createMachineAxisSearchGenerator({
             sourceIdentity: entry.mappingIdentity ?? null,
           });
         } else {
-          if (
-            options.requireFormalLegality === true &&
-            String(entry.actionKind) === 'star-combo'
-          ) {
-            rejectFormalSurface(options, {
-              code: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
-              path: 'actions',
-              message:
-                'Joint attacks are excluded from the formal surface until existPetBreakTarget is authoritative',
-              actorId: activeActorId,
+          if (String(entry.actionKind) === 'star-combo') {
+            const jointKiboEntry = verifiedJointKiboEntries[0] ?? null;
+            if (!jointRuntimeValidation.valid || !jointKiboEntry) {
+              rejectFormalSurface(options, {
+                code: !jointRuntimeValidation.valid
+                  ? VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE
+                  : 'joint-attack-kibo-required',
+                path: 'actions',
+                message: !jointRuntimeValidation.valid
+                  ? 'Joint attack search requires m12-joint-attack-runtime-v1'
+                  : 'Joint attack search requires the equipped verified Kibo JointStrikeSkill',
+                actorId: activeActorId,
+                kiboId: Number.isInteger(kiboId) ? kiboId : null,
+                publicActionId: entry.publicActionId,
+                sourceIdentity: entry.mappingIdentity ?? null,
+              });
+              continue;
+            }
+            const actorAction = createMachineAxisSearchAction({
+              id: nextActionId(),
+              ownerKind: 'actor',
+              slotId,
               publicActionId: entry.publicActionId,
+              actionKind: entry.actionKind,
+              level: 1,
+              startFrame: baseStartFrame,
+            });
+            const kiboAction = createMachineAxisSearchAction({
+              id: nextActionId(),
+              ownerKind: 'kibo',
+              slotId,
+              publicActionId: jointKiboEntry.publicActionId,
+              actionKind: jointKiboEntry.actionKind,
+              level: 1,
+              startFrame: baseStartFrame,
+            });
+            add({
+              action: actorAction,
+              actions: [actorAction, kiboAction],
+              compoundKind: 'joint-attack',
+              ownerId: `actor:${activeCharacterId}`,
+              ownerKind: 'compound',
+              slotId,
+              startFrame: baseStartFrame,
+              label: `${entry.name ?? entry.actionKind} + ${jointKiboEntry.name ?? jointKiboEntry.actionKind}`,
+              source: 'catalog:verified-joint-attack-compound',
               sourceIdentity: entry.mappingIdentity ?? null,
+              runtimeBindingHash:
+                jointRuntimeValidation.binding?.bindingHash ?? null,
             });
             continue;
           }
@@ -285,42 +344,13 @@ export function createMachineAxisSearchGenerator({
       }
 
       if (options.includeKibo !== false) {
-        const activeSlot = slotsByCharacterId.get(activeCharacterId);
-        const kiboId = Number(activeSlot?.loadout?.kiboId);
-        const kiboCandidates = getKiboActionCandidates(
-          kiboId,
-          activeCharacterId
-        );
-        const maxKiboActions = positiveIntegerOrNull(options.maxKiboActions);
-        const limitedKibo = maxKiboActions
-          ? kiboCandidates.slice(0, maxKiboActions)
-          : kiboCandidates;
         for (const entry of limitedKibo) {
-          const jointBinding = resolveVerifiedKiboJointAttackBinding({
-            type: ACTION_TYPES.KIBO_EVENT,
+          const jointBinding = resolveGeneratorJointAttackBinding({
+            entry,
             kiboId,
-            skillId: entry.publicActionId,
-            actionKind: entry.actionKind,
-            eventType: entry.actionKind,
-            actor: {
-              characterId: activeCharacterId,
-              loadout: { kiboId },
-            },
+            activeCharacterId,
           });
-          if (options.requireFormalLegality === true && jointBinding != null) {
-            rejectFormalSurface(options, {
-              code: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
-              path: 'actions',
-              message:
-                'Kibo joint attacks are excluded from the formal surface until existPetBreakTarget is authoritative',
-              actorId: activeActorId,
-              kiboId,
-              publicActionId: entry.publicActionId,
-              mappingIdentity: jointBinding.mappingIdentity,
-              mechanicsPackageHash: jointBinding.mechanicsPackageHash,
-            });
-            continue;
-          }
+          if (jointBinding != null) continue;
           add({
             action: createMachineAxisSearchAction({
               id: nextActionId(),
@@ -385,6 +415,24 @@ export function createMachineAxisSearchGenerator({
     getCharacterActionCandidates,
     getKiboActionCandidates,
     generateNextActions,
+  });
+}
+
+function resolveGeneratorJointAttackBinding({
+  entry,
+  kiboId,
+  activeCharacterId,
+}) {
+  return resolveVerifiedKiboJointAttackBinding({
+    type: ACTION_TYPES.KIBO_EVENT,
+    kiboId,
+    skillId: entry.publicActionId,
+    actionKind: entry.actionKind,
+    eventType: entry.actionKind,
+    actor: {
+      characterId: activeCharacterId,
+      loadout: { kiboId },
+    },
   });
 }
 

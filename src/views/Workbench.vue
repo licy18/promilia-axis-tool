@@ -4202,12 +4202,17 @@ async function insertTimelineEntry({ entry, laneId, startMs }) {
     actionLibraryCharacterId.value = request.actorCharacterId;
   }
   if (request.draftPatches.length > 1) {
-    return Boolean(
-      addInsertedActionGroup(request.draftPatches, {
-        actionRelations: request.actionRelations,
-        resolveAtStartMs: request.resolveDraftPatchesAtStartMs,
-      })?.committed
-    );
+    const insertion = addInsertedActionGroup(request.draftPatches, {
+      actionRelations: request.actionRelations,
+      resolveAtStartMs: request.resolveDraftPatchesAtStartMs,
+    });
+    if (insertion?.committed && request.jointAttackRuntime) {
+      combatScenario.value = normalizeCombatScenario({
+        ...combatScenario.value,
+        jointAttackRuntime: request.jointAttackRuntime,
+      });
+    }
+    return Boolean(insertion?.committed);
   }
   return Boolean(
     addInsertedAction(request.draftPatch, {
@@ -4279,6 +4284,7 @@ async function createTimelineEntryInsertionRequest(options = {}) {
     startMs: request.requestedStartMs,
     companionActionId,
     relationId,
+    jointAttackRuntime: combatScenario.value?.jointAttackRuntime ?? null,
   });
   return expansion.status === 'blocked'
     ? { ...request, blockedMessage: expansion.message }
@@ -4287,6 +4293,7 @@ async function createTimelineEntryInsertionRequest(options = {}) {
         draftPatch: expansion.draftPatches[0] ?? request.draftPatch,
         draftPatches: expansion.draftPatches,
         actionRelations: expansion.actionRelations ?? [],
+        jointAttackRuntime: expansion.jointAttackRuntime ?? null,
       };
 }
 

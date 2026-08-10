@@ -167,6 +167,8 @@ export function createCanonicalHeadlessCombatCore({
         compilation.scenario.combatScenario?.objectiveContract ?? null,
       optimizationScenarioPolicy:
         compilation.scenario.combatScenario?.optimizationScenarioPolicy ?? null,
+      jointAttackRuntime:
+        compilation.scenario.combatScenario?.jointAttackRuntime ?? null,
       enemyProfile: compilation.scenario.enemy?.profile ?? null,
       kiboAutoCastDerivationAuthority:
         compilation.dataIdentity?.kiboAutoCastDerivationAuthority ?? null,
@@ -291,6 +293,12 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
         : {
             objectiveContract:
               effectiveScenario.combatScenario.objectiveContract,
+          }),
+      ...(effectiveScenario.combatScenario?.jointAttackRuntime == null
+        ? {}
+        : {
+            jointAttackRuntime:
+              effectiveScenario.combatScenario.jointAttackRuntime,
           }),
       ...(effectiveScenario.kiboAutoCastDerivationRegistry == null
         ? {}
@@ -784,6 +792,24 @@ function projectRuntimePayload(payload = null) {
     'appliedAssumptionIdentity',
     'appliedAssumptionVersion',
     'appliedAssumptionHash',
+    'pairIdentity',
+    'actorActionId',
+    'kiboActionId',
+    'mappingIdentity',
+    'kiboResolutionIdentity',
+    'anchorHitIdentity',
+    'anchorRelativeFrame',
+    'anchorAbsoluteFrame',
+    'threshold',
+    'currentToughness',
+    'forceBreak',
+    'runtimeContractId',
+    'runtimeContractHash',
+    'runtimeBindingHash',
+    'jointAttackCalculatedToughnessDamage',
+    'jointAttackPairIdentity',
+    'jointAttackAnchorFrame',
+    'jointAttackKiboAnchorHit',
   ];
   for (const key of scalarKeys) {
     if (payload[key] !== undefined) result[key] = payload[key];
@@ -800,6 +826,10 @@ function projectRuntimePayload(payload = null) {
     'appliedTargetIds',
     'appliedEffectIdentities',
     'candidateWindowIdentities',
+    'anchorHitIdentities',
+    'fallbackApplications',
+    'settlementOrder',
+    'costActionIds',
   ]) {
     if (Array.isArray(payload[key])) result[key] = payload[key];
   }
@@ -836,6 +866,12 @@ function projectRuntimePayload(payload = null) {
   if (payload.stateTransaction != null) {
     result.stateTransaction = payload.stateTransaction;
   }
+  if (payload.admissionCursor != null) {
+    result.admissionCursor = payload.admissionCursor;
+  }
+  if (payload.eligibilityCursor != null) {
+    result.eligibilityCursor = payload.eligibilityCursor;
+  }
   if (payload.before != null)
     result.before = projectEffectState(payload.before);
   if (payload.after != null) result.after = projectEffectState(payload.after);
@@ -857,7 +893,11 @@ function projectDamageEvent(event = {}) {
     actionId: event.actionId,
     actorId: event.actorId,
     targetId: event.targetId,
-    hitIdentity: formula.randomBranch?.hitIdentity ?? null,
+    hitIdentity:
+      event.hitIdentity ??
+      event.anchorHitIdentity ??
+      formula.randomBranch?.hitIdentity ??
+      null,
     hitKey: event.hitKey ?? null,
     hitIndex: event.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
@@ -876,6 +916,25 @@ function projectDamageEvent(event = {}) {
     breakTriggered: event.breakTriggered === true,
     deathTriggered: event.deathTriggered === true,
     deathState: event.deathState ?? null,
+    pairIdentity:
+      event.pairIdentity ?? event.jointAttackPairIdentity ?? null,
+    jointAttackPairIdentity: event.jointAttackPairIdentity ?? null,
+    jointAttackCalculatedToughnessDamage:
+      event.jointAttackCalculatedToughnessDamage ?? null,
+    jointAttackAnchorFrame: event.jointAttackAnchorFrame === true,
+    jointAttackKiboAnchorHit: event.jointAttackKiboAnchorHit === true,
+    mappingIdentity: event.mappingIdentity ?? null,
+    kiboResolutionIdentity: event.kiboResolutionIdentity ?? null,
+    anchorHitIdentity: event.anchorHitIdentity ?? null,
+    ...(Array.isArray(event.anchorHitIdentities)
+      ? { anchorHitIdentities: [...event.anchorHitIdentities] }
+      : {}),
+    anchorRelativeFrame: event.anchorRelativeFrame ?? null,
+    anchorAbsoluteFrame: event.anchorAbsoluteFrame ?? null,
+    runtimeContractId: event.runtimeContractId ?? null,
+    runtimeContractHash: event.runtimeContractHash ?? null,
+    runtimeBindingHash: event.runtimeBindingHash ?? null,
+    stateTransaction: event.stateTransaction ?? null,
     ...(Array.isArray(event.settlementOrder)
       ? { settlementOrder: [...event.settlementOrder] }
       : {}),
@@ -1293,6 +1352,9 @@ function projectDiagnostics(simulation) {
         blockingActionId: diagnostic.blockingActionId ?? null,
         pairedActionId: diagnostic.pairedActionId ?? null,
         targetId: diagnostic.targetId ?? null,
+        pairIdentity: diagnostic.pairIdentity ?? null,
+        mappingIdentity: diagnostic.mappingIdentity ?? null,
+        runtimeBindingHash: diagnostic.runtimeBindingHash ?? null,
         sourceIdentity: diagnostic.sourceIdentity ?? null,
         sourceSequencePath: diagnostic.sourceSequencePath ?? null,
         reason: diagnostic.reason ?? null,
@@ -1576,6 +1638,7 @@ function createDataIdentity({ scenario, gameData }) {
     optimizationScenarioPolicy:
       scenario.combatScenario?.optimizationScenarioPolicy ?? null,
     objectiveContract: scenario.combatScenario?.objectiveContract ?? null,
+    jointAttackRuntime: scenario.combatScenario?.jointAttackRuntime ?? null,
     kiboAutoCastDerivationAuthority: projectKiboAutoCastDerivationRegistry(
       scenario.kiboAutoCastDerivationRegistry
     ),
@@ -1670,7 +1733,11 @@ function accumulateContributionValue(current, event) {
   const toughnessDamage = Number(event.toughnessDamage) || 0;
   if (event.stateEventKind) {
     current.stateEventCount += 1;
-    current.recoveredToughness += Math.max(0, -toughnessDamage);
+    if (event.stateEventKind === 'joint-attack-attached-toughness-clear') {
+      current.inflictedToughnessDamage += Math.max(0, toughnessDamage);
+    } else {
+      current.recoveredToughness += Math.max(0, -toughnessDamage);
+    }
   } else {
     current.hpDamage += Number(event.rawDamage) || 0;
     current.combatHitCount += 1;

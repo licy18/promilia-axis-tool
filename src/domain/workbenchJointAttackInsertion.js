@@ -4,9 +4,16 @@ import {
   ACTION_TYPES,
 } from './projectSchema';
 import {
-  createJointAttackTriggerUnresolvedEvidence,
   resolveVerifiedKiboJointAttackBinding,
 } from './verifiedJointAttackContract';
+import {
+  createVerifiedJointAttackRuntimeBinding,
+  validateVerifiedJointAttackRuntimeBinding,
+} from './verifiedJointAttackRuntimeContract';
+import {
+  createVerifiedJointAttackRuntimeEvidence,
+  createVerifiedJointAttackRuntimePair,
+} from './verifiedJointAttackRuntimePair';
 
 export function isWorkbenchJointAttackTimelineEntry(
   entry = {},
@@ -28,6 +35,7 @@ export function createWorkbenchJointAttackInsertion({
   startMs = 0,
   companionActionId = '',
   relationId = '',
+  jointAttackRuntime = null,
 } = {}) {
   const actorEntry = resolveActorActionEntry(entry, actorActionEntries);
   const insertsActor =
@@ -111,15 +119,43 @@ export function createWorkbenchJointAttackInsertion({
       '奇波动作缺少 breakSkillList 与 skillTag=15/PetJointStrikeSkill 的一致映射'
     );
   }
-  const triggerEvidence = createJointAttackTriggerUnresolvedEvidence({
-    actorAction: actorDraft,
-    kiboAction: kiboDraft,
-    binding: kiboBinding,
+  const runtimeBinding =
+    jointAttackRuntime == null
+      ? createVerifiedJointAttackRuntimeBinding()
+      : validateVerifiedJointAttackRuntimeBinding(jointAttackRuntime).binding;
+  if (!runtimeBinding) {
+    return blocked(
+      '现有合击产品 assumption 合同无效，不能静默覆盖或加入合击'
+    );
+  }
+  const runtimeActorId = `actor-${actorCharacterId}`;
+  const pair = createVerifiedJointAttackRuntimePair({
+    actorAction: {
+      ...actorDraft,
+      actorId: runtimeActorId,
+      actor: { characterId: actorCharacterId, loadout: { kiboId } },
+      actionKind: 'star-combo',
+      sourceSequencePath: [0],
+    },
+    kiboAction: {
+      ...kiboDraft,
+      actorId: runtimeActorId,
+      actor: { characterId: actorCharacterId, loadout: { kiboId } },
+      actionKind: 'break',
+      sourceSequencePath: [1],
+    },
+    actor: { loadout: { kiboId } },
+    scenario: { combatScenario: { jointAttackRuntime: runtimeBinding } },
+    actorActionIndex: 0,
+    kiboActionIndex: 1,
   });
+  if (!pair.ready) return blocked(`合击产品合同绑定失败：${pair.code}`);
+  const triggerEvidence = createVerifiedJointAttackRuntimeEvidence(pair);
 
   return {
     status: 'paired',
-    formalEligible: false,
+    formalEligible: true,
+    jointAttackRuntime: runtimeBinding,
     triggerEvidence,
     draftPatches: [
       { ...actorDraft, startMs },

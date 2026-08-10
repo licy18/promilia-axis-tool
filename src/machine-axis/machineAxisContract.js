@@ -8,6 +8,7 @@ import {
 } from './machineAxisEnemyProfileContract';
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
 import { normalizeCombatPickupPolicy } from '../domain/combatScenario';
+import { validateVerifiedJointAttackRuntimeBinding } from '../domain/verifiedJointAttackRuntimeContract';
 
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
@@ -90,6 +91,9 @@ export function normalizeMachineAxisContract(value = {}) {
       ...(scenario.objectiveContract == null
         ? {}
         : { objectiveContract: structuredClone(scenario.objectiveContract) }),
+      ...(scenario.jointAttackRuntime == null
+        ? {}
+        : { jointAttackRuntime: structuredClone(scenario.jointAttackRuntime) }),
       ...(scenario.optimizationQualification == null
         ? {}
         : {
@@ -634,6 +638,21 @@ function validateScenario(value, issues) {
         severity: 'error',
         code: entry.code,
         path: `scenario.objectiveContract${entry.field ? `.${entry.field}` : ''}`,
+        message: entry.message,
+      }))
+    );
+  }
+  if (value.jointAttackRuntime != null) {
+    issues.push(
+      ...validateVerifiedJointAttackRuntimeBinding(
+        value.jointAttackRuntime
+      ).issues.map(entry => ({
+        severity: 'error',
+        code: entry.code,
+        path: entry.path.replace(
+          'combatScenario.jointAttackRuntime',
+          'scenario.jointAttackRuntime'
+        ),
         message: entry.message,
       }))
     );

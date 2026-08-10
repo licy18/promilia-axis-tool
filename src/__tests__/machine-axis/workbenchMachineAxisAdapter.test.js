@@ -11,6 +11,7 @@ import {
   createMachineAxisService,
 } from '../../machine-axis/machineAxisService';
 import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 import {
   createWorkbenchDraftFromMachineAxisImport,
   createWorkbenchMachineAxisAdapter,
@@ -326,6 +327,67 @@ describe('Workbench Machine Axis adapter', () => {
       objectiveContract
     );
     expect(restored.project.enemy.profile).toEqual(enemyProfile);
+  }, 30_000);
+
+  it('round-trips the joint runtime assumption and binds it into all canonical hashes', () => {
+    const service = createMachineAxisService();
+    const adapter = createWorkbenchMachineAxisAdapter({ service });
+    const contract = structuredClone(fixture);
+    contract.scenario.durationFrames = 60;
+    contract.actions = [];
+    contract.scenario.team = contract.scenario.team.map(slot => {
+      const projected = structuredClone(slot);
+      delete projected.loadout?.kiboId;
+      return projected;
+    });
+    contract.scenario.initialRuntimeState.kiboEnergyBySlot = [];
+    contract.scenario.jointAttackRuntime =
+      createVerifiedJointAttackRuntimeBinding();
+
+    const imported = adapter.importContract(contract);
+    const exported = adapter.exportProject(imported.project);
+    const restored = adapter.importContract(
+      JSON.parse(JSON.stringify(exported))
+    );
+    const first = service.simulate(exported);
+    const replay = service.simulate(restored.contract);
+
+    expect(imported.project.combatScenario.jointAttackRuntime).toEqual(
+      contract.scenario.jointAttackRuntime
+    );
+    expect(exported.scenario.jointAttackRuntime).toEqual(
+      contract.scenario.jointAttackRuntime
+    );
+    expect(restored.project.combatScenario.jointAttackRuntime).toEqual(
+      contract.scenario.jointAttackRuntime
+    );
+    expect(replay.hashes).toEqual(first.hashes);
+
+    const changed = structuredClone(exported);
+    changed.scenario.jointAttackRuntime =
+      createVerifiedJointAttackRuntimeBinding({
+        cannotBeJointStrike: true,
+      });
+    const changedRun = service.simulate(changed);
+    for (const dimension of ['input', 'data', 'trace', 'build']) {
+      expect(changedRun.hashes[dimension]).not.toBe(first.hashes[dimension]);
+    }
+
+    const tampered = structuredClone(exported);
+    tampered.scenario.jointAttackRuntime.bindingHash = '0000000000000000';
+    expect(() => adapter.importContract(tampered)).toThrow(
+      MachineAxisValidationError
+    );
+    try {
+      adapter.importContract(tampered);
+    } catch (error) {
+      expect(error.issues).toContainEqual(
+        expect.objectContaining({
+          code: 'joint-attack-runtime-binding-hash-mismatch',
+          path: 'scenario.jointAttackRuntime.bindingHash',
+        })
+      );
+    }
   }, 30_000);
 
   it('rejects non-60 FPS on import and export', () => {

@@ -41,6 +41,11 @@ import {
   resolveVerifiedBattlePropertyTagsForHit,
 } from './verifiedBattlePropertyTags';
 import { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER } from './verifiedEnemyDamagePacketSettlementOrder';
+import {
+  createVerifiedJointAttackRuntimePair,
+  isActorJointAttack,
+} from '../../domain/verifiedJointAttackRuntimePair';
+import { evaluateVerifiedJointAttackRuntimeEligibility } from '../../domain/verifiedJointAttackRuntimeContract';
 
 export { VERIFIED_ENEMY_DAMAGE_PACKET_SETTLEMENT_ORDER };
 
@@ -385,6 +390,21 @@ export function createVerifiedCombatRuntime({
     );
   }
 
+  if (!nonDamageProjectionOnly) {
+    descriptors.push(
+      ...createVerifiedJointAttackRuntimeDescriptors({
+        scenario,
+        descriptors,
+        actionResolutionById,
+        executionByActionId,
+        frameRate: positiveNumber(
+          scenario?.time?.fps ?? scenario?.time?.frameRate,
+          FRAME_RATE
+        ),
+      })
+    );
+  }
+
   const durationMs = nonNegativeNumber(scenario?.time?.durationMs);
   for (
     let timeMs = FIXED_STEP_MS;
@@ -419,7 +439,7 @@ export function createVerifiedCombatRuntime({
   const hitRecoveryAtByIdentity = new Map();
   const executionBlocks = [...(actionVariantRuntime?.executionBlocks ?? [])];
   const blockedActionIds = new Set(
-    executionBlocks.map(block => block.actionId)
+    executionBlocks.map(block => String(block.actionId))
   );
   eventLog.push(...(actionVariantRuntime?.eventLog ?? []));
 
@@ -427,7 +447,7 @@ export function createVerifiedCombatRuntime({
     if (descriptor.timeMs > durationMs) continue;
     if (
       descriptor.action?.id &&
-      blockedActionIds.has(descriptor.action.id) &&
+      blockedActionIds.has(String(descriptor.action.id)) &&
       descriptor.kind !== 'action-cost'
     ) {
       continue;
@@ -456,11 +476,63 @@ export function createVerifiedCombatRuntime({
       );
       continue;
     }
+    if (descriptor.kind === 'joint-attack-admission') {
+      const result = applyVerifiedJointAttackAdmissionDescriptor({
+        descriptor,
+        scenario,
+        state,
+        controlledActorTimeline,
+      });
+      if (result.event) {
+        appendRuntimeEvent(eventLog, result.event, state);
+      }
+      if (result.executionBlocks.length > 0) {
+        for (const block of result.executionBlocks) {
+          blockedActionIds.add(String(block.actionId));
+          executionBlocks.push(block);
+        }
+      }
+      continue;
+    }
+    if (descriptor.kind === 'joint-attack-atomic-cost') {
+      const result = applyVerifiedJointAttackAtomicCostDescriptor({
+        descriptor,
+        state,
+        resourceEvents,
+        kiboResourceEvents,
+      });
+      if (result.event) appendRuntimeEvent(eventLog, result.event, state);
+      if (result.executionBlocks.length > 0) {
+        for (const block of result.executionBlocks) {
+          blockedActionIds.add(String(block.actionId));
+          executionBlocks.push(block);
+        }
+      }
+      continue;
+    }
+    if (descriptor.kind === 'joint-attack-attached-toughness-clear') {
+      const result = applyVerifiedJointAttackAttachedToughnessClear({
+        descriptor,
+        state,
+      });
+      if (result.event) {
+        appendRuntimeEvent(damageEvents, result.event, state);
+        eventLog.push(result.event);
+      }
+      if (result.executionBlocks.length > 0) {
+        for (const block of result.executionBlocks) {
+          blockedActionIds.add(String(block.actionId));
+          executionBlocks.push(block);
+        }
+      }
+      continue;
+    }
     if (descriptor.kind === 'manual-resource') {
       applyManualResourceDescriptor({ descriptor, state, resourceEvents });
       continue;
     }
     if (descriptor.kind === 'action-cost') {
+      if (descriptor.jointAttackDeferredCost === true) continue;
       const executionBlock = applyActionCostDescriptor({
         descriptor,
         state,
@@ -468,7 +540,7 @@ export function createVerifiedCombatRuntime({
         kiboResourceEvents,
       });
       if (executionBlock) {
-        blockedActionIds.add(descriptor.action.id);
+        blockedActionIds.add(String(descriptor.action.id));
         executionBlocks.push(executionBlock);
         eventLog.push(createResourceExecutionBlockedEvent(executionBlock));
       }
@@ -612,6 +684,7 @@ export function createVerifiedCombatRuntime({
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
+      recordVerifiedJointAttackAnchorHit({ descriptor, hitResult, state });
       appendVerifiedBreakWatcherEvents({
         descriptor,
         damageEvent: hitResult.damageEvent,
@@ -697,6 +770,7 @@ export function createVerifiedCombatRuntime({
       }
       appendRuntimeEvent(damageEvents, hitResult.damageEvent, state);
       eventLog.push(hitResult.damageEvent);
+      recordVerifiedJointAttackAnchorHit({ descriptor, hitResult, state });
       appendVerifiedBreakWatcherEvents({
         descriptor,
         damageEvent: hitResult.damageEvent,
@@ -729,6 +803,11 @@ export function createVerifiedCombatRuntime({
       if (tuningResult?.damageEvent) {
         appendRuntimeEvent(damageEvents, tuningResult.damageEvent, state);
         eventLog.push(tuningResult.damageEvent);
+        recordVerifiedJointAttackAnchorHit({
+          descriptor,
+          hitResult: { ready: true, damageEvent: tuningResult.damageEvent },
+          state,
+        });
         appendVerifiedBreakWatcherEvents({
           descriptor,
           damageEvent: tuningResult.damageEvent,
@@ -838,6 +917,13 @@ export function createVerifiedCombatRuntime({
       breakTriggerCount: damageEvents.filter(
         event => event.payload.breakState?.triggered
       ).length,
+      jointAttackAdmissionCount: eventLog.filter(
+        event => event.type === 'VERIFIED_JOINT_ATTACK_ADMITTED'
+      ).length,
+      jointAttackAttachedToughnessClearCount: damageEvents.filter(
+        event =>
+          event.type === 'VERIFIED_JOINT_ATTACK_ATTACHED_TOUGHNESS_CLEAR'
+      ).length,
       breakWatcherArmCount: breakWatcherEvents.filter(
         event => event.type === 'VERIFIED_BREAK_TRIGGER_WATCHER_ARMED'
       ).length,
@@ -864,6 +950,580 @@ export function createVerifiedCombatRuntime({
     },
     applied: true,
   };
+}
+
+function createVerifiedJointAttackRuntimeDescriptors({
+  scenario,
+  descriptors,
+  actionResolutionById,
+  executionByActionId,
+  frameRate,
+}) {
+  const actions = scenario?.actions ?? [];
+  const actionIndexById = new Map(
+    actions.map((action, index) => [String(action.id), index])
+  );
+  const actorById = new Map(
+    (scenario?.actors ?? []).map(actor => [String(actor.id), actor])
+  );
+  const actorActions = actions.filter(
+    action =>
+      isActorJointAttack(action) &&
+      executionByActionId.get(action.id)?.execute !== false
+  );
+  const kiboActions = actions.filter(
+    action =>
+      action.type === ACTION_TYPES.KIBO_EVENT &&
+      executionByActionId.get(action.id)?.execute !== false
+  );
+  const generated = [];
+  for (const actorAction of actorActions) {
+    const actor =
+      actorById.get(String(actorAction.actorId)) ?? actorAction.actor ?? null;
+    const readyPairs = kiboActions
+      .map(kiboAction =>
+        createVerifiedJointAttackRuntimePair({
+          actorAction,
+          kiboAction,
+          actor,
+          scenario,
+          fps: frameRate,
+          actorActionIndex: actionIndexById.get(String(actorAction.id)),
+          kiboActionIndex: actionIndexById.get(String(kiboAction.id)),
+        })
+      )
+      .filter(pair => pair.ready === true);
+    if (readyPairs.length !== 1) continue;
+    const pair = readyPairs[0];
+    const kiboResolution = actionResolutionById.get(pair.kiboAction.id);
+    const kiboHitDescriptors = descriptors.filter(
+      descriptor =>
+        descriptor.kind === 'hit' &&
+        String(descriptor.action?.id) === pair.kiboActionId &&
+        isRuntimeBindingDerivedFromMapping(
+          descriptor.resolution?.actionBinding,
+          pair.kiboMappingIdentity
+        )
+    );
+    const landedKiboHits = kiboHitDescriptors
+      .filter(isVerifiedLandedJointAttackHitDescriptor)
+      .sort((left, right) =>
+        compareUnannotatedDamageDescriptors(left, right, frameRate)
+      );
+    const firstAnchor = landedKiboHits[0] ?? null;
+    const anchorFrame = firstAnchor
+      ? timeToFrame(firstAnchor.timeMs, frameRate)
+      : null;
+    const anchorKiboHits =
+      anchorFrame == null
+        ? []
+        : landedKiboHits.filter(
+            descriptor =>
+              timeToFrame(descriptor.timeMs, frameRate) === anchorFrame
+          );
+    const anchorHitIdentities = anchorKiboHits.map(descriptor =>
+      resolveCriticalHitIdentity(descriptor.hit)
+    );
+    const runtimePair = Object.freeze({
+      ...pair,
+      anchorReady:
+        kiboResolution?.ready === true && anchorHitIdentities.length > 0,
+      anchorAbsoluteFrame: anchorFrame,
+      anchorTimeMs: firstAnchor?.timeMs ?? null,
+      anchorRelativeFrame:
+        numberOrNull(firstAnchor?.hit?.trigger?.startFrame) ?? null,
+      anchorHitIdentity: anchorHitIdentities[0] ?? null,
+      anchorHitIdentities: Object.freeze([...anchorHitIdentities]),
+      kiboResolutionIdentity:
+        kiboResolution?.actionBinding?.identity ?? null,
+    });
+    const inputSourceSequencePath = resolvePairInputSourceSequencePath(pair);
+    generated.push({
+      kind: 'joint-attack-admission',
+      timeMs: Number(pair.actorAction.startMs) || 0,
+      action: pair.actorAction,
+      sourceSequencePath: inputSourceSequencePath,
+      jointAttackPair: runtimePair,
+    });
+    const pairActionIds = new Set([
+      pair.actorActionId,
+      pair.kiboActionId,
+    ]);
+    const pairCostDescriptors = descriptors.filter(
+      descriptor =>
+        descriptor.kind === 'action-cost' &&
+        pairActionIds.has(String(descriptor.action?.id))
+    );
+    for (const descriptor of pairCostDescriptors) {
+      descriptor.jointAttackDeferredCost = true;
+      descriptor.jointAttackPair = runtimePair;
+    }
+    if (!runtimePair.anchorReady) continue;
+    const anchorFramePairDamageDescriptors = descriptors.filter(
+      descriptor =>
+        descriptor.kind === 'hit' &&
+        pairActionIds.has(String(descriptor.action?.id)) &&
+        timeToFrame(descriptor.timeMs, frameRate) === anchorFrame
+    );
+    for (const descriptor of anchorFramePairDamageDescriptors) {
+      descriptor.jointAttackPair = runtimePair;
+      descriptor.jointAttackSuppressToughness = true;
+      descriptor.jointAttackKiboAnchorHit =
+        String(descriptor.action?.id) === pair.kiboActionId &&
+        anchorHitIdentities.includes(resolveCriticalHitIdentity(descriptor.hit));
+    }
+    generated.push({
+      kind: 'joint-attack-atomic-cost',
+      timeMs: Number(pair.actorAction.startMs) || 0,
+      action: pair.actorAction,
+      sourceSequencePath: createPairStageSourceSequencePath(pair, -1),
+      jointAttackPair: runtimePair,
+      pairCostDescriptors,
+    });
+    generated.push({
+      kind: 'joint-attack-attached-toughness-clear',
+      timeMs: runtimePair.anchorTimeMs,
+      absoluteFrame: runtimePair.anchorAbsoluteFrame,
+      action: pair.kiboAction,
+      sourceSequencePath: createPostDamageSourceSequencePath(
+        anchorFramePairDamageDescriptors
+      ),
+      jointAttackPair: runtimePair,
+    });
+  }
+  return generated;
+}
+
+function isRuntimeBindingDerivedFromMapping(binding, mappingIdentity) {
+  const runtimeIdentity = String(binding?.identity ?? '');
+  const mapping = String(mappingIdentity ?? '');
+  return (
+    mapping.length > 0 &&
+    (runtimeIdentity === mapping ||
+      runtimeIdentity.startsWith(`${mapping}|execution-control:`))
+  );
+}
+
+function isVerifiedLandedJointAttackHitDescriptor(descriptor) {
+  const transaction = descriptor?.damageEventTransaction;
+  const hitIdentity = resolveCriticalHitIdentity(descriptor?.hit);
+  return (
+    transaction?.sourceKind === 'ordinary-hit' &&
+    String(transaction.sourceActionId ?? '') ===
+      String(descriptor?.action?.id ?? '') &&
+    String(transaction.sourceHitIdentity ?? '') === hitIdentity &&
+    transaction.beforeEvent?.eventContext?.landed === true &&
+    transaction.afterEvent?.eventContext?.landed === true
+  );
+}
+
+function compareUnannotatedDamageDescriptors(left, right, frameRate) {
+  return (
+    timeToFrame(left.timeMs, frameRate) -
+      timeToFrame(right.timeMs, frameRate) ||
+    compareSourceSequencePaths(
+      resolveUnannotatedDescriptorSourceSequencePath(left),
+      resolveUnannotatedDescriptorSourceSequencePath(right)
+    )
+  );
+}
+
+function resolveUnannotatedDescriptorSourceSequencePath(descriptor) {
+  const settlementPath =
+    descriptor?.damageEventTransaction?.settlementSourceSequencePath;
+  if (Array.isArray(settlementPath)) return [...settlementPath];
+  const tuningPath = descriptor?.tuningEvent?.eventContext?.sourceSequencePath;
+  if (Array.isArray(tuningPath)) return [...tuningPath];
+  const actionPath = getActionSourceSequencePath(descriptor?.action);
+  if (!actionPath) return null;
+  const localIndex = numberOrNull(
+    descriptor?.hit?.hitIndex ?? descriptor?.sourceSequence
+  );
+  return localIndex == null ? [...actionPath] : [...actionPath, localIndex];
+}
+
+function resolvePairInputSourceSequencePath(pair) {
+  const root = compareSourceSequencePaths(
+    pair.actorSourceSequencePath,
+    pair.kiboSourceSequencePath
+  ) <= 0
+    ? [...pair.actorSourceSequencePath]
+    : [...pair.kiboSourceSequencePath];
+  return [...root, -2];
+}
+
+function createPairStageSourceSequencePath(pair, stageOrder) {
+  const root = compareSourceSequencePaths(
+    pair.actorSourceSequencePath,
+    pair.kiboSourceSequencePath
+  ) <= 0
+    ? [...pair.actorSourceSequencePath]
+    : [...pair.kiboSourceSequencePath];
+  return [...root, stageOrder];
+}
+
+function createPostDamageSourceSequencePath(descriptors) {
+  const paths = descriptors
+    .map(resolveUnannotatedDescriptorSourceSequencePath)
+    .filter(Array.isArray)
+    .sort(compareSourceSequencePaths);
+  const maximum = paths.at(-1) ?? [Number.MAX_SAFE_INTEGER - 1];
+  return [...maximum, Number.MAX_SAFE_INTEGER];
+}
+
+function applyVerifiedJointAttackAdmissionDescriptor({
+  descriptor,
+  scenario,
+  state,
+  controlledActorTimeline,
+}) {
+  const pair = descriptor.jointAttackPair;
+  if (!pair?.anchorReady) {
+    return {
+      event: null,
+      executionBlocks: createVerifiedJointAttackExecutionBlocks({
+        descriptor,
+        pair,
+        code: 'joint-attack-kibo-landed-hit-required',
+      }),
+    };
+  }
+  const actorVital = state.actorVitals.get(String(pair.actorId));
+  const kiboVital = state.kiboVitals.get(String(pair.actorId));
+  const kiboState = findKiboStateByActorId(
+    state,
+    pair.actorId,
+    pair.kiboId
+  );
+  const controlledActor = resolveControlledActorAt(
+    controlledActorTimeline,
+    descriptor.timeMs,
+    { sourceSequencePath: descriptor.sourceSequencePath }
+  );
+  const eligibility = evaluateVerifiedJointAttackRuntimeEligibility({
+    binding: pair.runtimeBinding,
+    enemy: state.enemy,
+    enemyWpBreakToughBasisPoints: getAttribute(
+      scenario?.enemy,
+      'WP_BREAK_TOUGH'
+    ),
+    kiboWpBreakPercentBasisPoints: kiboState?.attributesById?.get(223),
+    actorAlive: Number(actorVital?.currentHp) > 0,
+    kiboAlive:
+      Number(kiboVital?.currentHp) > 0 &&
+      Number(kiboVital?.kiboId) === Number(pair.kiboId),
+    actorId: pair.actorId,
+    controlledActorId: controlledActor?.actorId,
+    targetId: pair.targetId,
+    expectedTargetId: scenario?.enemy?.id ?? state.enemy.enemyId,
+  });
+  if (!eligibility.eligible) {
+    return {
+      event: null,
+      executionBlocks: createVerifiedJointAttackExecutionBlocks({
+        descriptor,
+        pair,
+        code: eligibility.code,
+        eligibility,
+      }),
+    };
+  }
+  state.jointAttackAdmissions.set(pair.pairIdentity, {
+    pair,
+    eligibility,
+    admissionCursor: createEnemySettlementCursor(descriptor),
+  });
+  return {
+    event: {
+      type: 'VERIFIED_JOINT_ATTACK_ELIGIBILITY_PASSED',
+      timeMs: roundValue(descriptor.timeMs),
+      actionId: pair.actorActionId,
+      actorId: pair.actorId,
+      targetId: pair.targetId,
+      sourceSequencePath: descriptor.sourceSequencePath,
+      payload: {
+        pairIdentity: pair.pairIdentity,
+        actorActionId: pair.actorActionId,
+        kiboActionId: pair.kiboActionId,
+        kiboId: pair.kiboId,
+        mappingIdentity: pair.kiboMappingIdentity,
+        kiboResolutionIdentity: pair.kiboResolutionIdentity,
+        anchorHitIdentity: pair.anchorHitIdentity,
+        anchorHitIdentities: [...pair.anchorHitIdentities],
+        anchorRelativeFrame: pair.anchorRelativeFrame,
+        anchorAbsoluteFrame: pair.anchorAbsoluteFrame,
+        threshold: eligibility.threshold,
+        currentToughness: eligibility.currentToughness,
+        forceBreak: eligibility.forceBreak,
+        fallbackApplications: eligibility.fallbackApplications,
+        runtimeContractId: pair.runtimeBinding.contractId,
+        runtimeContractHash: pair.runtimeBinding.contractHash,
+        runtimeBindingHash: pair.runtimeBinding.bindingHash,
+        admissionCursor: createEnemySettlementCursor(descriptor),
+        sourceIdentity: pair.kiboMappingIdentity,
+        applied: true,
+        appliedToCalculators: true,
+      },
+    },
+    executionBlocks: [],
+  };
+}
+
+function recordVerifiedJointAttackAnchorHit({ descriptor, hitResult, state }) {
+  const pair = descriptor.jointAttackPair;
+  if (
+    !pair ||
+    descriptor.jointAttackKiboAnchorHit !== true ||
+    hitResult?.ready !== true
+  ) {
+    return;
+  }
+  const hitIdentity = resolveCriticalHitIdentity(descriptor.hit);
+  state.jointAttackAppliedAnchorHits.add(
+    `${pair.pairIdentity}|${hitIdentity}`
+  );
+}
+
+function applyVerifiedJointAttackAtomicCostDescriptor({
+  descriptor,
+  state,
+  resourceEvents,
+  kiboResourceEvents,
+}) {
+  const pair = descriptor.jointAttackPair;
+  const admission = state.jointAttackAdmissions.get(pair?.pairIdentity);
+  if (!admission) {
+    return {
+      event: null,
+      executionBlocks: createVerifiedJointAttackExecutionBlocks({
+        descriptor,
+        pair,
+        code: 'joint-attack-runtime-admission-missing',
+      }),
+    };
+  }
+  const costDescriptors = descriptor.pairCostDescriptors ?? [];
+  const preflightFailure = costDescriptors
+    .map(costDescriptor =>
+      preflightVerifiedActionCostDescriptor({
+        descriptor: costDescriptor,
+        state,
+      })
+    )
+    .find(Boolean);
+  if (preflightFailure) {
+    return {
+      event: null,
+      executionBlocks: createVerifiedJointAttackExecutionBlocks({
+        descriptor,
+        pair,
+        code: preflightFailure.reason,
+      }),
+    };
+  }
+  for (const costDescriptor of costDescriptors) {
+    const unexpectedFailure = applyActionCostDescriptor({
+      descriptor: costDescriptor,
+      state,
+      resourceEvents,
+      kiboResourceEvents,
+    });
+    if (unexpectedFailure) {
+      throw new Error(
+        `joint-attack-atomic-cost-preflight-drift:${unexpectedFailure.reason}`
+      );
+    }
+  }
+  return {
+    event: {
+      type: 'VERIFIED_JOINT_ATTACK_ADMITTED',
+      timeMs: roundValue(descriptor.timeMs),
+      actionId: pair.actorActionId,
+      actorId: pair.actorId,
+      targetId: pair.targetId,
+      sourceSequencePath: descriptor.sourceSequencePath,
+      payload: {
+        pairIdentity: pair.pairIdentity,
+        actorActionId: pair.actorActionId,
+        kiboActionId: pair.kiboActionId,
+        kiboId: pair.kiboId,
+        mappingIdentity: pair.kiboMappingIdentity,
+        kiboResolutionIdentity: pair.kiboResolutionIdentity,
+        anchorHitIdentity: pair.anchorHitIdentity,
+        anchorHitIdentities: [...pair.anchorHitIdentities],
+        anchorRelativeFrame: pair.anchorRelativeFrame,
+        anchorAbsoluteFrame: pair.anchorAbsoluteFrame,
+        threshold: admission.eligibility.threshold,
+        currentToughness: admission.eligibility.currentToughness,
+        forceBreak: admission.eligibility.forceBreak,
+        fallbackApplications: admission.eligibility.fallbackApplications,
+        costActionIds: costDescriptors.map(entry => String(entry.action.id)),
+        runtimeContractId: pair.runtimeBinding.contractId,
+        runtimeContractHash: pair.runtimeBinding.contractHash,
+        runtimeBindingHash: pair.runtimeBinding.bindingHash,
+        eligibilityCursor: admission.admissionCursor,
+        admissionCursor: createEnemySettlementCursor(descriptor),
+        sourceIdentity: pair.kiboMappingIdentity,
+        applied: true,
+        appliedToCalculators: true,
+      },
+    },
+    executionBlocks: [],
+  };
+}
+
+function preflightVerifiedActionCostDescriptor({ descriptor, state }) {
+  const { action, spCost, resolution } = descriptor;
+  if (spCost == null) return { reason: 'verified-skill-cost-source-missing' };
+  if (resolution.actionBinding.ownerKind === 'kibo') {
+    const kiboState = findKiboStateByAction(state, action);
+    if (!kiboState) return { reason: 'verified-kibo-resource-owner-unresolved' };
+    if (kiboState.current + Number.EPSILON < spCost) {
+      return { reason: 'verified-kibo-resource-insufficient' };
+    }
+    return null;
+  }
+  const actorState = state.actorEnergy.get(action.actorId);
+  if (!actorState) return { reason: 'verified-actor-resource-owner-unresolved' };
+  if (actorState.current + Number.EPSILON < spCost) {
+    return { reason: 'verified-actor-resource-insufficient' };
+  }
+  return null;
+}
+
+function applyVerifiedJointAttackAttachedToughnessClear({ descriptor, state }) {
+  const pair = descriptor.jointAttackPair;
+  const admission = state.jointAttackAdmissions.get(pair?.pairIdentity);
+  const anchorApplied = pair?.anchorHitIdentities?.some(hitIdentity =>
+    state.jointAttackAppliedAnchorHits.has(
+      `${pair.pairIdentity}|${hitIdentity}`
+    )
+  );
+  if (!admission || !anchorApplied) {
+    return {
+      event: null,
+      executionBlocks: createVerifiedJointAttackExecutionBlocks({
+        descriptor,
+        pair,
+        code: !admission
+          ? 'joint-attack-runtime-admission-missing'
+          : 'joint-attack-kibo-landed-hit-not-settled',
+      }),
+    };
+  }
+  const enemy = state.enemy;
+  const stateBefore = createEnemyStateSnapshot(enemy);
+  const toughnessBefore = Number(enemy.toughness) || 0;
+  const toughnessDamage = Math.max(0, toughnessBefore);
+  enemy.toughness = 0;
+  enemy.lastToughnessSourceActionId = pair.kiboActionId;
+  enemy.lastToughnessSourceActorId = pair.actorId;
+  enemy.lastToughnessBindingIdentity = pair.pairIdentity;
+  const breakTriggered =
+    enemy.targetPolicy?.breakMode === 'enabled' &&
+    enemy.targetPolicy?.toughnessMode === 'enabled' &&
+    !enemy.inBreak;
+  if (breakTriggered) {
+    enemy.inBreak = true;
+    enemy.breakStartedAtMs = descriptor.timeMs;
+    enemy.breakPhase = 'linear_recovery';
+    enemy.normalRecoveryEligibleAtMs = null;
+  }
+  const stateAfter = createEnemyStateSnapshot(enemy);
+  const settlementCursor = createEnemySettlementCursor(descriptor);
+  return {
+    event: {
+      type: 'VERIFIED_JOINT_ATTACK_ATTACHED_TOUGHNESS_CLEAR',
+      timeMs: roundValue(descriptor.timeMs),
+      actionId: pair.kiboActionId,
+      actorId: pair.actorId,
+      targetId: pair.targetId,
+      sourceSequencePath: descriptor.sourceSequencePath,
+      payload: {
+        verifiedCombat: true,
+        stateEventKind: 'joint-attack-attached-toughness-clear',
+        pairIdentity: pair.pairIdentity,
+        actorActionId: pair.actorActionId,
+        kiboActionId: pair.kiboActionId,
+        kiboId: pair.kiboId,
+        mappingIdentity: pair.kiboMappingIdentity,
+        hitIdentity: pair.anchorHitIdentity,
+        anchorHitIdentity: pair.anchorHitIdentity,
+        anchorHitIdentities: [...pair.anchorHitIdentities],
+        anchorRelativeFrame: pair.anchorRelativeFrame,
+        anchorAbsoluteFrame: pair.anchorAbsoluteFrame,
+        rawDamage: 0,
+        effectiveHpDamage: 0,
+        toughnessDamage,
+        toughnessBefore,
+        toughnessAfter: enemy.toughness,
+        breakTriggered,
+        settlementOrder: [
+          'anchor-frame-pair-hp-packets-settled',
+          'attached-toughness-cleared',
+          'break-state-transitioned',
+        ],
+        settlementCursor,
+        breakState: {
+          before: toughnessBefore,
+          after: enemy.toughness,
+          maximum: enemy.maxToughness,
+          triggered: breakTriggered,
+          inBreak: enemy.inBreak,
+        },
+        stateTransaction: {
+          before: stateBefore,
+          delta: { enemyHp: 0, enemyToughness: roundValue(-toughnessDamage) },
+          after: stateAfter,
+        },
+        runtimeContractId: pair.runtimeBinding.contractId,
+        runtimeContractHash: pair.runtimeBinding.contractHash,
+        runtimeBindingHash: pair.runtimeBinding.bindingHash,
+        sourceIdentity: pair.kiboMappingIdentity,
+        confidence: 'product-assumption',
+        applied: true,
+        appliedToCalculators: true,
+      },
+    },
+    executionBlocks: [],
+  };
+}
+
+function createVerifiedJointAttackExecutionBlocks({
+  descriptor,
+  pair,
+  code,
+  eligibility = null,
+}) {
+  if (!pair) return [];
+  return [pair.actorAction, pair.kiboAction].map(action => ({
+    schemaVersion: 1,
+    sourceKind: 'azpr-verified-joint-attack-runtime-precondition',
+    code,
+    status: 'blocked',
+    executable: false,
+    actionId: action.id,
+    actionName: action.name ?? action.id,
+    actorId: action.actorId ?? pair.actorId,
+    ownerKind:
+      action.type === ACTION_TYPES.KIBO_EVENT ? 'kibo' : 'actor',
+    ownerId:
+      action.type === ACTION_TYPES.KIBO_EVENT
+        ? pair.kiboId
+        : action.actor?.characterId ?? null,
+    timeMs: roundValue(descriptor.timeMs),
+    absoluteFrame: descriptor.absoluteFrame,
+    sourceSequencePath: descriptor.sourceSequencePath ?? null,
+    pairIdentity: pair.pairIdentity,
+    mappingIdentity: pair.kiboMappingIdentity,
+    runtimeBindingHash: pair.runtimeBinding?.bindingHash ?? null,
+    threshold: eligibility?.threshold ?? null,
+    currentToughness: eligibility?.currentToughness ?? null,
+    reason: code,
+    message: `Joint attack ${pair.pairIdentity} is blocked: ${code}`,
+    sourceIdentity: pair.kiboMappingIdentity,
+    appliedToCalculators: true,
+  }));
 }
 
 function applyKiboPassiveVitalChangeDescriptor({ descriptor, state }) {
@@ -1774,6 +2434,8 @@ function createRuntimeState({ scenario, mechanicsPackage, effectTimeline }) {
     runtimeDynamicEffects: [],
     vitalDiagnostics: [],
     nextRuntimeSequenceIndex: 0,
+    jointAttackAdmissions: new Map(),
+    jointAttackAppliedAnchorHits: new Set(),
     enemy: {
       targetPolicy,
       deathTruncationArmed:
@@ -4084,6 +4746,8 @@ function isNonDamageProjectionDescriptor(descriptor) {
   return [
     'manual-resource',
     'action-cost',
+    'joint-attack-atomic-cost',
+    'joint-attack-admission',
     'auto-sp-tick',
     'direct-sp',
     'direct-heal',
@@ -4120,6 +4784,7 @@ function shouldTruncateEnemySettlement({ descriptor, state }) {
   return [
     'weakness-state-tick',
     'hit',
+    'joint-attack-attached-toughness-clear',
     'passive-derived-hit',
     'passive-derived-dot',
     'passive-retaliation-hit',
@@ -4511,12 +5176,15 @@ function applyTuningCombatDescriptor({
     maximum: positiveNumberOrNull(enemyProfile.weaknessDamageMaximum),
     minimum: positiveNumberOrNull(enemyProfile.weaknessDamageMinimum),
   });
-  const toughnessDamage = toughnessDisabled
+  const calculatedToughnessDamage = toughnessDisabled
     ? 0
     : Math.min(
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
+  const toughnessDamage = descriptor.jointAttackSuppressToughness === true
+    ? 0
+    : calculatedToughnessDamage;
   const {
     toughnessBefore,
     breakTriggered,
@@ -4574,6 +5242,16 @@ function applyTuningCombatDescriptor({
         inBreakForHpDamage,
         hpDamageMultiplier,
         toughnessDamage,
+        jointAttackCalculatedToughnessDamage:
+          descriptor.jointAttackSuppressToughness === true
+            ? calculatedToughnessDamage
+            : null,
+        jointAttackPairIdentity:
+          descriptor.jointAttackPair?.pairIdentity ?? null,
+        jointAttackAnchorFrame:
+          descriptor.jointAttackSuppressToughness === true,
+        jointAttackKiboAnchorHit:
+          descriptor.jointAttackKiboAnchorHit === true,
         toughnessBefore,
         toughnessAfter: enemy.toughness,
         breakTriggered,
@@ -4914,12 +5592,15 @@ function applyHitDescriptor({
     maximum: weaknessMaximum,
     minimum: weaknessMinimum,
   });
-  const toughnessDamage = toughnessDisabled
+  const calculatedToughnessDamage = toughnessDisabled
     ? 0
     : Math.min(
         enemy.toughness,
         Math.max(0, Number(weaknessResult.deducted ?? 0))
       );
+  const toughnessDamage = descriptor.jointAttackSuppressToughness === true
+    ? 0
+    : calculatedToughnessDamage;
   const {
     toughnessBefore,
     breakTriggered,
@@ -5021,6 +5702,16 @@ function applyHitDescriptor({
         inBreakForHpDamage,
         hpDamageMultiplier,
         toughnessDamage,
+        jointAttackCalculatedToughnessDamage:
+          descriptor.jointAttackSuppressToughness === true
+            ? calculatedToughnessDamage
+            : null,
+        jointAttackPairIdentity:
+          descriptor.jointAttackPair?.pairIdentity ?? null,
+        jointAttackAnchorFrame:
+          descriptor.jointAttackSuppressToughness === true,
+        jointAttackKiboAnchorHit:
+          descriptor.jointAttackKiboAnchorHit === true,
         toughnessBefore,
         toughnessAfter: enemy.toughness,
         breakTriggered,
@@ -6827,6 +7518,9 @@ function resolveDescriptorOrder(kind) {
     'passive-derived-hit': 3,
     'passive-derived-dot': 3,
     'passive-retaliation-hit': 3,
+    'joint-attack-admission': 3,
+    'joint-attack-atomic-cost': 3,
+    'joint-attack-attached-toughness-clear': 3,
     'tuning-combat': 4,
     'manual-resource': 4,
     'auto-sp-tick': 5,
@@ -6847,6 +7541,9 @@ function resolveDescriptorOrder(kind) {
     'passive-derived-hit': ['combat-hit', 3],
     'passive-derived-dot': ['combat-hit', 3],
     'passive-retaliation-hit': ['combat-hit', 3],
+    'joint-attack-admission': ['combat-hit', 3],
+    'joint-attack-atomic-cost': ['combat-hit', 3],
+    'joint-attack-attached-toughness-clear': ['combat-hit', 3],
     'tuning-combat': ['post-hit-resource', 4],
     'manual-resource': ['post-hit-resource', 4],
     'auto-sp-tick': ['automatic-recovery', 5],

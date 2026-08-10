@@ -415,7 +415,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('rejects a mapped same-frame joint pair while existPetBreakTarget remains unresolved', () => {
+  it('rejects a mapped same-frame joint pair when the product runtime contract is missing', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;
@@ -465,12 +465,12 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         passed: false,
         finalScoreEligible: false,
         rejectionCodes: expect.arrayContaining([
-          'joint-attack-trigger-unresolved',
+          'joint-attack-runtime-contract-required',
           'machine-axis-same-frame-order-unresolved',
         ]),
         minimalCounterexamples: expect.arrayContaining([
           expect.objectContaining({
-            code: 'joint-attack-trigger-unresolved',
+            code: 'joint-attack-runtime-contract-required',
             actionId: 'formal-actor-joint',
           }),
         ]),
@@ -479,7 +479,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'joint-attack-trigger-unresolved',
+          code: 'joint-attack-runtime-contract-required',
           actionId: 'formal-actor-joint',
         }),
       ])
@@ -1707,7 +1707,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
           finalScoreEligible: false,
         }),
         expect.objectContaining({
-          code: 'joint-attack-trigger-unresolved',
+          code: 'joint-attack-runtime-contract-required',
           finalScoreEligible: false,
         }),
       ])

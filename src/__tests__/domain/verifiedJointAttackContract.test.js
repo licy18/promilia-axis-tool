@@ -89,7 +89,8 @@ describe('verified joint attack contract', () => {
     });
     expect(evidence).toMatchObject({
       code: 'joint-attack-trigger-unresolved',
-      status: 'preweakbreak-static-predicate-partially-closed',
+      status:
+        'preweakbreak-known-predicates-closed-product-runtime-binding-required',
       formalEligible: false,
       actorActionId: 'actor-joint',
       kiboActionId: 'kibo-joint',
@@ -103,7 +104,7 @@ describe('verified joint attack contract', () => {
         }),
       ]),
       eligibilityEvidence: {
-        status: 'client-static-predicate-chain-partially-closed',
+        status: 'client-known-predicate-chain-closed-unknown-gates-open',
         sourceMethod: 'PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720',
         thresholdMethod: 'UpdatePreBreakThreshold@0x13FCB20',
         closedPredicates: expect.arrayContaining([
@@ -125,6 +126,11 @@ describe('verified joint attack contract', () => {
           'joint-strike-post-cast-effect-chain',
           'server-authoritative-weakness-point-clear',
         ]),
+      },
+      productAssumptionResolution: {
+        contractId: 'm12-joint-attack-runtime-v1',
+        status: 'resolved-when-strict-runtime-binding-is-present',
+        clientParityReady: false,
       },
     });
     expect(evidence.pairIdentity).toMatch(/^joint-pair:[0-9a-f]{16}$/);

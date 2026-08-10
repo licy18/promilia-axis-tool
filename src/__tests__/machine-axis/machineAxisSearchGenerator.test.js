@@ -7,6 +7,7 @@ import {
   createMachineAxisSearchGenerator,
   deriveNextStartFrameByActor,
 } from '../../machine-axis/machineAxisSearchGenerator';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 
 function cloneFixture() {
   return structuredClone(fixture);
@@ -171,7 +172,7 @@ describe('Machine Axis search generator', () => {
     );
   });
 
-  it('excludes both joint-attack halves from the formal surface with a stable rejection', () => {
+  it('excludes both joint-attack halves without the product runtime contract', () => {
     const axis = cloneFixture();
     axis.actions = [];
     const rejections = [];
@@ -200,9 +201,60 @@ describe('Machine Axis search generator', () => {
     ).toBe(false);
     expect(rejections).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ code: 'joint-attack-trigger-unresolved' }),
+        expect.objectContaining({
+          code: 'joint-attack-runtime-contract-required',
+        }),
       ])
     );
+  });
+
+  it('generates one atomic joint-attack compound when the product runtime contract is bound', () => {
+    const axis = cloneFixture();
+    axis.actions = [];
+    axis.scenario.jointAttackRuntime =
+      createVerifiedJointAttackRuntimeBinding();
+    const rejections = [];
+    const candidates = generator.generateNextActions({
+      axis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+      options: {
+        activeActorId: 'actor-101010',
+        includeSwitch: false,
+        requireFormalLegality: true,
+        onFormalRejection: issue => rejections.push(issue),
+      },
+    });
+    const compounds = candidates.filter(
+      candidate => candidate.compoundKind === 'joint-attack'
+    );
+    expect(compounds).toHaveLength(1);
+    expect(compounds[0]).toMatchObject({
+      ownerKind: 'compound',
+      source: 'catalog:verified-joint-attack-compound',
+      runtimeBindingHash:
+        axis.scenario.jointAttackRuntime.bindingHash,
+      actions: [
+        expect.objectContaining({
+          owner: { kind: 'actor', slotId: expect.any(String) },
+          intent: expect.objectContaining({ actionKind: 'star-combo' }),
+        }),
+        expect.objectContaining({
+          owner: { kind: 'kibo', slotId: expect.any(String) },
+          intent: expect.objectContaining({ actionKind: 'break' }),
+        }),
+      ],
+    });
+    expect(new Set(compounds[0].actions.map(action => action.id)).size).toBe(2);
+    expect(rejections).toEqual([]);
+    expect(
+      candidates.some(
+        candidate =>
+          candidate.compoundKind == null &&
+          candidate.action.owner.kind === 'kibo' &&
+          candidate.action.intent.actionKind === 'break'
+      )
+    ).toBe(false);
   });
 
   it('resets to a legal opener after an ordinary intervening skill', () => {

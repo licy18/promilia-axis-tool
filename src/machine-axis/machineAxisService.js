@@ -54,6 +54,7 @@ import {
   validateMachineAxisObjectiveContract,
 } from './machineAxisObjectiveContract';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
+import { createVerifiedJointAttackRuntimePair } from '../domain/verifiedJointAttackRuntimePair';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
   createMachineAxisDiagnostic,
@@ -777,6 +778,9 @@ export function createMachineAxisService({
           ...(contract.scenario.objectiveContract == null
             ? {}
             : { objectiveContract: contract.scenario.objectiveContract }),
+          ...(contract.scenario.jointAttackRuntime == null
+            ? {}
+            : { jointAttackRuntime: contract.scenario.jointAttackRuntime }),
           ...(contract.scenario.target == null
             ? {}
             : { target: contract.scenario.target }),
@@ -2775,7 +2779,8 @@ function collectExecutionWarnings({ compilation, run }) {
     });
   }
   for (const group of groupSimultaneousCrossOwnerActions(
-    compilation.actionResolutions
+    compilation.actionResolutions,
+    compilation.canonicalCompilation.scenario
   )) {
     add({
       code: 'machine-axis-same-frame-order-unresolved',
@@ -2836,8 +2841,21 @@ function isRawSchemaIssueCode(code) {
   );
 }
 
-function groupSimultaneousCrossOwnerActions(actionResolutions = []) {
+function groupSimultaneousCrossOwnerActions(
+  actionResolutions = [],
+  scenario = {}
+) {
   const byFrame = new Map();
+  const actions = scenario.actions ?? [];
+  const actionById = new Map(
+    actions.map(action => [String(action.id), action])
+  );
+  const actionIndexById = new Map(
+    actions.map((action, index) => [String(action.id), index])
+  );
+  const actorById = new Map(
+    (scenario.actors ?? []).map(actor => [String(actor.id), actor])
+  );
   for (const resolution of actionResolutions) {
     if (!Number.isInteger(resolution.startFrame)) continue;
     if (!['actor', 'kibo'].includes(resolution.ownerKind)) continue;
@@ -2846,15 +2864,43 @@ function groupSimultaneousCrossOwnerActions(actionResolutions = []) {
     byFrame.set(resolution.startFrame, group);
   }
   return [...byFrame.entries()].flatMap(([absoluteFrame, entries]) => {
-    const ownerKinds = [...new Set(entries.map(entry => entry.ownerKind))];
+    const remaining = new Set(entries);
+    for (const actorEntry of entries.filter(
+      entry => entry.ownerKind === 'actor'
+    )) {
+      const actorAction = actionById.get(String(actorEntry.actionId));
+      if (actorAction?.actionKind !== 'star-combo') continue;
+      for (const kiboEntry of entries.filter(
+        entry => entry.ownerKind === 'kibo' && remaining.has(entry)
+      )) {
+        const kiboAction = actionById.get(String(kiboEntry.actionId));
+        const pair = createVerifiedJointAttackRuntimePair({
+          actorAction,
+          kiboAction,
+          actor: actorById.get(String(actorAction?.actorId)),
+          scenario,
+          fps: Number(scenario.time?.fps) || 60,
+          actorActionIndex: actionIndexById.get(String(actorEntry.actionId)),
+          kiboActionIndex: actionIndexById.get(String(kiboEntry.actionId)),
+        });
+        if (!pair.ready) continue;
+        remaining.delete(actorEntry);
+        remaining.delete(kiboEntry);
+        break;
+      }
+    }
+    const unresolvedEntries = [...remaining];
+    const ownerKinds = [
+      ...new Set(unresolvedEntries.map(entry => entry.ownerKind)),
+    ];
     if (!(ownerKinds.includes('actor') && ownerKinds.includes('kibo'))) {
       return [];
     }
     return [
       {
         absoluteFrame,
-        actionIds: entries.map(entry => entry.actionId),
-        ownerKinds: entries.map(entry => entry.ownerKind),
+        actionIds: unresolvedEntries.map(entry => entry.actionId),
+        ownerKinds: unresolvedEntries.map(entry => entry.ownerKind),
       },
     ];
   });

@@ -11,6 +11,7 @@ import {
   createVerifiedKiboAutoCastDerivation,
   VERIFIED_KIBO_AUTO_CAST_SOURCE_SEQUENCE_SOURCE,
 } from '../../domain/verifiedBackgroundActionDerivation';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 
 describe('action rule diagnostics', () => {
   beforeAll(() => {
@@ -923,6 +924,7 @@ describe('action rule diagnostics', () => {
       scenario: {
         time: { fps: 60 },
         actors: [actor],
+        jointAttackRuntime: createVerifiedJointAttackRuntimeBinding(),
         actions: [
           createActorCombo(frameToMs(120)),
           createKiboCombo(frameToMs(120)),
@@ -930,34 +932,55 @@ describe('action rule diagnostics', () => {
       },
     });
     expect(valid.summary.jointAttackViolationCount).toBe(0);
-    expect(valid.summary.jointAttackTriggerUnresolvedCount).toBe(1);
+    expect(valid.summary.jointAttackTriggerUnresolvedCount).toBe(0);
+    expect(valid.summary.jointAttackRuntimeReadyCount).toBe(1);
     expect(valid.diagnostics).toEqual([
       expect.objectContaining({
-        code: ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED,
-        status: 'unresolved',
+        code: ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY,
+        status: 'verified',
         actionIds: ['actor-combo', 'kibo-combo'],
         evidence: expect.objectContaining({
-          formalEligible: false,
-          status: 'preweakbreak-static-predicate-partially-closed',
-          eligibilityEvidence: expect.objectContaining({
-            status: 'client-static-predicate-chain-partially-closed',
-            leavesOpen: expect.arrayContaining([
-              'controlled-entity-offset-0x40-field-identity',
-              'service-cannot-be-joint-strike-set-runtime-input',
-            ]),
-          }),
-          postCastEvidence: expect.objectContaining({
-            status: 'server-effect-and-weakness-cleanup-open',
-            leavesOpen: expect.arrayContaining([
-              'joint-strike-post-cast-effect-chain',
-              'server-authoritative-weakness-point-clear',
-            ]),
-          }),
+          formalEligible: true,
+          clientParityReady: false,
+          status: 'resolved-by-product-assumption',
+          runtimeContractId: 'm12-joint-attack-runtime-v1',
+          leavesOpen: expect.arrayContaining([
+            'client-server-parity-for-product-fallback-gates',
+            'client-server-parity-for-kibo-hit-anchored-post-damage-toughness-clear-order',
+          ]),
         }),
       }),
     ]);
     expect(
       valid.readinessTimeline.actions.every(action => action.executable)
+    ).toBe(true);
+
+    const missingRuntimeContract = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actor],
+        actions: [
+          createActorCombo(frameToMs(120)),
+          createKiboCombo(frameToMs(120)),
+        ],
+      },
+    });
+    expect(missingRuntimeContract.diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED,
+          actionIds: ['actor-combo', 'kibo-combo'],
+        }),
+        expect.objectContaining({
+          code: ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
+          actionId: 'kibo-combo',
+        }),
+      ])
+    );
+    expect(
+      missingRuntimeContract.readinessTimeline.actions.every(
+        action => action.executable === false
+      )
     ).toBe(true);
 
     const mismatched = createActionRuleDiagnostics({
@@ -1067,6 +1090,7 @@ describe('action rule diagnostics', () => {
       scenario: {
         time: { fps: 60 },
         actors: [actor],
+        jointAttackRuntime: createVerifiedJointAttackRuntimeBinding(),
         actions: [
           createActorCombo(frameToMs(120)),
           createKiboCombo(frameToMs(120)),
@@ -1077,6 +1101,51 @@ describe('action rule diagnostics', () => {
     expect(
       atomicRollback.readinessTimeline.actions.find(
         action => action.actionId === 'actor-combo'
+      )
+    ).toMatchObject({
+      executable: false,
+      violationCodes: expect.arrayContaining([
+        ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
+      ]),
+    });
+
+    const firstActor = {
+      ...createActorCombo(frameToMs(120)),
+      id: 'actor-combo-first',
+    };
+    const firstKibo = {
+      ...createKiboCombo(frameToMs(120)),
+      id: 'kibo-combo-first',
+    };
+    const secondActor = {
+      ...createActorCombo(frameToMs(180)),
+      id: 'actor-combo-second',
+    };
+    const secondKibo = {
+      ...createKiboCombo(frameToMs(180)),
+      id: 'kibo-combo-second',
+    };
+    const cooldownRollback = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        actors: [actor],
+        jointAttackRuntime: createVerifiedJointAttackRuntimeBinding(),
+        actions: [firstActor, firstKibo, secondActor, secondKibo],
+      },
+    });
+    expect(
+      cooldownRollback.readinessTimeline.actions.find(
+        action => action.actionId === 'kibo-combo-second'
+      )
+    ).toMatchObject({
+      executable: false,
+      violationCodes: expect.arrayContaining([
+        ACTION_RULE_CODES.SKILL_COOLDOWN_ACTIVE,
+      ]),
+    });
+    expect(
+      cooldownRollback.readinessTimeline.actions.find(
+        action => action.actionId === 'actor-combo-second'
       )
     ).toMatchObject({
       executable: false,

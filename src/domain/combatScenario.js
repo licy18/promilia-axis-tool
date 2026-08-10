@@ -39,6 +39,9 @@ export function normalizeCombatScenario(value = null) {
     ...(value?.objectiveContract == null
       ? {}
       : { objectiveContract: structuredClone(value.objectiveContract) }),
+    ...(value?.jointAttackRuntime == null
+      ? {}
+      : { jointAttackRuntime: structuredClone(value.jointAttackRuntime) }),
     ...(value?.target == null
       ? {}
       : { target: normalizeCombatTargetPolicy(value.target) }),

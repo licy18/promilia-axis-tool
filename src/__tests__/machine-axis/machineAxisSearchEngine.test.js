@@ -278,7 +278,7 @@ describe('Machine Axis search engine', () => {
     });
   });
 
-  it('records unresolved joint actions as excluded formal surface evidence', async () => {
+  it('records a missing joint runtime contract as excluded formal surface evidence', async () => {
     const fakeService = {
       async simulate(axis) {
         return {
@@ -304,7 +304,7 @@ describe('Machine Axis search engine', () => {
     const generator = {
       generateNextActions({ options }) {
         options.onFormalRejection({
-          code: 'joint-attack-trigger-unresolved',
+          code: 'joint-attack-runtime-contract-required',
           path: 'actions',
           actorId: 'actor-101010',
           publicActionId: 10101012,
@@ -328,14 +328,120 @@ describe('Machine Axis search engine', () => {
     });
     expect(result.summary).toMatchObject({
       formalSurfaceRejectedCandidates: 1,
-      rejectionCounts: { 'joint-attack-trigger-unresolved': 1 },
+      rejectionCounts: { 'joint-attack-runtime-contract-required': 1 },
       rejectionExamples: [
         expect.objectContaining({
-          code: 'joint-attack-trigger-unresolved',
+          code: 'joint-attack-runtime-contract-required',
           actorId: 'actor-101010',
           publicActionId: 10101012,
         }),
       ],
     });
+  });
+
+  it('appends an atomic joint candidate as two actions and never evaluates either half alone', async () => {
+    const simulatedAxes = [];
+    const fakeService = {
+      async simulate(axis) {
+        simulatedAxes.push(structuredClone(axis));
+        const actions = (axis.actions ?? []).map((action, index) => ({
+          id: action.id,
+          type: action.owner?.kind === 'kibo' ? 'kiboEvent' : 'skill',
+          actorId: 'actor-a',
+          startMs: 0,
+          durationMs: 0,
+          sourceSequencePath: [index],
+        }));
+        return {
+          contract: axis,
+          hashes: {
+            input: `input-${actions.length}`,
+            data: 'data',
+            trace: `trace-${actions.length}`,
+            build: `build-${actions.length}`,
+          },
+          evaluation: {
+            totals: { hpDamage: actions.length, toughnessDamage: 0 },
+          },
+          trace: {
+            scenario: { durationMs: 1000, frameRate: 60, actorIds: ['actor-a'] },
+            critical: { policy: 'expected' },
+            state: { initial: {}, final: {} },
+            controlledActors: { initialActorId: 'actor-a' },
+            actions,
+            damage: [],
+            events: [],
+            resources: { actors: [], kibos: [] },
+            executionPlan: {
+              actions: actions.map(action => ({
+                actionId: action.id,
+                execute: true,
+                status: 'scheduled',
+                violationCodes: [],
+                unresolvedCodes: [],
+                startMs: 0,
+                durationMs: 0,
+                sourceSequencePath: action.sourceSequencePath,
+              })),
+            },
+            diagnostics: { actionRules: { diagnostics: [], summary: {} } },
+          },
+        };
+      },
+    };
+    const actorAction = createMachineAxisSearchAction({
+      id: 'joint-actor',
+      ownerKind: 'actor',
+      slotId: 'slot-1',
+      publicActionId: 10300212,
+      actionKind: 'star-combo',
+    });
+    const kiboAction = createMachineAxisSearchAction({
+      id: 'joint-kibo',
+      ownerKind: 'kibo',
+      slotId: 'slot-1',
+      publicActionId: 50000112,
+      actionKind: 'break',
+    });
+    const generator = {
+      generateNextActions({ axis }) {
+        if ((axis.actions ?? []).length > 0) return [];
+        return [
+          {
+            action: actorAction,
+            actions: [actorAction, kiboAction],
+            compoundKind: 'joint-attack',
+            label: 'atomic-joint',
+          },
+        ];
+      },
+    };
+
+    await createMachineAxisSearchEngine({
+      service: fakeService,
+      generator,
+    }).search({
+      contract: {
+        scenario: { durationFrames: 60, fps: 60, team: [] },
+        actions: [],
+      },
+      options: {
+        objective: 'damage',
+        maxDepth: 1,
+        includeWait: false,
+      },
+    });
+
+    const evaluatedActionSets = simulatedAxes
+      .map(axis => (axis.actions ?? []).map(action => action.id))
+      .filter(actions => actions.length > 0);
+    expect(evaluatedActionSets.length).toBeGreaterThan(0);
+    expect(
+      evaluatedActionSets.every(
+        actions =>
+          JSON.stringify(actions) ===
+          JSON.stringify(['joint-actor', 'joint-kibo'])
+      )
+    ).toBe(true);
   });
 });

@@ -313,6 +313,13 @@ function createContractFromProject(project, { service, metadata } = {}) {
               project.combatScenario.objectiveContract
             ),
           }),
+      ...(project.combatScenario?.jointAttackRuntime == null
+        ? {}
+        : {
+            jointAttackRuntime: structuredClone(
+              project.combatScenario.jointAttackRuntime
+            ),
+          }),
       ...(project.optimizationQualification == null
         ? {}
         : {

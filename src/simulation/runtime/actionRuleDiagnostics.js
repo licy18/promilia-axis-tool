@@ -28,6 +28,15 @@ import {
   resolveVerifiedKiboJointAttackBinding,
 } from '../../domain/verifiedJointAttackContract';
 import {
+  VERIFIED_JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID,
+  createVerifiedJointAttackRuntimeEvidence,
+  createVerifiedJointAttackRuntimePair,
+} from '../../domain/verifiedJointAttackRuntimePair';
+import {
+  VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE,
+  VERIFIED_JOINT_ATTACK_RUNTIME_READY_CODE,
+} from '../../domain/verifiedJointAttackRuntimeContract';
+import {
   ACTOR_SWITCH_EXIT_TAIL_UNRESOLVED,
   KIBO_SWITCH_EXIT_TAIL_UNRESOLVED,
   isVerifiedSwitchExitTailPolicy,
@@ -70,6 +79,11 @@ export const ACTION_RULE_CODES = Object.freeze({
   JOINT_ATTACK_DUPLICATE_SIDE: 'joint-attack-duplicate-side',
   JOINT_ATTACK_COUNTERPART_BLOCKED: 'joint-attack-counterpart-blocked',
   JOINT_ATTACK_TRIGGER_UNRESOLVED: JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
+  JOINT_ATTACK_RUNTIME_READY: VERIFIED_JOINT_ATTACK_RUNTIME_READY_CODE,
+  JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED:
+    VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE,
+  JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID:
+    VERIFIED_JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID,
   STAR_CARRY_SWITCH_TRIGGER_REQUIRED: 'star-carry-switch-trigger-required',
   KIBO_PASSIVE_SKILL_TAG_UNRESOLVED:
     'kibo-passive-cooldown-skill-tag-unresolved',
@@ -78,6 +92,7 @@ export const ACTION_RULE_CODES = Object.freeze({
 export const ACTION_RULE_STATUSES = Object.freeze({
   VIOLATED: 'violated',
   UNRESOLVED: 'unresolved',
+  VERIFIED: 'verified',
 });
 
 export function createActionRuleDiagnostics({
@@ -277,10 +292,15 @@ export function createActionRuleDiagnostics({
           ACTION_RULE_CODES.JOINT_ATTACK_TARGET_MISMATCH,
           ACTION_RULE_CODES.JOINT_ATTACK_DUPLICATE_SIDE,
           ACTION_RULE_CODES.JOINT_ATTACK_COUNTERPART_BLOCKED,
+          ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED,
+          ACTION_RULE_CODES.JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID,
         ].includes(item.code)
       ).length,
       jointAttackTriggerUnresolvedCount: diagnostics.filter(
         item => item.code === ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED
+      ).length,
+      jointAttackRuntimeReadyCount: diagnostics.filter(
+        item => item.code === ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY
       ).length,
       standaloneStarCarryViolationCount: diagnostics.filter(
         item =>
@@ -576,7 +596,12 @@ function createBlockedJointCounterpartDiagnostics({
   const diagnostics = [];
   for (const pair of (jointDiagnostics ?? []).filter(
     diagnostic =>
-      diagnostic.code === ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED &&
+      [
+        ACTION_RULE_CODES.JOINT_ATTACK_TRIGGER_UNRESOLVED,
+        ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY,
+        ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED,
+        ACTION_RULE_CODES.JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID,
+      ].includes(diagnostic.code) &&
       (diagnostic.actionIds ?? []).length === 2
   )) {
     const pairIds = uniqueValues(pair.actionIds.map(String));
@@ -818,6 +843,9 @@ function createJointAttackDiagnostics(
     }))
     .filter(entry => entry.binding != null);
   const defaultTargetId = resolveScenarioDefaultTargetIdentity(scenario);
+  const actionIndexById = new Map(
+    actions.map((action, index) => [String(action.id), index])
+  );
   const duplicateDiagnostics = createJointAttackDuplicateDiagnostics({
     actorCombos,
     kiboCombos,
@@ -840,6 +868,8 @@ function createJointAttackDiagnostics(
           actorById,
           fps,
           defaultTargetId,
+          actionIndexById,
+          scenario,
           side: 'actor',
         })
       ),
@@ -853,6 +883,8 @@ function createJointAttackDiagnostics(
           actorById,
           fps,
           defaultTargetId,
+          actionIndexById,
+          scenario,
           side: 'kibo',
         })
       ),
@@ -867,6 +899,8 @@ function createJointAttackDiagnostic({
   side,
   kiboBindings = [],
   defaultTargetId = null,
+  actionIndexById = new Map(),
+  scenario = {},
 }) {
   const actor = actorById.get(String(action.actorId ?? '')) ?? action.actor;
   const configuredKiboId = positiveIntegerOrNull(actor?.loadout?.kiboId);
@@ -908,6 +942,29 @@ function createJointAttackDiagnostic({
     const binding = kiboBindings.find(
       entry => String(entry.action.id) === String(sameFrame.id)
     )?.binding;
+    const pair = createVerifiedJointAttackRuntimePair({
+      actorAction: action,
+      kiboAction: sameFrame,
+      actor,
+      scenario,
+      fps,
+      actorActionIndex: actionIndexById.get(String(action.id)),
+      kiboActionIndex: actionIndexById.get(String(sameFrame.id)),
+    });
+    if (pair.ready) {
+      return createJointAttackRuntimeReadyDiagnostic(pair);
+    }
+    if (
+      pair.code === VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE ||
+      pair.code === VERIFIED_JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID
+    ) {
+      return createJointAttackRuntimeBlockedDiagnostic({
+        actorAction: action,
+        kiboAction: sameFrame,
+        binding,
+        pair,
+      });
+    }
     return createJointAttackTriggerUnresolvedDiagnostic({
       actorAction: action,
       kiboAction: sameFrame,
@@ -1067,6 +1124,81 @@ function createJointAttackTriggerUnresolvedDiagnostic({
       ],
     },
     appliedToSimulationResults: false,
+  };
+}
+
+function createJointAttackRuntimeReadyDiagnostic(pair) {
+  const evidence = createVerifiedJointAttackRuntimeEvidence(pair);
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(
+      ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY,
+      pair.actorActionId,
+      pair.kiboActionId
+    ),
+    code: ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY,
+    ruleKey: 'joint-attack-runtime-assumption',
+    status: ACTION_RULE_STATUSES.VERIFIED,
+    severity: 'info',
+    actionId: pair.actorActionId,
+    actionIds: [pair.actorActionId, pair.kiboActionId],
+    actorId: pair.actorId,
+    kiboId: pair.kiboId,
+    targetId: pair.targetId,
+    timeMs: Number(pair.actorAction.startMs) || 0,
+    pairIdentity: pair.pairIdentity,
+    runtimeBindingHash: pair.runtimeBinding.bindingHash,
+    mappingIdentity: pair.kiboMappingIdentity,
+    message:
+      '合击按版本化产品 assumption 通过输入资格门；客户端 parity 仍单独标记为未就绪',
+    evidence,
+    source: {
+      sourceKind: 'azpr-joint-attack-runtime-assumption',
+      sourceStatus: 'resolved-by-product-assumption',
+      fieldPaths: [
+        'combatScenario.jointAttackRuntime',
+        'NewTable/pet.breakSkillList',
+        'controlBinding.logic.skillTag',
+        'action.sourceSequencePath',
+      ],
+    },
+    appliedToSimulationResults: true,
+  };
+}
+
+function createJointAttackRuntimeBlockedDiagnostic({
+  actorAction,
+  kiboAction,
+  binding,
+  pair,
+}) {
+  const code = pair.code;
+  return {
+    schemaVersion: 1,
+    id: createDiagnosticId(code, actorAction.id, kiboAction.id),
+    code,
+    ruleKey: 'joint-attack-runtime-assumption',
+    status: ACTION_RULE_STATUSES.VIOLATED,
+    severity: 'error',
+    actionId: actorAction.id,
+    actionIds: [actorAction.id, kiboAction.id],
+    actorId: actorAction.actorId ?? null,
+    kiboId: binding?.ownerId ?? kiboAction.kiboId ?? null,
+    timeMs: Number(actorAction.startMs) || 0,
+    issues: pair.issues ?? [],
+    message:
+      code === VERIFIED_JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID
+        ? '合击两半必须是同一原子输入的相邻、确定 source sequence'
+        : '合击缺少有效的 m12-joint-attack-runtime-v1 产品 assumption 绑定',
+    source: {
+      sourceKind: 'azpr-joint-attack-runtime-assumption',
+      sourceStatus: code,
+      fieldPaths: [
+        'combatScenario.jointAttackRuntime',
+        'action.sourceSequencePath',
+      ],
+    },
+    appliedToSimulationResults: true,
   };
 }
 
@@ -3313,9 +3445,12 @@ function createSkillCooldownRequirement(action) {
   const verifiedControlSkillId = Number(verifiedActionMapping?.controlSkillId);
   const verifiedCooldown = verifiedActionMapping?.actionTiming?.cooldown;
   const verifiedCooldownMs = Number(verifiedCooldown?.cooldownMs);
+  const directKiboControl =
+    action.type === ACTION_TYPES.KIBO_EVENT &&
+    verifiedActionMapping?.ownerKind === 'kibo';
   if (
     Number.isInteger(verifiedControlSkillId) &&
-    verifiedControlSkillId !== Number(action.skillId) &&
+    (verifiedControlSkillId !== Number(action.skillId) || directKiboControl) &&
     verifiedCooldown?.status === 'applied' &&
     Number.isFinite(verifiedCooldownMs)
   ) {

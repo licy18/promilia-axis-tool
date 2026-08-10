@@ -1539,6 +1539,26 @@ export function projectSimulationResult({
     breakTriggered: event.payload.breakTriggered === true,
     deathTriggered: event.payload.deathTriggered === true,
     deathState: event.payload.deathState ?? null,
+    pairIdentity:
+      event.payload.pairIdentity ?? event.payload.jointAttackPairIdentity ?? null,
+    jointAttackPairIdentity: event.payload.jointAttackPairIdentity ?? null,
+    jointAttackCalculatedToughnessDamage:
+      event.payload.jointAttackCalculatedToughnessDamage ?? null,
+    jointAttackAnchorFrame: event.payload.jointAttackAnchorFrame === true,
+    jointAttackKiboAnchorHit:
+      event.payload.jointAttackKiboAnchorHit === true,
+    mappingIdentity: event.payload.mappingIdentity ?? null,
+    kiboResolutionIdentity: event.payload.kiboResolutionIdentity ?? null,
+    anchorHitIdentity: event.payload.anchorHitIdentity ?? null,
+    anchorHitIdentities: Array.isArray(event.payload.anchorHitIdentities)
+      ? [...event.payload.anchorHitIdentities]
+      : null,
+    anchorRelativeFrame: event.payload.anchorRelativeFrame ?? null,
+    anchorAbsoluteFrame: event.payload.anchorAbsoluteFrame ?? null,
+    runtimeContractId: event.payload.runtimeContractId ?? null,
+    runtimeContractHash: event.payload.runtimeContractHash ?? null,
+    runtimeBindingHash: event.payload.runtimeBindingHash ?? null,
+    stateTransaction: event.payload.stateTransaction ?? null,
     ...(Array.isArray(event.payload.settlementOrder)
       ? { settlementOrder: [...event.payload.settlementOrder] }
       : {}),
@@ -1546,6 +1566,10 @@ export function projectSimulationResult({
     formulaVersion: event.payload.formulaVersion,
     formulaBreakdown: event.payload.formulaBreakdown,
     hitKey: event.hitKey ?? event.payload.hitKey ?? null,
+    hitIdentity:
+      event.payload.hitIdentity ??
+      event.payload.formulaBreakdown?.randomBranch?.hitIdentity ??
+      null,
     hitIndex: event.hitIndex ?? event.payload.hitIndex ?? null,
     hitSkillId: event.hitSkillId ?? null,
     elementId: event.payload.elementId ?? null,

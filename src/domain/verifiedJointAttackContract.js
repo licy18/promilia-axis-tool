@@ -9,10 +9,9 @@ export const VERIFIED_KIBO_JOINT_ATTACK_SKILL_TAG = 15;
 export const JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE =
   'joint-attack-trigger-unresolved';
 export const JOINT_ATTACK_TRIGGER_STATUS =
-  'preweakbreak-static-predicate-partially-closed';
+  'preweakbreak-known-predicates-closed-product-runtime-binding-required';
 
 const JOINT_ATTACK_ELIGIBILITY_LEAVES_OPEN = Object.freeze([
-  'prebreak-threshold-formula-id-source-field-identity',
   'controlled-entity-offset-0x40-field-identity',
   'service-cannot-be-joint-strike-set-runtime-input',
 ]);
@@ -122,7 +121,7 @@ export function createJointAttackTriggerUnresolvedEvidence({
       },
     ],
     eligibilityEvidence: {
-      status: 'client-static-predicate-chain-partially-closed',
+      status: 'client-known-predicate-chain-closed-unknown-gates-open',
       sourceMethod: 'PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720',
       thresholdMethod: 'UpdatePreBreakThreshold@0x13FCB20',
       resultField: 'PetData.m_ExistPetBreakTarget@0x460',
@@ -149,6 +148,15 @@ export function createJointAttackTriggerUnresolvedEvidence({
       ...JOINT_ATTACK_ELIGIBILITY_LEAVES_OPEN,
       ...JOINT_ATTACK_POST_CAST_LEAVES_OPEN,
     ],
+    productAssumptionResolution: {
+      contractId: 'm12-joint-attack-runtime-v1',
+      status: 'resolved-when-strict-runtime-binding-is-present',
+      clientParityReady: false,
+      resolvedLeaves: [
+        ...JOINT_ATTACK_ELIGIBILITY_LEAVES_OPEN,
+        ...JOINT_ATTACK_POST_CAST_LEAVES_OPEN,
+      ],
+    },
   };
   return Object.freeze({
     ...value,

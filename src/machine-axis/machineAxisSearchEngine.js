@@ -146,7 +146,10 @@ export function createMachineAxisSearchEngine({
       let evaluated = [];
       const resourceThresholdChildren = [];
       for (const child of children) {
-        const childAxis = appendAction(child.parent.axis, child.next.action);
+        const childAxis = appendActions(
+          child.parent.axis,
+          child.next.actions ?? [child.next.action]
+        );
         let evaluation;
         try {
           evaluation = await evaluateCandidateAxis(childAxis, settings);
@@ -195,7 +198,10 @@ export function createMachineAxisSearchEngine({
         );
       }
       for (const child of thresholdChildren) {
-        const childAxis = appendAction(child.parent.axis, child.next.action);
+        const childAxis = appendActions(
+          child.parent.axis,
+          child.next.actions ?? [child.next.action]
+        );
         try {
           const evaluation = await evaluateCandidateAxis(childAxis, settings);
           stats.candidatesEvaluated += 1;
@@ -1225,14 +1231,16 @@ function createEmptyAxis(contract) {
   };
 }
 
-function appendAction(axis, action) {
+function appendActions(axis, actions) {
+  const appended = (actions ?? []).filter(Boolean);
+  const label = appended.map(action => action.id).join('+');
   return {
     ...axis,
     scenario: {
       ...(axis.scenario ?? {}),
-      name: `${String(axis.scenario?.name ?? 'Search')} + ${action.id}`,
+      name: `${String(axis.scenario?.name ?? 'Search')} + ${label}`,
     },
-    actions: [...(axis.actions ?? []), action],
+    actions: [...(axis.actions ?? []), ...appended],
   };
 }
 

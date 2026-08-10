@@ -70,6 +70,7 @@
           "$ref": "#/$defs/optimizationScenarioPolicyBinding"
         },
         "objectiveContract": { "$ref": "#/$defs/objectiveContract" },
+        "jointAttackRuntime": { "type": "object" },
         "cultivationProfile": { "$ref": "#/$defs/cultivationProfile" }
       }
     },
