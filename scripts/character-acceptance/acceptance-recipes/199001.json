@@ -214,6 +214,28 @@
       }
     }
   ],
+  "existingTuningMarkAcceptance": {
+    "ownerId": 199001,
+    "sourceActorId": "actor-199001",
+    "expectedProfileCount": 9,
+    "maximumStacks": 5,
+    "markProfiles": [
+      { "markId": 150, "profileKey": "fire", "elementName": "火" },
+      { "markId": 250, "profileKey": "thunder", "elementName": "雷" },
+      { "markId": 350, "profileKey": "ice", "elementName": "冰" },
+      { "markId": 450, "profileKey": "dark", "elementName": "暗" },
+      { "markId": 550, "profileKey": "wood", "elementName": "木" },
+      { "markId": 650, "profileKey": "earth", "elementName": "土" },
+      { "markId": 750, "profileKey": "wind", "elementName": "风" },
+      { "markId": 850, "profileKey": "water", "elementName": "水" },
+      { "markId": 950, "profileKey": "light", "elementName": "光" }
+    ],
+    "mixedInitialCounts": { "fire": 2, "wind": 4, "dark": 1 },
+    "capProfileKey": "fire",
+    "ultimate": { "publicActionId": 19900113, "stackDelta": 2 },
+    "starCarry": { "switchTargetSlotId": "slot-2", "stackDelta": 1 },
+    "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#existing-mark-only-nine-profile-acceptance"
+  },
   "isolatedActionCases": [
     {
       "identity": "star-first-hit-miss-condition-insufficient",

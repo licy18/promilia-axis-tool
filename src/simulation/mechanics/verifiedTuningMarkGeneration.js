@@ -66,6 +66,7 @@ export function createVerifiedTuningMarkGeneration({
   const conditionalDamageResults = [];
   const consumeJudgmentResults = [];
   const unresolved = [];
+  const actionStartMarkCountsByActionId = new Map();
   let sequence = 0;
 
   const enqueue = descriptor => {
@@ -180,6 +181,18 @@ export function createVerifiedTuningMarkGeneration({
       });
     if (!resolution?.ready) continue;
     const tuningEffects = dedupeTuningRuntimeEffects(resolution.effects ?? []);
+    if (
+      tuningEffects.some(
+        effect => effect.tuningMarkActivationCondition?.applied === true
+      )
+    ) {
+      enqueue({
+        kind: 'mark-state-snapshot',
+        timeMs: Number(action.startMs),
+        action,
+        resolution,
+      });
+    }
     const enqueuedConsumeGroups = new Set();
     for (const effect of tuningEffects) {
       if (effect.classification !== 'applied') continue;
@@ -384,6 +397,16 @@ export function createVerifiedTuningMarkGeneration({
         emitThresholdPassiveCommands,
         conditionalDamageGroups: tuningMarkConditionalDamageGroups,
       });
+    } else if (descriptor.kind === 'mark-state-snapshot') {
+      actionStartMarkCountsByActionId.set(
+        descriptor.action?.id,
+        new Map(
+          [...stateByMarkId.entries()].map(([markId, state]) => [
+            markId,
+            state.layers.length,
+          ])
+        )
+      );
     } else if (descriptor.kind === 'acquire') {
       applyLayerAcquisition({
         descriptor,
@@ -395,6 +418,7 @@ export function createVerifiedTuningMarkGeneration({
         scenario,
         enqueue,
         acquisitionGateResults,
+        actionStartMarkCountsByActionId,
         conditionalDamageGroups: tuningMarkConditionalDamageGroups,
         emitThresholdPassiveCommands,
       });
@@ -632,11 +656,20 @@ function applyLayerAcquisition({
   scenario,
   enqueue,
   acquisitionGateResults,
+  actionStartMarkCountsByActionId,
   conditionalDamageGroups,
   emitThresholdPassiveCommands,
 }) {
   const state = stateByMarkId.get(Number(descriptor.profile?.markId));
   if (!state) return;
+  const activationResult = resolveExistingTuningMarkActivationCondition({
+    descriptor,
+    actionStartMarkCountsByActionId,
+  });
+  if (descriptor.effect?.tuningMarkActivationCondition) {
+    acquisitionGateResults.push(activationResult);
+  }
+  if (!activationResult.passed) return;
   const gateResult = resolveTuningAcquisitionHitGate({
     descriptor,
     conditionalDamageGroups,
@@ -744,6 +777,52 @@ function applyLayerAcquisition({
     timeMs: descriptor.timeMs,
     descriptor,
   });
+}
+
+function resolveExistingTuningMarkActivationCondition({
+  descriptor,
+  actionStartMarkCountsByActionId,
+}) {
+  const condition = descriptor.effect?.tuningMarkActivationCondition;
+  if (!condition) {
+    return {
+      actionId: descriptor.action?.id ?? null,
+      effectIdentity: descriptor.effect?.effectIdentity ?? null,
+      timeMs: descriptor.timeMs,
+      gate: null,
+      candidateCount: 1,
+      landedCount: 1,
+      passed: true,
+    };
+  }
+  const actionSnapshot = actionStartMarkCountsByActionId.get(
+    descriptor.action?.id
+  );
+  const markCountAtActionStart = Number(
+    actionSnapshot?.get(Number(condition.markId)) ?? 0
+  );
+  const passed =
+    actionSnapshot != null &&
+    markCountAtActionStart >= Number(condition.minimumStacks);
+  return {
+    actionId: descriptor.action?.id ?? null,
+    effectIdentity: descriptor.effect?.effectIdentity ?? null,
+    timeMs: descriptor.timeMs,
+    gate: {
+      kind: 'existing-tuning-mark-at-action-start',
+      groupIdentity: condition.conditionIdentity,
+      markId: Number(condition.markId),
+      profileKey: condition.profileKey,
+      comparison: condition.comparison,
+      threshold: Number(condition.threshold),
+      minimumStacks: Number(condition.minimumStacks),
+      snapshotTiming: condition.snapshotTiming,
+    },
+    candidateCount: markCountAtActionStart,
+    landedCount: passed ? markCountAtActionStart : 0,
+    passed,
+    sourceIdentity: condition.sourceIdentity ?? descriptor.effect?.sourceIdentity,
+  };
 }
 
 function resolveTuningAcquisitionHitGate({
@@ -2472,6 +2551,7 @@ function sortLayers(layers) {
 function compareGenerationDescriptors(left, right) {
   const priority = {
     expire: 0,
+    'mark-state-snapshot': 0.5,
     acquire: 1,
     consume: 2,
     periodic: 3,

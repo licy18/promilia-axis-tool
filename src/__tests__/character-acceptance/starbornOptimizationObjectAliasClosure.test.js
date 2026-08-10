@@ -55,17 +55,17 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
     expect(validation.bundle.summary).toEqual({
       optimizationObjectCount: 1,
       sourceAliasCount: 2,
-      requirementCount: 607,
-      requiredCount: 354,
-      passedCount: 354,
+      requirementCount: 643,
+      requiredCount: 390,
+      passedCount: 390,
       notApplicableCount: 253,
       blockedCount: 0,
       sourceGapCount: 0,
       acceptanceGapCount: 0,
       scenarioCount: 4,
       scenarioPassedCount: 4,
-      assertionCount: 3064,
-      assertionPassedCount: 3064,
+      assertionCount: 3032,
+      assertionPassedCount: 3032,
     });
     expect(validation.bundle).toMatchObject({
       status: 'runtime-integrated-product-visual-pending',
@@ -238,6 +238,7 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
       'attackInputChains',
       'variantEdges',
       'inputVariantSelectors',
+      'actionEffectBindings',
       'runtimeEffectBindings',
       'resourceProfiles',
       'resourceTransactions',
@@ -286,6 +287,7 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
       'scripts/generate-character-acceptance.mjs',
       'src/character-acceptance/optimizationObjectAliasProtocol.js',
       'src/simulation/mechanics/verifiedTargetStateRuntime.js',
+      'src/simulation/mechanics/verifiedTuningMarkGeneration.js',
     ];
     for (const relativePath of sharedPaths) {
       const contents = fs.readFileSync(

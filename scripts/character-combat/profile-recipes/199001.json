@@ -733,6 +733,70 @@
       }
     ],
     "conditionalHitGroups": [],
+    "existingTuningMarkAcquisitionGroups": [
+      {
+        "groupIdentity": "starborn-199001-ultimate-existing-tuning-marks",
+        "controlSkillId": 19900113,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "triggerFrame": 140,
+        "wrapperElementIds": [
+          199001250,
+          199001251,
+          199001252,
+          199001253,
+          199001254,
+          199001255,
+          199001256,
+          199001257,
+          199001258
+        ],
+        "expectedProfileKeys": [
+          "fire",
+          "thunder",
+          "ice",
+          "dark",
+          "wood",
+          "earth",
+          "wind",
+          "water",
+          "light"
+        ],
+        "stackDelta": 2,
+        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+      },
+      {
+        "groupIdentity": "starborn-199001-star-carry-existing-tuning-marks",
+        "controlSkillId": 19900122,
+        "subSkillIndex": 0,
+        "mapIndex": 0,
+        "triggerFrame": 44,
+        "wrapperElementIds": [
+          199001096,
+          199001097,
+          199001098,
+          199001099,
+          199001100,
+          199001101,
+          199001102,
+          199001103,
+          199001104
+        ],
+        "expectedProfileKeys": [
+          "fire",
+          "thunder",
+          "ice",
+          "dark",
+          "wood",
+          "earth",
+          "wind",
+          "water",
+          "light"
+        ],
+        "stackDelta": 1,
+        "sourceIdentity": "product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+      }
+    ],
     "runtimeEffectBindings": [
       {
         "bindingIdentity": "starborn-199001-star-carry-self-attack",

@@ -6,9 +6,11 @@ import {
   createHeadlessAssumptionCanonicalPayload,
 } from '../../src/domain/headlessAssumptionContract.js';
 
-export const CHARACTER_COMBAT_COMPILER_VERSION = 6;
+export const CHARACTER_COMBAT_COMPILER_VERSION = 7;
 const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
 const SELF_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 102100;
+const EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID = 1007;
+const EXISTING_TUNING_MARK_CONDITIONAL_BASE_FUNCTION_ID = 5;
 const ELEMENT_LAYER_CONDITIONAL_FORMULA_FAMILIES = new Map([
   [
     TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID,
@@ -220,9 +222,20 @@ export function compileCharacterCombatRecipeContracts({
     ],
     controlBySkillId,
   });
+  const existingTuningMarkAcquisitionDefinitions =
+    compileExistingTuningMarkAcquisitionDefinitions({
+      ownerId,
+      definitions: compilerRecipe.existingTuningMarkAcquisitionGroups ?? [],
+      controlBySkillId,
+      tuningMarkProfiles: evidence?.tuningMarkProfiles ?? [],
+      operators: normalizedOperators,
+    });
   const actionEffectBindings = compileActionEffectBindings({
     ownerId,
-    definitions: compilerRecipe.actionEffectBindings ?? [],
+    definitions: [
+      ...(compilerRecipe.actionEffectBindings ?? []),
+      ...existingTuningMarkAcquisitionDefinitions,
+    ],
     controlBySkillId,
     resourceProfiles: compiledResourceProfiles,
     targetStateProfiles,
@@ -1583,6 +1596,8 @@ function applyActionEffectBinding(effect, binding) {
       sourceIdentity: binding.sourceIdentity,
     },
     tuningMark: binding.tuningMark,
+    tuningMarkActivationCondition:
+      binding.tuningMarkActivationCondition ?? null,
     hitGate: binding.hitGate ?? null,
     hitSettlementOrder:
       binding.hitSettlementOrder ?? effect.hitSettlementOrder ?? null,
@@ -3742,6 +3757,212 @@ function normalizeVariantInputWindow({
   };
 }
 
+function compileExistingTuningMarkAcquisitionDefinitions({
+  ownerId,
+  definitions,
+  controlBySkillId,
+  tuningMarkProfiles,
+  operators,
+}) {
+  const profileByMarkId = new Map(
+    (tuningMarkProfiles ?? []).map(profile => [
+      Number(profile.markId),
+      profile,
+    ])
+  );
+  return definitions.flatMap(definition => {
+    const groupIdentity = String(definition.groupIdentity ?? '').trim();
+    const control = requireControl(
+      controlBySkillId,
+      definition.controlSkillId,
+      'existing tuning mark acquisition'
+    );
+    const subSkillIndex = Number(definition.subSkillIndex);
+    const mapIndex = Number(definition.mapIndex ?? subSkillIndex);
+    const triggerFrame = Number(definition.triggerFrame);
+    const stackDelta = Number(definition.stackDelta);
+    const wrapperElementIds = (definition.wrapperElementIds ?? []).map(Number);
+    const expectedProfileKeys = (definition.expectedProfileKeys ?? []).map(
+      value => String(value)
+    );
+    const sourceIdentity = String(definition.sourceIdentity ?? '').trim();
+    if (
+      !groupIdentity ||
+      !Number.isInteger(subSkillIndex) ||
+      subSkillIndex < 0 ||
+      !Number.isInteger(mapIndex) ||
+      mapIndex < 0 ||
+      !Number.isInteger(triggerFrame) ||
+      triggerFrame < 0 ||
+      !Number.isInteger(stackDelta) ||
+      stackDelta <= 0 ||
+      wrapperElementIds.length === 0 ||
+      new Set(wrapperElementIds).size !== wrapperElementIds.length ||
+      expectedProfileKeys.length !== wrapperElementIds.length ||
+      new Set(expectedProfileKeys).size !== expectedProfileKeys.length ||
+      !sourceIdentity
+    ) {
+      throw new Error(
+        `character combat existing tuning mark acquisition group invalid: ${ownerId}/${groupIdentity || 'missing'}`
+      );
+    }
+    const bindings = wrapperElementIds.map(wrapperElementId => {
+      const wrapper = operators.readElementAsset(wrapperElementId);
+      const tree = wrapper?.tree;
+      const parameters =
+        tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
+      const markId = Number(parameters[9]);
+      const conditionElementId = Number(parameters[12]);
+      const threshold = Number(parameters[10]);
+      const trueValue = Number(parameters[6]);
+      const baseScalar = Number(parameters[0]);
+      const tuningProfile = profileByMarkId.get(markId);
+      const markAsset = operators.readElementAsset(markId);
+      const injectedPathIds = new Set(
+        (tree?.injectElementDataList ?? []).map(reference =>
+          String(reference?.m_PathID ?? reference)
+        )
+      );
+      const wrapperMatches = (control.effects ?? []).filter(
+        effect =>
+          Number(effect.mapIndex) === mapIndex &&
+          Number(effect.elementId) === wrapperElementId &&
+          Number(effect.trigger?.startFrame) === triggerFrame &&
+          Number(effect.depth ?? 0) === 0
+      );
+      if (
+        !wrapper ||
+        !markAsset ||
+        !tuningProfile?.applied ||
+        Number(tree?.formulaParams?.function_1) !==
+          EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID ||
+        Number(tree?.formulaParams?.function_2) !==
+          EXISTING_TUNING_MARK_CONDITIONAL_BASE_FUNCTION_ID ||
+        conditionElementId !== markId ||
+        threshold !== 0 ||
+        trueValue !== 10000 ||
+        baseScalar !== 1 ||
+        !injectedPathIds.has(String(markAsset.pathId)) ||
+        wrapperMatches.length !== 1
+      ) {
+        throw new Error(
+          `character combat existing tuning mark acquisition evidence missing: ${ownerId}/${groupIdentity}/${wrapperElementId}`
+        );
+      }
+      return {
+        bindingIdentity: `${groupIdentity}:${tuningProfile.profileKey ?? tuningProfile.key}`,
+        controlSkillId: Number(definition.controlSkillId),
+        subSkillIndex,
+        mapIndex,
+        elementId: markId,
+        triggerFrame,
+        frameCount: 1,
+        behaviorPathId:
+          wrapperMatches[0].trigger?.behaviorPathId == null
+            ? null
+            : String(wrapperMatches[0].trigger.behaviorPathId),
+        tuningMarkProfileKey:
+          tuningProfile.profileKey ?? tuningProfile.key,
+        stackDelta,
+        existingTuningMarkActivationCondition: {
+          conditionIdentity: `${groupIdentity}:${tuningProfile.profileKey ?? tuningProfile.key}`,
+          sourceElementId: wrapperElementId,
+          expectedMarkId: markId,
+          sourceIdentity,
+        },
+        sourceIdentity,
+      };
+    });
+    const actualProfileKeys = bindings
+      .map(binding => binding.tuningMarkProfileKey)
+      .sort();
+    const expectedSorted = [...expectedProfileKeys].sort();
+    if (actualProfileKeys.join('|') !== expectedSorted.join('|')) {
+      throw new Error(
+        `character combat existing tuning mark profile coverage mismatch: ${ownerId}/${groupIdentity}`
+      );
+    }
+    return bindings;
+  });
+}
+
+function compileExistingTuningMarkActivationCondition({
+  ownerId,
+  bindingIdentity,
+  definition,
+  tuningProfile,
+  operators,
+}) {
+  if (!definition) return null;
+  const conditionIdentity = String(
+    definition.conditionIdentity ?? ''
+  ).trim();
+  const sourceElementId = Number(definition.sourceElementId);
+  const expectedMarkId = Number(definition.expectedMarkId);
+  const asset = operators.readElementAsset(sourceElementId);
+  const tree = asset?.tree;
+  const parameters =
+    tree?.formulaParams?.formulaParamValues ?? tree?.functionParams ?? [];
+  const markId = Number(parameters[9]);
+  const conditionElementId = Number(parameters[12]);
+  const threshold = Number(parameters[10]);
+  const trueValue = Number(parameters[6]);
+  const baseScalar = Number(parameters[0]);
+  const markAsset = operators.readElementAsset(markId);
+  const injectedPathIds = new Set(
+    (tree?.injectElementDataList ?? []).map(reference =>
+      String(reference?.m_PathID ?? reference)
+    )
+  );
+  if (
+    !conditionIdentity ||
+    !asset ||
+    !markAsset ||
+    !tuningProfile?.applied ||
+    Number(tree?.formulaParams?.function_1) !==
+      EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID ||
+    Number(tree?.formulaParams?.function_2) !==
+      EXISTING_TUNING_MARK_CONDITIONAL_BASE_FUNCTION_ID ||
+    markId !== expectedMarkId ||
+    conditionElementId !== markId ||
+    Number(tuningProfile.markId) !== markId ||
+    threshold !== 0 ||
+    trueValue !== 10000 ||
+    baseScalar !== 1 ||
+    !injectedPathIds.has(String(markAsset.pathId))
+  ) {
+    throw new Error(
+      `character combat existing tuning mark activation condition evidence missing: ${ownerId}/${bindingIdentity}/${sourceElementId}`
+    );
+  }
+  return {
+    kind: 'tuning-mark-existing-at-action-start',
+    conditionIdentity,
+    commonFunctionId: EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID,
+    baseFunctionId: EXISTING_TUNING_MARK_CONDITIONAL_BASE_FUNCTION_ID,
+    expression: 'IF(self.ELEMENT_LAYERS[J]>K,G,0)',
+    profileKey: tuningProfile.profileKey ?? tuningProfile.key,
+    markId,
+    comparison: 'greater-than',
+    threshold,
+    minimumStacks: threshold + 1,
+    trueValue,
+    falseValue: 0,
+    baseScalar,
+    snapshotTiming: 'action-start-before-effects',
+    sourceElementId,
+    sourceIdentity: [
+      asset.sourceIdentity,
+      `element_formula[${EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID}]#IF(self.ELEMENT_LAYERS[J]>K,G,0)`,
+      definition.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    status: 'verified-existing-tuning-mark-activation-condition-ready',
+    applied: true,
+  };
+}
+
 function compileActionEffectBindings({
   ownerId,
   definitions,
@@ -3809,6 +4030,14 @@ function compileActionEffectBindings({
         targetStateProfileByIdentity,
         operators,
       });
+    const tuningMarkActivationCondition =
+      compileExistingTuningMarkActivationCondition({
+        ownerId,
+        bindingIdentity: definition.bindingIdentity,
+        definition: definition.existingTuningMarkActivationCondition,
+        tuningProfile,
+        operators,
+      });
     const hitActivation = compileActionEffectHitActivation({
       ownerId,
       definition: definition.hitActivation,
@@ -3871,6 +4100,7 @@ function compileActionEffectBindings({
       sourceIdentity: [
         element.sourceIdentity,
         targetStateActivationCondition?.sourceIdentity,
+        tuningMarkActivationCondition?.sourceIdentity,
         hitActivation?.sourceIdentity,
         landedHitActivationCondition?.sourceIdentity,
         scenarioOutOfScope?.sourceIdentity,
@@ -3918,6 +4148,7 @@ function compileActionEffectBindings({
           }
         : {}),
       targetStateActivationCondition,
+      tuningMarkActivationCondition,
       hitActivation,
       sourceReferenceKind: definition.sourceReferenceKind ?? null,
       hitGate: compileActionHitGate(definition.hitGate),

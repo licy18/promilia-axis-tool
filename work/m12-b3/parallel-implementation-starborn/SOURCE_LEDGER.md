@@ -41,7 +41,7 @@ Shared after ID normalization:
 - base combat attribute vector;
 - six public skill descriptions, labels, twelve-level values and CD/SP;
 - passive marker semantics and star-skill conditional effect values;
-- ultimate semantic: add one layer to each already-present elemental tuning mark;
+- ultimate semantic (product ruling `M12-B3-STARBORN-MARK-R1`, superseding the old generated oracle): add two layers to each already-present elemental tuning mark, cap five;
 - switch semantic: add one layer to existing marks and apply a 24s inheritable team attack state.
 
 Not shared:
@@ -59,12 +59,22 @@ The current global qualification record is one object (`STARBORN`) with both sou
 
 ## Closed source decisions
 
+### MARK-R1 tuning-mark source closure
+
+- `common function 1007` is the client-side parent condition for every mark type in both actions. The wrapper formula is `IF(self.ELEMENT_LAYERS[J]>K,G,0)` with `function_2=5`, `G=10000`, `K=0`, and the wrapper injects exactly the mark container addressed by `J`.
+- Female ultimate wrappers are `199001250..199001258` at `19900113/sub0/140F`; female star-carry wrappers are `199001096..199001104` at `19900122/sub0/44F`.
+- Male ultimate wrappers are `199002363..199002371` at `19900213/sub0/140F`; male star-carry wrappers are `199002071..199002079` at `19900222/sub0/44F`.
+- Each range maps in order to fire/thunder/ice/dark/wood/earth/wind/water/light mark IDs `150/250/350/450/550/650/750/850/950`. Every wrapper-to-child relation is verified from `injectElementDataList`; no prose-derived frame or target is introduced.
+- The raw client wrapper proves the `count > 0` eligibility condition. The corrected `ultimate +2` value comes from the explicit 2026-08-10 product ruling and deliberately supersedes the stale `skills.json`/golden `+1` oracle; the star-carry value remains `+1`.
+- Eligibility is sampled before action children. Queue order is exact-boundary expiry, action-start snapshot, then acquisition. Therefore an exact-expired mark is absent, and an earlier same-action child cannot make a previously absent type eligible.
+- Positive acceptance covers all nine types for each action with pre-existing marks. Negative acceptance separately starts all nine at zero and requires nine failed condition gates with zero acquisition events; mixed `fire=2/wind=4/dark=1` and cap-five cases verify deltas and absent-type isolation.
+
 - Every compiled action/effect/hit/resource/control-window row retains its source identity. Final blocking source gaps are zero for both aliases; non-blocking records are source-retained policy exclusions or dead/empty controls.
 - The star-skill passive is not inferred from prose. First-landed-hit action-effect bindings at 16F link the alias-specific hit subtree to the 20s team attack and enemy defense effects (`199001211/215`, `199002340/344`). Miss/blocked paths do not activate them.
 - Charged-derived and star-skill action effects use alias-specific landed-hit activation subtrees and trigger frames. Interruption at the follow-up left boundary proves late hits/effects are suppressed.
 - Star-carry uses distinct Battle Elements and timing: female `199001049` self 37F / allies 44F with replace semantics; male `199002266` self 38F / allies 44F with refresh semantics. Both use the verified formula `(self.ATK[4]*A)/10000`, 24s lifetime and `[start,end)` expiry. At 1440F cooldown, expiry precedes same-frame reapply; 1439F is rejected.
 - Ultimate resource boundary is 100 SP. A real baseline action executes at exactly 100; an isolated 99-SP case rejects with `machine-axis-action-resource-insufficient`.
-- Ultimate tuning-mark behavior is limited to existing elemental marks. Machine projections retain the acquired mark component source; no missing mark is invented.
+- Ultimate tuning-mark behavior is limited to existing elemental marks and adds two with a per-type cap of five. Machine projections retain condition-gate and acquired mark component sources; no missing mark is invented.
 - Female/male execution is not normalized into one trace: star skill duration is 190F vs 270F, ultimate 322F vs 268F, and hit/control assets remain alias-specific.
 - Male control `19900242` is retained as an empty 150F source control; female `19900142` has only a NewTable/backup row and no current-client control asset. The dormant male cross-alias link to female `19900115` is retained as source N/A and is never executable.
 - Boss-attack, received-hit, dodge/parry/counter, movement, airborne and distance-change rows remain structured `scenario-out-of-scope` N/A. No unreachable client behavior was implemented.

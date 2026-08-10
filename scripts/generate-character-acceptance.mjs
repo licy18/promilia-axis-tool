@@ -918,7 +918,13 @@ function executeVisualScenario({
   const negativeActionCases = (recipe.negativeActionCases ?? []).map(
     negativeCase => inspectNegativeActionCase(service, fixture, negativeCase)
   );
-  const isolatedActionCases = (recipe.isolatedActionCases ?? []).map(
+  const configuredIsolatedActionCases = [
+    ...(recipe.isolatedActionCases ?? []),
+    ...createExistingTuningMarkAcceptanceCases(
+      recipe.existingTuningMarkAcceptance
+    ),
+  ];
+  const isolatedActionCases = configuredIsolatedActionCases.map(
     isolatedCase =>
       inspectIsolatedActionCase(service, fixture, isolatedCase, profile)
   );
@@ -3118,6 +3124,60 @@ function inspectRecipeProbe(run, probe) {
       actual: { gate, judgment, acquisitions },
     };
   }
+  if (probe.kind === 'existing-tuning-mark-acquisition') {
+    const gates = (
+      run.trace?.resources?.tuningAcquisitionGates ?? []
+    ).filter(
+      row =>
+        row.actionId === probe.actionId &&
+        row.gateKind === 'existing-tuning-mark-at-action-start'
+    );
+    const acquisitions = (run.trace?.resources?.tuningMarks ?? []).filter(
+      row => row.actionId === probe.actionId && row.kind === 'acquire'
+    );
+    const expectedAcquisitions = probe.expectedAcquisitions ?? [];
+    const expectedRowsMatch = expectedAcquisitions.every(expected =>
+      acquisitions.some(
+        row =>
+          Number(row.markId) === Number(expected.markId) &&
+          Number(row.before) === Number(expected.before) &&
+          Number(row.after) === Number(expected.after) &&
+          Number(row.delta) === Number(expected.delta)
+      )
+    );
+    const absentRows = acquisitions.filter(row =>
+      (probe.absentMarkIds ?? []).some(
+        markId => Number(markId) === Number(row.markId)
+      )
+    );
+    const passedGates = gates.filter(row => row.passed === true);
+    const failedGates = gates.filter(row => row.passed === false);
+    return {
+      identity: identity(
+        'probe:existing-tuning-mark-acquisition:' + probe.actionId
+      ),
+      passed:
+        expectedRowsMatch &&
+        acquisitions.length === expectedAcquisitions.length &&
+        absentRows.length === 0 &&
+        matchesExpected(
+          passedGates.length,
+          probe.expectedPassedConditionCount
+        ) &&
+        matchesExpected(
+          failedGates.length,
+          probe.expectedFailedConditionCount
+        ) &&
+        gates.length ===
+          Number(probe.expectedPassedConditionCount ?? passedGates.length) +
+            Number(probe.expectedFailedConditionCount ?? failedGates.length),
+      actual: {
+        gates,
+        acquisitions,
+        absentRows,
+      },
+    };
+  }
   if (probe.kind === 'resource-boundary') {
     const events = run.trace?.variants?.resourceEvents ?? [];
     const exactGain = events.find(
@@ -3804,6 +3864,309 @@ function inspectIsolatedActionCase(service, fixture, isolatedCase, profile) {
       }),
     },
   };
+}
+
+function createExistingTuningMarkAcceptanceCases(definition) {
+  if (definition == null) return [];
+  const profiles = (definition.markProfiles ?? []).map(profile => ({
+    markId: Number(profile.markId),
+    profileKey: String(profile.profileKey ?? ''),
+    elementName: String(profile.elementName ?? ''),
+  }));
+  const expectedProfileCount = Number(definition.expectedProfileCount);
+  const maximumStacks = Number(definition.maximumStacks);
+  const ownerId = Number(definition.ownerId);
+  const sourceActorId = String(definition.sourceActorId ?? '');
+  const ultimatePublicActionId = Number(
+    definition.ultimate?.publicActionId
+  );
+  const ultimateStackDelta = Number(definition.ultimate?.stackDelta);
+  const starCarryStackDelta = Number(definition.starCarry?.stackDelta);
+  const switchTargetSlotId = String(
+    definition.starCarry?.switchTargetSlotId ?? ''
+  );
+  const sourceIdentity = String(definition.sourceIdentity ?? '').trim();
+  const profileKeySet = new Set(profiles.map(profile => profile.profileKey));
+  const profileIdSet = new Set(profiles.map(profile => profile.markId));
+  if (
+    !Number.isInteger(ownerId) ||
+    ownerId <= 0 ||
+    sourceActorId !== `actor-${ownerId}` ||
+    !Number.isInteger(expectedProfileCount) ||
+    expectedProfileCount <= 0 ||
+    profiles.length !== expectedProfileCount ||
+    profileKeySet.size !== expectedProfileCount ||
+    profileIdSet.size !== expectedProfileCount ||
+    profiles.some(
+      profile =>
+        !Number.isInteger(profile.markId) ||
+        profile.markId <= 0 ||
+        !profile.profileKey ||
+        !profile.elementName
+    ) ||
+    !Number.isInteger(maximumStacks) ||
+    maximumStacks <= 0 ||
+    !Number.isInteger(ultimatePublicActionId) ||
+    ultimatePublicActionId <= 0 ||
+    !Number.isInteger(ultimateStackDelta) ||
+    ultimateStackDelta <= 0 ||
+    !Number.isInteger(starCarryStackDelta) ||
+    starCarryStackDelta <= 0 ||
+    !switchTargetSlotId ||
+    !sourceIdentity
+  ) {
+    throw new Error(
+      `existing tuning mark acceptance definition invalid: ${ownerId || 'missing'}`
+    );
+  }
+  const normalizeCounts = rawCounts => {
+    const counts = Object.fromEntries(
+      profiles.map(profile => [profile.profileKey, 0])
+    );
+    for (const [profileKey, rawCount] of Object.entries(rawCounts ?? {})) {
+      const count = Number(rawCount);
+      if (
+        !profileKeySet.has(profileKey) ||
+        !Number.isInteger(count) ||
+        count < 0 ||
+        count > maximumStacks
+      ) {
+        throw new Error(
+          `existing tuning mark acceptance count invalid: ${ownerId}/${profileKey}`
+        );
+      }
+      counts[profileKey] = count;
+    }
+    return counts;
+  };
+  const createInitialRuntimeState = rawCounts => {
+    const counts = normalizeCounts(rawCounts);
+    return {
+      specialResourcesByActor: [],
+      kiboEnergyBySlot: [],
+      tuningMarks: profiles.flatMap(profile => {
+        const count = counts[profile.profileKey];
+        if (count === 0) return [];
+        return [
+          {
+            markId: profile.markId,
+            profileKey: profile.profileKey,
+            elementName: profile.elementName,
+            decayRemainingMs: 30_000,
+            heldReadyRemainingMs: 0,
+            layers: Array.from({ length: count }, (_, index) => ({
+              sourceActionId:
+                `existing-mark-fixture-${ownerId}-${profile.profileKey}-${index + 1}`,
+              sourceActorId,
+              sourceIdentity: {
+                contract: sourceIdentity,
+                profileKey: profile.profileKey,
+                layer: index + 1,
+              },
+            })),
+          },
+        ];
+      }),
+      activeEffects: [],
+    };
+  };
+  const createProbe = ({ actionId, rawCounts, stackDelta }) => {
+    const counts = normalizeCounts(rawCounts);
+    const present = profiles.filter(profile => counts[profile.profileKey] > 0);
+    return {
+      kind: 'existing-tuning-mark-acquisition',
+      assertionIdentity: `existing-tuning-mark-acquisition:${actionId}`,
+      actionId,
+      expectedAcquisitions: present.map(profile => {
+        const before = counts[profile.profileKey];
+        const after = Math.min(maximumStacks, before + stackDelta);
+        return {
+          markId: profile.markId,
+          before,
+          after,
+          delta: after - before,
+        };
+      }),
+      absentMarkIds: profiles
+        .filter(profile => counts[profile.profileKey] === 0)
+        .map(profile => profile.markId),
+      expectedPassedConditionCount: present.length,
+      expectedFailedConditionCount: profiles.length - present.length,
+    };
+  };
+  const createUltimateAction = (actionId, frame = 0) => ({
+    id: actionId,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: ultimatePublicActionId,
+      actionKind: 'ultimate',
+      level: 1,
+    },
+    schedule: { mode: 'absolute', frame },
+  });
+  const createSwitchAction = ({ actionId, ownerSlotId, targetSlotId, frame }) =>
+    ({
+      id: actionId,
+      owner: { kind: 'actor', slotId: ownerSlotId },
+      intent: { kind: 'switch', targetSlotId },
+      schedule: { mode: 'absolute', frame },
+    });
+  const derivedStarCarryActionId = switchActionId =>
+    `${switchActionId}--on-exit--${sourceActorId}--star-carry`;
+  const mixedCounts = normalizeCounts(definition.mixedInitialCounts);
+  const allPresentCounts = Object.fromEntries(
+    profiles.map(profile => [profile.profileKey, 1])
+  );
+  const capProfileKey = String(definition.capProfileKey ?? '');
+  if (!profileKeySet.has(capProfileKey)) {
+    throw new Error(
+      `existing tuning mark acceptance cap profile invalid: ${ownerId}/${capProfileKey}`
+    );
+  }
+  const capCounts = { [capProfileKey]: maximumStacks };
+  const zeroUltimateActionId = `${ownerId}-existing-mark-ultimate-zero`;
+  const zeroSwitchActionId = `${ownerId}-existing-mark-star-carry-zero-switch`;
+  const mixedUltimateActionId = `${ownerId}-existing-mark-ultimate-mixed`;
+  const mixedSwitchActionId = `${ownerId}-existing-mark-star-carry-mixed-switch`;
+  const allPresentSwitchActionId = `${ownerId}-existing-mark-all-present-switch`;
+  const allPresentUltimateActionId = `${ownerId}-existing-mark-all-present-ultimate`;
+  const capSwitchActionId = `${ownerId}-existing-mark-cap-switch`;
+  const capReturnActionId = `${ownerId}-existing-mark-cap-return`;
+  const capUltimateActionId = `${ownerId}-existing-mark-cap-ultimate`;
+  return [
+    {
+      identity: 'existing-tuning-mark-ultimate-all-zero',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState({}),
+      actions: [createUltimateAction(zeroUltimateActionId)],
+      probes: [
+        createProbe({
+          actionId: zeroUltimateActionId,
+          rawCounts: {},
+          stackDelta: ultimateStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-star-carry-all-zero',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState({}),
+      actions: [
+        createSwitchAction({
+          actionId: zeroSwitchActionId,
+          ownerSlotId: 'slot-1',
+          targetSlotId: switchTargetSlotId,
+          frame: 0,
+        }),
+      ],
+      probes: [
+        createProbe({
+          actionId: derivedStarCarryActionId(zeroSwitchActionId),
+          rawCounts: {},
+          stackDelta: starCarryStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-ultimate-mixed-and-cap-four',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState(mixedCounts),
+      actions: [createUltimateAction(mixedUltimateActionId)],
+      probes: [
+        createProbe({
+          actionId: mixedUltimateActionId,
+          rawCounts: mixedCounts,
+          stackDelta: ultimateStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-star-carry-mixed',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState(mixedCounts),
+      actions: [
+        createSwitchAction({
+          actionId: mixedSwitchActionId,
+          ownerSlotId: 'slot-1',
+          targetSlotId: switchTargetSlotId,
+          frame: 0,
+        }),
+      ],
+      probes: [
+        createProbe({
+          actionId: derivedStarCarryActionId(mixedSwitchActionId),
+          rawCounts: mixedCounts,
+          stackDelta: starCarryStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-all-nine-present-star-carry',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState(allPresentCounts),
+      actions: [
+        createSwitchAction({
+          actionId: allPresentSwitchActionId,
+          ownerSlotId: 'slot-1',
+          targetSlotId: switchTargetSlotId,
+          frame: 0,
+        }),
+      ],
+      probes: [
+        createProbe({
+          actionId: derivedStarCarryActionId(allPresentSwitchActionId),
+          rawCounts: allPresentCounts,
+          stackDelta: starCarryStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-all-nine-present-ultimate',
+      durationFrames: 400,
+      initialRuntimeState: createInitialRuntimeState(allPresentCounts),
+      actions: [createUltimateAction(allPresentUltimateActionId)],
+      probes: [
+        createProbe({
+          actionId: allPresentUltimateActionId,
+          rawCounts: allPresentCounts,
+          stackDelta: ultimateStackDelta,
+        }),
+      ],
+    },
+    {
+      identity: 'existing-tuning-mark-cap-five-both-actions',
+      durationFrames: 700,
+      initialRuntimeState: createInitialRuntimeState(capCounts),
+      actions: [
+        createSwitchAction({
+          actionId: capSwitchActionId,
+          ownerSlotId: 'slot-1',
+          targetSlotId: switchTargetSlotId,
+          frame: 0,
+        }),
+        createSwitchAction({
+          actionId: capReturnActionId,
+          ownerSlotId: switchTargetSlotId,
+          targetSlotId: 'slot-1',
+          frame: 100,
+        }),
+        createUltimateAction(capUltimateActionId, 200),
+      ],
+      probes: [
+        createProbe({
+          actionId: derivedStarCarryActionId(capSwitchActionId),
+          rawCounts: capCounts,
+          stackDelta: starCarryStackDelta,
+        }),
+        createProbe({
+          actionId: capUltimateActionId,
+          rawCounts: capCounts,
+          stackDelta: ultimateStackDelta,
+        }),
+      ],
+    },
+  ];
 }
 
 function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {

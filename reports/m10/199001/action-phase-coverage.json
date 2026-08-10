@@ -13,7 +13,7 @@
     "publicActionCount": 10,
     "runtimeReadyActionCount": 10,
     "appliedResourceTransactionCount": 0,
-    "appliedActionEffectCount": 24
+    "appliedActionEffectCount": 42
   },
   "phases": [
     {
@@ -382,6 +382,222 @@
       "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001078.asset/MonoBehaviour/ast_199001078__-8799594956058606391.json#elementConfigId=199001078|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_19900112.asset/MonoBehaviour/skill_control_19900112__-2500904238031557495.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-7530867443862883934|skill_control_19900112.asset#199001013@64F|skill_control_19900112.asset#199001013@64F|skill_control_19900112.asset#map0.element199001078@64F|ast_199001078.asset#time=600"
     },
     {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 150,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "fire",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001250.asset/MonoBehaviour/ast_199001250__6164331469746081753.json#elementConfigId=199001250|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 250,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "thunder",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001251.asset/MonoBehaviour/ast_199001251__-1329856183780981067.json#elementConfigId=199001251|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 350,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "ice",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_350.asset/MonoBehaviour/ast_350__3273457016050714061.json#elementConfigId=350|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001252.asset/MonoBehaviour/ast_199001252__-1156211791305095863.json#elementConfigId=199001252|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 450,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "dark",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_450.asset/MonoBehaviour/ast_450__-5819740171084359278.json#elementConfigId=450|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001253.asset/MonoBehaviour/ast_199001253__-4681911869225594217.json#elementConfigId=199001253|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 550,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "wood",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_550.asset/MonoBehaviour/ast_550__-669846950425800112.json#elementConfigId=550|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001254.asset/MonoBehaviour/ast_199001254__3226627960965811483.json#elementConfigId=199001254|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 650,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "earth",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_650.asset/MonoBehaviour/ast_650__2699138840966960245.json#elementConfigId=650|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001255.asset/MonoBehaviour/ast_199001255__-3385844286697091665.json#elementConfigId=199001255|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 750,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "wind",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001256.asset/MonoBehaviour/ast_199001256__1926755712068365056.json#elementConfigId=199001256|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 850,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "water",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_850.asset/MonoBehaviour/ast_850__3107436379383955232.json#elementConfigId=850|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001257.asset/MonoBehaviour/ast_199001257__3907667958652473563.json#elementConfigId=199001257|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900113,
+      "subSkillIndex": 0,
+      "elementId": 950,
+      "triggerFrame": 140,
+      "effectKind": "tuning-mark",
+      "profileKey": "light",
+      "stackDelta": 2,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_950.asset/MonoBehaviour/ast_950__-8695654341717050083.json#elementConfigId=950|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001258.asset/MonoBehaviour/ast_199001258__8755289717895663128.json#elementConfigId=199001258|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#ultimate-existing-mark-plus-2-cap-5|skill_control_19900113.asset#toOwnElementBaseDatas@140F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 150,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "fire",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001096.asset/MonoBehaviour/ast_199001096__-5180294550743404248.json#elementConfigId=199001096|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 250,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "thunder",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_250.asset/MonoBehaviour/ast_250__-3809486317990090417.json#elementConfigId=250|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001097.asset/MonoBehaviour/ast_199001097__6796977011667951284.json#elementConfigId=199001097|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 350,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "ice",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_350.asset/MonoBehaviour/ast_350__3273457016050714061.json#elementConfigId=350|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001098.asset/MonoBehaviour/ast_199001098__8302684673822054363.json#elementConfigId=199001098|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 450,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "dark",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_450.asset/MonoBehaviour/ast_450__-5819740171084359278.json#elementConfigId=450|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001099.asset/MonoBehaviour/ast_199001099__4417196058371087307.json#elementConfigId=199001099|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 550,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "wood",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_550.asset/MonoBehaviour/ast_550__-669846950425800112.json#elementConfigId=550|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001100.asset/MonoBehaviour/ast_199001100__2514429223272924266.json#elementConfigId=199001100|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 650,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "earth",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_650.asset/MonoBehaviour/ast_650__2699138840966960245.json#elementConfigId=650|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001101.asset/MonoBehaviour/ast_199001101__6373039348733276258.json#elementConfigId=199001101|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 750,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "wind",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_750.asset/MonoBehaviour/ast_750__1474042154774785480.json#elementConfigId=750|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001102.asset/MonoBehaviour/ast_199001102__-3328929433540016876.json#elementConfigId=199001102|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 850,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "water",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_850.asset/MonoBehaviour/ast_850__3107436379383955232.json#elementConfigId=850|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001103.asset/MonoBehaviour/ast_199001103__-8204894484040992923.json#elementConfigId=199001103|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
+      "controlSkillId": 19900122,
+      "subSkillIndex": 0,
+      "elementId": 950,
+      "triggerFrame": 44,
+      "effectKind": "tuning-mark",
+      "profileKey": "light",
+      "stackDelta": 1,
+      "status": "applied",
+      "applied": true,
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_950.asset/MonoBehaviour/ast_950__-8695654341717050083.json#elementConfigId=950|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_199001104.asset/MonoBehaviour/ast_199001104__-1387151147375504543.json#elementConfigId=199001104|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)|product-ruling:M12-B3-STARBORN-MARK-R1:2026-08-10#star-carry-existing-mark-plus-1-cap-5|skill_control_19900122.asset#directInjectTargetType@44F|element_formula[1007]#IF(self.ELEMENT_LAYERS[J]>K,G,0)"
+    },
+    {
       "controlSkillId": 19900149,
       "subSkillIndex": 0,
       "elementId": 600050,
@@ -488,5 +704,5 @@
       "status": "applied"
     }
   ],
-  "profileHash": "01392fe87abedb9a0c8f71e3d8e0acacd7ccc085927d6a3bd870b4820cf8ddd7"
+  "profileHash": "e6a672b52f0fab334520525c7f795946122d89a25956f9821cdd382ea7b98ba7"
 }
