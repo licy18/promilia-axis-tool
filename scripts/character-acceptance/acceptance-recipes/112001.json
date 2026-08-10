@@ -43,7 +43,7 @@
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "fixturePath": "fixtures/character-acceptance/112001-visual.json",
-        "fixtureSha256": "21396ec23394333eaa8e44629fee5ba7cff13b0157f2f3600d4e9ba1e7d6fa9e",
+        "fixtureSha256": "37fe23acafd1f26f8a96084709e56e4e8dfdf4a06e2ce2b99f5158cabfb82a9d",
         "screenshotPath": "reports/m12-b3-112001-workbench-visual-evidence.png",
         "screenshotSha256": "ca0e8df4693c141c586f178506d3e9c5cfb76004d73892779935f92faad059a7"
       }
@@ -1704,14 +1704,14 @@
     },
     {
       "identity": "residual-public-action-and-full-charge-surface",
-      "durationFrames": 2100,
+      "durationFrames": 1300,
       "team": [
         {
           "slotId": "slot-1",
           "characterId": 112001,
           "level": 1,
           "initialSp": 100,
-          "loadout": { "kiboId": 500001 },
+          "loadout": {},
           "cultivation": {}
         },
         {
@@ -1733,21 +1733,71 @@
       ],
       "initialRuntimeState": {
         "specialResourcesByActor": [],
-        "kiboEnergyBySlot": [
-          {
-            "slotId": "slot-1",
-            "actorId": "actor-112001",
-            "characterId": 112001,
-            "kiboId": 500001,
-            "kiboName": "迅狼",
-            "currentValue": 100,
-            "maxValue": 100
-          }
-        ],
+        "kiboEnergyBySlot": [],
         "tuningMarks": [],
         "activeEffects": []
       },
       "actions": [
+        {
+          "id": "isolated-residual-a5-chain-a1",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-residual-a5"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "isolated-residual-a5-chain-a2",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 2,
+              "groupId": "isolated-residual-a5"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 18 }
+        },
+        {
+          "id": "isolated-residual-default-normal",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 3,
+              "groupId": "isolated-residual-a5"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 73 }
+        },
+        {
+          "id": "isolated-residual-a5-chain-a4",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 4,
+              "groupId": "isolated-residual-a5"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 136 }
+        },
         {
           "id": "isolated-residual-a5-context",
           "owner": { "kind": "actor", "slotId": "slot-1" },
@@ -1761,7 +1811,7 @@
               "groupId": "isolated-residual-a5"
             }
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": { "mode": "absolute", "frame": 172 }
         },
         {
           "id": "isolated-residual-a5-heavy3-full",
@@ -1782,22 +1832,7 @@
               "contextActionId": "isolated-residual-a5-context"
             }
           },
-          "schedule": { "mode": "absolute", "frame": 59 }
-        },
-        {
-          "id": "isolated-residual-default-normal",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
-          "intent": {
-            "kind": "public-action",
-            "publicActionId": 11200101,
-            "actionKind": "normal-attack",
-            "level": 1,
-            "attackInput": {
-              "sequenceIndex": 3,
-              "groupId": "isolated-residual-default-normal"
-            }
-          },
-          "schedule": { "mode": "absolute", "frame": 400 }
+          "schedule": { "mode": "absolute", "frame": 231 }
         },
         {
           "id": "isolated-residual-default-charged",
@@ -1808,29 +1843,52 @@
             "actionKind": "charged-attack",
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 700 }
+          "schedule": { "mode": "absolute", "frame": 500 }
         },
         {
-          "id": "isolated-residual-star-combo",
+          "id": "isolated-residual-a4-chain-a1",
           "owner": { "kind": "actor", "slotId": "slot-1" },
           "intent": {
             "kind": "public-action",
-            "publicActionId": 11200112,
-            "actionKind": "star-combo",
-            "level": 1
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-residual-a4"
+            }
           },
-          "schedule": { "mode": "absolute", "frame": 1100 }
+          "schedule": { "mode": "absolute", "frame": 820 }
         },
         {
-          "id": "isolated-residual-star-combo-kibo-pair",
-          "owner": { "kind": "kibo", "slotId": "slot-1" },
+          "id": "isolated-residual-a4-chain-a2",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
           "intent": {
             "kind": "public-action",
-            "publicActionId": 50000112,
-            "actionKind": "break",
-            "level": 1
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 2,
+              "groupId": "isolated-residual-a4"
+            }
           },
-          "schedule": { "mode": "absolute", "frame": 1100 }
+          "schedule": { "mode": "absolute", "frame": 838 }
+        },
+        {
+          "id": "isolated-residual-a4-chain-a3",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 3,
+              "groupId": "isolated-residual-a4"
+            }
+          },
+          "schedule": { "mode": "absolute", "frame": 893 }
         },
         {
           "id": "isolated-residual-a4-context",
@@ -1845,7 +1903,7 @@
               "groupId": "isolated-residual-a4"
             }
           },
-          "schedule": { "mode": "absolute", "frame": 1400 }
+          "schedule": { "mode": "absolute", "frame": 956 }
         },
         {
           "id": "isolated-residual-a4-heavy3-full",
@@ -1866,7 +1924,7 @@
               "contextActionId": "isolated-residual-a4-context"
             }
           },
-          "schedule": { "mode": "absolute", "frame": 1436 }
+          "schedule": { "mode": "absolute", "frame": 992 }
         }
       ],
       "probes": [
@@ -1889,13 +1947,6 @@
           "assertionIdentity": "residual-default-charged-public-surface",
           "actionId": "isolated-residual-default-charged",
           "controlSkillId": 11200110,
-          "subSkillIndex": 0
-        },
-        {
-          "kind": "variant-selection",
-          "assertionIdentity": "residual-star-combo-public-surface",
-          "actionId": "isolated-residual-star-combo",
-          "controlSkillId": 11200126,
           "subSkillIndex": 0
         },
         {
@@ -1931,16 +1982,56 @@
             "hitIdentity": "11200110|3|elements|6|-921608818467044463|92|9"
           },
           "expectation": { "count": 1 }
+        }
+      ]
+    }
+  ],
+  "additionalScenarios": [
+    {
+      "fixturePath": "fixtures/character-acceptance/112001-joint-attack-runtime.json",
+      "skipCriticalMatrix": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "assertionIdentity": "residual-star-combo-public-surface",
+          "actionId": "gisele-star-combo-active",
+          "controlSkillId": 11200126,
+          "subSkillIndex": 0
         },
         {
           "kind": "trace-query",
           "assertionIdentity": "residual-star-combo-hit-lands",
           "path": "damage",
           "where": {
-            "actionId": "isolated-residual-star-combo",
+            "actionId": "gisele-star-combo-active",
             "hitIdentity": "11200126|0|elements|0|8607350075110621760|40|1"
           },
           "expectation": { "count": 1 }
+        },
+        {
+          "kind": "trace-query",
+          "identity": "joint-damage-then-attached-toughness-clear",
+          "path": "damage",
+          "where": {
+            "actionId": "gisele-star-combo-kibo-break",
+            "stateEventKind": "joint-attack-attached-toughness-clear"
+          },
+          "expectation": {
+            "count": 1,
+            "orderedValues": {
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
+            }
+          },
+          "select": [
+            "actionId",
+            "absoluteFrame",
+            "stateEventKind",
+            "toughnessAfter",
+            "breakTriggered",
+            "settlementOrder"
+          ]
         }
       ]
     }

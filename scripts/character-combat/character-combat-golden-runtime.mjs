@@ -39,6 +39,9 @@ export async function createCharacterCombatGoldenRuntime({
     const contextScheduling = await vite.ssrLoadModule(
       '/src/domain/verifiedActionContextScheduling.js'
     );
+    const jointAttackRuntime = await vite.ssrLoadModule(
+      '/src/domain/verifiedJointAttackRuntimeContract.js'
+    );
     const headlessModule = await vite.ssrLoadModule(
       '/src/simulation/headless/canonicalHeadlessCombatCore.js'
     );
@@ -56,6 +59,7 @@ export async function createCharacterCombatGoldenRuntime({
       factory,
       mechanicsSelection,
       contextScheduling,
+      jointAttackRuntime,
       headlessCore,
     });
     const comparison = runGoldenComparison({
@@ -66,6 +70,7 @@ export async function createCharacterCombatGoldenRuntime({
       factory,
       mechanicsSelection,
       contextScheduling,
+      jointAttackRuntime,
       headlessCore,
     });
     const actual = createGoldenActualProjection({
@@ -126,6 +131,7 @@ function runGoldenScenario({
   factory,
   mechanicsSelection,
   contextScheduling,
+  jointAttackRuntime,
   headlessCore,
 }) {
   const omitted = new Set(omittedActionKeys);
@@ -273,7 +279,17 @@ function runGoldenScenario({
       ...(scenarioRecipe.enemyConfig ?? {}),
     },
     initialRuntimeState,
-    combatScenario: scenarioRecipe.combatScenario,
+    combatScenario: {
+      ...(scenarioRecipe.combatScenario ?? {}),
+      ...(scenarioRecipe.jointAttackRuntimeInputs == null
+        ? {}
+        : {
+            jointAttackRuntime:
+              jointAttackRuntime.createVerifiedJointAttackRuntimeBinding(
+                scenarioRecipe.jointAttackRuntimeInputs
+              ),
+          }),
+    },
     mechanicsProfileSelection:
       mechanicsSelection.createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -301,6 +317,7 @@ function runGoldenComparison({
   factory,
   mechanicsSelection,
   contextScheduling,
+  jointAttackRuntime,
   headlessCore,
 }) {
   const comparisonRecipe = scenarioRecipe.comparison;
@@ -314,6 +331,7 @@ function runGoldenComparison({
     factory,
     mechanicsSelection,
     contextScheduling,
+    jointAttackRuntime,
     headlessCore,
   });
   const actionKey = String(comparisonRecipe.compareActionKey ?? '');

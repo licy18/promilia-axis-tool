@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "a0fc83613936e2af3bbe76d767efdf6c3d12cacb62d1ddb15bbf9ed583ad8cd7",
+    "verifiedMechanicsPackageHash": "52b013a830ee8239e9683737f29694d5e90c2b62bc04ab78359f3a3e74cc4a19",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -19,12 +19,12 @@
         "characterId": 103002,
         "level": 1,
         "initialSp": 100,
-        "loadout": { "kiboId": 500039 },
+        "loadout": {},
         "cultivation": {}
       },
       {
         "slotId": "slot-2",
-        "characterId": 101010,
+        "characterId": 102001,
         "level": 1,
         "initialSp": 0,
         "loadout": {},
@@ -49,17 +49,6 @@
       "elementDefenseOverrides": {}
     },
     "initialRuntimeState": {
-      "kiboEnergyBySlot": [
-        {
-          "slotId": "slot-1",
-          "actorId": "actor-103002",
-          "characterId": 103002,
-          "kiboId": 500039,
-          "kiboName": "火属性奇波",
-          "currentValue": 100,
-          "maxValue": 100
-        }
-      ],
       "specialResourcesByActor": [
         {
           "actorId": "actor-103002",
@@ -198,7 +187,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-sampled-low"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 300 },
@@ -217,7 +209,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-sampled-boundary"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 360 },
@@ -236,7 +231,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-expected"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 420 },
@@ -254,7 +252,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-forced-critical"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 480 },
@@ -272,7 +273,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-forced-non-critical"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 540 },
@@ -290,7 +294,10 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-miss-critical"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 600 },
@@ -323,7 +330,7 @@
       "id": "ruby-switch-back",
       "owner": { "kind": "actor", "slotId": "slot-2" },
       "intent": { "kind": "switch", "targetSlotId": "slot-1" },
-      "schedule": { "mode": "absolute", "frame": 860 }
+      "schedule": { "mode": "absolute", "frame": 1000 }
     },
     {
       "id": "ruby-post-star-carry-critical",
@@ -335,25 +342,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "post-star-carry" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 970 }
-    },
-    {
-      "id": "ruby-blocked-normal",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "blocked-normal" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1050 },
-      "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
-          "landed": "blocked",
-          "criticalMode": "inherit"
-        }
-      }
+      "schedule": { "mode": "absolute", "frame": 1280 }
     },
     {
       "id": "ruby-star-skill",
@@ -364,7 +353,7 @@
         "actionKind": "star-skill",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1150 }
+      "schedule": { "mode": "absolute", "frame": 1380 }
     },
     {
       "id": "ruby-ultimate",
@@ -375,7 +364,7 @@
         "actionKind": "ultimate",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1450 }
+      "schedule": { "mode": "absolute", "frame": 1680 }
     },
     {
       "id": "ruby-e1",
@@ -391,7 +380,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1779 }
+      "schedule": { "mode": "absolute", "frame": 2009 }
     },
     {
       "id": "ruby-e2",
@@ -568,28 +557,6 @@
         "level": 1
       },
       "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
-    },
-    {
-      "id": "ruby-star-combo-active",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10300212,
-        "actionKind": "star-combo",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2600 }
-    },
-    {
-      "id": "ruby-star-combo-kibo-break",
-      "owner": { "kind": "kibo", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 50003904,
-        "actionKind": "break",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2600 }
     }
   ],
   "metadata": {

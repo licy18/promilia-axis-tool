@@ -4,9 +4,9 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:108003:eb06acc456ee309245a78455e7691738a2ee808b:16304e7d86f67889",
-    "qualificationSubjectHash": "16304e7d86f67889",
-    "scenarioSetHash": "9c14620942308402",
+    "recordIdentity": "character-product-acceptance:108003:eb06acc456ee309245a78455e7691738a2ee808b:248fec491f96b217",
+    "qualificationSubjectHash": "248fec491f96b217",
+    "scenarioSetHash": "2c4c099b1a98bf59",
     "scenarioIdentities": [
       "m12-b3-e20-2-108003-s1-visual-acceptance"
     ],
@@ -20,7 +20,7 @@
     ]
   },
   "ownerId": 108003,
-  "fixturePath": "fixtures/character-acceptance/108003-visual.json",
+  "fixturePath": "fixtures/character-acceptance/108003-active-surface-closure.json",
   "goldenReports": [
     "reports/m10/108003/golden-trace.json"
   ],
@@ -38,6 +38,61 @@
       "controlSkillId": 10800342,
       "subSkillIndex": 0,
       "semanticName": "重击满蓄力"
+    }
+  ],
+  "additionalScenarios": [
+    {
+      "fixturePath": "fixtures/character-acceptance/108003-switch-star-carry.json",
+      "skipCriticalMatrix": true,
+      "mitiForegroundBackgroundSwitch": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
+          "controlSkillId": 10800322,
+          "subSkillIndex": 0,
+          "semanticName": "星携技"
+        }
+      ]
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/108003-joint-attack-runtime.json",
+      "skipCriticalMatrix": true,
+      "mitiJointInputWindowBoundary": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "miti-star-combo-active",
+          "controlSkillId": 10800326,
+          "subSkillIndex": 0,
+          "semanticName": "星鸣连携"
+        },
+        {
+          "kind": "trace-query",
+          "identity": "joint-damage-then-attached-toughness-clear",
+          "path": "damage",
+          "where": {
+            "actionId": "miti-star-combo-kibo-break",
+            "stateEventKind": "joint-attack-attached-toughness-clear"
+          },
+          "expectation": {
+            "count": 1,
+            "orderedValues": {
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
+            }
+          },
+          "select": [
+            "actionId",
+            "absoluteFrame",
+            "stateEventKind",
+            "toughnessAfter",
+            "breakTriggered",
+            "settlementOrder"
+          ]
+        }
+      ]
     }
   ]
 }

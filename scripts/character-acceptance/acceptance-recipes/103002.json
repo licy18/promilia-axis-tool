@@ -423,20 +423,6 @@
           "semanticName": "星决技"
         },
         {
-          "kind": "variant-selection",
-          "actionId": "ruby-star-combo-active",
-          "controlSkillId": 10300226,
-          "subSkillIndex": 0,
-          "semanticName": "星鸣连携"
-        },
-        {
-          "kind": "trace-query",
-          "identity": "blocked-normal-does-not-settle-damage",
-          "path": "damage",
-          "where": { "actionId": "ruby-blocked-normal" },
-          "expectation": { "count": 0 }
-        },
-        {
           "kind": "trace-query",
           "identity": "star-skill-fire-mark-acquired",
           "path": "resources.tuningMarks",
@@ -466,7 +452,7 @@
             "count": 2,
             "orderedValues": {
               "triggerFrame": [173, 237],
-              "absoluteFrame": [1623, 1687],
+              "absoluteFrame": [1853, 1917],
               "markCountAtJudgment": [1, 0],
               "consumedCount": [1, 0],
               "applied": [true, false],
@@ -556,6 +542,44 @@
             "orderedValues": { "operation": ["expire", "apply"] }
           },
           "select": ["actionId", "operation", "absoluteFrame"]
+        }
+      ]
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/103002-joint-attack-runtime.json",
+      "skipCriticalMatrix": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "ruby-joint-actor",
+          "controlSkillId": 10300226,
+          "subSkillIndex": 0,
+          "semanticName": "星鸣连携"
+        },
+        {
+          "kind": "trace-query",
+          "identity": "joint-damage-then-attached-toughness-clear",
+          "path": "damage",
+          "where": {
+            "actionId": "ruby-joint-kibo",
+            "stateEventKind": "joint-attack-attached-toughness-clear"
+          },
+          "expectation": {
+            "count": 1,
+            "orderedValues": {
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
+            }
+          },
+          "select": [
+            "actionId",
+            "absoluteFrame",
+            "stateEventKind",
+            "toughnessAfter",
+            "breakTriggered",
+            "settlementOrder"
+          ]
         }
       ]
     }

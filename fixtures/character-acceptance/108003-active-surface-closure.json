@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "52b013a830ee8239e9683737f29694d5e90c2b62bc04ab78359f3a3e74cc4a19",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-e20-2-108003-s1-visual-acceptance",
+    "name": "M12-B3-E20-2-108003-S1 米蒂真实机制验收轴",
+    "fps": 60,
+    "durationFrames": 10100,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 108003,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "specialResourcesByActor": [],
+      "activeEffects": [
+        {
+          "instanceKey": "protocol:108003:critical-rate-boundary-source:actor-108003",
+          "effectId": "protocol:108003:critical-rate-boundary-source",
+          "effectName": "米蒂临界率边界源属性",
+          "sourceActorId": "actor-108003",
+          "targetKind": "actor",
+          "targetId": "actor-108003",
+          "remainingDurationMs": 20000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 9500,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:108003:critical-rate-boundary-source",
+            "effectIdentity": "protocol:108003:critical-rate-boundary-source"
+          },
+          "appliedToCalculators": true
+        },
+        {
+          "instanceKey": "protocol:108003:critical-rate-zero-offset:actor-108003",
+          "effectId": "protocol:108003:critical-rate-zero-offset",
+          "effectName": "米蒂临界率零点偏移",
+          "sourceActorId": "actor-108003",
+          "targetKind": "actor",
+          "targetId": "actor-108003",
+          "remainingDurationMs": 10000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": -10000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:108003:critical-rate-zero-offset",
+            "effectIdentity": "protocol:108003:critical-rate-zero-offset"
+          },
+          "appliedToCalculators": true
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-e20-2-108003-s1-critical"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "optimizationScenarioPolicy": {
+      "policyId": "m12c-zero-distance-passive-boss-v1",
+      "policyHash": "967b0667f315db5b",
+      "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+      "rosterHash": "a690b860f0967e3d"
+    }
+  },
+  "actions": [
+    {
+      "id": "108003-critical-rate-zero",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 0 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 0
+        }
+      }
+    },
+    {
+      "id": "108003-critical-rate-one-hundred",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 650 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 9999
+        }
+      }
+    },
+    {
+      "id": "108003-critical-sampled-low",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-low" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1250 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 499
+        }
+      }
+    },
+    {
+      "id": "108003-critical-sampled-boundary",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-boundary" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1300 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 500
+        }
+      }
+    },
+    {
+      "id": "108003-critical-expected",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-expected" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1350 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "expected"
+        }
+      }
+    },
+    {
+      "id": "108003-critical-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-critical" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1400 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "108003-critical-non-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-non-critical" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1450 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "non-critical"
+        }
+      }
+    },
+    {
+      "id": "108003-critical-miss-critical",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "miti-normal-chain" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1500 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "miss",
+          "criticalMode": "critical"
+        }
+      }
+    },
+    {
+      "id": "miti-normal-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "miti-normal-chain" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1540 }
+    },
+    {
+      "id": "miti-normal-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "miti-normal-chain" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1590 }
+    },
+    {
+      "id": "miti-ultimate-positive",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800313,
+        "actionKind": "ultimate",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1700 }
+    },
+    {
+      "id": "miti-star-1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800312,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1950 }
+    },
+    {
+      "id": "miti-short-charge-state-on",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-short",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 2,
+          "chargeTier": 1,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2170 }
+    },
+    {
+      "id": "miti-full-charge-expiry-boundary",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-full",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 4,
+          "chargeTier": 2,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2627 }
+    },
+    {
+      "id": "miti-star-2-exact-cooldown",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800312,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3390 }
+    },
+    {
+      "id": "miti-full-charge-state-on",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-full",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 4,
+          "chargeTier": 2,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3600 }
+    },
+    {
+      "id": "miti-full-charge-state-off",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-full",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 4,
+          "chargeTier": 2,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3750 }
+    },
+    {
+      "id": "miti-pre-hit-after-mark",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "after-mark" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3850 },
+      "hitOverrides": {
+        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 600
+        }
+      }
+    },
+    {
+      "id": "miti-star-3-final-miss",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800312,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4830 },
+      "hitOverrides": {
+        "10800312|0|elements|5|8707751369307606056|118|11": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "miti-full-charge-state-on-all-miss",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-full",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 4,
+          "chargeTier": 2,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5050 },
+      "hitOverrides": {
+        "10800342|0|bulletElements|0|6551815408118607858|3|1": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800342|0|bulletElements|0|6551815408118607858|3|2": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "miti-short-charge-all-miss",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-short",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 2,
+          "chargeTier": 1,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5400 },
+      "hitOverrides": {
+        "10800341|0|projectile|108003125|10800314|0|0|control:10800341|sub:0|behavior:-5881325328861887341|config:0|bullet:10800314:0:0|element:108003125:0": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "miti-star-4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800312,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 6270 }
+    },
+    {
+      "id": "miti-star-5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800312,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 7710 }
+    },
+    {
+      "id": "miti-ultimate-all-miss",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800313,
+        "actionKind": "ultimate",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 8300 },
+      "hitOverrides": {
+        "10800313|0|bulletElements|0|-7191705908045289161|142|1": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800313|0|projectile|108003137|10800310|0|0|control:10800313|sub:0|behavior:-3701019818254093200|config:0|bullet:10800310:0:0|element:108003137:0": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800313|0|bulletElements|0|-7191705908045289161|153|3": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800313|0|bulletElements|0|-7191705908045289161|163|4": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        },
+        "10800313|0|bulletElements|0|-7191705908045289161|174|5": {
+          "landed": "miss",
+          "criticalMode": "inherit"
+        }
+      }
+    },
+    {
+      "id": "miti-short-charge-after-miss-ultimate",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-charged-short",
+          "selectorKind": "charge-tier",
+          "publicVariantIndex": 2,
+          "chargeTier": 1,
+          "mode": "hold"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 8550 }
+    }
+  ],
+  "metadata": {
+    "phase": "M12-B3-E20-2-108003-S1",
+    "probeContract": "canonical-machine-axis-real-settlement",
+    "requiredWorkbenchImport": true
+  }
+}

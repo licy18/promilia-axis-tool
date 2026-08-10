@@ -16,7 +16,7 @@
 | 米砂 (107002) | runtime-integrated | 98/98 | 0 | 0 | 否 |
 | 米蒂 (108003) | optimization-ready | 134/134 | 0 | 0 | 是 |
 | 末音 (109001) | optimization-ready | 134/134 | 0 | 0 | 是 |
-| 姬瑟贝露 (112001) | runtime-integrated | 186/186 | 0 | 0 | 否 |
+| 姬瑟贝露 (112001) | extracted | 186/186 | 0 | 0 | 否 |
 | 女主角 (199001) | runtime-integrated | 195/195 | 0 | 0 | 否 |
 | 男主角 (199002) | runtime-integrated | 195/195 | 0 | 0 | 否 |
 

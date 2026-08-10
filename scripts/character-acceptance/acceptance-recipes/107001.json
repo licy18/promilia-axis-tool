@@ -5,17 +5,17 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:7a9aa3a4a2b6a487",
-    "qualificationSubjectHash": "7a9aa3a4a2b6a487",
-    "scenarioSetHash": "7e4420f092ca6531",
+    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:efa359d4b6272561",
+    "qualificationSubjectHash": "efa359d4b6272561",
+    "scenarioSetHash": "ef3c2afd94e7c686",
     "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "fixturePath": "fixtures/character-acceptance/107001-visual.json",
-        "fixtureSha256": "d105e58e30fb874c185484a13bcf545c62d57ea2d6202f3bcdfd476b4520ae26",
+        "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
+        "fixtureSha256": "e43113e8558896c8fc7d76290669e06ec9f84e76cb417cff2bbe8458639dd5c7",
         "screenshotPath": "reports/m12-b3-107001-workbench-visual-evidence.png",
         "screenshotSha256": "cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260"
       }
@@ -30,7 +30,7 @@
     }
   ],
   "ownerId": 107001,
-  "fixturePath": "fixtures/character-acceptance/107001-visual.json",
+  "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
   "goldenReports": ["reports/m10/107001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10700162,
   "requirementPolicies": {
@@ -151,13 +151,6 @@
       "blockedHitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0"
     },
     {
-      "kind": "controlled-actor-companion-switch",
-      "assertionIdentity": "foreground-background-switch",
-      "switchActionId": "switch-away-from-third-lumi",
-      "beforeActorId": "actor-107001",
-      "afterActorId": "actor-101010"
-    },
-    {
       "kind": "tuning-hit-gate",
       "assertionIdentity": "star-first-hit-acquires-wind-mark-before-judgment",
       "actionId": "sifliya-star-interrupted-at-90",
@@ -184,10 +177,10 @@
       "expectedLanded": true,
       "expectedApplied": true,
       "expectedBranch": "enhanced",
-      "expectedMarkCountAtJudgment": 3,
+      "expectedMarkCountAtJudgment": 4,
       "expectedAcquisitionCount": 1,
-      "expectedBefore": 2,
-      "expectedAfter": 3,
+      "expectedBefore": 3,
+      "expectedAfter": 4,
       "expectedDelta": 1,
       "sameFrame": true
     },
@@ -266,6 +259,57 @@
           "expectedAfter": 3,
           "expectedDelta": 1,
           "sameFrame": true
+        }
+      ]
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/107001-switch-star-carry.json",
+      "skipCriticalMatrix": true,
+      "probes": [
+        {
+          "kind": "controlled-actor-companion-switch",
+          "assertionIdentity": "foreground-background-switch",
+          "switchActionId": "switch-away-from-third-lumi",
+          "beforeActorId": "actor-107001",
+          "afterActorId": "actor-101010"
+        }
+      ]
+    },
+    {
+      "fixturePath": "fixtures/character-acceptance/107001-joint-attack-runtime.json",
+      "skipCriticalMatrix": true,
+      "probes": [
+        {
+          "kind": "variant-selection",
+          "actionId": "sifliya-star-combo-default",
+          "controlSkillId": 10700126,
+          "subSkillIndex": 0,
+          "semanticName": "星鸣连携"
+        },
+        {
+          "kind": "trace-query",
+          "identity": "joint-damage-then-attached-toughness-clear",
+          "path": "damage",
+          "where": {
+            "actionId": "xunlang-star-combo-pair",
+            "stateEventKind": "joint-attack-attached-toughness-clear"
+          },
+          "expectation": {
+            "count": 1,
+            "orderedValues": {
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
+            }
+          },
+          "select": [
+            "actionId",
+            "absoluteFrame",
+            "stateEventKind",
+            "toughnessAfter",
+            "breakTriggered",
+            "settlementOrder"
+          ]
         }
       ]
     }

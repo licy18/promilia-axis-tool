@@ -905,16 +905,17 @@ function executeVisualScenario({
   const declaredInputWindowBoundaries = recipe.inputWindowBoundary
     ? inspectInputWindowBoundaries(fixture, first, recipe.inputWindowBoundary)
     : null;
+  const mitiJointInputWindowBoundaries = recipe.mitiJointInputWindowBoundary
+    ? inspectMitiInputWindowBoundaries(fixture, first, service)
+    : null;
   const inputWindowBoundaries =
     configuredInputWindowBoundaries ??
     declaredInputWindowBoundaries ??
-    (Number(recipe.ownerId) === 108003
-      ? inspectMitiInputWindowBoundaries(fixture, first, service)
-      : inspectInputWindowBoundaries(fixture, first));
-  const foregroundBackgroundSwitch =
-    Number(recipe.ownerId) === 108003
-      ? inspectMitiForegroundBackgroundSwitch(first)
-      : null;
+    mitiJointInputWindowBoundaries ??
+    inspectInputWindowBoundaries(fixture, first);
+  const foregroundBackgroundSwitch = recipe.mitiForegroundBackgroundSwitch
+    ? inspectMitiForegroundBackgroundSwitch(first)
+    : null;
   const negativeActionCases = (recipe.negativeActionCases ?? []).map(
     negativeCase => inspectNegativeActionCase(service, fixture, negativeCase)
   );
@@ -1021,13 +1022,17 @@ function executeVisualScenario({
           },
         ]
       : []),
-    ...(Number(recipe.ownerId) === 108003
+    ...(mitiJointInputWindowBoundaries
       ? [
           {
             identity: 'input-window-inside-outside-boundaries',
             passed: inputWindowBoundaries.passed,
             actual: inputWindowBoundaries.details,
           },
+        ]
+      : []),
+    ...(foregroundBackgroundSwitch
+      ? [
           {
             identity: 'foreground-background-switch',
             passed: foregroundBackgroundSwitch.passed,

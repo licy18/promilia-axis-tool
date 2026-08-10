@@ -570,6 +570,12 @@
     "scenarioIdentity": "m12-b3-102001:active-surface-golden",
     "durationFrames": 7200,
     "frameRate": 60,
+    "jointAttackRuntimeInputs": {
+      "forceBreak": true
+    },
+    "enemyConfig": {
+      "toughnessMultiplier": 2
+    },
     "teamCharacterIds": [102001, 101010, 103002],
     "initialControlledCharacterId": 102001,
     "initialActorSp": {
@@ -615,7 +621,7 @@
         "actionKind": "star-skill",
         "actionVariantIndex": 0,
         "controlSubSkillIndex": 0,
-        "startFrame": 100
+        "startFrame": 1900
       },
       {
         "actionKey": "lily-ultimate-cd-blocked",
@@ -715,7 +721,7 @@
         "actionKind": "star-combo",
         "actionVariantIndex": 1,
         "controlSubSkillIndex": 0,
-        "startFrame": 2600
+        "startFrame": 93
       },
       {
         "actionKey": "lily-star-combo-kibo-break",
@@ -723,7 +729,7 @@
         "kiboId": 500001,
         "actorCharacterId": 102001,
         "actionKind": "break",
-        "startFrame": 2600
+        "startFrame": 93
       },
       {
         "actionKey": "lily-star-skill-at-cap",

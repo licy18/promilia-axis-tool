@@ -2,6 +2,13 @@ import generatedManifestIndex from '../data/generated/character-acceptance-manif
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
 import { deriveCharacterAcceptanceArtifacts } from './characterAcceptanceDerivation.js';
 
+export {
+  OPTIMIZATION_OBJECT_ALIAS_BUNDLE_CONTRACT_NAME,
+  OPTIMIZATION_OBJECT_ALIAS_SELECTION_CONTRACT_NAME,
+  inspectOptimizationObjectSourceAliasSelection,
+  validateOptimizationObjectAliasAcceptanceBundle,
+} from './optimizationObjectAliasProtocol.js';
+
 export const CHARACTER_ACCEPTANCE_SCHEMA_VERSION = 1;
 export const CHARACTER_ACCEPTANCE_CONTRACT_NAME =
   'AzPrCharacterAcceptanceProtocol';
