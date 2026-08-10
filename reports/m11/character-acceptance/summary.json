@@ -808,11 +808,9 @@
     {
       "ownerId": 101010,
       "ownerName": "涂山小玉",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -854,7 +852,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "97263600bfe41109",
+      "manifestHash": "f633561ffc65b3f0",
       "sourceOfTruthHash": "638e497ad0f396ac",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -924,11 +922,9 @@
     {
       "ownerId": 103002,
       "ownerName": "红宝石",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        "acceptance-product-visual-signoff-pending"
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
@@ -970,7 +966,7 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "8c3af2315edcf502",
+      "manifestHash": "0d92949f7d2b5857",
       "sourceOfTruthHash": "cfebd30aa4547013",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
@@ -1375,15 +1371,15 @@
       }
     }
   ],
-  "catalogHash": "23ee25d61253b7be",
-  "manifestIndexHash": "5c2a1fcfa1c556f3",
+  "catalogHash": "5c846a9f26ad14c8",
+  "manifestIndexHash": "f6e572669dce82d3",
   "summary": {
     "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
     "runtimeIntegratedCount": 10,
-    "visuallyAcceptedCount": 6,
-    "optimizationReadyCount": 6,
+    "visuallyAcceptedCount": 8,
+    "optimizationReadyCount": 8,
     "machineScenarioPassCount": 11,
     "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,

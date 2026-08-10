@@ -117,10 +117,10 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 4,
-        'optimization-ready': 6,
+        'runtime-integrated': 2,
+        'optimization-ready': 8,
       },
-      optimizationReadyCount: 6,
+      optimizationReadyCount: 8,
     });
     expect(generatedCatalog.manifestIndexHash).toBe(
       generatedManifestIndex.indexHash
@@ -150,11 +150,19 @@ describe('generated character acceptance manifests', () => {
     );
     expect(WORKBENCH_HEADLESS_COMBAT_CORE.acceptanceFor(101010)).toMatchObject({
       ownerId: 101010,
+      maturityState: 'optimization-ready',
+      optimizationReady: true,
+    });
+    expect(() =>
+      WORKBENCH_HEADLESS_COMBAT_CORE.assertOptimizationReady(101010)
+    ).not.toThrow();
+    expect(WORKBENCH_HEADLESS_COMBAT_CORE.acceptanceFor(107002)).toMatchObject({
+      ownerId: 107002,
       maturityState: 'runtime-integrated',
       optimizationReady: false,
     });
     expect(() =>
-      WORKBENCH_HEADLESS_COMBAT_CORE.assertOptimizationReady(101010)
+      WORKBENCH_HEADLESS_COMBAT_CORE.assertOptimizationReady(107002)
     ).toThrow('character-not-optimization-ready');
 
     const tampered = structuredClone(generatedCatalog);
@@ -195,15 +203,18 @@ describe('generated character acceptance manifests', () => {
         issues: [],
       });
       const productAccepted = [
-        102001, 107001, 108003, 109001, 199001, 199002,
+        101010, 102001, 103002, 107001, 108003, 109001, 199001, 199002,
       ].includes(ownerId);
       const functionallyComplete =
         manifest.matrix.summary.blockedCount === 0 &&
         manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
-        ? [199001, 199002].includes(ownerId)
-          ? 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee'
-          : 'eb06acc456ee309245a78455e7691738a2ee808b'
+        ? ({
+            101010: 'd2ba1bb2e834cfca1c91ebce557819894cbc0b1b',
+            103002: '2a0be63030616ad887df683e6d2e8b7fa22c8aad',
+            199001: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
+            199002: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
+          })[ownerId] ?? 'eb06acc456ee309245a78455e7691738a2ee808b'
         : null;
       const runtimeIntegrated = ownerId !== 112001;
       expect(manifest.maturity).toMatchObject({

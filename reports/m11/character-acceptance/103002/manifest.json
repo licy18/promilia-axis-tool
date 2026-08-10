@@ -3351,17 +3351,17 @@
       }
     ],
     "productVisualAcceptance": {
-      "status": "pending",
+      "status": "accepted",
       "scenarioIdentities": [
         "m11-d-103002-visual-acceptance"
       ],
-      "acceptanceCommit": null,
-      "recordIdentity": null,
-      "qualificationSubjectHash": null,
-      "scenarioSetHash": null,
-      "bindingStatus": "not-requested",
+      "acceptanceCommit": "2a0be63030616ad887df683e6d2e8b7fa22c8aad",
+      "recordIdentity": "character-product-acceptance:103002:2a0be63030616ad887df683e6d2e8b7fa22c8aad:0c58b70dc4a55df1",
+      "qualificationSubjectHash": "0c58b70dc4a55df1",
+      "scenarioSetHash": "d297482aebf746aa",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002::0c58b70dc4a55df1",
+        "recordIdentity": "character-product-acceptance:103002:2a0be63030616ad887df683e6d2e8b7fa22c8aad:0c58b70dc4a55df1",
         "qualificationSubjectHash": "0c58b70dc4a55df1",
         "scenarioSetHash": "d297482aebf746aa",
         "scenarioIdentities": [
@@ -194361,12 +194361,14 @@
   },
   "qualificationSubjectHash": "0c58b70dc4a55df1",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
@@ -194376,7 +194378,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 190,
       "matrixPassedCount": 190,
       "matrixComplete": true,
@@ -194386,16 +194388,14 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "8c3af2315edcf502"
+  "manifestHash": "0d92949f7d2b5857"
 }

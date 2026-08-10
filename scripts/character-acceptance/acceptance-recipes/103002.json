@@ -3,9 +3,12 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
+    "status": "accepted",
+    "acceptanceCommit": "2a0be63030616ad887df683e6d2e8b7fa22c8aad",
+    "recordIdentity": "character-product-acceptance:103002:2a0be63030616ad887df683e6d2e8b7fa22c8aad:0c58b70dc4a55df1",
+    "scenarioIdentities": [
+      "m11-d-103002-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
@@ -13,11 +16,15 @@
         "screenshotPath": "reports/m11-d-character-acceptance-103002-desktop.png",
         "screenshotSha256": "13a2f1a1fdcee5b264e287c141401293f0d619c325d070708b1ab3b30445b336"
       }
-    ]
+    ],
+    "qualificationSubjectHash": "0c58b70dc4a55df1",
+    "scenarioSetHash": "d297482aebf746aa"
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-  "goldenReports": ["reports/m10/103002/golden-trace.json"],
+  "goldenReports": [
+    "reports/m10/103002/golden-trace.json"
+  ],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -44,27 +51,90 @@
     "reason": "m12c-zero-distance-passive-boss-active-surface-only",
     "sourceIdentity": "work/m12-b3/parallel-implementation-103002/SOURCE_LEDGER.md#frozen-active-surface",
     "includedControlSubskills": [
-      { "controlSkillId": 10300201, "subSkillIndex": 0 },
-      { "controlSkillId": 10300201, "subSkillIndex": 1 },
-      { "controlSkillId": 10300201, "subSkillIndex": 2 },
-      { "controlSkillId": 10300201, "subSkillIndex": 3 },
-      { "controlSkillId": 10300202, "subSkillIndex": 0 },
-      { "controlSkillId": 10300202, "subSkillIndex": 1 },
-      { "controlSkillId": 10300202, "subSkillIndex": 2 },
-      { "controlSkillId": 10300202, "subSkillIndex": 3 },
-      { "controlSkillId": 10300203, "subSkillIndex": 0 },
-      { "controlSkillId": 10300203, "subSkillIndex": 1 },
-      { "controlSkillId": 10300203, "subSkillIndex": 2 },
-      { "controlSkillId": 10300203, "subSkillIndex": 3 },
-      { "controlSkillId": 10300204, "subSkillIndex": 0 },
-      { "controlSkillId": 10300204, "subSkillIndex": 1 },
-      { "controlSkillId": 10300204, "subSkillIndex": 2 },
-      { "controlSkillId": 10300210, "subSkillIndex": 0 },
-      { "controlSkillId": 10300212, "subSkillIndex": 0 },
-      { "controlSkillId": 10300213, "subSkillIndex": 0 },
-      { "controlSkillId": 10300221, "subSkillIndex": 0 },
-      { "controlSkillId": 10300226, "subSkillIndex": 0 },
-      { "controlSkillId": 10300261, "subSkillIndex": 0 }
+      {
+        "controlSkillId": 10300201,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300201,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10300201,
+        "subSkillIndex": 2
+      },
+      {
+        "controlSkillId": 10300201,
+        "subSkillIndex": 3
+      },
+      {
+        "controlSkillId": 10300202,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300202,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10300202,
+        "subSkillIndex": 2
+      },
+      {
+        "controlSkillId": 10300202,
+        "subSkillIndex": 3
+      },
+      {
+        "controlSkillId": 10300203,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300203,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10300203,
+        "subSkillIndex": 2
+      },
+      {
+        "controlSkillId": 10300203,
+        "subSkillIndex": 3
+      },
+      {
+        "controlSkillId": 10300204,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300204,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10300204,
+        "subSkillIndex": 2
+      },
+      {
+        "controlSkillId": 10300210,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300212,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300213,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300221,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300226,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10300261,
+        "subSkillIndex": 0
+      }
     ]
   },
   "requirementPolicies": {
@@ -111,7 +181,9 @@
       "durationFrames": 600,
       "expectation": {
         "directSpCount": 0,
-        "effectCommandCountById": { "battle-element:103002279": 1 },
+        "effectCommandCountById": {
+          "battle-element:103002279": 1
+        },
         "targetStateChangeCountByIdentityAndOperation": {
           "ruby-enhanced-limit-counter-marker:expire": 1,
           "ruby-enhanced-limit-counter-marker:gain": 1
@@ -130,7 +202,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -156,7 +230,9 @@
       },
       "expectation": {
         "tuningConsumeEvents": [],
-        "finalTuningMarkStacksById": { "250": 2 }
+        "finalTuningMarkStacksById": {
+          "250": 2
+        }
       }
     },
     {
@@ -168,7 +244,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -202,7 +280,9 @@
             "after": 1
           }
         ],
-        "finalTuningMarkStacksById": { "250": 1 }
+        "finalTuningMarkStacksById": {
+          "250": 1
+        }
       }
     },
     {
@@ -214,7 +294,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -248,7 +330,9 @@
             "after": 1
           }
         ],
-        "finalTuningMarkStacksById": { "250": 1 }
+        "finalTuningMarkStacksById": {
+          "250": 1
+        }
       }
     },
     {
@@ -260,7 +344,9 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [103002273],
+        "elementIds": [
+          103002273
+        ],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -301,7 +387,9 @@
             "after": 0
           }
         ],
-        "finalTuningMarkStacksById": { "250": 0 }
+        "finalTuningMarkStacksById": {
+          "250": 0
+        }
       }
     }
   ],
@@ -320,7 +408,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -431,14 +523,21 @@
             "markId": 150,
             "kind": "acquire"
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
           "identity": "star-carry-thunder-mark-acquired",
           "path": "resources.tuningMarks",
-          "where": { "markId": 250, "kind": "acquire" },
-          "expectation": { "count": 1 }
+          "where": {
+            "markId": 250,
+            "kind": "acquire"
+          },
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -451,11 +550,26 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [173, 237],
-              "absoluteFrame": [1853, 1917],
-              "markCountAtJudgment": [1, 0],
-              "consumedCount": [1, 0],
-              "applied": [true, false],
+              "triggerFrame": [
+                173,
+                237
+              ],
+              "absoluteFrame": [
+                1853,
+                1917
+              ],
+              "markCountAtJudgment": [
+                1,
+                0
+              ],
+              "consumedCount": [
+                1,
+                0
+              ],
+              "applied": [
+                true,
+                false
+              ],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -525,7 +639,11 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": ["apply", "refresh", "expire"],
+        "requiredOperations": [
+          "apply",
+          "refresh",
+          "expire"
+        ],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -539,9 +657,18 @@
           },
           "expectation": {
             "count": 2,
-            "orderedValues": { "operation": ["expire", "apply"] }
+            "orderedValues": {
+              "operation": [
+                "expire",
+                "apply"
+              ]
+            }
           },
-          "select": ["actionId", "operation", "absoluteFrame"]
+          "select": [
+            "actionId",
+            "operation",
+            "absoluteFrame"
+          ]
         }
       ]
     },
@@ -567,9 +694,15 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [40],
-              "toughnessAfter": [0],
-              "breakTriggered": [true]
+              "absoluteFrame": [
+                40
+              ],
+              "toughnessAfter": [
+                0
+              ],
+              "breakTriggered": [
+                true
+              ]
             }
           },
           "select": [

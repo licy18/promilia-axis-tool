@@ -3,17 +3,22 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
+    "status": "accepted",
+    "acceptanceCommit": "d2ba1bb2e834cfca1c91ebce557819894cbc0b1b",
+    "recordIdentity": "character-product-acceptance:101010:d2ba1bb2e834cfca1c91ebce557819894cbc0b1b:ced78c0749a610f5",
+    "scenarioIdentities": [
+      "m11-d-101010-visual-acceptance"
+    ],
     "automatedEvidence": [
       {
-    "scenarioIdentity": "m11-d-101010-visual-acceptance",
-    "status": "automated-workbench-import-passed",
-    "screenshotPath": "reports/m11-d-character-acceptance-101010-desktop.png",
-      "screenshotSha256": "73ff96230b426eaf1d23026f0764199c054f522352fb10adc7ee1a2ea8526928"
+        "scenarioIdentity": "m11-d-101010-visual-acceptance",
+        "status": "automated-workbench-import-passed",
+        "screenshotPath": "reports/m11-d-character-acceptance-101010-desktop.png",
+        "screenshotSha256": "73ff96230b426eaf1d23026f0764199c054f522352fb10adc7ee1a2ea8526928"
       }
-    ]
+    ],
+    "qualificationSubjectHash": "ced78c0749a610f5",
+    "scenarioSetHash": "97325b28806a4146"
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
@@ -26,24 +31,78 @@
     "reason": "m12c-zero-distance-passive-boss-active-surface-only",
     "sourceIdentity": "work/m12-b3/parallel-implementation-101010/SOURCE_LEDGER.md#frozen-scenario-scope",
     "includedControlSubskills": [
-      { "controlSkillId": 10101001, "subSkillIndex": 0 },
-      { "controlSkillId": 10101001, "subSkillIndex": 1 },
-      { "controlSkillId": 10101002, "subSkillIndex": 0 },
-      { "controlSkillId": 10101003, "subSkillIndex": 0 },
-      { "controlSkillId": 10101004, "subSkillIndex": 0 },
-      { "controlSkillId": 10101004, "subSkillIndex": 1 },
-      { "controlSkillId": 10101005, "subSkillIndex": 0 },
-      { "controlSkillId": 10101005, "subSkillIndex": 1 },
-      { "controlSkillId": 10101010, "subSkillIndex": 0 },
-      { "controlSkillId": 10101010, "subSkillIndex": 1 },
-      { "controlSkillId": 10101010, "subSkillIndex": 2 },
-      { "controlSkillId": 10101012, "subSkillIndex": 0 },
-      { "controlSkillId": 10101013, "subSkillIndex": 0 },
-      { "controlSkillId": 10101021, "subSkillIndex": 0 },
-      { "controlSkillId": 10101026, "subSkillIndex": 0 },
-      { "controlSkillId": 10101042, "subSkillIndex": 0 },
-      { "controlSkillId": 10101042, "subSkillIndex": 1 },
-      { "controlSkillId": 10101061, "subSkillIndex": 0 }
+      {
+        "controlSkillId": 10101001,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101001,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10101002,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101003,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101004,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101004,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10101005,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101005,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10101010,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101010,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10101010,
+        "subSkillIndex": 2
+      },
+      {
+        "controlSkillId": 10101012,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101013,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101021,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101026,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101042,
+        "subSkillIndex": 0
+      },
+      {
+        "controlSkillId": 10101042,
+        "subSkillIndex": 1
+      },
+      {
+        "controlSkillId": 10101061,
+        "subSkillIndex": 0
+      }
     ]
   },
   "requirementPolicies": {
@@ -69,8 +128,15 @@
     "operationPath": "payload.operation",
     "timePath": "timeMs",
     "durationMs": 10000,
-    "requiredOperations": ["transform", "refresh", "expire"],
-    "startOperations": ["transform", "refresh"],
+    "requiredOperations": [
+      "transform",
+      "refresh",
+      "expire"
+    ],
+    "startOperations": [
+      "transform",
+      "refresh"
+    ],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -180,7 +246,9 @@
         "eventType": "VERIFIED_TUNING_DAMAGE",
         "elementId": 796
       },
-      "expectation": { "count": 0 }
+      "expectation": {
+        "count": 0
+      }
     },
     {
       "kind": "trace-query",
@@ -191,7 +259,9 @@
         "eventType": "VERIFIED_COMBAT_HIT",
         "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1"
       },
-      "expectation": { "count": 0 }
+      "expectation": {
+        "count": 0
+      }
     },
     {
       "kind": "trace-query",
@@ -204,7 +274,16 @@
       "expectation": {
         "count": 8,
         "orderedValues": {
-          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
+          "absoluteFrame": [
+            1125,
+            1125,
+            1129,
+            1129,
+            1133,
+            1133,
+            1137,
+            1137
+          ],
           "actorId": [
             "actor-103002",
             "actor-101003",
@@ -237,7 +316,9 @@
         "markId": 750,
         "kind": "consume"
       },
-      "expectation": { "minCount": 1 }
+      "expectation": {
+        "minCount": 1
+      }
     },
     {
       "kind": "trace-query",
@@ -248,7 +329,9 @@
         "eventType": "VERIFIED_TUNING_DAMAGE",
         "elementId": 796
       },
-      "expectation": { "count": 1 }
+      "expectation": {
+        "count": 1
+      }
     },
     {
       "kind": "trace-query",
@@ -259,7 +342,9 @@
         "eventType": "VERIFIED_TUNING_DAMAGE",
         "elementId": 997
       },
-      "expectation": { "count": 1 }
+      "expectation": {
+        "count": 1
+      }
     },
     {
       "kind": "trace-query",
@@ -270,7 +355,9 @@
         "eventType": "VERIFIED_TUNING_DAMAGE",
         "elementId": 996
       },
-      "expectation": { "count": 1 }
+      "expectation": {
+        "count": 1
+      }
     },
     {
       "kind": "trace-duration",
@@ -315,10 +402,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [272, 278, 284],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                272,
+                278,
+                284
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },
@@ -331,7 +434,9 @@
             "eventType": "VERIFIED_TUNING_DAMAGE",
             "elementId": 997
           },
-          "expectation": { "count": 3 }
+          "expectation": {
+            "count": 3
+          }
         },
         {
           "kind": "trace-query",
@@ -342,7 +447,9 @@
             "eventType": "VERIFIED_TUNING_DAMAGE",
             "elementId": 996
           },
-          "expectation": { "count": 3 }
+          "expectation": {
+            "count": 3
+          }
         },
         {
           "kind": "trace-query",
@@ -353,7 +460,9 @@
             "markId": 750,
             "kind": "consume"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     },
@@ -380,10 +489,26 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [219, 225, 231],
-              "before": [3, 2, 1],
-              "after": [2, 1, 0],
-              "delta": [-1, -1, -1]
+              "frameIndex": [
+                219,
+                225,
+                231
+              ],
+              "before": [
+                3,
+                2,
+                1
+              ],
+              "after": [
+                2,
+                1,
+                0
+              ],
+              "delta": [
+                -1,
+                -1,
+                -1
+              ]
             }
           }
         },
@@ -396,7 +521,9 @@
             "eventType": "VERIFIED_TUNING_DAMAGE",
             "elementId": 796
           },
-          "expectation": { "count": 3 }
+          "expectation": {
+            "count": 3
+          }
         },
         {
           "kind": "trace-query",
@@ -407,7 +534,9 @@
             "markId": 950,
             "kind": "consume"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     }
@@ -447,7 +576,10 @@
       "actions": [
         {
           "id": "isolated-a4-chain-a1",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
@@ -458,11 +590,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 0 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
         },
         {
           "id": "isolated-a4-chain-a2",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
@@ -473,11 +611,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 100 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 100
+          }
         },
         {
           "id": "isolated-a4-chain-a3",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
@@ -488,11 +632,17 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 200 }
+          "schedule": {
+            "mode": "absolute",
+            "frame": 200
+          }
         },
         {
           "id": "isolated-a4-miss-blocked",
-          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
           "intent": {
             "kind": "public-action",
             "publicActionId": 10101001,
@@ -503,7 +653,10 @@
             },
             "level": 1
           },
-          "schedule": { "mode": "absolute", "frame": 300 },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 300
+          },
           "hitOverrides": {
             "10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-3875140846970907040|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0": {
               "landed": "blocked",
@@ -534,7 +687,9 @@
             "controlSkillId": 10101004,
             "subSkillIndex": 0
           },
-          "expectation": { "count": 1 }
+          "expectation": {
+            "count": 1
+          }
         },
         {
           "kind": "trace-query",
@@ -544,7 +699,9 @@
             "actionId": "isolated-a4-miss-blocked",
             "eventType": "VERIFIED_COMBAT_HIT"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         },
         {
           "kind": "trace-query",
@@ -554,7 +711,9 @@
             "actionId": "isolated-a4-miss-blocked",
             "reason": "verified-direct-sp-shared"
           },
-          "expectation": { "count": 0 }
+          "expectation": {
+            "count": 0
+          }
         }
       ]
     }

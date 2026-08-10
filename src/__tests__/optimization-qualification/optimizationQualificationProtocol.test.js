@@ -187,7 +187,9 @@ describe('M12-B3 optimization qualification generation', () => {
       aliasHashesEqual: true,
     });
     expect(artifacts.catalog.admission.characters).toEqual([
+      '101010',
       '102001',
+      '103002',
       '107001',
       '108003',
       '109001',
@@ -273,13 +275,13 @@ describe('M12-B3 optimization qualification generation', () => {
       ).toBe(false);
     }
     expect(artifacts.summary.gapCounts).toMatchObject({
-      blockingUniqueGapCount: 4,
+      blockingUniqueGapCount: 2,
       byCategory: {
-        'not-implemented': 4,
+        'not-implemented': 2,
       },
     });
     expect(artifacts.summary.optimizationReadyCounts).toEqual({
-      character: 5,
+      character: 7,
       kibo: 43,
       'soul-essence': 62,
       equipment: 137,

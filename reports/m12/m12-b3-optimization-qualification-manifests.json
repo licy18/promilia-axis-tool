@@ -3,7 +3,7 @@
   "contractName": "AzPrOptimizationQualificationManifests",
   "kind": "azpr-optimization-qualification-manifests",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "396062529d292c6a",
+  "rosterHash": "da49f445b69f863f",
   "records": [
     {
       "objectKind": "character",
@@ -12,25 +12,19 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=101010]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           101010
         ],
         "mechanismHash": "54e16a3ddd7d9154",
         "characterAcceptanceManifestHashes": [
-          "97263600bfe41109"
+          "f633561ffc65b3f0"
         ]
       },
-      "manifestHash": "03ea6a0c2ef8b931"
+      "manifestHash": "3492e16b3fc76d1f"
     },
     {
       "objectKind": "character",
@@ -60,25 +54,19 @@
       "sourceIdentities": [
         "generated/characters.json#items[id=103002]"
       ],
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockers": [
-        {
-          "code": "character-not-optimization-ready",
-          "category": "not-implemented",
-          "message": "Character acceptance maturity has not reached optimization-ready."
-        }
-      ],
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockers": [],
       "evidence": {
         "sourceCharacterIds": [
           103002
         ],
         "mechanismHash": "d2189ab88f3e6130",
         "characterAcceptanceManifestHashes": [
-          "8c3af2315edcf502"
+          "0d92949f7d2b5857"
         ]
       },
-      "manifestHash": "33b483df8d623fe1"
+      "manifestHash": "c5b473a64b35894b"
     },
     {
       "objectKind": "character",
@@ -30851,17 +30839,17 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "optimization-ready": 259,
-      "runtime-integrated": 4
+      "optimization-ready": 261,
+      "runtime-integrated": 2
     },
     "optimizationReadyCounts": {
-      "character": 5,
+      "character": 7,
       "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 259
+    "optimizationReadyTotal": 261
   },
-  "manifestsHash": "079f7f5aa6394e25"
+  "manifestsHash": "73a6979dd5f443c6"
 }

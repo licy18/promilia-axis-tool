@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "396062529d292c6a",
-  "manifestsHash": "079f7f5aa6394e25",
-  "gapLedgerHash": "ef4863124e50f86a",
-  "bindingMatrixHash": "6a18f24bdf6c7cbf",
-  "sourceSnapshotHash": "d2f1d4e1ee60ec3c",
+  "rosterHash": "da49f445b69f863f",
+  "manifestsHash": "73a6979dd5f443c6",
+  "gapLedgerHash": "bac9d536a2bc9993",
+  "bindingMatrixHash": "32d8fc25496f74c7",
+  "sourceSnapshotHash": "8ab64f0937013ce0",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -21,12 +21,10 @@
       "objectKind": "character",
       "objectId": "101010",
       "displayName": "涂山小玉",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "03ea6a0c2ef8b931"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "3492e16b3fc76d1f"
     },
     {
       "objectKind": "character",
@@ -41,12 +39,10 @@
       "objectKind": "character",
       "objectId": "103002",
       "displayName": "红宝石",
-      "maturityState": "runtime-integrated",
-      "optimizationReady": false,
-      "blockerCodes": [
-        "character-not-optimization-ready"
-      ],
-      "manifestHash": "33b483df8d623fe1"
+      "maturityState": "optimization-ready",
+      "optimizationReady": true,
+      "blockerCodes": [],
+      "manifestHash": "c5b473a64b35894b"
     },
     {
       "objectKind": "character",
@@ -2395,7 +2391,9 @@
   ],
   "admission": {
     "characters": [
+      "101010",
       "102001",
+      "103002",
       "107001",
       "108003",
       "109001",
@@ -2669,7 +2667,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "396062529d292c6a",
+    "rosterHash": "da49f445b69f863f",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -2681,301 +2679,301 @@
         "actorObjectId": "101010",
         "kiboId": 500001,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500025,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500043,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500044,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500045,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500057,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500064,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500065,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500082,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500120,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500123,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500124,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500125,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500126,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500127,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500128,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500129,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500130,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500131,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500164,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500165,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500166,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500173,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500174,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500175,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500185,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500220,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500231,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500296,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500304,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500305,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500306,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500322,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500323,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500324,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500357,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500358,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500360,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500368,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500369,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500370,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500469,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "101010",
         "kiboId": 500470,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
@@ -3283,301 +3281,301 @@
         "actorObjectId": "103002",
         "kiboId": 500001,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500025,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500043,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500044,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500045,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500057,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500064,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500065,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500082,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500120,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500123,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500124,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500125,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500126,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500127,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500128,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500129,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500130,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500131,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500164,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500165,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500166,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500173,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500174,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500175,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500185,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500220,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500231,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500296,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500304,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500305,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500306,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500322,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500323,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500324,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500357,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500358,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500360,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500368,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500369,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500370,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500469,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
         "actorObjectId": "103002",
         "kiboId": 500470,
         "compatible": true,
-        "qualificationReady": false,
+        "qualificationReady": true,
         "runtimeOwnerIdentity": "actorSlotId+kiboId"
       },
       {
@@ -5442,14 +5440,14 @@
         "soulEssenceId": 10034,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10037,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5463,98 +5461,98 @@
         "soulEssenceId": 10044,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10047,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10048,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10050,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10052,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10055,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10056,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10057,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10058,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10059,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10060,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10061,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10062,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10063,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5575,7 +5573,7 @@
         "soulEssenceId": 10078,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5610,7 +5608,7 @@
         "soulEssenceId": 10097,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5638,21 +5636,21 @@
         "soulEssenceId": 10121,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10122,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10123,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5729,7 +5727,7 @@
         "soulEssenceId": 10150,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5750,21 +5748,21 @@
         "soulEssenceId": 10154,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10155,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10156,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -5799,28 +5797,28 @@
         "soulEssenceId": 10196,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10197,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10198,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
         "soulEssenceId": 10216,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "102001",
@@ -6310,14 +6308,14 @@
         "soulEssenceId": 10034,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10037,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6331,98 +6329,98 @@
         "soulEssenceId": 10044,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10047,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10048,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10050,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10052,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10055,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10056,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10057,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10058,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10059,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10060,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10061,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10062,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10063,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6443,7 +6441,7 @@
         "soulEssenceId": 10078,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6478,7 +6476,7 @@
         "soulEssenceId": 10097,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6506,21 +6504,21 @@
         "soulEssenceId": 10121,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10122,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10123,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6597,7 +6595,7 @@
         "soulEssenceId": 10150,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6618,21 +6616,21 @@
         "soulEssenceId": 10154,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10155,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10156,
         "compatible": true,
         "reason": "profession-match",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -6667,28 +6665,28 @@
         "soulEssenceId": 10196,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10197,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10198,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
         "soulEssenceId": 10216,
         "compatible": true,
         "reason": "universal-profession",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "107001",
@@ -9303,7 +9301,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9312,7 +9310,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9321,7 +9319,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9330,7 +9328,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9339,7 +9337,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9348,7 +9346,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9357,7 +9355,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9366,7 +9364,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9375,7 +9373,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9384,7 +9382,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9393,7 +9391,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9402,7 +9400,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9411,7 +9409,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9420,7 +9418,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9429,7 +9427,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9438,7 +9436,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9447,7 +9445,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9456,7 +9454,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9465,7 +9463,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9474,7 +9472,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9483,7 +9481,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9492,7 +9490,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9501,7 +9499,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9510,7 +9508,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9519,7 +9517,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9528,7 +9526,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9537,7 +9535,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9546,7 +9544,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9555,7 +9553,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9564,7 +9562,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9573,7 +9571,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9582,7 +9580,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9591,7 +9589,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9600,7 +9598,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9609,7 +9607,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9618,7 +9616,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9627,7 +9625,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9636,7 +9634,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9645,7 +9643,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9654,7 +9652,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9663,7 +9661,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9672,7 +9670,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9681,7 +9679,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9690,7 +9688,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9699,7 +9697,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9708,7 +9706,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9717,7 +9715,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9726,7 +9724,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9735,7 +9733,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9744,7 +9742,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9753,7 +9751,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9762,7 +9760,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9771,7 +9769,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9780,7 +9778,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9789,7 +9787,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9798,7 +9796,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9807,7 +9805,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9816,7 +9814,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9825,7 +9823,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9834,7 +9832,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9843,7 +9841,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9852,7 +9850,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9861,7 +9859,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9870,7 +9868,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9879,7 +9877,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9888,7 +9886,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9897,7 +9895,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9906,7 +9904,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9915,7 +9913,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9924,7 +9922,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9933,7 +9931,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9942,7 +9940,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9951,7 +9949,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9960,7 +9958,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9969,7 +9967,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9978,7 +9976,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9987,7 +9985,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -9996,7 +9994,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10005,7 +10003,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10014,7 +10012,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10023,7 +10021,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10032,7 +10030,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10041,7 +10039,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10050,7 +10048,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10059,7 +10057,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10068,7 +10066,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10077,7 +10075,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10086,7 +10084,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10095,7 +10093,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10104,7 +10102,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10113,7 +10111,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10122,7 +10120,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10131,7 +10129,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10140,7 +10138,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10149,7 +10147,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10158,7 +10156,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10167,7 +10165,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10176,7 +10174,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10185,7 +10183,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10194,7 +10192,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10203,7 +10201,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10212,7 +10210,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10221,7 +10219,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10230,7 +10228,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10239,7 +10237,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10248,7 +10246,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10257,7 +10255,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10266,7 +10264,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10275,7 +10273,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10284,7 +10282,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10293,7 +10291,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10302,7 +10300,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10311,7 +10309,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10320,7 +10318,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10329,7 +10327,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10338,7 +10336,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10347,7 +10345,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10356,7 +10354,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10365,7 +10363,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10374,7 +10372,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10383,7 +10381,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10392,7 +10390,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10401,7 +10399,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10410,7 +10408,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10419,7 +10417,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10428,7 +10426,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10437,7 +10435,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10446,7 +10444,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10455,7 +10453,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10464,7 +10462,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10473,7 +10471,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10482,7 +10480,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10491,7 +10489,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10500,7 +10498,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10509,7 +10507,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10518,7 +10516,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "101010",
@@ -10527,7 +10525,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "102001",
@@ -11769,7 +11767,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11778,7 +11776,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11787,7 +11785,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11796,7 +11794,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11805,7 +11803,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11814,7 +11812,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11823,7 +11821,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11832,7 +11830,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11841,7 +11839,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11850,7 +11848,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11859,7 +11857,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11868,7 +11866,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11877,7 +11875,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11886,7 +11884,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11895,7 +11893,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11904,7 +11902,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11913,7 +11911,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11922,7 +11920,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11931,7 +11929,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11940,7 +11938,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11949,7 +11947,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11958,7 +11956,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11967,7 +11965,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11976,7 +11974,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11985,7 +11983,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -11994,7 +11992,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12003,7 +12001,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12012,7 +12010,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12021,7 +12019,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12030,7 +12028,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12039,7 +12037,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12048,7 +12046,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12057,7 +12055,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12066,7 +12064,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12075,7 +12073,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12084,7 +12082,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12093,7 +12091,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12102,7 +12100,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12111,7 +12109,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12120,7 +12118,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12129,7 +12127,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12138,7 +12136,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12147,7 +12145,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12156,7 +12154,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12165,7 +12163,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12174,7 +12172,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12183,7 +12181,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12192,7 +12190,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12201,7 +12199,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12210,7 +12208,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12219,7 +12217,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12228,7 +12226,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12237,7 +12235,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12246,7 +12244,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12255,7 +12253,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12264,7 +12262,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12273,7 +12271,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12282,7 +12280,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12291,7 +12289,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12300,7 +12298,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12309,7 +12307,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12318,7 +12316,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12327,7 +12325,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12336,7 +12334,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12345,7 +12343,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12354,7 +12352,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12363,7 +12361,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12372,7 +12370,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12381,7 +12379,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12390,7 +12388,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12399,7 +12397,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12408,7 +12406,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12417,7 +12415,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12426,7 +12424,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12435,7 +12433,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12444,7 +12442,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12453,7 +12451,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12462,7 +12460,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12471,7 +12469,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12480,7 +12478,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12489,7 +12487,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12498,7 +12496,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12507,7 +12505,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12516,7 +12514,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12525,7 +12523,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12534,7 +12532,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12543,7 +12541,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12552,7 +12550,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12561,7 +12559,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12570,7 +12568,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12579,7 +12577,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12588,7 +12586,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12597,7 +12595,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12606,7 +12604,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12615,7 +12613,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12624,7 +12622,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12633,7 +12631,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12642,7 +12640,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12651,7 +12649,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12660,7 +12658,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12669,7 +12667,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12678,7 +12676,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12687,7 +12685,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12696,7 +12694,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12705,7 +12703,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12714,7 +12712,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12723,7 +12721,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12732,7 +12730,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12741,7 +12739,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12750,7 +12748,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12759,7 +12757,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12768,7 +12766,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12777,7 +12775,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12786,7 +12784,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12795,7 +12793,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12804,7 +12802,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12813,7 +12811,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12822,7 +12820,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12831,7 +12829,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12840,7 +12838,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12849,7 +12847,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12858,7 +12856,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12867,7 +12865,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12876,7 +12874,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12885,7 +12883,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12894,7 +12892,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12903,7 +12901,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12912,7 +12910,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12921,7 +12919,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12930,7 +12928,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12939,7 +12937,7 @@
         "setId": 3,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12948,7 +12946,7 @@
         "setId": 4,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12957,7 +12955,7 @@
         "setId": null,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12966,7 +12964,7 @@
         "setId": 1,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12975,7 +12973,7 @@
         "setId": 2,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12984,7 +12982,7 @@
         "setId": 5,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "103002",
@@ -12993,7 +12991,7 @@
         "setId": 6,
         "compatible": true,
         "reason": "public-equipment-slot-contract",
-        "qualificationReady": false
+        "qualificationReady": true
       },
       {
         "actorObjectId": "107001",
@@ -20631,17 +20629,17 @@
     },
     "summary": {
       "actorKiboEdgeCount": 387,
-      "actorKiboQualifiedEdgeCount": 215,
+      "actorKiboQualifiedEdgeCount": 301,
       "actorSoulEssenceEdgeCount": 558,
       "actorSoulEssenceCompatibleEdgeCount": 244,
-      "actorSoulEssenceQualifiedEdgeCount": 132,
+      "actorSoulEssenceQualifiedEdgeCount": 190,
       "actorEquipmentEdgeCount": 1233,
-      "actorEquipmentQualifiedEdgeCount": 685,
+      "actorEquipmentQualifiedEdgeCount": 959,
       "setSkillThresholdCount": 12,
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "6a18f24bdf6c7cbf"
+    "bindingMatrixHash": "32d8fc25496f74c7"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38236,19 +38234,19 @@
   "summary": {
     "objectCount": 263,
     "maturityCounts": {
-      "optimization-ready": 259,
-      "runtime-integrated": 4
+      "optimization-ready": 261,
+      "runtime-integrated": 2
     },
     "optimizationReadyCounts": {
-      "character": 5,
+      "character": 7,
       "kibo": 43,
       "soul-essence": 62,
       "equipment": 137,
       "set-skill": 12
     },
-    "optimizationReadyTotal": 259,
-    "gameplayBlockingGapCount": 4,
-    "bindingQualifiedEdgeCount": 1044,
+    "optimizationReadyTotal": 261,
+    "gameplayBlockingGapCount": 2,
+    "bindingQualifiedEdgeCount": 1462,
     "qualificationStage": {
       "schemaVersion": 1,
       "contractName": "AzPrOptimizationQualificationStageGate",
@@ -38256,8 +38254,8 @@
         "character": {
           "total": 9,
           "denominator": 9,
-          "ready": 5,
-          "admission": 5
+          "ready": 7,
+          "admission": 7
         },
         "kibo": {
           "total": 43,
@@ -38289,21 +38287,21 @@
           "total": 387,
           "expected": 387,
           "unique": 387,
-          "qualified": 215,
+          "qualified": 301,
           "readinessMismatch": 0
         },
         "actorSoulEssence": {
           "total": 558,
           "expected": 558,
           "unique": 558,
-          "qualified": 132,
+          "qualified": 190,
           "readinessMismatch": 0
         },
         "actorEquipment": {
           "total": 1233,
           "expected": 1233,
           "unique": 1233,
-          "qualified": 685,
+          "qualified": 959,
           "readinessMismatch": 0
         },
         "setSkillThresholds": {
@@ -38328,5 +38326,5 @@
     "formalOptimizationUnlocked": false,
     "m12cLocked": true
   },
-  "catalogHash": "101bba8b81436d93"
+  "catalogHash": "82942ff897b92d8e"
 }

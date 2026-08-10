@@ -3,14 +3,14 @@
   "contractName": "AzPrOptimizationQualificationGapLedger",
   "kind": "azpr-optimization-qualification-gap-ledger",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "396062529d292c6a",
+  "rosterHash": "da49f445b69f863f",
   "implementedCapabilities": [
     {
       "capabilityIdentity": "b3-frozen-roster-and-source-drift-gate",
       "status": "implemented",
       "evidence": [
-        "d2f1d4e1ee60ec3c",
-        "396062529d292c6a"
+        "8ab64f0937013ce0",
+        "da49f445b69f863f"
       ]
     },
     {
@@ -124,34 +124,6 @@
   ],
   "records": [
     {
-      "gapIdentity": "character:101010:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "101010",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=101010]"
-      ],
-      "details": {},
-      "gapHash": "b25254be6b1fa6fb"
-    },
-    {
-      "gapIdentity": "character:103002:character-not-optimization-ready",
-      "objectKind": "character",
-      "objectId": "103002",
-      "code": "character-not-optimization-ready",
-      "category": "not-implemented",
-      "blocking": true,
-      "message": "Character acceptance maturity has not reached optimization-ready.",
-      "sourceIdentities": [
-        "generated/characters.json#items[id=103002]"
-      ],
-      "details": {},
-      "gapHash": "784a0ea144cf6df0"
-    },
-    {
       "gapIdentity": "character:107002:character-not-optimization-ready",
       "objectKind": "character",
       "objectId": "107002",
@@ -181,16 +153,16 @@
     }
   ],
   "summary": {
-    "blockingUniqueGapCount": 4,
+    "blockingUniqueGapCount": 2,
     "byCategory": {
-      "not-implemented": 4
+      "not-implemented": 2
     },
     "byCode": {
-      "character-not-optimization-ready": 4
+      "character-not-optimization-ready": 2
     },
     "byObjectKind": {
-      "character": 4
+      "character": 2
     }
   },
-  "ledgerHash": "ef4863124e50f86a"
+  "ledgerHash": "bac9d536a2bc9993"
 }
