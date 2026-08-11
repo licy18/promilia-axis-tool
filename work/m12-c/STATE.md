@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；用户已裁决 M12-C4 采用 AI 引导的启发式剪枝并接受无法证明全局最优的 Top-N，搜索仍未启动。
+状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；用户已裁决 M12-C4 采用 AI 引导的启发式剪枝并接受无法证明全局最优的 Top-N。一次并发流程在最终 Gate V2 authority 建立前启动搜索，现已终止并标记为未授权/污染；没有可采信的 Top-N，正式搜索仍未获准继续。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -65,6 +65,13 @@
 - 所有结果必须标为 `AI-guided heuristic Top-N`，并保留 `guidanceHash`、provenance、来源/构筑覆盖、预算、seed、拒绝分布、closed-cycle/killed proof 与迭代链。`fullPoolEnumerationComplete=false` / `formalRankingReady=false` 是诚实的全池非穷举声明，不再作为“能否执行 M12-C4 AI 引导搜索”的阻断，但不得改写为全局最优、穷举完整或客户端一致。
 - 搜索按多轮反馈闭环推进：先覆盖 35/35 source config 的低预算基线，再由 AI 扩大高潜构筑和动作深度；使用独立 seed/策略复核，直到 Top-N 身份和分数改善在连续轮次中稳定，再进入 M12-C5 Workbench 人工复验。任一候选仍须先通过既有 qualification、binding、legality 和 objective proof，AI 不能让 illegal、skipped、unresolved 或 blocked 候选进入评分。
 - clean HEAD `07f7989860e3797e9bdde2660c1e6c752a06efb4` 的单次 `release:verify` 已通过 character-combat、visual acceptance、E22 binding、Kibo headless 与 machine-axis settlement；trial 全量为 241/242 files、1953/1954 tests，唯一失败是新增两份 gate 测试尚未进入 `reports/production-import-audit.json` 的 canonical file list。生成器同步后实际审计为 `unexpectedTestOnlyCount=0`、`unreferencedCount=0`；按用户“不再反复跑全量”的要求，仅复验该派生报告与对应单测，不把失败台账伪造为 PASS。
+
+## 0.5 2026-08-11 Gate V2 并发污染处置
+
+- clean HEAD `df94157eb91722fd8b72343c84c55d2e335b69bd` 的 release trial 已真实通过 242/242 Vitest files、1954/1954 tests、全部 assert-clean/build/bundle 审计与 64/64 production preview；静态 runner-output policy 随后恢复 101 个 tracked 试跑输出，tracked tree 回到 clean。
+- 该轮不能记为 release PASS：验证期间另一个并发流程提交 `03d5e55a2fc4de14d488abc871b5579293aa4e0f`，postflight 检出 HEAD 从 `df94157e` 漂移到 `03d5e55a` 并按规则 fail closed。全绿 trial 只属于旧 HEAD，不能转授给新 HEAD。
+- 同一并发流程在 release authority 建立前启动 `node scripts/run-ai-guided-search.mjs --outer --contract work/m12-c/m12c4-search-template.json --guidance-file work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json`。2026-08-11 23:09（北京时间）已终止核实的 Node PID 57568 及父 PowerShell PID 54684；未生成目标 feedback 文件。
+- `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json` 与 `work/m12-c/m12c4-search-template.json` 作为 untracked 污染证据原样保留，不作为 release 输入、正式搜索产物或 Top-N 依据。只有新的最终 clean tracked HEAD 完成真实 `release:verify` 且独立 admission 允许后，才可重新授权搜索。
 
 ## 1. 目标与结果身份
 
