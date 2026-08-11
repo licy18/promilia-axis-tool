@@ -15,27 +15,49 @@ function readArgument(name, fallback = null) {
   return process.argv[index + 1] ?? fallback;
 }
 
+function hasArgument(name) {
+  return process.argv.includes(name);
+}
+
 const contractPath = readArgument('--contract');
 const objective = readArgument('--objective');
 const guidanceJson = readArgument('--guidance');
 const guidanceFile = readArgument('--guidance-file');
 const optionsJson = readArgument('--options');
 const feedbackOutput = readArgument('--feedback-output');
+const outerOptionsJson = readArgument('--outer-options');
+const initialStateJson = readArgument('--initial-state');
+const runOuterSearch = hasArgument('--outer');
 
 if (!contractPath) {
   throw new Error('--contract <path> is required');
 }
 
 const loadedContract = await readJson(contractPath);
-const contract = loadedContract?.contract ?? loadedContract;
+const hasEmbeddedContract = Boolean(
+  loadedContract?.contract ?? loadedContract?.contractTemplate
+);
+const contract =
+  loadedContract?.contract ??
+  loadedContract?.contractTemplate ??
+  loadedContract;
 const guidance = guidanceJson
   ? JSON.parse(guidanceJson)
   : guidanceFile
     ? await readJson(guidanceFile)
     : null;
-const options = optionsJson ? JSON.parse(optionsJson) : {};
+const options = {
+  ...(hasEmbeddedContract && loadedContract?.options
+    ? loadedContract.options
+    : {}),
+  ...(optionsJson ? JSON.parse(optionsJson) : {}),
+};
 if (objective) options.objective = objective;
 if (guidance) options.guidance = guidance;
+const effectiveGuidance =
+  guidance ?? loadedContract?.guidance ?? options.guidance ?? null;
+const outerOptions = outerOptionsJson ? JSON.parse(outerOptionsJson) : null;
+const initialState = initialStateJson ? JSON.parse(initialStateJson) : null;
 
 const mechanicsPackage = await readJson(
   'src/data/generated/verified-combat-mechanics-package.json'
@@ -60,16 +82,50 @@ try {
   const guidanceModule = await vite.ssrLoadModule(
     '/src/machine-axis/machineAxisSearchGuidance.js'
   );
+  const outerBuildModule = await vite.ssrLoadModule(
+    '/src/machine-axis/m12cOuterBuildService.js'
+  );
+  const outerSearchModule = await vite.ssrLoadModule(
+    '/src/machine-axis/m12cOuterSearchService.js'
+  );
 
   packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
   const service = serviceModule.createMachineAxisService();
-  const engine = engineModule.createMachineAxisSearchEngine({ service });
-  const result = await engine.search({ contract, options });
+  const isOuterRequest =
+    runOuterSearch ||
+    loadedContract?.kind === 'azpr-m12c-outer-search' ||
+    loadedContract?.contractName === 'AzPrM12COuterSearchRequest';
+  let result;
+  if (isOuterRequest) {
+    const outerBuildService = outerBuildModule.createM12cOuterBuildService();
+    const outerSearchService = outerSearchModule.createM12cOuterSearchService({
+      machineAxisService: service,
+      outerBuildService,
+    });
+    result = await outerSearchService.search({
+      ...(hasEmbeddedContract ? loadedContract : {}),
+      contract,
+      options,
+      ...(effectiveGuidance == null ? {} : { guidance: effectiveGuidance }),
+      ...(outerOptions == null
+        ? {}
+        : {
+            outer: {
+              ...(loadedContract?.outer ?? {}),
+              ...outerOptions,
+            },
+          }),
+      ...(initialState == null ? {} : { initialState }),
+    });
+  } else {
+    const engine = engineModule.createMachineAxisSearchEngine({ service });
+    result = await engine.search({ contract, options });
+  }
 
   const guidanceApplication =
-    guidance == null
+    effectiveGuidance == null
       ? null
-      : guidanceModule.applySearchGuidance(options, guidance);
+      : guidanceModule.applySearchGuidance(options, effectiveGuidance);
   const feedback = guidanceModule.createSearchFeedback({
     result,
     guidanceApplication,
@@ -88,6 +144,8 @@ try {
         guidanceHash: result.summary?.guidance?.guidanceHash ?? null,
         appliedRules: result.summary?.guidance?.appliedRules ?? [],
         summary: result.summary,
+        outerSearch: isOuterRequest,
+        formalRankingReady: result.summary?.formalRankingReady ?? null,
         topResultCount: result.results?.length ?? 0,
         topScores: (result.results ?? []).map(
           entry => entry.score ?? entry.formalScore ?? null

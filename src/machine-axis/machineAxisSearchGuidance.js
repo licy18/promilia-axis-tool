@@ -30,6 +30,13 @@ const BOOLEAN_FIELDS = Object.freeze([
   'includeWait',
 ]);
 
+const OUTER_INTEGER_FIELDS = Object.freeze([
+  'maxSourceConfigs',
+  'maxBuildsPerSourceConfig',
+  'maxBuildsTotal',
+  'maxVariantSearches',
+]);
+
 export function normalizeSearchGuidance(input = {}) {
   const issues = [];
   if (
@@ -91,6 +98,31 @@ export function normalizeSearchGuidance(input = {}) {
   if (provenance.authority != null && provenance.authority !== 'ai-agent') {
     issues.push('machine-axis-search-guidance-provenance-authority-invalid');
   }
+  const outer = input.outer;
+  if (outer != null && (typeof outer !== 'object' || Array.isArray(outer))) {
+    issues.push('machine-axis-search-guidance-outer-invalid');
+  }
+  for (const field of OUTER_INTEGER_FIELDS) {
+    if (outer?.[field] != null) {
+      const value = Number(outer[field]);
+      if (!Number.isInteger(value) || value <= 0) {
+        issues.push(`machine-axis-search-guidance-outer-${field}-invalid`);
+      }
+    }
+  }
+  for (const field of ['sourceConfigIdentities']) {
+    if (outer?.[field] != null && !Array.isArray(outer[field])) {
+      issues.push(`machine-axis-search-guidance-outer-${field}-invalid`);
+    }
+  }
+  if (
+    outer?.initialFrontPolicy != null &&
+    outer.initialFrontPolicy !== 'all-team-members'
+  ) {
+    issues.push(
+      'machine-axis-search-guidance-outer-initialFrontPolicy-invalid'
+    );
+  }
   const guidance = {
     schemaVersion: MACHINE_AXIS_SEARCH_GUIDANCE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SEARCH_GUIDANCE_CONTRACT,
@@ -130,7 +162,31 @@ export function normalizeSearchGuidance(input = {}) {
       criticalPolicy: input.heuristic?.criticalPolicy ?? null,
       seeds: input.heuristic?.seeds ?? null,
     },
-    outer: input.outer ?? null,
+    outer:
+      outer == null || typeof outer !== 'object' || Array.isArray(outer)
+        ? null
+        : {
+            ...Object.fromEntries(
+              OUTER_INTEGER_FIELDS.filter(field => outer[field] != null).map(
+                field => [field, Number(outer[field])]
+              )
+            ),
+            ...(outer.sourceConfigIdentities == null
+              ? {}
+              : {
+                  sourceConfigIdentities: [
+                    ...new Set(
+                      (Array.isArray(outer.sourceConfigIdentities)
+                        ? outer.sourceConfigIdentities
+                        : []
+                      ).map(String)
+                    ),
+                  ].sort(),
+                }),
+            ...(outer.initialFrontPolicy == null
+              ? {}
+              : { initialFrontPolicy: outer.initialFrontPolicy }),
+          },
     provenance: {
       authority: 'ai-agent',
       agentId: provenance.agentId ?? null,
@@ -302,6 +358,7 @@ export function createSearchFeedback({
     .sort((left, right) => right[1] - left[1])
     .slice(0, 8)
     .map(([code, count]) => ({ code, count }));
+  const outerExecution = summary.outerSearchIntegration ?? null;
   return {
     schemaVersion: MACHINE_AXIS_SEARCH_GUIDANCE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SEARCH_FEEDBACK_CONTRACT,
@@ -334,12 +391,22 @@ export function createSearchFeedback({
     })),
     outer: {
       implemented: true,
-      searchIntegrationImplemented: false,
-      status: 'm12-c1-c2-pool-ready-search-integration-pending',
+      searchIntegrationImplemented: true,
+      executionApplied: outerExecution != null,
+      status:
+        outerExecution == null
+          ? 'm12-c4-outer-search-integration-ready'
+          : summary.formalRankingReady === true
+            ? 'm12-c4-formal-exhaustive-top-n-ready'
+            : 'm12-c4-outer-search-executed-partial',
       guidanceReserved:
         guidanceApplication?.layer === 'outer' ||
         guidanceApplication?.layer === 'both',
-      note: 'The authoritative M12-C team/loadout pool, build planner, and lazy iterator are available through the headless M12-C outer service and Machine Axis CLI. Outer guidance remains reserved until M12-C4 binds each build to inner axis search.',
+      buildCount: summary.buildCount ?? null,
+      variantSearchCount: summary.variantSearchCount ?? null,
+      enumerationComplete: summary.enumerationComplete ?? null,
+      formalRankingReady: summary.formalRankingReady ?? null,
+      note: 'The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive.',
     },
     recommendations: [],
   };

@@ -6,6 +6,7 @@ import {
   createMachineAxisObjectiveContract,
 } from './machineAxisObjectiveContract';
 import { createM12cOuterBuildService } from './m12cOuterBuildService';
+import { createM12cOuterSearchService } from './m12cOuterSearchService';
 
 export const MACHINE_AXIS_CLI_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CLI_CONTRACT_NAME = 'AzPrMachineAxisCli';
@@ -29,6 +30,7 @@ const COMMANDS = new Set([
   'kill',
   'm12c-outer-pool',
   'm12c-outer-builds',
+  'm12c-outer-search',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -52,6 +54,10 @@ const VALUED_OPTIONS = new Set([
   '--max-actions-per-owner',
   '--max-kibo-actions',
   '--max-candidates',
+  '--max-source-configs',
+  '--max-builds-per-source-config',
+  '--max-builds-total',
+  '--max-variant-searches',
 ]);
 const OUTPUT_FORMATS = new Set(['json', 'jsonl']);
 const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
@@ -61,6 +67,7 @@ export async function runMachineAxisCli(
   {
     service = createMachineAxisService(),
     m12cOuterService = createM12cOuterBuildService(),
+    m12cOuterSearchService = null,
     readFile,
     readStdin,
     writeFile,
@@ -75,6 +82,12 @@ export async function runMachineAxisCli(
     writeStdout: writeStdout ?? (() => {}),
     writeStderr: writeStderr ?? (() => {}),
   };
+  const resolvedM12cOuterSearchService =
+    m12cOuterSearchService ??
+    createM12cOuterSearchService({
+      machineAxisService: service,
+      outerBuildService: m12cOuterService,
+    });
   let parsed = { options: { format: 'json', output: null } };
   try {
     parsed = parseCliArguments(argv);
@@ -89,7 +102,13 @@ export async function runMachineAxisCli(
       );
       return MACHINE_AXIS_CLI_EXIT_CODES.USAGE;
     }
-    const result = await executeCommand(parsed, service, m12cOuterService, io);
+    const result = await executeCommand(
+      parsed,
+      service,
+      m12cOuterService,
+      resolvedM12cOuterSearchService,
+      io
+    );
     await emitResult(io, parsed.options, result.value);
     return result.exitCode;
   } catch (error) {
@@ -118,6 +137,10 @@ export function parseCliArguments(argv = []) {
     maxActionsPerOwner: null,
     maxKiboActions: null,
     maxCandidates: null,
+    maxSourceConfigs: null,
+    maxBuildsPerSourceConfig: null,
+    maxBuildsTotal: null,
+    maxVariantSearches: null,
     selector: {},
   };
   const positional = [];
@@ -213,6 +236,10 @@ export function parseCliArguments(argv = []) {
         '--max-actions-per-owner',
         '--max-kibo-actions',
         '--max-candidates',
+        '--max-source-configs',
+        '--max-builds-per-source-config',
+        '--max-builds-total',
+        '--max-variant-searches',
       ].includes(flag)
     ) {
       const number = Number(value);
@@ -231,6 +258,14 @@ export function parseCliArguments(argv = []) {
         options.maxActionsPerOwner = number;
       } else if (flag === '--max-candidates') {
         options.maxCandidates = number;
+      } else if (flag === '--max-source-configs') {
+        options.maxSourceConfigs = number;
+      } else if (flag === '--max-builds-per-source-config') {
+        options.maxBuildsPerSourceConfig = number;
+      } else if (flag === '--max-builds-total') {
+        options.maxBuildsTotal = number;
+      } else if (flag === '--max-variant-searches') {
+        options.maxVariantSearches = number;
       } else {
         options.maxKiboActions = number;
       }
@@ -294,9 +329,14 @@ export function parseCliArguments(argv = []) {
     };
   }
   if (
-    ['batch', 'search', 'cycle', 'kill', 'm12c-outer-builds'].includes(
-      command
-    ) &&
+    [
+      'batch',
+      'search',
+      'cycle',
+      'kill',
+      'm12c-outer-builds',
+      'm12c-outer-search',
+    ].includes(command) &&
     options.format === 'jsonl'
   ) {
     return {
@@ -359,7 +399,13 @@ function parseCsvSeeds(value) {
     .filter(Boolean);
 }
 
-async function executeCommand(parsed, service, m12cOuterService, io) {
+async function executeCommand(
+  parsed,
+  service,
+  m12cOuterService,
+  m12cOuterSearchService,
+  io
+) {
   const { command, options } = parsed;
   if (command === 'catalog') {
     return {
@@ -397,6 +443,43 @@ async function executeCommand(parsed, service, m12cOuterService, io) {
         candidates,
         candidateCount: candidates.length,
       },
+    };
+  }
+  if (command === 'm12c-outer-search') {
+    const [envelope] = await readContracts(options.input, options, io);
+    const contract = applyCliOverrides(
+      envelope?.contract ?? envelope?.contractTemplate,
+      options
+    );
+    const value = await m12cOuterSearchService.search(
+      { ...envelope, contract },
+      {
+        beamWidth: options.beamWidth,
+        topN: options.topN,
+        maxDepth: options.maxDepth,
+        objective: options.objective,
+        maxActionsPerOwner: options.maxActionsPerOwner,
+        maxKiboActions: options.maxKiboActions,
+        burstWindowMs: options.burstWindowMs,
+        jobs: options.jobs,
+        seeds:
+          options.seeds ??
+          (options.seed != null ? [String(options.seed)] : undefined),
+        criticalPolicy: options.criticalPolicy,
+        outer: {
+          maxSourceConfigs: options.maxSourceConfigs,
+          maxBuildsPerSourceConfig: options.maxBuildsPerSourceConfig,
+          maxBuildsTotal: options.maxBuildsTotal,
+          maxVariantSearches: options.maxVariantSearches,
+        },
+      }
+    );
+    return {
+      exitCode:
+        value?.valid === false
+          ? MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION
+          : MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value,
     };
   }
   if (command === 'compare') {

@@ -7,12 +7,17 @@ import {
 } from '../../machine-axis/machineAxisCli';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 
-function createHarness({ stdin = '', files = {} } = {}) {
+function createHarness({
+  stdin = '',
+  files = {},
+  m12cOuterSearchService,
+} = {}) {
   const output = { stdout: '', stderr: '', files: {} };
   return {
     output,
     io: {
       service: createMachineAxisService(),
+      ...(m12cOuterSearchService == null ? {} : { m12cOuterSearchService }),
       readFile: async path => {
         if (!(path in files)) throw new Error(`missing fixture file: ${path}`);
         return files[path];
@@ -147,6 +152,76 @@ describe('Machine Axis CLI', () => {
       ],
     });
   }, 30_000);
+
+  it('routes bounded M12-C outer search through the production CLI command', async () => {
+    const calls = [];
+    const envelope = {
+      schemaVersion: 1,
+      contractName: 'AzPrM12COuterSearchRequest',
+      kind: 'azpr-m12c-outer-search',
+      contract: cloneFixture(),
+      options: { objective: 'cycle-dps-no-toughness' },
+      outer: { sourceConfigIdentities: ['fixture-source'] },
+    };
+    const harness = createHarness({
+      stdin: JSON.stringify(envelope),
+      m12cOuterSearchService: {
+        search: async (...args) => {
+          calls.push(args);
+          return {
+            schemaVersion: 1,
+            contractName: 'AzPrM12COuterSearchReport',
+            kind: 'azpr-m12c-outer-search-report',
+            valid: true,
+            summary: { formalRankingReady: false },
+            results: [{ rank: 1 }],
+          };
+        },
+      },
+    });
+
+    const exit = await runMachineAxisCli(
+      [
+        'm12c-outer-search',
+        '-',
+        '--objective',
+        'cycle-dps-no-toughness',
+        '--beam-width',
+        '2',
+        '--top-n',
+        '3',
+        '--max-source-configs',
+        '1',
+        '--max-builds-per-source-config',
+        '2',
+        '--max-builds-total',
+        '2',
+        '--max-variant-searches',
+        '6',
+      ],
+      harness.io
+    );
+    const report = parseJson(harness.output.stdout);
+
+    expect(exit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
+    expect(report.kind).toBe('azpr-m12c-outer-search-report');
+    expect(calls).toHaveLength(1);
+    expect(calls[0][0]).toMatchObject({
+      kind: 'azpr-m12c-outer-search',
+      contract: envelope.contract,
+    });
+    expect(calls[0][1]).toMatchObject({
+      objective: 'cycle-dps-no-toughness',
+      beamWidth: 2,
+      topN: 3,
+      outer: {
+        maxSourceConfigs: 1,
+        maxBuildsPerSourceConfig: 2,
+        maxBuildsTotal: 2,
+        maxVariantSearches: 6,
+      },
+    });
+  });
 
   it('simulates, explains, compares, and writes structured output files', async () => {
     const text = JSON.stringify(fixture);
@@ -472,6 +547,11 @@ describe('Machine Axis CLI', () => {
     ['search', '--max-depth', '-1'],
     ['m12c-outer-builds', '--max-candidates'],
     ['m12c-outer-builds', '--max-candidates', '0'],
+    ['m12c-outer-search', '--max-source-configs'],
+    ['m12c-outer-search', '--max-source-configs', '0'],
+    ['m12c-outer-search', '--max-builds-per-source-config', 'x'],
+    ['m12c-outer-search', '--max-builds-total', '-1'],
+    ['m12c-outer-search', '--max-variant-searches', '0'],
     ['search', '--objective', 'nope'],
     ['cycle', '-', '--objective', 'damage'],
     ['cycle', '-', '--objective', 'fastest-kill'],

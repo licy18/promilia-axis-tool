@@ -566,6 +566,7 @@ describe('M12-C outer team and build pool', () => {
       expect(pool.authority.verifiedMechanicsPackageHash).toBe(
         mechanicsPackage.packageHash
       );
+      expect(service.pool()).toBe(pool);
       expect(planned.valid).toBe(true);
       expect(candidates).toHaveLength(1);
       expect(candidates[0].authority.verifiedMechanicsPackageHash).toBe(

@@ -73,6 +73,47 @@ describe('machine axis AI-guided search protocol', () => {
     );
   });
 
+  it('normalizes bounded outer search guidance and rejects invalid pool controls', () => {
+    const normalized = normalizeSearchGuidance({
+      ...BASE_GUIDANCE,
+      layer: 'both',
+      outer: {
+        sourceConfigIdentities: ['source-b', 'source-a', 'source-a'],
+        maxSourceConfigs: 2,
+        maxBuildsPerSourceConfig: 3,
+        maxBuildsTotal: 5,
+        maxVariantSearches: 15,
+        initialFrontPolicy: 'all-team-members',
+      },
+    });
+    const invalid = normalizeSearchGuidance({
+      layer: 'outer',
+      outer: {
+        maxBuildsTotal: 0,
+        sourceConfigIdentities: 'not-an-array',
+        initialFrontPolicy: 'first-only',
+      },
+    });
+
+    expect(normalized.valid).toBe(true);
+    expect(normalized.guidance.outer).toEqual({
+      maxSourceConfigs: 2,
+      maxBuildsPerSourceConfig: 3,
+      maxBuildsTotal: 5,
+      maxVariantSearches: 15,
+      sourceConfigIdentities: ['source-a', 'source-b'],
+      initialFrontPolicy: 'all-team-members',
+    });
+    expect(invalid.valid).toBe(false);
+    expect(invalid.issues).toEqual(
+      expect.arrayContaining([
+        'machine-axis-search-guidance-outer-maxBuildsTotal-invalid',
+        'machine-axis-search-guidance-outer-sourceConfigIdentities-invalid',
+        'machine-axis-search-guidance-outer-initialFrontPolicy-invalid',
+      ])
+    );
+  });
+
   it('applies guidance onto engine options and records applied rules', () => {
     const applied = applySearchGuidance(
       { objective: 'fastest-kill' },
@@ -187,8 +228,9 @@ describe('machine axis AI-guided search protocol', () => {
     });
     expect(feedback.outer).toMatchObject({
       implemented: true,
-      searchIntegrationImplemented: false,
-      status: 'm12-c1-c2-pool-ready-search-integration-pending',
+      searchIntegrationImplemented: true,
+      executionApplied: false,
+      status: 'm12-c4-outer-search-integration-ready',
     });
     expect(Array.isArray(feedback.recommendations)).toBe(true);
   }, 30_000);

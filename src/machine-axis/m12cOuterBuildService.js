@@ -22,6 +22,9 @@ export function createM12cOuterBuildService({
   qualification = getOptimizationQualificationCatalog(),
   getMechanicsPackage = getInstalledVerifiedCombatMechanicsPackage,
 } = {}) {
+  let cachedPool = null;
+  let cachedMechanicsPackageHash = null;
+
   function pool() {
     const mechanicsPackage = getMechanicsPackage();
     if (!mechanicsPackage) {
@@ -29,6 +32,12 @@ export function createM12cOuterBuildService({
         'Verified combat mechanics package is not installed',
         ['machine-axis-mechanics-package-not-installed']
       );
+    }
+    if (
+      cachedPool &&
+      cachedMechanicsPackageHash === mechanicsPackage.packageHash
+    ) {
+      return cachedPool;
     }
     const value = createM12cOuterBuildPool({ qualification });
     if (
@@ -40,6 +49,8 @@ export function createM12cOuterBuildService({
         ['machine-axis-m12c-mechanics-package-authority-mismatch']
       );
     }
+    cachedPool = value;
+    cachedMechanicsPackageHash = mechanicsPackage.packageHash;
     return value;
   }
 
