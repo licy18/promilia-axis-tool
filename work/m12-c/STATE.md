@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩与受影响角色产品重签已完成，clean HEAD release 尚未完成；正式搜索仍未启动。
+状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；没有伪造单次 `release:verify` PASS，正式搜索仍未启动。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -51,11 +51,13 @@
 - 当前工作树全量 Vitest 为 240/240 files、1936/1936 tests；聚焦范围回归 11/11 files、125/125 tests。production build（1901 modules）、Machine Axis CLI build、bundle 三项预算、production imports、Workbench data、action status、applied-source、Kibo headless、optimization scenario/qualification 与 E22 binding 22/22 均通过。
 - 去除 autonomous derivation registry 会改变部分既有验收轴的 canonical input/data/trace identity，即使伤害评价不变；例如 107002 的 evaluation hash 仍为 `5238bf8119e66446`，但 input/data/trace 已变为 `30780d8354ecceaf` / `9167d13d5bd46dc0` / `9d108c00b14b69ae`。代码回归常量已同步，产品记录没有由自动化静默续签。
 - 最终签收范围按完整 M10/verified golden 输入重算：101010、102001、103002、107001、107002、108003、109001、112001 的 acceptanceCommit/recordIdentity 均由用户明确签收到范围实现基线 `be60e68d1c1bcf77a962426ddb0af37fc384c4da`；199001、199002 未漂移并保留既有签收，101003 继续为 pending。原截图 SHA 与场景身份均保持不变，自动化没有代签。
-- 严格 `audit:character-acceptance` 已恢复 clean：11 runtime-integrated、10 visually-accepted、10 optimization-ready；qualification 仍为 263/263、E22 binding 22/22、visual acceptance 254/254。当前只剩最终签收提交后的 clean HEAD `release:verify`，正式搜索在其通过前继续阻断。
-- clean HEAD `50e292dd91423e05c25b8e1f99eb21d589f5e505` 的首次 `release:verify` 在首个 `character-combat` 阶段正确拦截 7 份旧 golden trace（101003、101010、102001、103002、107002、108003、109001）。全量原子同步后实际 diff 仅为这 7 份 trace 的 input/trace/data/build hash；verified mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`，因此不触发角色产品重签。该生成物同步提交后再运行一次 clean HEAD release。
+- 严格 `audit:character-acceptance` 已恢复 clean：11 runtime-integrated、10 visually-accepted、10 optimization-ready；qualification 仍为 263/263、E22 binding 22/22、visual acceptance 254/254。
+- clean HEAD `50e292dd91423e05c25b8e1f99eb21d589f5e505` 的首次 `release:verify` 在首个 `character-combat` 阶段正确拦截 7 份旧 golden trace（101003、101010、102001、103002、107002、108003、109001）。全量原子同步后实际 diff 仅为这 7 份 trace 的 input/trace/data/build hash；verified mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`。后续实证表明 golden 自身也是签收输入，不能据 package hash 不变推导“无需重签”。
 - clean HEAD `5700680f5359095ba7a3db5501baf79a7000b14f` 的第二次 `release:verify` 已通过 character-combat、visual acceptance 254/254、E22 binding 22/22、Kibo headless 122/448 与 machine-axis settlement；trial-release 全量 Vitest 为 239/240 files、1933/1936 tests，唯一失败是 `characterCombatHeadlessMigration.test.js` 中小玉、红宝石、寒悠悠三组仍指向同步前 golden hash。仅同步这 12 个测试镜像常量后再运行 clean HEAD release，不改变 runtime 或产品签收。
 - clean HEAD `ca1b5bef19a22c4c754163a86a5baa3dad69f816` 的第三次 `release:verify` 已达到全量 Vitest 240/240 files、1936/1936 tests，并通过 production imports、Workbench data、action status；随后 `audit:verified-combat` 正确拦截不属于常规 character-combat 发布集的 `101003/ultimate-controlled-buff-switch-golden.json`。verified-combat 原子同步的实际 diff 仅为该文件四个 canonical hash，mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；后续必须单独核验 golden 参与的角色签收输入，不能只凭 package hash 推断无需重签。
-- 用户要求停止从头重复全量并从断点继续；`a16f82f4d73e6b63bde1d0615c75bbcc5e5ef508` 上 `audit:verified-combat` 已 clean（18/18 validator），optimization-scenario 也 clean。后续 character-acceptance 首先暴露常规 M10 golden 属于 qualification subject 输入，因此对 101010、102001、103002、107002、108003、109001 做同一产品基线的第二波重绑；107001、112001、199001、199002 保持 verified，101003 保持 pending。接下来只从 character-acceptance 断点继续，不重跑 240/240 全量测试。
+- 用户要求停止从头重复全量并从断点继续；`a16f82f4d73e6b63bde1d0615c75bbcc5e5ef508` 上 `audit:verified-combat` 已 clean（18/18 validator），optimization-scenario 也 clean。后续 character-acceptance 首先暴露常规 M10 golden 属于 qualification subject 输入，因此对 101010、102001、103002、107002、108003、109001 做同一产品基线的第二波重绑；107001、112001、199001、199002 保持 verified，101003 保持 pending。
+- 断点续跑最终结果：签收聚焦 6 files/76 tests PASS；character acceptance 11 runtime-integrated / 10 visually-accepted / 10 optimization-ready；qualification 263/263；E22 22/22；visual acceptance 254/254；production build 1901 modules；bundle 总 JS gzip 897786 bytes 且三项预算全绿；applied-source 3/3；production preview 42/42 capabilities、64/64 tests PASS（637911ms）。Playwright 写出的 101 份非确定性 PNG 已恢复，未改写角色截图 SHA；只保留 `reports/production-preview-acceptance.json` 作为本次 64/64 证据。
+- 全量 Vitest 240/240 files、1936/1936 tests，以及 production imports、Workbench data、action status 的证据来自 `ca1b5bef19a22c4c754163a86a5baa3dad69f816` 的第三次 release 执行；其后改动仅为 verified/golden 镜像、签收 recipe/派生产物、测试常量、报告和文档，并已按影响域做上述聚焦与断点门禁。依用户指令没有再次从头执行 `release:verify`，因此 Gate V2 台账中不存在当前最终 HEAD 的单次 release PASS，`formal-search-admission` 仍不得伪造为 READY；正式搜索继续未启动。
 
 ## 1. 目标与结果身份
 
