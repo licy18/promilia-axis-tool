@@ -124,19 +124,40 @@ export async function appendLedgerRecord({
   record,
   now = new Date().toISOString(),
 } = {}) {
-  assertRecord(record);
+  const [stored] = await appendLedgerRecords({
+    repositoryRoot,
+    ledgerPath,
+    records: [record],
+    now,
+  });
+  return stored;
+}
+
+export async function appendLedgerRecords({
+  repositoryRoot,
+  ledgerPath = null,
+  records,
+  now = new Date().toISOString(),
+} = {}) {
+  if (!Array.isArray(records) || records.length === 0) {
+    throw new GateLedgerError('gate-record-batch-empty');
+  }
+  const completeRecords = records.map(prepareLedgerRecord);
   const paths = resolveLedgerPaths(repositoryRoot, ledgerPath);
   return withLedgerLock(paths, async () => {
     const ledger = await ensureLedger({ repositoryRoot, ledgerPath });
-    const completeRecord = createCompleteRecord(record);
-    if (
-      !ledger.records.some(entry => entry.recordId === completeRecord.recordId)
-    ) {
-      ledger.records.push(completeRecord);
+    for (const completeRecord of completeRecords) {
+      if (
+        !ledger.records.some(
+          entry => entry.recordId === completeRecord.recordId
+        )
+      ) {
+        ledger.records.push(completeRecord);
+      }
     }
     ledger.updatedAt = now;
     await writeLedgerAtomic(paths.file, ledger);
-    return completeRecord;
+    return completeRecords;
   });
 }
 
@@ -188,36 +209,76 @@ export async function completeGateRun({
   details = null,
   finishedAt = new Date().toISOString(),
 } = {}) {
+  const completion = await completeGateRunWithRecords({
+    repositoryRoot,
+    ledgerPath,
+    pending,
+    status,
+    exitCode,
+    summary,
+    stdoutComplete,
+    reportParseStatus,
+    details,
+    finishedAt,
+  });
+  return completion.record;
+}
+
+export async function completeGateRunWithRecords({
+  repositoryRoot,
+  ledgerPath = null,
+  pending,
+  status,
+  exitCode,
+  summary = null,
+  stdoutComplete = true,
+  reportParseStatus = 'complete',
+  details = null,
+  finishedAt = new Date().toISOString(),
+  relatedRecords = [],
+} = {}) {
   const durationMs = Math.max(
     0,
     new Date(finishedAt).getTime() - new Date(pending.startedAt).getTime()
   );
-  const record = await appendLedgerRecord({
+  const record = prepareLedgerRecord({
+    runId: pending.runId,
+    gate: pending.gate,
+    status,
+    mode: 'executed',
+    head: pending.head,
+    workingTreeFingerprint: pending.workingTreeFingerprint,
+    dependencyFingerprint: pending.dependencyFingerprint,
+    gateDefinitionVersion: pending.gateDefinitionVersion,
+    command: pending.command,
+    context: pending.context,
+    startedAt: pending.startedAt,
+    finishedAt,
+    durationMs,
+    exitCode,
+    stdoutComplete,
+    reportParseStatus,
+    summary,
+    details,
+  });
+  const additional =
+    typeof relatedRecords === 'function'
+      ? await relatedRecords(record)
+      : relatedRecords;
+  if (!Array.isArray(additional)) {
+    throw new GateLedgerError('gate-related-records-not-array');
+  }
+  const stored = await appendLedgerRecords({
     repositoryRoot,
     ledgerPath,
-    record: {
-      runId: pending.runId,
-      gate: pending.gate,
-      status,
-      mode: 'executed',
-      head: pending.head,
-      workingTreeFingerprint: pending.workingTreeFingerprint,
-      dependencyFingerprint: pending.dependencyFingerprint,
-      gateDefinitionVersion: pending.gateDefinitionVersion,
-      command: pending.command,
-      context: pending.context,
-      startedAt: pending.startedAt,
-      finishedAt,
-      durationMs,
-      exitCode,
-      stdoutComplete,
-      reportParseStatus,
-      summary,
-      details,
-    },
+    records: [...additional, record],
+    now: finishedAt,
   });
   await unlinkIfExists(pending.file);
-  return record;
+  return {
+    record: stored.at(-1),
+    relatedRecords: stored.slice(0, -1),
+  };
 }
 
 export async function recordGateReuse({
@@ -261,6 +322,7 @@ export function findReusablePass({
   ledger,
   gate,
   dependencyFingerprint,
+  gateDefinitionVersion,
   authority,
 }) {
   if (!validateLedger(ledger).valid) return null;
@@ -274,9 +336,11 @@ export function findReusablePass({
           record.status === 'pass' &&
           record.mode === 'executed' &&
           record.dependencyFingerprint === dependencyFingerprint &&
+          record.gateDefinitionVersion === gateDefinitionVersion &&
           record.exitCode === 0 &&
           record.stdoutComplete === true &&
-          record.reportParseStatus !== 'invalid'
+          ['complete', 'unavailable'].includes(record.reportParseStatus) &&
+          isReusableExecutionRecord({ ledger, record, authority })
       ) ?? null
   );
 }
@@ -293,19 +357,91 @@ export function findLatestExecutedRecord(ledger, gate) {
 export function hasSmartCacheAuthority({ ledger, authority }) {
   if (!authority) return false;
   return (ledger?.records ?? []).some(record => {
-    const recorded = record?.summary?.smartCacheAuthority;
     return (
       record.gate === 'release-verify' &&
       record.status === 'pass' &&
       record.mode === 'executed' &&
       record.exitCode === 0 &&
-      recorded?.fingerprintSchemaVersion ===
-        authority.fingerprintSchemaVersion &&
-      recorded?.dependencyMapVersion === authority.dependencyMapVersion &&
-      recorded?.dependencyMapHash === authority.dependencyMapHash &&
-      recorded?.runnerHash === authority.runnerHash
+      record.stdoutComplete === true &&
+      record.reportParseStatus === 'complete' &&
+      authoritiesMatch(record?.summary?.smartCacheAuthority, authority)
     );
   });
+}
+
+export function prepareLedgerRecord(record) {
+  assertRecord(record);
+  return createCompleteRecord(record);
+}
+
+function isReusableExecutionRecord({ ledger, record, authority }) {
+  if (record.context === 'release-verify-stage-pass-projection') {
+    return isAuthorizedReleaseProjection({ ledger, record, authority });
+  }
+  if (
+    record.context === 'release-extra-formal-gate' ||
+    record.context === 'release-trial-release-uncached' ||
+    record.context === 'executed-within-test:trial-release'
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function isAuthorizedReleaseProjection({ ledger, record, authority }) {
+  const details = record.details;
+  if (details?.evidenceProjection !== 'release-verify-stage-pass-v1') {
+    return false;
+  }
+  const releaseRecord = (ledger.records ?? []).find(
+    candidate => candidate.recordId === details.releaseRecordId
+  );
+  const sourceRecord = (ledger.records ?? []).find(
+    candidate => candidate.recordId === details.sourceRecordId
+  );
+  if (!releaseRecord || !sourceRecord) return false;
+  if (
+    releaseRecord.gate !== 'release-verify' ||
+    releaseRecord.status !== 'pass' ||
+    releaseRecord.mode !== 'executed' ||
+    releaseRecord.exitCode !== 0 ||
+    releaseRecord.stdoutComplete !== true ||
+    releaseRecord.reportParseStatus !== 'complete' ||
+    !authoritiesMatch(releaseRecord.summary?.smartCacheAuthority, authority)
+  ) {
+    return false;
+  }
+  if (
+    sourceRecord.gate !== details.sourceGate ||
+    sourceRecord.status !== 'pass' ||
+    sourceRecord.mode !== 'executed' ||
+    sourceRecord.exitCode !== 0 ||
+    sourceRecord.stdoutComplete !== true ||
+    !['complete', 'unavailable'].includes(sourceRecord.reportParseStatus) ||
+    sourceRecord.gateDefinitionVersion !== details.sourceGateDefinitionVersion
+  ) {
+    return false;
+  }
+  return (
+    record.head === releaseRecord.head &&
+    record.head === sourceRecord.head &&
+    record.head === details.releaseHead &&
+    record.workingTreeFingerprint === releaseRecord.workingTreeFingerprint &&
+    record.workingTreeFingerprint === sourceRecord.workingTreeFingerprint &&
+    releaseRecord.dependencyFingerprint ===
+      details.releaseDependencyFingerprint &&
+    sourceRecord.dependencyFingerprint === details.sourceDependencyFingerprint
+  );
+}
+
+function authoritiesMatch(recorded, authority) {
+  return (
+    recorded?.fingerprintSchemaVersion ===
+      authority?.fingerprintSchemaVersion &&
+    recorded?.dependencyMapVersion === authority?.dependencyMapVersion &&
+    recorded?.dependencyMapHash === authority?.dependencyMapHash &&
+    recorded?.runnerHash === authority?.runnerHash
+  );
 }
 
 export async function recoverInterruptedRuns({

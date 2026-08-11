@@ -64,6 +64,7 @@ export function planSmartGates({
               ledger,
               gate: definition.name,
               dependencyFingerprint: fingerprint.dependencyFingerprint,
+              gateDefinitionVersion: definition.version,
               authority,
             });
       const fingerprintChanged =

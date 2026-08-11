@@ -15,9 +15,10 @@ import {
   readGitState,
 } from './gates/gate-fingerprint.mjs';
 import {
-  appendLedgerRecord,
   beginGateRun,
   completeGateRun,
+  completeGateRunWithRecords,
+  prepareLedgerRecord,
   recoverInterruptedRuns,
 } from './gates/gate-ledger.mjs';
 import { runGate } from './gates/gate-runner.mjs';
@@ -262,36 +263,27 @@ export async function runReleaseVerification({
       root,
       stages.trialResult.observedRunnerReports
     );
-    await recordTrialReleaseComponents({
-      repositoryRoot: root,
-      snapshot,
-      fingerprints,
-      trialResult: stages.trialResult,
-      runtimeReports,
-    });
-    const admissionRecord = await appendLedgerRecord({
-      repositoryRoot: root,
-      record: {
-        gate: 'formal-search-admission',
-        status: stages.admission.ready ? 'pass' : 'fail',
-        mode: 'executed',
-        head: snapshot.head,
-        workingTreeFingerprint: snapshot.workingTreeFingerprint,
-        dependencyFingerprint: fingerprints.get('formal-search-admission')
-          .dependencyFingerprint,
-        gateDefinitionVersion: getGateDefinition('formal-search-admission')
-          .version,
-        command:
-          'formal-search-admission (derived from executed release contracts)',
-        context: 'release-formal-search-admission',
-        startedAt: stages.trialResult.record.finishedAt,
-        finishedAt: new Date().toISOString(),
-        durationMs: 0,
-        exitCode: stages.admission.ready ? 0 : 1,
-        stdoutComplete: true,
-        reportParseStatus: 'complete',
-        summary: stages.admission,
-      },
+    const completedAt = new Date().toISOString();
+    const admissionRecord = prepareLedgerRecord({
+      gate: 'formal-search-admission',
+      status: stages.admission.ready ? 'pass' : 'fail',
+      mode: 'executed',
+      head: snapshot.head,
+      workingTreeFingerprint: snapshot.workingTreeFingerprint,
+      dependencyFingerprint: fingerprints.get('formal-search-admission')
+        .dependencyFingerprint,
+      gateDefinitionVersion: getGateDefinition('formal-search-admission')
+        .version,
+      command:
+        'formal-search-admission (derived from executed release contracts)',
+      context: 'release-formal-search-admission',
+      startedAt: stages.trialResult.record.finishedAt,
+      finishedAt: completedAt,
+      durationMs: 0,
+      exitCode: stages.admission.ready ? 0 : 1,
+      stdoutComplete: true,
+      reportParseStatus: 'complete',
+      summary: stages.admission,
     });
     const summary = buildReleaseSummary({
       snapshot,
@@ -299,7 +291,7 @@ export async function runReleaseVerification({
       runtimeReports,
       admissionRecord,
     });
-    const releaseRecord = await completeGateRun({
+    const completion = await completeGateRunWithRecords({
       repositoryRoot: root,
       pending: releasePending,
       status: 'pass',
@@ -313,7 +305,19 @@ export async function runReleaseVerification({
         runnerOutputRestoration:
           stages.trialResult.runnerOutputRestoration ?? null,
       },
+      finishedAt: completedAt,
+      relatedRecords: releaseRecord => [
+        admissionRecord,
+        ...createReleaseEvidenceProjectionRecords({
+          snapshot,
+          fingerprints,
+          stages,
+          runtimeReports,
+          releaseRecord,
+        }),
+      ],
     });
+    const releaseRecord = completion.record;
     const report = {
       schemaVersion: 1,
       kind: 'azpr-release-verify-report',
@@ -517,38 +521,57 @@ export function validateReleasePostflight({ preflight, postflight }) {
   return { valid: issues.length === 0, issues };
 }
 
-async function recordTrialReleaseComponents({
-  repositoryRoot,
+export function createReleaseEvidenceProjectionRecords({
   snapshot,
   fingerprints,
-  trialResult,
+  stages,
   runtimeReports,
+  releaseRecord,
 }) {
+  assertFinalReleaseProjectionAuthority({
+    snapshot,
+    fingerprints,
+    stages,
+    releaseRecord,
+  });
+  const trialResult = stages.trialResult;
+  assertExecutedReleaseSource({
+    result: trialResult,
+    definition: getGateDefinition('trial-release'),
+    fingerprint: fingerprints.get('trial-release'),
+    snapshot,
+    context: 'release-trial-release-uncached',
+  });
+  const observedScripts = new Set(trialResult.summary?.observedScripts ?? []);
+  const stageTimeline = trialResult.summary?.stageTimeline ?? [];
+  const records = [];
   for (const component of TRIAL_RELEASE_COMPONENTS) {
     const definition = getGateDefinition(component.gate);
+    const stage = stageTimeline.find(
+      entry => entry.script === component.script
+    );
+    if (!observedScripts.has(component.script) || !stage) {
+      throw new Error(
+        `release-projection-stage-not-observed:${component.gate}:${component.script}`
+      );
+    }
     const summary = componentSummary(
       component.gate,
       trialResult,
       runtimeReports
     );
-    await appendLedgerRecord({
-      repositoryRoot,
-      record: {
+    records.push(
+      releaseProjectionRecord({
         gate: component.gate,
-        status: 'pass',
-        mode: 'executed',
-        head: snapshot.head,
-        workingTreeFingerprint: snapshot.workingTreeFingerprint,
-        dependencyFingerprint: fingerprints.get(component.gate)
-          .dependencyFingerprint,
-        gateDefinitionVersion: definition.version,
+        definition,
+        fingerprint: fingerprints.get(component.gate),
         command: component.command,
-        context: 'executed-within-test:trial-release',
-        startedAt: trialResult.record.startedAt,
-        finishedAt: trialResult.record.finishedAt,
-        durationMs: trialResult.durationMs,
-        exitCode: 0,
-        stdoutComplete: true,
+        snapshot,
+        releaseRecord,
+        sourceRecord: trialResult.record,
+        startedAt: stage.startedAt ?? trialResult.record.startedAt,
+        finishedAt: stage.finishedAt ?? trialResult.record.finishedAt,
+        durationMs: stage.durationMs ?? trialResult.durationMs,
         reportParseStatus: summary == null ? 'unavailable' : 'complete',
         summary:
           component.gate === 'determinism'
@@ -558,12 +581,155 @@ async function recordTrialReleaseComponents({
                 executionContext: 'test:trial-release/test-full',
               }
             : summary,
-        details: {
-          parentGate: 'trial-release',
-          parentRecordId: trialResult.record.recordId,
-        },
-      },
+      })
+    );
+  }
+  for (const gate of RELEASE_EXTRA_GATE_NAMES) {
+    const result = stages.extraResults.find(
+      candidate => candidate.gate === gate
+    );
+    const definition = getGateDefinition(gate);
+    if (!result) throw new Error(`release-projection-source-missing:${gate}`);
+    assertExecutedReleaseSource({
+      result,
+      definition,
+      fingerprint: fingerprints.get(gate),
+      snapshot,
+      context: 'release-extra-formal-gate',
     });
+    records.push(
+      releaseProjectionRecord({
+        gate,
+        definition,
+        fingerprint: fingerprints.get(gate),
+        command: result.record.command,
+        snapshot,
+        releaseRecord,
+        sourceRecord: result.record,
+        startedAt: result.record.startedAt,
+        finishedAt: result.record.finishedAt,
+        durationMs: result.durationMs,
+        reportParseStatus: result.record.reportParseStatus,
+        summary: result.summary ?? null,
+      })
+    );
+  }
+  return records;
+}
+
+function releaseProjectionRecord({
+  gate,
+  definition,
+  fingerprint,
+  command,
+  snapshot,
+  releaseRecord,
+  sourceRecord,
+  startedAt,
+  finishedAt,
+  durationMs,
+  reportParseStatus,
+  summary,
+}) {
+  if (!definition || !fingerprint) {
+    throw new Error(`release-projection-contract-missing:${gate}`);
+  }
+  return {
+    gate,
+    status: 'pass',
+    mode: 'executed',
+    head: snapshot.head,
+    workingTreeFingerprint: snapshot.workingTreeFingerprint,
+    dependencyFingerprint: fingerprint.dependencyFingerprint,
+    gateDefinitionVersion: definition.version,
+    command,
+    context: 'release-verify-stage-pass-projection',
+    startedAt,
+    finishedAt,
+    durationMs,
+    exitCode: 0,
+    stdoutComplete: true,
+    reportParseStatus,
+    summary,
+    details: {
+      evidenceProjection: 'release-verify-stage-pass-v1',
+      releaseRecordId: releaseRecord.recordId,
+      releaseHead: releaseRecord.head,
+      releaseDependencyFingerprint: releaseRecord.dependencyFingerprint,
+      sourceGate: sourceRecord.gate,
+      sourceRecordId: sourceRecord.recordId,
+      sourceDependencyFingerprint: sourceRecord.dependencyFingerprint,
+      sourceGateDefinitionVersion: sourceRecord.gateDefinitionVersion,
+    },
+  };
+}
+
+function assertFinalReleaseProjectionAuthority({
+  snapshot,
+  fingerprints,
+  stages,
+  releaseRecord,
+}) {
+  const releaseDefinition = getGateDefinition('release-verify');
+  const releaseFingerprint = fingerprints.get('release-verify');
+  const authority = releaseRecord?.summary?.smartCacheAuthority;
+  const expectedAuthority = snapshot.authority;
+  const valid =
+    stages?.status === 'pass' &&
+    stages?.trialValidation?.valid === true &&
+    stages?.postflightValidation?.valid === true &&
+    releaseRecord?.recordId &&
+    releaseRecord.gate === 'release-verify' &&
+    releaseRecord.status === 'pass' &&
+    releaseRecord.mode === 'executed' &&
+    releaseRecord.exitCode === 0 &&
+    releaseRecord.stdoutComplete === true &&
+    releaseRecord.reportParseStatus === 'complete' &&
+    releaseRecord.head === snapshot.head &&
+    releaseRecord.workingTreeFingerprint === snapshot.workingTreeFingerprint &&
+    releaseRecord.dependencyFingerprint ===
+      releaseFingerprint?.dependencyFingerprint &&
+    releaseRecord.gateDefinitionVersion === releaseDefinition?.version &&
+    authority?.fingerprintSchemaVersion ===
+      expectedAuthority?.fingerprintSchemaVersion &&
+    authority?.dependencyMapVersion ===
+      expectedAuthority?.dependencyMapVersion &&
+    authority?.dependencyMapHash === expectedAuthority?.dependencyMapHash &&
+    authority?.runnerHash === expectedAuthority?.runnerHash;
+  if (!valid) throw new Error('release-projection-authority-invalid');
+}
+
+function assertExecutedReleaseSource({
+  result,
+  definition,
+  fingerprint,
+  snapshot,
+  context,
+}) {
+  const record = result?.record;
+  const valid =
+    definition &&
+    fingerprint &&
+    result?.status === 'pass' &&
+    result?.exitCode === 0 &&
+    result?.stdoutComplete === true &&
+    result?.reportParseStatus !== 'invalid' &&
+    record?.recordId &&
+    record.gate === definition.name &&
+    record.status === 'pass' &&
+    record.mode === 'executed' &&
+    record.head === snapshot.head &&
+    record.workingTreeFingerprint === snapshot.workingTreeFingerprint &&
+    record.dependencyFingerprint === fingerprint.dependencyFingerprint &&
+    record.gateDefinitionVersion === definition.version &&
+    record.context === context &&
+    record.exitCode === 0 &&
+    record.stdoutComplete === true &&
+    ['complete', 'unavailable'].includes(record.reportParseStatus);
+  if (!valid) {
+    throw new Error(
+      `release-projection-source-invalid:${definition?.name ?? 'unknown'}`
+    );
   }
 }
 
