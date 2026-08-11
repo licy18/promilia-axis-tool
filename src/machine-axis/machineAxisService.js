@@ -48,6 +48,11 @@ import {
   selectTopN,
 } from './machineAxisSearchEngine';
 import { createMachineAxisSearchReport } from './machineAxisSearchReport';
+import {
+  createM12cBuildEnumerationPlan as createQualifiedM12cBuildEnumerationPlan,
+  createM12cOuterBuildPool as createQualifiedM12cOuterBuildPool,
+  iterateM12cBuildCandidates as iterateQualifiedM12cBuildCandidates,
+} from './m12cOuterBuildPool';
 import { createMachineAxisEnemyProfileFromCompiledEnemy } from './machineAxisEnemyProfileContract';
 import {
   createMachineAxisObjectiveContract,
@@ -315,6 +320,44 @@ export function createMachineAxisService({
       envelope,
       options
     );
+  }
+
+  function createM12cOuterBuildPool() {
+    const mechanicsPackage = requireMechanicsPackage();
+    const pool = createQualifiedM12cOuterBuildPool({
+      qualification: optimizationQualificationCatalog,
+    });
+    if (
+      pool.authority.verifiedMechanicsPackageHash !==
+      mechanicsPackage.packageHash
+    ) {
+      throw new MachineAxisValidationError([
+        createMachineAxisDiagnostic(
+          'machine-axis-m12c-mechanics-package-authority-mismatch',
+          'm12cOuterBuildPool.authority.verifiedMechanicsPackageHash',
+          'M12-C outer build authority does not match the installed mechanics package',
+          {
+            expected: pool.authority.verifiedMechanicsPackageHash,
+            actual: mechanicsPackage.packageHash,
+          }
+        ),
+      ]);
+    }
+    return pool;
+  }
+
+  function createM12cBuildEnumerationPlan(input) {
+    const pool = createM12cOuterBuildPool();
+    return createQualifiedM12cBuildEnumerationPlan(input, { pool });
+  }
+
+  function iterateM12cBuildCandidates(plan, options = {}) {
+    const pool = createM12cOuterBuildPool();
+    return iterateQualifiedM12cBuildCandidates(plan, {
+      pool,
+      maxCandidates: options.maxCandidates,
+      shouldPrune: options.shouldPrune,
+    });
   }
 
   async function search(envelope, options = {}) {
@@ -1011,6 +1054,9 @@ export function createMachineAxisService({
     evaluateBatch,
     evaluateCycle,
     evaluateKill,
+    createM12cOuterBuildPool,
+    createM12cBuildEnumerationPlan,
+    iterateM12cBuildCandidates,
     search,
     prepare,
     prepareValidated,

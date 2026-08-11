@@ -1,5 +1,10 @@
 import formalAdmissionBinding from '../../../reports/m12/m12-b3-binding-matrix.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
+import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   M12C_BUILD_SELECTION_CONTRACT_NAME,
   M12C_EQUIPMENT_SLOTS,
@@ -15,6 +20,7 @@ import {
   validateM12cBuildSelection,
   validateM12cOuterBuildAuthority,
 } from '../../machine-axis/m12cOuterBuildPool';
+import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { describe, expect, it } from 'vitest';
 
 const FIXED_INSTANCE = Object.freeze({
@@ -87,6 +93,27 @@ describe('M12-C outer team and build pool', () => {
     expect(orphanAlias.issues).toContain(
       'm12c-team-starborn-alias-without-object'
     );
+  });
+
+  it('rejects duplicate raw roster entries before canonicalization', () => {
+    const duplicated = resolveM12cTeamSourceConfig({
+      optimizationObjectIds: ['109001', '101010', '102001', '102001'],
+      sourceCharacterIdsByObjectId: {},
+    });
+    const nonArray = resolveM12cTeamSourceConfig({
+      optimizationObjectIds: '109001',
+      sourceCharacterIdsByObjectId: {},
+    });
+
+    expect(duplicated.valid).toBe(false);
+    expect(duplicated.issues).toEqual(
+      expect.arrayContaining([
+        'm12c-team-object-count-invalid',
+        'm12c-team-object-duplicate',
+      ])
+    );
+    expect(nonArray.valid).toBe(false);
+    expect(nonArray.issues).toContain('m12c-team-object-count-invalid');
   });
 
   it('materializes a scoreable canonical build for every one of the 35 source configs', () => {
@@ -504,6 +531,53 @@ describe('M12-C outer team and build pool', () => {
       ])
     );
     expect(planned.plan).not.toHaveProperty('initialFront');
+  });
+
+  it('exposes the authoritative pool and lazy iterator through the production service', () => {
+    clearInstalledVerifiedCombatMechanicsPackage();
+    const service = createMachineAxisService();
+    let missingPackageError = null;
+    try {
+      service.createM12cOuterBuildPool();
+    } catch (error) {
+      missingPackageError = error;
+    }
+    expect(missingPackageError).toMatchObject({
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-mechanics-package-not-installed',
+        }),
+      ],
+    });
+
+    installVerifiedCombatMechanicsPackage(mechanicsPackage);
+    try {
+      const pool = service.createM12cOuterBuildPool();
+      const sourceConfig = nonStarbornSourceConfig(pool);
+      const planned = service.createM12cBuildEnumerationPlan({
+        sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
+      });
+      const candidates = [
+        ...service.iterateM12cBuildCandidates(planned.plan, {
+          maxCandidates: 1,
+        }),
+      ];
+
+      expect(pool.summary).toMatchObject({
+        teamCount: 28,
+        sourceConfigCount: 35,
+      });
+      expect(pool.authority.verifiedMechanicsPackageHash).toBe(
+        mechanicsPackage.packageHash
+      );
+      expect(planned.valid).toBe(true);
+      expect(candidates).toHaveLength(1);
+      expect(candidates[0].authority.verifiedMechanicsPackageHash).toBe(
+        mechanicsPackage.packageHash
+      );
+    } finally {
+      clearInstalledVerifiedCombatMechanicsPackage();
+    }
   });
 
   it('fails closed on forged qualification, binding, pool, and build hashes', () => {

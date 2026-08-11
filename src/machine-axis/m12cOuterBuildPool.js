@@ -168,9 +168,11 @@ export function createM12cTeamCatalog(options = {}) {
 export function resolveM12cTeamSourceConfig(input, options = {}) {
   const teamCatalog = options.teamCatalog ?? createM12cTeamCatalog(options);
   const issues = [];
-  const objectIds = normalizeOptimizationObjectIds(
-    input?.optimizationObjectIds ?? []
-  );
+  const rawObjectIds = input?.optimizationObjectIds;
+  const objectIds = normalizeOptimizationObjectIds(rawObjectIds ?? []);
+  if (!Array.isArray(rawObjectIds) || rawObjectIds.length !== 3) {
+    issues.push('m12c-team-object-count-invalid');
+  }
   if (objectIds.length !== 3) {
     issues.push('m12c-team-object-count-invalid');
   }
@@ -184,7 +186,11 @@ export function resolveM12cTeamSourceConfig(input, options = {}) {
   if (objectIds.some(objectId => !allowed.has(objectId))) {
     issues.push('m12c-team-object-out-of-roster');
   }
-  if (new Set(input?.optimizationObjectIds ?? []).size !== 3) {
+  if (
+    Array.isArray(rawObjectIds) &&
+    new Set(rawObjectIds.map(value => String(value))).size !==
+      rawObjectIds.length
+  ) {
     issues.push('m12c-team-object-duplicate');
   }
 
@@ -1552,7 +1558,8 @@ function createActorSlotId(optimizationObjectId) {
 }
 
 function normalizeOptimizationObjectIds(values) {
-  return [...new Set((values ?? []).map(String))].sort(compareObjectIds);
+  const entries = Array.isArray(values) ? values : [];
+  return [...new Set(entries.map(String))].sort(compareObjectIds);
 }
 
 function normalizeSourceCharacterIdList(value) {

@@ -108,23 +108,35 @@ describe('machine axis AI-guided search protocol', () => {
         allowedActionKinds: ['normal-attack', 'star-skill'],
         blockedPublicActionIds: [10101012],
         perOwner: {
-          '101010': { allowedPublicActionIds: [10101001] },
+          101010: { allowedPublicActionIds: [10101001] },
         },
       },
       kiboPolicy: { allowedKiboIds: [500469] },
     });
 
     expect(
-      filter.character({ actionKind: 'ultimate', publicActionId: 10101013 }, 101010)
+      filter.character(
+        { actionKind: 'ultimate', publicActionId: 10101013 },
+        101010
+      )
     ).toBe(false);
     expect(
-      filter.character({ actionKind: 'star-skill', publicActionId: 10101012 }, 101010)
+      filter.character(
+        { actionKind: 'star-skill', publicActionId: 10101012 },
+        101010
+      )
     ).toBe(false);
     expect(
-      filter.character({ actionKind: 'normal-attack', publicActionId: 10101001 }, 101010)
+      filter.character(
+        { actionKind: 'normal-attack', publicActionId: 10101001 },
+        101010
+      )
     ).toBe(true);
     expect(
-      filter.character({ actionKind: 'normal-attack', publicActionId: 10101001 }, 103002)
+      filter.character(
+        { actionKind: 'normal-attack', publicActionId: 10101001 },
+        103002
+      )
     ).toBe(true);
     expect(filter.kibo({}, 500001)).toBe(false);
     expect(filter.kibo({}, 500469)).toBe(true);
@@ -163,7 +175,10 @@ describe('machine axis AI-guided search protocol', () => {
     expect(result.summary.topN).toBe(2);
 
     const applied = applySearchGuidance({ guidance }, guidance);
-    const feedback = createSearchFeedback({ result, guidanceApplication: applied });
+    const feedback = createSearchFeedback({
+      result,
+      guidanceApplication: applied,
+    });
     expect(feedback.guidanceHash).toBe(hashSearchGuidance(guidance));
     expect(feedback.budgetUsage).toMatchObject({
       beamWidth: 2,
@@ -171,8 +186,9 @@ describe('machine axis AI-guided search protocol', () => {
       maxDepth: 2,
     });
     expect(feedback.outer).toMatchObject({
-      implemented: false,
-      status: 'planned-m12-c1-not-implemented',
+      implemented: true,
+      searchIntegrationImplemented: false,
+      status: 'm12-c1-c2-pool-ready-search-integration-pending',
     });
     expect(Array.isArray(feedback.recommendations)).toBe(true);
   }, 30_000);

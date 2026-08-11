@@ -44,13 +44,13 @@ export function normalizeSearchGuidance(input = {}) {
   ) {
     issues.push('machine-axis-search-guidance-contract-name-invalid');
   }
-  if (
-    input.kind != null &&
-    input.kind !== MACHINE_AXIS_SEARCH_GUIDANCE_KIND
-  ) {
+  if (input.kind != null && input.kind !== MACHINE_AXIS_SEARCH_GUIDANCE_KIND) {
     issues.push('machine-axis-search-guidance-kind-invalid');
   }
-  if (input.layer != null && !['inner', 'outer', 'both'].includes(input.layer)) {
+  if (
+    input.layer != null &&
+    !['inner', 'outer', 'both'].includes(input.layer)
+  ) {
     issues.push('machine-axis-search-guidance-layer-invalid');
   }
   const budget = input.budget ?? {};
@@ -83,7 +83,9 @@ export function normalizeSearchGuidance(input = {}) {
     (typeof actionFilters.perOwner !== 'object' ||
       Array.isArray(actionFilters.perOwner))
   ) {
-    issues.push('machine-axis-search-guidance-action-filters-per-owner-invalid');
+    issues.push(
+      'machine-axis-search-guidance-action-filters-per-owner-invalid'
+    );
   }
   const provenance = input.provenance ?? {};
   if (provenance.authority != null && provenance.authority !== 'ai-agent') {
@@ -267,7 +269,8 @@ export function buildActionFilterFromGuidance(inputGuidance = {}) {
     if (!rule) return true;
     const publicActionId = Number(entry.publicActionId);
     if (rule.blocked.has(publicActionId)) return false;
-    if (rule.allowed.size > 0 && !rule.allowed.has(publicActionId)) return false;
+    if (rule.allowed.size > 0 && !rule.allowed.has(publicActionId))
+      return false;
     return true;
   };
   return {
@@ -290,7 +293,10 @@ export function buildActionFilterFromGuidance(inputGuidance = {}) {
   };
 }
 
-export function createSearchFeedback({ result = {}, guidanceApplication = null }) {
+export function createSearchFeedback({
+  result = {},
+  guidanceApplication = null,
+}) {
   const summary = result.summary ?? {};
   const rejectionEntries = Object.entries(summary.rejectionCounts ?? {})
     .sort((left, right) => right[1] - left[1])
@@ -327,12 +333,13 @@ export function createSearchFeedback({ result = {}, guidanceApplication = null }
       hashes: entry.hashes ?? null,
     })),
     outer: {
-      implemented: false,
-      status: 'planned-m12-c1-not-implemented',
-      guidanceReserved: guidanceApplication?.layer === 'outer' ||
+      implemented: true,
+      searchIntegrationImplemented: false,
+      status: 'm12-c1-c2-pool-ready-search-integration-pending',
+      guidanceReserved:
+        guidanceApplication?.layer === 'outer' ||
         guidanceApplication?.layer === 'both',
-      note:
-        'Outer team/loadout build-pool enumeration is planned in M12-C1; outer guidance fields are reserved and validated but not yet consumed by a search engine.',
+      note: 'The authoritative M12-C team/loadout pool, build planner, and lazy iterator are available through the Machine Axis service. Outer guidance remains reserved until M12-C4 binds each build to inner axis search.',
     },
     recommendations: [],
   };
