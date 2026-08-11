@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/ultimate-controlled-buff-switch-golden.json",
-        "reportHash": "24b38ef67c6dcc14",
+        "reportHash": "cb19b0fa643cbb5c",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "a5247572cdbdc6b2",
-          "data": "69d3276d6c4950a6",
-          "trace": "c08af1a97df57662",
+          "input": "173eba777e53cc42",
+          "data": "1464a66765ac10b7",
+          "trace": "efccb677c61f665e",
           "evaluation": null
         }
       },
@@ -1623,7 +1623,7 @@
           "assertionHash": "1be842279270d75b"
         }
       ],
-      "scenarioCaseHash": "82c1dea9ae1c4aa5"
+      "scenarioCaseHash": "46a6bd40208c5c16"
     },
     {
       "schemaVersion": 1,
@@ -1631,7 +1631,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/101003/golden-trace.json",
-        "reportHash": "cabc22e1914dd67c",
+        "reportHash": "3adeeef1c51d478a",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 101003 --assert-clean"
       },
       "execution": {
@@ -1639,9 +1639,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "dd10b2b3c428b467",
-          "data": "1cf26bb36061a311",
-          "trace": "e1a13952dc7761ea",
+          "input": "ef3608e8332e2f7d",
+          "data": "d7ada9b396911b3e",
+          "trace": "058b8b09c4d2ed3e",
           "evaluation": null
         }
       },
@@ -8762,7 +8762,7 @@
           "assertionHash": "14aedd3a456ce1ad"
         }
       ],
-      "scenarioCaseHash": "1c1939d77b61707c"
+      "scenarioCaseHash": "c2c1aa21aca0bcbb"
     },
     {
       "schemaVersion": 1,
@@ -13801,5 +13801,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "3971e25fffde1820"
+  "scenarioSetHash": "65ddc694c3e3ce87"
 }

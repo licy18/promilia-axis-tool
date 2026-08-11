@@ -8,7 +8,7 @@
       "runnerKind": "canonical-character-golden",
       "inputReference": {
         "reportPath": "reports/m10/109001/golden-trace.json",
-        "reportHash": "8c75a576d549c0e4",
+        "reportHash": "e041872140802373",
         "replayCommand": "node scripts/sync-character-combat-profile.mjs --owner 109001 --assert-clean"
       },
       "execution": {
@@ -16,9 +16,9 @@
         "stableReplay": true,
         "workbenchRoundTrip": "not-applicable",
         "canonicalHashes": {
-          "input": "b821bab7c2bf4987",
-          "data": "b8344c9ea9898d93",
-          "trace": "7db7448adab5127a",
+          "input": "5e55f4fac14c957d",
+          "data": "1e71b8fb9fb2d5c7",
+          "trace": "9eb06642d1fe9b31",
           "evaluation": null
         }
       },
@@ -11333,7 +11333,7 @@
           "assertionHash": "760774e6e477fd45"
         }
       ],
-      "scenarioCaseHash": "73dba2fd45d70e69"
+      "scenarioCaseHash": "d285ef84dd7e51a7"
     },
     {
       "schemaVersion": 1,
@@ -27516,5 +27516,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "f9d28359e46f348d"
+  "scenarioSetHash": "ba02c717cb75b6d4"
 }

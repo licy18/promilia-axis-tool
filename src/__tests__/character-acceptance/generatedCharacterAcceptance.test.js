@@ -210,11 +210,13 @@ describe('generated character acceptance manifests', () => {
         manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
         ? ({
-            101010: 'd2ba1bb2e834cfca1c91ebce557819894cbc0b1b',
+            101010: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
+            102001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
             103002: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
             107001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
             107002: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
             108003: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
+            109001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
             199001: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
             199002: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
             112001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',

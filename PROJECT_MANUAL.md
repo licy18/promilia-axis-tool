@@ -1897,7 +1897,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - 完整 Kibo action catalog 和 mechanics evidence 不删除；Machine Axis catalog 发布顶层 scope policy，并按 action kind 确定性分类。旧项目或手工合同显式输入自主动作时返回 `machine-axis-kibo-action-product-deferred`，不会把来源存在误报为可执行。
 - 搜索器与 Workbench 共享同一 classifier，只暴露 `signature` 和 `break`。编译阶段不物化 auto-cast action 或 derivation registry，因此三目标不会再被 cadence-open 诊断阻断。
 - 正式准入对 43 只 admitted Kibo 做 71 个 deferred autonomous surface（43 普攻、28 主动技）及 43 signature/43 break 的全量普查，并绑定 qualification、catalog、scheduler、search generator 和 scope policy hash。该检查只证明产品范围一致，不声称自主 AI 已实现。
-- 该修订会改变部分既有验收轴的 canonical 编译身份，即使伤害评价未变；自动化只更新代码回归常量，不自动续签产品记录。现场确认 103002、107001、107002、108003、112001 受影响后，由用户明确重签并绑定实现基线 `be60e68d1c1bcf77a962426ddb0af37fc384c4da`；101010、102001、109001、199001、199002 无漂移，101003 保持 pending。
+- 该修订会改变部分既有验收轴的 canonical 编译身份，即使伤害评价未变；自动化只更新代码回归常量，不自动续签产品记录。首轮运行时比较确认 103002、107001、107002、108003、112001 受影响；随后完整同步 M10/verified golden 又使 101010、102001、103002、107002、108003、109001 的 qualification subject 更新。用户明确要求先完成角色签收，最终 101010、102001、103002、107001、107002、108003、109001、112001 均绑定实现基线 `be60e68d1c1bcf77a962426ddb0af37fc384c4da`；199001、199002 未漂移，101003 保持 pending。原场景身份与截图 SHA 均未更换。
 
 下一阶段任务（重排后的 M12-C 前路线图，E20 起按依赖顺序推进）：
 
@@ -2225,7 +2225,7 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 
 ### M12-B3-E22 绑定矩阵与正式准入（2026-08-11，已关闭）
 
-- 角色-装配-奇波绑定矩阵全绿：`reports/m12/m12-b3-binding-matrix.json`（+ `.md`），生成器 `scripts/generate-m12-b3-binding-matrix.mjs`，门禁测试 `src/__tests__/optimization-qualification/m12BindingMatrix.test.js`，审计 `npm run audit:binding-matrix`。bindingMatrixHash=`b53e8e13947c0b46`，22/22 检查全绿。
+- 角色-装配-奇波绑定矩阵全绿：`reports/m12/m12-b3-binding-matrix.json`（+ `.md`），生成器 `scripts/generate-m12-b3-binding-matrix.mjs`，门禁测试 `src/__tests__/optimization-qualification/m12BindingMatrix.test.js`，审计 `npm run audit:binding-matrix`。bindingMatrixHash=`86f1d0af5c870cb6`，22/22 检查全绿。
 - 静态门禁：分母 9/43/62/137/12、blocking unique gap=0、`m12cLocked=false`、角色准入 9 个对象（含统一 STARBORN）、静态绑定矩阵全部合格、星临者两来源别名机制 hash 一致、roster/manifests/ledger/binding/catalog 产物 hash 与 summary 一致。
 - 八类场景绑定（Machine Axis 严格合同实测）：装配→角色（合法 strict loadout prepare 通过；职业不匹配灵子、装备部位错配均拒绝）；角色→奇波继承（羁绊 1→10 改变 kibo 继承 ATK，角色等级 80→40 改变角色属性）；效果来源/目标（三 actor 场景效应事件携带 source/target）；前后台/切人（107001 switch-star-carry 可执行且双轮重放稳定）；同名奇波跨 owner 隔离（三槽共用 500001 时资源事件按 actor 隔离）；同帧顺序（107001 wind-expiry 双轮 canonical hash 一致）；保存重放（Workbench adapter 与 JSON carrier round-trip hash 一致）；连续循环（cycle-dps 信封 closed 且 cycle/trace hash 稳定）。
 - 重锁反例：从合格 catalog 撤销任一对象（112001）后，formal admission 立即回到 `optimization-qualification-stage-locked`，stage gate 不再解锁。

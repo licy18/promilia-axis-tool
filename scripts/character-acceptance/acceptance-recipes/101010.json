@@ -4,11 +4,9 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "d2ba1bb2e834cfca1c91ebce557819894cbc0b1b",
-    "recordIdentity": "character-product-acceptance:101010:d2ba1bb2e834cfca1c91ebce557819894cbc0b1b:86cbb76d62e0a968",
-    "scenarioIdentities": [
-      "m11-d-101010-visual-acceptance"
-    ],
+    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
+    "recordIdentity": "character-product-acceptance:101010:be60e68d1c1bcf77a962426ddb0af37fc384c4da:a66b48bd5404e38e",
+    "scenarioIdentities": ["m11-d-101010-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
@@ -17,14 +15,12 @@
         "screenshotSha256": "73ff96230b426eaf1d23026f0764199c054f522352fb10adc7ee1a2ea8526928"
       }
     ],
-    "qualificationSubjectHash": "86cbb76d62e0a968",
+    "qualificationSubjectHash": "a66b48bd5404e38e",
     "scenarioSetHash": "ebde028fe5a24527"
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
-  "goldenReports": [
-    "reports/m10/101010/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/101010/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10101062,
   "scenarioScope": {
     "policyIdentity": "m12c-zero-distance-passive-boss-v1",
@@ -128,15 +124,8 @@
     "operationPath": "payload.operation",
     "timePath": "timeMs",
     "durationMs": 10000,
-    "requiredOperations": [
-      "transform",
-      "refresh",
-      "expire"
-    ],
-    "startOperations": [
-      "transform",
-      "refresh"
-    ],
+    "requiredOperations": ["transform", "refresh", "expire"],
+    "startOperations": ["transform", "refresh"],
     "rightOpenExpiry": true
   },
   "inputWindowBoundary": {
@@ -274,16 +263,7 @@
       "expectation": {
         "count": 8,
         "orderedValues": {
-          "absoluteFrame": [
-            1125,
-            1125,
-            1129,
-            1129,
-            1133,
-            1133,
-            1137,
-            1137
-          ],
+          "absoluteFrame": [1125, 1125, 1129, 1129, 1133, 1133, 1137, 1137],
           "actorId": [
             "actor-103002",
             "actor-101003",
@@ -295,14 +275,8 @@
             "actor-101003"
           ],
           "change": [
-            0.299988,
-            0.299988,
-            0.299988,
-            0.299988,
-            0.299988,
-            0.299988,
-            0.299988,
-            0.299988
+            0.299988, 0.299988, 0.299988, 0.299988, 0.299988, 0.299988,
+            0.299988, 0.299988
           ]
         }
       }
@@ -402,26 +376,10 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [
-                272,
-                278,
-                284
-              ],
-              "before": [
-                3,
-                2,
-                1
-              ],
-              "after": [
-                2,
-                1,
-                0
-              ],
-              "delta": [
-                -1,
-                -1,
-                -1
-              ]
+              "frameIndex": [272, 278, 284],
+              "before": [3, 2, 1],
+              "after": [2, 1, 0],
+              "delta": [-1, -1, -1]
             }
           }
         },
@@ -489,26 +447,10 @@
           "expectation": {
             "count": 3,
             "orderedValues": {
-              "frameIndex": [
-                219,
-                225,
-                231
-              ],
-              "before": [
-                3,
-                2,
-                1
-              ],
-              "after": [
-                2,
-                1,
-                0
-              ],
-              "delta": [
-                -1,
-                -1,
-                -1
-              ]
+              "frameIndex": [219, 225, 231],
+              "before": [3, 2, 1],
+              "after": [2, 1, 0],
+              "delta": [-1, -1, -1]
             }
           }
         },

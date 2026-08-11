@@ -51,7 +51,7 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: 'eb06acc456ee309245a78455e7691738a2ee808b',
+      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
       bindingStatus: 'verified',
       scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
       automatedEvidence: [

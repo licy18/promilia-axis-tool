@@ -316,7 +316,7 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: 'd2ba1bb2e834cfca1c91ebce557819894cbc0b1b',
+      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
       bindingStatus: 'verified',
       automatedEvidence: [
         expect.objectContaining({
