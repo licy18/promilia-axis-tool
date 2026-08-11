@@ -61,6 +61,10 @@ import {
   resolveMachineAxisSchedules,
   validateMachineAxisContract,
 } from './machineAxisContract';
+import {
+  isM12cFormalInitialStateRequired,
+  validateM12cInitialStatePreset,
+} from './m12cInitialStatePolicy';
 
 export const MACHINE_AXIS_SERVICE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SERVICE_CONTRACT_NAME = 'AzPrMachineAxisService';
@@ -623,6 +627,23 @@ export function createMachineAxisService({
         catalog: optimizationQualificationCatalog,
       })
     );
+    if (
+      isM12cFormalInitialStateRequired(contract.scenario) ||
+      contract.scenario.initialStatePreset != null
+    ) {
+      const initialStateValidation = validateM12cInitialStatePreset({
+        binding: contract.scenario.initialStatePreset,
+        objectiveId: contract.scenario.objectiveContract?.objectiveId,
+        team: contract.scenario.team,
+        initialRuntimeState: contract.scenario.initialRuntimeState,
+        mechanicsPackage: requireMechanicsPackage(),
+      });
+      issues.push(
+        ...initialStateValidation.issues.map(entry =>
+          createMachineAxisDiagnostic(entry.code, entry.path, entry.message)
+        )
+      );
+    }
     const teamBySlot = new Map(
       contract.scenario.team.map((slot, position) => [
         slot.slotId,
@@ -2210,7 +2231,8 @@ function resolveSemanticVariantSelection({
       binding =>
         binding.applied === true &&
         Number(binding.ownerId) === Number(ownerId) &&
-        Number(binding.publicControlSkillId) === Number(mapping.controlSkillId) &&
+        Number(binding.publicControlSkillId) ===
+          Number(mapping.controlSkillId) &&
         String(binding.actionKind) === String(mapping.actionKind)
     );
     if (releaseBindings.length === 0) {
@@ -2664,9 +2686,7 @@ function collectContextWindowConflictIssues({ contract, project }) {
       contextSegment.executionControlSkillId ?? contextSegment.controlSkillId
     );
     const sourceSubSkillIndex = Number(
-      contextSegment.selectedSubSkillIndex ??
-        contextSegment.subSkillIndex ??
-        0
+      contextSegment.selectedSubSkillIndex ?? contextSegment.subSkillIndex ?? 0
     );
     const contextFrame = absoluteScheduleFrame(previousContractAction);
     const actionFrame = absoluteScheduleFrame(action);
@@ -2681,8 +2701,7 @@ function collectContextWindowConflictIssues({ contract, project }) {
         edge.applied === true &&
         Number(edge.sourceControlSkillId) === sourceControlSkillId &&
         Number(edge.sourceSubSkillIndex) === sourceSubSkillIndex &&
-        String(edge.inputCommand ?? '') ===
-          String(action.intent?.actionKind) &&
+        String(edge.inputCommand ?? '') === String(action.intent?.actionKind) &&
         offsetFrames >= Number(edge.inputWindow?.startFrame) &&
         offsetFrames < Number(edge.inputWindow?.endFrame)
     );

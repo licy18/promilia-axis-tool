@@ -9,6 +9,11 @@ import {
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
 import { normalizeCombatPickupPolicy } from '../domain/combatScenario';
 import { validateVerifiedJointAttackRuntimeBinding } from '../domain/verifiedJointAttackRuntimeContract';
+import {
+  isM12cFormalInitialStateRequired,
+  normalizeM12cInitialStatePresetBinding,
+  validateM12cInitialStatePresetBindingShape,
+} from './m12cInitialStatePolicy';
 
 export const MACHINE_AXIS_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CONTRACT_NAME = 'AzPrMachineAxis';
@@ -75,6 +80,13 @@ export function normalizeMachineAxisContract(value = {}) {
       team: normalizeTeam(scenario.team),
       enemy: normalizeEnemy(scenario.enemy),
       initialRuntimeState: normalizePlainRecord(scenario.initialRuntimeState),
+      ...(scenario.initialStatePreset == null
+        ? {}
+        : {
+            initialStatePreset: normalizeM12cInitialStatePresetBinding(
+              scenario.initialStatePreset
+            ),
+          }),
       projectile: normalizeProjectile(scenario.projectile),
       critical: normalizeCritical(scenario.critical),
       ...(scenario.pickups == null
@@ -655,6 +667,22 @@ function validateScenario(value, issues) {
         ),
         message: entry.message,
       }))
+    );
+  }
+  if (isM12cFormalInitialStateRequired(value) && !value.initialStatePreset) {
+    issues.push(
+      diagnostic(
+        'm12c-initial-state-preset-required',
+        'scenario.initialStatePreset',
+        'Formal M12-C scenarios require an objective-scoped initial-state preset binding'
+      )
+    );
+  }
+  if (value.initialStatePreset != null) {
+    issues.push(
+      ...validateM12cInitialStatePresetBindingShape(
+        value.initialStatePreset
+      ).issues.map(entry => diagnostic(entry.code, entry.path, entry.message))
     );
   }
   if (!SCENARIO_CRITICAL_POLICIES.has(value.critical.policy)) {

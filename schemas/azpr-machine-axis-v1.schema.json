@@ -59,6 +59,36 @@
         },
         "enemy": { "$ref": "#/$defs/enemy" },
         "initialRuntimeState": { "type": "object" },
+        "initialStatePreset": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "contractName",
+            "policyId",
+            "policyVersion",
+            "policyHash",
+            "presetId",
+            "objectiveId",
+            "objectiveScope",
+            "mechanicsPackageId",
+            "mechanicsPackageHash",
+            "presetHash"
+          ],
+          "properties": {
+            "schemaVersion": { "const": 1 },
+            "contractName": { "const": "AzPrM12CInitialStatePreset" },
+            "policyId": { "const": "m12c-initial-state-v1" },
+            "policyVersion": { "const": "1.0.0" },
+            "policyHash": { "type": "string", "minLength": 1 },
+            "presetId": { "type": "string", "minLength": 1 },
+            "objectiveId": { "type": "string", "minLength": 1 },
+            "objectiveScope": { "enum": ["cycle", "kill"] },
+            "mechanicsPackageId": { "type": "string", "minLength": 1 },
+            "mechanicsPackageHash": { "type": "string", "minLength": 1 },
+            "presetHash": { "type": "string", "minLength": 1 }
+          }
+        },
         "projectile": { "$ref": "#/$defs/projectile" },
         "critical": { "$ref": "#/$defs/critical" },
         "pickups": { "$ref": "#/$defs/pickupPolicy" },
