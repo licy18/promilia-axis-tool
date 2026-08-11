@@ -44,7 +44,7 @@ function createSources() {
 }
 
 describe('STARBORN optimization-object alias acceptance closure', () => {
-  it('counts one optimization object while retaining and closing both source aliases', () => {
+  it('admits one signed optimization object while retaining both source aliases', () => {
     const validation = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: createSources(),
@@ -68,11 +68,67 @@ describe('STARBORN optimization-object alias acceptance closure', () => {
       assertionPassedCount: 3064,
     });
     expect(validation.bundle).toMatchObject({
-      status: 'runtime-integrated-product-visual-pending',
-      formalAdmission: false,
-      optimizationReady: false,
-      productVisualAcceptance: 'pending',
+      status: 'optimization-ready',
+      formalAdmission: true,
+      optimizationReady: true,
+      productVisualAcceptance: 'accepted',
+      productAcceptanceBinding: {
+        status: 'verified',
+        acceptanceCommit: '76605d759376a93a2981fc27f2fa18e3464b17f7',
+        recordIdentity:
+          'optimization-object-product-acceptance:STARBORN:76605d759376a93a2981fc27f2fa18e3464b17f7:c645f8836bf6fd0a',
+        acceptanceSubjectHash: 'c645f8836bf6fd0a',
+      },
     });
+  });
+
+  it('fails closed for a partial product signoff or an unaccepted source alias', () => {
+    const partialRecipe = structuredClone(objectRecipe);
+    partialRecipe.productVisualAcceptance.formalAdmission = false;
+    const partial = validateOptimizationObjectAliasAcceptanceBundle({
+      recipe: partialRecipe,
+      sources: createSources(),
+    });
+    expect(partial.valid).toBe(false);
+    expect(partial.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'optimization-object-product-acceptance-inconsistent',
+        }),
+      ])
+    );
+
+    const incompleteAliases = createSources();
+    incompleteAliases[1].manifest.evidence.productVisualAcceptance.status =
+      'pending';
+    incompleteAliases[1].manifest.maturity.optimizationReady = false;
+    const incomplete = validateOptimizationObjectAliasAcceptanceBundle({
+      recipe: objectRecipe,
+      sources: incompleteAliases,
+    });
+    expect(incomplete.valid).toBe(false);
+    expect(incomplete.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'optimization-object-source-alias-product-acceptance-incomplete',
+        }),
+      ])
+    );
+
+    const driftedEvidence = createSources();
+    driftedEvidence[1].manifest.manifestHash = 'drifted-manifest-hash';
+    const staleSignoff = validateOptimizationObjectAliasAcceptanceBundle({
+      recipe: objectRecipe,
+      sources: driftedEvidence,
+    });
+    expect(staleSignoff.valid).toBe(false);
+    expect(staleSignoff.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'optimization-object-product-acceptance-binding-invalid',
+        }),
+      ])
+    );
   });
 
   it('rejects a single-alias bundle instead of closing the unified object', () => {

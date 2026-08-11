@@ -402,9 +402,118 @@ export function validateOptimizationObjectAliasAcceptanceBundle({
       assertionPassedCount: 0,
     }
   );
+  const sortedAliasSummaries = aliasSummaries
+    .slice()
+    .sort((left, right) => left.sourceCharacterId - right.sourceCharacterId);
+  const acceptanceSubjectHash = hashCanonicalValue({
+    schemaVersion: 1,
+    contractName: 'AzPrOptimizationObjectProductAcceptanceSubject',
+    optimizationObjectId,
+    requiredSourceCharacterIds,
+    sourceAliases: sortedAliasSummaries,
+    summary,
+  });
+  const requestedProductAcceptance = recipe?.productVisualAcceptance ?? {};
+  const productVisualAcceptanceStatus = String(
+    requestedProductAcceptance.status ?? 'pending'
+  );
+  const acceptanceCommit = String(
+    requestedProductAcceptance.acceptanceCommit ?? ''
+  );
+  const acceptanceRecordIdentity = String(
+    requestedProductAcceptance.recordIdentity ?? ''
+  );
+  const requestedAcceptanceSubjectHash = String(
+    requestedProductAcceptance.acceptanceSubjectHash ?? ''
+  );
+  const expectedAcceptanceRecordIdentity =
+    `optimization-object-product-acceptance:${optimizationObjectId}:` +
+    `${acceptanceCommit}:${acceptanceSubjectHash}`;
+  const productAcceptanceRequested =
+    productVisualAcceptanceStatus === 'accepted' ||
+    requestedProductAcceptance.formalAdmission === true ||
+    requestedProductAcceptance.optimizationReady === true ||
+    acceptanceCommit !== '' ||
+    acceptanceRecordIdentity !== '' ||
+    requestedAcceptanceSubjectHash !== '';
+  const productAcceptanceTupleComplete =
+    productVisualAcceptanceStatus === 'accepted' &&
+    requestedProductAcceptance.formalAdmission === true &&
+    requestedProductAcceptance.optimizationReady === true;
+  const productAcceptanceBindingComplete =
+    /^[0-9a-f]{40}$/.test(acceptanceCommit) &&
+    requestedAcceptanceSubjectHash === acceptanceSubjectHash &&
+    acceptanceRecordIdentity === expectedAcceptanceRecordIdentity;
+  const everySourceAliasProductReady =
+    aliasSummaries.length === requiredSourceCharacterIds.length &&
+    aliasSummaries.every(
+      alias =>
+        alias.productVisualAcceptance === 'accepted' &&
+        alias.optimizationReady === true
+    );
+
+  if (!['pending', 'accepted'].includes(productVisualAcceptanceStatus)) {
+    addIssue(
+      issues,
+      'optimization-object-product-acceptance-status-invalid',
+      'recipe.productVisualAcceptance.status',
+      productVisualAcceptanceStatus,
+      ['pending', 'accepted']
+    );
+  }
+  if (productAcceptanceRequested && !productAcceptanceTupleComplete) {
+    addIssue(
+      issues,
+      'optimization-object-product-acceptance-inconsistent',
+      'recipe.productVisualAcceptance',
+      requestedProductAcceptance,
+      {
+        status: 'accepted',
+        formalAdmission: true,
+        optimizationReady: true,
+      }
+    );
+  }
+  if (productAcceptanceTupleComplete && !productAcceptanceBindingComplete) {
+    addIssue(
+      issues,
+      'optimization-object-product-acceptance-binding-invalid',
+      'recipe.productVisualAcceptance',
+      {
+        acceptanceCommit: acceptanceCommit || null,
+        recordIdentity: acceptanceRecordIdentity || null,
+        acceptanceSubjectHash: requestedAcceptanceSubjectHash || null,
+      },
+      {
+        acceptanceCommit: '40-character-lowercase-git-sha',
+        recordIdentity: expectedAcceptanceRecordIdentity,
+        acceptanceSubjectHash,
+      }
+    );
+  }
+  if (productAcceptanceTupleComplete && !everySourceAliasProductReady) {
+    addIssue(
+      issues,
+      'optimization-object-source-alias-product-acceptance-incomplete',
+      'sourceAliases',
+      aliasSummaries.map(alias => ({
+        sourceCharacterId: alias.sourceCharacterId,
+        productVisualAcceptance: alias.productVisualAcceptance,
+        optimizationReady: alias.optimizationReady,
+      }))
+    );
+  }
+
+  const productAccepted =
+    issues.length === 0 &&
+    productAcceptanceTupleComplete &&
+    productAcceptanceBindingComplete &&
+    everySourceAliasProductReady;
   const status =
     issues.length === 0
-      ? 'runtime-integrated-product-visual-pending'
+      ? productAccepted
+        ? 'optimization-ready'
+        : 'runtime-integrated-product-visual-pending'
       : 'blocked';
   const bundle = {
     schemaVersion: 1,
@@ -412,13 +521,21 @@ export function validateOptimizationObjectAliasAcceptanceBundle({
     kind: 'azpr-optimization-object-alias-acceptance-bundle',
     optimizationObjectId,
     status,
-    formalAdmission: false,
-    optimizationReady: false,
-    productVisualAcceptance: 'pending',
+    formalAdmission: productAccepted,
+    optimizationReady: productAccepted,
+    productVisualAcceptance: productAccepted ? 'accepted' : 'pending',
+    productAcceptanceBinding: {
+      status: productAccepted
+        ? 'verified'
+        : productAcceptanceRequested
+          ? 'invalid'
+          : 'not-requested',
+      acceptanceCommit: acceptanceCommit || null,
+      recordIdentity: acceptanceRecordIdentity || null,
+      acceptanceSubjectHash: requestedAcceptanceSubjectHash || null,
+    },
     requiredSourceCharacterIds,
-    sourceAliases: aliasSummaries.sort(
-      (left, right) => left.sourceCharacterId - right.sourceCharacterId
-    ),
+    sourceAliases: sortedAliasSummaries,
     summary,
     validation: {
       status:

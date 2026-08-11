@@ -3,10 +3,16 @@
   "contractName": "AzPrOptimizationObjectAliasAcceptanceBundle",
   "kind": "azpr-optimization-object-alias-acceptance-bundle",
   "optimizationObjectId": "STARBORN",
-  "status": "runtime-integrated-product-visual-pending",
-  "formalAdmission": false,
-  "optimizationReady": false,
-  "productVisualAcceptance": "pending",
+  "status": "optimization-ready",
+  "formalAdmission": true,
+  "optimizationReady": true,
+  "productVisualAcceptance": "accepted",
+  "productAcceptanceBinding": {
+    "status": "verified",
+    "acceptanceCommit": "76605d759376a93a2981fc27f2fa18e3464b17f7",
+    "recordIdentity": "optimization-object-product-acceptance:STARBORN:76605d759376a93a2981fc27f2fa18e3464b17f7:c645f8836bf6fd0a",
+    "acceptanceSubjectHash": "c645f8836bf6fd0a"
+  },
   "requiredSourceCharacterIds": [
     199001,
     199002
@@ -96,5 +102,5 @@
     "status": "optimization-object-alias-acceptance-bundle-valid",
     "issues": []
   },
-  "bundleHash": "0abbb378c9e5b9fd"
+  "bundleHash": "3338e8e57a632564"
 }
