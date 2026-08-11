@@ -1,10 +1,22 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：产品规则已冻结，尚未启动正式搜索。
+状态：`M12-C0` 至 `M12-C3`、中央串行集成和全量 release 门禁已完成；正式搜索仍未启动。
 
-基线：`master@c31e4c3fcf4291462b1b2a2a4d8fbbe6a844588f`。
+已验证实现基线：`master@777af8f790986efab42de398fd2ef394610a9a77`。本文件的状态提交不改变实现语义。
 
-本文件是 M12-C 的实施合同。`DEVELOPMENT_PLAN.md` 保留阶段摘要，实际实现、测试和产品复验均以本文件为准。规划完成不等于解锁：M12-B3 的功能修复、资格 hash 和五个待签角色的产品视觉验收未全部关闭前，不得运行正式 M12-C 搜索。
+本文件是 M12-C 的实施合同。`DEVELOPMENT_PLAN.md` 保留阶段摘要，实际实现、测试和产品复验均以本文件为准。实现与优化资格全绿不等于客户端一致性或产品视觉自动签收；未满足对应产品边界前，不得把 M12-C 搜索结果声明为已获产品验收。
+
+## 0. 2026-08-11 中央集成快照
+
+- `M12-C1/C2` 已接入生产路径：28 个队伍对象、35 个来源配置、STARBORN 单一优化对象/双互斥别名、lazy build generator、固定培养/装配资格投影、`buildHash`、headless service 和 CLI 均已实现并通过回归。
+- `M12-C3` 已实现 objective-scoped initial-state preset、canonical hash 和 formal authority 校验；循环轴与击杀轴白名单均 fail closed。
+- STARBORN 最终合同为：星决技对 action-start 已存在的每一种印记分别 `+1`，星携同样 `+1`，逐种 cap 5；无印记不创建，`199001/199002` 不双计。`+2` 仅保留为必须失败的负向测试。
+- M12-B3 optimization qualification 为 263/263：角色 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装 12/12；`blockingUniqueGapCount=0`，`m12cLocked=false`。E22 binding matrix 为 22/22。
+- 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `6e4843984a9f435d`；manifests `d08e4a0bc73b464f`；ledger `7b7cb20e220da974`；qualification binding matrix `bd4084ac0882820f`；qualification catalog `b26dede46b58f714`；E22 report `88b98cf6195e27c4`。
+- 全量门禁：`test:full` 228/228 files、1877/1877 tests；确定性聚焦集 16 files、166/166 tests；Workbench production preview 64/64；最终 `test:trial-release` exit 0。production build、Workbench data、action status、applied-source、Kibo headless、production imports、bundle、binding matrix 和确定性审计均通过。
+- `clientParityReady=false` 仍由已验证 mechanics/profile evidence 明确保留；它与 optimization qualification 全绿是两条独立状态，禁止混同。
+- 本轮没有自动签署任何产品视觉记录。既有角色级 accepted 记录保持原样；STARBORN optimization-object 仍为 `productVisualAcceptance=pending`、`formalAdmission=false`、`optimizationReady=false`。
+- 正式 M12-C 搜索、三个 objective 的 Top-N 和产品结论均尚未运行/生成；下一实施阶段仍是 `M12-C4`，不得把上述门禁通过数冒充搜索结果。
 
 ## 1. 目标与结果身份
 
@@ -139,7 +151,7 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 - 合击的当前产品合同是：有韧性敌人视为可合击目标；合击伤害本身不翻倍；同帧先结算伤害，再以附带削韧清空剩余架势并进入 Break；米砂相关触发由其奇波 40F 命中造成的破韧驱动；
 - STARBORN 星决技必须对队伍当前已拥有的每一种印记分别增加 1 层，并逐种执行各自上限/刷新规则；没有的印记类型不得凭空创建，也不得跨别名双计。
 
-最后两项在正式 M12-C admission 前必须由聚焦回归、canonical replay 和 Workbench 可视证据证明；本计划本身不把尚未合入的修复视为已经完成。
+上述合法性合同已由聚焦回归、canonical replay、Workbench production preview 和全量 trial-release 覆盖；产品视觉签收与 `clientParityReady` 仍按各自证据状态独立判断。
 
 ## 9. 实施顺序
 
@@ -151,13 +163,14 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 6. `M12-C5`：Top-N 自动导入 Workbench，逐条人工复验动作、派生、资源、Buff、印记、Break 与伤害曲线。
 7. `M12-C6`：固定输入重复运行、保存导入、batch/CLI/Workbench parity、cycle replay、trial-release、production build 与确定性审计全绿后，才允许形成正式结论。
 
-## 10. Admission 与当前阻断
+## 10. Admission 与当前边界
 
 正式搜索前至少满足：
 
-- 正式 roster 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装技能 12/12 和 binding matrix 全部 optimization-ready，formal admission 与核心 hash 一致；
-- `101010`、`103002`、`107002`、`STARBORN`、`112001` 的产品视觉由用户人工签收，不得自动 accepted；
-- STARBORN 每种既有印记 `+1` 与合击结算合同已合入主线并通过无头/手动/自动三路径回归；
-- objective-scoped initial-state validator 已落实，不能继续让通用 scenario 字段绕过循环/击杀白名单；
-- 三个 objective 的雷冠牦 profile、初始 preset、暴击政策和 runtime settlement 合同均进入结果 hash；
-- 正式搜索、M12-C 产品结论和后续阶段在上述门全部关闭前保持锁定。
+- 正式 roster 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装技能 12/12 和 E22 binding matrix 22/22 已全部通过，formal admission 与核心 hash 一致；
+- `101010`、`103002`、`107002`、`STARBORN`、`112001` 的产品视觉不得由自动化代签；本轮只保留已有记录，STARBORN optimization-object 仍明确 pending；
+- STARBORN 每种既有印记 `+1` 与合击结算合同已合入主线并通过无头、Workbench 和全量回归；
+- objective-scoped initial-state validator 已落实，通用 scenario 字段不能绕过循环/击杀白名单；
+- 三个 objective 的雷冠牦 profile、初始 preset、暴击政策和 runtime settlement 合同必须进入未来结果 hash；
+- `clientParityReady=false` 不回锁已经通过的 optimization qualification，但也不能被 formal scoring 或测试通过自动提升；
+- 正式搜索尚未启动。进入 `M12-C4` 后仍须分别产出三个 objective 的 Top-N、proof、hash、贡献和拒绝原因，再进入人工 Workbench 复验。
