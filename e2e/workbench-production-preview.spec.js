@@ -826,6 +826,10 @@ test('[m1c-library-to-runtime] drags actor, kibo, and enemy entries into owner-i
     'data-state-point-id'
   );
   await openRuntimeReviewTab(page, 'event');
+  await expect(page.locator('main.workbench')).toHaveAttribute(
+    'data-runtime-diagnostics-status',
+    'ready'
+  );
   await closeInspectorIfVisible(page);
   await page
     .locator(
