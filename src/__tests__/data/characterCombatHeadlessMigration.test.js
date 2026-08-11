@@ -14,10 +14,10 @@ const GOLDENS = [
       'e368436a1a3e14edf6e2f1abf8d0bddbf9fd930e28fd3c29db6f48c248934aba',
     summaryHash:
       'd77383d4f3df485a2b2ff3a1dd60958a8ad5f104074c21cf961f94e7f85e70bc',
-    inputHash: '869d60be94e607b9',
-    dataHash: '85f1728cc556fbed',
-    traceHash: 'e82a19886e4e8129',
-    buildHash: 'de5fafadb3636f21',
+    inputHash: 'f57a978c56945d0f',
+    dataHash: 'e45ba77f46e6d18c',
+    traceHash: 'b3d7589489c8491f',
+    buildHash: '2e47b46f77324981',
   },
   {
     identity: 'ruby-main',
@@ -28,10 +28,10 @@ const GOLDENS = [
       '198d3e8ca71f63745d559a39db58d6bcf311f877cf0ebefcd9c58088491edc09',
     summaryHash:
       '584a158a1c13856d3f4adaa4c01f5e0ece2d6dd768b075a5b2c734a78814d61f',
-    inputHash: '69fda5a55483e515',
-    dataHash: '35028f78b97a8cb9',
-    traceHash: '9f4a14dd31d5cd9e',
-    buildHash: '21caf7288c6da7da',
+    inputHash: '054646b15271c227',
+    dataHash: '81defb9df10a8d00',
+    traceHash: '009006900b786a7f',
+    buildHash: '65ecbb5d6a053502',
   },
   {
     identity: 'han-main',
@@ -42,10 +42,10 @@ const GOLDENS = [
       'ed5dd56bee71b05622c2f52b51e5844a7a468bff5dc00078fd089122babd507c',
     summaryHash:
       '137a834ffd2962fda13490990c7c3c89fd0668c62ebc33d4727d04f9f88b7bf6',
-    inputHash: 'dd10b2b3c428b467',
-    dataHash: '1cf26bb36061a311',
-    traceHash: 'e1a13952dc7761ea',
-    buildHash: '2c0e28e06818748b',
+    inputHash: 'ef3608e8332e2f7d',
+    dataHash: 'd7ada9b396911b3e',
+    traceHash: '058b8b09c4d2ed3e',
+    buildHash: '4d00ec6cba8f7faf',
   },
   {
     identity: 'han-controlled-buff-switch',
