@@ -73,6 +73,7 @@
 - 同一并发流程在 release authority 建立前启动 `node scripts/run-ai-guided-search.mjs --outer --contract work/m12-c/m12c4-search-template.json --guidance-file work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json`。2026-08-11 23:09（北京时间）已终止核实的 Node PID 57568 及父 PowerShell PID 54684；未生成目标 feedback 文件。
 - `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json` 与 `work/m12-c/m12c4-search-template.json` 作为 untracked 污染证据原样保留，不作为 release 输入、正式搜索产物或 Top-N 依据。只有新的最终 clean tracked HEAD 完成真实 `release:verify` 且独立 admission 允许后，才可重新授权搜索。
 - clean HEAD `e9fe2cef1b0ee058111c23ad65a71c402fd40433` 的下一轮 release 同样真实通过 242/242 Vitest files、1954/1954 tests 与 64/64 production preview，但进入独立 admission 编排时，原生 Node ESM 无法解析 `kiboAxisActionScopePolicy.js` 中缺少 `.js` 后缀的 `canonicalSerialization` import；本轮记为 `interrupted/orchestration`，不记为 PASS。修复为显式 `.js` import，并新增由真实 `node.exe` 导入该 policy 的回归用例；最终 clean HEAD 仍须重跑完整 release。
+- clean HEAD `89916a8f14e05b912ef1324b4ee6dbe95fe39d69` 的 release 已真实通过 242/242 Vitest files、1955/1955 tests 与 64/64 production preview；postflight 唯一漂移为生产 source 多出 `.js` 三个字节后应同步的 `reports/bundle-composition.json`。报告的 `kiboAxisActionScopePolicy.js.originalBytes` 从 5802 变为 5805，JS gzip 总量仍为 897786 bytes、三项预算全绿；独立重跑 bundle audit 后字节幂等。本轮仍按 postflight FAIL 记录，提交 canonical bundle 报告后重跑最终 release。
 
 ## 1. 目标与结果身份
 
