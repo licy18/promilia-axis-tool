@@ -5,10 +5,13 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 
 import {
+  assertGreedyNormalSynthesisAvailable,
   classifyGreedyKillProbe,
   deriveGreedyNormalCadence,
   synthesizeGreedyNormalAxis,
 } from './greedy-normal-axis.mjs';
+
+assertGreedyNormalSynthesisAvailable();
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -159,30 +162,30 @@ try {
       const classification = classifyGreedyKillProbe({ proof });
       const enemy = simulation.trace?.state?.final?.enemy ?? {};
       const row = {
-          event: 'probe',
-          actionCount,
-          wallTimeMs: Date.now() - startedAt,
-          classification,
-          enemyHp: enemy.hp ?? null,
-          enemyMaxHp: enemy.maxHp ?? null,
-          legalityPassed: simulation.actionLegalityProof?.passed === true,
-          inputHash: simulation.hashes?.input ?? null,
-          traceHash: simulation.hashes?.trace ?? null,
-          axis,
-          simulation,
-          proof,
-        };
+        event: 'probe',
+        actionCount,
+        wallTimeMs: Date.now() - startedAt,
+        classification,
+        enemyHp: enemy.hp ?? null,
+        enemyMaxHp: enemy.maxHp ?? null,
+        legalityPassed: simulation.actionLegalityProof?.passed === true,
+        inputHash: simulation.hashes?.input ?? null,
+        traceHash: simulation.hashes?.trace ?? null,
+        axis,
+        simulation,
+        proof,
+      };
       probeCache.set(actionCount, row);
       process.stdout.write(`${JSON.stringify(projectProbe(row))}\n`);
       return row;
     } catch (error) {
       const row = {
-          event: 'probe',
-          actionCount,
-          wallTimeMs: Date.now() - startedAt,
-          classification: classifyGreedyKillProbe({ error }),
-          error,
-        };
+        event: 'probe',
+        actionCount,
+        wallTimeMs: Date.now() - startedAt,
+        classification: classifyGreedyKillProbe({ error }),
+        error,
+      };
       probeCache.set(actionCount, row);
       process.stdout.write(`${JSON.stringify(projectProbe(row))}\n`);
       return row;
@@ -323,5 +326,5 @@ function projectProbe(row) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }

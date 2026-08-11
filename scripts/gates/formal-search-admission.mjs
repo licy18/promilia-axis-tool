@@ -39,6 +39,7 @@ export async function loadFormalSearchAdmissionEvidence({
     initialStateModule,
     settlementModule,
     kiboScopeModule,
+    normalAttackInputAuthorityModule,
     kiboActionCatalogSource,
     kiboSchedulerSource,
     kiboSearchGeneratorSource,
@@ -64,6 +65,10 @@ export async function loadFormalSearchAdmissionEvidence({
       'src/machine-axis/machineAxisEnemySettlementContract.js'
     ),
     importRepositoryModule(root, 'src/domain/kiboAxisActionScopePolicy.js'),
+    importRepositoryModule(
+      root,
+      'src/domain/verifiedNormalAttackInputAuthority.js'
+    ),
     readFile(
       path.join(
         root,
@@ -126,6 +131,8 @@ export async function loadFormalSearchAdmissionEvidence({
       policyHash: initialStateModule.M12C_INITIAL_STATE_POLICY_HASH,
       scenarioPolicyId: initialStateModule.M12C_SCENARIO_POLICY_ID,
     },
+    normalAttackInputAuthority:
+      normalAttackInputAuthorityModule.getVerifiedNormalAttackInputAuthorityDescriptor(),
     formalRuntimeBaseline: {
       ...settlementReadiness,
       clientParityRequiredForCurrentFormalScore:
@@ -456,6 +463,28 @@ export function evaluateFormalSearchAdmission(evidence) {
     'unresolved-skipped-pre-score-pruning',
     deterministic?.status === 'pass' && coverage.preScorePruning === true,
     { preScorePruning: coverage.preScorePruning ?? null }
+  );
+  const normalAttackInputAuthority = evidence.normalAttackInputAuthority;
+  add(
+    'normal-attack-combo-authority',
+    deterministic?.status === 'pass' &&
+      coverage.normalAttackComboAuthority === true &&
+      coverage.comboContinuationPreScore === true &&
+      coverage.specialContinuationFailClosed === true &&
+      normalAttackInputAuthority?.schemaVersion === 1 &&
+      normalAttackInputAuthority?.contractName ===
+        'AzPrVerifiedNormalAttackInputAuthority' &&
+      normalAttackInputAuthority?.policyVersion === 1 &&
+      /^[a-f0-9]{16}$/u.test(normalAttackInputAuthority?.contractHash ?? ''),
+    {
+      authority: normalAttackInputAuthority ?? null,
+      coverage: {
+        normalAttackComboAuthority: coverage.normalAttackComboAuthority ?? null,
+        comboContinuationPreScore: coverage.comboContinuationPreScore ?? null,
+        specialContinuationFailClosed:
+          coverage.specialContinuationFailClosed ?? null,
+      },
+    }
   );
 
   const kiboScope = evidence.kiboAxisActionScope;

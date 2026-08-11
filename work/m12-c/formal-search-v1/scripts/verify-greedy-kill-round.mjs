@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
 
 import {
+  assertGreedyNormalSynthesisAvailable,
   createCandidateRawIdentity,
   readJson,
   sha256Canonical,
@@ -16,6 +17,8 @@ import {
   synthesizeGreedyNormalAxis,
 } from './greedy-normal-axis.mjs';
 
+assertGreedyNormalSynthesisAvailable();
+
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
@@ -26,7 +29,9 @@ const projectRoot = path.resolve(
 const roundArgument = readArgument('--round');
 if (!roundArgument) throw new Error('--round is required');
 const roundDirectory = resolveRepositoryPath(roundArgument);
-const manifest = await readJson(path.join(roundDirectory, 'round-manifest.json'));
+const manifest = await readJson(
+  path.join(roundDirectory, 'round-manifest.json')
+);
 const checkpoint = await readJson(
   path.join(roundDirectory, 'round-checkpoint.json')
 );
@@ -57,7 +62,8 @@ try {
   const service = serviceModule.createMachineAxisService();
   const issues = [];
   const rows = [];
-  if (manifest.objective !== 'fastest-kill') issues.push('objective-not-fastest-kill');
+  if (manifest.objective !== 'fastest-kill')
+    issues.push('objective-not-fastest-kill');
   if (checkpoint.status !== 'completed') issues.push('round-not-completed');
   if (aggregate.formalRankingReady !== false) {
     issues.push('aggregate-formal-ranking-ready-not-false');
@@ -108,7 +114,9 @@ try {
     const shardCheckpoint = await readJson(
       path.join(shardDirectory, 'checkpoint.json')
     );
-    const resultArtifact = await readJson(path.join(shardDirectory, 'result.json'));
+    const resultArtifact = await readJson(
+      path.join(shardDirectory, 'result.json')
+    );
     const localIssues = [];
     if (shardCheckpoint.status !== 'completed') {
       localIssues.push('shard-not-completed');
@@ -134,7 +142,11 @@ try {
     if ((candidate.axis?.actions ?? []).length !== 221) {
       localIssues.push('candidate-action-count-not-221');
     }
-    for (let index = 0; index < (candidate.axis?.actions ?? []).length; index += 1) {
+    for (
+      let index = 0;
+      index < (candidate.axis?.actions ?? []).length;
+      index += 1
+    ) {
       const action = candidate.axis.actions[index];
       if (
         action.id !== `search-action-${index + 1}` ||
@@ -281,7 +293,10 @@ try {
     const sourceCharacters = (candidate.m12c?.build?.actors ?? []).map(actor =>
       Number(actor.sourceCharacterId)
     );
-    if (sourceCharacters.includes(199001) && sourceCharacters.includes(199002)) {
+    if (
+      sourceCharacters.includes(199001) &&
+      sourceCharacters.includes(199002)
+    ) {
       localIssues.push('starborn-source-aliases-coexist');
     }
     rows.push({
@@ -379,5 +394,5 @@ function repositoryRelative(filePath) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }

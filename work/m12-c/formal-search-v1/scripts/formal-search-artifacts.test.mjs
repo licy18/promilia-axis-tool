@@ -3,17 +3,25 @@ import test from 'node:test';
 import {
   aggregateRoundAggregates,
   aggregateShardResults,
-  createCandidateRawIdentity,
   sha256Canonical,
   stableJson,
   validateFinalCandidate,
 } from './formal-search-artifacts.mjs';
 
 const objective = 'cycle-dps-no-toughness';
+const normalAttackInputAuthority = {
+  schemaVersion: 1,
+  contractName: 'AzPrVerifiedNormalAttackInputAuthority',
+  policyVersion: '1.0.0',
+  contractHash: '0123456789abcdef',
+};
 
 test('stable hashing ignores object insertion order', () => {
   assert.equal(stableJson({ b: 2, a: 1 }), stableJson({ a: 1, b: 2 }));
-  assert.equal(sha256Canonical({ b: 2, a: 1 }), sha256Canonical({ a: 1, b: 2 }));
+  assert.equal(
+    sha256Canonical({ b: 2, a: 1 }),
+    sha256Canonical({ a: 1, b: 2 })
+  );
 });
 
 test('aggregation keeps failures separate and never converts them to zero', () => {
@@ -38,9 +46,50 @@ test('aggregation keeps failures separate and never converts them to zero', () =
   });
   assert.equal(aggregate.results.length, 1);
   assert.equal(aggregate.results[0].score, 42);
-  assert.deepEqual(aggregate.coverage.failedSourceConfigIdentities, ['source-b']);
-  assert.deepEqual(aggregate.coverage.missingSourceConfigIdentities, ['source-c']);
+  assert.deepEqual(aggregate.coverage.failedSourceConfigIdentities, [
+    'source-b',
+  ]);
+  assert.deepEqual(aggregate.coverage.missingSourceConfigIdentities, [
+    'source-c',
+  ]);
   assert.equal(aggregate.summary.topNReady, false);
+});
+
+test('old checkpoints and candidates without combo authority fail closed', () => {
+  const candidate = createResult({ score: 42, inputHash: 'legacy' });
+  delete candidate.legality.proof.normalAttackInputAuthority;
+  delete candidate.objectiveProof.normalAttackInputProof
+    .normalAttackInputAuthority;
+  assert.ok(
+    validateFinalCandidate(candidate, objective).issues.includes(
+      'candidate-normal-attack-input-authority-missing'
+    )
+  );
+
+  const legacyShard = createShard('legacy-source', [
+    createResult({ score: 42, inputHash: 'legacy-shard' }),
+  ]);
+  delete legacyShard.checkpoint.normalAttackInputAuthority;
+  delete legacyShard.result.normalAttackInputAuthority;
+  const aggregate = aggregateShardResults({
+    runId: 'run-legacy',
+    roundId: 'round-legacy',
+    objective,
+    topN: 1,
+    baseline: { head: 'a'.repeat(40) },
+    normalAttackInputAuthority,
+    expectedSourceConfigIdentities: ['legacy-source'],
+    shardArtifacts: [legacyShard],
+  });
+  assert.deepEqual(aggregate.results, []);
+  assert.deepEqual(aggregate.coverage.failedSourceConfigIdentities, [
+    'legacy-source',
+  ]);
+  assert.ok(
+    aggregate.invalidArtifacts.some(entry =>
+      entry.issues.includes('checkpoint-normal-attack-input-authority-missing')
+    )
+  );
 });
 
 test('aggregation is deterministic, deduplicates raw identity, and preserves cutoff ties', () => {
@@ -73,7 +122,10 @@ test('aggregation is deterministic, deduplicates raw identity, and preserves cut
     ],
   });
   assert.equal(first.aggregateHash, second.aggregateHash);
-  assert.deepEqual(first.results.map(row => row.score), [50, 40, 30, 20, 10]);
+  assert.deepEqual(
+    first.results.map(row => row.score),
+    [50, 40, 30, 20, 10]
+  );
   assert.equal(first.cutoffTies.length, 1);
   assert.equal(first.cutoffTies[0].score, 10);
 });
@@ -101,7 +153,10 @@ test('fastest-kill sorts finite formal times ascending', () => {
       ]),
     ],
   });
-  assert.deepEqual(aggregate.results.map(row => row.score), [1000, 2000]);
+  assert.deepEqual(
+    aggregate.results.map(row => row.score),
+    [1000, 2000]
+  );
 });
 
 test('combined objective aggregation keeps unique candidates across rounds', () => {
@@ -137,7 +192,10 @@ test('combined objective aggregation keeps unique candidates across rounds', () 
     baseline: { head: 'd'.repeat(40) },
     roundAggregates: [round2, round1],
   });
-  assert.deepEqual(combined.results.map(row => row.score), [12, 10]);
+  assert.deepEqual(
+    combined.results.map(row => row.score),
+    [12, 10]
+  );
   assert.deepEqual(combined.roundIds, ['round-1', 'round-2']);
 });
 
@@ -208,10 +266,13 @@ function createShard(sourceConfigIdentity, results, wallTimeMs = 10) {
     checkpoint: {
       status: 'completed',
       shardId: `shard-${sourceConfigIdentity}`,
+      normalAttackInputAuthority,
       coverage: { sourceConfigIdentity },
     },
     result: {
-      objective: results[0]?.axis?.scenario?.objectiveContract?.objectiveId ?? objective,
+      objective:
+        results[0]?.axis?.scenario?.objectiveContract?.objectiveId ?? objective,
+      normalAttackInputAuthority,
       summary: { candidatesEvaluated: results.length, wallTimeMs },
       results,
     },
@@ -260,9 +321,14 @@ function createResult({
         passed: true,
         skippedActionCount: 0,
         unresolvedActionCount: 0,
+        normalAttackInputAuthority,
       },
     },
-    objectiveProof: { valid: true, formalScore: score },
+    objectiveProof: {
+      valid: true,
+      formalScore: score,
+      normalAttackInputProof: { normalAttackInputAuthority },
+    },
     objectiveIssues: [],
     m12c: {
       buildHash,
@@ -358,7 +424,11 @@ function createTeamSlot(slotId, characterId, initialSp) {
   };
 }
 
-function createBuildActor(actorSlotId, optimizationObjectId, sourceCharacterId) {
+function createBuildActor(
+  actorSlotId,
+  optimizationObjectId,
+  sourceCharacterId
+) {
   return { actorSlotId, optimizationObjectId, sourceCharacterId };
 }
 

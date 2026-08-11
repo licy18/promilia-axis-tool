@@ -1,6 +1,17 @@
 import { msToFrame } from '../domain/timebase';
-import { getVerifiedActionVariantGraph } from '../data/verifiedCombatMechanicsPackage';
+import {
+  getInstalledVerifiedCombatMechanicsPackage,
+  getVerifiedActionVariantGraph,
+  getVerifiedCombatActionMapping,
+} from '../data/verifiedCombatMechanicsPackage';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import {
+  VERIFIED_NORMAL_ATTACK_INPUT_PHASES,
+  createVerifiedNormalAttackStructuralForm,
+  getVerifiedNormalAttackInputAuthorityDescriptor,
+  matchVerifiedNormalAttackInput,
+  resolveVerifiedNormalAttackInputPhase,
+} from '../domain/verifiedNormalAttackInputAuthority';
 import { projectActiveEffectStates } from './machineAxisEffectState';
 
 export const MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION = 1;
@@ -104,6 +115,57 @@ export function createSearchAttackChainProjection({
   currentFrame = 0,
   fps = 60,
 } = {}) {
+  const context = createNormalAttackAuthorityTraceContext({
+    trace,
+    currentFrame,
+    fps,
+  });
+  const states = [];
+  for (const actorId of context.actorIds) {
+    const accepted = context.acceptedByActorId.get(actorId) ?? null;
+    const mapping = resolveNormalAttackMapping({
+      actorId,
+      action: accepted?.action ?? null,
+    });
+    if (!mapping) {
+      states.push(
+        createUnresolvedNormalAttackProjection({
+          actorId,
+          accepted,
+          reason: 'normal-attack-authority-mapping-unresolved',
+        })
+      );
+      continue;
+    }
+    const phase = resolveVerifiedNormalAttackInputPhase({
+      mapping,
+      acceptedAction: accepted?.authorityAction ?? null,
+      acceptedSelection: accepted?.authoritySelection ?? null,
+      actorId,
+      inputTimeMs: frameToMs(currentFrame, fps),
+      fps,
+      activeContinuationWindows: context.continuationWindows,
+    });
+    if (phase.phase === VERIFIED_NORMAL_ATTACK_INPUT_PHASES.IDLE) continue;
+    states.push(
+      projectNormalAttackAuthorityPhase({
+        phase,
+        mapping,
+        accepted,
+        currentFrame,
+        fps,
+      })
+    );
+  }
+  return states.sort((left, right) =>
+    left.actorId.localeCompare(right.actorId, 'en')
+  );
+}
+
+export function createSearchNormalAttackInputProof({
+  trace = {},
+  fps = 60,
+} = {}) {
   const actionById = new Map(
     (trace.actions ?? []).map(action => [String(action.id), action])
   );
@@ -113,141 +175,394 @@ export function createSearchAttackChainProjection({
       selection,
     ])
   );
-  const continuityWindowsBySourceActionId = new Map();
-  for (const window of trace.variants?.attackChainContinuityWindows ?? []) {
-    const key = String(window.sourceActionId ?? '');
-    if (!key) continue;
-    const rows = continuityWindowsBySourceActionId.get(key) ?? [];
-    rows.push(window);
-    continuityWindowsBySourceActionId.set(key, rows);
-  }
-  const stateByActorId = new Map();
-  const ordered = [...(trace.executionPlan?.actions ?? [])].sort(
-    (left, right) =>
-      Number(left.sourceSequenceIndex ?? 0) -
-        Number(right.sourceSequenceIndex ?? 0) ||
-      Number(left.startMs ?? 0) - Number(right.startMs ?? 0) ||
-      String(left.actionId).localeCompare(String(right.actionId), 'en')
-  );
-  for (const entry of ordered) {
-    if (entry.execute === false) continue;
+  const acceptedByActorId = new Map();
+  const executedActionIds = new Set();
+  const issues = [];
+  const decisions = [];
+  for (const entry of orderExecutedTraceActions(trace)) {
     const action = actionById.get(String(entry.actionId));
     if (!action) continue;
-    const actionStartFrame = msToFrame(Number(action.startMs) || 0, fps);
-    if (actionStartFrame > Number(currentFrame)) continue;
+    executedActionIds.add(String(action.id));
     if (action.type === 'switch') {
-      stateByActorId.clear();
+      acceptedByActorId.clear();
       continue;
     }
-    // A compiler-authorized Kibo autonomous action owns the Kibo lane. It
-    // does not consume or reset the foreground Hero normal-attack chain.
     if (action.type === 'kiboEvent') continue;
     const actorId = String(action.actorId ?? '');
     if (!actorId) continue;
     if (action.actionKind !== 'normal-attack') {
-      const active = stateByActorId.get(actorId) ?? null;
-      const continuityWindow = (
-        continuityWindowsBySourceActionId.get(String(action.id)) ?? []
-      ).find(
-        window =>
-          active != null &&
-          window.applied === true &&
-          String(window.actorId ?? '') === actorId &&
-          String(window.targetChainIdentity ?? '') ===
-            String(active.chainIdentity) &&
-          Number(window.targetSequenceIndex) ===
-            Number(active.nextSequenceIndex) &&
-          Number.isFinite(Number(window.startsAtMs)) &&
-          Number.isFinite(Number(window.endsAtMs)) &&
-          Number(window.endsAtMs) > Number(window.startsAtMs) &&
-          typeof window.sourceIdentity === 'string' &&
-          window.sourceIdentity.length > 0
-      );
-      if (active && continuityWindow) {
-        stateByActorId.set(actorId, {
-          ...active,
-          status: 'sourced-continuity-window',
-          continuityStatus: 'verified-attack-chain-continuity',
-          continuityActionId: String(action.id),
-          continuityEdgeIdentity: continuityWindow.edgeIdentity ?? null,
-          linkWindowStatus: 'applied',
-          linkWindowStartFrame: msToFrame(
-            Number(continuityWindow.startsAtMs),
-            fps
-          ),
-          linkWindowEndFrame: msToFrame(Number(continuityWindow.endsAtMs), fps),
-          linkWindowSourceIdentity: continuityWindow.sourceIdentity,
-        });
-      } else {
-        stateByActorId.delete(actorId);
-      }
+      const selection = selectionById.get(String(action.id)) ?? {};
+      acceptedByActorId.set(actorId, {
+        action,
+        selection,
+        authorityAction: adaptTraceActionForNormalAttackAuthority(
+          action,
+          selection
+        ),
+        authoritySelection:
+          adaptTraceSelectionForNormalAttackAuthority(selection),
+      });
       continue;
     }
     const selection = selectionById.get(String(action.id)) ?? {};
-    const chainIdentity =
-      selection.attackInputChainIdentity ??
-      action.attackInputChainIdentity ??
-      null;
-    const groupId = selection.attackGroupId ?? action.attackGroupId ?? null;
-    const sequenceIndex = positiveIntegerOrNull(
-      selection.attackSequenceIndex ?? action.attackSequenceIndex
-    );
-    const sequenceTotal = positiveIntegerOrNull(
-      selection.attackSequenceTotal ?? action.attackSequenceTotal
-    );
-    const linkWindow =
-      selection.attackInputLinkWindow ?? action.attackInputLinkWindow ?? null;
-    if (
-      chainIdentity == null ||
-      groupId == null ||
-      sequenceIndex == null ||
-      sequenceTotal == null
-    ) {
-      stateByActorId.delete(actorId);
+    const mapping = resolveNormalAttackMapping({ actorId, action });
+    if (!mapping) {
+      issues.push(
+        normalAttackInputIssue({
+          code: 'machine-axis-normal-attack-input-authority-mapping-unresolved',
+          action,
+          message: 'Normal-attack input mapping is unresolved',
+        })
+      );
       continue;
     }
-    const linkStartFrame = nonNegativeIntegerOrNull(linkWindow?.startFrame);
-    const linkEndFrame = nonNegativeIntegerOrNull(linkWindow?.endFrame);
-    const hasSourcedWindow =
-      (selection.attackInputLinkTimingStatus ??
-        action.attackInputLinkTimingStatus) === 'applied' &&
-      linkStartFrame != null &&
-      linkEndFrame != null &&
-      linkEndFrame > linkStartFrame;
-    stateByActorId.set(actorId, {
+    const accepted = acceptedByActorId.get(actorId) ?? null;
+    const phase = resolveVerifiedNormalAttackInputPhase({
+      mapping,
+      acceptedAction: accepted?.authorityAction ?? null,
+      acceptedSelection: accepted?.authoritySelection ?? null,
       actorId,
-      chainIdentity: String(chainIdentity),
-      groupId: String(groupId),
-      sequenceIndex,
-      sequenceTotal,
-      nextSequenceIndex: sequenceIndex < sequenceTotal ? sequenceIndex + 1 : 1,
-      status:
-        sequenceIndex < sequenceTotal
-          ? 'successor-window'
-          : 'chain-complete-reopen-window',
-      continuityStatus: 'direct-normal-attack-link',
-      continuityActionId: null,
-      continuityEdgeIdentity: null,
-      predecessorAcceptedIdentity: String(action.id),
-      predecessorStartFrame: actionStartFrame,
-      publicActionId: action.skillId ?? null,
-      linkWindowStatus: hasSourcedWindow ? 'applied' : 'unresolved',
-      linkWindowStartFrame: hasSourcedWindow
-        ? actionStartFrame + linkStartFrame
-        : null,
-      linkWindowEndFrame: hasSourcedWindow
-        ? actionStartFrame + linkEndFrame
-        : null,
-      linkWindowSourceIdentity: linkWindow?.sourceIdentity ?? null,
+      inputTimeMs: Number(action.startMs) || 0,
+      fps,
+      activeContinuationWindows: normalizeAuthorityContinuationWindows(
+        trace.variants?.attackChainContinuityWindows,
+        executedActionIds
+      ),
+    });
+    const authorityAction = adaptTraceActionForNormalAttackAuthority(
+      action,
+      selection
+    );
+    const authoritySelection =
+      adaptTraceSelectionForNormalAttackAuthority(selection);
+    const match = matchVerifiedNormalAttackInput({
+      action: authorityAction,
+      selection: authoritySelection,
+      mapping,
+      phase,
+    });
+    decisions.push({ actionId: String(action.id), actorId, phase, match });
+    if (match.accepted !== true) {
+      issues.push(
+        normalAttackInputIssue({
+          code: 'machine-axis-normal-attack-input-authority-rejected',
+          action,
+          message: `Normal-attack input rejected: ${match.reason ?? 'unresolved'}`,
+          details: {
+            reason: match.reason ?? null,
+            phase: phase.phase ?? null,
+            expected: match.expected ?? null,
+            actual: match.actual ?? null,
+          },
+        })
+      );
+      continue;
+    }
+    acceptedByActorId.set(actorId, {
+      action,
+      selection,
+      authorityAction,
+      authoritySelection,
     });
   }
-  return [...stateByActorId.values()]
+  const descriptor = getVerifiedNormalAttackInputAuthorityDescriptor();
+  const proof = {
+    schemaVersion: MACHINE_AXIS_SEARCH_STATE_SCHEMA_VERSION,
+    contractName: MACHINE_AXIS_SEARCH_STATE_CONTRACT,
+    kind: 'azpr-machine-axis-search-normal-attack-input-proof',
+    status:
+      issues.length === 0
+        ? 'normal-attack-input-authority-passed'
+        : 'normal-attack-input-authority-rejected',
+    passed: issues.length === 0,
+    normalAttackInputAuthority: descriptor,
+    decisionCount: decisions.length,
+    decisions,
+    issues,
+  };
+  return { ...proof, proofHash: hashCanonicalValue(proof) };
+}
+
+function createNormalAttackAuthorityTraceContext({ trace, currentFrame, fps }) {
+  const actionById = new Map(
+    (trace.actions ?? []).map(action => [String(action.id), action])
+  );
+  const selectionById = new Map(
+    (trace.variants?.selections ?? []).map(selection => [
+      String(selection.actionId),
+      selection,
+    ])
+  );
+  const acceptedByActorId = new Map();
+  const executedActionIds = new Set();
+  for (const entry of orderExecutedTraceActions(trace)) {
+    const action = actionById.get(String(entry.actionId));
+    if (!action) continue;
+    const actionStartFrame = msToFrame(Number(action.startMs) || 0, fps);
+    if (actionStartFrame > Number(currentFrame)) continue;
+    executedActionIds.add(String(action.id));
+    if (action.type === 'switch') {
+      acceptedByActorId.clear();
+      continue;
+    }
+    if (action.type === 'kiboEvent') continue;
+    const actorId = String(action.actorId ?? '');
+    if (!actorId) continue;
+    const selection = selectionById.get(String(action.id)) ?? {};
+    acceptedByActorId.set(actorId, {
+      action,
+      selection,
+      authorityAction: adaptTraceActionForNormalAttackAuthority(
+        action,
+        selection
+      ),
+      authoritySelection:
+        adaptTraceSelectionForNormalAttackAuthority(selection),
+    });
+  }
+  const continuationWindows = normalizeAuthorityContinuationWindows(
+    trace.variants?.attackChainContinuityWindows,
+    executedActionIds
+  );
+  const actorIds = new Set(acceptedByActorId.keys());
+  const currentTimeMs = frameToMs(currentFrame, fps);
+  for (const window of continuationWindows) {
+    if (Number(window.endsAtMs) > currentTimeMs && window.actorId) {
+      actorIds.add(String(window.actorId));
+    }
+  }
+  return {
+    acceptedByActorId,
+    continuationWindows,
+    actorIds: [...actorIds].sort((left, right) =>
+      left.localeCompare(right, 'en')
+    ),
+  };
+}
+
+function orderExecutedTraceActions(trace) {
+  return [...(trace.executionPlan?.actions ?? [])]
+    .filter(entry => entry.execute !== false)
+    .sort(
+      (left, right) =>
+        Number(left.sourceSequenceIndex ?? 0) -
+          Number(right.sourceSequenceIndex ?? 0) ||
+        Number(left.startMs ?? 0) - Number(right.startMs ?? 0) ||
+        String(left.actionId).localeCompare(String(right.actionId), 'en')
+    );
+}
+
+function resolveNormalAttackMapping({ actorId, action = null }) {
+  const actorCharacterId = parseActorCharacterId(actorId);
+  if (action?.actionKind === 'normal-attack') {
+    const mapping = getVerifiedCombatActionMapping({
+      type: 'skill',
+      skillId: action.skillId,
+      actionKind: 'normal-attack',
+      actorCharacterId,
+    });
+    if (mapping) return mapping;
+  }
+  const candidates = (
+    getInstalledVerifiedCombatMechanicsPackage()?.actionMappings ?? []
+  ).filter(
+    mapping =>
+      mapping.ownerKind === 'actor' &&
+      Number(mapping.ownerId) === actorCharacterId &&
+      mapping.actionKind === 'normal-attack'
+  );
+  return candidates.length === 1 ? candidates[0] : null;
+}
+
+function parseActorCharacterId(actorId) {
+  const match = /^actor-(\d+)$/.exec(String(actorId ?? ''));
+  return match ? Number(match[1]) : null;
+}
+
+function adaptTraceActionForNormalAttackAuthority(action, selection) {
+  return {
+    ...action,
+    attackInput: {
+      controlSkillId:
+        selection?.controlSkillId ?? action?.controlSkillId ?? null,
+      selectedSubSkillIndex:
+        selection?.subSkillIndex ?? action?.subSkillIndex ?? null,
+      linkTimingStatus:
+        selection?.attackInputLinkTimingStatus ??
+        action?.attackInputLinkTimingStatus ??
+        null,
+      linkWindow:
+        selection?.attackInputLinkWindow ??
+        action?.attackInputLinkWindow ??
+        null,
+      attackInputChainIdentity:
+        selection?.attackInputChainIdentity ??
+        action?.attackInputChainIdentity ??
+        null,
+    },
+  };
+}
+
+function adaptTraceSelectionForNormalAttackAuthority(selection) {
+  return {
+    ...selection,
+    executionControlSkillId:
+      selection?.executionControlSkillId ?? selection?.controlSkillId ?? null,
+    selectedSubSkillIndex:
+      selection?.selectedSubSkillIndex ?? selection?.subSkillIndex ?? null,
+  };
+}
+
+function normalizeAuthorityContinuationWindows(windows, executedActionIds) {
+  return (windows ?? [])
     .filter(
-      state =>
-        state.linkWindowEndFrame == null ||
-        Number(currentFrame) < state.linkWindowEndFrame
+      window =>
+        executedActionIds.has(String(window?.sourceActionId ?? '')) &&
+        window?.applied === true
     )
-    .sort((left, right) => left.actorId.localeCompare(right.actorId, 'en'));
+    .map(window => ({
+      ...window,
+      relationType: window.relationType ?? 'attack-chain-continuity-window',
+    }));
+}
+
+function projectNormalAttackAuthorityPhase({
+  phase,
+  mapping,
+  accepted,
+  currentFrame,
+  fps,
+}) {
+  const form = createVerifiedNormalAttackStructuralForm({ mapping });
+  const sequenceIndex = positiveIntegerOrNull(
+    accepted?.authoritySelection?.attackSequenceIndex ??
+      accepted?.authorityAction?.attackSequenceIndex
+  );
+  const sourceSegment = form.segments?.find(
+    segment => Number(segment.sequenceIndex) === Number(sequenceIndex)
+  );
+  const predecessorStartFrame = accepted
+    ? msToFrame(Number(accepted.action?.startMs) || 0, fps)
+    : null;
+  const windowFrames = projectAuthorityPhaseWindow({
+    phase,
+    predecessorStartFrame,
+    fps,
+  });
+  return {
+    actorId: String(phase.actorId ?? accepted?.action?.actorId ?? ''),
+    authorityStatus: phase.status,
+    authorityPhase: phase.phase,
+    authoritySourceKind: phase.sourceKind,
+    authorityPhaseProof: phase,
+    authorityContractHash:
+      getVerifiedNormalAttackInputAuthorityDescriptor().contractHash,
+    formIdentity: phase.formIdentity,
+    mappingIdentity: phase.mappingIdentity,
+    chainIdentity: phase.expected?.chainIdentity ?? phase.chainIdentity ?? null,
+    groupId:
+      phase.expected?.groupId ??
+      accepted?.authoritySelection?.attackGroupId ??
+      accepted?.authorityAction?.attackGroupId ??
+      null,
+    sequenceIndex,
+    sequenceTotal: form.segmentCount ?? null,
+    nextSequenceIndex: phase.expected?.sequenceIndex ?? null,
+    expectedInput: phase.expected ?? null,
+    status: phase.phase,
+    continuityStatus: phase.sourceKind,
+    continuityActionId:
+      phase.sourceActionId === accepted?.action?.id
+        ? null
+        : phase.sourceActionId,
+    continuityEdgeIdentity: null,
+    predecessorAcceptedIdentity: phase.sourceActionId ?? null,
+    predecessorStartFrame,
+    publicActionId: mapping.sourceSkillId ?? null,
+    linkWindowStatus: phase.window ? 'applied' : 'unresolved',
+    linkWindowStartFrame: windowFrames.startFrame,
+    linkWindowEndFrame: windowFrames.endFrame,
+    linkWindowSourceIdentity:
+      phase.window?.sourceIdentity ?? phase.sourceIdentity ?? null,
+    recoveryEndFrame:
+      predecessorStartFrame != null && sourceSegment?.recoveryEndFrame != null
+        ? predecessorStartFrame + Number(sourceSegment.recoveryEndFrame)
+        : null,
+    reasons: [...(phase.reasons ?? [])],
+    currentFrame: Number(currentFrame),
+  };
+}
+
+function projectAuthorityPhaseWindow({ phase, predecessorStartFrame, fps }) {
+  if (
+    Number.isFinite(Number(phase.window?.startMs)) &&
+    Number.isFinite(Number(phase.window?.endMs))
+  ) {
+    return {
+      startFrame: msToFrame(Number(phase.window.startMs), fps),
+      endFrame: msToFrame(Number(phase.window.endMs), fps),
+    };
+  }
+  const relativeStart = nonNegativeIntegerOrNull(phase.window?.startFrame);
+  const relativeEnd = nonNegativeIntegerOrNull(phase.window?.endFrame);
+  return {
+    startFrame:
+      predecessorStartFrame != null && relativeStart != null
+        ? predecessorStartFrame + relativeStart
+        : null,
+    endFrame:
+      predecessorStartFrame != null && relativeEnd != null
+        ? predecessorStartFrame + relativeEnd
+        : null,
+  };
+}
+
+function createUnresolvedNormalAttackProjection({ actorId, accepted, reason }) {
+  return {
+    actorId,
+    authorityStatus: 'verified-normal-attack-input-phase-unresolved',
+    authorityPhase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+    authoritySourceKind: 'verified-normal-attack-input-authority',
+    authorityPhaseProof: null,
+    authorityContractHash:
+      getVerifiedNormalAttackInputAuthorityDescriptor().contractHash,
+    formIdentity: null,
+    mappingIdentity: null,
+    chainIdentity: null,
+    groupId: accepted?.authoritySelection?.attackGroupId ?? null,
+    sequenceIndex: accepted?.authoritySelection?.attackSequenceIndex ?? null,
+    sequenceTotal: null,
+    nextSequenceIndex: null,
+    expectedInput: null,
+    status: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+    predecessorAcceptedIdentity: accepted?.action?.id ?? null,
+    predecessorStartFrame: accepted
+      ? msToFrame(Number(accepted.action?.startMs) || 0)
+      : null,
+    publicActionId: accepted?.action?.skillId ?? null,
+    linkWindowStatus: 'unresolved',
+    linkWindowStartFrame: null,
+    linkWindowEndFrame: null,
+    linkWindowSourceIdentity: null,
+    recoveryEndFrame: null,
+    reasons: [reason],
+  };
+}
+
+function normalAttackInputIssue({ code, action, message, details = {} }) {
+  return {
+    code,
+    path: `actions.${Number(action?.sourceSequenceIndex ?? 0)}`,
+    message,
+    severity: 'error',
+    actionId: action?.id ?? null,
+    actorId: action?.actorId ?? null,
+    ...details,
+  };
+}
+
+function frameToMs(frame, fps = 60) {
+  return (Number(frame) * 1000) / Number(fps || 60);
 }
 
 export function hashSearchState(snapshot) {
@@ -418,6 +733,50 @@ export function createSearchEventBoundaryNodes({
         windowIdentity: inputWindow.identity,
         boundaryRole: 'end',
         source: 'verified-action-window',
+      });
+    }
+  }
+  for (const action of trace.actions ?? []) {
+    if (action?.actionKind !== 'normal-attack') continue;
+    const actorId = String(action.actorId ?? '');
+    const mapping = resolveNormalAttackMapping({ actorId, action });
+    if (!mapping) continue;
+    const form = createVerifiedNormalAttackStructuralForm({ mapping });
+    const selection = (trace.variants?.selections ?? []).find(
+      row => String(row.actionId) === String(action.id)
+    );
+    const sequenceIndex = positiveIntegerOrNull(
+      selection?.attackSequenceIndex ?? action.attackSequenceIndex
+    );
+    const segment = form.segments?.find(
+      row => Number(row.sequenceIndex) === Number(sequenceIndex)
+    );
+    if (!segment) continue;
+    const actionStartFrame = msToFrame(Number(action.startMs) || 0, fps);
+    if (segment.recoveryEndFrame != null) {
+      add(
+        actionStartFrame + Number(segment.recoveryEndFrame),
+        'normal-attack-input-boundary',
+        {
+          actionId: action.id ?? null,
+          windowIdentity: `${form.formIdentity}|recovery`,
+          boundaryRole: 'recovery-end',
+          source: 'verified-normal-attack-input-authority',
+        }
+      );
+    }
+    for (const [role, window] of [
+      ['reopen-start', segment.reopenWindow],
+      ['reopen-end', segment.reopenWindow],
+    ]) {
+      const offset =
+        role === 'reopen-start' ? window?.startFrame : window?.endFrame;
+      if (offset == null) continue;
+      add(actionStartFrame + Number(offset), 'normal-attack-input-boundary', {
+        actionId: action.id ?? null,
+        windowIdentity: `${form.formIdentity}|${role}`,
+        boundaryRole: role,
+        source: 'verified-normal-attack-input-authority',
       });
     }
   }
@@ -1152,6 +1511,8 @@ function describeBoundary(kind, details, frame) {
       return `hit settles at frame ${frame} (${details.hitIdentity ?? ''})`;
     case 'window-boundary':
       return `${details.source ?? 'action'} window ${details.boundaryRole ?? 'boundary'} at frame ${frame}`;
+    case 'normal-attack-input-boundary':
+      return `normal-attack input ${details.boundaryRole ?? 'boundary'} at frame ${frame}`;
     case 'horizon':
       return `scenario horizon at frame ${frame}`;
     default:

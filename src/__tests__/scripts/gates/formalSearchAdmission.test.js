@@ -62,6 +62,13 @@ describe('formal search admission', () => {
     expect(result.status).toBe('ready');
     expect(result.blockers).not.toContain('starborn-product-object-acceptance');
     expect(result.blockers).not.toContain('kibo-axis-action-scope-applied');
+    expect(result.blockers).not.toContain('normal-attack-combo-authority');
+    expect(currentEvidence.normalAttackInputAuthority).toMatchObject({
+      schemaVersion: 1,
+      contractName: 'AzPrVerifiedNormalAttackInputAuthority',
+      policyVersion: 1,
+      contractHash: expect.stringMatching(/^[a-f0-9]{16}$/),
+    });
     expect(currentEvidence.kiboAxisActionScope).toMatchObject({
       ready: true,
       status: 'kibo-axis-action-scope-ready',
@@ -99,6 +106,20 @@ describe('formal search admission', () => {
 
     expect(blocked.status).toBe('blocked');
     expect(blocked.blockers).toContain('release-verify-executed-pass');
+  });
+
+  it('fails closed when combo authority coverage or its descriptor hash is missing', () => {
+    const missingCoverage = structuredClone(currentEvidence);
+    missingCoverage.deterministicProof.coverage.comboContinuationPreScore = false;
+    expect(evaluateFormalSearchAdmission(missingCoverage).blockers).toContain(
+      'normal-attack-combo-authority'
+    );
+
+    const missingHash = structuredClone(currentEvidence);
+    delete missingHash.normalAttackInputAuthority.contractHash;
+    expect(evaluateFormalSearchAdmission(missingHash).blockers).toContain(
+      'normal-attack-combo-authority'
+    );
   });
 
   it('does not confuse clientParityReady=false with qualification readiness', () => {

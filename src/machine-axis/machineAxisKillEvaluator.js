@@ -11,6 +11,7 @@ import {
 } from './machineAxisEnemySettlementContract';
 import { validateMachineAxisObjectiveContract } from './machineAxisObjectiveContract';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
+import { createSearchNormalAttackInputProof } from './machineAxisSearchState';
 
 export const MACHINE_AXIS_KILL_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_KILL_CONTRACT_NAME = 'AzPrMachineAxisFastestKill';
@@ -104,6 +105,10 @@ export function createFastestKillProof(
   let actionLegalityProof = createMachineAxisActionLegalityProof(run, {
     objectiveId: objectiveContract?.objectiveId ?? null,
   });
+  const normalAttackInputProof = createSearchNormalAttackInputProof({
+    trace: run?.trace ?? {},
+    fps: Number(contract?.scenario?.fps) || 60,
+  });
   const issues = [
     ...objectiveValidation.issues.map(entry =>
       killIssue(
@@ -114,6 +119,7 @@ export function createFastestKillProof(
     ),
     ...profileValidation.issues,
     ...actionLegalityProof.issues,
+    ...normalAttackInputProof.issues,
   ];
   if (
     objectiveValidation.valid === true &&
@@ -147,6 +153,7 @@ export function createFastestKillProof(
         objectiveContract,
         settlementContract,
         actionLegalityProof,
+        normalAttackInputProof,
       },
       issues,
       run?.hashes
@@ -162,6 +169,7 @@ export function createFastestKillProof(
         objectiveContract,
         settlementContract,
         actionLegalityProof,
+        normalAttackInputProof,
       },
       settlementReadiness.issues,
       run?.hashes
@@ -180,6 +188,7 @@ export function createFastestKillProof(
       objectiveContract,
       profile: profileValidation.normalized,
       actionLegalityProof,
+      normalAttackInputProof,
     });
   }
   const lethal = lethalEvents[0];
@@ -315,6 +324,7 @@ export function createFastestKillProof(
     formalScorePolicy: settlementContract.formalScoring,
     killProof: proof,
     actionLegalityProof,
+    normalAttackInputProof,
     diagnostics,
     healing,
     hashes: {
@@ -334,6 +344,7 @@ export function createFastestKillProof(
     warnings: report.warnings,
     killProof: report.killProof,
     actionLegalityProof: report.actionLegalityProof,
+    normalAttackInputProof: report.normalAttackInputProof,
     diagnostics: report.diagnostics,
     healing: report.healing,
     runHashes: run.hashes ?? null,
@@ -472,6 +483,10 @@ function createUnkilledReport({
   actionLegalityProof = createMachineAxisActionLegalityProof(run, {
     objectiveId: objectiveContract?.objectiveId ?? null,
   }),
+  normalAttackInputProof = createSearchNormalAttackInputProof({
+    trace: run?.trace ?? {},
+    fps: Number(contract?.scenario?.fps) || 60,
+  }),
 }) {
   const settlementContract = getMachineAxisEnemySettlementContract();
   const settlementReadiness = getMachineAxisEnemySettlementFormalReadiness();
@@ -507,6 +522,7 @@ function createUnkilledReport({
       firstLethal: null,
     },
     actionLegalityProof,
+    normalAttackInputProof,
     diagnostics,
     healing,
     hashes: { ...(run.hashes ?? {}), kill: null },
@@ -523,6 +539,7 @@ function createUnkilledReport({
     warnings: report.warnings,
     killProof: report.killProof,
     actionLegalityProof: report.actionLegalityProof,
+    normalAttackInputProof: report.normalAttackInputProof,
     diagnostics,
     healing,
     runHashes: run.hashes ?? null,
@@ -554,6 +571,7 @@ function createRejectedKillReport(source, issues, hashes = null) {
       getMachineAxisEnemySettlementContract().formalScoring,
     killProof: null,
     actionLegalityProof: source?.actionLegalityProof ?? null,
+    normalAttackInputProof: source?.normalAttackInputProof ?? null,
     diagnostics: null,
     healing: null,
     hashes: { ...(hashes ?? {}), kill: null },

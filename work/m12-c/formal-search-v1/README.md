@@ -1,5 +1,9 @@
 # M12-C 末音 AI Top-5 正式搜索 v1
 
+> **INVALIDATED / 仅保留历史证据（2026-08-12）**
+>
+> 本目录既有 run、checkpoint、aggregate、finalization 与 closeout 产生于 verified normal-attack combo authority 接入之前。旧搜索把 112001 A1 错当作可按 18F 周期重复的独立动作，未携带 successor/recovery/reopen/special-continuation 状态，也未绑定 `normalAttackInputAuthority.contractHash`。因此既有候选与榜单全部不得评分、恢复、最终化或用于 closeout；文件原地保留，不删除、不覆盖。下一次正式搜索必须使用新 run ID，并由 canonical generator 逐步生成已验证 continuation。固定 cadence greedy 入口已永久 fail closed。
+
 本目录是从 `master@baeb03489aa823d59981d60255af5b418aa48178` 新建的正式搜索链，与两份准入前污染证据完全分离。`run-contract.json` 冻结三个 objective、敌人、初始状态、raw identity/tie 规则和 bounded 停止条件；任何结果都只标记为 `AI-guided heuristic Top-N`，`formalRankingReady=false`。
 
 ## 权威边界
@@ -25,7 +29,7 @@
 node work/m12-c/formal-search-v1/scripts/run-round.mjs --config <round-config.json>
 ```
 
-编排器在每个 objective/round 下按权威 `sourceConfigIdentity` 稳定排序；每片原子写入 `input.json`、`guidance.json`、`result.json`、`feedback.json`、`checkpoint.json`。完成片只在 input/guidance/orchestrator/result hash 全部一致时复用；失败、运行中断或缺失片单列，绝不转成零分。每片完成后重建 `aggregate.json`，聚合按 raw candidate identity 去重，并把 cutoff 同分候选保留在 `cutoffTies`。
+编排器在每个 objective/round 下按权威 `sourceConfigIdentity` 稳定排序；每片原子写入 `input.json`、`guidance.json`、`result.json`、`feedback.json`、`checkpoint.json`。完成片只在 input/guidance/orchestrator/result hash 与 `normalAttackInputAuthority.contractHash` 全部一致时复用；缺失 combo authority 的旧 checkpoint/result 一律作为 invalid artifact 单列，不转成零分。失败、运行中断或缺失片同样单列。每片完成后重建 `aggregate.json`，聚合按 raw candidate identity 去重，并把 cutoff 同分候选保留在 `cutoffTies`。
 
 编排与聚合测试：
 

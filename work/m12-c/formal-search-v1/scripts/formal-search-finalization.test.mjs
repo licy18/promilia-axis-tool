@@ -5,6 +5,12 @@ import { sha256Canonical } from './formal-search-artifacts.mjs';
 import { finalizeObjectiveArtifacts } from './formal-search-finalization.mjs';
 
 const baseline = { head: 'baseline-head' };
+const normalAttackInputAuthority = {
+  schemaVersion: 1,
+  contractName: 'AzPrVerifiedNormalAttackInputAuthority',
+  policyVersion: '1.0.0',
+  contractHash: '0123456789abcdef',
+};
 
 test('finalization fixes shard-local ranks, deduplicates raw identities, and preserves ties', () => {
   const objective = 'cycle-dps-no-toughness';
@@ -81,7 +87,11 @@ test('incomplete or failed coverage fails closed without inventing candidates', 
   });
   assert.equal(finalized.validity.valid, false);
   assert.equal(finalized.summary.topNReady, false);
-  assert.ok(finalized.validity.issues.some(issue => issue.startsWith('round-failed-shards')));
+  assert.ok(
+    finalized.validity.issues.some(issue =>
+      issue.startsWith('round-failed-shards')
+    )
+  );
 });
 
 test('declared terminal rounds rank only terminal raw identities while retaining all-round evidence', () => {
@@ -103,7 +113,12 @@ test('declared terminal rounds rank only terminal raw identities while retaining
         roundId: 'round2',
         objective,
         rows: [50, 40, 30, 20, 10].map((score, index) =>
-          candidate({ objective, score, suffix: `terminal-${index}`, oldRank: 1 })
+          candidate({
+            objective,
+            score,
+            suffix: `terminal-${index}`,
+            oldRank: 1,
+          })
         ),
       }),
     ],
@@ -142,10 +157,38 @@ test('missing declared terminal round fails closed', () => {
   );
 });
 
+test('old finalization inputs without combo authority cannot rank', () => {
+  const objective = 'cycle-dps-no-toughness';
+  const legacy = round({
+    roundId: 'legacy-round',
+    objective,
+    rows: [candidate({ objective, score: 1, suffix: 'legacy', oldRank: 1 })],
+  });
+  delete legacy.manifest.normalAttackInputAuthority;
+  delete legacy.aggregate.normalAttackInputAuthority;
+  delete legacy.shards[0].checkpoint.normalAttackInputAuthority;
+  delete legacy.shards[0].resultArtifact.normalAttackInputAuthority;
+  const finalized = finalizeObjectiveArtifacts({
+    runId: 'legacy-run',
+    objective,
+    baseline,
+    normalAttackInputAuthority,
+    rounds: [legacy],
+  });
+  assert.equal(finalized.validity.valid, false);
+  assert.equal(finalized.results.length, 0);
+  assert.ok(
+    finalized.validity.issues.includes(
+      'round-normal-attack-input-authority-missing:legacy-round'
+    )
+  );
+});
+
 function round({ roundId, objective, rows }) {
   const resultArtifact = {
     objective,
     baseline,
+    normalAttackInputAuthority,
     serviceResult: {
       objective,
       summary: { candidatesEvaluated: rows.length },
@@ -157,6 +200,7 @@ function round({ roundId, objective, rows }) {
     shardId: `${roundId}-shard`,
     inputHash: `${roundId}-input`,
     guidanceHash: `${roundId}-guidance`,
+    normalAttackInputAuthority,
     coverage: { sourceConfigIdentity: `${roundId}-source` },
     artifacts: { resultCanonicalSha256: sha256Canonical(resultArtifact) },
   };
@@ -166,13 +210,17 @@ function round({ roundId, objective, rows }) {
       iteration: Number(roundId.replace(/\D/g, '')) || 1,
       guidanceHash: checkpoint.guidanceHash,
       sourceConfigCount: 1,
+      normalAttackInputAuthority,
     },
     aggregate: {
       objective,
       baseline,
+      normalAttackInputAuthority,
       aggregateHash: `${roundId}-aggregate`,
       coverage: {
-        completedSourceConfigIdentities: [checkpoint.coverage.sourceConfigIdentity],
+        completedSourceConfigIdentities: [
+          checkpoint.coverage.sourceConfigIdentity,
+        ],
         failedSourceConfigIdentities: [],
         missingSourceConfigIdentities: [],
       },
@@ -233,9 +281,14 @@ function candidate({ objective, score, suffix, oldRank }) {
         passed: true,
         skippedActionCount: 0,
         unresolvedActionCount: 0,
+        normalAttackInputAuthority,
       },
     },
-    objectiveProof: { valid: true, formalScore: score },
+    objectiveProof: {
+      valid: true,
+      formalScore: score,
+      normalAttackInputProof: { normalAttackInputAuthority },
+    },
     objectiveIssues: [],
     m12c: {
       buildHash: `build-${suffix}`,

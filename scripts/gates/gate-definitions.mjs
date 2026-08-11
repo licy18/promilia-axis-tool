@@ -21,6 +21,7 @@ export const GATE_SYSTEM_FILES = Object.freeze([
 
 export const FORMAL_DETERMINISM_TEST_FILES = Object.freeze([
   'src/__tests__/domain/machineAxisContract.test.js',
+  'src/__tests__/domain/verifiedNormalAttackInputAuthority.test.js',
   'src/__tests__/integration/workbenchProjectReplayConsistency.test.js',
   'src/__tests__/machine-axis/m12cInitialStatePolicy.test.js',
   'src/__tests__/machine-axis/m12cOuterBuildPool.test.js',
@@ -31,6 +32,7 @@ export const FORMAL_DETERMINISM_TEST_FILES = Object.freeze([
   'src/__tests__/machine-axis/machineAxisObjectiveContract.test.js',
   'src/__tests__/machine-axis/machineAxisSearchAcceptanceBoundary.test.js',
   'src/__tests__/machine-axis/machineAxisSearchEngine.test.js',
+  'src/__tests__/machine-axis/machineAxisSearchGenerator.test.js',
   'src/__tests__/machine-axis/machineAxisSearchState.test.js',
   'src/__tests__/machine-axis/machineAxisService.test.js',
   'src/__tests__/machine-axis/workbenchMachineAxisAdapter.test.js',
@@ -180,7 +182,7 @@ const npxVitestStep = files => ({
 export const GATE_DEFINITIONS = deepFreeze([
   {
     name: 'repository-hygiene',
-    version: 2,
+    version: 3,
     order: 5,
     kind: 'static-check',
     description: 'Changed-file ESLint, Prettier check and git diff --check',
@@ -469,6 +471,9 @@ export const GATE_DEFINITIONS = deepFreeze([
       workbenchReplayConsistency: true,
       initialStateAuthority: true,
       preScorePruning: true,
+      normalAttackComboAuthority: true,
+      comboContinuationPreScore: true,
+      specialContinuationFailClosed: true,
     },
     command: {
       timeoutMs: 30 * 60_000,
@@ -772,7 +777,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'production-preview',
-    version: 4,
+    version: 5,
     order: 320,
     kind: 'browser-acceptance',
     description: '64-case production dist preview acceptance',
@@ -868,6 +873,7 @@ export const GATE_DEFINITIONS = deepFreeze([
       'src/data/generated/character-acceptance-catalog.json',
       'src/data/generated/workbench-kibo-action-catalog.json',
       'src/domain/kiboAxisActionScopePolicy.js',
+      'src/domain/verifiedNormalAttackInputAuthority.js',
       'src/machine-axis/m12cInitialStatePolicy.js',
       'src/machine-axis/kiboAutoCastScheduler.js',
       'src/machine-axis/machineAxisSearchGenerator.js',

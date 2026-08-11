@@ -34,12 +34,16 @@ for (const entry of directoryEntries) {
 }
 roundDirectories.sort(compareText);
 if (roundDirectories.length === 0) {
-  throw new Error(`No completed round directories found in ${objectiveDirectory}`);
+  throw new Error(
+    `No completed round directories found in ${objectiveDirectory}`
+  );
 }
 
 const rounds = [];
 for (const roundDirectory of roundDirectories) {
-  const manifest = await readJson(path.join(roundDirectory, 'round-manifest.json'));
+  const manifest = await readJson(
+    path.join(roundDirectory, 'round-manifest.json')
+  );
   const aggregate = await readJson(path.join(roundDirectory, 'aggregate.json'));
   const feedbackAggregatePath = path.join(
     roundDirectory,
@@ -55,8 +59,12 @@ for (const roundDirectory of roundDirectories) {
     .filter(entry => entry.isDirectory())
     .sort((left, right) => compareText(left.name, right.name))) {
     const shardDirectory = path.join(shardRoot, shardEntry.name);
-    const checkpoint = await readJson(path.join(shardDirectory, 'checkpoint.json'));
-    const resultArtifact = await readJson(path.join(shardDirectory, 'result.json'));
+    const checkpoint = await readJson(
+      path.join(shardDirectory, 'checkpoint.json')
+    );
+    const resultArtifact = await readJson(
+      path.join(shardDirectory, 'result.json')
+    );
     shards.push({ checkpoint, resultArtifact });
   }
   rounds.push({
@@ -77,6 +85,11 @@ const finalization = finalizeObjectiveArtifacts({
   topN: 5,
   rankingRoundIds: rankingRoundIds.length > 0 ? rankingRoundIds : null,
 });
+if (finalization.validity?.valid !== true) {
+  throw new Error(
+    `Objective finalization rejected before writing artifacts: ${JSON.stringify(finalization.validity?.issues ?? [])}`
+  );
+}
 const finalizationDirectory = path.join(
   objectiveDirectory,
   'finalizations',
@@ -123,7 +136,9 @@ const top5Index = {
   objective: finalization.objective,
   rankingClaim: finalization.rankingClaim,
   formalRankingReady: false,
+  normalAttackInputAuthority: finalization.normalAttackInputAuthority,
   finalizationHash: finalization.finalizationHash,
+  normalAttackInputAuthority: finalization.normalAttackInputAuthority,
   cutoffScore: finalization.summary.cutoffScore,
   cutoffTieCount: finalization.summary.cutoffTieCount,
   rows: top5Rows,
@@ -132,18 +147,21 @@ const indexWrite = await writeJsonAtomic(
   path.join(top5Directory, 'index.json'),
   top5Index
 );
-await writeJsonAtomic(path.join(objectiveDirectory, 'latest-finalization.json'), {
-  schemaVersion: 1,
-  kind: 'azpr-m12c-formal-search-finalization-pointer',
-  runId: finalization.runId,
-  objective: finalization.objective,
-  finalizationHash: finalization.finalizationHash,
-  valid: finalization.validity.valid,
-  objectiveFinalizationPath: repositoryRelative(resultWrite.path),
-  objectiveFinalizationFileSha256: resultWrite.sha256,
-  top5IndexPath: repositoryRelative(indexWrite.path),
-  top5IndexFileSha256: indexWrite.sha256,
-});
+await writeJsonAtomic(
+  path.join(objectiveDirectory, 'latest-finalization.json'),
+  {
+    schemaVersion: 1,
+    kind: 'azpr-m12c-formal-search-finalization-pointer',
+    runId: finalization.runId,
+    objective: finalization.objective,
+    finalizationHash: finalization.finalizationHash,
+    valid: finalization.validity.valid,
+    objectiveFinalizationPath: repositoryRelative(resultWrite.path),
+    objectiveFinalizationFileSha256: resultWrite.sha256,
+    top5IndexPath: repositoryRelative(indexWrite.path),
+    top5IndexFileSha256: indexWrite.sha256,
+  }
+);
 
 process.stdout.write(
   `${JSON.stringify({
@@ -162,7 +180,7 @@ if (!finalization.validity.valid) process.exitCode = 1;
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function readArguments(name) {

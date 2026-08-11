@@ -1,8 +1,16 @@
 import { msToFrame } from '../domain/timebase';
-import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
+import {
+  getVerifiedCombatActionMapping,
+  getVerifiedCombatActionMappingByIdentity,
+} from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import { isKiboAxisActionKindIncluded } from '../domain/kiboAxisActionScopePolicy';
 import { resolveVerifiedKiboJointAttackBinding } from '../domain/verifiedJointAttackContract';
+import {
+  VERIFIED_NORMAL_ATTACK_INPUT_PHASES,
+  matchVerifiedNormalAttackInput,
+  resolveVerifiedNormalAttackInputPhase,
+} from '../domain/verifiedNormalAttackInputAuthority';
 import {
   VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE,
   validateVerifiedJointAttackRuntimeBinding,
@@ -201,31 +209,36 @@ export function createMachineAxisSearchGenerator({
       for (const entry of filtered) {
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
-          const segment = selectNextAttackInputSegment({
+          const selection = selectNextAttackInputSegment({
             entry,
             attackInputs,
             activeAttackChain,
+            activeActorId,
           });
-          if (!segment) continue;
-          if (
-            activeAttackChain &&
-            activeAttackChain.linkWindowStatus !== 'applied'
-          ) {
+          if (!selection.ready) {
             rejectFormalSurface(options, {
-              code: 'attack-input-link-timing-unresolved',
+              code: selection.code,
               path: 'actions',
-              message: `Normal-chain continuation is unresolved for ${activeActorId}`,
+              message: selection.message,
               actorId: activeActorId,
               predecessorActionId:
-                activeAttackChain.predecessorAcceptedIdentity,
+                activeAttackChain?.predecessorAcceptedIdentity ?? null,
+              authorityPhase:
+                activeAttackChain?.authorityPhase ??
+                selection.phase?.phase ??
+                null,
+              authoritySourceKind:
+                activeAttackChain?.authoritySourceKind ??
+                selection.phase?.sourceKind ??
+                null,
+              reason: selection.reason ?? null,
             });
             continue;
           }
+          const { expected, phase } = selection;
           const continuesChain =
-            activeAttackChain != null &&
-            Number(segment.sequenceIndex) ===
-              Number(activeAttackChain.nextSequenceIndex) &&
-            Number(segment.sequenceIndex) > 1;
+            phase.phase ===
+            VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW;
           const startFrame = activeAttackChain
             ? Math.max(
                 baseStartFrame,
@@ -239,7 +252,7 @@ export function createMachineAxisSearchGenerator({
             continue;
           }
           const groupId = continuesChain
-            ? activeAttackChain.groupId
+            ? (expected.groupId ?? activeAttackChain.groupId)
             : createSearchAttackGroupId({
                 activeActorId,
                 entry,
@@ -253,15 +266,14 @@ export function createMachineAxisSearchGenerator({
               publicActionId: entry.publicActionId,
               actionKind: entry.actionKind,
               attackInput: {
-                sequenceIndex: segment.sequenceIndex,
+                sequenceIndex: expected.sequenceIndex,
                 groupId,
-                ...(segment.chainIdentity
-                  ? { chainIdentity: segment.chainIdentity }
+                ...(expected.chainIdentity
+                  ? { chainIdentity: expected.chainIdentity }
                   : {}),
-                ...(activeAttackChain?.predecessorAcceptedIdentity
+                ...(expected.contextActionId
                   ? {
-                      contextActionId:
-                        activeAttackChain.predecessorAcceptedIdentity,
+                      contextActionId: expected.contextActionId,
                     }
                   : {}),
               },
@@ -272,7 +284,7 @@ export function createMachineAxisSearchGenerator({
             ownerKind: 'actor',
             slotId,
             startFrame,
-            label: `${entry.name ?? entry.actionKind} A${segment.sequenceIndex}`,
+            label: `${entry.name ?? entry.actionKind} A${expected.sequenceIndex}`,
             source: 'catalog:character-public-action',
             sourceIdentity: entry.mappingIdentity ?? null,
           });
@@ -447,29 +459,143 @@ function selectNextAttackInputSegment({
   entry,
   attackInputs,
   activeAttackChain,
+  activeActorId,
 }) {
-  if (!activeAttackChain) {
-    return attackInputs.find(
-      segment =>
-        Number(segment.sequenceIndex) === 1 &&
-        positiveIntegerOrNull(segment.durationFrames) != null
-    );
+  const mapping = getVerifiedCombatActionMappingByIdentity(
+    entry.mappingIdentity
+  );
+  if (!mapping || mapping.actionKind !== 'normal-attack') {
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-authority-mapping-unresolved',
+      message: `Normal-attack authority mapping is unresolved for ${activeActorId}`,
+      reason: 'normal-attack-authority-mapping-unresolved',
+    });
   }
   if (
-    Number(entry.publicActionId) !== Number(activeAttackChain.publicActionId)
+    activeAttackChain?.mappingIdentity != null &&
+    String(mapping.identity) !== String(activeAttackChain.mappingIdentity)
   ) {
-    return null;
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-authority-mapping-conflict',
+      message: `Normal-attack authority mapping conflicts with the active continuation for ${activeActorId}`,
+      reason: 'normal-attack-authority-mapping-conflict',
+    });
   }
-  return attackInputs.find(
+  const phase = activeAttackChain
+    ? activeAttackChain.authorityPhaseProof
+    : resolveVerifiedNormalAttackInputPhase({
+        mapping,
+        actorId: activeActorId,
+      });
+  if (!phase) {
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-input-phase-unresolved',
+      message: `Normal-attack input phase is unresolved for ${activeActorId}`,
+      reason: 'normal-attack-input-phase-unresolved',
+    });
+  }
+  if (phase.phase === VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED) {
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-input-recovery-locked',
+      message: `Normal-attack input is recovery-locked for ${activeActorId}`,
+      reason: phase.reasons?.[0] ?? 'normal-attack-input-recovery-locked',
+      phase,
+    });
+  }
+  const expected = phase.expected;
+  if (!expected) {
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-input-target-unresolved',
+      message: `Normal-attack input target is unresolved for ${activeActorId}`,
+      reason: 'normal-attack-input-target-unresolved',
+      phase,
+    });
+  }
+  const authoritySegments = [
+    ...(mapping.attackInputSegments ?? []),
+    ...(mapping.profileAttackInputSegments ?? []),
+  ].filter(
     segment =>
-      positiveIntegerOrNull(segment.durationFrames) != null &&
-      Number(segment.sequenceIndex) ===
-        Number(activeAttackChain.nextSequenceIndex) &&
-      (activeAttackChain.chainIdentity == null ||
-        segment.chainIdentity == null ||
-        String(segment.chainIdentity) ===
-          String(activeAttackChain.chainIdentity))
+      Number(segment.sequenceIndex) === Number(expected.sequenceIndex) &&
+      Number(segment.controlSkillId) === Number(expected.controlSkillId) &&
+      Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
+        Number(expected.subSkillIndex) &&
+      (expected.chainIdentity == null ||
+        segment.attackInputChainIdentity == null ||
+        String(segment.attackInputChainIdentity) ===
+          String(expected.chainIdentity))
   );
+  const catalogSegment = attackInputs.find(
+    segment =>
+      Number(segment.sequenceIndex) === Number(expected.sequenceIndex) &&
+      positiveIntegerOrNull(segment.durationFrames) != null
+  );
+  if (authoritySegments.length !== 1 || !catalogSegment) {
+    const special =
+      phase.sourceKind !== 'verified-normal-attack-idle' &&
+      phase.sourceKind !== 'verified-normal-attack-direct-successor';
+    return rejectedNormalAttackSelection({
+      code: special
+        ? 'normal-attack-special-continuation-target-unresolved'
+        : 'normal-attack-input-target-unresolved',
+      message: special
+        ? `Verified special normal-attack continuation target cannot be constructed for ${activeActorId}`
+        : `Verified normal-attack input target cannot be constructed for ${activeActorId}`,
+      reason: 'normal-attack-input-target-not-unique',
+      phase,
+    });
+  }
+  const authoritySegment = authoritySegments[0];
+  const match = matchVerifiedNormalAttackInput({
+    action: {
+      actionKind: 'normal-attack',
+      actorId: activeActorId,
+      attackGroupId:
+        expected.groupId ??
+        activeAttackChain?.groupId ??
+        'search-normal-attack-opener',
+      attackSequenceIndex: expected.sequenceIndex,
+      runtimeContextActionId: expected.contextActionId ?? null,
+      attackInput: {
+        sequenceIndex: expected.sequenceIndex,
+        controlSkillId: authoritySegment.controlSkillId,
+        subSkillIndex:
+          authoritySegment.subSkillIndex ??
+          authoritySegment.selectedSubSkillIndex,
+        attackInputChainIdentity:
+          expected.chainIdentity ??
+          authoritySegment.attackInputChainIdentity ??
+          null,
+      },
+    },
+    mapping,
+    phase,
+  });
+  if (match.accepted !== true) {
+    return rejectedNormalAttackSelection({
+      code: 'normal-attack-input-authority-rejected',
+      message: `Normal-attack input authority rejected the generated target for ${activeActorId}`,
+      reason: match.reason ?? 'normal-attack-input-authority-rejected',
+      phase,
+    });
+  }
+  return {
+    ready: true,
+    segment: catalogSegment,
+    authoritySegment,
+    expected,
+    phase,
+    match,
+  };
+}
+
+function rejectedNormalAttackSelection({
+  code,
+  message,
+  reason,
+  phase = null,
+}) {
+  return { ready: false, code, message, reason, phase };
 }
 
 function createSearchAttackGroupId({

@@ -12,6 +12,7 @@ import {
   readJson,
   sha256Canonical,
   sha256Text,
+  validateNormalAttackInputAuthorityDescriptor,
   writeJsonAtomic,
 } from './formal-search-artifacts.mjs';
 import {
@@ -70,6 +71,14 @@ try {
   });
   const modules = await loadRepositoryModules(vite);
   modules.packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  const normalAttackInputAuthority =
+    modules.normalAttackInputAuthorityModule.getVerifiedNormalAttackInputAuthorityDescriptor();
+  if (
+    !validateNormalAttackInputAuthorityDescriptor(normalAttackInputAuthority)
+      .valid
+  ) {
+    throw new Error('Verified normal-attack input authority is invalid');
+  }
   const machineAxisService = modules.serviceModule.createMachineAxisService();
   const outerBuildService =
     modules.outerBuildModule.createM12cOuterBuildService();
@@ -138,6 +147,7 @@ try {
   const orchestrationIdentityHash = sha256Canonical({
     orchestratorId: 'azpr-m12c-formal-shard-orchestrator-v1',
     ...orchestrationSourceHashes,
+    normalAttackInputAuthority,
   });
   const roundManifest = {
     schemaVersion: FORMAL_SEARCH_ARTIFACT_SCHEMA_VERSION,
@@ -154,13 +164,13 @@ try {
     orchestratorId: 'azpr-m12c-formal-shard-orchestrator-v1',
     orchestrationSourceHashes,
     orchestrationIdentityHash,
+    normalAttackInputAuthority,
     contractTemplatePath: config.contractTemplate,
     contractTemplateHash,
     guidancePath: config.guidanceFile,
     guidanceHash,
     guidanceProvenance: normalizedGuidance.guidance.provenance,
-    previousFeedbackAggregate:
-      config.previousFeedbackAggregate ?? null,
+    previousFeedbackAggregate: config.previousFeedbackAggregate ?? null,
     presetSpec: config.presetSpec,
     presetSpecHash,
     topN: config.topN,
@@ -170,6 +180,18 @@ try {
     stopPolicy: config.stopPolicy,
     cycleReplayProvenance: cycleReplayTemplate?.provenance ?? null,
   };
+  const existingRoundManifest = await readJsonIfExists(
+    path.join(roundDirectory, 'round-manifest.json')
+  );
+  if (
+    existingRoundManifest &&
+    existingRoundManifest.normalAttackInputAuthority?.contractHash !==
+      normalAttackInputAuthority.contractHash
+  ) {
+    throw new Error(
+      'Existing round predates or mismatches the verified normal-attack combo authority; preserve it in place and start a new run/round ID'
+    );
+  }
   await writeJsonAtomic(
     path.join(roundDirectory, 'round-manifest.json'),
     roundManifest
@@ -198,6 +220,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
     });
     const shardDirectory = path.join(
       roundDirectory,
@@ -242,6 +265,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
       request,
       cycleReplay: cycleReplayTemplate?.provenance ?? null,
     };
@@ -250,7 +274,9 @@ try {
     if (previousCheckpoint?.status === 'completed') {
       if (
         previousCheckpoint.inputHash !== inputHash ||
-        previousCheckpoint.guidanceHash !== guidanceHash
+        previousCheckpoint.guidanceHash !== guidanceHash ||
+        previousCheckpoint.normalAttackInputAuthority?.contractHash !==
+          normalAttackInputAuthority.contractHash
       ) {
         throw new Error(
           `Completed shard ${shardCoordinates.shardId} does not match the current input; create a new round instead of overwriting evidence`
@@ -301,7 +327,10 @@ try {
         : []),
     ];
     const startedAt = new Date().toISOString();
-    await writeJsonAtomic(path.join(shardDirectory, 'input.json'), inputEnvelope);
+    await writeJsonAtomic(
+      path.join(shardDirectory, 'input.json'),
+      inputEnvelope
+    );
     await writeJsonAtomic(path.join(shardDirectory, 'guidance.json'), {
       ...normalizedGuidance.guidance,
       guidanceHash,
@@ -325,6 +354,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
       coverage: {
         sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
         sourceConfigOrdinal: index + 1,
@@ -388,6 +418,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         serviceRequestHash: serviceResult.requestHash,
         serviceResult,
       };
@@ -434,6 +465,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         serviceRequestHash: serviceResult.requestHash,
         coverage: {
           sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
@@ -503,6 +535,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         startedAt,
         finishedAt,
         error: normalizeError(error),
@@ -531,6 +564,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         failurePath: repositoryRelative(failurePath),
         coverage: {
           sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
@@ -567,8 +601,7 @@ try {
           aggregate.coverage.failedSourceConfigIdentities.length,
         missingSourceConfigs:
           aggregate.coverage.missingSourceConfigIdentities.length,
-        validDistinctCandidates:
-          aggregate.summary.validDistinctCandidateCount,
+        validDistinctCandidates: aggregate.summary.validDistinctCandidateCount,
         topNReady: aggregate.summary.topNReady,
         cutoffScore: aggregate.summary.cutoffScore,
         aggregateHash: aggregate.aggregateHash,
@@ -581,8 +614,7 @@ try {
     roundManifest,
     sourceConfigs,
   });
-  const completed =
-    aggregate.coverage.completedSourceConfigIdentities.length;
+  const completed = aggregate.coverage.completedSourceConfigIdentities.length;
   const failed = aggregate.coverage.failedSourceConfigIdentities.length;
   const missing = aggregate.coverage.missingSourceConfigIdentities.length;
   const roundStatus =
@@ -602,6 +634,7 @@ try {
     presetSpecHash,
     baseline: config.baseline,
     orchestrationIdentityHash,
+    normalAttackInputAuthority,
     coverage: aggregate.coverage,
     summary: aggregate.summary,
   });
@@ -631,10 +664,9 @@ try {
 async function loadCycleReplayTemplate(config) {
   if (config.cycleReplay == null) return null;
   if (
-    ![
-      'cycle-dps-no-toughness',
-      'cycle-dps-with-toughness',
-    ].includes(config.objective)
+    !['cycle-dps-no-toughness', 'cycle-dps-with-toughness'].includes(
+      config.objective
+    )
   ) {
     throw new Error(
       'Fixed cycle replay is admitted only for closed-cycle objectives'
@@ -661,8 +693,7 @@ async function loadCycleReplayTemplate(config) {
   }
   const candidate = (aggregate.results ?? []).find(
     row =>
-      row.rawIdentity?.identityHash ===
-      specification.templateRawIdentityHash
+      row.rawIdentity?.identityHash === specification.templateRawIdentityHash
   );
   if (!candidate?.axis) {
     throw new Error('cycleReplay template candidate was not found');
@@ -694,8 +725,7 @@ async function loadCycleReplayTemplate(config) {
   };
   if (
     provenance.loop.startFrame !== 0 ||
-    provenance.loop.endFrame !==
-      Number(candidate.axis.scenario.durationFrames)
+    provenance.loop.endFrame !== Number(candidate.axis.scenario.durationFrames)
   ) {
     throw new Error('cycleReplay must preserve the full closed horizon');
   }
@@ -715,9 +745,7 @@ async function runFixedCycleReplayShard({
   template,
 }) {
   const startedAt = Date.now();
-  if (
-    String(config.refinementInitialFrontOptimizationObjectId) !== '112001'
-  ) {
+  if (String(config.refinementInitialFrontOptimizationObjectId) !== '112001') {
     throw new Error('Fixed cycle replay requires initial front 112001');
   }
   const planResult = outerBuildService.plan({
@@ -742,8 +770,7 @@ async function runFixedCycleReplayShard({
   const axis = createFixedCycleReplayAxis({
     baseAxis: binding.contract,
     templateAxis: template.axis,
-    templateRawIdentityHash:
-      template.provenance.templateRawIdentityHash,
+    templateRawIdentityHash: template.provenance.templateRawIdentityHash,
     templateAggregateHash: template.provenance.templateAggregateHash,
     synthesisId: template.provenance.synthesisId,
   });
@@ -865,8 +892,7 @@ async function runFixedCycleReplayShard({
         reboundBuildHash: build.buildHash,
         reboundInitialFront: binding.initialFront,
         closedScore: candidate.score,
-        legalityProofHash:
-          validation.actionLegalityProof?.proofHash ?? null,
+        legalityProofHash: validation.actionLegalityProof?.proofHash ?? null,
         cycleProofHash: proof.hashes?.cycle ?? null,
       },
     },
@@ -899,13 +925,13 @@ async function rebuildRoundAggregate({
     objective: roundManifest.objective,
     topN: roundManifest.topN,
     baseline: roundManifest.baseline,
-    expectedSourceConfigIdentities:
-      roundManifest.sourceConfigIdentities,
+    expectedSourceConfigIdentities: roundManifest.sourceConfigIdentities,
     shardArtifacts,
     guidanceHash: roundManifest.guidanceHash,
     presetSpecHash: roundManifest.presetSpecHash,
     contractTemplateHash: roundManifest.contractTemplateHash,
     orchestrationIdentityHash: roundManifest.orchestrationIdentityHash,
+    normalAttackInputAuthority: roundManifest.normalAttackInputAuthority,
   });
   await writeJsonAtomic(path.join(roundDirectory, 'aggregate.json'), aggregate);
   return aggregate;
@@ -1022,14 +1048,18 @@ async function assertNoOtherSearchProcess() {
   if (process.platform !== 'win32') return;
   const command = [
     `$selfPid = ${process.pid}`,
-    "$rows = Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne $selfPid -and $_.Name -match '^node(\\.exe)?$' -and $_.CommandLine -and $_.CommandLine -match 'run-ai-guided-search|m12c-outer-search|formal-search-v1[\\\\/]+scripts[\\\\/]+run-round' } | Select-Object ProcessId, CommandLine",
-    "if ($rows) { $rows | ConvertTo-Json -Compress } else { '[]' }",
+    String.raw`$rows = Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne $selfPid -and $_.Name -match '^node(\.exe)?$' -and $_.CommandLine -and $_.CommandLine -match 'run-ai-guided-search|m12c-outer-search|formal-search-v1[\\/]+scripts[\\/]+run-round' } | Select-Object ProcessId, CommandLine`,
+    String.raw`if ($rows) { $rows | ConvertTo-Json -Compress } else { '[]' }`,
   ].join('; ');
-  const { stdout } = await execFile('pwsh', ['-NoProfile', '-Command', command], {
-    cwd: projectRoot,
-    windowsHide: true,
-    maxBuffer: 1024 * 1024,
-  });
+  const { stdout } = await execFile(
+    'pwsh',
+    ['-NoProfile', '-Command', command],
+    {
+      cwd: projectRoot,
+      windowsHide: true,
+      maxBuffer: 1024 * 1024,
+    }
+  );
   const rows = JSON.parse(stdout.trim() || '[]');
   const normalized = Array.isArray(rows) ? rows : [rows];
   if (normalized.length > 0) {
@@ -1064,9 +1094,7 @@ async function acquireProcessLock(lockPath, config) {
     if (error?.code !== 'EEXIST') throw error;
     const existing = await readJsonIfExists(lockPath);
     if (existing?.pid && processIsAlive(Number(existing.pid))) {
-      throw new Error(
-        `Formal search lock is held by live PID ${existing.pid}`
-      );
+      throw new Error(`Formal search lock is held by live PID ${existing.pid}`);
     }
     const stalePath = `${lockPath}.stale-${Date.now()}.json`;
     await fs.rename(lockPath, stalePath);
@@ -1099,12 +1127,14 @@ async function loadRepositoryModules(server) {
     guidanceModule,
     outerBuildModule,
     outerSearchModule,
+    normalAttackInputAuthorityModule,
   ] = await Promise.all([
     server.ssrLoadModule('/src/data/verifiedCombatMechanicsPackage.js'),
     server.ssrLoadModule('/src/machine-axis/machineAxisService.js'),
     server.ssrLoadModule('/src/machine-axis/machineAxisSearchGuidance.js'),
     server.ssrLoadModule('/src/machine-axis/m12cOuterBuildService.js'),
     server.ssrLoadModule('/src/machine-axis/m12cOuterSearchService.js'),
+    server.ssrLoadModule('/src/domain/verifiedNormalAttackInputAuthority.js'),
   ]);
   return {
     packageModule,
@@ -1112,15 +1142,17 @@ async function loadRepositoryModules(server) {
     guidanceModule,
     outerBuildModule,
     outerSearchModule,
+    normalAttackInputAuthorityModule,
   };
 }
 
 function selectSourceConfigs(pool, config) {
-  const all = [...(pool?.teamCatalog?.sourceConfigs ?? [])].sort((left, right) =>
-    String(left.sourceConfigIdentity).localeCompare(
-      String(right.sourceConfigIdentity),
-      'en'
-    )
+  const all = [...(pool?.teamCatalog?.sourceConfigs ?? [])].sort(
+    (left, right) =>
+      String(left.sourceConfigIdentity).localeCompare(
+        String(right.sourceConfigIdentity),
+        'en'
+      )
   );
   if (!Array.isArray(config.sourceConfigIdentities)) return all;
   const byIdentity = new Map(
@@ -1143,6 +1175,7 @@ function createShardCoordinates({
   presetSpecHash,
   contractTemplateHash,
   orchestrationIdentityHash,
+  normalAttackInputAuthority,
 }) {
   const directoryName = createShardDirectoryName(sourceConfig, index);
   return {
@@ -1156,6 +1189,7 @@ function createShardCoordinates({
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputContractHash: normalAttackInputAuthority.contractHash,
     }).slice(0, 24)}`,
   };
 }
@@ -1208,7 +1242,7 @@ async function findProjectRoot(start) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index < 0 ? null : process.argv[index + 1] ?? null;
+  return index < 0 ? null : (process.argv[index + 1] ?? null);
 }
 
 function resolveRepositoryPath(value) {

@@ -2,38 +2,42 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  GREEDY_NORMAL_RETIREMENT_CODE,
+  assertGreedyNormalSynthesisAvailable,
   classifyGreedyKillProbe,
   deriveGreedyNormalCadence,
   synthesizeGreedyNormalAxis,
 } from './greedy-normal-axis.mjs';
 
-test('derives and synthesizes a deterministic right-window normal cadence', () => {
+test('retires fixed-cadence synthesis instead of repeating A1', () => {
   const first = action(1, 0);
   const second = action(2, 18);
-  const cadence = deriveGreedyNormalCadence(first, second);
-  const axis = synthesizeGreedyNormalAxis({
-    baseAxis: { scenario: { name: 'base' }, actions: [] },
-    cadence,
-    actionCount: 4,
-  });
-  assert.deepEqual(
-    axis.actions.map(row => row.schedule.frame),
-    [0, 18, 36, 54]
+  assert.throws(
+    () => deriveGreedyNormalCadence(first, second),
+    error => error.code === GREEDY_NORMAL_RETIREMENT_CODE
   );
-  assert.deepEqual(
-    axis.actions.map(row => row.intent.attackInput.groupId),
-    ['group|1', 'group|2', 'group|3', 'group|4']
+  assert.throws(
+    () =>
+      synthesizeGreedyNormalAxis({
+        baseAxis: { scenario: { name: 'base' }, actions: [] },
+        cadence: {},
+        actionCount: 4,
+      }),
+    error => error.code === GREEDY_NORMAL_RETIREMENT_CODE
   );
-  assert.equal(axis.scenario.name, 'base [greedy-normal-v1:4]');
+  assert.throws(
+    () => assertGreedyNormalSynthesisAvailable(),
+    error => error.code === GREEDY_NORMAL_RETIREMENT_CODE
+  );
 });
 
-test('rejects cadence identities that would require semantic guessing', () => {
+test('rejects even a superficially plausible A1-to-A2 cadence because later phases are not periodic', () => {
   const first = action(1, 0);
   const second = action(2, 18);
   second.intent.attackInput.sequenceIndex = 2;
   assert.throws(
     () => deriveGreedyNormalCadence(first, second),
-    /stable A1 surface/
+    /fixed-cadence normal synthesis cannot represent verified successor/
   );
 });
 
@@ -46,8 +50,7 @@ test('classifies killed, non-killed, and invalid probes without zero scoring', (
         formalScore: 99,
         killProof: { feasible: true },
       },
-    })
-      .status,
+    }).status,
     'killed-valid'
   );
   assert.equal(

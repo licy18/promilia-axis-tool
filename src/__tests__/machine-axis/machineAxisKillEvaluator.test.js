@@ -353,6 +353,69 @@ describe('Machine Axis fastest-kill proof', () => {
     );
   });
 
+  it('rejects repeated A1 inputs before fastest-kill scoring', () => {
+    const run = createRun([
+      damagePacket({
+        frame: 18,
+        sequence: 1,
+        damage: 1000,
+        lethal: true,
+        actionId: 'melania-a1-2',
+      }),
+    ]);
+    run.trace.actions = [0, 18].map((frame, index) => ({
+      id: `melania-a1-${index + 1}`,
+      type: 'skill',
+      actorId: 'actor-112001',
+      actionKind: 'normal-attack',
+      skillId: 11200101,
+      startMs: (frame * 1000) / 60,
+      attackGroupId: `melania-chain-${index + 1}`,
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+    }));
+    run.trace.executionPlan = {
+      actions: run.trace.actions.map((action, index) => ({
+        actionId: action.id,
+        execute: true,
+        status: 'scheduled',
+        violationCodes: [],
+        unresolvedCodes: [],
+        sourceSequenceIndex: index,
+        startMs: action.startMs,
+      })),
+    };
+    run.trace.variants = {
+      selections: run.trace.actions.map(action => ({
+        actionId: action.id,
+        controlSkillId: 11200101,
+        subSkillIndex: 0,
+        attackGroupId: action.attackGroupId,
+        attackSequenceIndex: 1,
+        attackSequenceTotal: 5,
+      })),
+    };
+
+    expect(prove(run)).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      formalScore: null,
+      normalAttackInputProof: {
+        passed: false,
+        normalAttackInputAuthority: {
+          contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+        },
+        issues: [
+          expect.objectContaining({
+            code: 'machine-axis-normal-attack-input-authority-rejected',
+            actionId: 'melania-a1-2',
+            phase: 'successor-window',
+          }),
+        ],
+      },
+    });
+  });
+
   it('projects preflight action-rule rejection into a fastest-kill legality proof', () => {
     const evaluator = createMachineAxisKillEvaluator({
       service: {

@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import giseleFixture from '../../../fixtures/character-acceptance/112001-joint-attack-runtime.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -6,6 +7,7 @@ import {
   createSearchAttackChainProjection,
   createSearchEventBoundaryNodes,
   createSearchLoopClosureProjection,
+  createSearchNormalAttackInputProof,
   createSearchPendingEventProjection,
   createSearchStateSnapshot,
   deriveActiveActorId,
@@ -15,7 +17,9 @@ import {
 } from '../../machine-axis/machineAxisSearchState';
 
 function cloneFixture() {
-  return structuredClone(fixture);
+  const axis = structuredClone(fixture);
+  axis.actions = axis.actions.filter(action => !action.id.startsWith('a3-'));
+  return axis;
 }
 
 describe('Machine Axis search state', () => {
@@ -29,7 +33,10 @@ describe('Machine Axis search state', () => {
   });
 
   it('builds a deterministic state snapshot from a canonical run', () => {
-    const snapshot = createSearchStateSnapshot({ run, contract: fixture });
+    const snapshot = createSearchStateSnapshot({
+      run,
+      contract: cloneFixture(),
+    });
     expect(snapshot).toMatchObject({
       schemaVersion: 1,
       kind: 'azpr-machine-axis-search-state',
@@ -56,7 +63,7 @@ describe('Machine Axis search state', () => {
   });
 
   it('treats arrival time and prefix damage as non-equivalence keys', () => {
-    const base = createSearchStateSnapshot({ run, contract: fixture });
+    const base = createSearchStateSnapshot({ run, contract: cloneFixture() });
     const later = {
       ...base,
       currentFrame: base.currentFrame + 30,
@@ -95,7 +102,7 @@ describe('Machine Axis search state', () => {
     ];
     const snapshot = createSearchStateSnapshot({
       run: withChargeState,
-      contract: fixture,
+      contract: cloneFixture(),
     });
     expect(snapshot.chargeCooldowns).toEqual([
       expect.objectContaining({
@@ -165,7 +172,10 @@ describe('Machine Axis search state', () => {
   });
 
   it('infers the real execution node instead of coercing a null frame to zero', () => {
-    const snapshot = createSearchStateSnapshot({ run, contract: fixture });
+    const snapshot = createSearchStateSnapshot({
+      run,
+      contract: cloneFixture(),
+    });
     const finalActionEndFrame = Math.max(
       ...run.trace.executionPlan.actions
         .filter(entry => entry.execute !== false)
@@ -176,12 +186,12 @@ describe('Machine Axis search state', () => {
     expect(snapshot.currentFrame).toBe(finalActionEndFrame);
     expect(snapshot.currentFrame).toBeGreaterThan(0);
     expect(snapshot.remainingFrames).toBe(
-      fixture.scenario.durationFrames - finalActionEndFrame
+      cloneFixture().scenario.durationFrames - finalActionEndFrame
     );
   });
 
   it('does not merge states that differ in legality-relevant state', () => {
-    const base = createSearchStateSnapshot({ run, contract: fixture });
+    const base = createSearchStateSnapshot({ run, contract: cloneFixture() });
     const differentBuff = {
       ...base,
       effects: [
@@ -225,154 +235,151 @@ describe('Machine Axis search state', () => {
     expect(searchStatesEquivalent(base, brokenEnemy)).toBe(false);
   });
 
-  it('keeps accepted normal-chain predecessor and right-open link state in the hash', () => {
-    const trace = {
-      actions: [
-        {
-          id: 'actor-a-a1',
-          type: 'skill',
-          actionKind: 'normal-attack',
-          actorId: 'actor-a',
-          skillId: 10101001,
-          startMs: 100,
-          attackGroupId: 'chain-group-a',
-          attackSequenceIndex: 1,
-          attackSequenceTotal: 3,
-          attackInputChainIdentity: 'chain:10101001',
-          attackInputLinkTimingStatus: 'applied',
-          attackInputLinkWindow: {
-            startFrame: 5,
-            endFrame: 10,
-            sourceIdentity: 'client-input-window:a1-a2',
-          },
-        },
-      ],
-      executionPlan: {
-        actions: [
-          {
-            actionId: 'actor-a-a1',
-            execute: true,
-            sourceSequenceIndex: 0,
-            startMs: 100,
-          },
-        ],
-      },
-      variants: {
-        selections: [
-          {
-            actionId: 'actor-a-a1',
-            attackGroupId: 'chain-group-a',
-            attackSequenceIndex: 1,
-            attackSequenceTotal: 3,
-            attackInputChainIdentity: 'chain:10101001',
-            attackInputLinkTimingStatus: 'applied',
-            attackInputLinkWindow: {
-              startFrame: 5,
-              endFrame: 10,
-              sourceIdentity: 'client-input-window:a1-a2',
-            },
-          },
-        ],
-      },
-    };
-    const exactStart = createSearchAttackChainProjection({
-      trace,
-      currentFrame: 11,
-      fps: 60,
-    });
-    expect(exactStart).toEqual([
-      expect.objectContaining({
-        actorId: 'actor-a',
-        groupId: 'chain-group-a',
-        chainIdentity: 'chain:10101001',
-        nextSequenceIndex: 2,
-        predecessorAcceptedIdentity: 'actor-a-a1',
-        linkWindowStartFrame: 11,
-        linkWindowEndFrame: 16,
-      }),
-    ]);
-    expect(
-      createSearchAttackChainProjection({ trace, currentFrame: 16, fps: 60 })
-    ).toEqual([]);
-
-    const base = createSearchStateSnapshot({ run, contract: fixture });
-    const withChain = { ...base, attackChains: exactStart };
-    expect(hashSearchState(withChain)).not.toBe(hashSearchState(base));
-
-    const interrupted = structuredClone(trace);
-    interrupted.actions.push({
-      id: 'intervening-skill',
-      type: 'skill',
-      actorId: 'actor-a',
-      actionKind: 'star-skill',
-      startMs: (12 * 1000) / 60,
-    });
-    interrupted.executionPlan.actions.push({
-      actionId: 'intervening-skill',
-      execute: true,
-      sourceSequenceIndex: 1,
-      startMs: (12 * 1000) / 60,
-    });
-    expect(
-      createSearchAttackChainProjection({
-        trace: interrupted,
-        currentFrame: 13,
-        fps: 60,
-      })
-    ).toEqual([]);
-
-    const preserved = structuredClone(interrupted);
-    preserved.variants.attackChainContinuityWindows = [
+  it('keeps the complete verified 112001 continuation phase in the state hash', () => {
+    const axis = structuredClone(giseleFixture);
+    axis.actions = [
       {
-        edgeIdentity: 'attack-chain-continuity:intervening-skill:rule:2',
-        actorId: 'actor-a',
-        sourceActionId: 'intervening-skill',
-        targetChainIdentity: 'chain:10101001',
-        targetSequenceIndex: 2,
-        startsAtMs: (13 * 1000) / 60,
-        endsAtMs: (30 * 1000) / 60,
-        sourceIdentity: 'client-continuity-rule:counter-keeps-chain',
-        applied: true,
+        id: 'melania-a1',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 11200101,
+          actionKind: 'normal-attack',
+          attackInput: { sequenceIndex: 1, groupId: 'melania-chain' },
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
       },
     ];
-    expect(
-      createSearchAttackChainProjection({
-        trace: preserved,
-        currentFrame: 13,
-        fps: 60,
-      })
-    ).toEqual([
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    const melaniaRun = service.simulate(axis);
+    const at17 = createSearchAttackChainProjection({
+      trace: melaniaRun.trace,
+      currentFrame: 17,
+      fps: 60,
+    });
+    expect(at17).toEqual([
       expect.objectContaining({
-        status: 'sourced-continuity-window',
-        continuityStatus: 'verified-attack-chain-continuity',
-        continuityActionId: 'intervening-skill',
+        actorId: 'actor-112001',
+        authorityPhase: 'recovery-locked',
+        authorityContractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+        formIdentity: expect.stringMatching(/^normal-attack-form:/),
+        chainIdentity: null,
         nextSequenceIndex: 2,
-        linkWindowStartFrame: 13,
-        linkWindowEndFrame: 30,
-        linkWindowSourceIdentity: 'client-continuity-rule:counter-keeps-chain',
+        recoveryEndFrame: 230,
       }),
     ]);
-
-    const switched = structuredClone(trace);
-    switched.actions.push({
-      id: 'switch-away',
-      type: 'switch',
-      startMs: 150,
-    });
-    switched.executionPlan.actions.push({
-      actionId: 'switch-away',
-      execute: true,
-      sourceSequenceIndex: 1,
-      startMs: 150,
-    });
+    for (const frame of [18, 72]) {
+      expect(
+        createSearchAttackChainProjection({
+          trace: melaniaRun.trace,
+          currentFrame: frame,
+          fps: 60,
+        })
+      ).toEqual([
+        expect.objectContaining({
+          authorityPhase: 'successor-window',
+          nextSequenceIndex: 2,
+          linkWindowStartFrame: 18,
+          linkWindowEndFrame: 73,
+        }),
+      ]);
+    }
+    for (const frame of [73, 229]) {
+      expect(
+        createSearchAttackChainProjection({
+          trace: melaniaRun.trace,
+          currentFrame: frame,
+          fps: 60,
+        })
+      ).toEqual([
+        expect.objectContaining({
+          authorityPhase: 'recovery-locked',
+          recoveryEndFrame: 230,
+        }),
+      ]);
+    }
     expect(
       createSearchAttackChainProjection({
-        trace: switched,
-        currentFrame: 15,
+        trace: melaniaRun.trace,
+        currentFrame: 230,
         fps: 60,
       })
     ).toEqual([]);
-  });
+
+    const base = createSearchStateSnapshot({ run, contract: cloneFixture() });
+    expect(hashSearchState({ ...base, attackChains: at17 })).not.toBe(
+      hashSearchState(base)
+    );
+  }, 30_000);
+
+  it('rejects a repeated A1 before an objective can score it', () => {
+    const axis = structuredClone(giseleFixture);
+    axis.actions = [
+      {
+        id: 'melania-a1-1',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 11200101,
+          actionKind: 'normal-attack',
+          attackInput: { sequenceIndex: 1, groupId: 'melania-chain-1' },
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
+      },
+    ];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    const illegalTrace = structuredClone(service.simulate(axis).trace);
+    const firstAction = illegalTrace.actions.find(
+      action => action.id === 'melania-a1-1'
+    );
+    const firstSelection = illegalTrace.variants.selections.find(
+      selection => selection.actionId === 'melania-a1-1'
+    );
+    illegalTrace.actions.push({
+      ...structuredClone(firstAction),
+      id: 'melania-a1-2',
+      startMs: (18 * 1000) / 60,
+      attackGroupId: 'melania-chain-2',
+    });
+    illegalTrace.executionPlan.actions.push({
+      actionId: 'melania-a1-2',
+      execute: true,
+      status: 'scheduled',
+      sourceSequenceIndex: 1,
+      startMs: (18 * 1000) / 60,
+    });
+    illegalTrace.variants.selections.push({
+      ...structuredClone(firstSelection),
+      actionId: 'melania-a1-2',
+      attackGroupId: 'melania-chain-2',
+    });
+    const proof = createSearchNormalAttackInputProof({
+      trace: illegalTrace,
+      fps: 60,
+    });
+    expect(proof).toMatchObject({
+      passed: false,
+      status: 'normal-attack-input-authority-rejected',
+      normalAttackInputAuthority: {
+        contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      },
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-input-authority-rejected',
+          actionId: 'melania-a1-2',
+          phase: 'successor-window',
+        }),
+      ],
+    });
+  }, 30_000);
 
   it('derives the active actor from controlled actor transitions', () => {
     expect(deriveActiveActorId(run.trace)).toBe('actor-103002');

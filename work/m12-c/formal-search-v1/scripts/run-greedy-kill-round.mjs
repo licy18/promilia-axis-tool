@@ -14,10 +14,12 @@ import {
   readJson,
   sha256Canonical,
   sha256Text,
+  validateNormalAttackInputAuthorityDescriptor,
   writeJsonAtomic,
 } from './formal-search-artifacts.mjs';
 import {
   GREEDY_NORMAL_SYNTHESIS_ID,
+  assertGreedyNormalSynthesisAvailable,
   classifyGreedyKillProbe,
   deriveGreedyNormalCadence,
   synthesizeGreedyNormalAxis,
@@ -31,6 +33,7 @@ if (!configArgument) throw new Error('--config is required');
 const configPath = resolveRepositoryPath(configArgument);
 const config = await readJson(configPath);
 validateConfig(config);
+assertGreedyNormalSynthesisAvailable();
 const outputRoot = resolveRepositoryPath(config.outputRoot);
 const roundDirectory = path.join(
   outputRoot,
@@ -69,15 +72,24 @@ try {
   });
   const modules = await loadModules(vite);
   modules.packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
+  const normalAttackInputAuthority =
+    modules.normalAttackInputAuthorityModule.getVerifiedNormalAttackInputAuthorityDescriptor();
+  if (
+    !validateNormalAttackInputAuthorityDescriptor(normalAttackInputAuthority)
+      .valid
+  ) {
+    throw new Error('Verified normal-attack input authority is invalid');
+  }
   const service = modules.serviceModule.createMachineAxisService();
-  const outerBuildService = modules.outerBuildModule.createM12cOuterBuildService();
-  const outerSearchService = modules.outerSearchModule.createM12cOuterSearchService({
-    machineAxisService: service,
-    outerBuildService,
-  });
-  const normalizedGuidance = modules.guidanceModule.normalizeSearchGuidance(
-    guidanceInput
-  );
+  const outerBuildService =
+    modules.outerBuildModule.createM12cOuterBuildService();
+  const outerSearchService =
+    modules.outerSearchModule.createM12cOuterSearchService({
+      machineAxisService: service,
+      outerBuildService,
+    });
+  const normalizedGuidance =
+    modules.guidanceModule.normalizeSearchGuidance(guidanceInput);
   if (!normalizedGuidance.valid) {
     throw new Error(
       `Guidance invalid: ${JSON.stringify(normalizedGuidance.issues)}`
@@ -97,7 +109,10 @@ try {
       await fs.readFile(fileURLToPath(import.meta.url), 'utf8')
     ),
     greedyNormalAxisSha256: sha256Text(
-      await fs.readFile(path.join(scriptDirectory, 'greedy-normal-axis.mjs'), 'utf8')
+      await fs.readFile(
+        path.join(scriptDirectory, 'greedy-normal-axis.mjs'),
+        'utf8'
+      )
     ),
     artifactLibrarySha256: sha256Text(
       await fs.readFile(
@@ -109,6 +124,7 @@ try {
   const orchestrationIdentityHash = sha256Canonical({
     orchestratorId: 'azpr-m12c-formal-greedy-kill-shard-orchestrator-v1',
     ...orchestrationSourceHashes,
+    normalAttackInputAuthority,
   });
   const pool = outerBuildService.pool();
   const sourceConfigs = selectSourceConfigs(pool, config);
@@ -130,6 +146,7 @@ try {
     orchestratorId: 'azpr-m12c-formal-greedy-kill-shard-orchestrator-v1',
     orchestrationSourceHashes,
     orchestrationIdentityHash,
+    normalAttackInputAuthority,
     synthesisId: GREEDY_NORMAL_SYNTHESIS_ID,
     contractTemplatePath: config.contractTemplate,
     contractTemplateHash,
@@ -182,6 +199,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputContractHash: normalAttackInputAuthority.contractHash,
     }).slice(0, 24)}`;
     const inputEnvelope = {
       schemaVersion: FORMAL_SEARCH_ARTIFACT_SCHEMA_VERSION,
@@ -203,6 +221,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
     };
     const inputHash = sha256Canonical(inputEnvelope);
     const checkpointPath = path.join(shardDirectory, 'checkpoint.json');
@@ -210,7 +229,9 @@ try {
     if (previousCheckpoint?.status === 'completed') {
       if (
         previousCheckpoint.inputHash !== inputHash ||
-        previousCheckpoint.guidanceHash !== guidanceHash
+        previousCheckpoint.guidanceHash !== guidanceHash ||
+        previousCheckpoint.normalAttackInputAuthority?.contractHash !==
+          normalAttackInputAuthority.contractHash
       ) {
         throw new Error(`Completed shard input drift: ${shardId}`);
       }
@@ -234,7 +255,10 @@ try {
     }
     const attempt = Number(previousCheckpoint?.attempt ?? 0) + 1;
     const startedAt = new Date().toISOString();
-    await writeJsonAtomic(path.join(shardDirectory, 'input.json'), inputEnvelope);
+    await writeJsonAtomic(
+      path.join(shardDirectory, 'input.json'),
+      inputEnvelope
+    );
     await writeJsonAtomic(path.join(shardDirectory, 'guidance.json'), {
       ...normalizedGuidance.guidance,
       guidanceHash,
@@ -257,6 +281,7 @@ try {
       presetSpecHash,
       contractTemplateHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
       coverage: createCoverage(sourceConfig, index, sourceConfigs.length),
     });
     emit({
@@ -281,6 +306,7 @@ try {
         guidanceHash,
         presetSpecHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         config,
       });
       const resultArtifact = {
@@ -299,6 +325,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         serviceRequestHash: inputHash,
         serviceResult: shardRun.serviceResult,
       };
@@ -351,6 +378,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         serviceRequestHash: inputHash,
         coverage: {
           ...createCoverage(sourceConfig, index, sourceConfigs.length),
@@ -381,8 +409,7 @@ try {
         shardId,
         sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
         resultCount: 1,
-        candidatesEvaluated:
-          shardRun.serviceResult.summary.candidatesEvaluated,
+        candidatesEvaluated: shardRun.serviceResult.summary.candidatesEvaluated,
         wallTimeMs: shardRun.serviceResult.summary.wallTimeMs,
         actionCount: shardRun.feedback.boundarySearch.killedActionCount,
         score: shardRun.serviceResult.results[0].score,
@@ -427,6 +454,7 @@ try {
         presetSpecHash,
         contractTemplateHash,
         orchestrationIdentityHash,
+        normalAttackInputAuthority,
         coverage: createCoverage(sourceConfig, index, sourceConfigs.length),
         failurePath: repositoryRelative(failurePath),
         error: normalizeError(error),
@@ -484,6 +512,7 @@ try {
     presetSpecHash,
     baseline: config.baseline,
     orchestrationIdentityHash,
+    normalAttackInputAuthority,
     coverage: aggregate.coverage,
     summary: aggregate.summary,
   });
@@ -521,6 +550,7 @@ async function runGreedyShard({
   guidanceHash,
   presetSpecHash,
   orchestrationIdentityHash,
+  normalAttackInputAuthority,
   config,
 }) {
   const started = Date.now();
@@ -635,6 +665,7 @@ async function runGreedyShard({
       guidanceHash,
       presetSpecHash,
       orchestrationIdentityHash,
+      normalAttackInputAuthority,
       sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
       buildHash: build.buildHash,
       initialFront: binding.initialFront,
@@ -895,7 +926,11 @@ function requireSingleNormalCandidate(generator, axis, run, modules) {
   return candidates[0];
 }
 
-async function rebuildAggregate({ roundDirectory, roundManifest, sourceConfigs }) {
+async function rebuildAggregate({
+  roundDirectory,
+  roundManifest,
+  sourceConfigs,
+}) {
   const shardArtifacts = [];
   for (let index = 0; index < sourceConfigs.length; index += 1) {
     const shardDirectory = path.join(
@@ -925,6 +960,7 @@ async function rebuildAggregate({ roundDirectory, roundManifest, sourceConfigs }
     presetSpecHash: roundManifest.presetSpecHash,
     contractTemplateHash: roundManifest.contractTemplateHash,
     orchestrationIdentityHash: roundManifest.orchestrationIdentityHash,
+    normalAttackInputAuthority: roundManifest.normalAttackInputAuthority,
   });
   await writeJsonAtomic(path.join(roundDirectory, 'aggregate.json'), aggregate);
   return aggregate;
@@ -1062,6 +1098,7 @@ async function loadModules(server) {
     generatorModule,
     searchStateModule,
     killModule,
+    normalAttackInputAuthorityModule,
   ] = await Promise.all([
     server.ssrLoadModule('/src/data/verifiedCombatMechanicsPackage.js'),
     server.ssrLoadModule('/src/machine-axis/machineAxisService.js'),
@@ -1071,6 +1108,7 @@ async function loadModules(server) {
     server.ssrLoadModule('/src/machine-axis/machineAxisSearchGenerator.js'),
     server.ssrLoadModule('/src/machine-axis/machineAxisSearchState.js'),
     server.ssrLoadModule('/src/machine-axis/machineAxisKillEvaluator.js'),
+    server.ssrLoadModule('/src/domain/verifiedNormalAttackInputAuthority.js'),
   ]);
   return {
     packageModule,
@@ -1081,6 +1119,7 @@ async function loadModules(server) {
     generatorModule,
     searchStateModule,
     killModule,
+    normalAttackInputAuthorityModule,
   };
 }
 
@@ -1136,13 +1175,17 @@ async function assertNoOtherSearchProcess() {
   if (process.platform !== 'win32') return;
   const command = [
     `$selfPid = ${process.pid}`,
-    "$rows = Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne $selfPid -and $_.Name -match '^node(\\.exe)?$' -and $_.CommandLine -and $_.CommandLine -match 'run-ai-guided-search|m12c-outer-search|formal-search-v1[\\\\/]+scripts[\\\\/]+run-(round|greedy-kill-round)' } | Select-Object ProcessId, CommandLine",
-    "if ($rows) { $rows | ConvertTo-Json -Compress } else { '[]' }",
+    String.raw`$rows = Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne $selfPid -and $_.Name -match '^node(\.exe)?$' -and $_.CommandLine -and $_.CommandLine -match 'run-ai-guided-search|m12c-outer-search|formal-search-v1[\\/]+scripts[\\/]+run-(round|greedy-kill-round)' } | Select-Object ProcessId, CommandLine`,
+    String.raw`if ($rows) { $rows | ConvertTo-Json -Compress } else { '[]' }`,
   ].join('; ');
-  const { stdout } = await execFile('pwsh', ['-NoProfile', '-Command', command], {
-    cwd: projectRoot,
-    windowsHide: true,
-  });
+  const { stdout } = await execFile(
+    'pwsh',
+    ['-NoProfile', '-Command', command],
+    {
+      cwd: projectRoot,
+      windowsHide: true,
+    }
+  );
   const rows = JSON.parse(stdout.trim() || '[]');
   if ((Array.isArray(rows) ? rows : [rows]).length > 0) {
     throw new Error(`Another formal search process is running: ${stdout}`);
@@ -1154,15 +1197,19 @@ async function acquireProcessLock(lockFile, roundConfig) {
   try {
     const handle = await fs.open(lockFile, 'wx');
     await handle.writeFile(
-      `${JSON.stringify({
-        schemaVersion: 1,
-        kind: 'azpr-m12c-formal-search-process-lock',
-        pid: process.pid,
-        startedAt: new Date().toISOString(),
-        runId: roundConfig.runId,
-        roundId: roundConfig.roundId,
-        objective: roundConfig.objective,
-      }, null, 2)}\n`,
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          kind: 'azpr-m12c-formal-search-process-lock',
+          pid: process.pid,
+          startedAt: new Date().toISOString(),
+          runId: roundConfig.runId,
+          roundId: roundConfig.roundId,
+          objective: roundConfig.objective,
+        },
+        null,
+        2
+      )}\n`,
       'utf8'
     );
     await handle.close();
@@ -1237,7 +1284,7 @@ function repositoryRelative(filePath) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function emit(value) {

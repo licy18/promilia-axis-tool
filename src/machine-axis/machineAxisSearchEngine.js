@@ -1,5 +1,6 @@
 import {
   createSearchEventBoundaryNodes,
+  createSearchNormalAttackInputProof,
   createSearchResourceThresholdBoundary,
   createSearchStateSnapshot,
   deriveActiveActorId,
@@ -336,12 +337,21 @@ export function createMachineAxisSearchEngine({
         objectiveId: settings.objective,
       })
     );
+    const normalAttackInputProofs = runs.map(sample =>
+      createSearchNormalAttackInputProof({
+        trace: sample.run?.trace ?? {},
+        fps: Number(sample.axis?.scenario?.fps) || 60,
+      })
+    );
     if (
       MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(settings.objective) &&
-      actionLegalityProofs.some(proof => proof.passed !== true)
+      (actionLegalityProofs.some(proof => proof.passed !== true) ||
+        normalAttackInputProofs.some(proof => proof.passed !== true))
     ) {
       throw new SearchCandidateEvaluationError(
-        actionLegalityProofs.flatMap(proof => proof.issues ?? [])
+        [...actionLegalityProofs, ...normalAttackInputProofs].flatMap(
+          proof => proof.issues ?? []
+        )
       );
     }
     const snapshots = [];
@@ -394,6 +404,36 @@ export function createMachineAxisSearchEngine({
         ? { sampleStateHashes: snapshots.map(hashSearchState) }
         : {}),
     };
+    const normalAttackInputProof =
+      normalAttackInputProofs.length === 1
+        ? normalAttackInputProofs[0]
+        : {
+            status: normalAttackInputProofs.every(proof => proof.passed)
+              ? 'normal-attack-input-authority-passed'
+              : 'normal-attack-input-authority-rejected',
+            passed: normalAttackInputProofs.every(proof => proof.passed),
+            normalAttackInputAuthority:
+              normalAttackInputProofs[0]?.normalAttackInputAuthority ?? null,
+            samples: normalAttackInputProofs,
+          };
+    const actionLegalityProof =
+      actionLegalityProofs.length === 1
+        ? {
+            ...actionLegalityProofs[0],
+            normalAttackInputAuthority:
+              normalAttackInputProof.normalAttackInputAuthority,
+            normalAttackInputProofHash:
+              normalAttackInputProof.proofHash ?? null,
+          }
+        : {
+            status: actionLegalityProofs.every(proof => proof.passed)
+              ? 'axis-action-legality-passed'
+              : 'axis-action-legality-rejected',
+            passed: actionLegalityProofs.every(proof => proof.passed),
+            normalAttackInputAuthority:
+              normalAttackInputProof.normalAttackInputAuthority,
+            samples: actionLegalityProofs,
+          };
     return {
       axis: runs[0].axis,
       run: runs[0].run,
@@ -407,16 +447,8 @@ export function createMachineAxisSearchEngine({
       finalScoreEligible: objectiveEvaluation.finalScoreEligible,
       objectiveProof: objectiveEvaluation.proof,
       objectiveIssues: objectiveEvaluation.issues,
-      actionLegalityProof:
-        actionLegalityProofs.length === 1
-          ? actionLegalityProofs[0]
-          : {
-              status: actionLegalityProofs.every(proof => proof.passed)
-                ? 'axis-action-legality-passed'
-                : 'axis-action-legality-rejected',
-              passed: actionLegalityProofs.every(proof => proof.passed),
-              samples: actionLegalityProofs,
-            },
+      actionLegalityProof,
+      normalAttackInputProof,
       sampling:
         runs.length > 1 || settings.seeds?.length
           ? {
@@ -602,6 +634,7 @@ function createCandidateEntry({
   objectiveProof,
   objectiveIssues,
   actionLegalityProof,
+  normalAttackInputProof,
   sampling,
   chain,
   parentLabel,
@@ -629,6 +662,7 @@ function createCandidateEntry({
     objectiveProof,
     objectiveIssues,
     actionLegalityProof,
+    normalAttackInputProof,
     metrics,
     contributions,
     sampling,

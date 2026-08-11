@@ -3,7 +3,9 @@ import {
   FORMAL_SEARCH_RANKING_CLAIM,
   createCandidateRawIdentity,
   sha256Canonical,
+  stableJson,
   validateFinalCandidate,
+  validateNormalAttackInputAuthorityDescriptor,
 } from './formal-search-artifacts.mjs';
 
 export function finalizeObjectiveArtifacts({
@@ -13,8 +15,14 @@ export function finalizeObjectiveArtifacts({
   rounds = [],
   topN = 5,
   rankingRoundIds = null,
+  normalAttackInputAuthority = null,
 } = {}) {
   const issues = [];
+  const resolvedNormalAttackInputAuthority =
+    normalAttackInputAuthority ??
+    rounds.find(round => round?.manifest?.normalAttackInputAuthority)?.manifest
+      ?.normalAttackInputAuthority ??
+    null;
   const normalizedRankingRoundIds =
     rankingRoundIds == null
       ? null
@@ -29,22 +37,47 @@ export function finalizeObjectiveArtifacts({
   let missingShardCount = 0;
 
   for (const round of [...rounds].sort(compareRound)) {
+    const roundAuthorityIssues = validateBoundAuthority(
+      round?.manifest?.normalAttackInputAuthority,
+      resolvedNormalAttackInputAuthority
+    );
+    if (roundAuthorityIssues.length > 0) {
+      issues.push(
+        `round-normal-attack-input-authority-${roundAuthorityIssues[0]}:${round.roundId}`
+      );
+    }
     const rankingEligible =
-      normalizedRankingRoundIds == null ||
-      normalizedRankingRoundIds.includes(String(round.roundId));
+      roundAuthorityIssues.length === 0 &&
+      (normalizedRankingRoundIds == null ||
+        normalizedRankingRoundIds.includes(String(round.roundId)));
     if (rankingEligible) observedRankingRoundIds.add(String(round.roundId));
     const aggregate = round?.aggregate ?? {};
+    const aggregateAuthorityIssues = validateBoundAuthority(
+      aggregate.normalAttackInputAuthority,
+      resolvedNormalAttackInputAuthority
+    );
+    if (aggregateAuthorityIssues.length > 0) {
+      issues.push(
+        `aggregate-normal-attack-input-authority-${aggregateAuthorityIssues[0]}:${round.roundId}`
+      );
+    }
     const completedSources =
       aggregate.coverage?.completedSourceConfigIdentities ?? [];
-    const failedSources = aggregate.coverage?.failedSourceConfigIdentities ?? [];
-    const missingSources = aggregate.coverage?.missingSourceConfigIdentities ?? [];
+    const failedSources =
+      aggregate.coverage?.failedSourceConfigIdentities ?? [];
+    const missingSources =
+      aggregate.coverage?.missingSourceConfigIdentities ?? [];
     failedShardCount += failedSources.length;
     missingShardCount += missingSources.length;
     if (failedSources.length > 0) {
-      issues.push(`round-failed-shards:${round.roundId}:${failedSources.length}`);
+      issues.push(
+        `round-failed-shards:${round.roundId}:${failedSources.length}`
+      );
     }
     if (missingSources.length > 0) {
-      issues.push(`round-missing-shards:${round.roundId}:${missingSources.length}`);
+      issues.push(
+        `round-missing-shards:${round.roundId}:${missingSources.length}`
+      );
     }
     if (aggregate.objective !== objective) {
       issues.push(`round-objective-mismatch:${round.roundId}`);
@@ -56,6 +89,17 @@ export function finalizeObjectiveArtifacts({
     const roundShardHashes = [];
     for (const shard of [...(round.shards ?? [])].sort(compareShard)) {
       const checkpoint = shard?.checkpoint ?? {};
+      const checkpointAuthorityIssues = validateBoundAuthority(
+        checkpoint.normalAttackInputAuthority,
+        resolvedNormalAttackInputAuthority
+      );
+      if (checkpointAuthorityIssues.length > 0) {
+        failedShardCount += 1;
+        issues.push(
+          `shard-normal-attack-input-authority-${checkpointAuthorityIssues[0]}:${round.roundId}:${checkpoint.shardId ?? 'unknown'}`
+        );
+        continue;
+      }
       if (checkpoint.status !== 'completed') {
         failedShardCount += checkpoint.status === 'failed' ? 1 : 0;
         missingShardCount += checkpoint.status === 'failed' ? 0 : 1;
@@ -66,6 +110,17 @@ export function finalizeObjectiveArtifacts({
       }
       completedShardCount += 1;
       const resultArtifact = shard?.resultArtifact;
+      const resultAuthorityIssues = validateBoundAuthority(
+        resultArtifact?.normalAttackInputAuthority,
+        resolvedNormalAttackInputAuthority
+      );
+      if (resultAuthorityIssues.length > 0) {
+        failedShardCount += 1;
+        issues.push(
+          `result-normal-attack-input-authority-${resultAuthorityIssues[0]}:${round.roundId}:${checkpoint.shardId ?? 'unknown'}`
+        );
+        continue;
+      }
       const resultCanonicalSha256 = sha256Canonical(resultArtifact);
       if (
         checkpoint.artifacts?.resultCanonicalSha256 !== resultCanonicalSha256
@@ -121,7 +176,10 @@ export function finalizeObjectiveArtifacts({
           result,
         };
         const existing = candidatesByIdentity.get(rawIdentity.identityHash);
-        if (!existing || compareCandidateEntries(entry, existing, objective) < 0) {
+        if (
+          !existing ||
+          compareCandidateEntries(entry, existing, objective) < 0
+        ) {
           candidatesByIdentity.set(rawIdentity.identityHash, entry);
         }
       }
@@ -167,7 +225,9 @@ export function finalizeObjectiveArtifacts({
   if (selected.length !== topN) {
     issues.push(`top-n-incomplete:${selected.length}:${topN}`);
   }
-  if (new Set(selected.map(entry => entry.rawIdentity.identityHash)).size !== topN) {
+  if (
+    new Set(selected.map(entry => entry.rawIdentity.identityHash)).size !== topN
+  ) {
     issues.push('top-n-identity-not-distinct');
   }
 
@@ -191,6 +251,7 @@ export function finalizeObjectiveArtifacts({
     rankingClaim: FORMAL_SEARCH_RANKING_CLAIM,
     formalRankingReady: false,
     baseline,
+    normalAttackInputAuthority: resolvedNormalAttackInputAuthority,
     rankingEvidence: {
       mode:
         normalizedRankingRoundIds == null
@@ -201,8 +262,7 @@ export function finalizeObjectiveArtifacts({
         roundEvidence.map(entry => entry.roundId).sort(compareText),
       identityPolicy: 'raw-build-source-front-preset-input-trace-v1',
       semanticEquivalenceApplied: false,
-      note:
-        'All rounds remain coverage/budget/provenance evidence; only declared terminal rounds contribute ranking candidates when a terminal scope is supplied.',
+      note: 'All rounds remain coverage/budget/provenance evidence; only declared terminal rounds contribute ranking candidates when a terminal scope is supplied.',
     },
     validity: {
       valid: issues.length === 0,
@@ -216,7 +276,9 @@ export function finalizeObjectiveArtifacts({
       roundEvidence,
     },
     budgetUsage: Object.fromEntries(
-      Object.entries(budgetUsage).sort(([left], [right]) => compareText(left, right))
+      Object.entries(budgetUsage).sort(([left], [right]) =>
+        compareText(left, right)
+      )
     ),
     summary: {
       exploredValidDistinctCandidateCount: rankedCandidates.length,
@@ -227,7 +289,9 @@ export function finalizeObjectiveArtifacts({
       cutoffScore,
       cutoffTieCount: cutoffTies.length,
     },
-    candidateIdentityHashes: selected.map(entry => entry.rawIdentity.identityHash),
+    candidateIdentityHashes: selected.map(
+      entry => entry.rawIdentity.identityHash
+    ),
     cutoffTieIdentityHashes: cutoffTies.map(
       entry => entry.rawIdentity.identityHash
     ),
@@ -253,6 +317,15 @@ export function finalizeObjectiveArtifacts({
       sourceConfigIdentity: entry.sourceConfigIdentity,
     })),
   };
+}
+
+function validateBoundAuthority(actual, expected) {
+  const actualValidation = validateNormalAttackInputAuthorityDescriptor(actual);
+  if (!actualValidation.valid) return ['missing'];
+  const expectedValidation =
+    validateNormalAttackInputAuthorityDescriptor(expected);
+  if (!expectedValidation.valid) return ['expected-missing'];
+  return stableJson(actual) === stableJson(expected) ? [] : ['mismatch'];
 }
 
 export function compareCandidateEntries(left, right, objective) {

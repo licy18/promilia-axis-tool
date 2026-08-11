@@ -1,4 +1,5 @@
 import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
+import giseleFixture from '../../../fixtures/character-acceptance/112001-joint-attack-runtime.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -99,7 +100,11 @@ function createRubyAmmoDeficitEnvelope() {
       kind: 'public-action',
       publicActionId: 10300201,
       actionKind: 'normal-attack',
-      attackInput: { sequenceIndex: 1, groupId: 'cycle-ruby-enhanced' },
+      attackInput: {
+        sequenceIndex: 1,
+        groupId: 'cycle-ruby-enhanced',
+        contextActionId: 'cycle-ruby-a3',
+      },
       level: 1,
     },
     schedule: { mode: 'after-previous-end', offsetFrames: 0 },
@@ -599,6 +604,13 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       attackChains: [
         {
           actorId: 'actor-1',
+          authorityContractHash: 'authority-hash',
+          authorityPhase: 'successor-window',
+          authoritySourceKind: 'verified-normal-attack-direct-successor',
+          authorityStatus:
+            'verified-normal-attack-input-phase-successor-window',
+          formIdentity: 'normal-attack-form:test',
+          mappingIdentity: 'actor|1|normal-attack',
           chainIdentity: 'normal-chain:1001',
           groupId: `cycle-${cycle}:normal-group`,
           sequenceIndex: 1,
@@ -645,6 +657,44 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
       })
     );
   });
+
+  it('rejects a single A1 [0,18) loop before cycle scoring', () => {
+    const envelope = structuredClone(cycleFixture);
+    envelope.contract = structuredClone(giseleFixture);
+    envelope.contract.actions = [
+      {
+        id: 'melania-a1',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 11200101,
+          actionKind: 'normal-attack',
+          attackInput: { sequenceIndex: 1, groupId: 'melania-chain' },
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
+      },
+    ];
+    envelope.contract.scenario.durationFrames = 36;
+    envelope.contract.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    envelope.loop = { startFrame: 0, endFrame: 18 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope);
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      formalScore: null,
+    });
+    expect(report.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-cycle-state-not-closed',
+        dimension: 'attackChains',
+      })
+    );
+  }, 30_000);
 
   it('accepts an exact zero-frame loop boundary without including later frames', () => {
     const envelope = createNormalAttackCycleEnvelope();
@@ -1227,7 +1277,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('rejects a real Ruby enhanced input that consumes non-renewed ammunition', () => {
+  it('rejects an unresolved Ruby enhanced continuation before resource scoring', () => {
     const report = createMachineAxisService().evaluateCycle(
       createRubyAmmoDeficitEnvelope()
     );
@@ -1236,12 +1286,12 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.status).toBe('rejected');
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'machine-axis-cycle-resource-deficit',
-        resourceIdentity: 'actor:103002:element:103002047',
-        startValue: 6,
-        endValue: 5,
-        delta: -1,
+        code: 'attack-input-context-conflict',
+        actionId: 'cycle-ruby-enhanced-e1',
       })
+    );
+    expect(report.issues).not.toContainEqual(
+      expect.objectContaining({ code: 'machine-axis-cycle-resource-deficit' })
     );
   }, 30_000);
 

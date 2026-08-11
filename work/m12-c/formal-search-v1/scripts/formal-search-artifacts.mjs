@@ -5,6 +5,8 @@ import path from 'node:path';
 export const FORMAL_SEARCH_ARTIFACT_SCHEMA_VERSION = 1;
 export const FORMAL_SEARCH_RANKING_CLAIM = 'AI-guided heuristic Top-N';
 
+const NORMAL_ATTACK_INPUT_CONTRACT_HASH_PATTERN = /^[0-9a-f]{16}$/;
+
 const CYCLE_OBJECTIVES = new Set([
   'cycle-dps-no-toughness',
   'cycle-dps-with-toughness',
@@ -52,6 +54,50 @@ export function sha256Canonical(value) {
   return sha256Text(stableJson(value));
 }
 
+export function validateNormalAttackInputAuthorityDescriptor(value) {
+  const issues = [];
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return { valid: false, issues: ['normal-attack-input-authority-missing'] };
+  }
+  if (!Number.isInteger(Number(value.schemaVersion))) {
+    issues.push('normal-attack-input-authority-schema-version-invalid');
+  }
+  if (!String(value.contractName ?? '').trim()) {
+    issues.push('normal-attack-input-authority-contract-name-missing');
+  }
+  if (!String(value.policyVersion ?? '').trim()) {
+    issues.push('normal-attack-input-authority-policy-version-missing');
+  }
+  if (
+    !NORMAL_ATTACK_INPUT_CONTRACT_HASH_PATTERN.test(
+      String(value.contractHash ?? '')
+    )
+  ) {
+    issues.push('normal-attack-input-authority-contract-hash-invalid');
+  }
+  return { valid: issues.length === 0, issues };
+}
+
+function validateArtifactNormalAttackInputAuthority({
+  descriptor,
+  expected,
+  prefix,
+}) {
+  const validation = validateNormalAttackInputAuthorityDescriptor(descriptor);
+  if (!validation.valid) {
+    return [`${prefix}-normal-attack-input-authority-missing`];
+  }
+  const expectedValidation =
+    validateNormalAttackInputAuthorityDescriptor(expected);
+  if (
+    expectedValidation.valid &&
+    stableJson(descriptor) !== stableJson(expected)
+  ) {
+    return [`${prefix}-normal-attack-input-authority-mismatch`];
+  }
+  return [];
+}
+
 export async function writeJsonAtomic(filePath, value) {
   const absolutePath = path.resolve(filePath);
   const directory = path.dirname(absolutePath);
@@ -75,6 +121,8 @@ export async function readJson(filePath) {
 }
 
 export function createCandidateRawIdentity(result, objective) {
+  const normalAttackInputAuthority =
+    result?.legality?.proof?.normalAttackInputAuthority ?? null;
   const payload = {
     objective: String(objective),
     buildHash: result?.m12c?.buildHash ?? null,
@@ -84,6 +132,8 @@ export function createCandidateRawIdentity(result, objective) {
       result?.axis?.scenario?.initialStatePreset?.presetHash ?? null,
     inputHash: result?.hashes?.input ?? null,
     traceHash: result?.hashes?.trace ?? null,
+    normalAttackInputContractHash:
+      normalAttackInputAuthority?.contractHash ?? null,
   };
   return {
     schemaVersion: FORMAL_SEARCH_ARTIFACT_SCHEMA_VERSION,
@@ -109,6 +159,23 @@ export function validateFinalCandidate(result, objective) {
   }
   if (result.legality?.proof?.passed !== true) {
     issues.push('candidate-legality-proof-failed');
+  }
+  const legalityAuthority =
+    result.legality?.proof?.normalAttackInputAuthority ?? null;
+  const objectiveAuthority =
+    result.objectiveProof?.normalAttackInputProof?.normalAttackInputAuthority ??
+    null;
+  const legalityAuthorityValidation =
+    validateNormalAttackInputAuthorityDescriptor(legalityAuthority);
+  const objectiveAuthorityValidation =
+    validateNormalAttackInputAuthorityDescriptor(objectiveAuthority);
+  if (
+    !legalityAuthorityValidation.valid ||
+    !objectiveAuthorityValidation.valid
+  ) {
+    issues.push('candidate-normal-attack-input-authority-missing');
+  } else if (stableJson(legalityAuthority) !== stableJson(objectiveAuthority)) {
+    issues.push('candidate-normal-attack-input-authority-mismatch');
   }
   if (Number(result.legality?.proof?.skippedActionCount ?? 0) !== 0) {
     issues.push('candidate-legality-skipped-actions-present');
@@ -145,7 +212,9 @@ export function validateFinalCandidate(result, objective) {
   if (Number(result.axis?.scenario?.enemy?.level) !== 80) {
     issues.push('candidate-enemy-level-mismatch');
   }
-  if (result.axis?.scenario?.enemy?.profile?.profileHash !== ENEMY_PROFILE_HASH) {
+  if (
+    result.axis?.scenario?.enemy?.profile?.profileHash !== ENEMY_PROFILE_HASH
+  ) {
     issues.push('candidate-enemy-profile-hash-mismatch');
   }
   if (result.axis?.scenario?.optimizationQualification?.mode !== 'formal') {
@@ -202,10 +271,12 @@ function validateBuildAndFront(result, issues) {
   if (!optimizationObjectIds.includes('109001')) {
     issues.push('candidate-build-moyin-missing');
   }
-  const sourceCharacterIds = actors.map(actor => Number(actor?.sourceCharacterId));
+  const sourceCharacterIds = actors.map(actor =>
+    Number(actor?.sourceCharacterId)
+  );
   if (
-    sourceCharacterIds.filter(characterId =>
-      characterId === 199001 || characterId === 199002
+    sourceCharacterIds.filter(
+      characterId => characterId === 199001 || characterId === 199002
     ).length > 1
   ) {
     issues.push('candidate-starborn-source-alias-double-counted');
@@ -236,10 +307,13 @@ function validateBuildAndFront(result, issues) {
   ) {
     issues.push('candidate-initial-front-not-build-axis-identity');
   }
-  const controlledActor = result.axis?.scenario?.initialRuntimeState?.controlledActor;
+  const controlledActor =
+    result.axis?.scenario?.initialRuntimeState?.controlledActor;
   if (
-    Number(controlledActor?.characterId) !== Number(initialFront?.sourceCharacterId) ||
-    controlledActor?.actorId !== `actor-${Number(initialFront?.sourceCharacterId)}`
+    Number(controlledActor?.characterId) !==
+      Number(initialFront?.sourceCharacterId) ||
+    controlledActor?.actorId !==
+      `actor-${Number(initialFront?.sourceCharacterId)}`
   ) {
     issues.push('candidate-controlled-actor-initial-front-mismatch');
   }
@@ -251,7 +325,10 @@ function validateBuildAndFront(result, issues) {
   }
   for (const actor of actors) {
     const slot = scenarioTeam.find(row => row?.slotId === actor?.actorSlotId);
-    if (!slot || Number(slot.characterId) !== Number(actor?.sourceCharacterId)) {
+    if (
+      !slot ||
+      Number(slot.characterId) !== Number(actor?.sourceCharacterId)
+    ) {
       issues.push('candidate-scenario-team-build-binding-mismatch');
       break;
     }
@@ -512,18 +589,34 @@ export function aggregateShardResults({
   presetSpecHash = null,
   contractTemplateHash = null,
   orchestrationIdentityHash = null,
+  normalAttackInputAuthority = null,
 } = {}) {
-  const expected = [...new Set(expectedSourceConfigIdentities.map(String))].sort(
-    compareText
-  );
+  const expected = [
+    ...new Set(expectedSourceConfigIdentities.map(String)),
+  ].sort(compareText);
   const completed = [];
   const failed = [];
   const inProgress = [];
   const checkpointsBySource = new Map();
   const invalidCandidates = [];
+  const invalidArtifacts = [];
   const candidatesByIdentity = new Map();
   const summaryCounters = {};
   let aggregateWallTimeMs = 0;
+  const resolvedNormalAttackInputAuthority =
+    normalAttackInputAuthority ??
+    [...shardArtifacts]
+      .map(
+        artifact =>
+          artifact?.checkpoint?.normalAttackInputAuthority ??
+          artifact?.normalAttackInputAuthority ??
+          null
+      )
+      .find(
+        descriptor =>
+          validateNormalAttackInputAuthorityDescriptor(descriptor).valid
+      ) ??
+    null;
 
   for (const artifact of [...shardArtifacts].sort(compareShardArtifact)) {
     const checkpoint = artifact?.checkpoint ?? artifact;
@@ -534,6 +627,21 @@ export function aggregateShardResults({
     );
     if (!sourceConfigIdentity) continue;
     checkpointsBySource.set(sourceConfigIdentity, checkpoint);
+    const checkpointAuthorityIssues =
+      validateArtifactNormalAttackInputAuthority({
+        descriptor: checkpoint?.normalAttackInputAuthority,
+        expected: resolvedNormalAttackInputAuthority,
+        prefix: 'checkpoint',
+      });
+    if (checkpointAuthorityIssues.length > 0) {
+      failed.push(sourceConfigIdentity);
+      invalidArtifacts.push({
+        sourceConfigIdentity,
+        shardId: checkpoint?.shardId ?? null,
+        issues: checkpointAuthorityIssues,
+      });
+      continue;
+    }
     if (checkpoint.status === 'failed') {
       failed.push(sourceConfigIdentity);
       continue;
@@ -544,6 +652,20 @@ export function aggregateShardResults({
     }
 
     const resultArtifact = artifact?.result ?? null;
+    const resultAuthorityIssues = validateArtifactNormalAttackInputAuthority({
+      descriptor: resultArtifact?.normalAttackInputAuthority,
+      expected: resolvedNormalAttackInputAuthority,
+      prefix: 'result',
+    });
+    if (resultAuthorityIssues.length > 0) {
+      failed.push(sourceConfigIdentity);
+      invalidArtifacts.push({
+        sourceConfigIdentity,
+        shardId: checkpoint?.shardId ?? null,
+        issues: resultAuthorityIssues,
+      });
+      continue;
+    }
     const serviceResult = resultArtifact?.serviceResult ?? resultArtifact;
     if (!serviceResult || serviceResult.objective !== objective) {
       failed.push(sourceConfigIdentity);
@@ -575,7 +697,10 @@ export function aggregateShardResults({
         result,
       };
       const existing = candidatesByIdentity.get(identity.identityHash);
-      if (!existing || compareCandidateEntries(entry, existing, objective) < 0) {
+      if (
+        !existing ||
+        compareCandidateEntries(entry, existing, objective) < 0
+      ) {
         candidatesByIdentity.set(identity.identityHash, entry);
       }
     }
@@ -590,9 +715,9 @@ export function aggregateShardResults({
   const cutoffTies =
     cutoffScore == null
       ? []
-      : candidates.slice(topN).filter(entry =>
-          scoresTie(Number(entry.result.score), cutoffScore)
-        );
+      : candidates
+          .slice(topN)
+          .filter(entry => scoresTie(Number(entry.result.score), cutoffScore));
   const completedUnique = [...new Set(completed)].sort(compareText);
   const failedUnique = [...new Set(failed)]
     .filter(identity => !completedUnique.includes(identity))
@@ -632,6 +757,7 @@ export function aggregateShardResults({
     presetSpecHash,
     contractTemplateHash,
     orchestrationIdentityHash,
+    normalAttackInputAuthority: resolvedNormalAttackInputAuthority,
     coverage: {
       expectedSourceConfigIdentities: expected,
       completedSourceConfigIdentities: completedUnique,
@@ -644,6 +770,7 @@ export function aggregateShardResults({
       aggregateWallTimeMs,
       validDistinctCandidateCount: candidates.length,
       invalidCandidateCount: invalidCandidates.length,
+      invalidArtifactCount: invalidArtifacts.length,
       topNRequested: topN,
       topNReady: ranked.length === topN,
       cutoffScore,
@@ -664,6 +791,7 @@ export function aggregateShardResults({
     ...deterministicPayload,
     aggregateHash,
     invalidCandidates,
+    invalidArtifacts,
     results: ranked.map((entry, index) => ({
       rank: index + 1,
       rawIdentity: entry.rawIdentity,
@@ -688,24 +816,29 @@ export function aggregateRoundAggregates({
   roundAggregates = [],
   presetSpecHash = null,
   contractTemplateHash = null,
+  normalAttackInputAuthority = null,
 } = {}) {
   const pseudoShards = [];
   const expected = new Set();
   for (const aggregate of roundAggregates) {
-    for (const identity of
-      aggregate?.coverage?.expectedSourceConfigIdentities ?? []) {
+    for (const identity of aggregate?.coverage
+      ?.expectedSourceConfigIdentities ?? []) {
       expected.add(String(identity));
     }
     pseudoShards.push({
       checkpoint: {
         status: 'completed',
         shardId: `round:${aggregate?.roundId ?? 'unknown'}`,
+        normalAttackInputAuthority:
+          aggregate?.normalAttackInputAuthority ?? normalAttackInputAuthority,
         coverage: {
           sourceConfigIdentity: `round:${aggregate?.roundId ?? 'unknown'}`,
         },
       },
       result: {
         objective,
+        normalAttackInputAuthority:
+          aggregate?.normalAttackInputAuthority ?? normalAttackInputAuthority,
         summary: aggregate?.summary ?? {},
         results: [
           ...(aggregate?.results ?? []),
@@ -728,6 +861,11 @@ export function aggregateRoundAggregates({
     presetSpecHash,
     contractTemplateHash,
     orchestrationIdentityHash: null,
+    normalAttackInputAuthority:
+      normalAttackInputAuthority ??
+      roundAggregates.find(aggregate => aggregate?.normalAttackInputAuthority)
+        ?.normalAttackInputAuthority ??
+      null,
   });
   return {
     ...combined,
@@ -771,7 +909,11 @@ export function compareCandidateEntries(left, right, objective) {
 }
 
 function normalizeStableValue(value) {
-  if (value === null || typeof value === 'string' || typeof value === 'boolean') {
+  if (
+    value === null ||
+    typeof value === 'string' ||
+    typeof value === 'boolean'
+  ) {
     return value;
   }
   if (typeof value === 'number') {

@@ -14,7 +14,9 @@ import {
 import { createMachineAxisSearchAction } from '../../machine-axis/machineAxisSearchGenerator';
 
 function cloneFixture() {
-  return structuredClone(fixture);
+  const axis = structuredClone(fixture);
+  axis.actions = axis.actions.filter(action => !action.id.startsWith('a3-'));
+  return axis;
 }
 
 function createEntry({ id, score, frame = 0, chainLength = 1, stateHash }) {
@@ -180,6 +182,12 @@ describe('Machine Axis search engine', () => {
       expect(result.axis.actions.length).toBeGreaterThan(0);
       expect(service.validate(result.axis).valid).toBe(true);
       expect(result.score).toBeGreaterThanOrEqual(0);
+      expect(result.normalAttackInputProof).toMatchObject({
+        passed: true,
+        normalAttackInputAuthority: {
+          contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+        },
+      });
     }
     const second = await engine.search({ contract: axis, options });
     expect(second.results.map(result => result.axis.actions)).toEqual(
@@ -364,7 +372,11 @@ describe('Machine Axis search engine', () => {
             totals: { hpDamage: actions.length, toughnessDamage: 0 },
           },
           trace: {
-            scenario: { durationMs: 1000, frameRate: 60, actorIds: ['actor-a'] },
+            scenario: {
+              durationMs: 1000,
+              frameRate: 60,
+              actorIds: ['actor-a'],
+            },
             critical: { policy: 'expected' },
             state: { initial: {}, final: {} },
             controlledActors: { initialActorId: 'actor-a' },

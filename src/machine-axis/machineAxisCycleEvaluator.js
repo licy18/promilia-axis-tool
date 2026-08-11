@@ -8,7 +8,11 @@ import {
   createMachineAxisDiagnostic,
   validateMachineAxisContract,
 } from './machineAxisContract';
-import { createSearchStateSnapshot } from './machineAxisSearchState';
+import {
+  createSearchAttackChainProjection,
+  createSearchNormalAttackInputProof,
+  createSearchStateSnapshot,
+} from './machineAxisSearchState';
 import {
   normalizeEffectModifiers,
   projectActiveEffectStates,
@@ -839,6 +843,10 @@ function evaluateCycleSample({
           : preflightActionLegality,
     });
   }
+  const firstNormalAttackInputProof = createSearchNormalAttackInputProof({
+    trace: firstPrepared.run?.trace ?? {},
+    fps: Number(firstContract.scenario?.fps) || 60,
+  });
   const firstActionLegality = createMachineAxisActionLegalityProof(
     firstPrepared.run,
     { objectiveId: objectiveContract?.objectiveId ?? null }
@@ -846,6 +854,31 @@ function evaluateCycleSample({
   if (firstActionLegality.passed !== true) {
     return rejectedSample(seed, firstActionLegality.issues, {
       actionLegalityProof: firstActionLegality,
+    });
+  }
+  const normalAttackBoundaryClosure = compareCycleBoundaryStates(
+    {
+      attackChains: createSearchAttackChainProjection({
+        trace: firstPrepared.run?.trace ?? {},
+        currentFrame: Number(envelope.loop.startFrame) - 1,
+        fps: Number(firstContract.scenario?.fps) || 60,
+      }),
+    },
+    {
+      attackChains: createSearchAttackChainProjection({
+        trace: firstPrepared.run?.trace ?? {},
+        currentFrame: Number(envelope.loop.endFrame) - 1,
+        fps: Number(firstContract.scenario?.fps) || 60,
+      }),
+    }
+  );
+  if (!normalAttackBoundaryClosure.closed) {
+    return rejectedSample(seed, normalAttackBoundaryClosure.issues, {
+      normalAttackInputProof: {
+        passed: false,
+        firstCycle: firstNormalAttackInputProof,
+        boundaryClosure: normalAttackBoundaryClosure,
+      },
     });
   }
   const stateCriticalIssues = guardCriticalStateEffectPolicy({
@@ -931,6 +964,10 @@ function evaluateCycleSample({
       ),
     ]);
   }
+  const replayNormalAttackInputProof = createSearchNormalAttackInputProof({
+    trace: replayPrepared.run?.trace ?? {},
+    fps: Number(replayContract.scenario?.fps) || 60,
+  });
   const replayActionLegality = createMachineAxisActionLegalityProof(
     replayPrepared.run,
     { objectiveId: objectiveContract?.objectiveId ?? null }
@@ -1041,17 +1078,30 @@ function evaluateCycleSample({
         ? 'cycle-local-common-random-numbers'
         : 'exact-consecutive-cycle-damage',
   });
-  if (!replayProof.stable)
-    return rejectedSample(seed, replayProof.issues, {
-      replayProof,
-      firstCycle: sampledFirstCycle,
-      secondCycle,
-      hashes:
-        criticalPolicy === 'sampled'
-          ? firstPrepared.run.hashes
-          : replayPrepared.run.hashes,
-      proofHashes: replayPrepared.run.hashes,
-    });
+  const normalAttackInputIssues = [
+    ...(firstNormalAttackInputProof.issues ?? []),
+    ...(replayNormalAttackInputProof.issues ?? []),
+  ];
+  if (!replayProof.stable || normalAttackInputIssues.length > 0)
+    return rejectedSample(
+      seed,
+      [...replayProof.issues, ...normalAttackInputIssues],
+      {
+        replayProof,
+        normalAttackInputProof: {
+          passed: normalAttackInputIssues.length === 0,
+          firstCycle: firstNormalAttackInputProof,
+          replay: replayNormalAttackInputProof,
+        },
+        firstCycle: sampledFirstCycle,
+        secondCycle,
+        hashes:
+          criticalPolicy === 'sampled'
+            ? firstPrepared.run.hashes
+            : replayPrepared.run.hashes,
+        proofHashes: replayPrepared.run.hashes,
+      }
+    );
   return {
     valid: true,
     status: 'closed',
@@ -1069,6 +1119,11 @@ function evaluateCycleSample({
       passed: true,
       firstCycle: firstActionLegality,
       replay: replayActionLegality,
+    },
+    normalAttackInputProof: {
+      passed: true,
+      firstCycle: firstNormalAttackInputProof,
+      replay: replayNormalAttackInputProof,
     },
     state: {
       start: startSnapshot,
@@ -1562,6 +1617,7 @@ function createAcceptedReport({
               proof: sample.actionLegalityProof ?? null,
             })),
           },
+    normalAttackInputProof: createAggregateNormalAttackInputProof(samples),
     replayProof:
       samples.length === 1
         ? samples[0].replayProof
@@ -1620,6 +1676,7 @@ function createAcceptedReport({
     sampleStatistics: value.sampleStatistics,
     contributions: value.contributions,
     actionLegalityProof: value.actionLegalityProof,
+    normalAttackInputProof: value.normalAttackInputProof,
     replayProof: value.replayProof,
     evidence: value.evidence,
     warnings: value.warnings,
@@ -1672,6 +1729,7 @@ function createRejectedReport({
                 proof: sample.actionLegalityProof ?? null,
               })),
             },
+    normalAttackInputProof: createAggregateNormalAttackInputProof(samples),
     hashes: {
       input: null,
       data: null,
@@ -1951,8 +2009,28 @@ function projectSampleReport(sample) {
     secondCycle: sample.secondCycle ?? null,
     replayProof: sample.replayProof ?? null,
     actionLegalityProof: sample.actionLegalityProof ?? null,
+    normalAttackInputProof: sample.normalAttackInputProof ?? null,
     loopPlan: sample.loopPlan ?? null,
     evidence: sample.evidence ?? null,
+  };
+}
+
+function createAggregateNormalAttackInputProof(samples) {
+  if (!Array.isArray(samples) || samples.length === 0) return null;
+  const authority =
+    samples[0]?.normalAttackInputProof?.normalAttackInputAuthority ??
+    samples[0]?.normalAttackInputProof?.firstCycle
+      ?.normalAttackInputAuthority ??
+    null;
+  return {
+    passed: samples.every(
+      sample => sample.normalAttackInputProof?.passed === true
+    ),
+    normalAttackInputAuthority: authority,
+    samples: samples.map(sample => ({
+      seed: sample.seed ?? null,
+      proof: sample.normalAttackInputProof ?? null,
+    })),
   };
 }
 
@@ -2594,6 +2672,12 @@ function normalizeAttackChainState(snapshot) {
   return (snapshot.attackChains ?? [])
     .map(row => ({
       actorId: row.actorId ?? null,
+      authorityContractHash: row.authorityContractHash ?? null,
+      authorityPhase: row.authorityPhase ?? null,
+      authoritySourceKind: row.authoritySourceKind ?? null,
+      authorityStatus: row.authorityStatus ?? null,
+      formIdentity: row.formIdentity ?? null,
+      mappingIdentity: row.mappingIdentity ?? null,
       chainIdentity: row.chainIdentity ?? null,
       groupId: normalizeCycleLocalCooldownIdentity(row.groupId),
       sequenceIndex: integerOrNull(row.sequenceIndex),
@@ -2621,8 +2705,20 @@ function normalizeAttackChainState(snapshot) {
           ? null
           : Math.max(0, Number(row.linkWindowEndFrame) - currentFrame),
       linkWindowSourceIdentity: row.linkWindowSourceIdentity ?? null,
+      recoveryRemainingFrames:
+        row.recoveryEndFrame == null
+          ? null
+          : Math.max(0, Number(row.recoveryEndFrame) - currentFrame),
+      expectedInput: row.expectedInput ?? null,
+      reasons: [...(row.reasons ?? [])].sort(),
     }))
-    .filter(row => row.actorId && row.chainIdentity)
+    .filter(
+      row =>
+        row.actorId &&
+        row.authorityContractHash &&
+        row.authorityStatus &&
+        row.formIdentity
+    )
     .sort(compareCanonicalRows);
 }
 

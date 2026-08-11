@@ -2,6 +2,14 @@
 
 更新时间：2026-08-12（北京时间）
 
+## 失效裁决（当前权威状态）
+
+- 本文件以下“已完成”条目只描述历史执行事实，不再代表有效候选、有效 Top-N 或可恢复 checkpoint。
+- 已定位语义缺陷：112001 的 A1 后 17F 仍锁定、18–72F 只能接 A2、73–229F recovery lock、230F 才能重新 A1；旧结果错误地按 18F 重复 A1。技能派生的 special/context continuation 也必须作为独占义务进入状态与合并键。
+- 所有旧 run/finalization/closeout 缺少 `normalAttackInputAuthority.contractHash`，现已 fail closed。旧 evidence 原地保留，禁止删除、覆盖或 resume。
+- 固定 cadence greedy runner 已 retired；下一次正式搜索必须换新 run ID，通过 canonical generator 逐动作扩展，并重新跑 admission、三个 objective、finalization 与 closeout。
+- 当前有效正式 Top-N：无。`formalRankingReady=false`；不得引用下列旧分数或通过数作为当前搜索成果。
+
 ## 目标
 
 分别产出并验证：
@@ -40,10 +48,10 @@
 
 ## 当前状态
 
-- 阶段：incumbent 精炼与 bounded 停止判定。
-- 三目标首轮 35/35 均已完成；无韧性搜索已达到 bounded stop，待最终跨轮聚合/复验；kill 下一轮为 depth-16 + ring-1350211；有韧性下一轮为反馈驱动的 normal/star/wait 受限独立策略。
-- 正式搜索尚未消费 smoke 结果；`smoke/` 永不进入正式 aggregate。
-- tracked runtime 仍保持准入 HEAD 字节；本目录当前为全新 untracked evidence，最终统一版本化提交。
+- 阶段：旧正式搜索已失效，等待新 run admission。
+- 三目标旧结果均不得评分、聚合或最终化；当前没有有效 Top-5。
+- `runs/`、`verification/` 与 `smoke/` 只保留作历史/反例证据；`smoke/` 永不进入任何新正式 aggregate。
+- 新 run 必须绑定 combo authority descriptor/hash，并独立完成全量门禁后才能启动。
 
 ## 冻结策略
 
@@ -56,9 +64,8 @@
 
 ## 下一步
 
-1. 运行 kill depth-16 ring 精炼；若不足 5 个 killed proof，按实际 rejection feedback 加深，不把缺失结果记零分。
-2. 运行有韧性受限动作独立策略，并传播/验证有提升的 source family，直至满足预写 bounded stop。
-3. 修正跨轮最终化层的稳定候选身份：每轮 raw input identity 原样保留，停止/去重使用 build/source/front/preset/trace evidence identity，不使用尚不存在的 `semanticBuildHash`。
-4. 达到三个目标的 bounded 停止规则后，跨轮确定性聚合最终 Top-5。
-5. 对 15 个最终候选逐条独立复算、Workbench 导入/回放、截图与人工视觉检查。
-6. 更新 `work/m12-c/STATE.md`、运行 Smart Gate 影响域、提交并 push。
+1. 完成 combo-aware state/generator/evaluator 与 admission gate 的独立复验。
+2. 以新 run ID 启动，不复用任何缺少 combo authority hash 的 checkpoint/result。
+3. 重新执行三个 objective；invalid/skipped/unresolved 候选不评分、不记零分。
+4. 重新跨轮聚合、finalization 与 closeout；旧榜单不得混入。
+5. 对新产生的 15 个最终候选逐条独立复算、Workbench 导入/回放、截图与人工视觉检查；不得自动代签产品视觉。

@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import giseleFixture from '../../../fixtures/character-acceptance/112001-joint-attack-runtime.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -10,7 +11,9 @@ import {
 import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 
 function cloneFixture() {
-  return structuredClone(fixture);
+  const axis = structuredClone(fixture);
+  axis.actions = axis.actions.filter(action => !action.id.startsWith('a3-'));
+  return axis;
 }
 
 describe('Machine Axis search generator', () => {
@@ -146,6 +149,252 @@ describe('Machine Axis search generator', () => {
     });
     expect(successors[0].startFrame).toBeGreaterThan(opener.startFrame);
   }, 30_000);
+
+  it('keeps 112001 inside its verified A1 continuation and recovery surface', () => {
+    const axis = structuredClone(giseleFixture);
+    axis.actions = [];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    const initial = generator.generateNextActions({
+      axis,
+      run: { trace: {} },
+      nextStartFrameByActor: {},
+      options: {
+        activeActorId: 'actor-112001',
+        includeKibo: false,
+        includeSwitch: false,
+      },
+    });
+    const opener = initial.find(
+      candidate =>
+        candidate.action.intent.actionKind === 'normal-attack' &&
+        candidate.action.intent.attackInput.sequenceIndex === 1
+    );
+    expect(opener).toBeDefined();
+
+    const withOpener = { ...axis, actions: [opener.action] };
+    expect(service.validate(withOpener).issues).toEqual([]);
+    const run = service.simulate(withOpener);
+    const normalCandidatesAt = frame =>
+      generator
+        .generateNextActions({
+          axis: withOpener,
+          run,
+          nextStartFrameByActor: { 'actor-112001': frame },
+          options: {
+            activeActorId: 'actor-112001',
+            includeKibo: false,
+            includeSwitch: false,
+          },
+        })
+        .filter(
+          candidate => candidate.action.intent.actionKind === 'normal-attack'
+        );
+
+    expect(normalCandidatesAt(17)).toEqual([]);
+    const at18 = normalCandidatesAt(18);
+    expect(at18).toHaveLength(1);
+    expect(at18[0].action.intent.attackInput).toMatchObject({
+      sequenceIndex: 2,
+      groupId: opener.action.intent.attackInput.groupId,
+      contextActionId: opener.action.id,
+    });
+    expect(at18[0].startFrame).toBe(18);
+    expect(normalCandidatesAt(72)).toEqual([
+      expect.objectContaining({
+        startFrame: 72,
+        action: expect.objectContaining({
+          intent: expect.objectContaining({
+            attackInput: expect.objectContaining({ sequenceIndex: 2 }),
+          }),
+        }),
+      }),
+    ]);
+    expect(normalCandidatesAt(73)).toEqual([]);
+    expect(normalCandidatesAt(229)).toEqual([]);
+    expect(normalCandidatesAt(230)).toEqual([
+      expect.objectContaining({
+        startFrame: 230,
+        action: expect.objectContaining({
+          intent: expect.objectContaining({
+            attackInput: expect.objectContaining({ sequenceIndex: 1 }),
+          }),
+        }),
+      }),
+    ]);
+  }, 30_000);
+
+  it('emits only the exact verified special continuation target and fails closed when it cannot construct it', () => {
+    const axis = structuredClone(giseleFixture);
+    axis.actions = [];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    const createRun = targetControlSkillId => ({
+      trace: {
+        controlledActors: { initialActorId: 'actor-112001' },
+        actions: [
+          {
+            id: 'special-source',
+            type: 'skill',
+            actorId: 'actor-112001',
+            actionKind: 'star-skill',
+            startMs: 0,
+          },
+        ],
+        executionPlan: {
+          actions: [
+            {
+              actionId: 'special-source',
+              execute: true,
+              sourceSequenceIndex: 0,
+              startMs: 0,
+            },
+          ],
+        },
+        variants: {
+          selections: [],
+          attackChainContinuityWindows: [
+            {
+              actorId: 'actor-112001',
+              sourceActionId: 'special-source',
+              relationType: 'attack-chain-continuity-window',
+              inputCommand: 'normal-attack',
+              targetChainIdentity: null,
+              targetSequenceIndex: 4,
+              targetControlSkillId,
+              targetSubSkillIndex: 0,
+              startsAtMs: (20 * 1000) / 60,
+              endsAtMs: (40 * 1000) / 60,
+              sourceIdentity: 'verified:special:continuation',
+              applied: true,
+            },
+          ],
+        },
+      },
+    });
+    const candidates = generator
+      .generateNextActions({
+        axis,
+        run: createRun(11200104),
+        nextStartFrameByActor: { 'actor-112001': 30 },
+        options: {
+          activeActorId: 'actor-112001',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate => candidate.action.intent.actionKind === 'normal-attack'
+      );
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0].action.intent.attackInput).toMatchObject({
+      sequenceIndex: 4,
+      contextActionId: 'special-source',
+    });
+
+    const rejections = [];
+    const unresolved = generator
+      .generateNextActions({
+        axis,
+        run: createRun(99999999),
+        nextStartFrameByActor: { 'actor-112001': 30 },
+        options: {
+          activeActorId: 'actor-112001',
+          includeKibo: false,
+          includeSwitch: false,
+          onFormalRejection: issue => rejections.push(issue),
+        },
+      })
+      .filter(
+        candidate => candidate.action.intent.actionKind === 'normal-attack'
+      );
+    expect(unresolved).toEqual([]);
+    expect(rejections).toContainEqual(
+      expect.objectContaining({
+        code: 'normal-attack-special-continuation-target-unresolved',
+        authoritySourceKind: 'attack-chain-continuity-window',
+      })
+    );
+  });
+
+  it('uses the verified A5 reopen window before animation recovery completes', () => {
+    const axis = structuredClone(giseleFixture);
+    axis.actions = [];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    const run = {
+      trace: {
+        controlledActors: { initialActorId: 'actor-112001' },
+        actions: [
+          {
+            id: 'melania-a5',
+            type: 'skill',
+            actorId: 'actor-112001',
+            actionKind: 'normal-attack',
+            skillId: 11200101,
+            startMs: 0,
+            attackGroupId: 'melania-chain',
+            attackSequenceIndex: 5,
+            attackSequenceTotal: 5,
+          },
+        ],
+        executionPlan: {
+          actions: [
+            {
+              actionId: 'melania-a5',
+              execute: true,
+              sourceSequenceIndex: 0,
+              startMs: 0,
+            },
+          ],
+        },
+        variants: {
+          selections: [
+            {
+              actionId: 'melania-a5',
+              controlSkillId: 11200105,
+              subSkillIndex: 0,
+              attackGroupId: 'melania-chain',
+              attackSequenceIndex: 5,
+              attackSequenceTotal: 5,
+            },
+          ],
+        },
+      },
+    };
+    const normalAt = frame =>
+      generator
+        .generateNextActions({
+          axis,
+          run,
+          nextStartFrameByActor: { 'actor-112001': frame },
+          options: {
+            activeActorId: 'actor-112001',
+            includeKibo: false,
+            includeSwitch: false,
+          },
+        })
+        .filter(
+          candidate => candidate.action.intent.actionKind === 'normal-attack'
+        );
+    expect(normalAt(64)).toEqual([]);
+    expect(normalAt(65)).toEqual([
+      expect.objectContaining({
+        startFrame: 65,
+        action: expect.objectContaining({
+          intent: expect.objectContaining({
+            attackInput: expect.objectContaining({ sequenceIndex: 1 }),
+          }),
+        }),
+      }),
+    ]);
+  });
 
   it('allocates action identities after the existing axis instead of resetting each generation', () => {
     const axis = cloneFixture();
