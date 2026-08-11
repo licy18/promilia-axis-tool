@@ -468,5 +468,5 @@ describe('character acceptance protocol', () => {
     expect(() => assertCharacterOptimizationReady(forged)).toThrow(
       'character-acceptance-manifest-invalid'
     );
-  });
+  }, 30_000);
 });

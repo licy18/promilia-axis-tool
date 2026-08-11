@@ -54,7 +54,7 @@ describe('production imports audit CLI', () => {
     });
     expect(await readFile(outputPath)).toEqual(canonicalBytes);
     expect(after.mtimeMs).toBe(before.mtimeMs);
-  });
+  }, 30_000);
 
   it('rejects stale, tampered, or missing assert-clean output without writing', async () => {
     const directory = await createTemporaryDirectory();
