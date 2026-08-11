@@ -1,3 +1,6 @@
+import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
 import * as scopePolicyModule from '../../../domain/kiboAxisActionScopePolicy.js';
 import {
@@ -27,6 +30,32 @@ beforeAll(async () => {
 });
 
 describe('formal search admission', () => {
+  it('loads the scope policy through native Node ESM', () => {
+    const moduleUrl = pathToFileURL(
+      resolve('src/domain/kiboAxisActionScopePolicy.js')
+    ).href;
+    const imported = spawnSync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '--eval',
+        `const policy = await import(${JSON.stringify(
+          moduleUrl
+        )}); process.stdout.write(JSON.stringify(policy.getKiboAxisActionScopePolicy()));`,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+      }
+    );
+
+    expect(imported.status, imported.stderr).toBe(0);
+    expect(JSON.parse(imported.stdout)).toMatchObject({
+      policyId: 'm12c-kibo-axis-action-scope-v1',
+      policyVersion: '1.0.0',
+    });
+  });
+
   it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', () => {
     const result = evaluateFormalSearchAdmission(currentEvidence);
 

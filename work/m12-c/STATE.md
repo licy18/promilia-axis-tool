@@ -72,6 +72,7 @@
 - 该轮不能记为 release PASS：验证期间另一个并发流程提交 `03d5e55a2fc4de14d488abc871b5579293aa4e0f`，postflight 检出 HEAD 从 `df94157e` 漂移到 `03d5e55a` 并按规则 fail closed。全绿 trial 只属于旧 HEAD，不能转授给新 HEAD。
 - 同一并发流程在 release authority 建立前启动 `node scripts/run-ai-guided-search.mjs --outer --contract work/m12-c/m12c4-search-template.json --guidance-file work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json`。2026-08-11 23:09（北京时间）已终止核实的 Node PID 57568 及父 PowerShell PID 54684；未生成目标 feedback 文件。
 - `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json` 与 `work/m12-c/m12c4-search-template.json` 作为 untracked 污染证据原样保留，不作为 release 输入、正式搜索产物或 Top-N 依据。只有新的最终 clean tracked HEAD 完成真实 `release:verify` 且独立 admission 允许后，才可重新授权搜索。
+- clean HEAD `e9fe2cef1b0ee058111c23ad65a71c402fd40433` 的下一轮 release 同样真实通过 242/242 Vitest files、1954/1954 tests 与 64/64 production preview，但进入独立 admission 编排时，原生 Node ESM 无法解析 `kiboAxisActionScopePolicy.js` 中缺少 `.js` 后缀的 `canonicalSerialization` import；本轮记为 `interrupted/orchestration`，不记为 PASS。修复为显式 `.js` import，并新增由真实 `node.exe` 导入该 policy 的回归用例；最终 clean HEAD 仍须重跑完整 release。
 
 ## 1. 目标与结果身份
 

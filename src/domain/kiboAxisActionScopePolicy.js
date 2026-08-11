@@ -1,4 +1,4 @@
-import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization.js';
 
 export const KIBO_AXIS_ACTION_SCOPE_SCHEMA_VERSION = 1;
 export const KIBO_AXIS_ACTION_SCOPE_CONTRACT = 'AzPrKiboAxisActionScopePolicy';
