@@ -34,6 +34,8 @@
     "audit:optimization-scenario-policy": "node scripts/generate-optimization-scenario-policy.mjs --assert-clean",
     "data:generate-optimization-qualification": "node scripts/generate-optimization-qualification.mjs --write",
     "audit:optimization-qualification": "node scripts/generate-optimization-qualification.mjs --assert-clean",
+    "data:generate-binding-matrix": "node scripts/generate-m12-b3-binding-matrix.mjs --write",
+    "audit:binding-matrix": "node scripts/generate-m12-b3-binding-matrix.mjs --assert-clean",
     "data:generate-visual-acceptance": "node scripts/generate-m12-b3-visual-acceptance.mjs --write",
     "audit:visual-acceptance": "node scripts/generate-m12-b3-visual-acceptance.mjs --assert-clean",
     "data:sync-action-icons": "node scripts/sync-workbench-action-icons.mjs",

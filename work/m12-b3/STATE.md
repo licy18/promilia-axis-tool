@@ -333,3 +333,10 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - 资格重算：character 9/9、blockingUniqueGapCount=0、`m12cLocked=false`（M12-C 解锁）；E21 动态装载验收报告哈希与 production-import 报告已同步。
 - 测试：全量 Vitest 96 failed / 1743 passed（比基线 97 少 1；新增失败 1 条 production-import 报告过期已修复；存量失败保持未处理）。
 - 本提交为验收记录提交（chore），实现基线 `79ec6297` 为 acceptanceCommit。
+
+## M12-B3-E22 绑定矩阵与正式准入（2026-08-11，已关闭）
+
+- 新增 `scripts/generate-m12-b3-binding-matrix.mjs`、`reports/m12/m12-b3-binding-matrix.json/.md`、`src/__tests__/optimization-qualification/m12BindingMatrix.test.js` 与 `npm run audit:binding-matrix`。
+- bindingMatrixHash=`88b98cf6195e27c4`，22/22 全绿：静态分母/哈希 7 项、八类场景绑定 13 项、重锁 2 项。
+- 八类场景：装配→角色（合法通过/不匹配拒绝）、角色→奇波继承（羁绊与等级差分）、效果来源/目标、前后台/切人、同名奇波跨 owner 隔离、同帧顺序、保存重放（adapter+JSON）、连续循环。
+- 重锁：撤销 112001 后 formal admission 立即 stage-locked。E22 关闭，M12-C 门禁就绪。

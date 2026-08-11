@@ -2212,3 +2212,11 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 三个指标统一使用 80 级标准 `310054 雷冠牦`，并各自输出 Top-N：无韧循环 DPS、有韧循环 DPS、最快击杀。循环轴可用同一版本化 preset 指定角色/奇波 SP、印记和来源允许的角色专属资源，但必须连续闭环；最快击杀的调谐印记固定为 0。
 - 击杀轴可带入资源的通用理论定义是“可在非战斗状态持久保留且不会随时间过期”。M12-C v1 以产品范围主动收窄为角色/奇波 SP 与红宝石弹药两类，不继续搜索其他角色资源的客户端持久化证据；其他资源、状态、Buff、召唤物、冷却和 pending event 均固定为 0/未激活。具体初值由整次 run 的 preset 固定并进入 hash，不是候选优化维度。
 - 本次只冻结计划，没有解锁正式搜索。五个待签角色、STARBORN 每种既有印记分别 `+1`、合击同帧先伤害后清空架势并进入 Break，以及 objective-scoped 初始状态 validator 全部关闭后，才能进入 M12-C。
+
+### M12-B3-E22 绑定矩阵与正式准入（2026-08-11，已关闭）
+
+- 角色-装配-奇波绑定矩阵全绿：`reports/m12/m12-b3-binding-matrix.json`（+ `.md`），生成器 `scripts/generate-m12-b3-binding-matrix.mjs`，门禁测试 `src/__tests__/optimization-qualification/m12BindingMatrix.test.js`，审计 `npm run audit:binding-matrix`。bindingMatrixHash=`88b98cf6195e27c4`，22/22 检查全绿。
+- 静态门禁：分母 9/43/62/137/12、blocking unique gap=0、`m12cLocked=false`、角色准入 9 个对象（含统一 STARBORN）、静态绑定矩阵全部合格、星临者两来源别名机制 hash 一致、roster/manifests/ledger/binding/catalog 产物 hash 与 summary 一致。
+- 八类场景绑定（Machine Axis 严格合同实测）：装配→角色（合法 strict loadout prepare 通过；职业不匹配灵子、装备部位错配均拒绝）；角色→奇波继承（羁绊 1→10 改变 kibo 继承 ATK，角色等级 80→40 改变角色属性）；效果来源/目标（三 actor 场景效应事件携带 source/target）；前后台/切人（107001 switch-star-carry 可执行且双轮重放稳定）；同名奇波跨 owner 隔离（三槽共用 500001 时资源事件按 actor 隔离）；同帧顺序（107001 wind-expiry 双轮 canonical hash 一致）；保存重放（Workbench adapter 与 JSON carrier round-trip hash 一致）；连续循环（cycle-dps 信封 closed 且 cycle/trace hash 稳定）。
+- 重锁反例：从合格 catalog 撤销任一对象（112001）后，formal admission 立即回到 `optimization-qualification-stage-locked`，stage gate 不再解锁。
+- E22 关闭后进入 M12-C；M12-C 队伍/装配/三目标/初始状态规则按 2026-08-10 冻结合同执行，正式搜索仍待 M12-C 自身门禁放行。
