@@ -32,6 +32,7 @@ function externalizeWorkbenchJsonAssets() {
   const virtualSuffix = ':module';
   return {
     name: 'externalize-workbench-json-assets',
+    apply: 'build',
     enforce: 'pre',
     resolveId(source, importer, options = {}) {
       if (options.ssr || !importer) return null;
