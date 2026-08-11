@@ -15,9 +15,29 @@
 - 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `6e4843984a9f435d`；manifests `d08e4a0bc73b464f`；ledger `7b7cb20e220da974`；qualification binding matrix `bd4084ac0882820f`；qualification catalog `b26dede46b58f714`；E22 report `88b98cf6195e27c4`。
 - 全量门禁：`test:full` 228/228 files、1877/1877 tests；确定性聚焦集 16 files、166/166 tests；Workbench production preview 64/64；最终 `test:trial-release` exit 0。production build、Workbench data、action status、applied-source、Kibo headless、production imports、bundle、binding matrix 和确定性审计均通过。
 - `clientParityReady=false` 仍由已验证 mechanics/profile evidence 明确保留；它与 optimization qualification 全绿是两条独立状态，禁止混同。
-- 本轮没有自动签署任何产品视觉记录。既有角色级 accepted 记录保持原样；STARBORN optimization-object 仍为 `productVisualAcceptance=pending`、`formalAdmission=false`、`optimizationReady=false`。
+- 2026-08-11 用户明确签收单一 STARBORN optimization-object。正式 recipe/manifest 已更新为 `productVisualAcceptance=accepted`、`formalAdmission=true`、`optimizationReady=true`，acceptance subject hash=`c645f8836bf6fd0a`、bundle hash=`3338e8e57a632564`；签收绑定到基线 HEAD `76605d759376a93a2981fc27f2fa18e3464b17f7`，后续证据漂移不得自动续签。既有 `199001/199002` 角色级 accepted 记录保持原样，本次没有把一个对象拆成两次签收。
 - 正式 M12-C 搜索、三个 objective 的 Top-N 和产品结论均尚未运行/生成；下一实施阶段仍是 `M12-C4`，不得把上述门禁通过数冒充搜索结果。
 - GitHub 发布前对 `origin/master..master` 的 849 个未发布提交执行了单路径 Git LFS 迁移；完整 old SHA → new SHA 映射见 `work/m12-c/lfs-migration-object-map-2026-08-11.csv`。10 个既有 accepted 记录的原 `acceptanceCommit` 与 `recordIdentity` 均保持不变，映射仅用于迁移追溯，不构成自动续签。
+
+## 0.1 2026-08-11 Gate V2 实施基线
+
+- 新增 `npm run test:smart`：按 working tree bytes 计算 dependency fingerprint，支持 `--base <sha>`、`--plan`、`--integration`、`--explain`、可重复的 `--simulate-change <path>` 和 `--json <path>`。Unknown change 一律升级为 `test-full`、M12-C determinism 与 production-imports，不会输出“无需测试”。
+- 新增 `npm run release:verify`：只接受 clean tracked tree；不删除 untracked evidence，不 stash/pop，不切分支，不修改产品 acceptance。它真实执行未被 trial 覆盖的 M12-C 附加 gate，再真实调用一次保持原样的 `test:trial-release`，最后复核 HEAD、tracked tree 与 stash 未变化。
+- `scripts/gates/gate-definitions.mjs` 是单一 dependency map；fingerprint 包含 gate schema/version、dependency-map hash、runner hash、相关环境合同、canonical path 与当前文件内容 SHA-256。README/STATE/普通 docs 不会使 full/bundle/preview/qualification/binding 指纹失效；production/test/script/config/fixture/generated authority 改动按域失效。
+- `work/m12-c/gates/gate-ledger.json` 只作为 derived cache。记录区分 `executed` 与 `reused`，保留真实 command、exit code、duration 与可解析 summary；FAIL、timeout、OOM、cancelled、interrupted、输出不完整、解析失败和 fingerprint/schema/version mismatch 永不复用。pending 记录、原子替换和带 stale 检测的进程锁用于崩溃/并发恢复。
+- Bootstrap 规则：旧 HEAD 的 release PASS 不转移给本次 scripts/tests/config 变更；只有本实现所在最终提交的真实 `release:verify` PASS 才允许后续 smart reuse。每次动态结果以 ignored 的 `work/m12-c/gates/latest-*.json` 和 ledger 为准，不在本 tracked 状态文件手写可漂移 PASS。
+- `formal-search-admission` 不以 release PASS 自动推导 READY。STARBORN optimization-object 的产品阻断已由用户显式签收解除；当前 43 只 admitted Kibo 的 71 个 autonomous surface 仍缺 schedule/trigger 闭合证明，`reports/m12/m12-c-kibo-autonomous-readiness.json` 缺失，因此即使 Gate V2 最终 clean HEAD 的真实 `release:verify` PASS，Formal Search 仍必须 `BLOCKED`。该 proof 未来还必须绑定 qualification/action-catalog/scheduler hash、43 只 Kibo 和全部 surface，且 unresolved schedule/trigger 均为 0。`clientParityReady=false` 继续单列，不回锁已通过的 headless formal-score 基线，也不被自动提升。
+- 本改动只优化验证编排，没有启动 M12-C4、没有生成 Top-N、没有代签产品验收。提交前最终 Integration checkpoint 已在当前 working-tree bytes 上通过 `239/239` files、`1943/1943` tests（`NODE_OPTIONS=--max-old-space-size=8192`）；该记录不是 release authority，最终 clean HEAD 的 `release:verify` 结果仍须在交付报告中与 Development/Integration 分层列出。
+
+## 0.2 2026-08-11 外层池正式接入搜索
+
+- 新增生产服务 `src/machine-axis/m12cOuterSearchService.js`，把权威 28 队/35 source config 的 lazy build pool 接到既有 `machineAxisSearchEngine`；每个 build 原子尝试三名队员作为初始前台，候选经同一 formal `machineAxisService.prepare` 后才进入内层搜索，最终按 objective 聚合单一全局 Top-N。
+- 每条结果保留完整 `buildHash`、`poolHash`、队伍/来源配置、固定培养、奇波/灵子/五件装备、初始前台和正式 axis。初始前台仍不进入 `buildHash`；外层 variant budget 不足 3 时不会执行半个 build。初始 SP/专属资源若不属于当前 build 会直接拒绝，不会静默丢弃。
+- CLI 新增 `m12c-outer-search`，AI-guided runner 支持 `--outer`、外层预算和 initial-state 输入。外层 guidance 可独立控制 source/build/variant 范围，不会把 outer-only beam/action 策略泄漏到内层。
+- 报告严格区分 bounded-domain 与完整池：只有 35/35 source config、无 build constraints、无动态外层剪枝、全部 build 枚举完成、零失败且 Top-N 全部 final-score eligible 时，`formalRankingReady` 才能为 true；受预算/约束的样本不得冒充全池正式榜单。
+- 真实一 build/三前台冒烟已进入真实 inner engine，但三条 variant 均在评分前以 `kibo-auto-cast-schedule-unresolved` fail closed，未产生候选分数。现场枚举 43 只合格奇波共 71 个自动出手面：43 个普攻、28 个主动技；28 个主动技中 19 个缺精确 schedule/cadence，9 个缺触发条件。43/43 奇波都至少有一个未闭合普攻自动面，因此 `includeKibo=false` 不能绕过已装备奇波的合法性。
+- 本阶段最终验证：outer/build/guidance/CLI 聚焦集 4 files、76/76；search/service/objective/C3 兼容集 6 files、60/60；`machine-axis:build`、production `build`（1900 modules）、`audit:production-imports:check`（unexpected test-only 0 / unreferenced 0）和 `audit:bundle:check`（3 项预算均 true）通过。Gate V2 仍有并行未提交 tracked 改动，因此本阶段没有把旧 `test:full`/`test:trial-release` 结果冒充当前 dirty tree 的新 release 证明，也没有运行要求 clean tracked HEAD 的 `release:verify`。
+- 正式 M12-C 搜索仍未启动。下一搜索前阻断是闭合/裁决上述 Kibo autonomous schedule/trigger，随后在最终 clean tracked HEAD 上完成 Gate V2 `release:verify`；在此之前不得生成或宣称三个 objective 的正式 Top-N。
 
 ## 1. 目标与结果身份
 
@@ -95,11 +115,11 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 
 三个目标分别运行并分别输出 Top-N，禁止合成权重分数或用一个榜单替代另两个榜单。`N` 是运行参数。
 
-| objectiveId | 正式目标 | 敌人状态 | 截止/闭环 |
-| --- | --- | --- | --- |
-| `cycle-dps-no-toughness` | 最大化闭环循环 HP DPS | 无限 HP；保留等级、防御和元素抗性；关闭韧性、Break 与其增益 | 非空半开循环区间和连续重放闭环 |
-| `cycle-dps-with-toughness` | 最大化正常韧性结算下的闭环循环 HP DPS | 无限 HP；正常韧性、Break 与恢复 | 非空半开循环区间和连续重放闭环 |
-| `fastest-kill` | 最小化首次致死完整 settlement cursor | 有限 HP 与韧性；正常 Break | 首次致死 cursor，之后事件截断或仅记诊断 |
+| objectiveId                | 正式目标                              | 敌人状态                                                    | 截止/闭环                               |
+| -------------------------- | ------------------------------------- | ----------------------------------------------------------- | --------------------------------------- |
+| `cycle-dps-no-toughness`   | 最大化闭环循环 HP DPS                 | 无限 HP；保留等级、防御和元素抗性；关闭韧性、Break 与其增益 | 非空半开循环区间和连续重放闭环          |
+| `cycle-dps-with-toughness` | 最大化正常韧性结算下的闭环循环 HP DPS | 无限 HP；正常韧性、Break 与恢复                             | 非空半开循环区间和连续重放闭环          |
+| `fastest-kill`             | 最小化首次致死完整 settlement cursor  | 有限 HP 与韧性；正常 Break                                  | 首次致死 cursor，之后事件截断或仅记诊断 |
 
 排名候选是完整的“队伍 + 装配 + 初始前台 + 初始状态 + 动作轴”。同一 build 可以合法出现在三个榜单中；任何 UI 分组或同 build 折叠都不得改变正式 Top-N 顺序与结果集合。
 
@@ -169,9 +189,10 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 正式搜索前至少满足：
 
 - 正式 roster 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装技能 12/12 和 E22 binding matrix 22/22 已全部通过，formal admission 与核心 hash 一致；
-- `101010`、`103002`、`107002`、`STARBORN`、`112001` 的产品视觉不得由自动化代签；本轮只保留已有记录，STARBORN optimization-object 仍明确 pending；
+- `101010`、`103002`、`107002`、`112001` 的既有产品视觉记录保持 accepted；单一 `STARBORN` optimization-object 已由用户在 2026-08-11 明确签收，自动化只校验并派生 manifest，不得自行撤销、续签或拆成两个 alias 记录；
 - STARBORN 每种既有印记 `+1` 与合击结算合同已合入主线并通过无头、Workbench 和全量回归；
 - objective-scoped initial-state validator 已落实，通用 scenario 字段不能绕过循环/击杀白名单；
 - 三个 objective 的雷冠牦 profile、初始 preset、暴击政策和 runtime settlement 合同必须进入未来结果 hash；
+- 43 只 admitted Kibo 的全部 autonomous surface 必须由与当前 qualification/action catalog/scheduler hash 绑定的 proof 闭合，任何 schedule/cadence、trigger、分母或覆盖缺口都在评分前 fail closed，并保持 Formal Search `BLOCKED`；
 - `clientParityReady=false` 不回锁已经通过的 optimization qualification，但也不能被 formal scoring 或测试通过自动提升；
 - 正式搜索尚未启动。进入 `M12-C4` 后仍须分别产出三个 objective 的 Top-N、proof、hash、贡献和拒绝原因，再进入人工 Workbench 复验。

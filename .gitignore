@@ -14,6 +14,15 @@ dist-ssr
 
 work/machine-axis-cli-dist/
 
+# Derived smart/release gate evidence cache (never an authority source)
+/work/m12-c/gates/gate-ledger.json
+/work/m12-c/gates/.gate-ledger.lock
+/work/m12-c/gates/pending/
+/work/m12-c/gates/logs/
+/work/m12-c/gates/latest-smart-gate.json
+/work/m12-c/gates/latest-release-verify.json
+/work/m12-c/gates/scenario-*.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
