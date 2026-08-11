@@ -10161,10 +10161,43 @@ async function expectTimelineCurveNodeFrameAlignment(timeline, node) {
 
 async function selectTimelineFrameAtRatio(page, ratio) {
   const lane = page.getByTestId('workbench-timeline-lane');
-  await lane.scrollIntoViewIfNeeded();
-  const box = await lane.boundingBox();
-  expect(box).toBeTruthy();
-  await page.mouse.click(box.x + box.width * ratio, box.y + box.height / 2);
+  const cursorHandle = page.getByTestId(
+    'workbench-timeline-frame-cursor-handle'
+  );
+  await cursorHandle.scrollIntoViewIfNeeded();
+  const [laneBox, handleBox] = await Promise.all([
+    lane.boundingBox(),
+    cursorHandle.boundingBox(),
+  ]);
+  expect(laneBox).toBeTruthy();
+  expect(handleBox).toBeTruthy();
+  const clientY = handleBox.y + handleBox.height / 2;
+  await page.mouse.move(handleBox.x + handleBox.width / 2, clientY);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(laneBox.x + laneBox.width * ratio, clientY, {
+      steps: 4,
+    });
+  } finally {
+    await page.mouse.up();
+  }
+  const maxFrameIndex = Number(
+    await cursorHandle.getAttribute('aria-valuemax')
+  );
+  const targetFrame = maxFrameIndex * ratio;
+  await expect
+    .poll(async () => {
+      const frameIndex = Number(
+        await page
+          .getByTestId('workbench-timeline-grid-preview')
+          .getAttribute('data-cursor-frame-index')
+      );
+      return (
+        frameIndex >= Math.floor(targetFrame) - 1 &&
+        frameIndex <= Math.ceil(targetFrame)
+      );
+    })
+    .toBe(true);
 }
 
 async function expectPageWithoutHorizontalOverflow(page) {
