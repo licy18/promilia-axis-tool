@@ -9,4 +9,10 @@ reports/**/*.md text eol=lf
 scripts/optimization-qualification/evidence/*.json text eol=lf
 scripts/machine-axis/evidence/*.json text eol=lf
 fixtures/character-acceptance/*.json text eol=lf
+
+# Keep release-gate sources and evidence documentation Prettier-stable on Windows.
+scripts/gates/** text eol=lf
+scripts/release-verify.mjs text eol=lf
+src/__tests__/scripts/gates/** text eol=lf
+work/m12-c/gates/** text eol=lf
 src/data/generated/verified-combat-mechanics-package.json filter=lfs diff=lfs merge=lfs -text
