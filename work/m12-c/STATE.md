@@ -52,6 +52,7 @@
 - 去除 autonomous derivation registry 会改变部分既有验收轴的 canonical input/data/trace identity，即使伤害评价不变；例如 107002 的 evaluation hash 仍为 `5238bf8119e66446`，但 input/data/trace 已变为 `30780d8354ecceaf` / `9167d13d5bd46dc0` / `9d108c00b14b69ae`。代码回归常量已同步，产品记录没有由自动化静默续签。
 - 现场比较 10 个既有 accepted 角色：101010、102001、109001、199001、199002 的绑定未漂移；103002、107001、107002、108003、112001 的绑定失效。用户已明确签收这 5 个受影响角色，并将其 acceptanceCommit/recordIdentity 绑定到范围实现基线 `be60e68d1c1bcf77a962426ddb0af37fc384c4da`；原截图 SHA 与场景身份保持不变。101003 继续为原有 pending，不借本次重签提升。
 - 严格 `audit:character-acceptance` 已恢复 clean：11 runtime-integrated、10 visually-accepted、10 optimization-ready；qualification 仍为 263/263、E22 binding 22/22、visual acceptance 254/254。当前只剩最终签收提交后的 clean HEAD `release:verify`，正式搜索在其通过前继续阻断。
+- clean HEAD `50e292dd91423e05c25b8e1f99eb21d589f5e505` 的首次 `release:verify` 在首个 `character-combat` 阶段正确拦截 7 份旧 golden trace（101003、101010、102001、103002、107002、108003、109001）。全量原子同步后实际 diff 仅为这 7 份 trace 的 input/trace/data/build hash；verified mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`，因此不触发角色产品重签。该生成物同步提交后再运行一次 clean HEAD release。
 
 ## 1. 目标与结果身份
 
