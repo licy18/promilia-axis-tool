@@ -56,10 +56,10 @@ const GOLDENS = [
       '66bf4893e52cd56ef1899cf831a9d15ed17276d442a99d2cbdb7e30592a88bc2',
     summaryHash:
       'e9ecef3cacaa2bd6482ab5309542b9e84f7d8513f3e170be7a311656bae0cde9',
-    inputHash: 'a5247572cdbdc6b2',
-    dataHash: '69d3276d6c4950a6',
-    traceHash: 'c08af1a97df57662',
-    buildHash: 'a6d8592a8bdc47bb',
+    inputHash: '173eba777e53cc42',
+    dataHash: '1464a66765ac10b7',
+    traceHash: 'efccb677c61f665e',
+    buildHash: 'c767de8e70a48f4e',
   },
 ];
 

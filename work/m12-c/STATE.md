@@ -54,6 +54,7 @@
 - 严格 `audit:character-acceptance` 已恢复 clean：11 runtime-integrated、10 visually-accepted、10 optimization-ready；qualification 仍为 263/263、E22 binding 22/22、visual acceptance 254/254。当前只剩最终签收提交后的 clean HEAD `release:verify`，正式搜索在其通过前继续阻断。
 - clean HEAD `50e292dd91423e05c25b8e1f99eb21d589f5e505` 的首次 `release:verify` 在首个 `character-combat` 阶段正确拦截 7 份旧 golden trace（101003、101010、102001、103002、107002、108003、109001）。全量原子同步后实际 diff 仅为这 7 份 trace 的 input/trace/data/build hash；verified mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`，因此不触发角色产品重签。该生成物同步提交后再运行一次 clean HEAD release。
 - clean HEAD `5700680f5359095ba7a3db5501baf79a7000b14f` 的第二次 `release:verify` 已通过 character-combat、visual acceptance 254/254、E22 binding 22/22、Kibo headless 122/448 与 machine-axis settlement；trial-release 全量 Vitest 为 239/240 files、1933/1936 tests，唯一失败是 `characterCombatHeadlessMigration.test.js` 中小玉、红宝石、寒悠悠三组仍指向同步前 golden hash。仅同步这 12 个测试镜像常量后再运行 clean HEAD release，不改变 runtime 或产品签收。
+- clean HEAD `ca1b5bef19a22c4c754163a86a5baa3dad69f816` 的第三次 `release:verify` 已达到全量 Vitest 240/240 files、1936/1936 tests，并通过 production imports、Workbench data、action status；随后 `audit:verified-combat` 正确拦截不属于常规 character-combat 发布集的 `101003/ultimate-controlled-buff-switch-golden.json`。verified-combat 原子同步的实际 diff 仅为该文件四个 canonical hash，mechanics package 仍为 `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；同步对应测试镜像后再运行 clean HEAD release，不触发角色重签。
 
 ## 1. 目标与结果身份
 
