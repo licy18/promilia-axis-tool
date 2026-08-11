@@ -855,7 +855,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'formal-search-admission',
-    version: 3,
+    version: 4,
     order: 510,
     kind: 'derived-formal-decision',
     description:
@@ -865,10 +865,12 @@ export const GATE_DEFINITIONS = deepFreeze([
       'reports/m11/character-acceptance/optimization-objects/STARBORN/manifest.json',
       'src/data/generated/character-acceptance-catalog.json',
       'src/data/generated/workbench-kibo-action-catalog.json',
+      'src/domain/kiboAxisActionScopePolicy.js',
       'src/machine-axis/m12cInitialStatePolicy.js',
       'src/machine-axis/kiboAutoCastScheduler.js',
+      'src/machine-axis/machineAxisSearchGenerator.js',
+      'src/machine-axis/machineAxisService.js',
       'src/machine-axis/machineAxisEnemySettlementContract.js',
-      'reports/m12/m12-c-kibo-autonomous-readiness.json',
     ],
     smartTriggers: [],
     environmentKeys: [],

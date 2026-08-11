@@ -1693,7 +1693,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(closure.secondEnd.enemy.inBreak).toBe(false);
   }, 30_000);
 
-  it('rejects a Kibo passive loop before scoring while its autonomous schedule is unresolved', () => {
+  it('keeps Kibo passive loops behind the independent joint-attack contract', () => {
     const report = createMachineAxisService().evaluateCycle(
       createKiboInternalCooldownEnvelope()
     );
@@ -1703,17 +1703,16 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'kibo-auto-cast-schedule-unresolved',
-          finalScoreEligible: false,
-        }),
-        expect.objectContaining({
           code: 'joint-attack-runtime-contract-required',
           finalScoreEligible: false,
         }),
       ])
     );
+    expect(report.issues.map(issue => issue.code)).not.toContain(
+      'kibo-auto-cast-schedule-unresolved'
+    );
   }, 30_000);
-  it('does not let a practical-unlimited Kibo passive bypass the unresolved AI schedule', () => {
+  it('rejects explicitly authored autonomous Kibo actions at the axis boundary', () => {
     const report = createMachineAxisService().evaluateCycle(
       createKiboUnlimitedAfterDamageEnvelope()
     );
@@ -1722,8 +1721,9 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.formalScore).toBeNull();
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'kibo-auto-cast-schedule-unresolved',
-        finalScoreEligible: false,
+        code: 'machine-axis-kibo-action-product-deferred',
+        disposition: 'product-deferred-autonomous-action',
+        calculationStatus: 'not-generated-not-scheduled-not-scored',
       })
     );
   }, 30_000);
@@ -1777,7 +1777,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     });
   });
 
-  it('keeps a finite one-trigger Kibo passive outside formal cycles while scheduling is open', () => {
+  it('keeps a finite one-trigger Kibo passive outside formal cycles when its retained action cannot replay', () => {
     const report = createMachineAxisService().evaluateCycle(
       createKiboFiniteTriggerEnvelope()
     );
@@ -1786,8 +1786,12 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.formalScore).toBeNull();
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'kibo-auto-cast-schedule-unresolved',
-        finalScoreEligible: false,
+        code: 'machine-axis-cycle-second-replay-not-runnable',
+        causes: expect.arrayContaining([
+          expect.objectContaining({
+            code: 'skill-cooldown-active',
+          }),
+        ]),
       })
     );
   }, 30_000);
@@ -1807,7 +1811,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(run.trace.state.final.enemy.inBreak).toBe(false);
   }, 30_000);
 
-  it('keeps Kibo-free cycle replay deterministic and blocks an equipped-Kibo variant', () => {
+  it('keeps cycle replay deterministic when a Kibo is equipped but autonomous actions stay out of scope', () => {
     const service = createMachineAxisService();
     const first = service.evaluateCycle(createNormalAttackCycleEnvelope());
     const replay = service.evaluateCycle(createNormalAttackCycleEnvelope());
@@ -1826,21 +1830,12 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
         maxValue: 100,
       },
     ];
-    const blocked = service.evaluateCycle(equipped);
+    const equippedResult = service.evaluateCycle(equipped);
 
     expect(first.valid).toBe(true);
     expect(replay).toEqual(first);
-    expect(blocked.valid).toBe(false);
-    expect(blocked.formalScore).toBeNull();
-    expect(blocked.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: expect.stringMatching(
-            /^kibo-auto-cast-(?:schedule|trigger)-unresolved$/
-          ),
-          finalScoreEligible: false,
-        }),
-      ])
-    );
+    expect(equippedResult.valid).toBe(true);
+    expect(equippedResult.formalScore).not.toBeNull();
+    expect(equippedResult.issues).toEqual([]);
   }, 30_000);
 });

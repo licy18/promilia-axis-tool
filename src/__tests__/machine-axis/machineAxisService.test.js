@@ -16,10 +16,9 @@ function createMitiProjectileFixture() {
   const axis = structuredClone(mitiFixture);
   axis.actions = axis.actions.filter(
     action =>
-      ![
-        'miti-star-combo-active',
-        'miti-star-combo-kibo-break',
-      ].includes(action.id)
+      !['miti-star-combo-active', 'miti-star-combo-kibo-break'].includes(
+        action.id
+      )
   );
   return axis;
 }
@@ -283,16 +282,38 @@ describe('Machine Axis service', () => {
         'normal-attack': 122,
       },
     });
+    expect(catalog.kiboAxisActionScope).toMatchObject({
+      policyId: 'm12c-kibo-axis-action-scope-v1',
+      includedAxisActionKinds: ['signature', 'break'],
+      deferredAutonomousActionKinds: ['normal-attack', 'active'],
+      retainedCalculationSurfaces: ['signature', 'joint-attack', 'passive'],
+    });
     expect(machineActions).toEqual(sourceActions);
     for (const [publicActionId, actionKind] of [
       [50000102, 'signature'],
-      [504003, 'normal-attack'],
-      [504004, 'active'],
       [50000112, 'break'],
     ]) {
       expect(
         service.prepare(createKiboAxis({ publicActionId, actionKind })).valid
       ).toBe(true);
+    }
+    for (const [publicActionId, actionKind] of [
+      [504003, 'normal-attack'],
+      [504004, 'active'],
+    ]) {
+      const prepared = service.prepare(
+        createKiboAxis({ publicActionId, actionKind })
+      );
+      expect(prepared.valid).toBe(false);
+      expect(prepared.issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-kibo-action-product-deferred',
+          publicActionId,
+          actionKind,
+          disposition: 'product-deferred-autonomous-action',
+          calculationStatus: 'not-generated-not-scheduled-not-scored',
+        })
+      );
     }
   });
 
@@ -315,26 +336,7 @@ describe('Machine Axis service', () => {
         action => action.derivation?.kind === 'kibo-autonomous-cast'
       )
     ).toEqual([]);
-    expect(run.trace.scenario.kiboAutoCastDerivationAuthority).toMatchObject({
-      sourceKind: 'azpr-compile-owned-kibo-auto-cast-derivation-registry',
-      registryHash: expect.any(String),
-      sourceGenerationHash: expect.any(String),
-      evidenceClosed: false,
-      eligibilityContract: {
-        status: 'foreground-kibo-eligibility-closed',
-        evidenceClosed: true,
-      },
-      scheduleExclusions: expect.arrayContaining([
-        expect.objectContaining({
-          code: 'kibo-auto-cast-schedule-unresolved',
-          ownerActorId: 'actor-101007',
-          triggerTag: '0',
-        }),
-      ]),
-      controlledTimeline: {
-        timelineHash: expect.any(String),
-      },
-    });
+    expect(run.trace.scenario.kiboAutoCastDerivationAuthority).toBeUndefined();
 
     const shortageAxis = createKiboAxis({ currentValue: 99 });
     const shortage = service.validate(shortageAxis);
@@ -489,20 +491,11 @@ describe('Machine Axis service', () => {
       action => action.derivation?.kind === 'kibo-autonomous-cast'
     );
     expect(autonomousKiboActions).toEqual([]);
-    expect(
-      run.trace.scenario.kiboAutoCastDerivationAuthority.scheduleExclusions
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'kibo-auto-cast-schedule-unresolved',
-          ownerActorId: 'actor-101007',
-        }),
-      ])
-    );
-    expect(run.actionLegalityProof.rejectionCodes).toContain(
+    expect(run.trace.scenario.kiboAutoCastDerivationAuthority).toBeUndefined();
+    expect(run.actionLegalityProof.rejectionCodes).not.toContain(
       'kibo-auto-cast-schedule-unresolved'
     );
-    expect(run.actionLegalityProof.rejectionCodes).toContain(
+    expect(run.actionLegalityProof.rejectionCodes).not.toContain(
       'kibo-auto-cast-trigger-unresolved'
     );
 

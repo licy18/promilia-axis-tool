@@ -2,12 +2,15 @@ import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kib
 import { getInstalledVerifiedCombatMechanicsPackage } from '../data/verifiedCombatMechanicsPackage';
 import { projectWorkbenchKiboActionCatalog } from '../data/workbenchKiboActionCatalog';
 import { getActionSourceSequencePath } from '../domain/actionSourceSequence';
+import {
+  classifyKiboAxisActionKind,
+  getKiboAxisActionScopePolicy,
+  isKiboAutonomousActionKindDeferred,
+} from '../domain/kiboAxisActionScopePolicy';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import { VERIFIED_KIBO_AUTO_CAST_GENERATION_CONTRACT } from '../domain/verifiedBackgroundActionDerivation';
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 
-const AUTO_CAST_KINDS = new Set(['normal-attack', 'active']);
-const UNCONDITIONAL_TRIGGER_TAG = '0';
 const KIBO_FOREGROUND_ELIGIBILITY_CONTRACT =
   'AzPrKiboForegroundAutoCastEligibility';
 const VERIFIED_CATALOG_SOURCE_ID = 'public-kibo-action-catalog';
@@ -41,9 +44,8 @@ export function expandKiboAutoCastActions(contract, options = {}) {
 
 /**
  * Canonical compiler entry point. Persisted projects contain only player
- * inputs. Compilation regenerates the controlled-owner eligibility evidence,
- * but it does not invent autonomous casts while the NodeCanvas schedule is
- * unresolved.
+ * inputs. Autonomous normal/active Kibo actions remain catalogued for source
+ * audit, but the current product scope never materializes them on the axis.
  */
 export function createCompiledProjectKiboAutoCastGeneration({
   actions = [],
@@ -167,10 +169,9 @@ export function createCompiledProjectKiboAutoCastGeneration({
 }
 
 /**
- * Projects foreground Kibo eligibility over the controlled-actor timeline.
- * Tag-0 proves that a skill belongs to the normal AI/behavior-tree surface; it
- * does not prove an initial frame, arbitration priority, or recast cadence.
- * Until those NodeCanvas inputs are sourced, no autonomous action is emitted.
+ * Projects foreground Kibo eligibility over the controlled-actor timeline and
+ * records the autonomous catalog surfaces excluded by the current product
+ * policy. No normal/active action is generated, scheduled, or scored.
  */
 export function createKiboAutoCastGeneration(
   contract,
@@ -209,6 +210,7 @@ export function createKiboAutoCastGeneration(
   });
   const schedulerInputHash = hashCanonicalValue({
     schemaVersion: 1,
+    actionScopePolicy: getKiboAxisActionScopePolicy(),
     horizonFrames,
     fps,
     team: team.map(slot => ({
@@ -253,8 +255,10 @@ export function createKiboAutoCastGeneration(
       schedulerInputHash,
       controlled,
       eligibilityContract,
+      scopePolicy: getKiboAxisActionScopePolicy(),
       entries: [],
       issues,
+      scopeExclusions: [],
       triggerExclusions: [],
       scheduleExclusions: [],
       evidenceClosed: eligibilityContract.evidenceClosed === true,
@@ -264,14 +268,14 @@ export function createKiboAutoCastGeneration(
       generatedActions: [],
       derivationGeneration,
       controlledTimeline: controlled.projection,
+      scopeExclusions: [],
       triggerExclusions: [],
       scheduleExclusions: [],
       issues,
     };
   }
 
-  const triggerExclusions = [];
-  const scheduleExclusions = [];
+  const scopeExclusions = [];
   const slotById = new Map(team.map(slot => [String(slot.slotId), slot]));
   for (const interval of controlled.intervals) {
     if (!(interval.endFrame > interval.startFrame)) continue;
@@ -290,10 +294,11 @@ export function createKiboAutoCastGeneration(
     const kibo = resolvedCatalogById.get(kiboId);
     if (!kibo) continue;
     const declaredAutoSkills = (kibo.actions ?? []).filter(action =>
-      AUTO_CAST_KINDS.has(String(action.kind))
+      isKiboAutonomousActionKindDeferred(action.kind)
     );
     for (const action of declaredAutoSkills) {
       const triggerTag = String(action.petSkillLogicTag ?? '');
+      const scope = classifyKiboAxisActionKind(action.kind);
       const exclusion = {
         ownerActorId: interval.actorId,
         ownerSlotId: interval.slotId,
@@ -312,49 +317,37 @@ export function createKiboAutoCastGeneration(
         eligibilityStatus: 'foreground-owner-eligibility-closed',
         requiresEquippedKibo: true,
         requiresKiboAlive: true,
+        policyId: scope.policyId,
+        policyVersion: scope.policyVersion,
+        policyHash: scope.policyHash,
+        disposition: scope.disposition,
+        calculationStatus: scope.calculationStatus,
       };
-      if (triggerTag === UNCONDITIONAL_TRIGGER_TAG) {
-        scheduleExclusions.push({
-          code: 'kibo-auto-cast-schedule-unresolved',
-          ...exclusion,
-          scheduleEvidenceStatus:
-            'nodecanvas-token-priority-cadence-source-open',
-          disposition: 'not-generated-without-nodecanvas-schedule',
-          leavesOpen: [
-            'nodecanvas-behavior-tree-graph',
-            'attack-and-skill-token-arbitration',
-            'normal-vs-active-priority',
-            'initial-delay-and-recast-cadence',
-          ],
-        });
-      } else {
-        triggerExclusions.push({
-          code: 'kibo-auto-cast-trigger-unresolved',
-          ...exclusion,
-          disposition: 'not-generated-without-closed-trigger',
-        });
-      }
+      scopeExclusions.push({
+        code: 'kibo-autonomous-action-product-deferred',
+        ...exclusion,
+        sourceEvidenceStatus: 'catalogued-but-outside-current-product-scope',
+      });
     }
   }
-  triggerExclusions.sort(compareExclusions);
-  scheduleExclusions.sort(compareExclusions);
+  scopeExclusions.sort(compareExclusions);
 
   const evidenceClosed =
     eligibilityContract.evidenceClosed === true &&
     catalog.evidenceClosed === true &&
-    mechanicsPackage != null &&
-    triggerExclusions.length === 0 &&
-    scheduleExclusions.length === 0;
+    mechanicsPackage != null;
   const derivationGeneration = createGeneration({
     mechanicsPackage,
     catalog,
     schedulerInputHash,
     controlled,
     eligibilityContract,
+    scopePolicy: getKiboAxisActionScopePolicy(),
     entries: [],
     issues,
-    triggerExclusions,
-    scheduleExclusions,
+    scopeExclusions,
+    triggerExclusions: [],
+    scheduleExclusions: [],
     evidenceClosed,
   });
   return {
@@ -362,8 +355,9 @@ export function createKiboAutoCastGeneration(
     generatedActions: [],
     derivationGeneration,
     controlledTimeline: controlled.projection,
-    triggerExclusions,
-    scheduleExclusions,
+    scopeExclusions,
+    triggerExclusions: [],
+    scheduleExclusions: [],
     issues,
   };
 }
@@ -374,18 +368,20 @@ function createGeneration({
   schedulerInputHash,
   controlled,
   eligibilityContract,
+  scopePolicy,
   entries,
   issues,
+  scopeExclusions = [],
   triggerExclusions = [],
   scheduleExclusions = [],
   evidenceClosed = false,
 }) {
   const value = {
     status: issues.length
-      ? 'kibo-auto-cast-generation-invalid'
+      ? 'kibo-axis-action-scope-generation-invalid'
       : evidenceClosed
-        ? 'kibo-auto-cast-generation-ready'
-        : 'kibo-auto-cast-generation-ready-with-open-evidence',
+        ? 'kibo-axis-action-scope-generation-ready'
+        : 'kibo-axis-action-scope-generation-ready-with-open-evidence',
     evidenceStatus: evidenceClosed
       ? 'static-evidence-closed'
       : 'scheduler-evidence-open',
@@ -396,10 +392,12 @@ function createGeneration({
         }
       : { packageId: null, packageHash: null },
     catalog,
+    scopePolicy,
     schedulerInputHash,
     controlledTimeline: controlled.projection,
     eligibilityContract,
     entries,
+    scopeExclusions,
     triggerExclusions,
     scheduleExclusions,
     issues,
@@ -408,6 +406,7 @@ function createGeneration({
       controlledIntervalCount: controlled.intervals.length,
       controlledTransitionCount: controlled.transitions.length,
       controlledRejectedActionCount: controlled.rejections?.length ?? 0,
+      scopeExclusionCount: scopeExclusions.length,
       triggerExclusionCount: triggerExclusions.length,
       scheduleExclusionCount: scheduleExclusions.length,
       issueCount: issues.length,
@@ -416,15 +415,17 @@ function createGeneration({
   const projection = {
     schemaVersion: 1,
     contractName: VERIFIED_KIBO_AUTO_CAST_GENERATION_CONTRACT,
-    sourceKind: 'azpr-controlled-kibo-auto-cast-scheduler',
+    sourceKind: 'azpr-kibo-axis-action-scope-scheduler',
     status: String(value.status),
     evidenceStatus: String(value.evidenceStatus),
     mechanicsPackage: structuredClone(value.mechanicsPackage),
     catalog: structuredClone(value.catalog),
+    scopePolicy: structuredClone(value.scopePolicy),
     schedulerInputHash: String(value.schedulerInputHash),
     controlledTimeline: structuredClone(value.controlledTimeline),
     eligibilityContract: structuredClone(value.eligibilityContract),
     entries: value.entries.map(entry => structuredClone(entry)),
+    scopeExclusions: value.scopeExclusions.map(entry => structuredClone(entry)),
     triggerExclusions: value.triggerExclusions.map(entry =>
       structuredClone(entry)
     ),
@@ -866,10 +867,12 @@ function projectKiboAutoCastGeneration(value) {
     evidenceStatus: value.evidenceStatus ?? null,
     mechanicsPackage: value.mechanicsPackage ?? null,
     catalog: value.catalog ?? null,
+    scopePolicy: value.scopePolicy ?? null,
     schedulerInputHash: value.schedulerInputHash ?? null,
     controlledTimeline: value.controlledTimeline ?? null,
     eligibilityContract: value.eligibilityContract ?? null,
     entries: value.entries ?? [],
+    scopeExclusions: value.scopeExclusions ?? [],
     triggerExclusions: value.triggerExclusions ?? [],
     scheduleExclusions: value.scheduleExclusions ?? [],
     issues: value.issues ?? [],

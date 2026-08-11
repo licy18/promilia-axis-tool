@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
+import * as scopePolicyModule from '../../../domain/kiboAxisActionScopePolicy.js';
 import {
-  createKiboAutonomousReadinessEvidence,
+  createKiboAxisActionScopeEvidence,
   evaluateFormalSearchAdmission,
   loadFormalSearchAdmissionEvidence,
 } from '../../../../scripts/gates/formal-search-admission.mjs';
@@ -26,21 +27,30 @@ beforeAll(async () => {
 });
 
 describe('formal search admission', () => {
-  it('reads STARBORN as admitted but blocks the current open Kibo runtime surface', () => {
+  it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', () => {
     const result = evaluateFormalSearchAdmission(currentEvidence);
-    expect(result.status).toBe('blocked');
+
+    expect(result.status).toBe('ready');
     expect(result.blockers).not.toContain('starborn-product-object-acceptance');
-    expect(result.blockers).toContain('kibo-autonomous-runtime-ready');
-    expect(currentEvidence.kiboAutonomousReadiness).toMatchObject({
-      ready: false,
-      status: 'kibo-autonomous-search-runtime-blocked',
-      proof: { status: 'missing' },
+    expect(result.blockers).not.toContain('kibo-axis-action-scope-applied');
+    expect(currentEvidence.kiboAxisActionScope).toMatchObject({
+      ready: true,
+      status: 'kibo-axis-action-scope-ready',
+      policyValidation: { valid: true, issues: [] },
+      policy: {
+        includedAxisActionKinds: ['signature', 'break'],
+        deferredAutonomousActionKinds: ['normal-attack', 'active'],
+        retainedCalculationSurfaces: ['signature', 'joint-attack', 'passive'],
+      },
       census: {
         admittedKiboCount: 43,
-        autonomousSurfaceCount: 71,
+        deferredAutonomousSurfaceCount: 71,
         normalAttackSurfaceCount: 43,
         activeSurfaceCount: 28,
-        kiboWithOpenAutonomousSurfaceCount: 43,
+        signatureSurfaceCount: 43,
+        jointAttackSurfaceCount: 43,
+        missingCatalogKiboIds: [],
+        unexpectedSurfaceKeys: [],
       },
     });
     expect(result.clientParity).toMatchObject({
@@ -49,168 +59,153 @@ describe('formal search admission', () => {
     });
   });
 
-  it('becomes READY only after executed release and every product contract pass', () => {
+  it('still requires an executed clean release proof', () => {
     const evidence = structuredClone(currentEvidence);
-    evidence.productAcceptance.starborn = {
-      ...evidence.productAcceptance.starborn,
-      productVisualAcceptance: 'accepted',
-      formalAdmission: true,
-      optimizationReady: true,
-    };
-    closeKiboAutonomousReadiness(evidence);
-    const ready = evaluateFormalSearchAdmission(evidence);
-    expect(ready.blockers).toEqual([]);
-    expect(ready.status).toBe('ready');
-
     evidence.releaseProof = {
       ...evidence.releaseProof,
       status: 'fail',
       exitCode: 1,
     };
     const blocked = evaluateFormalSearchAdmission(evidence);
+
     expect(blocked.status).toBe('blocked');
     expect(blocked.blockers).toContain('release-verify-executed-pass');
   });
 
   it('does not confuse clientParityReady=false with qualification readiness', () => {
     const evidence = structuredClone(currentEvidence);
-    evidence.productAcceptance.starborn = {
-      ...evidence.productAcceptance.starborn,
-      productVisualAcceptance: 'accepted',
-      formalAdmission: true,
-      optimizationReady: true,
-    };
-    closeKiboAutonomousReadiness(evidence);
     evidence.formalRuntimeBaseline.clientParityReady = false;
     const result = evaluateFormalSearchAdmission(evidence);
+
     expect(result.ready).toBe(true);
     expect(result.clientParity.status).toBe('pending');
   });
 
-  it('accepts only a zero-unresolved proof bound to every current Kibo surface', () => {
-    const fixture = createKiboReadinessFixture();
-    const baseline = createKiboAutonomousReadinessEvidence({
-      ...fixture,
-      readinessProof: { exists: false, value: null, error: null },
-    });
-    const ready = createKiboAutonomousReadinessEvidence({
-      ...fixture,
-      readinessProof: {
-        exists: true,
-        error: null,
-        value: {
-          schemaVersion: 1,
-          contractName: 'AzPrM12CKiboAutonomousReadiness',
-          status: 'ready',
-          ready: true,
-          authority: baseline.authority,
-          coverage: {
-            admittedKiboIds: [500001],
-            autonomousSurfaceKeys: ['500001:normal-attack:504003'],
-          },
-          summary: {
-            admittedKiboCount: 1,
-            autonomousSurfaceCount: 1,
-            unresolvedScheduleCount: 0,
-            unresolvedTriggerCount: 0,
-          },
-        },
-      },
+  it('accepts only complete catalog coverage under the versioned policy', () => {
+    const ready = createKiboAxisActionScopeEvidence({
+      ...createKiboScopeFixture(),
+      scopePolicyModule,
     });
     expect(ready).toMatchObject({
       ready: true,
-      status: 'kibo-autonomous-search-runtime-ready',
-      proof: { valid: true, status: 'valid' },
+      status: 'kibo-axis-action-scope-ready',
+      expectedCensus: {
+        admittedKiboCount: 43,
+        catalogKiboCount: 43,
+        deferredAutonomousSurfaceCount: 71,
+        normalAttackSurfaceCount: 43,
+        activeSurfaceCount: 28,
+        includedActionSurfaceCount: 86,
+        signatureSurfaceCount: 43,
+        jointAttackSurfaceCount: 43,
+      },
+      census: {
+        admittedKiboCount: 43,
+        deferredAutonomousSurfaceCount: 71,
+        includedActionSurfaceCount: 86,
+      },
+      denominatorMismatches: [],
     });
 
-    const unresolved = createKiboAutonomousReadinessEvidence({
-      ...fixture,
-      readinessProof: {
-        exists: true,
-        error: null,
-        value: {
-          ...ready.proof,
-          schemaVersion: 1,
-          contractName: 'AzPrM12CKiboAutonomousReadiness',
-          status: 'ready',
-          ready: true,
-          authority: baseline.authority,
-          coverage: {
-            admittedKiboIds: [500001],
-            autonomousSurfaceKeys: ['500001:normal-attack:504003'],
-          },
-          summary: {
-            admittedKiboCount: 1,
-            autonomousSurfaceCount: 1,
-            unresolvedScheduleCount: 1,
-            unresolvedTriggerCount: 0,
-          },
-        },
-      },
+    const missingBreakFixture = createKiboScopeFixture();
+    missingBreakFixture.kiboActionCatalog.items[0].actions =
+      missingBreakFixture.kiboActionCatalog.items[0].actions.filter(
+        action => action.kind !== 'break'
+      );
+    const missingBreak = createKiboAxisActionScopeEvidence({
+      ...missingBreakFixture,
+      scopePolicyModule,
     });
-    expect(unresolved.ready).toBe(false);
-    expect(unresolved.issues).toContain(
-      'kibo-autonomous-readiness-unresolved-surfaces'
+    expect(missingBreak.ready).toBe(false);
+    expect(missingBreak.issues).toContain(
+      'kibo-axis-action-scope-included-coverage-incomplete'
+    );
+
+    const missingActiveFixture = createKiboScopeFixture();
+    missingActiveFixture.kiboActionCatalog.items[0].actions =
+      missingActiveFixture.kiboActionCatalog.items[0].actions.filter(
+        action => action.kind !== 'active'
+      );
+    const missingActive = createKiboAxisActionScopeEvidence({
+      ...missingActiveFixture,
+      scopePolicyModule,
+    });
+    expect(missingActive.ready).toBe(false);
+    expect(missingActive.issues).toEqual(
+      expect.arrayContaining([
+        'kibo-axis-action-scope-denominator-mismatch',
+        'kibo-axis-action-scope-denominator-mismatch:deferredAutonomousSurfaceCount',
+        'kibo-axis-action-scope-denominator-mismatch:activeSurfaceCount',
+      ])
     );
   });
 
-  it('fails closed when the Kibo readiness proof is corrupt', () => {
-    const result = createKiboAutonomousReadinessEvidence({
-      ...createKiboReadinessFixture(),
-      readinessProof: {
-        exists: true,
-        value: null,
-        error: 'Unexpected token',
+  it('fails closed when the scope policy validator or action kind drifts', () => {
+    const invalidPolicy = createKiboAxisActionScopeEvidence({
+      ...createKiboScopeFixture(),
+      scopePolicyModule: {
+        ...scopePolicyModule,
+        validateKiboAxisActionScopePolicy: () => ({
+          valid: false,
+          issues: ['test-policy-invalid'],
+        }),
       },
     });
-    expect(result).toMatchObject({
+    expect(invalidPolicy).toMatchObject({
       ready: false,
-      proof: { valid: false, status: 'corrupt' },
+      issues: expect.arrayContaining(['test-policy-invalid']),
     });
-    expect(result.issues).toContain('kibo-autonomous-readiness-proof-corrupt');
+
+    const unexpectedFixture = createKiboScopeFixture();
+    unexpectedFixture.kiboActionCatalog.items[0].actions.push({
+      skillId: 599999,
+      kind: 'unknown-autonomous-kind',
+      petSkillLogicTag: '0',
+    });
+    const unexpected = createKiboAxisActionScopeEvidence({
+      ...unexpectedFixture,
+      scopePolicyModule,
+    });
+    expect(unexpected.ready).toBe(false);
+    expect(unexpected.issues).toContain(
+      'kibo-axis-action-scope-unexpected-kind'
+    );
   });
 });
 
-function closeKiboAutonomousReadiness(evidence) {
-  evidence.kiboAutonomousReadiness = {
-    ...evidence.kiboAutonomousReadiness,
-    ready: true,
-    status: 'kibo-autonomous-search-runtime-ready',
-    issues: [],
-    proof: {
-      valid: true,
-      status: 'valid',
-      issues: [],
-      summary: {
-        admittedKiboCount: 43,
-        autonomousSurfaceCount: 71,
-        unresolvedScheduleCount: 0,
-        unresolvedTriggerCount: 0,
-      },
-    },
-  };
-}
-
-function createKiboReadinessFixture() {
+function createKiboScopeFixture() {
+  const kiboIds = Array.from({ length: 43 }, (_, index) => 500001 + index);
   return {
     qualificationCatalog: {
       catalogHash: 'qualification-hash',
-      admission: { kibos: [500001] },
+      admission: { kibos: kiboIds },
     },
     kiboActionCatalog: {
-      items: [
-        {
-          kiboId: 500001,
-          actions: [
-            {
-              skillId: 504003,
-              kind: 'normal-attack',
-              petSkillLogicTag: '0',
-            },
-          ],
-        },
-      ],
+      items: kiboIds.map((kiboId, index) => ({
+        kiboId,
+        actions: [
+          { skillId: kiboId * 100 + 2, kind: 'signature' },
+          { skillId: kiboId * 100 + 12, kind: 'break' },
+          {
+            skillId: kiboId * 100 + 3,
+            kind: 'normal-attack',
+            petSkillLogicTag: '0',
+          },
+          ...(index < 28
+            ? [
+                {
+                  skillId: kiboId * 100 + 4,
+                  kind: 'active',
+                  petSkillLogicTag: '0',
+                },
+              ]
+            : []),
+        ],
+      })),
     },
+    actionCatalogSource: Buffer.from('catalog-v1'),
     schedulerSource: Buffer.from('scheduler-v1'),
+    searchGeneratorSource: Buffer.from('search-generator-v1'),
+    machineAxisServiceSource: Buffer.from('machine-axis-service-v1'),
   };
 }

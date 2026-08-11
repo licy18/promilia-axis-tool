@@ -104,10 +104,11 @@ describe('ActionLibraryPanel', () => {
       '/assets/actions/tex_icon_skill_petbreakatk.png',
     ]);
     expect(
-      wrapper
-        .get('[data-testid="workbench-kibo-auto-cast-note"]')
-        .text()
-    ).toContain('自动释放');
+      wrapper.get('[data-testid="workbench-kibo-auto-cast-note"]').text()
+    ).toContain('不进入排轴、优化或伤害结算');
+    expect(
+      wrapper.get('[data-testid="workbench-kibo-auto-cast-note"]').text()
+    ).toContain('仅保留特性技、合击技与已验证被动');
   });
 
   it('keeps an unbound kibo entry out of the pointer drag flow', async () => {
@@ -222,17 +223,16 @@ describe('ActionLibraryPanel', () => {
       clientX: 12,
       clientY: 24,
     });
-    const entry =
-      wrapper.emitted('begin-timeline-entry-drag')?.at(-1)?.[0]?.entry;
+    const entry = wrapper
+      .emitted('begin-timeline-entry-drag')
+      ?.at(-1)?.[0]?.entry;
     expect(entry.attackInputSegments).toHaveLength(3);
     expect(entry.attackInputSourceSegments).toHaveLength(5);
     expect(
       new Set(
         entry.attackInputSourceSegments.map(segment => segment.controlSkillId)
       )
-    ).toEqual(
-      new Set([10300201, 10300202, 10300203, 10300204, 10300205])
-    );
+    ).toEqual(new Set([10300201, 10300202, 10300203, 10300204, 10300205]));
   });
 
   it('saves and reuses compatible fragments through the compact library view', async () => {

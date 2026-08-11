@@ -200,7 +200,7 @@ export function materializeVerifiedKiboAutoCastDerivationRegistry({
 
   const mechanicsPackage = getInstalledVerifiedCombatMechanicsPackage();
   if (
-    generation.status === 'kibo-auto-cast-generation-invalid' ||
+    generation.status === 'kibo-axis-action-scope-generation-invalid' ||
     (generation.issues ?? []).length > 0
   ) {
     issues.push(
@@ -426,14 +426,17 @@ export function materializeVerifiedKiboAutoCastDerivationRegistry({
     schedulerInputHash: generation.schedulerInputHash,
     mechanicsPackage: clonePlain(generation.mechanicsPackage),
     catalog: clonePlain(generation.catalog),
+    scopePolicy: clonePlain(generation.scopePolicy),
     controlledTimeline: compiledTimeline.projection,
     eligibilityContract: clonePlain(generation.eligibilityContract),
     entries: compiledEntries.sort(compareRegistryEntries),
+    scopeExclusions: (generation.scopeExclusions ?? []).map(clonePlain),
     triggerExclusions: (generation.triggerExclusions ?? []).map(clonePlain),
     scheduleExclusions: (generation.scheduleExclusions ?? []).map(clonePlain),
     summary: {
       entryCount: compiledEntries.length,
       controlledTransitionCount: compiledTimeline.transitions.length,
+      scopeExclusionCount: generation.scopeExclusions?.length ?? 0,
       triggerExclusionCount: generation.triggerExclusions?.length ?? 0,
       scheduleExclusionCount: generation.scheduleExclusions?.length ?? 0,
     },
@@ -468,9 +471,11 @@ export function projectKiboAutoCastDerivationRegistry(value) {
     schedulerInputHash: value.schedulerInputHash ?? null,
     mechanicsPackage: value.mechanicsPackage ?? null,
     catalog: value.catalog ?? null,
+    scopePolicy: value.scopePolicy ?? null,
     controlledTimeline: value.controlledTimeline ?? null,
     eligibilityContract: value.eligibilityContract ?? null,
     entries: value.entries ?? [],
+    scopeExclusions: value.scopeExclusions ?? [],
     triggerExclusions: value.triggerExclusions ?? [],
     scheduleExclusions: value.scheduleExclusions ?? [],
     summary: value.summary ?? null,

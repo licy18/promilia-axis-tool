@@ -11,10 +11,18 @@ const EXPECTED_DENOMINATORS = Object.freeze({
   'set-skill': 12,
 });
 
-const KIBO_AUTONOMOUS_READINESS_PROOF_PATH =
-  'reports/m12/m12-c-kibo-autonomous-readiness.json';
-const KIBO_AUTONOMOUS_READINESS_CONTRACT = 'AzPrM12CKiboAutonomousReadiness';
-const KIBO_AUTONOMOUS_ACTION_KINDS = new Set(['normal-attack', 'active']);
+const EXPECTED_KIBO_AXIS_ACTION_CENSUS = Object.freeze({
+  admittedKiboCount: 43,
+  catalogKiboCount: 43,
+  deferredAutonomousSurfaceCount: 71,
+  normalAttackSurfaceCount: 43,
+  activeSurfaceCount: 28,
+  includedActionSurfaceCount: 86,
+  signatureSurfaceCount: 43,
+  jointAttackSurfaceCount: 43,
+});
+
+const KIBO_AXIS_ACTION_SCOPE_CONTRACT = 'AzPrM12CKiboAxisActionScope';
 
 export async function loadFormalSearchAdmissionEvidence({
   repositoryRoot,
@@ -30,9 +38,11 @@ export async function loadFormalSearchAdmissionEvidence({
     starbornManifest,
     initialStateModule,
     settlementModule,
+    kiboScopeModule,
     kiboActionCatalogSource,
     kiboSchedulerSource,
-    kiboReadinessProof,
+    kiboSearchGeneratorSource,
+    machineAxisServiceSource,
   ] = await Promise.all([
     readJson(
       root,
@@ -53,6 +63,7 @@ export async function loadFormalSearchAdmissionEvidence({
       root,
       'src/machine-axis/machineAxisEnemySettlementContract.js'
     ),
+    importRepositoryModule(root, 'src/domain/kiboAxisActionScopePolicy.js'),
     readFile(
       path.join(
         root,
@@ -65,7 +76,10 @@ export async function loadFormalSearchAdmissionEvidence({
     readFile(
       path.join(root, 'src', 'machine-axis', 'kiboAutoCastScheduler.js')
     ),
-    readOptionalJson(root, KIBO_AUTONOMOUS_READINESS_PROOF_PATH),
+    readFile(
+      path.join(root, 'src', 'machine-axis', 'machineAxisSearchGenerator.js')
+    ),
+    readFile(path.join(root, 'src', 'machine-axis', 'machineAxisService.js')),
   ]);
   const settlementReadiness =
     settlementModule.getMachineAxisEnemySettlementFormalReadiness();
@@ -118,22 +132,26 @@ export async function loadFormalSearchAdmissionEvidence({
         settlementContract.formalScoring
           .clientParityRequiredForCurrentFormalScore,
     },
-    kiboAutonomousReadiness: createKiboAutonomousReadinessEvidence({
+    kiboAxisActionScope: createKiboAxisActionScopeEvidence({
       qualificationCatalog,
       kiboActionCatalog: JSON.parse(kiboActionCatalogSource.toString('utf8')),
       actionCatalogSource: kiboActionCatalogSource,
       schedulerSource: kiboSchedulerSource,
-      readinessProof: kiboReadinessProof,
+      searchGeneratorSource: kiboSearchGeneratorSource,
+      machineAxisServiceSource,
+      scopePolicyModule: kiboScopeModule,
     }),
   };
 }
 
-export function createKiboAutonomousReadinessEvidence({
+export function createKiboAxisActionScopeEvidence({
   qualificationCatalog,
   kiboActionCatalog,
   actionCatalogSource,
   schedulerSource,
-  readinessProof,
+  searchGeneratorSource,
+  machineAxisServiceSource,
+  scopePolicyModule,
 } = {}) {
   const admittedKiboIds = uniqueSortedNumbers(
     qualificationCatalog?.admission?.kibos ?? []
@@ -144,26 +162,55 @@ export function createKiboAutonomousReadinessEvidence({
   const missingCatalogKiboIds = admittedKiboIds.filter(
     kiboId => !itemByKiboId.has(kiboId)
   );
-  const surfaces = admittedKiboIds
+  const actions = admittedKiboIds
     .flatMap(kiboId =>
-      (itemByKiboId.get(kiboId)?.actions ?? [])
-        .filter(action => KIBO_AUTONOMOUS_ACTION_KINDS.has(String(action.kind)))
-        .map(action => ({
-          key: [kiboId, action.kind, Number(action.skillId)].join(':'),
-          kiboId,
-          skillId: Number(action.skillId),
-          kind: String(action.kind),
-          triggerTag: String(action.petSkillLogicTag ?? ''),
-          openEvidenceKind:
-            String(action.petSkillLogicTag ?? '') === '0'
-              ? 'schedule-cadence'
-              : 'trigger-condition',
-        }))
+      (itemByKiboId.get(kiboId)?.actions ?? []).map(action => ({
+        key: [kiboId, action.kind, Number(action.skillId)].join(':'),
+        kiboId,
+        skillId: Number(action.skillId),
+        kind: String(action.kind),
+        triggerTag: String(action.petSkillLogicTag ?? ''),
+      }))
     )
     .sort((left, right) => left.key.localeCompare(right.key));
-  const surfaceKeys = surfaces.map(surface => surface.key);
-  const kiboIdsWithoutAutonomousSurface = admittedKiboIds.filter(
-    kiboId => !surfaces.some(surface => surface.kiboId === kiboId)
+  const scopePolicy = scopePolicyModule?.getKiboAxisActionScopePolicy?.();
+  const policyValidation =
+    scopePolicyModule?.validateKiboAxisActionScopePolicy?.(scopePolicy) ?? {
+      valid: false,
+      issues: ['kibo-axis-action-scope-policy-module-invalid'],
+    };
+  const deferredSurfaces = actions.filter(action =>
+    scopePolicyModule?.isKiboAutonomousActionKindDeferred?.(action.kind)
+  );
+  const includedSurfaces = actions.filter(action =>
+    scopePolicyModule?.isKiboAxisActionKindIncluded?.(action.kind)
+  );
+  const unexpectedSurfaces = actions.filter(
+    action =>
+      !scopePolicyModule?.isKiboAutonomousActionKindDeferred?.(action.kind) &&
+      !scopePolicyModule?.isKiboAxisActionKindIncluded?.(action.kind)
+  );
+  const invalidDeferredClassifications = deferredSurfaces.filter(action => {
+    const classification = scopePolicyModule?.classifyKiboAxisActionKind?.(
+      action.kind
+    );
+    return (
+      classification?.disposition !== 'product-deferred-autonomous-action' ||
+      classification?.calculationStatus !==
+        'not-generated-not-scheduled-not-scored' ||
+      classification?.policyHash !== scopePolicy?.policyHash
+    );
+  });
+  const kiboIdsWithoutDeferredSurface = admittedKiboIds.filter(
+    kiboId => !deferredSurfaces.some(surface => surface.kiboId === kiboId)
+  );
+  const kiboIdsMissingIncludedKind = admittedKiboIds.filter(kiboId =>
+    (scopePolicy?.includedAxisActionKinds ?? []).some(
+      kind =>
+        !includedSurfaces.some(
+          surface => surface.kiboId === kiboId && surface.kind === kind
+        )
+    )
   );
   const authority = {
     qualificationCatalogHash: qualificationCatalog?.catalogHash ?? null,
@@ -172,59 +219,96 @@ export function createKiboAutonomousReadinessEvidence({
         Buffer.from(JSON.stringify(kiboActionCatalog ?? null))
     ),
     schedulerSourceSha256: sha256(schedulerSource ?? Buffer.alloc(0)),
+    searchGeneratorSourceSha256: sha256(
+      searchGeneratorSource ?? Buffer.alloc(0)
+    ),
+    machineAxisServiceSourceSha256: sha256(
+      machineAxisServiceSource ?? Buffer.alloc(0)
+    ),
+    scopePolicyId: scopePolicy?.policyId ?? null,
+    scopePolicyHash: scopePolicy?.policyHash ?? null,
   };
-  const proofValidation = validateKiboAutonomousReadinessProof({
-    proofEnvelope: readinessProof,
-    authority,
-    admittedKiboIds,
-    surfaceKeys,
-  });
-  const openKiboIds = uniqueSortedNumbers(
-    surfaces.map(surface => surface.kiboId)
-  );
   const census = {
     admittedKiboCount: admittedKiboIds.length,
     catalogKiboCount: admittedKiboIds.length - missingCatalogKiboIds.length,
-    autonomousSurfaceCount: surfaces.length,
-    normalAttackSurfaceCount: surfaces.filter(
+    deferredAutonomousSurfaceCount: deferredSurfaces.length,
+    normalAttackSurfaceCount: deferredSurfaces.filter(
       surface => surface.kind === 'normal-attack'
     ).length,
-    activeSurfaceCount: surfaces.filter(surface => surface.kind === 'active')
-      .length,
-    scheduleCadenceEvidenceOpenCount: surfaces.filter(
-      surface => surface.openEvidenceKind === 'schedule-cadence'
+    activeSurfaceCount: deferredSurfaces.filter(
+      surface => surface.kind === 'active'
     ).length,
-    triggerConditionEvidenceOpenCount: surfaces.filter(
-      surface => surface.openEvidenceKind === 'trigger-condition'
+    includedActionSurfaceCount: includedSurfaces.length,
+    signatureSurfaceCount: includedSurfaces.filter(
+      surface => surface.kind === 'signature'
     ).length,
-    kiboWithOpenAutonomousSurfaceCount: openKiboIds.length,
+    jointAttackSurfaceCount: includedSurfaces.filter(
+      surface => surface.kind === 'break'
+    ).length,
     missingCatalogKiboIds,
-    kiboIdsWithoutAutonomousSurface,
+    kiboIdsWithoutDeferredSurface,
+    kiboIdsMissingIncludedKind,
+    unexpectedSurfaceKeys: unexpectedSurfaces.map(surface => surface.key),
+    invalidDeferredSurfaceKeys: invalidDeferredClassifications.map(
+      surface => surface.key
+    ),
   };
+  const denominatorMismatches = Object.entries(EXPECTED_KIBO_AXIS_ACTION_CENSUS)
+    .filter(([field, expected]) => census[field] !== expected)
+    .map(([field, expected]) => ({
+      field,
+      expected,
+      actual: census[field] ?? null,
+    }));
   const ready =
-    proofValidation.valid &&
+    policyValidation.valid &&
+    admittedKiboIds.length > 0 &&
+    denominatorMismatches.length === 0 &&
     missingCatalogKiboIds.length === 0 &&
-    kiboIdsWithoutAutonomousSurface.length === 0;
+    kiboIdsWithoutDeferredSurface.length === 0 &&
+    kiboIdsMissingIncludedKind.length === 0 &&
+    unexpectedSurfaces.length === 0 &&
+    invalidDeferredClassifications.length === 0;
   return {
     schemaVersion: 1,
-    contractName: KIBO_AUTONOMOUS_READINESS_CONTRACT,
+    contractName: KIBO_AXIS_ACTION_SCOPE_CONTRACT,
     status: ready
-      ? 'kibo-autonomous-search-runtime-ready'
-      : 'kibo-autonomous-search-runtime-blocked',
+      ? 'kibo-axis-action-scope-ready'
+      : 'kibo-axis-action-scope-invalid',
     ready,
-    proofPath: KIBO_AUTONOMOUS_READINESS_PROOF_PATH,
     authority,
+    policy: scopePolicy ?? null,
+    policyValidation,
+    expectedCensus: EXPECTED_KIBO_AXIS_ACTION_CENSUS,
     census,
-    proof: proofValidation,
+    denominatorMismatches,
     issues: ready
       ? []
       : [
-          ...proofValidation.issues,
+          ...policyValidation.issues,
           ...(missingCatalogKiboIds.length
-            ? ['kibo-autonomous-catalog-coverage-incomplete']
+            ? ['kibo-axis-action-scope-catalog-coverage-incomplete']
             : []),
-          ...(kiboIdsWithoutAutonomousSurface.length
-            ? ['kibo-autonomous-surface-coverage-incomplete']
+          ...(kiboIdsWithoutDeferredSurface.length
+            ? ['kibo-axis-action-scope-deferred-coverage-incomplete']
+            : []),
+          ...(kiboIdsMissingIncludedKind.length
+            ? ['kibo-axis-action-scope-included-coverage-incomplete']
+            : []),
+          ...(unexpectedSurfaces.length
+            ? ['kibo-axis-action-scope-unexpected-kind']
+            : []),
+          ...(invalidDeferredClassifications.length
+            ? ['kibo-axis-action-scope-classification-invalid']
+            : []),
+          ...(denominatorMismatches.length
+            ? [
+                'kibo-axis-action-scope-denominator-mismatch',
+                ...denominatorMismatches.map(
+                  mismatch =>
+                    `kibo-axis-action-scope-denominator-mismatch:${mismatch.field}`
+                ),
+              ]
             : []),
         ],
   };
@@ -374,19 +458,18 @@ export function evaluateFormalSearchAdmission(evidence) {
     { preScorePruning: coverage.preScorePruning ?? null }
   );
 
-  const kiboAutonomous = evidence.kiboAutonomousReadiness;
+  const kiboScope = evidence.kiboAxisActionScope;
   add(
-    'kibo-autonomous-runtime-ready',
-    kiboAutonomous?.ready === true &&
-      kiboAutonomous?.status === 'kibo-autonomous-search-runtime-ready' &&
-      kiboAutonomous?.proof?.valid === true,
+    'kibo-axis-action-scope-applied',
+    kiboScope?.ready === true &&
+      kiboScope?.status === 'kibo-axis-action-scope-ready' &&
+      kiboScope?.policyValidation?.valid === true,
     {
-      status: kiboAutonomous?.status ?? null,
-      proofPath: kiboAutonomous?.proofPath ?? null,
-      proofStatus: kiboAutonomous?.proof?.status ?? null,
-      issues: kiboAutonomous?.issues ?? [],
-      census: kiboAutonomous?.census ?? null,
-      authority: kiboAutonomous?.authority ?? null,
+      status: kiboScope?.status ?? null,
+      issues: kiboScope?.issues ?? [],
+      policy: kiboScope?.policy ?? null,
+      census: kiboScope?.census ?? null,
+      authority: kiboScope?.authority ?? null,
     }
   );
 
@@ -459,107 +542,14 @@ async function readJson(root, relativePath) {
   return JSON.parse(await readFile(file, 'utf8'));
 }
 
-async function readOptionalJson(root, relativePath) {
-  const file = path.join(root, ...relativePath.split('/'));
-  try {
-    return {
-      exists: true,
-      value: JSON.parse(await readFile(file, 'utf8')),
-      error: null,
-    };
-  } catch (error) {
-    if (error?.code === 'ENOENT') {
-      return { exists: false, value: null, error: null };
-    }
-    return {
-      exists: true,
-      value: null,
-      error: error?.message ?? String(error),
-    };
-  }
-}
-
 async function importRepositoryModule(root, relativePath) {
   const file = path.join(root, ...relativePath.split('/'));
   return import(pathToFileURL(file).href);
 }
 
-function validateKiboAutonomousReadinessProof({
-  proofEnvelope,
-  authority,
-  admittedKiboIds,
-  surfaceKeys,
-}) {
-  if (!proofEnvelope?.exists) {
-    return {
-      valid: false,
-      status: 'missing',
-      issues: ['kibo-autonomous-readiness-proof-missing'],
-      summary: null,
-    };
-  }
-  if (proofEnvelope.error) {
-    return {
-      valid: false,
-      status: 'corrupt',
-      issues: ['kibo-autonomous-readiness-proof-corrupt'],
-      summary: null,
-      error: proofEnvelope.error,
-    };
-  }
-  const proof = proofEnvelope.value;
-  const issues = [];
-  if (
-    proof?.schemaVersion !== 1 ||
-    proof?.contractName !== KIBO_AUTONOMOUS_READINESS_CONTRACT
-  ) {
-    issues.push('kibo-autonomous-readiness-proof-contract-invalid');
-  }
-  if (proof?.status !== 'ready' || proof?.ready !== true) {
-    issues.push('kibo-autonomous-readiness-proof-not-ready');
-  }
-  for (const [key, expected] of Object.entries(authority)) {
-    if (proof?.authority?.[key] !== expected) {
-      issues.push(`kibo-autonomous-readiness-authority-mismatch:${key}`);
-    }
-  }
-  if (!sameArray(proof?.coverage?.admittedKiboIds, admittedKiboIds)) {
-    issues.push('kibo-autonomous-readiness-kibo-coverage-mismatch');
-  }
-  if (!sameArray(proof?.coverage?.autonomousSurfaceKeys, surfaceKeys)) {
-    issues.push('kibo-autonomous-readiness-surface-coverage-mismatch');
-  }
-  if (
-    proof?.summary?.admittedKiboCount !== admittedKiboIds.length ||
-    proof?.summary?.autonomousSurfaceCount !== surfaceKeys.length
-  ) {
-    issues.push('kibo-autonomous-readiness-denominator-mismatch');
-  }
-  if (
-    proof?.summary?.unresolvedScheduleCount !== 0 ||
-    proof?.summary?.unresolvedTriggerCount !== 0
-  ) {
-    issues.push('kibo-autonomous-readiness-unresolved-surfaces');
-  }
-  return {
-    valid: issues.length === 0,
-    status: issues.length === 0 ? 'valid' : 'invalid',
-    issues,
-    summary: proof?.summary ?? null,
-  };
-}
-
 function uniqueSortedNumbers(values) {
   return [...new Set(values.map(Number).filter(Number.isInteger))].sort(
     (left, right) => left - right
-  );
-}
-
-function sameArray(actual, expected) {
-  return (
-    Array.isArray(actual) &&
-    actual.length === expected.length &&
-    actual.every((value, index) => value === expected[index])
   );
 }
 

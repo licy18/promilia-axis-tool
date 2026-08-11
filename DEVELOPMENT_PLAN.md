@@ -28,7 +28,7 @@
 
 `work/m12-c/gates/gate-ledger.json` 是可丢弃的派生证据缓存，不是 authority source。只有真实命令 `exitCode=0`、输出完整且指纹完全相同的 `mode=executed,status=pass` 才可在开发/集成层复用；FAIL、timeout、OOM、cancelled、interrupted、解析失败和语义版本漂移均 fail closed。ledger 采用临时运行记录、原子替换、PID/hostname/timestamp 锁及 stale-lock 恢复；本 V2 首次上线前必须由新 HEAD 的真实 `release:verify` PASS 建立 bootstrap authority。
 
-`formal-search-admission` 与 release 结果分开判定。它额外核验 qualification、E22 binding、initial-state authority、M12-C determinism、formal runtime baseline、pre-score unresolved/skipped 边界、Kibo autonomous schedule/trigger 闭合证明和产品验收；`clientParityReady=false` 继续单列，不能与 optimization qualification 混同，也不能由测试或 release 自动提升。Kibo 闭合证明缺失、损坏、authority hash 漂移、覆盖不足或仍含 unresolved surface 时，release 可以独立 PASS，但正式搜索保持 `BLOCKED`。任何 required product acceptance pending 同样保持 `BLOCKED`，脚本不代签产品记录。
+`formal-search-admission` 与 release 结果分开判定。它额外核验 qualification、E22 binding、initial-state authority、M12-C determinism、formal runtime baseline、pre-score unresolved/skipped 边界、版本化 Kibo action scope 和产品验收；`clientParityReady=false` 继续单列，不能与 optimization qualification 混同，也不能由测试或 release 自动提升。当前 `m12c-kibo-axis-action-scope-v1` 将奇波普攻/主动技整体延后并移出排轴、优化和评分，只保留特性技、合击与已验证被动；scope policy、authority hash、43/71 分母或保留动作面任一漂移时，release 可以独立 PASS，但正式搜索保持 `BLOCKED`。任何 required product acceptance pending 同样保持 `BLOCKED`，脚本不代签产品记录。
 
 对标不等于照搬：
 

@@ -172,11 +172,14 @@
     </div>
 
     <p
-      v-if="kiboAutoCastCount"
+      v-if="kiboDeferredAutonomousCount"
       class="kibo-auto-cast-note"
       data-testid="workbench-kibo-auto-cast-note"
     >
-      奇波普攻与主动技为自动释放（{{ kiboAutoCastCount }} 个），拖入特性技/合击技后由排轴器自动补齐时间轴。
+      奇波普攻与主动技当前不进入排轴、优化或伤害结算（{{
+        kiboDeferredAutonomousCount
+      }}
+      个）；仅保留特性技、合击技与已验证被动。
     </p>
 
     <div v-if="actionEntries.length" class="skill-entry-list">
@@ -536,6 +539,10 @@ import { computed, reactive, ref } from 'vue';
 import { Collection, EditPen } from '@element-plus/icons-vue';
 import WorkbenchTimelineFragmentLibrary from './WorkbenchTimelineFragmentLibrary.vue';
 import { ACTION_TYPES } from '../../domain/projectSchema';
+import {
+  isKiboAutonomousActionKindDeferred,
+  isKiboAxisActionKindIncluded,
+} from '../../domain/kiboAxisActionScopePolicy';
 import { resolveWorkbenchActionScheduling } from '../../domain/workbenchActionScheduling';
 import { getSkillActionCatalog } from '../../domain/workbenchProjectFactory';
 import { createWorkbenchTimelineEntry } from '../../domain/workbenchTimelineEntry';
@@ -659,10 +666,7 @@ const defaultTimelineSkillEntry = computed(
 );
 const kiboTimelineEntries = computed(() =>
   (activeKibo.value?.actions ?? [])
-    .filter(
-      action =>
-        action.kind !== 'normal-attack' && action.kind !== 'active'
-    )
+    .filter(action => isKiboAxisActionKindIncluded(action.kind))
     .map(action =>
       annotateMechanicsCoverage(
         createWorkbenchTimelineEntry({
@@ -684,11 +688,10 @@ const kiboTimelineEntries = computed(() =>
       )
     )
 );
-const kiboAutoCastCount = computed(
+const kiboDeferredAutonomousCount = computed(
   () =>
-    (activeKibo.value?.actions ?? []).filter(
-      action =>
-        action.kind === 'normal-attack' || action.kind === 'active'
+    (activeKibo.value?.actions ?? []).filter(action =>
+      isKiboAutonomousActionKindDeferred(action.kind)
     ).length
 );
 const defaultKiboTimelineEntry = computed(

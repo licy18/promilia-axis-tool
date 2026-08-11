@@ -12,6 +12,11 @@ import {
   getWorkbenchLoadoutOptions,
 } from '../domain/workbenchProjectFactory';
 import { getSkillActionCatalog } from '../domain/skillActionCatalog';
+import {
+  classifyKiboAxisActionKind,
+  getKiboAxisActionScopePolicy,
+  isKiboAutonomousActionKindDeferred,
+} from '../domain/kiboAxisActionScopePolicy';
 import { frameToMs, msToFrame } from '../domain/timebase';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import generatedCharacters from '../data/generated/characters.json';
@@ -147,6 +152,7 @@ export function createMachineAxisService({
         ),
       optimizationScenarioPolicy: getOptimizationScenarioPolicy(),
       optimizationCandidateRoster: getOptimizationCandidateRosterPolicy(),
+      kiboAxisActionScope: getKiboAxisActionScopePolicy(),
       summary: {
         characterCount: coreCatalog.summary.characterCount,
         publicActionCount: publicActions.length,
@@ -1746,6 +1752,24 @@ function createKiboActionTemplate({
           kiboId,
           publicActionId: action.intent.publicActionId,
           actionKind: action.intent.actionKind ?? null,
+        }
+      )
+    );
+    return null;
+  }
+  if (isKiboAutonomousActionKindDeferred(publicAction.kind)) {
+    const scope = classifyKiboAxisActionKind(publicAction.kind);
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-kibo-action-product-deferred',
+        `actions.${index}.intent.actionKind`,
+        `Kibo ${publicAction.kind} is outside the current axis and optimization scope`,
+        {
+          actionId: action.id,
+          kiboId,
+          publicActionId: publicAction.skillId,
+          actionKind: publicAction.kind,
+          ...scope,
         }
       )
     );

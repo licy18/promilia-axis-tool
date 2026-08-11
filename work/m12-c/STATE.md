@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3`、中央串行集成和全量 release 门禁已完成；正式搜索仍未启动。
+状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩的开发/集成门禁已通过，产品签收重绑定与 clean HEAD release 尚未完成；正式搜索仍未启动。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -12,7 +12,7 @@
 - `M12-C3` 已实现 objective-scoped initial-state preset、canonical hash 和 formal authority 校验；循环轴与击杀轴白名单均 fail closed。
 - STARBORN 最终合同为：星决技对 action-start 已存在的每一种印记分别 `+1`，星携同样 `+1`，逐种 cap 5；无印记不创建，`199001/199002` 不双计。`+2` 仅保留为必须失败的负向测试。
 - M12-B3 optimization qualification 为 263/263：角色 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装 12/12；`blockingUniqueGapCount=0`，`m12cLocked=false`。E22 binding matrix 为 22/22。
-- 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `6e4843984a9f435d`；manifests `d08e4a0bc73b464f`；ledger `7b7cb20e220da974`；qualification binding matrix `bd4084ac0882820f`；qualification catalog `b26dede46b58f714`；E22 report `88b98cf6195e27c4`。
+- 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `6e4843984a9f435d`；manifests `d08e4a0bc73b464f`；ledger `7b7cb20e220da974`；qualification binding matrix `bd4084ac0882820f`；qualification catalog `b26dede46b58f714`；E22 report `07c2fc6c7355d85d`。
 - 全量门禁：`test:full` 228/228 files、1877/1877 tests；确定性聚焦集 16 files、166/166 tests；Workbench production preview 64/64；最终 `test:trial-release` exit 0。production build、Workbench data、action status、applied-source、Kibo headless、production imports、bundle、binding matrix 和确定性审计均通过。
 - `clientParityReady=false` 仍由已验证 mechanics/profile evidence 明确保留；它与 optimization qualification 全绿是两条独立状态，禁止混同。
 - 2026-08-11 用户明确签收单一 STARBORN optimization-object。正式 recipe/manifest 已更新为 `productVisualAcceptance=accepted`、`formalAdmission=true`、`optimizationReady=true`，acceptance subject hash=`c645f8836bf6fd0a`、bundle hash=`3338e8e57a632564`；签收绑定到基线 HEAD `76605d759376a93a2981fc27f2fa18e3464b17f7`，后续证据漂移不得自动续签。既有 `199001/199002` 角色级 accepted 记录保持原样，本次没有把一个对象拆成两次签收。
@@ -26,7 +26,7 @@
 - `scripts/gates/gate-definitions.mjs` 是单一 dependency map；fingerprint 包含 gate schema/version、dependency-map hash、runner hash、相关环境合同、canonical path 与当前文件内容 SHA-256。README/STATE/普通 docs 不会使 full/bundle/preview/qualification/binding 指纹失效；production/test/script/config/fixture/generated authority 改动按域失效。
 - `work/m12-c/gates/gate-ledger.json` 只作为 derived cache。记录区分 `executed` 与 `reused`，保留真实 command、exit code、duration 与可解析 summary；FAIL、timeout、OOM、cancelled、interrupted、输出不完整、解析失败和 fingerprint/schema/version mismatch 永不复用。pending 记录、原子替换和带 stale 检测的进程锁用于崩溃/并发恢复。
 - Bootstrap 规则：旧 HEAD 的 release PASS 不转移给本次 scripts/tests/config 变更；只有本实现所在最终提交的真实 `release:verify` PASS 才允许后续 smart reuse。每次动态结果以 ignored 的 `work/m12-c/gates/latest-*.json` 和 ledger 为准，不在本 tracked 状态文件手写可漂移 PASS。
-- `formal-search-admission` 不以 release PASS 自动推导 READY。STARBORN optimization-object 的产品阻断已由用户显式签收解除；当前 43 只 admitted Kibo 的 71 个 autonomous surface 仍缺 schedule/trigger 闭合证明，`reports/m12/m12-c-kibo-autonomous-readiness.json` 缺失，因此即使 Gate V2 最终 clean HEAD 的真实 `release:verify` PASS，Formal Search 仍必须 `BLOCKED`。该 proof 未来还必须绑定 qualification/action-catalog/scheduler hash、43 只 Kibo 和全部 surface，且 unresolved schedule/trigger 均为 0。`clientParityReady=false` 继续单列，不回锁已通过的 headless formal-score 基线，也不被自动提升。
+- `formal-search-admission` 不以 release PASS 自动推导 READY。STARBORN optimization-object 的产品阻断已由用户显式签收解除；2026-08-11 的新产品裁决把 43 只 admitted Kibo 的 71 个 autonomous surface（43 普攻、28 主动技）整体延后并移出排轴、优化和评分。准入现在校验版本化 `m12c-kibo-axis-action-scope-v1`、qualification/action-catalog/scheduler/search-generator authority 与 43/71 覆盖，不再要求一个虚构的 cadence readiness proof。`clientParityReady=false` 继续单列，不回锁已通过的 headless formal-score 基线，也不被自动提升。
 - 本改动只优化验证编排，没有启动 M12-C4、没有生成 Top-N、没有代签产品验收。提交前最终 Integration checkpoint 已在当前 working-tree bytes 上通过 `239/239` files、`1943/1943` tests（`NODE_OPTIONS=--max-old-space-size=8192`）；该记录不是 release authority，最终 clean HEAD 的 `release:verify` 结果仍须在交付报告中与 Development/Integration 分层列出。
 - 首次 clean HEAD `release:verify` 在 5 个附加 gate 全部通过后，于原始 trial 的全量段因两个保持默认 5 秒预算的重型测试超时而失败（`237/239` files、`1941/1943` tests）；失败台账未写 PASS，`&&` 链未进入后续 audit/build/preview。两个用例的断言与覆盖保持原样，仅把各自显式预算调整为 30 秒；修复后只跑对应 targeted regression，再直接重跑完整 `release:verify`。
 - 第二次 clean HEAD release 的 5 个附加 gate 仍全绿，trial 全量改善为 `238/239` files、`1942/1943` tests，但同一 production-import CLI 文件中另一个多次启动全图审计的用例在默认 5 秒预算下耗时 5.58 秒。策略改为给该文件 3 个真实 CLI 集成用例统一设置 30 秒 per-test budget，不再逐个追赶；所有 canonical byte、只读、tamper、missing-output 和 mtime 断言保持不变。
@@ -37,9 +37,20 @@
 - 每条结果保留完整 `buildHash`、`poolHash`、队伍/来源配置、固定培养、奇波/灵子/五件装备、初始前台和正式 axis。初始前台仍不进入 `buildHash`；外层 variant budget 不足 3 时不会执行半个 build。初始 SP/专属资源若不属于当前 build 会直接拒绝，不会静默丢弃。
 - CLI 新增 `m12c-outer-search`，AI-guided runner 支持 `--outer`、外层预算和 initial-state 输入。外层 guidance 可独立控制 source/build/variant 范围，不会把 outer-only beam/action 策略泄漏到内层。
 - 报告严格区分 bounded-domain 与完整池：只有 35/35 source config、无 build constraints、无动态外层剪枝、全部 build 枚举完成、零失败且 Top-N 全部 final-score eligible 时，`formalRankingReady` 才能为 true；受预算/约束的样本不得冒充全池正式榜单。
-- 真实一 build/三前台冒烟已进入真实 inner engine，但三条 variant 均在评分前以 `kibo-auto-cast-schedule-unresolved` fail closed，未产生候选分数。现场枚举 43 只合格奇波共 71 个自动出手面：43 个普攻、28 个主动技；28 个主动技中 19 个缺精确 schedule/cadence，9 个缺触发条件。43/43 奇波都至少有一个未闭合普攻自动面，因此 `includeKibo=false` 不能绕过已装备奇波的合法性。
+- 真实一 build/三前台冒烟已在新范围下进入真实 inner engine：不再产生 `kibo-auto-cast-schedule-unresolved`；两条前台 variant 产生候选，一条仅因循环动作/状态未闭合而为空。43 只合格奇波的 71 个自主动作仍完整保留在证据普查中，但不再生成、排程或评分。
 - 本阶段最终验证：outer/build/guidance/CLI 聚焦集 4 files、76/76；search/service/objective/C3 兼容集 6 files、60/60；`machine-axis:build`、production `build`（1900 modules）、`audit:production-imports:check`（unexpected test-only 0 / unreferenced 0）和 `audit:bundle:check`（3 项预算均 true）通过。Gate V2 仍有并行未提交 tracked 改动，因此本阶段没有把旧 `test:full`/`test:trial-release` 结果冒充当前 dirty tree 的新 release 证明，也没有运行要求 clean tracked HEAD 的 `release:verify`。
-- 正式 M12-C 搜索仍未启动。下一搜索前阻断是闭合/裁决上述 Kibo autonomous schedule/trigger，随后在最终 clean tracked HEAD 上完成 Gate V2 `release:verify`；在此之前不得生成或宣称三个 objective 的正式 Top-N。
+- 正式 M12-C 搜索仍未启动。下一搜索前需在最终 clean tracked HEAD 上完成本次范围变更的 Gate V2 `release:verify`；在此之前不得生成或宣称三个 objective 的正式 Top-N。
+
+## 0.3 2026-08-11 奇波自主动作产品延后
+
+- 当前只计算奇波特性技（`signature`）、合击（`break`/joint attack）与已验证被动；奇波 `normal-attack`、`active` 不进入 Workbench 动作库、Machine Axis、搜索候选、自动调度或伤害评分。
+- `src/domain/kiboAxisActionScopePolicy.js` 是单一版本化范围合同。Machine Axis catalog 仍发布全部来源动作和顶层 scope policy，可据动作 kind 确定性分类；显式输入自主动作时以 `machine-axis-kibo-action-product-deferred` fail closed，不能借手写项目或旧 fixture 绕过。
+- `kiboAutoCastScheduler` 只生成可审计的 `scopeExclusions`，不再生成动作、trigger/schedule exclusion 或 runtime registry。若未来恢复奇波 AI，必须发布新 policy 版本并闭合行为树、优先级、初始延迟、重施 cadence 与触发 authority，不能只改 guidance。
+- `formal-search-admission` 直接核验 43/43 奇波、71/71 deferred autonomous surfaces、43/43 signature 和 43/43 joint-attack surface，以及 policy/catalog/scheduler/search-generator hash；这证明“范围已应用”，不声称自主 AI 已实现。
+- 本节不改变 Kibo source catalog、verified mechanics package、静态培养属性、SP、大招、合击或被动运行时，也不启动正式搜索。
+- 当前工作树全量 Vitest 为 240/240 files、1936/1936 tests；聚焦范围回归 11/11 files、125/125 tests。production build（1901 modules）、Machine Axis CLI build、bundle 三项预算、production imports、Workbench data、action status、applied-source、Kibo headless、optimization scenario/qualification 与 E22 binding 22/22 均通过。
+- 去除 autonomous derivation registry 会改变部分既有验收轴的 canonical input/data/trace identity，即使伤害评价不变；例如 107002 的 evaluation hash 仍为 `5238bf8119e66446`，但 input/data/trace 已变为 `30780d8354ecceaf` / `9167d13d5bd46dc0` / `9d108c00b14b69ae`。代码回归常量已同步，产品签收记录没有自动续签或改写。
+- `npm run audit:character-acceptance` 当前在首个报告的 103002 处以 `character-acceptance-product-record-binding-invalid` fail closed。因此本范围变更尚无 clean HEAD release authority，正式搜索继续阻断；需由产品方复验受影响验收轴后重新绑定，再生成派生产物并重跑 `release:verify`。
 
 ## 1. 目标与结果身份
 
@@ -169,7 +180,7 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 - 只有当前前台受控角色响应玩家输入；后台角色不能开始新的输入动作；
 - 普攻后段必须由同 actor、同 chain 的已接受前段在右开输入窗 `[start,end)` 内派生；exact end、跳段、倒序、重复、跨 actor、切人后续接、blocked predecessor 和 context conflict 均拒绝；
 - 切人后旧角色所属奇波不再开始新动作；只有已经物化的投射物或场地 tail 可按来源继续，未物化尾包无证据时 fail closed；
-- 奇波自动出手机会与精确 AI cadence 分开；未知 cadence 以 `kibo-auto-cast-schedule-unresolved` 阻断，不能猜 earliest-ready 或 active-first；
+- 奇波普攻与主动技当前按版本化产品范围整体延后，不生成、不排程、不评分；特性技、合击和已验证被动继续经过原有 legality/runtime，恢复自主 AI 时必须升级 policy 并重新闭合 cadence authority；
 - 合击必须原子生成完整双方动作，禁止半边合击、generic break、同帧或名字匹配冒充 trigger；
 - 合击的当前产品合同是：有韧性敌人视为可合击目标；合击伤害本身不翻倍；同帧先结算伤害，再以附带削韧清空剩余架势并进入 Break；米砂相关触发由其奇波 40F 命中造成的破韧驱动；
 - STARBORN 星决技必须对队伍当前已拥有的每一种印记分别增加 1 层，并逐种执行各自上限/刷新规则；没有的印记类型不得凭空创建，也不得跨别名双计。
@@ -195,6 +206,6 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 - STARBORN 每种既有印记 `+1` 与合击结算合同已合入主线并通过无头、Workbench 和全量回归；
 - objective-scoped initial-state validator 已落实，通用 scenario 字段不能绕过循环/击杀白名单；
 - 三个 objective 的雷冠牦 profile、初始 preset、暴击政策和 runtime settlement 合同必须进入未来结果 hash；
-- 43 只 admitted Kibo 的全部 autonomous surface 必须由与当前 qualification/action catalog/scheduler hash 绑定的 proof 闭合，任何 schedule/cadence、trigger、分母或覆盖缺口都在评分前 fail closed，并保持 Formal Search `BLOCKED`；
+- 43 只 admitted Kibo 的全部 autonomous surface 必须由版本化范围合同明确覆盖为 product-deferred；qualification/action catalog/scheduler/search-generator hash、43/71 分母、signature/break 保留面或分类任一漂移都会使 Formal Search `BLOCKED`；
 - `clientParityReady=false` 不回锁已经通过的 optimization qualification，但也不能被 formal scoring 或测试通过自动提升；
 - 正式搜索尚未启动。进入 `M12-C4` 后仍须分别产出三个 objective 的 Top-N、proof、hash、贡献和拒绝原因，再进入人工 Workbench 复验。

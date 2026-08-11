@@ -637,17 +637,7 @@ describe('verified static combat properties', () => {
     expect(
       bare.scenario.actions.filter(action => action.type === 'kiboEvent')
     ).toEqual([]);
-    expect(
-      equipped.scenario.kiboAutoCastDerivationRegistry.scheduleExclusions
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          ownerCharacterId: 101007,
-          kiboId: 500001,
-          code: 'kibo-auto-cast-schedule-unresolved',
-        }),
-      ])
-    );
+    expect(equipped.scenario.kiboAutoCastDerivationRegistry).toBeNull();
     expect(equippedActor.verifiedStaticProperties.sources).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ kind: 'soulessence-level' }),

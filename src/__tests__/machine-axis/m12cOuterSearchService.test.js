@@ -216,7 +216,7 @@ describe('M12-C outer search integration', () => {
     );
   }, 60_000);
 
-  it('routes the real inner engine and excludes unresolved Kibo cadence before scoring', async () => {
+  it('routes the real inner engine without autonomous Kibo actions or cadence blockers', async () => {
     const outerBuildService = createM12cOuterBuildService();
     const { buildConstraints, sourceConfig } =
       createSingleBuild(outerBuildService);
@@ -249,21 +249,29 @@ describe('M12-C outer search integration', () => {
       buildConstraints,
     });
 
-    expect(report.valid).toBe(false);
-    expect(report.results).toEqual([]);
-    expect(report.failures).toHaveLength(3);
-    expect(
-      report.failures.every(
-        failure =>
-          failure.stage === 'inner-search' &&
-          failure.issues.includes('kibo-auto-cast-schedule-unresolved')
-      )
-    ).toBe(true);
+    expect(report.valid).toBe(true);
+    expect(report.results).toHaveLength(1);
+    expect(report.results[0]).toMatchObject({
+      score: expect.any(Number),
+      m12c: {
+        buildHash: expect.any(String),
+        sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
+      },
+    });
+    expect(report.failures).toEqual([
+      expect.objectContaining({
+        stage: 'inner-search-empty',
+        issues: expect.arrayContaining(['machine-axis-cycle-state-not-closed']),
+      }),
+    ]);
+    expect(report.failures[0].issues).not.toContain(
+      'kibo-auto-cast-schedule-unresolved'
+    );
     expect(report.summary).toMatchObject({
       buildCount: 1,
       variantSearchCount: 3,
-      candidateResultCount: 0,
-      failureCount: 3,
+      candidateResultCount: 2,
+      failureCount: 1,
       enumerationComplete: true,
       formalRankingReady: false,
     });

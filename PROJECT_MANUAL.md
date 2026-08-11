@@ -1889,6 +1889,16 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 - UI：动作库 kibo 区只保留特性技/合击技可拖入，新增「奇波普攻与主动技为自动释放」提示与普攻标签；Workbench 摘要显示「机器输入 42 / 实际执行 44」。
 - 验证：全套 Vitest 1431 通过（仅已知 process-heavy `characterCombatProfilePipeline` 并行超时，单独全过）、11 项确定性审计 clean、production build 与 `git diff --check` 通过。
 
+### M12-C 奇波自主动作产品范围修订（2026-08-11，覆盖 E19 sub2 当前行为）
+
+用户决定延后奇波自主 AI 实现。当前排轴器、Workbench 与优化器不再生成、拖入或评分奇波普攻（`normal-attack`）和主动技（`active`）；只计算奇波特性技/大招（`signature`）、合击（`break`/joint attack）与已验证被动。E19 sub2 上述自动补齐记录保留为历史实现说明，但不再描述当前产品行为。
+
+- `src/domain/kiboAxisActionScopePolicy.js` 冻结 `m12c-kibo-axis-action-scope-v1`：自主动作状态为 `not-generated-not-scheduled-not-scored`，恢复时必须升级版本并闭合 NodeCanvas、优先级、初始延迟、重施 cadence 与触发 authority。
+- 完整 Kibo action catalog 和 mechanics evidence 不删除；Machine Axis catalog 发布顶层 scope policy，并按 action kind 确定性分类。旧项目或手工合同显式输入自主动作时返回 `machine-axis-kibo-action-product-deferred`，不会把来源存在误报为可执行。
+- 搜索器与 Workbench 共享同一 classifier，只暴露 `signature` 和 `break`。编译阶段不物化 auto-cast action 或 derivation registry，因此三目标不会再被 cadence-open 诊断阻断。
+- 正式准入对 43 只 admitted Kibo 做 71 个 deferred autonomous surface（43 普攻、28 主动技）及 43 signature/43 break 的全量普查，并绑定 qualification、catalog、scheduler、search generator 和 scope policy hash。该检查只证明产品范围一致，不声称自主 AI 已实现。
+- 该修订会改变部分既有验收轴的 canonical 编译身份，即使伤害评价未变；自动化只更新代码回归常量，不自动续签产品记录。`audit:character-acceptance` 必须保持 fail closed，直到产品方复验并重新绑定受影响验收轴。
+
 下一阶段任务（重排后的 M12-C 前路线图，E20 起按依赖顺序推进）：
 
 1. **E20 角色管线打通（33 个角色缺口）**
@@ -1987,7 +1997,7 @@ sub2e 三项推进：① **census 计数规则**：`policyCovered` 不再要求 
 在 E20 全量机制矩阵 v1（`work/m12-b3/e20-2-109001/STATE.md`）基础上，先闭合两个易项：
 
 - **被动1（10900161 哈库茵之耀）**：新增 `persistent-property-runtime` 被动编译模式，被动控制 10900161@0F 直接注入的元素 109001316 编译为 attr21 +5400（defaultPropertyTags[307] = Overdrive，超限伤害+54%）；hero-module 等级文案 + ast_109001296 补暴击率+3%（attr7 +300）。variant runtime 战前（timeMs=0）生成持久效果命令（`verified-passive|battle-start|…`）。
-- **Overdrive 命中 tag 307**：`verifiedTuningMarkGeneration` 为 overlimit-* 事件写入 `propertyTags=[307]`；`verifiedDamageEventGeneration` 取“事件 tags ∪ 技能 tag”并集（保留 302/303 等技能 tag，避免破坏 10123/10150 灵魂加成）；超限结算按 tags 应用被动乘区。
+- **Overdrive 命中 tag 307**：`verifiedTuningMarkGeneration` 为 overlimit-\* 事件写入 `propertyTags=[307]`；`verifiedDamageEventGeneration` 取“事件 tags ∪ 技能 tag”并集（保留 302/303 等技能 tag，避免破坏 10123/10150 灵魂加成）；超限结算按 tags 应用被动乘区。
 - **109001 暴击阈值 500→800 适配**：被动暴击使临界矩阵 boundary 变化，fixture sampled roll 改 799/800，`inspectCriticalMatrix` 按 owner 边界校验。
 - **哈希/期望全量重基线**：包 hash `c87fb71b…`、FROZEN `e7b18d90…`；9 个 fixture、m11 integrated baseline、cycle/dynamic-loadout acceptance report、migration/pipeline/ruby/han/tuning/coverage/package/workbench/canonicalTraceView 单测期望同步。
 - 验证：新增 2 组单测（战前被动命令、超限 tag 307 并集）；全套 Vitest 1443/1445（仅已知 process-heavy 并行超时，单独通过）；11 项审计 clean；109001 保持 `runtime-integrated`（4/4），资格缺口 22，`m12cLocked` true。
@@ -2215,7 +2225,7 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 
 ### M12-B3-E22 绑定矩阵与正式准入（2026-08-11，已关闭）
 
-- 角色-装配-奇波绑定矩阵全绿：`reports/m12/m12-b3-binding-matrix.json`（+ `.md`），生成器 `scripts/generate-m12-b3-binding-matrix.mjs`，门禁测试 `src/__tests__/optimization-qualification/m12BindingMatrix.test.js`，审计 `npm run audit:binding-matrix`。bindingMatrixHash=`88b98cf6195e27c4`，22/22 检查全绿。
+- 角色-装配-奇波绑定矩阵全绿：`reports/m12/m12-b3-binding-matrix.json`（+ `.md`），生成器 `scripts/generate-m12-b3-binding-matrix.mjs`，门禁测试 `src/__tests__/optimization-qualification/m12BindingMatrix.test.js`，审计 `npm run audit:binding-matrix`。bindingMatrixHash=`07c2fc6c7355d85d`，22/22 检查全绿。
 - 静态门禁：分母 9/43/62/137/12、blocking unique gap=0、`m12cLocked=false`、角色准入 9 个对象（含统一 STARBORN）、静态绑定矩阵全部合格、星临者两来源别名机制 hash 一致、roster/manifests/ledger/binding/catalog 产物 hash 与 summary 一致。
 - 八类场景绑定（Machine Axis 严格合同实测）：装配→角色（合法 strict loadout prepare 通过；职业不匹配灵子、装备部位错配均拒绝）；角色→奇波继承（羁绊 1→10 改变 kibo 继承 ATK，角色等级 80→40 改变角色属性）；效果来源/目标（三 actor 场景效应事件携带 source/target）；前后台/切人（107001 switch-star-carry 可执行且双轮重放稳定）；同名奇波跨 owner 隔离（三槽共用 500001 时资源事件按 actor 隔离）；同帧顺序（107001 wind-expiry 双轮 canonical hash 一致）；保存重放（Workbench adapter 与 JSON carrier round-trip hash 一致）；连续循环（cycle-dps 信封 closed 且 cycle/trace hash 稳定）。
 - 重锁反例：从合格 catalog 撤销任一对象（112001）后，formal admission 立即回到 `optimization-qualification-stage-locked`，stage gate 不再解锁。

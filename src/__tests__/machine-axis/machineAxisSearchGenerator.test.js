@@ -40,6 +40,14 @@ describe('Machine Axis search generator', () => {
           entry.actionKind === 'signature' && entry.publicActionId === 50000102
       )
     ).toBe(true);
+    expect(new Set(kiboActions.map(entry => entry.actionKind))).toEqual(
+      new Set(['signature', 'break'])
+    );
+    expect(
+      kiboActions.some(entry =>
+        ['normal-attack', 'active'].includes(entry.actionKind)
+      )
+    ).toBe(false);
 
     expect(
       generator.getCharacterActionCandidates(108001, {
@@ -232,8 +240,7 @@ describe('Machine Axis search generator', () => {
     expect(compounds[0]).toMatchObject({
       ownerKind: 'compound',
       source: 'catalog:verified-joint-attack-compound',
-      runtimeBindingHash:
-        axis.scenario.jointAttackRuntime.bindingHash,
+      runtimeBindingHash: axis.scenario.jointAttackRuntime.bindingHash,
       actions: [
         expect.objectContaining({
           owner: { kind: 'actor', slotId: expect.any(String) },

@@ -23,6 +23,10 @@ import {
   validateVerifiedKiboAutoCastDerivation,
 } from '../../domain/verifiedBackgroundActionDerivation';
 import {
+  getKiboAxisActionScopePolicy,
+  isKiboAutonomousActionKindDeferred,
+} from '../../domain/kiboAxisActionScopePolicy';
+import {
   JOINT_ATTACK_TRIGGER_UNRESOLVED_CODE,
   createJointAttackTriggerUnresolvedEvidence,
   resolveVerifiedKiboJointAttackBinding,
@@ -601,8 +605,7 @@ function createBlockedJointCounterpartDiagnostics({
         ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_READY,
         ACTION_RULE_CODES.JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED,
         ACTION_RULE_CODES.JOINT_ATTACK_PAIR_SOURCE_ORDER_INVALID,
-      ].includes(diagnostic.code) &&
-      (diagnostic.actionIds ?? []).length === 2
+      ].includes(diagnostic.code) && (diagnostic.actionIds ?? []).length === 2
   )) {
     const pairIds = uniqueValues(pair.actionIds.map(String));
     const blockingActionId = pairIds.find(actionId =>
@@ -652,25 +655,23 @@ function createBackgroundActionDerivationDiagnostics(actions, scenario) {
     );
     const originConflict =
       switchDerivation.declared === true && kiboDerivation.declared === true;
-    const autonomousKiboDeclarationMissing =
+    const deferredAutonomousKiboAction =
       action.type === ACTION_TYPES.KIBO_EVENT &&
-      ['normal-attack', 'active'].includes(
-        String(action.eventType ?? action.actionKind ?? '')
-      ) &&
-      kiboDerivation.declared !== true;
+      isKiboAutonomousActionKindDeferred(action.eventType ?? action.actionKind);
     const declared =
       switchDerivation.declared ||
       kiboDerivation.declared ||
-      autonomousKiboDeclarationMissing;
+      deferredAutonomousKiboAction;
     const valid =
       !originConflict &&
+      !deferredAutonomousKiboAction &&
       ((switchDerivation.declared && switchDerivation.valid) ||
         (kiboDerivation.declared && kiboDerivation.valid));
     if (!declared || valid) return [];
     const reasons = uniqueValues([
       ...(originConflict ? ['derived-action-origin-conflict'] : []),
-      ...(autonomousKiboDeclarationMissing
-        ? ['autonomous-kibo-action-requires-compiler-registry']
+      ...(deferredAutonomousKiboAction
+        ? ['autonomous-kibo-action-product-deferred']
         : []),
       ...(switchDerivation.reasons ?? []),
       ...(kiboDerivation.reasons ?? []),
@@ -700,13 +701,22 @@ function createBackgroundActionDerivationDiagnostics(actions, scenario) {
         actorId: action.actorId ?? null,
         timeMs: Number(action.startMs) || 0,
         reason: reasons.join('|') || 'derivation-declaration-invalid',
-        sourceIdentity:
-          switchDerivation.bindingId ?? kiboDerivation.sourceIdentity ?? null,
+        sourceIdentity: deferredAutonomousKiboAction
+          ? getKiboAxisActionScopePolicy().policyHash
+          : (switchDerivation.bindingId ??
+            kiboDerivation.sourceIdentity ??
+            null),
         sourceSequencePath: action.sourceSequencePath ?? null,
-        message: `${action.name ?? action.id} 声明为后台派生动作，但其触发、owner 或来源顺序合同无效`,
+        message: deferredAutonomousKiboAction
+          ? `${action.name ?? action.id} 属于当前产品延后的奇波自主动作，不进入排轴、优化或伤害结算`
+          : `${action.name ?? action.id} 声明为后台派生动作，但其触发、owner 或来源顺序合同无效`,
         source: {
-          sourceKind: 'azpr-verified-background-action-derivation',
-          sourceStatus: 'background-action-derivation-fail-closed',
+          sourceKind: deferredAutonomousKiboAction
+            ? 'azpr-kibo-axis-action-scope-policy'
+            : 'azpr-verified-background-action-derivation',
+          sourceStatus: deferredAutonomousKiboAction
+            ? 'product-deferred-autonomous-action'
+            : 'background-action-derivation-fail-closed',
           fieldPaths: [
             'action.derivedAction',
             'action.switchTriggerBinding',

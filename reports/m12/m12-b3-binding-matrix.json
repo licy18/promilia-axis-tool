@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-11T03:44:20.521Z",
+  "generatedAt": "2026-08-11T11:22:19.148Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -102,10 +102,7 @@
         "detail": {
           "starborn": {
             "optimizationObjectId": "STARBORN",
-            "sourceCharacterIds": [
-              199001,
-              199002
-            ],
+            "sourceCharacterIds": [199001, 199002],
             "normalizedMechanismHash": "320b1011f76b0f8f",
             "aliasHashesEqual": true,
             "projection": {
@@ -1109,7 +1106,7 @@
           "identity": "same-frame-scenario-deterministic",
           "passed": true,
           "detail": {
-            "traceHash": "bff623d319b94a16",
+            "traceHash": "34c9ac74925254f9",
             "effectEventCount": 15
           }
         }
@@ -1208,5 +1205,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "88b98cf6195e27c4"
+  "bindingMatrixHash": "07c2fc6c7355d85d"
 }

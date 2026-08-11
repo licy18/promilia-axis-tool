@@ -1,9 +1,8 @@
 import { msToFrame } from '../domain/timebase';
 import { getVerifiedCombatActionMapping } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
-import {
-  resolveVerifiedKiboJointAttackBinding,
-} from '../domain/verifiedJointAttackContract';
+import { isKiboAxisActionKindIncluded } from '../domain/kiboAxisActionScopePolicy';
+import { resolveVerifiedKiboJointAttackBinding } from '../domain/verifiedJointAttackContract';
 import {
   VERIFIED_JOINT_ATTACK_RUNTIME_CONTRACT_REQUIRED_CODE,
   validateVerifiedJointAttackRuntimeBinding,
@@ -18,7 +17,6 @@ export const MACHINE_AXIS_SEARCH_GENERATOR_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SEARCH_GENERATOR_CONTRACT =
   'AzPrMachineAxisSearchGenerator';
 
-const KIBO_ACTION_KINDS = new Set(['signature', 'break']);
 const CHARACTER_ACTION_KINDS = new Set([
   'normal-attack',
   'charged-attack',
@@ -93,7 +91,7 @@ export function createMachineAxisSearchGenerator({
     const kibo = kibosByKiboId.get(Number(kiboId));
     if (!kibo) return [];
     return (kibo.actions ?? [])
-      .filter(entry => KIBO_ACTION_KINDS.has(String(entry.actionKind)))
+      .filter(entry => isKiboAxisActionKindIncluded(entry.actionKind))
       .filter(entry => hasVerifiedKiboDuration(entry, kiboId, characterId))
       .sort((left, right) => {
         const kindOrder = String(left.actionKind).localeCompare(
@@ -188,9 +186,7 @@ export function createMachineAxisSearchGenerator({
         ? kiboCandidates.slice(0, maxKiboActions)
         : kiboCandidates;
       const filteredKibo = options.actionFilter
-        ? limitedKibo.filter(entry =>
-            options.actionFilter.kibo(entry, kiboId)
-          )
+        ? limitedKibo.filter(entry => options.actionFilter.kibo(entry, kiboId))
         : limitedKibo;
       const verifiedJointKiboEntries = filteredKibo.filter(entry =>
         resolveGeneratorJointAttackBinding({
@@ -199,8 +195,9 @@ export function createMachineAxisSearchGenerator({
           activeCharacterId,
         })
       );
-      const jointRuntimeValidation =
-        validateVerifiedJointAttackRuntimeBinding(scenario.jointAttackRuntime);
+      const jointRuntimeValidation = validateVerifiedJointAttackRuntimeBinding(
+        scenario.jointAttackRuntime
+      );
       for (const entry of filtered) {
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
