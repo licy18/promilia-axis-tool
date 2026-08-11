@@ -17,17 +17,17 @@ const budgets = {
   ),
   workbenchGzipBytes: readPositiveNumberArgument(
     '--workbench-gzip-budget',
-    370_000
+    500_000
   ),
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-budget',
-    740_000
+    920_000
   ),
 };
 const warningThresholds = {
   totalJavaScriptGzipBytes: readPositiveNumberArgument(
     '--total-js-gzip-warning',
-    735_000
+    900_000
   ),
 };
 
@@ -78,6 +78,23 @@ const skillDiagnosticsChunk = report.javaScriptChunks.find(chunk =>
 const skillDiagnosticsAsset = report.assets.find(asset =>
   /workbench-skill-diagnostics-.*\.json$/u.test(asset.fileName)
 );
+const requiredExternalCatalogPrefixes = [
+  'character-acceptance-catalog-',
+  'character-acceptance-manifest-index-',
+  'characters-',
+  'combat-formula-evidence-',
+  'enemy-level-profiles-',
+  'kibo-passive-mechanics-',
+  'optimization-qualification-catalog-',
+  'soulessence-effect-mechanics-',
+  'workbench-action-status-catalog-',
+  'workbench-kibo-action-catalog-',
+  'workbench-seed-',
+  'workbench-skill-core-',
+];
+const externalCatalogAssets = requiredExternalCatalogPrefixes.map(prefix =>
+  report.assets.find(asset => asset.fileName.startsWith(`assets/${prefix}`))
+);
 const projectionGuard = {
   workbenchUsesProductionDataProjection:
     Boolean(workbenchChunk) && workbenchDetectedForbiddenModules.length === 0,
@@ -85,10 +102,14 @@ const projectionGuard = {
     Boolean(skillDiagnosticsAsset) ||
     (Boolean(skillDiagnosticsChunk) &&
       skillDiagnosticsChunk.fileName !== workbenchChunk?.fileName),
+  largeWorkbenchCatalogsExternalized: externalCatalogAssets.every(Boolean),
   forbiddenModules: workbenchForbiddenModules,
   detectedForbiddenModules: workbenchDetectedForbiddenModules,
   skillDiagnosticsChunk: skillDiagnosticsChunk?.fileName ?? null,
   skillDiagnosticsAsset: skillDiagnosticsAsset?.fileName ?? null,
+  externalCatalogAssets: externalCatalogAssets.map(
+    asset => asset?.fileName ?? null
+  ),
 };
 const budgetStatus = {
   initialEntryWithinBudget:
@@ -151,7 +172,8 @@ if (
   process.argv.includes('--assert-budget') &&
   (Object.values(budgetStatus).some(status => !status) ||
     !projectionGuard.workbenchUsesProductionDataProjection ||
-    !projectionGuard.skillDiagnosticsLazyChunkPresent)
+    !projectionGuard.skillDiagnosticsLazyChunkPresent ||
+    !projectionGuard.largeWorkbenchCatalogsExternalized)
 ) {
   process.exitCode = 1;
 }

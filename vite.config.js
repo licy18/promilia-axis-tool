@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { readFile } from 'node:fs/promises';
 import { availableParallelism } from 'node:os';
-import { resolve } from 'path';
+import { basename, dirname, resolve } from 'path';
 
 const TEST_INCLUDE = ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'];
 const DOM_TEST_INCLUDE = [
@@ -10,6 +11,64 @@ const DOM_TEST_INCLUDE = [
   'src/__tests__/domain/workbenchAnalysisReportPng.test.js',
   'src/__tests__/domain/workbenchProjectFileReceiver.test.js',
 ];
+
+const EXTERNALIZED_WORKBENCH_JSON_ASSETS = new Set([
+  'character-acceptance-catalog.json',
+  'character-acceptance-manifest-index.json',
+  'characters.json',
+  'combat-formula-evidence.json',
+  'enemy-level-profiles.json',
+  'kibo-passive-mechanics.json',
+  'optimization-qualification-catalog.json',
+  'soulessence-effect-mechanics.json',
+  'workbench-action-status-catalog.json',
+  'workbench-kibo-action-catalog.json',
+  'workbench-seed.json',
+  'workbench-skill-core.json',
+]);
+
+function externalizeWorkbenchJsonAssets() {
+  const virtualPrefix = '\0external-workbench-json:';
+  const virtualSuffix = ':module';
+  return {
+    name: 'externalize-workbench-json-assets',
+    enforce: 'pre',
+    resolveId(source, importer, options = {}) {
+      if (options.ssr || !importer) return null;
+      const sourcePath = source.split('?', 1)[0];
+      const fileName = basename(sourcePath);
+      if (
+        !sourcePath.endsWith('.json') ||
+        !EXTERNALIZED_WORKBENCH_JSON_ASSETS.has(fileName)
+      ) {
+        return null;
+      }
+      return `${virtualPrefix}${resolve(
+        dirname(importer),
+        sourcePath
+      )}${virtualSuffix}`;
+    },
+    async load(id) {
+      if (!id.startsWith(virtualPrefix) || !id.endsWith(virtualSuffix)) {
+        return null;
+      }
+      const filePath = id.slice(virtualPrefix.length, -virtualSuffix.length);
+      const fileName = basename(filePath);
+      const referenceId = this.emitFile({
+        type: 'asset',
+        name: fileName,
+        source: await readFile(filePath),
+      });
+      return [
+        `const url = import.meta.ROLLUP_FILE_URL_${referenceId};`,
+        'const response = await fetch(url);',
+        `if (!response.ok) throw new Error('Unable to load ${fileName}: ' + response.status);`,
+        'const value = await response.json();',
+        'export default value;',
+      ].join('\n');
+    },
+  };
+}
 
 function resolveVitestWorkerCount() {
   const configured = Number(process.env.VITEST_MAX_WORKERS);
@@ -23,7 +82,7 @@ const vitestWorkerCount = resolveVitestWorkerCount();
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [externalizeWorkbenchJsonAssets(), vue()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -35,104 +94,6 @@ export default defineConfig({
     terserOptions: {
       compress: { passes: 2 },
       format: { comments: false },
-    },
-    rollupOptions: {
-      output: {
-        onlyExplicitManualChunks: true,
-        manualChunks(id) {
-          if (
-            [
-              '/domain/actionHitOverrides.js',
-              '/domain/combatCriticalPolicy.js',
-              '/domain/combatScenario.js',
-              '/domain/timebase.js',
-              '/domain/workbenchActionScheduling.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'workbench-core-contracts';
-          }
-          if (
-            [
-              '/simulation/mechanics/verifiedCombatRuntime.js',
-              '/simulation/runtime/criticalRandomSource.js',
-              '/simulation/mechanics/verifiedBattleEffectGeneration.js',
-              '/simulation/mechanics/verifiedActionVariantRuntime.js',
-              '/simulation/mechanics/actionEffectiveTimeline.js',
-              '/domain/verifiedActionContextScheduling.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'verified-combat';
-          }
-          if (
-            [
-              '/data/verifiedCombatMechanicsPackage.js',
-              '/simulation/mechanics/verifiedCombatStaticProperties.js',
-              '/simulation/mechanics/threeValueMechanismConfiguration.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'verified-combat';
-          }
-          if (
-            [
-              '/simulation/projection/projectCycleBoundaryInheritance.js',
-              '/simulation/projection/projectTimelineStateDisplaySeries.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'workbench-ui';
-          }
-          if (
-            [
-              'TimelineGridPreview.vue',
-              'TimelineOperationAxis.vue',
-              'TimelineSwitchEventMarker.vue',
-              'ActionHitOverrideList.vue',
-            ].some(fileName =>
-              id.includes(`/features/workbench/${fileName}`)
-            ) ||
-            [
-              '/simulation/projection/projectTimelineOperationInputs.js',
-              '/domain/azprInputCommandProfile.js',
-              '/domain/workbenchJointAttackInsertion.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'workbench-ui';
-          }
-          if (
-            [
-              'WorkbenchAnalysisReportDialog.vue',
-              'WorkbenchConfigurationLibraryPanel.vue',
-              'WorkbenchPresetLibraryDialog.vue',
-              'WorkbenchScenarioComparisonDialog.vue',
-            ].some(fileName => id.includes(`/features/workbench/${fileName}`))
-          ) {
-            return 'workbench-project-tools';
-          }
-          if (
-            [
-              'ActionRuleDiagnosticsPanel.vue',
-              'AnalysisPanel.vue',
-              'EffectTimelinePanel.vue',
-              'EnemyPanel.vue',
-              'PropertiesPanel.vue',
-              'TeamLoadoutPanel.vue',
-              'WorkbenchCycleSectionPanel.vue',
-              'WorkbenchLayoutBar.vue',
-              'WorkbenchProjectDropOverlay.vue',
-              'WorkbenchScenarioBar.vue',
-            ].some(fileName =>
-              id.includes(`/features/workbench/${fileName}`)
-            ) ||
-            [
-              '/domain/workbenchLayout.js',
-              '/domain/workbenchProjectFileReceiver.js',
-              '/features/workbench/runtimeEffectReview.js',
-              '/features/workbench/verifiedActionMechanicsTrace.js',
-            ].some(modulePath => id.endsWith(modulePath))
-          ) {
-            return 'workbench-ui';
-          }
-        },
-      },
     },
   },
   test: {
