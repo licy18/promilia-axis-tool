@@ -2,7 +2,7 @@
 
 状态：`M12-C0` 至 `M12-C3`、中央串行集成和全量 release 门禁已完成；正式搜索仍未启动。
 
-已验证实现基线：`master@777af8f790986efab42de398fd2ef394610a9a77`。本文件的状态提交不改变实现语义。
+已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
 本文件是 M12-C 的实施合同。`DEVELOPMENT_PLAN.md` 保留阶段摘要，实际实现、测试和产品复验均以本文件为准。实现与优化资格全绿不等于客户端一致性或产品视觉自动签收；未满足对应产品边界前，不得把 M12-C 搜索结果声明为已获产品验收。
 
@@ -17,6 +17,7 @@
 - `clientParityReady=false` 仍由已验证 mechanics/profile evidence 明确保留；它与 optimization qualification 全绿是两条独立状态，禁止混同。
 - 本轮没有自动签署任何产品视觉记录。既有角色级 accepted 记录保持原样；STARBORN optimization-object 仍为 `productVisualAcceptance=pending`、`formalAdmission=false`、`optimizationReady=false`。
 - 正式 M12-C 搜索、三个 objective 的 Top-N 和产品结论均尚未运行/生成；下一实施阶段仍是 `M12-C4`，不得把上述门禁通过数冒充搜索结果。
+- GitHub 发布前对 `origin/master..master` 的 849 个未发布提交执行了单路径 Git LFS 迁移；完整 old SHA → new SHA 映射见 `work/m12-c/lfs-migration-object-map-2026-08-11.csv`。10 个既有 accepted 记录的原 `acceptanceCommit` 与 `recordIdentity` 均保持不变，映射仅用于迁移追溯，不构成自动续签。
 
 ## 1. 目标与结果身份
 
