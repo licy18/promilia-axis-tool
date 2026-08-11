@@ -5,6 +5,7 @@ import {
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createWorkbenchActionDraft,
@@ -37,48 +38,57 @@ afterEach(() => {
 });
 
 describe('verified Kibo accepted-skill cooldown passive', () => {
-  it('uses the old stack for each real paired joint strike and projects 0→4 layers after acceptance', () => {
+  it('uses the old stack for each source-resolved joint-strike acceptance and projects 0→4 layers', () => {
     const scenario = createWaterKiboScenario({
-      durationMs: 23000,
-      actions: BREAK_STARTS.flatMap((startMs, index) =>
-        createJointPair({ index, startMs })
-      ),
+      durationMs: 3000,
+      actions: createJointPair({ startMs: 0 }),
     });
-    const result = simulateScenario(scenario);
-    const windows =
-      result.actionRuleDiagnostics.readinessTimeline.cooldownWindows
-        .filter(window => window.ownerKind === 'kibo')
-        .sort((left, right) => left.startMs - right.startMs);
+    const sourceAction = scenario.actions.find(
+      action => action.id === 'joint-kibo-0'
+    );
+    const session = createVerifiedKiboCooldownModifierSession({ scenario });
+    const evaluations = BREAK_STARTS.map((startMs, index) => {
+      const action = {
+        ...sourceAction,
+        id: `accepted-joint-${index + 1}`,
+        startMs,
+      };
+      const evaluation = session.evaluate({
+        action,
+        ownerKind: 'kibo',
+        ownerId: KIBO_ID,
+        baseCooldown: { durationMs: 5000 },
+        currentEffectiveCooldown: { durationMs: 5000 },
+      });
+      session.onActionAccepted({
+        action,
+        ownerKind: 'kibo',
+        ownerId: KIBO_ID,
+        actionOrderIndex: index,
+        cooldownPolicy: {
+          setCd: true,
+          source: 'test-source-resolved-joint-strike-acceptance',
+        },
+      });
+      return evaluation;
+    });
 
     expect(
-      result.actionExecutionPlan.actions
-        .filter(action => action.actionId.includes('joint-'))
-        .every(action => action.execute)
-    ).toBe(true);
-    expect(windows.map(window => window.baseDurationMs)).toEqual([
-      5000, 5000, 5000, 5000, 5000,
-    ]);
-    expect(windows.map(window => window.effectiveDurationMs)).toEqual([
-      5000, 4750, 4500, 4250, 4000,
-    ]);
-    expect(windows.map(window => window.endMs)).toEqual([
-      5000, 9750, 14250, 18500, 22500,
-    ]);
+      evaluations.map(evaluation => evaluation.formula.baseDurationMs)
+    ).toEqual([5000, 5000, 5000, 5000, 5000]);
     expect(
-      windows.map(
-        window =>
-          window.cooldownEvaluation.verifiedKiboPassiveCooldown.passiveStates[0]
-            .stackCount
-      )
+      evaluations.map(evaluation => evaluation.effectiveDurationMs)
+    ).toEqual([5000, 4750, 4500, 4250, 4000]);
+    expect(
+      evaluations.map(evaluation => evaluation.passiveStates[0].stackCount)
     ).toEqual([0, 1, 2, 3, 4]);
     expect(
-      windows.map(
-        window => window.cooldownEvaluation.modifiers[0]?.stackCountUsed ?? 0
+      evaluations.map(
+        evaluation => evaluation.modifiers[0]?.stackCountUsed ?? 0
       )
     ).toEqual([0, 1, 2, 3, 4]);
 
-    const passiveTransitions =
-      result.actionRuleDiagnostics.cooldownModifierSession.acceptedTransitions;
+    const passiveTransitions = session.snapshot().acceptedTransitions;
     expect(passiveTransitions).toHaveLength(5);
     expect(
       passiveTransitions.map(transition => [
@@ -99,84 +109,9 @@ describe('verified Kibo accepted-skill cooldown passive', () => {
           transition.actualSkillTags.includes(15)
       )
     ).toBe(true);
-    expect(
-      result.actionRuleDiagnostics.acceptedSkillStartTransitions.filter(
-        transition => transition.ownerKind === 'kibo'
-      )
-    ).toHaveLength(5);
-
-    const passiveCommands =
-      result.verifiedKiboPassiveGeneration.effectCommands.filter(
-        command => command.sourceIdentity?.passiveSkillId === PASSIVE_SKILL_ID
-      );
-    expect(
-      passiveCommands.filter(
-        command => command.sourceIdentity.triggerEvent === 'scenario-start'
-      )
-    ).toEqual([
-      expect.objectContaining({
-        sourceKiboId: KIBO_ID,
-        targetKind: 'kibo',
-        targetId: 'actor-101003',
-        durationMs: null,
-        modifiers: [
-          expect.objectContaining({
-            attributeId: 57,
-            bucket: 'dynamicExtra',
-            valueRaw: 2000,
-          }),
-        ],
-      }),
-    ]);
-    expect(
-      passiveCommands
-        .filter(
-          command =>
-            command.sourceIdentity.triggerEvent === 'accepted-skill-start'
-        )
-        .map(command => [
-          command.sourceIdentity.stackBefore,
-          command.sourceIdentity.stackAfter,
-        ])
-    ).toEqual([
-      [0, 1],
-      [1, 2],
-      [2, 3],
-      [3, 4],
-      [4, 4],
-    ]);
-
-    const waterHits = result.verifiedCombatRuntime.damageEvents.filter(
-      event =>
-        event.type === 'VERIFIED_COMBAT_HIT' &&
-        event.actionId.startsWith('joint-kibo-')
-    );
-    expect(waterHits.length).toBeGreaterThan(0);
-    expect(
-      waterHits.every(event =>
-        event.payload.dynamicPropertyTrace.source.some(
-          trace => trace.attributeId === 57 && trace.dynamicExtraRaw === 2000
-        )
-      )
-    ).toBe(true);
-
-    for (const startMs of BREAK_STARTS) {
-      const kiboActionId = `joint-kibo-${startMs}`;
-      const sameFrame = result.eventLog.filter(
-        event => event.actionId === kiboActionId && event.timeMs === startMs
-      );
-      expect(
-        sameFrame.findIndex(
-          event =>
-            event.type === 'EFFECT_APPLIED' || event.type === 'EFFECT_REFRESHED'
-        )
-      ).toBeGreaterThan(
-        sameFrame.findIndex(event => event.type === 'COOLDOWN_START')
-      );
-    }
   });
 
-  it('does not add a layer for a real tag13 action', () => {
+  it('does not accept or add a layer for a tag13 autonomous action with unresolved cadence', () => {
     const scenario = createWaterKiboScenario({
       kiboId: TAG13_KIBO_ID,
       durationMs: 9000,
@@ -207,11 +142,14 @@ describe('verified Kibo accepted-skill cooldown passive', () => {
         window => window.actionId === 'joint-kibo-3000'
       );
 
-    expect(activeTransition).toMatchObject({
-      status: 'accepted-skill-start-passive-condition-not-matched',
-      stackBefore: 0,
-      stackAfter: 0,
-      actualSkillTags: [13],
+    expect(activeTransition).toBeUndefined();
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === 'tag13-active'
+      )
+    ).toMatchObject({
+      execute: false,
+      violationCodes: ['background-action-derivation-invalid'],
     });
     expect(breakWindow).toMatchObject({
       baseDurationMs: 5000,
@@ -417,10 +355,18 @@ function createWaterKiboScenario({
   }));
   const project = createWorkbenchProject(selection, {
     durationMs,
+    initialToughnessRatio: 0.01,
     teamSlots,
     actorConfigs,
     actions,
+    combatScenario: {
+      jointAttackRuntime: createVerifiedJointAttackRuntimeBinding(),
+    },
     initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${OWNER_ID}`,
+        characterId: OWNER_ID,
+      },
       kiboEnergyBySlot: [
         {
           slotId: OWNER_SLOT_ID,

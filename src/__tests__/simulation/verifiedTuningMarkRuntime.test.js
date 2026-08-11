@@ -2071,12 +2071,25 @@ function simulateVerifiedProject({
     initialSp:
       initialSpByCharacterId[Number(config.characterId)] ?? config.initialSp,
   }));
+  const initialControlledCharacterId = Number(
+    initialRuntimeState?.controlledActor?.characterId ??
+      actions.find(action => action.actorCharacterId != null)
+        ?.actorCharacterId ??
+      DEFAULT_WORKBENCH_SELECTION.characterId
+  );
+  const resolvedInitialRuntimeState = {
+    ...(initialRuntimeState ?? {}),
+    controlledActor: {
+      actorId: `actor-${initialControlledCharacterId}`,
+      characterId: initialControlledCharacterId,
+    },
+  };
   const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     durationMs,
     teamSlots,
     actorConfigs,
     actions,
-    initialRuntimeState,
+    initialRuntimeState: resolvedInitialRuntimeState,
     ...(targetPolicy ? { combatScenario: { target: targetPolicy } } : {}),
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),

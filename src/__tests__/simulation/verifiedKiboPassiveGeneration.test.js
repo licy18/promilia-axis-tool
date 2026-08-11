@@ -62,7 +62,6 @@ describe('verified kibo passive generation', () => {
     });
     const generation = createVerifiedKiboPassiveGeneration({
       scenario,
-      actionExecutionPlan,
       actionResolutionById,
     });
     const effectTimeline = createEffectRuntimeTimeline({
@@ -707,33 +706,35 @@ describe('verified kibo passive generation', () => {
     });
     const generation = createVerifiedKiboPassiveGeneration({
       scenario,
-      actionExecutionPlan,
       actionResolutionById,
     });
     const effectTimeline = createEffectRuntimeTimeline({
       scenario,
-      actionExecutionPlan,
       generatedCommands: generation.effectCommands,
     });
     const withPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline,
     });
     const withoutPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline: createEffectRuntimeTimeline({
         scenario,
-        actionExecutionPlan,
       }),
     });
     const integrated = simulateScenario(scenario);
 
     expect(resolution.ready).toBe(true);
     expect(resolution.controlBinding.logic.skillTag).toBe('13');
+    expect(actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
     expect(generation.unresolved).toEqual([]);
     expect(generation.conditionSuppressions).toEqual([
       expect.objectContaining({
@@ -781,9 +782,12 @@ describe('verified kibo passive generation', () => {
     expect(sumDamage(withPassive, action.id)).toBeGreaterThan(
       sumDamage(withoutPassive, action.id)
     );
-    expect(sumDamage(integrated.verifiedCombatRuntime, action.id)).toBe(
-      sumDamage(withPassive, action.id)
-    );
+    expect(sumDamage(integrated.verifiedCombatRuntime, action.id)).toBe(0);
+    expect(
+      integrated.verifiedKiboPassiveGeneration.effectCommands.filter(
+        command => command.sourceActionId === action.id
+      )
+    ).toEqual([]);
     expect(
       withPassive.damageEvents.flatMap(
         event => event.payload.dynamicPropertyTrace.source
@@ -1113,11 +1117,15 @@ describe('verified kibo passive generation', () => {
     expect(healSchedule.derivedPeriodic.heal.formula.coefficientRaw).toBe(200);
     expect(generation.unresolved).toEqual([]);
 
-    const result = simulateScenario(scenario);
-    const dotEvents = result.verifiedCombatRuntime.damageEvents.filter(
+    const directRuntime = createVerifiedCombatRuntime({
+      scenario,
+      kiboPassiveGeneration: generation,
+    });
+    const integrated = simulateScenario(scenario);
+    const dotEvents = directRuntime.damageEvents.filter(
       event => event.payload.kiboPassiveDerivedDot === true
     );
-    const healEvents = result.verifiedCombatRuntime.vitalEvents.filter(
+    const healEvents = directRuntime.vitalEvents.filter(
       event => event.type === 'VERIFIED_KIBO_PASSIVE_DERIVED_SELF_HEAL'
     );
     expect(dotEvents).toHaveLength(5);
@@ -1135,11 +1143,32 @@ describe('verified kibo passive generation', () => {
       expect(event.payload.appliedToCalculators).toBe(true);
       expect(event.payload.targetKind).toBe('kibo');
       expect(event.payload.appliedHeal).toBeGreaterThan(0);
-      const expectedLower = Math.floor(event.payload.sourceAttribute.value * 0.02 - 1);
-      const expectedUpper = Math.ceil(event.payload.sourceAttribute.value * 0.02 + 1);
+      const expectedLower = Math.floor(
+        event.payload.sourceAttribute.value * 0.02 - 1
+      );
+      const expectedUpper = Math.ceil(
+        event.payload.sourceAttribute.value * 0.02 + 1
+      );
       expect(event.payload.appliedHeal).toBeGreaterThanOrEqual(expectedLower);
       expect(event.payload.appliedHeal).toBeLessThanOrEqual(expectedUpper);
     }
+    expect(integrated.actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
+    expect(
+      integrated.verifiedCombatRuntime.damageEvents.filter(
+        event => event.payload.kiboPassiveDerivedDot === true
+      )
+    ).toEqual([]);
+    expect(
+      integrated.verifiedCombatRuntime.vitalEvents.filter(
+        event => event.type === 'VERIFIED_KIBO_PASSIVE_DERIVED_SELF_HEAL'
+      )
+    ).toEqual([]);
   });
 
   it('caps BeforeSkill stacks at six, refreshes both targets, and diagnoses non-signature tags', () => {
@@ -1309,36 +1338,29 @@ describe('verified kibo passive generation', () => {
     });
     const generation = createVerifiedKiboPassiveGeneration({
       scenario,
-      actionExecutionPlan,
       actionResolutionById,
     });
     const effectTimeline = createEffectRuntimeTimeline({
       scenario,
-      actionExecutionPlan,
       generatedCommands: generation.effectCommands,
     });
     const withPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline,
     });
     const withoutPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline: createEffectRuntimeTimeline({
         scenario,
-        actionExecutionPlan,
       }),
     });
     const withDefenseRootsOnly = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline: createEffectRuntimeTimeline({
         scenario,
-        actionExecutionPlan,
         generatedCommands: generation.effectCommands.filter(
           command => command.effectId === 'kibo-passive:520051:520051002'
         ),
@@ -1367,6 +1389,13 @@ describe('verified kibo passive generation', () => {
       .filter(trace => [3, 4, 66].includes(trace.attributeId));
 
     expect(resolution.ready).toBe(true);
+    expect(actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
     expect(generation.unresolved).toEqual([]);
     expect(passiveCommands).toHaveLength(damageHits.length * 2);
     expect(passiveCommands.slice(0, 2)).toEqual([
@@ -1515,7 +1544,6 @@ describe('verified kibo passive generation', () => {
     });
     const generation = createVerifiedKiboPassiveGeneration({
       scenario,
-      actionExecutionPlan,
       actionResolutionById,
     });
     const staticCommand = generation.effectCommands.find(
@@ -1526,23 +1554,19 @@ describe('verified kibo passive generation', () => {
     );
     const effectTimeline = createEffectRuntimeTimeline({
       scenario,
-      actionExecutionPlan,
       generatedCommands: generation.effectCommands,
     });
     const staticOnlyTimeline = createEffectRuntimeTimeline({
       scenario,
-      actionExecutionPlan,
       generatedCommands: [staticCommand],
     });
     const withCompositePassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline,
     });
     const withStaticOnly = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       effectTimeline: staticOnlyTimeline,
     });
@@ -1555,12 +1579,13 @@ describe('verified kibo passive generation', () => {
 
     expect(resolution.ready).toBe(true);
     expect(resolution.hits.filter(hit => hit.damage)).toHaveLength(6);
-    expect(
-      actionExecutionPlan.actions.map(entry => ({
-        actionId: entry.actionId,
-        execute: entry.execute,
-      }))
-    ).toEqual([{ actionId: action.id, execute: true }]);
+    expect(actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
     expect(generation.unresolved).toEqual([]);
     expect(staticCommand).toMatchObject({
       sourceActionId: null,
@@ -1685,18 +1710,15 @@ describe('verified kibo passive generation', () => {
     });
     const generation = createVerifiedKiboPassiveGeneration({
       scenario,
-      actionExecutionPlan,
       actionResolutionById,
     });
     const withPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
       kiboPassiveGeneration: generation,
     });
     const withoutPassive = createVerifiedCombatRuntime({
       scenario,
-      actionExecutionPlan,
       controlledActorTimeline,
     });
     const integrated = simulateScenario(scenario);
@@ -1711,7 +1733,13 @@ describe('verified kibo passive generation', () => {
     );
 
     expect(resolution.ready).toBe(true);
-    expect(actionExecutionPlan.actions[0].execute).toBe(true);
+    expect(actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
     expect(sourceDamageHits.length).toBeGreaterThan(0);
     expect(generation.unresolved).toEqual([]);
     expect(generation.effectCommands).toEqual([]);
@@ -1784,10 +1812,10 @@ describe('verified kibo passive generation', () => {
       integrated.verifiedCombatRuntime.damageEvents.filter(
         event => event.payload.kiboPassiveDerivedDamage
       )
-    ).toHaveLength(1);
+    ).toEqual([]);
     expect(
       integrated.verifiedKiboPassiveGeneration.summary.derivedDamageCommandCount
-    ).toBe(1);
+    ).toBe(0);
   });
 
   it('consumes a missed derived hit, suppresses a repeat inside two seconds, and allows a later trigger', () => {
@@ -2076,9 +2104,9 @@ describe('verified kibo passive generation', () => {
         receiveDamageEventIdentity: 'test:receive:520018',
       }),
     });
-    expect(
-      generation.unresolved.some(row => row.skillId === 520018)
-    ).toBe(false);
+    expect(generation.unresolved.some(row => row.skillId === 520018)).toBe(
+      false
+    );
     const withoutEvents = createVerifiedKiboPassiveGeneration({
       scenario,
       actionExecutionPlan,
@@ -2915,6 +2943,10 @@ function createSwiftWolfScenario() {
       }),
     ],
     initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${OWNER_CHARACTER_ID}`,
+        characterId: OWNER_CHARACTER_ID,
+      },
       kiboEnergyBySlot: [
         {
           slotId: 'team-slot-3',
@@ -2969,6 +3001,10 @@ function createActualKiboScenario({
       }),
     ],
     initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${OWNER_CHARACTER_ID}`,
+        characterId: OWNER_CHARACTER_ID,
+      },
       kiboEnergyBySlot: [
         {
           slotId: 'team-slot-3',

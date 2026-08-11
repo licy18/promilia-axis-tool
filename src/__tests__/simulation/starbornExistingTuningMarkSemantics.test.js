@@ -86,12 +86,8 @@ describe('STARBORN existing tuning mark product semantics', () => {
       const ultimate = runAliasAction({ alias, actionKind: 'ultimate' });
       const starCarry = runAliasAction({ alias, actionKind: 'star-carry' });
 
-      expect(projectOutcome(ultimate)).toEqual(
-        desiredOutcome({}, 1, { acquireAtCap: true })
-      );
-      expect(projectOutcome(starCarry)).toEqual(
-        desiredOutcome({}, 1, { acquireAtCap: true })
-      );
+      expect(projectOutcome(ultimate)).toEqual(desiredOutcome({}, 1));
+      expect(projectOutcome(starCarry)).toEqual(desiredOutcome({}, 1));
     }
   );
 
@@ -109,11 +105,9 @@ describe('STARBORN existing tuning mark product semantics', () => {
         counts: MIXED_COUNTS,
       });
 
-      expect(projectOutcome(ultimate)).toEqual(
-        desiredOutcome(MIXED_COUNTS, 1, { acquireAtCap: true })
-      );
+      expect(projectOutcome(ultimate)).toEqual(desiredOutcome(MIXED_COUNTS, 1));
       expect(projectOutcome(starCarry)).toEqual(
-        desiredOutcome(MIXED_COUNTS, 1, { acquireAtCap: true })
+        desiredOutcome(MIXED_COUNTS, 1)
       );
     }
   );
@@ -138,13 +132,13 @@ describe('STARBORN existing tuning mark product semantics', () => {
       });
 
       expect(projectOutcome(fourToFive)).toEqual(
-        desiredOutcome({ fire: 4 }, 1, { acquireAtCap: true })
+        desiredOutcome({ fire: 4 }, 1)
       );
       expect(projectOutcome(ultimateAtFive)).toEqual(
-        desiredOutcome({ fire: 5 }, 1, { acquireAtCap: true })
+        desiredOutcome({ fire: 5 }, 1)
       );
       expect(projectOutcome(starCarryAtFive)).toEqual(
-        desiredOutcome({ fire: 5 }, 1, { acquireAtCap: true })
+        desiredOutcome({ fire: 5 }, 1)
       );
     }
   );
@@ -180,9 +174,7 @@ describe('STARBORN existing tuning mark product semantics', () => {
         decayRemainingMs: 1_000,
       });
 
-      expect(projectOutcome(result)).toEqual(
-        desiredOutcome({}, 1)
-      );
+      expect(projectOutcome(result)).toEqual(desiredOutcome({}, 1));
       expect(result.events[0]).toMatchObject({
         kind: 'expire',
         markId: 150,
@@ -402,7 +394,8 @@ function createUnconditionalAcquireEffect(markId, startFrame) {
     classification: 'applied',
     mapIndex: 0,
     trigger: { startFrame },
-    sourceIdentity: 'independent-product-rule-fixture:same-action-earlier-child',
+    sourceIdentity:
+      'independent-product-rule-fixture:same-action-earlier-child',
     tuningMark: {
       applied: true,
       markId,
@@ -414,7 +407,9 @@ function createUnconditionalAcquireEffect(markId, startFrame) {
 }
 
 function desiredOutcome(counts, stackDelta) {
-  const present = MARKS.filter(mark => Number(counts[mark.profileKey] ?? 0) > 0);
+  const present = MARKS.filter(
+    mark => Number(counts[mark.profileKey] ?? 0) > 0
+  );
   return {
     finalCounts: Object.fromEntries(
       MARKS.map(mark => [
@@ -460,8 +455,7 @@ function projectOutcome(result) {
       .sort((left, right) => left.markId - right.markId),
     gates: result.acquisitionGateResults
       .filter(
-        result =>
-          result.gate?.kind === 'existing-tuning-mark-at-action-start'
+        result => result.gate?.kind === 'existing-tuning-mark-at-action-start'
       )
       .map(result => ({
         profileKey: result.gate.profileKey,

@@ -217,11 +217,18 @@ describe('verified Kibo BeforeSkill composite runtime', () => {
       skillId: LEOPARD_ACTIVE_SKILL_ID,
       eventType: 'active',
     });
-    const { action, resolution, generation, runtime } =
-      prepareLeopardRuntime(scenario);
+    const { action, resolution, generation, runtime, actionExecutionPlan } =
+      prepareLeopardRuntime(scenario, { isolateActionMechanics: true });
 
     expect(resolution.ready).toBe(true);
     expect(Number(resolution.controlBinding.logic.skillTag)).toBe(13);
+    expect(actionExecutionPlan.actions).toEqual([
+      expect.objectContaining({
+        actionId: action.id,
+        execute: false,
+        violationCodes: ['background-action-derivation-invalid'],
+      }),
+    ]);
     expect(
       generation.effectCommands.some(
         command =>
@@ -380,7 +387,10 @@ describe('verified Kibo BeforeSkill composite runtime', () => {
   });
 });
 
-function prepareLeopardRuntime(scenario) {
+function prepareLeopardRuntime(
+  scenario,
+  { isolateActionMechanics = false } = {}
+) {
   const action = scenario.actions[0];
   const resolution = resolveVerifiedCombatActionMechanics(action, {
     combatScenario: scenario.combatScenario,
@@ -397,17 +407,17 @@ function prepareLeopardRuntime(scenario) {
   });
   const generation = createVerifiedKiboPassiveGeneration({
     scenario,
-    actionExecutionPlan,
+    ...(isolateActionMechanics ? {} : { actionExecutionPlan }),
     actionResolutionById,
   });
   const effectTimeline = createEffectRuntimeTimeline({
     scenario,
-    actionExecutionPlan,
+    ...(isolateActionMechanics ? {} : { actionExecutionPlan }),
     generatedCommands: generation.effectCommands,
   });
   const runtime = createVerifiedCombatRuntime({
     scenario,
-    actionExecutionPlan,
+    ...(isolateActionMechanics ? {} : { actionExecutionPlan }),
     controlledActorTimeline,
     effectTimeline,
     kiboPassiveGeneration: generation,
@@ -463,8 +473,12 @@ function createLeopardScenario({
       : equipMode === 'wrong-actor'
         ? 'team-slot-1'
         : null;
-  const initialRuntimeState =
-    equippedSlotId == null
+  const initialRuntimeState = {
+    controlledActor: {
+      actorId: `actor-${OWNER_CHARACTER_ID}`,
+      characterId: OWNER_CHARACTER_ID,
+    },
+    ...(equippedSlotId == null
       ? {}
       : {
           kiboEnergyBySlot: [
@@ -484,7 +498,8 @@ function createLeopardScenario({
               valueShields: [TEST_SHIELD],
             },
           ],
-        };
+        }),
+  };
   const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     durationMs: 4000,
     teamSlots,

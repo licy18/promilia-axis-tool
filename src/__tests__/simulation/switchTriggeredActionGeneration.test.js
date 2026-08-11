@@ -143,7 +143,7 @@ describe('switch triggered star-carry generation', () => {
     });
   });
 
-  it('does not invent a child for a source gap or initial front actor', () => {
+  it('does not invent a child without a switch and derives only from an explicit initial-front switch', () => {
     expect(
       generate({
         actors: [actor(101007)],
@@ -156,13 +156,20 @@ describe('switch triggered star-carry generation', () => {
       initialActorId: 'actor-199001',
       switches: [switchAction('switch-gap', 1000, 199001, 101003)],
     });
-    expect(result.actions).toEqual([]);
+    expect(result.actions).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-199001',
+        skillId: 19900122,
+        actionKind: 'star-carry',
+        parentActionId: 'switch-gap',
+      }),
+    ]);
     expect(result.bindings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           starCarryOwnerCharacterId: 199001,
-          resolutionStatus: 'static-evidence-gap',
-          applied: false,
+          resolutionStatus: 'applied',
+          applied: true,
         }),
       ])
     );

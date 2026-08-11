@@ -287,10 +287,13 @@ describe('verified combat mechanics runtime', () => {
     const resolutions = [
       'verified-han-star-skill',
       'verified-muyin-charged',
-      'verified-wind-kibo-active',
     ].map(actionId =>
       result.verifiedCombatRuntime.actionResolutionById.get(actionId)
     );
+    const kiboAction = result.effectiveActionTimeline.scenario.actions.find(
+      action => action.id === 'verified-wind-kibo-active'
+    );
+    const kiboResolution = resolveVerifiedCombatActionMechanics(kiboAction);
 
     expect(resolutions).toEqual(
       resolutions.map(() =>
@@ -301,11 +304,23 @@ describe('verified combat mechanics runtime', () => {
       new Set(
         resolutions.map(resolution => resolution.actionBinding.actionKind)
       )
-    ).toEqual(new Set(['star-skill', 'charged-attack', 'active']));
+    ).toEqual(new Set(['star-skill', 'charged-attack']));
+    expect(kiboResolution).toMatchObject({
+      ready: true,
+      complete: true,
+      actionBinding: { actionKind: 'active' },
+    });
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === 'verified-wind-kibo-active'
+      )
+    ).toMatchObject({
+      execute: false,
+      violationCodes: ['background-action-derivation-invalid'],
+    });
     for (const actionId of [
       'verified-han-star-skill',
       'verified-muyin-charged',
-      'verified-wind-kibo-active',
     ]) {
       expect(
         result.verifiedCombatRuntime.damageEvents.some(
@@ -314,11 +329,7 @@ describe('verified combat mechanics runtime', () => {
       ).toBe(true);
     }
     const damageTotals = Object.fromEntries(
-      [
-        'verified-han-star-skill',
-        'verified-muyin-charged',
-        'verified-wind-kibo-active',
-      ].map(actionId => {
+      ['verified-han-star-skill', 'verified-muyin-charged'].map(actionId => {
         const events = result.verifiedCombatRuntime.damageEvents.filter(
           event =>
             event.actionId === actionId && event.type === 'VERIFIED_COMBAT_HIT'
@@ -338,12 +349,7 @@ describe('verified combat mechanics runtime', () => {
     );
     expect(damageTotals).toEqual({
       'verified-han-star-skill': { hitCount: 7, hp: 1297, toughness: 910 },
-      'verified-muyin-charged': { hitCount: 3, hp: 1107, toughness: 1084 },
-      'verified-wind-kibo-active': {
-        hitCount: 1,
-        hp: 611,
-        toughness: 122,
-      },
+      'verified-muyin-charged': { hitCount: 3, hp: 1157, toughness: 1134 },
     });
     expect(
       result.verifiedCombatRuntime.damageEvents
@@ -351,7 +357,7 @@ describe('verified combat mechanics runtime', () => {
         .flatMap(event => event.payload.dynamicPropertyTrace.target)
     ).toEqual([]);
     expect(result.verifiedKiboPassiveGeneration.summary).toMatchObject({
-      effectCommandCount: 1,
+      effectCommandCount: 0,
       evidenceClosedDefinitionCount: 44,
       scenarioAssumedDefinitionCount: 0,
       unresolvedDefinitionCount: 0,
@@ -360,7 +366,7 @@ describe('verified combat mechanics runtime', () => {
       result.effectTimeline.activeEffects.find(
         effect => effect.effectId === 'kibo-passive:520084:520084002'
       )
-    ).toMatchObject({ stacks: 1, targetKind: 'enemy' });
+    ).toBeUndefined();
     expect(
       result.verifiedCombatRuntime.damageEvents.find(
         event =>
@@ -877,8 +883,8 @@ describe('verified combat mechanics runtime', () => {
         expect.objectContaining({
           actorId: 'actor-109001',
           payload: expect.objectContaining({
-            reason: 'verified-auto-sp-foreground',
-            change: 0.020828,
+            reason: 'verified-auto-sp-background',
+            change: 0.010406,
           }),
         }),
         expect.objectContaining({
@@ -886,6 +892,13 @@ describe('verified combat mechanics runtime', () => {
           payload: expect.objectContaining({
             reason: 'verified-auto-sp-background',
             change: 0.010406,
+          }),
+        }),
+        expect.objectContaining({
+          actorId: 'actor-101007',
+          payload: expect.objectContaining({
+            reason: 'verified-auto-sp-foreground',
+            change: 0.020828,
           }),
         }),
       ])
@@ -1017,9 +1030,9 @@ describe('verified combat mechanics runtime', () => {
       expect.objectContaining({
         hitKey: 'verified-hit-1-101007012',
         payload: expect.objectContaining({
-          beforeValue: 0.020813,
+          beforeValue: 0.041657,
           change: 1.069992,
-          afterValue: 1.090805,
+          afterValue: 1.111649,
           maxValue: 100,
           recoverIntervalIdentity: 'damage-element:-9212100609153088879',
           share: 1,
@@ -1106,7 +1119,7 @@ describe('verified combat mechanics runtime', () => {
     expect(sameFrame[1]).toMatchObject({
       actionId: null,
       payload: {
-        reason: 'verified-auto-sp-background',
+        reason: 'verified-auto-sp-foreground',
         beforeValue: 0,
       },
     });
@@ -1118,7 +1131,7 @@ describe('verified combat mechanics runtime', () => {
       .points.filter(point => point.timeMs === 100);
     expect(curvePoints.map(point => point.reason)).toEqual([
       'verified-skill-cost',
-      'verified-auto-sp-background',
+      'verified-auto-sp-foreground',
     ]);
     expect(curvePoints[0].stateSnapshot).toMatchObject({
       before: { kiboEnergy: { currentValue: 100 } },
@@ -1319,8 +1332,11 @@ describe('verified combat mechanics runtime', () => {
       includeActor: true,
       includeActorUltimate: true,
       includeKibo: false,
-      durationMs: 1200,
-      actorUltimateStartMs: 300,
+      durationMs: 4200,
+      actorUltimateStartMs: 3000,
+      switchAtMs: 650,
+      switchFromCharacterId: PANGPANG_CHARACTER_ID,
+      switchTargetCharacterId: 109001,
       initialSpByCharacterId: { 109001: 99.45 },
     });
     let randomSampleCount = 0;
@@ -2670,6 +2686,12 @@ function createPangpangCriticalScenario() {
       projectile: { targetDistance: 0, defaultWillHit: true },
       critical: { policy: 'non-critical', seed: 'dynamic-defense-seed' },
     },
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${PANGPANG_CHARACTER_ID}`,
+        characterId: PANGPANG_CHARACTER_ID,
+      },
+    },
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -2993,6 +3015,9 @@ function simulateVerifiedAcceptanceScenario({
   durationMs = 5000,
   kiboStartMs = null,
   switchAtMs = null,
+  switchFromCharacterId = 109001,
+  switchTargetCharacterId = 101003,
+  initialControlledCharacterId = null,
   actorUltimateStartMs = 100,
   initialSpByCharacterId = {},
 } = {}) {
@@ -3086,27 +3111,35 @@ function simulateVerifiedAcceptanceScenario({
       createWorkbenchActionDraft({
         id: 'verified-switch-actor-2',
         type: 'switch',
-        actorCharacterId: 109001,
-        targetCharacterId: 101003,
+        actorCharacterId: switchFromCharacterId,
+        targetCharacterId: switchTargetCharacterId,
         startMs: switchAtMs,
         durationMs: 0,
       })
     );
   }
-  const resolvedInitialRuntimeState =
-    initialRuntimeState ??
-    (includeKibo
-      ? {
-          kiboEnergyBySlot: [
-            {
-              slotId: 'team-slot-3',
-              kiboId: HEAVY_ROCK_HOOF_ID,
-              currentValue: 100,
-              maxValue: 100,
-            },
-          ],
-        }
-      : null);
+  const defaultControlledCharacterId =
+    initialControlledCharacterId ??
+    (includeActor || includeKibo ? PANGPANG_CHARACTER_ID : 109001);
+  const resolvedInitialRuntimeState = {
+    controlledActor: {
+      actorId: `actor-${defaultControlledCharacterId}`,
+      characterId: defaultControlledCharacterId,
+    },
+    ...(initialRuntimeState ??
+      (includeKibo
+        ? {
+            kiboEnergyBySlot: [
+              {
+                slotId: 'team-slot-3',
+                kiboId: HEAVY_ROCK_HOOF_ID,
+                currentValue: 100,
+                maxValue: 100,
+              },
+            ],
+          }
+        : {})),
+  };
   const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     durationMs,
     teamSlots,
@@ -3237,6 +3270,12 @@ function simulatePangpangHitRecoveryParityScenario() {
         durationMs: 1000,
       }),
     ],
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${PANGPANG_CHARACTER_ID}`,
+        characterId: PANGPANG_CHARACTER_ID,
+      },
+    },
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -3461,6 +3500,12 @@ function simulateHanProjectileInput(hitOverrides = {}) {
         hitOverrides,
       }),
     ],
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${HAN_YOUYOU_CHARACTER_ID}`,
+        characterId: HAN_YOUYOU_CHARACTER_ID,
+      },
+    },
     mechanicsProfileSelection:
       createVerifiedWorkbenchMechanicsProfileSelection(),
   });
@@ -3490,13 +3535,29 @@ function simulateCrossCatalogScenario() {
       durationMs: 1400,
     }),
     createWorkbenchActionDraft({
+      id: 'verified-switch-han-to-muyin',
+      type: 'switch',
+      actorCharacterId: 101003,
+      targetCharacterId: 109001,
+      startMs: 1600,
+      durationMs: 0,
+    }),
+    createWorkbenchActionDraft({
       id: 'verified-muyin-charged',
       type: 'skill',
       actorCharacterId: 109001,
       skillId: 10900101,
       actionVariantIndex: 1,
-      startMs: 1800,
+      startMs: 3900,
       durationMs: 1000,
+    }),
+    createWorkbenchActionDraft({
+      id: 'verified-switch-muyin-to-pangpang',
+      type: 'switch',
+      actorCharacterId: 109001,
+      targetCharacterId: PANGPANG_CHARACTER_ID,
+      startMs: 5100,
+      durationMs: 0,
     }),
     createWorkbenchActionDraft({
       id: 'verified-wind-kibo-active',
@@ -3505,17 +3566,21 @@ function simulateCrossCatalogScenario() {
       skillId: 504004,
       kiboId: 500001,
       actionVariantIndex: 0,
-      startMs: 3200,
+      startMs: 6500,
       durationMs: 3000,
       eventType: 'active',
     }),
   ];
   const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
-    durationMs: 8000,
+    durationMs: 10000,
     teamSlots,
     actorConfigs,
     actions,
     initialRuntimeState: {
+      controlledActor: {
+        actorId: 'actor-101003',
+        characterId: 101003,
+      },
       kiboEnergyBySlot: [
         {
           slotId: 'team-slot-3',

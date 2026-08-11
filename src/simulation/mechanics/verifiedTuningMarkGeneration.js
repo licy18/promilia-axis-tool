@@ -821,7 +821,8 @@ function resolveExistingTuningMarkActivationCondition({
     candidateCount: markCountAtActionStart,
     landedCount: passed ? markCountAtActionStart : 0,
     passed,
-    sourceIdentity: condition.sourceIdentity ?? descriptor.effect?.sourceIdentity,
+    sourceIdentity:
+      condition.sourceIdentity ?? descriptor.effect?.sourceIdentity,
   };
 }
 
@@ -1012,8 +1013,7 @@ function applyTuningMarkConditionalDamage({
       markCountAtJudgment,
       minimumStacks: group.minimumStacks,
       branchSelectionMode: group.branchSelectionMode,
-      consumeJudgmentGroupIdentity:
-        group.consumeJudgmentGroupIdentity ?? null,
+      consumeJudgmentGroupIdentity: group.consumeJudgmentGroupIdentity ?? null,
       consumeJudgmentEventIdentity: consumeOutcome?.eventIdentity ?? null,
       consumeApplied: consumeOutcome?.applied ?? null,
       propertyTags: [...(template.propertyTags ?? [])],
@@ -1251,8 +1251,7 @@ function applyMarkConsumption({
     if (!selected) {
       const branchGroup = (conditionalDamageGroups ?? []).find(
         group =>
-          group.branchSelectionMode ===
-            'same-consume-judgment-outcome' &&
+          group.branchSelectionMode === 'same-consume-judgment-outcome' &&
           group.consumeJudgmentGroupIdentity ===
             descriptor.effect.tuningOverlimit.judgmentGroupIdentity
       );

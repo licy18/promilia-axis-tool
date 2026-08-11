@@ -97,7 +97,7 @@ describe('controlled actor runtime timeline', () => {
     expect(timeline.summary.appliedTransitionCount).toBe(1);
   });
 
-  it('applies only the stable first switch when two target changes share a frame', () => {
+  it('fails closed for both target changes when two switches share a frame without source order', () => {
     const scenario = createScenario();
     scenario.actions = [
       {
@@ -123,18 +123,21 @@ describe('controlled actor runtime timeline', () => {
       actionExecutionPlan,
     });
 
-    expect(actionExecutionPlan.executedActionIds).toContain('switch-z');
-    expect(actionExecutionPlan.skippedActionIds).toEqual(['switch-a']);
+    expect(actionExecutionPlan.executedActionIds).toEqual([]);
+    expect(actionExecutionPlan.skippedActionIds).toEqual([
+      'switch-z',
+      'switch-a',
+    ]);
     expect(
       timeline.transitions.map(transition => [
         transition.actionId,
         transition.status,
       ])
     ).toEqual([
-      ['switch-z', 'controlled-actor-switch-applied'],
+      ['switch-z', 'controlled-actor-switch-skipped'],
       ['switch-a', 'controlled-actor-switch-skipped'],
     ]);
-    expect(timeline.finalActor.actorId).toBe('actor-c');
+    expect(timeline.finalActor.actorId).toBe('actor-a');
   });
 });
 
