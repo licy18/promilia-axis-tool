@@ -106,7 +106,7 @@ describe('production imports audit CLI', () => {
     const missingOutputValue = runAudit(['--output', '--assert-clean']);
     expect(missingOutputValue.status).toBe(1);
     expect(missingOutputValue.stderr).toContain('Missing value for --output');
-  });
+  }, 30_000);
 
   it('keeps the committed default report canonical and read-only', async () => {
     const beforeBytes = await readFile(committedReportPath);
@@ -122,7 +122,7 @@ describe('production imports audit CLI', () => {
     });
     expect(await readFile(committedReportPath)).toEqual(beforeBytes);
     expect((await stat(committedReportPath)).mtimeMs).toBe(before.mtimeMs);
-  });
+  }, 30_000);
 });
 
 function runAudit(argumentsList) {

@@ -29,6 +29,7 @@
 - `formal-search-admission` 不以 release PASS 自动推导 READY。STARBORN optimization-object 的产品阻断已由用户显式签收解除；当前 43 只 admitted Kibo 的 71 个 autonomous surface 仍缺 schedule/trigger 闭合证明，`reports/m12/m12-c-kibo-autonomous-readiness.json` 缺失，因此即使 Gate V2 最终 clean HEAD 的真实 `release:verify` PASS，Formal Search 仍必须 `BLOCKED`。该 proof 未来还必须绑定 qualification/action-catalog/scheduler hash、43 只 Kibo 和全部 surface，且 unresolved schedule/trigger 均为 0。`clientParityReady=false` 继续单列，不回锁已通过的 headless formal-score 基线，也不被自动提升。
 - 本改动只优化验证编排，没有启动 M12-C4、没有生成 Top-N、没有代签产品验收。提交前最终 Integration checkpoint 已在当前 working-tree bytes 上通过 `239/239` files、`1943/1943` tests（`NODE_OPTIONS=--max-old-space-size=8192`）；该记录不是 release authority，最终 clean HEAD 的 `release:verify` 结果仍须在交付报告中与 Development/Integration 分层列出。
 - 首次 clean HEAD `release:verify` 在 5 个附加 gate 全部通过后，于原始 trial 的全量段因两个保持默认 5 秒预算的重型测试超时而失败（`237/239` files、`1941/1943` tests）；失败台账未写 PASS，`&&` 链未进入后续 audit/build/preview。两个用例的断言与覆盖保持原样，仅把各自显式预算调整为 30 秒；修复后只跑对应 targeted regression，再直接重跑完整 `release:verify`。
+- 第二次 clean HEAD release 的 5 个附加 gate 仍全绿，trial 全量改善为 `238/239` files、`1942/1943` tests，但同一 production-import CLI 文件中另一个多次启动全图审计的用例在默认 5 秒预算下耗时 5.58 秒。策略改为给该文件 3 个真实 CLI 集成用例统一设置 30 秒 per-test budget，不再逐个追赶；所有 canonical byte、只读、tamper、missing-output 和 mtime 断言保持不变。
 
 ## 0.2 2026-08-11 外层池正式接入搜索
 
