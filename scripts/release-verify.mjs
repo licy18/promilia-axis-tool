@@ -25,6 +25,11 @@ import {
   evaluateFormalSearchAdmission,
   loadFormalSearchAdmissionEvidence,
 } from './gates/formal-search-admission.mjs';
+import {
+  PRODUCTION_PREVIEW_REPORT_PATH,
+  restoreReleaseRunnerOutputs,
+  snapshotReleaseRunnerOutputs,
+} from './gates/release-runner-output.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const defaultRepositoryRoot = path.resolve(scriptDirectory, '..');
@@ -141,15 +146,45 @@ export async function runReleaseVerification({
         stdout.write(
           '\nRelease stage: test:trial-release (real execution; cache ignored)\n'
         );
-        return gateRunner({
+        const runnerOutputSnapshot = await snapshotReleaseRunnerOutputs({
           repositoryRoot: root,
-          definition: getGateDefinition('trial-release'),
-          fingerprint: fingerprints.get('trial-release'),
-          snapshot,
-          context: 'release-trial-release-uncached',
-          tee: true,
-          logDirectory: path.join(root, 'work', 'm12-c', 'gates', 'logs'),
         });
+        let trialResult;
+        let restoration;
+        try {
+          trialResult = await gateRunner({
+            repositoryRoot: root,
+            definition: getGateDefinition('trial-release'),
+            fingerprint: fingerprints.get('trial-release'),
+            snapshot,
+            context: 'release-trial-release-uncached',
+            tee: true,
+            logDirectory: path.join(root, 'work', 'm12-c', 'gates', 'logs'),
+          });
+        } finally {
+          restoration = await restoreReleaseRunnerOutputs({
+            repositoryRoot: root,
+            snapshot: runnerOutputSnapshot,
+          });
+        }
+        const capturedText =
+          restoration.capturedTextByPath[PRODUCTION_PREVIEW_REPORT_PATH] ??
+          null;
+        const observedProductionPreview = capturedText
+          ? parseCapturedRunnerJson(
+              capturedText,
+              PRODUCTION_PREVIEW_REPORT_PATH
+            )
+          : null;
+        const restorationSummary = { ...restoration };
+        delete restorationSummary.capturedTextByPath;
+        return {
+          ...trialResult,
+          runnerOutputRestoration: restorationSummary,
+          observedRunnerReports: {
+            productionPreview: observedProductionPreview,
+          },
+        };
       },
       validateTrialRelease: trialResult =>
         validateTrialReleaseExecution({
@@ -197,7 +232,11 @@ export async function runReleaseVerification({
         },
         stdoutComplete: stages.result?.stdoutComplete ?? true,
         reportParseStatus: 'invalid',
-        details: { failure: stages.failure ?? null },
+        details: {
+          failure: stages.failure ?? null,
+          runnerOutputRestoration:
+            stages.trialResult?.runnerOutputRestoration ?? null,
+        },
       });
       const report = createReleaseFailureReport({
         snapshot,
@@ -219,7 +258,10 @@ export async function runReleaseVerification({
       };
     }
 
-    const runtimeReports = await loadReleaseRuntimeReports(root);
+    const runtimeReports = await loadReleaseRuntimeReports(
+      root,
+      stages.trialResult.observedRunnerReports
+    );
     await recordTrialReleaseComponents({
       repositoryRoot: root,
       snapshot,
@@ -268,6 +310,8 @@ export async function runReleaseVerification({
       details: {
         uncachedTrialRelease: true,
         extraFormalGates: RELEASE_EXTRA_GATE_NAMES,
+        runnerOutputRestoration:
+          stages.trialResult.runnerOutputRestoration ?? null,
       },
     });
     const report = {
@@ -595,10 +639,11 @@ function buildReleaseSummary({
     })),
     trialReleaseDurationMs: stages.trialResult.durationMs,
     trialStageTimeline: stages.trialResult.summary?.stageTimeline ?? [],
+    runnerOutputRestoration: stages.trialResult.runnerOutputRestoration ?? null,
   };
 }
 
-async function loadReleaseRuntimeReports(root) {
+async function loadReleaseRuntimeReports(root, observedRunnerReports = {}) {
   const [
     productionImports,
     workbenchData,
@@ -610,7 +655,8 @@ async function loadReleaseRuntimeReports(root) {
     readJsonOptional(root, 'reports/production-import-audit.json'),
     readJsonOptional(root, 'reports/workbench-production-data-audit.json'),
     readJsonOptional(root, 'reports/bundle-composition.json'),
-    readJsonOptional(root, 'reports/production-preview-acceptance.json'),
+    observedRunnerReports.productionPreview ??
+      readJsonOptional(root, 'reports/production-preview-acceptance.json'),
     readJsonOptional(
       root,
       'reports/m12/m12-b3-optimization-qualification-summary.json'
@@ -660,6 +706,11 @@ function printReleaseSuccess(stdout, report) {
     'M12-C deterministic/formal: PASS (executed inside test:trial-release)\n'
   );
   stdout.write('test:trial-release: PASS (executed; cache ignored)\n');
+  if (summary.runnerOutputRestoration) {
+    stdout.write(
+      `Runner outputs restored: ${summary.runnerOutputRestoration.restoredCount} (static allowlist; pre-trial bytes)\n`
+    );
+  }
   if (summary.testFull) {
     stdout.write(
       `Full: ${summary.testFull.filesPassed ?? '?'} / ${summary.testFull.filesTotal ?? '?'} files; ${summary.testFull.testsPassed ?? '?'} / ${summary.testFull.testsTotal ?? '?'} tests\n`
@@ -699,6 +750,11 @@ function printReleaseFailure(stdout, report) {
   stdout.write(`FINAL HEAD: ${report.head}\n`);
   stdout.write('release:verify: FAIL (executed)\n');
   stdout.write(`Failure stage: ${report.failureStage}\n`);
+  if (report.runnerOutputRestoration) {
+    stdout.write(
+      `Runner outputs restored: ${report.runnerOutputRestoration.restoredCount} (static allowlist; pre-trial bytes)\n`
+    );
+  }
 }
 
 function createPreflightFailureReport(preflight, scriptIntegrity) {
@@ -738,7 +794,19 @@ function createReleaseFailureReport({
     scriptIntegrity,
     releaseRecordId: releaseRecord.recordId,
     failure: stages.failure ?? null,
+    runnerOutputRestoration:
+      stages.trialResult?.runnerOutputRestoration ?? null,
   };
+}
+
+function parseCapturedRunnerJson(text, relativePath) {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error(
+      `Captured runner output is not valid JSON: ${relativePath}: ${error.message}`
+    );
+  }
 }
 
 function normalizeRecordFailureStatus(status) {
@@ -793,6 +861,8 @@ Safety and authority:
   - Executes M12-C formal audits not already in test:trial-release.
   - Always invokes the real npm run test:trial-release exactly once.
   - Never accepts cached trial-release evidence.
+  - Restores only tracked direct reports/*.png and the production preview report to their pre-trial bytes.
+  - Preserves the observed production preview report in the release result before restoration.
   - Reports Formal Search Admission separately from clientParityReady.
   - Provides no --trust, --force-valid or --mark-pass option.`;
 }

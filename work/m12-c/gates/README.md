@@ -12,4 +12,6 @@
 
 `repository-hygiene` 对 authored source、test、recipe 与配置执行 changed-file ESLint / Prettier，并始终执行 `git diff --check`。`reports/**` 与 `src/data/generated/**` 属于 generator-owned exact-byte 输出，不交给通用 Prettier 重新序列化；它们仍由对应 generator 的 `--assert-clean`、语义审计、测试、build 与 `git diff --check` fail closed，跳过文件名和数量会写入门禁结果。
 
+正式 `test:trial-release` 会改写 Playwright reporter JSON 与 `reports/` 直属截图。`release:verify` 在 trial 前快照这些已跟踪文件，trial 后只把 `reports/production-preview-acceptance.json` 与 `reports/*.png` 恢复为 trial 前 bytes，并把本次 reporter JSON 先保存在 release 结果中；其他目录、扩展名、untracked evidence 或任意 source/config drift 都不恢复，继续由 postflight fail closed。实现不调用 `git restore`、`git clean` 或 stash。
+
 `formal-search-admission` 会校验版本化 `m12c-kibo-axis-action-scope-v1`。当前产品范围把奇波普攻/主动技的 71 个 autonomous surface 延后并从排轴、优化和评分中排除，只保留特性技、合击与已验证被动；准入绑定 qualification catalog、Kibo action catalog、scheduler、search generator 与 scope policy hash，并核验 43 只 admitted Kibo 的完整分类。它证明的是“范围已应用”，不是自主 AI/cadence 已实现；hash、分母、覆盖或保留动作面任一漂移时，release 结果与 Formal Search 状态仍分开报告。

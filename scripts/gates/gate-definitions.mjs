@@ -12,6 +12,7 @@ export const GATE_SYSTEM_FILES = Object.freeze([
   'scripts/gates/gate-runner.mjs',
   'scripts/gates/git-change-classifier.mjs',
   'scripts/gates/node-package-invocation.mjs',
+  'scripts/gates/release-runner-output.mjs',
   'scripts/gates/repository-hygiene-policy.mjs',
   'scripts/gates/run-repository-hygiene.mjs',
   'scripts/release-verify.mjs',
@@ -880,7 +881,7 @@ export const GATE_DEFINITIONS = deepFreeze([
   },
   {
     name: 'release-verify',
-    version: 3,
+    version: 4,
     order: 520,
     kind: 'release-authority',
     description:
