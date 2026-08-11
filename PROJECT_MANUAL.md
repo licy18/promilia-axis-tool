@@ -2220,3 +2220,12 @@ Workbench 草稿快照与项目重建路径持久化并恢复 Machine Axis sourc
 - 八类场景绑定（Machine Axis 严格合同实测）：装配→角色（合法 strict loadout prepare 通过；职业不匹配灵子、装备部位错配均拒绝）；角色→奇波继承（羁绊 1→10 改变 kibo 继承 ATK，角色等级 80→40 改变角色属性）；效果来源/目标（三 actor 场景效应事件携带 source/target）；前后台/切人（107001 switch-star-carry 可执行且双轮重放稳定）；同名奇波跨 owner 隔离（三槽共用 500001 时资源事件按 actor 隔离）；同帧顺序（107001 wind-expiry 双轮 canonical hash 一致）；保存重放（Workbench adapter 与 JSON carrier round-trip hash 一致）；连续循环（cycle-dps 信封 closed 且 cycle/trace hash 稳定）。
 - 重锁反例：从合格 catalog 撤销任一对象（112001）后，formal admission 立即回到 `optimization-qualification-stage-locked`，stage gate 不再解锁。
 - E22 关闭后进入 M12-C；M12-C 队伍/装配/三目标/初始状态规则按 2026-08-10 冻结合同执行，正式搜索仍待 M12-C 自身门禁放行。
+
+### M12-C AI 引导搜索协议（2026-08-11）
+
+- 搜索空间过大，内外层都不做纯枚举/纯自动搜索；实现保留 AI 介入接口与协议：`AzPrMachineAxisSearchGuidance`（输入）与 `AzPrMachineAxisSearchFeedback`（输出），代码在 `src/machine-axis/machineAxisSearchGuidance.js`。
+- Guidance 覆盖预算（beamWidth/topN/maxDepth/每 owner 动作数/奇波动作/等待候选/伤害上界）、动作过滤（全局 kind/ID + perOwner）、奇波白/黑名单、切人/等待策略、启发式（critical/seeds）、pruning 预留与 provenance（必须 `ai-agent`）；归一化后生成 SHA-256 `guidanceHash`，任何字段变更即产生新哈希。
+- 引擎集成：`machineAxisSearchEngine.search` 支持 `options.guidance`，结果 `summary.guidance` 回写 `guidanceHash + appliedRules`；生成器消费 `actionFilter`（按 guidance 过滤角色/奇波候选）。
+- CLI：`node scripts/run-ai-guided-search.mjs --contract <json> [--guidance|--guidance-file <json>] [--options <json>] [--feedback-output <path>]`（npm：`search:ai-guided`），示例见 `work/m12-c/guidance.sample.json`、`work/m12-c/feedback.sample.json`。
+- 外层（队伍/装配 build 池）尚未实现：feedback `outer.implemented=false`，外层字段只校验、不消费；M12-C1 实现时必须消费同一 guidance 合同。
+- 通用 Agent skill：`skills/azpr-m12c-ai-guided-search/`（已同步安装到 `~/.codex/skills/azpr-m12c-ai-guided-search`），含 SKILL.md、`references/protocol.md` 与 examples；`quick_validate.py` 通过。

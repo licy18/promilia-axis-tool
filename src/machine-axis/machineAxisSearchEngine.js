@@ -29,6 +29,10 @@ import {
 } from './machineAxisObjectiveContract';
 import { createFastestKillProof } from './machineAxisKillEvaluator';
 import {
+  applySearchGuidance,
+  buildActionFilterFromGuidance,
+} from './machineAxisSearchGuidance';
+import {
   MACHINE_AXIS_CYCLE_CONTRACT_NAME,
   MACHINE_AXIS_CYCLE_KIND,
   MACHINE_AXIS_CYCLE_SCHEMA_VERSION,
@@ -69,7 +73,13 @@ export function createMachineAxisSearchEngine({
 
   async function search({ contract, options = {} }) {
     const startedAt = Date.now();
-    const settings = normalizeSearchOptions(options);
+    const guidanceApplication =
+      options.guidance == null
+        ? null
+        : applySearchGuidance(options, options.guidance);
+    const settings = normalizeSearchOptions(
+      guidanceApplication ? guidanceApplication.options : options
+    );
     const horizonFrames = Number(contract.scenario?.durationFrames) || 1;
     const baseAxis = createEmptyAxis(contract);
     const baseEvaluation = await evaluateCandidateAxis(baseAxis, settings, {
@@ -119,6 +129,9 @@ export function createMachineAxisSearchEngine({
             includeNormalAttacks: settings.includeNormalAttacks,
             maxActionsPerOwner: settings.maxActionsPerOwner,
             maxKiboActions: settings.maxKiboActions,
+            actionFilter: guidanceApplication
+              ? buildActionFilterFromGuidance(options.guidance)
+              : undefined,
             requireFormalLegality: MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(
               settings.objective
             ),
@@ -281,6 +294,15 @@ export function createMachineAxisSearchEngine({
         topN: settings.topN,
         objective: settings.objective,
         horizonFrames,
+        ...(guidanceApplication
+          ? {
+              guidance: {
+                guidanceHash: guidanceApplication.guidanceHash,
+                guidanceVersion: guidanceApplication.guidanceVersion,
+                appliedRules: guidanceApplication.appliedRules,
+              },
+            }
+          : {}),
       },
       issues: dedupeSearchIssues(issues),
       results,

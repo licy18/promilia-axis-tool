@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "guidanceHash": "7f400b8a61c48cb2c7f3faa540984182c0384c0ea10fb4cc429ce15152738b27",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "budgetUsage": {
+    "beamWidth": 4,
+    "topN": 3,
+    "maxDepth": 3,
+    "steps": 3,
+    "wallTimeMs": 20472,
+    "candidatesEvaluated": 43,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 10,
+    "completedCandidates": 5,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    { "code": "actor-switch-exit-tail-order-unresolved", "count": 16 },
+    { "code": "machine-axis-normal-attack-input-missing", "count": 4 }
+  ],
+  "topResults": [
+    { "chainLength": 1, "score": 0, "heuristicScore": 0, "hashes": null },
+    { "chainLength": 2, "score": 0, "heuristicScore": 0, "hashes": null },
+    { "chainLength": 2, "score": 0, "heuristicScore": 0, "hashes": null }
+  ],
+  "outer": {
+    "implemented": false,
+    "status": "planned-m12-c1-not-implemented",
+    "guidanceReserved": false,
+    "note": "Outer team/loadout build-pool enumeration is planned in M12-C1; outer guidance fields are reserved and validated but not yet consumed by a search engine."
+  },
+  "recommendations": []
+}

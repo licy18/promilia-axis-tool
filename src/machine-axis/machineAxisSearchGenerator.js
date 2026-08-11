@@ -172,6 +172,11 @@ export function createMachineAxisSearchGenerator({
       const limited = maxActorActions
         ? characterCandidates.slice(0, maxActorActions)
         : characterCandidates;
+      const filtered = options.actionFilter
+        ? limited.filter(entry =>
+            options.actionFilter.character(entry, activeCharacterId)
+          )
+        : limited;
       const activeSlot = slotsByCharacterId.get(activeCharacterId);
       const kiboId = Number(activeSlot?.loadout?.kiboId);
       const kiboCandidates =
@@ -182,7 +187,12 @@ export function createMachineAxisSearchGenerator({
       const limitedKibo = maxKiboActions
         ? kiboCandidates.slice(0, maxKiboActions)
         : kiboCandidates;
-      const verifiedJointKiboEntries = limitedKibo.filter(entry =>
+      const filteredKibo = options.actionFilter
+        ? limitedKibo.filter(entry =>
+            options.actionFilter.kibo(entry, kiboId)
+          )
+        : limitedKibo;
+      const verifiedJointKiboEntries = filteredKibo.filter(entry =>
         resolveGeneratorJointAttackBinding({
           entry,
           kiboId,
@@ -191,7 +201,7 @@ export function createMachineAxisSearchGenerator({
       );
       const jointRuntimeValidation =
         validateVerifiedJointAttackRuntimeBinding(scenario.jointAttackRuntime);
-      for (const entry of limited) {
+      for (const entry of filtered) {
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
           const segment = selectNextAttackInputSegment({
@@ -344,7 +354,7 @@ export function createMachineAxisSearchGenerator({
       }
 
       if (options.includeKibo !== false) {
-        for (const entry of limitedKibo) {
+        for (const entry of filteredKibo) {
           const jointBinding = resolveGeneratorJointAttackBinding({
             entry,
             kiboId,

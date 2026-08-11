@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "inner",
+  "budget": {
+    "beamWidth": 4,
+    "topN": 3,
+    "maxDepth": 3,
+    "maxActionsPerOwner": 2,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 2,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "blockedActionKinds": ["dodge-attack", "plunging-attack"]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-advisor",
+    "sessionId": "sample",
+    "iteration": 1,
+    "rationale": "Bounded smoke search to validate the AI-guided protocol."
+  }
+}

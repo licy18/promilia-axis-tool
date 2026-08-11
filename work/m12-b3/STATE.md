@@ -340,3 +340,11 @@ Build a recomputable qualification boundary for the wind/thunder roster, STARBOR
 - bindingMatrixHash=`88b98cf6195e27c4`，22/22 全绿：静态分母/哈希 7 项、八类场景绑定 13 项、重锁 2 项。
 - 八类场景：装配→角色（合法通过/不匹配拒绝）、角色→奇波继承（羁绊与等级差分）、效果来源/目标、前后台/切人、同名奇波跨 owner 隔离、同帧顺序、保存重放（adapter+JSON）、连续循环。
 - 重锁：撤销 112001 后 formal admission 立即 stage-locked。E22 关闭，M12-C 门禁就绪。
+
+## M12-C AI 引导搜索协议（2026-08-11）
+
+- 新增 `src/machine-axis/machineAxisSearchGuidance.js`：guidance 归一化/哈希、options 应用、动作过滤器、feedback 生成；引擎支持 `options.guidance`，生成器消费 actionFilter。
+- 新增 CLI `scripts/run-ai-guided-search.mjs`（npm `search:ai-guided`）+ `work/m12-c/guidance.sample.json`/`feedback.sample.json`。
+- 新增测试 `src/__tests__/machine-axis/machineAxisSearchGuidance.test.js`（5/5 通过）；machine-axis 相关 75/75 通过，production build 通过。
+- 新增 skill `skills/azpr-m12c-ai-guided-search/`（SKILL.md + references/protocol.md + examples + agents/openai.yaml），quick_validate 通过，已安装到 `C:\Users\CORE\.codex\skills\azpr-m12c-ai-guided-search`。
+- 外层 build 池（M12-C1）未实现；guidance 的 `outer` 字段已预留，反馈明确 `outer.implemented=false`。
