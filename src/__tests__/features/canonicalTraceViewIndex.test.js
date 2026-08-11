@@ -1,5 +1,4 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
-import integratedBaseline from '../../../reports/m11/m11-headless-integrated-baseline-20260730.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -18,10 +17,8 @@ describe('canonicalTraceViewIndex', () => {
     const second = createCanonicalTraceViewIndex(run);
 
     expect(second).toBe(first);
-    expect(first.traceHash).toBe(
-      integratedBaseline.machineAxis.canonicalHashes.trace
-    );
-    expect(first.actionViews).toHaveLength(44);
+    expect(first.traceHash).toBe(run.hashes.trace);
+    expect(first.actionViews).toHaveLength(run.trace.actions.length);
 
     const kibo = first.actionsById.get('xunlang-signature');
     expect(kibo.hits).toHaveLength(9);

@@ -46,6 +46,7 @@ import {
   getWorkbenchPerformanceCounters,
   resetWorkbenchPerformanceCounters,
 } from '../../features/workbench/workbenchPerformanceInstrumentation';
+import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import {
   installProjectSimulationSkillDiagnostics,
   resetProjectSimulationSkillDiagnostics,
@@ -92,41 +93,44 @@ vi.mock(
   }
 );
 
-vi.mock('../../data/workbenchKiboActionCatalog', () => ({
-  projectWorkbenchKiboActionCatalog: catalog => catalog,
-  loadWorkbenchKiboActionCatalog: async () => ({
-    schemaVersion: 1,
-    kind: 'workbench-kibo-action-catalog',
-    items: [
-      {
-        kiboId: 500001,
-        actions: [
-          {
-            skillId: 50000102,
-            kind: 'signature',
-            icon: 'tex_icon_petskill_500001_02.png',
-            name: '迅风刃',
-            durationFrames: 85,
-          },
-          {
-            skillId: 504004,
-            kind: 'active',
-            icon: 'tex_icon_petskill_504004.png',
-            name: '狂风冲击',
-            durationFrames: 220,
-          },
-          {
-            skillId: 50000112,
-            kind: 'break',
-            icon: 'tex_icon_skill_petbreakatk.png',
-            name: '迅狼-合击',
-            durationFrames: 90,
-          },
-        ],
-      },
-    ],
-  }),
-}));
+vi.mock('../../data/workbenchKiboActionCatalog', async importOriginal => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    loadWorkbenchKiboActionCatalog: async () => ({
+      schemaVersion: 1,
+      kind: 'workbench-kibo-action-catalog',
+      items: [
+        {
+          kiboId: 500001,
+          actions: [
+            {
+              skillId: 50000102,
+              kind: 'signature',
+              icon: 'tex_icon_petskill_500001_02.png',
+              name: '迅风刃',
+              durationFrames: 85,
+            },
+            {
+              skillId: 504004,
+              kind: 'active',
+              icon: 'tex_icon_petskill_504004.png',
+              name: '狂风冲击',
+              durationFrames: 220,
+            },
+            {
+              skillId: 50000112,
+              kind: 'break',
+              icon: 'tex_icon_skill_petbreakatk.png',
+              name: '迅狼-合击',
+              durationFrames: 90,
+            },
+          ],
+        },
+      ],
+    }),
+  };
+});
 
 beforeAll(() => {
   installProjectSimulationSkillDiagnostics(workbenchSkillDiagnostics);
@@ -269,6 +273,14 @@ async function selectActorInspector(wrapper, characterId) {
   await nextTick();
   await settleWorkbenchAsyncPanels();
   await selectSideInspectorPanel(wrapper, 'team-loadout');
+}
+
+async function selectInitialControlledActor(wrapper, characterId) {
+  await selectActorInspector(wrapper, characterId);
+  await wrapper
+    .get('[data-testid="workbench-initial-controlled-actor-select"]')
+    .setValue(String(characterId));
+  await nextTick();
 }
 
 function getTimelineTeamSlot(wrapper, slotIndex) {
@@ -8309,11 +8321,7 @@ describe('Workbench view', () => {
       {
         selection,
         teamSlots,
-        actorConfigs: normalizeWorkbenchActorConfigs(
-          [],
-          selection,
-          teamSlots
-        ),
+        actorConfigs: normalizeWorkbenchActorConfigs([], selection, teamSlots),
         mechanicsProfileSelection:
           createVerifiedWorkbenchMechanicsProfileSelection(),
         actionDrafts: [
@@ -8358,9 +8366,11 @@ describe('Workbench view', () => {
       .trigger('click');
     await settleWorkbenchAsyncPanels();
     if (
-      wrapper.find(
-        '[data-testid="workbench-side-inspector-tab"][data-inspector-panel="properties"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-side-inspector-tab"][data-inspector-panel="properties"]'
+        )
+        .exists()
     ) {
       await selectSideInspectorPanel(wrapper, 'properties');
     }
@@ -8378,22 +8388,21 @@ describe('Workbench view', () => {
     const savedSwitch = savedDraft.actionDrafts.find(
       action => action.id === 'switch-to-xiaoyu-hit-edit'
     );
-    const terminalHitIdentity =
-      verifiedCombatMechanicsPackage.controlBindings
-        .find(binding => Number(binding.controlSkillId) === 10101021)
-        .hits.find(hit => Number(hit.elementId) === 101010177).hitIdentity;
+    const terminalHitIdentity = verifiedCombatMechanicsPackage.controlBindings
+      .find(binding => Number(binding.controlSkillId) === 10101021)
+      .hits.find(hit => Number(hit.elementId) === 101010177).hitIdentity;
     expect(savedSwitch.hitOverrides).toEqual({
       [terminalHitIdentity]: { willHit: false },
     });
-    expect(
-      savedDraft.actionDrafts.some(action => action.id === childId)
-    ).toBe(false);
+    expect(savedDraft.actionDrafts.some(action => action.id === childId)).toBe(
+      false
+    );
   }, 30000);
 
   it('keeps the Jade charged intent while projecting the A5-derived special form and occupancy', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     workbenchMechanicsProfileMockState.useVerifiedProfile = true;
-    workbenchMechanicsProfileMockState.durationMs = 10_000;
+    workbenchMechanicsProfileMockState.durationMs = 12_000;
     const wrapper = mount(Workbench, {
       global: {
         stubs: {
@@ -8404,6 +8413,7 @@ describe('Workbench view', () => {
       },
     });
     await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await selectInitialControlledActor(wrapper, 101010);
     await findActionLibraryActorButton(wrapper, 101010).trigger('click');
     await settleWorkbenchAsyncPanels();
 
@@ -8421,7 +8431,7 @@ describe('Workbench view', () => {
       .trigger('click');
     await normal.trigger('click');
     await nextTick();
-    await charged.trigger('click');
+    await findActionLibraryEntry(wrapper, 'charged-attack').trigger('click');
     await nextTick();
 
     const jadeActionNames = () =>
@@ -8521,6 +8531,7 @@ describe('Workbench view', () => {
       },
     });
     await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await selectInitialControlledActor(wrapper, 101010);
     await findActionLibraryActorButton(wrapper, 101010).trigger('click');
     await settleWorkbenchAsyncPanels();
     const jadeInitialSp = wrapper.get(
@@ -8630,6 +8641,7 @@ describe('Workbench view', () => {
       },
     });
     await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await selectInitialControlledActor(wrapper, 101010);
     await findActionLibraryActorButton(wrapper, 101010).trigger('click');
     await settleWorkbenchAsyncPanels();
     const jadeInitialSp = wrapper.get(
@@ -8754,6 +8766,7 @@ describe('Workbench view', () => {
       },
     });
     await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await selectInitialControlledActor(wrapper, 101010);
     await findActionLibraryActorButton(wrapper, 101010).trigger('click');
     await settleWorkbenchAsyncPanels();
 
@@ -8820,9 +8833,7 @@ describe('Workbench view', () => {
     );
     expect(sourceAction).toBeTruthy();
     expect(chargedAction).toBeTruthy();
-    expect(
-      msToFrame(chargedAction.startMs - sourceAction.startMs)
-    ).toBe(120);
+    expect(msToFrame(chargedAction.startMs - sourceAction.startMs)).toBe(120);
 
     const setupState = wrapper.vm.$.setupState;
     const readSetupValue = value => value?.value ?? value;
@@ -8870,9 +8881,9 @@ describe('Workbench view', () => {
     const operationMarker = wrapper.get(
       `[data-testid="workbench-timeline-operation-marker"][data-action-id="${chargedAction.id}"]`
     );
-    expect(
-      msToFrame(Number(operationMarker.attributes('data-start-ms')))
-    ).toBe(msToFrame(sourceAction.startMs) + 119);
+    expect(msToFrame(Number(operationMarker.attributes('data-start-ms')))).toBe(
+      msToFrame(sourceAction.startMs) + 119
+    );
     expect(
       msToFrame(Number(operationMarker.attributes('data-execution-start-ms')))
     ).toBe(msToFrame(sourceAction.startMs) + 119);
@@ -8880,9 +8891,11 @@ describe('Workbench view', () => {
     await wrapper.find('[data-testid="workbench-undo-edit"]').trigger('click');
     await settleWorkbenchAsyncPanels();
     expect(
-      wrapper.find(
-        `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
-      ).exists()
+      wrapper
+        .find(
+          `[data-testid="workbench-timeline-action"][data-action-id="${chargedAction.id}"]`
+        )
+        .exists()
     ).toBe(false);
     await wrapper.find('[data-testid="workbench-redo-edit"]').trigger('click');
     await settleWorkbenchAsyncPanels();
@@ -8909,6 +8922,7 @@ describe('Workbench view', () => {
       },
     });
     await selectCharacterFromTimeline(wrapper, 2, 101010);
+    await selectInitialControlledActor(wrapper, 101010);
     await findActionLibraryActorButton(wrapper, 101010).trigger('click');
     await settleWorkbenchAsyncPanels();
     const jadeInitialSp = wrapper.get(
@@ -10366,7 +10380,9 @@ describe('Workbench view', () => {
     ).toBe('3383.333333');
     expect(
       wrapper.find('[data-testid="workbench-note-input"]').element.value
-    ).toContain('自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。');
+    ).toContain(
+      '自动推迟：同轨已有动作占用，已从 2000ms 调整到 3383.333333ms。'
+    );
     expect(
       wrapper
         .find(
@@ -10539,6 +10555,7 @@ describe('Workbench view', () => {
         )
         .attributes('data-lane-id')
     ).toBe('kibo-team-slot-2');
+    await selectInitialControlledActor(wrapper, 101003);
     await selectRuntimeReviewTab(wrapper, 'event');
     expect(wrapper.text()).toContain('KIBO_EVENT');
     expect(wrapper.text()).toContain('awakening');
@@ -10593,6 +10610,7 @@ describe('Workbench view', () => {
         '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
       )
       .trigger('click');
+    await selectInitialControlledActor(wrapper, 101003);
     await nextTick();
 
     const firstStartMs = Number(
@@ -11291,11 +11309,9 @@ describe('Workbench view', () => {
     });
     await settleWorkbenchAsyncPanels();
     expect(
-      restored
-        .get(
-          `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
-        )
-        .element.value
+      restored.get(
+        `[data-testid="workbench-timeline-initial-special-resource-input"][data-character-id="103002"][data-resource-identity="${resourceIdentity}"]`
+      ).element.value
     ).toBe('6');
     expect(
       restored
@@ -11327,6 +11343,7 @@ describe('Workbench view', () => {
     await wrapper
       .find('[data-testid="workbench-enemy-level-input"]')
       .setValue('95');
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     await selectLoadoutFromTimeline(wrapper, 109001, 'kiboId', 500001);
     await selectLoadoutFromTimeline(wrapper, 109001, 'weapon', 1010111);
     await selectLoadoutFromTimeline(wrapper, 109001, 'soulessenceId', 10001);
@@ -11483,8 +11500,14 @@ describe('Workbench view', () => {
     expect(restored.find('[data-testid="workbench-draft-status"]').text()).toBe(
       '已恢复草稿'
     );
+    expect(
+      restored.find('[data-testid="scenario-action-count"]').attributes()
+    ).toMatchObject({
+      'data-executed-action-count': '5',
+      'data-skipped-action-count': '1',
+    });
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '2 action'
+      '5/6 action'
     );
     await selectSideInspectorPanel(restored, 'properties');
     expect(
@@ -11535,7 +11558,7 @@ describe('Workbench view', () => {
       '已重置草稿'
     );
     expect(restored.find('[data-testid="scenario-action-count"]').text()).toBe(
-      '1 action'
+      '5 action'
     );
     await selectSideInspectorPanel(restored, 'properties');
     expect(
@@ -12516,6 +12539,14 @@ describe('Workbench view', () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     workbenchMechanicsProfileMockState.useVerifiedProfile = true;
     await import('../../machine-axis/workbenchMachineAxisAdapter');
+    const authoritativeRun =
+      createMachineAxisService().simulate(machineAxisFixture);
+    const importedTraceHash = authoritativeRun.traceHash;
+    const importedTraceActionCount = authoritativeRun.trace.actions.length;
+    const importedExecutedActionCount =
+      authoritativeRun.trace.executionPlan.actions.filter(
+        action => action.execute !== false
+      ).length;
     const wrapper = mount(Workbench, {
       attachTo: document.body,
       global: {
@@ -12529,7 +12560,9 @@ describe('Workbench view', () => {
     await settleWorkbenchAsyncPanels();
     resetWorkbenchPerformanceCounters();
 
-    await wrapper.get('[data-testid="workbench-open-machine-axis"]').trigger('click');
+    await wrapper
+      .get('[data-testid="workbench-open-machine-axis"]')
+      .trigger('click');
     await settleWorkbenchAsyncPanels();
     expect(getWorkbenchPerformanceCounters()).toMatchObject({
       authoritativeCompile: 0,
@@ -12543,8 +12576,8 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(wrapper.get('main.workbench').attributes()).toMatchObject({
-          'data-canonical-trace-hash': 'd410351bdb3f61d5',
-          'data-canonical-trace-action-count': '44',
+          'data-canonical-trace-hash': importedTraceHash,
+          'data-canonical-trace-action-count': String(importedTraceActionCount),
           'data-machine-axis-import-active': 'true',
         });
       },
@@ -12552,24 +12585,28 @@ describe('Workbench view', () => {
     );
     await settleWorkbenchAsyncPanels();
 
-    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '机器输入 42'
-    );
-    expect(wrapper.get('[data-testid="machine-axis-summary"]').text()).toContain(
-      '实际执行 44'
-    );
+    expect(
+      wrapper.get('[data-testid="machine-axis-summary"]').text()
+    ).toContain(`机器输入 ${machineAxisFixture.actions.length}`);
+    expect(
+      wrapper.get('[data-testid="machine-axis-summary"]').text()
+    ).toContain(`实际执行 ${importedExecutedActionCount}`);
     expect(wrapper.get('[data-testid="machine-axis-status"]').text()).toContain(
       '已载入 M11-B 120 秒验收轴'
     );
     expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-action"][data-action-id="xunlang-signature"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="xunlang-signature"]'
+        )
+        .exists()
     ).toBe(true);
     expect(
-      wrapper.find(
-        '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
-      ).exists()
+      wrapper
+        .find(
+          '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
+        )
+        .exists()
     ).toBe(true);
 
     await wrapper
@@ -12591,7 +12628,7 @@ describe('Workbench view', () => {
     const inspector = wrapper.get(
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
-    expect(inspector.attributes('data-trace-hash')).toBe('d410351bdb3f61d5');
+    expect(inspector.attributes('data-trace-hash')).toBe(importedTraceHash);
     expect(inspector.text()).toContain('control 10100703 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
@@ -12610,13 +12647,12 @@ describe('Workbench view', () => {
     await vi.waitFor(
       () => {
         expect(
-          wrapper
-            .get('[data-testid="canonical-trace-hit-landed"]')
-            .element.value
+          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element
+            .value
         ).toBe('miss');
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).not.toBe('0d2c57b109dab9ed');
+        ).not.toBe(importedTraceHash);
       },
       { timeout: 30_000 }
     );
@@ -12630,9 +12666,10 @@ describe('Workbench view', () => {
       () => {
         expect(
           wrapper.get('main.workbench').attributes('data-canonical-trace-hash')
-        ).toBe('d410351bdb3f61d5');
+        ).toBe(importedTraceHash);
         expect(
-          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element.value
+          wrapper.get('[data-testid="canonical-trace-hit-landed"]').element
+            .value
         ).toBe('hit');
       },
       { timeout: 30_000 }

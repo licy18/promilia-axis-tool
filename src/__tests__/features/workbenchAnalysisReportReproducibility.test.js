@@ -112,6 +112,13 @@ describe('Workbench analysis report reproducibility', () => {
             seed: 'analysis-report-seed',
           },
         };
+        draft.initialRuntimeState = {
+          ...draft.initialRuntimeState,
+          controlledActor: {
+            actorId: `actor-${PANGPANG_CHARACTER_ID}`,
+            characterId: PANGPANG_CHARACTER_ID,
+          },
+        };
         draft.actionDrafts = [
           createWorkbenchActionDraft({
             id: 'analysis-pangpang-a3',

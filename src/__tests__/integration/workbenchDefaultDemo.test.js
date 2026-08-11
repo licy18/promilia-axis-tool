@@ -1,4 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   DEFAULT_WORKBENCH_DEMO_SCENARIO_NAME,
   createDefaultWorkbenchDemoDraftState,
@@ -12,6 +17,14 @@ import { compileProject } from '../../simulation/compiler/compileProject';
 import { simulateScenario } from '../../simulation/engine/simulateScenario';
 
 describe('Workbench default demo', () => {
+  beforeAll(() => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+  });
+
+  afterAll(() => {
+    clearInstalledVerifiedCombatMechanicsPackage();
+  });
+
   it('opens a three-person preview with six independent energy owners', () => {
     const draft = createDefaultWorkbenchDemoDraftState();
     const project = createWorkbenchProject(draft.selection, {

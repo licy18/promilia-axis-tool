@@ -1,5 +1,10 @@
 import { Buffer } from 'node:buffer';
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import {
+  clearInstalledVerifiedCombatMechanicsPackage,
+  installVerifiedCombatMechanicsPackage,
+} from '../../data/verifiedCombatMechanicsPackage';
 import {
   createDefaultWorkbenchDraftState,
   createWorkbenchDraftSnapshot,
@@ -39,6 +44,14 @@ const REPLAY_PROFILE = {
 };
 
 describe('Workbench project replay consistency', () => {
+  beforeAll(() => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+  });
+
+  afterAll(() => {
+    clearInstalledVerifiedCombatMechanicsPackage();
+  });
+
   it('replays the same configuration binding and runtime outputs from every project carrier', async () => {
     const sourceState = createWorkbenchDraftSnapshot(
       createReplaySourceState(),
