@@ -32,7 +32,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
         reachableControlCount: 29,
         executionFormCount: 14,
         hitCount: 73,
-      semanticEffectCount: 36,
+        semanticEffectCount: 36,
         excludedControlCount: 7,
       },
       validation: {
@@ -72,7 +72,7 @@ describe('M10-B2 Han Youyou character combat profile', () => {
       passiveCount: 1,
       switchTriggerCount: 1,
     });
-    expect(sourceManifest.summary.identityCount).toBe(524);
+    expect(sourceManifest.summary.identityCount).toBe(535);
     expect(reachableGraph.summary).toMatchObject({
       controlCount: 29,
       exclusionCount: 7,

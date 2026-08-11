@@ -45,6 +45,9 @@ describe('kibo headless census', () => {
       pvpPassiveOccurrenceCount: 122,
       pvpPassiveUniqueCount: 122,
     });
+    expect(outputs.census.sources.verifiedMechanics).toBe(
+      'src/data/generated/verified-combat-mechanics-package.json'
+    );
     expect(outputs.census.summary).toMatchObject({
       fixedSkillClassification: {
         evidenceClosed: 172,
@@ -84,7 +87,9 @@ describe('kibo headless census', () => {
     ).toHaveLength(0);
     expect(
       outputs.census.fixedSkills
-        .filter(row => row.slots.some(slot => [505, 506, 602, 603, 50206].includes(slot)))
+        .filter(row =>
+          row.slots.some(slot => [505, 506, 602, 603, 50206].includes(slot))
+        )
         .every(row => row.scopeClass === 'non-combat-capability')
     ).toBe(true);
     expect(
@@ -1078,9 +1083,7 @@ describe('kibo headless census', () => {
       },
     });
     expect(
-      generatedPassiveCatalog.unresolved.some(
-        row => row.skillId === 520018
-      )
+      generatedPassiveCatalog.unresolved.some(row => row.skillId === 520018)
     ).toBe(false);
     expect(
       generatedCensus.pvePassiveSkills.find(row => row.skillId === 520013)

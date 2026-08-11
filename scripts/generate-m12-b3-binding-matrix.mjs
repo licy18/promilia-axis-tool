@@ -63,6 +63,9 @@ export async function createM12B3BindingMatrix({
     const objectiveModule = await vite.ssrLoadModule(
       '/src/machine-axis/machineAxisObjectiveContract.js'
     );
+    const initialStatePolicyModule = await vite.ssrLoadModule(
+      '/src/machine-axis/m12cInitialStatePolicy.js'
+    );
     const policyModule = await vite.ssrLoadModule(
       '/src/optimization-scenario/optimizationScenarioPolicy.js'
     );
@@ -105,13 +108,11 @@ export async function createM12B3BindingMatrix({
       summary.gapCounts?.blockingUniqueGapCount === 0,
       { gapCounts: summary.gapCounts }
     );
-    addCheck(
-      'static',
-      'm12c-unlocked',
-      summary.m12cLocked === false,
-      { m12cLocked: summary.m12cLocked }
-    );
-    const admissionCharacters = qualificationCatalog.admission?.characters ?? [];
+    addCheck('static', 'm12c-unlocked', summary.m12cLocked === false, {
+      m12cLocked: summary.m12cLocked,
+    });
+    const admissionCharacters =
+      qualificationCatalog.admission?.characters ?? [];
     addCheck(
       'static',
       'character-admission-closed',
@@ -158,7 +159,10 @@ export async function createM12B3BindingMatrix({
       qualificationCatalog.cultivation.character.profiles.find(
         entry => Number(entry.characterId) === characterId
       );
-    const createCultivationProfile = ({ bondLevel = 1, actorLevel = 80 } = {}) => ({
+    const createCultivationProfile = ({
+      bondLevel = 1,
+      actorLevel = 80,
+    } = {}) => ({
       schemaVersion: 1,
       contractName: 'AzPrOptimizationCultivationProfile',
       profileId: 'm12-b3-e22-binding-matrix',
@@ -218,62 +222,83 @@ export async function createM12B3BindingMatrix({
       ringSlot = null,
       actions = [],
       catalog = qualificationCatalog,
-    } = {}) => ({
-      schemaVersion: 1,
-      contractName: 'AzPrMachineAxis',
-      dataIdentity: {
-        verifiedMechanicsPackageId: mechanicsPackage.packageId,
-        verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
-        mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
-        mechanicsProfileVersion: 1,
-      },
-      scenario: {
-        id: 'm12-b3-e22-binding-matrix',
-        name: 'M12 B3 E22 Binding Matrix',
-        fps: 60,
-        durationFrames: 600,
-        team: [101010, 103002, 102001].map((characterId, index) => ({
-          slotId: `slot-${index + 1}`,
-          characterId,
-          level: 80,
-          initialSp: 0,
-          loadout: {
-            kiboId: 500001,
-            soulessenceId: soulId,
-            equipment: Object.fromEntries(
-              ['weapon', 'top', 'bottom', 'earring', 'ring'].map(slot => [
-                slot,
-                ringSlot && slot === 'ring'
-                  ? ringSlot
-                  : Number(
-                      equipmentRecords.find(
-                        record => record.type === equipmentTypeBySlot[slot]
-                      ).id
-                    ),
-              ])
-            ),
-          },
-        })),
-        enemy: { enemyId: 300032 },
-        objectiveContract: objectiveModule.createMachineAxisObjectiveContract(
-          'cycle-dps-no-toughness'
-        ),
-        target: structuredClone(
-          policyModule.getOptimizationScenarioPolicy().assumptions.targetPolicy
-        ),
-        initialRuntimeState: {},
-        projectile: { targetDistance: 0, defaultWillHit: true },
-        critical: { policy: 'expected', seed: null },
-        optimizationScenarioPolicy:
-          policyModule.createOptimizationScenarioPolicyBinding(),
-        optimizationQualification: {
-          mode,
-          catalogHash: catalog.catalogHash,
+    } = {}) => {
+      const axis = {
+        schemaVersion: 1,
+        contractName: 'AzPrMachineAxis',
+        dataIdentity: {
+          verifiedMechanicsPackageId: mechanicsPackage.packageId,
+          verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
+          mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
+          mechanicsProfileVersion: 1,
         },
-        cultivationProfile: profile,
-      },
-      actions,
-    });
+        scenario: {
+          id: 'm12-b3-e22-binding-matrix',
+          name: 'M12 B3 E22 Binding Matrix',
+          fps: 60,
+          durationFrames: 600,
+          team: [101010, 103002, 102001].map((characterId, index) => ({
+            slotId: `slot-${index + 1}`,
+            characterId,
+            level: 80,
+            initialSp: 0,
+            loadout: {
+              kiboId: 500001,
+              soulessenceId: soulId,
+              equipment: Object.fromEntries(
+                ['weapon', 'top', 'bottom', 'earring', 'ring'].map(slot => [
+                  slot,
+                  ringSlot && slot === 'ring'
+                    ? ringSlot
+                    : Number(
+                        equipmentRecords.find(
+                          record => record.type === equipmentTypeBySlot[slot]
+                        ).id
+                      ),
+                ])
+              ),
+            },
+          })),
+          enemy: { enemyId: 300032 },
+          objectiveContract: objectiveModule.createMachineAxisObjectiveContract(
+            'cycle-dps-no-toughness'
+          ),
+          target: structuredClone(
+            policyModule.getOptimizationScenarioPolicy().assumptions
+              .targetPolicy
+          ),
+          initialRuntimeState: {},
+          projectile: { targetDistance: 0, defaultWillHit: true },
+          critical: { policy: 'expected', seed: null },
+          optimizationScenarioPolicy:
+            policyModule.createOptimizationScenarioPolicyBinding(),
+          optimizationQualification: {
+            mode,
+            catalogHash: catalog.catalogHash,
+          },
+          cultivationProfile: profile,
+        },
+        actions,
+      };
+      if (mode === 'formal') {
+        const initialActor = axis.scenario.team[0];
+        axis.scenario.initialRuntimeState = {
+          controlledActor: {
+            actorId: `actor-${initialActor.characterId}`,
+            characterId: initialActor.characterId,
+          },
+        };
+        axis.scenario.initialStatePreset =
+          initialStatePolicyModule.createM12cInitialStatePresetBinding({
+            presetId: 'm12-b3-e22-binding-matrix-cold-start-v1',
+            objectiveId: axis.scenario.objectiveContract.objectiveId,
+            team: axis.scenario.team,
+            initialRuntimeState: axis.scenario.initialRuntimeState,
+            mechanicsPackage,
+          });
+      }
+      return axis;
+    };
     const createFormalAxisForCatalog = catalog => {
       const axis = createAxis({ mode: 'formal', catalog });
       for (const slot of axis.scenario.team) {
@@ -314,9 +339,7 @@ export async function createM12B3BindingMatrix({
         ),
       { codes: illegalSoulCodes.slice(0, 6) }
     );
-    const weaponId = equipmentRecords.find(
-      record => record.type === '武器'
-    ).id;
+    const weaponId = equipmentRecords.find(record => record.type === '武器').id;
     const illegalEquipmentPrepared = service.prepare(
       createAxis({ ringSlot: weaponId })
     );
@@ -385,7 +408,9 @@ export async function createM12B3BindingMatrix({
     threeActorFixture.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;
     const threeActorSim = service.simulate(threeActorFixture);
-    const sourceTargetEvents = (threeActorSim.trace?.effects?.events ?? []).filter(
+    const sourceTargetEvents = (
+      threeActorSim.trace?.effects?.events ?? []
+    ).filter(
       event =>
         (event.after?.effectAdderActorId ?? event.sourceActorId) &&
         (event.after?.targetId ?? event.targetId)
@@ -547,14 +572,14 @@ export async function createM12B3BindingMatrix({
       ),
     };
     const tamperedFormalAxis = createFormalAxisForCatalog(tamperedCatalog);
-    const relockIssues = protocolModule.createOptimizationQualificationIssuesForContract(
-      tamperedFormalAxis,
-      { catalog: tamperedCatalog }
-    );
+    const relockIssues =
+      protocolModule.createOptimizationQualificationIssuesForContract(
+        tamperedFormalAxis,
+        { catalog: tamperedCatalog }
+      );
     const relockCodes = (relockIssues ?? []).map(issue => issue.code);
-    const stageGate = stageGateModule.deriveOptimizationQualificationStageGate(
-      tamperedCatalog
-    );
+    const stageGate =
+      stageGateModule.deriveOptimizationQualificationStageGate(tamperedCatalog);
     addCheck(
       're-lock',
       'revoking-one-object-re-locks-formal-admission',
@@ -591,10 +616,16 @@ export async function createM12B3BindingMatrix({
         checks: checks.filter(check => check.dimension === 'static'),
       },
       scenarioMatrix: Object.fromEntries(
-        ['loadout-to-character', 'character-to-kibo-inheritance',
-          'effect-source-target', 'foreground-background-switch',
-          'cross-owner-kibo-isolation', 'same-frame-ordering',
-          'save-replay', 'continuous-cycle'].map(dimension => [
+        [
+          'loadout-to-character',
+          'character-to-kibo-inheritance',
+          'effect-source-target',
+          'foreground-background-switch',
+          'cross-owner-kibo-isolation',
+          'same-frame-ordering',
+          'save-replay',
+          'continuous-cycle',
+        ].map(dimension => [
           dimension,
           {
             status: blocked.some(check => check.dimension === dimension)
@@ -666,7 +697,10 @@ function createMarkdown(report) {
 
 const writeMode = process.argv.includes('--write');
 const assertClean = process.argv.includes('--assert-clean');
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   const { report } = await createM12B3BindingMatrix();
   const jsonPath = path.join(
     projectRootDefault,
@@ -707,7 +741,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
         ? canonicalJson(JSON.parse(actual))
         : actual;
       if (actualNormalized !== expected) {
-        drift.push(path.relative(projectRootDefault, filePath).replaceAll('\\', '/'));
+        drift.push(
+          path.relative(projectRootDefault, filePath).replaceAll('\\', '/')
+        );
       }
     }
     if (drift.length) {

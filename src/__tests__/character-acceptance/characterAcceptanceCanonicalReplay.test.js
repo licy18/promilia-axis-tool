@@ -2,7 +2,7 @@ import xiaoyuFixture from '../../../fixtures/character-acceptance/101010-visual.
 import rubyFixture from '../../../fixtures/character-acceptance/103002-visual.json';
 import hanFixture from '../../../fixtures/character-acceptance/101003-visual.json';
 import moyinFixture from '../../../fixtures/character-acceptance/109001-visual.json';
-import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
+import mitiFixture from '../../../fixtures/character-acceptance/108003-active-surface-closure.json';
 import misaFixture from '../../../fixtures/character-acceptance/107002-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
@@ -15,9 +15,9 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: 'ddf8023c5df6168f',
-      data: 'c4adb18b45ef12d4',
-      trace: '197ff74152b8bc75',
+      input: '93bb8b09eb5e75e3',
+      data: '6af1c735c0f4c47c',
+      trace: 'd92d46b043dc203c',
       evaluation: 'fd30dcfbaa6144f0',
     },
   },
@@ -25,9 +25,9 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: '2bd40cea97b9435b',
-      data: '275b6030a0654001',
-      trace: '1196d09295ac8c60',
+      input: 'e02fdcaf3fecae08',
+      data: 'b2c2e1cdfab8d024',
+      trace: '212f8d7da88f6786',
       evaluation: '208849308c4ec837',
     },
   },
@@ -35,9 +35,9 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: 'cc3d6c0efc1bfc83',
-      data: '665403a4382b63df',
-      trace: '127e2cbd0bd9c3f5',
+      input: 'c8b46f828c346f0a',
+      data: '7e17791ba49a9ea2',
+      trace: 'df58152d6ea369e4',
       evaluation: '53eb57b729f3a7e6',
     },
   },
@@ -45,9 +45,9 @@ const cases = [
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: '526ab757142cf86c',
-      data: '6bb2168ad1dc2103',
-      trace: '0af55dab9b226e34',
+      input: '269ff7673999b42d',
+      data: 'b7af247f0ef075a2',
+      trace: 'd2b947ed718cad15',
       evaluation: '855dd5b0926bf110',
     },
   },
@@ -55,19 +55,19 @@ const cases = [
     ownerId: 108003,
     fixture: mitiFixture,
     hashes: {
-      input: 'b875d8187268e30c',
-      data: '71b6957912903650',
-      trace: 'bf79a47c463d642a',
-      evaluation: '466ef3ebad8eb8af',
+      input: '76730e9947c44906',
+      data: '3176ab37d9834506',
+      trace: 'a0a6dcc744f39520',
+      evaluation: 'b42113336570ef3e',
     },
   },
   {
     ownerId: 107002,
     fixture: misaFixture,
     hashes: {
-      input: '36ea193752df20e5',
-      data: 'f5452dec2a5982df',
-      trace: '016132ffd7fc9cfc',
+      input: '43048ce2b231532d',
+      data: '270777ca92806aa5',
+      trace: '1d5446b60ea54185',
       evaluation: '5238bf8119e66446',
     },
   },
@@ -97,6 +97,7 @@ describe('M11-D canonical character scenario batch', () => {
     ({ fixture, hashes }) => {
       const service = createMachineAxisService();
       const adapter = createWorkbenchMachineAxisAdapter({ service });
+      expect(service.prepare(fixture).issues).toEqual([]);
       const first = service.simulate(fixture);
       const second = service.simulate(fixture);
       const imported = adapter.importContract(fixture);

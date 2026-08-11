@@ -11,12 +11,13 @@ const GOLDENS = [
     report: xiaoyuGolden,
     assertionCount: 118,
     replayHash:
-      'ccc6d42eb2dfe9281a158971d5c2044a2cd5cb9e551a8d84654d795420228cf0',
+      'e368436a1a3e14edf6e2f1abf8d0bddbf9fd930e28fd3c29db6f48c248934aba',
     summaryHash:
-      '5732addb14644c9ab8872074987fc3e416159335153ebd624900c43d128d7426',
-    inputHash: '8ebc66d991ea2de9',
-    dataHash: '90297386319c28cc',
-    traceHash: 'c07de9f8c5ed6e2c',
+      'd77383d4f3df485a2b2ff3a1dd60958a8ad5f104074c21cf961f94e7f85e70bc',
+    inputHash: '869d60be94e607b9',
+    dataHash: '85f1728cc556fbed',
+    traceHash: 'e82a19886e4e8129',
+    buildHash: 'de5fafadb3636f21',
   },
   {
     identity: 'ruby-main',
@@ -24,25 +25,27 @@ const GOLDENS = [
     report: rubyGolden,
     assertionCount: 129,
     replayHash:
-      'b491d74a89a3b2e47a0f9de215567506862608cf80559420ccb74af4e5761afc',
+      '198d3e8ca71f63745d559a39db58d6bcf311f877cf0ebefcd9c58088491edc09',
     summaryHash:
-      '7230de690cf96352c554b0d07a27258d60fa059bcfa9f8406556aad1da457407',
-    inputHash: '2ead74cda9823599',
-    dataHash: '501f7ecc584383b8',
-    traceHash: '47cece9ea6d70f54',
+      '584a158a1c13856d3f4adaa4c01f5e0ece2d6dd768b075a5b2c734a78814d61f',
+    inputHash: '69fda5a55483e515',
+    dataHash: '35028f78b97a8cb9',
+    traceHash: '9f4a14dd31d5cd9e',
+    buildHash: '21caf7288c6da7da',
   },
   {
     identity: 'han-main',
     ownerId: 101003,
     report: hanGolden,
-    assertionCount: 76,
+    assertionCount: 79,
     replayHash:
-      '5a3f70cf2007b04e2958330330ffd2404b30ef783b20a89e256728ed95d7c5bd',
+      'ed5dd56bee71b05622c2f52b51e5844a7a468bff5dc00078fd089122babd507c',
     summaryHash:
-      'd2bbede6c86e81440b6fd16ed758f3d65b06751360580f44d5a360bd902a16f9',
-    inputHash: '89236436344ccfdf',
-    dataHash: '7c0206aab6793197',
-    traceHash: 'e6c4bb0ab0ca3a20',
+      '137a834ffd2962fda13490990c7c3c89fd0668c62ebc33d4727d04f9f88b7bf6',
+    inputHash: 'dd10b2b3c428b467',
+    dataHash: '1cf26bb36061a311',
+    traceHash: 'e1a13952dc7761ea',
+    buildHash: '2c0e28e06818748b',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -50,12 +53,13 @@ const GOLDENS = [
     report: hanSwitchGolden,
     assertionCount: 34,
     replayHash:
-      'b02b27541d2bd5fdab0361e3f6be8bd149e55a24e388217f20d007b4d7fffae4',
+      '66bf4893e52cd56ef1899cf831a9d15ed17276d442a99d2cbdb7e30592a88bc2',
     summaryHash:
-      'e37062e6cd73cfac6e81ff6140a403d9062fe6ed24d7722261e82665d9e8626a',
-    inputHash: '1b0eef273f6c366c',
-    dataHash: '4b8f8d251533f911',
-    traceHash: '98933017cf441958',
+      'e9ecef3cacaa2bd6482ab5309542b9e84f7d8513f3e170be7a311656bae0cde9',
+    inputHash: 'a5247572cdbdc6b2',
+    dataHash: '69d3276d6c4950a6',
+    traceHash: 'c08af1a97df57662',
+    buildHash: 'a6d8592a8bdc47bb',
   },
 ];
 
@@ -70,6 +74,7 @@ describe('M10 golden migration to the canonical headless core', () => {
       inputHash,
       dataHash,
       traceHash,
+      buildHash,
     }) => {
       expect(report.compilerPath).toContain(
         'canonicalHeadlessCombatCore.js#compile'
@@ -82,6 +87,8 @@ describe('M10 golden migration to the canonical headless core', () => {
         inputHash,
         traceHash,
         dataHash,
+        buildHash,
+        headlessAssumptionContracts: [],
         criticalPolicy: 'non-critical',
       });
       expect(report.validation).toMatchObject({

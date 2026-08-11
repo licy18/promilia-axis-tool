@@ -41,9 +41,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: '36ea193752df20e5',
-      data: 'f5452dec2a5982df',
-      trace: '016132ffd7fc9cfc',
+      input: '43048ce2b231532d',
+      data: '270777ca92806aa5',
+      trace: '1d5446b60ea54185',
       evaluation: '5238bf8119e66446',
     });
     expect(second.hashes).toEqual(first.hashes);
@@ -89,9 +89,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
         `pickup-reward:pickup|misa-a3-hp-pickup|misa-a3|${spawnFrame}|0|${entitySequence}|${ordinal}`,
       ])
     );
-    expect(
-      directHeals.filter(event => event.actionId === 'misa-a3')
-    ).toEqual([]);
+    expect(directHeals.filter(event => event.actionId === 'misa-a3')).toEqual(
+      []
+    );
 
     const missAbsorbActionId = 'misa-charged-ultimate-absorb-miss';
     expect(
@@ -278,13 +278,13 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       functionalFailureCount: 0,
     });
     expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: '5ee914e2f5134d280f2a5da0ea6a28604242957c',
+      bindingStatus: 'verified',
     });
     expect(misaManifest.maturity).toMatchObject({
-      optimizationReady: false,
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      optimizationReady: true,
+      blockers: [],
     });
     expect(
       misaMatrix.requirements.filter(requirement =>

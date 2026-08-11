@@ -738,8 +738,8 @@ describe('M10-B1 Ruby character combat profile', () => {
       summary: {
         publicActionCount: 10,
         rawWindowCount: 159,
-        semanticTransitionCount: 37,
-        appliedTransitionCount: 37,
+        semanticTransitionCount: 38,
+        appliedTransitionCount: 38,
         gameplayGapCount: 0,
       },
     });

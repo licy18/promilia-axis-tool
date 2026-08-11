@@ -22,8 +22,7 @@ const FIXED_SLOT_SEMANTICS = Object.freeze({
   205: {
     name: 'PetUltraBlink',
     scope: 'pve-combat-action-support',
-    sourceIdentity:
-      'dump.cs#ESkillSlotType.PetUltraBlink=205',
+    sourceIdentity: 'dump.cs#ESkillSlotType.PetUltraBlink=205',
   },
   401: {
     name: 'JumpBack',
@@ -58,26 +57,22 @@ const FIXED_SLOT_SEMANTICS = Object.freeze({
   505: {
     name: 'PetDecoration',
     scope: 'non-combat-capability',
-    sourceIdentity:
-      'dump.cs#SystemConst.systemEnum.petDecoration=505',
+    sourceIdentity: 'dump.cs#SystemConst.systemEnum.petDecoration=505',
   },
   506: {
     name: 'PetRelease',
     scope: 'non-combat-capability',
-    sourceIdentity:
-      'dump.cs#SystemConst.systemEnum.petRelease=506',
+    sourceIdentity: 'dump.cs#SystemConst.systemEnum.petRelease=506',
   },
   507: {
     name: 'PetFeed',
     scope: 'non-combat-capability',
-    sourceIdentity:
-      'dump.cs#SystemConst.systemEnum.petFeed=507',
+    sourceIdentity: 'dump.cs#SystemConst.systemEnum.petFeed=507',
   },
   508: {
     name: 'PetBox',
     scope: 'non-combat-capability',
-    sourceIdentity:
-      'dump.cs#SystemConst.systemEnum.petBox=508',
+    sourceIdentity: 'dump.cs#SystemConst.systemEnum.petBox=508',
   },
   602: {
     name: 'KiBoVersusCommonSkill',
@@ -225,7 +220,8 @@ export async function createKiboHeadlessCensus({
   );
   const languageById = parseInt64LanguageRows(languageText);
   const kiboById = new Map(kibos.map(kibo => [Number(kibo.id), kibo]));
-  const staticKiboCatalog = verifiedMechanicsDocument.staticPropertyCatalog?.kibo ?? {};
+  const staticKiboCatalog =
+    verifiedMechanicsDocument.staticPropertyCatalog?.kibo ?? {};
   const kiboStaticAudit = {
     profiles: new Map(
       (staticKiboCatalog.profiles ?? []).map(profile => [
@@ -386,6 +382,8 @@ function createPortableReportSources(sources) {
   return {
     ...sources,
     kibos: 'src/data/generated/kibos.json',
+    verifiedMechanics:
+      'src/data/generated/verified-combat-mechanics-package.json',
     publicRuntimeCoverage: 'reports/verified-public-runtime-coverage.json',
   };
 }
@@ -555,7 +553,9 @@ function createFixedSkillRows({
   return [...groupRows(occurrences, row => row.skillId).entries()]
     .map(([skillId, skillOccurrences]) => {
       const slots = uniqueSorted(skillOccurrences.map(row => row.slot));
-      const slotSemantics = slots.map(slot => FIXED_SLOT_SEMANTICS[slot] ?? null);
+      const slotSemantics = slots.map(
+        slot => FIXED_SLOT_SEMANTICS[slot] ?? null
+      );
       const knownSlotScopes = uniqueSorted(
         slotSemantics.map(entry => entry?.scope ?? 'unknown')
       );
@@ -596,9 +596,13 @@ function createFixedSkillRows({
         unresolvedReasons:
           closureClass === 'unresolved'
             ? [
-                ...(allSlotsKnown ? [] : ['fixed-skill-slot-semantics-not-yet-evidence-closed']),
+                ...(allSlotsKnown
+                  ? []
+                  : ['fixed-skill-slot-semantics-not-yet-evidence-closed']),
                 ...(nonCombatGuardFailed
-                  ? ['fixed-skill-classified-non-combat-but-in-public-action-surface']
+                  ? [
+                      'fixed-skill-classified-non-combat-but-in-public-action-surface',
+                    ]
                   : []),
               ]
             : [],
@@ -2910,10 +2914,7 @@ function parseAreaAuraPropertyPassive({
     return null;
   }
 
-  const auraPathIds = extractObjectPathIds(
-    area.raw,
-    'ElementParams'
-  );
+  const auraPathIds = extractObjectPathIds(area.raw, 'ElementParams');
   const auraEntries = areaValue.ElementAddListWithDelete;
   if (
     auraPathIds.length !== auraEntries.length ||
@@ -3059,9 +3060,7 @@ function parseTriggerProbability(trigger, element) {
   );
   if (!Number.isFinite(missBasisPoints) || missBasisPoints < 0) return null;
   const chanceBasisPoints = 10000 - missBasisPoints;
-  const describeText = String(
-    element?.describe ?? element?.elementName ?? ''
-  );
+  const describeText = String(element?.describe ?? element?.elementName ?? '');
   const percentMatch = describeText.match(/(\d+(?:\.\d+)?)%\s*概率/u);
   if (!percentMatch) return null;
   const describedPercent = Number(percentMatch[1]);
@@ -3085,7 +3084,8 @@ function resolveElementFormulaIds(value) {
       value?.formulaParams?.function_2 ?? value?.baseIntParams?.[1]
     ),
     coefficientRaw: Number(
-      value?.formulaParams?.formulaParamValues?.[0] ?? value?.functionParams?.[0]
+      value?.formulaParams?.formulaParamValues?.[0] ??
+        value?.functionParams?.[0]
     ),
   };
 }
@@ -3159,10 +3159,7 @@ function parseAfterReceiveDamageRetaliationWithStaticPropertyPassive({
   if (plainProperties.length !== 2 || triggers.length !== 1) return null;
   const trigger = triggers[0];
   const triggerValue = trigger.value ?? {};
-  const probability = parseTriggerProbability(
-    triggerValue,
-    trigger.value
-  );
+  const probability = parseTriggerProbability(triggerValue, trigger.value);
   if (
     Number(triggerValue.triggerType) !== 1 ||
     Number(triggerValue.triggerParam1) !== 4 ||
@@ -3179,7 +3176,10 @@ function parseAfterReceiveDamageRetaliationWithStaticPropertyPassive({
   if (damagePathIds.length !== 1) return null;
   const damageElement =
     elementObjects.find(row => row.pathId === damagePathIds[0]) ?? null;
-  if (!damageElement || !isVerifiedSourceAtkRatioDamage(damageElement.value, 1)) {
+  if (
+    !damageElement ||
+    !isVerifiedSourceAtkRatioDamage(damageElement.value, 1)
+  ) {
     return null;
   }
   if (
@@ -3222,12 +3222,12 @@ function parseAfterReceiveDamageRetaliationWithStaticPropertyPassive({
       kind: 'battle-property',
       attributeId: Number(property.value.attributeID),
       bucket:
-        PROPERTY_BUCKET_BY_CALCULATE_TYPE[
-          Number(property.value.calculateType)
-        ],
+        PROPERTY_BUCKET_BY_CALCULATE_TYPE[Number(property.value.calculateType)],
       valueRaw: Number(property.value.functionParams[0]),
-      durationMs: Number(property.value.time) === -1 ? null : Number(property.value.time),
-      expiration: Number(property.value.time) === -1 ? 'battle-exit' : 'duration',
+      durationMs:
+        Number(property.value.time) === -1 ? null : Number(property.value.time),
+      expiration:
+        Number(property.value.time) === -1 ? 'battle-exit' : 'duration',
       sourceElementId: Number(property.value.elementConfigId),
       sourcePathId: property.pathId,
     })),
@@ -3337,7 +3337,10 @@ function parseAfterReceiveDamagePoisonDotPassive({
   if (damagePathIds.length !== 1) return null;
   const damageElement =
     elementObjects.find(row => row.pathId === damagePathIds[0]) ?? null;
-  if (!damageElement || !isVerifiedSourceAtkRatioDamage(damageElement.value, 6)) {
+  if (
+    !damageElement ||
+    !isVerifiedSourceAtkRatioDamage(damageElement.value, 6)
+  ) {
     return null;
   }
   if (
@@ -3408,7 +3411,9 @@ function parseAfterReceiveDamagePoisonDotPassive({
             weakBreakDamageRateBasisPoints: Number(damage.weakBreakDamageRate),
             physicalPenetrationBasisPoints: Number(damage.armerPenetration),
             magicPenetrationBasisPoints: Number(damage.magicPenetration),
-            elementCalculationFactorBasisPoints: Number(damage.elementCalFactor),
+            elementCalculationFactorBasisPoints: Number(
+              damage.elementCalFactor
+            ),
             physicalRatioBasisPoints: Number(damage.physicalRatio),
             magicRatioBasisPoints: Number(damage.magicRatio),
             recoverSp: Number(damage.recoverSP),
@@ -3492,9 +3497,14 @@ function parsePeriodicBeforeDamageCritPassive({
   ) {
     return null;
   }
-  const propertyPathIds = extractObjectPathIds(damageEvent.raw, 'targetElement');
+  const propertyPathIds = extractObjectPathIds(
+    damageEvent.raw,
+    'targetElement'
+  );
   if (propertyPathIds.length !== 1) return null;
-  const property = elementObjects.find(row => row.pathId === propertyPathIds[0]);
+  const property = elementObjects.find(
+    row => row.pathId === propertyPathIds[0]
+  );
   if (!property || !isPlainPropertyElement(property?.value)) return null;
   if (
     Number(property.value.attributeID) !== 7 ||
@@ -4227,13 +4237,11 @@ function parseDerivedDotAndSelfHealPassive({
     ])
   );
   const relayDot =
-    elementObjects.find(
-      row => row.pathId === relayPathIdByTargetType[1]
-    ) ?? null;
+    elementObjects.find(row => row.pathId === relayPathIdByTargetType[1]) ??
+    null;
   const relayHeal =
-    elementObjects.find(
-      row => row.pathId === relayPathIdByTargetType[0]
-    ) ?? null;
+    elementObjects.find(row => row.pathId === relayPathIdByTargetType[0]) ??
+    null;
   if (!relayDot || !relayHeal) return null;
   for (const relay of [relayDot, relayHeal]) {
     const value = relay.value ?? {};
@@ -4269,13 +4277,10 @@ function parseDerivedDotAndSelfHealPassive({
     return null;
   }
   const dot =
-    elementObjects.find(
-      row => row.pathId === relayDotTargetPathIds[0]
-    ) ?? null;
+    elementObjects.find(row => row.pathId === relayDotTargetPathIds[0]) ?? null;
   const heal =
-    elementObjects.find(
-      row => row.pathId === relayHealTargetPathIds[0]
-    ) ?? null;
+    elementObjects.find(row => row.pathId === relayHealTargetPathIds[0]) ??
+    null;
   if (!dot || !heal) return null;
   const dotValue = dot.value ?? {};
   const healValue = heal.value ?? {};
@@ -4358,12 +4363,8 @@ function parseDerivedDotAndSelfHealPassive({
     controlResourcePathIds.length !== reachablePathIds.length ||
     uniqueValues(controlResourcePathIds).length !==
       controlResourcePathIds.length ||
-    controlResourcePathIds.some(
-      pathId => !reachablePathIds.includes(pathId)
-    ) ||
-    reachablePathIds.some(
-      pathId => !controlResourcePathIds.includes(pathId)
-    ) ||
+    controlResourcePathIds.some(pathId => !reachablePathIds.includes(pathId)) ||
+    reachablePathIds.some(pathId => !controlResourcePathIds.includes(pathId)) ||
     elementObjects.some(row => !reachablePathIds.includes(row.pathId))
   ) {
     return null;
@@ -4422,7 +4423,9 @@ function parseDerivedDotAndSelfHealPassive({
             damageTypeName: 'Dot',
             elementalType: Number(dotValue.damageElementalType),
             elementalTypeName: 'None',
-            weakBreakDamageRateBasisPoints: Number(dotValue.weakBreakDamageRate),
+            weakBreakDamageRateBasisPoints: Number(
+              dotValue.weakBreakDamageRate
+            ),
             physicalPenetrationBasisPoints: Number(dotValue.armerPenetration),
             magicPenetrationBasisPoints: Number(dotValue.magicPenetration),
             elementCalculationFactorBasisPoints: Number(
@@ -4572,12 +4575,8 @@ function parseAfterReceiveDamageRetaliationDamagePassive({
     controlResourcePathIds.length !== reachablePathIds.length ||
     uniqueValues(controlResourcePathIds).length !==
       controlResourcePathIds.length ||
-    controlResourcePathIds.some(
-      pathId => !reachablePathIds.includes(pathId)
-    ) ||
-    reachablePathIds.some(
-      pathId => !controlResourcePathIds.includes(pathId)
-    ) ||
+    controlResourcePathIds.some(pathId => !reachablePathIds.includes(pathId)) ||
+    reachablePathIds.some(pathId => !controlResourcePathIds.includes(pathId)) ||
     elementObjects.some(row => !reachablePathIds.includes(row.pathId))
   ) {
     return null;
@@ -5146,10 +5145,7 @@ function parseStaticPropertyEffectPassive({
   behaviors,
   elementObjects,
 }) {
-  const resourceRootPathIds = extractArrayPathIds(
-    controlRoot.raw,
-    'elements'
-  );
+  const resourceRootPathIds = extractArrayPathIds(controlRoot.raw, 'elements');
   if (behaviors.length === 0 && resourceRootPathIds.length === 0) return null;
   const directInjectTargetTypes =
     behaviors.length > 0
@@ -5452,9 +5448,9 @@ function createPublicActionClosureRow(action) {
       ? 'evidence-closed'
       : policyCovered
         ? 'evidence-closed'
-      : scenarioAssumed
-        ? 'scenario-assumed'
-        : 'unresolved',
+        : scenarioAssumed
+          ? 'scenario-assumed'
+          : 'unresolved',
     runtimeStatus: action.runtimeStatus,
     runnable: action.runnable === true,
     sourceEvidenceStatus: action.sourceEvidenceStatus,
@@ -5592,8 +5588,7 @@ function createMaturityMatrix({
       ['signature', 'normal-attack', 'break'].every(
         kind => actionByKind[kind]?.closureClass === 'evidence-closed'
       ) &&
-      (!hasActive ||
-        actionByKind.active?.closureClass === 'evidence-closed');
+      (!hasActive || actionByKind.active?.closureClass === 'evidence-closed');
     const fixedClassified = fixedRows.every(
       row => row.closureClass === 'evidence-closed'
     );

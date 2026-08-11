@@ -94,8 +94,7 @@ describe('M10 character combat profile pipeline', () => {
     const removedCandidates = structuredClone(giseleProfile);
     removedCandidates.contracts.coverageCandidates.settlement = [];
     expect(
-      validateCharacterCombatCoverageCandidateClosure(removedCandidates)
-        .issues
+      validateCharacterCombatCoverageCandidateClosure(removedCandidates).issues
     ).toEqual(
       expect.arrayContaining([
         'settlement-coverage-candidates-missing',
@@ -150,13 +149,12 @@ describe('M10 character combat profile pipeline', () => {
   it('binds selected-root settlement closure to per-node source classifications', () => {
     const exactCandidateIdentity =
       'settlement-coverage:actor|112001|11200101|0|11200103|normal-attack:11200103|0|elements|1|-7394849788543465206';
-    const exactGraphIdentity =
-      '11200103|0|elements|1|-7394849788543465206';
-    const exactNodeIdentity =
-      '11200103|element:-7394849788543465206';
-    const candidate = giseleProfile.contracts.coverageCandidates.settlement.find(
-      item => item.candidateIdentity === exactCandidateIdentity
-    );
+    const exactGraphIdentity = '11200103|0|elements|1|-7394849788543465206';
+    const exactNodeIdentity = '11200103|element:-7394849788543465206';
+    const candidate =
+      giseleProfile.contracts.coverageCandidates.settlement.find(
+        item => item.candidateIdentity === exactCandidateIdentity
+      );
     expect(candidate).toMatchObject({
       graphIdentity: exactGraphIdentity,
       rootElementId: 112001008,
@@ -208,19 +206,20 @@ describe('M10 character combat profile pipeline', () => {
     ]);
 
     const missingDisposition = structuredClone(giseleProfile);
-    delete missingDisposition.contracts.coverageCandidates.settlement
-      .find(item => item.candidateIdentity === exactCandidateIdentity)
-      .nodeClassifications[0].dimensions.hp.sourceClosureDisposition;
+    delete missingDisposition.contracts.coverageCandidates.settlement.find(
+      item => item.candidateIdentity === exactCandidateIdentity
+    ).nodeClassifications[0].dimensions.hp.sourceClosureDisposition;
     expect(
       validateCharacterCombatCoverageCandidateClosure(missingDisposition).issues
     ).toContain('settlement-coverage-node-source-closure-invalid');
 
     const sourceBindingTamper = structuredClone(giseleProfile);
-    sourceBindingTamper.contracts.coverageCandidates.settlement
-      .find(item => item.candidateIdentity === exactCandidateIdentity)
-      .nodeClassifications[0].dimensions.hp.sourceDimensionStatus = 'applied';
+    sourceBindingTamper.contracts.coverageCandidates.settlement.find(
+      item => item.candidateIdentity === exactCandidateIdentity
+    ).nodeClassifications[0].dimensions.hp.sourceDimensionStatus = 'applied';
     expect(
-      validateCharacterCombatCoverageCandidateClosure(sourceBindingTamper).issues
+      validateCharacterCombatCoverageCandidateClosure(sourceBindingTamper)
+        .issues
     ).toContain('settlement-coverage-node-source-binding-invalid');
 
     const graphCountTamper = structuredClone(giseleProfile);
@@ -231,14 +230,13 @@ describe('M10 character combat profile pipeline', () => {
     tamperedGraph.unresolvedNodeCount = 0;
     expect(
       validateCharacterCombatCoverageCandidateClosure(graphCountTamper).issues
-    ).toContain(
-      'settlement-coverage-graph-node-classification-count-mismatch'
-    );
+    ).toContain('settlement-coverage-graph-node-classification-count-mismatch');
 
     const genericNa = structuredClone(giseleProfile);
-    const genericCandidate = genericNa.contracts.coverageCandidates.settlement.find(
-      item => item.candidateIdentity === exactCandidateIdentity
-    );
+    const genericCandidate =
+      genericNa.contracts.coverageCandidates.settlement.find(
+        item => item.candidateIdentity === exactCandidateIdentity
+      );
     genericCandidate.dimensions.hp = {
       status: 'not-applicable',
       reasons: ['reachable-graph-has-no-output-for-coverage-dimension'],
@@ -265,9 +263,8 @@ describe('M10 character combat profile pipeline', () => {
     );
     genericCoverage.verifiedZeroCount -= 1;
     genericCoverage.notApplicableCount += 1;
-    const genericIssues = validateCharacterCombatCoverageCandidateClosure(
-      genericNa
-    ).issues;
+    const genericIssues =
+      validateCharacterCombatCoverageCandidateClosure(genericNa).issues;
     expect(genericIssues).toEqual(
       expect.arrayContaining([
         'settlement-coverage-node-source-closure-invalid',
@@ -282,7 +279,8 @@ describe('M10 character combat profile pipeline', () => {
     );
 
     const deletedPolicy = structuredClone(giseleProfile);
-    deletedPolicy.contracts.coverageCandidates.settlementNodeClosurePolicies = [];
+    deletedPolicy.contracts.coverageCandidates.settlementNodeClosurePolicies =
+      [];
     expect(
       validateCharacterCombatCoverageCandidateClosure(deletedPolicy).issues
     ).toContain('settlement-coverage-node-source-closure-invalid');
@@ -311,8 +309,7 @@ describe('M10 character combat profile pipeline', () => {
   it('recomputes runtime-applied node source bindings and rejects forged identities', () => {
     const ultimateCandidateIdentity =
       'settlement-coverage:actor|112001|11200113|0|11200113|ultimate:11200113|0|elements|7|-7212963066810547935';
-    const ultimateGraphIdentity =
-      '11200113|0|elements|7|-7212963066810547935';
+    const ultimateGraphIdentity = '11200113|0|elements|7|-7212963066810547935';
     const runtimeBindings = [
       {
         nodeIdentity: '11200113|element:-2511185242952603503',
@@ -370,8 +367,7 @@ describe('M10 character combat profile pipeline', () => {
         .find(item => item.candidateIdentity === ultimateCandidateIdentity)
         .nodeClassifications.find(
           item =>
-            item.nodeCatalogIdentity ===
-            '11200113|element:-2511185242952603503'
+            item.nodeCatalogIdentity === '11200113|element:-2511185242952603503'
         ).dimensions.hp;
     const expectClosureFailure = profileValue => {
       expect(
@@ -404,9 +400,10 @@ describe('M10 character combat profile pipeline', () => {
     expectClosureFailure(authoritySwap);
 
     const otherGroupGraft = structuredClone(giseleProfile);
-    const otherGroup = otherGroupGraft.contracts.tuningMarkConditionalDamageGroups.find(
-      group => group.groupIdentity === 'gisele-heavy3-consumer-32f'
-    );
+    const otherGroup =
+      otherGroupGraft.contracts.tuningMarkConditionalDamageGroups.find(
+        group => group.groupIdentity === 'gisele-heavy3-consumer-32f'
+      );
     const graftedUltimateCandidate =
       otherGroupGraft.contracts.coverageCandidates.settlement.find(
         item => item.candidateIdentity === ultimateCandidateIdentity
@@ -418,11 +415,9 @@ describe('M10 character combat profile pipeline', () => {
     graftedGroupClosure.sourceClosureBindingIdentities.push(
       otherGroup.groupIdentity
     );
-    graftedGroupClosure.sourceClosureSourceIdentity +=
-      `|${otherGroup.sourceIdentity}`;
-    const otherGroupIssues = validateCharacterCombatCoverageCandidateClosure(
-      otherGroupGraft
-    ).issues;
+    graftedGroupClosure.sourceClosureSourceIdentity += `|${otherGroup.sourceIdentity}`;
+    const otherGroupIssues =
+      validateCharacterCombatCoverageCandidateClosure(otherGroupGraft).issues;
     expect(otherGroupIssues).toEqual(
       expect.arrayContaining([
         'settlement-coverage-conditional-damage-binding-invalid',
@@ -470,9 +465,8 @@ describe('M10 character combat profile pipeline', () => {
       .filter(Boolean)
       .sort()
       .join('|')}`;
-    const otherEffectIssues = validateCharacterCombatCoverageCandidateClosure(
-      otherEffectGraft
-    ).issues;
+    const otherEffectIssues =
+      validateCharacterCombatCoverageCandidateClosure(otherEffectGraft).issues;
     expect(otherEffectIssues).toEqual(
       expect.arrayContaining([
         'settlement-coverage-semantic-effect-binding-invalid',
@@ -745,8 +739,8 @@ describe('M10 character combat profile pipeline', () => {
       status: 'character-combat-profile-catalog-ready',
       summary: {
         publicCharacterCount: 20,
-        compiledProfileCount: 8,
-        runtimeAppliedProfileCount: 8,
+        compiledProfileCount: 11,
+        runtimeAppliedProfileCount: 11,
         uiVerifiedProfileCount: 0,
         characterCompleteCount: 0,
       },
@@ -2527,9 +2521,9 @@ describe('M10 character combat profile pipeline', () => {
               outputRoot,
               'src',
               'data',
-               'generated',
-               'character-combat-owner-contracts',
-               '112001.json'
+              'generated',
+              'character-combat-owner-contracts',
+              '112001.json'
             ),
             'utf8'
           )

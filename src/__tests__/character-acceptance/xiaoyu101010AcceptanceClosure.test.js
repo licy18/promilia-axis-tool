@@ -290,7 +290,7 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     ).toBe(true);
   });
 
-  it('publishes stable owner evidence but remains product-visual pending', () => {
+  it('publishes stable owner evidence with the recorded product acceptance', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 4,
       executionPassedCount: 4,
@@ -315,9 +315,9 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       )
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: 'd2ba1bb2e834cfca1c91ebce557819894cbc0b1b',
+      bindingStatus: 'verified',
       automatedEvidence: [
         expect.objectContaining({
           scenarioIdentity: 'm11-d-101010-visual-acceptance',
@@ -330,12 +330,12 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       ],
     });
     expect(manifest.maturity).toMatchObject({
-      optimizationReady: false,
+      optimizationReady: true,
       gates: {
-        visuallyAccepted: false,
-        optimizationReady: false,
+        visuallyAccepted: true,
+        optimizationReady: true,
       },
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      blockers: [],
     });
   });
 

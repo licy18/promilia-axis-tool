@@ -10,7 +10,7 @@ const MISA_ID = 107002;
 describe('M12-B3 Misa reduced action surface profile', () => {
   it('publishes an honest runtime-applied partial profile without qualification claims', () => {
     expect(ownerContract).toMatchObject({
-      compilerVersion: 5,
+      compilerVersion: 7,
       ownerId: MISA_ID,
       status: 'character-combat-owner-contracts-compiled',
       summary: {
@@ -46,7 +46,7 @@ describe('M12-B3 Misa reduced action surface profile', () => {
     expect(profile).not.toHaveProperty('optimizationReady');
     expect(runtimeCoverage.summary).toMatchObject({
       actionCount: 10,
-      runtimeReadyActionCount: 7,
+      runtimeReadyActionCount: 4,
       executionFormCount: 10,
       controlCount: 15,
       hitCount: 57,
@@ -127,9 +127,7 @@ describe('M12-B3 Misa reduced action surface profile', () => {
       ownerContract.contracts.pickupSpawnBindings
         .filter(binding => binding.pickupIdentity === identity)
         .map(binding => binding.triggerFrame);
-    expect(pickupFrames('misa-a3-hp-pickup')).toEqual([
-      40, 46, 52, 58, 64, 70,
-    ]);
+    expect(pickupFrames('misa-a3-hp-pickup')).toEqual([40, 46, 52, 58, 64, 70]);
     expect(pickupFrames('misa-star-sp-pickup')).toEqual([74, 82, 90, 99]);
     expect(
       ownerContract.contracts.pickupSpawnBindings

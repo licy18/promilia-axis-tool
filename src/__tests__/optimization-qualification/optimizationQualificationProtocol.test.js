@@ -9,6 +9,7 @@ import equipmentCatalog from '../../data/generated/equipment.json';
 import qualificationCatalog from '../../data/generated/optimization-qualification-catalog.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import { createM12cInitialStatePresetBinding } from '../../machine-axis/m12cInitialStatePolicy';
 import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
 import {
@@ -113,7 +114,7 @@ function createAxis({
     earring: '耳环',
     ring: '戒指',
   };
-  return {
+  const axis = {
     schemaVersion: 1,
     contractName: 'AzPrMachineAxis',
     dataIdentity: {
@@ -166,6 +167,23 @@ function createAxis({
     },
     actions: [],
   };
+  if (mode === 'formal') {
+    const initialActor = axis.scenario.team[0];
+    axis.scenario.initialRuntimeState = {
+      controlledActor: {
+        actorId: `actor-${initialActor.characterId}`,
+        characterId: initialActor.characterId,
+      },
+    };
+    axis.scenario.initialStatePreset = createM12cInitialStatePresetBinding({
+      presetId: 'm12c-qualification-test-cold-start-v1',
+      objectiveId: axis.scenario.objectiveContract.objectiveId,
+      team: axis.scenario.team,
+      initialRuntimeState: axis.scenario.initialRuntimeState,
+      mechanicsPackage,
+    });
+  }
+  return axis;
 }
 
 describe('M12-B3 optimization qualification generation', () => {
