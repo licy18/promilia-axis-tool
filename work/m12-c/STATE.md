@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；没有伪造单次 `release:verify` PASS，正式搜索仍未启动。
+状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；用户已裁决 M12-C4 采用 AI 引导的启发式剪枝并接受无法证明全局最优的 Top-N，搜索仍未启动。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -58,6 +58,13 @@
 - 用户要求停止从头重复全量并从断点继续；`a16f82f4d73e6b63bde1d0615c75bbcc5e5ef508` 上 `audit:verified-combat` 已 clean（18/18 validator），optimization-scenario 也 clean。后续 character-acceptance 首先暴露常规 M10 golden 属于 qualification subject 输入，因此对 101010、102001、103002、107002、108003、109001 做同一产品基线的第二波重绑；107001、112001、199001、199002 保持 verified，101003 保持 pending。
 - 断点续跑最终结果：签收聚焦 6 files/76 tests PASS；character acceptance 11 runtime-integrated / 10 visually-accepted / 10 optimization-ready；qualification 263/263；E22 22/22；visual acceptance 254/254；production build 1901 modules；bundle 总 JS gzip 897786 bytes 且三项预算全绿；applied-source 3/3；production preview 42/42 capabilities、64/64 tests PASS（637911ms）。Playwright 写出的 101 份非确定性 PNG 已恢复，未改写角色截图 SHA；只保留 `reports/production-preview-acceptance.json` 作为本次 64/64 证据。
 - 全量 Vitest 240/240 files、1936/1936 tests，以及 production imports、Workbench data、action status 的证据来自 `ca1b5bef19a22c4c754163a86a5baa3dad69f816` 的第三次 release 执行；其后改动仅为 verified/golden 镜像、签收 recipe/派生产物、测试常量、报告和文档，并已按影响域做上述聚焦与断点门禁。依用户指令没有再次从头执行 `release:verify`，因此 Gate V2 台账中不存在当前最终 HEAD 的单次 release PASS，`formal-search-admission` 仍不得伪造为 READY；正式搜索继续未启动。
+
+## 0.4 2026-08-11 AI 引导 Top-N 产品裁决
+
+- 用户明确裁决：面对约 `80396186388671058977832111` 个合法 build 的完整装配空间，M12-C4 不要求证明全局最优；由 AI 通过版本化 guidance 主动选择外层样本、动作过滤、beam/depth、等待/切人策略和迭代预算，目标是在可用算力内找到尽可能优的三个独立 Top-N。
+- 所有结果必须标为 `AI-guided heuristic Top-N`，并保留 `guidanceHash`、provenance、来源/构筑覆盖、预算、seed、拒绝分布、closed-cycle/killed proof 与迭代链。`fullPoolEnumerationComplete=false` / `formalRankingReady=false` 是诚实的全池非穷举声明，不再作为“能否执行 M12-C4 AI 引导搜索”的阻断，但不得改写为全局最优、穷举完整或客户端一致。
+- 搜索按多轮反馈闭环推进：先覆盖 35/35 source config 的低预算基线，再由 AI 扩大高潜构筑和动作深度；使用独立 seed/策略复核，直到 Top-N 身份和分数改善在连续轮次中稳定，再进入 M12-C5 Workbench 人工复验。任一候选仍须先通过既有 qualification、binding、legality 和 objective proof，AI 不能让 illegal、skipped、unresolved 或 blocked 候选进入评分。
+- clean HEAD `07f7989860e3797e9bdde2660c1e6c752a06efb4` 的单次 `release:verify` 已通过 character-combat、visual acceptance、E22 binding、Kibo headless 与 machine-axis settlement；trial 全量为 241/242 files、1953/1954 tests，唯一失败是新增两份 gate 测试尚未进入 `reports/production-import-audit.json` 的 canonical file list。生成器同步后实际审计为 `unexpectedTestOnlyCount=0`、`unreferencedCount=0`；按用户“不再反复跑全量”的要求，仅复验该派生报告与对应单测，不把失败台账伪造为 PASS。
 
 ## 1. 目标与结果身份
 
