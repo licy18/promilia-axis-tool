@@ -20,7 +20,7 @@ import {
   validateM12cBuildSelection,
   validateM12cOuterBuildAuthority,
 } from '../../machine-axis/m12cOuterBuildPool';
-import { createMachineAxisService } from '../../machine-axis/machineAxisService';
+import { createM12cOuterBuildService } from '../../machine-axis/m12cOuterBuildService';
 import { describe, expect, it } from 'vitest';
 
 const FIXED_INSTANCE = Object.freeze({
@@ -535,30 +535,26 @@ describe('M12-C outer team and build pool', () => {
 
   it('exposes the authoritative pool and lazy iterator through the production service', () => {
     clearInstalledVerifiedCombatMechanicsPackage();
-    const service = createMachineAxisService();
+    const service = createM12cOuterBuildService();
     let missingPackageError = null;
     try {
-      service.createM12cOuterBuildPool();
+      service.pool();
     } catch (error) {
       missingPackageError = error;
     }
     expect(missingPackageError).toMatchObject({
-      issues: [
-        expect.objectContaining({
-          code: 'machine-axis-mechanics-package-not-installed',
-        }),
-      ],
+      issues: ['machine-axis-mechanics-package-not-installed'],
     });
 
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
     try {
-      const pool = service.createM12cOuterBuildPool();
+      const pool = service.pool();
       const sourceConfig = nonStarbornSourceConfig(pool);
-      const planned = service.createM12cBuildEnumerationPlan({
+      const planned = service.plan({
         sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
       });
       const candidates = [
-        ...service.iterateM12cBuildCandidates(planned.plan, {
+        ...service.iterate(planned.plan, {
           maxCandidates: 1,
         }),
       ];

@@ -5,6 +5,7 @@ import {
   MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS,
   createMachineAxisObjectiveContract,
 } from './machineAxisObjectiveContract';
+import { createM12cOuterBuildService } from './m12cOuterBuildService';
 
 export const MACHINE_AXIS_CLI_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_CLI_CONTRACT_NAME = 'AzPrMachineAxisCli';
@@ -26,6 +27,8 @@ const COMMANDS = new Set([
   'search',
   'cycle',
   'kill',
+  'm12c-outer-pool',
+  'm12c-outer-builds',
 ]);
 const VALUED_OPTIONS = new Set([
   '--input',
@@ -48,6 +51,7 @@ const VALUED_OPTIONS = new Set([
   '--objective',
   '--max-actions-per-owner',
   '--max-kibo-actions',
+  '--max-candidates',
 ]);
 const OUTPUT_FORMATS = new Set(['json', 'jsonl']);
 const CRITICAL_POLICIES = new Set(Object.values(COMBAT_CRITICAL_POLICIES));
@@ -56,6 +60,7 @@ export async function runMachineAxisCli(
   argv,
   {
     service = createMachineAxisService(),
+    m12cOuterService = createM12cOuterBuildService(),
     readFile,
     readStdin,
     writeFile,
@@ -84,7 +89,7 @@ export async function runMachineAxisCli(
       );
       return MACHINE_AXIS_CLI_EXIT_CODES.USAGE;
     }
-    const result = await executeCommand(parsed, service, io);
+    const result = await executeCommand(parsed, service, m12cOuterService, io);
     await emitResult(io, parsed.options, result.value);
     return result.exitCode;
   } catch (error) {
@@ -112,6 +117,7 @@ export function parseCliArguments(argv = []) {
     objective: null,
     maxActionsPerOwner: null,
     maxKiboActions: null,
+    maxCandidates: null,
     selector: {},
   };
   const positional = [];
@@ -206,6 +212,7 @@ export function parseCliArguments(argv = []) {
         '--max-depth',
         '--max-actions-per-owner',
         '--max-kibo-actions',
+        '--max-candidates',
       ].includes(flag)
     ) {
       const number = Number(value);
@@ -222,6 +229,8 @@ export function parseCliArguments(argv = []) {
       else if (flag === '--max-depth') options.maxDepth = number;
       else if (flag === '--max-actions-per-owner') {
         options.maxActionsPerOwner = number;
+      } else if (flag === '--max-candidates') {
+        options.maxCandidates = number;
       } else {
         options.maxKiboActions = number;
       }
@@ -285,7 +294,9 @@ export function parseCliArguments(argv = []) {
     };
   }
   if (
-    ['batch', 'search', 'cycle', 'kill'].includes(command) &&
+    ['batch', 'search', 'cycle', 'kill', 'm12c-outer-builds'].includes(
+      command
+    ) &&
     options.format === 'jsonl'
   ) {
     return {
@@ -317,7 +328,7 @@ export function parseCliArguments(argv = []) {
         message: 'compare requires --left and --right inputs',
       };
     }
-  } else if (command !== 'catalog') {
+  } else if (!['catalog', 'm12c-outer-pool'].includes(command)) {
     options.input = options.input ?? positional[0] ?? '-';
   }
   return { valid: true, command, options };
@@ -348,12 +359,44 @@ function parseCsvSeeds(value) {
     .filter(Boolean);
 }
 
-async function executeCommand(parsed, service, io) {
+async function executeCommand(parsed, service, m12cOuterService, io) {
   const { command, options } = parsed;
   if (command === 'catalog') {
     return {
       exitCode: MACHINE_AXIS_CLI_EXIT_CODES.OK,
       value: service.catalog(),
+    };
+  }
+  if (command === 'm12c-outer-pool') {
+    return {
+      exitCode: MACHINE_AXIS_CLI_EXIT_CODES.OK,
+      value: m12cOuterService.pool(),
+    };
+  }
+  if (command === 'm12c-outer-builds') {
+    const [input] = await readContracts(options.input, options, io);
+    const planned = m12cOuterService.plan(input);
+    const candidates = planned.valid
+      ? [
+          ...m12cOuterService.iterate(planned.plan, {
+            maxCandidates: options.maxCandidates ?? 1,
+          }),
+        ]
+      : [];
+    return {
+      exitCode: planned.valid
+        ? MACHINE_AXIS_CLI_EXIT_CODES.OK
+        : MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION,
+      value: {
+        schemaVersion: 1,
+        contractName: 'AzPrM12COuterBuildBatch',
+        kind: 'azpr-m12c-outer-build-batch',
+        valid: planned.valid,
+        issues: planned.issues,
+        plan: planned.plan,
+        candidates,
+        candidateCount: candidates.length,
+      },
     };
   }
   if (command === 'compare') {

@@ -250,8 +250,8 @@
     ]
   },
   "summary": {
-    "sourceCodeFileCount": 230,
-    "productionReachableCount": 226,
+    "sourceCodeFileCount": 231,
+    "productionReachableCount": 227,
     "testOnlyCount": 4,
     "allowedTestOnlyCount": 4,
     "unexpectedTestOnlyCount": 0,
@@ -264,7 +264,7 @@
       "src/domain": 54,
       "src/features/workbench": 60,
       "src/i18n": 1,
-      "src/machine-axis": 24,
+      "src/machine-axis": 25,
       "src/optimization-qualification": 2,
       "src/optimization-scenario": 1,
       "src/router": 1,
@@ -417,6 +417,7 @@
     "src/machine-axis/kiboAutoCastScheduler.js",
     "src/machine-axis/m12cInitialStatePolicy.js",
     "src/machine-axis/m12cOuterBuildPool.js",
+    "src/machine-axis/m12cOuterBuildService.js",
     "src/machine-axis/machineAxisActionLegality.js",
     "src/machine-axis/machineAxisBatchEvaluator.js",
     "src/machine-axis/machineAxisCli.js",

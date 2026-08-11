@@ -339,7 +339,7 @@ export function createSearchFeedback({
       guidanceReserved:
         guidanceApplication?.layer === 'outer' ||
         guidanceApplication?.layer === 'both',
-      note: 'The authoritative M12-C team/loadout pool, build planner, and lazy iterator are available through the Machine Axis service. Outer guidance remains reserved until M12-C4 binds each build to inner axis search.',
+      note: 'The authoritative M12-C team/loadout pool, build planner, and lazy iterator are available through the headless M12-C outer service and Machine Axis CLI. Outer guidance remains reserved until M12-C4 binds each build to inner axis search.',
     },
     recommendations: [],
   };
