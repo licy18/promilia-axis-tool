@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-result",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "shardId": "m12c-shard:af090f729e8fec72c8caa961",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+    "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+    "optimizationObjectIds": [
+      "109001",
+      "112001",
+      "STARBORN"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      {
+        "optimizationObjectId": "STARBORN",
+        "sourceCharacterId": 199002
+      }
+    ]
+  },
+  "inputHash": "065f7a6e5fcddbfc552dc5320cf81e2fcdf05379f486e43c594383df09b759c8",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "4a0b4cc53424e01f",
+  "serviceResult": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchReport",
+    "kind": "azpr-m12c-outer-search-report",
+    "valid": false,
+    "objective": "fastest-kill",
+    "objectiveContract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisObjectiveContract",
+      "objectiveId": "fastest-kill",
+      "classification": "primary",
+      "formalEligible": true,
+      "targetPolicy": {
+        "hpMode": "finite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "enabled"
+      },
+      "scoring": {
+        "metric": "first-lethal-settlement-time",
+        "direction": "minimize",
+        "damageBasis": "settled-post-defense-hp-damage",
+        "formula": "firstLethalFrameThenTimeMs",
+        "finalRankingEligibility": "real-kill-candidate-only"
+      },
+      "proofRequirements": {
+        "loopBoundary": "not-applicable",
+        "actorBoundary": "runtime-legality-through-lethal-settlement",
+        "enemyBoundary": "first-lethal-settlement-and-post-death-truncation",
+        "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+        "killRequired": true,
+        "enemyProfile": "fully-resolved-hp-defense-level-and-toughness-profile"
+      },
+      "objectiveHash": "a27579630c82bd6e"
+    },
+    "options": {
+      "beamWidth": 2,
+      "topN": 5,
+      "maxDepth": 2,
+      "maxActionsPerOwner": 4,
+      "maxKiboActions": 2,
+      "includeKibo": true,
+      "includeSwitch": true,
+      "includeNormalAttacks": true,
+      "includeWait": true,
+      "maxWaitCandidates": 2,
+      "objective": "fastest-kill",
+      "objectiveContract": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisObjectiveContract",
+        "objectiveId": "fastest-kill",
+        "classification": "primary",
+        "formalEligible": true,
+        "targetPolicy": {
+          "hpMode": "finite",
+          "toughnessMode": "enabled",
+          "breakMode": "enabled",
+          "deathTruncation": "enabled"
+        },
+        "scoring": {
+          "metric": "first-lethal-settlement-time",
+          "direction": "minimize",
+          "damageBasis": "settled-post-defense-hp-damage",
+          "formula": "firstLethalFrameThenTimeMs",
+          "finalRankingEligibility": "real-kill-candidate-only"
+        },
+        "proofRequirements": {
+          "loopBoundary": "not-applicable",
+          "actorBoundary": "runtime-legality-through-lethal-settlement",
+          "enemyBoundary": "first-lethal-settlement-and-post-death-truncation",
+          "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+          "killRequired": true,
+          "enemyProfile": "fully-resolved-hp-defense-level-and-toughness-profile"
+        },
+        "objectiveHash": "a27579630c82bd6e"
+      },
+      "allowUnverifiedRuntimeTiming": false,
+      "burstWindowMs": 10000,
+      "criticalPolicy": "expected",
+      "seeds": null,
+      "maxDamagePerMsBound": 10,
+      "jobs": 1
+    },
+    "outerOptions": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 1,
+      "maxVariantSearches": 3,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+      ]
+    },
+    "guidance": {
+      "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+      "guidanceVersion": "1.0.0",
+      "layer": "both"
+    },
+    "pool": {
+      "poolHash": "f9740b8fe17d178e",
+      "authority": {
+        "qualificationCatalogHash": "6476cfbe9e49fcd5",
+        "qualificationBindingMatrixHash": "2f38f4d3ef1a95ce",
+        "sourceSnapshotHash": "2960a288bde9f925",
+        "rosterHash": "8f79e3260a1bd756",
+        "manifestsHash": "e76c15a97197b559",
+        "gapLedgerHash": "2173684e22b4ad5c",
+        "fixedCultivationProfileHash": "22f28f1f4b5b0d90",
+        "formalAdmissionBindingHash": "86f1d0af5c870cb6",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58"
+      },
+      "summary": {
+        "teamCount": 28,
+        "sourceConfigCount": 35,
+        "kiboCount": 43,
+        "soulEssenceCount": 62,
+        "globalEquipmentQualifiedCount": 137,
+        "m12cEquipmentProjectionCount": 53,
+        "m12cEquipmentProjectionCountBySlot": {
+          "weapon": 17,
+          "top": 9,
+          "bottom": 9,
+          "earring": 9,
+          "ring": 9
+        },
+        "setSkillThresholdCount": 12
+      }
+    },
+    "summary": {
+      "steps": 6,
+      "candidatesEvaluated": 69,
+      "invalidCandidates": 15,
+      "mergedCandidates": 0,
+      "prunedCandidates": 0,
+      "expandedCandidates": 9,
+      "completedCandidates": 0,
+      "formalSurfaceRejectedCandidates": 0,
+      "rejectionCounts": {
+        "joint-attack-threshold-not-reached": 18,
+        "machine-axis-action-conditions-unresolved": 3,
+        "machine-axis-action-not-executable": 21,
+        "verified-charging-release-selection-unresolved": 3,
+        "skill-cooldown-active": 4,
+        "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT": 1
+      },
+      "objective": "fastest-kill",
+      "topN": 5,
+      "wallTimeMs": 32415,
+      "requestedSourceConfigCount": 1,
+      "selectedSourceConfigCount": 1,
+      "plannedSourceConfigCount": 1,
+      "buildCount": 1,
+      "variantSearchCount": 3,
+      "candidateResultCount": 0,
+      "topResultCount": 0,
+      "failureCount": 3,
+      "failureSampleCount": 3,
+      "failureSampleTruncated": false,
+      "buildBudgetExhausted": false,
+      "variantBudgetExhausted": false,
+      "enumerationComplete": false,
+      "fullPoolSourceConfigCoverage": false,
+      "fullPoolEnumerationComplete": false,
+      "buildConstraintsApplied": false,
+      "dynamicOuterPruningApplied": false,
+      "formalRankingReady": false,
+      "rankingStatus": "partial-bounded-not-formal-ranking",
+      "outerSearchIntegration": {
+        "implemented": true,
+        "poolBound": true,
+        "buildContractBound": true,
+        "allInitialFrontsBound": true,
+        "globalTopNBound": true
+      }
+    },
+    "plans": [
+      {
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "planHash": "3ae30d754351bb37",
+        "estimatedBuildCount": "2329118695171018780526952",
+        "enumeratedBuildCount": 1,
+        "complete": false
+      }
+    ],
+    "failures": [
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "buildHash": "eab84ec9befc1cde",
+        "variantKey": "m12c-variant:1098e1970a5cdfbd",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:109001",
+          "optimizationObjectId": "109001",
+          "sourceCharacterId": 109001
+        },
+        "issues": [
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-conditions-unresolved",
+          "machine-axis-action-not-executable",
+          "verified-charging-release-selection-unresolved"
+        ]
+      },
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "buildHash": "eab84ec9befc1cde",
+        "variantKey": "m12c-variant:7b4d323382849a99",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "issues": [
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-conditions-unresolved",
+          "machine-axis-action-not-executable",
+          "skill-cooldown-active",
+          "verified-charging-release-selection-unresolved"
+        ]
+      },
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "buildHash": "eab84ec9befc1cde",
+        "variantKey": "m12c-variant:b8b15e265c32efc3",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:STARBORN",
+          "optimizationObjectId": "STARBORN",
+          "sourceCharacterId": 199002
+        },
+        "issues": [
+          "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT",
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-conditions-unresolved",
+          "machine-axis-action-not-executable",
+          "skill-cooldown-active",
+          "verified-charging-release-selection-unresolved"
+        ]
+      }
+    ],
+    "failureSummary": {
+      "joint-attack-threshold-not-reached": 3,
+      "machine-axis-action-conditions-unresolved": 3,
+      "machine-axis-action-not-executable": 3,
+      "skill-cooldown-active": 2,
+      "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT": 1,
+      "verified-charging-release-selection-unresolved": 3
+    },
+    "issues": [
+      "joint-attack-threshold-not-reached",
+      "machine-axis-action-conditions-unresolved",
+      "machine-axis-action-not-executable",
+      "skill-cooldown-active",
+      "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT",
+      "verified-charging-release-selection-unresolved"
+    ],
+    "executionLedger": {
+      "poolHash": "f9740b8fe17d178e",
+      "processedVariantKeyCount": 3,
+      "processedVariantKeyChainHash": "064f42af991e33b4",
+      "processedVariantKeys": [
+        "m12c-variant:1098e1970a5cdfbd",
+        "m12c-variant:7b4d323382849a99",
+        "m12c-variant:b8b15e265c32efc3"
+      ],
+      "processedVariantKeysTruncated": false
+    },
+    "results": [],
+    "requestHash": "4a0b4cc53424e01f"
+  }
+}

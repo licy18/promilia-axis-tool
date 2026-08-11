@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-depth-probe",
+  "objective": "fastest-kill",
+  "status": "completed",
+  "exitStatus": "completed",
+  "aggregateHash": "4aeaff300533bd4bbfe67fc417048135eeeff4c65b1cc50453a654bb69e9549b",
+  "guidanceHash": "c59840fe912b89c8018d630da0f7e194ab2dfa97f1ca12134f2ad56313f58c88",
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "coverage": {
+    "expectedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "completedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "failedSourceConfigIdentities": [],
+    "inProgressSourceConfigIdentities": [],
+    "missingSourceConfigIdentities": []
+  },
+  "summary": {
+    "steps": 24,
+    "candidatesEvaluated": 912,
+    "invalidCandidates": 217,
+    "mergedCandidates": 6,
+    "prunedCandidates": 0,
+    "expandedCandidates": 87,
+    "completedCandidates": 0,
+    "formalSurfaceRejectedCandidates": 0,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "candidateResultCount": 0,
+    "failureCount": 3,
+    "aggregateWallTimeMs": 623528,
+    "validDistinctCandidateCount": 0,
+    "invalidCandidateCount": 0,
+    "topNRequested": 5,
+    "topNReady": false,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 0
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 2,
+    "topN": 10,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 4,
+    "maxKiboActions": 2,
+    "maxWaitCandidates": 2,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": true
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 3,
+    "rationale": "Round-2 feedback 529be2e04e331f1acc9fa7b80c0c5cdc56d36de38ca2fa79bc9052cf28305c7c found ring 1350211 improved the 112001 incumbent from 19083.46928913 to 20797.9953003. Fix only that verified ring choice and propagate it across every one of the eight authoritative 112001 source configs, including both mutually exclusive STARBORN aliases, while preserving all three initial fronts."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T21:34:01.786Z",
+  "guidanceHash": "7944675fcbe43d3981da2a4cde434fd7d0c2ed9a934cf557d17b8ab3b564b99d",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 1,
+    "steps": 3,
+    "wallTimeMs": 31224,
+    "candidatesEvaluated": 23,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 7,
+    "completedCandidates": 1,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 3
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 3
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 1
+    }
+  ],
+  "topResults": [
+    {
+      "chainLength": null,
+      "score": 0,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "4ec485d87e7850ff",
+        "data": "fe4052b37b44acaa",
+        "trace": "ed32e050e736eb83",
+        "evaluation": "5a35bd24a4378fd0",
+        "build": "5cae1dda1b5545ab"
+      }
+    }
+  ],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round8-null-safe-coverage-correction",
+    "shardId": "m12c-shard:39f2c67ff1614361ed567df1",
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+    "inputHash": "9cc53686f864063e25e9bdfe1c479aec5314584f54bc0885844bba8abe57b855",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

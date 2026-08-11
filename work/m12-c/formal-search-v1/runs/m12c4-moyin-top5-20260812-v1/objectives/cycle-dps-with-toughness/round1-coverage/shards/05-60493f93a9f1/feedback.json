@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T18:11:41.548Z",
+  "guidanceHash": "a8dc100b223e70c843bf95d372b7ddd43b49e4f6902bd475d9e79f59347cd14a",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 1,
+    "steps": 3,
+    "wallTimeMs": 31521,
+    "candidatesEvaluated": 23,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 7,
+    "completedCandidates": 0,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 3
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 3
+    },
+    {
+      "code": "machine-axis-action-duration-unresolved",
+      "count": 1
+    }
+  ],
+  "topResults": [],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round1-coverage",
+    "shardId": "m12c-shard:6c3d84f58884c6d46b3b1d5b",
+    "sourceConfigIdentity": "m12c-source-v1:101010=101010+108003=108003+109001=109001",
+    "inputHash": "156e56bda092432c0f9c33d452046a363f82d4419505692996f52770e83f9fdd",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

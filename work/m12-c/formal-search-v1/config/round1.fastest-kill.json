@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-config",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "iteration": 1,
+  "objective": "fastest-kill",
+  "topN": 5,
+  "contractTemplate": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "guidanceFile": "work/m12-c/formal-search-v1/guidance/round1.fastest-kill.json",
+  "outputRoot": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1",
+  "expectedSourceConfigCount": 35,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "options": {
+    "objective": "fastest-kill",
+    "criticalPolicy": "expected",
+    "jobs": 1
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "buildConstraints": {},
+  "presetSpec": {
+    "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+    "actorSp": "max",
+    "kiboSp": "max",
+    "tuningMarks": [],
+    "rubyAmmo": 12,
+    "policyNote": "All in-team actor/Kibo SP starts at 100; Ruby ammunition is 12 only when 103002 is in the team; all tuning marks remain 0 and no other persistent resource is admitted."
+  },
+  "previousFeedbackAggregate": null,
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffAbsoluteImprovementMsThreshold": 16.66666667,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

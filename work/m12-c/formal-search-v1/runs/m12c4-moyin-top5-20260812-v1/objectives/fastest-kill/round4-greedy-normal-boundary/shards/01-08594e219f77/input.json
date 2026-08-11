@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-greedy-normal-boundary",
+  "objective": "fastest-kill",
+  "shardId": "m12c-greedy-kill-shard:a99cc4b27ac4436b41cd6733",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+    "teamIdentity": "m12c-team-v1:101010+109001+112001",
+    "optimizationObjectIds": [
+      "101010",
+      "109001",
+      "112001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "101010",
+        "sourceCharacterId": 101010
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      }
+    ]
+  },
+  "buildConstraints": {
+    "112001": {
+      "equipmentIdsBySlot": {
+        "ring": [
+          1350211
+        ]
+      }
+    }
+  },
+  "initialState": {
+    "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+    "actorSpByOptimizationObjectId": {
+      "101010": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "kiboSpByOptimizationObjectId": {
+      "101010": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "tuningMarks": [],
+    "specialResources": []
+  },
+  "refinementInitialFrontOptimizationObjectId": "112001",
+  "firstProbeActionCount": 16,
+  "maxActionCount": 400,
+  "guidanceHash": "0dc387f3948fb9f0fc1cab8bffbaf70d9f5430ef9d6014156c16766bb20e7a43",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 4,
+    "rationale": "Depth-16 feedback 126a74f3f0ba6b7fe81e1788c460560f93c8d30bcf6f3073e126f36acdb49ab8 spent 1879223ms and 1890 evaluations without a killed proof against authoritative HP 1912087.24. A clean smoke derived the verified 112001 A1 right-window cadence from two consecutive formal generator calls, found 220 inputs nonlethal and 221 inputs killed at 66133.333333ms, while 222 was correctly rejected as target-dead. Use a checkpointed fail-closed boundary search over that Hero-input-only surface for every authoritative 112001 source config; do not generate Kibo autonomous cadence, switches, or waits."
+  },
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "0aa6a0847e86ed06ea4d9b9350cdf2bb947e964f39c3d1d93a6ff9d8e2494bb0"
+}

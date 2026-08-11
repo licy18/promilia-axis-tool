@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round6-greedy-normal-bracket64",
+  "objective": "fastest-kill",
+  "shardId": "m12c-greedy-kill-shard:18acb36640bc3acb01ca160b",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "teamIdentity": "m12c-team-v1:103002+109001+112001",
+    "optimizationObjectIds": [
+      "103002",
+      "109001",
+      "112001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "103002",
+        "sourceCharacterId": 103002
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      }
+    ]
+  },
+  "buildConstraints": {
+    "112001": {
+      "equipmentIdsBySlot": {
+        "ring": [
+          1350211
+        ]
+      }
+    }
+  },
+  "initialState": {
+    "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+    "actorSpByOptimizationObjectId": {
+      "103002": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "kiboSpByOptimizationObjectId": {
+      "103002": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "tuningMarks": [],
+    "specialResources": [
+      {
+        "optimizationObjectId": "103002",
+        "resourceIdentity": "actor:103002:element:103002047",
+        "currentValue": 12,
+        "maxValue": 12,
+        "inputStep": 1,
+        "scenarioConfigurable": true,
+        "activeStates": []
+      }
+    ]
+  },
+  "refinementInitialFrontOptimizationObjectId": "112001",
+  "firstProbeActionCount": 64,
+  "maxActionCount": 400,
+  "guidanceHash": "ff02ea706e3e69bed372a6953cbed6ecaa31a1d67197a46f88009e7d985127ff",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 6,
+    "rationale": "Round-5 feedback f2e1a8a84c0febe9e22c429cb4694ed0bdc6ac144e3b02910f97a4a40d8fc56c reproduced every round-4 Top-5 and tie raw identity at 221 actions, frame 3968, and 66133.333333ms under a bracket-32 schedule; independent verification 32884adcc020db345d03dfad51adf7136ecc55d2280bdc84f8ff60112156e3b9 passed 8/8 with zero issues. Repeat with a bracket-64 schedule as the third terminal determinism round, retaining all fail-closed action legality and target-dead boundaries."
+  },
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "0aa6a0847e86ed06ea4d9b9350cdf2bb947e964f39c3d1d93a6ff9d8e2494bb0"
+}

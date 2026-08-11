@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-depth-probe",
+  "objective": "cycle-dps-with-toughness",
+  "status": "completed",
+  "exitStatus": "completed",
+  "aggregateHash": "ef20e319f4824f4de8b6fee5dc520d844f12055aa73cfab7bee1bc683af9e8d0",
+  "guidanceHash": "7f6d5337a2c38db36a3f6136ecb6e7770e315342187d0d9c90f38199459dd17e",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "coverage": {
+    "expectedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "completedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "failedSourceConfigIdentities": [],
+    "inProgressSourceConfigIdentities": [],
+    "missingSourceConfigIdentities": []
+  },
+  "summary": {
+    "steps": 24,
+    "candidatesEvaluated": 815,
+    "invalidCandidates": 349,
+    "mergedCandidates": 35,
+    "prunedCandidates": 0,
+    "expandedCandidates": 87,
+    "completedCandidates": 29,
+    "formalSurfaceRejectedCandidates": 0,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "candidateResultCount": 29,
+    "failureCount": 0,
+    "aggregateWallTimeMs": 1666970,
+    "validDistinctCandidateCount": 29,
+    "invalidCandidateCount": 0,
+    "topNRequested": 5,
+    "topNReady": true,
+    "cutoffScore": 381.27432251,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1
+  }
+}

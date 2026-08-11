@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-terminal-bounded-stability-evidence",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "boundedClaim": {
+    "terminalCandidateStatus": true,
+    "globalOptimalityClaimed": false,
+    "exhaustiveCompletenessClaimed": false,
+    "clientParityClaimed": false,
+    "stopRule": "three consecutive terminal rounds preserve ordered Top-5 raw identities, exact scores, source-family set, cutoff score, and full cutoff-tie identity set"
+  },
+  "strictFinalCandidateValidationApplied": true,
+  "coverageRound": null,
+  "effectiveCoverage": {
+    "effectiveCoverageHash": "b74cda78ba1570f7dcc4aed7ad48b1148e0f41947587dbbf76e26d3046cac08b",
+    "expectedSourceConfigCount": 35,
+    "effectiveCompletedSourceConfigCount": 35,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "originalRoundId": "round1-coverage",
+    "correctionRoundId": "round8-null-safe-coverage-correction"
+  },
+  "terminalRounds": [
+    {
+      "roundId": "round5-incumbent-replay-null-safe",
+      "iteration": 5,
+      "aggregateHash": "412af72f3433021624248b1bb18f50f84281b1e3bfac78edf080f4e6e23e4e7e",
+      "historicalAggregateHash": "412af72f3433021624248b1bb18f50f84281b1e3bfac78edf080f4e6e23e4e7e",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "e11f405d205183f2b3729d937c830d6b08a7ff70a4bd8b2943451e27fb5be0be",
+      "guidanceHash": "a402ad16ced17b4df13ad935b63d70268b759588ec4ac2b004a220b381efceff",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 469.50721728,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 5,
+      "independentVerificationHash": "06233e51906c64f002747d7b3c61e6ab3ed609a16f441f40993ca9de76f3d716"
+    },
+    {
+      "roundId": "round6-terminal-confirm-a",
+      "iteration": 6,
+      "aggregateHash": "22747bb96240dcfc03e2aba43d86b35db0ecd8c7ce8ad7877def60e83751512b",
+      "historicalAggregateHash": "22747bb96240dcfc03e2aba43d86b35db0ecd8c7ce8ad7877def60e83751512b",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "569f27a99c618c2a6fc3989bbb9034d3ac64cd97b9446b04e7dc2bada1da2190",
+      "guidanceHash": "368a923da4dc97874835c41568a5cd353f96b43c3c9d224df0a492b480eae31c",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 469.50721728,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 5,
+      "independentVerificationHash": "0ddde53b14806a19d01e3871040fa0f2c562a099b81845b02a4a03405b810f70"
+    },
+    {
+      "roundId": "round7-terminal-confirm-b",
+      "iteration": 7,
+      "aggregateHash": "94998c39e519759f93d31f56f85b50c73c15d5824480966e76f2f4f8ce8ad89a",
+      "historicalAggregateHash": "94998c39e519759f93d31f56f85b50c73c15d5824480966e76f2f4f8ce8ad89a",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "f3f50b17262bcc00032e660aa7ab22fea7ea0b4ec3b79da4e48353b9506f4583",
+      "guidanceHash": "c3b4897e91ff772b775a5e77efd4ed59926cd37b3fa6d6e3c96151e34ebb5977",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 469.50721728,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 5,
+      "independentVerificationHash": "52403f060730214dddd71d9a691ab8989bd5e3db46a401857433f0b8da62dd87"
+    }
+  ],
+  "stableEvidence": {
+    "consecutiveRoundCount": 3,
+    "orderedTop5RawIdentityHashes": [
+      "38b7c64da14ca72199304af0b8c20f6873f3acd2d9ed56af4a519abea9cf555c",
+      "54019e131cab8e0e2d19b65b396b485eaecd45f9d95e55644348ec2743acbed0",
+      "78db8f263eae855e836395f2db9cd69d639ea5778ba01a2b9eb0310232349d36",
+      "82d3ef3ee54674f7c4b9963f7a652b8238ad65040e2b3b613bba98498093e195",
+      "86a2caad4c4972337fc1d2a0180b7301e9ff9b7b31b3dc0363e8d9910a5c6040"
+    ],
+    "orderedTop5Scores": [
+      469.50721728,
+      469.50721728,
+      469.50721728,
+      469.50721728,
+      469.50721728
+    ],
+    "top5SourceFamilyIdentities": [
+      "m12c-team-v1:102001+109001+112001",
+      "m12c-team-v1:103002+109001+112001",
+      "m12c-team-v1:107001+109001+112001",
+      "m12c-team-v1:108003+109001+112001",
+      "m12c-team-v1:109001+112001+STARBORN"
+    ],
+    "cutoffScore": 469.50721728,
+    "cutoffTieCount": 3,
+    "cutoffTieRawIdentityHashes": [
+      "9c0e9df89f6a78ba0b43d91f6072024744b9588f2d3432cb8397e5909d979bd0",
+      "cc4f1f245ec483c84d105f99322eee6dc5a51f4b9f134757137ba71e2be55988",
+      "e13ce1a9d8ac378b1f48b3e052a0975394ceead2986e7e1116e5672e6ea6cd64"
+    ]
+  },
+  "independentVerificationRequired": true,
+  "valid": true,
+  "issues": [],
+  "terminalStabilityHash": "aabcec5347d721b41bc31000b67ed1a57e105485c559c266da0dd91f65a586f3"
+}

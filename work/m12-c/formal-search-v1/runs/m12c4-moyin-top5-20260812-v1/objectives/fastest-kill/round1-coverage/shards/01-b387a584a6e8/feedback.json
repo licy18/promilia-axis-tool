@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T18:28:58.408Z",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 2,
+    "steps": 6,
+    "wallTimeMs": 29105,
+    "candidatesEvaluated": 71,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 13,
+    "completedCandidates": 0,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 20
+    },
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 18
+    },
+    {
+      "code": "skill-cooldown-active",
+      "count": 4
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 2
+    }
+  ],
+  "topResults": [],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round1-coverage",
+    "shardId": "m12c-shard:9b29e3ad18bf8da05296de74",
+    "sourceConfigIdentity": "m12c-source-v1:101010=101010+102001=102001+109001=109001",
+    "inputHash": "00cd2825235440bed7a081573c660285baffac54540382d4da3749d3c19149d6",
+    "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

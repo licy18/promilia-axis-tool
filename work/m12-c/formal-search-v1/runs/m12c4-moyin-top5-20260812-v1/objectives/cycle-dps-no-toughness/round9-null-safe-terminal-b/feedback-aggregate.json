@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round9-null-safe-terminal-b",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "33e514854f4528957970b3cae7a9d67231b980736172b26bee069b8d3d994b0b",
+  "guidanceHashes": [
+    "23988a242c00c658de27202339875e1de81e4a84bc473689ee3855b3f7151782"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 1,
+    "completedSourceConfigCount": 1,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 1,
+    "feedbackSourceConfigCount": 1
+  },
+  "budgetUsage": {
+    "beamWidth": 1,
+    "candidatesEvaluated": 5,
+    "completedCandidates": 2,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 1,
+    "maxDepth": 1,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 3,
+    "topN": 10,
+    "wallTimeMs": 4885
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 1
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 2,
+    "topNReady": false,
+    "topScore": 20797.9953003,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1,
+    "topIdentityHashes": [
+      "a810778310ad071d45d428f34bbc084e88b8159ecddea45139ae99b35eac8b59",
+      "549af28e42294643165515cc8f75f4b010a68aa02c97618ac6b18ac0ea0105b5"
+    ],
+    "cutoffTieIdentityHashes": []
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "73a4bbe3b80352707b9ad77edb96c684d9b0a400dd33af3d70054e4394b99ce6"
+    }
+  ],
+  "feedbackAggregateHash": "f3af52995806c873bbe02462bf2bcca14184f3a51b85f63e7599fde693e897d8"
+}

@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-cold-cycle-coverage-correction-verification",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-with-toughness",
+  "originalRoundId": "round1-coverage",
+  "correctionRoundId": "round8-null-safe-coverage-correction",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "originalAggregateHash": "a8bb3613eb19f0a6d40066d7c7b1b15879fca85635808ffaaac26ba781674837",
+  "correctionAggregateHash": "4ef1d07155f805929e9c2221dd7a2ac8cb1893a7c6439d8c5a9575f66a0e5fb7",
+  "coverage": {
+    "expectedShardCount": 8,
+    "verifiedShardCount": 8,
+    "validShardCount": 8,
+    "verifiedCandidateCount": 9,
+    "validCandidateCount": 9
+  },
+  "coldStateContract": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": 0,
+    "kiboSp": 0,
+    "tuningMarks": 0,
+    "specialResources": 0,
+    "rubyAmmoAbsent": true
+  },
+  "valid": true,
+  "issues": [],
+  "rows": [
+    {
+      "shard": "01-26e39bd0ca02",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "1b68fcb4417b6d778f9318000265497b9c2eafcc02f50fad4f596f8ede16077d",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "a8895f5e1bb55569",
+          "legalityProofHash": "436eadbc2e55fe5b",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "02-ccb9585bebd7",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+103002=103002+109001=109001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "3803544d2c419cd3c2921dc1d322b2fc087c428ce67af6eb785c9ce99e890aa6",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "30b4695756c94c0b",
+          "legalityProofHash": "6c4b7497e59c9921",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "03-ae79bff50c2b",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "869fb67e042a7f4137341876f4ce2e2ce2e0d79a9693c3cbdf20b5589c6dc22a",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "d6b2151658ceffcc",
+          "legalityProofHash": "721adbd55f46ac2c",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "04-df3bdabf4312",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107002=107002+109001=109001",
+      "candidateCount": 2,
+      "validCandidateCount": 2,
+      "candidates": [
+        {
+          "rawIdentityHash": "8c67b2a9fe99b3ccd4e7d35b841e530fdd81dede04f36a1412251a574244468f",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "09729b8fb05789e3",
+          "legalityProofHash": "605e4b238e77af79",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "6c5c516f67aef764540a9f8b4afe578ccf0005af71c32de6e7c017e31940750f",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "6a8f262b27b67596",
+          "legalityProofHash": "9b3d300cb15e7fe3",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "05-764a6d780faf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "372e2d40523c10c695e64aa6f464014cbafcc98b44c445747d62c48f89473750",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "43c155d40a69dbc6",
+          "legalityProofHash": "c1e7b4077915ceda",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "06-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "29ca5fc39dbb504fec2892c4d8222ccc3c1208b9bbeb0053cdef29b0abc3b3d2",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "e8ac0959d8b22dc1",
+          "legalityProofHash": "5927371d67a741d0",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "07-349568e9da43",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199001",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "994533c6ff2dca38b9fb8cd7cd032bf69fc68fb1c2e922767b2095e935edc445",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "0aaa07a176166011",
+          "legalityProofHash": "0763c797ea8a174a",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "08-3a9607f4e280",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+      "candidateCount": 1,
+      "validCandidateCount": 1,
+      "candidates": [
+        {
+          "rawIdentityHash": "0808745ac2cb544a9d7f0a639f34d5a6b1968da8286e5da6278d16aca52c6663",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "432b34414215ee0d",
+          "legalityProofHash": "9a8c1050afe2450b",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    }
+  ],
+  "verificationHash": "b53fa410b0249f9f38633e8cc8162293f534b61ab877482fed220229b3ab9dfd"
+}

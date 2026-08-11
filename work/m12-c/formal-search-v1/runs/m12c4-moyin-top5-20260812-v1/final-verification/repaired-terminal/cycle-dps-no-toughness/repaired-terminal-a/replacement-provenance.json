@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-preset-quarantine-replacement-provenance",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-no-toughness",
+  "compositeRoundId": "repaired-terminal-a",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "quarantineHash": "0bb833990380bd9ff5dbea2e5b3a1cd959bd2a8354e76ec3ab0986940acc2505",
+  "baseRound": {
+    "roundId": "round4-normal-only",
+    "iteration": 4,
+    "aggregateHash": "8c8517874742663c0793c6f943c57ec950180944e1813469487be6835b9b20b2",
+    "retainedSourceConfigCount": 7,
+    "excludedSourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "excludedShardId": "m12c-shard:c254b2edd92793d2d221c6c5",
+    "excludedResultCanonicalSha256": "9e16c65768f6d1fc38e0e0199b66d669b6772672734aa109c7fde5e49f3300d7",
+    "excludedRawIdentityHashes": [
+      "5272bdb9297b31f9e000c9dfbe2ced2e13498a7eaa49844ea7c94e8bf4a40370",
+      "16ab7dc909ce98b095f044a2c530b0c13b1e797f28328799b3adf4e261cf2f1e"
+    ]
+  },
+  "replacementRound": {
+    "roundId": "round8-null-safe-terminal-a",
+    "iteration": 8,
+    "aggregateHash": "b7241fb57e0983ad75eded2cc424aefd62773a5dd7ab931e138119f1349db4db",
+    "feedbackAggregateHash": "619cf537994477b104598fcd9d0af9f05ac796591b6843395bce962ca8edefab",
+    "guidanceHash": "bbe95e9a993bff317e8b73abe4850923e1bf46bed4f675f44f8e619b6fde6cec",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "shardId": "m12c-shard:9638be0291774b55aa2f93dd",
+    "inputHash": "250af8f4879437a7560dd663b5c82e776a5e7c7d9979cc1e6e03b2a62a727353",
+    "resultCanonicalSha256": "eadd3ca9cc388e364a21d3579e7d2fc6e368c6b25d82c6c04c64468eb55510c9",
+    "replacementAdmission": [
+      {
+        "rawIdentityHash": "a810778310ad071d45d428f34bbc084e88b8159ecddea45139ae99b35eac8b59",
+        "valid": true,
+        "issues": [],
+        "actualPresetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+        "expectedPresetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+        "actualSpecialResources": []
+      },
+      {
+        "rawIdentityHash": "549af28e42294643165515cc8f75f4b010a68aa02c97618ac6b18ac0ea0105b5",
+        "valid": true,
+        "issues": [],
+        "actualPresetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+        "expectedPresetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+        "actualSpecialResources": []
+      }
+    ]
+  },
+  "replacementPolicy": {
+    "entireAffectedSourceShardReplaced": true,
+    "quarantinedResultReused": false,
+    "hashOnlyRewriteApplied": false,
+    "canonicalPresetRegeneratedByProductionBinder": true,
+    "gameplayContractChanged": false
+  },
+  "compositeAggregateHash": "2309a2ba3695796a5f66ffab0d191b8ead98ce97f5f187e26241d44b26d0078e",
+  "replacementProvenanceHash": "6d00e6ce55aed06c2e323e62579da69a3836ea86837122674b5327d0632a76ce"
+}

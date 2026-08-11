@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-round-config",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-greedy-normal-boundary",
+  "iteration": 4,
+  "objective": "fastest-kill",
+  "topN": 5,
+  "contractTemplate": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "guidanceFile": "work/m12-c/formal-search-v1/guidance/round4.fastest-kill.greedy-normal-boundary.json",
+  "outputRoot": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1",
+  "expectedSourceConfigCount": 8,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+    "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+    "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+    "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+  ],
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "refinementInitialFrontOptimizationObjectId": "112001",
+  "firstProbeActionCount": 16,
+  "maxActionCount": 400,
+  "buildConstraints": {
+    "112001": {
+      "equipmentIdsBySlot": {
+        "ring": [
+          1350211
+        ]
+      }
+    }
+  },
+  "presetSpec": {
+    "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+    "actorSp": "max",
+    "kiboSp": "max",
+    "tuningMarks": [],
+    "rubyAmmo": 12,
+    "policyNote": "All in-team actor/Kibo SP starts at 100; Ruby ammunition is 12 only when 103002 is in the team; all tuning marks remain 0 and no other persistent resource is admitted."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/round3-depth16-ring/feedback-aggregate.json",
+    "feedbackAggregateHash": "126a74f3f0ba6b7fe81e1788c460560f93c8d30bcf6f3073e126f36acdb49ab8",
+    "roundAggregateHash": "0eac8264ce803fcfceaf71175075594f062064a8e2ce686a5bc47a85ba6155cc"
+  },
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffAbsoluteImprovementThresholdFrames": 1,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

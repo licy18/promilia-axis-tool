@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-normal-only",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "8c8517874742663c0793c6f943c57ec950180944e1813469487be6835b9b20b2",
+  "guidanceHashes": [
+    "8b6d2050f837d020b9cbf061a217aa7a765026c053f174a3fe896ee8fe581419"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 8,
+    "completedSourceConfigCount": 8,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 8,
+    "feedbackSourceConfigCount": 8
+  },
+  "budgetUsage": {
+    "beamWidth": 16,
+    "candidatesEvaluated": 45,
+    "completedCandidates": 17,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 3,
+    "maxDepth": 8,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 24,
+    "topN": 80,
+    "wallTimeMs": 44875
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 3
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 17,
+    "topNReady": true,
+    "topScore": 20797.9953003,
+    "cutoffScore": 20797.9953003,
+    "cutoffTieCount": 3,
+    "topNFamilyCount": 5,
+    "topIdentityHashes": [
+      "0426742c76451b5a56ae5730fb671eae3c478cfa0cc5fc6a83be4aec9d93f354",
+      "05fd79c6703fe8c225d19943d129486fca90be5c452e5c60a7a2ec831367674d",
+      "24310a88c20aec14384a77f2a0f632975a2dc44ae8e6b3d2aa977feaf0004ff7",
+      "3c152cb8d3cbe3366f999de54a08cc229a987cdb7d269b60335f1d3485a926ad",
+      "5272bdb9297b31f9e000c9dfbe2ced2e13498a7eaa49844ea7c94e8bf4a40370"
+    ],
+    "cutoffTieIdentityHashes": [
+      "610564bdaf6347abbea833b16d41105954698ec7276118283e4e920845dd0230",
+      "6c24910c075662370cd0207e92b6e526e1e1365ae943f114b3972d82af689f62",
+      "fbdd71cff671fee11c418f08df614bbde3fce2c3aa925f38187eb1bb1b2ca8f2"
+    ]
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-08594e219f77",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "feedbackFileSha256": "f4c6277236c1e595f56788b416888a26d0423fdf7b2035025f8ab0bb5c1d4975"
+    },
+    {
+      "shardName": "02-7f148f2b9895",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "feedbackFileSha256": "355f28f5e42fee6cfca104ad913b46b988d20f92e3791131d38ab309bd316444"
+    },
+    {
+      "shardName": "03-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "f36431b970d685f26ba568e13a750c89e10c7bc26ed73174fe30f5aee08e6408"
+    },
+    {
+      "shardName": "04-72d08b446c79",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "feedbackFileSha256": "8e694b8ed562a858af6e0ab6c1599785eb4da28872d3f865d38cc59c0ccd9541"
+    },
+    {
+      "shardName": "05-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "f35e85d9ef07d3be08e309ec6dfd8d5f1f8e1edebd079a0a30afc557e8a30030"
+    },
+    {
+      "shardName": "06-b71db1e1a915",
+      "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "feedbackFileSha256": "cbec822ff8bd57736dd618ae216bc711fa10068963866a4e51e0446e4298317d"
+    },
+    {
+      "shardName": "07-0726e8a7f286",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "feedbackFileSha256": "3a720db85ff32aedefae39995f9f856a06a308e7cf1b744592f6b61294e5cd00"
+    },
+    {
+      "shardName": "08-5aa51fde8b60",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "feedbackFileSha256": "9206a930f8af6f761e8a81909c8dff8c2a557e09fd0f7488cc714a0d624fbfb6"
+    }
+  ],
+  "feedbackAggregateHash": "06cb99a1b6dd15590fd7da7214856820639cfb6125581a1984754ac4df9bc7a0"
+}

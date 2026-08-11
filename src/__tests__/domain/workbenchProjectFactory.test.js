@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { reactive } from 'vue';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
@@ -38,6 +39,88 @@ afterAll(() => {
 });
 
 describe('workbench project actor configuration', () => {
+  it('normalizes persisted cultivation fields from reactive Workbench state', () => {
+    const characterId = DEFAULT_WORKBENCH_TEAM_SLOTS[0].characterId;
+    const actorConfigs = reactive([
+      {
+        characterId,
+        loadout: {
+          soulessenceCultivation: {
+            level: 80,
+            rank: 6,
+          },
+          equipmentCultivation: {
+            weapon: {
+              instance: { id: 'weapon-instance', tuningScore: 110 },
+              tuningFormula: { attack: 48, criticalRate: 12 },
+            },
+          },
+        },
+        cultivation: {
+          optimizationStaticSources: {
+            sourceKind: 'fixed-optimization-cultivation',
+            hash: 'cultivation-source-hash',
+          },
+          starGiftNodeSkillLevels: {
+            'node-1': 7,
+          },
+        },
+      },
+    ]);
+
+    const normalized = normalizeWorkbenchActorConfigs(actorConfigs, {
+      characterId,
+    });
+
+    expect(normalized[0]).toMatchObject({
+      characterId,
+      loadout: {
+        soulessenceCultivation: { level: 80, rank: 6 },
+        equipmentCultivation: {
+          weapon: {
+            instance: { id: 'weapon-instance', tuningScore: 110 },
+            tuningFormula: { attack: 48, criticalRate: 12 },
+          },
+        },
+      },
+      cultivation: {
+        optimizationStaticSources: {
+          sourceKind: 'fixed-optimization-cultivation',
+          hash: 'cultivation-source-hash',
+        },
+        starGiftNodeSkillLevels: { 'node-1': 7 },
+      },
+    });
+  });
+
+  it('creates a project from reactive objective and joint-attack contracts', () => {
+    const combatScenario = reactive({
+      objectiveContract: {
+        objective: 'cycle-dps-no-toughness',
+        presetHash: 'canonical-cold-cycle-preset',
+      },
+      jointAttackRuntime: {
+        policyId: 'm12-joint-attack-runtime-v1',
+        sameFrameOrder: ['damage', 'toughness-settlement'],
+      },
+    });
+
+    const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+      combatScenario,
+    });
+
+    expect(project.combatScenario).toMatchObject({
+      objectiveContract: {
+        objective: 'cycle-dps-no-toughness',
+        presetHash: 'canonical-cold-cycle-preset',
+      },
+      jointAttackRuntime: {
+        policyId: 'm12-joint-attack-runtime-v1',
+        sameFrameOrder: ['damage', 'toughness-settlement'],
+      },
+    });
+  });
+
   it('compiles legacy switch durations as zero-duration exact-frame events', () => {
     const sourceCharacterId = DEFAULT_WORKBENCH_TEAM_SLOTS[0].characterId;
     const targetCharacterId = DEFAULT_WORKBENCH_TEAM_SLOTS[1].characterId;

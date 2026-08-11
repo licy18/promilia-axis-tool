@@ -1,0 +1,922 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-independent-verification",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-greedy-normal-boundary",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "aggregateHash": "fe54efa56b011a3b5e8b246279c7de7e6abd4e365c7309796835b0b89f92ea78",
+  "coverage": {
+    "expectedCandidateCount": 8,
+    "verifiedCandidateCount": 8,
+    "validCandidateCount": 8,
+    "invalidCandidateCount": 0,
+    "topNCount": 5,
+    "cutoffTieCount": 3,
+    "rawIdentityCount": 8
+  },
+  "boundaryContract": {
+    "shorterActionCount": 220,
+    "killedActionCount": 221,
+    "rejectedLongerActionCount": 222,
+    "killedFrame": 3968,
+    "killedTimeMs": 66133.333333,
+    "shorterRemainingHp": 2807.551112,
+    "longerRejectionCode": "machine-axis-action-target-dead"
+  },
+  "valid": true,
+  "issues": [],
+  "rows": [
+    {
+      "shard": "01-08594e219f77",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "buildHash": "bd1a14d9b242f73e",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "f97bd69afb871a2d34d87d3db67f3ce58eab4ca4b727c5ae69aa16aa42128029",
+        "objective": "fastest-kill",
+        "buildHash": "bd1a14d9b242f73e",
+        "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "1122157a0d280e48b0a42ea21ead4cdd3566bd962b412eaa6bee9a3ccd8e552f",
+        "inputHash": "a551155511aabd10",
+        "traceHash": "ad4a4d8924882828"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "8e6f6e4e5d273d45",
+          "traceHash": "a4be6b0fdcd77bdb",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "a551155511aabd10",
+          "traceHash": "ad4a4d8924882828",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "dbcf9d7328ea227c",
+          "traceHash": "34df3ebc7982a9b2",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "02-7f148f2b9895",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "buildHash": "fceb8d26c3e68c1f",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "743c597a1415e08fed9f708295317c7ec26e7d4f81660b5c7a08a869340e6410",
+        "objective": "fastest-kill",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "dc5f53ce30fa852fe1e9d1184f5c1ffaeb0236b11427373464895666ce6398b1",
+        "inputHash": "5a4f93c6f3a70b18",
+        "traceHash": "58a9ff9a267bdb60"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "1df60c97c07fc76c",
+          "traceHash": "b9594db3ec0e92a1",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "5a4f93c6f3a70b18",
+          "traceHash": "58a9ff9a267bdb60",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "95165a0bf22e0f4b",
+          "traceHash": "009a5e58b82e0cc0",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "03-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "buildHash": "28246fd3b29c6178",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "e605c09d0c2168462e269019cf1efa85956aed06a2f51ccf03336c9ca74d0c67",
+        "objective": "fastest-kill",
+        "buildHash": "28246fd3b29c6178",
+        "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "888efac3c0620c55f3485d0a91b6218a485819c58f1f04079d630f2820b214f6",
+        "inputHash": "0410890c89aafe82",
+        "traceHash": "b66159ae65009fdd"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "4352b133868362b4",
+          "traceHash": "9bf26e5f013c636c",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "0410890c89aafe82",
+          "traceHash": "b66159ae65009fdd",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "fcbc6348d626b1b1",
+          "traceHash": "2703968e3e154f23",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "04-72d08b446c79",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "buildHash": "18d5368248d5537e",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "d93f6770e69818312ac11338bce5406037593b7ce0ade416300f683c561d736f",
+        "objective": "fastest-kill",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "11a3c677098ade0989825891067ace7a08a103bf4f1a19eb9c850a4fbd61e8c8",
+        "inputHash": "e2c4e74d2f904a94",
+        "traceHash": "cca0eb3a883242af"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "61db3ab3c3efc5b5",
+          "traceHash": "87bc0804b7401049",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "e2c4e74d2f904a94",
+          "traceHash": "cca0eb3a883242af",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "8eb403c55df6a494",
+          "traceHash": "7340544fa18587c9",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "05-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "buildHash": "1c90d1c746a809f4",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "41a4968f7d391842edc63427b0f9f3d793195324feff3ad89e0e55dc5f14ead1",
+        "objective": "fastest-kill",
+        "buildHash": "1c90d1c746a809f4",
+        "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e9beccc21744a656f6e61f012fa2b3db42511071d0c562aa84707974755dacd9",
+        "inputHash": "7a915d63214f408f",
+        "traceHash": "bec2d3acbd7ce558"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "e7e5921f5b7e9009",
+          "traceHash": "0e9e4dcd3fb95ef2",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "7a915d63214f408f",
+          "traceHash": "bec2d3acbd7ce558",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "4b07fc77ed7130e4",
+          "traceHash": "a9c4b26c2cb85b9d",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "06-b71db1e1a915",
+      "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "buildHash": "fd161a33da6bf84a",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "e4231bbc450243a507c9628ad9a600c37ab18a908cad8579beab2643e2392268",
+        "objective": "fastest-kill",
+        "buildHash": "fd161a33da6bf84a",
+        "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "a40c64337cc8e995a4d4139d7891c221e0415a713f0cad106c359b189a156d48",
+        "inputHash": "0d9dab0cd72c9f49",
+        "traceHash": "64cc11344877dbba"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "8f173ae7a44d3cfb",
+          "traceHash": "52328613b5414337",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "0d9dab0cd72c9f49",
+          "traceHash": "64cc11344877dbba",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "f3098aa95b7988e8",
+          "traceHash": "12e44e6afa092351",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "07-0726e8a7f286",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "buildHash": "7cf2ce3936b0ab40",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "97bfa472d625d72b1f8d0d5fb25192cfd14f45224d84bf6375d76852b4353f0b",
+        "objective": "fastest-kill",
+        "buildHash": "7cf2ce3936b0ab40",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "c9f4072a5c266c62",
+        "traceHash": "e63331a9f7dcb5b9"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "db9c64d07ae72754",
+          "traceHash": "25330e15abcb0683",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "c9f4072a5c266c62",
+          "traceHash": "e63331a9f7dcb5b9",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "a1ceb91d3f98ba11",
+          "traceHash": "f1b05fabcb004fe0",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "08-5aa51fde8b60",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "buildHash": "37848158739122c6",
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "7d0919ecba94f8d9b97753b5f47a29755b1a6b0f9b63f671a1d0670dcafbe47f",
+        "objective": "fastest-kill",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "aee1d86efa799c5b",
+        "traceHash": "01385c49efe5095c"
+      },
+      "score": 66133.333333,
+      "actionCount": 221,
+      "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+      "probes": {
+        "220": {
+          "classification": {
+            "status": "valid-not-killed",
+            "killed": false,
+            "valid": true,
+            "formalScore": null,
+            "issueCodes": []
+          },
+          "enemyHp": 2807.551112,
+          "inputHash": "2148fc0d5efc818c",
+          "traceHash": "0d5f17c8740ddc24",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "not-killed",
+          "proofFormalScore": null,
+          "firstLethal": null
+        },
+        "221": {
+          "classification": {
+            "status": "killed-valid",
+            "killed": true,
+            "valid": true,
+            "formalScore": 66133.333333,
+            "issueCodes": []
+          },
+          "enemyHp": 0,
+          "inputHash": "aee1d86efa799c5b",
+          "traceHash": "01385c49efe5095c",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "killed",
+          "proofFormalScore": 66133.333333,
+          "firstLethal": {
+            "frame": 3968,
+            "timeMs": 66133.333333,
+            "cursor": {
+              "absoluteFrame": 3968,
+              "timeMs": 66133.333333,
+              "runtimePhasePriority": 0,
+              "runtimePriority": 0,
+              "runtimeSequenceIndex": 444
+            },
+            "actionId": "search-action-221",
+            "actorId": "actor-112001",
+            "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+            "hitKey": "verified-hit-1-112001000",
+            "hitIndex": 1,
+            "requestedHpDamage": 6938,
+            "effectiveHpDamage": 2807.551112,
+            "overkill": 4130.448888,
+            "toughnessDamage": 9983,
+            "breakTriggered": false,
+            "deathTriggered": true,
+            "settlementOrder": [
+              "hp-output-calculated-from-pre-break-state",
+              "toughness-settled",
+              "break-state-transitioned",
+              "hp-settled"
+            ]
+          }
+        },
+        "222": {
+          "classification": {
+            "status": "invalid-upper-bound",
+            "killed": null,
+            "valid": false,
+            "formalScore": null,
+            "issueCodes": [
+              "machine-axis-action-target-dead"
+            ]
+          },
+          "enemyHp": 0,
+          "inputHash": "ab6fd8cc5eb4c5c1",
+          "traceHash": "b054f758bf16f3d5",
+          "legalityProofPassed": true,
+          "skippedActionCount": 0,
+          "unresolvedActionCount": 0,
+          "proofStatus": "rejected",
+          "proofFormalScore": null,
+          "firstLethal": null
+        }
+      },
+      "valid": true,
+      "issues": []
+    }
+  ],
+  "verificationHash": "9a37d16c09651066b01da155777ed513f9e8706018e558b3683ae6ef79fa58d4"
+}

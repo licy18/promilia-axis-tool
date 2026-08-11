@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-manifest",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round8-null-safe-terminal-a",
+  "iteration": 8,
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "roundConfigPath": "work/m12-c/formal-search-v1/config/round8.cycle-dps-no-toughness.null-safe-terminal-a.json",
+  "roundConfigHash": "e253ca49b4f0902999d5bb5b8e5c4723030630fc1a944fae522188672b29219b",
+  "orchestratorId": "azpr-m12c-formal-shard-orchestrator-v1",
+  "orchestrationSourceHashes": {
+    "runRoundSha256": "9f83a50a08fdaeb31c67f0b4498a47b083c771f8eb1ee27c97de79580a72a7e9",
+    "artifactLibrarySha256": "0d8b954b69e3c9bd204318301c07f373e5149c7bdf264a964da13cc9f6b135aa",
+    "cycleReplayLibrarySha256": null
+  },
+  "orchestrationIdentityHash": "9ae5fcd192d6e7615f99e5aa9469d4386b746d17edc888fa9dc03f30df683fcc",
+  "contractTemplatePath": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "guidancePath": "work/m12-c/formal-search-v1/guidance/round8.cycle-dps-no-toughness.null-safe-terminal-a.json",
+  "guidanceHash": "bbe95e9a993bff317e8b73abe4850923e1bf46bed4f675f44f8e619b6fde6cec",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 8,
+    "rationale": "Fail-closed terminal preset scan quarantined the two raw identities produced by the sole affected source m12c-source-v1:103002=103002+109001=109001+112001=112001 in rounds 4/5/6 because an explicit Ruby=0 resource violated the canonical cold-cycle preset. Re-run only that necessary source shard with rubyAmmo:null, all actor/Kibo SP zero, zero marks, no special resources, the same ring constraint, and the bounded normal-only beam-1 surface; do not reuse or rewrite quarantined results."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round7-null-safe-coverage-correction/feedback-aggregate.json",
+    "feedbackAggregateHash": "2f17a74146b5bab7b06e97084a2cb1715b5c12d951fa552e94553bdb2fdb5cf6",
+    "roundAggregateHash": "3a3383c0b46f4cc6895bc62d1980f38ce027d4b6242161898d52b62f679a1889"
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "topN": 5,
+  "sourceConfigCount": 1,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001"
+  ],
+  "sourceConfigUniverseHash": "edab209b7add737e703640bc774b5015bbcfb979388ab872a1f3cbcf9e162622",
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  },
+  "cycleReplayProvenance": null
+}

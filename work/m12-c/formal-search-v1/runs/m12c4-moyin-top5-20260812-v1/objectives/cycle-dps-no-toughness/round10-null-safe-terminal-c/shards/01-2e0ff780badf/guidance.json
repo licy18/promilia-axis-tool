@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 2,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": [
+      "normal-attack"
+    ],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ],
+    "allowedPublicActionIds": [],
+    "blockedPublicActionIds": [],
+    "perOwner": {}
+  },
+  "kiboPolicy": {
+    "allowedKiboIds": [],
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": false
+  },
+  "waitPolicy": {
+    "includeWait": false,
+    "maxWaitFrames": null
+  },
+  "pruning": {
+    "earlyTerminationScore": null,
+    "aggressive": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 10,
+    "rationale": "Round-9 independently reproduced both canonical replacement raw identities, exact scores, input/trace hashes, empty special-resource state, and presetHash from round 8. Run the same sole affected shard a third and final time to satisfy the declared three-confirmation bounded stop before pairing replacements with the three quarantined historical terminal rounds."
+  },
+  "guidanceHash": "876e4038025f018026d389b361f78984fe77e29aa9ae96242b0d9ee1062d2e1f"
+}

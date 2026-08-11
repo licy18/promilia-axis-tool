@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 4,
+    "topN": 50,
+    "maxDepth": 16,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 3,
+    "maxWaitCandidates": 6,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": true
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 3,
+    "rationale": "Round-2 feedback 9fa52f0b2a977af0b75c5042b2136f87906d659a0dae2478d3bfae077b5352c1 evaluated 912 candidates at depth 8 without a killed proof. Double depth to 16 on the same incumbent source and fix 112001 ring 1350211, independently justified by the no-toughness build probe, while retaining switch and verified Kibo signature/joint surfaces."
+  }
+}

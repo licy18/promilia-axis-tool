@@ -1,0 +1,458 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T19:15:38.358Z",
+  "guidanceHash": "7f6d5337a2c38db36a3f6136ecb6e7770e315342187d0d9c90f38199459dd17e",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "budgetUsage": {
+    "beamWidth": 4,
+    "topN": 50,
+    "maxDepth": 8,
+    "steps": 24,
+    "wallTimeMs": 1666970,
+    "candidatesEvaluated": 815,
+    "prunedCandidates": 0,
+    "mergedCandidates": 35,
+    "invalidCandidates": 349,
+    "completedCandidates": 29,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 291
+    },
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 174
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 174
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 174
+    },
+    {
+      "code": "actor-switch-exit-tail-order-unresolved",
+      "count": 164
+    },
+    {
+      "code": "skill-cooldown-active",
+      "count": 70
+    },
+    {
+      "code": "machine-axis-action-conditions-unresolved",
+      "count": 5
+    },
+    {
+      "code": "verified-charging-release-selection-unresolved",
+      "count": 5
+    }
+  ],
+  "topResults": [
+    {
+      "chainLength": null,
+      "score": 430.81340599,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "9924b5b619c50bf8",
+        "data": "a0d618249f06505b",
+        "trace": "802333bb94fceaf5",
+        "evaluation": "20f7554a038eee95",
+        "build": "85fbbf22add3dcc5"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 430.76830343,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "bdb879092db99db4",
+        "data": "a22880019ad64988",
+        "trace": "6e6898a940c34eec",
+        "evaluation": "62b8474956d80d66",
+        "build": "08b65e33aa3ad8ae"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 383.0596302,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "cd45bba784aaaa6f",
+        "data": "1d1098f7898897b0",
+        "trace": "93cd3b43ecc9f541",
+        "evaluation": "40f72ab9804f5bc6",
+        "build": "dbf263599e635bf5"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 383.01452764,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "8f43f0b42b00bb97",
+        "data": "ee80ffe37f2b91df",
+        "trace": "d143aa56d2174cb5",
+        "evaluation": "6ed24f1394448ff4",
+        "build": "2eb1d46535f6f020"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 381.27432251,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "162da8b154c78969",
+        "data": "4b13475e6d2e58b1",
+        "trace": "b88ebe55505096d5",
+        "evaluation": "ff2f4a3b336c96ff",
+        "build": "15fd6f1b830ec20d"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 335.30585442,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "60d38f31b0d06a97",
+        "data": "8bd41f0a205d5e16",
+        "trace": "ac6f22db137b97c0",
+        "evaluation": "c862f2fa9b470e6e",
+        "build": "085eda43c385db63"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 333.96071256,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "787683b338f58aba",
+        "data": "b022b834a6e93be3",
+        "trace": "7517ac9e6029c3ff",
+        "evaluation": "197dcac8a8ea176c",
+        "build": "9546b7c9637814b3"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 333.61075185,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "c11570b7f7c24209",
+        "data": "1d0f4931c0b0db78",
+        "trace": "23cc3c67e8641408",
+        "evaluation": "a1eb685e3d32a38f",
+        "build": "9d639aaf4492492c"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 286.25203934,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "87016fe19b3d5566",
+        "data": "274207365ce944d4",
+        "trace": "4146928844d4f7c4",
+        "evaluation": "f720d1b81f398143",
+        "build": "2e3743c16e316220"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 286.25203934,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "162e6b072474b128",
+        "data": "274207365ce944d4",
+        "trace": "e446a886771cf3f6",
+        "evaluation": "c7f3224894a36fbc",
+        "build": "cf91bb706da0391a"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 285.90207863,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "58deb6e9efb250e8",
+        "data": "05f6e47036ca0251",
+        "trace": "fdcd4259a1d38697",
+        "evaluation": "13d53f1a3e4399bf",
+        "build": "82419d60900dccc0"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 285.85697606,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "4f67dfd9026bc3cc",
+        "data": "03ffe4c9edc0f4c6",
+        "trace": "00b303c6e06e1a01",
+        "evaluation": "14fafbcdb028cd97",
+        "build": "9429d6753faee3ca"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 238.54336611,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "05ef5417a249064e",
+        "data": "b383225a4b04a44f",
+        "trace": "679e788e427d24cf",
+        "evaluation": "488409a68b17dfea",
+        "build": "9c249ee0e600df35"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 238.14830284,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "6ece4729c6670535",
+        "data": "b92851fe15f502da",
+        "trace": "40cf75d0855ad981",
+        "evaluation": "13e4a8e4781a82af",
+        "build": "3cc454b80294ffff"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 217.12085953,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "be14c630fae6be4f",
+        "data": "e74e2318a7a3a207",
+        "trace": "d0bccc36f3a96384",
+        "evaluation": "c70dd2652d8dc6cb",
+        "build": "32260c6c37d1cb27"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 217.12085953,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "43ed8bc6f209889c",
+        "data": "c133337490c8af19",
+        "trace": "da03e156ef582a8c",
+        "evaluation": "1aa63145b47a5542",
+        "build": "2f85ee33f9104c30"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 217.12085953,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "a951bae7525f82fb",
+        "data": "e74e2318a7a3a207",
+        "trace": "e0fabc17ccc467dd",
+        "evaluation": "1aa63145b47a5542",
+        "build": "b628149cb1bb3f60"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 217.12085953,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "91b8e82fbecd671b",
+        "data": "17867ce3eaa2eac4",
+        "trace": "51415e53f03e3173",
+        "evaluation": "151c244b3b1e1ab9",
+        "build": "9361a9758ab4a943"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 217.12085953,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "b58067877a6e98c3",
+        "data": "c133337490c8af19",
+        "trace": "bae3efd3104b84fd",
+        "evaluation": "151c244b3b1e1ab9",
+        "build": "d6927ef681bd8c64"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 190.83469289,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "f1745c27fbcb7c61",
+        "data": "8203fa714ed88cc9",
+        "trace": "9cd82e5388d08146",
+        "evaluation": "aa0ef0c0c322e0cf",
+        "build": "7f0d6fae50740358"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 143.12601967,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "41ed9d5228137f28",
+        "data": "e9b0a9d7b0dff7a7",
+        "trace": "e6694b8ca781677e",
+        "evaluation": "2476bd51f4afb1ab",
+        "build": "bbb805ab20975fa3"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 99.9631513,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "efcd92752f35a2e6",
+        "data": "ea74b4ab00000f55",
+        "trace": "00c9f5a023f6d6df",
+        "evaluation": "27725ac6f5ec5927",
+        "build": "58e83586d990d7d3"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 95.41734645,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "cb2b9fe073f2f1df",
+        "data": "1d934df7fbacff8b",
+        "trace": "2092afff5af2f257",
+        "evaluation": "ca08c25691f7f50b",
+        "build": "24b072e4decd82f3"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 90.30258814,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "4aa260b4e2722a29",
+        "data": "c8524d6878bddd19",
+        "trace": "72f3db47188acccc",
+        "evaluation": "6b2634e5b7b5ebd1",
+        "build": "be6cef25ece93adb"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 72.40591965,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "cc5f9cea3b34ee92",
+        "data": "a5d3bb22d6e0f6d5",
+        "trace": "487bc7e9a2768b63",
+        "evaluation": "685f734f23973138",
+        "build": "ff31e556f7417126"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 47.70867322,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "c30d81e74457ba4e",
+        "data": "0bacc853512647c1",
+        "trace": "53d5e40c78499490",
+        "evaluation": "b9329bcbdf1491d4",
+        "build": "523990a761626ea1"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 29.57655785,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "96009abf6cfd4247",
+        "data": "1fd80824b0e25527",
+        "trace": "fab0fe030543642d",
+        "evaluation": "bff85c3914695447",
+        "build": "b690f39dbaeecede"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 14.86632818,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "8b266d974fc6bcc8",
+        "data": "1fd80824b0e25527",
+        "trace": "f996032fdde0cfe0",
+        "evaluation": "bff85c3914695447",
+        "build": "fbed11f3d36968d9"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 0,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "84f042cf3c9ae838",
+        "data": "e84463cff262119c",
+        "trace": "7aaf109e01c3417a",
+        "evaluation": "5a35bd24a4378fd0",
+        "build": "59affc15c956af95"
+      }
+    }
+  ],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round2-depth-probe",
+    "shardId": "m12c-shard:f70097ac35ae037c95508aa2",
+    "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+    "inputHash": "cf91c1585bd6dd83d09f5415b133e28ebbabff77fb7900dc15211368b236eee1",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

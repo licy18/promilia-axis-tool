@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩、受影响角色产品重签与用户指定的断点续跑门禁均已完成；用户已裁决 M12-C4 采用 AI 引导的启发式剪枝并接受无法证明全局最优的 Top-N。一次并发流程在最终 Gate V2 authority 建立前启动搜索，现已终止并标记为未授权/污染；没有可采信的 Top-N，正式搜索仍未获准继续。
+状态：`M12-C0` 至 `M12-C6` 已完成。正式 run `m12c4-moyin-top5-20260812-v1` 已分别产出三个 objective 的 bounded Top-5，并完成 strict finalization、15/15 独立 replay、15/15 Workbench 真实导入与人工视觉签收、preset 污染隔离/替换和确定性 overall closeout。结果统一声明为 `AI-guided heuristic Top-N`；`optimizationFormalScoreReady=true` 只表示当前 runtime-baseline 正式评分资格闭合，`formalRankingReady=false`、`clientParityReady=false` 继续保留，不宣称全局最优、穷举完整或客户端一致。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -75,6 +75,17 @@
 - `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json` 与 `work/m12-c/m12c4-search-template.json` 作为 untracked 污染证据原样保留，不作为 release 输入、正式搜索产物或 Top-N 依据。只有新的最终 clean tracked HEAD 完成真实 `release:verify` 且独立 admission 允许后，才可重新授权搜索。
 - clean HEAD `e9fe2cef1b0ee058111c23ad65a71c402fd40433` 的下一轮 release 同样真实通过 242/242 Vitest files、1954/1954 tests 与 64/64 production preview，但进入独立 admission 编排时，原生 Node ESM 无法解析 `kiboAxisActionScopePolicy.js` 中缺少 `.js` 后缀的 `canonicalSerialization` import；本轮记为 `interrupted/orchestration`，不记为 PASS。修复为显式 `.js` import，并新增由真实 `node.exe` 导入该 policy 的回归用例；最终 clean HEAD 仍须重跑完整 release。
 - clean HEAD `89916a8f14e05b912ef1324b4ee6dbe95fe39d69` 的 release 已真实通过 242/242 Vitest files、1955/1955 tests 与 64/64 production preview；postflight 唯一漂移为生产 source 多出 `.js` 三个字节后应同步的 `reports/bundle-composition.json`。报告的 `kiboAxisActionScopePolicy.js.originalBytes` 从 5802 变为 5805，JS gzip 总量仍为 897786 bytes、三项预算全绿；独立重跑 bundle audit 后字节幂等。本轮仍按 postflight FAIL 记录，提交 canonical bundle 报告后重跑最终 release。
+
+## 0.6 2026-08-12 M12-C4/C5/C6 正式搜索收口
+
+- 唯一准入起点为已推送的 `master@baeb03489aa823d59981d60255af5b418aa48178`，现场确认 `HEAD == origin/master`、tracked tree clean；release record `5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24` 的 Formal Search Admission 为 READY 14/14、0 blockers。准入基线全量 Vitest 242/242 files、1961/1961 tests，preview 64/64、binding 22/22、qualification 263/263。本次 closeout 没有重复这些长门禁。
+- 正式版本化根为 `work/m12-c/formal-search-v1/`，run 为 `runs/m12c4-moyin-top5-20260812-v1/`。准入前污染文件 `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json` 与 `work/m12-c/m12c4-search-template.json` 未被读取、续跑或纳入正式输入，`stash@{0}` 未改动。
+- `M12-C4` 完成：三个 objective 都形成 5 个不同 raw identity 的确定性最终榜。无韧循环 Top-5 均为 `20797.9953003 HP DPS`，有韧循环均为 `469.50721728 HP DPS`，最快击杀均为 `66133.333333 ms`；cutoff ties 均完整保留。effective source coverage 三项目标均为 35/35；累计 round/shard 为无韧 10/79、有韧 8/77、击杀 6/61，failed/missing 全为 0。最新 finalization hash 分别为 `eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0`、`0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a`、`134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154`。
+- preset admission 修复按 canonical projection/hash fail closed 扫描全部 objective/terminal round：隔离 2 个受 Ruby=0 污染的 raw identity、6 个 occurrence，并只重跑受影响必要 shard/terminal confirm；quarantine hash=`0bb833990380bd9ff5dbea2e5b3a1cd959bd2a8354e76ec3ab0986940acc2505`，replacement/repair evidence valid。cold cycle 明确拒绝显式 0 或伪装 Ruby 字段；fastest-kill 只允许 actor/Kibo SP=100、marks=[]，以及 103002 入队时唯一 `actor:103002:element:103002047` 的 12/12 弹药。
+- `M12-C5` 完成：最终 15 个 `machine-axis.json` 均经真实文件选择器导入 Workbench 并逐条查看 timeline、动作检查器、trace 身份与摘要。结构化矩阵记录 15/15 import active、15/15 canonical trace match、15/15 individual screenshot、15/15 manual accepted，并为三个 objective 各保存 1 张直接可见“已导入 Machine Axis”和摘要/trace 的证据；见 `product-review/workbench-top15-visual-signoff.json` 与 `product-review/WORKBENCH_TOP15_SIGNOFF.md`。
+- 真实导入发现 Vue reactive Proxy 不能直接 `structuredClone`。修复只对持久化 JSON-safe 合同字段在 `DataCloneError` 时使用 JSON fallback，普通正式输入仍保持原 `structuredClone` 语义；因此独立 Top-15 复验恢复原 hash `a5bf3e453572c37bd6b81a46d28f26e23144dba70ae9005872e75c98bed20f27`，15/15 valid、0 issues。fastest-kill 边界保持 220 动作未击杀且剩余 `2807.551112 HP`，第 221 动作在 frame 3968 / `66133.333333 ms` 首次致死，第 222 动作按 target-dead fail closed。
+- `M12-C6` 完成：formal-search-v1 五个 node:test 文件 23/23；project factory + Machine Axis adapter 38/38；真实 Workbench Machine Axis import 聚焦用例 1/1；Prettier、diff-check 通过，ESLint 0 errors（2 条既有 unused warning）。overall closeout 连续两次得到 `3e67f6f08ee5457373c1c18952bc7611bff37f29f24b6c0c53d58c3fdcd2a8fa`，valid=true、0 issues、15/15 formal-score qualification、18/18 screenshot hash；见 `final-verification/overall-closeout.json` 与 `final-verification/OVERALL_CLOSEOUT.md`。
+- bounded 停止只基于声明轮次的 Top-5 identity/score/family/cutoff 稳定与独立策略无新增 family：无韧使用修复后的三组 terminal confirm，有韧 round5/6/7 稳定并由 round8 coverage corroborate，击杀 round4/5/6 稳定且保持 4 families/3 cutoff ties。此停止条件不是 admissible bound、全局最优性或完整枚举证明。
 
 ## 1. 目标与结果身份
 
@@ -217,9 +228,9 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 2. `M12-C1`：实现并验证 28 个队伍对象、35 个来源配置、STARBORN 单别名和初始前台轴身份。
 3. `M12-C2`：生成合法 build 池，闭合灵子职业、奇波隔离、五部位装备、套装派生、同名效果刷新/叠层/阻断及 build hash。
 4. `M12-C3`：实现 objective-scoped 初始状态 validator；循环资源白名单与击杀轴 SP/红宝石弹药白名单必须有正反例。
-5. `M12-C4`：为三个 objective 分别运行内层动作轴搜索并输出独立 Top-N、proof、hash、贡献与拒绝原因。
-6. `M12-C5`：Top-N 自动导入 Workbench，逐条人工复验动作、派生、资源、Buff、印记、Break 与伤害曲线。
-7. `M12-C6`：固定输入重复运行、保存导入、batch/CLI/Workbench parity、cycle replay、trial-release、production build 与确定性审计全绿后，才允许形成正式结论。
+5. `M12-C4`（完成）：三个 objective 已分别输出 bounded Top-5、proof、hash、贡献、拒绝原因、coverage、budget 与 terminal stability。
+6. `M12-C5`（完成）：15/15 Top-5 已真实导入 Workbench，逐条人工复验动作、派生、资源、Buff、印记、Break、伤害曲线与 trace 身份并保存截图矩阵。
+7. `M12-C6`（完成）：在既有 release/admission 全量基线上完成固定输入独立 replay、导入、cycle/kill proof、preset 白名单、截图 hash、聚焦 Workbench/adapter 回归与确定性 overall closeout；按用户要求未重复无影响域必要性的 full gate。
 
 ## 10. Admission 与当前边界
 
@@ -232,4 +243,4 @@ M12-C 在同一无头核心中联合优化队伍、装配、初始前台和动�
 - 三个 objective 的雷冠牦 profile、初始 preset、暴击政策和 runtime settlement 合同必须进入未来结果 hash；
 - 43 只 admitted Kibo 的全部 autonomous surface 必须由版本化范围合同明确覆盖为 product-deferred；qualification/action catalog/scheduler/search-generator hash、43/71 分母、signature/break 保留面或分类任一漂移都会使 Formal Search `BLOCKED`；
 - `clientParityReady=false` 不回锁已经通过的 optimization qualification，但也不能被 formal scoring 或测试通过自动提升；
-- 正式搜索尚未启动。进入 `M12-C4` 后仍须分别产出三个 objective 的 Top-N、proof、hash、贡献和拒绝原因，再进入人工 Workbench 复验。
+- 正式搜索与人工 Workbench 复验已按 0.6 节完成；当前交付是 runtime-baseline 下的 bounded heuristic Top-5。`formalRankingReady=false` 与 `clientParityReady=false` 均保持，未来合同、权威数据或客户端证据漂移时必须重新 admission 并重算受影响结果。

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-manifest",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-normal-only",
+  "iteration": 4,
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "roundConfigPath": "work/m12-c/formal-search-v1/config/round4.cycle-dps-no-toughness.normal-only.json",
+  "roundConfigHash": "50645c3de158292c8b258c687172952c04c514b4b56559f49048ec684beb2725",
+  "orchestratorId": "azpr-m12c-formal-shard-orchestrator-v1",
+  "orchestrationSourceHashes": {
+    "runRoundSha256": "58b8eefed5d2be9a700ed5833ba709285af8d3a90906937f01ac47269ae65705",
+    "artifactLibrarySha256": "dc2974a9fb828c7b474e43951155a70e0d1f0f1bc62f5517b8a077ce5d145127"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "contractTemplatePath": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "guidancePath": "work/m12-c/formal-search-v1/guidance/round4.cycle-dps-no-toughness.normal-only.json",
+  "guidanceHash": "8b6d2050f837d020b9cbf061a217aa7a765026c053f174a3fe896ee8fe581419",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 4,
+    "rationale": "Round-3 feedback 5e36337b7586a439b5a8c2cbd9087fa035568f7adb4dfa750abe5fa6d5c72120 confirmed the ring-1350211 incumbent at 20797.9953003 DPS across all eight authoritative 112001 source configs, with a five-family Top-5 boundary and three cutoff ties. Independently rerun only the single verified normal-attack surface, disabling Kibo, switch, and wait generation while preserving the same eight sources and all three initial fronts."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round3-ring-propagation/feedback-aggregate.json",
+    "feedbackAggregateHash": "5e36337b7586a439b5a8c2cbd9087fa035568f7adb4dfa750abe5fa6d5c72120",
+    "roundAggregateHash": "d0edefb363136e68e74e5d9a1affa9f14c48ce98a2435f6e50a79dee89cfb55e"
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "topN": 5,
+  "sourceConfigCount": 8,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+    "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+    "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+    "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+  ],
+  "sourceConfigUniverseHash": "93b0e41a0d228777972fc07b6c0fb436387ea31e4efa10c4fdc102fd1a2a5e0a",
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

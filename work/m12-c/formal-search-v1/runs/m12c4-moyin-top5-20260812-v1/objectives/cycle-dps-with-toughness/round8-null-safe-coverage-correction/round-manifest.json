@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-manifest",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round8-null-safe-coverage-correction",
+  "iteration": 8,
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "roundConfigPath": "work/m12-c/formal-search-v1/config/round8.cycle-dps-with-toughness.null-safe-coverage-correction.json",
+  "roundConfigHash": "fd2843fea18ccfa7b574996bc47fc442fcf08d9a4d77e6debf25703c33d6421d",
+  "orchestratorId": "azpr-m12c-formal-shard-orchestrator-v1",
+  "orchestrationSourceHashes": {
+    "runRoundSha256": "80887d92939186372a84451a53f95020819ad004f3cc65e9dd28f4f7237d864d",
+    "artifactLibrarySha256": "dc2974a9fb828c7b474e43951155a70e0d1f0f1bc62f5517b8a077ce5d145127",
+    "cycleReplayLibrarySha256": null
+  },
+  "orchestrationIdentityHash": "b373ddb067e604c0ecea6b8738e3bfb587a1d378487fa96bebc9b7c8b8560d35",
+  "contractTemplatePath": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "guidancePath": "work/m12-c/formal-search-v1/guidance/round8.cycle-dps-with-toughness.null-safe-coverage-correction.json",
+  "guidanceHash": "7944675fcbe43d3981da2a4cde434fd7d0c2ed9a934cf557d17b8ab3b564b99d",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 8,
+    "rationale": "After the valid three-round toughness terminal set, audit of the original coverage round found the same rubyAmmo:null coercion on eight 103002 source configs. Preserve the 27 unaffected shards and rerun only those eight configs under the null-safe cold-cycle preset; treat this as coverage correction and verify that it introduces no cutoff or family improvement."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round7-terminal-confirm-b/feedback-aggregate.json",
+    "feedbackAggregateHash": "f3f50b17262bcc00032e660aa7ab22fea7ea0b4ec3b79da4e48353b9506f4583",
+    "roundAggregateHash": "94998c39e519759f93d31f56f85b50c73c15d5824480966e76f2f4f8ce8ad89a"
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "topN": 5,
+  "sourceConfigCount": 8,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+    "m12c-source-v1:102001=102001+103002=103002+109001=109001",
+    "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+    "m12c-source-v1:103002=103002+107002=107002+109001=109001",
+    "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "m12c-source-v1:103002=103002+109001=109001+STARBORN=199001",
+    "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002"
+  ],
+  "sourceConfigUniverseHash": "99a9a112f3373f83d0f9825651a43f81f832b48041f7a16d291d89fc5a5fa551",
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  },
+  "cycleReplayProvenance": null
+}

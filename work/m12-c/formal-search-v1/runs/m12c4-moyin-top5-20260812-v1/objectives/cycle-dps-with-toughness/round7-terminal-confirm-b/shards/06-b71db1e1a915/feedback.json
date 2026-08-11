@@ -1,0 +1,55 @@
+{
+  "guidanceHash": "c3b4897e91ff772b775a5e77efd4ed59926cd37b3fa6d6e3c96151e34ebb5977",
+  "budgetUsage": {
+    "beamWidth": 1,
+    "maxDepth": 8,
+    "candidatesEvaluated": 1,
+    "wallTimeMs": 3921
+  },
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 1,
+    "topNReady": false,
+    "topScore": 469.50721728,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1
+  },
+  "rejectionBreakdown": [],
+  "recommendations": [
+    "Retain raw build identity and aggregate all source-family shards before ranking."
+  ],
+  "cycleReplay": {
+    "synthesisId": "m12c-fixed-incumbent-cycle-replay-v1",
+    "templateAggregatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round3-restricted-probe/aggregate.json",
+    "templateRoundId": "round3-restricted-probe",
+    "templateAggregateHash": "fb69a4f32f5ff07fd1a2c56e01552ebd73fc68cd4527b98131521f893c56c195",
+    "templateRawIdentityHash": "c80a75d86c2160f24c7b4e8604a85c16d10b7534d61863fd4159db6313433450",
+    "templateScore": 430.81340599,
+    "templateActionHash": "ddb9bc7ec4b0195e1092edf9d0cecb6b6529f4e7de2aa4ba451f09c8b20ee642",
+    "loop": {
+      "startFrame": 0,
+      "endFrame": 7200
+    },
+    "semanticEquivalenceClaimed": false,
+    "admissibleBoundClaimed": false,
+    "reboundSourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+    "reboundBuildHash": "fd161a33da6bf84a",
+    "reboundInitialFront": {
+      "actorSlotId": "m12c-slot:112001",
+      "optimizationObjectId": "112001",
+      "sourceCharacterId": 112001
+    },
+    "closedScore": 469.50721728,
+    "legalityProofHash": "a2e8d7504b91db2e",
+    "cycleProofHash": "1cc0450871744bf0"
+  },
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round7-terminal-confirm-b",
+    "shardId": "m12c-shard:0cc7bb9544970153f601af2a",
+    "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+    "inputHash": "f984a5e695e85fdcebea2932d12d2e41b380a5c0872e54f9bdbc1916d9735611",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

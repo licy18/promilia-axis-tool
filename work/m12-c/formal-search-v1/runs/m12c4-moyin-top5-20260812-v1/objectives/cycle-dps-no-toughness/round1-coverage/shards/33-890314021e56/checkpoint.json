@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "objective": "cycle-dps-no-toughness",
+  "shardId": "m12c-shard:287fb3ebbdedf08080960423",
+  "attempt": 1,
+  "attemptHistory": [],
+  "status": "completed",
+  "exitStatus": "completed-with-results",
+  "startedAt": "2026-08-11T18:04:35.580Z",
+  "finishedAt": "2026-08-11T18:05:09.093Z",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "inputHash": "de891cf49df5fdeb82a5f452c4055f45d01e4ff29b2099fc65f32efd7b2782b8",
+  "guidanceHash": "71f11746ff9bd07f0c2127076de8841d8b8309c42859aa3dd5d66d1c3cf51e32",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "b5c146bfb82c45b1",
+  "coverage": {
+    "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+STARBORN=199002",
+    "sourceConfigOrdinal": 33,
+    "sourceConfigCount": 35,
+    "initialFrontPolicy": "all-team-members",
+    "expectedInitialFrontCount": 3,
+    "processedVariantKeyCount": 3,
+    "processedVariantKeyChainHash": "edc0ff1534a06ebe",
+    "plannedSourceConfigCount": 1,
+    "buildCount": 1,
+    "variantSearchCount": 3
+  },
+  "summary": {
+    "valid": true,
+    "resultCount": 2,
+    "failureCount": 2,
+    "wallTimeMs": 32626,
+    "candidatesEvaluated": 23,
+    "completedCandidates": 2
+  },
+  "artifacts": {
+    "resultPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round1-coverage/shards/33-890314021e56/result.json",
+    "resultFileSha256": "b1a6d774b61af6b071f15fd38f84dfbdf5f0bb91240517b1cbd102f1417eb959",
+    "resultCanonicalSha256": "f818e2bb022261d256cb696d656ef4a57c7d2e676f5d3fde7a37ef322651d305",
+    "resultBytes": 290219,
+    "feedbackPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round1-coverage/shards/33-890314021e56/feedback.json",
+    "feedbackFileSha256": "2f965132b32403ad350b188b3e987c2ee29ff658441cd535c57144f414283f85",
+    "feedbackCanonicalSha256": "e838d5bac1722820e7c72f518deeef360e8233c8f7efa4830011ed9b35a5f9b1",
+    "feedbackBytes": 2970
+  }
+}

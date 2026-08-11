@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 4,
+    "topN": 50,
+    "maxDepth": 8,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 6,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "allowedActionKinds": [
+      "normal-attack",
+      "star-skill"
+    ],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": false
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 3,
+    "rationale": "Round-2 feedback bd3172bd9be772c65cfb5a7c3f51317b7d6c164d6c3d267ad297fd2930be3f05 produced 29 positive closed cycles; every Top-5 chain used only 112001 normal attack, star skill, and a recovery wait. Independently rerun the incumbent with exactly that verified action surface, disabling switch and Kibo action generation to measure stability and cost without changing runtime semantics."
+  }
+}

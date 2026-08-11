@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-terminal-bounded-stability-evidence",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "boundedClaim": {
+    "terminalCandidateStatus": true,
+    "globalOptimalityClaimed": false,
+    "exhaustiveCompletenessClaimed": false,
+    "clientParityClaimed": false,
+    "stopRule": "three consecutive terminal rounds preserve ordered Top-5 raw identities, exact scores, source-family set, cutoff score, and full cutoff-tie identity set"
+  },
+  "strictFinalCandidateValidationApplied": true,
+  "coverageRound": {
+    "roundId": "round1-coverage",
+    "iteration": 1,
+    "aggregateHash": "e4711191d37c028cfee499cdf5ad257c274005931cdeabab32057e751da11976",
+    "historicalAggregateHash": "e4711191d37c028cfee499cdf5ad257c274005931cdeabab32057e751da11976",
+    "strictAggregateRebuilt": false,
+    "feedbackAggregateHash": "0170898fa84050ccf2eed0358a3965fd063441c132465b27ec9008b58e358d39",
+    "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+    "expectedShardCount": 35,
+    "completedShardCount": 35,
+    "failedShardCount": 0,
+    "missingShardCount": 0,
+    "validDistinctCandidateCount": 0,
+    "topNReady": false,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 0,
+    "independentVerificationHash": null
+  },
+  "effectiveCoverage": null,
+  "terminalRounds": [
+    {
+      "roundId": "round4-greedy-normal-boundary",
+      "iteration": 4,
+      "aggregateHash": "fe54efa56b011a3b5e8b246279c7de7e6abd4e365c7309796835b0b89f92ea78",
+      "historicalAggregateHash": "fe54efa56b011a3b5e8b246279c7de7e6abd4e365c7309796835b0b89f92ea78",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "69e780e92e2b7038ca27640a7bd09706c1a2e2fc74f420cc983328833c7d63da",
+      "guidanceHash": "0dc387f3948fb9f0fc1cab8bffbaf70d9f5430ef9d6014156c16766bb20e7a43",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 66133.333333,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 4,
+      "independentVerificationHash": "9a37d16c09651066b01da155777ed513f9e8706018e558b3683ae6ef79fa58d4"
+    },
+    {
+      "roundId": "round5-greedy-normal-bracket32",
+      "iteration": 5,
+      "aggregateHash": "46f045ce4e5f94f7aba11f4f9c403055072fbba15a4b2999209e8c26b1cc088c",
+      "historicalAggregateHash": "46f045ce4e5f94f7aba11f4f9c403055072fbba15a4b2999209e8c26b1cc088c",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "f2e1a8a84c0febe9e22c429cb4694ed0bdc6ac144e3b02910f97a4a40d8fc56c",
+      "guidanceHash": "155862dcb0b07c0d8b7ea1297515ee0fa06c7ccabf0c4e766ea64d171c18d77a",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 66133.333333,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 4,
+      "independentVerificationHash": "32884adcc020db345d03dfad51adf7136ecc55d2280bdc84f8ff60112156e3b9"
+    },
+    {
+      "roundId": "round6-greedy-normal-bracket64",
+      "iteration": 6,
+      "aggregateHash": "858aad546d24a2b80a10f218c5627c062ea635f8fb8f9c30464b77dc80ed31d3",
+      "historicalAggregateHash": "858aad546d24a2b80a10f218c5627c062ea635f8fb8f9c30464b77dc80ed31d3",
+      "strictAggregateRebuilt": false,
+      "feedbackAggregateHash": "fab25c6d6fc5473a50865bb085c3636e62b38af48546626418619ba5b3838566",
+      "guidanceHash": "ff02ea706e3e69bed372a6953cbed6ecaa31a1d67197a46f88009e7d985127ff",
+      "expectedShardCount": 8,
+      "completedShardCount": 8,
+      "failedShardCount": 0,
+      "missingShardCount": 0,
+      "validDistinctCandidateCount": 8,
+      "topNReady": true,
+      "cutoffScore": 66133.333333,
+      "cutoffTieCount": 3,
+      "topNFamilyCount": 4,
+      "independentVerificationHash": "cdcfa9c680c270fa70663d47bc7609faee55e026deb044aef6eef09eb751d3b6"
+    }
+  ],
+  "stableEvidence": {
+    "consecutiveRoundCount": 3,
+    "orderedTop5RawIdentityHashes": [
+      "41a4968f7d391842edc63427b0f9f3d793195324feff3ad89e0e55dc5f14ead1",
+      "743c597a1415e08fed9f708295317c7ec26e7d4f81660b5c7a08a869340e6410",
+      "7d0919ecba94f8d9b97753b5f47a29755b1a6b0f9b63f671a1d0670dcafbe47f",
+      "97bfa472d625d72b1f8d0d5fb25192cfd14f45224d84bf6375d76852b4353f0b",
+      "d93f6770e69818312ac11338bce5406037593b7ce0ade416300f683c561d736f"
+    ],
+    "orderedTop5Scores": [
+      66133.333333,
+      66133.333333,
+      66133.333333,
+      66133.333333,
+      66133.333333
+    ],
+    "top5SourceFamilyIdentities": [
+      "m12c-team-v1:102001+109001+112001",
+      "m12c-team-v1:107001+109001+112001",
+      "m12c-team-v1:107002+109001+112001",
+      "m12c-team-v1:109001+112001+STARBORN"
+    ],
+    "cutoffScore": 66133.333333,
+    "cutoffTieCount": 3,
+    "cutoffTieRawIdentityHashes": [
+      "e4231bbc450243a507c9628ad9a600c37ab18a908cad8579beab2643e2392268",
+      "e605c09d0c2168462e269019cf1efa85956aed06a2f51ccf03336c9ca74d0c67",
+      "f97bd69afb871a2d34d87d3db67f3ce58eab4ca4b727c5ae69aa16aa42128029"
+    ]
+  },
+  "independentVerificationRequired": true,
+  "valid": true,
+  "issues": [],
+  "terminalStabilityHash": "0317238701906f26719870d0dd31337fe140bddff05c69fae397bc9b86dd9b62"
+}

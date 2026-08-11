@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalHeuristicSearchRun",
+  "kind": "azpr-m12c-formal-heuristic-search-run",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "createdFor": "M12-C 末音 AI Top-5 搜索",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "globalOptimalityClaim": false,
+  "fullPoolEnumerationComplete": false,
+  "clientParityReady": false,
+  "scoreAuthority": "formal-for-current-runtime-contract",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "scope": {
+    "requiredOptimizationObjectId": "109001",
+    "optimizationObjectCount": 9,
+    "teamObjectCount": 28,
+    "sourceConfigCount": 35,
+    "initialFrontPolicy": "all-team-members",
+    "initialFrontCountPerBuild": 3,
+    "enemyId": 310054,
+    "enemyLevel": 80,
+    "criticalPolicy": "expected",
+    "topN": 5
+  },
+  "objectives": [
+    {
+      "objective": "cycle-dps-no-toughness",
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "round1Config": "work/m12-c/formal-search-v1/config/round1.cycle-dps-no-toughness.json"
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "round1Config": "work/m12-c/formal-search-v1/config/round1.cycle-dps-with-toughness.json"
+    },
+    {
+      "objective": "fastest-kill",
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "round1Config": "work/m12-c/formal-search-v1/config/round1.fastest-kill.json"
+    }
+  ],
+  "identityAndTiePolicy": {
+    "semanticBuildHashAvailable": false,
+    "rankingIdentity": "raw buildHash + sourceConfigIdentity + initialFront + initialStatePresetHash + canonical input/trace hash",
+    "deduplicateExactRawIdentity": true,
+    "preserveAllCutoffTies": true,
+    "tieBreakForDisplayedRanks": "raw identity SHA-256 ascending",
+    "cutoffTiesAreNotDiscarded": true
+  },
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cycleCutoffRelativeImprovementThreshold": 0.0025,
+    "fastestKillCutoffAbsoluteImprovementMsThreshold": 16.66666667,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "meaning": "bounded budget stop only; never an optimality, exhaustive-coverage, or client-parity proof"
+  },
+  "forbiddenInputs": [
+    "work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json",
+    "work/m12-c/m12c4-search-template.json"
+  ]
+}

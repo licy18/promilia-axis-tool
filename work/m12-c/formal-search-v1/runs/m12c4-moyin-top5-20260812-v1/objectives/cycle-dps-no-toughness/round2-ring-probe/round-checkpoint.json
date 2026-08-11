@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-ring-probe",
+  "objective": "cycle-dps-no-toughness",
+  "status": "completed",
+  "exitStatus": "completed",
+  "aggregateHash": "cb30ad2ff03faf84f2ede752659b3dad2b80aa0a90cbc891f69933ebd928ff93",
+  "guidanceHash": "2d96dd1f4137832f09bad26e2af810811e7ab4ae2d87b231e236fd451a4aebdd",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "coverage": {
+    "expectedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "completedSourceConfigIdentities": [
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+    ],
+    "failedSourceConfigIdentities": [],
+    "inProgressSourceConfigIdentities": [],
+    "missingSourceConfigIdentities": []
+  },
+  "summary": {
+    "steps": 27,
+    "candidatesEvaluated": 216,
+    "invalidCandidates": 54,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "expandedCandidates": 27,
+    "completedCandidates": 36,
+    "formalSurfaceRejectedCandidates": 0,
+    "buildCount": 9,
+    "variantSearchCount": 27,
+    "candidateResultCount": 36,
+    "failureCount": 0,
+    "aggregateWallTimeMs": 292135,
+    "validDistinctCandidateCount": 27,
+    "invalidCandidateCount": 0,
+    "topNRequested": 5,
+    "topNReady": true,
+    "cutoffScore": 19054.61995443,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1
+  }
+}

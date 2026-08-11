@@ -1,0 +1,1291 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-final-top15-independent-verification",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "boundaries": {
+    "enemyId": 310054,
+    "enemyLevel": 80,
+    "enemyProfileHash": "cb1edcc277fcda5b",
+    "criticalPolicy": "expected",
+    "qualificationMode": "formal",
+    "autonomousKiboActionsAdmitted": false,
+    "semanticEquivalenceClaimed": false,
+    "globalOptimalityClaimed": false,
+    "exhaustiveCompletenessClaimed": false,
+    "clientParityClaimed": false
+  },
+  "quarantine": {
+    "quarantineHash": "0bb833990380bd9ff5dbea2e5b3a1cd959bd2a8354e76ec3ab0986940acc2505",
+    "quarantinedRawIdentityHashes": [
+      "16ab7dc909ce98b095f044a2c530b0c13b1e797f28328799b3adf4e261cf2f1e",
+      "5272bdb9297b31f9e000c9dfbe2ced2e13498a7eaa49844ea7c94e8bf4a40370"
+    ],
+    "quarantinedIdentitySurvivorCount": 0
+  },
+  "coverage": {
+    "objectiveCount": 3,
+    "expectedCandidateCount": 15,
+    "verifiedCandidateCount": 15,
+    "validCandidateCount": 15,
+    "invalidCandidateCount": 0,
+    "distinctRawIdentityCount": 15
+  },
+  "objectives": [
+    {
+      "objective": "cycle-dps-no-toughness",
+      "finalizationHash": "eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0",
+      "finalizationPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/objective-finalization.json",
+      "top5IndexPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/index.json",
+      "topNCount": 5,
+      "cutoffScore": 20797.9953003,
+      "cutoffTieCount": 3,
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "finalizationHash": "0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a",
+      "finalizationPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/objective-finalization.json",
+      "top5IndexPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/index.json",
+      "topNCount": 5,
+      "cutoffScore": 469.50721728,
+      "cutoffTieCount": 3,
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "finalizationHash": "134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154",
+      "finalizationPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/objective-finalization.json",
+      "top5IndexPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/index.json",
+      "topNCount": 5,
+      "cutoffScore": 66133.333333,
+      "cutoffTieCount": 3,
+      "valid": true,
+      "issues": []
+    }
+  ],
+  "valid": true,
+  "issues": [],
+  "rows": [
+    {
+      "objective": "cycle-dps-no-toughness",
+      "rank": 1,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "0426742c76451b5a56ae5730fb671eae3c478cfa0cc5fc6a83be4aec9d93f354",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "a37fb546da9cbc9af488f3880c0cd45569ecdb069e9ce1d913e366abcccb324a",
+        "inputHash": "521d86f0176df303",
+        "traceHash": "c23abe1dcefe6252"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "buildHash": "37848158739122c6",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "a37fb546da9cbc9af488f3880c0cd45569ecdb069e9ce1d913e366abcccb324a",
+      "actionCount": 1,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-01.0426742c7645.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-01.0426742c7645.candidate.json",
+      "inputHash": "521d86f0176df303",
+      "traceHash": "c23abe1dcefe6252",
+      "legalityProofHash": "daefb60fe63cb8a7",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 20797.9953003,
+        "cycleProofHash": "709a85bc71a36a5f",
+        "repeatedCycleProofHash": "709a85bc71a36a5f",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 18,
+          "durationFrames": 18,
+          "durationSeconds": 0.3,
+          "fps": 60,
+          "actionIds": [
+            "search-action-1"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-no-toughness",
+      "rank": 2,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "05fd79c6703fe8c225d19943d129486fca90be5c452e5c60a7a2ec831367674d",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "bd1a14d9b242f73e",
+        "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "bf567b212947311eb388519a6498771e10ca90485cb50f15fe305780f5ee7812",
+        "inputHash": "24991625d548c24a",
+        "traceHash": "3f0d8e8ccd072d8c"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:101010+109001+112001",
+      "buildHash": "bd1a14d9b242f73e",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "bf567b212947311eb388519a6498771e10ca90485cb50f15fe305780f5ee7812",
+      "actionCount": 1,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-02.05fd79c6703f.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-02.05fd79c6703f.candidate.json",
+      "inputHash": "24991625d548c24a",
+      "traceHash": "3f0d8e8ccd072d8c",
+      "legalityProofHash": "b90310b33a07934f",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 20797.9953003,
+        "cycleProofHash": "6bd8c886fbd8941c",
+        "repeatedCycleProofHash": "6bd8c886fbd8941c",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 18,
+          "durationFrames": 18,
+          "durationSeconds": 0.3,
+          "fps": 60,
+          "actionIds": [
+            "search-action-1"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-no-toughness",
+      "rank": 3,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "24310a88c20aec14384a77f2a0f632975a2dc44ae8e6b3d2aa977feaf0004ff7",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "1c90d1c746a809f4",
+        "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e4bf29a31ee645521f5f00afa05c9084706cb40ba2ef03acb3cac1d803643fa8",
+        "inputHash": "5d4128205ff39a11",
+        "traceHash": "3bd8c2693b809348"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:107002+109001+112001",
+      "buildHash": "1c90d1c746a809f4",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "e4bf29a31ee645521f5f00afa05c9084706cb40ba2ef03acb3cac1d803643fa8",
+      "actionCount": 1,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-03.24310a88c20a.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-03.24310a88c20a.candidate.json",
+      "inputHash": "5d4128205ff39a11",
+      "traceHash": "3bd8c2693b809348",
+      "legalityProofHash": "61811de14663e76b",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 20797.9953003,
+        "cycleProofHash": "5cc9380e8c28d0d7",
+        "repeatedCycleProofHash": "5cc9380e8c28d0d7",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 18,
+          "durationFrames": 18,
+          "durationSeconds": 0.3,
+          "fps": 60,
+          "actionIds": [
+            "search-action-1"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-no-toughness",
+      "rank": 4,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "3c152cb8d3cbe3366f999de54a08cc229a987cdb7d269b60335f1d3485a926ad",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e4d5160465cc5b7e1ced6c3c6c8494836084f65e2f42c8095eddd7204b766aeb",
+        "inputHash": "9110df7e0bcb3491",
+        "traceHash": "d5811914b9db407b"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:102001+109001+112001",
+      "buildHash": "fceb8d26c3e68c1f",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "e4d5160465cc5b7e1ced6c3c6c8494836084f65e2f42c8095eddd7204b766aeb",
+      "actionCount": 1,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-04.3c152cb8d3cb.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-04.3c152cb8d3cb.candidate.json",
+      "inputHash": "9110df7e0bcb3491",
+      "traceHash": "d5811914b9db407b",
+      "legalityProofHash": "989412938f02ff7b",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 20797.9953003,
+        "cycleProofHash": "656d3b5cc440d008",
+        "repeatedCycleProofHash": "656d3b5cc440d008",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 18,
+          "durationFrames": 18,
+          "durationSeconds": 0.3,
+          "fps": 60,
+          "actionIds": [
+            "search-action-1"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-no-toughness",
+      "rank": 5,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "610564bdaf6347abbea833b16d41105954698ec7276118283e4e920845dd0230",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "ebc3672e42ea1df1b7cd10d66b64b32d58e88069c81ea5f85297d90379a7d3be",
+        "inputHash": "673a1ee3cdd8aa59",
+        "traceHash": "06e8adfe0e922d1a"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:107001+109001+112001",
+      "buildHash": "18d5368248d5537e",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "ebc3672e42ea1df1b7cd10d66b64b32d58e88069c81ea5f85297d90379a7d3be",
+      "actionCount": 1,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-05.610564bdaf63.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-05.610564bdaf63.candidate.json",
+      "inputHash": "673a1ee3cdd8aa59",
+      "traceHash": "06e8adfe0e922d1a",
+      "legalityProofHash": "ef57820750feea40",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 20797.9953003,
+        "cycleProofHash": "b7ca0130f1f629cb",
+        "repeatedCycleProofHash": "b7ca0130f1f629cb",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 18,
+          "durationFrames": 18,
+          "durationSeconds": 0.3,
+          "fps": 60,
+          "actionIds": [
+            "search-action-1"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "rank": 1,
+      "score": 469.50721728,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "38b7c64da14ca72199304af0b8c20f6873f3acd2d9ed56af4a519abea9cf555c",
+        "objective": "cycle-dps-with-toughness",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "a37fb546da9cbc9af488f3880c0cd45569ecdb069e9ce1d913e366abcccb324a",
+        "inputHash": "0f0ee7df69ca88a1",
+        "traceHash": "e4195894d42fce78"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "buildHash": "37848158739122c6",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "a37fb546da9cbc9af488f3880c0cd45569ecdb069e9ce1d913e366abcccb324a",
+      "actionCount": 8,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-01.38b7c64da14c.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-01.38b7c64da14c.candidate.json",
+      "inputHash": "0f0ee7df69ca88a1",
+      "traceHash": "e4195894d42fce78",
+      "legalityProofHash": "ffd951c68a4b56b1",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 469.50721728,
+        "cycleProofHash": "6f248a3443562d1f",
+        "repeatedCycleProofHash": "6f248a3443562d1f",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 7200,
+          "durationFrames": 7200,
+          "durationSeconds": 120,
+          "fps": 60,
+          "actionIds": [
+            "search-action-2",
+            "search-action-1",
+            "search-action-3",
+            "search-action-4",
+            "search-action-5",
+            "search-action-6",
+            "search-action-7",
+            "search-wait-8-6"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "rank": 2,
+      "score": 469.50721728,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "54019e131cab8e0e2d19b65b396b485eaecd45f9d95e55644348ec2743acbed0",
+        "objective": "cycle-dps-with-toughness",
+        "buildHash": "fd161a33da6bf84a",
+        "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "9ba84af849e0736c4a7cd88dc8f49e7db0c44b012a7f445cf5f87bce7bc78340",
+        "inputHash": "bf8159838c13779b",
+        "traceHash": "d21a3ea9d60eaa01"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:108003+109001+112001",
+      "buildHash": "fd161a33da6bf84a",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "9ba84af849e0736c4a7cd88dc8f49e7db0c44b012a7f445cf5f87bce7bc78340",
+      "actionCount": 8,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-02.54019e131cab.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-02.54019e131cab.candidate.json",
+      "inputHash": "bf8159838c13779b",
+      "traceHash": "d21a3ea9d60eaa01",
+      "legalityProofHash": "a2e8d7504b91db2e",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 469.50721728,
+        "cycleProofHash": "1cc0450871744bf0",
+        "repeatedCycleProofHash": "1cc0450871744bf0",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 7200,
+          "durationFrames": 7200,
+          "durationSeconds": 120,
+          "fps": 60,
+          "actionIds": [
+            "search-action-2",
+            "search-action-1",
+            "search-action-3",
+            "search-action-4",
+            "search-action-5",
+            "search-action-6",
+            "search-action-7",
+            "search-wait-8-6"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "rank": 3,
+      "score": 469.50721728,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "78db8f263eae855e836395f2db9cd69d639ea5778ba01a2b9eb0310232349d36",
+        "objective": "cycle-dps-with-toughness",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e4d5160465cc5b7e1ced6c3c6c8494836084f65e2f42c8095eddd7204b766aeb",
+        "inputHash": "5e4709fa2222a3a1",
+        "traceHash": "b1ec2b6c21230e1d"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:102001+109001+112001",
+      "buildHash": "fceb8d26c3e68c1f",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "e4d5160465cc5b7e1ced6c3c6c8494836084f65e2f42c8095eddd7204b766aeb",
+      "actionCount": 8,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-03.78db8f263eae.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-03.78db8f263eae.candidate.json",
+      "inputHash": "5e4709fa2222a3a1",
+      "traceHash": "b1ec2b6c21230e1d",
+      "legalityProofHash": "d5a1ddd7acb167b6",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 469.50721728,
+        "cycleProofHash": "325b1cbb39bd651b",
+        "repeatedCycleProofHash": "325b1cbb39bd651b",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 7200,
+          "durationFrames": 7200,
+          "durationSeconds": 120,
+          "fps": 60,
+          "actionIds": [
+            "search-action-2",
+            "search-action-1",
+            "search-action-3",
+            "search-action-4",
+            "search-action-5",
+            "search-action-6",
+            "search-action-7",
+            "search-wait-8-6"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "rank": 4,
+      "score": 469.50721728,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "82d3ef3ee54674f7c4b9963f7a652b8238ad65040e2b3b613bba98498093e195",
+        "objective": "cycle-dps-with-toughness",
+        "buildHash": "28246fd3b29c6178",
+        "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+        "inputHash": "dbb0c0a862f46ebe",
+        "traceHash": "fcfabb0ddcbcdb6c"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:103002+109001+112001",
+      "buildHash": "28246fd3b29c6178",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "98c564fca6275690166a8e920e3c4e4073cce902cc70b1dffdb8fa49d9ada4ee",
+      "actionCount": 8,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-04.82d3ef3ee546.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-04.82d3ef3ee546.candidate.json",
+      "inputHash": "dbb0c0a862f46ebe",
+      "traceHash": "fcfabb0ddcbcdb6c",
+      "legalityProofHash": "3fb1de9b5b7c5ef1",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 469.50721728,
+        "cycleProofHash": "8db20f212ca98f75",
+        "repeatedCycleProofHash": "8db20f212ca98f75",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 7200,
+          "durationFrames": 7200,
+          "durationSeconds": 120,
+          "fps": 60,
+          "actionIds": [
+            "search-action-2",
+            "search-action-1",
+            "search-action-3",
+            "search-action-4",
+            "search-action-5",
+            "search-action-6",
+            "search-action-7",
+            "search-wait-8-6"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "cycle-dps-with-toughness",
+      "rank": 5,
+      "score": 469.50721728,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "86a2caad4c4972337fc1d2a0180b7301e9ff9b7b31b3dc0363e8d9910a5c6040",
+        "objective": "cycle-dps-with-toughness",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "ebc3672e42ea1df1b7cd10d66b64b32d58e88069c81ea5f85297d90379a7d3be",
+        "inputHash": "f76f1c209fb5c151",
+        "traceHash": "2f019a15cc2e3368"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:107001+109001+112001",
+      "buildHash": "18d5368248d5537e",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "presetHash": "ebc3672e42ea1df1b7cd10d66b64b32d58e88069c81ea5f85297d90379a7d3be",
+      "actionCount": 8,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-05.86a2caad4c49.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/finalizations/0ddbd25bb856b45ebabd541053aa51c517270d2059151ae3403cfd9ecdd9855a/top5/rank-05.86a2caad4c49.candidate.json",
+      "inputHash": "f76f1c209fb5c151",
+      "traceHash": "2f019a15cc2e3368",
+      "legalityProofHash": "530da62803dc5dc8",
+      "proofEvidence": {
+        "kind": "closed-cycle",
+        "status": "closed",
+        "formalScore": 469.50721728,
+        "cycleProofHash": "342d0d8d2bab717c",
+        "repeatedCycleProofHash": "342d0d8d2bab717c",
+        "loop": {
+          "interval": "[start,end)",
+          "startFrame": 0,
+          "endFrame": 7200,
+          "durationFrames": 7200,
+          "durationSeconds": 120,
+          "fps": 60,
+          "actionIds": [
+            "search-action-2",
+            "search-action-1",
+            "search-action-3",
+            "search-action-4",
+            "search-action-5",
+            "search-action-6",
+            "search-action-7",
+            "search-wait-8-6"
+          ]
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "rank": 1,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "41a4968f7d391842edc63427b0f9f3d793195324feff3ad89e0e55dc5f14ead1",
+        "objective": "fastest-kill",
+        "buildHash": "1c90d1c746a809f4",
+        "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e9beccc21744a656f6e61f012fa2b3db42511071d0c562aa84707974755dacd9",
+        "inputHash": "7a915d63214f408f",
+        "traceHash": "bec2d3acbd7ce558"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:107002+109001+112001",
+      "buildHash": "1c90d1c746a809f4",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "presetHash": "e9beccc21744a656f6e61f012fa2b3db42511071d0c562aa84707974755dacd9",
+      "actionCount": 221,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-01.41a4968f7d39.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-01.41a4968f7d39.candidate.json",
+      "inputHash": "7a915d63214f408f",
+      "traceHash": "bec2d3acbd7ce558",
+      "legalityProofHash": "3e06b198d765bcab",
+      "proofEvidence": {
+        "kind": "fastest-kill-boundary",
+        "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+        "probes": {
+          "220": {
+            "classification": {
+              "status": "valid-not-killed",
+              "killed": false,
+              "valid": true,
+              "formalScore": null,
+              "issueCodes": []
+            },
+            "enemyHp": 2807.551112,
+            "inputHash": "e7e5921f5b7e9009",
+            "traceHash": "0e9e4dcd3fb95ef2",
+            "killProofHash": "7cebe570bafcdf1a",
+            "proofStatus": "not-killed",
+            "proofFormalScore": null,
+            "firstLethal": null
+          },
+          "221": {
+            "classification": {
+              "status": "killed-valid",
+              "killed": true,
+              "valid": true,
+              "formalScore": 66133.333333,
+              "issueCodes": []
+            },
+            "enemyHp": 0,
+            "inputHash": "7a915d63214f408f",
+            "traceHash": "bec2d3acbd7ce558",
+            "killProofHash": "5d5595e3385cd83d",
+            "proofStatus": "killed",
+            "proofFormalScore": 66133.333333,
+            "firstLethal": {
+              "frame": 3968,
+              "timeMs": 66133.333333,
+              "cursor": {
+                "absoluteFrame": 3968,
+                "timeMs": 66133.333333,
+                "runtimePhasePriority": 0,
+                "runtimePriority": 0,
+                "runtimeSequenceIndex": 444
+              },
+              "actionId": "search-action-221",
+              "actorId": "actor-112001",
+              "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+              "hitKey": "verified-hit-1-112001000",
+              "hitIndex": 1,
+              "requestedHpDamage": 6938,
+              "effectiveHpDamage": 2807.551112,
+              "overkill": 4130.448888,
+              "toughnessDamage": 9983,
+              "breakTriggered": false,
+              "deathTriggered": true,
+              "settlementOrder": [
+                "hp-output-calculated-from-pre-break-state",
+                "toughness-settled",
+                "break-state-transitioned",
+                "hp-settled"
+              ]
+            }
+          },
+          "222": {
+            "classification": {
+              "status": "invalid-upper-bound",
+              "killed": null,
+              "valid": false,
+              "formalScore": null,
+              "issueCodes": [
+                "machine-axis-action-target-dead"
+              ]
+            },
+            "enemyHp": 0,
+            "inputHash": "4b07fc77ed7130e4",
+            "traceHash": "a9c4b26c2cb85b9d",
+            "killProofHash": null,
+            "proofStatus": "rejected",
+            "proofFormalScore": null,
+            "firstLethal": null
+          }
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "rank": 2,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "743c597a1415e08fed9f708295317c7ec26e7d4f81660b5c7a08a869340e6410",
+        "objective": "fastest-kill",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "dc5f53ce30fa852fe1e9d1184f5c1ffaeb0236b11427373464895666ce6398b1",
+        "inputHash": "5a4f93c6f3a70b18",
+        "traceHash": "58a9ff9a267bdb60"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:102001+109001+112001",
+      "buildHash": "fceb8d26c3e68c1f",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "presetHash": "dc5f53ce30fa852fe1e9d1184f5c1ffaeb0236b11427373464895666ce6398b1",
+      "actionCount": 221,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-02.743c597a1415.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-02.743c597a1415.candidate.json",
+      "inputHash": "5a4f93c6f3a70b18",
+      "traceHash": "58a9ff9a267bdb60",
+      "legalityProofHash": "a76d5891fc6b6a34",
+      "proofEvidence": {
+        "kind": "fastest-kill-boundary",
+        "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+        "probes": {
+          "220": {
+            "classification": {
+              "status": "valid-not-killed",
+              "killed": false,
+              "valid": true,
+              "formalScore": null,
+              "issueCodes": []
+            },
+            "enemyHp": 2807.551112,
+            "inputHash": "1df60c97c07fc76c",
+            "traceHash": "b9594db3ec0e92a1",
+            "killProofHash": "cd7a5f30ac49d5cf",
+            "proofStatus": "not-killed",
+            "proofFormalScore": null,
+            "firstLethal": null
+          },
+          "221": {
+            "classification": {
+              "status": "killed-valid",
+              "killed": true,
+              "valid": true,
+              "formalScore": 66133.333333,
+              "issueCodes": []
+            },
+            "enemyHp": 0,
+            "inputHash": "5a4f93c6f3a70b18",
+            "traceHash": "58a9ff9a267bdb60",
+            "killProofHash": "66d2ddb0242d9a03",
+            "proofStatus": "killed",
+            "proofFormalScore": 66133.333333,
+            "firstLethal": {
+              "frame": 3968,
+              "timeMs": 66133.333333,
+              "cursor": {
+                "absoluteFrame": 3968,
+                "timeMs": 66133.333333,
+                "runtimePhasePriority": 0,
+                "runtimePriority": 0,
+                "runtimeSequenceIndex": 444
+              },
+              "actionId": "search-action-221",
+              "actorId": "actor-112001",
+              "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+              "hitKey": "verified-hit-1-112001000",
+              "hitIndex": 1,
+              "requestedHpDamage": 6938,
+              "effectiveHpDamage": 2807.551112,
+              "overkill": 4130.448888,
+              "toughnessDamage": 9983,
+              "breakTriggered": false,
+              "deathTriggered": true,
+              "settlementOrder": [
+                "hp-output-calculated-from-pre-break-state",
+                "toughness-settled",
+                "break-state-transitioned",
+                "hp-settled"
+              ]
+            }
+          },
+          "222": {
+            "classification": {
+              "status": "invalid-upper-bound",
+              "killed": null,
+              "valid": false,
+              "formalScore": null,
+              "issueCodes": [
+                "machine-axis-action-target-dead"
+              ]
+            },
+            "enemyHp": 0,
+            "inputHash": "95165a0bf22e0f4b",
+            "traceHash": "009a5e58b82e0cc0",
+            "killProofHash": null,
+            "proofStatus": "rejected",
+            "proofFormalScore": null,
+            "firstLethal": null
+          }
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "rank": 3,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "7d0919ecba94f8d9b97753b5f47a29755b1a6b0f9b63f671a1d0670dcafbe47f",
+        "objective": "fastest-kill",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "aee1d86efa799c5b",
+        "traceHash": "01385c49efe5095c"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "buildHash": "37848158739122c6",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "presetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+      "actionCount": 221,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-03.7d0919ecba94.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-03.7d0919ecba94.candidate.json",
+      "inputHash": "aee1d86efa799c5b",
+      "traceHash": "01385c49efe5095c",
+      "legalityProofHash": "7ec9a567b3c0b898",
+      "proofEvidence": {
+        "kind": "fastest-kill-boundary",
+        "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+        "probes": {
+          "220": {
+            "classification": {
+              "status": "valid-not-killed",
+              "killed": false,
+              "valid": true,
+              "formalScore": null,
+              "issueCodes": []
+            },
+            "enemyHp": 2807.551112,
+            "inputHash": "2148fc0d5efc818c",
+            "traceHash": "0d5f17c8740ddc24",
+            "killProofHash": "2560f09fc285d898",
+            "proofStatus": "not-killed",
+            "proofFormalScore": null,
+            "firstLethal": null
+          },
+          "221": {
+            "classification": {
+              "status": "killed-valid",
+              "killed": true,
+              "valid": true,
+              "formalScore": 66133.333333,
+              "issueCodes": []
+            },
+            "enemyHp": 0,
+            "inputHash": "aee1d86efa799c5b",
+            "traceHash": "01385c49efe5095c",
+            "killProofHash": "002703b4ef65ea89",
+            "proofStatus": "killed",
+            "proofFormalScore": 66133.333333,
+            "firstLethal": {
+              "frame": 3968,
+              "timeMs": 66133.333333,
+              "cursor": {
+                "absoluteFrame": 3968,
+                "timeMs": 66133.333333,
+                "runtimePhasePriority": 0,
+                "runtimePriority": 0,
+                "runtimeSequenceIndex": 444
+              },
+              "actionId": "search-action-221",
+              "actorId": "actor-112001",
+              "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+              "hitKey": "verified-hit-1-112001000",
+              "hitIndex": 1,
+              "requestedHpDamage": 6938,
+              "effectiveHpDamage": 2807.551112,
+              "overkill": 4130.448888,
+              "toughnessDamage": 9983,
+              "breakTriggered": false,
+              "deathTriggered": true,
+              "settlementOrder": [
+                "hp-output-calculated-from-pre-break-state",
+                "toughness-settled",
+                "break-state-transitioned",
+                "hp-settled"
+              ]
+            }
+          },
+          "222": {
+            "classification": {
+              "status": "invalid-upper-bound",
+              "killed": null,
+              "valid": false,
+              "formalScore": null,
+              "issueCodes": [
+                "machine-axis-action-target-dead"
+              ]
+            },
+            "enemyHp": 0,
+            "inputHash": "ab6fd8cc5eb4c5c1",
+            "traceHash": "b054f758bf16f3d5",
+            "killProofHash": null,
+            "proofStatus": "rejected",
+            "proofFormalScore": null,
+            "firstLethal": null
+          }
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "rank": 4,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "97bfa472d625d72b1f8d0d5fb25192cfd14f45224d84bf6375d76852b4353f0b",
+        "objective": "fastest-kill",
+        "buildHash": "7cf2ce3936b0ab40",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "c9f4072a5c266c62",
+        "traceHash": "e63331a9f7dcb5b9"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "buildHash": "7cf2ce3936b0ab40",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "presetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+      "actionCount": 221,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-04.97bfa472d625.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-04.97bfa472d625.candidate.json",
+      "inputHash": "c9f4072a5c266c62",
+      "traceHash": "e63331a9f7dcb5b9",
+      "legalityProofHash": "2ee742513c20d6a0",
+      "proofEvidence": {
+        "kind": "fastest-kill-boundary",
+        "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+        "probes": {
+          "220": {
+            "classification": {
+              "status": "valid-not-killed",
+              "killed": false,
+              "valid": true,
+              "formalScore": null,
+              "issueCodes": []
+            },
+            "enemyHp": 2807.551112,
+            "inputHash": "db9c64d07ae72754",
+            "traceHash": "25330e15abcb0683",
+            "killProofHash": "8bb32fd49c149f5a",
+            "proofStatus": "not-killed",
+            "proofFormalScore": null,
+            "firstLethal": null
+          },
+          "221": {
+            "classification": {
+              "status": "killed-valid",
+              "killed": true,
+              "valid": true,
+              "formalScore": 66133.333333,
+              "issueCodes": []
+            },
+            "enemyHp": 0,
+            "inputHash": "c9f4072a5c266c62",
+            "traceHash": "e63331a9f7dcb5b9",
+            "killProofHash": "bc2f6297f4d19b61",
+            "proofStatus": "killed",
+            "proofFormalScore": 66133.333333,
+            "firstLethal": {
+              "frame": 3968,
+              "timeMs": 66133.333333,
+              "cursor": {
+                "absoluteFrame": 3968,
+                "timeMs": 66133.333333,
+                "runtimePhasePriority": 0,
+                "runtimePriority": 0,
+                "runtimeSequenceIndex": 444
+              },
+              "actionId": "search-action-221",
+              "actorId": "actor-112001",
+              "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+              "hitKey": "verified-hit-1-112001000",
+              "hitIndex": 1,
+              "requestedHpDamage": 6938,
+              "effectiveHpDamage": 2807.551112,
+              "overkill": 4130.448888,
+              "toughnessDamage": 9983,
+              "breakTriggered": false,
+              "deathTriggered": true,
+              "settlementOrder": [
+                "hp-output-calculated-from-pre-break-state",
+                "toughness-settled",
+                "break-state-transitioned",
+                "hp-settled"
+              ]
+            }
+          },
+          "222": {
+            "classification": {
+              "status": "invalid-upper-bound",
+              "killed": null,
+              "valid": false,
+              "formalScore": null,
+              "issueCodes": [
+                "machine-axis-action-target-dead"
+              ]
+            },
+            "enemyHp": 0,
+            "inputHash": "a1ceb91d3f98ba11",
+            "traceHash": "f1b05fabcb004fe0",
+            "killProofHash": null,
+            "proofStatus": "rejected",
+            "proofFormalScore": null,
+            "firstLethal": null
+          }
+        }
+      },
+      "valid": true,
+      "issues": []
+    },
+    {
+      "objective": "fastest-kill",
+      "rank": 5,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "d93f6770e69818312ac11338bce5406037593b7ce0ade416300f683c561d736f",
+        "objective": "fastest-kill",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "11a3c677098ade0989825891067ace7a08a103bf4f1a19eb9c850a4fbd61e8c8",
+        "inputHash": "e2c4e74d2f904a94",
+        "traceHash": "cca0eb3a883242af"
+      },
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "teamIdentity": "m12c-team-v1:107001+109001+112001",
+      "buildHash": "18d5368248d5537e",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+      "presetHash": "11a3c677098ade0989825891067ace7a08a103bf4f1a19eb9c850a4fbd61e8c8",
+      "actionCount": 221,
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-05.d93f6770e698.machine-axis.json",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-05.d93f6770e698.candidate.json",
+      "inputHash": "e2c4e74d2f904a94",
+      "traceHash": "cca0eb3a883242af",
+      "legalityProofHash": "908dfc6f63a71ada",
+      "proofEvidence": {
+        "kind": "fastest-kill-boundary",
+        "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+        "probes": {
+          "220": {
+            "classification": {
+              "status": "valid-not-killed",
+              "killed": false,
+              "valid": true,
+              "formalScore": null,
+              "issueCodes": []
+            },
+            "enemyHp": 2807.551112,
+            "inputHash": "61db3ab3c3efc5b5",
+            "traceHash": "87bc0804b7401049",
+            "killProofHash": "28d9576c9c4ad37c",
+            "proofStatus": "not-killed",
+            "proofFormalScore": null,
+            "firstLethal": null
+          },
+          "221": {
+            "classification": {
+              "status": "killed-valid",
+              "killed": true,
+              "valid": true,
+              "formalScore": 66133.333333,
+              "issueCodes": []
+            },
+            "enemyHp": 0,
+            "inputHash": "e2c4e74d2f904a94",
+            "traceHash": "cca0eb3a883242af",
+            "killProofHash": "04ea7dd2e6d2ba53",
+            "proofStatus": "killed",
+            "proofFormalScore": 66133.333333,
+            "firstLethal": {
+              "frame": 3968,
+              "timeMs": 66133.333333,
+              "cursor": {
+                "absoluteFrame": 3968,
+                "timeMs": 66133.333333,
+                "runtimePhasePriority": 0,
+                "runtimePriority": 0,
+                "runtimeSequenceIndex": 444
+              },
+              "actionId": "search-action-221",
+              "actorId": "actor-112001",
+              "hitIdentity": "11200101|0|elements|0|-7332396199243874878|8|1",
+              "hitKey": "verified-hit-1-112001000",
+              "hitIndex": 1,
+              "requestedHpDamage": 6938,
+              "effectiveHpDamage": 2807.551112,
+              "overkill": 4130.448888,
+              "toughnessDamage": 9983,
+              "breakTriggered": false,
+              "deathTriggered": true,
+              "settlementOrder": [
+                "hp-output-calculated-from-pre-break-state",
+                "toughness-settled",
+                "break-state-transitioned",
+                "hp-settled"
+              ]
+            }
+          },
+          "222": {
+            "classification": {
+              "status": "invalid-upper-bound",
+              "killed": null,
+              "valid": false,
+              "formalScore": null,
+              "issueCodes": [
+                "machine-axis-action-target-dead"
+              ]
+            },
+            "enemyHp": 0,
+            "inputHash": "8eb403c55df6a494",
+            "traceHash": "7340544fa18587c9",
+            "killProofHash": null,
+            "proofStatus": "rejected",
+            "proofFormalScore": null,
+            "firstLethal": null
+          }
+        }
+      },
+      "valid": true,
+      "issues": []
+    }
+  ],
+  "verificationHash": "a5bf3e453572c37bd6b81a46d28f26e23144dba70ae9005872e75c98bed20f27"
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-manifest",
+  "runId": "m12c4-moyin-top5-20260812-v1-smoke-v2",
+  "roundId": "orchestration-smoke-v2",
+  "iteration": 1,
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "roundConfigPath": "work/m12-c/formal-search-v1/config/smoke.orchestration.json",
+  "roundConfigHash": "a2e1031590c2ac277a7907d929c980b124b30858a760df06405d54c8d8f5a119",
+  "orchestratorId": "azpr-m12c-formal-shard-orchestrator-v1",
+  "orchestrationSourceHashes": {
+    "runRoundSha256": "58b8eefed5d2be9a700ed5833ba709285af8d3a90906937f01ac47269ae65705",
+    "artifactLibrarySha256": "dc2974a9fb828c7b474e43951155a70e0d1f0f1bc62f5517b8a077ce5d145127"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "contractTemplatePath": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "guidancePath": "work/m12-c/formal-search-v1/guidance/round1.cycle-dps-no-toughness.json",
+  "guidanceHash": "71f11746ff9bd07f0c2127076de8841d8b8309c42859aa3dd5d66d1c3cf51e32",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 1,
+    "rationale": "Low-budget diversity-first coverage of every authoritative source family; preserve all three initial fronts and collect real rejection/proof feedback before refinement."
+  },
+  "previousFeedbackAggregate": null,
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Orchestration smoke only; excluded from formal round aggregation."
+  },
+  "presetSpecHash": "575ddb92c8b34e4bb5b463804fa4c327996ab02c1fc265c984f435b2af16f1d8",
+  "topN": 5,
+  "sourceConfigCount": 1,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+102001=102001+109001=109001"
+  ],
+  "sourceConfigUniverseHash": "0112b1e26de52a4d9da69b0982d6e21587811157982f27f50cfdd0a0266d0aeb",
+  "stopPolicy": {
+    "policyId": "m12c4-orchestration-smoke-v1",
+    "consecutiveStableTop5IdentityRounds": 0,
+    "independentStrategyRequired": false,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": false,
+    "optimalityProof": false
+  }
+}

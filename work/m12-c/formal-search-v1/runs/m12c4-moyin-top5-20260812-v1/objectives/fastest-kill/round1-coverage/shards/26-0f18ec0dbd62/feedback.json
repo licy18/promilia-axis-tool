@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T18:41:50.425Z",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 2,
+    "steps": 6,
+    "wallTimeMs": 30535,
+    "candidatesEvaluated": 68,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 16,
+    "completedCandidates": 0,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 23
+    },
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 18
+    },
+    {
+      "code": "actor-switch-exit-tail-order-unresolved",
+      "count": 4
+    },
+    {
+      "code": "skill-cooldown-active",
+      "count": 4
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 2
+    },
+    {
+      "code": "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT",
+      "count": 1
+    }
+  ],
+  "topResults": [],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round1-coverage",
+    "shardId": "m12c-shard:b5003abf01b2dae4982cc5f3",
+    "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+STARBORN=199002",
+    "inputHash": "8e062a89fae60662d3b64406d72338f2d1c7643c90caff9743837cdf083a10e0",
+    "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

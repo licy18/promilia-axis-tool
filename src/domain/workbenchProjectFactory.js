@@ -588,7 +588,7 @@ export function normalizeWorkbenchLoadout(loadout = {}) {
     ...(source.soulessenceCultivation == null
       ? {}
       : {
-          soulessenceCultivation: structuredClone(
+          soulessenceCultivation: cloneWorkbenchSerializableValue(
             source.soulessenceCultivation
           ),
         }),
@@ -625,11 +625,11 @@ function normalizeWorkbenchEquipmentCultivation(value) {
       : null,
     maxValue: optionalClampedInteger(value.maxValue, 0, 110),
     ...(value.instance && typeof value.instance === 'object'
-      ? { instance: structuredClone(value.instance) }
+      ? { instance: cloneWorkbenchSerializableValue(value.instance) }
       : {}),
     tuningFormula:
       value.tuningFormula && typeof value.tuningFormula === 'object'
-        ? structuredClone(value.tuningFormula)
+        ? cloneWorkbenchSerializableValue(value.tuningFormula)
         : null,
   };
 }
@@ -641,18 +641,29 @@ export function normalizeWorkbenchCultivation(cultivation = {}) {
     ...(cultivation?.optimizationStaticSources == null
       ? {}
       : {
-          optimizationStaticSources: structuredClone(
+          optimizationStaticSources: cloneWorkbenchSerializableValue(
             cultivation.optimizationStaticSources
           ),
         }),
     ...(cultivation?.starGiftNodeSkillLevels == null
       ? {}
       : {
-          starGiftNodeSkillLevels: structuredClone(
+          starGiftNodeSkillLevels: cloneWorkbenchSerializableValue(
             cultivation.starGiftNodeSkillLevels
           ),
         }),
   };
+}
+
+function cloneWorkbenchSerializableValue(value) {
+  try {
+    return structuredClone(value);
+  } catch (error) {
+    if (error?.name !== 'DataCloneError') {
+      throw error;
+    }
+    return JSON.parse(JSON.stringify(value));
+  }
 }
 
 export function normalizeWorkbenchKiboConfig(config = {}) {

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "objective": "fastest-kill",
+  "shardId": "m12c-shard:9f0f98121c78dc462625658a",
+  "attempt": 1,
+  "attemptHistory": [],
+  "status": "completed",
+  "exitStatus": "completed-without-results",
+  "startedAt": "2026-08-11T18:28:58.429Z",
+  "finishedAt": "2026-08-11T18:29:29.675Z",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "inputHash": "e4e3dd0989a099201268cea05acad0f3c9b29f00044758e3e01f3fc91487022e",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "9df97cd789aa9153",
+  "coverage": {
+    "sourceConfigIdentity": "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+    "sourceConfigOrdinal": 2,
+    "sourceConfigCount": 35,
+    "initialFrontPolicy": "all-team-members",
+    "expectedInitialFrontCount": 3,
+    "processedVariantKeyCount": 3,
+    "processedVariantKeyChainHash": "ac43fbb27fe38761",
+    "plannedSourceConfigCount": 1,
+    "buildCount": 1,
+    "variantSearchCount": 3
+  },
+  "summary": {
+    "valid": false,
+    "resultCount": 0,
+    "failureCount": 3,
+    "wallTimeMs": 31227,
+    "candidatesEvaluated": 69,
+    "completedCandidates": 0
+  },
+  "artifacts": {
+    "resultPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/round1-coverage/shards/02-26e39bd0ca02/result.json",
+    "resultFileSha256": "7433373206bd523f303129bfeca0fa480a73d88010f8805cc53ffebfe3fc5147",
+    "resultCanonicalSha256": "8c8326b38f227d63bcb5339a5a0a920870b7abe35e1742424f61048ec433e84e",
+    "resultBytes": 10867,
+    "feedbackPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/round1-coverage/shards/02-26e39bd0ca02/feedback.json",
+    "feedbackFileSha256": "b6d422ef4d6b52a84970d39ff09ca420cd8e5aafd395c66584e26a5fc9b0e67a",
+    "feedbackCanonicalSha256": "3254eb475e923f8dff9fcd4831dae5175dd1c66bc28153226b7a66ae33c046a2",
+    "feedbackBytes": 2143
+  }
+}

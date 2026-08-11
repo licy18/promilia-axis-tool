@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T17:55:52.277Z",
+  "guidanceHash": "71f11746ff9bd07f0c2127076de8841d8b8309c42859aa3dd5d66d1c3cf51e32",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 1,
+    "steps": 3,
+    "wallTimeMs": 29596,
+    "candidatesEvaluated": 22,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 8,
+    "completedCandidates": 4,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-breakable-toughness-required",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 6
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 3
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 3
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 2
+    }
+  ],
+  "topResults": [
+    {
+      "chainLength": null,
+      "score": 7833.47752582,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "db29ba6651cc9ee3",
+        "data": "a18482008dde7fae",
+        "trace": "55169d7787835035",
+        "evaluation": "4d221f7a92092bf2",
+        "build": "c3ff6872d9b9ec6f"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 6689.84767912,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "65f666ed2f376014",
+        "data": "db8f2e8a5b0c3125",
+        "trace": "09383b7775c857f4",
+        "evaluation": "3f2acdd28d0dc323",
+        "build": "a0f887b884f84468"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 4295.67342658,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "2e6c93cead13f03f",
+        "data": "d16b24603f33b7a0",
+        "trace": "bb94a079c289467f",
+        "evaluation": "de2858a334410811",
+        "build": "b4521515552301b7"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 0,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "37795ec6c457b55e",
+        "data": "f8ece614b4fe6af1",
+        "trace": "04245f36dd9115ee",
+        "evaluation": "5a35bd24a4378fd0",
+        "build": "c120fe2bd055de9a"
+      }
+    }
+  ],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round1-coverage",
+    "shardId": "m12c-shard:80c6bc53fcbba4e8a08cddd7",
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+    "inputHash": "6712f2fd3d758da44a6b2423ec8bf9fc78e574690c026599e9c09a78571bb5f9",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

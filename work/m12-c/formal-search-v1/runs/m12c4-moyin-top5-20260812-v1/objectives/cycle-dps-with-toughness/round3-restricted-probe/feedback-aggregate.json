@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round3-restricted-probe",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "fb69a4f32f5ff07fd1a2c56e01552ebd73fc68cd4527b98131521f893c56c195",
+  "guidanceHashes": [
+    "c973cdd2758618a85dee3229cb82c2310b6c9931a0ac1b679a365ef986533fc1"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 1,
+    "completedSourceConfigCount": 1,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 1,
+    "feedbackSourceConfigCount": 1
+  },
+  "budgetUsage": {
+    "beamWidth": 4,
+    "candidatesEvaluated": 559,
+    "completedCandidates": 56,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 58,
+    "maxDepth": 8,
+    "mergedCandidates": 89,
+    "prunedCandidates": 0,
+    "steps": 24,
+    "topN": 50,
+    "wallTimeMs": 1078283
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "skill-cooldown-active",
+      "count": 116
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 58
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 50,
+    "topNReady": true,
+    "topScore": 430.81340599,
+    "cutoffScore": 333.96071256,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1,
+    "topIdentityHashes": [
+      "c80a75d86c2160f24c7b4e8604a85c16d10b7534d61863fd4159db6313433450",
+      "e2b9b1cdf3be4d0ba4f6151ba6260726404a64d0969c63678db07008c887c135",
+      "60f0b7181b61cb7e55b587537a03586cfa0f35e0205f120f284412b3a2bcbc61",
+      "7b7fdfbfca3fd3749a874422c5c6a8c4a6fe8c68cf9e75384a91b4e19d56fe3b",
+      "52444c9f3d4d97d6beacdfe32513bff025acd4ddc8b5d6d9a1c3a5c86b0e96cd"
+    ],
+    "cutoffTieIdentityHashes": []
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "d7f395d969ded56476f51ab621b131f618de7c1793137156edf65b83b29c62a9"
+    }
+  ],
+  "feedbackAggregateHash": "e348dda9c2065ec144ad7d1e718271fbbe1d800f14056b99847ee8216cb027e4"
+}

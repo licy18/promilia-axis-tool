@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T20:22:29.090Z",
+  "guidanceHash": "ae5c4f759db6051ab53bfbb967ae61c68060bd4e286f862afc4b52e77ad712cc",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "budgetUsage": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 1,
+    "steps": 3,
+    "wallTimeMs": 6115,
+    "candidatesEvaluated": 6,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 0,
+    "completedCandidates": 2,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [],
+  "topResults": [
+    {
+      "chainLength": null,
+      "score": 20797.9953003,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "24991625d548c24a",
+        "data": "42e34607e1e7e3fe",
+        "trace": "3f0d8e8ccd072d8c",
+        "evaluation": "24d28414f105551b",
+        "build": "c3bac5fd1fe573eb"
+      }
+    },
+    {
+      "chainLength": null,
+      "score": 6689.84767912,
+      "heuristicScore": null,
+      "hashes": {
+        "algorithm": "fnv1a64-utf8-v1",
+        "input": "b1e12187453e6d2a",
+        "data": "ae95c6371f47fd5f",
+        "trace": "fa22a3964c486052",
+        "evaluation": "e56d40279dc0b124",
+        "build": "f7a190cc4bbf3599"
+      }
+    }
+  ],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round6-normal-only-confirm",
+    "shardId": "m12c-shard:ff9c0fb64dab5a3c2527aa7c",
+    "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+    "inputHash": "3a0fa2a1101f1253d885e4655ee3d8295bb8a2d92bcdb14062ba45eb24a4ab47",
+    "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

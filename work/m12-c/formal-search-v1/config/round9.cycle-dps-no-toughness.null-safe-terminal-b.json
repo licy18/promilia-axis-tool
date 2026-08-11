@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-config",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round9-null-safe-terminal-b",
+  "iteration": 9,
+  "objective": "cycle-dps-no-toughness",
+  "topN": 5,
+  "contractTemplate": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "guidanceFile": "work/m12-c/formal-search-v1/guidance/round9.cycle-dps-no-toughness.null-safe-terminal-b.json",
+  "outputRoot": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1",
+  "expectedSourceConfigCount": 1,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001"
+  ],
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "options": {
+    "objective": "cycle-dps-no-toughness",
+    "criticalPolicy": "expected",
+    "jobs": 1
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "buildConstraints": {
+    "112001": {
+      "equipmentIdsBySlot": {
+        "ring": [1350211]
+      }
+    }
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round8-null-safe-terminal-a/feedback-aggregate.json",
+    "feedbackAggregateHash": "619cf537994477b104598fcd9d0af9f05ac796591b6843395bce962ca8edefab",
+    "roundAggregateHash": "b7241fb57e0983ad75eded2cc424aefd62773a5dd7ab931e138119f1349db4db"
+  },
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

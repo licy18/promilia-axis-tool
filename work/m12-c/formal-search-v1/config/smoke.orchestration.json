@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-config",
+  "runId": "m12c4-moyin-top5-20260812-v1-smoke-v2",
+  "roundId": "orchestration-smoke-v2",
+  "iteration": 1,
+  "objective": "cycle-dps-no-toughness",
+  "topN": 5,
+  "contractTemplate": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "guidanceFile": "work/m12-c/formal-search-v1/guidance/round1.cycle-dps-no-toughness.json",
+  "outputRoot": "work/m12-c/formal-search-v1/smoke/orchestration-v2",
+  "expectedSourceConfigCount": 1,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+102001=102001+109001=109001"
+  ],
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "options": {
+    "objective": "cycle-dps-no-toughness",
+    "criticalPolicy": "expected",
+    "jobs": 1
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "buildConstraints": {},
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Orchestration smoke only; excluded from formal round aggregation."
+  },
+  "previousFeedbackAggregate": null,
+  "stopPolicy": {
+    "policyId": "m12c4-orchestration-smoke-v1",
+    "consecutiveStableTop5IdentityRounds": 0,
+    "independentStrategyRequired": false,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": false,
+    "optimalityProof": false
+  }
+}

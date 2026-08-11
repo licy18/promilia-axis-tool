@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "layer": "inner",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 400,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": [
+      "normal-attack"
+    ],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ],
+    "allowedPublicActionIds": [],
+    "blockedPublicActionIds": [],
+    "perOwner": {}
+  },
+  "kiboPolicy": {
+    "allowedKiboIds": [],
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": false
+  },
+  "waitPolicy": {
+    "includeWait": false,
+    "maxWaitFrames": null
+  },
+  "pruning": {
+    "earlyTerminationScore": null,
+    "aggressive": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 1,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 4,
+    "rationale": "Depth-16 feedback 126a74f3f0ba6b7fe81e1788c460560f93c8d30bcf6f3073e126f36acdb49ab8 spent 1879223ms and 1890 evaluations without a killed proof against authoritative HP 1912087.24. A clean smoke derived the verified 112001 A1 right-window cadence from two consecutive formal generator calls, found 220 inputs nonlethal and 221 inputs killed at 66133.333333ms, while 222 was correctly rejected as target-dead. Use a checkpointed fail-closed boundary search over that Hero-input-only surface for every authoritative 112001 source config; do not generate Kibo autonomous cadence, switches, or waits."
+  },
+  "guidanceHash": "0dc387f3948fb9f0fc1cab8bffbaf70d9f5430ef9d6014156c16766bb20e7a43"
+}

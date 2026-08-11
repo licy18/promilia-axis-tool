@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-depth-probe",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "ef20e319f4824f4de8b6fee5dc520d844f12055aa73cfab7bee1bc683af9e8d0",
+  "guidanceHashes": [
+    "7f6d5337a2c38db36a3f6136ecb6e7770e315342187d0d9c90f38199459dd17e"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 1,
+    "completedSourceConfigCount": 1,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 1,
+    "feedbackSourceConfigCount": 1
+  },
+  "budgetUsage": {
+    "beamWidth": 4,
+    "candidatesEvaluated": 815,
+    "completedCandidates": 29,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 349,
+    "maxDepth": 8,
+    "mergedCandidates": 35,
+    "prunedCandidates": 0,
+    "steps": 24,
+    "topN": 50,
+    "wallTimeMs": 1666970
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 291
+    },
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 174
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 174
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 174
+    },
+    {
+      "code": "actor-switch-exit-tail-order-unresolved",
+      "count": 164
+    },
+    {
+      "code": "skill-cooldown-active",
+      "count": 70
+    },
+    {
+      "code": "machine-axis-action-conditions-unresolved",
+      "count": 5
+    },
+    {
+      "code": "verified-charging-release-selection-unresolved",
+      "count": 5
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 29,
+    "topNReady": true,
+    "topScore": 430.81340599,
+    "cutoffScore": 381.27432251,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1,
+    "topIdentityHashes": [
+      "ab09870b28bba3b148784df3bd60b2e5d9c9d461863bd591d47360ed0e0ac8fa",
+      "ec092c5339b725218db5571634c6fbb4f8453f457ea6e28f094e468fa4731e5f",
+      "0cc9ecfdda630f975e51671e94e27b63799302bdbb3df5f0f41eff9b5482d85a",
+      "c248337480fe94523e575e65cdfbeacd0b966cc9b2ff1ad6d9c93e62e8b26c59",
+      "01d2e9be47e2287d6f2a2debf35f1e2bfc7338bda601e84949a68ac89901050a"
+    ],
+    "cutoffTieIdentityHashes": []
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "0ca7a5ea2666f0a28c6c021cd5f6906d16bac43513359c3a3fa2fd0f1ffa8095"
+    }
+  ],
+  "feedbackAggregateHash": "bd3172bd9be772c65cfb5a7c3f51317b7d6c164d6c3d267ad297fd2930be3f05"
+}

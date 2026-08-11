@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round5-greedy-normal-bracket32",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "46f045ce4e5f94f7aba11f4f9c403055072fbba15a4b2999209e8c26b1cc088c",
+  "guidanceHashes": [
+    "155862dcb0b07c0d8b7ea1297515ee0fa06c7ccabf0c4e766ea64d171c18d77a"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 8,
+    "completedSourceConfigCount": 8,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 8,
+    "feedbackSourceConfigCount": 8
+  },
+  "budgetUsage": {
+    "beamWidth": 8,
+    "candidatesEvaluated": 104,
+    "maxDepth": 3200,
+    "wallTimeMs": 92955
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-target-dead",
+      "count": 24
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 8,
+    "topNReady": true,
+    "topScore": 66133.333333,
+    "cutoffScore": 66133.333333,
+    "cutoffTieCount": 3,
+    "topNFamilyCount": 4,
+    "topIdentityHashes": [
+      "41a4968f7d391842edc63427b0f9f3d793195324feff3ad89e0e55dc5f14ead1",
+      "743c597a1415e08fed9f708295317c7ec26e7d4f81660b5c7a08a869340e6410",
+      "7d0919ecba94f8d9b97753b5f47a29755b1a6b0f9b63f671a1d0670dcafbe47f",
+      "97bfa472d625d72b1f8d0d5fb25192cfd14f45224d84bf6375d76852b4353f0b",
+      "d93f6770e69818312ac11338bce5406037593b7ce0ade416300f683c561d736f"
+    ],
+    "cutoffTieIdentityHashes": [
+      "e4231bbc450243a507c9628ad9a600c37ab18a908cad8579beab2643e2392268",
+      "e605c09d0c2168462e269019cf1efa85956aed06a2f51ccf03336c9ca74d0c67",
+      "f97bd69afb871a2d34d87d3db67f3ce58eab4ca4b727c5ae69aa16aa42128029"
+    ]
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-08594e219f77",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "feedbackFileSha256": "ee2fb3da95e426c8bedf89b729e73ffcb33d024245b8488c5767496da068121f"
+    },
+    {
+      "shardName": "02-7f148f2b9895",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "feedbackFileSha256": "f9a345cd29f3ade9dc8e5e0ca7086a6fe8370dbcae7bcd9fc5409ad562e02b8f"
+    },
+    {
+      "shardName": "03-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "3bf0e1fe2f06677f74ee5a37c1c1a57f606c4b8c6b80dddf5d2f2ea722f508be"
+    },
+    {
+      "shardName": "04-72d08b446c79",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "feedbackFileSha256": "594d6a95b081c4b6a825348948d2fc107978408714a328b99825d0231ff5a877"
+    },
+    {
+      "shardName": "05-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "fbc69e57857b3e347da7293624a81d2abeee5c75b2b64770a9eb96b9217319e4"
+    },
+    {
+      "shardName": "06-b71db1e1a915",
+      "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "feedbackFileSha256": "5c538b0ce667206e28aabddfeaafc4428f0de02c5f637f522d026e7cf36b74a9"
+    },
+    {
+      "shardName": "07-0726e8a7f286",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "feedbackFileSha256": "d0beb1e57979da1fa27356ea1a14f6d02827d824006f325a3da5608c95e2258f"
+    },
+    {
+      "shardName": "08-5aa51fde8b60",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "feedbackFileSha256": "b3bf858765dc2eca83d5b5474658dec95445fcfb581f1f9efe295a1650cb9597"
+    }
+  ],
+  "feedbackAggregateHash": "f2e1a8a84c0febe9e22c429cb4694ed0bdc6ac144e3b02910f97a4a40d8fc56c"
+}

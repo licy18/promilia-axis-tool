@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round3-ring-propagation",
+  "objective": "cycle-dps-no-toughness",
+  "shardId": "m12c-shard:222949b2dbe95bdd53f80c8c",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "teamIdentity": "m12c-team-v1:102001+109001+112001",
+    "optimizationObjectIds": [
+      "102001",
+      "109001",
+      "112001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "102001",
+        "sourceCharacterId": 102001
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      }
+    ]
+  },
+  "guidanceHash": "17c3aebf3560afedb602b1bed7562910b5059e1deabb5dc957b2d7288f3008e2",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 3,
+    "rationale": "Round-2 feedback 529be2e04e331f1acc9fa7b80c0c5cdc56d36de38ca2fa79bc9052cf28305c7c found ring 1350211 improved the 112001 incumbent from 19083.46928913 to 20797.9953003. Fix only that verified ring choice and propagate it across every one of the eight authoritative 112001 source configs, including both mutually exclusive STARBORN aliases, while preserving all three initial fronts."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "request": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchRequest",
+    "kind": "azpr-m12c-outer-search",
+    "contract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxis",
+      "kind": "azpr-machine-axis",
+      "dataIdentity": {
+        "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+        "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+        "mechanicsProfileVersion": 1
+      },
+      "scenario": {
+        "id": "m12c-formal-search-template-v1",
+        "name": "M12-C 末音 AI Top-5 正式搜索模板 v1",
+        "fps": 60,
+        "durationFrames": 7200,
+        "team": [],
+        "enemy": {
+          "enemyId": 310054,
+          "level": 80
+        },
+        "critical": {
+          "policy": "expected",
+          "seed": null
+        },
+        "projectile": {
+          "targetDistance": 0,
+          "defaultWillHit": true
+        }
+      },
+      "actions": [],
+      "metadata": {
+        "purpose": "M12-C formal AI-guided heuristic Top-5 shard template",
+        "authorityHead": "baeb03489aa823d59981d60255af5b418aa48178",
+        "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+        "rankingClaim": "AI-guided heuristic Top-N",
+        "formalRankingReady": false,
+        "clientParityReady": false
+      }
+    },
+    "options": {
+      "objective": "cycle-dps-no-toughness",
+      "criticalPolicy": "expected",
+      "jobs": 1,
+      "guidance": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchGuidance",
+        "kind": "azpr-machine-axis-search-guidance",
+        "guidanceVersion": "1.0.0",
+        "objective": "cycle-dps-no-toughness",
+        "layer": "both",
+        "budget": {
+          "beamWidth": 2,
+          "topN": 10,
+          "maxDepth": 1,
+          "maxActionsPerOwner": 4,
+          "maxKiboActions": 2,
+          "maxWaitCandidates": 2,
+          "maxDamagePerMsBound": 10,
+          "includeKibo": true,
+          "includeSwitch": true,
+          "includeNormalAttacks": true,
+          "includeWait": true
+        },
+        "actionFilters": {
+          "blockedActionKinds": [
+            "dodge-attack",
+            "plunging-attack"
+          ]
+        },
+        "kiboPolicy": {
+          "blockedKiboIds": []
+        },
+        "switchPolicy": {
+          "includeSwitch": true
+        },
+        "waitPolicy": {
+          "includeWait": true,
+          "maxWaitFrames": null
+        },
+        "heuristic": {
+          "criticalPolicy": "expected",
+          "seeds": null
+        },
+        "outer": {
+          "maxSourceConfigs": 1,
+          "maxBuildsPerSourceConfig": 1,
+          "maxBuildsTotal": 1,
+          "maxVariantSearches": 3,
+          "initialFrontPolicy": "all-team-members"
+        },
+        "provenance": {
+          "authority": "ai-agent",
+          "agentId": "codex-m12c-formal-search",
+          "sessionId": "m12c4-moyin-top5-20260812-v1",
+          "iteration": 3,
+          "rationale": "Round-2 feedback 529be2e04e331f1acc9fa7b80c0c5cdc56d36de38ca2fa79bc9052cf28305c7c found ring 1350211 improved the 112001 incumbent from 19083.46928913 to 20797.9953003. Fix only that verified ring choice and propagate it across every one of the eight authoritative 112001 source configs, including both mutually exclusive STARBORN aliases, while preserving all three initial fronts."
+        }
+      }
+    },
+    "guidance": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisSearchGuidance",
+      "kind": "azpr-machine-axis-search-guidance",
+      "guidanceVersion": "1.0.0",
+      "objective": "cycle-dps-no-toughness",
+      "layer": "both",
+      "budget": {
+        "beamWidth": 2,
+        "topN": 10,
+        "maxDepth": 1,
+        "maxActionsPerOwner": 4,
+        "maxKiboActions": 2,
+        "maxWaitCandidates": 2,
+        "maxDamagePerMsBound": 10,
+        "includeKibo": true,
+        "includeSwitch": true,
+        "includeNormalAttacks": true,
+        "includeWait": true
+      },
+      "actionFilters": {
+        "blockedActionKinds": [
+          "dodge-attack",
+          "plunging-attack"
+        ]
+      },
+      "kiboPolicy": {
+        "blockedKiboIds": []
+      },
+      "switchPolicy": {
+        "includeSwitch": true
+      },
+      "waitPolicy": {
+        "includeWait": true,
+        "maxWaitFrames": null
+      },
+      "heuristic": {
+        "criticalPolicy": "expected",
+        "seeds": null
+      },
+      "outer": {
+        "maxSourceConfigs": 1,
+        "maxBuildsPerSourceConfig": 1,
+        "maxBuildsTotal": 1,
+        "maxVariantSearches": 3,
+        "initialFrontPolicy": "all-team-members"
+      },
+      "provenance": {
+        "authority": "ai-agent",
+        "agentId": "codex-m12c-formal-search",
+        "sessionId": "m12c4-moyin-top5-20260812-v1",
+        "iteration": 3,
+        "rationale": "Round-2 feedback 529be2e04e331f1acc9fa7b80c0c5cdc56d36de38ca2fa79bc9052cf28305c7c found ring 1350211 improved the 112001 incumbent from 19083.46928913 to 20797.9953003. Fix only that verified ring choice and propagate it across every one of the eight authoritative 112001 source configs, including both mutually exclusive STARBORN aliases, while preserving all three initial fronts."
+      }
+    },
+    "initialState": {
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "actorSpByOptimizationObjectId": {},
+      "kiboSpByOptimizationObjectId": {},
+      "tuningMarks": [],
+      "specialResources": []
+    },
+    "buildConstraints": {
+      "112001": {
+        "equipmentIdsBySlot": {
+          "ring": [
+            1350211
+          ]
+        }
+      }
+    },
+    "outer": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 1,
+      "maxVariantSearches": 3,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:102001=102001+109001=109001+112001=112001"
+      ]
+    }
+  }
+}

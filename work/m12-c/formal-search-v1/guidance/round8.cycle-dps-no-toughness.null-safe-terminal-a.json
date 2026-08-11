@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 2,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": ["normal-attack"],
+    "blockedActionKinds": ["dodge-attack", "plunging-attack"]
+  },
+  "kiboPolicy": { "blockedKiboIds": [] },
+  "switchPolicy": { "includeSwitch": false },
+  "waitPolicy": { "includeWait": false, "maxWaitFrames": null },
+  "heuristic": { "criticalPolicy": "expected", "seeds": null },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 8,
+    "rationale": "Fail-closed terminal preset scan quarantined the two raw identities produced by the sole affected source m12c-source-v1:103002=103002+109001=109001+112001=112001 in rounds 4/5/6 because an explicit Ruby=0 resource violated the canonical cold-cycle preset. Re-run only that necessary source shard with rubyAmmo:null, all actor/Kibo SP zero, zero marks, no special resources, the same ring constraint, and the bounded normal-only beam-1 surface; do not reuse or rewrite quarantined results."
+  }
+}

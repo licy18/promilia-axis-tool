@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-cold-cycle-coverage-correction-verification",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-no-toughness",
+  "originalRoundId": "round1-coverage",
+  "correctionRoundId": "round7-null-safe-coverage-correction",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "clientParityReady": false,
+  "originalAggregateHash": "c0e92734f9c593ae520f59d51461e1a620bd6164b93da6022e4e499e3778c1d6",
+  "correctionAggregateHash": "3a3383c0b46f4cc6895bc62d1980f38ce027d4b6242161898d52b62f679a1889",
+  "coverage": {
+    "expectedShardCount": 8,
+    "verifiedShardCount": 8,
+    "validShardCount": 8,
+    "verifiedCandidateCount": 28,
+    "validCandidateCount": 28
+  },
+  "coldStateContract": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": 0,
+    "kiboSp": 0,
+    "tuningMarks": 0,
+    "specialResources": 0,
+    "rubyAmmoAbsent": true
+  },
+  "valid": true,
+  "issues": [],
+  "rows": [
+    {
+      "shard": "01-26e39bd0ca02",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+      "candidateCount": 3,
+      "validCandidateCount": 3,
+      "candidates": [
+        {
+          "rawIdentityHash": "9682ce398edefda2755da34940d19fc45901424792c366b3f5148e4feaa4784a",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "b478f746992c2120",
+          "legalityProofHash": "03ea0f4a985c276c",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "155aa4ca474068df7bf65e045a1f3362d3db992a36ad3c1520a9a6e041fb7700",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "ace646ca266acb80",
+          "legalityProofHash": "5f1d9d2f29e366bb",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "5ec0954cf325c915d0c82c1b0b187388e7ce9fb568f9bc09bf20ff0aff7ed987",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "74d00eaec22f8648",
+          "legalityProofHash": "051ec50efa242775",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "02-ccb9585bebd7",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+103002=103002+109001=109001",
+      "candidateCount": 4,
+      "validCandidateCount": 4,
+      "candidates": [
+        {
+          "rawIdentityHash": "15765fbb08f0883ddc22ebe339d93ed6c0caad797ae6af00df70c7a85653aaeb",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "710adb750a4521cb",
+          "legalityProofHash": "4ef6fac93bf0b8ef",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "a0c34b7bb74669b6f50a051386283b29f6e03e6d806bb1d4f8842dbd80b0e1e3",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "8115c5f573fdaa1f",
+          "legalityProofHash": "7451b3d1da199b1b",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "b8a987c9758a04d6b2e09e2f4e61d4111b3dbafa294b0ecf21b5019738cc95cb",
+          "score": 5076.5925293,
+          "actionCount": 1,
+          "cycleProofHash": "475d6ed7f6c949fb",
+          "legalityProofHash": "8ed9d0fe66094f4c",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "db8c33319fa1163b7f74f6d1e256046c7c33fc6a2988d4f8f6b94aa474ec6dda",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "72744ad3d185a995",
+          "legalityProofHash": "6d0d8ccc3473e27c",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "03-ae79bff50c2b",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+      "candidateCount": 4,
+      "validCandidateCount": 4,
+      "candidates": [
+        {
+          "rawIdentityHash": "1c469318080a21a745fcf0e3dff6e898fc54cc04b8825b1fed17ce5eff0d765b",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "b0b6ec1de3c8d5ab",
+          "legalityProofHash": "f70b354b25979539",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "addd86dd59e7305ddb28659f0ad80073bf925674fb9fa2bf89bd3c562f83bd82",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "900f7fd299ca6ec1",
+          "legalityProofHash": "33f6693b2a301cac",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "027eae4ea7ea481103eaf9b7d24214526aa3f0e49cf39e6a9788f26be76056dd",
+          "score": 4295.67342658,
+          "actionCount": 1,
+          "cycleProofHash": "fae2d25201a2b754",
+          "legalityProofHash": "148d791f0812a453",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "78909e34fcb683410d5c055d31254dc46a413c38da0d5eff5472dda4bc5c9c7d",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "fecc93b20382c72b",
+          "legalityProofHash": "18249a1e674b8bf2",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "04-df3bdabf4312",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107002=107002+109001=109001",
+      "candidateCount": 4,
+      "validCandidateCount": 4,
+      "candidates": [
+        {
+          "rawIdentityHash": "1dcd336ee117dcb44ae256f874e6aa3a4c4ea2f690e0f2d898bc3830445f65bc",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "bbe307076b5afe55",
+          "legalityProofHash": "99d8e8b0693f0612",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "e60cc98b574bf40fb0a9ce3b84440613346d838c26372354bf948e7bcb4cac0b",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "c04117ce6043ce4e",
+          "legalityProofHash": "85e2676dadae6874",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "b8261411f28601d906cd605137bb68a8746c291a72b9d1a2d23c133b7bbc6737",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "6229c1c2712724f3",
+          "legalityProofHash": "727c8e815b8fc8d4",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "e3ca70b65abb8a41141e2665c68cbfd71bd72cc5aab523a8cb546d98e3e44823",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "a229ad8f8286297b",
+          "legalityProofHash": "3b9a65996c5074d7",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "05-764a6d780faf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+      "candidateCount": 3,
+      "validCandidateCount": 3,
+      "candidates": [
+        {
+          "rawIdentityHash": "ce944cf94e4c213ba76814d83762d61a7718c813a2de132ca30f2baf793ffa50",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "fe8fa4d960cdcc74",
+          "legalityProofHash": "4d714278a8fe67e7",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "e744012e85ffce3a5aefc408204c996c55749a17f75e6394ce1e2596e8f3270a",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "b1c286d66a0d9322",
+          "legalityProofHash": "131e6ea8f843214c",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "04c6cd8e172932d47dee3fc92ad293aeb596a1a4aab9cda100225b23d5cbc71e",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "bc1cb6aed51edaeb",
+          "legalityProofHash": "cb4df8f427933947",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "06-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "candidateCount": 4,
+      "validCandidateCount": 4,
+      "candidates": [
+        {
+          "rawIdentityHash": "d2e2d165cf82dbbfab0bafc0e6eefd31013c2367657cddcb364f98f91c5ee8c4",
+          "score": 19083.46928913,
+          "actionCount": 1,
+          "cycleProofHash": "8b16c9b909b32b84",
+          "legalityProofHash": "03244c26f1a9d5f0",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "832f9d2488aa1573dc840ade51a3842b90735fead6330b6c9d3af05a62286fa3",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "7663be21045d4783",
+          "legalityProofHash": "c077c5541866b365",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "d67117ea528e435854180b9359d322ae813945c123656e17b89b8334260d7b96",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "cde917af2bcd239f",
+          "legalityProofHash": "4507fe5ceb203ed0",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "0bbfcaa151e55957b239975bb38ce7f9069c0c630a1d1da051dd14c2a0140e40",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "7e5c7a5416a3ac21",
+          "legalityProofHash": "08869ed51c6f9ae5",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "07-349568e9da43",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199001",
+      "candidateCount": 3,
+      "validCandidateCount": 3,
+      "candidates": [
+        {
+          "rawIdentityHash": "d970664da732d6ae1e645063e713874354f390c1de4d4c77115929f1eae05978",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "48743b0bc416f8e2",
+          "legalityProofHash": "3c5046c8a9a8f9e3",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "e40e16e43a70c7e2c000ff559717d04b38ecb0d3512ed59650685562297b07f3",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "7940fa66c64e6b76",
+          "legalityProofHash": "c06c30bd1aa00e16",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "a453a7632bfc55eda43bcdfff6fb114586c623dc8c1f161252cf607fba9ff95d",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "1dd25c9ae627a886",
+          "legalityProofHash": "3749ab9cc9c113d2",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    },
+    {
+      "shard": "08-3a9607f4e280",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+      "candidateCount": 3,
+      "validCandidateCount": 3,
+      "candidates": [
+        {
+          "rawIdentityHash": "85d7185fff15158666c6f96408ac3faa96e64e2453cca1bc70225387850fb5d1",
+          "score": 7833.47752582,
+          "actionCount": 1,
+          "cycleProofHash": "86602dac4c03250f",
+          "legalityProofHash": "8fda9a1df8871f92",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "4dc45ee18f2448eb71750f787ab932f78d0c0b9df36e14aa41ea92c0628f8d3a",
+          "score": 6689.84767912,
+          "actionCount": 1,
+          "cycleProofHash": "4b0da2012ac4632b",
+          "legalityProofHash": "2d8cb3cd67a0baa7",
+          "valid": true,
+          "issues": []
+        },
+        {
+          "rawIdentityHash": "a6581f4dbb615bc60bc26108df2908b6f6286fef6a29e8315721f2addeaa274d",
+          "score": 0,
+          "actionCount": 1,
+          "cycleProofHash": "93402713091fb6cd",
+          "legalityProofHash": "d4262e9594596d44",
+          "valid": true,
+          "issues": []
+        }
+      ],
+      "valid": true,
+      "issues": []
+    }
+  ],
+  "verificationHash": "631d9811565f4de6ec029d580725dc1029a328ffa1f5e407f39b052023e1afc6"
+}

@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-incumbent-replay-ring-propagation",
+  "objective": "cycle-dps-with-toughness",
+  "shardId": "m12c-shard:4129d2354ccdcf082b23dcab",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "teamIdentity": "m12c-team-v1:102001+109001+112001",
+    "optimizationObjectIds": [
+      "102001",
+      "109001",
+      "112001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "102001",
+        "sourceCharacterId": 102001
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      }
+    ]
+  },
+  "guidanceHash": "cf2814058161cd9c97893b3b2d71d855940c39a68b82a3f3b6acc87ba2983d9f",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 4,
+    "rationale": "Round-3 feedback e348dda9c2065ec144ad7d1e718271fbbe1d800f14056b99847ee8216cb027e4 independently reproduced the 430.81340599 closed-cycle incumbent with only 112001 star skill, six right-window A1 inputs, and a horizon wait. Rebind that exact raw schedule to the previously observed 1350211 ring refinement and evaluate it independently across eight stable 112001 source configs, preserving both STARBORN aliases as mutually exclusive raw identities. This is incumbent propagation, not semantic equivalence or an admissible-bound proof."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "0d6a9681968fe53560cd581314112812cd9c782a81c959b440670d8b643d5856",
+  "request": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchRequest",
+    "kind": "azpr-m12c-outer-search",
+    "contract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxis",
+      "kind": "azpr-machine-axis",
+      "dataIdentity": {
+        "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+        "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+        "mechanicsProfileVersion": 1
+      },
+      "scenario": {
+        "id": "m12c-formal-search-template-v1",
+        "name": "M12-C 末音 AI Top-5 正式搜索模板 v1",
+        "fps": 60,
+        "durationFrames": 7200,
+        "team": [],
+        "enemy": {
+          "enemyId": 310054,
+          "level": 80
+        },
+        "critical": {
+          "policy": "expected",
+          "seed": null
+        },
+        "projectile": {
+          "targetDistance": 0,
+          "defaultWillHit": true
+        }
+      },
+      "actions": [],
+      "metadata": {
+        "purpose": "M12-C formal AI-guided heuristic Top-5 shard template",
+        "authorityHead": "baeb03489aa823d59981d60255af5b418aa48178",
+        "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+        "rankingClaim": "AI-guided heuristic Top-N",
+        "formalRankingReady": false,
+        "clientParityReady": false
+      }
+    },
+    "options": {
+      "objective": "cycle-dps-with-toughness",
+      "criticalPolicy": "expected",
+      "jobs": 1,
+      "guidance": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchGuidance",
+        "kind": "azpr-machine-axis-search-guidance",
+        "guidanceVersion": "1.0.0",
+        "objective": "cycle-dps-with-toughness",
+        "layer": "both",
+        "budget": {
+          "beamWidth": 1,
+          "topN": 8,
+          "maxDepth": 8,
+          "maxActionsPerOwner": 6,
+          "maxKiboActions": 1,
+          "maxWaitCandidates": 1,
+          "maxDamagePerMsBound": 10,
+          "includeKibo": false,
+          "includeSwitch": false,
+          "includeNormalAttacks": true,
+          "includeWait": true
+        },
+        "actionFilters": {
+          "allowedActionKinds": [
+            "normal-attack",
+            "star-skill"
+          ],
+          "blockedActionKinds": [
+            "dodge-attack",
+            "plunging-attack"
+          ]
+        },
+        "kiboPolicy": {
+          "blockedKiboIds": []
+        },
+        "switchPolicy": {
+          "includeSwitch": false
+        },
+        "waitPolicy": {
+          "includeWait": true,
+          "maxWaitFrames": null
+        },
+        "heuristic": {
+          "criticalPolicy": "expected",
+          "seeds": null
+        },
+        "outer": {
+          "maxSourceConfigs": 8,
+          "maxBuildsPerSourceConfig": 1,
+          "maxBuildsTotal": 8,
+          "maxVariantSearches": 8,
+          "initialFrontPolicy": "all-team-members"
+        },
+        "provenance": {
+          "authority": "ai-agent",
+          "agentId": "codex-m12c-formal-search",
+          "sessionId": "m12c4-moyin-top5-20260812-v1",
+          "iteration": 4,
+          "rationale": "Round-3 feedback e348dda9c2065ec144ad7d1e718271fbbe1d800f14056b99847ee8216cb027e4 independently reproduced the 430.81340599 closed-cycle incumbent with only 112001 star skill, six right-window A1 inputs, and a horizon wait. Rebind that exact raw schedule to the previously observed 1350211 ring refinement and evaluate it independently across eight stable 112001 source configs, preserving both STARBORN aliases as mutually exclusive raw identities. This is incumbent propagation, not semantic equivalence or an admissible-bound proof."
+        }
+      }
+    },
+    "guidance": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisSearchGuidance",
+      "kind": "azpr-machine-axis-search-guidance",
+      "guidanceVersion": "1.0.0",
+      "objective": "cycle-dps-with-toughness",
+      "layer": "both",
+      "budget": {
+        "beamWidth": 1,
+        "topN": 8,
+        "maxDepth": 8,
+        "maxActionsPerOwner": 6,
+        "maxKiboActions": 1,
+        "maxWaitCandidates": 1,
+        "maxDamagePerMsBound": 10,
+        "includeKibo": false,
+        "includeSwitch": false,
+        "includeNormalAttacks": true,
+        "includeWait": true
+      },
+      "actionFilters": {
+        "allowedActionKinds": [
+          "normal-attack",
+          "star-skill"
+        ],
+        "blockedActionKinds": [
+          "dodge-attack",
+          "plunging-attack"
+        ]
+      },
+      "kiboPolicy": {
+        "blockedKiboIds": []
+      },
+      "switchPolicy": {
+        "includeSwitch": false
+      },
+      "waitPolicy": {
+        "includeWait": true,
+        "maxWaitFrames": null
+      },
+      "heuristic": {
+        "criticalPolicy": "expected",
+        "seeds": null
+      },
+      "outer": {
+        "maxSourceConfigs": 8,
+        "maxBuildsPerSourceConfig": 1,
+        "maxBuildsTotal": 8,
+        "maxVariantSearches": 8,
+        "initialFrontPolicy": "all-team-members"
+      },
+      "provenance": {
+        "authority": "ai-agent",
+        "agentId": "codex-m12c-formal-search",
+        "sessionId": "m12c4-moyin-top5-20260812-v1",
+        "iteration": 4,
+        "rationale": "Round-3 feedback e348dda9c2065ec144ad7d1e718271fbbe1d800f14056b99847ee8216cb027e4 independently reproduced the 430.81340599 closed-cycle incumbent with only 112001 star skill, six right-window A1 inputs, and a horizon wait. Rebind that exact raw schedule to the previously observed 1350211 ring refinement and evaluate it independently across eight stable 112001 source configs, preserving both STARBORN aliases as mutually exclusive raw identities. This is incumbent propagation, not semantic equivalence or an admissible-bound proof."
+      }
+    },
+    "initialState": {
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "actorSpByOptimizationObjectId": {},
+      "kiboSpByOptimizationObjectId": {},
+      "tuningMarks": [],
+      "specialResources": []
+    },
+    "buildConstraints": {
+      "112001": {
+        "equipmentIdsBySlot": {
+          "ring": [
+            1350211
+          ]
+        }
+      }
+    },
+    "outer": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 8,
+      "maxVariantSearches": 8,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:102001=102001+109001=109001+112001=112001"
+      ]
+    }
+  },
+  "cycleReplay": {
+    "synthesisId": "m12c-fixed-incumbent-cycle-replay-v1",
+    "templateAggregatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round3-restricted-probe/aggregate.json",
+    "templateRoundId": "round3-restricted-probe",
+    "templateAggregateHash": "fb69a4f32f5ff07fd1a2c56e01552ebd73fc68cd4527b98131521f893c56c195",
+    "templateRawIdentityHash": "c80a75d86c2160f24c7b4e8604a85c16d10b7534d61863fd4159db6313433450",
+    "templateScore": 430.81340599,
+    "templateActionHash": "ddb9bc7ec4b0195e1092edf9d0cecb6b6529f4e7de2aa4ba451f09c8b20ee642",
+    "loop": {
+      "startFrame": 0,
+      "endFrame": 7200
+    },
+    "semanticEquivalenceClaimed": false,
+    "admissibleBoundClaimed": false
+  }
+}

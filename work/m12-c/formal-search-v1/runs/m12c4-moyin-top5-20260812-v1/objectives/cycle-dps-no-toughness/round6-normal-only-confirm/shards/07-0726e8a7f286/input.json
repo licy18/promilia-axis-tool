@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round6-normal-only-confirm",
+  "objective": "cycle-dps-no-toughness",
+  "shardId": "m12c-shard:976608945e2a4e5540d0d181",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+    "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+    "optimizationObjectIds": [
+      "109001",
+      "112001",
+      "STARBORN"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      {
+        "optimizationObjectId": "STARBORN",
+        "sourceCharacterId": 199001
+      }
+    ]
+  },
+  "guidanceHash": "ae5c4f759db6051ab53bfbb967ae61c68060bd4e286f862afc4b52e77ad712cc",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 6,
+    "rationale": "Round-5 feedback ffd56efacb51daa6603a9ac79b59f45ae5e3cc627a98b1d0fbb061bee1135c3a exactly reproduced round 4 raw Top-5 identities, cutoff, ties, and families. Repeat the identical bounded normal-only beam-1 surface once more so the stop certificate rests on three consecutive raw-identity-stable rounds (4, 5, 6), without inventing semantic equivalence for round-3 action identifiers."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "request": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchRequest",
+    "kind": "azpr-m12c-outer-search",
+    "contract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxis",
+      "kind": "azpr-machine-axis",
+      "dataIdentity": {
+        "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+        "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+        "mechanicsProfileVersion": 1
+      },
+      "scenario": {
+        "id": "m12c-formal-search-template-v1",
+        "name": "M12-C 末音 AI Top-5 正式搜索模板 v1",
+        "fps": 60,
+        "durationFrames": 7200,
+        "team": [],
+        "enemy": {
+          "enemyId": 310054,
+          "level": 80
+        },
+        "critical": {
+          "policy": "expected",
+          "seed": null
+        },
+        "projectile": {
+          "targetDistance": 0,
+          "defaultWillHit": true
+        }
+      },
+      "actions": [],
+      "metadata": {
+        "purpose": "M12-C formal AI-guided heuristic Top-5 shard template",
+        "authorityHead": "baeb03489aa823d59981d60255af5b418aa48178",
+        "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+        "rankingClaim": "AI-guided heuristic Top-N",
+        "formalRankingReady": false,
+        "clientParityReady": false
+      }
+    },
+    "options": {
+      "objective": "cycle-dps-no-toughness",
+      "criticalPolicy": "expected",
+      "jobs": 1,
+      "guidance": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisSearchGuidance",
+        "kind": "azpr-machine-axis-search-guidance",
+        "guidanceVersion": "1.0.0",
+        "objective": "cycle-dps-no-toughness",
+        "layer": "both",
+        "budget": {
+          "beamWidth": 1,
+          "topN": 10,
+          "maxDepth": 1,
+          "maxActionsPerOwner": 2,
+          "maxKiboActions": 1,
+          "maxWaitCandidates": 1,
+          "maxDamagePerMsBound": 10,
+          "includeKibo": false,
+          "includeSwitch": false,
+          "includeNormalAttacks": true,
+          "includeWait": false
+        },
+        "actionFilters": {
+          "allowedActionKinds": [
+            "normal-attack"
+          ],
+          "blockedActionKinds": [
+            "dodge-attack",
+            "plunging-attack"
+          ]
+        },
+        "kiboPolicy": {
+          "blockedKiboIds": []
+        },
+        "switchPolicy": {
+          "includeSwitch": false
+        },
+        "waitPolicy": {
+          "includeWait": false,
+          "maxWaitFrames": null
+        },
+        "heuristic": {
+          "criticalPolicy": "expected",
+          "seeds": null
+        },
+        "outer": {
+          "maxSourceConfigs": 1,
+          "maxBuildsPerSourceConfig": 1,
+          "maxBuildsTotal": 1,
+          "maxVariantSearches": 3,
+          "initialFrontPolicy": "all-team-members"
+        },
+        "provenance": {
+          "authority": "ai-agent",
+          "agentId": "codex-m12c-formal-search",
+          "sessionId": "m12c4-moyin-top5-20260812-v1",
+          "iteration": 6,
+          "rationale": "Round-5 feedback ffd56efacb51daa6603a9ac79b59f45ae5e3cc627a98b1d0fbb061bee1135c3a exactly reproduced round 4 raw Top-5 identities, cutoff, ties, and families. Repeat the identical bounded normal-only beam-1 surface once more so the stop certificate rests on three consecutive raw-identity-stable rounds (4, 5, 6), without inventing semantic equivalence for round-3 action identifiers."
+        }
+      }
+    },
+    "guidance": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisSearchGuidance",
+      "kind": "azpr-machine-axis-search-guidance",
+      "guidanceVersion": "1.0.0",
+      "objective": "cycle-dps-no-toughness",
+      "layer": "both",
+      "budget": {
+        "beamWidth": 1,
+        "topN": 10,
+        "maxDepth": 1,
+        "maxActionsPerOwner": 2,
+        "maxKiboActions": 1,
+        "maxWaitCandidates": 1,
+        "maxDamagePerMsBound": 10,
+        "includeKibo": false,
+        "includeSwitch": false,
+        "includeNormalAttacks": true,
+        "includeWait": false
+      },
+      "actionFilters": {
+        "allowedActionKinds": [
+          "normal-attack"
+        ],
+        "blockedActionKinds": [
+          "dodge-attack",
+          "plunging-attack"
+        ]
+      },
+      "kiboPolicy": {
+        "blockedKiboIds": []
+      },
+      "switchPolicy": {
+        "includeSwitch": false
+      },
+      "waitPolicy": {
+        "includeWait": false,
+        "maxWaitFrames": null
+      },
+      "heuristic": {
+        "criticalPolicy": "expected",
+        "seeds": null
+      },
+      "outer": {
+        "maxSourceConfigs": 1,
+        "maxBuildsPerSourceConfig": 1,
+        "maxBuildsTotal": 1,
+        "maxVariantSearches": 3,
+        "initialFrontPolicy": "all-team-members"
+      },
+      "provenance": {
+        "authority": "ai-agent",
+        "agentId": "codex-m12c-formal-search",
+        "sessionId": "m12c4-moyin-top5-20260812-v1",
+        "iteration": 6,
+        "rationale": "Round-5 feedback ffd56efacb51daa6603a9ac79b59f45ae5e3cc627a98b1d0fbb061bee1135c3a exactly reproduced round 4 raw Top-5 identities, cutoff, ties, and families. Repeat the identical bounded normal-only beam-1 surface once more so the stop certificate rests on three consecutive raw-identity-stable rounds (4, 5, 6), without inventing semantic equivalence for round-3 action identifiers."
+      }
+    },
+    "initialState": {
+      "presetId": "m12c-cycle-cold-zero-state-v1",
+      "actorSpByOptimizationObjectId": {},
+      "kiboSpByOptimizationObjectId": {},
+      "tuningMarks": [],
+      "specialResources": []
+    },
+    "buildConstraints": {
+      "112001": {
+        "equipmentIdsBySlot": {
+          "ring": [
+            1350211
+          ]
+        }
+      }
+    },
+    "outer": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 1,
+      "maxVariantSearches": 3,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001"
+      ]
+    }
+  }
+}

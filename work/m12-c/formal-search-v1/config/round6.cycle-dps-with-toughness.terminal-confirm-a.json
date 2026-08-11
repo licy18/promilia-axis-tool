@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-config",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round6-terminal-confirm-a",
+  "iteration": 6,
+  "objective": "cycle-dps-with-toughness",
+  "topN": 5,
+  "contractTemplate": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "guidanceFile": "work/m12-c/formal-search-v1/guidance/round6.cycle-dps-with-toughness.terminal-confirm-a.json",
+  "outputRoot": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1",
+  "expectedSourceConfigCount": 8,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+    "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+    "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+    "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+    "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+  ],
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "options": { "objective": "cycle-dps-with-toughness", "criticalPolicy": "expected", "jobs": 1 },
+  "outer": {
+    "maxSourceConfigs": 8,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 8,
+    "maxVariantSearches": 8,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "refinementInitialFrontOptimizationObjectId": "112001",
+  "buildConstraints": {
+    "112001": { "equipmentIdsBySlot": { "ring": [1350211] } }
+  },
+  "cycleReplay": {
+    "synthesisId": "m12c-fixed-incumbent-cycle-replay-v1",
+    "templateAggregatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round3-restricted-probe/aggregate.json",
+    "templateAggregateHash": "fb69a4f32f5ff07fd1a2c56e01552ebd73fc68cd4527b98131521f893c56c195",
+    "templateRawIdentityHash": "c80a75d86c2160f24c7b4e8604a85c16d10b7534d61863fd4159db6313433450",
+    "loopStartFrame": 0,
+    "loopEndFrame": 7200
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round5-incumbent-replay-null-safe/feedback-aggregate.json",
+    "feedbackAggregateHash": "e11f405d205183f2b3729d937c830d6b08a7ff70a4bd8b2943451e27fb5be0be",
+    "roundAggregateHash": "412af72f3433021624248b1bb18f50f84281b1e3bfac78edf080f4e6e23e4e7e"
+  },
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

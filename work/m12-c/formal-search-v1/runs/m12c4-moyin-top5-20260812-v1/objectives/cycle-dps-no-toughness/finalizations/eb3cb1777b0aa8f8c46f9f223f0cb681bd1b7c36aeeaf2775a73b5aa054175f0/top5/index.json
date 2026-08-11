@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-top5-index",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "finalizationHash": "eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0",
+  "cutoffScore": 20797.9953003,
+  "cutoffTieCount": 3,
+  "rows": [
+    {
+      "rank": 1,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "0426742c76451b5a56ae5730fb671eae3c478cfa0cc5fc6a83be4aec9d93f354",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "a37fb546da9cbc9af488f3880c0cd45569ecdb069e9ce1d913e366abcccb324a",
+        "inputHash": "521d86f0176df303",
+        "traceHash": "c23abe1dcefe6252"
+      },
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "37848158739122c6",
+      "objectiveProofStatus": "closed",
+      "objectiveProofHash": "709a85bc71a36a5f",
+      "legalityProofHash": "daefb60fe63cb8a7",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-01.0426742c7645.machine-axis.json",
+      "axisFileSha256": "32db6b894aaf08ddcf8698306e12e3504b872666749f215f970104c053aa7455",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-01.0426742c7645.candidate.json",
+      "candidateFileSha256": "5fe32a3d0622e456684d77f7be6657ba68f04e392f8fa0647cb3149f312aaf21"
+    },
+    {
+      "rank": 2,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "05fd79c6703fe8c225d19943d129486fca90be5c452e5c60a7a2ec831367674d",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "bd1a14d9b242f73e",
+        "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "bf567b212947311eb388519a6498771e10ca90485cb50f15fe305780f5ee7812",
+        "inputHash": "24991625d548c24a",
+        "traceHash": "3f0d8e8ccd072d8c"
+      },
+      "teamIdentity": "m12c-team-v1:101010+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "bd1a14d9b242f73e",
+      "objectiveProofStatus": "closed",
+      "objectiveProofHash": "6bd8c886fbd8941c",
+      "legalityProofHash": "b90310b33a07934f",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-02.05fd79c6703f.machine-axis.json",
+      "axisFileSha256": "929a54dff4dfd7da925f0e17c19d2f20261e23779b5f28dd09fd5362ae880807",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-02.05fd79c6703f.candidate.json",
+      "candidateFileSha256": "b9ef33b284efa04754d144c39546fddf0c5d429e9aa67aee26d5be545e08e163"
+    },
+    {
+      "rank": 3,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "24310a88c20aec14384a77f2a0f632975a2dc44ae8e6b3d2aa977feaf0004ff7",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "1c90d1c746a809f4",
+        "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e4bf29a31ee645521f5f00afa05c9084706cb40ba2ef03acb3cac1d803643fa8",
+        "inputHash": "5d4128205ff39a11",
+        "traceHash": "3bd8c2693b809348"
+      },
+      "teamIdentity": "m12c-team-v1:107002+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "1c90d1c746a809f4",
+      "objectiveProofStatus": "closed",
+      "objectiveProofHash": "5cc9380e8c28d0d7",
+      "legalityProofHash": "61811de14663e76b",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-03.24310a88c20a.machine-axis.json",
+      "axisFileSha256": "f9c51e20ac567a78131922094cffbb2252d6d9e1d21c90b699065cd5446d3321",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-03.24310a88c20a.candidate.json",
+      "candidateFileSha256": "da1edd3d7face96431a3fd8e4d8201919e82b0e100c2d42b203f46b516b237d7"
+    },
+    {
+      "rank": 4,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "3c152cb8d3cbe3366f999de54a08cc229a987cdb7d269b60335f1d3485a926ad",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e4d5160465cc5b7e1ced6c3c6c8494836084f65e2f42c8095eddd7204b766aeb",
+        "inputHash": "9110df7e0bcb3491",
+        "traceHash": "d5811914b9db407b"
+      },
+      "teamIdentity": "m12c-team-v1:102001+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "fceb8d26c3e68c1f",
+      "objectiveProofStatus": "closed",
+      "objectiveProofHash": "656d3b5cc440d008",
+      "legalityProofHash": "989412938f02ff7b",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-04.3c152cb8d3cb.machine-axis.json",
+      "axisFileSha256": "d82bb047e125a22e8a92fa6a0e08081cc58f578115bdbdc36b36fd07156dcf6b",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-04.3c152cb8d3cb.candidate.json",
+      "candidateFileSha256": "095caa7e8e68c9b59b678d7ef1561924f200ab39c5d132943a1d3010f3a39141"
+    },
+    {
+      "rank": 5,
+      "score": 20797.9953003,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "610564bdaf6347abbea833b16d41105954698ec7276118283e4e920845dd0230",
+        "objective": "cycle-dps-no-toughness",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "ebc3672e42ea1df1b7cd10d66b64b32d58e88069c81ea5f85297d90379a7d3be",
+        "inputHash": "673a1ee3cdd8aa59",
+        "traceHash": "06e8adfe0e922d1a"
+      },
+      "teamIdentity": "m12c-team-v1:107001+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "18d5368248d5537e",
+      "objectiveProofStatus": "closed",
+      "objectiveProofHash": "b7ca0130f1f629cb",
+      "legalityProofHash": "ef57820750feea40",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-05.610564bdaf63.machine-axis.json",
+      "axisFileSha256": "5771cdde6de9fcdf6e2cf996d4ff0c20efcdddfe37c5c08b3962a2fa95bcda4d",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/finalizations/eb3cb1777b0aa8f8c46f9f223f0cb681bd1b7c36aeeaf2775a73b5aa054175f0/top5/rank-05.610564bdaf63.candidate.json",
+      "candidateFileSha256": "a53b60f722db1ea778e26af84bdf98ca7b710656f23d0ea0fdee16e87a5c57e1"
+    }
+  ]
+}

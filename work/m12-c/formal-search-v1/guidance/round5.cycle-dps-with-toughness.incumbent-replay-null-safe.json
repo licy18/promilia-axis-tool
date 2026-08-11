@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 8,
+    "maxDepth": 8,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "allowedActionKinds": ["normal-attack", "star-skill"],
+    "blockedActionKinds": ["dodge-attack", "plunging-attack"]
+  },
+  "kiboPolicy": { "blockedKiboIds": [] },
+  "switchPolicy": { "includeSwitch": false },
+  "waitPolicy": { "includeWait": true, "maxWaitFrames": null },
+  "heuristic": { "criticalPolicy": "expected", "seeds": null },
+  "outer": {
+    "maxSourceConfigs": 8,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 8,
+    "maxVariantSearches": 8,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 5,
+    "rationale": "Round-4 feedback 4fd050faee85a0e4a31be99db497aeecc832a4b4f9a4ec307a7ead2b258b4263 produced 8/8 closed candidates at 469.50721728, but independent verification rejected the 103002 shard because rubyAmmo:null was incorrectly coerced to an explicit zero-value persistent resource. Preserve the failed evidence, apply the tested null-safe objective preset materialization, and rerun all eight families so no failed candidate is treated as zero or retained in ranking."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 8,
+    "maxDepth": 8,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "allowedActionKinds": [
+      "normal-attack",
+      "star-skill"
+    ],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ],
+    "allowedPublicActionIds": [],
+    "blockedPublicActionIds": [],
+    "perOwner": {}
+  },
+  "kiboPolicy": {
+    "allowedKiboIds": [],
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": false
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "pruning": {
+    "earlyTerminationScore": null,
+    "aggressive": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 8,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 8,
+    "maxVariantSearches": 8,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 4,
+    "rationale": "Round-3 feedback e348dda9c2065ec144ad7d1e718271fbbe1d800f14056b99847ee8216cb027e4 independently reproduced the 430.81340599 closed-cycle incumbent with only 112001 star skill, six right-window A1 inputs, and a horizon wait. Rebind that exact raw schedule to the previously observed 1350211 ring refinement and evaluate it independently across eight stable 112001 source configs, preserving both STARBORN aliases as mutually exclusive raw identities. This is incumbent propagation, not semantic equivalence or an admissible-bound proof."
+  },
+  "guidanceHash": "cf2814058161cd9c97893b3b2d71d855940c39a68b82a3f3b6acc87ba2983d9f"
+}

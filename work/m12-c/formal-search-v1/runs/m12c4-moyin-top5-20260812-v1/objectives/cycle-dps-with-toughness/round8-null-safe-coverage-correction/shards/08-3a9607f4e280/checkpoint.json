@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round8-null-safe-coverage-correction",
+  "objective": "cycle-dps-with-toughness",
+  "shardId": "m12c-shard:39f2c67ff1614361ed567df1",
+  "attempt": 1,
+  "attemptHistory": [],
+  "status": "completed",
+  "exitStatus": "completed-with-results",
+  "startedAt": "2026-08-11T21:33:30.184Z",
+  "finishedAt": "2026-08-11T21:34:01.797Z",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "inputHash": "9cc53686f864063e25e9bdfe1c479aec5314584f54bc0885844bba8abe57b855",
+  "guidanceHash": "7944675fcbe43d3981da2a4cde434fd7d0c2ed9a934cf557d17b8ab3b564b99d",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "b373ddb067e604c0ecea6b8738e3bfb587a1d378487fa96bebc9b7c8b8560d35",
+  "serviceRequestHash": "b159acb7f1b2deb6",
+  "coverage": {
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+    "sourceConfigOrdinal": 8,
+    "sourceConfigCount": 8,
+    "initialFrontPolicy": "all-team-members",
+    "expectedInitialFrontCount": 3,
+    "processedVariantKeyCount": 3,
+    "processedVariantKeyChainHash": "83a1ac89c83839a6",
+    "plannedSourceConfigCount": 1,
+    "buildCount": 1,
+    "variantSearchCount": 3
+  },
+  "summary": {
+    "valid": true,
+    "resultCount": 1,
+    "failureCount": 2,
+    "wallTimeMs": 31224,
+    "candidatesEvaluated": 23,
+    "completedCandidates": 1
+  },
+  "artifacts": {
+    "resultPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round8-null-safe-coverage-correction/shards/08-3a9607f4e280/result.json",
+    "resultFileSha256": "bde3b73e8cbef7ee2079c4fd8ccd6a33e10b4df27385205717d4490b3f120cc7",
+    "resultCanonicalSha256": "5d45d4c204bfcffe6fb0d1d2fea37e344f9a21d157a6038d0a1943a68042fe58",
+    "resultBytes": 140959,
+    "feedbackPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-with-toughness/round8-null-safe-coverage-correction/shards/08-3a9607f4e280/feedback.json",
+    "feedbackFileSha256": "4e790f08dcc4c52e771fe2197970020e34724ad271c70de1ebe88080a3540fb4",
+    "feedbackCanonicalSha256": "3e04f90855e79f457fad0201187b4345b1f267d309aecf716fbc8ab82da7be3f",
+    "feedbackBytes": 2621
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-top5-index",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "finalizationHash": "134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154",
+  "cutoffScore": 66133.333333,
+  "cutoffTieCount": 3,
+  "rows": [
+    {
+      "rank": 1,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "41a4968f7d391842edc63427b0f9f3d793195324feff3ad89e0e55dc5f14ead1",
+        "objective": "fastest-kill",
+        "buildHash": "1c90d1c746a809f4",
+        "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "e9beccc21744a656f6e61f012fa2b3db42511071d0c562aa84707974755dacd9",
+        "inputHash": "7a915d63214f408f",
+        "traceHash": "bec2d3acbd7ce558"
+      },
+      "teamIdentity": "m12c-team-v1:107002+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "1c90d1c746a809f4",
+      "objectiveProofStatus": "killed",
+      "objectiveProofHash": "5d5595e3385cd83d",
+      "legalityProofHash": "3e06b198d765bcab",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-01.41a4968f7d39.machine-axis.json",
+      "axisFileSha256": "48ead8218430da88bf6340e579c682b01499fe533d440525c965705367438cb2",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-01.41a4968f7d39.candidate.json",
+      "candidateFileSha256": "a5b9b28dc2014b5e9ee464951f9f3be03fccd54136c96dffc70ebde0634cc458"
+    },
+    {
+      "rank": 2,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "743c597a1415e08fed9f708295317c7ec26e7d4f81660b5c7a08a869340e6410",
+        "objective": "fastest-kill",
+        "buildHash": "fceb8d26c3e68c1f",
+        "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "dc5f53ce30fa852fe1e9d1184f5c1ffaeb0236b11427373464895666ce6398b1",
+        "inputHash": "5a4f93c6f3a70b18",
+        "traceHash": "58a9ff9a267bdb60"
+      },
+      "teamIdentity": "m12c-team-v1:102001+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "fceb8d26c3e68c1f",
+      "objectiveProofStatus": "killed",
+      "objectiveProofHash": "66d2ddb0242d9a03",
+      "legalityProofHash": "a76d5891fc6b6a34",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-02.743c597a1415.machine-axis.json",
+      "axisFileSha256": "5316425a5f5b9de67941138a576a47b5c8f6084181f5369f77dc81300893e6f1",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-02.743c597a1415.candidate.json",
+      "candidateFileSha256": "39e1fd782ae3e0a61d36cd260919e39fce67f55d6550db342d9dd2089c08248f"
+    },
+    {
+      "rank": 3,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "7d0919ecba94f8d9b97753b5f47a29755b1a6b0f9b63f671a1d0670dcafbe47f",
+        "objective": "fastest-kill",
+        "buildHash": "37848158739122c6",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "aee1d86efa799c5b",
+        "traceHash": "01385c49efe5095c"
+      },
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "37848158739122c6",
+      "objectiveProofStatus": "killed",
+      "objectiveProofHash": "002703b4ef65ea89",
+      "legalityProofHash": "7ec9a567b3c0b898",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-03.7d0919ecba94.machine-axis.json",
+      "axisFileSha256": "340dff7faa8b8eb9fe658115eb8901ef96d1b9d563ebc4fe7e1843c0130d9a51",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-03.7d0919ecba94.candidate.json",
+      "candidateFileSha256": "be6bc9d00e797a066ca16d7aa1ab030f4491bdfa8e067e7311d6d5754dfc7ada"
+    },
+    {
+      "rank": 4,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "97bfa472d625d72b1f8d0d5fb25192cfd14f45224d84bf6375d76852b4353f0b",
+        "objective": "fastest-kill",
+        "buildHash": "7cf2ce3936b0ab40",
+        "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "77dd8c4266ac167f8f76641d7397e05a00a76216e9a5509b2b36e9691af5cd57",
+        "inputHash": "c9f4072a5c266c62",
+        "traceHash": "e63331a9f7dcb5b9"
+      },
+      "teamIdentity": "m12c-team-v1:109001+112001+STARBORN",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "7cf2ce3936b0ab40",
+      "objectiveProofStatus": "killed",
+      "objectiveProofHash": "bc2f6297f4d19b61",
+      "legalityProofHash": "2ee742513c20d6a0",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-04.97bfa472d625.machine-axis.json",
+      "axisFileSha256": "8294c9e69a5e06d7bfae8c9d63cc258a02bd538faeefe377a12509cb1b674782",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-04.97bfa472d625.candidate.json",
+      "candidateFileSha256": "59ce674fed66faf9bc12214a23bf811aace43f862cdc1944bbdcf29579a27efc"
+    },
+    {
+      "rank": 5,
+      "score": 66133.333333,
+      "rawIdentity": {
+        "schemaVersion": 1,
+        "kind": "azpr-m12c-raw-candidate-identity",
+        "identityHash": "d93f6770e69818312ac11338bce5406037593b7ce0ade416300f683c561d736f",
+        "objective": "fastest-kill",
+        "buildHash": "18d5368248d5537e",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:112001",
+          "optimizationObjectId": "112001",
+          "sourceCharacterId": 112001
+        },
+        "initialStatePresetHash": "11a3c677098ade0989825891067ace7a08a103bf4f1a19eb9c850a4fbd61e8c8",
+        "inputHash": "e2c4e74d2f904a94",
+        "traceHash": "cca0eb3a883242af"
+      },
+      "teamIdentity": "m12c-team-v1:107001+109001+112001",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "initialFront": {
+        "actorSlotId": "m12c-slot:112001",
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      },
+      "buildHash": "18d5368248d5537e",
+      "objectiveProofStatus": "killed",
+      "objectiveProofHash": "04ea7dd2e6d2ba53",
+      "legalityProofHash": "908dfc6f63a71ada",
+      "axisPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-05.d93f6770e698.machine-axis.json",
+      "axisFileSha256": "09b57bab5227e6b12315dc25127054c5ecb01612a304618d8073ff50aa9afdfc",
+      "candidatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/fastest-kill/finalizations/134a48ee991927504e2f206048e6fde764a5566f37485fa5fa78917201943154/top5/rank-05.d93f6770e698.candidate.json",
+      "candidateFileSha256": "15671445b8c17b71651b516211a6f4559176cc00ceb3dac2120660409c0a9e45"
+    }
+  ]
+}

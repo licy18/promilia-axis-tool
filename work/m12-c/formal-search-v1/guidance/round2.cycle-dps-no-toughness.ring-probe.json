@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 2,
+    "topN": 27,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 4,
+    "maxKiboActions": 2,
+    "maxWaitCandidates": 2,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": true
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 9,
+    "maxBuildsTotal": 9,
+    "maxVariantSearches": 27,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 2,
+    "rationale": "Round-1 feedback 2da55b60e54d3a522da789746037fd0917a64a6089e9e26ba389b785f2a400df found an eight-source exact cutoff boundary driven by 112001 front normal attack. Preserve the action budget and probe the deterministic first nine build variants, which vary the final actor ring domain, on one incumbent source before transferring any build constraint."
+  }
+}

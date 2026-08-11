@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-with-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 4,
+    "maxKiboActions": 2,
+    "maxWaitCandidates": 2,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": true,
+    "includeSwitch": true,
+    "includeNormalAttacks": true,
+    "includeWait": true
+  },
+  "actionFilters": {
+    "allowedActionKinds": [],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ],
+    "allowedPublicActionIds": [],
+    "blockedPublicActionIds": [],
+    "perOwner": {}
+  },
+  "kiboPolicy": {
+    "allowedKiboIds": [],
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": true
+  },
+  "waitPolicy": {
+    "includeWait": true,
+    "maxWaitFrames": null
+  },
+  "pruning": {
+    "earlyTerminationScore": null,
+    "aggressive": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 8,
+    "rationale": "After the valid three-round toughness terminal set, audit of the original coverage round found the same rubyAmmo:null coercion on eight 103002 source configs. Preserve the 27 unaffected shards and rerun only those eight configs under the null-safe cold-cycle preset; treat this as coverage correction and verify that it introduces no cutoff or family improvement."
+  },
+  "guidanceHash": "7944675fcbe43d3981da2a4cde434fd7d0c2ed9a934cf557d17b8ab3b564b99d"
+}

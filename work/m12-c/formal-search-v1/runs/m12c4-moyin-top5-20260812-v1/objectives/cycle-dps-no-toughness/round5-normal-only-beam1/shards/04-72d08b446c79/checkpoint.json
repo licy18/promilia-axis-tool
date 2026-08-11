@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round5-normal-only-beam1",
+  "objective": "cycle-dps-no-toughness",
+  "shardId": "m12c-shard:9a57022f8ef665a4fd4e47fd",
+  "attempt": 1,
+  "attemptHistory": [],
+  "status": "completed",
+  "exitStatus": "completed-with-results",
+  "startedAt": "2026-08-11T19:48:54.737Z",
+  "finishedAt": "2026-08-11T19:49:00.056Z",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "inputHash": "958be098d6d792b775ca86ff31dde8bef3db9f51d71e9b390dbd02732c17aa05",
+  "guidanceHash": "1bf7caafe98cd9e0d8c8025a0ca2cd56927ed65f927d5b59361ab95145bb4142",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "f0781bdcaaf27224",
+  "coverage": {
+    "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+    "sourceConfigOrdinal": 4,
+    "sourceConfigCount": 8,
+    "initialFrontPolicy": "all-team-members",
+    "expectedInitialFrontCount": 3,
+    "processedVariantKeyCount": 3,
+    "processedVariantKeyChainHash": "c781b67d31e5367b",
+    "plannedSourceConfigCount": 1,
+    "buildCount": 1,
+    "variantSearchCount": 3
+  },
+  "summary": {
+    "valid": true,
+    "resultCount": 2,
+    "failureCount": 1,
+    "wallTimeMs": 4528,
+    "candidatesEvaluated": 5,
+    "completedCandidates": 2
+  },
+  "artifacts": {
+    "resultPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round5-normal-only-beam1/shards/04-72d08b446c79/result.json",
+    "resultFileSha256": "287a77039b4636bd4507172f9a2fceac4bd976d0080631c7e426dc5609d39a56",
+    "resultCanonicalSha256": "2d5778f0665d8066d66d29fe898b36d66da312b5ee5955f2efcdec45ed88559c",
+    "resultBytes": 283312,
+    "feedbackPath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round5-normal-only-beam1/shards/04-72d08b446c79/feedback.json",
+    "feedbackFileSha256": "d0533cb85a6d4aad44d5f6dcb986ffd26060ef55a54083753c77345242feb358",
+    "feedbackCanonicalSha256": "639346c033bd220f005488743a5af80418e11764b843a2a158f0733cf5101652",
+    "feedbackBytes": 2635
+  }
+}

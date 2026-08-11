@@ -17,4 +17,7 @@ src/__tests__/scripts/gates/** text eol=lf
 src/domain/kiboAxisActionScopePolicy.js text eol=lf
 work/m12-c/gates/** text eol=lf
 work/m12-c/STATE.md text eol=lf
+
+# Formal-search evidence carries canonical byte hashes; never rewrite it on checkout.
+work/m12-c/formal-search-v1/** -text
 src/data/generated/verified-combat-mechanics-package.json filter=lfs diff=lfs merge=lfs -text

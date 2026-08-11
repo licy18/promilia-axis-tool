@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "layer": "inner",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 400,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": ["normal-attack"],
+    "blockedActionKinds": ["dodge-attack", "plunging-attack"]
+  },
+  "kiboPolicy": {"blockedKiboIds": []},
+  "switchPolicy": {"includeSwitch": false},
+  "waitPolicy": {"includeWait": false, "maxWaitFrames": null},
+  "heuristic": {"criticalPolicy": "expected", "seeds": null},
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 1,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 5,
+    "rationale": "Round-4 feedback 69e780e92e2b7038ca27640a7bd09706c1a2e2fc74f420cc983328833c7d63da found eight distinct legal killed candidates at the same first-lethal boundary: 221 Hero A1 inputs, frame 3968, 66133.333333ms, with 220 inputs nonlethal and longer target-dead prefixes rejected. Independently repeat every source shard with a different initial bracket of 32 actions; retain the same generator-derived cadence and fail-closed binary boundary contract."
+  }
+}

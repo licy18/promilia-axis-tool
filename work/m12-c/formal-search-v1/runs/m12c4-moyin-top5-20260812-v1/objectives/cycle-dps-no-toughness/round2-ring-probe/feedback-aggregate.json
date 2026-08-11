@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-ring-probe",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "cb30ad2ff03faf84f2ede752659b3dad2b80aa0a90cbc891f69933ebd928ff93",
+  "guidanceHashes": [
+    "2d96dd1f4137832f09bad26e2af810811e7ab4ae2d87b231e236fd451a4aebdd"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 1,
+    "completedSourceConfigCount": 1,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 1,
+    "feedbackSourceConfigCount": 1
+  },
+  "budgetUsage": {
+    "beamWidth": 2,
+    "candidatesEvaluated": 216,
+    "completedCandidates": 36,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 54,
+    "maxDepth": 1,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 27,
+    "topN": 27,
+    "wallTimeMs": 292135
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-breakable-toughness-required",
+      "count": 54
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 54
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 27
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 27
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 27,
+    "topNReady": true,
+    "topScore": 20797.9953003,
+    "cutoffScore": 19054.61995443,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1,
+    "topIdentityHashes": [
+      "73c3bbfb48aa7ac2c301547c9a005f348224a44db0194f29df830618142f5be8",
+      "4a67cf0233268ab664f7f1982b0193f6693d2ba2fae27ed7b3e2e6d0ec2f19a6",
+      "3a4a2f7789107bb610a6346aefac4e214c5f92c3be8af71ebf575e794804a349",
+      "0aecb0e8f82520f429d151ae00fd234cbf2fac3de9a8eeeb0436c92b8a4063b1",
+      "75cc08e3c61fc9ee3d73a94589423f49ba484d68d39c9445be9ab885f098751b"
+    ],
+    "cutoffTieIdentityHashes": []
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "a7689ed823af75ec399d422153431c346f642771cf102b63f6fa8510bf1cf640"
+    }
+  ],
+  "feedbackAggregateHash": "529be2e04e331f1acc9fa7b80c0c5cdc56d36de38ca2fa79bc9052cf28305c7c"
+}

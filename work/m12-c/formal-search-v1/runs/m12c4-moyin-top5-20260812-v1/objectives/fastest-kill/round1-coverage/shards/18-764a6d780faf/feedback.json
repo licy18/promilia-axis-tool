@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "protocolIdentity": "azpr-ai-guided-search:v1",
+  "generatedAt": "2026-08-11T18:37:41.043Z",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "budgetUsage": {
+    "beamWidth": 2,
+    "topN": 5,
+    "maxDepth": 2,
+    "steps": 6,
+    "wallTimeMs": 32048,
+    "candidatesEvaluated": 65,
+    "prunedCandidates": 0,
+    "mergedCandidates": 0,
+    "invalidCandidates": 19,
+    "completedCandidates": 0,
+    "formalSurfaceRejectedCandidates": 0
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 22
+    },
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 18
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 4
+    },
+    {
+      "code": "skill-cooldown-active",
+      "count": 4
+    },
+    {
+      "code": "actor-switch-exit-tail-order-unresolved",
+      "count": 4
+    },
+    {
+      "code": "machine-axis-action-duration-unresolved",
+      "count": 2
+    }
+  ],
+  "topResults": [],
+  "outer": {
+    "implemented": true,
+    "searchIntegrationImplemented": true,
+    "executionApplied": true,
+    "status": "m12-c4-outer-search-executed-partial",
+    "guidanceReserved": true,
+    "buildCount": 1,
+    "variantSearchCount": 3,
+    "enumerationComplete": false,
+    "formalRankingReady": false,
+    "note": "The authoritative M12-C pool is connected to bounded lazy build enumeration, all three initial-front variants, formal inner-axis search, and deterministic global Top-N aggregation. Partial budget runs remain explicitly non-formal until enumeration is exhaustive."
+  },
+  "recommendations": [],
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round1-coverage",
+    "shardId": "m12c-shard:24829fc7756c7efc4647256e",
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+    "inputHash": "a7db21a5936969cfa7d2bab6a7ea34c6e3e86923af9cb6ad9cb5dc1a8a608a29",
+    "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

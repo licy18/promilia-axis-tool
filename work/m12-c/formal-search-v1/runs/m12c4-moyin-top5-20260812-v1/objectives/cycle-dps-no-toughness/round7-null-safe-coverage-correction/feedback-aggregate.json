@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round7-null-safe-coverage-correction",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "3a3383c0b46f4cc6895bc62d1980f38ce027d4b6242161898d52b62f679a1889",
+  "guidanceHashes": [
+    "24e5ed268b6e1bba5ec54125c866cbb8fd11cbc224ad2befd21b9c2b2f2c01ad"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 8,
+    "completedSourceConfigCount": 8,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 8,
+    "feedbackSourceConfigCount": 8
+  },
+  "budgetUsage": {
+    "beamWidth": 16,
+    "candidatesEvaluated": 181,
+    "completedCandidates": 28,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 59,
+    "maxDepth": 8,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 24,
+    "topN": 40,
+    "wallTimeMs": 252666
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-breakable-toughness-required",
+      "count": 48
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 48
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 24
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 24
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 10
+    },
+    {
+      "code": "machine-axis-action-duration-unresolved",
+      "count": 1
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 28,
+    "topNReady": true,
+    "topScore": 19083.46928913,
+    "cutoffScore": 7833.47752582,
+    "cutoffTieCount": 4,
+    "topNFamilyCount": 4,
+    "topIdentityHashes": [
+      "d2e2d165cf82dbbfab0bafc0e6eefd31013c2367657cddcb364f98f91c5ee8c4",
+      "15765fbb08f0883ddc22ebe339d93ed6c0caad797ae6af00df70c7a85653aaeb",
+      "1c469318080a21a745fcf0e3dff6e898fc54cc04b8825b1fed17ce5eff0d765b",
+      "1dcd336ee117dcb44ae256f874e6aa3a4c4ea2f690e0f2d898bc3830445f65bc",
+      "832f9d2488aa1573dc840ade51a3842b90735fead6330b6c9d3af05a62286fa3"
+    ],
+    "cutoffTieIdentityHashes": [
+      "85d7185fff15158666c6f96408ac3faa96e64e2453cca1bc70225387850fb5d1",
+      "9682ce398edefda2755da34940d19fc45901424792c366b3f5148e4feaa4784a",
+      "ce944cf94e4c213ba76814d83762d61a7718c813a2de132ca30f2baf793ffa50",
+      "d970664da732d6ae1e645063e713874354f390c1de4d4c77115929f1eae05978"
+    ]
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-26e39bd0ca02",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+      "feedbackFileSha256": "95296673024065693f5c3bed92d3b1439883fbfc96a34426d97aff239075328d"
+    },
+    {
+      "shardName": "02-ccb9585bebd7",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+103002=103002+109001=109001",
+      "feedbackFileSha256": "319f5389f54cc06cc568b683d3e98985be4bea4dd48f46a505db546b0a75405f"
+    },
+    {
+      "shardName": "03-ae79bff50c2b",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+      "feedbackFileSha256": "c0f8c7c3d362c532aa8ada9bea5dfa8973ba473d107b128e42d414756eb059da"
+    },
+    {
+      "shardName": "04-df3bdabf4312",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107002=107002+109001=109001",
+      "feedbackFileSha256": "0427b81ba04ca50723dacd4fba07df8b93c9a0ce32bd6a749ec4ade955b992aa"
+    },
+    {
+      "shardName": "05-764a6d780faf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+      "feedbackFileSha256": "641cf9eeee23a526a381743edd84d995e8d5a51f78515dba7eab0c36f2f87b2b"
+    },
+    {
+      "shardName": "06-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "9677d207c194112ec31f8e2f5e01c193a709cd3253b72c19b124c3e08a81a22e"
+    },
+    {
+      "shardName": "07-349568e9da43",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199001",
+      "feedbackFileSha256": "b968e679ecc10e341c30d78539b7163837efec6457f1ae248b5f67476952d42e"
+    },
+    {
+      "shardName": "08-3a9607f4e280",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+      "feedbackFileSha256": "3846f7799970c787ad0d0b0a52bb439e1376a53335a5f01ba149f30147baabe8"
+    }
+  ],
+  "feedbackAggregateHash": "2f17a74146b5bab7b06e97084a2cb1715b5c12d951fa552e94553bdb2fdb5cf6"
+}

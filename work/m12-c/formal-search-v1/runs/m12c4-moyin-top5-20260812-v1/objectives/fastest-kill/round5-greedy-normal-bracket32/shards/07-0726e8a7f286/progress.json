@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-shard-progress",
+  "status": "completed-killed",
+  "inputHash": "775e365305184b042faa7775e9d1da91849719c7cca7f106adec2fd96d9446f0",
+  "guidanceHash": "155862dcb0b07c0d8b7ea1297515ee0fa06c7ccabf0c4e766ea64d171c18d77a",
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "orchestrationIdentityHash": "0aa6a0847e86ed06ea4d9b9350cdf2bb947e964f39c3d1d93a6ff9d8e2494bb0",
+  "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+  "buildHash": "7cf2ce3936b0ab40",
+  "initialFront": {
+    "actorSlotId": "m12c-slot:112001",
+    "optimizationObjectId": "112001",
+    "sourceCharacterId": 112001
+  },
+  "synthesisId": "azpr-m12c-greedy-normal-axis-synthesis-v1",
+  "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+  "cadenceFrames": 18,
+  "cadencePublicActionId": 11200101,
+  "validNotKilledLowerBound": 220,
+  "firstNonUnkilledUpperBound": 221,
+  "probes": [
+    {
+      "actionCount": 32,
+      "wallTimeMs": 392,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 1712426.48512,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "0adb28d976bb1a45",
+      "traceHash": "9e41c389adb0bb0b"
+    },
+    {
+      "actionCount": 64,
+      "wallTimeMs": 486,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 1412930.939712,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "de33aca2c6c65cac",
+      "traceHash": "6d70f5ef3a69241d"
+    },
+    {
+      "actionCount": 128,
+      "wallTimeMs": 740,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 845138.220936,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "cf60f2d5b25ad66b",
+      "traceHash": "ef6236e03da4a4be"
+    },
+    {
+      "actionCount": 192,
+      "wallTimeMs": 909,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 177510.711632,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "7bae813d02ffd522",
+      "traceHash": "0ecac4228df9a520"
+    },
+    {
+      "actionCount": 208,
+      "wallTimeMs": 1062,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 77680.334192,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "720e4bc0eeec538d",
+      "traceHash": "25e4941fc5eb4a94"
+    },
+    {
+      "actionCount": 216,
+      "wallTimeMs": 1100,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 27765.145472,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "e6d70b3be282ba5a",
+      "traceHash": "2ef5cca1b041a675"
+    },
+    {
+      "actionCount": 220,
+      "wallTimeMs": 1020,
+      "classification": {
+        "status": "valid-not-killed",
+        "killed": false,
+        "valid": true,
+        "formalScore": null,
+        "issueCodes": []
+      },
+      "enemyHp": 2807.551112,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "db9c64d07ae72754",
+      "traceHash": "25330e15abcb0683"
+    },
+    {
+      "actionCount": 221,
+      "wallTimeMs": 1092,
+      "classification": {
+        "status": "killed-valid",
+        "killed": true,
+        "valid": true,
+        "formalScore": 66133.333333,
+        "issueCodes": []
+      },
+      "enemyHp": 0,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "c9f4072a5c266c62",
+      "traceHash": "e63331a9f7dcb5b9"
+    },
+    {
+      "actionCount": 222,
+      "wallTimeMs": 982,
+      "classification": {
+        "status": "invalid-upper-bound",
+        "killed": null,
+        "valid": false,
+        "formalScore": null,
+        "issueCodes": [
+          "machine-axis-action-target-dead"
+        ]
+      },
+      "enemyHp": 0,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "a1ceb91d3f98ba11",
+      "traceHash": "f1b05fabcb004fe0"
+    },
+    {
+      "actionCount": 224,
+      "wallTimeMs": 1072,
+      "classification": {
+        "status": "invalid-upper-bound",
+        "killed": null,
+        "valid": false,
+        "formalScore": null,
+        "issueCodes": [
+          "machine-axis-action-target-dead"
+        ]
+      },
+      "enemyHp": 0,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "a5709eddd6441557",
+      "traceHash": "3db003402ef1265a"
+    },
+    {
+      "actionCount": 256,
+      "wallTimeMs": 1152,
+      "classification": {
+        "status": "invalid-upper-bound",
+        "killed": null,
+        "valid": false,
+        "formalScore": null,
+        "issueCodes": [
+          "machine-axis-action-target-dead"
+        ]
+      },
+      "enemyHp": 0,
+      "enemyMaxHp": 1912087.24,
+      "legalityPassed": true,
+      "inputHash": "9ffff0de3adea941",
+      "traceHash": "34036f5186624649"
+    }
+  ],
+  "updatedAt": "2026-08-11T20:40:12.575Z"
+}

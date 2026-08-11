@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "fastest-kill",
+  "layer": "inner",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 400,
+    "maxActionsPerOwner": 6,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": ["normal-attack"],
+    "blockedActionKinds": ["dodge-attack", "plunging-attack"]
+  },
+  "kiboPolicy": {"blockedKiboIds": []},
+  "switchPolicy": {"includeSwitch": false},
+  "waitPolicy": {"includeWait": false, "maxWaitFrames": null},
+  "heuristic": {"criticalPolicy": "expected", "seeds": null},
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 1,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 6,
+    "rationale": "Round-5 feedback f2e1a8a84c0febe9e22c429cb4694ed0bdc6ac144e3b02910f97a4a40d8fc56c reproduced every round-4 Top-5 and tie raw identity at 221 actions, frame 3968, and 66133.333333ms under a bracket-32 schedule; independent verification 32884adcc020db345d03dfad51adf7136ecc55d2280bdc84f8ff60112156e3b9 passed 8/8 with zero issues. Repeat with a bracket-64 schedule as the third terminal determinism round, retaining all fail-closed action legality and target-dead boundaries."
+  }
+}

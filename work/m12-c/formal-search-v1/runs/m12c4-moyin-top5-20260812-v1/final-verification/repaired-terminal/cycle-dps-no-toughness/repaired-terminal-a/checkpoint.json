@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-preset-repaired-terminal-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "objective": "cycle-dps-no-toughness",
+  "roundId": "repaired-terminal-a",
+  "status": "completed",
+  "exitStatus": "completed",
+  "aggregateHash": "2309a2ba3695796a5f66ffab0d191b8ead98ce97f5f187e26241d44b26d0078e",
+  "replacementProvenanceHash": "6d00e6ce55aed06c2e323e62579da69a3836ea86837122674b5327d0632a76ce",
+  "coverage": {
+    "expectedSourceConfigIdentities": [
+      "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+    ],
+    "completedSourceConfigIdentities": [
+      "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+    ],
+    "failedSourceConfigIdentities": [],
+    "inProgressSourceConfigIdentities": [],
+    "missingSourceConfigIdentities": []
+  },
+  "summary": {
+    "steps": 24,
+    "candidatesEvaluated": 45,
+    "invalidCandidates": 3,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "expandedCandidates": 24,
+    "completedCandidates": 17,
+    "formalSurfaceRejectedCandidates": 0,
+    "buildCount": 8,
+    "variantSearchCount": 24,
+    "candidateResultCount": 17,
+    "failureCount": 7,
+    "aggregateWallTimeMs": 44971,
+    "validDistinctCandidateCount": 17,
+    "invalidCandidateCount": 0,
+    "topNRequested": 5,
+    "topNReady": true,
+    "cutoffScore": 20797.9953003,
+    "cutoffTieCount": 3,
+    "topNFamilyCount": 5
+  },
+  "artifacts": {
+    "aggregatePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/final-verification/repaired-terminal/cycle-dps-no-toughness/repaired-terminal-a/aggregate.json",
+    "aggregateFileSha256": "89cac3bef56e5f980e5e19bd0863398babd804eaa541163aceb33eba9d35106e",
+    "provenancePath": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/final-verification/repaired-terminal/cycle-dps-no-toughness/repaired-terminal-a/replacement-provenance.json",
+    "provenanceFileSha256": "41518a36d768b7af7bd5fa85ba54bb6ef47ba711e5f7ec7136b3159b4b72bdeb"
+  },
+  "checkpointHash": "393195eea54fdf9b4e4958a53a5f064620665aab62bb207de6cb78259fa0c808"
+}

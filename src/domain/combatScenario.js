@@ -38,14 +38,33 @@ export function normalizeCombatScenario(value = null) {
         }),
     ...(value?.objectiveContract == null
       ? {}
-      : { objectiveContract: structuredClone(value.objectiveContract) }),
+      : {
+          objectiveContract: cloneCombatScenarioContract(
+            value.objectiveContract
+          ),
+        }),
     ...(value?.jointAttackRuntime == null
       ? {}
-      : { jointAttackRuntime: structuredClone(value.jointAttackRuntime) }),
+      : {
+          jointAttackRuntime: cloneCombatScenarioContract(
+            value.jointAttackRuntime
+          ),
+        }),
     ...(value?.target == null
       ? {}
       : { target: normalizeCombatTargetPolicy(value.target) }),
   };
+}
+
+function cloneCombatScenarioContract(value) {
+  try {
+    return structuredClone(value);
+  } catch (error) {
+    if (error?.name !== 'DataCloneError') {
+      throw error;
+    }
+    return JSON.parse(JSON.stringify(value));
+  }
 }
 
 export function normalizeCombatPickupPolicy(value = null) {

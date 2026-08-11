@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-manifest",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round2-ring-probe",
+  "iteration": 2,
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "roundConfigPath": "work/m12-c/formal-search-v1/config/round2.cycle-dps-no-toughness.ring-probe.json",
+  "roundConfigHash": "330ae30fed790455896b5ef01e2ebd31e5f08e5f33d2331c719f98c24dc16ddd",
+  "orchestratorId": "azpr-m12c-formal-shard-orchestrator-v1",
+  "orchestrationSourceHashes": {
+    "runRoundSha256": "58b8eefed5d2be9a700ed5833ba709285af8d3a90906937f01ac47269ae65705",
+    "artifactLibrarySha256": "dc2974a9fb828c7b474e43951155a70e0d1f0f1bc62f5517b8a077ce5d145127"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "contractTemplatePath": "work/m12-c/formal-search-v1/contracts/m12c-formal-search-template.json",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "guidancePath": "work/m12-c/formal-search-v1/guidance/round2.cycle-dps-no-toughness.ring-probe.json",
+  "guidanceHash": "2d96dd1f4137832f09bad26e2af810811e7ab4ae2d87b231e236fd451a4aebdd",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 2,
+    "rationale": "Round-1 feedback 2da55b60e54d3a522da789746037fd0917a64a6089e9e26ba389b785f2a400df found an eight-source exact cutoff boundary driven by 112001 front normal attack. Preserve the action budget and probe the deterministic first nine build variants, which vary the final actor ring domain, on one incumbent source before transferring any build constraint."
+  },
+  "previousFeedbackAggregate": {
+    "path": "work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/objectives/cycle-dps-no-toughness/round1-coverage/feedback-aggregate.json",
+    "feedbackAggregateHash": "2da55b60e54d3a522da789746037fd0917a64a6089e9e26ba389b785f2a400df",
+    "roundAggregateHash": "c0e92734f9c593ae520f59d51461e1a620bd6164b93da6022e4e499e3778c1d6"
+  },
+  "presetSpec": {
+    "presetId": "m12c-cycle-cold-zero-state-v1",
+    "actorSp": "zero",
+    "kiboSp": "zero",
+    "tuningMarks": [],
+    "rubyAmmo": null,
+    "policyNote": "Cold zero-state cycle baseline; no non-combat-persistent resource is optimized per candidate."
+  },
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "topN": 5,
+  "sourceConfigCount": 1,
+  "sourceConfigIdentities": [
+    "m12c-source-v1:107002=107002+109001=109001+112001=112001"
+  ],
+  "sourceConfigUniverseHash": "4878a1326c36f14dd98f9db2e448e8e0ecbaf3bd52a0f064c42ce96097ec8203",
+  "stopPolicy": {
+    "policyId": "m12c4-bounded-stop-v1",
+    "consecutiveStableTop5IdentityRounds": 3,
+    "cutoffRelativeImprovementThreshold": 0.0025,
+    "independentStrategyRequired": true,
+    "noNewTop5FamilyRequired": true,
+    "all35SourceConfigsMustHaveCompletedCoverageRound": true,
+    "optimalityProof": false
+  }
+}

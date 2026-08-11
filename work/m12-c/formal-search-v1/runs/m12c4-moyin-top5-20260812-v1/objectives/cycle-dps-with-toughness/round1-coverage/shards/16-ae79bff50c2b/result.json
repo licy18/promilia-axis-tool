@@ -1,0 +1,3783 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-result",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "shardId": "m12c-shard:224a2a05c32383c16a333dfc",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+    "teamIdentity": "m12c-team-v1:103002+107001+109001",
+    "optimizationObjectIds": [
+      "103002",
+      "107001",
+      "109001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "103002",
+        "sourceCharacterId": 103002
+      },
+      {
+        "optimizationObjectId": "107001",
+        "sourceCharacterId": 107001
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      }
+    ]
+  },
+  "inputHash": "dc841005922345b336daeb050518a6bb9c0ce5fbdc5a3c31ff7c46497fc8b30b",
+  "guidanceHash": "a8dc100b223e70c843bf95d372b7ddd43b49e4f6902bd475d9e79f59347cd14a",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "6c5b432d9b0af9de",
+  "serviceResult": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchReport",
+    "kind": "azpr-m12c-outer-search-report",
+    "valid": true,
+    "objective": "cycle-dps-with-toughness",
+    "objectiveContract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisObjectiveContract",
+      "objectiveId": "cycle-dps-with-toughness",
+      "classification": "primary",
+      "formalEligible": true,
+      "targetPolicy": {
+        "hpMode": "infinite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "disabled"
+      },
+      "scoring": {
+        "metric": "closed-cycle-hp-dps",
+        "direction": "maximize",
+        "damageBasis": "settled-post-defense-hp-damage",
+        "formula": "loopHpDamage / loopDurationSeconds",
+        "finalRankingEligibility": "accepted-loop-proof-only"
+      },
+      "proofRequirements": {
+        "loopBoundary": "strict-half-open-replayable-loop",
+        "actorBoundary": "non-degrading-and-next-loop-ready",
+        "enemyBoundary": "toughness-break-state-and-recovery-phase-closed",
+        "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+        "killRequired": false,
+        "enemyProfile": "resolved-defense-level-and-toughness-inputs"
+      },
+      "objectiveHash": "4b2fc336ea871db4"
+    },
+    "options": {
+      "beamWidth": 2,
+      "topN": 5,
+      "maxDepth": 1,
+      "maxActionsPerOwner": 4,
+      "maxKiboActions": 2,
+      "includeKibo": true,
+      "includeSwitch": true,
+      "includeNormalAttacks": true,
+      "includeWait": true,
+      "maxWaitCandidates": 2,
+      "objective": "cycle-dps-with-toughness",
+      "objectiveContract": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisObjectiveContract",
+        "objectiveId": "cycle-dps-with-toughness",
+        "classification": "primary",
+        "formalEligible": true,
+        "targetPolicy": {
+          "hpMode": "infinite",
+          "toughnessMode": "enabled",
+          "breakMode": "enabled",
+          "deathTruncation": "disabled"
+        },
+        "scoring": {
+          "metric": "closed-cycle-hp-dps",
+          "direction": "maximize",
+          "damageBasis": "settled-post-defense-hp-damage",
+          "formula": "loopHpDamage / loopDurationSeconds",
+          "finalRankingEligibility": "accepted-loop-proof-only"
+        },
+        "proofRequirements": {
+          "loopBoundary": "strict-half-open-replayable-loop",
+          "actorBoundary": "non-degrading-and-next-loop-ready",
+          "enemyBoundary": "toughness-break-state-and-recovery-phase-closed",
+          "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+          "killRequired": false,
+          "enemyProfile": "resolved-defense-level-and-toughness-inputs"
+        },
+        "objectiveHash": "4b2fc336ea871db4"
+      },
+      "allowUnverifiedRuntimeTiming": false,
+      "burstWindowMs": 10000,
+      "criticalPolicy": "expected",
+      "seeds": null,
+      "maxDamagePerMsBound": 10,
+      "jobs": 1
+    },
+    "outerOptions": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 1,
+      "maxVariantSearches": 3,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:103002=103002+107001=107001+109001=109001"
+      ]
+    },
+    "guidance": {
+      "guidanceHash": "a8dc100b223e70c843bf95d372b7ddd43b49e4f6902bd475d9e79f59347cd14a",
+      "guidanceVersion": "1.0.0",
+      "layer": "both"
+    },
+    "pool": {
+      "poolHash": "f9740b8fe17d178e",
+      "authority": {
+        "qualificationCatalogHash": "6476cfbe9e49fcd5",
+        "qualificationBindingMatrixHash": "2f38f4d3ef1a95ce",
+        "sourceSnapshotHash": "2960a288bde9f925",
+        "rosterHash": "8f79e3260a1bd756",
+        "manifestsHash": "e76c15a97197b559",
+        "gapLedgerHash": "2173684e22b4ad5c",
+        "fixedCultivationProfileHash": "22f28f1f4b5b0d90",
+        "formalAdmissionBindingHash": "86f1d0af5c870cb6",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58"
+      },
+      "summary": {
+        "teamCount": 28,
+        "sourceConfigCount": 35,
+        "kiboCount": 43,
+        "soulEssenceCount": 62,
+        "globalEquipmentQualifiedCount": 137,
+        "m12cEquipmentProjectionCount": 53,
+        "m12cEquipmentProjectionCountBySlot": {
+          "weapon": 17,
+          "top": 9,
+          "bottom": 9,
+          "earring": 9,
+          "ring": 9
+        },
+        "setSkillThresholdCount": 12
+      }
+    },
+    "summary": {
+      "steps": 3,
+      "candidatesEvaluated": 22,
+      "invalidCandidates": 8,
+      "mergedCandidates": 0,
+      "prunedCandidates": 0,
+      "expandedCandidates": 3,
+      "completedCandidates": 1,
+      "formalSurfaceRejectedCandidates": 0,
+      "rejectionCounts": {
+        "joint-attack-threshold-not-reached": 6,
+        "machine-axis-action-not-executable": 6,
+        "machine-axis-action-resource-insufficient": 3,
+        "machine-axis-normal-attack-input-missing": 2,
+        "verified-resource-cost-unavailable": 3
+      },
+      "objective": "cycle-dps-with-toughness",
+      "topN": 5,
+      "wallTimeMs": 30222,
+      "requestedSourceConfigCount": 1,
+      "selectedSourceConfigCount": 1,
+      "plannedSourceConfigCount": 1,
+      "buildCount": 1,
+      "variantSearchCount": 3,
+      "candidateResultCount": 1,
+      "topResultCount": 1,
+      "failureCount": 2,
+      "failureSampleCount": 2,
+      "failureSampleTruncated": false,
+      "buildBudgetExhausted": false,
+      "variantBudgetExhausted": false,
+      "enumerationComplete": false,
+      "fullPoolSourceConfigCoverage": false,
+      "fullPoolEnumerationComplete": false,
+      "buildConstraintsApplied": false,
+      "dynamicOuterPruningApplied": false,
+      "formalRankingReady": false,
+      "rankingStatus": "partial-bounded-not-formal-ranking",
+      "outerSearchIntegration": {
+        "implemented": true,
+        "poolBound": true,
+        "buildContractBound": true,
+        "allInitialFrontsBound": true,
+        "globalTopNBound": true
+      }
+    },
+    "plans": [
+      {
+        "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+        "planHash": "2d7bca6a11ebbd9f",
+        "estimatedBuildCount": "2319520678570039307530275",
+        "enumeratedBuildCount": 1,
+        "complete": false
+      }
+    ],
+    "failures": [
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+        "buildHash": "de4e22a59e613f44",
+        "variantKey": "m12c-variant:49dfff9015ecab01",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:107001",
+          "optimizationObjectId": "107001",
+          "sourceCharacterId": 107001
+        },
+        "issues": [
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-not-executable",
+          "machine-axis-action-resource-insufficient",
+          "machine-axis-cycle-second-replay-not-runnable",
+          "machine-axis-cycle-state-not-closed",
+          "machine-axis-normal-attack-input-missing",
+          "verified-resource-cost-unavailable"
+        ]
+      },
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+        "buildHash": "de4e22a59e613f44",
+        "variantKey": "m12c-variant:224e79481ac566e3",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:109001",
+          "optimizationObjectId": "109001",
+          "sourceCharacterId": 109001
+        },
+        "issues": [
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-not-executable",
+          "machine-axis-action-resource-insufficient",
+          "machine-axis-cycle-second-replay-not-runnable",
+          "machine-axis-cycle-state-not-closed",
+          "verified-resource-cost-unavailable"
+        ]
+      }
+    ],
+    "failureSummary": {
+      "joint-attack-threshold-not-reached": 2,
+      "machine-axis-action-not-executable": 2,
+      "machine-axis-action-resource-insufficient": 2,
+      "machine-axis-cycle-second-replay-not-runnable": 2,
+      "machine-axis-cycle-state-not-closed": 2,
+      "machine-axis-normal-attack-input-missing": 1,
+      "verified-resource-cost-unavailable": 2
+    },
+    "issues": [
+      "joint-attack-threshold-not-reached",
+      "machine-axis-action-not-executable",
+      "machine-axis-action-resource-insufficient",
+      "machine-axis-cycle-second-replay-not-runnable",
+      "machine-axis-cycle-state-not-closed",
+      "machine-axis-normal-attack-input-missing",
+      "verified-resource-cost-unavailable"
+    ],
+    "executionLedger": {
+      "poolHash": "f9740b8fe17d178e",
+      "processedVariantKeyCount": 3,
+      "processedVariantKeyChainHash": "a0920e5ac00cf536",
+      "processedVariantKeys": [
+        "m12c-variant:224e79481ac566e3",
+        "m12c-variant:49dfff9015ecab01",
+        "m12c-variant:ef6d137342c610e2"
+      ],
+      "processedVariantKeysTruncated": false
+    },
+    "results": [
+      {
+        "rank": 1,
+        "teamCandidateId": "m12c-variant:ef6d137342c610e2",
+        "score": 0,
+        "scoreDirection": "maximize",
+        "finalScoreEligible": true,
+        "heuristic": {
+          "value": 0,
+          "finalScore": false,
+          "purpose": "beam-expansion-only"
+        },
+        "deltaVsRank1": 0,
+        "team": [
+          {
+            "slotId": "m12c-slot:103002",
+            "characterId": 103002,
+            "level": 80,
+            "initialSp": 0,
+            "kiboId": 500001
+          },
+          {
+            "slotId": "m12c-slot:107001",
+            "characterId": 107001,
+            "level": 80,
+            "initialSp": 0,
+            "kiboId": 500001
+          },
+          {
+            "slotId": "m12c-slot:109001",
+            "characterId": 109001,
+            "level": 80,
+            "initialSp": 0,
+            "kiboId": 500001
+          }
+        ],
+        "axis": {
+          "schemaVersion": 1,
+          "contractName": "AzPrMachineAxis",
+          "kind": "azpr-machine-axis",
+          "dataIdentity": {
+            "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+            "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+            "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+            "mechanicsProfileVersion": "1"
+          },
+          "scenario": {
+            "id": "m12c-cycle-dps-with-toughness-de4e22a59e613f44-103002-empty",
+            "name": "M12-C cycle-dps-with-toughness de4e22a59e613f44 front 103002 (empty) + search-action-1",
+            "fps": 60,
+            "durationFrames": 7200,
+            "team": [
+              {
+                "slotId": "m12c-slot:103002",
+                "characterId": 103002,
+                "level": 80,
+                "initialSp": 0,
+                "loadout": {
+                  "kiboId": 500001,
+                  "soulessenceId": 10034,
+                  "equipment": {
+                    "weapon": 1310011,
+                    "top": 1320011,
+                    "bottom": 1330011,
+                    "earring": 1340011,
+                    "ring": 1350011
+                  }
+                },
+                "cultivation": {}
+              },
+              {
+                "slotId": "m12c-slot:107001",
+                "characterId": 107001,
+                "level": 80,
+                "initialSp": 0,
+                "loadout": {
+                  "kiboId": 500001,
+                  "soulessenceId": 10002,
+                  "equipment": {
+                    "weapon": 1310011,
+                    "top": 1320011,
+                    "bottom": 1330011,
+                    "earring": 1340011,
+                    "ring": 1350011
+                  }
+                },
+                "cultivation": {}
+              },
+              {
+                "slotId": "m12c-slot:109001",
+                "characterId": 109001,
+                "level": 80,
+                "initialSp": 0,
+                "loadout": {
+                  "kiboId": 500001,
+                  "soulessenceId": 10034,
+                  "equipment": {
+                    "weapon": 1310011,
+                    "top": 1320011,
+                    "bottom": 1330011,
+                    "earring": 1340011,
+                    "ring": 1350011
+                  }
+                },
+                "cultivation": {}
+              }
+            ],
+            "enemy": {
+              "enemyId": 310054,
+              "level": 80,
+              "hpMultiplier": 1,
+              "defenseMultiplier": 1,
+              "toughnessMultiplier": 1,
+              "initialToughnessRatio": 1,
+              "elementDefenseOverrides": {},
+              "profile": {
+                "schemaVersion": 1,
+                "contractName": "AzPrEnemyProfile",
+                "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                "profileHash": "cb1edcc277fcda5b",
+                "enemyId": 310054,
+                "level": 80,
+                "source": {
+                  "status": "authoritative-resolved",
+                  "kind": "enemy-level-and-break-profile-pipeline",
+                  "identity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]",
+                  "hash": "6e449b5502e76e59"
+                },
+                "attributes": {
+                  "maxHp": 1912087.24,
+                  "physicalDefense": 990,
+                  "magicalDefense": 990,
+                  "maxToughness": 469608,
+                  "elementDefenses": {
+                    "DARK_DEFENSE": 0,
+                    "EARTH_DEFENSE": 0,
+                    "ELEC_DEFENSE": 0,
+                    "FIRE_DEFENSE": 0,
+                    "ICE_DEFENSE": 0,
+                    "LIGHT_DEFENSE": 0,
+                    "NORMAL_DEFENSE": 0,
+                    "WATER_DEFENSE": 0,
+                    "WIND_DEFENSE": 0,
+                    "WOOD_DEFENSE": 0
+                  }
+                },
+                "breakRules": {
+                  "recoveryDelayMs": 60000,
+                  "recoveryRateBasisPoints": 1000,
+                  "breakTimeMs": 11000,
+                  "breakEndTimeMs": 2000,
+                  "breakDamageUpBasisPoints": 10000,
+                  "weaknessDamageMaximum": -1,
+                  "weaknessDamageMinimum": -1,
+                  "typeMultipliersBasisPoints": {
+                    "heal": 10000,
+                    "magic": 10000,
+                    "physical": 10000
+                  },
+                  "elementMultipliersBasisPoints": {
+                    "0": 10000,
+                    "1": 10000,
+                    "2": 10000,
+                    "3": 10000,
+                    "4": 10000,
+                    "5": 10000,
+                    "6": 10000,
+                    "7": 10000,
+                    "8": 10000,
+                    "9": 10000
+                  }
+                }
+              }
+            },
+            "initialRuntimeState": {
+              "controlledActor": {
+                "actorId": "actor-103002",
+                "characterId": 103002
+              },
+              "kiboEnergyBySlot": [
+                {
+                  "slotId": "m12c-slot:103002",
+                  "actorId": "actor-103002",
+                  "characterId": 103002,
+                  "kiboId": 500001,
+                  "currentValue": 0,
+                  "maxValue": 100
+                },
+                {
+                  "slotId": "m12c-slot:107001",
+                  "actorId": "actor-107001",
+                  "characterId": 107001,
+                  "kiboId": 500001,
+                  "currentValue": 0,
+                  "maxValue": 100
+                },
+                {
+                  "slotId": "m12c-slot:109001",
+                  "actorId": "actor-109001",
+                  "characterId": 109001,
+                  "kiboId": 500001,
+                  "currentValue": 0,
+                  "maxValue": 100
+                }
+              ],
+              "tuningMarks": [],
+              "specialResourcesByActor": [
+                {
+                  "actorId": "actor-103002",
+                  "characterId": 103002,
+                  "resourceIdentity": "actor:103002:element:103002047",
+                  "currentValue": 0,
+                  "maxValue": 12,
+                  "inputStep": 1,
+                  "scenarioConfigurable": true,
+                  "activeStates": []
+                }
+              ]
+            },
+            "initialStatePreset": {
+              "schemaVersion": 1,
+              "contractName": "AzPrM12CInitialStatePreset",
+              "policyId": "m12c-initial-state-v1",
+              "policyVersion": "1.0.0",
+              "policyHash": "d73197058df0f0de30dc6a480a4d768001b674f0ef111b6abd21ec6d540761cf",
+              "presetId": "m12c-cycle-cold-zero-state-v1",
+              "objectiveId": "cycle-dps-with-toughness",
+              "objectiveScope": "cycle",
+              "mechanicsPackageId": "azpr-tc-2026-07-18",
+              "mechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+              "presetHash": "91121a6659af66495ca1bfebc916ceec2a55df54e050f18a120b0ddf7f11d2e3"
+            },
+            "projectile": {
+              "targetDistance": 0,
+              "defaultWillHit": true
+            },
+            "critical": {
+              "policy": "expected",
+              "seed": null
+            },
+            "optimizationScenarioPolicy": {
+              "policyId": "m12c-zero-distance-passive-boss-v1",
+              "policyHash": "967b0667f315db5b",
+              "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+              "rosterHash": "a690b860f0967e3d"
+            },
+            "objectiveContract": {
+              "schemaVersion": 1,
+              "contractName": "AzPrMachineAxisObjectiveContract",
+              "objectiveId": "cycle-dps-with-toughness",
+              "classification": "primary",
+              "formalEligible": true,
+              "targetPolicy": {
+                "hpMode": "infinite",
+                "toughnessMode": "enabled",
+                "breakMode": "enabled",
+                "deathTruncation": "disabled"
+              },
+              "scoring": {
+                "metric": "closed-cycle-hp-dps",
+                "direction": "maximize",
+                "damageBasis": "settled-post-defense-hp-damage",
+                "formula": "loopHpDamage / loopDurationSeconds",
+                "finalRankingEligibility": "accepted-loop-proof-only"
+              },
+              "proofRequirements": {
+                "loopBoundary": "strict-half-open-replayable-loop",
+                "actorBoundary": "non-degrading-and-next-loop-ready",
+                "enemyBoundary": "toughness-break-state-and-recovery-phase-closed",
+                "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+                "killRequired": false,
+                "enemyProfile": "resolved-defense-level-and-toughness-inputs"
+              },
+              "objectiveHash": "4b2fc336ea871db4"
+            },
+            "jointAttackRuntime": {
+              "schemaVersion": 1,
+              "contractName": "AzPrVerifiedJointAttackRuntimeAssumption",
+              "contractId": "m12-joint-attack-runtime-v1",
+              "formalReady": true,
+              "clientParityReady": false,
+              "semantics": {
+                "releaseAuthority": "explicit-player-input-only-not-automatic-release",
+                "foregroundAuthority": "current-controlled-actor-and-current-equipped-live-kibo",
+                "kiboIdentity": "verified-break-skill-list-and-skill-tag-15-pet-joint-strike-skill",
+                "thresholdFormula": "maxWeaknessPoint*WP_BREAK_TOUGH/10000*kibo.WP_BREAK_PERCENT/10000",
+                "thresholdBoundary": "current-weakness-point-strictly-less-than-threshold",
+                "triggerTiming": "first-source-ordered-cursor-where-all-known-conditions-pass",
+                "pairAtomicity": "actor-star-combo-and-equipped-kibo-joint-strike-commit-or-rollback-together",
+                "attachedToughnessAnchor": "first-source-ordered-verified-kibo-joint-strike-landed-hit-derived-from-mapping-and-hit-identity",
+                "jointDamageBreakState": "pair-hp-packets-at-kibo-anchor-frame-settle-before-attached-clear-then-later-packets-read-canonical-state",
+                "attachedToughnessEffect": "after-anchor-frame-pair-hp-packets-clear-current-toughness-once",
+                "breakTransition": "enter-break-once-after-attached-toughness-clear-if-not-already-broken",
+                "subsequentPacketVisibility": "only-source-ordered-packets-after-attached-clear-observe-new-break"
+              },
+              "fallbackPolicy": {
+                "missingCannotBeJointStrike": "assume-no-service-exclusion",
+                "missingControlledEntityGate": "assume-open-after-known-input-and-fsm-gates",
+                "explicitCannotBeJointStrikeTrue": "reject",
+                "explicitControlledEntityGateFalse": "reject",
+                "futureClientConflict": "bump-contract-version-and-recompute-all-affected-hashes-and-scores"
+              },
+              "thresholdInputs": {
+                "enemyWpBreakToughBasisPoints": 10000,
+                "sourceStatus": "verified-current-client-catalog-invariant",
+                "sourceIdentity": "generated/enemies.items[*].property.baseAttributes[key=WP_BREAK_TOUGH]",
+                "sourceInvariant": "all-current-nonmissing-WP_BREAK_TOUGH-values-equal-10000"
+              },
+              "evidence": {
+                "resolutionStatus": "resolved-by-product-assumption",
+                "clientParityStatus": "not-claimed",
+                "sourceLedger": [
+                  "PreWeakBreakSystem.OnUpdateDeltaTime@0x13FB720",
+                  "PreWeakBreakSystem.UpdatePreBreakThreshold@0x13FCB20",
+                  "NewTable/element_formula.rows[id=223].functionOutput",
+                  "NewTable/battle_info.rows[attrID=WP_BREAK_TOUGH]",
+                  "NewTable/battle_info.rows[attrID=WP_BREAK_PERCENT]",
+                  "NewTable/pet.breakSkillList",
+                  "verified-control-binding:skillTag=15/PetJointStrikeSkill",
+                  "verified-kibo-joint-strike-action-mapping-and-hit-identity"
+                ],
+                "resolvedByProductAssumption": [
+                  "controlled-entity-offset-0x40-field-identity",
+                  "service-cannot-be-joint-strike-set-runtime-input",
+                  "joint-strike-post-cast-effect-chain",
+                  "server-authoritative-weakness-point-clear"
+                ],
+                "leavesOpen": [
+                  "client-server-parity-for-product-fallback-gates",
+                  "client-server-parity-for-kibo-hit-anchored-post-damage-toughness-clear-order"
+                ]
+              },
+              "contractHash": "9fe09a5ab27781f2",
+              "runtimeInputs": {
+                "forceBreak": false,
+                "cannotBeJointStrike": null,
+                "controlledEntityGate": null,
+                "enemyRage": false,
+                "distanceEligible": true,
+                "heightEligible": true,
+                "connectivityEligible": true,
+                "actorConflict": false,
+                "kiboConflict": false
+              },
+              "bindingHash": "daededcff4c88b3b"
+            },
+            "optimizationQualification": {
+              "mode": "formal",
+              "catalogHash": "6476cfbe9e49fcd5"
+            },
+            "cultivationProfile": {
+              "schemaVersion": 1,
+              "contractName": "AzPrOptimizationCultivationProfile",
+              "profileId": "m12c-outer-build:de4e22a59e613f44",
+              "actors": [
+                {
+                  "slotId": "m12c-slot:103002",
+                  "character": {
+                    "level": 80,
+                    "starGiftRank": 7,
+                    "starGiftNodeIds": [
+                      76,
+                      65,
+                      66,
+                      68,
+                      87
+                    ]
+                  },
+                  "kibo": {
+                    "level": 80,
+                    "talents": [
+                      {
+                        "attributeId": 1,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 3,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 4,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 5,
+                        "level": 10
+                      }
+                    ],
+                    "dnaFactors": [],
+                    "bondLevel": 1
+                  },
+                  "soulEssence": {
+                    "level": 80,
+                    "rank": 6,
+                    "star": 1
+                  },
+                  "equipment": {
+                    "weapon": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "top": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "bottom": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "earring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "ring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    }
+                  }
+                },
+                {
+                  "slotId": "m12c-slot:107001",
+                  "character": {
+                    "level": 80,
+                    "starGiftRank": 7,
+                    "starGiftNodeIds": [
+                      73,
+                      67,
+                      68,
+                      66,
+                      88
+                    ]
+                  },
+                  "kibo": {
+                    "level": 80,
+                    "talents": [
+                      {
+                        "attributeId": 1,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 3,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 4,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 5,
+                        "level": 10
+                      }
+                    ],
+                    "dnaFactors": [],
+                    "bondLevel": 1
+                  },
+                  "soulEssence": {
+                    "level": 80,
+                    "rank": 6,
+                    "star": 1
+                  },
+                  "equipment": {
+                    "weapon": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "top": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "bottom": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "earring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "ring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    }
+                  }
+                },
+                {
+                  "slotId": "m12c-slot:109001",
+                  "character": {
+                    "level": 80,
+                    "starGiftRank": 7,
+                    "starGiftNodeIds": [
+                      65,
+                      71,
+                      74,
+                      68,
+                      87
+                    ]
+                  },
+                  "kibo": {
+                    "level": 80,
+                    "talents": [
+                      {
+                        "attributeId": 1,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 3,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 4,
+                        "level": 10
+                      },
+                      {
+                        "attributeId": 5,
+                        "level": 10
+                      }
+                    ],
+                    "dnaFactors": [],
+                    "bondLevel": 1
+                  },
+                  "soulEssence": {
+                    "level": 80,
+                    "rank": 6,
+                    "star": 1
+                  },
+                  "equipment": {
+                    "weapon": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "top": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "bottom": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "earring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    },
+                    "ring": {
+                      "rarity": 4,
+                      "enhancementLevel": 9,
+                      "tuningScore": 110,
+                      "instanceTier": "starborn",
+                      "maxValue": 110
+                    }
+                  }
+                }
+              ]
+            },
+            "target": {
+              "hpMode": "infinite",
+              "toughnessMode": "enabled",
+              "breakMode": "enabled",
+              "deathTruncation": "disabled"
+            }
+          },
+          "actions": [
+            {
+              "id": "search-action-1",
+              "owner": {
+                "kind": "actor",
+                "slotId": "m12c-slot:103002"
+              },
+              "schedule": {
+                "mode": "absolute",
+                "frame": 0,
+                "offsetFrames": 0
+              },
+              "note": "machine-axis-search-generated",
+              "intent": {
+                "kind": "public-action",
+                "publicActionId": 10300201,
+                "actionKind": "charged-attack",
+                "level": 1
+              }
+            }
+          ],
+          "metadata": {
+            "purpose": "M12-C formal AI-guided heuristic Top-5 shard template",
+            "authorityHead": "baeb03489aa823d59981d60255af5b418aa48178",
+            "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+            "rankingClaim": "AI-guided heuristic Top-N",
+            "formalRankingReady": false,
+            "clientParityReady": false,
+            "m12c": {
+              "poolHash": "f9740b8fe17d178e",
+              "buildHash": "de4e22a59e613f44",
+              "teamIdentity": "m12c-team-v1:103002+107001+109001",
+              "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+              "initialFront": {
+                "actorSlotId": "m12c-slot:103002",
+                "optimizationObjectId": "103002",
+                "sourceCharacterId": 103002
+              }
+            }
+          }
+        },
+        "hashes": {
+          "algorithm": "fnv1a64-utf8-v1",
+          "input": "6922c55ce098a954",
+          "data": "3fd287fa40a4e5c8",
+          "trace": "73fbce6f93c96e30",
+          "evaluation": "5a35bd24a4378fd0",
+          "build": "d490890e1ab8f2d4"
+        },
+        "legality": {
+          "valid": true,
+          "issues": [],
+          "warnings": [],
+          "classification": {
+            "schemaStatus": "schema-valid",
+            "runnabilityStatus": "runnable",
+            "evidenceStatus": "evidence-closed"
+          },
+          "invalidActionCount": 0,
+          "proof": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisActionLegalityProof",
+            "status": "axis-action-legality-passed",
+            "passed": true,
+            "finalScoreEligible": true,
+            "objectiveId": "cycle-dps-with-toughness",
+            "actionCount": 1,
+            "skippedActionCount": 0,
+            "unresolvedActionCount": 0,
+            "rejectionCodes": [],
+            "rejectionCounts": {},
+            "rejectionCountsByCategory": {},
+            "issues": [],
+            "minimalCounterexamples": [],
+            "hashBindings": {
+              "input": "6922c55ce098a954",
+              "data": "3fd287fa40a4e5c8",
+              "trace": "73fbce6f93c96e30",
+              "build": "d490890e1ab8f2d4"
+            },
+            "proofHash": "35aa691f96312e6c"
+          }
+        },
+        "criticalPolicy": {
+          "policy": "expected",
+          "seed": null
+        },
+        "sampling": null,
+        "objectiveProof": {
+          "schemaVersion": 1,
+          "contractName": "AzPrMachineAxisCycleDps",
+          "kind": "azpr-machine-axis-cycle-dps-evaluation",
+          "valid": true,
+          "status": "closed",
+          "issues": [],
+          "warnings": [
+            {
+              "severity": "warning",
+              "code": "machine-axis-enemy-settlement-client-parity-pending",
+              "path": "runtime.enemySettlementTiming.clientParity",
+              "message": "Formal scoring currently follows the versioned headless runtime baseline; controlled client capture remains pending and a differing future contract invalidates affected scores for recomputation",
+              "contractId": "m12-enemy-settlement-runtime-v2",
+              "contractHash": "2e3095db4b8c9232"
+            }
+          ],
+          "objectiveContract": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisObjectiveContract",
+            "objectiveId": "cycle-dps-with-toughness",
+            "classification": "primary",
+            "formalEligible": true,
+            "targetPolicy": {
+              "hpMode": "infinite",
+              "toughnessMode": "enabled",
+              "breakMode": "enabled",
+              "deathTruncation": "disabled"
+            },
+            "scoring": {
+              "metric": "closed-cycle-hp-dps",
+              "direction": "maximize",
+              "damageBasis": "settled-post-defense-hp-damage",
+              "formula": "loopHpDamage / loopDurationSeconds",
+              "finalRankingEligibility": "accepted-loop-proof-only"
+            },
+            "proofRequirements": {
+              "loopBoundary": "strict-half-open-replayable-loop",
+              "actorBoundary": "non-degrading-and-next-loop-ready",
+              "enemyBoundary": "toughness-break-state-and-recovery-phase-closed",
+              "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+              "killRequired": false,
+              "enemyProfile": "resolved-defense-level-and-toughness-inputs"
+            },
+            "objectiveHash": "4b2fc336ea871db4"
+          },
+          "enemySettlementTiming": {
+            "schemaVersion": 2,
+            "contractName": "AzPrMachineAxisEnemySettlementTiming",
+            "contractId": "m12-enemy-settlement-runtime-v2",
+            "semantics": {
+              "breakingPacketHpDamagePhase": "pre-break",
+              "breakActivation": "after-breaking-packet-toughness-settlement",
+              "subsequentSameFramePacket": "post-break-by-canonical-source-sequence",
+              "breakIntervalEnd": "right-open",
+              "sameFrameStateOrder": "weakness-state-tick-before-combat-hit",
+              "toughnessAdvanceResolution": "fixed-100ms-runtime-tick",
+              "finiteDeathTruncation": "stop-enemy-hp-and-toughness-settlement-after-first-lethal-packet",
+              "formalScenarioExecutionPath": "local-controlled",
+              "fastestKillScoreBoundary": "first-lethal-settlement-cursor-inclusive-tail-non-scoring"
+            },
+            "formalScoring": {
+              "formalReady": true,
+              "formalStatus": "formal-score-ready-runtime-baseline",
+              "scoreAuthority": "formal-for-current-runtime-contract",
+              "scoreBasis": "product-approved-versioned-headless-runtime-semantics",
+              "clientParityStatus": "controlled-capture-pending-nonblocking",
+              "clientParityRequiredForCurrentFormalScore": false,
+              "replacementPolicy": "new-client-evidence-contract-version-invalidates-and-recomputes-affected-scores"
+            },
+            "evidence": {
+              "evidenceStatus": "client-static-partial-controlled-capture-required",
+              "clientParityReady": false,
+              "pendingCode": "machine-axis-enemy-settlement-client-parity-pending",
+              "clientStaticFindings": {
+                "breakingPacketHpMultiplierRead": "pre-break-state",
+                "packetInternalSettlementOrder": "weakness-point-change-dispatch-before-change-hp",
+                "breakDamageUpSource": "authoritative-profile-battle-property-221-wp-break-dmgup",
+                "ordinaryAndRealDamageBreakMultiplier": "profile-property-applied",
+                "pureToughnessBreakMultiplier": "not-applied-and-gated-while-broken",
+                "localControlledTimerAdvance": "per-update-delta-time",
+                "localControlledBreakEnd": "right-open-greater-than-or-equal-transition",
+                "remoteControlledUpdate": "performance-mirroring-only"
+              },
+              "leavesOpen": [
+                "same-frame-damage-element-queue-order-and-immediate-weak-state-visibility",
+                "break-end-state-update-versus-hit-order-in-the-same-client-frame",
+                "finite-hp-lethal-packet-and-post-death-tail-packet-disposition",
+                "authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario"
+              ],
+              "scoreSensitiveLeavesOpen": [
+                "same-frame-damage-element-queue-order-and-immediate-weak-state-visibility",
+                "break-end-state-update-versus-hit-order-in-the-same-client-frame"
+              ],
+              "nonBlockingLeavesOpen": [
+                "finite-hp-lethal-packet-and-post-death-tail-packet-disposition",
+                "authoritative-local-versus-remote-network-path-for-the-zero-distance-passive-boss-scenario"
+              ],
+              "sources": [
+                {
+                  "kind": "client-static-evidence-report",
+                  "identity": "reports/m12/m12-b3-enemy-toughness-settlement-evidence-20260808.json",
+                  "bytes": 19799,
+                  "sha256": "4999f4201c92f7e281bd4dbc3bfb8e84fb8573c68c688eaf295ee3fdcec13bfb",
+                  "reportHash": "a54468f259bb2e4d1ad0e8981048a72855add385f2417a5488d8f135a991bd5d",
+                  "closes": [
+                    "single-packet-break-multiplier-order",
+                    "break-damage-up-property-source-and-route-scope",
+                    "local-controlled-timer-state-machine",
+                    "remote-controlled-performance-only-path"
+                  ]
+                },
+                {
+                  "kind": "controlled-capture-manifest",
+                  "identity": "src/data/generated/runtime-capture-hook-manifest.json",
+                  "manifestId": "azpr-tc-20260709-three-value-runtime-capture-v3",
+                  "bytes": 30088,
+                  "sha256": "3724588d3c94f620095820181ddf008f10896963d9663590d9818b92d8587ea4",
+                  "captureStatus": "not-captured"
+                },
+                {
+                  "kind": "runtime-implementation",
+                  "identity": "src/simulation/mechanics/verifiedCombatRuntime.js#applyHitDescriptor",
+                  "closes": [
+                    "breaking-packet-pre-break-runtime-behavior",
+                    "same-frame-source-sequence-runtime-behavior"
+                  ]
+                },
+                {
+                  "kind": "runtime-implementation",
+                  "identity": "src/simulation/mechanics/verifiedCombatRuntime.js#applyWeaknessStateDescriptor",
+                  "closes": [
+                    "right-open-break-end-runtime-behavior",
+                    "state-tick-before-hit-runtime-behavior"
+                  ]
+                },
+                {
+                  "kind": "reverse-engineered-profile-values",
+                  "identity": "reports/verified-combat-mechanics-audit.json#combat-enemy-break-profiles",
+                  "closes": [
+                    "recovery-delay-value",
+                    "recovery-rate-value",
+                    "break-time-value",
+                    "break-end-time-value",
+                    "break-damage-up-value"
+                  ],
+                  "leavesOpen": [
+                    "native-breaking-packet-hp-multiplier-order",
+                    "native-break-end-frame-order"
+                  ]
+                }
+              ]
+            },
+            "contractHash": "2e3095db4b8c9232"
+          },
+          "assumptions": {
+            "enemyHp": "infinite",
+            "toughness": "enabled",
+            "break": "enabled",
+            "deathTruncation": "disabled"
+          },
+          "critical": {
+            "policy": "expected",
+            "seeds": []
+          },
+          "warmup": {
+            "interval": "[start,end)",
+            "startFrame": 0,
+            "endFrame": 0,
+            "durationFrames": 0,
+            "actionIds": []
+          },
+          "loop": {
+            "interval": "[start,end)",
+            "startFrame": 0,
+            "endFrame": 38,
+            "durationFrames": 38,
+            "durationSeconds": 0.63333333,
+            "fps": 60,
+            "actionIds": [
+              "search-action-1"
+            ]
+          },
+          "metrics": {
+            "loopHpDamage": 0,
+            "cycleDps": 0,
+            "combatHitCount": 0,
+            "healing": {
+              "requestedHealing": 0,
+              "effectiveHealing": 0,
+              "overhealing": 0,
+              "effectiveHps": 0,
+              "settlementCount": 0
+            }
+          },
+          "formalScore": 0,
+          "formalStatus": "formal-score-ready-runtime-baseline",
+          "formalScorePolicy": {
+            "formalReady": true,
+            "formalStatus": "formal-score-ready-runtime-baseline",
+            "scoreAuthority": "formal-for-current-runtime-contract",
+            "scoreBasis": "product-approved-versioned-headless-runtime-semantics",
+            "clientParityStatus": "controlled-capture-pending-nonblocking",
+            "clientParityRequiredForCurrentFormalScore": false,
+            "replacementPolicy": "new-client-evidence-contract-version-invalidates-and-recomputes-affected-scores"
+          },
+          "sampleStatistics": {
+            "sampleCount": 1,
+            "loopHpDamage": {
+              "count": 1,
+              "mean": 0,
+              "variance": 0,
+              "min": 0,
+              "max": 0,
+              "quantiles": {
+                "p5": 0,
+                "p25": 0,
+                "p50": 0,
+                "p75": 0,
+                "p95": 0
+              }
+            },
+            "cycleDps": {
+              "count": 1,
+              "mean": 0,
+              "variance": 0,
+              "min": 0,
+              "max": 0,
+              "quantiles": {
+                "p5": 0,
+                "p25": 0,
+                "p50": 0,
+                "p75": 0,
+                "p95": 0
+              }
+            },
+            "healing": {
+              "requestedHealing": {
+                "count": 1,
+                "mean": 0,
+                "variance": 0,
+                "min": 0,
+                "max": 0,
+                "quantiles": {
+                  "p5": 0,
+                  "p25": 0,
+                  "p50": 0,
+                  "p75": 0,
+                  "p95": 0
+                }
+              },
+              "effectiveHealing": {
+                "count": 1,
+                "mean": 0,
+                "variance": 0,
+                "min": 0,
+                "max": 0,
+                "quantiles": {
+                  "p5": 0,
+                  "p25": 0,
+                  "p50": 0,
+                  "p75": 0,
+                  "p95": 0
+                }
+              },
+              "overhealing": {
+                "count": 1,
+                "mean": 0,
+                "variance": 0,
+                "min": 0,
+                "max": 0,
+                "quantiles": {
+                  "p5": 0,
+                  "p25": 0,
+                  "p50": 0,
+                  "p75": 0,
+                  "p95": 0
+                }
+              },
+              "effectiveHps": {
+                "count": 1,
+                "mean": 0,
+                "variance": 0,
+                "min": 0,
+                "max": 0,
+                "quantiles": {
+                  "p5": 0,
+                  "p25": 0,
+                  "p50": 0,
+                  "p75": 0,
+                  "p95": 0
+                }
+              }
+            },
+            "contributionConservation": {
+              "byActor": {
+                "sampleMean": 0,
+                "contributionMean": 0,
+                "difference": 0,
+                "conserved": true
+              },
+              "byAction": {
+                "sampleMean": 0,
+                "contributionMean": 0,
+                "difference": 0,
+                "conserved": true
+              },
+              "byHit": {
+                "sampleMean": 0,
+                "contributionMean": 0,
+                "difference": 0,
+                "conserved": true
+              }
+            },
+            "healingContributionConservation": {
+              "healingBySourceActor": {
+                "sampleMean": 0,
+                "contributionMean": 0,
+                "difference": 0,
+                "conserved": true
+              },
+              "healingBySourceAction": {
+                "sampleMean": 0,
+                "contributionMean": 0,
+                "difference": 0,
+                "conserved": true
+              }
+            }
+          },
+          "contributions": {
+            "byActor": [],
+            "byAction": [],
+            "byHit": [],
+            "healingBySourceActor": [],
+            "healingBySourceAction": []
+          },
+          "actionLegalityProof": {
+            "passed": true,
+            "firstCycle": {
+              "schemaVersion": 1,
+              "contractName": "AzPrMachineAxisActionLegalityProof",
+              "status": "axis-action-legality-passed",
+              "passed": true,
+              "finalScoreEligible": true,
+              "objectiveId": "cycle-dps-with-toughness",
+              "actionCount": 1,
+              "skippedActionCount": 0,
+              "unresolvedActionCount": 0,
+              "rejectionCodes": [],
+              "rejectionCounts": {},
+              "rejectionCountsByCategory": {},
+              "issues": [],
+              "minimalCounterexamples": [],
+              "hashBindings": {
+                "input": "6922c55ce098a954",
+                "data": "3fd287fa40a4e5c8",
+                "trace": "73fbce6f93c96e30",
+                "build": "d490890e1ab8f2d4"
+              },
+              "proofHash": "35aa691f96312e6c"
+            },
+            "replay": {
+              "schemaVersion": 1,
+              "contractName": "AzPrMachineAxisActionLegalityProof",
+              "status": "axis-action-legality-passed",
+              "passed": true,
+              "finalScoreEligible": true,
+              "objectiveId": "cycle-dps-with-toughness",
+              "actionCount": 2,
+              "skippedActionCount": 0,
+              "unresolvedActionCount": 0,
+              "rejectionCodes": [],
+              "rejectionCounts": {},
+              "rejectionCountsByCategory": {},
+              "issues": [],
+              "minimalCounterexamples": [],
+              "hashBindings": {
+                "input": "879f091a502e031c",
+                "data": "1883467e73075896",
+                "trace": "6ab3ca95cc855cf2",
+                "build": "1d0d3885110df12d"
+              },
+              "proofHash": "25efb94c6db87659"
+            }
+          },
+          "replayProof": {
+            "stable": true,
+            "issues": [],
+            "damageStabilityMode": "exact-consecutive-cycle-damage",
+            "randomDamageVariation": {
+              "independentlySampledCycleDamageMayDiffer": false,
+              "stateAndWarmupClosureStillRequired": true
+            },
+            "damageStable": true,
+            "firstClosure": {
+              "closed": true,
+              "issues": [],
+              "resourceDiffs": [
+                {
+                  "resourceIdentity": "actor:103002:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:109001:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-103002:500001:sp",
+                  "startValue": 0,
+                  "endValue": 0.125,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-107001:500001:sp",
+                  "startValue": 0,
+                  "endValue": 0.125,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-109001:500001:sp",
+                  "startValue": 0,
+                  "endValue": 0.125,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:103002:element:103002047",
+                  "startValue": 0,
+                  "endValue": 6,
+                  "delta": 6,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:element:107001006",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:103002:hp",
+                  "startValue": 22834.425781,
+                  "endValue": 22834.425781,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:hp",
+                  "startValue": 26376.228516,
+                  "endValue": 26376.228516,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:109001:hp",
+                  "startValue": 24870.707031,
+                  "endValue": 24870.707031,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-1:500001:hp",
+                  "startValue": 9555,
+                  "endValue": 9555,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-2:500001:hp",
+                  "startValue": 9874,
+                  "endValue": 9874,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-3:500001:hp",
+                  "startValue": 9738,
+                  "endValue": 9738,
+                  "delta": 0,
+                  "closed": true
+                }
+              ],
+              "tuningMarkDiffs": [],
+              "stateDiffs": [
+                {
+                  "dimension": "cooldowns",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "chargeCooldowns",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "effects",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "attackChains",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "kiboPassiveRuntime",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "targetStates",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "specialStates",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "enemy",
+                  "equal": true,
+                  "start": {
+                    "hp": 1912087.24,
+                    "maxHp": 1912087.24,
+                    "toughness": 469608,
+                    "maxToughness": 469608,
+                    "inBreak": false,
+                    "breakPhase": "normal",
+                    "breakElapsedMs": 0,
+                    "recoveryDelayRemainingMs": 0,
+                    "defeated": false,
+                    "profileSourceIdentity": {
+                      "contractName": "AzPrEnemyProfile",
+                      "profileHash": "cb1edcc277fcda5b",
+                      "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                      "sourceHash": "6e449b5502e76e59",
+                      "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                    }
+                  },
+                  "end": {
+                    "hp": 1912087.24,
+                    "maxHp": 1912087.24,
+                    "toughness": 469608,
+                    "maxToughness": 469608,
+                    "inBreak": false,
+                    "breakPhase": "normal",
+                    "breakElapsedMs": 0,
+                    "recoveryDelayRemainingMs": 0,
+                    "defeated": false,
+                    "profileSourceIdentity": {
+                      "contractName": "AzPrEnemyProfile",
+                      "profileHash": "cb1edcc277fcda5b",
+                      "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                      "sourceHash": "6e449b5502e76e59",
+                      "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                    }
+                  }
+                },
+                {
+                  "dimension": "shields",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "pendingEvents",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                }
+              ]
+            },
+            "secondClosure": {
+              "closed": true,
+              "issues": [],
+              "resourceDiffs": [
+                {
+                  "resourceIdentity": "actor:103002:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:109001:sp",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-103002:500001:sp",
+                  "startValue": 0.125,
+                  "endValue": 0.25,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-107001:500001:sp",
+                  "startValue": 0.125,
+                  "endValue": 0.25,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:actor-109001:500001:sp",
+                  "startValue": 0.125,
+                  "endValue": 0.25,
+                  "delta": 0.125,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:103002:element:103002047",
+                  "startValue": 6,
+                  "endValue": 12,
+                  "delta": 6,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:element:107001006",
+                  "startValue": 0,
+                  "endValue": 0,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:103002:hp",
+                  "startValue": 22834.425781,
+                  "endValue": 22834.425781,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:107001:hp",
+                  "startValue": 26376.228516,
+                  "endValue": 26376.228516,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "actor:109001:hp",
+                  "startValue": 24870.707031,
+                  "endValue": 24870.707031,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-1:500001:hp",
+                  "startValue": 9555,
+                  "endValue": 9555,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-2:500001:hp",
+                  "startValue": 9874,
+                  "endValue": 9874,
+                  "delta": 0,
+                  "closed": true
+                },
+                {
+                  "resourceIdentity": "kibo:team-slot-3:500001:hp",
+                  "startValue": 9738,
+                  "endValue": 9738,
+                  "delta": 0,
+                  "closed": true
+                }
+              ],
+              "tuningMarkDiffs": [],
+              "stateDiffs": [
+                {
+                  "dimension": "cooldowns",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "chargeCooldowns",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "effects",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "attackChains",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "kiboPassiveRuntime",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "targetStates",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "specialStates",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "enemy",
+                  "equal": true,
+                  "start": {
+                    "hp": 1912087.24,
+                    "maxHp": 1912087.24,
+                    "toughness": 469608,
+                    "maxToughness": 469608,
+                    "inBreak": false,
+                    "breakPhase": "normal",
+                    "breakElapsedMs": 0,
+                    "recoveryDelayRemainingMs": 0,
+                    "defeated": false,
+                    "profileSourceIdentity": {
+                      "contractName": "AzPrEnemyProfile",
+                      "profileHash": "cb1edcc277fcda5b",
+                      "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                      "sourceHash": "6e449b5502e76e59",
+                      "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                    }
+                  },
+                  "end": {
+                    "hp": 1912087.24,
+                    "maxHp": 1912087.24,
+                    "toughness": 469608,
+                    "maxToughness": 469608,
+                    "inBreak": false,
+                    "breakPhase": "normal",
+                    "breakElapsedMs": 0,
+                    "recoveryDelayRemainingMs": 0,
+                    "defeated": false,
+                    "profileSourceIdentity": {
+                      "contractName": "AzPrEnemyProfile",
+                      "profileHash": "cb1edcc277fcda5b",
+                      "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                      "sourceHash": "6e449b5502e76e59",
+                      "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                    }
+                  }
+                },
+                {
+                  "dimension": "shields",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                },
+                {
+                  "dimension": "pendingEvents",
+                  "equal": true,
+                  "start": [],
+                  "end": []
+                }
+              ]
+            },
+            "secondExecution": {
+              "runnable": true,
+              "issues": [],
+              "variantPairs": [
+                {
+                  "sourceActionId": "search-action-1",
+                  "replayActionId": "cycle-2:search-action-1",
+                  "equivalent": true,
+                  "sourceVariant": {
+                    "publicActionId": 10300201,
+                    "actionKind": "charged-attack",
+                    "publicVariantIndex": 1,
+                    "mappingIdentity": "actor|103002|10300201|1|10300210|charged-attack",
+                    "resolvedControlSkillId": 10300210,
+                    "resolvedSubSkillIndex": 0,
+                    "durationFrames": 38,
+                    "variantResolutionStatus": "verified-action-variant-selection-ready"
+                  },
+                  "replayVariant": {
+                    "publicActionId": 10300201,
+                    "actionKind": "charged-attack",
+                    "publicVariantIndex": 1,
+                    "mappingIdentity": "actor|103002|10300201|1|10300210|charged-attack",
+                    "resolvedControlSkillId": 10300210,
+                    "resolvedSubSkillIndex": 0,
+                    "durationFrames": 38,
+                    "variantResolutionStatus": "verified-action-variant-selection-ready"
+                  }
+                }
+              ]
+            },
+            "cycles": [
+              {
+                "index": 1,
+                "hpDamage": 0,
+                "combatHitCount": 0,
+                "runnable": true
+              },
+              {
+                "index": 2,
+                "hpDamage": 0,
+                "combatHitCount": 0,
+                "runnable": true
+              }
+            ]
+          },
+          "stateClosure": [
+            {
+              "seed": null,
+              "start": {
+                "schemaVersion": 1,
+                "contractName": "AzPrMachineAxisSearchState",
+                "kind": "azpr-machine-axis-search-state",
+                "currentFrame": 0,
+                "timeMs": 0,
+                "remainingFrames": 7200,
+                "fps": 60,
+                "activeActorId": "actor-103002",
+                "actors": [
+                  {
+                    "actorId": "actor-103002",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "sp": 0,
+                    "max": 100
+                  }
+                ],
+                "kibos": [
+                  {
+                    "actorId": "actor-103002",
+                    "kiboId": 500001,
+                    "energy": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "kiboId": 500001,
+                    "energy": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "kiboId": 500001,
+                    "energy": 0,
+                    "max": 100
+                  }
+                ],
+                "cooldowns": [],
+                "chargeCooldowns": [],
+                "effects": [],
+                "tuningMarks": [],
+                "specialResources": [
+                  {
+                    "actorId": "actor-103002",
+                    "resourceIdentity": "actor:103002:element:103002047",
+                    "currentValue": 0,
+                    "maxValue": 12,
+                    "activeStates": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "resourceIdentity": "actor:107001:element:107001006",
+                    "currentValue": 0,
+                    "maxValue": 10,
+                    "activeStates": []
+                  }
+                ],
+                "attackChains": [],
+                "pendingEvents": [],
+                "enemy": {
+                  "hp": 1912087.24,
+                  "maxHp": 1912087.24,
+                  "toughness": 469608,
+                  "maxToughness": 469608,
+                  "inBreak": false,
+                  "breakPhase": "normal",
+                  "breakElapsedMs": 0,
+                  "recoveryDelayRemainingMs": 0,
+                  "defeated": false,
+                  "profileSourceIdentity": {
+                    "contractName": "AzPrEnemyProfile",
+                    "profileHash": "cb1edcc277fcda5b",
+                    "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                    "sourceHash": "6e449b5502e76e59",
+                    "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                  },
+                  "valueShields": [],
+                  "hitCountShields": []
+                },
+                "damage": {
+                  "hpDamage": 0,
+                  "toughnessDamage": 0,
+                  "combatHitCount": 0,
+                  "stateEventCount": 0
+                },
+                "soulTriggerIntervals": [],
+                "soulTriggerCounters": [],
+                "soulPeriodicRoots": [],
+                "targetStates": [],
+                "actorVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 22834.425781,
+                    "maximumHp": 22834.425781,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 26376.228516,
+                    "maximumHp": 26376.228516,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 24870.707031,
+                    "maximumHp": 24870.707031,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ],
+                "kiboVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": "team-slot-1",
+                    "kiboId": 500001,
+                    "currentHp": 9555,
+                    "maximumHp": 9555,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": "team-slot-2",
+                    "kiboId": 500001,
+                    "currentHp": 9874,
+                    "maximumHp": 9874,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": "team-slot-3",
+                    "kiboId": 500001,
+                    "currentHp": 9738,
+                    "maximumHp": 9738,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ]
+              },
+              "firstEnd": {
+                "schemaVersion": 1,
+                "contractName": "AzPrMachineAxisSearchState",
+                "kind": "azpr-machine-axis-search-state",
+                "currentFrame": 38,
+                "timeMs": 633.333,
+                "remainingFrames": 7162,
+                "fps": 60,
+                "activeActorId": "actor-103002",
+                "actors": [
+                  {
+                    "actorId": "actor-103002",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "sp": 0,
+                    "max": 100
+                  }
+                ],
+                "kibos": [
+                  {
+                    "actorId": "actor-103002",
+                    "kiboId": 500001,
+                    "energy": 0.125,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "kiboId": 500001,
+                    "energy": 0.125,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "kiboId": 500001,
+                    "energy": 0.125,
+                    "max": 100
+                  }
+                ],
+                "cooldowns": [],
+                "chargeCooldowns": [],
+                "effects": [],
+                "tuningMarks": [],
+                "specialResources": [
+                  {
+                    "actorId": "actor-103002",
+                    "resourceIdentity": "actor:103002:element:103002047",
+                    "currentValue": 6,
+                    "maxValue": 12,
+                    "activeStates": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "resourceIdentity": "actor:107001:element:107001006",
+                    "currentValue": 0,
+                    "maxValue": 10,
+                    "activeStates": []
+                  }
+                ],
+                "attackChains": [],
+                "pendingEvents": [],
+                "enemy": {
+                  "hp": 1912087.24,
+                  "maxHp": 1912087.24,
+                  "toughness": 469608,
+                  "maxToughness": 469608,
+                  "inBreak": false,
+                  "breakPhase": "normal",
+                  "breakElapsedMs": 0,
+                  "recoveryDelayRemainingMs": 0,
+                  "defeated": false,
+                  "profileSourceIdentity": {
+                    "contractName": "AzPrEnemyProfile",
+                    "profileHash": "cb1edcc277fcda5b",
+                    "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                    "sourceHash": "6e449b5502e76e59",
+                    "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                  },
+                  "valueShields": [],
+                  "hitCountShields": []
+                },
+                "damage": {
+                  "hpDamage": 0,
+                  "toughnessDamage": 0,
+                  "combatHitCount": 0,
+                  "stateEventCount": 0
+                },
+                "soulTriggerIntervals": [],
+                "soulTriggerCounters": [],
+                "soulPeriodicRoots": [],
+                "targetStates": [],
+                "actorVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 22834.425781,
+                    "maximumHp": 22834.425781,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 26376.228516,
+                    "maximumHp": 26376.228516,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 24870.707031,
+                    "maximumHp": 24870.707031,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ],
+                "kiboVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": "team-slot-1",
+                    "kiboId": 500001,
+                    "currentHp": 9555,
+                    "maximumHp": 9555,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": "team-slot-2",
+                    "kiboId": 500001,
+                    "currentHp": 9874,
+                    "maximumHp": 9874,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": "team-slot-3",
+                    "kiboId": 500001,
+                    "currentHp": 9738,
+                    "maximumHp": 9738,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ]
+              },
+              "secondEnd": {
+                "schemaVersion": 1,
+                "contractName": "AzPrMachineAxisSearchState",
+                "kind": "azpr-machine-axis-search-state",
+                "currentFrame": 76,
+                "timeMs": 1266.667,
+                "remainingFrames": 7124,
+                "fps": 60,
+                "activeActorId": "actor-103002",
+                "actors": [
+                  {
+                    "actorId": "actor-103002",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "sp": 0,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "sp": 0,
+                    "max": 100
+                  }
+                ],
+                "kibos": [
+                  {
+                    "actorId": "actor-103002",
+                    "kiboId": 500001,
+                    "energy": 0.25,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "kiboId": 500001,
+                    "energy": 0.25,
+                    "max": 100
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "kiboId": 500001,
+                    "energy": 0.25,
+                    "max": 100
+                  }
+                ],
+                "cooldowns": [],
+                "chargeCooldowns": [],
+                "effects": [],
+                "tuningMarks": [],
+                "specialResources": [
+                  {
+                    "actorId": "actor-103002",
+                    "resourceIdentity": "actor:103002:element:103002047",
+                    "currentValue": 12,
+                    "maxValue": 12,
+                    "activeStates": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "resourceIdentity": "actor:107001:element:107001006",
+                    "currentValue": 0,
+                    "maxValue": 10,
+                    "activeStates": []
+                  }
+                ],
+                "attackChains": [],
+                "pendingEvents": [],
+                "enemy": {
+                  "hp": 1912087.24,
+                  "maxHp": 1912087.24,
+                  "toughness": 469608,
+                  "maxToughness": 469608,
+                  "inBreak": false,
+                  "breakPhase": "normal",
+                  "breakElapsedMs": 0,
+                  "recoveryDelayRemainingMs": 0,
+                  "defeated": false,
+                  "profileSourceIdentity": {
+                    "contractName": "AzPrEnemyProfile",
+                    "profileHash": "cb1edcc277fcda5b",
+                    "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                    "sourceHash": "6e449b5502e76e59",
+                    "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                  },
+                  "valueShields": [],
+                  "hitCountShields": []
+                },
+                "damage": {
+                  "hpDamage": 0,
+                  "toughnessDamage": 0,
+                  "combatHitCount": 0,
+                  "stateEventCount": 0
+                },
+                "soulTriggerIntervals": [],
+                "soulTriggerCounters": [],
+                "soulPeriodicRoots": [],
+                "targetStates": [],
+                "actorVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 22834.425781,
+                    "maximumHp": 22834.425781,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 26376.228516,
+                    "maximumHp": 26376.228516,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": null,
+                    "kiboId": null,
+                    "currentHp": 24870.707031,
+                    "maximumHp": 24870.707031,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ],
+                "kiboVitals": [
+                  {
+                    "actorId": "actor-103002",
+                    "slotId": "team-slot-1",
+                    "kiboId": 500001,
+                    "currentHp": 9555,
+                    "maximumHp": 9555,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-107001",
+                    "slotId": "team-slot-2",
+                    "kiboId": 500001,
+                    "currentHp": 9874,
+                    "maximumHp": 9874,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  },
+                  {
+                    "actorId": "actor-109001",
+                    "slotId": "team-slot-3",
+                    "kiboId": 500001,
+                    "currentHp": 9738,
+                    "maximumHp": 9738,
+                    "valueShields": [],
+                    "hitCountShields": []
+                  }
+                ]
+              }
+            }
+          ],
+          "samples": [
+            {
+              "valid": true,
+              "status": "closed",
+              "seed": null,
+              "issues": [],
+              "hashes": {
+                "algorithm": "fnv1a64-utf8-v1",
+                "input": "879f091a502e031c",
+                "data": "1883467e73075896",
+                "trace": "6ab3ca95cc855cf2",
+                "evaluation": "2e6b4bdabaa6e26f",
+                "build": "1d0d3885110df12d"
+              },
+              "proofHashes": {
+                "algorithm": "fnv1a64-utf8-v1",
+                "input": "879f091a502e031c",
+                "data": "1883467e73075896",
+                "trace": "6ab3ca95cc855cf2",
+                "evaluation": "2e6b4bdabaa6e26f",
+                "build": "1d0d3885110df12d"
+              },
+              "firstCycle": {
+                "interval": "[start,end)",
+                "startFrame": 0,
+                "endFrame": 38,
+                "hpDamage": 0,
+                "combatHitCount": 0,
+                "byActor": [],
+                "byAction": [],
+                "byHit": [],
+                "enemySettlementPackets": [],
+                "enemyStateTransitions": [],
+                "healing": {
+                  "requestedHealing": 0,
+                  "effectiveHealing": 0,
+                  "overhealing": 0,
+                  "effectiveHps": 0,
+                  "settlementCount": 0,
+                  "bySourceActor": [],
+                  "bySourceAction": []
+                }
+              },
+              "secondCycle": {
+                "interval": "[start,end)",
+                "startFrame": 38,
+                "endFrame": 76,
+                "hpDamage": 0,
+                "combatHitCount": 0,
+                "byActor": [],
+                "byAction": [],
+                "byHit": [],
+                "enemySettlementPackets": [],
+                "enemyStateTransitions": [],
+                "healing": {
+                  "requestedHealing": 0,
+                  "effectiveHealing": 0,
+                  "overhealing": 0,
+                  "effectiveHps": 0,
+                  "settlementCount": 0,
+                  "bySourceActor": [],
+                  "bySourceAction": []
+                }
+              },
+              "replayProof": {
+                "stable": true,
+                "issues": [],
+                "damageStabilityMode": "exact-consecutive-cycle-damage",
+                "randomDamageVariation": {
+                  "independentlySampledCycleDamageMayDiffer": false,
+                  "stateAndWarmupClosureStillRequired": true
+                },
+                "damageStable": true,
+                "firstClosure": {
+                  "closed": true,
+                  "issues": [],
+                  "resourceDiffs": [
+                    {
+                      "resourceIdentity": "actor:103002:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:109001:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-103002:500001:sp",
+                      "startValue": 0,
+                      "endValue": 0.125,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-107001:500001:sp",
+                      "startValue": 0,
+                      "endValue": 0.125,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-109001:500001:sp",
+                      "startValue": 0,
+                      "endValue": 0.125,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:103002:element:103002047",
+                      "startValue": 0,
+                      "endValue": 6,
+                      "delta": 6,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:element:107001006",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:103002:hp",
+                      "startValue": 22834.425781,
+                      "endValue": 22834.425781,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:hp",
+                      "startValue": 26376.228516,
+                      "endValue": 26376.228516,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:109001:hp",
+                      "startValue": 24870.707031,
+                      "endValue": 24870.707031,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-1:500001:hp",
+                      "startValue": 9555,
+                      "endValue": 9555,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-2:500001:hp",
+                      "startValue": 9874,
+                      "endValue": 9874,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-3:500001:hp",
+                      "startValue": 9738,
+                      "endValue": 9738,
+                      "delta": 0,
+                      "closed": true
+                    }
+                  ],
+                  "tuningMarkDiffs": [],
+                  "stateDiffs": [
+                    {
+                      "dimension": "cooldowns",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "chargeCooldowns",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "effects",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "attackChains",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "kiboPassiveRuntime",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "targetStates",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "specialStates",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "enemy",
+                      "equal": true,
+                      "start": {
+                        "hp": 1912087.24,
+                        "maxHp": 1912087.24,
+                        "toughness": 469608,
+                        "maxToughness": 469608,
+                        "inBreak": false,
+                        "breakPhase": "normal",
+                        "breakElapsedMs": 0,
+                        "recoveryDelayRemainingMs": 0,
+                        "defeated": false,
+                        "profileSourceIdentity": {
+                          "contractName": "AzPrEnemyProfile",
+                          "profileHash": "cb1edcc277fcda5b",
+                          "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                          "sourceHash": "6e449b5502e76e59",
+                          "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                        }
+                      },
+                      "end": {
+                        "hp": 1912087.24,
+                        "maxHp": 1912087.24,
+                        "toughness": 469608,
+                        "maxToughness": 469608,
+                        "inBreak": false,
+                        "breakPhase": "normal",
+                        "breakElapsedMs": 0,
+                        "recoveryDelayRemainingMs": 0,
+                        "defeated": false,
+                        "profileSourceIdentity": {
+                          "contractName": "AzPrEnemyProfile",
+                          "profileHash": "cb1edcc277fcda5b",
+                          "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                          "sourceHash": "6e449b5502e76e59",
+                          "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                        }
+                      }
+                    },
+                    {
+                      "dimension": "shields",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "pendingEvents",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    }
+                  ]
+                },
+                "secondClosure": {
+                  "closed": true,
+                  "issues": [],
+                  "resourceDiffs": [
+                    {
+                      "resourceIdentity": "actor:103002:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:109001:sp",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-103002:500001:sp",
+                      "startValue": 0.125,
+                      "endValue": 0.25,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-107001:500001:sp",
+                      "startValue": 0.125,
+                      "endValue": 0.25,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:actor-109001:500001:sp",
+                      "startValue": 0.125,
+                      "endValue": 0.25,
+                      "delta": 0.125,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:103002:element:103002047",
+                      "startValue": 6,
+                      "endValue": 12,
+                      "delta": 6,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:element:107001006",
+                      "startValue": 0,
+                      "endValue": 0,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:103002:hp",
+                      "startValue": 22834.425781,
+                      "endValue": 22834.425781,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:107001:hp",
+                      "startValue": 26376.228516,
+                      "endValue": 26376.228516,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "actor:109001:hp",
+                      "startValue": 24870.707031,
+                      "endValue": 24870.707031,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-1:500001:hp",
+                      "startValue": 9555,
+                      "endValue": 9555,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-2:500001:hp",
+                      "startValue": 9874,
+                      "endValue": 9874,
+                      "delta": 0,
+                      "closed": true
+                    },
+                    {
+                      "resourceIdentity": "kibo:team-slot-3:500001:hp",
+                      "startValue": 9738,
+                      "endValue": 9738,
+                      "delta": 0,
+                      "closed": true
+                    }
+                  ],
+                  "tuningMarkDiffs": [],
+                  "stateDiffs": [
+                    {
+                      "dimension": "cooldowns",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "chargeCooldowns",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "effects",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "attackChains",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "kiboPassiveRuntime",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "targetStates",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "specialStates",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "enemy",
+                      "equal": true,
+                      "start": {
+                        "hp": 1912087.24,
+                        "maxHp": 1912087.24,
+                        "toughness": 469608,
+                        "maxToughness": 469608,
+                        "inBreak": false,
+                        "breakPhase": "normal",
+                        "breakElapsedMs": 0,
+                        "recoveryDelayRemainingMs": 0,
+                        "defeated": false,
+                        "profileSourceIdentity": {
+                          "contractName": "AzPrEnemyProfile",
+                          "profileHash": "cb1edcc277fcda5b",
+                          "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                          "sourceHash": "6e449b5502e76e59",
+                          "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                        }
+                      },
+                      "end": {
+                        "hp": 1912087.24,
+                        "maxHp": 1912087.24,
+                        "toughness": 469608,
+                        "maxToughness": 469608,
+                        "inBreak": false,
+                        "breakPhase": "normal",
+                        "breakElapsedMs": 0,
+                        "recoveryDelayRemainingMs": 0,
+                        "defeated": false,
+                        "profileSourceIdentity": {
+                          "contractName": "AzPrEnemyProfile",
+                          "profileHash": "cb1edcc277fcda5b",
+                          "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                          "sourceHash": "6e449b5502e76e59",
+                          "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+                        }
+                      }
+                    },
+                    {
+                      "dimension": "shields",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    },
+                    {
+                      "dimension": "pendingEvents",
+                      "equal": true,
+                      "start": [],
+                      "end": []
+                    }
+                  ]
+                },
+                "secondExecution": {
+                  "runnable": true,
+                  "issues": [],
+                  "variantPairs": [
+                    {
+                      "sourceActionId": "search-action-1",
+                      "replayActionId": "cycle-2:search-action-1",
+                      "equivalent": true,
+                      "sourceVariant": {
+                        "publicActionId": 10300201,
+                        "actionKind": "charged-attack",
+                        "publicVariantIndex": 1,
+                        "mappingIdentity": "actor|103002|10300201|1|10300210|charged-attack",
+                        "resolvedControlSkillId": 10300210,
+                        "resolvedSubSkillIndex": 0,
+                        "durationFrames": 38,
+                        "variantResolutionStatus": "verified-action-variant-selection-ready"
+                      },
+                      "replayVariant": {
+                        "publicActionId": 10300201,
+                        "actionKind": "charged-attack",
+                        "publicVariantIndex": 1,
+                        "mappingIdentity": "actor|103002|10300201|1|10300210|charged-attack",
+                        "resolvedControlSkillId": 10300210,
+                        "resolvedSubSkillIndex": 0,
+                        "durationFrames": 38,
+                        "variantResolutionStatus": "verified-action-variant-selection-ready"
+                      }
+                    }
+                  ]
+                },
+                "cycles": [
+                  {
+                    "index": 1,
+                    "hpDamage": 0,
+                    "combatHitCount": 0,
+                    "runnable": true
+                  },
+                  {
+                    "index": 2,
+                    "hpDamage": 0,
+                    "combatHitCount": 0,
+                    "runnable": true
+                  }
+                ]
+              },
+              "actionLegalityProof": {
+                "passed": true,
+                "firstCycle": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrMachineAxisActionLegalityProof",
+                  "status": "axis-action-legality-passed",
+                  "passed": true,
+                  "finalScoreEligible": true,
+                  "objectiveId": "cycle-dps-with-toughness",
+                  "actionCount": 1,
+                  "skippedActionCount": 0,
+                  "unresolvedActionCount": 0,
+                  "rejectionCodes": [],
+                  "rejectionCounts": {},
+                  "rejectionCountsByCategory": {},
+                  "issues": [],
+                  "minimalCounterexamples": [],
+                  "hashBindings": {
+                    "input": "6922c55ce098a954",
+                    "data": "3fd287fa40a4e5c8",
+                    "trace": "73fbce6f93c96e30",
+                    "build": "d490890e1ab8f2d4"
+                  },
+                  "proofHash": "35aa691f96312e6c"
+                },
+                "replay": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrMachineAxisActionLegalityProof",
+                  "status": "axis-action-legality-passed",
+                  "passed": true,
+                  "finalScoreEligible": true,
+                  "objectiveId": "cycle-dps-with-toughness",
+                  "actionCount": 2,
+                  "skippedActionCount": 0,
+                  "unresolvedActionCount": 0,
+                  "rejectionCodes": [],
+                  "rejectionCounts": {},
+                  "rejectionCountsByCategory": {},
+                  "issues": [],
+                  "minimalCounterexamples": [],
+                  "hashBindings": {
+                    "input": "879f091a502e031c",
+                    "data": "1883467e73075896",
+                    "trace": "6ab3ca95cc855cf2",
+                    "build": "1d0d3885110df12d"
+                  },
+                  "proofHash": "25efb94c6db87659"
+                }
+              },
+              "loopPlan": {
+                "sourceActionIds": [
+                  "search-action-1"
+                ],
+                "secondActionIds": [
+                  "cycle-2:search-action-1"
+                ],
+                "warmupActionIds": [],
+                "replayHorizonFrame": 7200,
+                "commonRandomRollCount": 0
+              },
+              "evidence": {
+                "firstCycle": {
+                  "classification": {
+                    "schemaStatus": "schema-valid",
+                    "runnabilityStatus": "runnable",
+                    "evidenceStatus": "evidence-closed"
+                  },
+                  "warnings": []
+                },
+                "replay": {
+                  "classification": {
+                    "schemaStatus": "schema-valid",
+                    "runnabilityStatus": "runnable",
+                    "evidenceStatus": "evidence-closed"
+                  },
+                  "warnings": []
+                }
+              }
+            }
+          ],
+          "evidence": {
+            "evidenceClosed": true,
+            "samples": [
+              {
+                "seed": null,
+                "firstCycle": {
+                  "classification": {
+                    "schemaStatus": "schema-valid",
+                    "runnabilityStatus": "runnable",
+                    "evidenceStatus": "evidence-closed"
+                  },
+                  "warnings": []
+                },
+                "replay": {
+                  "classification": {
+                    "schemaStatus": "schema-valid",
+                    "runnabilityStatus": "runnable",
+                    "evidenceStatus": "evidence-closed"
+                  },
+                  "warnings": []
+                }
+              }
+            ]
+          },
+          "hashes": {
+            "input": "879f091a502e031c",
+            "data": "1883467e73075896",
+            "trace": "6ab3ca95cc855cf2",
+            "evaluation": "2e6b4bdabaa6e26f",
+            "cycle": "0b96d716c3a6a43a",
+            "build": "77afd74e7c7a241f"
+          }
+        },
+        "objectiveIssues": [],
+        "boundariesConsumed": [],
+        "coverageTrust": {
+          "actionCount": 1,
+          "warnings": 0,
+          "assumptionWarningCount": 0,
+          "warningCodesByCount": {},
+          "note": "无场景假设警告"
+        },
+        "metrics": {
+          "hpDamage": 0,
+          "dps": 0,
+          "burst": {
+            "windowMs": 10000,
+            "hpDamage": 0,
+            "hitCount": 0,
+            "startMs": 0,
+            "endMs": 0,
+            "byActor": {}
+          },
+          "toughnessDamage": 0,
+          "netToughnessDamage": 0,
+          "healing": {
+            "requestedHealing": 0,
+            "effectiveHealing": 0,
+            "overhealing": 0,
+            "effectiveHps": 0,
+            "settlementCount": 0,
+            "bySourceActor": [],
+            "bySourceAction": []
+          },
+          "resourceSurplus": {
+            "actors": [
+              {
+                "actorId": "actor-103002",
+                "resource": "sp",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 0,
+                "max": 100,
+                "delta": 0
+              },
+              {
+                "actorId": "actor-107001",
+                "resource": "sp",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 0,
+                "max": 100,
+                "delta": 0
+              },
+              {
+                "actorId": "actor-109001",
+                "resource": "sp",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 0,
+                "max": 100,
+                "delta": 0
+              }
+            ],
+            "kibos": [
+              {
+                "actorId": "actor-103002",
+                "kiboId": 500001,
+                "resource": "kibo-energy",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 24.993896,
+                "max": 100,
+                "delta": 24.994
+              },
+              {
+                "actorId": "actor-107001",
+                "kiboId": 500001,
+                "resource": "kibo-energy",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 24.993896,
+                "max": 100,
+                "delta": 24.994
+              },
+              {
+                "actorId": "actor-109001",
+                "kiboId": 500001,
+                "resource": "kibo-energy",
+                "valueUnit": "absolute-sp-points",
+                "initial": 0,
+                "final": 24.993896,
+                "max": 100,
+                "delta": 24.994
+              }
+            ],
+            "selfEnergyDelta": 0
+          },
+          "idle": {
+            "durationMs": 120000,
+            "busyMs": 633.333,
+            "idleMs": 119366.667,
+            "idleRatio": 0.9947222222222223,
+            "byActor": [
+              {
+                "actorId": "actor-103002",
+                "busyMs": 633.333,
+                "idleMs": 119366.667,
+                "idleRatio": 0.9947222222222223,
+                "executedActionCount": 1
+              }
+            ]
+          },
+          "nonExecutableActions": [],
+          "unresolvedActionCount": 0
+        },
+        "contributions": {
+          "strategy": "mean-by-stable-identity",
+          "sampleCount": 1,
+          "byActor": [],
+          "byAction": [],
+          "byHit": [],
+          "healingBySourceActor": [],
+          "healingBySourceAction": []
+        },
+        "causalExplanation": {
+          "actionSequence": [
+            {
+              "actionId": "search-action-1",
+              "label": "重击",
+              "frame": 0,
+              "source": "catalog:character-public-action"
+            }
+          ],
+          "endState": {
+            "currentFrame": 38,
+            "remainingFrames": 7162,
+            "activeActorId": "actor-103002",
+            "actors": [
+              {
+                "actorId": "actor-103002",
+                "sp": 0,
+                "max": 100
+              },
+              {
+                "actorId": "actor-107001",
+                "sp": 0,
+                "max": 100
+              },
+              {
+                "actorId": "actor-109001",
+                "sp": 0,
+                "max": 100
+              }
+            ],
+            "kibos": [
+              {
+                "actorId": "actor-103002",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              },
+              {
+                "actorId": "actor-107001",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              },
+              {
+                "actorId": "actor-109001",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              }
+            ],
+            "cooldowns": [],
+            "effects": [],
+            "tuningMarks": [],
+            "specialResources": [
+              {
+                "actorId": "actor-103002",
+                "resourceIdentity": "actor:103002:element:103002047",
+                "currentValue": 6,
+                "maxValue": 12
+              }
+            ],
+            "attackChains": [],
+            "pendingEvents": [],
+            "enemy": {
+              "hp": 1912087.24,
+              "maxHp": 1912087.24,
+              "toughness": 469608,
+              "maxToughness": 469608,
+              "inBreak": false,
+              "breakPhase": "normal",
+              "breakElapsedMs": 0,
+              "recoveryDelayRemainingMs": 0,
+              "defeated": false,
+              "profileSourceIdentity": {
+                "contractName": "AzPrEnemyProfile",
+                "profileHash": "cb1edcc277fcda5b",
+                "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                "sourceHash": "6e449b5502e76e59",
+                "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+              }
+            }
+          },
+          "loopClosureState": {
+            "schemaVersion": 1,
+            "contractName": "AzPrMachineAxisSearchState",
+            "kind": "azpr-machine-axis-search-loop-closure-state",
+            "activeActorId": "actor-103002",
+            "actors": [
+              {
+                "actorId": "actor-103002",
+                "sp": 0,
+                "max": 100
+              },
+              {
+                "actorId": "actor-107001",
+                "sp": 0,
+                "max": 100
+              },
+              {
+                "actorId": "actor-109001",
+                "sp": 0,
+                "max": 100
+              }
+            ],
+            "kibos": [
+              {
+                "actorId": "actor-103002",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              },
+              {
+                "actorId": "actor-107001",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              },
+              {
+                "actorId": "actor-109001",
+                "kiboId": 500001,
+                "energy": 0.125,
+                "max": 100
+              }
+            ],
+            "cooldowns": [],
+            "chargeCooldowns": [],
+            "effects": [],
+            "tuningMarks": [],
+            "specialResources": [
+              {
+                "actorId": "actor-103002",
+                "resourceIdentity": "actor:103002:element:103002047",
+                "currentValue": 6,
+                "maxValue": 12
+              }
+            ],
+            "attackChains": [],
+            "pendingEvents": [],
+            "enemy": {
+              "hp": 1912087.24,
+              "maxHp": 1912087.24,
+              "toughness": 469608,
+              "maxToughness": 469608,
+              "inBreak": false,
+              "breakPhase": "normal",
+              "breakElapsedMs": 0,
+              "recoveryDelayRemainingMs": 0,
+              "defeated": false,
+              "profileSourceIdentity": {
+                "contractName": "AzPrEnemyProfile",
+                "profileHash": "cb1edcc277fcda5b",
+                "profileId": "enemy:310054:level:80:6e449b5502e76e59",
+                "sourceHash": "6e449b5502e76e59",
+                "sourceIdentity": "azpr-enemy-level-template-3#level=80|outputs/combat-enemy-break-profiles-20260718.json#enemyId=310054|NewTable/template_value.rows[id=310054].baseAttribute[201-221]"
+              }
+            }
+          },
+          "note": "cycle-dps-with-toughness objective, M12-C cycle-dps-with-toughness de4e22a59e613f44 front 103002 (empty) + search-action-1"
+        },
+        "m12c": {
+          "buildHash": "de4e22a59e613f44",
+          "poolHash": "f9740b8fe17d178e",
+          "teamIdentity": "m12c-team-v1:103002+107001+109001",
+          "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+          "initialFront": {
+            "actorSlotId": "m12c-slot:103002",
+            "optimizationObjectId": "103002",
+            "sourceCharacterId": 103002
+          },
+          "fixedCultivationProfile": {
+            "character": {
+              "level": 80,
+              "starGiftRank": 7,
+              "completedStarGiftAttributeRank": 6,
+              "currentRankNodeSelection": "all"
+            },
+            "kibo": {
+              "level": 80,
+              "talentLevelsByAttributeId": {
+                "1": 10,
+                "3": 10,
+                "4": 10,
+                "5": 10
+              },
+              "resolvedTalentValuesByAttributeId": {
+                "1": 120,
+                "3": 120,
+                "4": 120,
+                "5": 120
+              },
+              "bondLevel": 1,
+              "inheritanceBasisPoints": 900,
+              "dnaFactors": []
+            },
+            "soulEssence": {
+              "level": 80,
+              "rank": 6,
+              "star": 1
+            },
+            "equipment": {
+              "rarity": 4,
+              "enhancementLevel": 9,
+              "tuningScore": 110,
+              "instanceTier": "starborn",
+              "bGoldSide": true,
+              "maxValue": 110
+            },
+            "optimizationEnumeratedDimensions": [],
+            "fixedProfileHash": "22f28f1f4b5b0d90",
+            "heroRankInput": "excluded",
+            "equipmentInstanceSource": {
+              "identity": "starborn",
+              "bGoldSide": true,
+              "maximum": 110,
+              "maximumRule": "exact",
+              "sourceIdentity": "IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336"
+            }
+          },
+          "build": {
+            "schemaVersion": 1,
+            "contractName": "AzPrM12COuterBuild",
+            "kind": "azpr-m12c-outer-build",
+            "identityPolicy": {
+              "teamOrder": "canonical-optimization-object-order",
+              "actorSlotIdentity": "canonical-optimization-object-slot",
+              "kiboRuntimeOwnerIdentity": "actorSlotId+kiboId",
+              "excludes": [
+                "initialFront",
+                "axis",
+                "initialStatePreset"
+              ]
+            },
+            "teamIdentity": "m12c-team-v1:103002+107001+109001",
+            "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+            "optimizationObjectIds": [
+              "103002",
+              "107001",
+              "109001"
+            ],
+            "actors": [
+              {
+                "actorSlotId": "m12c-slot:103002",
+                "optimizationObjectId": "103002",
+                "sourceCharacterId": 103002,
+                "position": "猛攻",
+                "characterCultivation": {
+                  "level": 80,
+                  "starGiftRank": 7,
+                  "completedStarGiftAttributeRank": 6,
+                  "currentRankNodeSelection": "all",
+                  "currentRankNodeIds": [
+                    76,
+                    65,
+                    66,
+                    68,
+                    87
+                  ],
+                  "completedRankSourceIdentities": [
+                    "NewTable/talent_rank.rows[id=277,heroId=103002,rank=1]",
+                    "NewTable/talent_rank.rows[id=278,heroId=103002,rank=2]",
+                    "NewTable/talent_rank.rows[id=279,heroId=103002,rank=3]",
+                    "NewTable/talent_rank.rows[id=280,heroId=103002,rank=4]",
+                    "NewTable/talent_rank.rows[id=281,heroId=103002,rank=5]",
+                    "NewTable/talent_rank.rows[id=282,heroId=103002,rank=6]"
+                  ],
+                  "currentRankNodeSourceIdentities": [
+                    "NewTable/talent_rune.rows[id=76]",
+                    "NewTable/talent_rune.rows[id=65]",
+                    "NewTable/talent_rune.rows[id=66]",
+                    "NewTable/talent_rune.rows[id=68]",
+                    "NewTable/talent_rune.rows[id=87]"
+                  ],
+                  "currentRankSourceIdentity": "NewTable/talent_rank.rows[id=283,heroId=103002,rank=7]",
+                  "sourceProfileHash": "99d5cafa6c9fbc8d"
+                },
+                "kibo": {
+                  "kiboId": 500001,
+                  "runtimeOwnerIdentity": "m12c-slot:103002+500001",
+                  "runtimeOwnerContract": "actorSlotId+kiboId",
+                  "level": 80,
+                  "talents": {
+                    "1": 120,
+                    "3": 120,
+                    "4": 120,
+                    "5": 120
+                  },
+                  "talentLevels": {
+                    "1": 10,
+                    "3": 10,
+                    "4": 10,
+                    "5": 10
+                  },
+                  "bondLevel": 1,
+                  "inheritanceBasisPoints": 900,
+                  "dnaFactors": [],
+                  "manifestHash": "4f06f5fc98c2cbeb"
+                },
+                "soulEssence": {
+                  "soulEssenceId": 10034,
+                  "profession": null,
+                  "compatibilityReason": "universal-profession",
+                  "level": 80,
+                  "rank": 6,
+                  "star": 1,
+                  "manifestHash": "ba5e71b838337c82",
+                  "sourceIdentity": "NewTable/soulessence.rows[id=10034]",
+                  "profileHash": "d62a3d974078c100"
+                },
+                "equipment": [
+                  {
+                    "slot": "weapon",
+                    "equipmentId": 1310011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "bbfbcf0c31969251",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1310011]"
+                  },
+                  {
+                    "slot": "top",
+                    "equipmentId": 1320011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "f9bf2dc285169938",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1320011]"
+                  },
+                  {
+                    "slot": "bottom",
+                    "equipmentId": 1330011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "e4bec1dead03dff0",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1330011]"
+                  },
+                  {
+                    "slot": "earring",
+                    "equipmentId": 1340011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "b2b25b3fdc5a2cba",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1340011]"
+                  },
+                  {
+                    "slot": "ring",
+                    "equipmentId": 1350011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "edb9caad03b5ea9a",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1350011]"
+                  }
+                ],
+                "setBonuses": []
+              },
+              {
+                "actorSlotId": "m12c-slot:107001",
+                "optimizationObjectId": "107001",
+                "sourceCharacterId": 107001,
+                "position": "爆发",
+                "characterCultivation": {
+                  "level": 80,
+                  "starGiftRank": 7,
+                  "completedStarGiftAttributeRank": 6,
+                  "currentRankNodeSelection": "all",
+                  "currentRankNodeIds": [
+                    73,
+                    67,
+                    68,
+                    66,
+                    88
+                  ],
+                  "completedRankSourceIdentities": [
+                    "NewTable/talent_rank.rows[id=85,heroId=107001,rank=1]",
+                    "NewTable/talent_rank.rows[id=86,heroId=107001,rank=2]",
+                    "NewTable/talent_rank.rows[id=87,heroId=107001,rank=3]",
+                    "NewTable/talent_rank.rows[id=88,heroId=107001,rank=4]",
+                    "NewTable/talent_rank.rows[id=89,heroId=107001,rank=5]",
+                    "NewTable/talent_rank.rows[id=90,heroId=107001,rank=6]"
+                  ],
+                  "currentRankNodeSourceIdentities": [
+                    "NewTable/talent_rune.rows[id=73]",
+                    "NewTable/talent_rune.rows[id=67]",
+                    "NewTable/talent_rune.rows[id=68]",
+                    "NewTable/talent_rune.rows[id=66]",
+                    "NewTable/talent_rune.rows[id=88]"
+                  ],
+                  "currentRankSourceIdentity": "NewTable/talent_rank.rows[id=91,heroId=107001,rank=7]",
+                  "sourceProfileHash": "1d2822b6e8709093"
+                },
+                "kibo": {
+                  "kiboId": 500001,
+                  "runtimeOwnerIdentity": "m12c-slot:107001+500001",
+                  "runtimeOwnerContract": "actorSlotId+kiboId",
+                  "level": 80,
+                  "talents": {
+                    "1": 120,
+                    "3": 120,
+                    "4": 120,
+                    "5": 120
+                  },
+                  "talentLevels": {
+                    "1": 10,
+                    "3": 10,
+                    "4": 10,
+                    "5": 10
+                  },
+                  "bondLevel": 1,
+                  "inheritanceBasisPoints": 900,
+                  "dnaFactors": [],
+                  "manifestHash": "4f06f5fc98c2cbeb"
+                },
+                "soulEssence": {
+                  "soulEssenceId": 10002,
+                  "profession": "爆发",
+                  "compatibilityReason": "profession-match",
+                  "level": 80,
+                  "rank": 6,
+                  "star": 1,
+                  "manifestHash": "51d9aeac35ff7210",
+                  "sourceIdentity": "NewTable/soulessence.rows[id=10002]",
+                  "profileHash": "16a7ee0a0c15a3f0"
+                },
+                "equipment": [
+                  {
+                    "slot": "weapon",
+                    "equipmentId": 1310011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "bbfbcf0c31969251",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1310011]"
+                  },
+                  {
+                    "slot": "top",
+                    "equipmentId": 1320011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "f9bf2dc285169938",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1320011]"
+                  },
+                  {
+                    "slot": "bottom",
+                    "equipmentId": 1330011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "e4bec1dead03dff0",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1330011]"
+                  },
+                  {
+                    "slot": "earring",
+                    "equipmentId": 1340011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "b2b25b3fdc5a2cba",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1340011]"
+                  },
+                  {
+                    "slot": "ring",
+                    "equipmentId": 1350011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "edb9caad03b5ea9a",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1350011]"
+                  }
+                ],
+                "setBonuses": []
+              },
+              {
+                "actorSlotId": "m12c-slot:109001",
+                "optimizationObjectId": "109001",
+                "sourceCharacterId": 109001,
+                "position": "猛攻",
+                "characterCultivation": {
+                  "level": 80,
+                  "starGiftRank": 7,
+                  "completedStarGiftAttributeRank": 6,
+                  "currentRankNodeSelection": "all",
+                  "currentRankNodeIds": [
+                    65,
+                    71,
+                    74,
+                    68,
+                    87
+                  ],
+                  "completedRankSourceIdentities": [
+                    "NewTable/talent_rank.rows[id=157,heroId=109001,rank=1]",
+                    "NewTable/talent_rank.rows[id=158,heroId=109001,rank=2]",
+                    "NewTable/talent_rank.rows[id=159,heroId=109001,rank=3]",
+                    "NewTable/talent_rank.rows[id=160,heroId=109001,rank=4]",
+                    "NewTable/talent_rank.rows[id=161,heroId=109001,rank=5]",
+                    "NewTable/talent_rank.rows[id=162,heroId=109001,rank=6]"
+                  ],
+                  "currentRankNodeSourceIdentities": [
+                    "NewTable/talent_rune.rows[id=65]",
+                    "NewTable/talent_rune.rows[id=71]",
+                    "NewTable/talent_rune.rows[id=74]",
+                    "NewTable/talent_rune.rows[id=68]",
+                    "NewTable/talent_rune.rows[id=87]"
+                  ],
+                  "currentRankSourceIdentity": "NewTable/talent_rank.rows[id=163,heroId=109001,rank=7]",
+                  "sourceProfileHash": "12881c0a1d70c512"
+                },
+                "kibo": {
+                  "kiboId": 500001,
+                  "runtimeOwnerIdentity": "m12c-slot:109001+500001",
+                  "runtimeOwnerContract": "actorSlotId+kiboId",
+                  "level": 80,
+                  "talents": {
+                    "1": 120,
+                    "3": 120,
+                    "4": 120,
+                    "5": 120
+                  },
+                  "talentLevels": {
+                    "1": 10,
+                    "3": 10,
+                    "4": 10,
+                    "5": 10
+                  },
+                  "bondLevel": 1,
+                  "inheritanceBasisPoints": 900,
+                  "dnaFactors": [],
+                  "manifestHash": "4f06f5fc98c2cbeb"
+                },
+                "soulEssence": {
+                  "soulEssenceId": 10034,
+                  "profession": null,
+                  "compatibilityReason": "universal-profession",
+                  "level": 80,
+                  "rank": 6,
+                  "star": 1,
+                  "manifestHash": "ba5e71b838337c82",
+                  "sourceIdentity": "NewTable/soulessence.rows[id=10034]",
+                  "profileHash": "d62a3d974078c100"
+                },
+                "equipment": [
+                  {
+                    "slot": "weapon",
+                    "equipmentId": 1310011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "bbfbcf0c31969251",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1310011]"
+                  },
+                  {
+                    "slot": "top",
+                    "equipmentId": 1320011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "f9bf2dc285169938",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1320011]"
+                  },
+                  {
+                    "slot": "bottom",
+                    "equipmentId": 1330011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "e4bec1dead03dff0",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1330011]"
+                  },
+                  {
+                    "slot": "earring",
+                    "equipmentId": 1340011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "b2b25b3fdc5a2cba",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1340011]"
+                  },
+                  {
+                    "slot": "ring",
+                    "equipmentId": 1350011,
+                    "setId": null,
+                    "rarity": 4,
+                    "enhancementLevel": 9,
+                    "tuningScore": 110,
+                    "instanceTier": "starborn",
+                    "bGoldSide": true,
+                    "compatibilityReason": "public-equipment-slot-contract",
+                    "manifestHash": "edb9caad03b5ea9a",
+                    "sourceIdentity": "NewTable/accessory.rows[id=1350011]"
+                  }
+                ],
+                "setBonuses": []
+              }
+            ],
+            "fixedCultivationProfile": {
+              "character": {
+                "level": 80,
+                "starGiftRank": 7,
+                "completedStarGiftAttributeRank": 6,
+                "currentRankNodeSelection": "all"
+              },
+              "kibo": {
+                "level": 80,
+                "talentLevelsByAttributeId": {
+                  "1": 10,
+                  "3": 10,
+                  "4": 10,
+                  "5": 10
+                },
+                "resolvedTalentValuesByAttributeId": {
+                  "1": 120,
+                  "3": 120,
+                  "4": 120,
+                  "5": 120
+                },
+                "bondLevel": 1,
+                "inheritanceBasisPoints": 900,
+                "dnaFactors": []
+              },
+              "soulEssence": {
+                "level": 80,
+                "rank": 6,
+                "star": 1
+              },
+              "equipment": {
+                "rarity": 4,
+                "enhancementLevel": 9,
+                "tuningScore": 110,
+                "instanceTier": "starborn",
+                "bGoldSide": true,
+                "maxValue": 110
+              },
+              "optimizationEnumeratedDimensions": [],
+              "fixedProfileHash": "22f28f1f4b5b0d90",
+              "heroRankInput": "excluded",
+              "equipmentInstanceSource": {
+                "identity": "starborn",
+                "bGoldSide": true,
+                "maximum": 110,
+                "maximumRule": "exact",
+                "sourceIdentity": "IL2CPP/Azur.Gameplay.UI.AccessoryData.bGoldSide|maxValue|ResourcesLang/chs/Table/lang_words.json#id=-2424279961521123336"
+              }
+            },
+            "authority": {
+              "qualificationCatalogHash": "6476cfbe9e49fcd5",
+              "qualificationBindingMatrixHash": "2f38f4d3ef1a95ce",
+              "sourceSnapshotHash": "2960a288bde9f925",
+              "rosterHash": "8f79e3260a1bd756",
+              "manifestsHash": "e76c15a97197b559",
+              "gapLedgerHash": "2173684e22b4ad5c",
+              "fixedCultivationProfileHash": "22f28f1f4b5b0d90",
+              "formalAdmissionBindingHash": "86f1d0af5c870cb6",
+              "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58"
+            },
+            "poolHash": "f9740b8fe17d178e",
+            "buildHash": "de4e22a59e613f44"
+          }
+        }
+      }
+    ],
+    "requestHash": "6c5b432d9b0af9de"
+  }
+}

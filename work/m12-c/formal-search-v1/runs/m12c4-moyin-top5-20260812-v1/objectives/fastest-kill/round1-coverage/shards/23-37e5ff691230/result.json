@@ -1,0 +1,314 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-shard-result",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round1-coverage",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "shardId": "m12c-shard:fd3782974856d93893135b27",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:107001=107001+108003=108003+109001=109001",
+    "teamIdentity": "m12c-team-v1:107001+108003+109001",
+    "optimizationObjectIds": [
+      "107001",
+      "108003",
+      "109001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "107001",
+        "sourceCharacterId": 107001
+      },
+      {
+        "optimizationObjectId": "108003",
+        "sourceCharacterId": 108003
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      }
+    ]
+  },
+  "inputHash": "34794796b73000206ad7d889fc38fe0cf10a0f9f14b134ab03f16096f32eb2ac",
+  "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "serviceRequestHash": "9d972c8d310ccc07",
+  "serviceResult": {
+    "schemaVersion": 1,
+    "contractName": "AzPrM12COuterSearchReport",
+    "kind": "azpr-m12c-outer-search-report",
+    "valid": false,
+    "objective": "fastest-kill",
+    "objectiveContract": {
+      "schemaVersion": 1,
+      "contractName": "AzPrMachineAxisObjectiveContract",
+      "objectiveId": "fastest-kill",
+      "classification": "primary",
+      "formalEligible": true,
+      "targetPolicy": {
+        "hpMode": "finite",
+        "toughnessMode": "enabled",
+        "breakMode": "enabled",
+        "deathTruncation": "enabled"
+      },
+      "scoring": {
+        "metric": "first-lethal-settlement-time",
+        "direction": "minimize",
+        "damageBasis": "settled-post-defense-hp-damage",
+        "formula": "firstLethalFrameThenTimeMs",
+        "finalRankingEligibility": "real-kill-candidate-only"
+      },
+      "proofRequirements": {
+        "loopBoundary": "not-applicable",
+        "actorBoundary": "runtime-legality-through-lethal-settlement",
+        "enemyBoundary": "first-lethal-settlement-and-post-death-truncation",
+        "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+        "killRequired": true,
+        "enemyProfile": "fully-resolved-hp-defense-level-and-toughness-profile"
+      },
+      "objectiveHash": "a27579630c82bd6e"
+    },
+    "options": {
+      "beamWidth": 2,
+      "topN": 5,
+      "maxDepth": 2,
+      "maxActionsPerOwner": 4,
+      "maxKiboActions": 2,
+      "includeKibo": true,
+      "includeSwitch": true,
+      "includeNormalAttacks": true,
+      "includeWait": true,
+      "maxWaitCandidates": 2,
+      "objective": "fastest-kill",
+      "objectiveContract": {
+        "schemaVersion": 1,
+        "contractName": "AzPrMachineAxisObjectiveContract",
+        "objectiveId": "fastest-kill",
+        "classification": "primary",
+        "formalEligible": true,
+        "targetPolicy": {
+          "hpMode": "finite",
+          "toughnessMode": "enabled",
+          "breakMode": "enabled",
+          "deathTruncation": "enabled"
+        },
+        "scoring": {
+          "metric": "first-lethal-settlement-time",
+          "direction": "minimize",
+          "damageBasis": "settled-post-defense-hp-damage",
+          "formula": "firstLethalFrameThenTimeMs",
+          "finalRankingEligibility": "real-kill-candidate-only"
+        },
+        "proofRequirements": {
+          "loopBoundary": "not-applicable",
+          "actorBoundary": "runtime-legality-through-lethal-settlement",
+          "enemyBoundary": "first-lethal-settlement-and-post-death-truncation",
+          "toughnessSettlement": "packet-ordered-toughness-break-double-damage-recovery",
+          "killRequired": true,
+          "enemyProfile": "fully-resolved-hp-defense-level-and-toughness-profile"
+        },
+        "objectiveHash": "a27579630c82bd6e"
+      },
+      "allowUnverifiedRuntimeTiming": false,
+      "burstWindowMs": 10000,
+      "criticalPolicy": "expected",
+      "seeds": null,
+      "maxDamagePerMsBound": 10,
+      "jobs": 1
+    },
+    "outerOptions": {
+      "maxSourceConfigs": 1,
+      "maxBuildsPerSourceConfig": 1,
+      "maxBuildsTotal": 1,
+      "maxVariantSearches": 3,
+      "initialFrontPolicy": "all-team-members",
+      "sourceConfigIdentities": [
+        "m12c-source-v1:107001=107001+108003=108003+109001=109001"
+      ]
+    },
+    "guidance": {
+      "guidanceHash": "b1df9d6d421c86bf953ec7fc42620041db729dd90d1878074bd95f9734f6c78f",
+      "guidanceVersion": "1.0.0",
+      "layer": "both"
+    },
+    "pool": {
+      "poolHash": "f9740b8fe17d178e",
+      "authority": {
+        "qualificationCatalogHash": "6476cfbe9e49fcd5",
+        "qualificationBindingMatrixHash": "2f38f4d3ef1a95ce",
+        "sourceSnapshotHash": "2960a288bde9f925",
+        "rosterHash": "8f79e3260a1bd756",
+        "manifestsHash": "e76c15a97197b559",
+        "gapLedgerHash": "2173684e22b4ad5c",
+        "fixedCultivationProfileHash": "22f28f1f4b5b0d90",
+        "formalAdmissionBindingHash": "86f1d0af5c870cb6",
+        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58"
+      },
+      "summary": {
+        "teamCount": 28,
+        "sourceConfigCount": 35,
+        "kiboCount": 43,
+        "soulEssenceCount": 62,
+        "globalEquipmentQualifiedCount": 137,
+        "m12cEquipmentProjectionCount": 53,
+        "m12cEquipmentProjectionCountBySlot": {
+          "weapon": 17,
+          "top": 9,
+          "bottom": 9,
+          "earring": 9,
+          "ring": 9
+        },
+        "setSkillThresholdCount": 12
+      }
+    },
+    "summary": {
+      "steps": 6,
+      "candidatesEvaluated": 65,
+      "invalidCandidates": 19,
+      "mergedCandidates": 0,
+      "prunedCandidates": 0,
+      "expandedCandidates": 9,
+      "completedCandidates": 0,
+      "formalSurfaceRejectedCandidates": 0,
+      "rejectionCounts": {
+        "actor-switch-exit-tail-order-unresolved": 8,
+        "joint-attack-threshold-not-reached": 18,
+        "machine-axis-action-not-executable": 24,
+        "machine-axis-normal-attack-input-missing": 2,
+        "skill-cooldown-active": 4,
+        "machine-axis-action-duration-unresolved": 2
+      },
+      "objective": "fastest-kill",
+      "topN": 5,
+      "wallTimeMs": 31661,
+      "requestedSourceConfigCount": 1,
+      "selectedSourceConfigCount": 1,
+      "plannedSourceConfigCount": 1,
+      "buildCount": 1,
+      "variantSearchCount": 3,
+      "candidateResultCount": 0,
+      "topResultCount": 0,
+      "failureCount": 3,
+      "failureSampleCount": 3,
+      "failureSampleTruncated": false,
+      "buildBudgetExhausted": false,
+      "variantBudgetExhausted": false,
+      "enumerationComplete": false,
+      "fullPoolSourceConfigCoverage": false,
+      "fullPoolEnumerationComplete": false,
+      "buildConstraintsApplied": false,
+      "dynamicOuterPruningApplied": false,
+      "formalRankingReady": false,
+      "rankingStatus": "partial-bounded-not-formal-ranking",
+      "outerSearchIntegration": {
+        "implemented": true,
+        "poolBound": true,
+        "buildContractBound": true,
+        "allInitialFrontsBound": true,
+        "globalTopNBound": true
+      }
+    },
+    "plans": [
+      {
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+108003=108003+109001=109001",
+        "planHash": "af6e57e4622b22db",
+        "estimatedBuildCount": "2079570263545552482613350",
+        "enumeratedBuildCount": 1,
+        "complete": false
+      }
+    ],
+    "failures": [
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+108003=108003+109001=109001",
+        "buildHash": "97e91afbbbfb08fe",
+        "variantKey": "m12c-variant:b18d26b90921d03c",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:107001",
+          "optimizationObjectId": "107001",
+          "sourceCharacterId": 107001
+        },
+        "issues": [
+          "actor-switch-exit-tail-order-unresolved",
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-not-executable",
+          "machine-axis-normal-attack-input-missing",
+          "skill-cooldown-active"
+        ]
+      },
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+108003=108003+109001=109001",
+        "buildHash": "97e91afbbbfb08fe",
+        "variantKey": "m12c-variant:07c267b2a61d7e97",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:108003",
+          "optimizationObjectId": "108003",
+          "sourceCharacterId": 108003
+        },
+        "issues": [
+          "actor-switch-exit-tail-order-unresolved",
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-duration-unresolved",
+          "machine-axis-action-not-executable",
+          "skill-cooldown-active"
+        ]
+      },
+      {
+        "stage": "inner-search-empty",
+        "sourceConfigIdentity": "m12c-source-v1:107001=107001+108003=108003+109001=109001",
+        "buildHash": "97e91afbbbfb08fe",
+        "variantKey": "m12c-variant:08675cacb0b7fae2",
+        "initialFront": {
+          "actorSlotId": "m12c-slot:109001",
+          "optimizationObjectId": "109001",
+          "sourceCharacterId": 109001
+        },
+        "issues": [
+          "joint-attack-threshold-not-reached",
+          "machine-axis-action-not-executable"
+        ]
+      }
+    ],
+    "failureSummary": {
+      "actor-switch-exit-tail-order-unresolved": 2,
+      "joint-attack-threshold-not-reached": 3,
+      "machine-axis-action-duration-unresolved": 1,
+      "machine-axis-action-not-executable": 3,
+      "machine-axis-normal-attack-input-missing": 1,
+      "skill-cooldown-active": 2
+    },
+    "issues": [
+      "actor-switch-exit-tail-order-unresolved",
+      "joint-attack-threshold-not-reached",
+      "machine-axis-action-duration-unresolved",
+      "machine-axis-action-not-executable",
+      "machine-axis-normal-attack-input-missing",
+      "skill-cooldown-active"
+    ],
+    "executionLedger": {
+      "poolHash": "f9740b8fe17d178e",
+      "processedVariantKeyCount": 3,
+      "processedVariantKeyChainHash": "25c99a502077f8cc",
+      "processedVariantKeys": [
+        "m12c-variant:07c267b2a61d7e97",
+        "m12c-variant:08675cacb0b7fae2",
+        "m12c-variant:b18d26b90921d03c"
+      ],
+      "processedVariantKeysTruncated": false
+    },
+    "results": [],
+    "requestHash": "9d972c8d310ccc07"
+  }
+}

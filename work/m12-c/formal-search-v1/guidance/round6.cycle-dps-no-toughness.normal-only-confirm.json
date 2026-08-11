@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchGuidance",
+  "kind": "azpr-machine-axis-search-guidance",
+  "guidanceVersion": "1.0.0",
+  "objective": "cycle-dps-no-toughness",
+  "layer": "both",
+  "budget": {
+    "beamWidth": 1,
+    "topN": 10,
+    "maxDepth": 1,
+    "maxActionsPerOwner": 2,
+    "maxKiboActions": 1,
+    "maxWaitCandidates": 1,
+    "maxDamagePerMsBound": 10,
+    "includeKibo": false,
+    "includeSwitch": false,
+    "includeNormalAttacks": true,
+    "includeWait": false
+  },
+  "actionFilters": {
+    "allowedActionKinds": [
+      "normal-attack"
+    ],
+    "blockedActionKinds": [
+      "dodge-attack",
+      "plunging-attack"
+    ]
+  },
+  "kiboPolicy": {
+    "blockedKiboIds": []
+  },
+  "switchPolicy": {
+    "includeSwitch": false
+  },
+  "waitPolicy": {
+    "includeWait": false,
+    "maxWaitFrames": null
+  },
+  "heuristic": {
+    "criticalPolicy": "expected",
+    "seeds": null
+  },
+  "outer": {
+    "maxSourceConfigs": 1,
+    "maxBuildsPerSourceConfig": 1,
+    "maxBuildsTotal": 1,
+    "maxVariantSearches": 3,
+    "initialFrontPolicy": "all-team-members"
+  },
+  "provenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 6,
+    "rationale": "Round-5 feedback ffd56efacb51daa6603a9ac79b59f45ae5e3cc627a98b1d0fbb061bee1135c3a exactly reproduced round 4 raw Top-5 identities, cutoff, ties, and families. Repeat the identical bounded normal-only beam-1 surface once more so the stop certificate rests on three consecutive raw-identity-stable rounds (4, 5, 6), without inventing semantic equivalence for round-3 action identifiers."
+  }
+}

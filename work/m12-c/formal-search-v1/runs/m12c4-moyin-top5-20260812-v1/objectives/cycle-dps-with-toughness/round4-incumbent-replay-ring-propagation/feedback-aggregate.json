@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round4-incumbent-replay-ring-propagation",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "fde602b0e894a91bfd3a6fe328ee455432a4d0e96dd58a379766116067358cff",
+  "guidanceHashes": [
+    "cf2814058161cd9c97893b3b2d71d855940c39a68b82a3f3b6acc87ba2983d9f"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 8,
+    "completedSourceConfigCount": 8,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 8,
+    "feedbackSourceConfigCount": 8
+  },
+  "budgetUsage": {
+    "beamWidth": 8,
+    "candidatesEvaluated": 8,
+    "maxDepth": 64,
+    "wallTimeMs": 32790
+  },
+  "rejectionBreakdown": [],
+  "recommendations": [
+    {
+      "text": "Retain raw build identity and aggregate all source-family shards before ranking.",
+      "count": 8
+    }
+  ],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 8,
+    "topNReady": true,
+    "topScore": 469.50721728,
+    "cutoffScore": 469.50721728,
+    "cutoffTieCount": 3,
+    "topNFamilyCount": 5,
+    "topIdentityHashes": [
+      "38b7c64da14ca72199304af0b8c20f6873f3acd2d9ed56af4a519abea9cf555c",
+      "54019e131cab8e0e2d19b65b396b485eaecd45f9d95e55644348ec2743acbed0",
+      "78db8f263eae855e836395f2db9cd69d639ea5778ba01a2b9eb0310232349d36",
+      "86a2caad4c4972337fc1d2a0180b7301e9ff9b7b31b3dc0363e8d9910a5c6040",
+      "9c0e9df89f6a78ba0b43d91f6072024744b9588f2d3432cb8397e5909d979bd0"
+    ],
+    "cutoffTieIdentityHashes": [
+      "cc4f1f245ec483c84d105f99322eee6dc5a51f4b9f134757137ba71e2be55988",
+      "e13ce1a9d8ac378b1f48b3e052a0975394ceead2986e7e1116e5672e6ea6cd64",
+      "e85a84384d79b049646295986c8466c73bf4241a9a4cafc94acfb35cac76c7a8"
+    ]
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-08594e219f77",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "feedbackFileSha256": "284f6052bd2b05957d84173b7ab2f032d9baf759752852d2202e95328619adbf"
+    },
+    {
+      "shardName": "02-7f148f2b9895",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "feedbackFileSha256": "9d0743809efd2377c46feb26a50735381c35e8b8c787c652bc71979c5bb92826"
+    },
+    {
+      "shardName": "03-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "8a7fbbbf7a0b773a47f80459d65193bf2e9310eb8bc0537732bb8817e326460b"
+    },
+    {
+      "shardName": "04-72d08b446c79",
+      "sourceConfigIdentity": "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "feedbackFileSha256": "ea47f699a52545b9b4ed7ee34899422d97a689b04ee9e709d20b8bb93da04925"
+    },
+    {
+      "shardName": "05-e74ffcc6ab9c",
+      "sourceConfigIdentity": "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "feedbackFileSha256": "1ff852231cbca646fc3a70f553c53195f3b5d3981015aba93c258ea1cc5be448"
+    },
+    {
+      "shardName": "06-b71db1e1a915",
+      "sourceConfigIdentity": "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "feedbackFileSha256": "f87ebd87a9f8f68f22e8316d6b57841607881895130f0f36991306a5baa368e2"
+    },
+    {
+      "shardName": "07-0726e8a7f286",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "feedbackFileSha256": "9e32b4d95448c0997a22b16b7eeb2e5d84eef656575c8f19e7397c573f99fc67"
+    },
+    {
+      "shardName": "08-5aa51fde8b60",
+      "sourceConfigIdentity": "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002",
+      "feedbackFileSha256": "5add8255415e4fb72c7735d33be5b01a445d497dd0ffb3d72f5ed821450f384f"
+    }
+  ],
+  "feedbackAggregateHash": "4fd050faee85a0e4a31be99db497aeecc832a4b4f9a4ec307a7ead2b258b4263"
+}

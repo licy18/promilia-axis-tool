@@ -933,13 +933,18 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 
 #### M12-C：末音试点
 
+- 2026-08-12 状态：`M12-C4/C5/C6` 已完成。正式 run `work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/` 已为三个 objective 各生成 5 个不同 raw identity；三者 effective source coverage 均为 35/35，累计 10/79、8/77、6/61 rounds/shards 且 failed/missing=0。结果只声明 `AI-guided heuristic Top-N`，`formalRankingReady=false`、`clientParityReady=false`，不宣称全局最优或穷举完整。
+- `M12-C4`：三份 latest finalization 与 terminal-bounded evidence 均 valid；无韧/有韧/击杀 cutoff 分别为 `20797.9953003 HP DPS`、`469.50721728 HP DPS`、`66133.333333 ms`。Ruby=0 冷循环污染已按全量扫描隔离 2 个 raw identity/6 occurrences，并从 canonical preset 只重跑必要 shard；未受影响产物保留，replacement provenance 已落盘。
+- `M12-C5`：15/15 最终候选均通过真实 Workbench 文件导入、timeline/动作检查器/trace 视觉检查和人工签收；15 张逐候选截图与 3 张 objective 导入摘要证据均有 SHA-256，结构化矩阵为 15/15 import active、15/15 trace match、15/15 manual accepted。
+- `M12-C6`：15/15 独立 replay 与 strict final validation 通过，verification hash=`a5bf3e453572c37bd6b81a46d28f26e23144dba70ae9005872e75c98bed20f27`；overall closeout 连续两次 hash=`3e67f6f08ee5457373c1c18952bc7611bff37f29f24b6c0c53d58c3fdcd2a8fa`、valid=true、0 issues、18/18 screenshot hash。当前 `optimizationFormalScoreReady=true` 只属于冻结 runtime-baseline，不提升 ranking/client parity readiness。
+
 - 权威实施合同见 `work/m12-c/STATE.md`。本阶段只枚举正式 9 人 roster 中以 `109001 末音` 为必选核心的三人队：另外两人从其余 8 个优化对象中选择，共 28 个对象队伍；STARBORN 仍是一个对象，但每条轴必须显式且互斥地选择 `199001` 或 `199002`，因此共有 35 个来源配置。队伍顺序不形成变体；初始前台由内层动作轴搜索并进入 `axisHash`，不进入队伍或 `buildHash`。
 - 固定培养为角色 80 级/星赐 7、奇波 80 级/四天赋 10/羁绊 1/`dnaFactors=[]`、灵子 80 级/`rank=6`/`star=1`、装备四星 `+9/同调110` 合法缘星实例。外层枚举合法队伍与角色到奇波、灵子、五部位装备的绑定及派生套装效果，内层再搜索动作轴；不得先按静态面板贪心选装，也不得让 illegal/unscoreable 候选进入评分。
 - 三个目标分别输出独立 Top-N：`cycle-dps-no-toughness`、`cycle-dps-with-toughness`、`fastest-kill`。三者统一使用 80 级标准敌人 `310054 雷冠牦` 和零距离静止场景；两个循环目标使用无限 HP 并分别关闭/启用韧性，击杀目标使用有限 HP/韧性和首次致死 cursor。禁止合成权重榜单。
-- 2026-08-11 产品裁决：M12-C4 采用版本化 AI guidance 对无法穷举的装配与动作空间做启发式剪枝，目标是在可用算力内找到尽可能优的 Top-N，不要求证明全局最优。报告必须保留 guidance/provenance、覆盖、预算、seed、拒绝分布和 objective proof，并明确标为 `AI-guided heuristic Top-N`；不得把 `formalRankingReady=false` 改写为穷举完整或全局最优。
+- 2026-08-11 产品裁决已在本次 M12-C4 执行：版本化 AI guidance 对无法穷举的装配与动作空间做启发式剪枝，报告保留 guidance/provenance、覆盖、预算、seed、拒绝分布和 objective proof，并明确标为 `AI-guided heuristic Top-N`；`formalRankingReady=false` 未被改写为穷举完整或全局最优。
 - 循环轴可由调用方用版本化 preset 固定角色/奇波 SP、队伍印记和来源允许的角色专属资源，以跳过暖机；不同 preset 分榜，且循环仍须证明资源、CD、状态、印记逐层到期和 pending event 可连续闭环。只给印记层数时按 0F 新获得、完整正常持续时间处理。
 - 击杀轴初始资源的通用资格原则是“可在非战斗状态持久保留且不会随时间过期”；M12-C v1 为控制证据范围，只开放角色/奇波 SP 与红宝石 `103002047` 弹药，调谐印记固定为 0，其他角色资源/状态全部固定为 0 或未激活。满 SP 可作为统一 preset；红宝石弹药合法范围为 `0..12`，切人不得重填。preset 由整次 run 固定并进入 hash，不能按候选偷选。
-- 手动排轴、Workbench、CLI、batch 与三个自动目标必须消费同一无头合法性门。Top-N 自动导入可视化验收台，由产品复核动作、派生、资源、Buff、印记、Break 和伤害曲线；复核通过后才能形成产品结论。角色/STARBORN 签收、每种既有印记 `+1`、合击同帧“伤害后清空架势并 Break”、objective-scoped 初始状态门和奇波自主动作延后范围均已关闭；M12-C4 按 `work/m12-c/STATE.md` 的 AI 引导诚实性边界执行。
+- 手动排轴、Workbench、CLI、batch 与三个自动目标消费同一无头合法性门。最终 Top-15 已自动导入可视化验收台并逐条复核动作、派生、资源、Buff、印记、Break、伤害曲线与 trace；角色/STARBORN 签收、每种既有印记 `+1`、合击同帧“伤害后清空架势并 Break”、objective-scoped 初始状态门和奇波自主动作延后范围均保持关闭。最终边界与证据路径见 `work/m12-c/STATE.md` 0.6 节。
 
 执行边界：M10-B2-R1 完成后先实施 M11，不继续盲目扩角色。暂缓新的营销式页面、视觉特效、非必要响应式适配、包体压缩、与验收无关的拖拽细节和全角色批量标绿；允许继续的 UI 工作仅限暴露、定位和复验机制错误。
 

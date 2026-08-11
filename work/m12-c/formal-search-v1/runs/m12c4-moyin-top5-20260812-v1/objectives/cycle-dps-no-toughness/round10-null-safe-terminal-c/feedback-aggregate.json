@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round10-null-safe-terminal-c",
+  "objective": "cycle-dps-no-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "d4b7c7020c3d0f59b3fa2df85e8a9586bb25f19d46d1f385536fb782daf9b046",
+  "guidanceHashes": [
+    "876e4038025f018026d389b361f78984fe77e29aa9ae96242b0d9ee1062d2e1f"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 1,
+    "completedSourceConfigCount": 1,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 1,
+    "feedbackSourceConfigCount": 1
+  },
+  "budgetUsage": {
+    "beamWidth": 1,
+    "candidatesEvaluated": 5,
+    "completedCandidates": 2,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 1,
+    "maxDepth": 1,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 3,
+    "topN": 10,
+    "wallTimeMs": 4846
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 1
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 2,
+    "topNReady": false,
+    "topScore": 20797.9953003,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1,
+    "topIdentityHashes": [
+      "a810778310ad071d45d428f34bbc084e88b8159ecddea45139ae99b35eac8b59",
+      "549af28e42294643165515cc8f75f4b010a68aa02c97618ac6b18ac0ea0105b5"
+    ],
+    "cutoffTieIdentityHashes": []
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "2078bb3034bb4200be82f2bafb1de0ea57a40d85c9eb7ab8dd6a2233baa923fc"
+    }
+  ],
+  "feedbackAggregateHash": "d03f60f7389bc89c2ff706e5d6dc55e9946bc8798484b6e73828eeee8e5e0482"
+}

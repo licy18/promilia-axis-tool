@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrM12CFormalSearchRoundFeedbackAggregate",
+  "kind": "azpr-m12c-formal-search-round-feedback-aggregate",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round8-null-safe-coverage-correction",
+  "objective": "cycle-dps-with-toughness",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "roundAggregateHash": "4ef1d07155f805929e9c2221dd7a2ac8cb1893a7c6439d8c5a9575f66a0e5fb7",
+  "guidanceHashes": [
+    "7944675fcbe43d3981da2a4cde434fd7d0c2ed9a934cf557d17b8ab3b564b99d"
+  ],
+  "coverage": {
+    "expectedSourceConfigCount": 8,
+    "completedSourceConfigCount": 8,
+    "failedSourceConfigCount": 0,
+    "missingSourceConfigCount": 0,
+    "feedbackFileCount": 8,
+    "feedbackSourceConfigCount": 8
+  },
+  "budgetUsage": {
+    "beamWidth": 16,
+    "candidatesEvaluated": 181,
+    "completedCandidates": 9,
+    "formalSurfaceRejectedCandidates": 0,
+    "invalidCandidates": 59,
+    "maxDepth": 8,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "steps": 24,
+    "topN": 40,
+    "wallTimeMs": 254755
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "joint-attack-threshold-not-reached",
+      "count": 48
+    },
+    {
+      "code": "machine-axis-action-not-executable",
+      "count": 48
+    },
+    {
+      "code": "machine-axis-action-resource-insufficient",
+      "count": 24
+    },
+    {
+      "code": "verified-resource-cost-unavailable",
+      "count": 24
+    },
+    {
+      "code": "machine-axis-normal-attack-input-missing",
+      "count": 10
+    },
+    {
+      "code": "machine-axis-action-duration-unresolved",
+      "count": 1
+    }
+  ],
+  "recommendations": [],
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 9,
+    "topNReady": true,
+    "topScore": 0,
+    "cutoffScore": 0,
+    "cutoffTieCount": 4,
+    "topNFamilyCount": 5,
+    "topIdentityHashes": [
+      "0808745ac2cb544a9d7f0a639f34d5a6b1968da8286e5da6278d16aca52c6663",
+      "1b68fcb4417b6d778f9318000265497b9c2eafcc02f50fad4f596f8ede16077d",
+      "29ca5fc39dbb504fec2892c4d8222ccc3c1208b9bbeb0053cdef29b0abc3b3d2",
+      "372e2d40523c10c695e64aa6f464014cbafcc98b44c445747d62c48f89473750",
+      "3803544d2c419cd3c2921dc1d322b2fc087c428ce67af6eb785c9ce99e890aa6"
+    ],
+    "cutoffTieIdentityHashes": [
+      "6c5c516f67aef764540a9f8b4afe578ccf0005af71c32de6e7c017e31940750f",
+      "869fb67e042a7f4137341876f4ce2e2ce2e0d79a9693c3cbdf20b5589c6dc22a",
+      "8c67b2a9fe99b3ccd4e7d35b841e530fdd81dede04f36a1412251a574244468f",
+      "994533c6ff2dca38b9fb8cd7cd032bf69fc68fb1c2e922767b2095e935edc445"
+    ]
+  },
+  "feedbackFiles": [
+    {
+      "shardName": "01-26e39bd0ca02",
+      "sourceConfigIdentity": "m12c-source-v1:101010=101010+103002=103002+109001=109001",
+      "feedbackFileSha256": "5d71ab3fcd39d4107ed19f9c9c3ecd0dc36962824935025e1f7355054b3a3e38"
+    },
+    {
+      "shardName": "02-ccb9585bebd7",
+      "sourceConfigIdentity": "m12c-source-v1:102001=102001+103002=103002+109001=109001",
+      "feedbackFileSha256": "31c683c95816d53482a738874bf84fa995da339db620f77fa793e1ef6ec3b3a2"
+    },
+    {
+      "shardName": "03-ae79bff50c2b",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107001=107001+109001=109001",
+      "feedbackFileSha256": "7d33038e2a2293fedb227b7cab5594b0094f67c9be35af59e3fb09e48ef77f12"
+    },
+    {
+      "shardName": "04-df3bdabf4312",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+107002=107002+109001=109001",
+      "feedbackFileSha256": "3a6573e3a679235d4422a75db4a48ae0d1de96dc019754561c71a43c9599d8a0"
+    },
+    {
+      "shardName": "05-764a6d780faf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+108003=108003+109001=109001",
+      "feedbackFileSha256": "2cd279bec4387509661f5d0ad8809680f80a5b93b63ab3755fc1c4dcf2e92fc8"
+    },
+    {
+      "shardName": "06-2e0ff780badf",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "feedbackFileSha256": "ec15a8664a5437d89689addfb997ed0da85b4c83a86e14dd36b2fb8a0084cf9d"
+    },
+    {
+      "shardName": "07-349568e9da43",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199001",
+      "feedbackFileSha256": "a986145dd07aad844582a2f8bf6820dd324976ec8de37a0c8480f84ca5f8d2ee"
+    },
+    {
+      "shardName": "08-3a9607f4e280",
+      "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+STARBORN=199002",
+      "feedbackFileSha256": "4e790f08dcc4c52e771fe2197970020e34724ad271c70de1ebe88080a3540fb4"
+    }
+  ],
+  "feedbackAggregateHash": "58988e05e03038bdc037ce7ad8068b9d808c1bf4ed0cd0c2b390a18cf2783bec"
+}

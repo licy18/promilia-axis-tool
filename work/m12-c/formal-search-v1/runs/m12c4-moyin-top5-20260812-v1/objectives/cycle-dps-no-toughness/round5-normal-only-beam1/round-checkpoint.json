@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-search-round-checkpoint",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round5-normal-only-beam1",
+  "objective": "cycle-dps-no-toughness",
+  "status": "completed",
+  "exitStatus": "completed",
+  "aggregateHash": "9223e78b80292190268cba68b31f4395103bfe8fb752da2d14cb26a183f61f6b",
+  "guidanceHash": "1bf7caafe98cd9e0d8c8025a0ca2cd56927ed65f927d5b59361ab95145bb4142",
+  "presetSpecHash": "0784e9b706a2f2edc286e2301cdf768665054fa4d52440af56de57105f857fe5",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "orchestrationIdentityHash": "7dec7198891866626b88d6da1b7db0a9d1500ce6489dd78bc62a8007e02b9b43",
+  "coverage": {
+    "expectedSourceConfigIdentities": [
+      "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+    ],
+    "completedSourceConfigIdentities": [
+      "m12c-source-v1:101010=101010+109001=109001+112001=112001",
+      "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+      "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+      "m12c-source-v1:107001=107001+109001=109001+112001=112001",
+      "m12c-source-v1:107002=107002+109001=109001+112001=112001",
+      "m12c-source-v1:108003=108003+109001=109001+112001=112001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199001",
+      "m12c-source-v1:109001=109001+112001=112001+STARBORN=199002"
+    ],
+    "failedSourceConfigIdentities": [],
+    "inProgressSourceConfigIdentities": [],
+    "missingSourceConfigIdentities": []
+  },
+  "summary": {
+    "steps": 24,
+    "candidatesEvaluated": 45,
+    "invalidCandidates": 3,
+    "mergedCandidates": 0,
+    "prunedCandidates": 0,
+    "expandedCandidates": 24,
+    "completedCandidates": 17,
+    "formalSurfaceRejectedCandidates": 0,
+    "buildCount": 8,
+    "variantSearchCount": 24,
+    "candidateResultCount": 17,
+    "failureCount": 7,
+    "aggregateWallTimeMs": 43607,
+    "validDistinctCandidateCount": 17,
+    "invalidCandidateCount": 0,
+    "topNRequested": 5,
+    "topNReady": true,
+    "cutoffScore": 20797.9953003,
+    "cutoffTieCount": 3,
+    "topNFamilyCount": 5
+  }
+}

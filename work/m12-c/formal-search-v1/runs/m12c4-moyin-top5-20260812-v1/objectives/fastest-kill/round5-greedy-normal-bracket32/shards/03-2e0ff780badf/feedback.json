@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisSearchFeedback",
+  "kind": "azpr-machine-axis-search-feedback",
+  "objective": "fastest-kill",
+  "rankingClaim": "AI-guided heuristic Top-N",
+  "formalRankingReady": false,
+  "guidanceHash": "155862dcb0b07c0d8b7ea1297515ee0fa06c7ccabf0c4e766ea64d171c18d77a",
+  "budgetUsage": {
+    "beamWidth": 1,
+    "maxDepth": 400,
+    "candidatesEvaluated": 13,
+    "wallTimeMs": 11366
+  },
+  "rankingBoundary": {
+    "validDistinctCandidateCount": 1,
+    "topNReady": false,
+    "topScore": 66133.333333,
+    "cutoffScore": null,
+    "cutoffTieCount": 0,
+    "topNFamilyCount": 1
+  },
+  "rejectionBreakdown": [
+    {
+      "code": "machine-axis-action-target-dead",
+      "count": 3
+    }
+  ],
+  "recommendations": [],
+  "boundarySearch": {
+    "synthesisId": "azpr-m12c-greedy-normal-axis-synthesis-v1",
+    "cadenceHash": "3f6f52b0afe36326c54feefc4648276bde98a9894a16b75dd884003d30e1a9a3",
+    "cadenceFrames": 18,
+    "validNotKilledActionCount": 220,
+    "killedActionCount": 221,
+    "killedFrame": 3968,
+    "killedTimeMs": 66133.333333,
+    "probeCount": 11
+  },
+  "formalShard": {
+    "runId": "m12c4-moyin-top5-20260812-v1",
+    "roundId": "round5-greedy-normal-bracket32",
+    "shardId": "m12c-greedy-kill-shard:ead08709cf5c14d98605475a",
+    "sourceConfigIdentity": "m12c-source-v1:103002=103002+109001=109001+112001=112001",
+    "inputHash": "c935ee83755cd1524a0dd712fa7d0dd9567b8483124177743e965adb56c930da",
+    "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+    "baselineHead": "baeb03489aa823d59981d60255af5b418aa48178"
+  }
+}

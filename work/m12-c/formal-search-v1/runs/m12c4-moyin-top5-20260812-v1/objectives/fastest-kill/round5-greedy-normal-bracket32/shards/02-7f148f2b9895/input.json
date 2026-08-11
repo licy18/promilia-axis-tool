@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "kind": "azpr-m12c-formal-greedy-kill-shard-input",
+  "runId": "m12c4-moyin-top5-20260812-v1",
+  "roundId": "round5-greedy-normal-bracket32",
+  "objective": "fastest-kill",
+  "shardId": "m12c-greedy-kill-shard:5504d3ad397da91483c67f2d",
+  "baseline": {
+    "head": "baeb03489aa823d59981d60255af5b418aa48178",
+    "originMaster": "baeb03489aa823d59981d60255af5b418aa48178",
+    "releaseRecordId": "5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24",
+    "formalSearchAdmissionRecordId": "2a2da2221839c3636598ab6c427df76057f5f2ee3daa238ee8bb50fdae30abe3",
+    "releaseReportPath": "work/m12-c/gates/latest-release-verify.json",
+    "stashTopObjectId": "900e193bf710b8f894b50e0bc966db70cbd7e717"
+  },
+  "sourceConfig": {
+    "sourceConfigIdentity": "m12c-source-v1:102001=102001+109001=109001+112001=112001",
+    "teamIdentity": "m12c-team-v1:102001+109001+112001",
+    "optimizationObjectIds": [
+      "102001",
+      "109001",
+      "112001"
+    ],
+    "actors": [
+      {
+        "optimizationObjectId": "102001",
+        "sourceCharacterId": 102001
+      },
+      {
+        "optimizationObjectId": "109001",
+        "sourceCharacterId": 109001
+      },
+      {
+        "optimizationObjectId": "112001",
+        "sourceCharacterId": 112001
+      }
+    ]
+  },
+  "buildConstraints": {
+    "112001": {
+      "equipmentIdsBySlot": {
+        "ring": [
+          1350211
+        ]
+      }
+    }
+  },
+  "initialState": {
+    "presetId": "m12c-kill-full-sp-ruby12-zero-marks-v1",
+    "actorSpByOptimizationObjectId": {
+      "102001": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "kiboSpByOptimizationObjectId": {
+      "102001": 100,
+      "109001": 100,
+      "112001": 100
+    },
+    "tuningMarks": [],
+    "specialResources": []
+  },
+  "refinementInitialFrontOptimizationObjectId": "112001",
+  "firstProbeActionCount": 32,
+  "maxActionCount": 400,
+  "guidanceHash": "155862dcb0b07c0d8b7ea1297515ee0fa06c7ccabf0c4e766ea64d171c18d77a",
+  "guidanceProvenance": {
+    "authority": "ai-agent",
+    "agentId": "codex-m12c-formal-search",
+    "sessionId": "m12c4-moyin-top5-20260812-v1",
+    "iteration": 5,
+    "rationale": "Round-4 feedback 69e780e92e2b7038ca27640a7bd09706c1a2e2fc74f420cc983328833c7d63da found eight distinct legal killed candidates at the same first-lethal boundary: 221 Hero A1 inputs, frame 3968, 66133.333333ms, with 220 inputs nonlethal and longer target-dead prefixes rejected. Independently repeat every source shard with a different initial bracket of 32 actions; retain the same generator-derived cadence and fail-closed binary boundary contract."
+  },
+  "presetSpecHash": "87f74e6c0e07819d29ae35cd24c2b5c5f96c73547689ced360fa43244ad85fd0",
+  "contractTemplateHash": "afbf0850a9d94dfc118943795c4e2e80e4eed81352ff1a9c3f9cb7fb58f9e936",
+  "orchestrationIdentityHash": "0aa6a0847e86ed06ea4d9b9350cdf2bb947e964f39c3d1d93a6ff9d8e2494bb0"
+}
