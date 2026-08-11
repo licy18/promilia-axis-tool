@@ -8,7 +8,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/108003-joint-attack-runtime.json",
-        "inputHash": "5efc1d867fe65b78",
+        "inputHash": "8aacd3619d33f45c",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/108003-joint-attack-runtime.json"
       },
       "execution": {
@@ -17,11 +17,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "5efc1d867fe65b78",
-          "data": "7aca34ddedf352ba",
-          "trace": "4721e813f60c5b7b",
+          "input": "8aacd3619d33f45c",
+          "data": "ef6acb935c156f21",
+          "trace": "0d270ff7cccca758",
           "evaluation": "de8545a84fb68991",
-          "build": "58f38c2ebab3ffb0"
+          "build": "5c6037ef98c04a55"
         }
       },
       "traceProjection": {
@@ -1142,22 +1142,10 @@
         "switchTriggers": [],
         "diagnostics": [
           {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-108003-joint-attack-runtime:0"
-          },
-          {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-108003-joint-attack-runtime:1"
-          },
-          {
             "actionId": "miti-star-combo-active",
             "code": "joint-attack-runtime-assumption-ready",
             "status": "verified",
-            "projectionIdentity": "machine-diagnostic:m12-b3-108003-joint-attack-runtime:2"
+            "projectionIdentity": "machine-diagnostic:m12-b3-108003-joint-attack-runtime:0"
           }
         ],
         "criticalDecisions": [
@@ -1193,7 +1181,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "885908712530402f",
+      "traceProjectionHash": "1444cb572d8ebd16",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -1807,7 +1795,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "04e130bb6bc9729e"
+      "scenarioCaseHash": "74a3674679bf8643"
     },
     {
       "schemaVersion": 1,
@@ -87511,5 +87499,5 @@
       "machine-axis": 3
     }
   },
-  "scenarioSetHash": "7068aa5664d0d2c0"
+  "scenarioSetHash": "b12816fa65c41b2a"
 }

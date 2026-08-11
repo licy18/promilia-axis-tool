@@ -1,6 +1,6 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩的开发/集成门禁已通过，产品签收重绑定与 clean HEAD release 尚未完成；正式搜索仍未启动。
+状态：`M12-C0` 至 `M12-C3` 已完成；奇波自主动作范围收缩与受影响角色产品重签已完成，clean HEAD release 尚未完成；正式搜索仍未启动。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
@@ -12,7 +12,7 @@
 - `M12-C3` 已实现 objective-scoped initial-state preset、canonical hash 和 formal authority 校验；循环轴与击杀轴白名单均 fail closed。
 - STARBORN 最终合同为：星决技对 action-start 已存在的每一种印记分别 `+1`，星携同样 `+1`，逐种 cap 5；无印记不创建，`199001/199002` 不双计。`+2` 仅保留为必须失败的负向测试。
 - M12-B3 optimization qualification 为 263/263：角色 9/9、奇波 43/43、灵子 62/62、装备 137/137、套装 12/12；`blockingUniqueGapCount=0`，`m12cLocked=false`。E22 binding matrix 为 22/22。
-- 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `6e4843984a9f435d`；manifests `d08e4a0bc73b464f`；ledger `7b7cb20e220da974`；qualification binding matrix `bd4084ac0882820f`；qualification catalog `b26dede46b58f714`；E22 report `07c2fc6c7355d85d`。
+- 当前权威 hash：verified mechanics package `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`；roster `e12aabb34300562d`；manifests `7a66eade8bed71c8`；ledger `5bee5de9feb482a4`；qualification binding matrix `acc1dae5e749d641`；qualification catalog `d7cebfbd94c04d33`；E22 report `b53e8e13947c0b46`。
 - 全量门禁：`test:full` 228/228 files、1877/1877 tests；确定性聚焦集 16 files、166/166 tests；Workbench production preview 64/64；最终 `test:trial-release` exit 0。production build、Workbench data、action status、applied-source、Kibo headless、production imports、bundle、binding matrix 和确定性审计均通过。
 - `clientParityReady=false` 仍由已验证 mechanics/profile evidence 明确保留；它与 optimization qualification 全绿是两条独立状态，禁止混同。
 - 2026-08-11 用户明确签收单一 STARBORN optimization-object。正式 recipe/manifest 已更新为 `productVisualAcceptance=accepted`、`formalAdmission=true`、`optimizationReady=true`，acceptance subject hash=`c645f8836bf6fd0a`、bundle hash=`3338e8e57a632564`；签收绑定到基线 HEAD `76605d759376a93a2981fc27f2fa18e3464b17f7`，后续证据漂移不得自动续签。既有 `199001/199002` 角色级 accepted 记录保持原样，本次没有把一个对象拆成两次签收。
@@ -49,8 +49,9 @@
 - `formal-search-admission` 直接核验 43/43 奇波、71/71 deferred autonomous surfaces、43/43 signature 和 43/43 joint-attack surface，以及 policy/catalog/scheduler/search-generator hash；这证明“范围已应用”，不声称自主 AI 已实现。
 - 本节不改变 Kibo source catalog、verified mechanics package、静态培养属性、SP、大招、合击或被动运行时，也不启动正式搜索。
 - 当前工作树全量 Vitest 为 240/240 files、1936/1936 tests；聚焦范围回归 11/11 files、125/125 tests。production build（1901 modules）、Machine Axis CLI build、bundle 三项预算、production imports、Workbench data、action status、applied-source、Kibo headless、optimization scenario/qualification 与 E22 binding 22/22 均通过。
-- 去除 autonomous derivation registry 会改变部分既有验收轴的 canonical input/data/trace identity，即使伤害评价不变；例如 107002 的 evaluation hash 仍为 `5238bf8119e66446`，但 input/data/trace 已变为 `30780d8354ecceaf` / `9167d13d5bd46dc0` / `9d108c00b14b69ae`。代码回归常量已同步，产品签收记录没有自动续签或改写。
-- `npm run audit:character-acceptance` 当前在首个报告的 103002 处以 `character-acceptance-product-record-binding-invalid` fail closed。因此本范围变更尚无 clean HEAD release authority，正式搜索继续阻断；需由产品方复验受影响验收轴后重新绑定，再生成派生产物并重跑 `release:verify`。
+- 去除 autonomous derivation registry 会改变部分既有验收轴的 canonical input/data/trace identity，即使伤害评价不变；例如 107002 的 evaluation hash 仍为 `5238bf8119e66446`，但 input/data/trace 已变为 `30780d8354ecceaf` / `9167d13d5bd46dc0` / `9d108c00b14b69ae`。代码回归常量已同步，产品记录没有由自动化静默续签。
+- 现场比较 10 个既有 accepted 角色：101010、102001、109001、199001、199002 的绑定未漂移；103002、107001、107002、108003、112001 的绑定失效。用户已明确签收这 5 个受影响角色，并将其 acceptanceCommit/recordIdentity 绑定到范围实现基线 `be60e68d1c1bcf77a962426ddb0af37fc384c4da`；原截图 SHA 与场景身份保持不变。101003 继续为原有 pending，不借本次重签提升。
+- 严格 `audit:character-acceptance` 已恢复 clean：11 runtime-integrated、10 visually-accepted、10 optimization-ready；qualification 仍为 263/263、E22 binding 22/22、visual acceptance 254/254。当前只剩最终签收提交后的 clean HEAD `release:verify`，正式搜索在其通过前继续阻断。
 
 ## 1. 目标与结果身份
 

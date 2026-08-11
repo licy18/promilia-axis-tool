@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-11T11:22:19.148Z",
+  "generatedAt": "2026-08-11T12:29:01.430Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -13,11 +13,11 @@
     "setSkills": 12
   },
   "hashes": {
-    "rosterHash": "6e4843984a9f435d",
-    "manifestsHash": "d08e4a0bc73b464f",
-    "ledgerHash": "7b7cb20e220da974",
-    "bindingMatrixHash": "bd4084ac0882820f",
-    "qualificationCatalogHash": "b26dede46b58f714",
+    "rosterHash": "e12aabb34300562d",
+    "manifestsHash": "7a66eade8bed71c8",
+    "ledgerHash": "5bee5de9feb482a4",
+    "bindingMatrixHash": "acc1dae5e749d641",
+    "qualificationCatalogHash": "d7cebfbd94c04d33",
     "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58"
   },
   "staticMatrix": {
@@ -102,7 +102,10 @@
         "detail": {
           "starborn": {
             "optimizationObjectId": "STARBORN",
-            "sourceCharacterIds": [199001, 199002],
+            "sourceCharacterIds": [
+              199001,
+              199002
+            ],
             "normalizedMechanismHash": "320b1011f76b0f8f",
             "aliasHashesEqual": true,
             "projection": {
@@ -965,9 +968,9 @@
         "identity": "artifact-hash-consistency",
         "passed": true,
         "detail": {
-          "rosterHash": "6e4843984a9f435d",
-          "bindingMatrixHash": "bd4084ac0882820f",
-          "catalogHash": "b26dede46b58f714"
+          "rosterHash": "e12aabb34300562d",
+          "bindingMatrixHash": "acc1dae5e749d641",
+          "catalogHash": "d7cebfbd94c04d33"
         }
       }
     ]
@@ -1205,5 +1208,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "07c2fc6c7355d85d"
+  "bindingMatrixHash": "b53e8e13947c0b46"
 }

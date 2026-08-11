@@ -4,13 +4,11 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:107001:eb06acc456ee309245a78455e7691738a2ee808b:3a891f60cad3c045",
-    "qualificationSubjectHash": "3a891f60cad3c045",
+    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
+    "recordIdentity": "character-product-acceptance:107001:be60e68d1c1bcf77a962426ddb0af37fc384c4da:3907aa5ba208627c",
+    "qualificationSubjectHash": "3907aa5ba208627c",
     "scenarioSetHash": "9b0a34182b43788f",
-    "scenarioIdentities": [
-      "m12-b3-107001-focused-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
@@ -33,9 +31,7 @@
   ],
   "ownerId": 107001,
   "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
-  "goldenReports": [
-    "reports/m10/107001/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/107001/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10700162,
   "requirementPolicies": {
     "unselectedControlVariantsFromActionForms": true
@@ -75,11 +71,7 @@
     "effectIdentity": "battle-element:107001262",
     "targetId": "actor-107001",
     "durationFrames": 1440,
-    "requiredOperations": [
-      "apply",
-      "refresh",
-      "expire"
-    ],
+    "requiredOperations": ["apply", "refresh", "expire"],
     "rightOpenExpiry": true
   },
   "probes": [
@@ -305,15 +297,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

@@ -36,10 +36,7 @@
       "set-skill:5:4",
       "set-skill:6:4"
     ],
-    "c10RuntimeIntegratedSetKeys": [
-      "set-skill:2:4",
-      "set-skill:4:4"
-    ],
+    "c10RuntimeIntegratedSetKeys": ["set-skill:2:4", "set-skill:4:4"],
     "guardedFacts": {
       "setSkillDenominator": 12,
       "runtimeAppliedSetSkillCount": 8,
@@ -91,11 +88,7 @@
       "mainPetShareType": 0,
       "petShareType": 0,
       "sourceKiboDirectEventCount": 0,
-      "actorChanges": [
-        16,
-        16,
-        16
-      ]
+      "actorChanges": [16, 16, 16]
     },
     "contracts": [
       "actor-target direct SP always gives the target/source actor its actor value and routes other actors only through shareType",
@@ -107,20 +100,9 @@
   },
   "scope": {
     "batch": "periodic-persistent-property-root-with-finite-leaf",
-    "soulEssenceIds": [
-      10078,
-      10084,
-      10152,
-      10197
-    ],
-    "runtimeAppliedSoulEssenceIds": [
-      10084,
-      10152,
-      10197
-    ],
-    "evidenceBlockedSoulEssenceIds": [
-      10078
-    ],
+    "soulEssenceIds": [10078, 10084, 10152, 10197],
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
     "setSkillIds": [],
     "runtimeAppliedSetSkillIds": [],
     "evidenceBlockedSetSkillIds": [],
@@ -404,51 +386,15 @@
     "eventSource": "verified tuning-mark acquisition publishes the acquired StackElement container identity and native types",
     "markContainerCount": 9,
     "markContainers": {
-      "150": [
-        31,
-        41,
-        1001
-      ],
-      "250": [
-        37,
-        41,
-        1001
-      ],
-      "350": [
-        35,
-        41,
-        1001
-      ],
-      "450": [
-        32,
-        41,
-        1001
-      ],
-      "550": [
-        34,
-        41,
-        1001
-      ],
-      "650": [
-        33,
-        41,
-        1001
-      ],
-      "750": [
-        32,
-        41,
-        1001
-      ],
-      "850": [
-        32,
-        41,
-        1001
-      ],
-      "950": [
-        38,
-        41,
-        1001
-      ]
+      "150": [31, 41, 1001],
+      "250": [37, 41, 1001],
+      "350": [35, 41, 1001],
+      "450": [32, 41, 1001],
+      "550": [34, 41, 1001],
+      "650": [33, 41, 1001],
+      "750": [32, 41, 1001],
+      "850": [32, 41, 1001],
+      "950": [38, 41, 1001]
     },
     "windElementSeparation": {
       "750": "StackElement acquisition source; publishes one paired BeforeGetElement/AfterGetElement transaction",
@@ -473,16 +419,8 @@
       "phase",
       "targetSequenceIndex"
     ],
-    "phaseOrder": [
-      "before",
-      "settlement",
-      "after"
-    ],
-    "coveredDirectEffectKinds": [
-      "direct-sp",
-      "direct-heal",
-      "direct-shield"
-    ],
+    "phaseOrder": ["before", "settlement", "after"],
+    "coveredDirectEffectKinds": ["direct-sp", "direct-heal", "direct-shield"],
     "descriptorArrayOrdinalAffectsSemantics": false,
     "legacyMissingPath": "fail-closed with VERIFIED_DIRECT_EFFECT_SOURCE_SEQUENCE_UNRESOLVED",
     "classificationBoundary": "source-order readiness is expressed only by its namespaced status and cannot mark a gameplay effect applied",
@@ -490,10 +428,7 @@
       "generatedHealBeforeAcquire": 100,
       "generatedHealAfterAcquire": 111,
       "outOfHorizonDescriptorCount": 30,
-      "resultsAfterDescriptorInsertion": [
-        100,
-        111
-      ],
+      "resultsAfterDescriptorInsertion": [100, 111],
       "directSpProvenanceStable": true,
       "directShieldProvenanceStable": true
     }
@@ -501,18 +436,8 @@
   "c9PersistentLoadoutPropertyContract": {
     "nativeEvidence": "InjectToOwnElementBehavior.Start/GetInjectTargets installs frame-zero Self elements; ChangePropertyElement.Parse/Combine binds time=-1 and Cover; explicit UnloadSkill(36) removal closes the lifetime",
     "runtimeAppliedSoulEssenceIds": [
-      10033,
-      10034,
-      10047,
-      10050,
-      10056,
-      10057,
-      10058,
-      10059,
-      10061,
-      10062,
-      10133,
-      10156
+      10033, 10034, 10047, 10050, 10056, 10057, 10058, 10059, 10061, 10062,
+      10133, 10156
     ],
     "conditionalOrFiniteOutliers": {
       "10078": "conditional wrapper and finite 1100ms property leaf",
@@ -536,14 +461,8 @@
     "sourceSequence": "actor character, loadout kind, soul/set identity, threshold, skill/control graph path and leaf element",
     "dualLeafSoulEssence": {
       "soulEssenceId": 10133,
-      "leafElementIds": [
-        19004401,
-        19004403
-      ],
-      "attributeIds": [
-        105,
-        23
-      ]
+      "leafElementIds": [19004401, 19004403],
+      "attributeIds": [105, 23]
     },
     "numericConsequences": {
       "windDamage": "10056 increases a real wind hit and remains actor-isolated",
@@ -557,26 +476,12 @@
     "nativeEvidence": "SkillPlayer UpdateElements calls TriggerElement.OnUpdate, which evaluates periodic roots at frame 1 and then on strict greater-than interval boundaries; TriggerEffect injects a finite ChangePropertyElement leaf whose Cover lifecycle remains independent from the persistent root",
     "rootInstallation": "one source-driven root per equipped actor/loadout/control/map/root identity; changing loadout removes the root and prevents later refreshes",
     "periodicCadence": {
-      "1000ms": [
-        1,
-        61,
-        121
-      ],
-      "2000ms": [
-        1,
-        121,
-        241
-      ],
+      "1000ms": [1, 61, 121],
+      "2000ms": [1, 121, 241],
       "failedConditionConsumesCurrentPeriod": true
     },
-    "runtimeAppliedSoulEssenceIds": [
-      10084,
-      10152,
-      10197
-    ],
-    "evidenceBlockedSoulEssenceIds": [
-      10078
-    ],
+    "runtimeAppliedSoulEssenceIds": [10084, 10152, 10197],
+    "evidenceBlockedSoulEssenceIds": [10078],
     "contracts": {
       "10078": "root 19004600 and 1100ms attr21 leaf 19004601 are indexed, but defaultPropertyTags [302,303] remain fail-closed because native multi-tag match semantics are not source-closed",
       "10084": "root 19006000 periodically refreshes finite leaf 19006001 on Self; attr8 affects verified critical damage only while the 1100ms right-open leaf is active",
@@ -669,12 +574,7 @@
       "effectTarget": "Target(1), the actual healed actor",
       "attributeId": 5,
       "bucket": "dynamicPercent",
-      "valuesByStarRaw": [
-        1460,
-        1940,
-        2430,
-        2910
-      ],
+      "valuesByStarRaw": [1460, 1940, 2430, 2910],
       "durationMs": 15000,
       "combineType": 5,
       "stackMode": "block",
@@ -764,10 +664,7 @@
       "skillId": 19998008,
       "triggerElementId": 199999063,
       "wrapperElementId": 199999071,
-      "propertyElementIds": [
-        199999064,
-        199999070
-      ],
+      "propertyElementIds": [199999064, 199999070],
       "threshold": "at least four valid same-set equipment slots; one runtime installation at four or five pieces",
       "trigger": "AfterDamage(2), Self observer, NormalAttack(1) OR WhackAttack(2), landed verified transaction only",
       "effectTarget": "native event target enemy",
@@ -800,12 +697,8 @@
     "reverseReferenceCensus": {
       "defaultPackageSkillListJsonFiles": 212053,
       "staticPackageSkillListJsonFiles": 0,
-      "oldGraphControlSkillIds": [
-        19998005
-      ],
-      "nearMatchControlSkillIds": [
-        19998003
-      ]
+      "oldGraphControlSkillIds": [19998005],
+      "nearMatchControlSkillIds": [19998003]
     },
     "signatureSearch": {
       "battleElementRows": 14781,
@@ -850,12 +743,7 @@
       "attributeId": 1,
       "durationMs": 8000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        400,
-        500,
-        600,
-        700
-      ]
+      "valuesByStarRaw": [400, 500, 600, 700]
     },
     "10052": {
       "name": "小小木雕",
@@ -869,12 +757,7 @@
       "triggerIntervalMs": 10,
       "stackMode": "refresh",
       "maxStacks": 1,
-      "valuesByStarRaw": [
-        1070,
-        1340,
-        1600,
-        1870
-      ]
+      "valuesByStarRaw": [1070, 1340, 1600, 1870]
     },
     "10169": {
       "name": "软软棉花肉",
@@ -884,12 +767,7 @@
       "attributeId": 229,
       "durationMs": 20000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        375000,
-        500000,
-        625000,
-        750000
-      ],
+      "valuesByStarRaw": [375000, 500000, 625000, 750000],
       "blockingReason": "effect-shield-refresh-replacement-semantics-evidence-gap"
     },
     "10175": {
@@ -901,12 +779,7 @@
       "attributeId": 1,
       "durationMs": 2000,
       "stackMode": "refresh",
-      "valuesByStarRaw": [
-        900,
-        1200,
-        1500,
-        1800
-      ]
+      "valuesByStarRaw": [900, 1200, 1500, 1800]
     },
     "10176": {
       "name": "温柔的照护",
@@ -920,12 +793,7 @@
       "combineNumber": -1,
       "stackMode": "block",
       "activeDuplicateRefreshes": false,
-      "valuesByStarRaw": [
-        1460,
-        1940,
-        2430,
-        2910
-      ]
+      "valuesByStarRaw": [1460, 1940, 2430, 2910]
     }
   },
   "runtimeMatrix": {
@@ -980,11 +848,7 @@
       "landed-hit-kibo-sp-recovery",
       "overlimit-direct-sp"
     ],
-    "vitalSettlements": [
-      "direct-heal",
-      "direct-shield",
-      "periodic-heal"
-    ],
+    "vitalSettlements": ["direct-heal", "direct-shield", "periodic-heal"],
     "negativeGates": [
       "actor-resource-insufficient",
       "kibo-resource-insufficient",
@@ -1063,12 +927,8 @@
     "runtimeUnappliedSoulEssenceCount": 0,
     "runtimeAppliedSetSkillCount": 12,
     "runtimeUnappliedSetSkillCount": 0,
-    "newlyAppliedSoulEssenceIds": [
-      10095
-    ],
-    "newlyAppliedSetSkillIds": [
-      "set-skill:3:4"
-    ],
+    "newlyAppliedSoulEssenceIds": [10095],
+    "newlyAppliedSetSkillIds": ["set-skill:3:4"],
     "preservedRuntimeAppliedSoulEssenceCount": 61,
     "preservedRuntimeAppliedSetSkillCount": 11,
     "remainingBlockedFourPieceSetSkillIds": []
@@ -1093,12 +953,12 @@
     }
   },
   "hashes": {
-    "sourceSnapshotHash": "b22dcfb761cc58d4",
-    "rosterHash": "6e4843984a9f435d",
-    "manifestsHash": "d08e4a0bc73b464f",
-    "ledgerHash": "7b7cb20e220da974",
-    "bindingMatrixHash": "bd4084ac0882820f",
-    "qualificationCatalogHash": "b26dede46b58f714",
+    "sourceSnapshotHash": "2865c423f6cd4334",
+    "rosterHash": "e12aabb34300562d",
+    "manifestsHash": "7a66eade8bed71c8",
+    "ledgerHash": "5bee5de9feb482a4",
+    "bindingMatrixHash": "acc1dae5e749d641",
+    "qualificationCatalogHash": "d7cebfbd94c04d33",
     "dynamicLoadoutEffectCensusHash": "bf1b9ef761ed1db5",
     "soulEssenceEffectCatalogHash": "6febc556edfa8073",
     "soulEssenceSourceSnapshotHash": "648a0c60af46daa3",

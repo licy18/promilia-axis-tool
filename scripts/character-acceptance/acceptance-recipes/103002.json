@@ -4,11 +4,9 @@
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "2a0be63030616ad887df683e6d2e8b7fa22c8aad",
-    "recordIdentity": "character-product-acceptance:103002:2a0be63030616ad887df683e6d2e8b7fa22c8aad:22a63a5df82b3260",
-    "scenarioIdentities": [
-      "m11-d-103002-visual-acceptance"
-    ],
+    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
+    "recordIdentity": "character-product-acceptance:103002:be60e68d1c1bcf77a962426ddb0af37fc384c4da:ffe20daca7c866b4",
+    "scenarioIdentities": ["m11-d-103002-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-103002-visual-acceptance",
@@ -17,14 +15,12 @@
         "screenshotSha256": "13a2f1a1fdcee5b264e287c141401293f0d619c325d070708b1ab3b30445b336"
       }
     ],
-    "qualificationSubjectHash": "22a63a5df82b3260",
+    "qualificationSubjectHash": "ffe20daca7c866b4",
     "scenarioSetHash": "b6fafdf5110fb6e0"
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
-  "goldenReports": [
-    "reports/m10/103002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/103002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -202,9 +198,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -244,9 +238,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -294,9 +286,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -344,9 +334,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -408,11 +396,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -550,26 +534,11 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [
-                173,
-                237
-              ],
-              "absoluteFrame": [
-                1853,
-                1917
-              ],
-              "markCountAtJudgment": [
-                1,
-                0
-              ],
-              "consumedCount": [
-                1,
-                0
-              ],
-              "applied": [
-                true,
-                false
-              ],
+              "triggerFrame": [173, 237],
+              "absoluteFrame": [1853, 1917],
+              "markCountAtJudgment": [1, 0],
+              "consumedCount": [1, 0],
+              "applied": [true, false],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -639,11 +608,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -658,17 +623,10 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": [
-                "expire",
-                "apply"
-              ]
+              "operation": ["expire", "apply"]
             }
           },
-          "select": [
-            "actionId",
-            "operation",
-            "absoluteFrame"
-          ]
+          "select": ["actionId", "operation", "absoluteFrame"]
         }
       ]
     },
@@ -694,15 +652,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

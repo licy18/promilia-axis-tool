@@ -3,13 +3,11 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "5ee914e2f5134d280f2a5da0ea6a28604242957c",
-    "recordIdentity": "character-product-acceptance:107002:5ee914e2f5134d280f2a5da0ea6a28604242957c:57961f2d54618543",
-    "qualificationSubjectHash": "57961f2d54618543",
-    "scenarioSetHash": "de392cbb73dc2ae9",
-    "scenarioIdentities": [
-      "m12-b3-107002-reduced-action-surface-acceptance"
-    ],
+    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
+    "recordIdentity": "character-product-acceptance:107002:be60e68d1c1bcf77a962426ddb0af37fc384c4da:87403ea8176d1bbf",
+    "qualificationSubjectHash": "87403ea8176d1bbf",
+    "scenarioSetHash": "1ac7a5345df45267",
+    "scenarioIdentities": ["m12-b3-107002-reduced-action-surface-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
@@ -22,9 +20,7 @@
   "ownerId": 107002,
   "runtimeProfileOverlay": true,
   "fixturePath": "fixtures/character-acceptance/107002-visual.json",
-  "goldenReports": [
-    "reports/m10/107002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/107002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10700262,
   "criticalProbe": {
     "preHitAttributeChange": {
@@ -47,10 +43,7 @@
       "identity": "misa-star-source-sub1-not-runtime-reachable",
       "controlSkillId": 10700212,
       "subSkillIndex": 1,
-      "dimensions": [
-        "control-window",
-        "hit"
-      ],
+      "dimensions": ["control-window", "hit"],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.publicActions[actionIdentity=actor|107002|10700212|0|10700212|star-skill].variantConditionDiscovery.defaultSelection[subSkillIndex=0]|variantDurations[subSkillIndex=1]"
@@ -59,10 +52,7 @@
       "identity": "misa-star-execution-sub1-not-runtime-reachable",
       "controlSkillId": 10700226,
       "subSkillIndex": 1,
-      "dimensions": [
-        "control-window",
-        "hit"
-      ],
+      "dimensions": ["control-window", "hit"],
       "scenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
       "reason": "source-subskill-has-no-runtime-reachable-public-action-form-in-frozen-product-scenario",
       "sourceIdentity": "src/data/generated/character-combat-profiles/107002.json#contracts.actionForms[formIdentity=actor:107002:star-skill:misa-star-main-combo].executionControlSkillId=10700226;executionSubSkillIndex=0"

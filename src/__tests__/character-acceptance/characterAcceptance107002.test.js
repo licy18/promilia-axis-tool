@@ -279,7 +279,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     });
     expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: '5ee914e2f5134d280f2a5da0ea6a28604242957c',
+      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
       bindingStatus: 'verified',
     });
     expect(misaManifest.maturity).toMatchObject({

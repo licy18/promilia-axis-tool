@@ -16,17 +16,17 @@
       "edgeIdentity": "coverage-edge:00eff1e3d062d1c3"
     },
     {
-      "requirementIdentity": "contract:control-window:control-window:59:2276264a05d95f27",
+      "requirementIdentity": "contract:effect:effect:1:1beed99978d9383f",
       "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-2",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
       "selector": {
-        "kind": "control-window",
-        "windowIdentity": "actor:107001|control:10700112|sub:0|117-266|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json"
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
       },
-      "assertionHash": "8926d5f2a6b96f90",
-      "traceProjectionHash": "7da4121c1950f806",
+      "assertionHash": "6be81f27fac0f974",
+      "traceProjectionHash": "7b5ed0659deff703",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:01145b1bfe8a2108"
+      "edgeIdentity": "coverage-edge:0351e02a8a265628"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -53,19 +53,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:03cdafa9324727bf"
-    },
-    {
-      "requirementIdentity": "contract:control-window:control-window:61:202c088bf78d62bb",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-4",
-      "selector": {
-        "kind": "control-window",
-        "windowIdentity": "actor:107001|control:10700112|sub:0|155-304|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_16278780643787128__16278780643787128.json#behaviorlineControl[0].behaviorList[pathId=8537591540481606008]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8537591540481606008__8537591540481606008.json"
-      },
-      "assertionHash": "a9b4ec4e2f27dd3d",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:042ce67f325697d6"
     },
     {
       "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
@@ -224,6 +211,20 @@
       "edgeIdentity": "coverage-edge:0acdb97ea3874d6e"
     },
     {
+      "requirementIdentity": "protocol:107001:save-import-replay",
+      "scenarioIdentity": "m12-b3-107001-joint-attack-runtime",
+      "assertionIdentity": "workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1ebb23438e769331",
+      "traceProjectionHash": "c5fa95f8cdc3dd3d",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0c3cf6a66a42d711"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:59:7a46e08fad24af1a",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:81",
@@ -249,6 +250,32 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:0c7671d2a981c6b2"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:0:c22a35f27440c790",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "5b56006384a9e9ba",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0c7797ed1df39ebb"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:59:7a46e08fad24af1a",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "576824fcc6048275",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:0d12269937e1950c"
     },
     {
       "requirementIdentity": "contract:effect:effect:6:6c60b928405a978a",
@@ -317,19 +344,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:0f0d692446f57622"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "a5ac6b9cdc71d4f4",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:0f3969956a0c9e57"
     },
     {
       "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
@@ -639,19 +653,6 @@
       "edgeIdentity": "coverage-edge:1a93b8bca25aaafa"
     },
     {
-      "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "6be81f27fac0f974",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:1ac5212ae939b78a"
-    },
-    {
       "requirementIdentity": "contract:public-action:actor|107001|10700112|0|10700112|star-skill",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-focused-acceptance:sifliya-star-interrupted-at-90",
@@ -717,21 +718,6 @@
       "traceProjectionHash": "132f6892a1e21eaf",
       "status": "verified",
       "edgeIdentity": "coverage-edge:1ca6da4b0a9c2b51"
-    },
-    {
-      "requirementIdentity": "contract:public-action:actor|107001|10700112|0|10700112|star-skill",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-wind-expiry-boundary:sifliya-star-exact-expiry",
-      "selector": {
-        "controlSkillId": 10700112,
-        "kind": "action-form",
-        "ownerId": 107001,
-        "subSkillIndex": 0
-      },
-      "assertionHash": "30e05d5dfa621bc2",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:1d15075787bd3e76"
     },
     {
       "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
@@ -813,19 +799,6 @@
       "edgeIdentity": "coverage-edge:1fc735341b470bb9"
     },
     {
-      "requirementIdentity": "contract:passive:actor:107001:passive:10700161",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-passive:machine-passives-m12-b3-107001-wind-expiry-boundary-1",
-      "selector": {
-        "kind": "passive",
-        "passiveIdentity": "actor:107001:passive:10700161"
-      },
-      "assertionHash": "d4282f6e6ac2d463",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:20497ae8d5e8d4fe"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-focused-acceptance:19:3",
@@ -876,19 +849,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:22e48a5ee68986cd"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:2:8aa145591ef6e54b",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "6be81f27fac0f974",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:24d2c60d1daed92b"
     },
     {
       "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
@@ -1009,21 +969,6 @@
       "edgeIdentity": "coverage-edge:2834bb9ac959c7f3"
     },
     {
-      "requirementIdentity": "contract:action-effect-binding:sifliya-star-first-hit-wind-mark",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "controlSkillId": 10700112,
-        "effectIdentity": "battle-element:750",
-        "kind": "effect",
-        "subSkillIndex": 0
-      },
-      "assertionHash": "a5ac6b9cdc71d4f4",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:284f5d4735ff3c28"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
       "scenarioIdentity": "m12-b3-107001-switch-star-carry",
       "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-switch-star-carry:0",
@@ -1074,6 +1019,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:2962a07978d38fe3"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:60:417cb01313029929",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-3",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107001|control:10700112|sub:0|117-278|target:10700110/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_4623990864207298936__4623990864207298936.json#behaviorlineControl[0].behaviorList[pathId=1924024245281440120]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_1924024245281440120__1924024245281440120.json"
+      },
+      "assertionHash": "f4dccd79d61d54b8",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:29d81669a1715a22"
     },
     {
       "requirementIdentity": "contract:action-form:sifliya-normal-three-inputs:segment:2",
@@ -1144,6 +1102,19 @@
       "edgeIdentity": "coverage-edge:2af85adc00be299c"
     },
     {
+      "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "5b56006384a9e9ba",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2bd23b3b417f5432"
+    },
+    {
       "requirementIdentity": "contract:hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m12-b3-107001-focused-acceptance:1",
@@ -1196,6 +1167,19 @@
       "edgeIdentity": "coverage-edge:2d793d69f457fafa"
     },
     {
+      "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "bf0842bfebda2485",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2d8688178b32fdb2"
+    },
+    {
       "requirementIdentity": "contract:hit:10700121|0|bulletElements|0|-3874667740088165249|60|5",
       "scenarioIdentity": "m12-b3-107001-switch-star-carry",
       "assertionIdentity": "trace-hit:machine-hit:m12-b3-107001-switch-star-carry:7",
@@ -1246,6 +1230,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:2f22182dd943d6ee"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:58:ee792a5a626954dc",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-1",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107001|control:10700112|sub:0|0-62|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1889667392740179592__-1889667392740179592.json#behaviorlineControl[0].behaviorList[pathId=8160253702739739000]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8160253702739739000__8160253702739739000.json"
+      },
+      "assertionHash": "194b15e347d655f1",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:2f478b1a19c01764"
     },
     {
       "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
@@ -1326,6 +1323,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:312e00e284efb3ee"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "bf0842bfebda2485",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:31464a4a97238d45"
     },
     {
       "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
@@ -1436,6 +1446,19 @@
       "edgeIdentity": "coverage-edge:327969018f9b2b33"
     },
     {
+      "requirementIdentity": "contract:passive:actor:107001:passive:10700161",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-passive:machine-passives-m12-b3-107001-wind-expiry-boundary-1",
+      "selector": {
+        "kind": "passive",
+        "passiveIdentity": "actor:107001:passive:10700161"
+      },
+      "assertionHash": "d4282f6e6ac2d463",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:331d847908d9f51a"
+    },
+    {
       "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-focused-acceptance:27",
@@ -1449,6 +1472,19 @@
       "edgeIdentity": "coverage-edge:33c16056ca54cb83"
     },
     {
+      "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "bf0842bfebda2485",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:33f4b79ac407af90"
+    },
+    {
       "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-focused-acceptance:23",
@@ -1460,19 +1496,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:348cb7d90ed179b7"
-    },
-    {
-      "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:107001:element:107001006"
-      },
-      "assertionHash": "e23920ade56aac00",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:351b64acbfcdda3b"
     },
     {
       "requirementIdentity": "contract:effect:effect:11:37cb437345e499ed",
@@ -1542,19 +1565,6 @@
       "edgeIdentity": "coverage-edge:376154708efdcca0"
     },
     {
-      "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "bf0842bfebda2485",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:37b5487d82ed6cdd"
-    },
-    {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-focused-acceptance:13",
@@ -1566,6 +1576,20 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:382f19bd6fcc6bb5"
+    },
+    {
+      "requirementIdentity": "protocol:107001:save-import-replay",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1ebb23438e769331",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3874d5edee0f0165"
     },
     {
       "requirementIdentity": "contract:hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
@@ -1605,20 +1629,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:3a1d36812cf2a26b"
-    },
-    {
-      "requirementIdentity": "protocol:107001:save-import-replay",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "1ebb23438e769331",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:3a34ab807bd3d595"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -1890,6 +1900,21 @@
       "edgeIdentity": "coverage-edge:44d408db6635bc6b"
     },
     {
+      "requirementIdentity": "contract:action-form:actor|107001|10700112|0|10700112|star-skill:default",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-wind-expiry-boundary:sifliya-star-exact-expiry",
+      "selector": {
+        "controlSkillId": 10700112,
+        "kind": "action-form",
+        "ownerId": 107001,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "30e05d5dfa621bc2",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:45e0468623e70f00"
+    },
+    {
       "requirementIdentity": "contract:hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m12-b3-107001-focused-acceptance:73",
@@ -1941,19 +1966,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:469c4fd7b5eae4ac"
-    },
-    {
-      "requirementIdentity": "contract:control-window:control-window:58:ee792a5a626954dc",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-1",
-      "selector": {
-        "kind": "control-window",
-        "windowIdentity": "actor:107001|control:10700112|sub:0|0-62|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_-1889667392740179592__-1889667392740179592.json#behaviorlineControl[0].behaviorList[pathId=8160253702739739000]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8160253702739739000__8160253702739739000.json"
-      },
-      "assertionHash": "194b15e347d655f1",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:48a0887ac44b0fc0"
     },
     {
       "requirementIdentity": "contract:hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
@@ -2076,35 +2088,6 @@
       "edgeIdentity": "coverage-edge:4c0ae546b861f51b"
     },
     {
-      "requirementIdentity": "contract:action-effect-binding:sifliya-star-first-hit-wind-mark",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
-      "selector": {
-        "controlSkillId": 10700112,
-        "effectIdentity": "battle-element:750",
-        "kind": "effect",
-        "subSkillIndex": 0
-      },
-      "assertionHash": "bf0842bfebda2485",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:4c82731093b0869f"
-    },
-    {
-      "requirementIdentity": "protocol:107001:save-import-replay",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "58a76707b981af64",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:4cbb14a9d6d97a5a"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-damage-effect:m12-b3-107001-focused-acceptance:77",
@@ -2116,6 +2099,20 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:4d3a5fde67192f0a"
+    },
+    {
+      "requirementIdentity": "protocol:107001:save-import-replay",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "58a76707b981af64",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:4e6a0e0adf974c2e"
     },
     {
       "requirementIdentity": "contract:effect:effect:3:48b4749aa3b6f0ed",
@@ -2317,6 +2314,19 @@
       "edgeIdentity": "coverage-edge:552ba3188d5a6bc9"
     },
     {
+      "requirementIdentity": "contract:effect:effect:3:48b4749aa3b6f0ed",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "6be81f27fac0f974",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:554c34fd2787bac8"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:1:1beed99978d9383f",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-focused-acceptance:10:751",
@@ -2408,6 +2418,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:57b2761757f5f867"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:11:37cb437345e499ed",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "576824fcc6048275",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:57fbc335194c6e16"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -2645,19 +2668,6 @@
       "edgeIdentity": "coverage-edge:5f174a4471276a7e"
     },
     {
-      "requirementIdentity": "contract:effect:effect:2:8aa145591ef6e54b",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "5b56006384a9e9ba",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:5f5f70aae7510957"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-focused-acceptance:3",
@@ -2777,19 +2787,17 @@
       "edgeIdentity": "coverage-edge:67f3ddd544f32d48"
     },
     {
-      "requirementIdentity": "contract:action-form:actor|107001|10700112|0|10700112|star-skill:default",
+      "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
       "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-wind-expiry-boundary:sifliya-star-exact-expiry",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
       "selector": {
-        "controlSkillId": 10700112,
-        "kind": "action-form",
-        "ownerId": 107001,
-        "subSkillIndex": 0
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
       },
-      "assertionHash": "30e05d5dfa621bc2",
-      "traceProjectionHash": "7da4121c1950f806",
+      "assertionHash": "a5ac6b9cdc71d4f4",
+      "traceProjectionHash": "7b5ed0659deff703",
       "status": "verified",
-      "edgeIdentity": "coverage-edge:6860b5b8e63b8aa4"
+      "edgeIdentity": "coverage-edge:6814d585435830f9"
     },
     {
       "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
@@ -2859,6 +2867,20 @@
       "edgeIdentity": "coverage-edge:6ac4ec4c50289c80"
     },
     {
+      "requirementIdentity": "protocol:107001:save-import-replay",
+      "scenarioIdentity": "m12-b3-107001-joint-attack-runtime",
+      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "58a76707b981af64",
+      "traceProjectionHash": "c5fa95f8cdc3dd3d",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:6ad901019506fc8e"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:59:7a46e08fad24af1a",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-damage-effect:m12-b3-107001-focused-acceptance:10",
@@ -2870,19 +2892,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:6aef881bf3433484"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
-      "selector": {
-        "effectIdentity": "battle-element:752",
-        "kind": "effect"
-      },
-      "assertionHash": "576824fcc6048275",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:6b244bb063fe1f06"
     },
     {
       "requirementIdentity": "contract:public-action:actor|107001|10700112|0|10700112|star-skill",
@@ -2939,19 +2948,6 @@
       "edgeIdentity": "coverage-edge:6cb25a6bf9cd9484"
     },
     {
-      "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "kind": "resource",
-        "resourceIdentity": "actor:107001:element:107001006"
-      },
-      "assertionHash": "e23920ade56aac00",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:6d4ebc4058f1be2c"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:59:7a46e08fad24af1a",
       "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
       "assertionIdentity": "trace-effect:golden-damage-effect:m12-b3-107001-sifliya-focused-golden:15",
@@ -3006,19 +3002,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:6df8f29c25e4a8bb"
-    },
-    {
-      "requirementIdentity": "contract:control-window:control-window:60:417cb01313029929",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-3",
-      "selector": {
-        "kind": "control-window",
-        "windowIdentity": "actor:107001|control:10700112|sub:0|117-278|target:10700110/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_4623990864207298936__4623990864207298936.json#behaviorlineControl[0].behaviorList[pathId=1924024245281440120]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_1924024245281440120__1924024245281440120.json"
-      },
-      "assertionHash": "f4dccd79d61d54b8",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:6e26bab18199f556"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:70:33a7ec32aa1b9985",
@@ -3187,6 +3170,21 @@
       "edgeIdentity": "coverage-edge:71c772095df91646"
     },
     {
+      "requirementIdentity": "contract:public-action:actor|107001|10700112|0|10700112|star-skill",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-wind-expiry-boundary:sifliya-star-exact-expiry",
+      "selector": {
+        "controlSkillId": 10700112,
+        "kind": "action-form",
+        "ownerId": 107001,
+        "subSkillIndex": 0
+      },
+      "assertionHash": "30e05d5dfa621bc2",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:71ca3b44ba2a64c2"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
       "scenarioIdentity": "m12-b3-107001-switch-star-carry",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-switch-star-carry:0:3",
@@ -3286,19 +3284,6 @@
       "edgeIdentity": "coverage-edge:7398739a3b9fcbc2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "bf0842bfebda2485",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:74238354d149c814"
-    },
-    {
       "requirementIdentity": "contract:action-form:sifliya-normal-three-inputs:segment:1",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-focused-acceptance:107001-critical-sampled-low",
@@ -3338,6 +3323,19 @@
       "traceProjectionHash": "132f6892a1e21eaf",
       "status": "verified",
       "edgeIdentity": "coverage-edge:74f41aa4f3f54b79"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "576824fcc6048275",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:758ba70391cc9b7c"
     },
     {
       "requirementIdentity": "contract:action-form:sifliya-normal-three-inputs:segment:2",
@@ -3445,6 +3443,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:79b926ec1256fe08"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:62:5b4dbea67a2e34bf",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-5",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107001|control:10700112|sub:0|62-135|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_9061412738508865912__9061412738508865912.json#behaviorlineControl[0].behaviorList[pathId=5572410190615495032]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_5572410190615495032__5572410190615495032.json"
+      },
+      "assertionHash": "64ee9cd14448d2b9",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:79d4ccb09f3a3ea2"
     },
     {
       "requirementIdentity": "contract:effect:effect:6:6c60b928405a978a",
@@ -3582,6 +3593,19 @@
       "edgeIdentity": "coverage-edge:7ba37cc567b261d1"
     },
     {
+      "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:107001:element:107001006"
+      },
+      "assertionHash": "e23920ade56aac00",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:7bfa27dd889d858b"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-focused-acceptance:40:3",
@@ -3679,19 +3703,6 @@
       "edgeIdentity": "coverage-edge:7fda23147b7d017b"
     },
     {
-      "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "bf0842bfebda2485",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:80b948dc894c0df5"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:11:37cb437345e499ed",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:40",
@@ -3703,20 +3714,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:80f6ea1d2d4ac924"
-    },
-    {
-      "requirementIdentity": "protocol:107001:save-import-replay",
-      "scenarioIdentity": "m12-b3-107001-joint-attack-runtime",
-      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "58a76707b981af64",
-      "traceProjectionHash": "8e3b939da726fe12",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:81046d8d6d39ba44"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -4079,19 +4076,6 @@
       "edgeIdentity": "coverage-edge:891c71c32f50ee12"
     },
     {
-      "requirementIdentity": "contract:effect:effect:0:c22a35f27440c790",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "6be81f27fac0f974",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:897a79cad11d6a27"
-    },
-    {
       "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
       "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
       "assertionIdentity": "trace-resource:golden-resource:m12-b3-107001-sifliya-focused-golden:1",
@@ -4103,32 +4087,6 @@
       "traceProjectionHash": "0e1b1a3c410add8c",
       "status": "verified",
       "edgeIdentity": "coverage-edge:89dc3cb5d773714e"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:1:1beed99978d9383f",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "5b56006384a9e9ba",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:89efa56351a18420"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "a5ac6b9cdc71d4f4",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:8a5c59686ae177ac"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -4194,19 +4152,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:8d0790b391562ed3"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:11:37cb437345e499ed",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
-      "selector": {
-        "effectIdentity": "battle-element:752",
-        "kind": "effect"
-      },
-      "assertionHash": "576824fcc6048275",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:8d43ad83ee142512"
     },
     {
       "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
@@ -4304,6 +4249,19 @@
       "edgeIdentity": "coverage-edge:921d8af1d19445b1"
     },
     {
+      "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "bf0842bfebda2485",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:92e53d4e693a56dd"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-damage-effect:m12-b3-107001-focused-acceptance:33",
@@ -4330,19 +4288,6 @@
       "traceProjectionHash": "0e1b1a3c410add8c",
       "status": "verified",
       "edgeIdentity": "coverage-edge:94144c5bdd369e5a"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:1:1beed99978d9383f",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "6be81f27fac0f974",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:94be5e89ffb29cdc"
     },
     {
       "requirementIdentity": "contract:effect:effect:4:a1dfa81db27b76f5",
@@ -4436,20 +4381,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:9874b77d309db830"
-    },
-    {
-      "requirementIdentity": "protocol:107001:save-import-replay",
-      "scenarioIdentity": "m12-b3-107001-joint-attack-runtime",
-      "assertionIdentity": "workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "1ebb23438e769331",
-      "traceProjectionHash": "8e3b939da726fe12",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:98c59032d167efbb"
     },
     {
       "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
@@ -4558,6 +4489,19 @@
       "edgeIdentity": "coverage-edge:9b4f25197aa31ab4"
     },
     {
+      "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "a5ac6b9cdc71d4f4",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:9bf79d9c08c94b1f"
+    },
+    {
       "requirementIdentity": "protocol:107001:critical-integer-threshold-boundary",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "scenario-fact:critical:integerThresholdBoundary",
@@ -4661,19 +4605,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:9e8add4a0c4fcbcf"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:59:7a46e08fad24af1a",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
-      "selector": {
-        "effectIdentity": "battle-element:752",
-        "kind": "effect"
-      },
-      "assertionHash": "576824fcc6048275",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:9f8943708ded11b8"
     },
     {
       "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
@@ -5108,19 +5039,6 @@
       "edgeIdentity": "coverage-edge:b0d3d06ddb1c9161"
     },
     {
-      "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "5b56006384a9e9ba",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b116fe4b8e702b06"
-    },
-    {
       "requirementIdentity": "contract:public-action:actor|107001|10700101|0|10700103|normal-attack",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-focused-acceptance:window-end-source",
@@ -5149,6 +5067,19 @@
       "edgeIdentity": "coverage-edge:b1fcffec9d7deff6"
     },
     {
+      "requirementIdentity": "contract:resource-profile:actor:107001:element:107001006",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-resource:machine-resource:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "kind": "resource",
+        "resourceIdentity": "actor:107001:element:107001006"
+      },
+      "assertionHash": "e23920ade56aac00",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b2576d95e0c09698"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
       "scenarioIdentity": "m12-b3-107001-switch-star-carry",
       "assertionIdentity": "trace-effect:machine-damage-effect:m12-b3-107001-switch-star-carry:1",
@@ -5160,19 +5091,6 @@
       "traceProjectionHash": "132f6892a1e21eaf",
       "status": "verified",
       "edgeIdentity": "coverage-edge:b2c911c4218a38fb"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "bf0842bfebda2485",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b2cb4b27d823d486"
     },
     {
       "requirementIdentity": "contract:effect:effect:64:df14cd1c32e80e31",
@@ -5337,19 +5255,6 @@
       "edgeIdentity": "coverage-edge:b7ec1ecc3429cab2"
     },
     {
-      "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
-      "selector": {
-        "effectIdentity": "battle-element:752",
-        "kind": "effect"
-      },
-      "assertionHash": "576824fcc6048275",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b88700adcc879ec8"
-    },
-    {
       "requirementIdentity": "contract:action-form:sifliya-normal-three-inputs:segment:1",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-focused-acceptance:window-outside-after",
@@ -5456,19 +5361,6 @@
       "edgeIdentity": "coverage-edge:bcd7a764b80bd8cb"
     },
     {
-      "requirementIdentity": "contract:control-window:control-window:62:5b4dbea67a2e34bf",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-5",
-      "selector": {
-        "kind": "control-window",
-        "windowIdentity": "actor:107001|control:10700112|sub:0|62-135|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_9061412738508865912__9061412738508865912.json#behaviorlineControl[0].behaviorList[pathId=5572410190615495032]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_5572410190615495032__5572410190615495032.json"
-      },
-      "assertionHash": "64ee9cd14448d2b9",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:be2370f87f62d9d6"
-    },
-    {
       "requirementIdentity": "contract:effect:effect:9:cc8552a24f626f8e",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-tuning-damage-effect:m12-b3-107001-focused-acceptance:77",
@@ -5506,6 +5398,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:bf559312ba81c1aa"
+    },
+    {
+      "requirementIdentity": "contract:control-window:control-window:61:202c088bf78d62bb",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-4",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107001|control:10700112|sub:0|155-304|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_16278780643787128__16278780643787128.json#behaviorlineControl[0].behaviorList[pathId=8537591540481606008]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8537591540481606008__8537591540481606008.json"
+      },
+      "assertionHash": "a9b4ec4e2f27dd3d",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bfde4237522dfca2"
     },
     {
       "requirementIdentity": "contract:effect:effect:4:a1dfa81db27b76f5",
@@ -5777,6 +5682,21 @@
       "edgeIdentity": "coverage-edge:c8391ebdd3d19088"
     },
     {
+      "requirementIdentity": "contract:action-effect-binding:sifliya-star-first-hit-wind-mark",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "controlSkillId": 10700112,
+        "effectIdentity": "battle-element:750",
+        "kind": "effect",
+        "subSkillIndex": 0
+      },
+      "assertionHash": "a5ac6b9cdc71d4f4",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c935ae6852f979dc"
+    },
+    {
       "requirementIdentity": "protocol:107001:critical-expected-no-random-side-effect",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "scenario-fact:critical:expectedNoCriticalEvent",
@@ -5804,6 +5724,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:c9ec007ff7a59266"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:2:8aa145591ef6e54b",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "6be81f27fac0f974",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c9fc247c5673689b"
     },
     {
       "requirementIdentity": "contract:resource-transaction:actor:107001:element:107001006",
@@ -5858,19 +5791,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:cb70ce477e086e78"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:0:c22a35f27440c790",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "5b56006384a9e9ba",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:cb84a038aaf32b4b"
     },
     {
       "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
@@ -5975,6 +5895,34 @@
       "traceProjectionHash": "0e1b1a3c410add8c",
       "status": "verified",
       "edgeIdentity": "coverage-edge:ce64880cd9d6e889"
+    },
+    {
+      "requirementIdentity": "contract:action-effect-binding:sifliya-star-first-hit-wind-mark",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-wind-expiry-boundary:10:0",
+      "selector": {
+        "controlSkillId": 10700112,
+        "effectIdentity": "battle-element:750",
+        "kind": "effect",
+        "subSkillIndex": 0
+      },
+      "assertionHash": "bf0842bfebda2485",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cec29c100db380b7"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:17:ba69edb373eec584",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "a5ac6b9cdc71d4f4",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:cf650abdf2b05018"
     },
     {
       "requirementIdentity": "contract:hit:10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
@@ -6246,19 +6194,6 @@
       "edgeIdentity": "coverage-edge:d8f6b742ad6a6a43"
     },
     {
-      "requirementIdentity": "contract:effect:effect:3:48b4749aa3b6f0ed",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "6be81f27fac0f974",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:d96a4a6bab23b87c"
-    },
-    {
       "requirementIdentity": "contract:hit:10700102|4|projectile|107001010|107001021|0|0|control:10700102|sub:4|behavior:8100721922202346811|config:0|bullet:107001021:0:0|element:107001010:0",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m12-b3-107001-focused-acceptance:30",
@@ -6403,6 +6338,19 @@
       "traceProjectionHash": "0e1b1a3c410add8c",
       "status": "verified",
       "edgeIdentity": "coverage-edge:dee760ee8323fbed"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:3:48b4749aa3b6f0ed",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "5b56006384a9e9ba",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:dfa7e8d886bdbbe4"
     },
     {
       "requirementIdentity": "protocol:107001:foreground-background-switch",
@@ -6577,6 +6525,19 @@
       "edgeIdentity": "coverage-edge:e5def2c1fb3d6de6"
     },
     {
+      "requirementIdentity": "contract:effect:effect:10:f2a48bcb5f3f7a7a",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-component-activation:m12-b3-107001-wind-expiry-boundary:0:752",
+      "selector": {
+        "effectIdentity": "battle-element:752",
+        "kind": "effect"
+      },
+      "assertionHash": "576824fcc6048275",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e5df88a0170d4832"
+    },
+    {
       "requirementIdentity": "contract:passive:actor:107001:passive:10700161",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-passive:machine-passives-m12-b3-107001-focused-acceptance-1",
@@ -6614,6 +6575,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:e68dffc9528705e7"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "6be81f27fac0f974",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e6ca346675f1447e"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:61:202c088bf78d62bb",
@@ -6711,6 +6685,32 @@
       "edgeIdentity": "coverage-edge:e81356e83fe599a2"
     },
     {
+      "requirementIdentity": "contract:effect:effect:0:c22a35f27440c790",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:0:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "6be81f27fac0f974",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e81598e264419d0f"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
+      "selector": {
+        "effectIdentity": "battle-element:750",
+        "kind": "effect"
+      },
+      "assertionHash": "a5ac6b9cdc71d4f4",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e85f3c629b4396e0"
+    },
+    {
       "requirementIdentity": "contract:public-action:actor|107001|10700101|4|10700110|charged-attack",
       "scenarioIdentity": "m12-b3-107001-sifliya-focused-golden",
       "assertionIdentity": "trace-action-form:golden-action-form:m12-b3-107001-sifliya-focused-golden:sifliya-charged-with-lumi",
@@ -6803,6 +6803,19 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:eb1e966f94fc19f7"
+    },
+    {
+      "requirementIdentity": "contract:effect:effect:2:8aa145591ef6e54b",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "5b56006384a9e9ba",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:ec1da4b1860db61f"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:40:08f12c950fd952bd",
@@ -7109,6 +7122,19 @@
       "edgeIdentity": "coverage-edge:f443f1380cd11543"
     },
     {
+      "requirementIdentity": "contract:control-window:control-window:59:2276264a05d95f27",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-control-window:machine-controlWindows-m12-b3-107001-wind-expiry-boundary-2",
+      "selector": {
+        "kind": "control-window",
+        "windowIdentity": "actor:107001|control:10700112|sub:0|117-266|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_8626454303935971704__8626454303935971704.json#behaviorlineControl[0].behaviorList[pathId=2527074818534031736]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700112.asset/MonoBehaviour/MonoBehaviour_2527074818534031736__2527074818534031736.json"
+      },
+      "assertionHash": "8926d5f2a6b96f90",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f496d8b692df0d3c"
+    },
+    {
       "requirementIdentity": "contract:public-action:actor|107001|10700101|0|10700103|normal-attack",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-107001-focused-acceptance:107001-critical-non-critical",
@@ -7194,6 +7220,19 @@
       "edgeIdentity": "coverage-edge:f7e95a3ff3b1713e"
     },
     {
+      "requirementIdentity": "contract:effect:effect:1:1beed99978d9383f",
+      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
+      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
+      "selector": {
+        "effectIdentity": "battle-element:751",
+        "kind": "effect"
+      },
+      "assertionHash": "5b56006384a9e9ba",
+      "traceProjectionHash": "7b5ed0659deff703",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:f8408c827b036544"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:5:8fbf17a4e5b9c13f",
       "scenarioIdentity": "m12-b3-107001-focused-acceptance",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-107001-focused-acceptance:14:1",
@@ -7205,19 +7244,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:f88e5f3094990637"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:3:48b4749aa3b6f0ed",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-modifier-effect:m12-b3-107001-wind-expiry-boundary:10:751",
-      "selector": {
-        "effectIdentity": "battle-element:751",
-        "kind": "effect"
-      },
-      "assertionHash": "5b56006384a9e9ba",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f900e6393148b440"
     },
     {
       "requirementIdentity": "protocol:107001:save-import-replay",
@@ -7232,19 +7258,6 @@
       "traceProjectionHash": "132f6892a1e21eaf",
       "status": "verified",
       "edgeIdentity": "coverage-edge:f90855de0e046cf3"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:18:c5f706c9f71201e6",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "a5ac6b9cdc71d4f4",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:f9222ebe03875304"
     },
     {
       "requirementIdentity": "contract:effect:effect:51:5dabd5c9e4f084f3",
@@ -7353,19 +7366,6 @@
       "traceProjectionHash": "81615c05b0def986",
       "status": "verified",
       "edgeIdentity": "coverage-edge:fadddcaf9103d45f"
-    },
-    {
-      "requirementIdentity": "contract:effect:effect:16:2208412d946f7b8e",
-      "scenarioIdentity": "m12-b3-107001-wind-expiry-boundary",
-      "assertionIdentity": "trace-effect:machine-tuning-mark-resource-effect:m12-b3-107001-wind-expiry-boundary:0",
-      "selector": {
-        "effectIdentity": "battle-element:750",
-        "kind": "effect"
-      },
-      "assertionHash": "a5ac6b9cdc71d4f4",
-      "traceProjectionHash": "7da4121c1950f806",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:fd138e986b991421"
     },
     {
       "requirementIdentity": "contract:effect:effect:5:8fbf17a4e5b9c13f",
@@ -7491,5 +7491,5 @@
       "m12-b3-107001-wind-expiry-boundary": 36
     }
   },
-  "coverageHash": "63a6d475f76c3590"
+  "coverageHash": "2895cdb664af2b3f"
 }

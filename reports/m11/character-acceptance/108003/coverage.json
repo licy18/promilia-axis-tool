@@ -1604,6 +1604,20 @@
       "edgeIdentity": "coverage-edge:39ca6998ebfe3b91"
     },
     {
+      "requirementIdentity": "protocol:108003:save-import-replay",
+      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
+      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "58a76707b981af64",
+      "traceProjectionHash": "1444cb572d8ebd16",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:3a2d128b6c399f19"
+    },
+    {
       "requirementIdentity": "contract:runtime-effect-binding:miti-passive61-team-sp-periodic",
       "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
       "assertionIdentity": "trace-effect:machine-resource-backed-effect:m12-b3-e20-2-108003-s1-visual-acceptance:1469",
@@ -3219,20 +3233,6 @@
       "edgeIdentity": "coverage-edge:75c2187ae4dfd539"
     },
     {
-      "requirementIdentity": "protocol:108003:save-import-replay",
-      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
-      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "58a76707b981af64",
-      "traceProjectionHash": "885908712530402f",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:75ff4c256f801601"
-    },
-    {
       "requirementIdentity": "contract:target-state-profile:miti-electrified",
       "scenarioIdentity": "m12-b3-108003-switch-star-carry",
       "assertionIdentity": "trace-state:machine-state:m12-b3-108003-switch-star-carry:0",
@@ -3632,20 +3632,6 @@
       "edgeIdentity": "coverage-edge:7f574e0bace6d66c"
     },
     {
-      "requirementIdentity": "protocol:108003:input-window-inside-outside-boundaries",
-      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
-      "assertionIdentity": "input-window-inside-outside-boundaries",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "input-window-inside-outside-boundaries",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "5d688629f66c2055",
-      "traceProjectionHash": "885908712530402f",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:807279a4587f0a75"
-    },
-    {
       "requirementIdentity": "contract:target-state-transaction:miti-electrified-star-skill",
       "scenarioIdentity": "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden",
       "assertionIdentity": "trace-state:golden-state:m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden:1",
@@ -3870,20 +3856,6 @@
       "traceProjectionHash": "0de3b6e3bc58ee4b",
       "status": "verified",
       "edgeIdentity": "coverage-edge:888ac03d80857f1f"
-    },
-    {
-      "requirementIdentity": "protocol:108003:input-window-inside-outside-boundaries",
-      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
-      "assertionIdentity": "scenario-fact:input-window-inside-outside-boundaries",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "input-window-inside-outside-boundaries",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "b14f4b977691be28",
-      "traceProjectionHash": "885908712530402f",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:88936e1b995f5a26"
     },
     {
       "requirementIdentity": "contract:hit:10800342|0|bulletElements|4|8304950733444486178|63|22",
@@ -4618,20 +4590,6 @@
       "traceProjectionHash": "0de3b6e3bc58ee4b",
       "status": "verified",
       "edgeIdentity": "coverage-edge:a473b4dfa75fdd0f"
-    },
-    {
-      "requirementIdentity": "protocol:108003:save-import-replay",
-      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
-      "assertionIdentity": "workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "1ebb23438e769331",
-      "traceProjectionHash": "885908712530402f",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:a47f55d1869185b6"
     },
     {
       "requirementIdentity": "protocol:108003:save-import-replay",
@@ -5413,6 +5371,20 @@
       "edgeIdentity": "coverage-edge:b8dd7206f6ac68c0"
     },
     {
+      "requirementIdentity": "protocol:108003:input-window-inside-outside-boundaries",
+      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
+      "assertionIdentity": "scenario-fact:input-window-inside-outside-boundaries",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "input-window-inside-outside-boundaries",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "b14f4b977691be28",
+      "traceProjectionHash": "1444cb572d8ebd16",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:b94bef9ccf96d77e"
+    },
+    {
       "requirementIdentity": "contract:target-state-transaction:miti-electrified-full-charge-consume",
       "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
       "assertionIdentity": "trace-state:machine-state:m12-b3-e20-2-108003-s1-visual-acceptance:13",
@@ -5476,6 +5448,20 @@
       "traceProjectionHash": "5ab3940d71f9424f",
       "status": "verified",
       "edgeIdentity": "coverage-edge:ba9c5a0794dcc57b"
+    },
+    {
+      "requirementIdentity": "protocol:108003:save-import-replay",
+      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
+      "assertionIdentity": "workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1ebb23438e769331",
+      "traceProjectionHash": "1444cb572d8ebd16",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:bb355b336c11ee2e"
     },
     {
       "requirementIdentity": "contract:control-window:control-window:39:929acf30a4c3254b",
@@ -5599,6 +5585,20 @@
       "traceProjectionHash": "5ab3940d71f9424f",
       "status": "verified",
       "edgeIdentity": "coverage-edge:bfabec81de2519d2"
+    },
+    {
+      "requirementIdentity": "protocol:108003:input-window-inside-outside-boundaries",
+      "scenarioIdentity": "m12-b3-108003-joint-attack-runtime",
+      "assertionIdentity": "input-window-inside-outside-boundaries",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "input-window-inside-outside-boundaries",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "5d688629f66c2055",
+      "traceProjectionHash": "1444cb572d8ebd16",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:c04f55ee339ce96d"
     },
     {
       "requirementIdentity": "contract:target-state-profile:miti-electrified",
@@ -7585,5 +7585,5 @@
       "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden": 172
     }
   },
-  "coverageHash": "7731d01adbed50f7"
+  "coverageHash": "ea33003d939bc721"
 }

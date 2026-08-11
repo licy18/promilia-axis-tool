@@ -51664,7 +51664,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/107001-joint-attack-runtime.json",
-        "inputHash": "3832a486b92bc452",
+        "inputHash": "21d4efda35a5551e",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/107001-joint-attack-runtime.json"
       },
       "execution": {
@@ -51673,11 +51673,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "3832a486b92bc452",
-          "data": "794fd58ae463ce68",
-          "trace": "9495b90a792d2657",
+          "input": "21d4efda35a5551e",
+          "data": "d5519ad05098ecf9",
+          "trace": "ad2e0f3f54e9b124",
           "evaluation": "667730f61578b3ba",
-          "build": "25a36a9f25f7701a"
+          "build": "4defd95d44a517aa"
         }
       },
       "traceProjection": {
@@ -52804,22 +52804,10 @@
         "switchTriggers": [],
         "diagnostics": [
           {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-107001-joint-attack-runtime:0"
-          },
-          {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-107001-joint-attack-runtime:1"
-          },
-          {
             "actionId": "sifliya-star-combo-default",
             "code": "joint-attack-runtime-assumption-ready",
             "status": "verified",
-            "projectionIdentity": "machine-diagnostic:m12-b3-107001-joint-attack-runtime:2"
+            "projectionIdentity": "machine-diagnostic:m12-b3-107001-joint-attack-runtime:0"
           }
         ],
         "criticalDecisions": [
@@ -52854,7 +52842,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "8e3b939da726fe12",
+      "traceProjectionHash": "c5fa95f8cdc3dd3d",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -53426,7 +53414,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "5f27f0a06d0b1874"
+      "scenarioCaseHash": "a04b81438dbeb848"
     },
     {
       "schemaVersion": 1,
@@ -62315,7 +62303,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/107001-wind-expiry-boundary.json",
-        "inputHash": "f5d9eaef7c95ec44",
+        "inputHash": "ef616286328c8130",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/107001-wind-expiry-boundary.json"
       },
       "execution": {
@@ -62324,11 +62312,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "f5d9eaef7c95ec44",
-          "data": "4f2cb27358436385",
-          "trace": "bff623d319b94a16",
+          "input": "ef616286328c8130",
+          "data": "3704a90dcf11411f",
+          "trace": "34c9ac74925254f9",
           "evaluation": "a998e9d90618adbe",
-          "build": "3d5acbb7b15bc7eb"
+          "build": "8d906a0c807d1691"
         }
       },
       "traceProjection": {
@@ -68841,20 +68829,7 @@
           }
         ],
         "switchTriggers": [],
-        "diagnostics": [
-          {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-107001-wind-expiry-boundary:0"
-          },
-          {
-            "actionId": null,
-            "code": "kibo-auto-cast-schedule-unresolved",
-            "status": "unresolved",
-            "projectionIdentity": "machine-diagnostic:m12-b3-107001-wind-expiry-boundary:1"
-          }
-        ],
+        "diagnostics": [],
         "criticalDecisions": [
           {
             "actionId": "sifliya-star-exact-expiry",
@@ -68942,7 +68917,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "7da4121c1950f806",
+      "traceProjectionHash": "7b5ed0659deff703",
       "assertions": [
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -70505,7 +70480,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "a822246554497813"
+      "scenarioCaseHash": "991d85d8fee576a2"
     }
   ],
   "summary": {
@@ -70518,5 +70493,5 @@
       "machine-axis": 4
     }
   },
-  "scenarioSetHash": "f440fd8209726900"
+  "scenarioSetHash": "0fa8bacf713e8964"
 }

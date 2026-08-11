@@ -3,13 +3,11 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
     "status": "accepted",
-    "acceptanceCommit": "eb06acc456ee309245a78455e7691738a2ee808b",
-    "recordIdentity": "character-product-acceptance:108003:eb06acc456ee309245a78455e7691738a2ee808b:3ad23898fbd67391",
-    "qualificationSubjectHash": "3ad23898fbd67391",
+    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
+    "recordIdentity": "character-product-acceptance:108003:be60e68d1c1bcf77a962426ddb0af37fc384c4da:4137d8e636637e1a",
+    "qualificationSubjectHash": "4137d8e636637e1a",
     "scenarioSetHash": "2708eb62c12c4ebc",
-    "scenarioIdentities": [
-      "m12-b3-e20-2-108003-s1-visual-acceptance"
-    ],
+    "scenarioIdentities": ["m12-b3-e20-2-108003-s1-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
@@ -21,9 +19,7 @@
   },
   "ownerId": 108003,
   "fixturePath": "fixtures/character-acceptance/108003-active-surface-closure.json",
-  "goldenReports": [
-    "reports/m10/108003/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/108003/golden-trace.json"],
   "probes": [
     {
       "kind": "variant-selection",
@@ -78,15 +74,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

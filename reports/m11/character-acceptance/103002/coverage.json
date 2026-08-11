@@ -1011,20 +1011,6 @@
       "edgeIdentity": "coverage-edge:19c816c3a460ce7a"
     },
     {
-      "requirementIdentity": "protocol:103002:save-import-replay",
-      "scenarioIdentity": "m12-b3-103002-joint-attack-runtime",
-      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "58a76707b981af64",
-      "traceProjectionHash": "9027a81f47a4b509",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:19deef925ddd1873"
-    },
-    {
       "requirementIdentity": "contract:hit:10300213|0|elements|40|1916680892601011831|325|25",
       "scenarioIdentity": "m12-b3-103002-active-surface-closure",
       "assertionIdentity": "trace-hit:machine-hit:m12-b3-103002-active-surface-closure:45",
@@ -1131,6 +1117,20 @@
       "traceProjectionHash": "6b55fbeafb3a1dd1",
       "status": "verified",
       "edgeIdentity": "coverage-edge:205c069a9fb779d7"
+    },
+    {
+      "requirementIdentity": "protocol:103002:save-import-replay",
+      "scenarioIdentity": "m12-b3-103002-joint-attack-runtime",
+      "assertionIdentity": "scenario-fact:workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "58a76707b981af64",
+      "traceProjectionHash": "26663f75a2a2a916",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:208e7b1f3ae2e615"
     },
     {
       "requirementIdentity": "contract:variant-edge:variant-edge:82:d69ba10d1c5879af",
@@ -3888,6 +3888,20 @@
       "edgeIdentity": "coverage-edge:86c88f676e094838"
     },
     {
+      "requirementIdentity": "protocol:103002:save-import-replay",
+      "scenarioIdentity": "m12-b3-103002-joint-attack-runtime",
+      "assertionIdentity": "workbench-import-export-round-trip",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "workbench-import-export-round-trip",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "1ebb23438e769331",
+      "traceProjectionHash": "26663f75a2a2a916",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:8722477d3f2739ce"
+    },
+    {
       "requirementIdentity": "contract:effect:effect:29:4cf13c0754a96981",
       "scenarioIdentity": "m12-b3-103002-active-surface-closure",
       "assertionIdentity": "trace-effect:machine-applied-effect-source-element:m12-b3-103002-active-surface-closure:21:2",
@@ -5188,20 +5202,6 @@
       "traceProjectionHash": "eddd94b7b5a654d3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:b7cfcd6872a17e40"
-    },
-    {
-      "requirementIdentity": "protocol:103002:save-import-replay",
-      "scenarioIdentity": "m12-b3-103002-joint-attack-runtime",
-      "assertionIdentity": "workbench-import-export-round-trip",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "workbench-import-export-round-trip",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "1ebb23438e769331",
-      "traceProjectionHash": "9027a81f47a4b509",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:b80b168df3e21ff4"
     },
     {
       "requirementIdentity": "protocol:103002:critical-sampled-same-seed",
@@ -7297,5 +7297,5 @@
       "m12-b3-103002-reload-window-boundaries": 44
     }
   },
-  "coverageHash": "02dcf40349e78e8a"
+  "coverageHash": "7ecc079e4cc25797"
 }
