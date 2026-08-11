@@ -2021,7 +2021,11 @@ describe('verified combat mechanics package', () => {
   });
 
   it('fails closed when a data-driven headless assumption binding loses its contract', () => {
-    const contracted = structuredClone(mechanicsPackage);
+    const cloneWithIndependentActionVariantGraph = source => ({
+      ...source,
+      actionVariantGraph: structuredClone(source.actionVariantGraph),
+    });
+    const contracted = cloneWithIndependentActionVariantGraph(mechanicsPackage);
     const contract = {
       schemaVersion: 1,
       ownerId: 777001,
@@ -2084,14 +2088,14 @@ describe('verified combat mechanics package', () => {
       'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad'
     );
 
-    const missing = structuredClone(contracted);
+    const missing = cloneWithIndependentActionVariantGraph(contracted);
     missing.actionVariantGraph.headlessAssumptionContracts = [];
     expect(validateVerifiedCombatMechanicsPackage(missing)).toMatchObject({
       valid: false,
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const renamed = structuredClone(contracted);
+    const renamed = cloneWithIndependentActionVariantGraph(contracted);
     renamed.actionVariantGraph.headlessAssumptionContracts[0].assumptions[0].identity =
       'test-order-renamed';
     expect(validateVerifiedCombatMechanicsPackage(renamed)).toMatchObject({
@@ -2099,7 +2103,7 @@ describe('verified combat mechanics package', () => {
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const semanticTamper = structuredClone(contracted);
+    const semanticTamper = cloneWithIndependentActionVariantGraph(contracted);
     semanticTamper.actionVariantGraph.headlessAssumptionContracts[0].assumptions[0].selectedSemantics.precedence =
       'old-tier';
     expect(validateVerifiedCombatMechanicsPackage(semanticTamper)).toMatchObject({
@@ -2107,7 +2111,8 @@ describe('verified combat mechanics package', () => {
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const deletedAssumption = structuredClone(contracted);
+    const deletedAssumption =
+      cloneWithIndependentActionVariantGraph(contracted);
     deletedAssumption.actionVariantGraph.headlessAssumptionContracts[0].assumptions.splice(
       1,
       1
@@ -2117,14 +2122,14 @@ describe('verified combat mechanics package', () => {
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const reordered = structuredClone(contracted);
+    const reordered = cloneWithIndependentActionVariantGraph(contracted);
     reordered.actionVariantGraph.headlessAssumptionContracts[0].assumptions.reverse();
     expect(validateVerifiedCombatMechanicsPackage(reordered)).toMatchObject({
       valid: false,
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const versioned = structuredClone(contracted);
+    const versioned = cloneWithIndependentActionVariantGraph(contracted);
     versioned.actionVariantGraph.headlessAssumptionContracts[0].assumptionVersion =
       '1.0.1';
     expect(validateVerifiedCombatMechanicsPackage(versioned)).toMatchObject({
@@ -2132,7 +2137,7 @@ describe('verified combat mechanics package', () => {
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const rehashed = structuredClone(contracted);
+    const rehashed = cloneWithIndependentActionVariantGraph(contracted);
     rehashed.actionVariantGraph.headlessAssumptionContracts[0].assumptionHash =
       'b'.repeat(64);
     expect(validateVerifiedCombatMechanicsPackage(rehashed)).toMatchObject({
@@ -2140,7 +2145,7 @@ describe('verified combat mechanics package', () => {
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
 
-    const staleBinding = structuredClone(contracted);
+    const staleBinding = cloneWithIndependentActionVariantGraph(contracted);
     const staleBindingContract =
       staleBinding.actionVariantGraph.headlessAssumptionContracts[0];
     staleBindingContract.assumptions[0].selectedSemantics.precedence =
@@ -2159,7 +2164,7 @@ describe('verified combat mechanics package', () => {
       issues: [],
     });
 
-    const parityClaim = structuredClone(contracted);
+    const parityClaim = cloneWithIndependentActionVariantGraph(contracted);
     parityClaim.actionVariantGraph.headlessAssumptionContracts[0].clientParityReady =
       true;
     expect(validateVerifiedCombatMechanicsPackage(parityClaim)).toMatchObject({
