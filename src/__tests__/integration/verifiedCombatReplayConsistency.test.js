@@ -18,6 +18,7 @@ import {
 } from '../../domain/workbenchDraftStorage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
 import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
+import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 import {
   createWorkbenchActionDraft,
   createWorkbenchProject,
@@ -154,12 +155,17 @@ describe('verified combat project replay consistency', () => {
       createVerifiedReplaySignature(pngDraft),
     ];
 
+    expect(signatures[0].blockedActionSignature).toEqual([
+      ['verified-replay-wind-kibo', ['background-action-derivation-invalid']],
+    ]);
     expect(signatures[0].bindingIdentities).toEqual([
       'actor|101003|10100312|0|10100312|star-skill|execution-control:10100312|sub:0',
+      'actor|101003|10100322|0|10100322|star-carry|execution-control:10100322|sub:0',
       'actor|101007|10100712|2|10100726|star-combo|execution-control:10100726|sub:0',
+      'actor|101007|10100721|0|10100721|star-carry|execution-control:10100721|sub:0',
       'actor|109001|10900101|1|10900110|charged-attack|execution-control:10900110|sub:0',
+      'actor|109001|10900121|0|10900121|star-carry|execution-control:10900121|sub:0',
       'kibo|500001|50000112|0|50000112|break|execution-control:50000112|sub:0',
-      'kibo|500001|504004|0|504004|active|execution-control:504004|sub:0',
     ]);
     expect(
       Object.fromEntries(
@@ -171,15 +177,16 @@ describe('verified combat project replay consistency', () => {
           'verified-replay-wind-kibo-combo',
         ].map(actionId => [
           actionId,
-          signatures[0].damageSignature.filter(event => event[0] === actionId)
-            .length,
+          signatures[0].combatDamageSignature.filter(
+            event => event[0] === actionId
+          ).length,
         ])
       )
     ).toEqual({
       'verified-replay-han-star': 8,
       'verified-replay-pangpang-combo': 2,
       'verified-replay-muyin-charged': 3,
-      'verified-replay-wind-kibo': 1,
+      'verified-replay-wind-kibo': 0,
       'verified-replay-wind-kibo-combo': 1,
     });
     expect(signatures[0]).toMatchObject({
@@ -202,19 +209,35 @@ describe('verified combat project replay consistency', () => {
       operationInputSignature: [
         ['verified-replay-han-star', 'skill', 'press', 'E', 0, null],
         [
+          'verified-replay-switch-han-to-muyin',
+          'switch',
+          'press',
+          '1',
+          1600,
+          null,
+        ],
+        [
           'verified-replay-muyin-charged',
           'charged-attack',
           'hold',
           'LMB',
-          2800,
-          3050,
+          4000,
+          4250,
+        ],
+        [
+          'verified-replay-switch-muyin-to-pangpang',
+          'switch',
+          'press',
+          '3',
+          5200,
+          null,
         ],
         [
           'verified-replay-pangpang-combo',
           'joint-attack',
           'press',
           'F',
-          7400,
+          12000,
           null,
         ],
       ],
@@ -326,15 +349,7 @@ describe('verified combat project replay consistency', () => {
       ],
     ]);
     expect(signatures[0].specialResourceCurveSignature).toEqual([
-      [
-        'actor-101010',
-        'actor:101010:element:101010115',
-        24,
-        0,
-        100,
-        1,
-        true,
-      ],
+      ['actor-101010', 'actor:101010:element:101010115', 24, 0, 100, 1, true],
     ]);
     expect(signatures[0].jadeEffectSignature).toEqual(
       expect.arrayContaining([
@@ -407,15 +422,7 @@ describe('verified combat project replay consistency', () => {
     }
     const signatures = drafts.map(createVerifiedReplaySignature);
     expect(signatures[0].specialResourceCurveSignature).toEqual([
-      [
-        'actor-103002',
-        'actor:103002:element:103002047',
-        6,
-        6,
-        12,
-        1,
-        true,
-      ],
+      ['actor-103002', 'actor:103002:element:103002047', 6, 6, 12, 1, true],
     ]);
     for (const signature of signatures.slice(1)) {
       expect(signature).toEqual(signatures[0]);
@@ -510,6 +517,10 @@ function createVerifiedReplayDraft() {
         }),
       ],
       initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101007',
+          characterId: 101007,
+        },
         enemy: {
           enemyId: String(base.selection.enemyId),
           hp: { currentValue: 8628, maxValue: 8628 },
@@ -570,12 +581,20 @@ function createCrossCatalogReplayDraft() {
           durationMs: 1400,
         }),
         createWorkbenchActionDraft({
+          id: 'verified-replay-switch-han-to-muyin',
+          type: 'switch',
+          actorCharacterId: 101003,
+          targetCharacterId: 109001,
+          startMs: 1600,
+          durationMs: 0,
+        }),
+        createWorkbenchActionDraft({
           id: 'verified-replay-muyin-charged',
           type: 'skill',
           actorCharacterId: 109001,
           skillId: 10900101,
           actionVariantIndex: 1,
-          startMs: 2800,
+          startMs: 4000,
           durationMs: 1000,
         }),
         createWorkbenchActionDraft({
@@ -585,9 +604,17 @@ function createCrossCatalogReplayDraft() {
           skillId: 504004,
           kiboId: 500001,
           actionVariantIndex: 0,
-          startMs: 4200,
+          startMs: 6000,
           durationMs: 3000,
           eventType: 'active',
+        }),
+        createWorkbenchActionDraft({
+          id: 'verified-replay-switch-muyin-to-pangpang',
+          type: 'switch',
+          actorCharacterId: 109001,
+          targetCharacterId: 101007,
+          startMs: 5200,
+          durationMs: 0,
         }),
         createWorkbenchActionDraft({
           id: 'verified-replay-pangpang-combo',
@@ -595,7 +622,7 @@ function createCrossCatalogReplayDraft() {
           actorCharacterId: 101007,
           skillId: 10100712,
           actionVariantIndex: 2,
-          startMs: 7400,
+          startMs: 12000,
           durationMs: 1000,
         }),
         createWorkbenchActionDraft({
@@ -605,7 +632,7 @@ function createCrossCatalogReplayDraft() {
           skillId: 50000112,
           kiboId: 500001,
           actionVariantIndex: 0,
-          startMs: 7400,
+          startMs: 12000,
           durationMs: 1500,
           eventType: 'break',
         }),
@@ -621,7 +648,14 @@ function createCrossCatalogReplayDraft() {
           gapMs: 0,
         },
       ],
+      combatScenario: {
+        jointAttackRuntime: createVerifiedJointAttackRuntimeBinding(),
+      },
       initialRuntimeState: {
+        controlledActor: {
+          actorId: 'actor-101003',
+          characterId: 101003,
+        },
         enemy: {
           enemyId: String(base.selection.enemyId),
           hp: { currentValue: 8628, maxValue: 8628 },
@@ -698,14 +732,14 @@ function createSpecialResourceReplayDraft() {
             characterId: 101010,
             actorName: '涂山小玉',
             resourceIdentity: 'actor:101010:element:101010115',
-          resourceName: '爆发状态叠层',
-          currentValue: 24,
-          maxValue: 100,
-          inputStep: 1,
-          scenarioConfigurable: true,
-          baselineStatus: 'scenario-configurable-initial-state',
-          activeStates: [],
-        },
+            resourceName: '爆发状态叠层',
+            currentValue: 24,
+            maxValue: 100,
+            inputStep: 1,
+            scenarioConfigurable: true,
+            baselineStatus: 'scenario-configurable-initial-state',
+            activeStates: [],
+          },
         ],
       },
       runtimeSampleCaptures: [],
@@ -774,6 +808,7 @@ function createVerifiedReplaySignature(draft) {
     configurationSelection: draft.configurationSelection,
     gameDataBinding: draft.gameDataBinding,
     mechanicsProfileSelection: draft.mechanicsProfileSelection,
+    combatScenario: draft.combatScenario,
     actions: draft.actionDrafts,
     actionRelations: draft.actionRelations,
     cycleBoundaries: draft.cycleBoundaries,
@@ -807,6 +842,9 @@ function createVerifiedReplaySignature(draft) {
       relation.toActionId,
       relation.gapMs,
     ]),
+    blockedActionSignature: result.actionExecutionPlan.actions
+      .filter(action => action.execute !== true)
+      .map(action => [action.actionId, action.violationCodes]),
     bindingIdentities: result.verifiedCombatRuntime.actionResolutions
       .filter(resolution => resolution.ready)
       .map(resolution => resolution.actionBinding.identity)
@@ -829,6 +867,15 @@ function createVerifiedReplaySignature(draft) {
       event.payload.rawDamage,
       event.payload.toughnessDamage,
     ]),
+    combatDamageSignature: result.verifiedCombatRuntime.damageEvents
+      .filter(event => !event.payload.stateEventKind)
+      .map(event => [
+        event.actionId,
+        event.timeMs,
+        event.payload.elementId,
+        event.payload.rawDamage,
+        event.payload.toughnessDamage,
+      ]),
     tuningMarkEventCount:
       result.verifiedCombatRuntime.tuningMarkRuntime?.events?.length ?? 0,
     tuningMarkSignature: (
