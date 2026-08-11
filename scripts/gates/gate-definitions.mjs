@@ -12,6 +12,7 @@ export const GATE_SYSTEM_FILES = Object.freeze([
   'scripts/gates/gate-runner.mjs',
   'scripts/gates/git-change-classifier.mjs',
   'scripts/gates/node-package-invocation.mjs',
+  'scripts/gates/repository-hygiene-policy.mjs',
   'scripts/gates/run-repository-hygiene.mjs',
   'scripts/release-verify.mjs',
   'scripts/run-smart-gates.mjs',
@@ -178,7 +179,7 @@ const npxVitestStep = files => ({
 export const GATE_DEFINITIONS = deepFreeze([
   {
     name: 'repository-hygiene',
-    version: 1,
+    version: 2,
     order: 5,
     kind: 'static-check',
     description: 'Changed-file ESLint, Prettier check and git diff --check',

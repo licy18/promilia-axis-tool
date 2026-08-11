@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 import { normalizeRepositoryPath } from './git-change-classifier.mjs';
 import { resolveCommandInvocation } from './node-package-invocation.mjs';
+import { isGeneratorOwnedOutput } from './repository-hygiene-policy.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, '..', '..');
@@ -24,8 +25,14 @@ for (const relativePath of changedFiles) {
 const eslintFiles = existingFiles.filter(file =>
   /\.(cjs|js|jsx|mjs|vue)$/u.test(file)
 );
-const prettierFiles = existingFiles.filter(file =>
+const prettierCandidates = existingFiles.filter(file =>
   /\.(cjs|css|html|js|json|jsx|md|mjs|scss|ts|tsx|vue|ya?ml)$/u.test(file)
+);
+const prettierSkippedGeneratorOutputFiles = prettierCandidates.filter(
+  isGeneratorOwnedOutput
+);
+const prettierFiles = prettierCandidates.filter(
+  file => !isGeneratorOwnedOutput(file)
 );
 const commands = [
   {
@@ -63,6 +70,9 @@ process.stdout.write(
       changedFileCount: changedFiles.length,
       eslintFileCount: eslintFiles.length,
       prettierFileCount: prettierFiles.length,
+      prettierSkippedGeneratorOutputCount:
+        prettierSkippedGeneratorOutputFiles.length,
+      prettierSkippedGeneratorOutputFiles,
       results,
       passed,
     },
