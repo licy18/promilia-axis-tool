@@ -305,6 +305,21 @@ describe('Workbench game data catalog', () => {
     const project = createWorkbenchProject(state.selection, {
       ...state,
       actions: state.actionDrafts,
+      initialRuntimeState: {
+        controlledActor: {
+          actorId: `actor-${state.actorConfigs[0].characterId}`,
+          characterId: state.actorConfigs[0].characterId,
+        },
+        kiboVitalsBySlot: [
+          {
+            slotId: state.teamSlots[0].slotId,
+            actorId: `actor-${state.actorConfigs[0].characterId}`,
+            kiboId: state.actorConfigs[0].loadout.kiboId,
+            currentValue: 0,
+            maxValue: 100,
+          },
+        ],
+      },
       gameDataCompatibilityReport: compatibility,
     });
     const scenario = compileProject(project, getWorkbenchGameData());

@@ -176,16 +176,21 @@ describe('verified Battle effect formula registry', () => {
             : null;
         const sourceAtkHeal =
           contract.family === 'source-atk-ratio-heal' ? 10000 : null;
+        const sourceMaxHpHeal =
+          contract.family === 'source-max-hp-ratio-heal' ? 10000 : null;
         const result = evaluateVerifiedBattleEffectFormula({
           effect,
           level,
           sourceActor:
-            sourceTuning == null && sourceAtkHeal == null
+            sourceTuning == null &&
+            sourceAtkHeal == null &&
+            sourceMaxHpHeal == null
               ? null
               : {
                   stats: {
                     tuningStrength: sourceTuning,
                     attack: sourceAtkHeal,
+                    maxHp: sourceMaxHpHeal,
                   },
                 },
         });
@@ -203,7 +208,12 @@ describe('verified Battle effect formula registry', () => {
           .filter(Number.isFinite);
 
         expect(legacyValues.length).toBeGreaterThan(0);
-        if (contract.family === 'source-tuning-ratio-with-common-ratio') {
+        if (
+          [
+            'source-tuning-ratio-with-common-ratio',
+            'source-max-hp-ratio-heal',
+          ].includes(contract.family)
+        ) {
           expect(new Set(legacyValues)).toEqual(
             new Set([
               effect.formula.valueByLevel[level] ??

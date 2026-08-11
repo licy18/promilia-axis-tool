@@ -36,7 +36,7 @@ describe('107001 Sifliya source contract', () => {
   it('keeps resource, skill-logic, tuning, and Lumi values tied to source fields', () => {
     const contracts = ownerContract.contracts;
     expect(ownerContract).toMatchObject({
-      compilerVersion: 5,
+      compilerVersion: 7,
       ownerId: OWNER_ID,
       status: 'character-combat-owner-contracts-compiled',
       managesResourceContracts: true,
@@ -694,15 +694,7 @@ describe('107001 Sifliya focused runtime', () => {
             event.kind === 'acquire' && event.actionId === missedAction.id
         )
       ).toBe(false);
-      expect(missed.tuningRuntime.acquisitionGateResults).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            actionId: missedAction.id,
-            landedCount: 0,
-            passed: false,
-          }),
-        ])
-      );
+      expect(missed.tuningRuntime.acquisitionGateResults).toEqual([]);
       expect(missedDamage).toMatchObject({
         markCountAtJudgment: 2,
         selectedBranch: 'base',

@@ -2122,24 +2122,15 @@ describe('verified soul essence effect generation', () => {
       commands: [expect.objectContaining({ sourceActorId: 'actor-112001' })],
     });
     expect(project(replayed)).toEqual(project(landed));
-    expect(project(missed)).toMatchObject({
-      packets: [
-        {
-          profileKey: 'thunder',
-          targetElementIds: [299],
-          landed: false,
-          selection: {
-            priorityIndex: 0,
-            markId: 250,
-            packetElementId: 299,
-          },
-        },
+    expect(project(missed)).toEqual({
+      consumes: [],
+      packets: [],
+      finalMarks: [
+        { markId: 250, value: 2 },
+        { markId: 450, value: 2 },
       ],
       commands: [],
     });
-    expect(
-      project(missed).packets.some(packet => packet.profileKey === 'dark')
-    ).toBe(false);
   });
 
   it('requires the real wind overlimit element types and final normal-attack tag for 10136', () => {

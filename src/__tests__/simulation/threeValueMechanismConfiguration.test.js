@@ -370,6 +370,21 @@ function createConfiguredProject({ includeInstanceSelection }) {
   return createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
     actorConfigs,
     enemyConfig,
+    initialRuntimeState: {
+      controlledActor: {
+        actorId: 'actor-109001',
+        characterId: 109001,
+      },
+      kiboVitalsBySlot: [
+        {
+          slotId: DEFAULT_WORKBENCH_TEAM_SLOTS[0].slotId,
+          actorId: 'actor-109001',
+          kiboId: 500001,
+          currentValue: 0,
+          maxValue: 100,
+        },
+      ],
+    },
     configurationLibrary: includeInstanceSelection
       ? {
           actorInstances: [

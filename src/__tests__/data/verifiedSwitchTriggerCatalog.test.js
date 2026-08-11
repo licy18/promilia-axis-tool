@@ -24,10 +24,10 @@ describe('verified switch trigger catalog', () => {
       },
       summary: {
         profileCount: 20,
-        appliedProfileCount: 17,
-        unresolvedProfileCount: 3,
+        appliedProfileCount: 20,
+        unresolvedProfileCount: 0,
         appliedOnEnterProfileCount: 11,
-        appliedOnExitProfileCount: 6,
+        appliedOnExitProfileCount: 9,
       },
     });
     expect(getVerifiedSwitchTriggerCatalog()?.profiles).toHaveLength(20);
@@ -56,14 +56,22 @@ describe('verified switch trigger catalog', () => {
     ).toBe('star-carry');
   });
 
-  it('retains the three source gaps instead of inventing child actions', () => {
-    expect(coverage.unresolvedProfiles.map(profile => profile.ownerId)).toEqual(
-      [102001, 199001, 199002]
-    );
-    expect(getVerifiedSwitchTriggerProfile(102001, 'on-exit')).toMatchObject({
-      applied: false,
-      resolutionStatus: 'static-evidence-gap',
-      reasons: ['star-carry-action-mapping-missing'],
-    });
+  it('binds every verified exit profile to its own star-carry action', () => {
+    expect(coverage.unresolvedProfiles).toEqual([]);
+    for (const ownerId of [102001, 199001, 199002]) {
+      const profile = getVerifiedSwitchTriggerProfile(ownerId, 'on-exit');
+      expect(profile).toMatchObject({
+        ownerId,
+        triggerPhase: 'on-exit',
+        applied: true,
+        resolutionStatus: 'applied',
+        reasons: [],
+      });
+      expect(
+        getVerifiedCombatActionMappingByIdentity(
+          profile.starCarryActionIdentity
+        )?.actionKind
+      ).toBe('star-carry');
+    }
   });
 });

@@ -42,13 +42,20 @@ describe('M9 public team causal chain', () => {
     for (const actionId of [
       'han-star-skill',
       'ruby-ultimate',
-      'fire-kibo-signature',
       'jade-limit-counter',
       'jade-ultimate',
       'jade-charged-variant',
     ]) {
       expect(executed.has(actionId), actionId).toBe(true);
     }
+    expect(
+      withBuff.actionExecutionPlan.actions.find(
+        action => action.actionId === 'fire-kibo-signature'
+      )
+    ).toMatchObject({
+      execute: false,
+      violationCodes: ['controlled-actor-action-unavailable'],
+    });
 
     const fireMarkEvents = withBuff.verifiedTuningMarkGeneration.events.filter(
       event => event.profileKey === 'fire' && event.delta !== 0
@@ -109,24 +116,11 @@ describe('M9 public team causal chain', () => {
     });
 
     expect(
-      withBuff.verifiedBattleEffectGeneration.effectCommands.some(
-        command =>
-          command.sourceActionId === 'fire-kibo-signature' &&
-          command.targetKind === 'actor' &&
-          command.targetId === `actor-${JADE_ID}` &&
-          command.modifiers.some(modifier => modifier.attributeId === 52)
+      withBuff.verifiedBattleEffectGeneration.effectCommands.filter(
+        command => command.sourceActionId === 'fire-kibo-signature'
       )
-    ).toBe(true);
-    expect(sumActionDamage(withBuff, 'fire-kibo-signature')).toBeGreaterThan(0);
-    expect(
-      withBuff.verifiedCombatRuntime.damageEvents
-        .filter(event => event.actionId === 'fire-kibo-signature')
-        .flatMap(event => event.payload.dynamicPropertyTrace.source)
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ attributeId: 52, dynamicExtraRaw: 216 }),
-      ])
-    );
+    ).toEqual([]);
+    expect(sumActionDamage(withBuff, 'fire-kibo-signature')).toBe(0);
 
     expect(
       withBuff.runtimeOutputs.stateCurves.resources.curvesBySpecialResource.map(
@@ -316,6 +310,10 @@ function simulateTeam({ includeFireKiboAction }) {
       initialToughnessRatio: 1,
     },
     initialRuntimeState: {
+      controlledActor: {
+        actorId: `actor-${HAN_ID}`,
+        characterId: HAN_ID,
+      },
       kiboEnergyBySlot: teamSlots.map(slot => ({
         slotId: slot.slotId,
         kiboId: kiboByCharacterId[slot.characterId],

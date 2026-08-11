@@ -221,8 +221,10 @@ describe('generated action status runtime', () => {
         endMs: 18000,
         durationMs: 18000,
         sourceIdentity: expect.objectContaining({
-          sourceKind: 'azpr-newtable-kibo-standard-battle-cooldown',
-          cooldownMode: 'standard-battle',
+          sourceKind: 'azpr-verified-action-control-cooldown',
+          sourceStatus: 'confirmed-control-variant-cooldown',
+          subSkillId: 50000102,
+          actionBindingIdentity: 'kibo|500001|50000102|0|50000102|signature',
         }),
       }),
     ]);
