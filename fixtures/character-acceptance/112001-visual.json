@@ -143,6 +143,53 @@
       "schedule": { "mode": "absolute", "frame": 67 }
     },
     {
+      "id": "gisele-heavy3-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 11200101,
+        "actionKind": "normal-attack",
+        "level": 1,
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "gisele-heavy3-chain"
+        }
+      },
+      "schedule": { "mode": "absolute", "frame": 364 }
+    },
+    {
+      "id": "gisele-heavy3-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 11200101,
+        "actionKind": "normal-attack",
+        "level": 1,
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "gisele-heavy3-chain",
+          "contextActionId": "gisele-heavy3-a1"
+        }
+      },
+      "schedule": { "mode": "absolute", "frame": 382 }
+    },
+    {
+      "id": "gisele-heavy3-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 11200101,
+        "actionKind": "normal-attack",
+        "level": 1,
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "gisele-heavy3-chain",
+          "contextActionId": "gisele-heavy3-a2"
+        }
+      },
+      "schedule": { "mode": "absolute", "frame": 437 }
+    },
+    {
       "id": "gisele-a4",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
@@ -152,7 +199,8 @@
         "level": 1,
         "attackInput": {
           "sequenceIndex": 4,
-          "groupId": "gisele-a4"
+          "groupId": "gisele-heavy3-chain",
+          "contextActionId": "gisele-heavy3-a3"
         }
       },
       "schedule": { "mode": "absolute", "frame": 500 }

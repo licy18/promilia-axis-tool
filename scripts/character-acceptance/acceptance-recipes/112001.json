@@ -269,6 +269,71 @@
       "durationFrames": 500,
       "actions": [
         {
+          "id": "isolated-heavy3-context-a1-66",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy3-context-66"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
+        },
+        {
+          "id": "isolated-heavy3-context-a2-66",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 2,
+              "groupId": "isolated-heavy3-context-66",
+              "contextActionId": "isolated-heavy3-context-a1-66"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 18
+          }
+        },
+        {
+          "id": "isolated-heavy3-context-a3-66",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 3,
+              "groupId": "isolated-heavy3-context-66",
+              "contextActionId": "isolated-heavy3-context-a2-66"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 73
+          }
+        },
+        {
           "id": "isolated-heavy3-context-a4-66",
           "owner": {
             "kind": "actor",
@@ -281,12 +346,13 @@
             "level": 1,
             "attackInput": {
               "sequenceIndex": 4,
-              "groupId": "isolated-heavy3-a4-66"
+              "groupId": "isolated-heavy3-context-66",
+              "contextActionId": "isolated-heavy3-context-a3-66"
             }
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 0
+            "frame": 136
           }
         },
         {
@@ -313,7 +379,7 @@
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 36
+            "frame": 172
           }
         }
       ],
@@ -332,6 +398,71 @@
       "durationFrames": 500,
       "actions": [
         {
+          "id": "isolated-heavy3-context-a1-68",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "isolated-heavy3-context-68"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
+        },
+        {
+          "id": "isolated-heavy3-context-a2-68",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 2,
+              "groupId": "isolated-heavy3-context-68",
+              "contextActionId": "isolated-heavy3-context-a1-68"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 18
+          }
+        },
+        {
+          "id": "isolated-heavy3-context-a3-68",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 11200101,
+            "actionKind": "normal-attack",
+            "level": 1,
+            "attackInput": {
+              "sequenceIndex": 3,
+              "groupId": "isolated-heavy3-context-68",
+              "contextActionId": "isolated-heavy3-context-a2-68"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 73
+          }
+        },
+        {
           "id": "isolated-heavy3-context-a4-68",
           "owner": {
             "kind": "actor",
@@ -344,12 +475,13 @@
             "level": 1,
             "attackInput": {
               "sequenceIndex": 4,
-              "groupId": "isolated-heavy3-a4-68"
+              "groupId": "isolated-heavy3-context-68",
+              "contextActionId": "isolated-heavy3-context-a3-68"
             }
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 0
+            "frame": 136
           }
         },
         {
@@ -376,7 +508,7 @@
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 36
+            "frame": 172
           }
         }
       ],
