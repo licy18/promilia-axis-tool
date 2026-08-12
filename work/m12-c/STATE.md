@@ -38,6 +38,14 @@
 - 聚焦回归为 Machine Axis service、Sifliya runtime、verified action variant、action-rule diagnostics 共 4 files / `141/141 PASS`；`node --check scripts/generate-character-acceptance.mjs` 与 `git diff --check` 通过。为了技术诊断曾使用的 visual-evidence 环境旁路和 manifest 输出接线均已撤回，没有进入提交。
 - 下一步只能在 `2409ce3e` 之后启动逐 owner/别名的全新 Workbench/Playwright 截图与人工视觉复核；199001/199002 必须作为同一个 STARBORN optimization object 做一致性裁决。旧截图/hash 仅追溯，不得复用或自动代签。全部真实产品签收前仍禁止 `release:verify`、formal admission 与任何正式搜索。
 
+## 0.03 2026-08-12 owner / STARBORN 视觉待签快照
+
+- 审阅基线为 `bda6696e07969b82445a922e19f3c9739a315dc6`。新建 `e2e/m12-c-owner-visual-review.spec.js`，对 101010、102001、103002、107001、107002、108003、109001、112001、199001、199002 串行生成精确 owner-only runtime package，真实导入 Workbench 并展开代表动作 canonical trace；10/10 Playwright 审阅 PASS。
+- 证据位于 `work/m12-c/product-review/visual-evidence/2026-08-12/`：每个 owner/alias 两张全新 1440×900 PNG 和一份 `pending-explicit-user-signoff` JSON，共 20/20 PNG 尺寸与 SHA-256 复核通过。汇总入口为 `work/m12-c/product-review/OWNER_VISUAL_SIGNOFF.md`。
+- 代表性闭合可见：Ruby E1=`10300201/sub1`；Sifliya A3=`10700103/sub4`；Misa A3=`10700203/sub0`；Gisele Heavy3=`11200141/sub3`。STARBORN 199001/199002 两别名分别真实导入并显示自身 A3 trace，但产品裁决仍按单一 STARBORN optimization object 联合签收，不能拆成两个对象。
+- 首次裸 Workbench 导入 107001 被诚实拒绝为 normal-input missing，证明 owner overlay 并非全局默认包；正式审阅严格采用仓库生成器导出的 owner-only runtime package。审阅夹具第一次因关闭对话框后读取已卸载节点超时，冻结状态文字后复跑 PASS；107002 最初所选 ultimate 无直接 hit 行，改用配方明确验证的 A3 后在不放宽 hit 断言的情况下 PASS。
+- 当前所有新 review 记录仍为 `pending-explicit-user-signoff`；recipe 未写入 accepted identity，STARBORN 旧对象级 accepted 记录未被沿用。等待用户明确签收前仍禁止刷新最终派生产物、运行 `release:verify` / formal admission 或启动任何正式搜索。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 112001,
+  "optimizationObjectId": null,
+  "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
+  "fixturePath": "fixtures/character-acceptance/112001-visual.json",
+  "fixtureSha256": "21d7c303df902e247c21b079f478f2dd528ba7250270d4f38ef63f3d9931ce63",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/112001.json",
+  "runtimePackageSha256": "eac89f0ac5fcc4da51eb5cbeb18cf92397f89438fbb4e5f312c4bb4fc967f3d6",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+  "canonicalTraceHash": "d3becf22243bcf71",
+  "selectedAction": {
+    "actionId": "gisele-heavy3-threshold67",
+    "controlSkillId": 11200141,
+    "subSkillIndex": 3
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 11 个机器输入 · 13 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-112001-import-dialog.png",
+    "importScreenshotSha256": "e15ff1fac8cf0ea83f4be4c80c61eeeff1bbef8dc47f0e23de117e3f98ca5427",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-112001-canonical-trace.png",
+    "traceScreenshotSha256": "4367f0877b6d1dd6bbc019efdc3115d2f283e758f387ac0e8511967f14f5930e",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n特殊重击3完全释放\n536F\n请求\ncharged-attack · 11200101\n实际形态\n特殊重击3完全释放\n执行\ncontrol 11200141 / sub 3\n占轴\n536F - 677F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n15\n普攻5 hit2/4\n17F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n重击 hit2~4/6~8\n31F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n重击 hit2~4/6~8\n39F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n重击 hit2~4/6~8\n48F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n重击 hit2~4/6~8\n57F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n重击 hit2~4/6~8\n66F · HP -10 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n普攻5 hit2/4\n86F · HP -48 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 11\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 12\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nverified-conditional-damage|gisele-heavy3-consumer-32f|gisele-heavy3-threshold67|1|9466.666666|\n未结算 · HP -29 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\nverified-conditional-damage|gisele-heavy3-consumer-39f|gisele-heavy3-threshold67|1|9583.333333|\n未结算 · HP -29 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\nverified-conditional-damage|gisele-heavy3-consumer-46f|gisele-heavy3-threshold67|1|9700|\n未结算 · HP -29 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n6.72%\n目标抗暴\n0%\n有效暴击率\n6.72%\n暴伤\n153.44%\n采样 ROLL\n0 · 未暴击\n效果事务\n9\n雷调谐印记\n施加 · actor-101010 · 635F\n4 → 3 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-103002 · 635F\n4 → 3 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-112001 · 635F\n4 → 3 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-101010 · 642F\n3 → 2 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-103002 · 642F\n3 → 2 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-112001 · 642F\n3 → 2 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-101010 · 649F\n2 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-103002 · 649F\n2 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n雷调谐印记\n施加 · actor-112001 · 649F\n2 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|112001|112001...\n资源事务\n9\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 5.9771 → 6.157 / 100 · 553F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 5.9771 → 6.157 / 100 · 553F\n无来源\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 6.1779 → 6.3578 / 100 · 567F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 6.1779 → 6.3578 / 100 · 567F\n无来源\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 6.4515 → 6.6315 / 100 · 622F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 6.4515 → 6.6315 / 100 · 622F\n无来源\ntuning-mark:250\nconsume · 4 → 3 / 5 · 635F\nbattle-effect:11200141:3:536980873299289094:-...\ntuning-mark:250\nconsume · 3 → 2 / 5 · 642F\nbattle-effect:11200141:3:536980873299289094:1...\ntuning-mark:250\nconsume · 2 → 1 / 5 · 649F\nbattle-effect:11200141:3:536980873299289094:-...\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\nd3becf22243bcf71\nskill_control_11200104.asset#EventBridge[path...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  }
+}

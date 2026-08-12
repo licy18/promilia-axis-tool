@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 107001,
+  "optimizationObjectId": null,
+  "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
+  "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
+  "fixtureSha256": "dc1cbc9cec361b9975be5f5525af56e5319c7d5c40aecc4e73d120ff4e1f3bcf",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/107001.json",
+  "runtimePackageSha256": "6e40edb3783e7b760f1caef3acb977492be3867e8b9574bcbb36b9ae13a458f2",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+  "canonicalTraceHash": "23a2c1330d29e380",
+  "selectedAction": {
+    "actionId": "sifliya-a3-cycle-1",
+    "controlSkillId": 10700103,
+    "subSkillIndex": 4
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 50 个机器输入 · 50 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107001-import-dialog.png",
+    "importScreenshotSha256": "87dffb4396bf7fde159c9495fc857197c62c28ae98f87ba4b5efd8b0f6d91e00",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107001-canonical-trace.png",
+    "traceScreenshotSha256": "195b980d9f464e887b24ba242b9e675df82bae5d79da34de063aa3b5c340bfea",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n普通攻击 A3\n1307F\n请求\nnormal-attack · 10700101\n实际形态\n普通攻击 A3\n执行\ncontrol 10700103 / sub 4\n占轴\n1307F - 1367F\n就绪\nready\n来源状态\nruntime-dependent / scenario-assumed-zero-distance\n命中\n4\n西芙莉雅 - 普攻3 子弹伤害\n31F · HP -53 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n295 · 暴击\n西芙莉雅 - 普攻3 子弹伤害\n31F · HP -35 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n7827 · 未暴击\n西芙莉雅 - 普攻3 子弹伤害\n31F · HP -35 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4553 · 未暴击\nHit 4\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n资源事务\n3\nactor:107001:element:107001006\ngain · 3 → 4 / 10 · 1338F\nskill_control_10700103.asset#sub4:bulletCount...\nactor:107001:element:107001006\ngain · 4 → 5 / 10 · 1338F\nskill_control_10700103.asset#sub4:bulletCount...\nactor:107001:element:107001006\ngain · 5 → 6 / 10 · 1338F\nskill_control_10700103.asset#sub4:bulletCount...\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n23a2c1330d29e380\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  }
+}

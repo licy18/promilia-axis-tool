@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 107002,
+  "optimizationObjectId": null,
+  "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
+  "fixturePath": "fixtures/character-acceptance/107002-visual.json",
+  "fixtureSha256": "f34331dec754496e7ff97e33d92bda1603353a0daba281efaeba2ec3d0d14940",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/107002.json",
+  "runtimePackageSha256": "fc25d7197a6d840ed3aff0bf8cce3290119f2717a1dd3bda66a092a700962ee6",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+  "canonicalTraceHash": "1910eb5fa24efb76",
+  "selectedAction": {
+    "actionId": "misa-a3",
+    "controlSkillId": 10700203,
+    "subSkillIndex": 0
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 44 个机器输入 · 46 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107002-import-dialog.png",
+    "importScreenshotSha256": "c28140906591878ef6bc2a8bcc5aa4c8de0ddad87835ba0d059c7e7c72552cce",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107002-canonical-trace.png",
+    "traceScreenshotSha256": "db997d1f34895e6c02a050b91e4d70d3e723d03b5ecc3425a05691aae8dd5307",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\nA3\n6947F\n请求\nnormal-attack · 10700201\n实际形态\nA3\n执行\ncontrol 10700203 / sub 0\n占轴\n6947F - 7047F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n11\n平A3 hit1~4\n40F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n2053 · 未暴击\n平A3 hit1~4\n46F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8552 · 未暴击\n平A3 hit1~4\n52F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8317 · 未暴击\n平A3 hit1~4\n58F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n6191 · 未暴击\n平A3 hit1~4\n64F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n6570 · 未暴击\n平A3 hit1~4\n70F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n3857 · 未暴击\n平A3 hit1~4\n76F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n726 · 未暴击\n平A3 hit1~4\n82F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n9063 · 未暴击\n平A3 hit1~4\n88F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n9099 · 未暴击\n平A3 hit1~4\n94F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8407 · 未暴击\n平A3 hit1~4\n100F · HP -20 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4052 · 未暴击\n资源事务\n2\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 18.4181 → 18.5553 / 100 · 6987F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 18.4181 → 18.5553 / 100 · 6987F\n无来源\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n1910eb5fa24efb76\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12COwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 109001,
+  "optimizationObjectId": null,
+  "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
+  "fixturePath": "fixtures/character-acceptance/109001-visual.json",
+  "fixtureSha256": "3512c5328d64de85aeb44930e646c1f361b9795da32fde607fbe42a497ba80cc",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/109001.json",
+  "runtimePackageSha256": "d8006922503a02fa9921856a9fbbb3406e8b0d2a93b943474df367e8c4342df2",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+  "canonicalTraceHash": "ff78b9d9ff0d2b93",
+  "selectedAction": {
+    "actionId": "moyin-thunder-preseed-signature",
+    "controlSkillId": 50005701,
+    "subSkillIndex": 0
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 44 个机器输入 · 44 个实际执行项",
+    "importScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-109001-import-dialog.png",
+    "importScreenshotSha256": "67eebf702cee0cf2d04d97bd742b1db8bee065ed91fcdfcb05a6ab1a38608a45",
+    "traceScreenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-109001-canonical-trace.png",
+    "traceScreenshotSha256": "06ac256f80f76bc27831b32c9877573ef830ad7c1da5e25d236bb32b28d7705a",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n猪突猛进\n3200F\n请求\nsignature · 50005701\n实际形态\n猪突猛进\n执行\ncontrol 50005701 / sub 0\n占轴\n3200F - 3360F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n1\n狂雷冲锋\n15F · HP -194 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n2.43%\n目标抗暴\n0%\n有效暴击率\n2.43%\n暴伤\n125.86%\n采样 ROLL\n6932 · 未暴击\n效果事务\n4\n雷调谐印记\n施加 · actor-101010 · 3215F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"kibo|500057|5000570...\n雷调谐印记\n施加 · actor-103002 · 3215F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"kibo|500057|5000570...\n雷调谐印记\n施加 · actor-109001 · 3215F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"kibo|500057|5000570...\n雷调谐印记\n施加 · actor-109001 · 3215F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"kibo|500057|5000570...\n效果区间\n4\n雷调谐印记\nactor-109001 → actor-101010 · 3215F - 3683F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n雷调谐印记\nactor-109001 → actor-103002 · 3215F - 3683F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n雷调谐印记\nactor-109001 · 3215F - 3683F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n雷调谐印记\nactor-109001 · 3215F - 3683F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n资源事务\n3\nkibo-energy:team-slot-1:500057\nverified-skill-cost · 100 → 0 / 100 · 3200F\n无来源\ntuning-mark:250\nheld-trigger · 1 → 1 / 5 · 3215F\ncombat-overlimit-mechanics-20260718.json#tuni...\ntuning-mark:250\nacquire · 0 → 1 / 5 · 3215F\nbattle-effect:50005701:0:-3809486317990090417...\n韧性事实\n命中削韧\n0\n命中削韧\n0\nTRACE\nff78b9d9ff0d2b93\nmoyin-thunder-preseed-signature|controlSubSki...",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  }
+}
