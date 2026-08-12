@@ -150,6 +150,7 @@ function createStructuralForm({ mapping, chain }) {
   for (let index = 0; index < segments.length - 1; index += 1) {
     const segment = segments[index];
     const successor = segments[index + 1];
+    const sourceSegment = sourceSegments[index];
     segment.successor = successor
       ? {
           sequenceIndex: successor.sequenceIndex,
@@ -158,6 +159,22 @@ function createStructuralForm({ mapping, chain }) {
           sourceIdentity: successor.sourceIdentity,
         }
       : null;
+    const directSuccessorMatches =
+      segment.linkWindow?.targetControlSkillId === successor.controlSkillId &&
+      segment.linkWindow?.targetSubSkillIndex === successor.subSkillIndex;
+    if (
+      chain &&
+      !directSuccessorMatches &&
+      supportsDerivedReopenSuccessor({
+        mapping,
+        chain,
+        sourceSegment,
+        reopenWindow: segment.reopenWindow,
+      })
+    ) {
+      segment.linkWindow = segment.reopenWindow;
+      segment.linkTimingStatus = 'applied';
+    }
     segment.reopenWindow = null;
     if (!segment.linkWindow) {
       reasons.push('normal-attack-adjacency-window-required');
@@ -168,8 +185,8 @@ function createStructuralForm({ mapping, chain }) {
     }
     if (
       chain &&
-      (segment.linkWindow.targetControlSkillId !== successor.controlSkillId ||
-        segment.linkWindow.targetSubSkillIndex !== successor.subSkillIndex)
+      !directSuccessorMatches &&
+      segment.linkWindow.kind !== 'attack-reopen-window'
     ) {
       reasons.push('normal-attack-adjacency-target-mismatch');
     }
@@ -224,6 +241,57 @@ function createStructuralForm({ mapping, chain }) {
     segments,
     reasons: [],
   };
+}
+
+function supportsDerivedReopenSuccessor({
+  mapping,
+  chain,
+  sourceSegment,
+  reopenWindow,
+}) {
+  if (
+    chain?.applied !== true ||
+    chain?.entryPolicy?.kind !== 'derived-or-quick-entry' ||
+    !textOrNull(chain?.entryPolicy?.sourceIdentity) ||
+    chain?.stateCondition?.kind !== 'resource-at-least' ||
+    !textOrNull(chain?.stateCondition?.resourceIdentity) ||
+    !textOrNull(chain?.stateCondition?.sourceIdentity) ||
+    chain?.segmentLimit?.kind !== 'resource-current-value' ||
+    chain.segmentLimit.resourceIdentity !==
+      chain.stateCondition.resourceIdentity ||
+    !(Number(chain.segmentLimit.costPerSegment) > 0) ||
+    !textOrNull(chain.segmentLimit.sourceIdentity)
+  ) {
+    return false;
+  }
+  const mappingOpeners = (mapping?.attackInputSegments ?? []).filter(
+    candidate => positiveIntegerOrNull(candidate?.sequenceIndex) === 1
+  );
+  if (mappingOpeners.length !== 1) return false;
+  const opener = mappingOpeners[0];
+  const openerControlSkillId = positiveIntegerOrNull(opener?.controlSkillId);
+  const openerSubSkillIndex = nonNegativeIntegerOrNull(
+    opener?.subSkillIndex ?? opener?.selectedSubSkillIndex
+  );
+  const nextControlSkillId = positiveIntegerOrNull(
+    sourceSegment?.nextControlSkillId
+  );
+  const rawLinkWindow = resolveSegmentLinkWindow(sourceSegment);
+  const rawReopenWindow = resolveSegmentReopenWindow(sourceSegment);
+  return (
+    openerControlSkillId != null &&
+    openerSubSkillIndex != null &&
+    nextControlSkillId === openerControlSkillId &&
+    positiveIntegerOrNull(rawLinkWindow?.targetControlSkillId) ===
+      openerControlSkillId &&
+    nonNegativeIntegerOrNull(rawLinkWindow?.targetSubSkillIndex) ===
+      openerSubSkillIndex &&
+    reopenWindow?.kind === 'attack-reopen-window' &&
+    reopenWindow.allowAttack === true &&
+    Boolean(reopenWindow.sourceIdentity) &&
+    rawReopenWindow?.allowAttack === true &&
+    (rawReopenWindow.allowedInputCommands ?? []).includes('normal-attack')
+  );
 }
 
 function collectMappingReachableSegments(mapping, reasons) {

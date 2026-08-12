@@ -25,10 +25,10 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: 'e02fdcaf3fecae08',
-      data: 'b2c2e1cdfab8d024',
-      trace: '212f8d7da88f6786',
-      evaluation: '208849308c4ec837',
+      input: '0d81f27dc4ba1cea',
+      data: '4b4e77c78408e1ef',
+      trace: '9fadee844fa09040',
+      evaluation: 'b0acda242f007986',
     },
   },
   {

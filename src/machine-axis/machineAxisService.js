@@ -2005,11 +2005,16 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
       contextualSegments: matchingBindings,
     });
   }
-  const sourceSegment = (
-    mapping.attackInputSegments ??
-    mapping.attackInputSourceSegments ??
-    []
-  ).find(
+  const contextChainIdentity =
+    contextAction?.intent?.attackInput?.chainIdentity ?? null;
+  const contextSegmentPool = contextChainIdentity
+    ? profileSegments.filter(
+        segment =>
+          String(segment.attackInputChainIdentity ?? '') ===
+          String(contextChainIdentity)
+      )
+    : defaultSegments;
+  const sourceSegment = contextSegmentPool.find(
     segment => Number(segment.sequenceIndex) === Number(contextSequenceIndex)
   );
   const offsetFrames = actionFrame - contextFrame;
@@ -2041,11 +2046,7 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
   ];
   if (matchingWindows.length !== 1) return requestedSegment;
   const window = matchingWindows[0];
-  const linked = (
-    mapping.attackInputSegments ??
-    mapping.attackInputSourceSegments ??
-    []
-  ).filter(
+  const linked = contextSegmentPool.filter(
     segment =>
       Number(segment.controlSkillId) === Number(window.targetControlSkillId) &&
       Number(segment.selectedSubSkillIndex) ===

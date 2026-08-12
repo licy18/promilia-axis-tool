@@ -21,6 +21,14 @@ const MISA_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     Number(mapping.ownerId) === 107002 && mapping.actionKind === 'normal-attack'
 );
+const RUBY_MAPPING = mechanicsPackage.actionMappings.find(
+  mapping =>
+    Number(mapping.ownerId) === 103002 && mapping.actionKind === 'normal-attack'
+);
+const RUBY_ENHANCED_CHAIN =
+  mechanicsPackage.actionVariantGraph.attackInputChains.find(
+    chain => chain.chainIdentity === 'ruby-enhanced-twelve-inputs'
+  );
 
 describe('verified normal attack input authority', () => {
   it('publishes a frozen hash-bound policy descriptor', () => {
@@ -198,6 +206,95 @@ describe('verified normal attack input authority', () => {
       status: 'verified-normal-attack-structural-form-unresolved',
       reasons: expect.arrayContaining([
         'normal-attack-adjacency-target-ambiguous',
+      ]),
+    });
+  });
+
+  it('uses Ruby sourced attack reopen windows for derived enhanced successors', () => {
+    const form = createVerifiedNormalAttackStructuralForm({
+      mapping: RUBY_MAPPING,
+      chain: RUBY_ENHANCED_CHAIN,
+    });
+    expect(form).toMatchObject({
+      status: 'verified-normal-attack-structural-form-ready',
+      chainIdentity: 'ruby-enhanced-twelve-inputs',
+      segmentCount: 12,
+      reasons: [],
+    });
+    expect(form.segments[0]).toMatchObject({
+      sequenceIndex: 1,
+      controlSkillId: 10300201,
+      subSkillIndex: 1,
+      linkWindow: {
+        kind: 'attack-reopen-window',
+        startFrame: 24,
+        endFrame: 210,
+        allowAttack: true,
+        sourceIdentity: expect.any(String),
+      },
+      reopenWindow: null,
+      successor: {
+        sequenceIndex: 2,
+        controlSkillId: 10300201,
+        subSkillIndex: 2,
+      },
+    });
+
+    const source = createChainAttackAction({
+      id: 'ruby-enhanced-e1',
+      chain: RUBY_ENHANCED_CHAIN,
+      sequenceIndex: 1,
+      groupId: 'ruby-enhanced-chain',
+      startFrame: 0,
+    });
+    const at = frame =>
+      resolveVerifiedNormalAttackInputPhase({
+        mapping: RUBY_MAPPING,
+        chain: RUBY_ENHANCED_CHAIN,
+        acceptedAction: source,
+        acceptedSelection: createSelection(source),
+        actorId: source.actorId,
+        inputTimeMs: frameToMs(frame),
+      });
+    expect(at(23)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      reasons: ['normal-attack-successor-window-not-open'],
+    });
+    for (const frame of [24, 209]) {
+      expect(at(frame)).toMatchObject({
+        phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW,
+        expected: {
+          chainIdentity: 'ruby-enhanced-twelve-inputs',
+          sequenceIndex: 2,
+          controlSkillId: 10300201,
+          subSkillIndex: 2,
+          groupId: 'ruby-enhanced-chain',
+        },
+      });
+    }
+    expect(at(210)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.IDLE,
+      expected: { sequenceIndex: 1 },
+      reasons: [],
+    });
+  });
+
+  it('fails closed when Ruby derived enhanced succession loses reopen evidence', () => {
+    const chain = structuredClone(RUBY_ENHANCED_CHAIN);
+    chain.segments[0].executionTiming.windows =
+      chain.segments[0].executionTiming.windows.filter(
+        window => window.kind !== 'attack-reopen-window'
+      );
+    expect(
+      createVerifiedNormalAttackStructuralForm({
+        mapping: RUBY_MAPPING,
+        chain,
+      })
+    ).toMatchObject({
+      status: 'verified-normal-attack-structural-form-unresolved',
+      formIdentity: null,
+      reasons: expect.arrayContaining([
+        'normal-attack-adjacency-target-mismatch',
       ]),
     });
   });
@@ -484,6 +581,33 @@ function createMappingAttackAction({
     attackSequenceIndex: sequenceIndex,
     attackSequenceTotal: 5,
     attackInput: segment,
+  };
+}
+
+function createChainAttackAction({
+  id,
+  chain,
+  sequenceIndex,
+  groupId,
+  startFrame,
+}) {
+  const segment = chain.segments.find(
+    candidate => Number(candidate.sequenceIndex) === Number(sequenceIndex)
+  );
+  return {
+    id,
+    type: 'skill',
+    actionKind: 'normal-attack',
+    actorId: 'actor-103002',
+    skillId: chain.sourceSkillId,
+    startMs: frameToMs(startFrame),
+    attackGroupId: groupId,
+    attackSequenceIndex: sequenceIndex,
+    attackInputChainIdentity: chain.chainIdentity,
+    attackInput: {
+      ...segment,
+      attackInputChainIdentity: chain.chainIdentity,
+    },
   };
 }
 

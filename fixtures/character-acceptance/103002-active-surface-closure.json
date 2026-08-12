@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+    "verifiedMechanicsPackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -149,7 +149,11 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-zero",
+          "chainIdentity": "ruby-normal-default-three-inputs"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 0 },
@@ -162,13 +166,51 @@
       }
     },
     {
+      "id": "103002-critical-rate-zero-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-zero",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-rate-zero"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 15 }
+    },
+    {
+      "id": "103002-critical-rate-zero-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-zero",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-rate-zero-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 38 }
+    },
+    {
       "id": "103002-critical-rate-one-hundred",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "critical-full",
+          "chainIdentity": "ruby-normal-default-three-inputs"
+        },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 120 },
@@ -181,6 +223,40 @@
       }
     },
     {
+      "id": "103002-critical-rate-one-hundred-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-full",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-rate-one-hundred"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 135 }
+    },
+    {
+      "id": "103002-critical-rate-one-hundred-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-full",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-rate-one-hundred-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 158 }
+    },
+    {
       "id": "103002-critical-sampled-low",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
@@ -189,7 +265,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-sampled-low"
+          "groupId": "critical-sampled-low",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
@@ -203,6 +280,40 @@
       }
     },
     {
+      "id": "103002-critical-sampled-low-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-sampled-low",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-sampled-low"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 315 }
+    },
+    {
+      "id": "103002-critical-sampled-low-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-sampled-low",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-sampled-low-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 338 }
+    },
+    {
       "id": "103002-critical-sampled-boundary",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
@@ -211,11 +322,12 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-sampled-boundary"
+          "groupId": "critical-sampled-boundary",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 360 },
+      "schedule": { "mode": "absolute", "frame": 380 },
       "hitOverrides": {
         "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
           "landed": "hit",
@@ -223,6 +335,40 @@
           "criticalRoll": 500
         }
       }
+    },
+    {
+      "id": "103002-critical-sampled-boundary-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-sampled-boundary",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-sampled-boundary"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 395 }
+    },
+    {
+      "id": "103002-critical-sampled-boundary-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-sampled-boundary",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-sampled-boundary-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 418 }
     },
     {
       "id": "103002-critical-expected",
@@ -233,17 +379,52 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-expected"
+          "groupId": "critical-expected",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 420 },
+      "schedule": { "mode": "absolute", "frame": 460 },
       "hitOverrides": {
         "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
           "landed": "hit",
           "criticalMode": "expected"
         }
       }
+    },
+    {
+      "id": "103002-critical-expected-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-expected",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-expected"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 475 }
+    },
+    {
+      "id": "103002-critical-expected-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-expected",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-expected-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 498 }
     },
     {
       "id": "103002-critical-critical",
@@ -254,17 +435,52 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-forced-critical"
+          "groupId": "critical-forced-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 480 },
+      "schedule": { "mode": "absolute", "frame": 540 },
       "hitOverrides": {
         "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
           "landed": "hit",
           "criticalMode": "critical"
         }
       }
+    },
+    {
+      "id": "103002-critical-critical-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-forced-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-critical"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 555 }
+    },
+    {
+      "id": "103002-critical-critical-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-forced-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-critical-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 578 }
     },
     {
       "id": "103002-critical-non-critical",
@@ -275,17 +491,52 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-forced-non-critical"
+          "groupId": "critical-forced-non-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 540 },
+      "schedule": { "mode": "absolute", "frame": 620 },
       "hitOverrides": {
         "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
       }
+    },
+    {
+      "id": "103002-critical-non-critical-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-forced-non-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-non-critical"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 635 }
+    },
+    {
+      "id": "103002-critical-non-critical-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-forced-non-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-non-critical-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 658 }
     },
     {
       "id": "103002-critical-miss-critical",
@@ -296,11 +547,12 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "critical-miss-critical"
+          "groupId": "critical-miss-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 600 },
+      "schedule": { "mode": "absolute", "frame": 700 },
       "hitOverrides": {
         "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
           "landed": "miss",
@@ -309,28 +561,100 @@
       }
     },
     {
+      "id": "103002-critical-miss-critical-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "critical-miss-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-miss-critical"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 715 }
+    },
+    {
+      "id": "103002-critical-miss-critical-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "critical-miss-critical",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "103002-critical-miss-critical-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 738 }
+    },
+    {
       "id": "ruby-pre-star-carry-critical",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "pre-star-carry" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "pre-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 700 }
+      "schedule": { "mode": "absolute", "frame": 780 }
+    },
+    {
+      "id": "ruby-pre-star-carry-critical-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "pre-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "ruby-pre-star-carry-critical"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 795 }
+    },
+    {
+      "id": "ruby-pre-star-carry-critical-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "pre-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "ruby-pre-star-carry-critical-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 818 }
     },
     {
       "id": "ruby-switch-away",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": { "kind": "switch", "targetSlotId": "slot-2" },
-      "schedule": { "mode": "absolute", "frame": 760 }
+      "schedule": { "mode": "absolute", "frame": 860 }
     },
     {
       "id": "ruby-switch-back",
       "owner": { "kind": "actor", "slotId": "slot-2" },
       "intent": { "kind": "switch", "targetSlotId": "slot-1" },
-      "schedule": { "mode": "absolute", "frame": 1000 }
+      "schedule": { "mode": "absolute", "frame": 1100 }
     },
     {
       "id": "ruby-post-star-carry-critical",
@@ -339,10 +663,48 @@
         "kind": "public-action",
         "publicActionId": 10300201,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "post-star-carry" },
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "post-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1280 }
+      "schedule": { "mode": "absolute", "frame": 1380 }
+    },
+    {
+      "id": "ruby-post-star-carry-critical-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "post-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "ruby-post-star-carry-critical"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1395 }
+    },
+    {
+      "id": "ruby-post-star-carry-critical-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10300201,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "post-star-carry",
+          "chainIdentity": "ruby-normal-default-three-inputs",
+          "contextActionId": "ruby-post-star-carry-critical-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1418 }
     },
     {
       "id": "ruby-star-skill",
@@ -353,7 +715,7 @@
         "actionKind": "star-skill",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1380 }
+      "schedule": { "mode": "absolute", "frame": 1500 }
     },
     {
       "id": "ruby-ultimate",
@@ -364,7 +726,7 @@
         "actionKind": "ultimate",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1680 }
+      "schedule": { "mode": "absolute", "frame": 1800 }
     },
     {
       "id": "ruby-e1",
@@ -376,11 +738,12 @@
         "attackInput": {
           "sequenceIndex": 1,
           "groupId": "ruby-enhanced-twelve",
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
           "contextActionId": "ruby-ultimate"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 2009 }
+      "schedule": { "mode": "absolute", "frame": 2129 }
     },
     {
       "id": "ruby-e2",
@@ -392,11 +755,12 @@
         "attackInput": {
           "sequenceIndex": 2,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e1"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2153 }
     },
     {
       "id": "ruby-e3",
@@ -408,11 +772,12 @@
         "attackInput": {
           "sequenceIndex": 3,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e2"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2177 }
     },
     {
       "id": "ruby-e4",
@@ -424,11 +789,12 @@
         "attackInput": {
           "sequenceIndex": 4,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e3"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2209 }
     },
     {
       "id": "ruby-e5",
@@ -440,11 +806,12 @@
         "attackInput": {
           "sequenceIndex": 5,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e4"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2233 }
     },
     {
       "id": "ruby-e6",
@@ -456,11 +823,12 @@
         "attackInput": {
           "sequenceIndex": 6,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e5"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2257 }
     },
     {
       "id": "ruby-e7",
@@ -472,11 +840,12 @@
         "attackInput": {
           "sequenceIndex": 7,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e6"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2289 }
     },
     {
       "id": "ruby-e8",
@@ -488,11 +857,12 @@
         "attackInput": {
           "sequenceIndex": 8,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e7"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2307 }
     },
     {
       "id": "ruby-e9",
@@ -504,11 +874,12 @@
         "attackInput": {
           "sequenceIndex": 9,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e8"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2325 }
     },
     {
       "id": "ruby-e10",
@@ -520,11 +891,12 @@
         "attackInput": {
           "sequenceIndex": 10,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e9"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2353 }
     },
     {
       "id": "ruby-e11",
@@ -536,11 +908,12 @@
         "attackInput": {
           "sequenceIndex": 11,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e10"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2371 }
     },
     {
       "id": "ruby-e12",
@@ -552,11 +925,12 @@
         "attackInput": {
           "sequenceIndex": 12,
           "groupId": "ruby-enhanced-twelve",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-e11"
         },
         "level": 1
       },
-      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
+      "schedule": { "mode": "absolute", "frame": 2408 }
     }
   ],
   "metadata": {

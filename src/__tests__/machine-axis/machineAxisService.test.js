@@ -1356,6 +1356,7 @@ describe('Machine Axis service', () => {
               actionKind: 'normal-attack',
               attackInput: {
                 sequenceIndex: 1,
+                groupId: 'ruby-explicit-enhanced',
                 chainIdentity,
                 contextActionId: 'ruby-ultimate-context',
               },
@@ -1365,6 +1366,17 @@ describe('Machine Axis service', () => {
         ],
       });
       axis.scenario.team[2].initialSp = 100;
+      axis.scenario.initialRuntimeState = {
+        specialResourcesByActor: [
+          {
+            actorId: 'actor-103002',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 12,
+            maxValue: 12,
+          },
+        ],
+      };
       return axis;
     };
 
@@ -1381,9 +1393,24 @@ describe('Machine Axis service', () => {
       })
     );
 
-    const matching = createMachineAxisService().prepare(
-      createRubyAxis('ruby-enhanced-twelve-inputs')
-    );
+    const matchingAxis = createRubyAxis('ruby-enhanced-twelve-inputs');
+    matchingAxis.actions.push({
+      id: 'ruby-explicit-chain-a2',
+      owner: { kind: 'actor', slotId: 'slot-3' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300201,
+        actionKind: 'normal-attack',
+        attackInput: {
+          sequenceIndex: 2,
+          groupId: 'ruby-explicit-enhanced',
+          chainIdentity: 'ruby-enhanced-twelve-inputs',
+          contextActionId: 'ruby-explicit-chain-a1',
+        },
+      },
+      schedule: { mode: 'absolute', frame: 353 },
+    });
+    const matching = createMachineAxisService().prepare(matchingAxis);
     expect(matching.issues).toEqual([]);
     expect(
       matching.project.actions.find(
@@ -1397,6 +1424,20 @@ describe('Machine Axis service', () => {
         attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
         controlSkillId: 10300201,
         selectedSubSkillIndex: 1,
+      },
+    });
+    expect(
+      matching.project.actions.find(
+        action => action.id === 'ruby-explicit-chain-a2'
+      )
+    ).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackInputChainSelectionSource: 'user-explicit',
+      controlSubSkillIndex: 2,
+      attackInput: {
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 2,
       },
     });
   });

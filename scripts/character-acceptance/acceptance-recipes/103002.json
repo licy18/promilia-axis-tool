@@ -20,6 +20,7 @@
   },
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
+  "inputWindowBoundary": null,
   "goldenReports": ["reports/m10/103002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
@@ -535,7 +536,7 @@
             "count": 2,
             "orderedValues": {
               "triggerFrame": [173, 237],
-              "absoluteFrame": [1853, 1917],
+              "absoluteFrame": [1973, 2037],
               "markCountAtJudgment": [1, 0],
               "consumedCount": [1, 0],
               "applied": [true, false],
@@ -575,30 +576,76 @@
         "cases": [
           {
             "actionId": "window-outside-before",
-            "expectedOffset": 23,
+            "sourceActionId": "reload-before-source",
+            "expectedOffset": -300,
             "expectedControlSkillId": 10300201,
             "expectedSubSkillIndex": 0
           },
           {
             "actionId": "window-inside-start",
+            "sourceActionId": "reload-start-source",
             "expectedOffset": 24,
             "expectedControlSkillId": 10300201,
             "expectedSubSkillIndex": 1
           },
           {
             "actionId": "window-inside-end",
+            "sourceActionId": "reload-end-source",
             "expectedOffset": 263,
             "expectedControlSkillId": 10300201,
             "expectedSubSkillIndex": 1
           },
           {
             "actionId": "window-outside-after",
+            "sourceActionId": "reload-after-source",
             "expectedOffset": 264,
             "expectedControlSkillId": 10300201,
             "expectedSubSkillIndex": 0
           }
         ]
       },
+      "negativeActionCases": [
+        {
+          "identity": "reload-window-start-minus-one-lane-overlap",
+          "assertionIdentity": "negative:reload-window-start-minus-one-23f-lane-overlap",
+          "durationFrames": 300,
+          "actions": [
+            {
+              "id": "negative-reload-window-source",
+              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "intent": {
+                "kind": "public-action",
+                "publicActionId": 10300201,
+                "actionKind": "charged-attack",
+                "level": 1
+              },
+              "schedule": { "mode": "absolute", "frame": 0 }
+            },
+            {
+              "id": "negative-reload-window-start-minus-one",
+              "owner": { "kind": "actor", "slotId": "slot-1" },
+              "intent": {
+                "kind": "public-action",
+                "publicActionId": 10300201,
+                "actionKind": "normal-attack",
+                "attackInput": {
+                  "sequenceIndex": 1,
+                  "groupId": "negative-reload-window-start-minus-one"
+                },
+                "level": 1
+              },
+              "schedule": { "mode": "absolute", "frame": 23 }
+            }
+          ],
+          "requiredExecutableActionIds": ["negative-reload-window-source"],
+          "expectedIssue": {
+            "actionId": "negative-reload-window-start-minus-one",
+            "code": "machine-axis-action-not-executable",
+            "reason": "confirmed-action-rule-violation",
+            "violationCode": "action-lane-overlap"
+          }
+        }
+      ],
       "probes": []
     },
     {

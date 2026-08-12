@@ -18,6 +18,17 @@
 - 三条工作流状态：① authority/core/search fail-closed：技术实现完成，最终 release 仍未建立；② owner acceptance：技术迁移进行中，Ruby dirty，所有受影响角色和 STARBORN object 的新 Playwright/Workbench 产品视觉签收仍未完成，旧截图/hash 仅追溯；③ release/search：`optimizationFormalScoreReady=false`、formal admission 未重跑、最终 HEAD 未推送，三个目标当前有效 Top-5 均为 `0/5`，旧 release/admission/run/checkpoint/finalization/closeout 一律失效。
 - 严格续接顺序：先读本节与 `work/m12-c/CODEX_HANDOFF.md`，复核 HEAD/status；完成 Ruby 技术闭合；逐 owner 做真实 replay、Workbench/Playwright 视觉检查并独立签收；所有 owner/STARBORN 完成后一次性刷新派生产物；只运行一次 `NODE_OPTIONS=--max-old-space-size=8192 npm run release:verify`；要求 clean、HEAD 不漂移、formal admission 15/15、authority v2 live descriptor 全绑定并推送 `origin/master`；最后才创建全新 run，按 source-family/team 分片重新搜索三个 objective Top-5。
 
+## 0.01 2026-08-12 15:50 Ruby/103002 技术闭合快照
+
+- 续接入口核对通过：`master@dafc6095a2825030d462e68a311022ae9cc9ad33`，相对 `origin/master` ahead 40；初始六个 Ruby tracked WIP 与 `.readonly-ruby-probe.mjs` 均存在。所有既有 untracked evidence 原样保留，`stash@{0}` 未读取或改动。
+- 普攻链已按 authority v2 闭合：active-surface 中十组 critical/pre-post star-carry 普攻均为显式 `ruby-normal-default-three-inputs` A1→A2→A3；主轴 A1/A2/A3 同样显式绑定默认链，并在 A3 的来源化 `[34,79)` phase transition 内于 672F 合法进入 `ruby-enhanced-twelve-inputs` E1。强化 E1→E12 使用来源化 `attack-reopen-window` 续段；缺 reopen、资源/entry-policy/source identity 任一权威时仍 fail closed。
+- compiler/runtime 修复保持通用：上下文前驱按前驱自身显式 chain 解析，目标按请求 chain 解析；derived chain 仅在已应用 `derived-or-quick-entry`、同一来源化资源门槛/逐段消耗、回指默认 opener 且 reopen 明确允许 `normal-attack` 时，才允许用 reopen 形成后继。没有新增 owner-id 分支，也没有改 authority v2 版本/hash。
+- reload 边界保持右开 `[24,264)`：`-300/24/263/264F` 分别物化 default/enhanced/enhanced/default，`23F` 作为 `action-lane-overlap` 负例。owner-only 生成报告为 requirement 696、required/pass 190/190、N/A 506，blocked/source gap/acceptance gap/functional failure 全 0；6 个证据场景（1 golden + 5 machine）共 1778/1778 assertions，5 个 machine 场景 headless/canonical/Workbench 全绿。
+- 主轴 canonical input/data/trace/evaluation/build hash 为 `0d81f27dc4ba1cea` / `4b4e77c78408e1ef` / `9fadee844fa09040` / `b0acda242f007986` / `d6adc7d6fdc52e02`；active-surface 为 `c098c6e04ea9a5ea` / `6d2fa208fc1a64f7` / `aef8824f88df5d7f` / `009654b3cfb789bb` / `bc058f5828628d55`。`node scripts/generate-character-acceptance.mjs --owner 103002 --assert-clean` 已通过。
+- 聚焦验证：normal-input authority + Machine Axis service 44/44，Ruby closure 5/5，Ruby profile + verified runtime 77/77；`.readonly-ruby-probe.mjs` 需经 `vite-node` 运行，确认 prepared valid、E1→E12 全部物化和执行。raw `node` 会被仓库既有 extensionless ESM import 阻断，不要重复；这不是 Ruby runtime 失败。
+- 不要用旧多 owner canonical batch 或简化 test helper overlay 代替 owner 生成器：当前全局 package/旧 owner fixture 尚处迁移期；简化 Ruby helper overlay 的 input/trace 为 `0c12e71e18e218c2` / `6214b892da466fb4`，与正式 owner overlay 不同，该试验接线已撤回。`characterAcceptanceCanonicalReplay.test.js` 中 Ruby 期望值已更新为正式 owner manifest hash，待最终全局派生产物刷新后统一运行。
+- 产品边界没有改变：103002 `productVisualAcceptance=pending`、`optimizationReady=false`，唯一 blocker 为 `acceptance-product-visual-signoff-pending`。本批没有运行 full/trial-release/`release:verify`、formal admission 或任何搜索，也没有签收或复用旧截图。下一步仍是逐 owner/STARBORN 的真实 replay、Workbench/Playwright 视觉检查与独立签收；全部完成前不得刷新最终 release authority 或启动 Formal Search。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。
