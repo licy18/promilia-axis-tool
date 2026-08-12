@@ -8,7 +8,7 @@
       "runnerKind": "machine-axis",
       "inputReference": {
         "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
-        "inputHash": "c8d29a1c6833fbfc",
+        "inputHash": "75bc747ec03c75d6",
         "replayCommand": "node scripts/machine-axis-cli.mjs simulate --input fixtures/character-acceptance/199002-starborn-visual.json"
       },
       "execution": {
@@ -17,11 +17,11 @@
         "workbenchRoundTrip": "passed",
         "canonicalHashes": {
           "algorithm": "fnv1a64-utf8-v1",
-          "input": "c8d29a1c6833fbfc",
+          "input": "75bc747ec03c75d6",
           "data": "3ba3fc0129e67d1b",
-          "trace": "de92ab91256337a8",
+          "trace": "c9a0da196dc61f38",
           "evaluation": "63597e31bdb38761",
-          "build": "440887513ce5e16e"
+          "build": "289e9dc789a13860"
         }
       },
       "traceProjection": {
@@ -203,7 +203,7 @@
             "semanticName": "A3",
             "controlSkillId": 19900203,
             "subSkillIndex": 0,
-            "actualDurationFrames": 54,
+            "actualDurationFrames": 48,
             "projectionIdentity": "machine-action-form:m12-b3-starborn-199002-focused-acceptance:starborn-m-star-thrust-a3"
           },
           {
@@ -230,7 +230,7 @@
             "semanticName": "A3",
             "controlSkillId": 19900203,
             "subSkillIndex": 0,
-            "actualDurationFrames": 54,
+            "actualDurationFrames": 48,
             "projectionIdentity": "machine-action-form:m12-b3-starborn-199002-focused-acceptance:starborn-m-thrust-a3"
           },
           {
@@ -101729,7 +101729,7 @@
           "workbench-import-export-round-trip": true
         }
       },
-      "traceProjectionHash": "890be4a7f5516de4",
+      "traceProjectionHash": "27a7fff3d0d18992",
       "assertions": [
         {
           "assertionIdentity": "blocked-hit-suppresses-damage",
@@ -139263,13 +139263,13 @@
           ],
           "actual": {
             "actionId": "starborn-m-star-thrust-a3",
-            "actualDurationFrames": 54,
+            "actualDurationFrames": 48,
             "appliedAssumptionHash": null,
             "appliedAssumptionIdentity": null,
             "appliedAssumptionVersion": null,
             "attackGroupId": "starborn-m-star-thrust",
             "attackInputAnimationDurationFrames": 270,
-            "attackInputChainIdentity": null,
+            "attackInputChainIdentity": "starborn-199002-normal-five-inputs",
             "attackInputDurationBasis": null,
             "attackInputIdentity": null,
             "attackInputLinkTimingStatus": "applied",
@@ -139310,7 +139310,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "fa72bbc95887b7b8"
+          "assertionHash": "c84e1108efa5c32e"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-switch-out-for-star-carry--on-exit--actor-199002--star-carry",
@@ -139362,13 +139362,13 @@
           ],
           "actual": {
             "actionId": "starborn-m-thrust-a3",
-            "actualDurationFrames": 54,
+            "actualDurationFrames": 48,
             "appliedAssumptionHash": null,
             "appliedAssumptionIdentity": null,
             "appliedAssumptionVersion": null,
             "attackGroupId": "starborn-m-derived-thrust",
             "attackInputAnimationDurationFrames": 270,
-            "attackInputChainIdentity": null,
+            "attackInputChainIdentity": "starborn-199002-normal-five-inputs",
             "attackInputDurationBasis": null,
             "attackInputIdentity": null,
             "attackInputLinkTimingStatus": "applied",
@@ -139409,7 +139409,7 @@
             "subSkillIndex": 0
           },
           "reasons": [],
-          "assertionHash": "97c665e1e996e3ba"
+          "assertionHash": "fd9ec9eab16b19fe"
         },
         {
           "assertionIdentity": "probe:variant-selection:starborn-m-ultimate",
@@ -139500,10 +139500,10 @@
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
             "baselineCanonicalHashes": {
-              "input": "c8d29a1c6833fbfc",
+              "input": "75bc747ec03c75d6",
               "data": "3ba3fc0129e67d1b",
-              "trace": "de92ab91256337a8",
-              "build": "440887513ce5e16e"
+              "trace": "c9a0da196dc61f38",
+              "build": "289e9dc789a13860"
             },
             "canonicalHashes": {
               "input": "d71930e4ade10651",
@@ -139518,7 +139518,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "64ae1b05aa04d9a8"
+          "assertionHash": "35f8f071dd6a3dc5"
         },
         {
           "assertionIdentity": "scenario-fact:blocked-hit-suppresses-damage",
@@ -168876,10 +168876,10 @@
             "baselinePrerequisiteIssues": [],
             "baselineMissingActionIds": [],
             "baselineCanonicalHashes": {
-              "input": "c8d29a1c6833fbfc",
+              "input": "75bc747ec03c75d6",
               "data": "3ba3fc0129e67d1b",
-              "trace": "de92ab91256337a8",
-              "build": "440887513ce5e16e"
+              "trace": "c9a0da196dc61f38",
+              "build": "289e9dc789a13860"
             },
             "canonicalHashes": {
               "input": null,
@@ -168893,7 +168893,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "26e0b723b7ac630d"
+          "assertionHash": "cc83e1b0493947aa"
         },
         {
           "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-starborn-199002-focused-acceptance:199002-blocked-hit-negative",
@@ -202288,7 +202288,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "2b2cd7d9da19d39b"
+      "scenarioCaseHash": "ebb6dfe469db118b"
     },
     {
       "schemaVersion": 1,
@@ -207291,5 +207291,5 @@
       "machine-axis": 1
     }
   },
-  "scenarioSetHash": "01709cdcd34a2097"
+  "scenarioSetHash": "f109b41168e24276"
 }

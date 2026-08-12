@@ -4161,20 +4161,6 @@
       "edgeIdentity": "coverage-edge:8bd798229a43bd36"
     },
     {
-      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
-      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
-      "assertionIdentity": "input-window-inside-outside-boundaries",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "input-window-inside-outside-boundaries",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "9fe99c6a11b9765f",
-      "traceProjectionHash": "e7cd12ddcec239ad",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:8c5ed2420bc71378"
-    },
-    {
       "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
       "scenarioIdentity": "m12-b3-103002-active-surface-closure",
       "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-active-surface-closure:103002-critical-sampled-boundary",
@@ -7112,6 +7098,20 @@
       "edgeIdentity": "coverage-edge:e80891d28bc24005"
     },
     {
+      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+      "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+      "assertionIdentity": "input-window-inside-outside-boundaries",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "input-window-inside-outside-boundaries",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "2f52182f00cbdd19",
+      "traceProjectionHash": "e7cd12ddcec239ad",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:e83c688c981f2e10"
+    },
+    {
       "requirementIdentity": "contract:variant-edge:variant-edge:7:54227b4ae1b67714",
       "scenarioIdentity": "m12-b3-103002-active-surface-closure",
       "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-active-surface-closure-8",
@@ -7833,5 +7833,5 @@
       "m12-b3-103002-reload-window-boundaries": 44
     }
   },
-  "coverageHash": "6cedc738e7097432"
+  "coverageHash": "d34a777bc2973e2c"
 }

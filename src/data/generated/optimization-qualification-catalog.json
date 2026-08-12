@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "604ff1ebce8cf68b",
-  "manifestsHash": "87c0ac512122a6c9",
-  "gapLedgerHash": "dc8f2eb907d5039a",
-  "bindingMatrixHash": "f0ad5b1ddeae730f",
-  "sourceSnapshotHash": "ce6d9cf7cd459974",
+  "rosterHash": "eaf6307fbcda3055",
+  "manifestsHash": "bb3f6aae02f5f195",
+  "gapLedgerHash": "3c6248725fe07866",
+  "bindingMatrixHash": "a525454b1409827f",
+  "sourceSnapshotHash": "f7604a117fe0577a",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -42,7 +42,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "ffbb89ab4aff265c"
+      "manifestHash": "ede96064f1303e19"
     },
     {
       "objectKind": "character",
@@ -96,7 +96,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "9a3326745e65360a"
+      "manifestHash": "5bea49fae6c8b56f"
     },
     {
       "objectKind": "equipment",
@@ -2665,7 +2665,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "604ff1ebce8cf68b",
+    "rosterHash": "eaf6307fbcda3055",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20637,7 +20637,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "f0ad5b1ddeae730f"
+    "bindingMatrixHash": "a525454b1409827f"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38321,5 +38321,5 @@
     "formalOptimizationUnlocked": true,
     "m12cLocked": false
   },
-  "catalogHash": "c7f5149166287d2b"
+  "catalogHash": "9c6866fe1d68a3fd"
 }

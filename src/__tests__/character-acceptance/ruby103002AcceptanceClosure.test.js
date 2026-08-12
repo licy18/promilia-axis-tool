@@ -212,8 +212,8 @@ describe('Ruby 103002 acceptance closure', () => {
       status: 'accepted',
       acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
       recordIdentity:
-        'character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:a87a71c9f84966c5',
-      qualificationSubjectHash: 'a87a71c9f84966c5',
+        'character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8',
+      qualificationSubjectHash: '314afdb71e2322d8',
       scenarioSetHash: '983f79cbac9c221a',
       bindingStatus: 'verified',
     });

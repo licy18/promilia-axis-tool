@@ -1605,14 +1605,14 @@
           "algorithm": "fnv1a64-utf8-v1",
           "input": "1713ca779e018493",
           "data": "3e1c13df0891a56b",
-          "trace": "f2c5dca18c89977b",
+          "trace": "06c0a3b396d7812b",
           "evaluation": "979a671363a8299f",
-          "build": "6b396f80db2edcf3"
+          "build": "7676b331c151627c"
         },
         "actionCount": 8,
         "executedActionCount": 8,
         "traceIndex": {
-          "traceHash": "f2c5dca18c89977b",
+          "traceHash": "06c0a3b396d7812b",
           "actionCount": 8,
           "hitCount": 8,
           "effectEventCount": 6,
@@ -1742,7 +1742,7 @@
                     "appliedAssumptionVersion": null,
                     "attackGroupId": "reload-end",
                     "attackInputAnimationDurationFrames": 230,
-                    "attackInputChainIdentity": null,
+                    "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
                     "attackInputDurationBasis": null,
                     "attackInputIdentity": null,
                     "attackInputLinkTimingStatus": "applied",
@@ -1860,8 +1860,8 @@
                 "baselineCanonicalHashes": {
                   "input": "1713ca779e018493",
                   "data": "3e1c13df0891a56b",
-                  "trace": "f2c5dca18c89977b",
-                  "build": "6b396f80db2edcf3"
+                  "trace": "06c0a3b396d7812b",
+                  "build": "7676b331c151627c"
                 },
                 "canonicalHashes": {
                   "input": "58b0914433051892",
@@ -3204,8 +3204,8 @@
         "evidenceKind": "machine-axis-trace",
         "status": "automated-machine-axis-passed",
         "traceHashSource": "machine-axis-canonical-trace",
-        "canonicalTraceHash": "f2c5dca18c89977b",
-        "traceSha256": "a26cd502b1309c917655cd8ea1d13ae08a6208151454ca98bc4cdda2a4133d94"
+        "canonicalTraceHash": "06c0a3b396d7812b",
+        "traceSha256": "23cdad07aac5cb0085ddcbd28ee1343d546b6b2c6c4d612a359d8d0a5055d2b7"
       },
       {
         "scenarioIdentity": "m12-b3-103002-marker-expiry-ordering",
@@ -3222,13 +3222,13 @@
         "m11-d-103002-visual-acceptance"
       ],
       "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
-      "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:a87a71c9f84966c5",
-      "qualificationSubjectHash": "a87a71c9f84966c5",
+      "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8",
+      "qualificationSubjectHash": "314afdb71e2322d8",
       "scenarioSetHash": "983f79cbac9c221a",
       "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:a87a71c9f84966c5",
-        "qualificationSubjectHash": "a87a71c9f84966c5",
+        "recordIdentity": "character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:314afdb71e2322d8",
+        "qualificationSubjectHash": "314afdb71e2322d8",
         "scenarioSetHash": "983f79cbac9c221a",
         "scenarioIdentities": [
           "m11-d-103002-visual-acceptance"
@@ -128292,9 +128292,9 @@
             "algorithm": "fnv1a64-utf8-v1",
             "input": "1713ca779e018493",
             "data": "3e1c13df0891a56b",
-            "trace": "f2c5dca18c89977b",
+            "trace": "06c0a3b396d7812b",
             "evaluation": "979a671363a8299f",
-            "build": "6b396f80db2edcf3"
+            "build": "7676b331c151627c"
           }
         },
         "traceProjection": {
@@ -136532,7 +136532,7 @@
                     "appliedAssumptionVersion": null,
                     "attackGroupId": "reload-end",
                     "attackInputAnimationDurationFrames": 230,
-                    "attackInputChainIdentity": null,
+                    "attackInputChainIdentity": "ruby-enhanced-twelve-inputs",
                     "attackInputDurationBasis": null,
                     "attackInputIdentity": null,
                     "attackInputLinkTimingStatus": "applied",
@@ -136617,7 +136617,7 @@
               ]
             },
             "reasons": [],
-            "assertionHash": "9fe99c6a11b9765f"
+            "assertionHash": "2f52182f00cbdd19"
           },
           {
             "assertionIdentity": "machine-axis-validation",
@@ -136678,8 +136678,8 @@
               "baselineCanonicalHashes": {
                 "input": "1713ca779e018493",
                 "data": "3e1c13df0891a56b",
-                "trace": "f2c5dca18c89977b",
-                "build": "6b396f80db2edcf3"
+                "trace": "06c0a3b396d7812b",
+                "build": "7676b331c151627c"
               },
               "canonicalHashes": {
                 "input": "58b0914433051892",
@@ -136694,7 +136694,7 @@
               }
             },
             "reasons": [],
-            "assertionHash": "74ca58f3f00230af"
+            "assertionHash": "89234f3fe13ab392"
           },
           {
             "assertionIdentity": "runtime-interruption:enhanced-marker-cutoff-at-trigger",
@@ -140492,7 +140492,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "895a6985551733f0"
+        "scenarioCaseHash": "9d52772a5b1e3500"
       }
     ],
     "summary": {
@@ -140505,7 +140505,7 @@
         "machine-axis": 5
       }
     },
-    "scenarioSetHash": "d41ae6fcae3a4441"
+    "scenarioSetHash": "b08191904bf57a22"
   },
   "coverageContext": {
     "denominator": {
@@ -144705,20 +144705,6 @@
         "edgeIdentity": "coverage-edge:8bd798229a43bd36"
       },
       {
-        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
-        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
-        "assertionIdentity": "input-window-inside-outside-boundaries",
-        "selector": {
-          "expectedValue": true,
-          "factIdentity": "input-window-inside-outside-boundaries",
-          "kind": "scenario-fact"
-        },
-        "assertionHash": "9fe99c6a11b9765f",
-        "traceProjectionHash": "e7cd12ddcec239ad",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:8c5ed2420bc71378"
-      },
-      {
         "requirementIdentity": "contract:action-form:ruby-normal-default-three-inputs:segment:1",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-action-form:machine-action-form:m12-b3-103002-active-surface-closure:103002-critical-sampled-boundary",
@@ -147656,6 +147642,20 @@
         "edgeIdentity": "coverage-edge:e80891d28bc24005"
       },
       {
+        "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+        "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
+        "assertionIdentity": "input-window-inside-outside-boundaries",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "input-window-inside-outside-boundaries",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "2f52182f00cbdd19",
+        "traceProjectionHash": "e7cd12ddcec239ad",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:e83c688c981f2e10"
+      },
+      {
         "requirementIdentity": "contract:variant-edge:variant-edge:7:54227b4ae1b67714",
         "scenarioIdentity": "m12-b3-103002-active-surface-closure",
         "assertionIdentity": "trace-variant-edge:machine-variantEdges-m12-b3-103002-active-surface-closure-8",
@@ -148377,7 +148377,7 @@
         "m12-b3-103002-reload-window-boundaries": 44
       }
     },
-    "coverageHash": "6cedc738e7097432"
+    "coverageHash": "d34a777bc2973e2c"
   },
   "matrix": {
     "schemaVersion": 1,
@@ -174063,7 +174063,7 @@
         },
         "coverageEdgeIds": [
           "coverage-edge:20dbbc43197d19b1",
-          "coverage-edge:8c5ed2420bc71378"
+          "coverage-edge:e83c688c981f2e10"
         ],
         "evidenceScenarioIds": [
           "m12-b3-103002-reload-window-boundaries"
@@ -174199,7 +174199,7 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "f632eefaaaeb7b3f"
+    "matrixHash": "6ba85ccf49783d2d"
   },
   "ledger": {
     "schemaVersion": 1,
@@ -198166,9 +198166,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "930e8b4cedbaca9f"
+    "sourceOfTruthHash": "89d08469c69287c9"
   },
-  "qualificationSubjectHash": "a87a71c9f84966c5",
+  "qualificationSubjectHash": "314afdb71e2322d8",
   "maturity": {
     "currentState": "optimization-ready",
     "earnedStates": [
@@ -198206,5 +198206,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "93e7330a75fb3756"
+  "manifestHash": "60df5e7de80f7c90"
 }
