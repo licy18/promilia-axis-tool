@@ -32,6 +32,7 @@ const MELANIA_ID = 112001;
 const SIFLIYA_ID = 107001;
 const MISA_ID = 107002;
 const MOYIN_ID = 109001;
+const STARBORN_IDS = [199001, 199002];
 const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
@@ -967,6 +968,115 @@ describe('verified action variant and special resource runtime', () => {
       contextActionId: null,
     });
   });
+
+  it.each(STARBORN_IDS)(
+    'keeps verified-empty STARBORN %i A1 structural-only without opening runtime channels',
+    ownerId => {
+      const fixture = structuredClone(mechanicsPackage);
+      const mapping = fixture.actionMappings.find(
+        candidate =>
+          Number(candidate.ownerId) === ownerId &&
+          candidate.actionKind === 'normal-attack'
+      );
+      const openerSegment = mapping.attackInputSegments.find(
+        segment => Number(segment.sequenceIndex) === 1
+      );
+      const forgedContext = fixture.actionVariantGraph.contextEdges.find(
+        edge =>
+          Number(edge.ownerId) === ownerId &&
+          edge.inputCommand === 'charged-attack' &&
+          edge.applied === true
+      );
+      forgedContext.sourceControlSkillId = Number(openerSegment.controlSkillId);
+      forgedContext.sourceSubSkillIndex = Number(
+        openerSegment.subSkillIndex ?? 0
+      );
+      forgedContext.inputWindow = {
+        ...forgedContext.inputWindow,
+        startFrame: 0,
+        endFrame: 100,
+      };
+      installVerifiedCombatMechanicsPackage(fixture);
+
+      const carrier = createRuntimeContextNormalAttackAction({
+        ownerId,
+        id: `starborn-${ownerId}-verified-empty-a1`,
+        startFrame: 0,
+        groupId: `starborn-${ownerId}-verified-empty-chain`,
+      });
+      const charged = createActorAction({
+        id: `starborn-${ownerId}-charged-after-empty-a1`,
+        characterId: ownerId,
+        skillId: Number(mapping.sourceSkillId),
+        actionKind: 'charged-attack',
+        actionVariantIndex: 1,
+        startMs: frameTime(10),
+        contextActionId: carrier.id,
+      });
+      const contextRuntime = runVariantRuntime({
+        actors: [carrier.actor],
+        actions: [carrier, charged],
+        durationMs: frameTime(500),
+      });
+
+      expect(contextRuntime.actionResolutionById.get(carrier.id)).toMatchObject(
+        {
+          ready: true,
+          complete: true,
+          status: 'verified-combat-action-mechanics-verified-empty-timing-only',
+          hits: [],
+          effects: [],
+        }
+      );
+      expect(contextRuntime.selectionByActionId.get(charged.id)).toMatchObject({
+        edgeIdentity: null,
+        contextActionId: null,
+      });
+      expect(
+        contextRuntime.resourceEvents.filter(
+          event => event.actionId === carrier.id
+        )
+      ).toEqual([]);
+      expect(
+        contextRuntime.effectCommands.filter(
+          command =>
+            command.actionId === carrier.id ||
+            command.sourceActionId === carrier.id
+        )
+      ).toEqual([]);
+      expect(
+        contextRuntime.activeSwitchWindows.filter(
+          window => window.actionId === carrier.id
+        )
+      ).toEqual([]);
+      expect(
+        contextRuntime.companionEvents.filter(
+          event => event.actionId === carrier.id
+        )
+      ).toEqual([]);
+
+      const successor = createRuntimeContextNormalAttackAction({
+        ownerId,
+        id: `starborn-${ownerId}-authority-a2`,
+        startFrame: Number(openerSegment.linkWindow.startFrame),
+        groupId: carrier.attackGroupId,
+      });
+      const chainRuntime = runVariantRuntime({
+        actors: [carrier.actor],
+        actions: [carrier, successor],
+        durationMs: frameTime(500),
+      });
+      expect(chainRuntime.selectionByActionId.get(successor.id)).toMatchObject({
+        attackChainSequenceIndex: 2,
+        executionControlSkillId: Number(
+          mapping.attackInputSegments.find(
+            segment => Number(segment.sequenceIndex) === 2
+          ).controlSkillId
+        ),
+        status: 'verified-action-variant-selection-ready',
+      });
+    }
+  );
 
   it('keeps Sifliya A1-to-A2 right-open and does not infer the unsourced A3 edge', () => {
     const mapping = normalMappingByOwnerId.get(SIFLIYA_ID);

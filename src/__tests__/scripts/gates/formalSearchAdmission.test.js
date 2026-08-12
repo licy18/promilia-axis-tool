@@ -56,8 +56,8 @@ describe('formal search admission', () => {
     });
   });
 
-  it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', () => {
-    const result = evaluateFormalSearchAdmission(currentEvidence);
+  it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', async () => {
+    const result = await evaluateFormalSearchAdmission(currentEvidence);
 
     expect(result.status).toBe('ready');
     expect(result.blockers).not.toContain('starborn-product-object-acceptance');
@@ -99,31 +99,31 @@ describe('formal search admission', () => {
     });
   });
 
-  it('still requires an executed clean release proof', () => {
+  it('still requires an executed clean release proof', async () => {
     const evidence = structuredClone(currentEvidence);
     evidence.releaseProof = {
       ...evidence.releaseProof,
       status: 'fail',
       exitCode: 1,
     };
-    const blocked = evaluateFormalSearchAdmission(evidence);
+    const blocked = await evaluateFormalSearchAdmission(evidence);
 
     expect(blocked.status).toBe('blocked');
     expect(blocked.blockers).toContain('release-verify-executed-pass');
   });
 
-  it('fails closed when combo authority coverage or its descriptor hash is missing', () => {
+  it('fails closed when combo authority coverage or its descriptor hash is missing', async () => {
     const missingCoverage = structuredClone(currentEvidence);
     missingCoverage.deterministicProof.coverage.comboContinuationPreScore = false;
-    expect(evaluateFormalSearchAdmission(missingCoverage).blockers).toContain(
-      'normal-attack-combo-authority'
-    );
+    expect(
+      (await evaluateFormalSearchAdmission(missingCoverage)).blockers
+    ).toContain('normal-attack-combo-authority');
 
     const missingHash = structuredClone(currentEvidence);
     delete missingHash.normalAttackInputAuthority.contractHash;
-    expect(evaluateFormalSearchAdmission(missingHash).blockers).toContain(
-      'normal-attack-combo-authority'
-    );
+    expect(
+      (await evaluateFormalSearchAdmission(missingHash)).blockers
+    ).toContain('normal-attack-combo-authority');
 
     const stalePolicy = structuredClone(currentEvidence);
     stalePolicy.normalAttackInputAuthority = {
@@ -133,15 +133,28 @@ describe('formal search admission', () => {
     };
     delete stalePolicy.normalAttackInputAuthority.structuralFallbackPolicy;
     delete stalePolicy.normalAttackInputAuthority.reachablePrefixPolicy;
-    expect(evaluateFormalSearchAdmission(stalePolicy).blockers).toContain(
-      'normal-attack-combo-authority'
-    );
+    expect(
+      (await evaluateFormalSearchAdmission(stalePolicy)).blockers
+    ).toContain('normal-attack-combo-authority');
+
+    const forgedHash = structuredClone(currentEvidence);
+    forgedHash.normalAttackInputAuthority.contractHash = '0000000000000000';
+    expect(
+      (await evaluateFormalSearchAdmission(forgedHash)).blockers
+    ).toContain('normal-attack-combo-authority');
+
+    const sameShapeChangedField = structuredClone(currentEvidence);
+    sameShapeChangedField.normalAttackInputAuthority.intervalPolicy =
+      'closed-interval-forgery';
+    expect(
+      (await evaluateFormalSearchAdmission(sameShapeChangedField)).blockers
+    ).toContain('normal-attack-combo-authority');
   });
 
-  it('does not confuse clientParityReady=false with qualification readiness', () => {
+  it('does not confuse clientParityReady=false with qualification readiness', async () => {
     const evidence = structuredClone(currentEvidence);
     evidence.formalRuntimeBaseline.clientParityReady = false;
-    const result = evaluateFormalSearchAdmission(evidence);
+    const result = await evaluateFormalSearchAdmission(evidence);
 
     expect(result.ready).toBe(true);
     expect(result.clientParity.status).toBe('pending');

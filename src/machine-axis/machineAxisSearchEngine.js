@@ -345,14 +345,21 @@ export function createMachineAxisSearchEngine({
     );
     if (
       MACHINE_AXIS_PRIMARY_OBJECTIVE_IDS.includes(settings.objective) &&
-      (actionLegalityProofs.some(proof => proof.passed !== true) ||
+      (actionLegalityProofs.some(
+        proof =>
+          proof.passed !== true ||
+          proof.finalScoreEligible !== true ||
+          (proof.scoreExclusions ?? []).length > 0
+      ) ||
         normalAttackInputProofs.some(proof => proof.passed !== true))
     ) {
-      throw new SearchCandidateEvaluationError(
-        [...actionLegalityProofs, ...normalAttackInputProofs].flatMap(
-          proof => proof.issues ?? []
-        )
-      );
+      throw new SearchCandidateEvaluationError([
+        ...actionLegalityProofs.flatMap(proof => [
+          ...(proof.issues ?? []),
+          ...(proof.scoreExclusions ?? []),
+        ]),
+        ...normalAttackInputProofs.flatMap(proof => proof.issues ?? []),
+      ]);
     }
     const snapshots = [];
     for (const sample of runs) {
@@ -426,10 +433,25 @@ export function createMachineAxisSearchEngine({
               normalAttackInputProof.proofHash ?? null,
           }
         : {
-            status: actionLegalityProofs.every(proof => proof.passed)
+            status: actionLegalityProofs.every(
+              proof =>
+                proof.passed === true &&
+                proof.finalScoreEligible === true &&
+                (proof.scoreExclusions ?? []).length === 0
+            )
               ? 'axis-action-legality-passed'
-              : 'axis-action-legality-rejected',
-            passed: actionLegalityProofs.every(proof => proof.passed),
+              : actionLegalityProofs.every(proof => proof.passed === true)
+                ? 'axis-action-legality-passed-score-ineligible'
+                : 'axis-action-legality-rejected',
+            passed: actionLegalityProofs.every(proof => proof.passed === true),
+            finalScoreEligible: actionLegalityProofs.every(
+              proof =>
+                proof.finalScoreEligible === true &&
+                (proof.scoreExclusions ?? []).length === 0
+            ),
+            scoreExclusions: actionLegalityProofs.flatMap(
+              proof => proof.scoreExclusions ?? []
+            ),
             normalAttackInputAuthority:
               normalAttackInputProof.normalAttackInputAuthority,
             samples: actionLegalityProofs,

@@ -1847,6 +1847,20 @@ export function createVerifiedActionVariantRuntime({
       }
       continue;
     }
+    if (isVerifiedEmptyNormalAttackTimingResolution(resolution)) {
+      const structuralContext = createVerifiedEmptyNormalAttackActionContext({
+        action: runtimeAction,
+        mapping,
+        chain: attackChainSelection.chain,
+        selection: attackChainSelection,
+        resolution,
+        executionControlSkillId,
+        selectedSubSkillIndex,
+      });
+      lastResolvedActionByActorId.set(action.actorId, structuralContext);
+      resolvedActionContextById.set(String(action.id), structuralContext);
+      continue;
+    }
     if (!actorState) {
       const resolvedActionContext = createResolvedActionContext({
         action: runtimeAction,
@@ -2214,6 +2228,40 @@ function createStructuralAuthorityOnlyActionContext({
     mechanicsReady: false,
     contextReady: false,
     structuralAuthorityOnly: true,
+  };
+}
+
+function isVerifiedEmptyNormalAttackTimingResolution(resolution) {
+  return (
+    resolution?.status ===
+      'verified-combat-action-mechanics-verified-empty-timing-only' &&
+    resolution?.mechanicsSurface?.kind === 'verified-empty-normal-attack-timing'
+  );
+}
+
+function createVerifiedEmptyNormalAttackActionContext({
+  action,
+  mapping,
+  chain,
+  selection,
+  resolution,
+  executionControlSkillId,
+  selectedSubSkillIndex,
+}) {
+  return {
+    ...createResolvedActionContext({
+      action,
+      mapping,
+      chain,
+      selection,
+      resolution,
+      executionControlSkillId,
+      selectedSubSkillIndex,
+    }),
+    mechanicsReady: false,
+    contextReady: false,
+    structuralAuthorityOnly: true,
+    verifiedEmptyTimingOnly: true,
   };
 }
 

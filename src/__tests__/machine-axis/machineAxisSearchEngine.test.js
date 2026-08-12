@@ -286,6 +286,114 @@ describe('Machine Axis search engine', () => {
     });
   });
 
+  it('prunes every sampled score-ineligible candidate before reading run metrics', async () => {
+    let scoreReadCount = 0;
+    const fakeService = {
+      async simulate(axis) {
+        const blocked = (axis.actions ?? []).length > 0;
+        return {
+          contract: axis,
+          hashes: {
+            input: blocked ? 'score-ineligible-input' : 'root-input',
+            data: 'data',
+            trace: blocked ? 'score-ineligible-trace' : 'root-trace',
+            build: 'build',
+          },
+          evaluation: blocked
+            ? {
+                get totals() {
+                  scoreReadCount += 1;
+                  throw new Error('score metrics must not be read');
+                },
+              }
+            : { totals: {} },
+          validation: blocked
+            ? {
+                issues: [],
+                warnings: [
+                  {
+                    severity: 'warning',
+                    code: 'machine-axis-variant-resolution-open',
+                    actionId: 'score-ineligible-action',
+                    path: 'actions.0',
+                  },
+                ],
+              }
+            : { issues: [], warnings: [] },
+          trace: {
+            scenario: { durationMs: 1000, frameRate: 60, actorIds: [] },
+            state: { initial: {}, final: {} },
+            controlledActors: {},
+            actions: blocked
+              ? [
+                  {
+                    id: 'score-ineligible-action',
+                    type: 'skill',
+                    startMs: 0,
+                  },
+                ]
+              : [],
+            events: [],
+            executionPlan: {
+              actions: blocked
+                ? [
+                    {
+                      actionId: 'score-ineligible-action',
+                      execute: true,
+                      status: 'scheduled',
+                      violationCodes: [],
+                      unresolvedCodes: [],
+                    },
+                  ]
+                : [],
+            },
+            diagnostics: { actionRules: { diagnostics: [], summary: {} } },
+          },
+        };
+      },
+    };
+    const generator = {
+      generateNextActions({ axis }) {
+        if ((axis.actions ?? []).length > 0) return [];
+        return [
+          {
+            action: createMachineAxisSearchAction({
+              id: 'score-ineligible-action',
+              ownerKind: 'actor',
+              slotId: 'slot-1',
+              publicActionId: 10101012,
+              actionKind: 'star-skill',
+              startFrame: 0,
+            }),
+            label: 'score-ineligible-action',
+          },
+        ];
+      },
+    };
+    const result = await createMachineAxisSearchEngine({
+      service: fakeService,
+      generator,
+    }).search({
+      contract: {
+        scenario: { durationFrames: 60, fps: 60, team: [] },
+        actions: [],
+      },
+      options: {
+        objective: 'cycle-dps-no-toughness',
+        maxDepth: 1,
+        includeWait: false,
+        seeds: [17, 19],
+      },
+    });
+
+    expect(scoreReadCount).toBe(0);
+    expect(result.results).toEqual([]);
+    expect(result.summary).toMatchObject({
+      invalidCandidates: 1,
+      rejectionCounts: { 'machine-axis-variant-resolution-open': 2 },
+    });
+  });
+
   it('records a missing joint runtime contract as excluded formal surface evidence', async () => {
     const fakeService = {
       async simulate(axis) {

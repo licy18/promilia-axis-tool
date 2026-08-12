@@ -125,6 +125,7 @@ export async function loadFormalSearchAdmissionEvidence({
     };
   });
   return {
+    repositoryRoot: root,
     releaseProof,
     deterministicProof,
     qualificationSummary,
@@ -339,7 +340,9 @@ export function createKiboAxisActionScopeEvidence({
   };
 }
 
-export function evaluateFormalSearchAdmission(evidence) {
+export async function evaluateFormalSearchAdmission(evidence) {
+  const liveNormalAttackInputAuthority =
+    await loadLiveNormalAttackInputAuthority(evidence?.repositoryRoot);
   const checks = [];
   const add = (id, passed, details, category = 'contract') => {
     const expectedId = FORMAL_SEARCH_ADMISSION_CHECK_IDS[checks.length];
@@ -503,9 +506,12 @@ export function evaluateFormalSearchAdmission(evidence) {
         'verified-graph-then-unique-mapping-reachable-prefix' &&
       normalAttackInputAuthority?.reachablePrefixPolicy ===
         'unique-a1-exact-control-subskill-contiguous-adjacency' &&
-      /^[a-f0-9]{16}$/u.test(normalAttackInputAuthority?.contractHash ?? ''),
+      /^[a-f0-9]{16}$/u.test(normalAttackInputAuthority?.contractHash ?? '') &&
+      stableJson(normalAttackInputAuthority) ===
+        stableJson(liveNormalAttackInputAuthority),
     {
       authority: normalAttackInputAuthority ?? null,
+      liveAuthority: liveNormalAttackInputAuthority ?? null,
       coverage: {
         normalAttackComboAuthority: coverage.normalAttackComboAuthority ?? null,
         comboContinuationPreScore: coverage.comboContinuationPreScore ?? null,
@@ -647,6 +653,21 @@ async function importRepositoryModule(root, relativePath) {
   return import(pathToFileURL(file).href);
 }
 
+async function loadLiveNormalAttackInputAuthority(repositoryRoot) {
+  if (typeof repositoryRoot !== 'string' || repositoryRoot.length === 0) {
+    return null;
+  }
+  try {
+    const module = await importRepositoryModule(
+      path.resolve(repositoryRoot),
+      'src/domain/verifiedNormalAttackInputAuthority.js'
+    );
+    return module.getVerifiedNormalAttackInputAuthorityDescriptor();
+  } catch {
+    return null;
+  }
+}
+
 function uniqueSortedNumbers(values) {
   return [...new Set(values.map(Number).filter(Number.isInteger))].sort(
     (left, right) => left - right
@@ -655,4 +676,22 @@ function uniqueSortedNumbers(values) {
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
+}
+
+function stableJson(value) {
+  return JSON.stringify(normalizeStableValue(value));
+}
+
+function normalizeStableValue(value) {
+  if (Array.isArray(value)) {
+    return value.map(normalizeStableValue);
+  }
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map(key => [key, normalizeStableValue(value[key])])
+    );
+  }
+  return value;
 }
