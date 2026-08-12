@@ -576,8 +576,7 @@ function createRuntimeProfileOverlay(
   );
   result.semanticEffectCatalog.summary = {
     ...(result.semanticEffectCatalog.summary ?? {}),
-    runtimeEffectCount:
-      result.semanticEffectCatalog.semanticEffects.length,
+    runtimeEffectCount: result.semanticEffectCatalog.semanticEffects.length,
     runtimeFormulaCount: result.semanticEffectCatalog.formulas.length,
   };
   const graph = result.actionVariantGraph;
@@ -894,10 +893,11 @@ function executeVisualScenario({
         second,
         recipe.criticalProbe
       );
-  const buffLifecycle = recipe.buffLifecycle
-    ? inspectEffectLifecycle(first, recipe.buffLifecycle)
-    : inspectThunderLifecycle(first);
-  const thunderLifecycle = inspectThunderLifecycle(first);
+  const buffLifecycle = recipe.skipThunderLifecycle
+    ? null
+    : recipe.buffLifecycle
+      ? inspectEffectLifecycle(first, recipe.buffLifecycle)
+      : inspectThunderLifecycle(first);
   const configuredInputWindowBoundaries = recipe.inputWindowProbe
     ? inspectConfiguredInputWindowBoundaries({
         fixture,
@@ -916,7 +916,12 @@ function executeVisualScenario({
     configuredInputWindowBoundaries ??
     declaredInputWindowBoundaries ??
     mitiJointInputWindowBoundaries ??
-    inspectInputWindowBoundaries(fixture, first);
+    (Number(recipe.ownerId) === 109001 &&
+    (recipe.additionalScenarios ?? []).some(
+      definition => definition.inputWindowBoundary
+    )
+      ? null
+      : inspectInputWindowBoundaries(fixture, first));
   const foregroundBackgroundSwitch = recipe.mitiForegroundBackgroundSwitch
     ? inspectMitiForegroundBackgroundSwitch(first)
     : null;
@@ -929,9 +934,8 @@ function executeVisualScenario({
       recipe.existingTuningMarkAcceptance
     ),
   ];
-  const isolatedActionCases = configuredIsolatedActionCases.map(
-    isolatedCase =>
-      inspectIsolatedActionCase(service, fixture, isolatedCase, profile)
+  const isolatedActionCases = configuredIsolatedActionCases.map(isolatedCase =>
+    inspectIsolatedActionCase(service, fixture, isolatedCase, profile)
   );
   const runtimeInterruptionCases = (recipe.runtimeInterruptionCases ?? []).map(
     interruptionCase =>
@@ -1008,7 +1012,7 @@ function executeVisualScenario({
     ...Object.entries(criticalMatrix)
       .filter(([key]) => key !== 'details')
       .map(([key, passed]) => ({ identity: 'critical:' + key, passed })),
-    ...(Number(recipe.ownerId) === 109001 || recipe.buffLifecycle
+    ...(buffLifecycle
       ? [
           {
             identity: 'buff-apply-refresh-stack-expire',
@@ -1017,7 +1021,7 @@ function executeVisualScenario({
           },
         ]
       : []),
-    ...(Number(recipe.ownerId) === 109001 || recipe.inputWindowBoundary
+    ...(inputWindowBoundaries
       ? [
           {
             identity: 'input-window-inside-outside-boundaries',
@@ -1070,9 +1074,9 @@ function executeVisualScenario({
   }
   const scenarioFactAliases = (recipe.scenarioFactAliases ?? []).map(alias => {
     const factIdentity = String(alias?.factIdentity ?? '').trim();
-    const sourceAssertionIdentities = (alias?.allOfAssertionIdentities ?? []).map(
-      identity => String(identity).trim()
-    );
+    const sourceAssertionIdentities = (
+      alias?.allOfAssertionIdentities ?? []
+    ).map(identity => String(identity).trim());
     if (!factIdentity || sourceAssertionIdentities.length === 0) {
       throw new Error(
         'Invalid scenario fact alias in character acceptance recipe for ' +
@@ -1097,10 +1101,7 @@ function executeVisualScenario({
       },
     };
   });
-  const assertionResults = [
-    ...baseAssertionResults,
-    ...scenarioFactAliases,
-  ];
+  const assertionResults = [...baseAssertionResults, ...scenarioFactAliases];
   if (
     new Set(assertionResults.map(result => String(result.identity))).size !==
     assertionResults.length
@@ -1314,18 +1315,19 @@ function executeVisualScenario({
         ...(first.trace?.damage ?? [])
           .filter(event => event.formula?.randomBranch)
           .map((event, index) => ({
-          projectionIdentity:
-            'machine-critical:' + fixture.scenario.id + ':' + index,
-          actionId: event.actionId ?? null,
-          hitIdentity: event.hitIdentity ?? null,
-          mode: event.formula.randomBranch.mode ?? null,
-          sourceCriticalBasisPoints:
-            event.formula.randomBranch.sourceCriticalBasisPoints ?? null,
-          targetCriticalDefenseBasisPoints:
-            event.formula.randomBranch.targetCriticalDefenseBasisPoints ?? null,
-          effectiveThresholdBasisPoints:
-            event.formula.randomBranch.criticalThreshold ?? null,
-          criticalRoll: event.formula.randomBranch.criticalRoll ?? null,
+            projectionIdentity:
+              'machine-critical:' + fixture.scenario.id + ':' + index,
+            actionId: event.actionId ?? null,
+            hitIdentity: event.hitIdentity ?? null,
+            mode: event.formula.randomBranch.mode ?? null,
+            sourceCriticalBasisPoints:
+              event.formula.randomBranch.sourceCriticalBasisPoints ?? null,
+            targetCriticalDefenseBasisPoints:
+              event.formula.randomBranch.targetCriticalDefenseBasisPoints ??
+              null,
+            effectiveThresholdBasisPoints:
+              event.formula.randomBranch.criticalThreshold ?? null,
+            criticalRoll: event.formula.randomBranch.criticalRoll ?? null,
             critical: event.formula.randomBranch.critical ?? null,
           })),
         ...collectIsolatedProjectionRows('criticalDecisions'),
@@ -1418,9 +1420,9 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
     : ownerId === 109001
       ? (first.trace?.damage ?? []).find(
           event =>
-            event.actionId === 'moyin-lifecycle-a5-1' &&
+            event.actionId === 'moyin-round-1-a5' &&
             event.eventType === 'VERIFIED_COMBAT_HIT' &&
-            String(event.hitIdentity ?? '').endsWith('|47|6')
+            String(event.hitIdentity ?? '').endsWith('|20|5')
         )
       : ownerId === 108003
         ? sampledLow
@@ -1430,7 +1432,7 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
     : ownerId === 109001
       ? (first.trace?.damage ?? []).find(
           event =>
-            event.actionId === 'moyin-lifecycle-a5-1' &&
+            event.actionId === 'moyin-round-1-a5' &&
             event.eventType === 'VERIFIED_COMBAT_HIT' &&
             String(event.hitIdentity ?? '').endsWith('|56|7')
         )
@@ -1674,51 +1676,48 @@ function inspectThunderLifecycle(run) {
       event.payload?.stateIdentity === 'moyin-brilliant' &&
       event.payload?.applied === false
   );
-  const apply = findMark(
-    'moyin-lifecycle-a5-1',
-    event => event.kind === 'acquire'
-  );
-  const stack = findMark(
-    'moyin-lifecycle-a5-2',
-    event => event.kind === 'acquire'
-  );
-  const cap = findMark(
-    'moyin-lifecycle-a5-3',
-    event => event.kind === 'acquire'
-  );
+  const apply = findMark('moyin-round-1-a5', event => event.kind === 'acquire');
+  const stack = findMark('moyin-round-2-a5', event => event.kind === 'acquire');
+  const cap = findMark('moyin-round-4-a5', event => event.kind === 'acquire');
   const refresh = findMark(
-    'moyin-lifecycle-a5-4-refresh',
+    'moyin-round-5-a5',
     event => event.kind === 'acquire'
   );
-  const expire = marks.find(event => event.kind === 'expire') ?? null;
+  const acquisitions = Array.from({ length: 5 }, (_, index) =>
+    findMark(`moyin-round-${index + 1}-a5`, event => event.kind === 'acquire')
+  );
+  const consumes = Array.from({ length: 5 }, (_, index) =>
+    findMark(`moyin-round-${index + 1}-a4`, event => event.kind === 'consume')
+  );
+  const expire =
+    marks.find(event => event.kind === 'expire' && event.frameIndex === 6428) ??
+    null;
+  const preseed = findMark(
+    'moyin-thunder-preseed-signature',
+    event => event.kind === 'acquire'
+  );
   const firstHeldDamage = (run.trace?.damage ?? []).find(
     event =>
-      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.actionId === 'moyin-thunder-preseed-signature' &&
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
       Number(event.elementId) === 251
   );
   const nextHeldDamage = (run.trace?.damage ?? []).find(
     event =>
-      event.actionId === 'moyin-held-boundary-hit' &&
-      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
-      Number(event.elementId) === 251
-  );
-  const heldDamageInsideCooldown = (run.trace?.damage ?? []).find(
-    event =>
-      event.actionId === 'moyin-lifecycle-a5-2' &&
+      event.actionId === 'moyin-limit-1' &&
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
       Number(event.elementId) === 251
   );
   const persistentEffect = (run.trace?.effects?.events ?? []).find(
     event =>
-      event.actionId === 'moyin-lifecycle-a5-1' &&
+      event.actionId === 'moyin-round-1-a5' &&
       event.effectId === 'tuning-mark:250:persistent' &&
       event.operation === 'apply' &&
       event.targetId === 'actor-109001'
   );
   const expiryBoundaryHit = (run.trace?.damage ?? []).find(
     event =>
-      event.actionId === 'moyin-expiry-boundary-hit' &&
+      event.actionId === 'moyin-expiry-boundary-a1' &&
       event.eventType === 'VERIFIED_COMBAT_HIT' &&
       String(event.hitIdentity ?? '').endsWith('|12|1')
   );
@@ -1731,17 +1730,37 @@ function inspectThunderLifecycle(run) {
   const passed =
     suppressedOffAcquire == null &&
     suppressedOffCondition != null &&
+    preseed?.before === 0 &&
+    preseed?.after === 1 &&
+    preseed?.delta === 1 &&
+    preseed?.frameIndex === 3215 &&
     apply?.before === 0 &&
     apply?.after === 2 &&
     apply?.delta === 2 &&
-    stack?.before === 2 &&
-    stack?.after === 4 &&
+    stack?.before === 1 &&
+    stack?.after === 3 &&
     cap?.before === 3 &&
     cap?.after === 5 &&
     cap?.delta === 2 &&
-    refresh?.before === 5 &&
+    refresh?.before === 4 &&
     refresh?.after === 5 &&
-    refresh?.delta === 0 &&
+    refresh?.delta === 1 &&
+    acquisitions.every(
+      (event, index) =>
+        event?.before === index &&
+        event?.after === Math.min(index + 2, 5) &&
+        event?.delta === Math.min(2, 5 - index) &&
+        event?.maximum === 5 &&
+        // `delta` is the cap-adjusted applied value. The verified x2 source
+        // remains a +2 transaction even when the fifth round can apply only 1.
+        String(event?.sourceIdentity).includes('thunder-tuning-mark-x2')
+    ) &&
+    consumes.every(
+      (event, index) =>
+        event?.before === index + 1 &&
+        event?.after === index &&
+        event?.delta === -1
+    ) &&
     expire?.before === 5 &&
     expire?.after === 4 &&
     expire?.delta === -1 &&
@@ -1750,10 +1769,8 @@ function inspectThunderLifecycle(run) {
       672 &&
     firstHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
     Number(firstHeldDamage?.rawDamage) > 0 &&
-    firstHeldDamage?.absoluteFrame === apply?.frameIndex &&
-    heldDamageInsideCooldown == null &&
+    firstHeldDamage?.absoluteFrame === preseed?.frameIndex &&
     nextHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
-    Number(nextHeldDamage?.rawDamage) > Number(firstHeldDamage?.rawDamage) &&
     Math.abs(
       Number(nextHeldDamage?.timeMs) - Number(firstHeldDamage?.timeMs) - 5000
     ) < 0.001 &&
@@ -1764,14 +1781,16 @@ function inspectThunderLifecycle(run) {
     details: {
       suppressedOffAcquire,
       suppressedOffCondition,
+      preseed,
       apply,
       stack,
       cap,
       refresh,
+      acquisitions,
+      consumes,
       expire,
       firstHeldDamage: projectCriticalHit(firstHeldDamage),
       nextHeldDamage: projectCriticalHit(nextHeldDamage),
-      heldDamageInsideCooldown: projectCriticalHit(heldDamageInsideCooldown),
       persistentEffect,
       expiryBoundaryHit: projectCriticalHit(expiryBoundaryHit),
     },
@@ -3134,9 +3153,7 @@ function inspectRecipeProbe(run, probe) {
     };
   }
   if (probe.kind === 'existing-tuning-mark-acquisition') {
-    const gates = (
-      run.trace?.resources?.tuningAcquisitionGates ?? []
-    ).filter(
+    const gates = (run.trace?.resources?.tuningAcquisitionGates ?? []).filter(
       row =>
         row.actionId === probe.actionId &&
         row.gateKind === 'existing-tuning-mark-at-action-start'
@@ -3886,9 +3903,7 @@ function createExistingTuningMarkAcceptanceCases(definition) {
   const maximumStacks = Number(definition.maximumStacks);
   const ownerId = Number(definition.ownerId);
   const sourceActorId = String(definition.sourceActorId ?? '');
-  const ultimatePublicActionId = Number(
-    definition.ultimate?.publicActionId
-  );
+  const ultimatePublicActionId = Number(definition.ultimate?.publicActionId);
   const ultimateStackDelta = Number(definition.ultimate?.stackDelta);
   const starCarryStackDelta = Number(definition.starCarry?.stackDelta);
   const switchTargetSlotId = String(
@@ -3964,8 +3979,7 @@ function createExistingTuningMarkAcceptanceCases(definition) {
             decayRemainingMs: 30_000,
             heldReadyRemainingMs: 0,
             layers: Array.from({ length: count }, (_, index) => ({
-              sourceActionId:
-                `existing-mark-fixture-${ownerId}-${profile.profileKey}-${index + 1}`,
+              sourceActionId: `existing-mark-fixture-${ownerId}-${profile.profileKey}-${index + 1}`,
               sourceActorId,
               sourceIdentity: {
                 contract: sourceIdentity,
@@ -4014,13 +4028,17 @@ function createExistingTuningMarkAcceptanceCases(definition) {
     },
     schedule: { mode: 'absolute', frame },
   });
-  const createSwitchAction = ({ actionId, ownerSlotId, targetSlotId, frame }) =>
-    ({
-      id: actionId,
-      owner: { kind: 'actor', slotId: ownerSlotId },
-      intent: { kind: 'switch', targetSlotId },
-      schedule: { mode: 'absolute', frame },
-    });
+  const createSwitchAction = ({
+    actionId,
+    ownerSlotId,
+    targetSlotId,
+    frame,
+  }) => ({
+    id: actionId,
+    owner: { kind: 'actor', slotId: ownerSlotId },
+    intent: { kind: 'switch', targetSlotId },
+    schedule: { mode: 'absolute', frame },
+  });
   const derivedStarCarryActionId = switchActionId =>
     `${switchActionId}--on-exit--${sourceActorId}--star-carry`;
   const mixedCounts = normalizeCounts(definition.mixedInitialCounts);
@@ -4247,10 +4265,7 @@ function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
   return {
     actionForms: selectionRows.map(selection => ({
       projectionIdentity:
-        'machine-isolated-action-form:' +
-        scenarioId +
-        ':' +
-        selection.actionId,
+        'machine-isolated-action-form:' + scenarioId + ':' + selection.actionId,
       actionId: selection.actionId,
       ownerId: selection.ownerId,
       semanticName: selection.semanticName,
@@ -4261,8 +4276,7 @@ function createIsolatedMachineTraceProjection({ run, profile, scenarioId }) {
     hits: (run.trace?.damage ?? [])
       .filter(event => event.hitIdentity)
       .map((event, index) => ({
-        projectionIdentity:
-          'machine-isolated-hit:' + scenarioId + ':' + index,
+        projectionIdentity: 'machine-isolated-hit:' + scenarioId + ':' + index,
         actionId: event.actionId ?? null,
         hitIdentity: event.hitIdentity,
         frame: event.frame ?? null,

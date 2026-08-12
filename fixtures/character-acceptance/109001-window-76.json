@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-109001-star-window-offset-76",
+    "name": "末音星鸣技窗口 76F 内侧验收轴",
+    "fps": 60,
+    "durationFrames": 500,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 109001,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": { "specialResourcesByActor": [] },
+    "critical": { "policy": "sampled", "seed": "m12-b3-109001-window-76" },
+    "projectile": { "targetDistance": 0, "defaultWillHit": true },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    }
+  },
+  "actions": [
+    {
+      "id": "window-source",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 0 }
+    },
+    {
+      "id": "window-offset-76",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-offset-76",
+          "contextActionId": "window-source"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 76 }
+    }
+  ],
+  "metadata": {
+    "phase": "M12-B3-E20-2-109001-S3-window-76",
+    "probeContract": "isolated-star-skill-input-window"
+  }
+}

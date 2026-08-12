@@ -19,7 +19,7 @@
         "characterId": 109001,
         "level": 1,
         "initialSp": 100,
-        "loadout": {},
+        "loadout": { "kiboId": 500057 },
         "cultivation": {}
       },
       {
@@ -50,6 +50,17 @@
     },
     "initialRuntimeState": {
       "specialResourcesByActor": [],
+      "kiboEnergyBySlot": [
+        {
+          "slotId": "slot-1",
+          "actorId": "actor-109001",
+          "characterId": 109001,
+          "kiboId": 500057,
+          "kiboName": "猪古力",
+          "currentValue": 100,
+          "maxValue": 100
+        }
+      ],
       "activeEffects": [
         {
           "instanceKey": "protocol:109001:critical-rate-boundary-source:actor-109001",
@@ -270,18 +281,373 @@
       }
     },
     {
-      "id": "window-before-source",
+      "id": "moyin-thunder-preseed-signature",
+      "owner": { "kind": "kibo", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 50005701,
+        "actionKind": "signature",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3200 }
+    },
+    {
+      "id": "moyin-limit-1",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
+        "publicActionId": 10900121,
+        "actionKind": "limit-counter",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3600 }
+      "schedule": { "mode": "absolute", "frame": 3485 }
     },
     {
-      "id": "window-outside-before",
+      "id": "moyin-round-1-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "moyin-round-1" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3538 }
+    },
+    {
+      "id": "moyin-round-1-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "moyin-round-1" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3554 }
+    },
+    {
+      "id": "moyin-round-1-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "moyin-round-1" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3589 }
+    },
+    {
+      "id": "moyin-round-1-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "moyin-round-1" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3654 }
+    },
+    {
+      "id": "moyin-round-1-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "moyin-round-1" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 3718 }
+    },
+    {
+      "id": "moyin-limit-2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900121,
+        "actionKind": "limit-counter",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4015 }
+    },
+    {
+      "id": "moyin-round-2-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "moyin-round-2" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4068 }
+    },
+    {
+      "id": "moyin-round-2-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "moyin-round-2" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4084 }
+    },
+    {
+      "id": "moyin-round-2-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "moyin-round-2" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4119 }
+    },
+    {
+      "id": "moyin-round-2-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "moyin-round-2" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4184 }
+    },
+    {
+      "id": "moyin-round-2-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "moyin-round-2" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4248 }
+    },
+    {
+      "id": "moyin-limit-3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900121,
+        "actionKind": "limit-counter",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4326 }
+    },
+    {
+      "id": "moyin-round-3-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "moyin-round-3" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4379 }
+    },
+    {
+      "id": "moyin-round-3-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "moyin-round-3" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4395 }
+    },
+    {
+      "id": "moyin-round-3-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "moyin-round-3" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4430 }
+    },
+    {
+      "id": "moyin-round-3-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "moyin-round-3" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4495 }
+    },
+    {
+      "id": "moyin-round-3-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "moyin-round-3" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4559 }
+    },
+    {
+      "id": "moyin-limit-4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900121,
+        "actionKind": "limit-counter",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4637 }
+    },
+    {
+      "id": "moyin-round-4-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "moyin-round-4" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4690 }
+    },
+    {
+      "id": "moyin-round-4-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "moyin-round-4" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4706 }
+    },
+    {
+      "id": "moyin-round-4-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "moyin-round-4" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4741 }
+    },
+    {
+      "id": "moyin-round-4-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "moyin-round-4" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4806 }
+    },
+    {
+      "id": "moyin-round-4-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "moyin-round-4" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4870 }
+    },
+    {
+      "id": "moyin-limit-5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900121,
+        "actionKind": "limit-counter",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4948 }
+    },
+    {
+      "id": "moyin-round-5-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "moyin-round-5" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5001 }
+    },
+    {
+      "id": "moyin-round-5-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 2, "groupId": "moyin-round-5" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5017 }
+    },
+    {
+      "id": "moyin-round-5-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 3, "groupId": "moyin-round-5" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5052 }
+    },
+    {
+      "id": "moyin-round-5-a4",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 4, "groupId": "moyin-round-5" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5117 }
+    },
+    {
+      "id": "moyin-round-5-a5",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10900101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 5, "groupId": "moyin-round-5" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5181 }
+    },
+    {
+      "id": "moyin-expiry-boundary-a1",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
@@ -289,93 +655,56 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "window-before",
-          "contextActionId": "window-before-source"
+          "groupId": "moyin-expiry-boundary"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3639 }
+      "schedule": { "mode": "absolute", "frame": 6416 }
     },
     {
-      "id": "window-start-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 4400 }
-    },
-    {
-      "id": "window-inside-start",
+      "id": "moyin-expiry-boundary-a2",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
         "actionKind": "normal-attack",
         "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "window-start",
-          "contextActionId": "window-start-source"
+          "sequenceIndex": 2,
+          "groupId": "moyin-expiry-boundary"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 4441 }
+      "schedule": { "mode": "absolute", "frame": 6432 }
     },
     {
-      "id": "window-end-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 5200 }
-    },
-    {
-      "id": "window-inside-end",
+      "id": "moyin-expiry-boundary-a3",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
         "actionKind": "normal-attack",
         "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "window-end",
-          "contextActionId": "window-end-source"
+          "sequenceIndex": 3,
+          "groupId": "moyin-expiry-boundary"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 5276 }
+      "schedule": { "mode": "absolute", "frame": 6467 }
     },
     {
-      "id": "window-after-source",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 6000 }
-    },
-    {
-      "id": "window-outside-after",
+      "id": "moyin-expiry-boundary-a4",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
         "actionKind": "normal-attack",
         "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "window-after",
-          "contextActionId": "window-after-source"
+          "sequenceIndex": 4,
+          "groupId": "moyin-expiry-boundary"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6078 }
+      "schedule": { "mode": "absolute", "frame": 6532 }
     },
     {
       "id": "moyin-a5-brilliant-off",
@@ -384,136 +713,13 @@
         "kind": "public-action",
         "publicActionId": 10900101,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "brilliant-off" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1540 }
-    },
-    {
-      "id": "moyin-lifecycle-brilliant-source-1",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1618 }
-    },
-    {
-      "id": "moyin-lifecycle-brilliant-chase-1",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
         "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "lifecycle-brilliant-1",
-          "contextActionId": "moyin-lifecycle-brilliant-source-1"
+          "sequenceIndex": 5,
+          "groupId": "moyin-expiry-boundary"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1659 }
-    },
-    {
-      "id": "moyin-lifecycle-a5-1",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "lifecycle-1" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1889 }
-    },
-    {
-      "id": "moyin-lifecycle-a5-2",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "lifecycle-2" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 1967 }
-    },
-    {
-      "id": "moyin-held-boundary-hit",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "held-boundary" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2224 }
-    },
-    {
-      "id": "moyin-lifecycle-brilliant-source-2",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900112,
-        "actionKind": "star-skill",
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2240 }
-    },
-    {
-      "id": "moyin-lifecycle-brilliant-chase-2",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "lifecycle-brilliant-2",
-          "contextActionId": "moyin-lifecycle-brilliant-source-2"
-        },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2281 }
-    },
-    {
-      "id": "moyin-lifecycle-a5-3",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "lifecycle-3" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2511 }
-    },
-    {
-      "id": "moyin-lifecycle-a5-4-refresh",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 5, "groupId": "lifecycle-4" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 2589 }
-    },
-    {
-      "id": "moyin-expiry-boundary-hit",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": {
-        "kind": "public-action",
-        "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "expiry-boundary" },
-        "level": 1
-      },
-      "schedule": { "mode": "absolute", "frame": 3824 }
+      "schedule": { "mode": "absolute", "frame": 6596 }
     }
   ],
   "metadata": {

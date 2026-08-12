@@ -45,10 +45,10 @@ const cases = [
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: '269ff7673999b42d',
-      data: 'b7af247f0ef075a2',
-      trace: 'd2b947ed718cad15',
-      evaluation: '855dd5b0926bf110',
+      input: '15d080b8fdb34e86',
+      data: '8fdf2cf52bd9b30f',
+      trace: '953d6fb09f0c8113',
+      evaluation: 'e181489404062a9a',
     },
   },
   {

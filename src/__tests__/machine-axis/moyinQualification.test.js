@@ -64,12 +64,30 @@ function createNormal(id, sequenceIndex, frame, contextActionId = null) {
   });
 }
 
-function createBrilliantPair(prefix, starFrame) {
-  const starId = `${prefix}-star`;
-  return [
-    createStar(starId, starFrame),
-    createNormal(`${prefix}-chase`, 1, starFrame + 41, starId),
-  ];
+function createLimitCounter(id, frame) {
+  return createPublicAction({
+    id,
+    publicActionId: 10900121,
+    actionKind: 'limit-counter',
+    frame,
+  });
+}
+
+const NORMAL_CHAIN_OFFSETS = [0, 16, 51, 116, 180];
+
+function createNormalChain(id, targetSequenceIndex, targetFrame) {
+  const chainStart =
+    targetFrame - NORMAL_CHAIN_OFFSETS[targetSequenceIndex - 1];
+  return Array.from({ length: targetSequenceIndex }, (_, index) => {
+    const sequenceIndex = index + 1;
+    const action = createNormal(
+      sequenceIndex === targetSequenceIndex ? id : `${id}-a${sequenceIndex}`,
+      sequenceIndex,
+      chainStart + NORMAL_CHAIN_OFFSETS[index]
+    );
+    action.intent.attackInput.groupId = id;
+    return action;
+  });
 }
 
 function createInheritedThunder(count) {
@@ -165,8 +183,7 @@ describe('Moyin Machine Axis qualification', () => {
     expect(
       moyinProfile.contracts.effects.raw.find(
         effect =>
-          Number(effect.controlSkillId) === 10900143 &&
-          effect.tuningOverlimit
+          Number(effect.controlSkillId) === 10900143 && effect.tuningOverlimit
       )
     ).toMatchObject({
       classification: 'applied',
@@ -178,19 +195,15 @@ describe('Moyin Machine Axis qualification', () => {
   });
 
   it('gates A5 on Brilliant and replays the thunder lifecycle on applied transactions only', () => {
-    const actionIds = new Set([
-      'moyin-a5-brilliant-off',
-      'moyin-lifecycle-brilliant-source-1',
-      'moyin-lifecycle-brilliant-chase-1',
-      'moyin-lifecycle-a5-1',
-      'moyin-lifecycle-a5-2',
-      'moyin-held-boundary-hit',
-      'moyin-lifecycle-brilliant-source-2',
-      'moyin-lifecycle-brilliant-chase-2',
-      'moyin-lifecycle-a5-3',
-      'moyin-lifecycle-a5-4-refresh',
-      'moyin-expiry-boundary-hit',
-    ]);
+    const actionIds = new Set(
+      fixture.actions
+        .filter(action =>
+          /^(moyin-thunder-preseed-signature|moyin-limit-|moyin-round-|moyin-expiry-boundary-a1)/.test(
+            action.id
+          )
+        )
+        .map(action => action.id)
+    );
     const execution = run.trace.executionPlan.actions.filter(row =>
       actionIds.has(row.actionId)
     );
@@ -201,30 +214,47 @@ describe('Moyin Machine Axis qualification', () => {
       event => Number(event.markId) === 250
     );
     expect(
-      marks.filter(
+      marks.find(
         event =>
-          event.actionId === 'moyin-a5-brilliant-off' &&
+          event.actionId === 'moyin-thunder-preseed-signature' &&
           event.kind === 'acquire'
       )
-    ).toHaveLength(0);
-    expect(
-      run.trace.state.targetEvents.find(
-        event =>
-          event.actionId === 'moyin-a5-brilliant-off' &&
-          event.type === 'VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED' &&
-          event.payload?.stateIdentity === 'moyin-brilliant' &&
-          event.payload?.applied === false
-      )
-    ).toBeTruthy();
+    ).toMatchObject({ before: 0, after: 1, delta: 1, frameIndex: 3215 });
     expect(
       marks
-        .filter(event => event.kind === 'acquire')
+        .filter(
+          event =>
+            event.kind === 'acquire' &&
+            /^moyin-round-\d-a5$/.test(event.actionId)
+        )
+        .map(event => [
+          event.actionId,
+          event.frameIndex,
+          event.before,
+          event.after,
+          event.delta,
+          event.maximum,
+          event.sourceIdentity.includes('thunder-tuning-mark-x2') ? 2 : null,
+          event.sourceIdentity.includes('thunder-tuning-mark-x2'),
+        ])
+    ).toEqual([
+      ['moyin-round-1-a5', 3765, 0, 2, 2, 5, 2, true],
+      ['moyin-round-2-a5', 4295, 1, 3, 2, 5, 2, true],
+      ['moyin-round-3-a5', 4606, 2, 4, 2, 5, 2, true],
+      ['moyin-round-4-a5', 4917, 3, 5, 2, 5, 2, true],
+      ['moyin-round-5-a5', 5228, 4, 5, 1, 5, 2, true],
+    ]);
+
+    expect(
+      marks
+        .filter(event => event.kind === 'consume')
         .map(event => [event.actionId, event.before, event.after, event.delta])
     ).toEqual([
-      ['moyin-lifecycle-a5-1', 0, 2, 2],
-      ['moyin-lifecycle-a5-2', 2, 4, 2],
-      ['moyin-lifecycle-a5-3', 3, 5, 2],
-      ['moyin-lifecycle-a5-4-refresh', 5, 5, 0],
+      ['moyin-round-1-a4', 1, 0, -1],
+      ['moyin-round-2-a4', 2, 1, -1],
+      ['moyin-round-3-a4', 3, 2, -1],
+      ['moyin-round-4-a4', 4, 3, -1],
+      ['moyin-round-5-a4', 5, 4, -1],
     ]);
 
     const heldThunder = run.trace.damage.filter(
@@ -237,31 +267,46 @@ describe('Moyin Machine Axis qualification', () => {
         .filter(event => actionIds.has(event.actionId))
         .map(event => [event.actionId, event.absoluteFrame])
     ).toEqual([
-      ['moyin-lifecycle-a5-1', 1936],
-      ['moyin-held-boundary-hit', 2236],
-      ['moyin-lifecycle-a5-3', 2558],
+      ['moyin-thunder-preseed-signature', 3215],
+      ['moyin-limit-1', 3515],
+      ['moyin-limit-2', 4045],
+      ['moyin-limit-3', 4356],
+      ['moyin-limit-4', 4667],
+      ['moyin-limit-5', 4978],
+      ['moyin-expiry-boundary-a1', 6428],
     ]);
     expect(
-      heldThunder.find(event => event.actionId === 'moyin-lifecycle-a5-2')
-    ).toBeUndefined();
-    expect(
-      heldThunder.find(event => event.actionId === 'moyin-held-boundary-hit')
+      heldThunder.find(event => event.actionId === 'moyin-limit-1')
         ?.absoluteFrame -
-        heldThunder.find(event => event.actionId === 'moyin-lifecycle-a5-1')
-          ?.absoluteFrame
+        heldThunder.find(
+          event => event.actionId === 'moyin-thunder-preseed-signature'
+        )?.absoluteFrame
     ).toBe(300);
+    expect(
+      marks.find(event => event.kind === 'expire' && event.frameIndex === 6428)
+    ).toMatchObject({ before: 5, after: 4, delta: -1 });
     expect(
       marks
         .filter(event => !Array.isArray(event.sourceSequencePath))
         .map(event => [event.actionId, event.kind, event.frameIndex])
     ).toEqual([]);
+    const persistent = run.trace.effects.events.find(
+      event =>
+        event.actionId === 'moyin-round-1-a5' &&
+        event.effectId === 'tuning-mark:250:persistent' &&
+        event.operation === 'apply'
+    );
     expect(
-      run.trace.state.targetEvents.filter(
-        event =>
-          event.payload?.stateIdentity === 'moyin-brilliant' &&
-          event.payload?.operation === 'consume'
-      )
-    ).toEqual([]);
+      (persistent?.modifiers ?? []).map(modifier => [
+        modifier.attributeId,
+        modifier.valueRaw,
+      ])
+    ).toEqual(
+      expect.arrayContaining([
+        [7, 43],
+        [8, 86],
+      ])
+    );
   });
 
   it('settles the A5 off/on and A4 state-plus-mark counterexample matrix', () => {
@@ -269,15 +314,15 @@ describe('Moyin Machine Axis qualification', () => {
     const a5Off = service.simulate(
       createQualificationAxis({
         id: 'moyin-a5-off-matrix',
-        actions: [createNormal('a5-off', 5, 0)],
+        actions: createNormalChain('a5-off', 5, 180),
       })
     );
     const a5On = service.simulate(
       createQualificationAxis({
         id: 'moyin-a5-on-matrix',
         actions: [
-          ...createBrilliantPair('a5-on-brilliant', 0),
-          createNormal('a5-on', 5, 271),
+          createLimitCounter('a5-on-brilliant', 0),
+          ...createNormalChain('a5-on', 5, 233),
         ],
       })
     );
@@ -296,7 +341,7 @@ describe('Moyin Machine Axis qualification', () => {
         before: 0,
         after: 2,
         delta: 2,
-        frameIndex: 318,
+        frameIndex: 280,
         sourceSequencePath: expect.any(Array),
       }),
     ]);
@@ -305,15 +350,15 @@ describe('Moyin Machine Axis qualification', () => {
       {
         id: 'a4-off-mark-1',
         initialThunderCount: 1,
-        actions: [createNormal('a4-off-mark-1', 4, 0)],
+        actions: createNormalChain('a4-off-mark-1', 4, 116),
         before: 1,
         consumeCount: 0,
       },
       {
         id: 'a4-on-mark-0',
         actions: [
-          ...createBrilliantPair('a4-on-zero-brilliant', 0),
-          createNormal('a4-on-mark-0', 4, 271),
+          createLimitCounter('a4-on-zero-brilliant', 0),
+          ...createNormalChain('a4-on-mark-0', 4, 169),
         ],
         before: 0,
         consumeCount: 0,
@@ -321,24 +366,22 @@ describe('Moyin Machine Axis qualification', () => {
       {
         id: 'a4-on-mark-2',
         actions: [
-          ...createBrilliantPair('a4-on-two-brilliant', 0),
-          createNormal('a4-on-two-a5', 5, 271),
-          createNormal('a4-on-mark-2', 4, 349),
+          createLimitCounter('a4-on-two-brilliant', 0),
+          ...createNormalChain('a4-on-mark-2', 4, 169),
         ],
+        initialThunderCount: 2,
         before: 2,
         consumeCount: 1,
       },
       {
         id: 'a4-on-mark-1',
         actions: [
-          ...createBrilliantPair('a4-on-one-brilliant-1', 0),
-          createNormal('a4-on-one-a5', 5, 271),
-          ...createBrilliantPair('a4-on-one-brilliant-2', 349),
-          createNormal('a4-on-mark-1', 4, 620),
+          createLimitCounter('a4-on-one-brilliant', 0),
+          ...createNormalChain('a4-on-mark-1', 4, 169),
         ],
+        initialThunderCount: 1,
         before: 1,
         consumeCount: 1,
-        chaseConsumeActionId: 'a4-on-one-brilliant-2-chase',
       },
     ];
     for (const expected of matrix) {
@@ -380,15 +423,6 @@ describe('Moyin Machine Axis qualification', () => {
             event.payload?.operation === 'consume'
         )
       ).toEqual([]);
-      if (expected.chaseConsumeActionId) {
-        expect(
-          result.trace.resources.tuningMarks.find(
-            event =>
-              event.actionId === expected.chaseConsumeActionId &&
-              event.kind === 'consume'
-          )
-        ).toMatchObject({ before: 2, after: 1, delta: -1 });
-      }
     }
   });
 
@@ -397,12 +431,14 @@ describe('Moyin Machine Axis qualification', () => {
       createQualificationAxis({
         id: 'moyin-repeated-a4-matrix',
         actions: [
-          ...createBrilliantPair('repeat-brilliant', 0),
-          createNormal('repeat-a5', 5, 271),
-          createNormal('repeat-a4-1', 4, 349),
-          createNormal('repeat-a4-2', 4, 413),
-          createNormal('repeat-a4-insufficient', 4, 477),
+          createLimitCounter('repeat-brilliant-1', 0),
+          ...createNormalChain('repeat-a4-1', 4, 169),
+          createLimitCounter('repeat-brilliant-2', 300),
+          ...createNormalChain('repeat-a4-2', 4, 469),
+          createLimitCounter('repeat-brilliant-3', 600),
+          ...createNormalChain('repeat-a4-insufficient', 4, 769),
         ],
+        initialThunderCount: 2,
       })
     );
     expect(
@@ -439,11 +475,9 @@ describe('Moyin Machine Axis qualification', () => {
           id,
           durationFrames: 900,
           actions: [
-            ...createBrilliantPair(`${id}-brilliant-1`, 0),
-            ...(refresh
-              ? createBrilliantPair(`${id}-brilliant-2`, 271)
-              : []),
-            createNormal(`${id}-a5`, 5, a5Frame),
+            createLimitCounter(`${id}-brilliant-1`, 0),
+            ...(refresh ? [createLimitCounter(`${id}-brilliant-2`, 271)] : []),
+            ...createNormalChain(`${id}-a5`, 5, a5Frame),
           ],
         })
       );
@@ -453,11 +487,11 @@ describe('Moyin Machine Axis qualification', () => {
       ).length;
     expect(
       acquireCount(
-        runBoundary({ id: 'brilliant-inside', a5Frame: 483 }),
+        runBoundary({ id: 'brilliant-inside', a5Frame: 463 }),
         'brilliant-inside-a5'
       )
     ).toBe(1);
-    const exact = runBoundary({ id: 'brilliant-exact', a5Frame: 484 });
+    const exact = runBoundary({ id: 'brilliant-exact', a5Frame: 464 });
     expect(acquireCount(exact, 'brilliant-exact-a5')).toBe(0);
     const exactExpire = exact.trace.state.targetEvents.find(
       event =>
@@ -469,9 +503,9 @@ describe('Moyin Machine Axis qualification', () => {
         event.actionId === 'brilliant-exact-a5' &&
         event.type === 'VERIFIED_ACTION_EFFECT_STATE_CONDITION_EVALUATED'
     );
-    expect(exactExpire.timeMs).toBe(8850);
+    expect(exactExpire.timeMs).toBe(8516.666667);
     expect(exactCondition).toMatchObject({
-      timeMs: 8850,
+      timeMs: 8516.666667,
       payload: { applied: false },
     });
     expect(exact.trace.state.targetEvents.indexOf(exactExpire)).toBeLessThan(
@@ -482,7 +516,7 @@ describe('Moyin Machine Axis qualification', () => {
       acquireCount(
         runBoundary({
           id: 'brilliant-refresh-inside',
-          a5Frame: 754,
+          a5Frame: 734,
           refresh: true,
         }),
         'brilliant-refresh-inside-a5'
@@ -490,12 +524,10 @@ describe('Moyin Machine Axis qualification', () => {
     ).toBe(1);
     const refreshedExact = runBoundary({
       id: 'brilliant-refresh-exact',
-      a5Frame: 755,
+      a5Frame: 735,
       refresh: true,
     });
-    expect(
-      acquireCount(refreshedExact, 'brilliant-refresh-exact-a5')
-    ).toBe(0);
+    expect(acquireCount(refreshedExact, 'brilliant-refresh-exact-a5')).toBe(0);
     expect(
       refreshedExact.trace.state.targetEvents
         .filter(
@@ -508,9 +540,9 @@ describe('Moyin Machine Axis qualification', () => {
           Math.round((event.timeMs * 60) / 1000),
         ])
     ).toEqual([
-      ['gain', 51],
-      ['refresh', 322],
-      ['expire', 802],
+      ['gain', 31],
+      ['refresh', 302],
+      ['expire', 782],
     ]);
   });
 
@@ -577,8 +609,7 @@ describe('Moyin Machine Axis qualification', () => {
         appliedToSimulationResults: true,
       }),
     ]);
-    const transaction =
-      result.trace.readiness.cooldownReductionTransactions[0];
+    const transaction = result.trace.readiness.cooldownReductionTransactions[0];
     expect(readinessById.get('charge-star-3')).toMatchObject({
       status: 'ready',
       executable: true,
@@ -637,8 +668,7 @@ describe('Moyin Machine Axis qualification', () => {
     expect(noBank.trace.readiness.cooldownReductionTransactions).toEqual([
       expect.objectContaining({
         sourceActionId: 'no-bank-ultimate',
-        status:
-          'cooldown-reduction-transaction-consumed-no-active-target',
+        status: 'cooldown-reduction-transaction-consumed-no-active-target',
         consumed: true,
         appliedToSimulationResults: false,
       }),
