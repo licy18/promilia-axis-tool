@@ -2,6 +2,7 @@
 
 ## 0.000 2026-08-13 00:00 normal-input v2 最终修复与无人监管准入
 
+- clean `66793ae27315fbabc7f37759f23dd621c14cc711` 上的首次无人监管 release 已真实执行并诚实失败，release record=`897beb9b3b44d3f5f4b048b09357ba52374c2059537ad157252adedcc8fedea5`、failureStage=`test`：247 files / 2070 tests 中仅 `productionImportsAudit` 1 项失败。根因是本批新增 Workbench 调度模块未进入 canonical production-import report；现已用权威生成器刷新为 source 235 / production-reachable 231 / allowed test-only 4 / unexpected 0 / unreferenced 0，聚焦 3/3 PASS。旧 release 仍为 FAIL，不产生 admission；提交这个单一派生清单修复后才允许从新 clean HEAD 完整重跑。
 - 在 `c4761acf4e906b2b47f2cf149a307ef01f4584ee` 后完成通用 normal-input 收口：graph phase transition 可在 Ruby 默认 A3 的来源化 `[34,79)` 窗口进入强化 E1；显式 chain 在缺 owner overlay 时只从唯一 applied/ready、owner/source/identity 一致且 segment 连续、occupancy 精确的 graph chain 投影；context-selected E1 可从唯一执行 control/subskill 反推链并让 E2 继承。没有新增 Ruby owner-id 特判。
 - 当前实证：Machine Axis service + context scheduling + Workbench attack-input chain + variant runtime 4 files / 141 tests PASS；官方 Ruby CLI `103002-visual-fresh-cli-closeout.json` exit 0，E1=`10300201/sub1`、24F；production build 1903 modules PASS；真实 production preview 42/42 capabilities、64/64 tests PASS，612920ms。预览生成的 100 个非确定性 tracked PNG 已精确恢复，`reports/production-preview-acceptance.json` 与 canonical bundle 报告保留。
 - Ruby phase-transition 投影已拆到 Workbench 动态模块，既有共享链解析保持首屏可用；权威 bundle check 现场通过且未抬预算：initial entry `119981/120000` gzip bytes、Workbench `487871/500000`、total JavaScript `914453/920000`，三项 budget status 全为 true。

@@ -2,6 +2,7 @@
 
 ## 2026-08-13 00:00 无人监管发布准入续接
 
+- 第一次无人监管 release 尝试在 clean `66793ae27315fbabc7f37759f23dd621c14cc711` 上真实执行，record `897beb9b3b44d3f5f4b048b09357ba52374c2059537ad157252adedcc8fedea5`，结果 `FAIL (executed)`：247 files / 2070 tests 中仅 `productionImportsAudit` 1 项失败，原因是新增 `verifiedNormalAttackInputScheduling.js` 尚未进入 canonical production-import report。报告已由权威生成器刷新为 235 source / 231 production-reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced，聚焦测试 3/3 PASS；必须提交该单一派生清单修复后，从新的 clean HEAD 完整重跑建权，旧 FAIL 不得作为准入。
 - 当前工作批在 `c4761acf4e906b2b47f2cf149a307ef01f4584ee` 之后修复 Ruby `A3 -> E1` phase transition、无 owner overlay 的 graph-chain segment 投影、context-selected E1 后的 E2 链继承，以及相应 Workbench 顺序输入验收。中央聚焦回归为 4 files / 141 tests PASS，生产 build 1903 modules 通过。
 - 新 phase-transition 投影按依赖职责进入 Workbench 动态模块，既有共享链解析仍留在首屏模块；bundle 权威脚本现场通过，initial entry `119981/120000` gzip bytes、Workbench `487871/500000`、total JavaScript `914453/920000`，三项 `budgetStatus=true`，未提高预算。
 - 新鲜官方 Ruby CLI 输出位于 `work/m12-c/diagnostics/103002-visual-fresh-cli-closeout.json`：E1 为 `10300201/sub1`、24F，三段强化命中；随后同一实现完成真实 production preview 42/42 capabilities、64/64 tests PASS，报告在 `reports/production-preview-acceptance.json`。
