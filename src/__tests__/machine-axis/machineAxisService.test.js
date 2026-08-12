@@ -16,6 +16,7 @@ const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
 function createMitiProjectileFixture() {
   const axis = structuredClone(mitiFixture);
+  axis.dataIdentity.verifiedMechanicsPackageHash = mechanicsPackage.packageHash;
   // The visual-acceptance fixture predates the verified normal-input authority.
   // Keep it as historical evidence, but isolate this projectile test from its
   // legacy repeated-A1 and switch-tail actions instead of treating that axis as
@@ -32,7 +33,9 @@ function createMitiProjectileFixture() {
 }
 
 function createVerifiedThreeActorFixture() {
-  return structuredClone(authorityFixture);
+  const axis = structuredClone(authorityFixture);
+  axis.dataIdentity.verifiedMechanicsPackageHash = mechanicsPackage.packageHash;
+  return axis;
 }
 
 function createAxis({
@@ -1098,7 +1101,10 @@ describe('Machine Axis service', () => {
   }, 15_000);
 
   it('rejects the legacy M11-B direct-A3 fixture under the normal-input authority', () => {
-    const prepared = createMachineAxisService().prepareValidated(fixture);
+    const legacyAxis = structuredClone(fixture);
+    legacyAxis.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    const prepared = createMachineAxisService().validate(legacyAxis);
 
     expect(prepared.valid).toBe(false);
     expect(prepared.actionLegalityProof).toMatchObject({

@@ -33,6 +33,18 @@ const SIFLIYA_ID = 107001;
 const MISA_ID = 107002;
 const MOYIN_ID = 109001;
 const STARBORN_IDS = [199001, 199002];
+const createVerifiedContextEdgeIdentity = edge =>
+  [
+    `actor:${Number(edge.ownerId)}`,
+    `control:${Number(edge.sourceControlSkillId)}`,
+    `sub:${Number(edge.sourceSubSkillIndex)}`,
+    `context:${Number(edge.inputWindow.startFrame)}-${Number(
+      edge.inputWindow.endFrame
+    )}`,
+    `public-control:${Number(edge.targetControlSkillId)}`,
+    `execution-control:${Number(edge.executionControlSkillId)}`,
+    `sub:${Number(edge.targetSubSkillIndex)}`,
+  ].join('|');
 const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
@@ -1028,6 +1040,8 @@ describe('verified action variant and special resource runtime', () => {
         startFrame: 0,
         endFrame: 100,
       };
+      forgedContext.edgeIdentity =
+        createVerifiedContextEdgeIdentity(forgedContext);
       installVerifiedCombatMechanicsPackage(fixture);
 
       const carrier = createRuntimeContextNormalAttackAction({
@@ -1446,7 +1460,6 @@ describe('verified action variant and special resource runtime', () => {
 
       fixture.actionVariantGraph.contextEdges.push({
         ...structuredClone(edge),
-        edgeIdentity: `${edge.edgeIdentity}:ambiguous-duplicate`,
       });
       installVerifiedCombatMechanicsPackage(fixture);
       const ambiguous = runAt(Number(edge.inputWindow.startFrame));
