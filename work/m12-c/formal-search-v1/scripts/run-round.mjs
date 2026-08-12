@@ -21,6 +21,7 @@ import {
   createFixedCycleReplayCandidate,
 } from './cycle-replay-axis.mjs';
 import { materializeFormalInitialState } from './formal-initial-state.mjs';
+import { validateFormalSearchAdmissionRecord } from '../../../../scripts/gates/formal-search-admission.mjs';
 
 const execFile = promisify(childProcess.execFile);
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -1042,20 +1043,11 @@ async function assertReleaseAuthority(baseline) {
   ) {
     throw new Error('Release authority does not match the frozen baseline');
   }
-  if (
-    admission?.ready !== true ||
-    admission?.status !== 'ready' ||
-    (admission?.blockers ?? []).length !== 0 ||
-    (admission?.checks ?? []).length !== 14 ||
-    (admission?.checks ?? []).some(check => check.passed !== true)
-  ) {
-    throw new Error('Formal Search Admission is not READY 14/14');
-  }
-  if (
-    admission?.clientParity?.ready !== false ||
-    admission?.clientParity?.status !== 'pending'
-  ) {
-    throw new Error('Client parity boundary drifted from pending/false');
+  const admissionValidation = validateFormalSearchAdmissionRecord(admission);
+  if (!admissionValidation.valid) {
+    throw new Error(
+      `Formal Search Admission does not match current authority: ${admissionValidation.issues.join(', ')}`
+    );
   }
 }
 

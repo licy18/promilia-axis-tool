@@ -25,7 +25,7 @@
 - 已完整读取并执行 `azpr-m12c-ai-guided-search` skill、`references/protocol.md`、`references/pruning-strategy.md`。
 - 已读取 `work/m12-c/STATE.md`、`DEVELOPMENT_PLAN.md` 的 M12/M12-C 合同、最新 release/admission report 与 gate ledger。
 - 已确认 `HEAD == origin/master == baeb03489aa823d59981d60255af5b418aa48178`，tracked tree clean，`stash@{0}` object `900e193bf710b8f894b50e0bc966db70cbd7e717` 未变化。
-- 已确认 release record `5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24` 为 executed PASS；Formal Search Admission READY 14/14、0 blockers；`clientParityReady=false/PENDING` 单列。
+- 历史 release record `5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24` 曾为 executed PASS、Formal Search Admission READY 14/14、0 blockers；该 admission 缺少 `normal-attack-combo-authority`，现已失效。新 runner 按 gate 导出的当前完整、有序 check authority 逐项校验，旧 14 项记录 fail closed；`clientParityReady=false/PENDING` 仍单列。
 - 已确认权威 pool `f9740b8fe17d178e`：28 teams、35 source configs、43 Kibo、62 soul essences、137 global equipment、53 M12-C equipment projections、12 set thresholds。
 - 已实现独立、可恢复、原子 shard orchestration；不修改 `src/` gameplay/runtime。确定性测试 5/5、脚本语法检查通过。
 - one-source smoke v2 已真实处理 1 build / 3 initial fronts：23 candidates evaluated、3 个合法 closed-cycle 结果；第二次运行只复用完成 shard，aggregate hash 稳定为 `d93a8e1fd9ecd0ee8238c56a2e11011976a58a93754f2516c1a191263907cbe7`。

@@ -9,7 +9,7 @@
 ## 权威边界
 
 - release record：`5ae44c228b24bca4a2b8de189307547ea1252a8c21104edbf7bcb0af1fca0a24`
-- Formal Search Admission：READY `14/14`，0 blockers
+- 历史 Formal Search Admission 曾为 READY `14/14`、0 blockers；该记录缺少 `normal-attack-combo-authority`，已随旧 run 一并失效。新 run 必须逐项匹配 gate 导出的当前完整、有序 check authority，旧 14 项记录 fail closed
 - runtime score authority：`formal-for-current-runtime-contract`
 - Client Parity：`PENDING` / `clientParityReady=false`，不阻断当前 runtime-baseline scoring，也不随搜索提升
 - 敌人：`310054 雷冠牦`，80 级；profile/hash 由正式 bind 路径解析并进入每条 axis

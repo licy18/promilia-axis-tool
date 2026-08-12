@@ -24,6 +24,24 @@ const EXPECTED_KIBO_AXIS_ACTION_CENSUS = Object.freeze({
 
 const KIBO_AXIS_ACTION_SCOPE_CONTRACT = 'AzPrM12CKiboAxisActionScope';
 
+export const FORMAL_SEARCH_ADMISSION_CHECK_IDS = Object.freeze([
+  'release-verify-executed-pass',
+  'optimization-qualification-complete',
+  'm12c-lock-open',
+  'qualification-hash-binding-consistent',
+  'binding-matrix-complete',
+  'binding-authority-hashes-match',
+  'formal-initial-state-authority',
+  'deterministic-canonical-proof',
+  'unresolved-skipped-pre-score-pruning',
+  'normal-attack-combo-authority',
+  'kibo-axis-action-scope-applied',
+  'formal-runtime-baseline-ready',
+  'client-parity-policy-satisfied',
+  'required-character-product-acceptance',
+  'starborn-product-object-acceptance',
+]);
+
 export async function loadFormalSearchAdmissionEvidence({
   repositoryRoot,
   releaseProof,
@@ -324,6 +342,12 @@ export function createKiboAxisActionScopeEvidence({
 export function evaluateFormalSearchAdmission(evidence) {
   const checks = [];
   const add = (id, passed, details, category = 'contract') => {
+    const expectedId = FORMAL_SEARCH_ADMISSION_CHECK_IDS[checks.length];
+    if (id !== expectedId) {
+      throw new Error(
+        `Formal Search Admission check authority drifted at index ${checks.length}: expected ${expectedId ?? '<none>'}, received ${id}`
+      );
+    }
     checks.push({ id, passed: passed === true, category, details });
   };
 
@@ -548,6 +572,12 @@ export function evaluateFormalSearchAdmission(evidence) {
     'product-acceptance'
   );
 
+  if (checks.length !== FORMAL_SEARCH_ADMISSION_CHECK_IDS.length) {
+    throw new Error(
+      `Formal Search Admission check authority is incomplete: expected ${FORMAL_SEARCH_ADMISSION_CHECK_IDS.length}, received ${checks.length}`
+    );
+  }
+
   const blockers = checks.filter(check => !check.passed).map(check => check.id);
   return {
     schemaVersion: 1,
@@ -563,6 +593,43 @@ export function evaluateFormalSearchAdmission(evidence) {
       status: runtime?.clientParityReady === true ? 'ready' : 'pending',
       warnings: runtime?.warnings ?? [],
     },
+  };
+}
+
+export function validateFormalSearchAdmissionRecord(admission) {
+  const issues = [];
+  const checks = Array.isArray(admission?.checks) ? admission.checks : [];
+  const actualCheckIds = checks.map(check => String(check?.id ?? ''));
+
+  if (admission?.ready !== true || admission?.status !== 'ready') {
+    issues.push('formal-search-admission-not-ready');
+  }
+  if (!Array.isArray(admission?.blockers) || admission.blockers.length !== 0) {
+    issues.push('formal-search-admission-blockers-present');
+  }
+  if (
+    actualCheckIds.length !== FORMAL_SEARCH_ADMISSION_CHECK_IDS.length ||
+    actualCheckIds.some(
+      (checkId, index) => checkId !== FORMAL_SEARCH_ADMISSION_CHECK_IDS[index]
+    )
+  ) {
+    issues.push('formal-search-admission-check-authority-mismatch');
+  }
+  if (checks.some(check => check?.passed !== true)) {
+    issues.push('formal-search-admission-check-not-passed');
+  }
+  if (
+    admission?.clientParity?.ready !== false ||
+    admission?.clientParity?.status !== 'pending'
+  ) {
+    issues.push('formal-search-admission-client-parity-boundary-drifted');
+  }
+
+  return {
+    valid: issues.length === 0,
+    issues,
+    expectedCheckIds: [...FORMAL_SEARCH_ADMISSION_CHECK_IDS],
+    actualCheckIds,
   };
 }
 

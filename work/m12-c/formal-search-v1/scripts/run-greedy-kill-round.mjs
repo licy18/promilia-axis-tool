@@ -25,6 +25,7 @@ import {
   deriveGreedyNormalCadence,
   synthesizeGreedyNormalAxis,
 } from './greedy-normal-axis.mjs';
+import { validateFormalSearchAdmissionRecord } from '../../../../scripts/gates/formal-search-admission.mjs';
 
 const execFile = promisify(childProcess.execFile);
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -1181,20 +1182,19 @@ async function assertReleaseAuthority(baseline) {
     resolveRepositoryPath(baseline.releaseReportPath)
   );
   const admission = report?.summary?.formalSearchAdmission;
+  const admissionValidation = validateFormalSearchAdmissionRecord(admission);
   if (
     report.status !== 'pass' ||
     report.mode !== 'executed' ||
     report.head !== baseline.head ||
-    report.releaseRecordId !== baseline.releaseRecordId ||
-    admission?.ready !== true ||
-    admission?.status !== 'ready' ||
-    (admission?.blockers ?? []).length !== 0 ||
-    (admission?.checks ?? []).length !== 14 ||
-    (admission?.checks ?? []).some(check => check.passed !== true) ||
-    admission?.clientParity?.ready !== false ||
-    admission?.clientParity?.status !== 'pending'
+    report.releaseRecordId !== baseline.releaseRecordId
   ) {
-    throw new Error('Release/Formal Search Admission authority drifted');
+    throw new Error('Release authority does not match the frozen baseline');
+  }
+  if (!admissionValidation.valid) {
+    throw new Error(
+      `Formal Search Admission does not match current authority: ${admissionValidation.issues.join(', ')}`
+    );
   }
 }
 
