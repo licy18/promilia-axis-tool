@@ -29,6 +29,15 @@
 - 不要用旧多 owner canonical batch 或简化 test helper overlay 代替 owner 生成器：当前全局 package/旧 owner fixture 尚处迁移期；简化 Ruby helper overlay 的 input/trace 为 `0c12e71e18e218c2` / `6214b892da466fb4`，与正式 owner overlay 不同，该试验接线已撤回。`characterAcceptanceCanonicalReplay.test.js` 中 Ruby 期望值已更新为正式 owner manifest hash，待最终全局派生产物刷新后统一运行。
 - 产品边界没有改变：103002 `productVisualAcceptance=pending`、`optimizationReady=false`，唯一 blocker 为 `acceptance-product-visual-signoff-pending`。本批没有运行 full/trial-release/`release:verify`、formal admission 或任何搜索，也没有签收或复用旧截图。下一步仍是逐 owner/STARBORN 的真实 replay、Workbench/Playwright 视觉检查与独立签收；全部完成前不得刷新最终 release authority 或启动 Formal Search。
 
+## 0.02 2026-08-12 17:05 正式 owner 技术闭合快照
+
+- 技术批已由 `2409ce3e` 提交（`fix(m12-c): close remaining owner acceptance axes`），其直接父提交 `830504cd` 为 Ruby/103002 闭合。未跟踪的 `.readonly-ruby-probe.mjs`、`work/**` evidence 与 `stash@{0}` 均未删除、移动、暂存或改写。
+- 107001 已按完整 A1→A2→A3 与 A3 来源化 reopen 重排：早段 critical/resource 探针使用真实 A1 命中，A2/A3 helper 命中显式 miss；第 8/9/10 点风语分别由 A1/A2/A3 合法取得，10 点阈值在继承风印 1200F 过期前完成。原 72F fresh A1 保留为 phase-conflict 负例，230F idle/reopen 才作为正向 fresh A1；Lumi 生命周期探针锚定真实 transform 动作 `window-inside-end`。
+- owner-only profile overlay 只在 `inputToIndex=true`、明确 normal-attack、控制技/来源 identity/后继 segment 全部一致时，把 raw target subskill 投影到来源化后继 subskill；同时只补齐该 control/subskill 的已安装 hit identity，不覆盖已有相等集合。其他 owner 的 round-trip 交叉验证保持稳定；不可运行负例仅在 schema-valid、not-runnable、not-evaluated 的完整分类成立时计为合格，不放宽主场景或 stale-hit 校验。
+- 当前正式技术矩阵全部零缺口：101010 `202/202`、102001 `108/108`、103002 `190/190`、107001 `80/80`、107002 `108/108`、108003 `134/134`、109001 `134/134`、112001 `184/184`、199001 `195/195`、199002 `195/195`；每个 owner 的 blocked/source gap/acceptance gap/functional failure 均为 0，headless replay、canonical replay 与 Workbench round-trip 全绿，且所有 `productVisualAcceptance` 仍为 `pending`、`optimizationReady=false`。
+- 聚焦回归为 Machine Axis service、Sifliya runtime、verified action variant、action-rule diagnostics 共 4 files / `141/141 PASS`；`node --check scripts/generate-character-acceptance.mjs` 与 `git diff --check` 通过。为了技术诊断曾使用的 visual-evidence 环境旁路和 manifest 输出接线均已撤回，没有进入提交。
+- 下一步只能在 `2409ce3e` 之后启动逐 owner/别名的全新 Workbench/Playwright 截图与人工视觉复核；199001/199002 必须作为同一个 STARBORN optimization object 做一致性裁决。旧截图/hash 仅追溯，不得复用或自动代签。全部真实产品签收前仍禁止 `release:verify`、formal admission 与任何正式搜索。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。
