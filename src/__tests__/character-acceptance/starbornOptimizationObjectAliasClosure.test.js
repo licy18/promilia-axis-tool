@@ -44,23 +44,30 @@ function createSources() {
 }
 
 describe('STARBORN optimization-object alias acceptance closure', () => {
-  it('fails closed for the historical object signoff after the technical fixture migration', () => {
+  it('accepts both source aliases as one jointly signed STARBORN object', () => {
     const validation = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: createSources(),
     });
 
-    expect(validation.valid).toBe(false);
-    expect(validation.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'optimization-object-product-acceptance-binding-invalid',
-          path: 'recipe.productVisualAcceptance',
-        }),
-      ])
-    );
-    expect(validation.bundle.formalAdmission).toBe(false);
-    expect(validation.bundle.optimizationReady).toBe(false);
+    expect(validation.valid).toBe(true);
+    expect(validation.issues).toEqual([]);
+    expect(validation.bundle).toMatchObject({
+      optimizationObjectId: 'STARBORN',
+      productVisualAcceptance: 'accepted',
+      formalAdmission: true,
+      optimizationReady: true,
+      requiredSourceCharacterIds: [199001, 199002],
+      summary: {
+        optimizationObjectCount: 1,
+        sourceAliasCount: 2,
+        requiredCount: 390,
+        passedCount: 390,
+        blockedCount: 0,
+        assertionCount: 3237,
+        assertionPassedCount: 3237,
+      },
+    });
   });
 
   it('fails closed for a partial product signoff or an unaccepted source alias', () => {

@@ -130,8 +130,8 @@ describe('Sifliya 107001 acceptance closure', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 5,
       executionPassedCount: 5,
-      assertionCount: 692,
-      assertionPassedCount: 692,
+      assertionCount: 740,
+      assertionPassedCount: 740,
     });
     expect(
       scenarioCases.records.every(
@@ -152,7 +152,7 @@ describe('Sifliya 107001 acceptance closure', () => {
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
       bindingStatus: 'verified',
     });
     expect(
@@ -167,10 +167,11 @@ describe('Sifliya 107001 acceptance closure', () => {
           fixturePath:
             'fixtures/character-acceptance/107001-active-surface-closure.json',
           fixtureSha256:
-            'c0076775d267ae7314d561471f9e26d07a797f122ab768fe1ef632d3a4fbc06a',
-          screenshotPath: 'reports/m12-b3-107001-workbench-visual-evidence.png',
+            'dc1cbc9cec361b9975be5f5525af56e5319c7d5c40aecc4e73d120ff4e1f3bcf',
+          screenshotPath:
+            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107001-canonical-trace.png',
           screenshotSha256:
-            'cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260',
+            '195b980d9f464e887b24ba242b9e675df82bae5d79da34de063aa3b5c340bfea',
         }),
       ]
     );
@@ -181,7 +182,7 @@ describe('Sifliya 107001 acceptance closure', () => {
       expect.objectContaining({
         scenarioIdentity: 'm12-b3-107001-wind-expiry-boundary',
         evidenceKind: 'machine-axis-trace',
-        canonicalTraceHash: '34c9ac74925254f9',
+        canonicalTraceHash: '75e162692579024e',
         traceSha256: expect.stringMatching(/^[0-9a-f]{64}$/),
       }),
     ]);

@@ -49,7 +49,7 @@ describe('M12-B3 Misa reduced action surface profile', () => {
       runtimeReadyActionCount: 4,
       executionFormCount: 10,
       controlCount: 15,
-      hitCount: 57,
+      hitCount: 67,
       targetStateProfileCount: 1,
       targetStateTransactionCount: 2,
       switchTriggerCount: 1,

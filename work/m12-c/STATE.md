@@ -54,6 +54,15 @@
 - 派生刷新暴露并关闭两个通用一致性缺口：assertion 的深层 `undefined` 在 JSON 落盘时会改变 hash，现统一先做 JSON 值归一化并有序列化稳定性回归；E22 显式请求全局 normal-chain identity 时，Machine Axis 只查 profile overlay 导致裸全局包 missing，现优先匹配 owner profile，缺匹配且链等于全局 chain 时才回退 verified `attackInputSegments`。聚焦回归 2 files / 40 tests PASS，E22 binding 22/22 PASS，visual acceptance 254/254 ready。
 - 当前仍没有 release authority 或 Formal Search Admission；必须先提交本批，使 tracked tree clean，再按 handoff 只运行一次 8 GiB `release:verify`，独立确认 HEAD 稳定、formal admission 15/15 与 authority v2 live descriptor 后才能推送并启动全新搜索。所有既有 untracked evidence 与 `.readonly-ruby-probe.mjs` 保留，`stash@{0}` 未动。
 
+## 0.05 2026-08-12 20:38 单次 release 失败与定向技术收口
+
+- owner/STARBORN 签收批已提交为 `04e955e8c99118e3a255194f7f6cf0cc6ba4f619`（`feat(m12-c): accept owner visual evidence`）。在该 clean tracked HEAD 上依 handoff 唯一一次执行 `$env:NODE_OPTIONS='--max-old-space-size=8192'; npm run release:verify`；preflight 确认 HEAD/parent 稳定、tracked clean、untracked evidence 存在且 `stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`。
+- 本轮 release 真实通过 character-combat、visual acceptance 254/254、E22 binding 22/22、Kibo headless 与 machine-axis settlement，随后在 `test:trial-release` 失败：247 个 Vitest files 为 215 pass / 32 fail，tests 为 1944 pass / 105 fail / 20 skip。`work/m12-c/gates/latest-release-verify.json` 保持 `status=fail`、`failureStage=test`，release record 为 `4b7afb2a5b81a4b7245efe6cf3202f5f0198e70fad1ee12a5b4a255fc3e89170`；不得将其改写为 release PASS 或 Formal Search Admission。
+- 32 个失败文件均属于签收后陈旧 fixture/test/report 镜像，未通过放宽生产 runtime 修复：formal Machine Axis fixtures 与 E21/E22 镜像改绑当前 mechanics package `62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8`；角色验收、canonical/headless hash 与 10 个已签 owner 状态同步，101003 继续 pending；历史非法 `m11-b-three-actor-120s.json` 未改。
+- 普攻/魂质测试改用真实完整 A1→A2→A3/A5 链、合法 context/reopen 和可真实结算的技能资源；伪造 switch→charged 上下文改为明确要求 `VERIFIED_ACTION_CONTEXT_WINDOW_MISSING`，没有削弱 fail-closed。生产导入清单由 `npm run audit:production-imports` 原子刷新，仅新增本轮已进入生产可达图的测试/e2e 文件，`unexpectedTestOnlyCount=0`、`unreferencedCount=0`。
+- 定向复验覆盖 release 原失败面全部 32 files / 598 tests：acceptance/data 12/116、Machine Axis 非 CLI 12/115、CLI 2/56、runtime 3/192、trace/import/Workbench 3/119，全部通过；其中 production-import report 首次只读检查诚实报告 drift，生成器刷新后自身 3/3 通过。另有 soul 全文件 125/125、Prettier 与 `git diff --check` 通过。一次 32 文件合并命令因工具 6 分钟上限被中止，其精确 Vitest 子树已回收，不计 PASS/FAIL，也未遗留进程。
+- 严格遵守“只运行一次 release”：没有第二次 `release:verify`，没有生成 READY admission、没有推送、没有启动 Formal Search。下一步只能先提交本定向镜像收口；即使 tracked tree clean，当前 authority 仍为 FAIL，必须由后续明确裁决是否授权新的完整 release 建权。所有既有 untracked evidence、`.readonly-ruby-probe.mjs` 与 `stash@{0}` 原样保留。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。

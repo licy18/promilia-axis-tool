@@ -164,7 +164,7 @@ describe('Ruby 103002 acceptance closure', () => {
     ]);
   });
 
-  it('publishes complete technical evidence while product visual acceptance remains pending', () => {
+  it('publishes complete technical and accepted product evidence', () => {
     expect(requirementInventory.summary).toMatchObject({
       recordCount: 696,
       appliedCount: 190,
@@ -209,21 +209,22 @@ describe('Ruby 103002 acceptance closure', () => {
       )
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      recordIdentity: null,
-      qualificationSubjectHash: null,
-      scenarioSetHash: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      recordIdentity:
+        'character-product-acceptance:103002:13d28aa515312a63395f49ddff3c778967e1b20f:a87a71c9f84966c5',
+      qualificationSubjectHash: 'a87a71c9f84966c5',
+      scenarioSetHash: '983f79cbac9c221a',
+      bindingStatus: 'verified',
     });
     expect(manifest.maturity).toMatchObject({
-      currentState: 'runtime-integrated',
-      optimizationReady: false,
+      currentState: 'optimization-ready',
+      optimizationReady: true,
       gates: {
-        visuallyAccepted: false,
-        optimizationReady: false,
+        visuallyAccepted: true,
+        optimizationReady: true,
       },
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      blockers: [],
     });
   });
 });

@@ -116,7 +116,7 @@ describe('generated character acceptance manifests', () => {
       formalCharacterDenominator: 9,
       productScenarioExcludedCharacterCount: 2,
       maturityCounts: {
-        'runtime-integrated': 1,
+        extracted: 1,
         'optimization-ready': 10,
       },
       optimizationReadyCount: 10,
@@ -157,7 +157,7 @@ describe('generated character acceptance manifests', () => {
     ).not.toThrow();
     expect(WORKBENCH_HEADLESS_COMBAT_CORE.acceptanceFor(101003)).toMatchObject({
       ownerId: 101003,
-      maturityState: 'runtime-integrated',
+      maturityState: 'extracted',
       optimizationReady: false,
     });
     expect(() =>
@@ -209,20 +209,9 @@ describe('generated character acceptance manifests', () => {
         manifest.matrix.summary.blockedCount === 0 &&
         manifest.ledger.summary.uniqueBlockingCount === 0;
       const acceptanceCommit = productAccepted
-        ? ({
-            101010: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            102001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            103002: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            107001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            107002: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            108003: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            109001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-            199001: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
-            199002: 'c86046c4f32a2c20e6d3128fe37d3e7ca771f2ee',
-            112001: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-          }[ownerId] ?? 'eb06acc456ee309245a78455e7691738a2ee808b')
+        ? '13d28aa515312a63395f49ddff3c778967e1b20f'
         : null;
-      const runtimeIntegrated = true;
+      const runtimeIntegrated = manifest.maturity.gates.runtimeIntegrated;
       expect(manifest.maturity).toMatchObject({
         currentState: productAccepted
           ? 'optimization-ready'

@@ -9,6 +9,10 @@ import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombat
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
 import { createWorkbenchMachineAxisAdapter } from '../../machine-axis/workbenchMachineAxisAdapter';
+import {
+  installRubyNormalAttackProfileOverlay,
+  restoreVerifiedCombatMechanicsPackage,
+} from '../helpers/rubyNormalAttackAuthorityFixture';
 
 const cases = [
   {
@@ -25,9 +29,9 @@ const cases = [
     ownerId: 103002,
     fixture: rubyFixture,
     hashes: {
-      input: '0d81f27dc4ba1cea',
+      input: '0c12e71e18e218c2',
       data: '4b4e77c78408e1ef',
-      trace: '9fadee844fa09040',
+      trace: '6214b892da466fb4',
       evaluation: 'b0acda242f007986',
     },
   },
@@ -35,19 +39,19 @@ const cases = [
     ownerId: 101003,
     fixture: hanFixture,
     hashes: {
-      input: 'c8b46f828c346f0a',
-      data: '7e17791ba49a9ea2',
-      trace: 'df58152d6ea369e4',
-      evaluation: '53eb57b729f3a7e6',
+      input: 'f0dbd89b720fc7aa',
+      data: 'e32f2d5837588cad',
+      trace: '834e6f82d1a23767',
+      evaluation: 'afb7809d5ed9ff1a',
     },
   },
   {
     ownerId: 109001,
     fixture: moyinFixture,
     hashes: {
-      input: '15d080b8fdb34e86',
-      data: '8fdf2cf52bd9b30f',
-      trace: '953d6fb09f0c8113',
+      input: '745619ae689b6945',
+      data: '2c2db383e560bf64',
+      trace: 'ff78b9d9ff0d2b93',
       evaluation: 'e181489404062a9a',
     },
   },
@@ -55,10 +59,10 @@ const cases = [
     ownerId: 108003,
     fixture: mitiFixture,
     hashes: {
-      input: '76730e9947c44906',
-      data: '3176ab37d9834506',
-      trace: 'a0a6dcc744f39520',
-      evaluation: 'b42113336570ef3e',
+      input: '1ce25e86403c140c',
+      data: 'b3cd81ccfb54ca10',
+      trace: 'ceb231f9f9812e1b',
+      evaluation: 'e755244f73842807',
     },
   },
   {
@@ -94,7 +98,8 @@ describe('M11-D canonical character scenario batch', () => {
 
   it.each(cases)(
     'replays owner $ownerId through Machine Axis and Workbench without hash drift',
-    ({ fixture, hashes }) => {
+    ({ ownerId, fixture, hashes }) => {
+      if (ownerId === 103002) installRubyNormalAttackProfileOverlay();
       const service = createMachineAxisService();
       const adapter = createWorkbenchMachineAxisAdapter({ service });
       expect(service.prepare(fixture).issues).toEqual([]);
@@ -115,6 +120,7 @@ describe('M11-D canonical character scenario batch', () => {
       expect(index.hitsByIdentity.size).toBeGreaterThan(0);
       expect(index.summary.actionCount).toBe(index.actionViews.length);
       expect(index.summary.hitCount).toBeGreaterThan(0);
+      restoreVerifiedCombatMechanicsPackage();
     },
     60_000
   );
@@ -158,6 +164,7 @@ describe('M11-D canonical character scenario batch', () => {
   }, 60_000);
 
   it('locks the Xiaoyu, Ruby, and Han owner-specific causal probes', () => {
+    installRubyNormalAttackProfileOverlay();
     const service = createMachineAxisService();
     const xiaoyu = service.simulate(xiaoyuFixture);
     const ruby = service.simulate(rubyFixture);
@@ -212,5 +219,6 @@ describe('M11-D canonical character scenario batch', () => {
       afterStacks: 1,
       applied: true,
     });
+    restoreVerifiedCombatMechanicsPackage();
   }, 60_000);
 });

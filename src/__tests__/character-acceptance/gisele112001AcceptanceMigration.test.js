@@ -406,17 +406,18 @@ describe('M12-C 112001 acceptance normal-input migration', () => {
     ).toEqual([]);
   }, 60_000);
 
-  it('keeps product visual acceptance pending for a fresh evidence replay', () => {
+  it('binds the fresh evidence replay to the accepted product record', () => {
     expect(giseleRecipe.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      recordIdentity: null,
-      qualificationSubjectHash: null,
-      scenarioSetHash: null,
+      status: 'accepted',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      recordIdentity:
+        'character-product-acceptance:112001:13d28aa515312a63395f49ddff3c778967e1b20f:aae0ae0f9ebc0700',
+      qualificationSubjectHash: 'aae0ae0f9ebc0700',
+      scenarioSetHash: 'd66afb989d3e65ac',
       automatedEvidence: [
         expect.objectContaining({
           fixtureSha256:
-            'abab0b4b2e508611a2515612de1fd200f83320b8c81a6f47c46a42a3467f725b',
+            '21d7c303df902e247c21b079f478f2dd528ba7250270d4f38ef63f3d9931ce63',
         }),
       ],
     });

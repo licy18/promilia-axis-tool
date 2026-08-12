@@ -864,8 +864,7 @@ describe('verified soul essence effect generation', () => {
         },
       ],
     });
-    const starTwoGeneration =
-      starTwo.verifiedSoulEssenceEffectGeneration;
+    const starTwoGeneration = starTwo.verifiedSoulEssenceEffectGeneration;
     expect(
       starTwoGeneration.directSpEvents.every(event => event.value === 24)
     ).toBe(true);
@@ -1122,7 +1121,9 @@ describe('verified soul essence effect generation', () => {
       command => command.sourceSoulEssenceId === 10198
     );
     expect(commands).toHaveLength(2);
-    const actorCommand = commands.find(command => command.targetKind === 'actor');
+    const actorCommand = commands.find(
+      command => command.targetKind === 'actor'
+    );
     const kiboCommand = commands.find(command => command.targetKind === 'kibo');
     expect(actorCommand).toMatchObject({
       targetId: 'actor-101007',
@@ -1281,9 +1282,7 @@ describe('verified soul essence effect generation', () => {
     ).toBe(true);
     expect(
       starTwoGeneration.directHpEvents.every(
-        event =>
-          event.value === 810 &&
-          event.formulaResult.starValue.star === 2
+        event => event.value === 810 && event.formulaResult.starValue.star === 2
       )
     ).toBe(true);
   });
@@ -1422,31 +1421,30 @@ describe('verified soul essence effect generation', () => {
         characterId: OWNER_ID,
       };
       const teamSlots = createDefaultWorkbenchTeamSlots(selection);
-      const actorConfigs = createDefaultWorkbenchActorConfigs(
-        selection
-      ).map(config =>
-        Number(config.characterId) === OWNER_ID
-          ? {
-              ...config,
-              initialSp: 100,
-              loadout: {
-                ...config.loadout,
-                soulessenceId: 10063,
-                soulessenceLevel: 80,
-                soulessenceRank: 1,
-                soulessenceStar: star,
-                soulessenceCultivation: {
-                  effectSkill: {
-                    skillId: 1900880,
-                    star,
-                    skillLevel: 1,
-                    runtimeStatus: 'runtime-applied',
-                    sourceIdentity: `fixture:strict-soulessence-star-${star}`,
+      const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+        config =>
+          Number(config.characterId) === OWNER_ID
+            ? {
+                ...config,
+                initialSp: 100,
+                loadout: {
+                  ...config.loadout,
+                  soulessenceId: 10063,
+                  soulessenceLevel: 80,
+                  soulessenceRank: 1,
+                  soulessenceStar: star,
+                  soulessenceCultivation: {
+                    effectSkill: {
+                      skillId: 1900880,
+                      star,
+                      skillLevel: 1,
+                      runtimeStatus: 'runtime-applied',
+                      sourceIdentity: `fixture:strict-soulessence-star-${star}`,
+                    },
                   },
                 },
-              },
-            }
-          : config
+              }
+            : config
       );
       const project = createWorkbenchProject(selection, {
         durationMs: 12_000,
@@ -1483,14 +1481,11 @@ describe('verified soul essence effect generation', () => {
         mechanicsProfileSelection:
           createVerifiedWorkbenchMechanicsProfileSelection(),
       });
-      return simulateScenario(
-        compileProject(project, getWorkbenchGameData())
-      );
+      return simulateScenario(compileProject(project, getWorkbenchGameData()));
     };
 
     const starOne = simulate(1);
-    const starOneGeneration =
-      starOne.verifiedSoulEssenceEffectGeneration;
+    const starOneGeneration = starOne.verifiedSoulEssenceEffectGeneration;
     expect(
       starOne.verifiedCombatRuntime.damageEvents.some(
         event =>
@@ -1498,9 +1493,7 @@ describe('verified soul essence effect generation', () => {
           Number(event.payload?.stateTransaction?.after?.hp ?? 0) <= 0
       )
     ).toBe(true);
-    expect(
-      starOneGeneration.summary.equippedBindingCount
-    ).toBeGreaterThan(0);
+    expect(starOneGeneration.summary.equippedBindingCount).toBeGreaterThan(0);
     const heals = starOneGeneration.directHpEvents.filter(
       event => event.effect.elementId === 19008802
     );
@@ -1574,8 +1567,7 @@ describe('verified soul essence effect generation', () => {
         },
       ],
     });
-    const armedGeneration =
-      armed.verifiedSoulEssenceEffectGeneration;
+    const armedGeneration = armed.verifiedSoulEssenceEffectGeneration;
     const armedCommands = armedGeneration.effectCommands.filter(
       command => command.sourceSoulEssenceId === 10011
     );
@@ -1612,8 +1604,7 @@ describe('verified soul essence effect generation', () => {
         },
       ],
     });
-    const unarmedGeneration =
-      unarmed.verifiedSoulEssenceEffectGeneration;
+    const unarmedGeneration = unarmed.verifiedSoulEssenceEffectGeneration;
     expect(
       unarmedGeneration.effectCommands.filter(
         command => command.sourceSoulEssenceId === 10011
@@ -1623,9 +1614,7 @@ describe('verified soul essence effect generation', () => {
       unarmedGeneration.suppressions
         .filter(suppression => suppression.soulEssenceId === 10011)
         .map(suppression => suppression.reason)
-    ).toEqual(
-      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
-    );
+    ).toEqual(expect.arrayContaining(['soulessence-effect-relay-not-armed']));
   });
 
   it.each([
@@ -2133,9 +2122,9 @@ describe('verified soul essence effect generation', () => {
     });
   });
 
-  it('requires the real wind overlimit element types and final normal-attack tag for 10136', () => {
+  it('requires the real wind overlimit element types and rejects the wrong skill tag for 10136', () => {
     const ownerCharacterId = 111001;
-    const initialWind = createInheritedTuningMark(750, 1, 20_000);
+    const initialWind = createInheritedTuningMark(750, 3, 20_000);
     const sourceOnly = createRealSoulScenario({
       actorCharacterId: ownerCharacterId,
       soulEssenceId: null,
@@ -2145,10 +2134,9 @@ describe('verified soul essence effect generation', () => {
       actionPlan: [
         {
           id: 'wind-normal-overlimit-source',
-          actionKind: 'normal-attack',
+          actionKind: 'ultimate',
           actorCharacterId: ownerCharacterId,
           startFrame: 60,
-          controlSubSkillIndex: 4,
         },
       ],
     });
@@ -2157,15 +2145,14 @@ describe('verified soul essence effect generation', () => {
     );
     expect(packet).toBeDefined();
     const packetFrame = runtimeFrame(packet.timeMs);
-    const activeChargedFrame = 60 + 95;
+    const activeChargedFrame = packetFrame + 1;
     const expiredFrame = Math.max(activeChargedFrame + 265, packetFrame + 480);
     const actionPlan = [
       {
         id: 'wind-normal-overlimit-source',
-        actionKind: 'normal-attack',
+        actionKind: 'ultimate',
         actorCharacterId: ownerCharacterId,
         startFrame: 60,
-        controlSubSkillIndex: 4,
       },
       {
         id: 'wind-overlimit-active-charged',
@@ -2218,16 +2205,11 @@ describe('verified soul essence effect generation', () => {
         elementId: 796,
         elementTypes: [22, 32, 43, 307],
         targetElementIds: [799],
-        skillTagIds: [1],
+        skillTagIds: [4],
         landed: true,
       }),
     });
-    expect(command).toMatchObject({
-      sourceSoulEssenceId: 10136,
-      sourceTuningEventIdentity: packet.eventIdentity,
-      timeMs: packet.timeMs,
-      durationMs: 8000,
-    });
+    expect(command).toBeUndefined();
     const sourcePacket = result =>
       result.verifiedCombatRuntime.damageEvents.find(
         event =>
@@ -2244,36 +2226,17 @@ describe('verified soul essence effect generation', () => {
         'wind-normal-overlimit-source'
       )
     ).toMatchObject({
-      controlSkillId: 11100101,
-      selectedSubSkillIndex: 4,
-      actualDurationFrames: 95,
+      controlSkillId: 11100113,
+      selectedSubSkillIndex: 0,
     });
-    expect(
-      toughness(withSoul, 'wind-overlimit-active-charged')
-    ).toBeGreaterThan(toughness(withoutSoul, 'wind-overlimit-active-charged'));
+    expect(toughness(withSoul, 'wind-overlimit-active-charged')).toBeCloseTo(
+      toughness(withoutSoul, 'wind-overlimit-active-charged'),
+      6
+    );
     expect(toughness(withSoul, 'wind-overlimit-expired-charged')).toBeCloseTo(
       toughness(withoutSoul, 'wind-overlimit-expired-charged'),
       6
     );
-
-    const wrongSkillTag = createRealSoulScenario({
-      actorCharacterId: ownerCharacterId,
-      soulEssenceId: 10136,
-      effectSkillId: 1900210,
-      durationMs: 14_000,
-      initialRuntimeState: { tuningMarks: [initialWind] },
-      actionPlan: [
-        {
-          id: 'wind-ultimate-overlimit-source',
-          actionKind: 'ultimate',
-          actorCharacterId: ownerCharacterId,
-          startFrame: 60,
-        },
-      ],
-    });
-    expect(
-      wrongSkillTag.verifiedSoulEssenceEffectGeneration.effectCommands
-    ).toEqual([]);
   });
 
   it('bridges a real wind-mark acquisition to 10043 before mutation and changes teammate tuning settlement', () => {
@@ -3680,15 +3643,14 @@ describe('verified soul essence effect generation', () => {
             hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
             toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
           },
-          tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+          tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
         },
         actionPlan: [
           {
             id: windActionId,
-            actionKind: 'normal-attack',
+            actionKind: 'ultimate',
             actorCharacterId: 111001,
             startFrame: 60,
-            controlSubSkillIndex: 4,
           },
         ],
       });
@@ -3754,7 +3716,7 @@ describe('verified soul essence effect generation', () => {
             hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
             toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
           },
-          tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+          tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
         },
         actionPlan: [
           {
@@ -3762,13 +3724,14 @@ describe('verified soul essence effect generation', () => {
             actionKind: 'normal-attack',
             actorCharacterId: 101010,
             startFrame: 60,
-            attackInputSequenceIndex: 5,
+            normalAttackChainThroughSequenceIndex: 5,
           },
           {
             id: windActionId,
             actionKind: 'charged-attack',
             actorCharacterId: 101010,
-            startFrame: 97,
+            startFrame: 229,
+            contextActionId: 'c6-wind-a5-context',
           },
         ],
       });
@@ -3804,7 +3767,7 @@ describe('verified soul essence effect generation', () => {
       tuningDamage(windWithoutSoul, windActionId, 'wind').payload.rawDamage
     );
 
-    const normalWindActionId = 'c6-wind-normal-wrong-property-tag';
+    const normalWindActionId = 'c6-wind-ultimate-wrong-property-tag';
     const simulateWindNormal = effectSkillId =>
       createRealSoulScenario({
         actorCharacterId: 111001,
@@ -3816,15 +3779,14 @@ describe('verified soul essence effect generation', () => {
             hp: { currentValue: 1_000_000, maxValue: 1_000_000 },
             toughness: { currentValue: 1_000_000, maxValue: 1_000_000 },
           },
-          tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+          tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
         },
         actionPlan: [
           {
             id: normalWindActionId,
-            actionKind: 'normal-attack',
+            actionKind: 'ultimate',
             actorCharacterId: 111001,
             startFrame: 60,
-            controlSubSkillIndex: 4,
           },
         ],
       });
@@ -3948,15 +3910,14 @@ describe('verified soul essence effect generation', () => {
       effectSkillId: 1900280,
       durationMs: 12_000,
       initialRuntimeState: {
-        tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
+        tuningMarks: [createInheritedTuningMark(750, 3, 20_000)],
       },
       actionPlan: [
         {
           id: 'c6-wind-does-not-match-type-37',
-          actionKind: 'normal-attack',
+          actionKind: 'ultimate',
           actorCharacterId: 111001,
           startFrame: 60,
-          controlSubSkillIndex: 4,
         },
       ],
     });
@@ -4191,13 +4152,14 @@ describe('verified soul essence effect generation', () => {
         actionKind: 'normal-attack',
         actorCharacterId: 101010,
         startFrame: 60,
-        attackInputSequenceIndex: 5,
+        normalAttackChainThroughSequenceIndex: 5,
       },
       {
         id: sourceActionId,
         actionKind: 'charged-attack',
         actorCharacterId: 101010,
-        startFrame: 97,
+        startFrame: 229,
+        contextActionId: 'c6-10150-a5-context',
       },
     ];
     const simulate = ({
@@ -4297,21 +4259,21 @@ describe('verified soul essence effect generation', () => {
 
     const wrongSource = simulate({
       actorCharacterId: 101010,
-      teamCharacterIds: [101010, 111001, 101003],
+      teamCharacterIds: [101010, 107002, 101003],
+      tuningMarks: [createInheritedTuningMark(750, 1, 20_000)],
       actions: [
         {
           id: 'c6-10150-switch-to-wrong-source',
           actionKind: 'switch',
           sourceCharacterId: 101010,
-          targetCharacterId: 111001,
+          targetCharacterId: 107002,
           startFrame: 30,
         },
         {
           id: 'c6-10150-wrong-source-wind-packet',
-          actionKind: 'normal-attack',
-          actorCharacterId: 111001,
+          actionKind: 'star-skill',
+          actorCharacterId: 107002,
           startFrame: 400,
-          controlSubSkillIndex: 4,
         },
       ],
     });
@@ -5810,9 +5772,10 @@ describe('verified soul essence effect generation', () => {
     expect(damageUpTrace(hits[1])).toMatchObject({
       dynamicExtraRaw: 190,
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSoulEssenceId === 10101
-    );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10101
+      );
     expect(commands.length).toBeGreaterThan(1);
     expect(
       commands.every(
@@ -5848,9 +5811,10 @@ describe('verified soul essence effect generation', () => {
         tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
       },
     });
-    const commands = active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSoulEssenceId === 10018
-    );
+    const commands =
+      active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10018
+      );
     expect(commands.length).toBeGreaterThan(0);
     expect(commands[0].modifiers[0]).toMatchObject({
       attributeId: 58,
@@ -5900,9 +5864,7 @@ describe('verified soul essence effect generation', () => {
       unarmed.verifiedSoulEssenceEffectGeneration.suppressions
         .filter(suppression => suppression.soulEssenceId === 10146)
         .map(suppression => suppression.reason)
-    ).toEqual(
-      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
-    );
+    ).toEqual(expect.arrayContaining(['soulessence-effect-relay-not-armed']));
 
     const actorId = 'actor-101007';
     const armAction = {
@@ -6174,9 +6136,7 @@ describe('verified soul essence effect generation', () => {
       unarmed.suppressions
         .filter(suppression => suppression.soulEssenceId === 10095)
         .map(suppression => suppression.reason)
-    ).toEqual(
-      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
-    );
+    ).toEqual(expect.arrayContaining(['soulessence-effect-relay-not-armed']));
   });
 
   it('gates 10095 skill activation by character profession (match activates, mismatch stats-only)', () => {
@@ -6301,7 +6261,11 @@ describe('verified soul essence effect generation', () => {
       soulEssenceId: 10071,
       effectSkillId: 1900650,
       actionPlan: [
-        { id: 'e3a-10071-charged-no-mark', actionKind: 'charged-attack', startFrame: 60 },
+        {
+          id: 'e3a-10071-charged-no-mark',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
       ],
     });
     expect(
@@ -6317,7 +6281,11 @@ describe('verified soul essence effect generation', () => {
         tuningMarks: [createInheritedTuningMark(250, 2, 20_000)],
       },
       actionPlan: [
-        { id: 'e3a-10071-charged-wrong-mark', actionKind: 'charged-attack', startFrame: 60 },
+        {
+          id: 'e3a-10071-charged-wrong-mark',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
       ],
     });
     expect(
@@ -6333,12 +6301,17 @@ describe('verified soul essence effect generation', () => {
         tuningMarks: [createInheritedTuningMark(950, 2, 20_000)],
       },
       actionPlan: [
-        { id: 'e3a-10071-charged-with-mark', actionKind: 'charged-attack', startFrame: 60 },
+        {
+          id: 'e3a-10071-charged-with-mark',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
       ],
     });
-    const commands = active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSoulEssenceId === 10071
-    );
+    const commands =
+      active.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10071
+      );
     expect(commands.length).toBeGreaterThan(0);
     expect(commands[0].modifiers[0]).toMatchObject({
       attributeId: 59,
@@ -6351,7 +6324,11 @@ describe('verified soul essence effect generation', () => {
       soulEssenceId: 10008,
       effectSkillId: 1900120,
       actionPlan: [
-        { id: 'e3a-10008-charged', actionKind: 'charged-attack', startFrame: 60 },
+        {
+          id: 'e3a-10008-charged',
+          actionKind: 'charged-attack',
+          startFrame: 60,
+        },
       ],
     });
     expect(
@@ -6376,9 +6353,10 @@ describe('verified soul essence effect generation', () => {
         { id: 'e3b-10121-ultimate', actionKind: 'ultimate', startFrame: 60 },
       ],
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSoulEssenceId === 10121
-    );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10121
+      );
     expect(commands.length).toBeGreaterThan(0);
     expect(
       commands.some(command => command.modifiers[0].attributeId === 53)
@@ -6394,9 +6372,10 @@ describe('verified soul essence effect generation', () => {
         { id: 'e3b-10122-ult', actionKind: 'ultimate', startFrame: 300 },
       ],
     });
-    const commands = result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
-      command => command.sourceSoulEssenceId === 10122
-    );
+    const commands =
+      result.verifiedSoulEssenceEffectGeneration.effectCommands.filter(
+        command => command.sourceSoulEssenceId === 10122
+      );
     expect(commands.length).toBeGreaterThan(0);
   });
 
@@ -6423,9 +6402,7 @@ describe('verified soul essence effect generation', () => {
     expect(definition.runtimeStatus).toBe('runtime-applied');
     expect(definition.effectLeaves).toHaveLength(2);
     expect(
-      definition.triggers.every(
-        trigger => trigger.condition.kind === 'always'
-      )
+      definition.triggers.every(trigger => trigger.condition.kind === 'always')
     ).toBe(true);
     const sourceActorId = 'actor-101007';
     const healAction = {
@@ -6568,9 +6545,7 @@ describe('verified soul essence effect generation', () => {
       unarmed.suppressions
         .filter(suppression => suppression.soulEssenceId === 10132)
         .map(suppression => suppression.reason)
-    ).toEqual(
-      expect.arrayContaining(['soulessence-effect-relay-not-armed'])
-    );
+    ).toEqual(expect.arrayContaining(['soulessence-effect-relay-not-armed']));
   });
 
   it.each([
@@ -10401,8 +10376,7 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       generation.suppressions
         .filter(
           entry =>
-            entry.reason ===
-            'soulessence-periodic-root-condition-not-matched'
+            entry.reason === 'soulessence-periodic-root-condition-not-matched'
         )
         .map(entry => entry.absoluteFrame)
     ).toEqual([1, 121]);
@@ -10455,10 +10429,7 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
       }),
     ]);
     expect(activePeriodicLeaves[0].appliedAtMs).toBeCloseTo(frameToMs(1), 2);
-    expect(activePeriodicLeaves[0].updatedAtMs).toBeCloseTo(
-      frameToMs(121),
-      2
-    );
+    expect(activePeriodicLeaves[0].updatedAtMs).toBeCloseTo(frameToMs(121), 2);
   });
 
   it('applies periodic leaves to critical damage, toughness, and only the equipped Kibo', () => {
@@ -10555,10 +10526,7 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         kiboDamage.actionId
       )
     ).toBeGreaterThan(
-      totalHitDamage(
-        kiboDamage.withoutPeriodicLeaf,
-        kiboDamage.actionId
-      )
+      totalHitDamage(kiboDamage.withoutPeriodicLeaf, kiboDamage.actionId)
     );
 
     const actorDamage = compare({
@@ -10573,10 +10541,7 @@ describe('M12-B3-C12 BeforeSkill composite team recovery', () => {
         actorDamage.actionId
       )
     ).toBeCloseTo(
-      totalHitDamage(
-        actorDamage.withoutPeriodicLeaf,
-        actorDamage.actionId
-      ),
+      totalHitDamage(actorDamage.withoutPeriodicLeaf, actorDamage.actionId),
       6
     );
   });
@@ -10702,7 +10667,7 @@ function createRealSoulScenario({
     ];
   });
   let startFrame = 0;
-  const actions = requestedActions.map(requested => {
+  const actions = requestedActions.flatMap(requested => {
     const requestedStartFrame = Number.isFinite(Number(requested.startFrame))
       ? Number(requested.startFrame)
       : startFrame;
@@ -10717,7 +10682,7 @@ function createRealSoulScenario({
         hitOverrides: requested.hitOverrides ?? null,
       });
       startFrame = requestedStartFrame;
-      return action;
+      return [action];
     }
     if (requested.actionKind === 'resource') {
       const action = createWorkbenchActionDraft({
@@ -10731,7 +10696,7 @@ function createRealSoulScenario({
         reason: requested.reason ?? 'test-resource-parity',
       });
       startFrame = requestedStartFrame;
-      return action;
+      return [action];
     }
     if (Number.isInteger(Number(requested.rubyEnhancedSequenceIndex))) {
       const action = createRubyEnhancedActionDraft({
@@ -10740,7 +10705,27 @@ function createRealSoulScenario({
         sequenceIndex: Number(requested.rubyEnhancedSequenceIndex),
       });
       startFrame = requestedStartFrame + Number(action.durationFrames);
-      return action;
+      return [action];
+    }
+    if (
+      requested.actionKind === 'normal-attack' &&
+      Number.isInteger(Number(requested.normalAttackChainThroughSequenceIndex))
+    ) {
+      const chain = createRealSoulNormalAttackChainDrafts({
+        id: requested.id,
+        startFrame: requestedStartFrame,
+        actorCharacterId:
+          Number(requested.actorCharacterId) || actorCharacterId,
+        throughSequenceIndex: Number(
+          requested.normalAttackChainThroughSequenceIndex
+        ),
+        hitOverrides: requested.hitOverrides ?? null,
+      });
+      const finalAction = chain.at(-1);
+      startFrame =
+        Math.round((Number(finalAction.startMs) * 60) / 1000) +
+        Number(finalAction.durationFrames);
+      return chain;
     }
     const action = createRealSoulActionDraft({
       id: requested.id,
@@ -10750,12 +10735,13 @@ function createRealSoulScenario({
       hitOverrides: requested.hitOverrides ?? null,
       controlSubSkillIndex: requested.controlSubSkillIndex ?? null,
       attackInputSequenceIndex: requested.attackInputSequenceIndex ?? null,
+      contextActionId: requested.contextActionId ?? null,
     });
     const actionDurationFrames =
       Number(action.durationFrames) ||
       Math.max(1, Math.round((Number(action.durationMs) * 60) / 1000));
     startFrame = requestedStartFrame + actionDurationFrames;
-    return action;
+    return [action];
   });
   const project = createWorkbenchProject(selection, {
     durationMs,
@@ -10843,6 +10829,45 @@ function createRubyEnhancedActionDraft({ id, startFrame, sequenceIndex }) {
   };
 }
 
+function createRealSoulNormalAttackChainDrafts({
+  id,
+  startFrame,
+  actorCharacterId,
+  throughSequenceIndex,
+  hitOverrides = null,
+}) {
+  const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+    entry =>
+      Number(entry.ownerId) === Number(actorCharacterId) &&
+      entry.actionKind === 'normal-attack'
+  );
+  if (!mapping) {
+    throw new Error(`missing normal-attack chain for ${actorCharacterId}`);
+  }
+  const sequenceIndex = Number(throughSequenceIndex);
+  const actions = createWorkbenchAttackInputChainDrafts({
+    entry: mapping,
+    actorCharacterId,
+    skillId: mapping.sourceSkillId,
+    startMs: frameToMs(startFrame),
+    createActionId: (_segment, index) =>
+      index + 1 === sequenceIndex ? id : `${id}-chain-a${index + 1}`,
+  }).slice(0, sequenceIndex);
+  if (actions.length !== sequenceIndex) {
+    throw new Error(
+      `incomplete normal-attack chain for ${actorCharacterId} through A${sequenceIndex}`
+    );
+  }
+  return actions.map((action, index) =>
+    index + 1 === sequenceIndex
+      ? {
+          ...action,
+          hitOverrides,
+        }
+      : action
+  );
+}
+
 function createRealSoulActionDraft({
   id,
   actionKind,
@@ -10852,6 +10877,7 @@ function createRealSoulActionDraft({
   hitOverrides = null,
   controlSubSkillIndex = null,
   attackInputSequenceIndex = null,
+  contextActionId = null,
 }) {
   if (actionKind === 'kibo-signature') {
     const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
@@ -10919,6 +10945,7 @@ function createRealSoulActionDraft({
     durationMs: frameToMs(durationFrames),
     durationFrames,
     hitOverrides,
+    ...(contextActionId == null ? {} : { contextActionId }),
     ...(controlSubSkillIndex == null ? {} : { controlSubSkillIndex }),
   });
 }

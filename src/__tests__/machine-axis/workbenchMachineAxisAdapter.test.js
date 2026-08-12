@@ -196,7 +196,7 @@ describe('Workbench Machine Axis adapter', () => {
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
   }, 30_000);
 
-  it('round-trips contextual inputs without a projected attack segment and fails closed on stale intent metadata', () => {
+  it('fails closed when preserved context metadata does not name a verified open window', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
     const contract = structuredClone(fixture);
@@ -210,38 +210,22 @@ describe('Workbench Machine Axis adapter', () => {
       contextActionId: 'switch-to-xiaoyu',
       chainIdentity: null,
     };
-    const imported = adapter.importContract(contract);
-    const projectAction = imported.project.actions.find(
-      action => action.id === actionId
+    expect(() => adapter.importContract(contract)).toThrow(
+      MachineAxisValidationError
     );
-    const exported = adapter.exportProject(imported.project);
-
-    expect(projectAction).toMatchObject({
-      contextActionId: 'switch-to-xiaoyu',
-    });
-    expect(projectAction).not.toHaveProperty('attackSequenceIndex');
-    expect(
-      exported.actions.find(action => action.id === actionId).intent.attackInput
-    ).toEqual(sourceAction.intent.attackInput);
-
-    const staleMetadataProject = structuredClone(imported.project);
-    staleMetadataProject.metadata.transport.machineAxis.actionIntentsByActionId[
-      actionId
-    ].actionKind = 'ultimate';
-    const staleExport = adapter.exportProject(staleMetadataProject);
-    expect(
-      staleExport.actions.find(action => action.id === actionId).intent
-        .attackInput
-    ).toBeNull();
-
-    const missingMetadataProject = structuredClone(imported.project);
-    delete missingMetadataProject.metadata.transport.machineAxis
-      .actionIntentsByActionId;
-    const missingExport = adapter.exportProject(missingMetadataProject);
-    expect(
-      missingExport.actions.find(action => action.id === actionId).intent
-        .attackInput
-    ).toBeNull();
+    try {
+      adapter.importContract(contract);
+    } catch (error) {
+      expect(error).toMatchObject({
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            actionId,
+            reason: 'verified-context-window-input-missing',
+            violationCodes: ['VERIFIED_ACTION_CONTEXT_WINDOW_MISSING'],
+          }),
+        ]),
+      });
+    }
   }, 30_000);
 
   it('round-trips the formal objective and structured enemy profile without defaulting', () => {

@@ -805,7 +805,7 @@ describe('verified combat mechanics runtime', () => {
     }
   });
 
-  it('moves and removes only the selected normal attack input and its hit nodes', () => {
+  it('invalidates dependent normal inputs when an earlier chain input is moved outside its link window', () => {
     const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
       item => item.ownerId === 102001 && item.actionKind === 'normal-attack'
     );
@@ -833,7 +833,7 @@ describe('verified combat mechanics runtime', () => {
     );
     const movedTimes = damageTimesByAction(moved, chain);
     expect(movedTimes['lili-a1']).toEqual(baselineTimes['lili-a1']);
-    expect(movedTimes['lili-a3']).toEqual(baselineTimes['lili-a3']);
+    expect(movedTimes['lili-a3']).toEqual([]);
     expect(movedTimes['lili-a2']).not.toEqual(baselineTimes['lili-a2']);
 
     const deleted = simulateAttackInputChain(

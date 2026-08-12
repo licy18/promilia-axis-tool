@@ -51,17 +51,21 @@ describe('Lily M12-B3 owner character acceptance', () => {
     });
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
       status: 'accepted',
-      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
       bindingStatus: 'verified',
       scenarioIdentities: ['m12-b3-102001-zero-distance-acceptance'],
       automatedEvidence: [
         {
           scenarioIdentity: 'm12-b3-102001-zero-distance-acceptance',
           status: 'automated-workbench-import-passed',
+          evidenceKind: 'workbench-playwright-screenshot',
+          fixturePath: 'fixtures/character-acceptance/102001-visual.json',
+          fixtureSha256:
+            'b055a761a9e3bb9d9cd4fb8a083c540dd53656ed208d52a81a87f2b9d3ed6eea',
           screenshotPath:
-            'reports/m11-d-character-acceptance-102001-desktop.png',
+            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-102001-canonical-trace.png',
           screenshotSha256:
-            '71f35e3e964093414d56841759d63d33b38dde7cdf432f30b0e85c8c6799b516',
+            '1a0a318f5af664b5fa29dd51d8dcc0a542f55bfb6bec3d41d6b85642218b2ecf',
         },
       ],
     });

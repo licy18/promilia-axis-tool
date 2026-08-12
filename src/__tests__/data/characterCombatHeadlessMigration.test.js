@@ -14,10 +14,10 @@ const GOLDENS = [
       'e368436a1a3e14edf6e2f1abf8d0bddbf9fd930e28fd3c29db6f48c248934aba',
     summaryHash:
       'd77383d4f3df485a2b2ff3a1dd60958a8ad5f104074c21cf961f94e7f85e70bc',
-    inputHash: 'f57a978c56945d0f',
-    dataHash: 'e45ba77f46e6d18c',
-    traceHash: 'b3d7589489c8491f',
-    buildHash: '2e47b46f77324981',
+    inputHash: '8b4157a9943c3300',
+    dataHash: '510bddc422e19f8c',
+    traceHash: '21489003d9cd9b94',
+    buildHash: '2063275cc0d565d1',
   },
   {
     identity: 'ruby-main',
@@ -28,10 +28,10 @@ const GOLDENS = [
       '198d3e8ca71f63745d559a39db58d6bcf311f877cf0ebefcd9c58088491edc09',
     summaryHash:
       '584a158a1c13856d3f4adaa4c01f5e0ece2d6dd768b075a5b2c734a78814d61f',
-    inputHash: '054646b15271c227',
-    dataHash: '81defb9df10a8d00',
-    traceHash: '009006900b786a7f',
-    buildHash: '65ecbb5d6a053502',
+    inputHash: '4156add41754d07e',
+    dataHash: 'ed95a9e97f048755',
+    traceHash: 'f0d115c08eaaa7d8',
+    buildHash: '6970aa6d0e76cdcf',
   },
   {
     identity: 'han-main',
@@ -42,10 +42,10 @@ const GOLDENS = [
       'ed5dd56bee71b05622c2f52b51e5844a7a468bff5dc00078fd089122babd507c',
     summaryHash:
       '137a834ffd2962fda13490990c7c3c89fd0668c62ebc33d4727d04f9f88b7bf6',
-    inputHash: 'ef3608e8332e2f7d',
-    dataHash: 'd7ada9b396911b3e',
-    traceHash: '058b8b09c4d2ed3e',
-    buildHash: '4d00ec6cba8f7faf',
+    inputHash: 'fc58338577029102',
+    dataHash: 'b7d7387cc5a1f741',
+    traceHash: '07ca74c1e965ad32',
+    buildHash: '4f55609c633c5dfa',
   },
   {
     identity: 'han-controlled-buff-switch',
@@ -56,10 +56,10 @@ const GOLDENS = [
       '66bf4893e52cd56ef1899cf831a9d15ed17276d442a99d2cbdb7e30592a88bc2',
     summaryHash:
       'e9ecef3cacaa2bd6482ab5309542b9e84f7d8513f3e170be7a311656bae0cde9',
-    inputHash: '173eba777e53cc42',
-    dataHash: '1464a66765ac10b7',
-    traceHash: 'efccb677c61f665e',
-    buildHash: 'c767de8e70a48f4e',
+    inputHash: '0b168047343ec594',
+    dataHash: '0719e241c7246933',
+    traceHash: '0d44c908e0425610',
+    buildHash: '08f916c8731f6905',
   },
 ];
 

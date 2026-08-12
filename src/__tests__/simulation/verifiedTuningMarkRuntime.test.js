@@ -5,6 +5,7 @@ import {
   installVerifiedCombatMechanicsPackage,
 } from '../../data/verifiedCombatMechanicsPackage';
 import { createVerifiedWorkbenchMechanicsProfileSelection } from '../../domain/workbenchMechanicsProfileSelection';
+import { createWorkbenchAttackInputChainDrafts } from '../../domain/workbenchAttackInputChain';
 import {
   DEFAULT_WORKBENCH_SELECTION,
   createDefaultWorkbenchActorConfigs,
@@ -872,14 +873,13 @@ describe('verified tuning mark runtime', () => {
     );
     const runA5 = brilliant =>
       simulateVerifiedProject({
-        durationMs: 4_000,
+        durationMs: 7_000,
         actions: [
           ...(brilliant ? [createMoyinBrilliantAction('a5-brilliant', 0)] : []),
-          createMoyinNormalSegment({
+          ...createMoyinNormalChain({
             id: brilliant ? 'a5-on' : 'a5-off',
-            controlSkillId: 10900105,
             sequenceIndex: 5,
-            startMs: brilliant ? 1_000 : 0,
+            chainStartMs: brilliant ? 1_000 : 0,
           }),
         ],
       });
@@ -909,7 +909,7 @@ describe('verified tuning mark runtime', () => {
 
     const runA4 = ({ brilliant, markCount }) =>
       simulateVerifiedProject({
-        durationMs: 4_000,
+        durationMs: 6_000,
         initialRuntimeState:
           markCount > 0
             ? {
@@ -920,11 +920,10 @@ describe('verified tuning mark runtime', () => {
             : null,
         actions: [
           ...(brilliant ? [createMoyinBrilliantAction('a4-brilliant', 0)] : []),
-          createMoyinNormalSegment({
+          ...createMoyinNormalChain({
             id: `a4-${brilliant ? 'on' : 'off'}-mark-${markCount}`,
-            controlSkillId: 10900104,
             sequenceIndex: 4,
-            startMs: brilliant ? 1_000 : 0,
+            chainStartMs: brilliant ? 1_000 : 0,
           }),
         ],
       });
@@ -967,20 +966,24 @@ describe('verified tuning mark runtime', () => {
       profile => profile.key === 'thunder'
     );
     const repeated = simulateVerifiedProject({
-      durationMs: 6_000,
+      durationMs: 10_000,
       initialRuntimeState: {
         tuningMarks: [createInheritedMarkWithCount(thunder.markId, 2)],
       },
       actions: [
         createMoyinBrilliantAction('repeat-brilliant', 0),
-        ...[1_000, 2_200, 3_400].map((startMs, index) =>
-          createMoyinNormalSegment({
-            id: `repeat-a4-${index + 1}`,
-            controlSkillId: 10900104,
-            sequenceIndex: 4,
-            startMs,
-          })
-        ),
+        ...createMoyinNormalChain({
+          id: 'repeat-a4-1',
+          sequenceIndex: 4,
+          chainStartMs: 1_000,
+        }),
+        createMoyinBrilliantAction('repeat-brilliant-refresh', 4_000),
+        ...createMoyinNormalChain({
+          id: 'repeat-a4-2',
+          sequenceIndex: 4,
+          chainStartMs: 5_500,
+          attackGroupId: 'repeat-a4-chain-2',
+        }),
       ],
     });
     expect(
@@ -1008,7 +1011,7 @@ describe('verified tuning mark runtime', () => {
     ).toMatchObject({ currentValue: 1 });
 
     const chase = simulateVerifiedProject({
-      durationMs: 8_000,
+      durationMs: 10_000,
       initialRuntimeState: {
         tuningMarks: [createInheritedMarkWithCount(thunder.markId, 2)],
       },
@@ -1048,11 +1051,11 @@ describe('verified tuning mark runtime', () => {
             sourceEvidenceStatus: 'confirmed-structured-data',
           },
         }),
-        createMoyinNormalSegment({
+        createMoyinBrilliantAction('moyin-brilliant-after-chase', 4_000),
+        ...createMoyinNormalChain({
           id: 'moyin-a4-after-chase',
-          controlSkillId: 10900104,
           sequenceIndex: 4,
-          startMs: 6_000,
+          chainStartMs: 5_000,
         }),
       ],
     });
@@ -1076,6 +1079,7 @@ describe('verified tuning mark runtime', () => {
     ).toEqual([
       ['moyin-brilliant-before-chase', 'gain'],
       ['moyin-active-chase', 'refresh'],
+      ['moyin-brilliant-after-chase', 'refresh'],
     ]);
   });
 
@@ -1085,11 +1089,10 @@ describe('verified tuning mark runtime', () => {
         durationMs: 10_000,
         actions: [
           createMoyinBrilliantAction('boundary-brilliant', 0),
-          createMoyinNormalSegment({
+          ...createMoyinNormalChain({
             id: 'boundary-a5',
-            controlSkillId: 10900105,
             sequenceIndex: 5,
-            startMs,
+            targetStartMs: startMs,
           }),
         ],
       });
@@ -2024,36 +2027,39 @@ function createMoyinBrilliantAction(id, startMs) {
   });
 }
 
-function createMoyinNormalSegment({
+function createMoyinNormalChain({
   id,
-  controlSkillId,
   sequenceIndex,
-  startMs,
+  chainStartMs = null,
+  targetStartMs = null,
+  attackGroupId = null,
 }) {
-  return createWorkbenchActionDraft({
-    id,
-    type: 'skill',
+  const mapping = mechanicsPackage.actionMappings.find(
+    entry => entry.ownerId === 109001 && entry.actionKind === 'normal-attack'
+  );
+  if (!mapping) throw new Error('missing Moyin normal-attack mapping');
+  const prefixFrames = mapping.attackInputSegments
+    .filter(segment => Number(segment.sequenceIndex) < Number(sequenceIndex))
+    .reduce(
+      (sum, segment) =>
+        sum +
+        Number(segment.effectiveDurationFrames ?? segment.durationFrames) +
+        Number(segment.defaultLinkDelayFrames ?? 0),
+      0
+    );
+  const resolvedStartMs =
+    targetStartMs == null
+      ? Number(chainStartMs ?? 0)
+      : Number(targetStartMs) - (prefixFrames * 1000) / 60;
+  return createWorkbenchAttackInputChainDrafts({
+    entry: mapping,
     actorCharacterId: 109001,
-    skillId: 10900101,
-    actionKind: 'normal-attack',
-    actionVariantIndex: 0,
-    startMs,
-    durationMs: 1_000,
-    attackSequenceIndex: sequenceIndex,
-    attackSequenceTotal: 5,
-    attackInputExpansionMode: 'single-input',
-    attackInputChainSelectionSource: 'user-explicit',
-    attackInput: {
-      identity: `actor|109001|10900101|0|${controlSkillId}|normal-attack|attack-input-${sequenceIndex}`,
-      controlSkillId,
-      selectedSubSkillIndex: 0,
-      sequenceIndex,
-      sequenceTotal: 5,
-      durationFrames: 60,
-      durationStatus: 'applied',
-      sourceEvidenceStatus: 'confirmed-structured-data',
-    },
-  });
+    skillId: mapping.sourceSkillId,
+    startMs: resolvedStartMs,
+    ...(attackGroupId == null ? {} : { attackGroupId }),
+    createActionId: (_segment, index) =>
+      index + 1 === Number(sequenceIndex) ? id : `${id}-a${index + 1}`,
+  }).slice(0, Number(sequenceIndex));
 }
 
 function simulateVerifiedProject({

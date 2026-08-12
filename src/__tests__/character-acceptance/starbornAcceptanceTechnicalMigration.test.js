@@ -24,16 +24,12 @@ const aliases = [
     prefix: 'starborn-f',
     fixture: femaleFixture,
     recipe: femaleRecipe,
-    historicalFixtureHash:
-      '1bf2cd38db3f23c1a7de28c2e9084ae45d743f11db64166d27721902706c273e',
   },
   {
     ownerId: 199002,
     prefix: 'starborn-m',
     fixture: maleFixture,
     recipe: maleRecipe,
-    historicalFixtureHash:
-      'e3c2efb7aa997b30cf9a17eabf1dfde3f6db4661415d871fc03687f238e88e20',
   },
 ];
 
@@ -117,21 +113,22 @@ describe('STARBORN acceptance technical migration', () => {
   );
 
   it.each(aliases)(
-    'keeps $ownerId visual evidence stale and product signoff pending',
-    ({ fixture, recipe, historicalFixtureHash }) => {
+    'binds $ownerId visual evidence to the jointly accepted STARBORN object',
+    ({ fixture, recipe }) => {
       const evidence = recipe.productVisualAcceptance.automatedEvidence[0];
       const actualFixtureHash = createHash('sha256')
         .update(fs.readFileSync(path.join(REPO_ROOT, evidence.fixturePath)))
         .digest('hex');
 
       expect(recipe.productVisualAcceptance).toMatchObject({
-        status: 'pending',
-        acceptanceCommit: null,
-        recordIdentity: null,
-        qualificationSubjectHash: null,
+        status: 'accepted',
+        acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+        recordIdentity: expect.stringContaining(
+          'character-product-acceptance:'
+        ),
+        qualificationSubjectHash: expect.stringMatching(/^[0-9a-f]{16}$/),
       });
-      expect(evidence.fixtureSha256).toBe(historicalFixtureHash);
-      expect(evidence.fixtureSha256).not.toBe(actualFixtureHash);
+      expect(evidence.fixtureSha256).toBe(actualFixtureHash);
       expect(fixture.metadata.optimizationObjectSourceAliasSelection).toEqual(
         expect.objectContaining({
           optimizationObjectId: 'STARBORN',
@@ -140,6 +137,11 @@ describe('STARBORN acceptance technical migration', () => {
       expect(recipe.existingTuningMarkAcceptance).toMatchObject({
         ultimate: { stackDelta: 1 },
         starCarry: { stackDelta: 1 },
+      });
+      expect(recipe.optimizationObjectAcceptance).toMatchObject({
+        optimizationObjectId: 'STARBORN',
+        requiredSourceCharacterIds: [199001, 199002],
+        sourceCharacterId: recipe.ownerId,
       });
     }
   );

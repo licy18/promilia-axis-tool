@@ -66,7 +66,7 @@ describe('M12-B3-E22 binding matrix and formal admission', () => {
       expect(report.scenarioMatrix[dimension].status).toBe('passed');
     }
     expect(report.hashes.verifiedMechanicsPackageHash).toBe(
-      'fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58'
+      '62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8'
     );
   });
 

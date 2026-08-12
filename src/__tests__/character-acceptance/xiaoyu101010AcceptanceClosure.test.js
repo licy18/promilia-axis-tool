@@ -297,7 +297,7 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     ).toBe(true);
   });
 
-  it('publishes stable technical evidence while product acceptance remains pending', () => {
+  it('publishes stable technical evidence with accepted product binding', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 4,
       executionPassedCount: 4,
@@ -322,32 +322,36 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       )
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      recordIdentity: null,
-      qualificationSubjectHash: null,
-      scenarioSetHash: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      recordIdentity:
+        'character-product-acceptance:101010:13d28aa515312a63395f49ddff3c778967e1b20f:6c361b4ae3dc61a8',
+      qualificationSubjectHash: '6c361b4ae3dc61a8',
+      scenarioSetHash: 'eca42d0ce3b24bf0',
+      bindingStatus: 'verified',
       automatedEvidence: [
         expect.objectContaining({
           scenarioIdentity: 'm11-d-101010-visual-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
           status: 'automated-workbench-import-passed',
+          fixturePath: 'fixtures/character-acceptance/101010-visual.json',
+          fixtureSha256:
+            '0b9128883b509b8c7cd0a096b9d9c36ad7f5407a74864a9d1b6b21ff8d2a914a',
           screenshotPath:
-            'reports/m11-d-character-acceptance-101010-desktop.png',
+            'work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-101010-canonical-trace.png',
           screenshotSha256:
-            '73ff96230b426eaf1d23026f0764199c054f522352fb10adc7ee1a2ea8526928',
+            '05005798c185bf4c7bff789f2256694317e0fc336eea65c248364bb173a66cfa',
         }),
       ],
     });
     expect(manifest.maturity).toMatchObject({
-      currentState: 'runtime-integrated',
-      optimizationReady: false,
+      currentState: 'optimization-ready',
+      optimizationReady: true,
       gates: {
-        visuallyAccepted: false,
-        optimizationReady: false,
+        visuallyAccepted: true,
+        optimizationReady: true,
       },
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      blockers: [],
     });
   });
 

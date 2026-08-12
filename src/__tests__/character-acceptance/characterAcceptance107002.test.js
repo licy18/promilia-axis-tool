@@ -332,14 +332,22 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       functionalFailureCount: 0,
     });
     expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'pending',
-      acceptanceCommit: null,
-      recordIdentity: null,
-      bindingStatus: 'not-requested',
+      status: 'accepted',
+      acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
+      recordIdentity:
+        'character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66',
+      qualificationSubjectHash: 'bd44ed4ae5bace66',
+      scenarioSetHash: 'ca11b122ad34a2d4',
+      bindingStatus: 'verified',
     });
     expect(misaManifest.maturity).toMatchObject({
-      optimizationReady: false,
-      blockers: ['acceptance-product-visual-signoff-pending'],
+      currentState: 'optimization-ready',
+      optimizationReady: true,
+      gates: {
+        visuallyAccepted: true,
+        optimizationReady: true,
+      },
+      blockers: [],
     });
     expect(
       misaMatrix.requirements.filter(requirement =>
