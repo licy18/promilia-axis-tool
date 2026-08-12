@@ -262,6 +262,27 @@ describe('Moyin Machine Axis qualification', () => {
         event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
         Number(event.elementId) === 251
     );
+    const limitHeldThunder = heldThunder.filter(event =>
+      /^moyin-limit-[1-5]$/.test(event.actionId)
+    );
+    expect(
+      limitHeldThunder.map(event => [
+        event.actionId,
+        event.absoluteFrame,
+        event.rawDamage,
+      ])
+    ).toEqual([
+      ['moyin-limit-1', 3515, 158],
+      ['moyin-limit-2', 4045, 316],
+      ['moyin-limit-3', 4356, 473],
+      ['moyin-limit-4', 4667, 631],
+      ['moyin-limit-5', 4978, 789],
+    ]);
+    expect(
+      limitHeldThunder.every(
+        event => event.formula?.status === 'verified-tuning-formula-applied'
+      )
+    ).toBe(true);
     expect(
       heldThunder
         .filter(event => actionIds.has(event.actionId))
@@ -275,13 +296,17 @@ describe('Moyin Machine Axis qualification', () => {
       ['moyin-limit-5', 4978],
       ['moyin-expiry-boundary-a1', 6428],
     ]);
+    const signatureHeld = heldThunder.find(
+      event => event.actionId === 'moyin-thunder-preseed-signature'
+    );
+    expect(signatureHeld?.absoluteFrame).toBe(3215);
     expect(
-      heldThunder.find(event => event.actionId === 'moyin-limit-1')
-        ?.absoluteFrame -
-        heldThunder.find(
-          event => event.actionId === 'moyin-thunder-preseed-signature'
-        )?.absoluteFrame
+      limitHeldThunder[0]?.absoluteFrame - signatureHeld?.absoluteFrame
     ).toBe(300);
+    expect(limitHeldThunder[0]?.timeMs - signatureHeld?.timeMs).toBeCloseTo(
+      5000,
+      6
+    );
     expect(
       marks.find(event => event.kind === 'expire' && event.frameIndex === 6428)
     ).toMatchObject({ before: 5, after: 4, delta: -1 });
@@ -307,6 +332,52 @@ describe('Moyin Machine Axis qualification', () => {
         [8, 86],
       ])
     );
+
+    const findCriticalHit = actionId =>
+      run.trace.damage.find(
+        event =>
+          event.actionId === actionId &&
+          event.eventType === 'VERIFIED_COMBAT_HIT'
+      );
+    expect(
+      findCriticalHit('109001-critical-sampled-low')?.formula?.randomBranch
+    ).toMatchObject({
+      criticalRoll: 499,
+      criticalThreshold: 500,
+      critical: true,
+    });
+    expect(
+      findCriticalHit('109001-critical-sampled-boundary')?.formula?.randomBranch
+    ).toMatchObject({
+      criticalRoll: 500,
+      criticalThreshold: 500,
+      critical: false,
+    });
+    const findRoundOneA5Hit = suffix =>
+      run.trace.damage.find(
+        event =>
+          event.actionId === 'moyin-round-1-a5' &&
+          event.eventType === 'VERIFIED_COMBAT_HIT' &&
+          String(event.hitIdentity ?? '').endsWith(suffix)
+      );
+    const preHitBefore = findRoundOneA5Hit('|20|5')?.formula?.randomBranch;
+    const preHitAfter = findRoundOneA5Hit('|56|7')?.formula?.randomBranch;
+    expect(preHitBefore).toMatchObject({
+      sourceCriticalRateBasisPoints: 500,
+      sourceCriticalDamageBasisPoints: 15000,
+    });
+    expect(preHitAfter).toMatchObject({
+      sourceCriticalRateBasisPoints: 586,
+      sourceCriticalDamageBasisPoints: 15172,
+    });
+    expect(
+      preHitAfter.sourceCriticalRateBasisPoints -
+        preHitBefore.sourceCriticalRateBasisPoints
+    ).toBe(2 * 43);
+    expect(
+      preHitAfter.sourceCriticalDamageBasisPoints -
+        preHitBefore.sourceCriticalDamageBasisPoints
+    ).toBe(2 * 86);
   });
 
   it('settles the A5 off/on and A4 state-plus-mark counterexample matrix', () => {

@@ -25182,6 +25182,43 @@
               "randomBranch": null,
               "expectedCritical": null
             },
+            "limitHeldDamages": [
+              {
+                "actionId": "moyin-limit-1",
+                "absoluteFrame": 3515,
+                "timeMs": 58583.333333,
+                "rawDamage": 158,
+                "formulaStatus": "verified-tuning-formula-applied"
+              },
+              {
+                "actionId": "moyin-limit-2",
+                "absoluteFrame": 4045,
+                "timeMs": 67416.666667,
+                "rawDamage": 316,
+                "formulaStatus": "verified-tuning-formula-applied"
+              },
+              {
+                "actionId": "moyin-limit-3",
+                "absoluteFrame": 4356,
+                "timeMs": 72600,
+                "rawDamage": 473,
+                "formulaStatus": "verified-tuning-formula-applied"
+              },
+              {
+                "actionId": "moyin-limit-4",
+                "absoluteFrame": 4667,
+                "timeMs": 77783.333333,
+                "rawDamage": 631,
+                "formulaStatus": "verified-tuning-formula-applied"
+              },
+              {
+                "actionId": "moyin-limit-5",
+                "absoluteFrame": 4978,
+                "timeMs": 82966.666667,
+                "rawDamage": 789,
+                "formulaStatus": "verified-tuning-formula-applied"
+              }
+            ],
             "persistentEffect": {
               "absoluteFrame": 3765,
               "actionId": "moyin-round-1-a5",
@@ -25279,7 +25316,7 @@
             }
           },
           "reasons": [],
-          "assertionHash": "d89a81c4fe053f39"
+          "assertionHash": "a0cf3118e3b91ee6"
         },
         {
           "assertionIdentity": "canonical-same-input-replay",
@@ -39085,7 +39122,7 @@
           "assertionHash": "1ebb23438e769331"
         }
       ],
-      "scenarioCaseHash": "5baf751233a9e669"
+      "scenarioCaseHash": "ce090db8068265dc"
     },
     {
       "schemaVersion": 1,
@@ -58852,5 +58889,5 @@
       "machine-axis": 5
     }
   },
-  "scenarioSetHash": "245c5b0c6754e749"
+  "scenarioSetHash": "7594bea6d484214c"
 }

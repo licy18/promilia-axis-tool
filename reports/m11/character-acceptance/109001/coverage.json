@@ -782,6 +782,20 @@
       "edgeIdentity": "coverage-edge:11ae2dd908704459"
     },
     {
+      "requirementIdentity": "protocol:109001:buff-apply-refresh-stack-expire",
+      "scenarioIdentity": "m11-d-109001-visual-acceptance",
+      "assertionIdentity": "buff-apply-refresh-stack-expire",
+      "selector": {
+        "expectedValue": true,
+        "factIdentity": "buff-apply-refresh-stack-expire",
+        "kind": "scenario-fact"
+      },
+      "assertionHash": "a0cf3118e3b91ee6",
+      "traceProjectionHash": "bf5331609a1e4ea3",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:123973c5b89f302e"
+    },
+    {
       "requirementIdentity": "contract:hit:10900105|0|elements|6|2602386345610884148|56|7",
       "scenarioIdentity": "m11-d-109001-visual-acceptance",
       "assertionIdentity": "trace-hit:machine-hit:m11-d-109001-visual-acceptance:211",
@@ -4724,20 +4738,6 @@
       "traceProjectionHash": "bf5331609a1e4ea3",
       "status": "verified",
       "edgeIdentity": "coverage-edge:7f506369342b3e07"
-    },
-    {
-      "requirementIdentity": "protocol:109001:buff-apply-refresh-stack-expire",
-      "scenarioIdentity": "m11-d-109001-visual-acceptance",
-      "assertionIdentity": "buff-apply-refresh-stack-expire",
-      "selector": {
-        "expectedValue": true,
-        "factIdentity": "buff-apply-refresh-stack-expire",
-        "kind": "scenario-fact"
-      },
-      "assertionHash": "d89a81c4fe053f39",
-      "traceProjectionHash": "bf5331609a1e4ea3",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:7f56e95846b459c2"
     },
     {
       "requirementIdentity": "contract:hit:10900104|0|elements|0|610497198600338323|7|1",
@@ -9615,5 +9615,5 @@
       "m12-b3-109001-star-window-offset-78": 71
     }
   },
-  "coverageHash": "7ccf8b49a070ddb0"
+  "coverageHash": "1ee5cbdc211f74dc"
 }

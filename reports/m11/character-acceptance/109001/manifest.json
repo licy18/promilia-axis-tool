@@ -500,6 +500,43 @@
                 "randomBranch": null,
                 "expectedCritical": null
               },
+              "limitHeldDamages": [
+                {
+                  "actionId": "moyin-limit-1",
+                  "absoluteFrame": 3515,
+                  "timeMs": 58583.333333,
+                  "rawDamage": 158,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-2",
+                  "absoluteFrame": 4045,
+                  "timeMs": 67416.666667,
+                  "rawDamage": 316,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-3",
+                  "absoluteFrame": 4356,
+                  "timeMs": 72600,
+                  "rawDamage": 473,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-4",
+                  "absoluteFrame": 4667,
+                  "timeMs": 77783.333333,
+                  "rawDamage": 631,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-5",
+                  "absoluteFrame": 4978,
+                  "timeMs": 82966.666667,
+                  "rawDamage": 789,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                }
+              ],
               "persistentEffect": {
                 "absoluteFrame": 3765,
                 "actionId": "moyin-round-1-a5",
@@ -1059,9 +1096,9 @@
       "scenarioSetHash": null,
       "bindingStatus": "not-requested",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:109001::df290a3890956188",
-        "qualificationSubjectHash": "df290a3890956188",
-        "scenarioSetHash": "139e3cc1acca06d5",
+        "recordIdentity": "character-product-acceptance:109001::548cb8ebbb3c1f66",
+        "qualificationSubjectHash": "548cb8ebbb3c1f66",
+        "scenarioSetHash": "c9aa8026e43ea235",
         "scenarioIdentities": [
           "m11-d-109001-visual-acceptance"
         ]
@@ -31327,6 +31364,43 @@
                 "randomBranch": null,
                 "expectedCritical": null
               },
+              "limitHeldDamages": [
+                {
+                  "actionId": "moyin-limit-1",
+                  "absoluteFrame": 3515,
+                  "timeMs": 58583.333333,
+                  "rawDamage": 158,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-2",
+                  "absoluteFrame": 4045,
+                  "timeMs": 67416.666667,
+                  "rawDamage": 316,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-3",
+                  "absoluteFrame": 4356,
+                  "timeMs": 72600,
+                  "rawDamage": 473,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-4",
+                  "absoluteFrame": 4667,
+                  "timeMs": 77783.333333,
+                  "rawDamage": 631,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                },
+                {
+                  "actionId": "moyin-limit-5",
+                  "absoluteFrame": 4978,
+                  "timeMs": 82966.666667,
+                  "rawDamage": 789,
+                  "formulaStatus": "verified-tuning-formula-applied"
+                }
+              ],
               "persistentEffect": {
                 "absoluteFrame": 3765,
                 "actionId": "moyin-round-1-a5",
@@ -31424,7 +31498,7 @@
               }
             },
             "reasons": [],
-            "assertionHash": "d89a81c4fe053f39"
+            "assertionHash": "a0cf3118e3b91ee6"
           },
           {
             "assertionIdentity": "canonical-same-input-replay",
@@ -45230,7 +45304,7 @@
             "assertionHash": "1ebb23438e769331"
           }
         ],
-        "scenarioCaseHash": "5baf751233a9e669"
+        "scenarioCaseHash": "ce090db8068265dc"
       },
       {
         "schemaVersion": 1,
@@ -64997,7 +65071,7 @@
         "machine-axis": 5
       }
     },
-    "scenarioSetHash": "245c5b0c6754e749"
+    "scenarioSetHash": "7594bea6d484214c"
   },
   "coverageContext": {
     "denominator": {
@@ -65816,6 +65890,20 @@
         "traceProjectionHash": "bf5331609a1e4ea3",
         "status": "verified",
         "edgeIdentity": "coverage-edge:11ae2dd908704459"
+      },
+      {
+        "requirementIdentity": "protocol:109001:buff-apply-refresh-stack-expire",
+        "scenarioIdentity": "m11-d-109001-visual-acceptance",
+        "assertionIdentity": "buff-apply-refresh-stack-expire",
+        "selector": {
+          "expectedValue": true,
+          "factIdentity": "buff-apply-refresh-stack-expire",
+          "kind": "scenario-fact"
+        },
+        "assertionHash": "a0cf3118e3b91ee6",
+        "traceProjectionHash": "bf5331609a1e4ea3",
+        "status": "verified",
+        "edgeIdentity": "coverage-edge:123973c5b89f302e"
       },
       {
         "requirementIdentity": "contract:hit:10900105|0|elements|6|2602386345610884148|56|7",
@@ -69760,20 +69848,6 @@
         "traceProjectionHash": "bf5331609a1e4ea3",
         "status": "verified",
         "edgeIdentity": "coverage-edge:7f506369342b3e07"
-      },
-      {
-        "requirementIdentity": "protocol:109001:buff-apply-refresh-stack-expire",
-        "scenarioIdentity": "m11-d-109001-visual-acceptance",
-        "assertionIdentity": "buff-apply-refresh-stack-expire",
-        "selector": {
-          "expectedValue": true,
-          "factIdentity": "buff-apply-refresh-stack-expire",
-          "kind": "scenario-fact"
-        },
-        "assertionHash": "d89a81c4fe053f39",
-        "traceProjectionHash": "bf5331609a1e4ea3",
-        "status": "verified",
-        "edgeIdentity": "coverage-edge:7f56e95846b459c2"
       },
       {
         "requirementIdentity": "contract:hit:10900104|0|elements|0|610497198600338323|7|1",
@@ -74651,7 +74725,7 @@
         "m12-b3-109001-star-window-offset-78": 71
       }
     },
-    "coverageHash": "7ccf8b49a070ddb0"
+    "coverageHash": "1ee5cbdc211f74dc"
   },
   "matrix": {
     "schemaVersion": 1,
@@ -80855,8 +80929,8 @@
           "kind": "scenario-fact"
         },
         "coverageEdgeIds": [
-          "coverage-edge:6ff5f88165eb879d",
-          "coverage-edge:7f56e95846b459c2"
+          "coverage-edge:123973c5b89f302e",
+          "coverage-edge:6ff5f88165eb879d"
         ],
         "evidenceScenarioIds": [
           "m11-d-109001-visual-acceptance"
@@ -81331,7 +81405,7 @@
         "window-boundary": 1
       }
     },
-    "matrixHash": "a3c65d347bed8ab7"
+    "matrixHash": "3044066a075d49ff"
   },
   "ledger": {
     "schemaVersion": 1,
@@ -83274,9 +83348,9 @@
   "derivation": {
     "status": "derived-artifacts-verified",
     "inputIncludedDerivedArtifacts": false,
-    "sourceOfTruthHash": "404c4c2fcd4eb29c"
+    "sourceOfTruthHash": "d3d513391b444d1e"
   },
-  "qualificationSubjectHash": "df290a3890956188",
+  "qualificationSubjectHash": "548cb8ebbb3c1f66",
   "maturity": {
     "currentState": "runtime-integrated",
     "earnedStates": [
@@ -83314,5 +83388,5 @@
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "bb06b3641327a67c"
+  "manifestHash": "a8118a4e75a3d851"
 }

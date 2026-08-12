@@ -1517,7 +1517,18 @@ function inspectCriticalMatrix(ownerId, first, second, probe) {
                 preHitBefore,
                 preHitAfter,
                 'sourceCriticalDamageBasisPoints'
-              )),
+              )) &&
+            (ownerId !== 109001 ||
+              (preHitBefore?.formula?.randomBranch
+                ?.sourceCriticalRateBasisPoints === 500 &&
+                preHitAfter?.formula?.randomBranch
+                  ?.sourceCriticalRateBasisPoints ===
+                  500 + 2 * 43 &&
+                preHitBefore?.formula?.randomBranch
+                  ?.sourceCriticalDamageBasisPoints === 15000 &&
+                preHitAfter?.formula?.randomBranch
+                  ?.sourceCriticalDamageBasisPoints ===
+                  15000 + 2 * 86)),
           nonCrittableRejection:
             nonCrittable?.formula?.status ===
               'verified-tuning-formula-applied' &&
@@ -1708,6 +1719,14 @@ function inspectThunderLifecycle(run) {
       event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
       Number(event.elementId) === 251
   );
+  const expectedLimitHeldFrames = [3515, 4045, 4356, 4667, 4978];
+  const expectedLimitHeldRawDamage = [158, 316, 473, 631, 789];
+  const limitHeldDamages = (run.trace?.damage ?? []).filter(
+    event =>
+      /^moyin-limit-[1-5]$/.test(event.actionId) &&
+      event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
+      Number(event.elementId) === 251
+  );
   const persistentEffect = (run.trace?.effects?.events ?? []).find(
     event =>
       event.actionId === 'moyin-round-1-a5' &&
@@ -1771,6 +1790,17 @@ function inspectThunderLifecycle(run) {
     Number(firstHeldDamage?.rawDamage) > 0 &&
     firstHeldDamage?.absoluteFrame === preseed?.frameIndex &&
     nextHeldDamage?.formula?.status === 'verified-tuning-formula-applied' &&
+    limitHeldDamages.length === expectedLimitHeldFrames.length &&
+    limitHeldDamages.every(
+      (event, index) =>
+        event.actionId === `moyin-limit-${index + 1}` &&
+        event.formula?.status === 'verified-tuning-formula-applied' &&
+        Number(event.absoluteFrame) === expectedLimitHeldFrames[index] &&
+        Number(event.rawDamage) === expectedLimitHeldRawDamage[index]
+    ) &&
+    Number(nextHeldDamage?.absoluteFrame) -
+      Number(firstHeldDamage?.absoluteFrame) ===
+      300 &&
     Math.abs(
       Number(nextHeldDamage?.timeMs) - Number(firstHeldDamage?.timeMs) - 5000
     ) < 0.001 &&
@@ -1791,6 +1821,13 @@ function inspectThunderLifecycle(run) {
       expire,
       firstHeldDamage: projectCriticalHit(firstHeldDamage),
       nextHeldDamage: projectCriticalHit(nextHeldDamage),
+      limitHeldDamages: limitHeldDamages.map(event => ({
+        actionId: event.actionId,
+        absoluteFrame: event.absoluteFrame,
+        timeMs: event.timeMs,
+        rawDamage: event.rawDamage,
+        formulaStatus: event.formula?.status ?? null,
+      })),
       persistentEffect,
       expiryBoundaryHit: projectCriticalHit(expiryBoundaryHit),
     },
