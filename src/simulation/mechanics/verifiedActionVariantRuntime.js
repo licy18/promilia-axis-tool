@@ -1180,7 +1180,7 @@ export function createVerifiedActionVariantRuntime({
       'missing',
       'group-conflict',
     ].includes(contextSelection.status);
-    const attackChainSelection = contextConsumesInput
+    let attackChainSelection = contextConsumesInput
       ? { status: 'context-selected', action, chain: null, segment: null }
       : resolveAttackInputChainAction({
           action,
@@ -1798,6 +1798,41 @@ export function createVerifiedActionVariantRuntime({
           assumptionHash: chargingBinding.assumptionHash,
         },
       };
+    }
+
+    if (mapping?.actionKind === 'normal-attack') {
+      const resolvedAttackChainSelection =
+        attackChainSelection.chain && attackChainSelection.segment
+          ? {
+              chain: attackChainSelection.chain,
+              segment: attackChainSelection.segment,
+              sequenceIndex: attackChainSelection.sequenceIndex,
+            }
+          : resolveUniqueExecutedAttackInputChainSegment({
+              mapping,
+              actorState,
+              attackInputChains,
+              executionControlSkillId,
+              selectedSubSkillIndex,
+            });
+      if (resolvedAttackChainSelection?.chain) {
+        attackChainSelection = {
+          ...attackChainSelection,
+          status: 'selected',
+          ...resolvedAttackChainSelection,
+        };
+        selectionSource = {
+          ...(selectionSource ?? {}),
+          chainIdentity:
+            resolvedAttackChainSelection.chain.chainIdentity ?? null,
+          chainSequenceIndex: resolvedAttackChainSelection.sequenceIndex,
+          semanticIdentity: `${resolvedAttackChainSelection.chain.chainIdentity}:segment:${resolvedAttackChainSelection.sequenceIndex}`,
+          semanticName:
+            resolvedAttackChainSelection.segment.semanticName ??
+            selectionSource?.semanticName ??
+            null,
+        };
+      }
     }
 
     let resolution = applyAttackInputChainTimingResolution({
@@ -2902,6 +2937,53 @@ function hasAttackChainEntryResource(chain, actorState) {
   if (!actorState) return false;
   const costPerSegment = Number(segmentLimit.costPerSegment);
   return costPerSegment > 0 && Number(actorState.current) >= costPerSegment;
+}
+
+function resolveUniqueExecutedAttackInputChainSegment({
+  mapping,
+  actorState,
+  attackInputChains,
+  executionControlSkillId,
+  selectedSubSkillIndex,
+}) {
+  if (
+    mapping?.ownerKind === 'kibo' ||
+    !Number.isInteger(Number(executionControlSkillId)) ||
+    !Number.isInteger(Number(selectedSubSkillIndex))
+  ) {
+    return null;
+  }
+  const matches = (attackInputChains ?? []).flatMap(chain => {
+    if (
+      chain.applied !== true ||
+      Number(chain.ownerId) !== Number(mapping.ownerId) ||
+      Number(chain.sourceSkillId) !== Number(mapping.sourceSkillId) ||
+      !isRuntimeConditionSatisfied(chain.stateCondition, actorState) ||
+      !hasAttackChainEntryResource(chain, actorState)
+    ) {
+      return [];
+    }
+    return (chain.segments ?? [])
+      .filter(
+        segment =>
+          Number(segment.controlSkillId) === Number(executionControlSkillId) &&
+          Number(segment.subSkillIndex) === Number(selectedSubSkillIndex)
+      )
+      .map(segment => ({
+        chain,
+        segment,
+        sequenceIndex: Number(segment.sequenceIndex),
+      }));
+  });
+  const uniqueMatches = [
+    ...new Map(
+      matches.map(match => [
+        `${match.chain.chainIdentity}|${match.sequenceIndex}`,
+        match,
+      ])
+    ).values(),
+  ];
+  return uniqueMatches.length === 1 ? uniqueMatches[0] : null;
 }
 
 function createAttackChainContinuationWindow({

@@ -458,9 +458,22 @@ describe('verified action variant and special resource runtime', () => {
       attackSequenceIndex: 1,
       attackInputIntent: createPublicNormalAttackIntent(),
     });
+    enhancedAfterStar.attackGroupId = 'ruby-star-enhanced-chain';
+    enhancedAfterStar.contextActionId = starSkill.id;
+    const enhancedSecondInput = createActorAction({
+      id: 'ruby-star-quick-entry-e2',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(204 + 25),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 2,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    enhancedSecondInput.attackGroupId = enhancedAfterStar.attackGroupId;
+    enhancedSecondInput.contextActionId = enhancedAfterStar.id;
     const quickEntryRuntime = runVariantRuntime({
       actors: [starSkill.actor],
-      actions: [starSkill, enhancedAfterStar],
+      actions: [starSkill, enhancedAfterStar, enhancedSecondInput],
       durationMs: 5000,
       initialRuntimeState: {
         specialResourcesByActor: [
@@ -480,6 +493,15 @@ describe('verified action variant and special resource runtime', () => {
       executionControlSkillId: 10300201,
       selectedSubSkillIndex: 1,
     });
+    expect(
+      quickEntryRuntime.selectionByActionId.get(enhancedSecondInput.id)
+    ).toMatchObject({
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackChainSequenceIndex: 2,
+      semanticName: '强化普攻 E2',
+      executionControlSkillId: 10300201,
+      selectedSubSkillIndex: 2,
+    });
     expect(quickEntryRuntime.resourceEvents).toEqual([
       expect.objectContaining({
         actionId: 'ruby-star-skill',
@@ -495,6 +517,14 @@ describe('verified action variant and special resource runtime', () => {
           operation: 'consume',
           beforeValue: 12,
           afterValue: 11,
+        }),
+      }),
+      expect.objectContaining({
+        actionId: 'ruby-star-quick-entry-e2',
+        payload: expect.objectContaining({
+          operation: 'consume',
+          beforeValue: 11,
+          afterValue: 10,
         }),
       }),
     ]);

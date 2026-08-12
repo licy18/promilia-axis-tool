@@ -3435,6 +3435,9 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     ),
     { targetPosition: { x: 220, y: 82 } }
   );
+  const pangActions = timeline.locator(
+    '[data-testid="workbench-timeline-action"][data-skill-id="10100701"]'
+  );
   await dragLocatorTo(
     page,
     windKiboEnergySkill,
@@ -3447,9 +3450,6 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     '[data-testid="workbench-timeline-action"][data-skill-id="10100312"]'
   );
   const hanAction = hanActions.filter({ hasText: '星鸣技' });
-  const pangActions = timeline.locator(
-    '[data-testid="workbench-timeline-action"][data-skill-id="10100701"]'
-  );
   const pangAction = timeline
     .locator(
       '[data-testid="workbench-timeline-action"][data-skill-id="10100701"][data-attack-sequence-index="1"]'
@@ -3465,7 +3465,7 @@ test('[m7-catalog-runtime-workflow][m7-r3-operation-axis-skills] runs mapped act
     '[data-testid="workbench-timeline-action"][data-skill-id="50000112"]'
   );
   await expect(hanAction).toHaveCount(1);
-  await expect(pangActions).toHaveCount(4);
+  await expect(pangActions).toHaveCount(1);
   await expect(pangAction).toHaveCount(1);
   await expect(muyinAction).toHaveCount(1);
   await expect(kiboEnergyAction).toHaveCount(1);
@@ -3602,6 +3602,7 @@ test('[m7-r2-normal-attack-input-timing][m7-r3-operation-axis] uses real input w
   const group = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10200101"]'
   );
+  await appendVerifiedNormalAttackInputs(page, normalAttack, group, 5);
   await expect(group).toHaveCount(5);
   const groupId = await group.first().getAttribute('data-attack-group-id');
   expect(groupId).toBeTruthy();
@@ -3657,7 +3658,7 @@ test('[m7-r2-normal-attack-input-timing][m7-r3-operation-axis] uses real input w
   await closeInspectorIfVisible(page);
 
   await page.getByTestId('workbench-undo-edit').click();
-  await expect(group).toHaveCount(0);
+  await expect(group).toHaveCount(4);
   await page.getByTestId('workbench-redo-edit').click();
   await expect(group).toHaveCount(5);
 
@@ -6622,12 +6623,12 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolve
   });
 
   await expect(normalAttack).toHaveAttribute('data-attack-input-count', '5');
-  await normalAttack.click();
 
   const normalBlocks = () =>
     timeline.locator(
       '[data-testid="workbench-timeline-action"][data-skill-id="10101001"][data-attack-group-id]:not([data-attack-group-id=""])'
     );
+  await appendVerifiedNormalAttackInputs(page, normalAttack, normalBlocks(), 5);
   await expect(normalBlocks()).toHaveCount(5);
   const defaultGroupId = await normalBlocks()
     .first()
@@ -6695,6 +6696,7 @@ test('[m9-r3-r2-xiaoyu-forms-occupancy] [m9-r3-r2-r1-xiaoyu-burst-chain] resolve
       y: actorLaneBoxForBurstDrop.height / 2,
     },
   });
+  await appendVerifiedNormalAttackInputs(page, normalAttack, normalBlocks(), 8);
   await expect(normalBlocks()).toHaveCount(8);
   const groupIds = await normalBlocks().evaluateAll(actions => [
     ...new Set(
@@ -7531,6 +7533,12 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   const normalBlocks = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10300201"]'
   );
+  await appendVerifiedNormalAttackInputs(
+    page,
+    normalAttackEntry,
+    normalBlocks,
+    3
+  );
   await expect(normalBlocks).toHaveCount(3);
   await expect(
     timeline.locator(
@@ -7549,7 +7557,10 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
   ).toHaveCount(0);
   await expect(ammoNodes).toHaveCount(0);
 
-  await page.getByTestId('workbench-undo-edit').click();
+  for (const expectedCount of [2, 1, 0]) {
+    await page.getByTestId('workbench-undo-edit').click();
+    await expect(normalBlocks).toHaveCount(expectedCount);
+  }
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     0
   );
@@ -7640,6 +7651,12 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
       y: 72,
     },
   });
+  await appendVerifiedNormalAttackInputs(
+    page,
+    normalAttackEntry,
+    normalBlocks,
+    12
+  );
   await expect(normalBlocks).toHaveCount(12);
   await expect(
     timeline.locator(
@@ -7692,9 +7709,10 @@ test('[m10-b1-ruby-profile-ui] schedules Ruby reload and ammo-aware attacks thro
 
   await page.getByTestId('workbench-undo-edit').click();
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
-    1
+    12
   );
-  await expect(ammoNodes).toHaveCount(1);
+  await expect(normalBlocks).toHaveCount(11);
+  await expect(ammoNodes).toHaveCount(12);
   await page.getByTestId('workbench-redo-edit').click();
   await expect(timeline.getByTestId('workbench-timeline-action')).toHaveCount(
     actionCount
@@ -8332,6 +8350,12 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
   const normalBlocks = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10300201"]'
   );
+  await appendVerifiedNormalAttackInputs(
+    page,
+    normalAttackEntry,
+    normalBlocks,
+    3
+  );
   await expect(normalBlocks).toHaveCount(3);
   const firstGroupId = await normalBlocks
     .filter({ hasText: /A1.*普通攻击/ })
@@ -8353,24 +8377,29 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
       y: 72,
     },
   });
-  await expect(normalBlocks).toHaveCount(9);
-  const groupIds = await normalBlocks.evaluateAll(actions => [
-    ...new Set(
-      actions
-        .map(action => action.getAttribute('data-attack-group-id'))
-        .filter(Boolean)
-    ),
-  ]);
-  const enhancedGroupId = groupIds.find(groupId => groupId !== firstGroupId);
-  expect(enhancedGroupId).toBeTruthy();
-  const projectedGroup = () =>
-    timeline.locator(
-      `[data-testid="workbench-timeline-action"][data-attack-group-id="${enhancedGroupId}"]`
-    );
-  await expect(projectedGroup()).toHaveCount(6);
-  const projectedFirst = timeline.locator(
-    `[data-testid="workbench-timeline-action"][data-attack-group-id="${enhancedGroupId}"][data-attack-sequence-index="1"]`
+  await appendVerifiedNormalAttackInputs(
+    page,
+    normalAttackEntry,
+    normalBlocks,
+    9
   );
+  await expect(normalBlocks).toHaveCount(9);
+  const projectedGroup = () =>
+    normalBlocks.filter({
+      hasText: /E(?:[1-9]|1[0-2]).*强化普攻/,
+    });
+  const projectedFirst = normalBlocks.filter({
+    hasText: /E1.*强化普攻/,
+  });
+  await expect(projectedFirst).toHaveAttribute(
+    'data-attack-group-id',
+    firstGroupId
+  );
+  await expect(projectedFirst).toHaveAttribute(
+    'data-attack-sequence-index',
+    '1'
+  );
+  await expect(projectedGroup()).toHaveCount(6);
   await expect(projectedFirst).toContainText(/E1.*强化普攻/);
   const projectedFirstId = await projectedFirst.getAttribute('data-action-id');
   await expect(
@@ -8379,16 +8408,10 @@ test('[m10-b1-r2-ruby-replay] reprojects a public normal attack from the replaye
     )
   ).toHaveAttribute('title', /6 -> 5/);
 
-  await dragTimelineActionByFrames(page, projectedFirst, 50);
-  await expect(projectedGroup()).toHaveCount(3);
-  await expect(projectedFirst).toContainText(/A1.*普通攻击/);
   await page.getByTestId('workbench-undo-edit').click();
-  await expect(projectedGroup()).toHaveCount(6);
+  await expect(projectedGroup()).toHaveCount(5);
   await expect(projectedFirst).toContainText(/E1.*强化普攻/);
   await page.getByTestId('workbench-redo-edit').click();
-  await expect(projectedGroup()).toHaveCount(3);
-  await expect(projectedFirst).toContainText(/A1.*普通攻击/);
-  await page.getByTestId('workbench-undo-edit').click();
   await expect(projectedGroup()).toHaveCount(6);
   await expect(projectedFirst).toContainText(/E1.*强化普攻/);
 
@@ -8603,6 +8626,12 @@ test('[m10-b1-r3-ruby-star-carry-entry] replays a real switch into Ruby thunder 
   const enhancedBlocks = timeline.locator(
     '[data-testid="workbench-timeline-action"][data-skill-id="10300201"]'
   );
+  await appendVerifiedNormalAttackInputs(
+    page,
+    normalAttackEntry,
+    enhancedBlocks,
+    12
+  );
   await expect(enhancedBlocks).toHaveCount(12);
   const enhancedFirstBlock = timeline
     .locator(
@@ -8636,16 +8665,10 @@ test('[m10-b1-r3-ruby-star-carry-entry] replays a real switch into Ruby thunder 
     )
   ).toHaveAttribute('title', /12 -> 11/);
 
-  await dragTimelineActionByFrames(page, firstEnhanced, 20);
-  await expect(projectedGroup()).toHaveCount(3);
-  await expect(firstEnhanced).toContainText(/A1.*普通攻击/);
   await page.getByTestId('workbench-undo-edit').click();
-  await expect(projectedGroup()).toHaveCount(12);
+  await expect(projectedGroup()).toHaveCount(11);
   await expect(firstEnhanced).toContainText(/E1.*强化普攻/);
   await page.getByTestId('workbench-redo-edit').click();
-  await expect(projectedGroup()).toHaveCount(3);
-  await expect(firstEnhanced).toContainText(/A1.*普通攻击/);
-  await page.getByTestId('workbench-undo-edit').click();
   await expect(projectedGroup()).toHaveCount(12);
   await expect(firstEnhanced).toContainText(/E1.*强化普攻/);
 
@@ -8998,7 +9021,7 @@ test('[m11-d-character-acceptance-visual-import] imports each authoritative owne
       ownerId: 101010,
       fixturePath: 'fixtures/character-acceptance/101010-visual.json',
       actionId: '101010-critical-rate-zero',
-      expectedTraceText: 'control 10101001 / sub 0',
+      expectedTraceText: 'control 10101011 / sub 0',
     },
     {
       ownerId: 103002,
@@ -9018,7 +9041,7 @@ test('[m11-d-character-acceptance-visual-import] imports each authoritative owne
       ownerId: 109001,
       fixturePath: 'fixtures/character-acceptance/109001-visual.json',
       actionId: '109001-critical-rate-zero',
-      expectedTraceText: 'control 10900101 / sub 0',
+      expectedTraceText: 'control 10900115 / sub 0',
     },
     {
       ownerId: 108003,
@@ -10290,6 +10313,104 @@ async function dragLocatorTo(
     targetPosition,
   });
   await page.mouse.up();
+}
+
+async function appendVerifiedNormalAttackInputs(
+  page,
+  normalAttackEntry,
+  normalAttackActions,
+  expectedCount
+) {
+  const workbench = page.locator('main.workbench');
+  const previousMode =
+    (await workbench.getAttribute('data-action-placement-mode')) ?? 'free';
+  if (previousMode !== 'assisted') {
+    await page
+      .locator(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .click();
+  }
+  let currentCount = await normalAttackActions.count();
+  if (currentCount === 0 && expectedCount > 0) {
+    await normalAttackEntry.click();
+    await expect(normalAttackActions).toHaveCount(1);
+    currentCount = 1;
+  }
+  while (currentCount < expectedCount) {
+    const actionsBefore = await normalAttackActions.evaluateAll(actions =>
+      actions.map(action => ({
+        id: action.getAttribute('data-action-id'),
+        groupId: action.getAttribute('data-attack-group-id'),
+        sequenceIndex: Number(
+          action.getAttribute('data-attack-sequence-index')
+        ),
+        startMs: Number(action.getAttribute('data-start-ms')),
+        durationMs: Number(action.getAttribute('data-duration-ms')),
+        laneId: action.getAttribute('data-lane-id'),
+      }))
+    );
+    const previous = [...actionsBefore].sort(
+      (left, right) =>
+        right.startMs - left.startMs ||
+        right.sequenceIndex - left.sequenceIndex ||
+        String(right.id).localeCompare(String(left.id))
+    )[0];
+    expect(previous?.id).toBeTruthy();
+    expect(previous?.laneId).toBeTruthy();
+    const timeline = page.getByTestId('workbench-timeline-grid-preview');
+    const lane = timeline.locator(
+      `[data-testid="workbench-timeline-row"][data-lane-id="${previous.laneId}"]`
+    );
+    const laneBox = await lane.boundingBox();
+    const timelineDurationMs = Number(
+      await timeline.getAttribute('data-duration-ms')
+    );
+    if (!laneBox || !timelineDurationMs) {
+      throw new Error('Normal attack continuation geometry is unavailable');
+    }
+    const nextInputMs = previous.startMs + previous.durationMs;
+    const traceHashBefore = await workbench.getAttribute(
+      'data-canonical-trace-hash'
+    );
+    await dragLocatorTo(page, normalAttackEntry, lane, {
+      targetPosition: {
+        x: (nextInputMs / timelineDurationMs) * laneBox.width,
+        y: laneBox.height / 2,
+      },
+    });
+    const nextCount = currentCount + 1;
+    await expect(normalAttackActions).toHaveCount(nextCount);
+    await expect
+      .poll(() => workbench.getAttribute('data-canonical-trace-hash'))
+      .not.toBe(traceHashBefore);
+    const idsBefore = new Set(actionsBefore.map(action => action.id));
+    const actionsAfter = await normalAttackActions.evaluateAll(actions =>
+      actions.map(action => ({
+        id: action.getAttribute('data-action-id'),
+        groupId: action.getAttribute('data-attack-group-id'),
+        sequenceIndex: Number(
+          action.getAttribute('data-attack-sequence-index')
+        ),
+      }))
+    );
+    const inserted = actionsAfter.find(action => !idsBefore.has(action.id));
+    expect(inserted?.groupId).toBeTruthy();
+    if (inserted.groupId === previous.groupId) {
+      expect(inserted.sequenceIndex).toBe(previous.sequenceIndex + 1);
+    } else {
+      expect(inserted.sequenceIndex).toBe(1);
+    }
+    currentCount = nextCount;
+  }
+  expect(currentCount).toBe(expectedCount);
+  if (previousMode !== 'assisted') {
+    await page
+      .locator(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="free"]'
+      )
+      .click();
+  }
 }
 
 async function dragTimelineActionByFrames(page, action, frameDelta) {

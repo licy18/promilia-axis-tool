@@ -5,8 +5,8 @@ import {
   resolveVerifiedAttackInputChainEntry,
   resolveVerifiedContextInputScheduling,
   resolveVerifiedContextActionStartMs,
-  resolveVerifiedNormalAttackInputEntry,
 } from '../../domain/verifiedActionContextScheduling';
+import { resolveVerifiedNormalAttackInputEntry } from '../../domain/verifiedNormalAttackInputScheduling';
 import { frameToMs } from '../../domain/timebase';
 import {
   ACTION_RULE_CODES,
@@ -848,6 +848,86 @@ describe('verified action context scheduling', () => {
     expect(phaseEntry.status).toBe('selected');
     expect(phaseEntry.chain.chainIdentity).toBe('ruby-enhanced-twelve-inputs');
     expect(phaseEntry.entry.attackInputSegments).toHaveLength(6);
+
+    const a3 = {
+      id: 'ruby-normal-a3-authority-source',
+      type: 'skill',
+      actorId: 'actor-ruby',
+      actorCharacterId: 103002,
+      skillId: mapping.sourceSkillId,
+      startMs: 0,
+      attackGroupId: 'ruby-default-chain',
+      attackSequenceIndex: 3,
+      attackSequenceTotal: 3,
+      attackInput: {
+        ...mapping.attackInputSegments.find(
+          segment => Number(segment.controlSkillId) === 10300203
+        ),
+        attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      },
+    };
+    const a3Selection = {
+      actionId: a3.id,
+      actorId: a3.actorId,
+      ready: true,
+      status: 'ready',
+      attackGroupId: a3.attackGroupId,
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      attackChainSequenceIndex: 3,
+      executionControlSkillId: 10300203,
+      selectedSubSkillIndex: 0,
+    };
+    const resolvePhaseTransition = frame =>
+      resolveVerifiedNormalAttackInputEntry({
+        entry,
+        graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+        ownerId: 103002,
+        actorId: a3.actorId,
+        timeMs: frameToMs(frame),
+        effectIntervals: [],
+        variantRuntime: baseRuntime,
+        actions: [a3],
+        runtimeSelections: [a3Selection],
+      });
+
+    expect(resolvePhaseTransition(33)).toMatchObject({
+      status: 'blocked',
+      reason: 'normal-attack-special-continuation-window-not-open',
+      phase: {
+        sourceKind: 'attack-chain-phase-transition',
+        sourceActionId: a3.id,
+      },
+    });
+    expect(resolvePhaseTransition(34)).toMatchObject({
+      status: 'selected',
+      chain: {
+        chainIdentity: 'ruby-enhanced-twelve-inputs',
+      },
+      phase: {
+        sourceKind: 'attack-chain-phase-transition',
+        sourceActionId: a3.id,
+        expected: {
+          chainIdentity: 'ruby-enhanced-twelve-inputs',
+          sequenceIndex: 1,
+          controlSkillId: 10300201,
+          subSkillIndex: 1,
+          groupId: a3.attackGroupId,
+          contextActionId: a3.id,
+        },
+      },
+      entry: {
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        attackInputGroupId: a3.attackGroupId,
+        attackInputContextActionId: a3.id,
+        attackInputSegments: [
+          {
+            sequenceIndex: 1,
+            selectedSubSkillIndex: 1,
+            semanticName: '强化普攻 E1',
+          },
+        ],
+      },
+    });
   });
 
   it('snaps a derived heavy input to the sourced A5 context window', () => {

@@ -1,6 +1,7 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
 import authorityFixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
+import rubyVisualFixture from '../../../fixtures/character-acceptance/103002-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import rubyOwnerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
 import kiboActionCatalog from '../../data/generated/workbench-kibo-action-catalog.json';
@@ -1465,6 +1466,41 @@ describe('Machine Axis service', () => {
       },
     });
   });
+
+  it('imports the signed Ruby phase transition from the installed graph without an owner overlay', () => {
+    const axis = structuredClone(rubyVisualFixture);
+    axis.dataIdentity.verifiedMechanicsPackageHash =
+      mechanicsPackage.packageHash;
+    const service = createMachineAxisService();
+    const prepared = service.prepare(axis);
+
+    expect(prepared.issues).toEqual([]);
+    expect(
+      prepared.project.actions.find(action => action.id === 'ruby-chain-e1')
+    ).toMatchObject({
+      attackGroupId: 'm11-d-ruby-normal',
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 12,
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      controlSubSkillIndex: 1,
+      attackInput: {
+        attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+        controlSkillId: 10300201,
+        selectedSubSkillIndex: 1,
+        durationFrames: 24,
+      },
+    });
+
+    const run = service.simulate(axis);
+    expect(run.validation.issues).toEqual([]);
+    expect(
+      run.trace.actions.find(action => action.id === 'ruby-chain-e1')
+    ).toMatchObject({
+      actionKind: 'normal-attack',
+      controlSkillId: 10300201,
+      subSkillIndex: 1,
+    });
+  }, 30_000);
 
   it('rejects illegal loadouts and stale semantic variant identities', () => {
     const service = createMachineAxisService();

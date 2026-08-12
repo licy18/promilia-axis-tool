@@ -1195,10 +1195,8 @@ import {
   migrateLegacyAttackInputActionDrafts,
   reconcileWorkbenchAttackInputIntentGroups,
 } from '../domain/workbenchAttackInputChain';
-import {
-  resolveVerifiedContextActionStartMs,
-  resolveVerifiedNormalAttackInputEntry,
-} from '../domain/verifiedActionContextScheduling';
+import { resolveVerifiedContextActionStartMs } from '../domain/verifiedActionContextScheduling';
+import { resolveVerifiedNormalAttackInputEntry } from '../domain/verifiedNormalAttackInputScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
 import { normalizeCombatScenario } from '../domain/combatScenario';

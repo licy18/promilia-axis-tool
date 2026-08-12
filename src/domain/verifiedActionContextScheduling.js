@@ -63,6 +63,8 @@ export function projectVerifiedAttackInputChainSegment(
     chainSequenceIndex: resolvedChainSequenceIndex,
     label: chainSegment.label ?? `A${resolvedSequenceIndex}`,
     semanticName: chainSegment.semanticName ?? source.semanticName ?? null,
+    attackInputChainIdentity:
+      attackInputChainIdentity ?? source.attackInputChainIdentity ?? null,
     selectedSubSkillIndex: subSkillIndex,
     effectiveDurationFrames: durationFrames,
     durationFrames,
@@ -323,7 +325,7 @@ export function resolveVerifiedAttackInputChainEntry({
   };
 }
 
-export function resolveVerifiedNormalAttackInputEntry({
+export function resolveVerifiedNormalAttackInputEntryBase({
   entry = null,
   graph = null,
   ownerId = null,
@@ -334,6 +336,7 @@ export function resolveVerifiedNormalAttackInputEntry({
   actions = [],
   runtimeSelections = [],
   excludedActionIds = [],
+  projectPhaseTransitions = null,
 } = {}) {
   if (!entry?.attackInputSegments?.length) {
     return { status: 'not-required', entry, chain: null, phase: null };
@@ -374,7 +377,7 @@ export function resolveVerifiedNormalAttackInputEntry({
       acceptedAction?.id != null &&
       String(window.sourceActionId) === String(acceptedAction.id)
   );
-  const projectedWindows = projectNormalAttackContinuationCandidates({
+  const projectedActiveWindows = projectNormalAttackContinuationCandidates({
     entry,
     graph,
     ownerId,
@@ -384,7 +387,7 @@ export function resolveVerifiedNormalAttackInputEntry({
   });
   if (
     activeWindows.length > 0 &&
-    projectedWindows.length !== activeWindows.length
+    projectedActiveWindows.length !== activeWindows.length
   ) {
     return createVerifiedNormalAttackInputBlock({
       reason: 'verified-normal-attack-input-active-window-unresolved',
@@ -393,6 +396,25 @@ export function resolveVerifiedNormalAttackInputEntry({
       chain: null,
     });
   }
+  const projectedPhaseTransitions =
+    typeof projectPhaseTransitions === 'function'
+      ? projectPhaseTransitions({
+          entry,
+          graph,
+          ownerId,
+          actorId,
+          timeMs,
+          effectIntervals,
+          variantRuntime,
+          excludedActionIds,
+          acceptedAction,
+          acceptedSelection,
+        })
+      : [];
+  const continuationCandidates = [
+    ...projectedActiveWindows,
+    ...projectedPhaseTransitions,
+  ];
   const chain = resolveNormalAttackAuthorityChain({
     entry,
     graph,
@@ -404,7 +426,7 @@ export function resolveVerifiedNormalAttackInputEntry({
     excludedActionIds,
     acceptedAction,
     acceptedSelection,
-    continuationCandidates: projectedWindows,
+    continuationCandidates,
   });
   const authorityChain = projectVerifiedNormalAttackAuthorityChain(chain);
   const phase = resolveVerifiedNormalAttackInputPhase({
@@ -414,10 +436,10 @@ export function resolveVerifiedNormalAttackInputEntry({
     acceptedSelection,
     actorId,
     inputTimeMs: timeMs,
-    activeContinuationWindows: projectedWindows.filter(
+    activeContinuationWindows: continuationCandidates.filter(
       candidate => candidate.relationType === 'attack-chain-continuity-window'
     ),
-    specialContinuationCandidates: projectedWindows.filter(
+    specialContinuationCandidates: continuationCandidates.filter(
       candidate => candidate.relationType !== 'attack-chain-continuity-window'
     ),
   });
@@ -853,7 +875,7 @@ function collectActiveNormalAttackInputWindows({
   );
 }
 
-function resolveDerivedAttackChainEntry({
+export function resolveDerivedAttackChainEntry({
   chain,
   graph,
   actorId,
@@ -861,6 +883,8 @@ function resolveDerivedAttackChainEntry({
   variantRuntime,
   actions,
   runtimeSelections,
+  includePendingPhaseTransition = false,
+  sourceChainIdentity = null,
 }) {
   if (!chain.segments?.length) return null;
   const quickEntries = collectActiveNormalAttackInputWindows({
@@ -902,7 +926,12 @@ function resolveDerivedAttackChainEntry({
     candidate =>
       candidate.applied === true &&
       candidate.phaseTransition?.applied === true &&
-      candidate.phaseTransition.targetChainIdentity === chain.chainIdentity
+      candidate.phaseTransition.inputCommand === 'normal-attack' &&
+      candidate.phaseTransition.targetChainIdentity === chain.chainIdentity &&
+      Number(candidate.ownerId) === Number(chain.ownerId) &&
+      Number(candidate.sourceSkillId) === Number(chain.sourceSkillId) &&
+      (sourceChainIdentity == null ||
+        candidate.chainIdentity === sourceChainIdentity)
   );
   const selectionByActionId = new Map(
     (runtimeSelections ?? []).map(selection => [
@@ -910,6 +939,7 @@ function resolveDerivedAttackChainEntry({
       selection,
     ])
   );
+  let phaseEntry = null;
   for (const sourceChain of sourceChains) {
     const transition = sourceChain.phaseTransition;
     const sourceSegment = sourceChain.segments.find(
@@ -917,7 +947,7 @@ function resolveDerivedAttackChainEntry({
         Number(segment.sequenceIndex) === Number(transition.sourceSequenceIndex)
     );
     if (!sourceSegment) continue;
-    const matched = (actions ?? []).some(action => {
+    const matched = (actions ?? []).find(action => {
       if (
         (String(action.actorId) !== String(actorId) &&
           Number(action.actorCharacterId) !== Number(chain.ownerId)) ||
@@ -947,19 +977,23 @@ function resolveDerivedAttackChainEntry({
         transition.inputWindow?.frameRate ?? 60
       );
       return (
-        relativeFrame >= Number(transition.inputWindow?.startFrame) &&
+        (includePendingPhaseTransition ||
+          relativeFrame >= Number(transition.inputWindow?.startFrame)) &&
         relativeFrame < Number(transition.inputWindow?.endFrame)
       );
     });
     if (matched) {
-      return {
+      if (phaseEntry) return null;
+      phaseEntry = {
         chain,
         sequenceIndex: 1,
         sourceIdentity: transition.sourceIdentity,
+        sourceAction: matched,
+        transition,
       };
     }
   }
-  return null;
+  return phaseEntry;
 }
 
 function resolveAttackChainSegmentLimit(segmentLimit, resourceValue, fallback) {
@@ -1301,7 +1335,7 @@ function compareContextEdges(left, right) {
   );
 }
 
-function isRuntimeConditionSatisfied({
+export function isRuntimeConditionSatisfied({
   condition,
   actorId,
   timeMs,

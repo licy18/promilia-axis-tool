@@ -1,5 +1,14 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.000 2026-08-13 00:00 normal-input v2 最终修复与无人监管准入
+
+- 在 `c4761acf4e906b2b47f2cf149a307ef01f4584ee` 后完成通用 normal-input 收口：graph phase transition 可在 Ruby 默认 A3 的来源化 `[34,79)` 窗口进入强化 E1；显式 chain 在缺 owner overlay 时只从唯一 applied/ready、owner/source/identity 一致且 segment 连续、occupancy 精确的 graph chain 投影；context-selected E1 可从唯一执行 control/subskill 反推链并让 E2 继承。没有新增 Ruby owner-id 特判。
+- 当前实证：Machine Axis service + context scheduling + Workbench attack-input chain + variant runtime 4 files / 141 tests PASS；官方 Ruby CLI `103002-visual-fresh-cli-closeout.json` exit 0，E1=`10300201/sub1`、24F；production build 1903 modules PASS；真实 production preview 42/42 capabilities、64/64 tests PASS，612920ms。预览生成的 100 个非确定性 tracked PNG 已精确恢复，`reports/production-preview-acceptance.json` 与 canonical bundle 报告保留。
+- Ruby phase-transition 投影已拆到 Workbench 动态模块，既有共享链解析保持首屏可用；权威 bundle check 现场通过且未抬预算：initial entry `119981/120000` gzip bytes、Workbench `487871/500000`、total JavaScript `914453/920000`，三项 budget status 全为 true。
+- 用户授权后再次核对产品范围：10 个 optimization owner/alias 已全部签收，199001/199002 继续只支撑单一 STARBORN 对象。101003 当前轴 `actionLegalityProof.passed=true/finalScoreEligible=true` 且 Workbench trace 可见，但 owner generator 仍为 required 155 / passed 114、41 blocked、13 source gap、34 acceptance gap、47 functional failure；因此 101003 继续 pending/unready，新截图仅作为 untracked 诊断证据，不进入 acceptance recipe 或正式提交。
+- 用户已明确授权重新发布、无人监管推进并另开 GPT-5.6-sol max 搜索任务。中央任务只负责修复提交、真实 Gate V2 release PASS、独立 Formal Search Admission 15/15、clean HEAD 推送与 authority v2 descriptor/hash 交接；不得创建任何 search run/config 或执行 `search:ai-guided`。独立任务 id 为 `019ff67c-6c58-7782-8bdb-0aaf52ef79c1`，在准入证据交付前保持只读等待。
+- 保护项：不读取/使用两个既有污染文件，不清理任何 untracked evidence，不暂存 `.readonly-ruby-probe.mjs` 或 `work/**` 诊断材料，不动 `stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`。
+
 状态：`M12-C4/C5/C6` 的既有搜索结论已于 2026-08-12 撤回并重新锁定。正式 run `m12c4-moyin-top5-20260812-v1` 暴露普攻链状态机漏洞：连段输入窗内重复普攻被错误解析为新的 `A1`，因此 `0.3s` 单次 A1 循环、重复 A1 击杀轴及其 Top-5/finalization/replay/Workbench 签收/closeout 全部属于受污染历史证据，不得继续作为产品结果或新搜索 checkpoint。当前 `optimizationFormalScoreReady=false`、`formalRankingReady=false`、`clientParityReady=false`；只有无头核心、排轴器和优化器统一接入修正后的连段状态并重新完成准入后，才可启动新的 M12-C4 搜索。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。

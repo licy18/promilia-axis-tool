@@ -1,5 +1,14 @@
 # AzPr M12-C 中央集成续接 Handoff
 
+## 2026-08-13 00:00 无人监管发布准入续接
+
+- 当前工作批在 `c4761acf4e906b2b47f2cf149a307ef01f4584ee` 之后修复 Ruby `A3 -> E1` phase transition、无 owner overlay 的 graph-chain segment 投影、context-selected E1 后的 E2 链继承，以及相应 Workbench 顺序输入验收。中央聚焦回归为 4 files / 141 tests PASS，生产 build 1903 modules 通过。
+- 新 phase-transition 投影按依赖职责进入 Workbench 动态模块，既有共享链解析仍留在首屏模块；bundle 权威脚本现场通过，initial entry `119981/120000` gzip bytes、Workbench `487871/500000`、total JavaScript `914453/920000`，三项 `budgetStatus=true`，未提高预算。
+- 新鲜官方 Ruby CLI 输出位于 `work/m12-c/diagnostics/103002-visual-fresh-cli-closeout.json`：E1 为 `10300201/sub1`、24F，三段强化命中；随后同一实现完成真实 production preview 42/42 capabilities、64/64 tests PASS，报告在 `reports/production-preview-acceptance.json`。
+- 用户已授权无人监管签收。既有产品范围不变：101010、102001、103002、107001、107002、108003、109001、112001、199001、199002 为 10 个已签角色 owner/alias；199001/199002 仍只形成一个 `STARBORN` optimization object。101003 的当前 CLI 轴虽为 `axis-action-legality-passed` 且新增 Workbench 截图已只作为 untracked 诊断证据保留，但 owner generator 仍真实报告 41 blocked / 13 source gap / 34 acceptance gap / 47 functional failure，因此继续 pending/unready，不得自动升格。
+- 本批提交后只允许从 clean tracked HEAD 运行一次用户重新授权的 8 GiB `release:verify`，要求 Gate V2 executed PASS、Formal Search Admission READY 15/15、normal-input authority v2 live descriptor 全字段绑定、HEAD 无漂移、`origin/master == HEAD`。中央任务不得创建 search run/config 或启动 `search:ai-guided`；准入证据必须交给独立任务 `019ff67c-6c58-7782-8bdb-0aaf52ef79c1` 后由其启动全新三目标搜索。
+- 保护项继续生效：全部既有 untracked evidence、`.readonly-ruby-probe.mjs` 与新增 101003 诊断截图均不删、不移动、不暂存；`stash@{0}` 必须仍为 `900e193bf710b8f894b50e0bc966db70cbd7e717`。污染文件 `work/m12-c/guidance.m12c4.round1.cycle-no-toughness.json`、`work/m12-c/m12c4-search-template.json` 不得读取或使用。
+
 时间：2026-08-12 20:40（北京）
 仓库：`C:\Codex\AzPr Axis\promilia-axis-tool`
 

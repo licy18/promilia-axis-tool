@@ -22,7 +22,10 @@ import {
   isKiboAutonomousActionKindDeferred,
 } from '../domain/kiboAxisActionScopePolicy';
 import { frameToMs, msToFrame } from '../domain/timebase';
-import { resolveVerifiedContextInputScheduling } from '../domain/verifiedActionContextScheduling';
+import {
+  projectVerifiedAttackInputChainSegment,
+  resolveVerifiedContextInputScheduling,
+} from '../domain/verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import generatedCharacters from '../data/generated/characters.json';
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
@@ -1888,15 +1891,24 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
             String(segment.attackInputChainIdentity ?? '') ===
             String(requestedChainIdentity)
         );
+  const requestedGraphSegments =
+    requestedChainIdentity == null || requestedProfileSegments.length > 0
+      ? []
+      : projectVerifiedGraphAttackInputChainSegments({
+          mapping,
+          chainIdentity: requestedChainIdentity,
+        });
   const candidatePool =
     requestedChainIdentity == null
       ? defaultSegments
       : requestedProfileSegments.length > 0
         ? requestedProfileSegments
-        : String(requestedChainIdentity) ===
-            String(mapping.attackInputChainIdentity ?? '')
-          ? defaultSegments
-          : requestedProfileSegments;
+        : requestedGraphSegments.length > 0
+          ? requestedGraphSegments
+          : String(requestedChainIdentity) ===
+              String(mapping.attackInputChainIdentity ?? '')
+            ? defaultSegments
+            : requestedProfileSegments;
   const candidates = candidatePool.filter(
     segment => Number(segment.sequenceIndex) === sequenceIndex
   );
@@ -2389,6 +2401,60 @@ function resolveContractActionExecutionForm({
         mapping.actionScheduling?.durationFrames
     ),
   };
+}
+
+function projectVerifiedGraphAttackInputChainSegments({
+  mapping,
+  chainIdentity,
+}) {
+  const graph = requireMechanicsPackage().actionVariantGraph;
+  const chains = (graph?.attackInputChains ?? []).filter(
+    chain =>
+      chain.applied === true &&
+      chain.status === 'verified-attack-input-chain-ready' &&
+      String(chain.chainIdentity ?? '') === String(chainIdentity ?? '') &&
+      Number(chain.ownerId) === Number(mapping.ownerId) &&
+      Number(chain.sourceSkillId) === Number(mapping.sourceSkillId)
+  );
+  if (chains.length !== 1) return [];
+  const chain = chains[0];
+  const segments = chain.segments ?? [];
+  if (
+    segments.length === 0 ||
+    segments.some(
+      (segment, index) =>
+        segment.applied !== true ||
+        segment.status !== 'verified-attack-input-chain-segment-ready' ||
+        Number(segment.sequenceIndex) !== index + 1 ||
+        Number(segment.sequenceTotal) !== segments.length ||
+        !Number.isInteger(Number(segment.controlSkillId)) ||
+        !Number.isInteger(Number(segment.subSkillIndex)) ||
+        Number(segment.subSkillIndex) < 0 ||
+        !(Number(segment.durationFrames) > 0) ||
+        segment.executionTiming?.occupancy?.status !== 'applied' ||
+        Number(segment.executionTiming.occupancy.durationFrames) !==
+          Number(segment.durationFrames)
+    )
+  ) {
+    return [];
+  }
+  const sourceSegments =
+    mapping.attackInputSourceSegments ?? mapping.attackInputSegments ?? [];
+  const projected = segments.map(segment => {
+    const sources = sourceSegments.filter(
+      source => Number(source.controlSkillId) === Number(segment.controlSkillId)
+    );
+    if (sources.length !== 1) return null;
+    return projectVerifiedAttackInputChainSegment(
+      sources[0],
+      segment,
+      Number(segment.sequenceIndex),
+      segments.length,
+      chain.chainIdentity,
+      Number(segment.sequenceIndex)
+    );
+  });
+  return projected.every(Boolean) ? projected : [];
 }
 
 function selectContextualAttackInputSegment({
