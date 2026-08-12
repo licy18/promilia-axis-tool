@@ -15,6 +15,63 @@ import { resolveVerifiedAttackInputChainEntry } from '../../domain/verifiedActio
 import { frameToMs, msToFrame } from '../../domain/timebase';
 
 describe('workbench normal attack input chain', () => {
+  it('materializes one live input without expanding the selected chain tail', () => {
+    const mapping = findNormalAttack(103002);
+    const resolved = resolveVerifiedAttackInputChainEntry({
+      entry: { ...mapping, skillId: mapping.sourceSkillId },
+      graph: mechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(100),
+      variantRuntime: {
+        initialState: [
+          {
+            actorId: 'actor-ruby',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 9,
+            maxValue: 12,
+          },
+        ],
+        resourceEvents: [],
+        activeSwitchWindows: [
+          {
+            relationType: 'attack-chain-continuity-window',
+            inputCommand: 'normal-attack',
+            actorId: 'actor-ruby',
+            targetControlSkillId: 10300202,
+            targetSubSkillIndex: 1,
+            targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+            startsAtMs: frameToMs(90),
+            endsAtMs: frameToMs(306),
+          },
+        ],
+      },
+      selectionMode: 'single-input',
+    });
+    let actionIndex = 0;
+    const drafts = createWorkbenchAttackInputChainDrafts({
+      entry: resolved.entry,
+      actorCharacterId: 103002,
+      skillId: mapping.sourceSkillId,
+      startMs: frameToMs(100),
+      createActionId: () => `live-input-${++actionIndex}`,
+    });
+
+    expect(drafts).toEqual([
+      expect.objectContaining({
+        id: 'live-input-1',
+        attackInputExpansionMode: 'single-input',
+        attackSequenceIndex: 4,
+        attackSequenceTotal: 12,
+        attackChainSequenceIndex: 4,
+        attackInput: expect.objectContaining({
+          semanticName: '强化普攻 E4',
+        }),
+      }),
+    ]);
+  });
+
   it('publishes Ruby normal attack as three default inputs instead of leaking candidate A4/A5', () => {
     const mapping = findNormalAttack(103002);
     const drafts = createChain(mapping, 103002);
@@ -67,8 +124,7 @@ describe('workbench normal attack input chain', () => {
           {
             actorId: 'actor-ruby',
             ownerId: 103002,
-            compilerBindingIdentity:
-              'ruby-star-skill-quick-enhanced-entry',
+            compilerBindingIdentity: 'ruby-star-skill-quick-enhanced-entry',
             targetControlSkillId: 10300201,
             targetSubSkillIndex: 1,
             startsAtMs: frameToMs(40),

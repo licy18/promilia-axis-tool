@@ -1,10 +1,19 @@
 import { frameToMs, msToFrame, snapMsToFrame } from './timebase';
+import {
+  VERIFIED_NORMAL_ATTACK_INPUT_PHASES,
+  resolveVerifiedNormalAttackInputPhase,
+} from './verifiedNormalAttackInputAuthority';
 
 export const VERIFIED_CONTEXT_INPUT_SEMANTICS = Object.freeze({
   IMMEDIATE_INTERRUPT: 'immediate-interrupt',
   BUFFERED_UNTIL_FRAME: 'buffered-until-frame',
   IMMEDIATE_CONTINUOUS: 'immediate-continuous',
   UNRESOLVED: 'unresolved',
+});
+
+export const VERIFIED_ATTACK_INPUT_SELECTION_MODES = Object.freeze({
+  CHAIN: 'chain',
+  SINGLE_INPUT: 'single-input',
 });
 
 export function projectVerifiedAttackInputChainSegment(
@@ -85,10 +94,20 @@ export function resolveVerifiedAttackInputChainEntry({
   actions = [],
   runtimeSelections = [],
   excludedActionIds = [],
+  selectionMode = VERIFIED_ATTACK_INPUT_SELECTION_MODES.CHAIN,
 } = {}) {
   if (!entry?.attackInputSegments?.length || !graph?.attackInputChains) {
     return { status: 'not-required', entry, chain: null };
   }
+  const singleInput =
+    selectionMode === VERIFIED_ATTACK_INPUT_SELECTION_MODES.SINGLE_INPUT;
+  const activeNormalInputWindows = singleInput
+    ? collectActiveNormalAttackInputWindows({
+        variantRuntime,
+        actorId,
+        timeMs,
+      })
+    : [];
   const eligibleChains = graph.attackInputChains.filter(
     chain =>
       chain.applied === true &&
@@ -104,7 +123,10 @@ export function resolveVerifiedAttackInputChainEntry({
       })
   );
   const derivedEntries = eligibleChains
-    .filter(chain => chain.entryPolicy?.kind === 'derived-or-quick-entry')
+    .filter(
+      chain =>
+        singleInput || chain.entryPolicy?.kind === 'derived-or-quick-entry'
+    )
     .map(chain =>
       resolveDerivedAttackChainEntry({
         chain,
@@ -117,6 +139,61 @@ export function resolveVerifiedAttackInputChainEntry({
       })
     )
     .filter(Boolean);
+  if (
+    singleInput &&
+    activeNormalInputWindows.length > 0 &&
+    derivedEntries.length === 0
+  ) {
+    const targetedChains = graph.attackInputChains.filter(
+      chain =>
+        chain.applied === true &&
+        Number(chain.ownerId) === Number(ownerId) &&
+        Number(chain.sourceSkillId) === Number(entry.skillId) &&
+        activeNormalInputWindows.some(window =>
+          chain.segments?.some(
+            segment =>
+              Number(segment.controlSkillId) ===
+                Number(window.targetControlSkillId) &&
+              Number(segment.subSkillIndex) ===
+                Number(window.targetSubSkillIndex) &&
+              (window.targetChainIdentity == null ||
+                String(window.targetChainIdentity) ===
+                  String(chain.chainIdentity))
+          )
+        )
+    );
+    const resourceUnavailable = targetedChains.some(chain => {
+      if (!chain.segmentLimit?.resourceIdentity) return false;
+      const resourceValue = resolveRuntimeResourceValue({
+        variantRuntime,
+        actorId,
+        resourceIdentity: chain.segmentLimit.resourceIdentity,
+        timeMs,
+        excludedActionIds,
+      });
+      return (
+        resolveAttackChainSegmentLimit(
+          chain.segmentLimit,
+          resourceValue,
+          chain.segments.length
+        ) < 1
+      );
+    });
+    return {
+      status: 'blocked',
+      reason: resourceUnavailable
+        ? 'verified-normal-attack-input-resource-unavailable'
+        : 'verified-normal-attack-input-active-window-unresolved',
+      reasons: [
+        resourceUnavailable
+          ? 'verified-derived-attack-input-requires-source-resource'
+          : 'verified-normal-attack-input-active-window-target-unresolved',
+      ],
+      entry: null,
+      chain: targetedChains.length === 1 ? targetedChains[0] : null,
+      activeWindows: activeNormalInputWindows,
+    };
+  }
   const conditionSelectedChains = eligibleChains.filter(
     chain =>
       !chain.entryPolicy || chain.entryPolicy.kind === 'condition-selected'
@@ -131,7 +208,15 @@ export function resolveVerifiedAttackInputChainEntry({
         ? conditionSelectedChains
         : defaultChains;
   if (chains.length !== 1) {
-    return { status: 'not-selected', entry, chain: null };
+    return singleInput
+      ? {
+          status: 'blocked',
+          reason: 'verified-normal-attack-input-chain-not-selected',
+          reasons: ['verified-normal-attack-input-chain-not-unique'],
+          entry: null,
+          chain: null,
+        }
+      : { status: 'not-selected', entry, chain: null };
   }
 
   const chain = chains[0];
@@ -152,11 +237,32 @@ export function resolveVerifiedAttackInputChainEntry({
     resourceValue,
     chain.segments.length
   );
+  if (singleInput && derivedEntry && segmentLimit < 1) {
+    return {
+      status: 'blocked',
+      reason: 'verified-normal-attack-input-resource-unavailable',
+      reasons: ['verified-derived-attack-input-requires-source-resource'],
+      entry: null,
+      chain,
+    };
+  }
   const startSequenceIndex = derivedEntry?.sequenceIndex ?? 1;
+  const selectedSegmentCount = singleInput
+    ? Math.min(segmentLimit, 1)
+    : segmentLimit;
   const selectedChainSegments = chain.segments.slice(
     startSequenceIndex - 1,
-    startSequenceIndex - 1 + segmentLimit
+    startSequenceIndex - 1 + selectedSegmentCount
   );
+  if (singleInput && selectedChainSegments.length !== 1) {
+    return {
+      status: 'blocked',
+      reason: 'verified-normal-attack-input-segment-unavailable',
+      reasons: ['verified-normal-attack-input-target-segment-missing'],
+      entry: null,
+      chain,
+    };
+  }
   const sourceSegments =
     entry.attackInputSourceSegments ?? entry.attackInputSegments;
   const segments = selectedChainSegments.map((chainSegment, index) => {
@@ -165,9 +271,11 @@ export function resolveVerifiedAttackInputChainEntry({
         Number(segment.controlSkillId) === Number(chainSegment.controlSkillId)
     );
     if (!source) return null;
-    const sequenceIndex = index + 1;
     const chainSequenceIndex = Number(chainSegment.sequenceIndex);
-    const sequenceTotal = selectedChainSegments.length;
+    const sequenceIndex = singleInput ? chainSequenceIndex : index + 1;
+    const sequenceTotal = singleInput
+      ? chain.segments.length
+      : selectedChainSegments.length;
     const projected = projectVerifiedAttackInputChainSegment(
       source,
       chainSegment,
@@ -184,11 +292,19 @@ export function resolveVerifiedAttackInputChainEntry({
       : null;
   });
   if (segments.some(segment => !segment)) {
-    return {
-      status: 'source-segment-missing',
-      entry,
-      chain,
-    };
+    return singleInput
+      ? {
+          status: 'blocked',
+          reason: 'verified-normal-attack-input-source-segment-missing',
+          reasons: ['verified-normal-attack-input-source-segment-missing'],
+          entry: null,
+          chain,
+        }
+      : {
+          status: 'source-segment-missing',
+          entry,
+          chain,
+        };
   }
   return {
     status: 'selected',
@@ -197,8 +313,544 @@ export function resolveVerifiedAttackInputChainEntry({
       ...entry,
       attackInputSegments: segments,
       attackInputChainIdentity: chain.chainIdentity,
+      ...(singleInput
+        ? {
+            attackInputExpansionMode:
+              VERIFIED_ATTACK_INPUT_SELECTION_MODES.SINGLE_INPUT,
+          }
+        : {}),
     },
   };
+}
+
+export function resolveVerifiedNormalAttackInputEntry({
+  entry = null,
+  graph = null,
+  ownerId = null,
+  actorId = null,
+  timeMs = 0,
+  effectIntervals = [],
+  variantRuntime = null,
+  actions = [],
+  runtimeSelections = [],
+  excludedActionIds = [],
+} = {}) {
+  if (!entry?.attackInputSegments?.length) {
+    return { status: 'not-required', entry, chain: null, phase: null };
+  }
+  const selectionByActionId = new Map(
+    (runtimeSelections ?? []).map(selection => [
+      String(selection.actionId),
+      selection,
+    ])
+  );
+  const latestAccepted = resolveLatestAcceptedActorAction({
+    actions,
+    selectionByActionId,
+    ownerId,
+    actorId,
+    timeMs,
+    excludedActionIds,
+  });
+  const acceptedAction = latestAccepted?.action
+    ? {
+        ...latestAccepted.action,
+        actorId: latestAccepted.action.actorId ?? actorId,
+        actionKind: latestAccepted.action.attackInput
+          ? 'normal-attack'
+          : (latestAccepted.action.actionKind ?? latestAccepted.action.type),
+      }
+    : null;
+  const acceptedSelection = latestAccepted?.selection ?? null;
+  const activeWindows = collectPendingNormalAttackInputWindows({
+    variantRuntime,
+    actorId,
+    timeMs,
+    actions,
+    selectionByActionId,
+    excludedActionIds,
+  }).filter(
+    window =>
+      acceptedAction?.id != null &&
+      String(window.sourceActionId) === String(acceptedAction.id)
+  );
+  const projectedWindows = projectNormalAttackContinuationCandidates({
+    entry,
+    graph,
+    ownerId,
+    activeWindows,
+    actions,
+    selectionByActionId,
+  });
+  if (
+    activeWindows.length > 0 &&
+    projectedWindows.length !== activeWindows.length
+  ) {
+    return createVerifiedNormalAttackInputBlock({
+      reason: 'verified-normal-attack-input-active-window-unresolved',
+      reasons: ['verified-normal-attack-input-active-window-target-unresolved'],
+      phase: null,
+      chain: null,
+    });
+  }
+  const chain = resolveNormalAttackAuthorityChain({
+    entry,
+    graph,
+    ownerId,
+    actorId,
+    timeMs,
+    effectIntervals,
+    variantRuntime,
+    excludedActionIds,
+    acceptedAction,
+    acceptedSelection,
+    continuationCandidates: projectedWindows,
+  });
+  const authorityChain = projectVerifiedNormalAttackAuthorityChain(chain);
+  const phase = resolveVerifiedNormalAttackInputPhase({
+    mapping: entry,
+    chain: authorityChain,
+    acceptedAction,
+    acceptedSelection,
+    actorId,
+    inputTimeMs: timeMs,
+    activeContinuationWindows: projectedWindows.filter(
+      candidate => candidate.relationType === 'attack-chain-continuity-window'
+    ),
+    specialContinuationCandidates: projectedWindows.filter(
+      candidate => candidate.relationType !== 'attack-chain-continuity-window'
+    ),
+  });
+  if (!phase.formIdentity) {
+    return createVerifiedNormalAttackInputBlock({
+      reason:
+        phase.reasons?.[0] ??
+        'verified-normal-attack-input-structural-form-unresolved',
+      reasons: phase.reasons,
+      phase,
+      chain,
+    });
+  }
+  if (phase.phase === VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED) {
+    return createVerifiedNormalAttackInputBlock({
+      reason:
+        phase.reasons?.[0] ?? 'verified-normal-attack-input-recovery-locked',
+      reasons: phase.reasons,
+      phase,
+      chain,
+    });
+  }
+  if (!phase.expected) {
+    return createVerifiedNormalAttackInputBlock({
+      reason: 'verified-normal-attack-input-expected-target-unresolved',
+      reasons: ['verified-normal-attack-input-expected-target-unresolved'],
+      phase,
+      chain,
+    });
+  }
+  const expectedChain =
+    (graph?.attackInputChains ?? []).find(
+      candidate =>
+        candidate.applied === true &&
+        Number(candidate.ownerId) === Number(ownerId) &&
+        String(candidate.chainIdentity) ===
+          String(phase.expected.chainIdentity ?? chain?.chainIdentity ?? '')
+    ) ?? chain;
+  if (
+    expectedChain?.segmentLimit?.resourceIdentity &&
+    resolveAttackChainSegmentLimit(
+      expectedChain.segmentLimit,
+      resolveRuntimeResourceValue({
+        variantRuntime,
+        actorId,
+        resourceIdentity: expectedChain.segmentLimit.resourceIdentity,
+        timeMs,
+        excludedActionIds,
+      }),
+      expectedChain.segments.length
+    ) < 1
+  ) {
+    return createVerifiedNormalAttackInputBlock({
+      reason: 'verified-normal-attack-input-resource-unavailable',
+      reasons: ['verified-derived-attack-input-requires-source-resource'],
+      phase,
+      chain: expectedChain,
+    });
+  }
+  const chainSegment = (
+    expectedChain?.segments ??
+    entry.attackInputSegments ??
+    []
+  ).find(
+    segment =>
+      Number(segment.sequenceIndex) === Number(phase.expected.sequenceIndex) &&
+      Number(segment.controlSkillId) ===
+        Number(phase.expected.controlSkillId) &&
+      Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
+        Number(phase.expected.subSkillIndex)
+  );
+  const sourceSegments =
+    entry.attackInputSourceSegments ?? entry.attackInputSegments;
+  const sourceSegment = sourceSegments.find(
+    segment =>
+      Number(segment.controlSkillId) === Number(phase.expected.controlSkillId)
+  );
+  if (!chainSegment || !sourceSegment) {
+    return createVerifiedNormalAttackInputBlock({
+      reason: 'verified-normal-attack-input-source-segment-missing',
+      reasons: ['verified-normal-attack-input-source-segment-missing'],
+      phase,
+      chain: expectedChain,
+    });
+  }
+  const sequenceTotal =
+    expectedChain?.segments?.length ?? entry.attackInputSegments.length;
+  const projected = projectVerifiedAttackInputChainSegment(
+    sourceSegment,
+    chainSegment,
+    Number(phase.expected.sequenceIndex),
+    sequenceTotal,
+    phase.expected.chainIdentity ?? expectedChain?.chainIdentity ?? null,
+    Number(phase.expected.sequenceIndex)
+  );
+  if (!projected) {
+    return createVerifiedNormalAttackInputBlock({
+      reason: 'verified-normal-attack-input-segment-unavailable',
+      reasons: ['verified-normal-attack-input-target-segment-missing'],
+      phase,
+      chain: expectedChain,
+    });
+  }
+  return {
+    status: 'selected',
+    reason: null,
+    reasons: [],
+    chain: expectedChain ?? null,
+    phase,
+    entry: {
+      ...entry,
+      attackInputSegments: [projected],
+      attackInputChainIdentity:
+        phase.expected.chainIdentity ?? expectedChain?.chainIdentity ?? null,
+      attackInputExpansionMode:
+        VERIFIED_ATTACK_INPUT_SELECTION_MODES.SINGLE_INPUT,
+      ...(phase.expected.groupId
+        ? { attackInputGroupId: phase.expected.groupId }
+        : {}),
+      ...(phase.expected.contextActionId
+        ? { attackInputContextActionId: phase.expected.contextActionId }
+        : {}),
+    },
+  };
+}
+
+function projectVerifiedNormalAttackAuthorityChain(chain) {
+  if (!chain?.segments?.length) return chain ?? null;
+  return {
+    ...chain,
+    segments: chain.segments.map(segment => ({
+      ...segment,
+      actionTiming:
+        segment.actionTiming ??
+        (segment.executionTiming
+          ? {
+              animation: segment.executionTiming.animation ?? null,
+              windows: segment.executionTiming.windows ?? [],
+            }
+          : null),
+    })),
+  };
+}
+
+function resolveLatestAcceptedActorAction({
+  actions,
+  selectionByActionId,
+  ownerId,
+  actorId,
+  timeMs,
+  excludedActionIds,
+}) {
+  const excluded = new Set((excludedActionIds ?? []).map(String));
+  return (actions ?? [])
+    .map((action, index) => ({
+      action,
+      index,
+      selection: selectionByActionId.get(String(action.id)) ?? null,
+    }))
+    .filter(({ action, selection }) => {
+      if (
+        excluded.has(String(action.id)) ||
+        Number(action.startMs) > Number(timeMs) ||
+        (Number(action.actorCharacterId ?? action.actor?.characterId) !==
+          Number(ownerId) &&
+          String(action.actorId ?? '') !== String(actorId ?? ''))
+      ) {
+        return false;
+      }
+      const status = String(selection?.status ?? 'ready');
+      return (
+        selection?.ready !== false &&
+        !status.includes('blocked') &&
+        !status.includes('skipped') &&
+        !status.includes('unresolved')
+      );
+    })
+    .sort(
+      (left, right) =>
+        Number(right.action.startMs) - Number(left.action.startMs) ||
+        right.index - left.index
+    )[0];
+}
+
+function collectPendingNormalAttackInputWindows({
+  variantRuntime,
+  actorId,
+  timeMs,
+  actions,
+  selectionByActionId,
+  excludedActionIds,
+}) {
+  const excluded = new Set((excludedActionIds ?? []).map(String));
+  const sourceActionsById = new Map(
+    (actions ?? []).map(action => [String(action.id), action])
+  );
+  return (variantRuntime?.activeSwitchWindows ?? []).filter(window => {
+    const sourceActionId = String(window?.sourceActionId ?? '');
+    const sourceAction = sourceActionsById.get(sourceActionId);
+    const sourceSelection = selectionByActionId.get(sourceActionId);
+    const sourceStatus = String(sourceSelection?.status ?? 'ready');
+    return (
+      window?.applied !== false &&
+      (window.compilerBindingIdentity != null ||
+        window.relationType === 'attack-chain-continuity-window') &&
+      String(window.inputCommand ?? '') === 'normal-attack' &&
+      String(window.actorId) === String(actorId) &&
+      sourceAction != null &&
+      !excluded.has(sourceActionId) &&
+      Number(sourceAction.startMs) <= Number(timeMs) &&
+      sourceSelection?.ready !== false &&
+      !sourceStatus.includes('blocked') &&
+      !sourceStatus.includes('skipped') &&
+      !sourceStatus.includes('unresolved') &&
+      Number.isFinite(Number(window.startsAtMs)) &&
+      Number.isFinite(Number(window.endsAtMs)) &&
+      Number(timeMs) < Number(window.endsAtMs)
+    );
+  });
+}
+
+function projectNormalAttackContinuationCandidates({
+  entry,
+  graph,
+  ownerId,
+  activeWindows,
+  actions,
+  selectionByActionId,
+}) {
+  const chains = (graph?.attackInputChains ?? []).filter(
+    chain => chain.applied === true && Number(chain.ownerId) === Number(ownerId)
+  );
+  const mappingSegments =
+    entry.attackInputSourceSegments ?? entry.attackInputSegments ?? [];
+  return (activeWindows ?? []).flatMap(window => {
+    const chainMatches = chains.flatMap(chain =>
+      (chain.segments ?? [])
+        .filter(segment => isNormalAttackWindowTarget(segment, window))
+        .map(segment => ({ chain, segment }))
+    );
+    const mappingMatches = mappingSegments
+      .filter(segment => isNormalAttackWindowTarget(segment, window))
+      .map(segment => ({ chain: null, segment }));
+    const matches = chainMatches.length > 0 ? chainMatches : mappingMatches;
+    const uniqueMatches = [
+      ...new Map(
+        matches.map(match => [
+          [
+            match.chain?.chainIdentity ?? '',
+            match.segment.sequenceIndex,
+            match.segment.controlSkillId,
+            match.segment.subSkillIndex ?? match.segment.selectedSubSkillIndex,
+          ].join('|'),
+          match,
+        ])
+      ).values(),
+    ];
+    if (uniqueMatches.length !== 1) return [];
+    const match = uniqueMatches[0];
+    const sourceAction = (actions ?? []).find(
+      action => String(action.id) === String(window.sourceActionId)
+    );
+    if (!sourceAction) return [];
+    const groupId =
+      window.groupId ??
+      sourceAction?.attackGroupId ??
+      resolvePriorNormalAttackGroupId({
+        actions,
+        selectionByActionId,
+        sourceAction,
+        ownerId,
+      });
+    return [
+      {
+        ...window,
+        applied: true,
+        sourceKind: window.relationType ?? 'verified-special-continuation',
+        chainIdentity: match.chain?.chainIdentity ?? null,
+        sequenceIndex: Number(match.segment.sequenceIndex),
+        controlSkillId: Number(match.segment.controlSkillId),
+        subSkillIndex: Number(
+          match.segment.subSkillIndex ?? match.segment.selectedSubSkillIndex
+        ),
+        groupId: groupId ?? null,
+      },
+    ];
+  });
+}
+
+function isNormalAttackWindowTarget(segment, window) {
+  return (
+    Number(segment.controlSkillId) === Number(window.targetControlSkillId) &&
+    Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
+      Number(window.targetSubSkillIndex) &&
+    (window.targetSequenceIndex == null ||
+      Number(segment.sequenceIndex) === Number(window.targetSequenceIndex)) &&
+    (window.targetChainIdentity == null ||
+      String(segment.attackInputChainIdentity ?? '') ===
+        String(window.targetChainIdentity))
+  );
+}
+
+function resolvePriorNormalAttackGroupId({
+  actions,
+  selectionByActionId,
+  sourceAction,
+  ownerId,
+}) {
+  if (!sourceAction) return null;
+  return (
+    (actions ?? [])
+      .map((action, index) => ({
+        action,
+        index,
+        selection: selectionByActionId.get(String(action.id)) ?? null,
+      }))
+      .filter(
+        ({ action, selection }) =>
+          action.attackInput &&
+          Number(action.actorCharacterId ?? action.actor?.characterId) ===
+            Number(ownerId) &&
+          Number(action.startMs) <= Number(sourceAction.startMs) &&
+          selection?.ready !== false
+      )
+      .sort(
+        (left, right) =>
+          Number(right.action.startMs) - Number(left.action.startMs) ||
+          right.index - left.index
+      )[0]?.action?.attackGroupId ?? null
+  );
+}
+
+function resolveNormalAttackAuthorityChain({
+  entry,
+  graph,
+  ownerId,
+  actorId,
+  timeMs,
+  effectIntervals,
+  variantRuntime,
+  excludedActionIds,
+  acceptedAction,
+  acceptedSelection,
+  continuationCandidates,
+}) {
+  const ownerChains = (graph?.attackInputChains ?? []).filter(
+    chain =>
+      chain.applied === true &&
+      Number(chain.ownerId) === Number(ownerId) &&
+      Number(chain.sourceSkillId) === Number(entry.skillId)
+  );
+  const continuationChainIdentities = [
+    ...new Set(
+      (continuationCandidates ?? [])
+        .map(candidate => candidate.chainIdentity)
+        .filter(Boolean)
+    ),
+  ];
+  if (continuationChainIdentities.length === 1) {
+    return (
+      ownerChains.find(
+        chain => chain.chainIdentity === continuationChainIdentities[0]
+      ) ?? null
+    );
+  }
+  const acceptedChainIdentity =
+    acceptedSelection?.attackInputChainIdentity ??
+    acceptedAction?.attackInputChainIdentity ??
+    acceptedAction?.attackInput?.attackInputChainIdentity ??
+    null;
+  if (acceptedChainIdentity) {
+    const acceptedChain = ownerChains.find(
+      chain => String(chain.chainIdentity) === String(acceptedChainIdentity)
+    );
+    if (acceptedChain) return acceptedChain;
+  }
+  const eligible = ownerChains.filter(chain =>
+    isRuntimeConditionSatisfied({
+      condition: chain.stateCondition,
+      actorId,
+      timeMs,
+      effectIntervals,
+      variantRuntime,
+      excludedActionIds,
+    })
+  );
+  const conditionSelected = eligible.filter(
+    chain =>
+      !chain.entryPolicy || chain.entryPolicy.kind === 'condition-selected'
+  );
+  const defaults = eligible.filter(
+    chain => chain.entryPolicy?.kind === 'default'
+  );
+  return conditionSelected.length === 1
+    ? conditionSelected[0]
+    : defaults.length === 1
+      ? defaults[0]
+      : eligible.length === 1
+        ? eligible[0]
+        : null;
+}
+
+function createVerifiedNormalAttackInputBlock({
+  reason,
+  reasons,
+  phase,
+  chain,
+}) {
+  return {
+    status: 'blocked',
+    reason,
+    reasons: [...new Set((reasons ?? []).filter(Boolean))],
+    entry: null,
+    chain: chain ?? null,
+    phase: phase ?? null,
+  };
+}
+
+function collectActiveNormalAttackInputWindows({
+  variantRuntime,
+  actorId,
+  timeMs,
+}) {
+  return (variantRuntime?.activeSwitchWindows ?? []).filter(
+    window =>
+      (window.compilerBindingIdentity != null ||
+        window.relationType === 'attack-chain-continuity-window') &&
+      (window.inputCommand == null ||
+        String(window.inputCommand) === 'normal-attack') &&
+      String(window.actorId) === String(actorId) &&
+      Number(window.startsAtMs) <= Number(timeMs) &&
+      Number(timeMs) < Number(window.endsAtMs)
+  );
 }
 
 function resolveDerivedAttackChainEntry({
@@ -211,15 +863,11 @@ function resolveDerivedAttackChainEntry({
   runtimeSelections,
 }) {
   if (!chain.segments?.length) return null;
-  const quickEntries = (variantRuntime?.activeSwitchWindows ?? [])
-    .filter(
-      window =>
-      (window.compilerBindingIdentity != null ||
-        window.relationType === 'attack-chain-continuity-window') &&
-      String(window.actorId) === String(actorId) &&
-      Number(window.startsAtMs) <= Number(timeMs) &&
-      Number(timeMs) < Number(window.endsAtMs)
-    )
+  const quickEntries = collectActiveNormalAttackInputWindows({
+    variantRuntime,
+    actorId,
+    timeMs,
+  })
     .map(window => {
       const segment = chain.segments.find(
         candidate =>

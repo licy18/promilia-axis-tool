@@ -5,6 +5,7 @@ import {
   resolveVerifiedAttackInputChainEntry,
   resolveVerifiedContextInputScheduling,
   resolveVerifiedContextActionStartMs,
+  resolveVerifiedNormalAttackInputEntry,
 } from '../../domain/verifiedActionContextScheduling';
 import { frameToMs } from '../../domain/timebase';
 import {
@@ -13,6 +14,554 @@ import {
 } from '../../simulation/runtime/actionRuleDiagnostics';
 
 describe('verified action context scheduling', () => {
+  it('materializes the complete mapping-backed input phase without reopening A1 during recovery', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 112001 && item.actionKind === 'normal-attack'
+    );
+    const entry = { ...mapping, skillId: mapping.sourceSkillId };
+    const source = {
+      id: 'melania-a1',
+      type: 'skill',
+      actorId: 'actor-melania',
+      actorCharacterId: 112001,
+      skillId: mapping.sourceSkillId,
+      startMs: 0,
+      attackGroupId: 'melania-chain',
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+      attackInput: mapping.attackInputSegments[0],
+    };
+    const selection = {
+      actionId: source.id,
+      actorId: source.actorId,
+      ready: true,
+      attackGroupId: source.attackGroupId,
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+      executionControlSkillId: 11200101,
+      selectedSubSkillIndex: 0,
+    };
+    expect(mapping).toMatchObject({
+      identity: expect.any(String),
+      sourceSkillId: 11200101,
+    });
+    for (const segment of mapping.attackInputSegments) {
+      expect(segment.actionTiming.animation).toMatchObject({
+        endFrame: expect.any(Number),
+        sourceIdentity: expect.any(String),
+      });
+    }
+    const at = frame =>
+      resolveVerifiedNormalAttackInputEntry({
+        entry,
+        graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+        ownerId: 112001,
+        actorId: source.actorId,
+        timeMs: frameToMs(frame),
+        actions: [source],
+        runtimeSelections: [selection],
+      });
+
+    for (const frame of [17, 73, 229]) {
+      expect(at(frame)).toMatchObject({
+        status: 'blocked',
+        entry: null,
+      });
+    }
+    for (const frame of [18, 72]) {
+      expect(at(frame)).toMatchObject({
+        status: 'selected',
+        phase: {
+          formIdentity: expect.stringMatching(/^normal-attack-form:/),
+          mappingIdentity: mapping.identity,
+          sourceSkillId: mapping.sourceSkillId,
+          reasons: [],
+        },
+        entry: {
+          attackInputExpansionMode: 'single-input',
+          attackInputGroupId: 'melania-chain',
+          attackInputContextActionId: source.id,
+          attackInputSegments: [
+            {
+              sequenceIndex: 2,
+              sequenceTotal: 5,
+              controlSkillId: 11200102,
+            },
+          ],
+        },
+      });
+    }
+    expect(at(230)).toMatchObject({
+      status: 'selected',
+      phase: { phase: 'idle' },
+      entry: {
+        attackInputExpansionMode: 'single-input',
+        attackInputSegments: [
+          {
+            sequenceIndex: 1,
+            sequenceTotal: 5,
+            controlSkillId: 11200101,
+          },
+        ],
+      },
+    });
+    expect(at(230).entry).not.toHaveProperty('attackInputGroupId');
+  });
+
+  it('gives a sourced special continuation priority over the direct successor', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 112001 && item.actionKind === 'normal-attack'
+    );
+    const source = {
+      id: 'melania-a1',
+      type: 'skill',
+      actorId: 'actor-melania',
+      actorCharacterId: 112001,
+      skillId: mapping.sourceSkillId,
+      startMs: 0,
+      attackGroupId: 'melania-chain',
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+      attackInput: mapping.attackInputSegments[0],
+    };
+    const specialSource = {
+      id: 'melania-special-skill',
+      type: 'skill',
+      actionKind: 'star-skill',
+      actorId: source.actorId,
+      actorCharacterId: 112001,
+      skillId: 11200111,
+      startMs: frameToMs(20),
+    };
+    const resolved = resolveVerifiedNormalAttackInputEntry({
+      entry: { ...mapping, skillId: mapping.sourceSkillId },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 112001,
+      actorId: source.actorId,
+      timeMs: frameToMs(30),
+      actions: [source, specialSource],
+      runtimeSelections: [
+        {
+          actionId: source.id,
+          actorId: source.actorId,
+          ready: true,
+          attackGroupId: source.attackGroupId,
+          attackSequenceIndex: 1,
+          executionControlSkillId: 11200101,
+          selectedSubSkillIndex: 0,
+        },
+        {
+          actionId: specialSource.id,
+          actorId: specialSource.actorId,
+          ready: true,
+          status: 'ready',
+        },
+      ],
+      variantRuntime: {
+        activeSwitchWindows: [
+          {
+            applied: true,
+            compilerBindingIdentity: 'melania-special-continuation',
+            relationType: 'input-derived',
+            inputCommand: 'normal-attack',
+            actorId: source.actorId,
+            sourceActionId: 'melania-special-skill',
+            sourceIdentity: 'verified:melania:special-continuation',
+            targetControlSkillId: 11200104,
+            targetSubSkillIndex: 0,
+            startsAtMs: frameToMs(20),
+            endsAtMs: frameToMs(40),
+          },
+        ],
+      },
+    });
+
+    expect(resolved).toMatchObject({
+      status: 'selected',
+      phase: {
+        sourceKind: 'input-derived',
+        sourceActionId: 'melania-special-skill',
+      },
+      entry: {
+        attackInputGroupId: 'melania-chain',
+        attackInputContextActionId: 'melania-special-skill',
+        attackInputSegments: [
+          {
+            sequenceIndex: 4,
+            controlSkillId: 11200104,
+          },
+        ],
+      },
+    });
+  });
+
+  it('ignores a continuation window whose source action is missing or still in the future', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 112001 && item.actionKind === 'normal-attack'
+    );
+    const source = {
+      id: 'melania-a1',
+      type: 'skill',
+      actorId: 'actor-melania',
+      actorCharacterId: 112001,
+      skillId: mapping.sourceSkillId,
+      startMs: 0,
+      attackGroupId: 'melania-chain',
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+      attackInput: mapping.attackInputSegments[0],
+    };
+    const selection = {
+      actionId: source.id,
+      actorId: source.actorId,
+      ready: true,
+      attackGroupId: source.attackGroupId,
+      attackSequenceIndex: 1,
+      executionControlSkillId: 11200101,
+      selectedSubSkillIndex: 0,
+    };
+    const window = sourceActionId => ({
+      applied: true,
+      compilerBindingIdentity: `fake:${sourceActionId}`,
+      relationType: 'input-derived',
+      inputCommand: 'normal-attack',
+      actorId: source.actorId,
+      sourceActionId,
+      sourceIdentity: `verified:${sourceActionId}`,
+      targetControlSkillId: 11200104,
+      targetSubSkillIndex: 0,
+      startsAtMs: frameToMs(20),
+      endsAtMs: frameToMs(40),
+    });
+    const resolve = ({ sourceActionId, extraActions = [] }) =>
+      resolveVerifiedNormalAttackInputEntry({
+        entry: { ...mapping, skillId: mapping.sourceSkillId },
+        graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+        ownerId: 112001,
+        actorId: source.actorId,
+        timeMs: frameToMs(30),
+        actions: [source, ...extraActions],
+        runtimeSelections: [selection],
+        variantRuntime: { activeSwitchWindows: [window(sourceActionId)] },
+      });
+
+    for (const resolved of [
+      resolve({ sourceActionId: 'missing-source' }),
+      resolve({
+        sourceActionId: 'future-source',
+        extraActions: [
+          {
+            id: 'future-source',
+            type: 'skill',
+            actorId: source.actorId,
+            actorCharacterId: 112001,
+            startMs: frameToMs(31),
+          },
+        ],
+      }),
+    ]) {
+      expect(resolved).toMatchObject({
+        status: 'selected',
+        phase: {
+          sourceKind: 'verified-normal-attack-direct-successor',
+          sourceActionId: source.id,
+        },
+        entry: {
+          attackInputSegments: [
+            {
+              sequenceIndex: 2,
+              controlSkillId: 11200102,
+            },
+          ],
+        },
+      });
+    }
+  });
+
+  it('blocks an active sourced continuation whose target is not uniquely verified', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 112001 && item.actionKind === 'normal-attack'
+    );
+    const source = {
+      id: 'melania-a1',
+      type: 'skill',
+      actorId: 'actor-melania',
+      actorCharacterId: 112001,
+      skillId: mapping.sourceSkillId,
+      startMs: 0,
+      attackGroupId: 'melania-chain',
+      attackSequenceIndex: 1,
+      attackSequenceTotal: 5,
+      attackInput: mapping.attackInputSegments[0],
+    };
+    const resolved = resolveVerifiedNormalAttackInputEntry({
+      entry: { ...mapping, skillId: mapping.sourceSkillId },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 112001,
+      actorId: source.actorId,
+      timeMs: frameToMs(30),
+      actions: [source],
+      runtimeSelections: [
+        {
+          actionId: source.id,
+          actorId: source.actorId,
+          ready: true,
+          status: 'ready',
+          attackGroupId: source.attackGroupId,
+          attackSequenceIndex: 1,
+          executionControlSkillId: 11200101,
+          selectedSubSkillIndex: 0,
+        },
+      ],
+      variantRuntime: {
+        activeSwitchWindows: [
+          {
+            applied: true,
+            compilerBindingIdentity: 'unverified-target',
+            relationType: 'input-derived',
+            inputCommand: 'normal-attack',
+            actorId: source.actorId,
+            sourceActionId: source.id,
+            sourceIdentity: 'verified:missing-target',
+            targetControlSkillId: 99999999,
+            targetSubSkillIndex: 0,
+            startsAtMs: frameToMs(20),
+            endsAtMs: frameToMs(40),
+          },
+        ],
+      },
+    });
+
+    expect(resolved).toMatchObject({
+      status: 'blocked',
+      reason: 'verified-normal-attack-input-active-window-unresolved',
+      reasons: ['verified-normal-attack-input-active-window-target-unresolved'],
+      entry: null,
+    });
+  });
+
+  it('fails closed when mapping identity or segment recovery evidence is absent', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 112001 && item.actionKind === 'normal-attack'
+    );
+    const unresolved = resolveVerifiedNormalAttackInputEntry({
+      entry: {
+        ...mapping,
+        identity: null,
+        skillId: mapping.sourceSkillId,
+        attackInputSegments: mapping.attackInputSegments.map(
+          (segment, index) =>
+            index === 0
+              ? {
+                  ...segment,
+                  animationDurationSourceIdentity: null,
+                  actionTiming: {
+                    ...segment.actionTiming,
+                    animation: {
+                      ...segment.actionTiming.animation,
+                      sourceIdentity: null,
+                    },
+                  },
+                }
+              : segment
+        ),
+      },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 112001,
+      actorId: 'actor-melania',
+      timeMs: 0,
+    });
+
+    expect(unresolved).toMatchObject({
+      status: 'blocked',
+      entry: null,
+      phase: {
+        formIdentity: null,
+        mappingIdentity: null,
+        sourceSkillId: mapping.sourceSkillId,
+        reasons: expect.arrayContaining([
+          'normal-attack-mapping-identity-required',
+          'normal-attack-segment-recovery-evidence-required',
+        ]),
+      },
+    });
+  });
+
+  it('selects exactly one live normal-attack input inside a continuation window', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 103002 &&
+        Number(item.sourceSkillId) === 10300201 &&
+        Number(item.actionVariantIndex) === 0
+    );
+    const entry = { ...mapping, skillId: mapping.sourceSkillId };
+    const baseRuntime = {
+      initialState: [
+        {
+          actorId: 'actor-ruby',
+          characterId: 103002,
+          resourceIdentity: 'actor:103002:element:103002047',
+          currentValue: 9,
+          maxValue: 12,
+        },
+      ],
+      resourceEvents: [],
+      activeSwitchWindows: [],
+    };
+
+    const outside = resolveVerifiedAttackInputChainEntry({
+      entry,
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(10),
+      variantRuntime: baseRuntime,
+      selectionMode: 'single-input',
+    });
+    expect(outside).toMatchObject({
+      status: 'selected',
+      entry: {
+        attackInputExpansionMode: 'single-input',
+        attackInputSegments: [
+          {
+            sequenceIndex: 1,
+            sequenceTotal: 3,
+            chainSequenceIndex: 1,
+            semanticName: '普通攻击 A1',
+          },
+        ],
+      },
+    });
+
+    const window = {
+      edgeIdentity:
+        'attack-chain-continuity:ruby-dodge:ruby-enhanced-dodge-chain-continuity:4',
+      relationType: 'attack-chain-continuity-window',
+      inputCommand: 'normal-attack',
+      actorId: 'actor-ruby',
+      ownerId: 103002,
+      targetControlSkillId: 10300202,
+      targetSubSkillIndex: 1,
+      targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+      targetSequenceIndex: 4,
+      startsAtMs: frameToMs(90),
+      endsAtMs: frameToMs(306),
+    };
+    const inside = resolveVerifiedAttackInputChainEntry({
+      entry,
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(305),
+      variantRuntime: { ...baseRuntime, activeSwitchWindows: [window] },
+      selectionMode: 'single-input',
+    });
+    expect(inside.entry.attackInputSegments).toEqual([
+      expect.objectContaining({
+        sequenceIndex: 4,
+        sequenceTotal: 12,
+        chainSequenceIndex: 4,
+        semanticName: '强化普攻 E4',
+      }),
+    ]);
+  });
+
+  it('projects graph-chain animation evidence into the authority structural form', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 101010 && item.actionKind === 'normal-attack'
+    );
+    const resolved = resolveVerifiedNormalAttackInputEntry({
+      entry: { ...mapping, skillId: mapping.sourceSkillId },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 101010,
+      actorId: 'actor-jade',
+      timeMs: frameToMs(30),
+      effectIntervals: [
+        {
+          effectId: 'battle-element:101010129',
+          targetId: 'actor-jade',
+          startMs: 0,
+          endMs: frameToMs(600),
+        },
+      ],
+    });
+
+    expect(resolved).toMatchObject({
+      status: 'selected',
+      phase: {
+        formIdentity: expect.stringMatching(/^normal-attack-form:/),
+        mappingIdentity: mapping.identity,
+        sourceSkillId: mapping.sourceSkillId,
+        reasons: [],
+      },
+      chain: { chainIdentity: 'xiaoyu-burst-three-inputs' },
+      entry: {
+        attackInputExpansionMode: 'single-input',
+        attackInputChainIdentity: 'xiaoyu-burst-three-inputs',
+        attackInputSegments: [
+          {
+            sequenceIndex: 1,
+            sequenceTotal: 3,
+            controlSkillId: 10101001,
+            selectedSubSkillIndex: 1,
+          },
+        ],
+      },
+    });
+  });
+
+  it('blocks a live derived input when its source resource cannot fund one segment', () => {
+    const mapping = verifiedCombatMechanicsPackage.actionMappings.find(
+      item =>
+        Number(item.ownerId) === 103002 &&
+        Number(item.sourceSkillId) === 10300201 &&
+        Number(item.actionVariantIndex) === 0
+    );
+    const resolved = resolveVerifiedAttackInputChainEntry({
+      entry: { ...mapping, skillId: mapping.sourceSkillId },
+      graph: verifiedCombatMechanicsPackage.actionVariantGraph,
+      ownerId: 103002,
+      actorId: 'actor-ruby',
+      timeMs: frameToMs(100),
+      variantRuntime: {
+        initialState: [
+          {
+            actorId: 'actor-ruby',
+            characterId: 103002,
+            resourceIdentity: 'actor:103002:element:103002047',
+            currentValue: 0,
+            maxValue: 12,
+          },
+        ],
+        resourceEvents: [],
+        activeSwitchWindows: [
+          {
+            actorId: 'actor-ruby',
+            compilerBindingIdentity: 'ruby-star-skill-quick-enhanced-entry',
+            inputCommand: 'normal-attack',
+            targetControlSkillId: 10300201,
+            targetSubSkillIndex: 1,
+            startsAtMs: frameToMs(40),
+            endsAtMs: frameToMs(280),
+          },
+        ],
+      },
+      selectionMode: 'single-input',
+    });
+
+    expect(resolved).toMatchObject({
+      status: 'blocked',
+      reason: 'verified-normal-attack-input-resource-unavailable',
+      entry: null,
+    });
+  });
+
   it('projects the state-selected normal attack chain without persisting runtime state', () => {
     const entry = createNormalAttackEntry();
     const graph = createVariantGraph();
@@ -242,8 +791,7 @@ describe('verified action context scheduling', () => {
           {
             actorId: 'actor-ruby',
             ownerId: 103002,
-            compilerBindingIdentity:
-              'ruby-star-skill-quick-enhanced-entry',
+            compilerBindingIdentity: 'ruby-star-skill-quick-enhanced-entry',
             sourceActionId: 'ruby-star-skill',
             targetControlSkillId: 10300201,
             targetSubSkillIndex: 1,

@@ -8429,8 +8429,10 @@ describe('Workbench view', () => {
         '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
       )
       .trigger('click');
-    await normal.trigger('click');
-    await nextTick();
+    for (let inputIndex = 0; inputIndex < 5; inputIndex += 1) {
+      await findActionLibraryEntry(wrapper, 'normal-attack').trigger('click');
+      await settleWorkbenchAsyncPanels();
+    }
     await findActionLibraryEntry(wrapper, 'charged-attack').trigger('click');
     await nextTick();
 
@@ -8549,9 +8551,10 @@ describe('Workbench view', () => {
     await findActionLibraryEntry(wrapper, 'ultimate').trigger('click');
     await flushPromises();
     await nextTick();
-    await findActionLibraryEntry(wrapper, 'normal-attack').trigger('click');
-    await flushPromises();
-    await nextTick();
+    for (let inputIndex = 0; inputIndex < 3; inputIndex += 1) {
+      await findActionLibraryEntry(wrapper, 'normal-attack').trigger('click');
+      await settleWorkbenchAsyncPanels();
+    }
 
     const setupState = wrapper.vm.$.setupState;
     const readSetupValue = value => value?.value ?? value;
@@ -8908,7 +8911,7 @@ describe('Workbench view', () => {
     ).toContain('特殊重击');
   }, 30000);
 
-  it('rebuilds a stale normal-chain drag preview after assisted placement crosses the Jade burst frame', async () => {
+  it('rebuilds a stale single-input drag preview after assisted placement crosses the Jade burst frame', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     workbenchMechanicsProfileMockState.useVerifiedProfile = true;
     workbenchMechanicsProfileMockState.durationMs = 20_000;
@@ -8982,7 +8985,7 @@ describe('Workbench view', () => {
         (left, right) => left.attackSequenceIndex - right.attackSequenceIndex
       );
 
-    expect(burstDrafts).toHaveLength(3);
+    expect(burstDrafts).toHaveLength(1);
     expect(burstDrafts[0].startMs).toBeGreaterThanOrEqual(
       ultimateDraft.startMs + frameToMs(329)
     );
@@ -8992,11 +8995,7 @@ describe('Workbench view', () => {
         action.attackInput.controlSkillId,
         action.attackInput.selectedSubSkillIndex,
       ])
-    ).toEqual([
-      [1, 10101001, 1],
-      [2, 10101004, 1],
-      [3, 10101005, 1],
-    ]);
+    ).toEqual([[1, 10101001, 1]]);
   }, 30000);
 
   it('rebuilds the workbench project when the selected character changes', async () => {
@@ -12431,7 +12430,7 @@ describe('Workbench view', () => {
     restored.unmount();
   });
 
-  it('inserts a normal attack chain in one transaction and edits sibling inputs independently', async () => {
+  it('inserts one live normal-attack input in one transaction', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
     const wrapper = mount(Workbench, {
       global: {
@@ -12441,6 +12440,11 @@ describe('Workbench view', () => {
       },
     });
     await settleWorkbenchAsyncPanels();
+
+    await wrapper
+      .get('[data-testid="workbench-scenario-add"]')
+      .trigger('click');
+    await nextTick();
 
     await findActionLibraryEntry(wrapper, 'normal-attack').trigger('click');
     await nextTick();
@@ -12457,14 +12461,12 @@ describe('Workbench view', () => {
       );
 
     expect(insertedGroupId).toBeTruthy();
-    expect(groupRows()).toHaveLength(5);
-    expect(groupRows().map(row => row.get('strong').text())).toEqual([
-      'A1',
-      'A2',
-      'A3',
-      'A4',
-      'A5',
-    ]);
+    expect(groupRows()).toHaveLength(1);
+    expect(groupRows()[0].get('strong').text()).toBe('A1');
+    expect(groupRows()[0].attributes()).toMatchObject({
+      'data-attack-sequence-index': '1',
+      'data-attack-sequence-total': '5',
+    });
     expect(
       wrapper
         .get('[data-testid="workbench-undo-edit"]')
@@ -12476,64 +12478,92 @@ describe('Workbench view', () => {
     expect(groupRows()).toHaveLength(0);
     await wrapper.get('[data-testid="workbench-redo-edit"]').trigger('click');
     await nextTick();
-    expect(groupRows()).toHaveLength(5);
-
-    const rowsBeforeMove = groupRows();
-    const actionIds = Object.fromEntries(
-      rowsBeforeMove.map(row => [
-        Number(row.attributes('data-attack-sequence-index')),
-        row.attributes('data-action-id'),
-      ])
-    );
-    const startsBeforeMove = Object.fromEntries(
-      rowsBeforeMove.map(row => [
-        row.attributes('data-action-id'),
-        Number(row.attributes('data-start-ms')),
-      ])
-    );
-    wrapper.findComponent(TimelineGridPreview).vm.$emit('update-action-time', {
-      actionId: actionIds[2],
-      startMs: startsBeforeMove[actionIds[2]] + frameToMs(30),
-    });
-    await nextTick();
-    const startsAfterMove = Object.fromEntries(
-      groupRows().map(row => [
-        row.attributes('data-action-id'),
-        Number(row.attributes('data-start-ms')),
-      ])
-    );
-    expect(startsAfterMove[actionIds[2]]).not.toBe(
-      startsBeforeMove[actionIds[2]]
-    );
-    for (const actionId of [
-      actionIds[1],
-      actionIds[3],
-      actionIds[4],
-      actionIds[5],
-    ]) {
-      expect(startsAfterMove[actionId]).toBe(startsBeforeMove[actionId]);
-    }
-
-    wrapper
-      .findComponent(TimelineGridPreview)
-      .vm.$emit('delete-action', actionIds[3]);
-    await nextTick();
-    expect(groupRows()).toHaveLength(4);
-    await selectSideInspectorPanel(wrapper, 'action-rules');
-    expect(
-      wrapper
-        .find(
-          '[data-testid="workbench-action-rule-row"][data-rule-code="attack-input-chain-incomplete"]'
-        )
-        .exists()
-    ).toBe(true);
-
-    await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
-    await nextTick();
-    expect(groupRows()).toHaveLength(5);
+    expect(groupRows()).toHaveLength(1);
     wrapper.unmount();
     clearInstalledVerifiedCombatMechanicsPackage();
   });
+
+  it('keeps explicit normal-attack inputs blocked through recovery before reopening A1', async () => {
+    installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
+    workbenchMechanicsProfileMockState.useVerifiedProfile = true;
+    const wrapper = mount(Workbench, {
+      global: {
+        stubs: {
+          RouterLink: { template: '<a><slot /></a>' },
+        },
+      },
+    });
+    await settleWorkbenchAsyncPanels();
+    await wrapper
+      .get('[data-testid="workbench-scenario-add"]')
+      .trigger('click');
+    await settleWorkbenchAsyncPanels();
+    await selectCharacterFromTimeline(wrapper, 0, 112001);
+    await selectInitialControlledActor(wrapper, 112001);
+    await findActionLibraryActorButton(wrapper, 112001).trigger('click');
+    await wrapper
+      .get(
+        '[data-testid="workbench-action-placement-mode-option"][data-mode="assisted"]'
+      )
+      .trigger('click');
+    await settleWorkbenchAsyncPanels();
+
+    const normalEntry = getSkillActionCatalog(
+      workbenchSeed.gameData.skills.filter(
+        skill => Number(skill.characterId) === 112001
+      ),
+      1
+    ).find(entry => entry.kind === 'normal-attack');
+    const actorLane = wrapper.get(
+      '[data-testid="workbench-timeline-lane-label"][data-lane-kind="actor-action"][data-character-id="112001"]'
+    );
+    const timeline = wrapper.findComponent(TimelineGridPreview);
+    const emitNormalAtFrame = async frame => {
+      timeline.vm.$emit('insert-timeline-entry', {
+        entry: { ...normalEntry, type: 'skill' },
+        laneId: actorLane.attributes('data-lane-id'),
+        startMs: frameToMs(frame),
+      });
+      await settleWorkbenchAsyncPanels();
+    };
+    const attackRows = () =>
+      wrapper.findAll(
+        `[data-testid="workbench-timeline-action"][data-lane-id="${actorLane.attributes('data-lane-id')}"][data-attack-sequence-index]`
+      );
+
+    expect(normalEntry).toBeTruthy();
+    await emitNormalAtFrame(0);
+    expect(attackRows()).toHaveLength(1);
+    expect(attackRows()[0].attributes('data-attack-sequence-index')).toBe('1');
+
+    for (const frame of [17, 73, 229]) {
+      const before = attackRows().length;
+      await emitNormalAtFrame(frame);
+      expect(attackRows()).toHaveLength(before);
+      expect(
+        wrapper.get('[data-testid="workbench-draft-status"]').text()
+      ).toContain('未加入动作');
+    }
+
+    for (const frame of [18, 72]) {
+      await emitNormalAtFrame(frame);
+      expect(attackRows()).toHaveLength(2);
+      expect(
+        attackRows().map(row => row.attributes('data-attack-sequence-index'))
+      ).toEqual(['1', '2']);
+      await wrapper.get('[data-testid="workbench-undo-edit"]').trigger('click');
+      await settleWorkbenchAsyncPanels();
+      expect(attackRows()).toHaveLength(1);
+    }
+
+    await emitNormalAtFrame(230);
+    expect(attackRows()).toHaveLength(2);
+    expect(
+      attackRows().map(row => row.attributes('data-attack-sequence-index'))
+    ).toEqual(['1', '1']);
+    wrapper.unmount();
+    clearInstalledVerifiedCombatMechanicsPackage();
+  }, 30000);
 
   it('imports, inspects, edits, and rejects Machine Axis through the real Workbench surface', async () => {
     installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);

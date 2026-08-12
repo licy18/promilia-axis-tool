@@ -12,7 +12,9 @@
     :data-runtime-diagnostics-revision="runtimeDiagnosticsRevision"
     :data-canonical-trace-hash="canonicalTraceIndex.traceHash"
     :data-canonical-trace-action-count="canonicalTraceIndex.summary.actionCount"
-    :data-machine-axis-import-active="machineAxisImportSession ? 'true' : 'false'"
+    :data-machine-axis-import-active="
+      machineAxisImportSession ? 'true' : 'false'
+    "
     :data-selected-action-count="selectedActionIds.length"
     :data-action-relation-count="actionRelations.length"
     :data-selected-action-relation-id="selectedActionRelationId"
@@ -1194,8 +1196,8 @@ import {
   reconcileWorkbenchAttackInputIntentGroups,
 } from '../domain/workbenchAttackInputChain';
 import {
-  resolveVerifiedAttackInputChainEntry,
   resolveVerifiedContextActionStartMs,
+  resolveVerifiedNormalAttackInputEntry,
 } from '../domain/verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import { normalizeInitialRuntimeState } from '../domain/initialRuntimeState';
@@ -1336,9 +1338,7 @@ import {
   createControlledActorTimeline,
   resolveControlledActorAt,
 } from '../simulation/runtime/controlledActorTimeline';
-import {
-  createWorkbenchProfileCompatibilityReport,
-} from '../simulation/mechanics/threeValueMechanicsProfileCatalog';
+import { createWorkbenchProfileCompatibilityReport } from '../simulation/mechanics/threeValueMechanicsProfileCatalog';
 import { createVerifiedActionVariantRuntime } from '../simulation/mechanics/verifiedActionVariantRuntime';
 import { projectScenarioEffectiveActionTimeline } from '../simulation/mechanics/actionEffectiveTimeline';
 import {
@@ -1695,8 +1695,7 @@ const canonicalSimulation = computed(() => {
 });
 const canonicalTraceIndex = computed(() =>
   createCanonicalTraceViewIndex(canonicalSimulation.value, {
-    actionResolutions:
-      machineAxisImportSession.value?.actionResolutions ?? [],
+    actionResolutions: machineAxisImportSession.value?.actionResolutions ?? [],
     requestedActions: machineAxisImportSession.value?.contract?.actions ?? [],
   })
 );
@@ -1705,10 +1704,9 @@ const machineAxisDialogSummary = computed(() => ({
   requestedActionCount:
     machineAxisImportSession.value?.contract?.actions?.length ??
     actionDrafts.value.length,
-  executedActionCount:
-    canonicalTraceIndex.value.actionViews.filter(
-      action => action.execution?.execute !== false
-    ).length,
+  executedActionCount: canonicalTraceIndex.value.actionViews.filter(
+    action => action.execution?.execute !== false
+  ).length,
   factCount: canonicalTraceIndex.value.factsByIdentity.size,
 }));
 const effectiveScenarioActions = computed(
@@ -3405,8 +3403,7 @@ function updateInitialSpecialResource(request = {}) {
   const runtimeCurve =
     simulationResult.value.runtimeOutputs.stateCurves.resources.curvesBySpecialResource?.find(
       curve =>
-        curve.actorId === actorId &&
-        curve.resourceIdentity === resourceIdentity
+        curve.actorId === actorId && curve.resourceIdentity === resourceIdentity
     );
   if (
     !runtimeCurve ||
@@ -3425,12 +3422,9 @@ function updateInitialSpecialResource(request = {}) {
     inputStep
   );
   if (currentValue == null) return false;
-  const currentRows =
-    initialRuntimeState.value?.specialResourcesByActor ?? [];
+  const currentRows = initialRuntimeState.value?.specialResourcesByActor ?? [];
   const currentRow = currentRows.find(
-    row =>
-      row.actorId === actorId &&
-      row.resourceIdentity === resourceIdentity
+    row => row.actorId === actorId && row.resourceIdentity === resourceIdentity
   );
   if (
     Number(currentRow?.currentValue ?? runtimeCurve.initialValue ?? 0) ===
@@ -3446,8 +3440,7 @@ function updateInitialSpecialResource(request = {}) {
     specialResourcesByActor: [
       ...currentRows.filter(
         row =>
-          row.actorId !== actorId ||
-          row.resourceIdentity !== resourceIdentity
+          row.actorId !== actorId || row.resourceIdentity !== resourceIdentity
       ),
       {
         ...(currentRow ?? {}),
@@ -3456,8 +3449,7 @@ function updateInitialSpecialResource(request = {}) {
           actor?.characterId ?? runtimeCurve.characterId ?? request.characterId,
         actorName: actor?.name ?? runtimeCurve.actorName ?? null,
         resourceIdentity,
-        resourceName:
-          runtimeCurve.resourceName ?? request.resourceName ?? null,
+        resourceName: runtimeCurve.resourceName ?? request.resourceName ?? null,
         currentValue,
         maxValue,
         inputStep,
@@ -3555,11 +3547,7 @@ function normalizeInitialResourceStep(value) {
 
 function normalizeInitialSpecialResourceInput(value, maxValue, inputStep) {
   const number = Number(value);
-  if (
-    !Number.isFinite(number) ||
-    !Number.isFinite(maxValue) ||
-    maxValue <= 0
-  ) {
+  if (!Number.isFinite(number) || !Number.isFinite(maxValue) || maxValue <= 0) {
     return null;
   }
   const clampedValue = clampNumber(number, 0, maxValue);
@@ -3736,12 +3724,20 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
     entry: actionEntry,
     actorCharacterId,
     fallbackStartMs,
+    allowNormalAttackWindowSnap: insertOptions.requestedStartMs == null,
   });
-  actionEntry = resolveVerifiedStateSelectedActionEntry({
+  const actionEntryResolution = resolveVerifiedStateSelectedActionEntry({
     entry: actionEntry,
     actorCharacterId,
     timeMs: requestedStartMs,
   });
+  if (actionEntryResolution.status === 'blocked') {
+    draftStatus.value = formatVerifiedNormalAttackInputBlockedMessage(
+      actionEntryResolution
+    );
+    return false;
+  }
+  actionEntry = actionEntryResolution.entry;
   if (actionEntry.kind === 'star-combo') {
     return insertTimelineEntry({
       entry: createWorkbenchTimelineEntry({
@@ -3762,10 +3758,24 @@ async function addSkillAction(actionEntryOrSkillId, insertOptions = {}) {
     level,
     firstActionId: nextActionId,
   });
-  const attackInputDrafts = createAttackInputDraftsAt(requestedStartMs);
+  const attackInputResolution = createAttackInputDraftsAt(requestedStartMs);
+  if (attackInputResolution.status === 'blocked') {
+    draftStatus.value = formatVerifiedNormalAttackInputBlockedMessage(
+      attackInputResolution
+    );
+    return false;
+  }
+  const attackInputDrafts = attackInputResolution.drafts;
   if (attackInputDrafts.length) {
     addInsertedActionGroup(attackInputDrafts, {
-      resolveAtStartMs: createAttackInputDraftsAt,
+      resolveAtStartMs: startMs => {
+        const resolved = createAttackInputDraftsAt(startMs);
+        if (resolved.status === 'blocked') {
+          draftStatus.value =
+            formatVerifiedNormalAttackInputBlockedMessage(resolved);
+        }
+        return resolved.drafts;
+      },
     });
     return;
   }
@@ -3813,15 +3823,21 @@ function createAttackInputDraftFactory({
 } = {}) {
   const createdAt = new Date().toISOString();
   return startMs => {
-    const selectedEntry = resolveVerifiedStateSelectedActionEntry({
+    const resolution = resolveVerifiedStateSelectedActionEntry({
       entry,
       actorCharacterId,
       timeMs: startMs,
     });
-    if (!selectedEntry?.attackInputSegments?.length) return [];
+    const selectedEntry = resolution.entry;
+    if (resolution.status === 'blocked') {
+      return { ...resolution, drafts: [] };
+    }
+    if (!selectedEntry?.attackInputSegments?.length) {
+      return { ...resolution, drafts: [] };
+    }
     const usedActionIds = new Set(actionDrafts.value.map(action => action.id));
     usedActionIds.add(firstActionId);
-    return createWorkbenchAttackInputChainDrafts({
+    const drafts = createWorkbenchAttackInputChainDrafts({
       entry: selectedEntry,
       actorCharacterId,
       skillId: selectedEntry.skillId,
@@ -3836,6 +3852,16 @@ function createAttackInputDraftFactory({
       },
       createdAt,
     });
+    return drafts.length
+      ? { ...resolution, drafts }
+      : {
+          status: 'blocked',
+          reason: 'verified-normal-attack-input-materialization-failed',
+          reasons: ['verified-normal-attack-input-produced-no-draft'],
+          entry: null,
+          chain: resolution.chain ?? null,
+          drafts: [],
+        };
   };
 }
 
@@ -3848,7 +3874,7 @@ function resolveVerifiedStateSelectedActionEntry({
   const actorId = resolveScenarioActorId(actorCharacterId);
   const variantRuntime =
     simulationResult.value.verifiedActionVariantRuntime ?? null;
-  return resolveVerifiedAttackInputChainEntry({
+  return resolveVerifiedNormalAttackInputEntry({
     entry,
     graph,
     ownerId: actorCharacterId,
@@ -3858,16 +3884,63 @@ function resolveVerifiedStateSelectedActionEntry({
     variantRuntime,
     actions: actionDrafts.value,
     runtimeSelections: variantRuntime?.selections ?? [],
-  }).entry;
+  });
+}
+
+function formatVerifiedNormalAttackInputBlockedMessage(resolution) {
+  const reason = String(resolution?.reason ?? '').trim();
+  if (reason === 'verified-normal-attack-input-resource-unavailable') {
+    return '当前资源不足，续段窗内的普攻输入未加入';
+  }
+  if (reason === 'verified-normal-attack-input-active-window-unresolved') {
+    return '当前续段窗的目标不唯一或未验证，普攻 A1 未加入';
+  }
+  return '当前普攻输入没有唯一可执行形态，未加入动作';
 }
 
 function resolveVerifiedAssistedInsertStartMs({
   entry,
   actorCharacterId,
   fallbackStartMs,
+  allowNormalAttackWindowSnap = false,
 } = {}) {
   if (!isConstraintAssistedPlacement()) {
     return fallbackStartMs;
+  }
+  if (allowNormalAttackWindowSnap && entry?.attackInputSegments?.length) {
+    const fallbackResolution = resolveVerifiedStateSelectedActionEntry({
+      entry,
+      actorCharacterId,
+      timeMs: fallbackStartMs,
+    });
+    const sourceAction = actionDrafts.value.find(
+      action =>
+        String(action.id) ===
+        String(fallbackResolution.phase?.sourceActionId ?? '')
+    );
+    const phaseWindow = fallbackResolution.phase?.window;
+    const candidateStartMs = Number.isFinite(Number(phaseWindow?.startMs))
+      ? Number(phaseWindow.startMs)
+      : sourceAction && Number.isInteger(Number(phaseWindow?.startFrame))
+        ? snapMsToFrame(
+            Number(sourceAction.startMs) +
+              frameToMs(Number(phaseWindow.startFrame))
+          )
+        : null;
+    if (
+      fallbackResolution.status === 'blocked' &&
+      fallbackResolution.phase?.expected &&
+      candidateStartMs != null &&
+      candidateStartMs >= 0 &&
+      candidateStartMs <= project.value.time.durationMs &&
+      resolveVerifiedStateSelectedActionEntry({
+        entry,
+        actorCharacterId,
+        timeMs: candidateStartMs,
+      }).status === 'selected'
+    ) {
+      return candidateStartMs;
+    }
   }
   const mapping = getVerifiedCombatActionMapping({
     type: ACTION_TYPES.SKILL,
@@ -4201,7 +4274,7 @@ async function insertTimelineEntry({ entry, laneId, startMs }) {
   if (request.targetLane.characterId != null) {
     actionLibraryCharacterId.value = request.actorCharacterId;
   }
-  if (request.draftPatches.length > 1) {
+  if (request.draftPatches.length > 1 || request.resolveDraftPatchesAtStartMs) {
     const insertion = addInsertedActionGroup(request.draftPatches, {
       actionRelations: request.actionRelations,
       resolveAtStartMs: request.resolveDraftPatchesAtStartMs,
@@ -4334,11 +4407,23 @@ function createTimelineEntryDraftRequest({
       actorCharacterId,
       fallbackStartMs: requestedStartMs,
     });
-    actionEntry = resolveVerifiedStateSelectedActionEntry({
+    const actionEntryResolution = resolveVerifiedStateSelectedActionEntry({
       entry: actionEntry,
       actorCharacterId,
       timeMs: requestedStartMs,
     });
+    if (actionEntryResolution.status === 'blocked') {
+      return {
+        blockedMessage: formatVerifiedNormalAttackInputBlockedMessage(
+          actionEntryResolution
+        ),
+        targetLane,
+        actorCharacterId,
+        requestedStartMs,
+        draftPatches: [],
+      };
+    }
+    actionEntry = actionEntryResolution.entry;
     const skill = resolveContextSkill(actorCharacterId, actionEntry.skillId);
     const level = resolveSkillInsertLevel(actorCharacterId, skill);
     const scheduling = resolveWorkbenchActionScheduling(actionEntry);
@@ -4368,9 +4453,28 @@ function createTimelineEntryDraftRequest({
       level,
       firstActionId: actionId,
     });
-    attackInputDrafts = createAttackInputDraftsAt(requestedStartMs);
+    const attackInputResolution = createAttackInputDraftsAt(requestedStartMs);
+    if (attackInputResolution.status === 'blocked') {
+      return {
+        blockedMessage: formatVerifiedNormalAttackInputBlockedMessage(
+          attackInputResolution
+        ),
+        targetLane,
+        actorCharacterId,
+        requestedStartMs,
+        draftPatches: [],
+      };
+    }
+    attackInputDrafts = attackInputResolution.drafts;
     if (attackInputDrafts.length) {
-      resolveDraftPatchesAtStartMs = createAttackInputDraftsAt;
+      resolveDraftPatchesAtStartMs = resolvedStartMs => {
+        const resolved = createAttackInputDraftsAt(resolvedStartMs);
+        if (resolved.status === 'blocked') {
+          draftStatus.value =
+            formatVerifiedNormalAttackInputBlockedMessage(resolved);
+        }
+        return resolved.drafts;
+      };
     }
   } else {
     if (
@@ -6500,9 +6604,8 @@ function closeWorkbenchMachineAxisDialog() {
 async function loadM11bMachineAxisFixture() {
   try {
     machineAxisDialogStatus.value = '正在载入 120 秒验收轴';
-    const fixtureModule = await import(
-      '../../fixtures/machine-axis/m11-b-three-actor-120s.json'
-    );
+    const fixtureModule =
+      await import('../../fixtures/machine-axis/m11-b-three-actor-120s.json');
     await importWorkbenchMachineAxisContract(
       fixtureModule.default,
       '已载入 M11-B 120 秒验收轴'
@@ -6517,14 +6620,12 @@ async function importWorkbenchMachineAxisContract(contract, statusText) {
     machineAxisDialogStatus.value = '正在验证 Machine Axis';
     machineAxisImportDiagnostics.value = [];
     await loadVerifiedCombatMechanicsPackage();
-    const adapterModule = await import(
-      '../machine-axis/workbenchMachineAxisAdapter'
-    );
+    const adapterModule =
+      await import('../machine-axis/workbenchMachineAxisAdapter');
     const adapter = adapterModule.createWorkbenchMachineAxisAdapter();
     const imported = adapter.importContract(contract);
-    const draft = adapterModule.createWorkbenchDraftFromMachineAxisImport(
-      imported
-    );
+    const draft =
+      adapterModule.createWorkbenchDraftFromMachineAxisImport(imported);
     if (!applyImportedProjectDraft(draft, statusText)) return false;
     machineAxisImportSession.value = {
       contract: imported.contract,
@@ -6553,7 +6654,8 @@ function showMachineAxisImportFailure(error) {
         severity: issue.severity ?? 'error',
         code: issue.code ?? 'machine-axis-import-invalid',
         path: issue.path ?? 'contract',
-        message: issue.message ?? String(error?.message ?? 'Machine Axis 输入无效'),
+        message:
+          issue.message ?? String(error?.message ?? 'Machine Axis 输入无效'),
         actionId: issue.actionId ?? null,
         hitIdentity: issue.hitIdentity ?? null,
       }))
@@ -6577,18 +6679,18 @@ async function exportCurrentMachineAxis() {
     return false;
   }
   try {
-    const adapterModule = await import(
-      '../machine-axis/workbenchMachineAxisAdapter'
-    );
+    const adapterModule =
+      await import('../machine-axis/workbenchMachineAxisAdapter');
     const contract = adapterModule.exportWorkbenchProjectToMachineAxis(
       project.value
     );
     const blob = new Blob([JSON.stringify(contract, null, 2)], {
       type: 'application/json',
     });
-    const safeId = String(project.value.id ?? 'workbench')
-      .replace(/[^a-z0-9_-]+/gi, '-')
-      .replace(/^-+|-+$/g, '') || 'workbench';
+    const safeId =
+      String(project.value.id ?? 'workbench')
+        .replace(/[^a-z0-9_-]+/gi, '-')
+        .replace(/^-+|-+$/g, '') || 'workbench';
     downloadWorkbenchBlob(blob, `${safeId}.machine-axis.json`);
     machineAxisDialogStatus.value = `已导出 ${contract.actions.length} 个机器输入`;
     machineAxisImportDiagnostics.value = [];
@@ -7235,7 +7337,9 @@ function applyWorkbenchHistorySnapshot(snapshot, status) {
   );
   combatScenario.value = normalizeCombatScenario(snapshot.combatScenario);
   projectIdentity.value = cloneWorkbenchHistoryValue(snapshot.projectIdentity);
-  projectTransport.value = cloneWorkbenchHistoryValue(snapshot.projectTransport);
+  projectTransport.value = cloneWorkbenchHistoryValue(
+    snapshot.projectTransport
+  );
   runtimeSampleCaptures.value = normalizeWorkbenchRuntimeSampleCaptures(
     snapshot.runtimeSampleCaptures
   );
@@ -9428,6 +9532,10 @@ function applyVerifiedActionTiming(entry, mapping) {
   ) {
     return {
       ...entry,
+      identity: mapping?.identity ?? entry.identity ?? null,
+      sourceSkillId:
+        mapping?.sourceSkillId ?? entry.sourceSkillId ?? entry.skillId,
+      actionKind: mapping?.actionKind ?? entry.actionKind ?? entry.kind ?? null,
       needsTimingData: false,
       attackInputSegments: entry.attackInputSegments ?? [],
       attackInputSourceSegments:
@@ -9447,6 +9555,10 @@ function applyVerifiedActionTiming(entry, mapping) {
   });
   return {
     ...entry,
+    identity: mapping?.identity ?? entry.identity ?? null,
+    sourceSkillId:
+      mapping?.sourceSkillId ?? entry.sourceSkillId ?? entry.skillId,
+    actionKind: mapping?.actionKind ?? entry.actionKind ?? entry.kind ?? null,
     durationFrames,
     durationMs: durationFrames ? frameToMs(durationFrames) : null,
     timingStatus,

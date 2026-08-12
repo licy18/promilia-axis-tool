@@ -41,6 +41,19 @@ export function normalizeAttackInputSegments(segments = []) {
   return values;
 }
 
+function normalizeSingleAttackInputSegment(segments = []) {
+  if (!Array.isArray(segments) || segments.length !== 1) return [];
+  const segment = normalizeAttackInputSegment(segments[0]);
+  if (
+    !segment ||
+    segment.sequenceIndex < 1 ||
+    segment.sequenceIndex > segment.sequenceTotal
+  ) {
+    return [];
+  }
+  return [segment];
+}
+
 export function normalizeAttackInputActionFields(source = {}) {
   const legacyStatus = normalizeText(source.attackInputLegacyStatus);
   const attackInputIntent = normalizeAttackInputIntent(
@@ -102,7 +115,13 @@ export function createWorkbenchAttackInputChainDrafts({
   baseDraft = null,
   createdAt = null,
 } = {}) {
-  const segments = normalizeAttackInputSegments(entry?.attackInputSegments);
+  const attackInputExpansionMode = normalizeAttackInputExpansionMode(
+    baseDraft?.attackInputExpansionMode ?? entry?.attackInputExpansionMode
+  );
+  const segments =
+    attackInputExpansionMode === ATTACK_INPUT_EXPANSION_MODES.SINGLE_INPUT
+      ? normalizeSingleAttackInputSegment(entry?.attackInputSegments)
+      : normalizeAttackInputSegments(entry?.attackInputSegments);
   if (!segments.length || typeof createActionId !== 'function') {
     return [];
   }
@@ -110,7 +129,11 @@ export function createWorkbenchAttackInputChainDrafts({
     createActionId(segment, index)
   );
   const groupId =
-    normalizeText(attackGroupId) ?? `attack-group-${actionIds[0]}`;
+    normalizeText(attackGroupId ?? entry?.attackInputGroupId) ??
+    `attack-group-${actionIds[0]}`;
+  const contextActionId = normalizeText(
+    baseDraft?.contextActionId ?? entry?.attackInputContextActionId
+  );
   const attackInputIntent =
     normalizeAttackInputIntent(baseDraft?.attackInputIntent) ??
     createPublicNormalAttackIntent(entry);
@@ -174,6 +197,7 @@ export function createWorkbenchAttackInputChainDrafts({
         segmentCount: segments.length,
         createdAt,
       },
+      ...(contextActionId ? { contextActionId } : {}),
       attackGroupId: groupId,
       attackSequenceIndex: segment.sequenceIndex,
       attackSequenceTotal: segment.sequenceTotal,
@@ -181,6 +205,7 @@ export function createWorkbenchAttackInputChainDrafts({
       attackInputChainIdentity: segment.attackInputChainIdentity,
       attackInputIntent,
       attackInputChainSelectionSource,
+      ...(attackInputExpansionMode ? { attackInputExpansionMode } : {}),
       attackInput: segment,
     };
     cursorFrame += layoutDurationFrames + (linkDelayFrames ?? 0);
