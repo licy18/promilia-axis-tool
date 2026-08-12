@@ -1,4 +1,5 @@
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
+import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../domain/verifiedNormalAttackInputAuthority';
 
 export const MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_ACTION_LEGALITY_CONTRACT =
@@ -25,7 +26,11 @@ export function createMachineAxisActionLegalityProof(
   const addIssue = issue => {
     if (!issue) return;
     const identity = createLegalityIssueIdentity(issue);
-    if (issues.some(entry => createLegalityIssueIdentity(entry) === identity)) {
+    const existingIndex = issues.findIndex(
+      entry => createLegalityIssueIdentity(entry) === identity
+    );
+    if (existingIndex >= 0) {
+      issues[existingIndex] = mergeLegalityIssues(issues[existingIndex], issue);
       return;
     }
     issues.push(issue);
@@ -136,6 +141,8 @@ export function createMachineAxisActionLegalityProof(
     passed: issues.length === 0,
     finalScoreEligible: issues.length === 0,
     objectiveId,
+    normalAttackInputAuthority:
+      getVerifiedNormalAttackInputAuthorityDescriptor(),
     actionCount: (plan.actions ?? []).length,
     skippedActionCount: (plan.actions ?? []).filter(
       entry => entry.execute === false
@@ -262,7 +269,9 @@ function normalizePreflightLegalityIssues(issue, index) {
 }
 
 function classifyLegalityIssue(issue) {
-  const code = String(issue?.code ?? '').toLowerCase();
+  const code = String(issue?.code ?? '')
+    .toLowerCase()
+    .replaceAll('_', '-');
   if (
     issue?.resourceIdentity != null ||
     code.includes('resource') ||
@@ -331,7 +340,12 @@ function projectLegalityIdentityFields(source) {
     'runtimeOwnerIdentity',
     'derivationIdentity',
     'evidenceStatus',
+    'expectedAttackInput',
+    'actualAttackInput',
+    'formIdentity',
     'frameIndex',
+    'reasons',
+    'sourceKind',
     'sourceIdentity',
     'sourceSequencePath',
     'sourceSequenceSource',
@@ -361,12 +375,35 @@ function createLegalityIssueIdentity(issue) {
   return JSON.stringify({
     code: issue.code ?? null,
     actionId: issue.actionId ?? null,
-    actionIds: uniqueSorted(issue.actionIds),
+    actionIds: issue.actionId == null ? uniqueSorted(issue.actionIds) : [],
     path: issue.actionId == null ? (issue.path ?? null) : null,
     resourceIdentity: issue.resourceIdentity ?? null,
     targetId: issue.targetId ?? null,
     absoluteFrame: issue.absoluteFrame ?? null,
   });
+}
+
+function mergeLegalityIssues(existing, incoming) {
+  const merged = { ...existing };
+  for (const [key, value] of Object.entries(incoming ?? {})) {
+    if (value == null || (Array.isArray(value) && value.length === 0)) {
+      continue;
+    }
+    merged[key] = value;
+  }
+  merged.actionIds = uniqueSorted([
+    ...(existing.actionIds ?? []),
+    ...(incoming.actionIds ?? []),
+  ]);
+  merged.ruleCodes = uniqueSorted([
+    ...(existing.ruleCodes ?? []),
+    ...(incoming.ruleCodes ?? []),
+  ]);
+  merged.unresolvedCodes = uniqueSorted([
+    ...(existing.unresolvedCodes ?? []),
+    ...(incoming.unresolvedCodes ?? []),
+  ]);
+  return merged;
 }
 
 function compareLegalityIssues(left, right) {

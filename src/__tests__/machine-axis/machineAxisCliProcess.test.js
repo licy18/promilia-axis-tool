@@ -8,7 +8,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
 
 const ROOT = process.cwd();
@@ -174,13 +174,15 @@ describe('Machine Axis CLI real process I/O', () => {
 
   it.each([
     [['catalog', '--output'], 'Missing value for --output'],
-    [
-      ['validate', '--critical-policy'],
-      'Missing value for --critical-policy',
-    ],
+    [['validate', '--critical-policy'], 'Missing value for --critical-policy'],
     [['validate', '--input'], 'Missing value for --input'],
     [
-      ['explain', resolve(tempRoot ?? '', 'unused-axis.json'), '--frame', 'nope'],
+      [
+        'explain',
+        resolve(tempRoot ?? '', 'unused-axis.json'),
+        '--frame',
+        'nope',
+      ],
       'Invalid value for --frame',
     ],
   ])(

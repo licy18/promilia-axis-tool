@@ -1,4 +1,5 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import authorityFixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mitiFixture from '../../../fixtures/character-acceptance/108003-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import rubyOwnerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
@@ -10,17 +11,27 @@ import {
 } from '../../machine-axis/machineAxisService';
 import { createSearchStateSnapshot } from '../../machine-axis/machineAxisSearchState';
 
-const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
+const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
 function createMitiProjectileFixture() {
   const axis = structuredClone(mitiFixture);
+  // The visual-acceptance fixture predates the verified normal-input authority.
+  // Keep it as historical evidence, but isolate this projectile test from its
+  // legacy repeated-A1 and switch-tail actions instead of treating that axis as
+  // a current replay authority.
   axis.actions = axis.actions.filter(
     action =>
+      action.intent?.actionKind !== 'normal-attack' &&
+      action.intent?.kind !== 'switch' &&
       !['miti-star-combo-active', 'miti-star-combo-kibo-break'].includes(
         action.id
       )
   );
   return axis;
+}
+
+function createVerifiedThreeActorFixture() {
+  return structuredClone(authorityFixture);
 }
 
 function createAxis({
@@ -72,19 +83,52 @@ function createAxis({
     },
     actions: actions ?? [
       {
-        id: 'pangpang-a3',
+        id: 'pangpang-plunging',
         owner: { kind: 'actor', slotId: 'slot-1' },
         intent: {
           kind: 'public-action',
           publicActionId: 10100701,
-          actionKind: 'normal-attack',
-          attackInput: { sequenceIndex: 3 },
+          actionKind: 'plunging-attack',
         },
         schedule: { mode: 'absolute', frame: 60 },
         hitOverrides,
       },
     ],
   };
+}
+
+function createMoyinNormalAction({
+  id,
+  sequenceIndex,
+  frame,
+  groupId,
+  contextActionId = null,
+}) {
+  return {
+    id,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: 11200101,
+      actionKind: 'normal-attack',
+      attackInput: {
+        sequenceIndex,
+        groupId,
+        ...(contextActionId == null ? {} : { contextActionId }),
+      },
+    },
+    schedule: { mode: 'absolute', frame },
+  };
+}
+
+function createMoyinContinuationAxis(actions) {
+  const axis = createAxis({ actions });
+  axis.scenario.team[0] = {
+    ...axis.scenario.team[0],
+    characterId: 112001,
+    loadout: {},
+  };
+  return axis;
 }
 
 function createKiboAxis({
@@ -129,19 +173,23 @@ describe('Machine Axis service', () => {
     installVerifiedCombatMechanicsPackage(mechanicsPackage);
   });
 
-  it('runs a real public Pangpang A3 through the canonical core', () => {
+  it('runs a real public Pangpang plunging attack through the canonical core', () => {
     const service = createMachineAxisService();
     const run = service.simulate(createAxis());
-    const action = run.trace.actions.find(item => item.id === 'pangpang-a3');
-    const hit = run.trace.damage.find(item => item.actionId === 'pangpang-a3');
+    const action = run.trace.actions.find(
+      item => item.id === 'pangpang-plunging'
+    );
+    const hit = run.trace.damage.find(
+      item => item.actionId === 'pangpang-plunging'
+    );
 
     expect(action).toMatchObject({
       skillId: 10100701,
-      controlSkillId: 10100703,
+      actionKind: 'plunging-attack',
       subSkillIndex: 0,
     });
     expect(hit).toMatchObject({
-      hitIdentity: PANGPANG_A3_HIT,
+      hitIdentity: PANGPANG_PLUNGING_HIT,
       rawDamage: expect.any(Number),
       toughnessDamage: expect.any(Number),
     });
@@ -150,6 +198,123 @@ describe('Machine Axis service', () => {
       data: expect.any(String),
       trace: expect.any(String),
       evaluation: expect.any(String),
+    });
+  }, 30_000);
+
+  it('enforces Moyin normal-input continuation and recovery boundaries before scoring', () => {
+    const service = createMachineAxisService();
+    const opener = createMoyinNormalAction({
+      id: 'moyin-a1',
+      sequenceIndex: 1,
+      frame: 0,
+      groupId: 'moyin-chain',
+    });
+    const createPair = secondAction =>
+      createMoyinContinuationAxis([opener, secondAction]);
+    const createSuccessor = frame =>
+      createMoyinNormalAction({
+        id: `moyin-a2-${frame}`,
+        sequenceIndex: 2,
+        frame,
+        groupId: 'moyin-chain',
+        contextActionId: opener.id,
+      });
+
+    for (const frame of [18, 72]) {
+      const prepared = service.prepareValidated(
+        createPair(createSuccessor(frame))
+      );
+      expect(prepared.valid, `A2@${frame}`).toBe(true);
+      expect(
+        prepared.run.trace.actions.find(
+          action => action.id === `moyin-a2-${frame}`
+        )
+      ).toMatchObject({
+        controlSkillId: 11200102,
+      });
+    }
+
+    const invalidCases = [
+      {
+        label: 'early-a2',
+        action: createSuccessor(17),
+        reason: 'normal-attack-successor-window-not-open',
+      },
+      {
+        label: 'fresh-a1-in-successor-window',
+        action: createMoyinNormalAction({
+          id: 'moyin-illegal-a1-18',
+          sequenceIndex: 1,
+          frame: 18,
+          groupId: 'fresh-chain-at-18',
+        }),
+        reason: 'normal-attack-successor-window-target-conflict',
+      },
+      {
+        label: 'a1-during-recovery',
+        action: createMoyinNormalAction({
+          id: 'moyin-illegal-a1-73',
+          sequenceIndex: 1,
+          frame: 73,
+          groupId: 'fresh-chain-at-73',
+        }),
+        reason: 'normal-attack-recovery-not-complete',
+      },
+      {
+        label: 'a1-before-recovery-end',
+        action: createMoyinNormalAction({
+          id: 'moyin-illegal-a1-229',
+          sequenceIndex: 1,
+          frame: 229,
+          groupId: 'fresh-chain-at-229',
+        }),
+        reason: 'normal-attack-recovery-not-complete',
+      },
+    ];
+    for (const { label, action, reason } of invalidCases) {
+      const prepared = service.prepareValidated(createPair(action));
+      expect(prepared.valid, label).toBe(false);
+      expect(prepared.issues, label).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-action-not-executable',
+          actionId: action.id,
+          reason: 'verified-normal-attack-input-phase-conflict',
+          reasons: expect.arrayContaining([reason]),
+          formIdentity: expect.stringMatching(/^normal-attack-form:/),
+          expectedAttackInput: expect.any(Object),
+          actualAttackInput: expect.objectContaining({
+            sequenceIndex: action.intent.attackInput.sequenceIndex,
+          }),
+        })
+      );
+      expect(
+        prepared.run.trace.executionPlan.actions.find(
+          row => row.actionId === action.id
+        )
+      ).toMatchObject({ execute: false });
+      expect(
+        prepared.run.trace.damage.some(event => event.actionId === action.id)
+      ).toBe(false);
+      expect(prepared.actionLegalityProof).toMatchObject({
+        passed: false,
+        finalScoreEligible: false,
+      });
+    }
+
+    const reopened = service.prepareValidated(
+      createPair(
+        createMoyinNormalAction({
+          id: 'moyin-a1-230',
+          sequenceIndex: 1,
+          frame: 230,
+          groupId: 'fresh-chain-at-230',
+        })
+      )
+    );
+    expect(reopened.valid).toBe(true);
+    expect(reopened.actionLegalityProof).toMatchObject({
+      passed: true,
+      finalScoreEligible: true,
     });
   }, 30_000);
 
@@ -280,6 +445,33 @@ describe('Machine Axis service', () => {
         active: 82,
         break: 122,
         'normal-attack': 122,
+      },
+    });
+    expect(catalog.dataIdentity.normalAttackInputAuthority).toMatchObject({
+      schemaVersion: expect.any(Number),
+      contractName: expect.any(String),
+      policyVersion: expect.any(Number),
+      contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+    });
+    const moyinNormalAttack = catalog.publicActions.find(
+      action =>
+        Number(action.ownerId) === 112001 &&
+        action.actionKind === 'normal-attack'
+    );
+    expect(moyinNormalAttack).toBeDefined();
+    expect(moyinNormalAttack.attackInputs[0]).toMatchObject({
+      identity: expect.any(String),
+      sequenceIndex: 1,
+      sequenceTotal: 5,
+      controlSkillId: 11200101,
+      subSkillIndex: 0,
+      animationDurationFrames: 230,
+      linkWindow: {
+        kind: 'control-transition-window',
+        startFrame: 18,
+        endFrame: 73,
+        targetControlSkillId: 11200102,
+        targetSubSkillIndex: 0,
       },
     });
     expect(catalog.kiboAxisActionScope).toMatchObject({
@@ -446,8 +638,9 @@ describe('Machine Axis service', () => {
       rejectionCodes: ['machine-axis-public-action-unknown'],
     });
   });
-  it('runs the acceptance fixture as a real three-actor plus kibo axis', () => {
-    const run = createMachineAxisService().simulate(fixture);
+  it('runs a verified real three-actor plus kibo axis', () => {
+    const axis = createVerifiedThreeActorFixture();
+    const run = createMachineAxisService().simulate(axis);
     const actionsById = new Map(
       run.trace.actions.map(action => [action.id, action])
     );
@@ -456,7 +649,7 @@ describe('Machine Axis service', () => {
     );
     const enemyState = createSearchStateSnapshot({
       run,
-      contract: fixture,
+      contract: axis,
     }).enemy;
 
     expect(run.contract.scenario.target).toEqual({
@@ -479,9 +672,9 @@ describe('Machine Axis service', () => {
     });
     for (const actionId of [
       'xunlang-signature',
-      'a3-expected',
+      'plunging-inherit',
       'xiaoyu-charged',
-      'ruby-enhanced-e1-intent',
+      'ruby-plunging',
     ]) {
       expect(hpDamageByAction.get(actionId), actionId).toBeGreaterThan(0);
     }
@@ -499,19 +692,19 @@ describe('Machine Axis service', () => {
       'kibo-auto-cast-trigger-unresolved'
     );
 
-    expect(actionsById.get('a3-inherit')).toMatchObject({
+    expect(actionsById.get('plunging-inherit')).toMatchObject({
       actorId: 'actor-101007',
-      controlSkillId: 10100703,
+      skillId: 10100701,
+      actionKind: 'plunging-attack',
     });
     expect(actionsById.get('xiaoyu-charged')).toMatchObject({
       actorId: 'actor-101010',
       actionKind: 'charged-attack',
     });
-    expect(actionsById.get('ruby-enhanced-e1-intent')).toMatchObject({
+    expect(actionsById.get('ruby-plunging')).toMatchObject({
       actorId: 'actor-103002',
-      name: '强化普攻 E1',
-      controlSkillId: 10300201,
-      subSkillIndex: 1,
+      skillId: 10300201,
+      actionKind: 'plunging-attack',
     });
     expect(actionsById.get('xunlang-signature')).toMatchObject({
       skillId: 50000102,
@@ -525,21 +718,29 @@ describe('Machine Axis service', () => {
         change: -100,
       })
     );
-    expect(run.trace.resources.special).toContainEqual(
-      expect.objectContaining({
-        actionId: 'ruby-enhanced-e1-intent',
-        payload: expect.objectContaining({
-          resourceIdentity: 'actor:103002:element:103002047',
-          beforeValue: 6,
-          afterValue: 5,
-          change: -1,
-        }),
-      })
-    );
-    const replay = createMachineAxisService().simulate(fixture);
+    const replay = createMachineAxisService().simulate(axis);
     expect(replay.hashes).toEqual(run.hashes);
     expect(replay.actionLegalityProof.proofHash).toBe(
       run.actionLegalityProof.proofHash
+    );
+  }, 15_000);
+
+  it('rejects the legacy M11-B direct-A3 fixture under the normal-input authority', () => {
+    const prepared = createMachineAxisService().prepareValidated(fixture);
+
+    expect(prepared.valid).toBe(false);
+    expect(prepared.actionLegalityProof).toMatchObject({
+      passed: false,
+      finalScoreEligible: false,
+      normalAttackInputAuthority: expect.objectContaining({
+        contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      }),
+    });
+    expect(prepared.issues).toContainEqual(
+      expect.objectContaining({
+        actionId: 'a3-inherit',
+        reason: 'verified-normal-attack-input-phase-conflict',
+      })
     );
   }, 15_000);
 
@@ -549,7 +750,7 @@ describe('Machine Axis service', () => {
     const miss = service.simulate(
       createAxis({
         hitOverrides: {
-          [PANGPANG_A3_HIT]: {
+          [PANGPANG_PLUNGING_HIT]: {
             landed: 'miss',
             criticalMode: 'inherit',
           },
@@ -558,15 +759,16 @@ describe('Machine Axis service', () => {
     );
 
     expect(
-      hit.trace.damage.filter(item => item.actionId === 'pangpang-a3').length
+      hit.trace.damage.filter(item => item.actionId === 'pangpang-plunging')
+        .length
     ).toBeGreaterThan(0);
     expect(
-      miss.trace.damage.filter(item => item.actionId === 'pangpang-a3')
+      miss.trace.damage.filter(item => item.actionId === 'pangpang-plunging')
     ).toHaveLength(0);
     expect(
       miss.trace.events.filter(
         item =>
-          item.actionId === 'pangpang-a3' &&
+          item.actionId === 'pangpang-plunging' &&
           ['hp', 'toughness', 'sp'].includes(item.payload?.resource)
       )
     ).toHaveLength(0);
@@ -577,7 +779,7 @@ describe('Machine Axis service', () => {
     const blocked = service.simulate(
       createAxis({
         hitOverrides: {
-          [PANGPANG_A3_HIT]: {
+          [PANGPANG_PLUNGING_HIT]: {
             landed: 'blocked',
             criticalMode: 'inherit',
           },
@@ -586,12 +788,12 @@ describe('Machine Axis service', () => {
     );
 
     expect(
-      blocked.trace.damage.filter(item => item.actionId === 'pangpang-a3')
+      blocked.trace.damage.filter(item => item.actionId === 'pangpang-plunging')
     ).toHaveLength(0);
     expect(
       blocked.trace.events.filter(
         item =>
-          item.actionId === 'pangpang-a3' &&
+          item.actionId === 'pangpang-plunging' &&
           ['hp', 'toughness', 'sp'].includes(item.payload?.resource)
       )
     ).toHaveLength(0);
@@ -602,7 +804,7 @@ describe('Machine Axis service', () => {
     const axis = createAxis({
       critical: { policy: 'non-critical', seed: 'captured-seed' },
       hitOverrides: {
-        [PANGPANG_A3_HIT]: {
+        [PANGPANG_PLUNGING_HIT]: {
           landed: 'hit',
           criticalMode: 'sampled',
           criticalRoll: 1234,
@@ -639,7 +841,7 @@ describe('Machine Axis service', () => {
       issues: [
         expect.objectContaining({
           code: 'machine-axis-hit-identity-stale',
-          actionId: 'pangpang-a3',
+          actionId: 'pangpang-plunging',
           hitIdentity: 'stale-hit-identity',
         }),
       ],
@@ -648,14 +850,14 @@ describe('Machine Axis service', () => {
   });
 
   it('rejects critical overrides for a real non-critical-eligible hit', () => {
-    const hit = findMechanicsHit(PANGPANG_A3_HIT);
+    const hit = findMechanicsHit(PANGPANG_PLUNGING_HIT);
     const originalDamageType = hit.damage.damageType;
     hit.damage.damageType = 6;
     try {
       const validation = createMachineAxisService().validate(
         createAxis({
           hitOverrides: {
-            [PANGPANG_A3_HIT]: {
+            [PANGPANG_PLUNGING_HIT]: {
               landed: 'hit',
               criticalMode: 'critical',
             },
@@ -667,8 +869,8 @@ describe('Machine Axis service', () => {
       expect(validation.issues).toContainEqual(
         expect.objectContaining({
           code: 'machine-axis-hit-critical-override-unsupported',
-          actionId: 'pangpang-a3',
-          hitIdentity: PANGPANG_A3_HIT,
+          actionId: 'pangpang-plunging',
+          hitIdentity: PANGPANG_PLUNGING_HIT,
         })
       );
     } finally {
@@ -677,14 +879,14 @@ describe('Machine Axis service', () => {
   });
 
   it('rejects expected mode when a real hit has critical-only state effects', () => {
-    const hit = findMechanicsHit(PANGPANG_A3_HIT);
+    const hit = findMechanicsHit(PANGPANG_PLUNGING_HIT);
     const originalIdentities = hit.criticalStateEffectIdentities;
     hit.criticalStateEffectIdentities = ['synthetic:critical-state-effect'];
     try {
       const validation = createMachineAxisService().validate(
         createAxis({
           hitOverrides: {
-            [PANGPANG_A3_HIT]: {
+            [PANGPANG_PLUNGING_HIT]: {
               landed: 'hit',
               criticalMode: 'expected',
             },
@@ -696,8 +898,8 @@ describe('Machine Axis service', () => {
       expect(validation.issues).toContainEqual(
         expect.objectContaining({
           code: 'machine-axis-hit-expected-state-branch-unsupported',
-          actionId: 'pangpang-a3',
-          hitIdentity: PANGPANG_A3_HIT,
+          actionId: 'pangpang-plunging',
+          hitIdentity: PANGPANG_PLUNGING_HIT,
         })
       );
     } finally {
@@ -711,13 +913,12 @@ describe('Machine Axis service', () => {
   it('resolves relative schedules and rejects conflicting actions', () => {
     const service = createMachineAxisService();
     const pangpang = {
-      id: 'pangpang-a3',
+      id: 'pangpang-plunging',
       owner: { kind: 'actor', slotId: 'slot-1' },
       intent: {
         kind: 'public-action',
         publicActionId: 10100701,
-        actionKind: 'normal-attack',
-        attackInput: { sequenceIndex: 3 },
+        actionKind: 'plunging-attack',
       },
       schedule: { mode: 'after-previous-end', offsetFrames: 5 },
     };
@@ -732,7 +933,7 @@ describe('Machine Axis service', () => {
     ];
     const run = service.simulate(createAxis({ actions }));
     expect(
-      run.actionResolutions.find(item => item.actionId === 'pangpang-a3')
+      run.actionResolutions.find(item => item.actionId === 'pangpang-plunging')
     ).toMatchObject({ startFrame: 35 });
 
     const conflict = service.validate(
@@ -741,7 +942,7 @@ describe('Machine Axis service', () => {
           { ...pangpang, schedule: { mode: 'absolute', frame: 0 } },
           {
             ...pangpang,
-            id: 'pangpang-a3-overlap',
+            id: 'pangpang-plunging-overlap',
             schedule: { mode: 'absolute', frame: 0 },
           },
         ],

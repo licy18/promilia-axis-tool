@@ -13,6 +13,10 @@ import {
 } from '../domain/workbenchProjectFactory';
 import { getSkillActionCatalog } from '../domain/skillActionCatalog';
 import {
+  ATTACK_INPUT_CHAIN_SELECTION_SOURCES,
+  ATTACK_INPUT_EXPANSION_MODES,
+} from '../domain/workbenchAttackInputChain';
+import {
   classifyKiboAxisActionKind,
   getKiboAxisActionScopePolicy,
   isKiboAutonomousActionKindDeferred,
@@ -70,6 +74,7 @@ import {
   isM12cFormalInitialStateRequired,
   validateM12cInitialStatePreset,
 } from './m12cInitialStatePolicy';
+import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../domain/verifiedNormalAttackInputAuthority';
 
 export const MACHINE_AXIS_SERVICE_SCHEMA_VERSION = 1;
 export const MACHINE_AXIS_SERVICE_CONTRACT_NAME = 'AzPrMachineAxisService';
@@ -134,6 +139,8 @@ export function createMachineAxisService({
         verifiedMechanicsPackageHash: mechanicsPackage.packageHash,
         mechanicsProfileId: 'azpr-three-value-verified-tc-20260718',
         mechanicsProfileVersion: 1,
+        normalAttackInputAuthority:
+          getVerifiedNormalAttackInputAuthorityDescriptor(),
         optimizationScenarioPolicyId: getOptimizationScenarioPolicy().policyId,
         optimizationScenarioPolicyHash:
           getOptimizationScenarioPolicy().policyHash,
@@ -2009,6 +2016,12 @@ function selectContextualAttackInputSegment({
   if (contextualSegments.length !== 1) return requestedSegment;
   const contextualSegment = contextualSegments[0];
   if (
+    Number(contextualSegment.sequenceIndex) !==
+    Number(requestedSegment.sequenceIndex)
+  ) {
+    return requestedSegment;
+  }
+  if (
     requestedChainIdentity &&
     (String(contextualSegment.attackInputChainIdentity ?? '') !==
       String(requestedChainIdentity) ||
@@ -2067,9 +2080,9 @@ function createAttackInputFields(action, mapping, segment) {
       segment.attackInputChainIdentity ??
       mapping.attackInputChainIdentity ??
       null,
-    attackInputChainSelectionSource: action.intent.attackInput?.chainIdentity
-      ? 'user-explicit'
-      : 'runtime-projected',
+    attackInputChainSelectionSource:
+      ATTACK_INPUT_CHAIN_SELECTION_SOURCES.USER_EXPLICIT,
+    attackInputExpansionMode: ATTACK_INPUT_EXPANSION_MODES.SINGLE_INPUT,
     attackInputIntent: {
       schemaVersion: 1,
       contractName: 'AzPrWorkbenchAttackInputIntent',
@@ -2518,18 +2531,26 @@ function createActorCatalogEntries(character, gameData) {
       scenarioRuntimeStatus: mapping?.scenarioRuntimeStatus ?? 'unresolved',
       durationFrames: mapping?.actionTiming?.occupancy?.durationFrames ?? null,
       attackInputs: (mapping?.attackInputSegments ?? []).map(segment => ({
+        identity: segment.identity ?? null,
         sequenceIndex: segment.sequenceIndex,
         sequenceTotal: segment.sequenceTotal,
         label: segment.label,
+        controlSkillId: segment.controlSkillId ?? null,
+        subSkillIndex:
+          segment.subSkillIndex ?? segment.selectedSubSkillIndex ?? null,
         chainIdentity:
           segment.attackInputChainIdentity ??
           mapping.attackInputChainIdentity ??
           null,
         durationFrames:
           segment.effectiveDurationFrames ?? segment.durationFrames ?? null,
+        animationDurationFrames: segment.animationDurationFrames ?? null,
+        durationBasis: segment.durationBasis ?? null,
+        sourceIdentity: segment.sourceIdentity ?? null,
         linkTimingStatus: segment.linkTimingStatus ?? null,
         linkWindow: segment.linkWindow
           ? {
+              kind: segment.linkWindow.kind ?? null,
               startFrame: segment.linkWindow.startFrame ?? null,
               endFrame: segment.linkWindow.endFrame ?? null,
               targetControlSkillId:
@@ -2802,8 +2823,14 @@ function createExecutionBlockIssue({
         actionId,
         actorId: block.actorId ?? null,
         reason: block.reason ?? entry.skipReason ?? entry.status,
+        reasons: block.reasons ?? [],
+        sourceKind: block.sourceKind ?? null,
         sourceIdentity: block.sourceIdentity ?? null,
         sourceSequencePath: block.sourceSequencePath ?? null,
+        formIdentity: block.formIdentity ?? null,
+        attackInputChainIdentity: block.attackInputChainIdentity ?? null,
+        expectedAttackInput: block.expectedAttackInput ?? null,
+        actualAttackInput: block.actualAttackInput ?? null,
         ...(unresolved
           ? { unresolvedCodes: [blockCode] }
           : { violationCodes: [blockCode] }),

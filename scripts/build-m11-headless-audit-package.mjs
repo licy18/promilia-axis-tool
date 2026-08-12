@@ -64,10 +64,7 @@ const EVIDENCE_PATHS = [
     'reports/m11/m11-headless-integrated-baseline-20260730.json',
     'evidence/m11-headless-integrated-baseline.json',
   ],
-  [
-    'reports/m11/m11-external-audit-response-20260730.md',
-    'AUDIT_RESPONSE.md',
-  ],
+  ['reports/m11/m11-external-audit-response-20260730.md', 'AUDIT_RESPONSE.md'],
   [
     'reports/m11/m11-external-audit-remediation-20260730.md',
     'audit/remediation-dispositions.md',
@@ -226,7 +223,7 @@ async function main() {
     await copyRepoPath(schemaPath, packageRoot, schemaPath);
   }
   for (const fixturePath of [
-    'fixtures/machine-axis/m11-b-three-actor-120s.json',
+    'fixtures/machine-axis/m11-b-three-actor-authority.json',
     'fixtures/character-acceptance/101003-visual.json',
     'fixtures/character-acceptance/101010-visual.json',
     'fixtures/character-acceptance/103002-visual.json',
@@ -945,10 +942,10 @@ async function writePackageDocuments({
     '```powershell',
     'New-Item -ItemType Directory -Path output -Force | Out-Null',
     'node runtime/machine-axis-cli.mjs catalog --output output/catalog.json',
-    'node runtime/machine-axis-cli.mjs validate --input fixtures/machine-axis/m11-b-three-actor-120s.json --output output/validation.json',
-    'node runtime/machine-axis-cli.mjs simulate --input fixtures/machine-axis/m11-b-three-actor-120s.json --output output/run.json',
-    'node runtime/machine-axis-cli.mjs explain --input fixtures/machine-axis/m11-b-three-actor-120s.json --action ruby-enhanced-e1-intent --output output/explain.json',
-    'node runtime/machine-axis-cli.mjs compare --left fixtures/machine-axis/m11-b-three-actor-120s.json --right fixtures/machine-axis/m11-b-three-actor-120s.json --output output/compare.json',
+    'node runtime/machine-axis-cli.mjs validate --input fixtures/machine-axis/m11-b-three-actor-authority.json --output output/validation.json',
+    'node runtime/machine-axis-cli.mjs simulate --input fixtures/machine-axis/m11-b-three-actor-authority.json --output output/run.json',
+    'node runtime/machine-axis-cli.mjs explain --input fixtures/machine-axis/m11-b-three-actor-authority.json --action ruby-plunging --output output/explain.json',
+    'node runtime/machine-axis-cli.mjs compare --left fixtures/machine-axis/m11-b-three-actor-authority.json --right fixtures/machine-axis/m11-b-three-actor-authority.json --output output/compare.json',
     '```',
     '',
     '不传 `--input` 或传 `-` 时从 stdin 读；不传 `--output` 或传 `-` 时向 stdout 输出。`--format jsonl` 支持批量输入输出。stdout 只写机器 JSON，错误摘要写 stderr。',
@@ -1127,7 +1124,7 @@ async function writeAuditScripts({ packageRoot, integratedReport }) {
     '',
     "const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');",
     "const CLI = resolve(ROOT, 'runtime/machine-axis-cli.mjs');",
-    "const FIXTURE = 'fixtures/machine-axis/m11-b-three-actor-120s.json';",
+    "const FIXTURE = 'fixtures/machine-axis/m11-b-three-actor-authority.json';",
     `const EXPECTED_HASHES = ${expectedHashes};`,
     `const EXPECTED_DATA_HASH = ${expectedDataHash};`,
     '',

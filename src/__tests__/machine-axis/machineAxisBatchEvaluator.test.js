@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -50,7 +50,7 @@ describe('Machine Axis batch evaluator', () => {
     expect(row.hashes.input).toMatch(/^[0-9a-f]{16}$/);
     expect(row.hashes.trace).toMatch(/^[0-9a-f]{16}$/);
     expect(row.scenario).toMatchObject({
-      projectId: 'm11-b-three-actor-120s',
+      projectId: 'm11-b-three-actor-authority',
       durationMs: 120000,
     });
 

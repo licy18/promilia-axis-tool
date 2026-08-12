@@ -1,4 +1,4 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
@@ -248,7 +248,7 @@ describe('Machine Axis CLI', () => {
 
     const explainHarness = createHarness({ files: { axis: text } });
     const explainExit = await runMachineAxisCli(
-      ['explain', 'axis', '--action', 'a3-sampled'],
+      ['explain', 'axis', '--action', 'plunging-sampled'],
       explainHarness.io
     );
     const explanation = parseJson(explainHarness.output.stdout);
@@ -256,7 +256,7 @@ describe('Machine Axis CLI', () => {
     expect(explanation).toMatchObject({
       kind: 'azpr-machine-axis-explanation',
       hashes: run.hashes,
-      selector: { actionId: 'a3-sampled' },
+      selector: { actionId: 'plunging-sampled' },
     });
 
     const compareHarness = createHarness({

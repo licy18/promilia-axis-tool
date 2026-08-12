@@ -19,7 +19,7 @@ const mechanicsPackage = JSON.parse(
 
 const fixture = JSON.parse(
   await readFile(
-    resolve(root, 'fixtures/machine-axis/m11-b-three-actor-120s.json'),
+    resolve(root, 'fixtures/machine-axis/m11-b-three-actor-authority.json'),
     'utf8'
   )
 );
@@ -107,7 +107,7 @@ try {
       node: process.version,
       platform: process.platform,
       arch: process.arch,
-      fixture: 'fixtures/machine-axis/m11-b-three-actor-120s.json',
+      fixture: 'fixtures/machine-axis/m11-b-three-actor-authority.json',
       scenarioDurationMs: 120000,
       runCount,
     },
@@ -136,7 +136,7 @@ try {
 
 - 时间：${new Date().toISOString()}
 - 环境：Node ${process.version} / ${process.platform}-${process.arch}
-- 场景：\`m11-b-three-actor-120s\`（120s，3 角色 + 3 奇波）重复 ${runCount} 次
+- 场景：\`m11-b-three-actor-authority\`（120s，3 角色 + 3 奇波）重复 ${runCount} 次
 - 说明：仅记录真实基线，不据此牺牲机制精度或合法性检查
 
 ## 吞吐基线

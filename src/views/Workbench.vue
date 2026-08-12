@@ -6605,7 +6605,7 @@ async function loadM11bMachineAxisFixture() {
   try {
     machineAxisDialogStatus.value = '正在载入 120 秒验收轴';
     const fixtureModule =
-      await import('../../fixtures/machine-axis/m11-b-three-actor-120s.json');
+      await import('../../fixtures/machine-axis/m11-b-three-actor-authority.json');
     await importWorkbenchMachineAxisContract(
       fixtureModule.default,
       '已载入 M11-B 120 秒验收轴'

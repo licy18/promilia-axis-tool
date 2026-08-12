@@ -1,4 +1,4 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createWorkbenchDraftSnapshot } from '../../domain/workbenchDraftStorage';
@@ -18,7 +18,7 @@ import {
 } from '../../machine-axis/workbenchMachineAxisAdapter';
 import { resolveWorkbenchMachineAxisConfigurationProjection } from '../../machine-axis/workbenchMachineAxisProjectProjection';
 
-const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
+const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
 describe('Workbench Machine Axis adapter', () => {
   beforeEach(() => {
@@ -97,7 +97,7 @@ describe('Workbench Machine Axis adapter', () => {
       fps: 60,
       durationFrames: 7200,
       projectile: { targetDistance: 0, defaultWillHit: true },
-      critical: { policy: 'sampled', seed: 'm11-b-fixture-seed' },
+      critical: { policy: 'sampled', seed: 'm11-b-authority-fixture-seed' },
       initialRuntimeState: {
         kiboEnergyBySlot: [
           expect.objectContaining({
@@ -152,18 +152,16 @@ describe('Workbench Machine Axis adapter', () => {
       mode: 'hold',
     });
     expect(
-      exported.actions.find(action => action.id === 'a3-sampled').hitOverrides[
-        PANGPANG_A3_HIT
-      ]
+      exported.actions.find(action => action.id === 'plunging-sampled')
+        .hitOverrides[PANGPANG_PLUNGING_HIT]
     ).toEqual({
       landed: 'hit',
       criticalMode: 'sampled',
       criticalRoll: 2345,
     });
     expect(
-      exported.actions.find(action => action.id === 'a3-miss').hitOverrides[
-        PANGPANG_A3_HIT
-      ]
+      exported.actions.find(action => action.id === 'plunging-miss')
+        .hitOverrides[PANGPANG_PLUNGING_HIT]
     ).toMatchObject({ landed: 'miss', criticalMode: 'inherit' });
     expect(restoredRun.hashes).toEqual(originalRun.hashes);
     expect(restoredRun.trace).toEqual(originalRun.trace);
@@ -173,8 +171,8 @@ describe('Workbench Machine Axis adapter', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });
     const contract = structuredClone(fixture);
-    const action = contract.actions.find(item => item.id === 'a3-miss');
-    action.hitOverrides[PANGPANG_A3_HIT].landed = 'blocked';
+    const action = contract.actions.find(item => item.id === 'plunging-miss');
+    action.hitOverrides[PANGPANG_PLUNGING_HIT].landed = 'blocked';
 
     const imported = adapter.importContract(contract);
     const exported = adapter.exportProject(imported.project);
@@ -183,13 +181,13 @@ describe('Workbench Machine Axis adapter', () => {
     );
 
     expect(
-      exported.actions.find(item => item.id === 'a3-miss').hitOverrides[
-        PANGPANG_A3_HIT
+      exported.actions.find(item => item.id === 'plunging-miss').hitOverrides[
+        PANGPANG_PLUNGING_HIT
       ]
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
     expect(
-      restored.contract.actions.find(item => item.id === 'a3-miss')
-        .hitOverrides[PANGPANG_A3_HIT]
+      restored.contract.actions.find(item => item.id === 'plunging-miss')
+        .hitOverrides[PANGPANG_PLUNGING_HIT]
     ).toMatchObject({ landed: 'blocked', criticalMode: 'inherit' });
   }, 30_000);
 
@@ -281,29 +279,8 @@ describe('Workbench Machine Axis adapter', () => {
     contract.scenario.target = structuredClone(objectiveContract.targetPolicy);
     contract.scenario.enemy.profile = enemyProfile;
 
-    let legalityError = null;
-    try {
-      adapter.importContract(contract);
-    } catch (error) {
-      legalityError = error;
-    }
-    expect(legalityError).toBeInstanceOf(MachineAxisValidationError);
-    expect(legalityError.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          actionId: 'a3-inherit',
-          code: 'machine-axis-action-not-executable',
-          violationCodes: expect.arrayContaining([
-            'attack-input-chain-incomplete',
-          ]),
-        }),
-      ])
-    );
-
-    // This assertion is about the objective/profile transport boundary. The
-    // shared M11 diagnostic fixture intentionally contains standalone A3
-    // samples and three equipped Kibo, which the formal legality gate above
-    // must reject while autonomous scheduling remains source-open.
+    // Isolate the objective/profile transport boundary from autonomous Kibo
+    // scheduling and action-tail diagnostics.
     contract.actions = [];
     contract.scenario.team = contract.scenario.team.map(slot => {
       const projected = structuredClone(slot);
@@ -443,10 +420,12 @@ describe('Workbench Machine Axis adapter', () => {
     const rebuiltRun = WORKBENCH_HEADLESS_COMBAT_CORE.simulate(rebuilt);
 
     expect(
-      persistedDraft.actionDrafts.find(action => action.id === 'a3-sampled')
-    ).toMatchObject({ attackInputExpansionMode: 'single-input' });
+      persistedDraft.actionDrafts.find(
+        action => action.id === 'plunging-sampled'
+      )
+    ).not.toHaveProperty('attackInputExpansionMode');
     expect(
-      rebuilt.actions.find(action => action.id === 'a3-sampled')
+      rebuilt.actions.find(action => action.id === 'plunging-sampled')
     ).not.toHaveProperty('attackInputExpansionMode');
     expect(rebuilt.id).toBe(fixture.scenario.id);
     expect(rebuilt.name).toBe(fixture.scenario.name);
@@ -465,11 +444,11 @@ describe('Workbench Machine Axis adapter', () => {
     const adapter = createWorkbenchMachineAxisAdapter({ service });
     const isolated = structuredClone(fixture);
     isolated.actions = isolated.actions.filter(
-      item => item.id === 'a3-inherit'
+      item => item.id === 'plunging-inherit'
     );
     const imported = adapter.importContract(isolated);
     const edited = structuredClone(imported.project);
-    const action = edited.actions.find(item => item.id === 'a3-inherit');
+    const action = edited.actions.find(item => item.id === 'plunging-inherit');
     action.startMs += 1000 / 60;
     action.startFrame = null;
     const exported = adapter.exportProject(edited);
@@ -477,12 +456,13 @@ describe('Workbench Machine Axis adapter', () => {
       exported.actions.every(item => item.schedule.mode === 'absolute')
     ).toBe(true);
     expect(
-      exported.actions.find(item => item.id === 'a3-inherit').schedule
+      exported.actions.find(item => item.id === 'plunging-inherit').schedule
     ).toEqual({
       mode: 'absolute',
       frame:
-        imported.actionResolutions.find(item => item.actionId === 'a3-inherit')
-          .startFrame + 1,
+        imported.actionResolutions.find(
+          item => item.actionId === 'plunging-inherit'
+        ).startFrame + 1,
       actionId: null,
       offsetFrames: 0,
     });

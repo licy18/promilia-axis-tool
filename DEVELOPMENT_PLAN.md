@@ -933,10 +933,9 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 
 #### M12-C：末音试点
 
-- 2026-08-12 状态：`M12-C4/C5/C6` 已完成。正式 run `work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/` 已为三个 objective 各生成 5 个不同 raw identity；三者 effective source coverage 均为 35/35，累计 10/79、8/77、6/61 rounds/shards 且 failed/missing=0。结果只声明 `AI-guided heuristic Top-N`，`formalRankingReady=false`、`clientParityReady=false`，不宣称全局最优或穷举完整。
-- `M12-C4`：三份 latest finalization 与 terminal-bounded evidence 均 valid；无韧/有韧/击杀 cutoff 分别为 `20797.9953003 HP DPS`、`469.50721728 HP DPS`、`66133.333333 ms`。Ruby=0 冷循环污染已按全量扫描隔离 2 个 raw identity/6 occurrences，并从 canonical preset 只重跑必要 shard；未受影响产物保留，replacement provenance 已落盘。
-- `M12-C5`：15/15 最终候选均通过真实 Workbench 文件导入、timeline/动作检查器/trace 视觉检查和人工签收；15 张逐候选截图与 3 张 objective 导入摘要证据均有 SHA-256，结构化矩阵为 15/15 import active、15/15 trace match、15/15 manual accepted。
-- `M12-C6`：15/15 独立 replay 与 strict final validation 通过，verification hash=`a5bf3e453572c37bd6b81a46d28f26e23144dba70ae9005872e75c98bed20f27`；overall closeout 连续两次 hash=`3e67f6f08ee5457373c1c18952bc7611bff37f29f24b6c0c53d58c3fdcd2a8fa`、valid=true、0 issues、18/18 screenshot hash。当前 `optimizationFormalScoreReady=true` 只属于冻结 runtime-baseline，不提升 ranking/client parity readiness。
+- 2026-08-12 状态纠正：`M12-C4/C5/C6` 重新锁定，既有正式 run `work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/` 的 Top-5、finalization、独立 replay、Workbench 签收和 overall closeout 全部撤回为受污染历史证据。根因是连段输入窗内的连续普攻被错误地反复解析成 `A1`，使单次 A1 被误判为闭环、击杀轴也能重复 A1；旧分数和排名不得继续引用或续跑。
+- 当前先重构统一 continuation state：`A1` 窗内普攻只能进入 `A2`，`A2` 窗内只能进入 `A3`，其余段按角色权威 transition graph 类推；技能打开特殊续段窗时只能进入该特殊段，必须拒绝回到 `A1`。只有链已合法结束、超时或取消后才允许新开 `A1`。
+- 无头 runtime、Machine Axis/Workbench 排轴与 search generator/beam/merge/proof 必须消费同一版本化合同；continuation state 进入 canonical identity、状态合并和循环闭合。旧 run 原地保留但不得作为 checkpoint，新实现完成聚焦反例、一次全量准入和重新搜索后，才能重建 `M12-C4/C5/C6`。
 
 - 权威实施合同见 `work/m12-c/STATE.md`。本阶段只枚举正式 9 人 roster 中以 `109001 末音` 为必选核心的三人队：另外两人从其余 8 个优化对象中选择，共 28 个对象队伍；STARBORN 仍是一个对象，但每条轴必须显式且互斥地选择 `199001` 或 `199002`，因此共有 35 个来源配置。队伍顺序不形成变体；初始前台由内层动作轴搜索并进入 `axisHash`，不进入队伍或 `buildHash`。
 - 固定培养为角色 80 级/星赐 7、奇波 80 级/四天赋 10/羁绊 1/`dnaFactors=[]`、灵子 80 级/`rank=6`/`star=1`、装备四星 `+9/同调110` 合法缘星实例。外层枚举合法队伍与角色到奇波、灵子、五部位装备的绑定及派生套装效果，内层再搜索动作轴；不得先按静态面板贪心选装，也不得让 illegal/unscoreable 候选进入评分。

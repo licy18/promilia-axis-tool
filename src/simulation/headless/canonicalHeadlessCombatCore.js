@@ -24,6 +24,7 @@ import {
 } from '../../domain/verifiedBackgroundActionDerivation';
 import { projectVerifiedSwitchExitTailPolicy } from '../generation/verifiedSwitchExitTailPolicy';
 import { isAuthoritativeSwitchTriggerGeneration } from '../generation/switchTriggeredActionGeneration';
+import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../../domain/verifiedNormalAttackInputAuthority';
 
 export const CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION = 1;
 export const CANONICAL_HEADLESS_COMBAT_CORE_CONTRACT =
@@ -444,10 +445,16 @@ function projectTraceAction(action) {
           attackSequenceIndex: action.attackSequenceIndex ?? null,
           attackSequenceTotal: action.attackSequenceTotal ?? null,
           attackInputChainIdentity: action.attackInputChainIdentity ?? null,
+          attackInputIdentity: action.attackInput?.identity ?? null,
+          attackInputAnimationDurationFrames:
+            action.attackInput?.animationDurationFrames ?? null,
+          attackInputDurationBasis: action.attackInput?.durationBasis ?? null,
+          attackInputSourceIdentity: action.attackInput?.sourceIdentity ?? null,
           attackInputLinkTimingStatus:
             action.attackInput?.linkTimingStatus ?? null,
           attackInputLinkWindow: action.attackInput?.linkWindow
             ? {
+                kind: action.attackInput.linkWindow.kind ?? null,
                 startFrame: action.attackInput.linkWindow.startFrame ?? null,
                 endFrame: action.attackInput.linkWindow.endFrame ?? null,
                 targetControlSkillId:
@@ -916,8 +923,7 @@ function projectDamageEvent(event = {}) {
     breakTriggered: event.breakTriggered === true,
     deathTriggered: event.deathTriggered === true,
     deathState: event.deathState ?? null,
-    pairIdentity:
-      event.pairIdentity ?? event.jointAttackPairIdentity ?? null,
+    pairIdentity: event.pairIdentity ?? event.jointAttackPairIdentity ?? null,
     jointAttackPairIdentity: event.jointAttackPairIdentity ?? null,
     jointAttackCalculatedToughnessDamage:
       event.jointAttackCalculatedToughnessDamage ?? null,
@@ -1228,10 +1234,17 @@ function projectVariantSelections(value) {
             selection.attackSequenceIndex ??
             null,
           attackSequenceTotal: selection.attackSequenceTotal ?? null,
+          attackInputIdentity: selection.attackInputIdentity ?? null,
+          attackInputAnimationDurationFrames:
+            selection.attackInputAnimationDurationFrames ??
+            selection.animationDurationFrames ??
+            null,
+          attackInputDurationBasis: selection.attackInputDurationBasis ?? null,
           attackInputLinkTimingStatus:
             selection.attackInputLinkTimingStatus ?? null,
           attackInputLinkWindow: selection.attackInputLinkWindow
             ? {
+                kind: selection.attackInputLinkWindow.kind ?? null,
                 startFrame: selection.attackInputLinkWindow.startFrame ?? null,
                 endFrame: selection.attackInputLinkWindow.endFrame ?? null,
                 targetControlSkillId:
@@ -1277,8 +1290,7 @@ function projectVariantSelections(value) {
         }
       : null,
     chargingRelease: selection?.chargingRelease ?? null,
-    appliedAssumptionIdentity:
-      selection?.appliedAssumptionIdentity ?? null,
+    appliedAssumptionIdentity: selection?.appliedAssumptionIdentity ?? null,
     appliedAssumptionVersion: selection?.appliedAssumptionVersion ?? null,
     appliedAssumptionHash: selection?.appliedAssumptionHash ?? null,
     sourceKind: selection?.sourceKind ?? null,
@@ -1340,27 +1352,61 @@ function projectDiagnostics(simulation) {
     ),
     actionRules: {
       status: rules.status ?? null,
-      diagnostics: (rules.diagnostics ?? []).map(diagnostic => ({
-        id: diagnostic.id ?? null,
-        code: diagnostic.code ?? null,
-        status: diagnostic.status ?? null,
-        severity: diagnostic.severity ?? null,
-        actionId: diagnostic.actionId ?? null,
-        actionIds: diagnostic.actionIds ?? [],
-        actorId: diagnostic.actorId ?? null,
-        controlledActorId: diagnostic.controlledActorId ?? null,
-        blockingActionId: diagnostic.blockingActionId ?? null,
-        pairedActionId: diagnostic.pairedActionId ?? null,
-        targetId: diagnostic.targetId ?? null,
-        pairIdentity: diagnostic.pairIdentity ?? null,
-        mappingIdentity: diagnostic.mappingIdentity ?? null,
-        runtimeBindingHash: diagnostic.runtimeBindingHash ?? null,
-        sourceIdentity: diagnostic.sourceIdentity ?? null,
-        sourceSequencePath: diagnostic.sourceSequencePath ?? null,
-        reason: diagnostic.reason ?? null,
-        timeMs: diagnostic.timeMs ?? null,
-        message: diagnostic.message ?? null,
-      })),
+      diagnostics: (rules.diagnostics ?? []).map(diagnostic => {
+        const runtimeBlock = diagnostic.runtimeBlock ?? {};
+        return {
+          id: diagnostic.id ?? null,
+          code: diagnostic.code ?? null,
+          status: diagnostic.status ?? null,
+          severity: diagnostic.severity ?? null,
+          actionId: diagnostic.actionId ?? null,
+          actionIds: diagnostic.actionIds ?? [],
+          actorId: diagnostic.actorId ?? null,
+          controlledActorId: diagnostic.controlledActorId ?? null,
+          blockingActionId: diagnostic.blockingActionId ?? null,
+          pairedActionId: diagnostic.pairedActionId ?? null,
+          targetId: diagnostic.targetId ?? null,
+          pairIdentity: diagnostic.pairIdentity ?? null,
+          mappingIdentity: diagnostic.mappingIdentity ?? null,
+          runtimeBindingHash: diagnostic.runtimeBindingHash ?? null,
+          sourceKind:
+            diagnostic.sourceKind ??
+            diagnostic.source?.sourceKind ??
+            runtimeBlock.sourceKind ??
+            null,
+          sourceIdentity:
+            diagnostic.sourceIdentity ??
+            diagnostic.source?.sourceIdentity ??
+            runtimeBlock.sourceIdentity ??
+            null,
+          sourceSequencePath:
+            diagnostic.sourceSequencePath ??
+            runtimeBlock.sourceSequencePath ??
+            null,
+          reason:
+            diagnostic.reason ??
+            runtimeBlock.reason ??
+            diagnostic.source?.sourceStatus ??
+            null,
+          reasons: diagnostic.reasons ?? runtimeBlock.reasons ?? [],
+          formIdentity:
+            diagnostic.formIdentity ?? runtimeBlock.formIdentity ?? null,
+          attackInputChainIdentity:
+            diagnostic.attackInputChainIdentity ??
+            runtimeBlock.attackInputChainIdentity ??
+            null,
+          expectedAttackInput:
+            diagnostic.expectedAttackInput ??
+            runtimeBlock.expectedAttackInput ??
+            null,
+          actualAttackInput:
+            diagnostic.actualAttackInput ??
+            runtimeBlock.actualAttackInput ??
+            null,
+          timeMs: diagnostic.timeMs ?? null,
+          message: diagnostic.message ?? null,
+        };
+      }),
       summary: rules.summary ?? null,
     },
   };
@@ -1638,6 +1684,8 @@ function createDataIdentity({ scenario, gameData }) {
     optimizationScenarioPolicy:
       scenario.combatScenario?.optimizationScenarioPolicy ?? null,
     objectiveContract: scenario.combatScenario?.objectiveContract ?? null,
+    normalAttackInputAuthority:
+      getVerifiedNormalAttackInputAuthorityDescriptor(),
     jointAttackRuntime: scenario.combatScenario?.jointAttackRuntime ?? null,
     kiboAutoCastDerivationAuthority: projectKiboAutoCastDerivationRegistry(
       scenario.kiboAutoCastDerivationRegistry

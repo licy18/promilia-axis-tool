@@ -1,10 +1,23 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
-状态：`M12-C0` 至 `M12-C6` 已完成。正式 run `m12c4-moyin-top5-20260812-v1` 已分别产出三个 objective 的 bounded Top-5，并完成 strict finalization、15/15 独立 replay、15/15 Workbench 真实导入与人工视觉签收、preset 污染隔离/替换和确定性 overall closeout。结果统一声明为 `AI-guided heuristic Top-N`；`optimizationFormalScoreReady=true` 只表示当前 runtime-baseline 正式评分资格闭合，`formalRankingReady=false`、`clientParityReady=false` 继续保留，不宣称全局最优、穷举完整或客户端一致。
+状态：`M12-C4/C5/C6` 的既有搜索结论已于 2026-08-12 撤回并重新锁定。正式 run `m12c4-moyin-top5-20260812-v1` 暴露普攻链状态机漏洞：连段输入窗内重复普攻被错误解析为新的 `A1`，因此 `0.3s` 单次 A1 循环、重复 A1 击杀轴及其 Top-5/finalization/replay/Workbench 签收/closeout 全部属于受污染历史证据，不得继续作为产品结果或新搜索 checkpoint。当前 `optimizationFormalScoreReady=false`、`formalRankingReady=false`、`clientParityReady=false`；只有无头核心、排轴器和优化器统一接入修正后的连段状态并重新完成准入后，才可启动新的 M12-C4 搜索。
 
 已验证实现基线（迁移前身份）：`master@777af8f790986efab42de398fd2ef394610a9a77`；Git LFS 等价提交：`d4da771d726dce458f1c44425f8280a2c9f13598`。迁移只改变 Git 存储身份，不改变生成包工作树字节或实现语义。
 
 本文件是 M12-C 的实施合同。`DEVELOPMENT_PLAN.md` 保留阶段摘要，实际实现、测试和产品复验均以本文件为准。实现与优化资格全绿不等于客户端一致性或产品视觉自动签收；未满足对应产品边界前，不得把 M12-C 搜索结果声明为已获产品验收。
+
+## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
+
+- 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。
+- 部分技能会打开角色专属的特殊续段窗口。窗口有效时，同一输入只能解析为该特殊续段；若调用方、排轴器或优化器试图回到 `A1`，必须在物化/评分前 fail closed。只有当前没有有效续段窗口、旧链已超时/完成/被合法取消时，普攻输入才允许新开 `A1`。
+- 同一版本化 continuation state 必须由无头 runtime、Machine Axis compiler/service、Workbench 排轴投影和 search generator/beam state 共同消费，并进入 canonical input/trace、axis/result identity、状态合并键、循环边界和击杀 proof；不得在任何一层维护第二套猜测规则。
+- 循环闭合必须证明链状态也闭合。仅有一次 `A1` 且终点仍处于 `A2` 输入窗的 `[0,18)` 不构成可重复循环；击杀轴不得把连续 LMB 输入全部重新解释为 `A1`。非法、skipped、unresolved 或 continuation-state 不闭合的候选一律不评分。
+- 旧 run 原地保留用于追溯，不删除、不移动、不续跑；新的实现必须使用新合同版本、新 authority/hash 和新 run id，从旧 checkpoint/finalization fail closed。
+- 单一权威已由 `bc30f03e5ccfce14e98edcc13495779ee6174f51` 落库：`verifiedNormalAttackInputAuthority` 从 verified mapping adjacency 生成 hash-bound structural form；末音 A1 的 17/18/72/73/229/230F 分别为 locked/successor/recovery/idle，A5 reopen 与特殊续段另有精确相位。
+- runtime 接线提交为 `dc952acc686e4b147b1255ac2aa071fbc65aafc5` 与 `9c4b0c56e121ef7436e1c9b523d3830939688df6`：错误的显式 A1/new-group 不能绕过相位，generic 单输入物化真实后继；同 group 的合法多轮连段按 reopen/idle 分实例，不能误合并或重置相位。核心 authority/runtime/action-rule 聚焦为 3 files、86/86 PASS。
+- Workbench live 输入由 `bfd0b9f8f5d8576b09c41b2829b696edadd86ff3` 改为一次 click/drag 只物化一个精确输入，优先级为 special/context > successor > idle A1；缺失、多义或资源不足时零插入。迁移后的 Workbench 完整单文件为 109/109 PASS，M11-C 定向真实浏览器验证由 `861445b02d59e7ed33af7f9229003fe4301429a5` 通过。
+- Machine Axis service、canonical core 与 action-legality proof 已统一投影 authority descriptor、结构化 form/expected/actual 证据，并拒绝错误 sequence；新的 `m11-b-three-actor-authority.json` 取代共享消费者中的旧 standalone-A3 baseline。旧 `m11-b-three-actor-120s.json` 保留为必须失败的历史反例，不删除、不覆盖。
+- 当前中央聚焦复验：service 20/20、canonical core 15/15、axis boundary 23/23、共享 CLI/batch/adapter/project/trace 消费者 7 files 96/96、Workbench 109/109。搜索/优化器与旧 artifact/checkpoint 失效提交仍须串行审查合入；在最终 clean HEAD 的单次 release 准入通过前，`optimizationFormalScoreReady=false`，不得启动新搜索。
 
 ## 0. 2026-08-11 中央集成快照
 

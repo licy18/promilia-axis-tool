@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import {
   installVerifiedCombatMechanicsPackage,
@@ -34,9 +34,7 @@ describe('Lily Machine Axis action-level integration', () => {
     const levelTwelve = runLevelCase(12, 3960);
 
     expect(levelOne.hashes.input).not.toBe(levelTwelve.hashes.input);
-    expect(levelOne.hashes.evaluation).not.toBe(
-      levelTwelve.hashes.evaluation
-    );
+    expect(levelOne.hashes.evaluation).not.toBe(levelTwelve.hashes.evaluation);
   });
 
   it('defaults a missing level to 1 and fails closed on invalid or out-of-range levels', () => {

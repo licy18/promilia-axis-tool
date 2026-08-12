@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import {
   createDefaultWorkbenchDraftState,
   createWorkbenchProjectFileSnapshot,
@@ -28,7 +28,7 @@ describe('Workbench project file receiver', () => {
   it('routes a Machine Axis contract without treating it as a Workbench project', async () => {
     const file = new File(
       [JSON.stringify(machineAxisFixture)],
-      'm11-b-three-actor-120s.json',
+      'm11-b-three-actor-authority.json',
       { type: 'application/json' }
     );
     const result = await receiveWorkbenchProjectFile(file);

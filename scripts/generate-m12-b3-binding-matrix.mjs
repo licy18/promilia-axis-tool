@@ -403,7 +403,7 @@ export async function createM12B3BindingMatrix({
     // ---------- B3 来源/目标 ----------
     const threeActorFixture = await readJson(
       projectRoot,
-      'fixtures/machine-axis/m11-b-three-actor-120s.json'
+      'fixtures/machine-axis/m11-b-three-actor-authority.json'
     );
     threeActorFixture.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;

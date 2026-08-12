@@ -1,4 +1,4 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createCanonicalTraceViewIndex } from '../../features/workbench/canonicalTraceViewIndex';
@@ -33,34 +33,22 @@ describe('canonicalTraceViewIndex', () => {
       ])
     );
 
-    const ruby = first.actionsById.get('ruby-enhanced-e1-intent');
-    expect(ruby.resolved).toMatchObject({
-      controlSkillId: 10300201,
-      subSkillIndex: 1,
-    });
-    expect(ruby.resourceTransactions).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          resourceIdentity: 'actor:103002:element:103002047',
-          before: 6,
-          after: 5,
-        }),
-      ])
-    );
+    const ruby = first.actionsById.get('ruby-plunging');
+    expect(ruby.hits.length).toBeGreaterThan(0);
   });
 
   it('keeps miss rows editable and exposes each critical contract separately', () => {
     const index = createCanonicalTraceViewIndex(run);
-    const hitIdentity = '10100703|0|elements|0|-9212100609153088879|14|1';
+    const hitIdentity = '10100711|0|elements|0|-6537565703316603243|35|1';
 
-    expect(index.actionsById.get('a3-miss').hits).toEqual([
+    expect(index.actionsById.get('plunging-miss').hits).toEqual([
       expect.objectContaining({
         identity: hitIdentity,
         landed: 'miss',
         settlements: [],
       }),
     ]);
-    expect(index.actionsById.get('a3-sampled').hits[0]).toMatchObject({
+    expect(index.actionsById.get('plunging-sampled').hits[0]).toMatchObject({
       criticalMode: 'sampled',
       critical: {
         roll: 2345,
@@ -72,7 +60,7 @@ describe('canonicalTraceViewIndex', () => {
         eventMaterialized: false,
       },
     });
-    const expectedHit = index.actionsById.get('a3-expected').hits[0];
+    const expectedHit = index.actionsById.get('plunging-expected').hits[0];
     expect(expectedHit).toMatchObject({
       criticalMode: 'expected',
       critical: {
@@ -82,13 +70,13 @@ describe('canonicalTraceViewIndex', () => {
         sourceCriticalDamageBasisPoints: 15000,
         expectedResult: {
           probabilityBasisPoints: 500,
-          nonCriticalRaw: '4718592',
-          nonCriticalValue: 72,
-          criticalRaw: '7077888',
-          criticalValue: 108,
-          weightedRaw: '4836556',
-          weightedValue: 73.79998779296875,
-          weightedInteger: '74',
+          nonCriticalRaw: '7864320',
+          nonCriticalValue: 120,
+          criticalRaw: '11796480',
+          criticalValue: 180,
+          weightedRaw: '8060928',
+          weightedValue: 123,
+          weightedInteger: '123',
           criticalEventMaterialized: false,
         },
         eventMaterialized: false,
@@ -98,11 +86,13 @@ describe('canonicalTraceViewIndex', () => {
       1.5,
       4
     );
-    expect(index.actionsById.get('a3-critical').hits[0]).toMatchObject({
+    expect(index.actionsById.get('plunging-critical').hits[0]).toMatchObject({
       criticalMode: 'critical',
       critical: { critical: true, eventMaterialized: true },
     });
-    expect(index.actionsById.get('a3-non-critical').hits[0]).toMatchObject({
+    expect(
+      index.actionsById.get('plunging-non-critical').hits[0]
+    ).toMatchObject({
       criticalMode: 'non-critical',
       critical: { critical: false, eventMaterialized: false },
     });
@@ -113,14 +103,14 @@ describe('canonicalTraceViewIndex', () => {
     missingEvidenceRun.hashes.trace = 'missing-expected-materialization';
     missingEvidenceRun.traceHash = 'missing-expected-materialization';
     const event = missingEvidenceRun.trace.damage.find(
-      item => item.actionId === 'a3-expected'
+      item => item.actionId === 'plunging-expected'
     );
     delete event.formula.verifiedResult.expectedCritical
       .criticalEventMaterialized;
 
     const critical =
       createCanonicalTraceViewIndex(missingEvidenceRun).actionsById.get(
-        'a3-expected'
+        'plunging-expected'
       ).hits[0].critical;
     expect(critical.expectedResult.criticalEventMaterialized).toBeNull();
     expect(critical.eventMaterialized).toBeNull();
@@ -131,7 +121,7 @@ describe('canonicalTraceViewIndex', () => {
     staleRun.hashes.traceHash = 'stale-hit-fixture';
     staleRun.traceHash = 'stale-hit-fixture';
     staleRun.trace.actions.find(
-      action => action.id === 'a3-inherit'
+      action => action.id === 'plunging-inherit'
     ).hitOverrides = {
       'obsolete-hit-identity': {
         willHit: false,
@@ -140,7 +130,9 @@ describe('canonicalTraceViewIndex', () => {
     };
 
     const action =
-      createCanonicalTraceViewIndex(staleRun).actionsById.get('a3-inherit');
+      createCanonicalTraceViewIndex(staleRun).actionsById.get(
+        'plunging-inherit'
+      );
     expect(action.hits).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

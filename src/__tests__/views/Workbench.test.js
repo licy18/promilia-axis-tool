@@ -11,7 +11,7 @@ import {
   it,
   vi,
 } from 'vitest';
-import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import machineAxisFixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import workbenchSkillDiagnostics from '../../data/generated/workbench-skill-diagnostics.json';
 import workbenchSeed from '../../data/generated/workbench-seed.json';
 import verifiedCombatMechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
@@ -12634,7 +12634,7 @@ describe('Workbench view', () => {
     expect(
       wrapper
         .find(
-          '[data-testid="workbench-timeline-action"][data-action-id="ruby-enhanced-e1-intent"]'
+          '[data-testid="workbench-timeline-action"][data-action-id="ruby-plunging"]'
         )
         .exists()
     ).toBe(true);
@@ -12644,7 +12644,7 @@ describe('Workbench view', () => {
       .trigger('click');
     await wrapper
       .get(
-        '[data-testid="workbench-timeline-action"][data-action-id="a3-sampled"]'
+        '[data-testid="workbench-timeline-action"][data-action-id="plunging-sampled"]'
       )
       .trigger('click');
     await settleWorkbenchAsyncPanels();
@@ -12659,7 +12659,7 @@ describe('Workbench view', () => {
       '[data-testid="workbench-canonical-trace-inspector"]'
     );
     expect(inspector.attributes('data-trace-hash')).toBe(importedTraceHash);
-    expect(inspector.text()).toContain('control 10100703 / sub 0');
+    expect(inspector.text()).toContain('control 10100711 / sub 0');
     const hitRow = inspector.get('[data-testid="canonical-trace-hit-row"]');
     const landedSelect = hitRow.get(
       '[data-testid="canonical-trace-hit-landed"]'

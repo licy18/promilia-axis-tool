@@ -34,6 +34,12 @@ describe('Machine Axis action legality proof', () => {
       passed: true,
       finalScoreEligible: true,
       rejectionCodes: [],
+      normalAttackInputAuthority: {
+        schemaVersion: expect.any(Number),
+        contractName: expect.any(String),
+        policyVersion: expect.any(Number),
+        contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+      },
       proofHash: expect.stringMatching(/^[0-9a-f]{16}$/),
     });
   });
@@ -203,6 +209,62 @@ describe('Machine Axis action legality proof', () => {
         actionId: 'joint-pair',
       }),
     ]);
+  });
+
+  it('preserves the normal-input authority counterexample in the formal proof', () => {
+    const run = createRun([
+      {
+        actionId: 'illegal-fresh-a1',
+        status: 'skipped-rule-blocked',
+        execute: false,
+        violationCodes: ['VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT'],
+        unresolvedCodes: [],
+      },
+    ]);
+    run.trace.diagnostics.actionRules.diagnostics = [
+      {
+        code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+        status: 'violated',
+        actionId: 'illegal-fresh-a1',
+        actorId: 'actor-112001',
+        reason: 'verified-normal-attack-input-phase-conflict',
+        reasons: ['normal-attack-successor-window-target-conflict'],
+        sourceKind: 'verified-normal-attack-direct-successor',
+        sourceIdentity: 'verified:112001:a1-a2-window',
+        formIdentity: 'normal-attack-form:0123456789abcdef',
+        expectedAttackInput: {
+          sequenceIndex: 2,
+          controlSkillId: 11200102,
+          subSkillIndex: 0,
+        },
+        actualAttackInput: {
+          sequenceIndex: 1,
+          controlSkillId: 11200101,
+          subSkillIndex: 0,
+        },
+      },
+    ];
+
+    const proof = createMachineAxisActionLegalityProof(run, {
+      objectiveId: 'fastest-kill',
+    });
+    expect(proof).toMatchObject({
+      passed: false,
+      finalScoreEligible: false,
+      rejectionCounts: {
+        VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT: 1,
+      },
+    });
+    expect(proof.minimalCounterexamples).toContainEqual(
+      expect.objectContaining({
+        actionId: 'illegal-fresh-a1',
+        category: 'chain',
+        formIdentity: 'normal-attack-form:0123456789abcdef',
+        reasons: ['normal-attack-successor-window-target-conflict'],
+        expectedAttackInput: expect.objectContaining({ sequenceIndex: 2 }),
+        actualAttackInput: expect.objectContaining({ sequenceIndex: 1 }),
+      })
+    );
   });
 
   it.each([

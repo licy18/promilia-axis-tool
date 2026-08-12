@@ -21,18 +21,18 @@ import {
 } from '../../simulation/headless/canonicalHeadlessCombatCore';
 import { DEFAULT_THREE_VALUE_MECHANICS_PROFILE_CATALOG } from '../../simulation/mechanics/threeValueMechanicsProfileCatalog';
 
-const PANGPANG_CHARACTER_ID = 101007;
-const PANGPANG_SKILL_ID = 10100701;
-const PANGPANG_ULTIMATE_SKILL_ID = 10100713;
-const PANGPANG_MAPPING = verifiedCombatMechanicsPackage.actionMappings.find(
+const MOYIN_CHARACTER_ID = 112001;
+const MOYIN_SKILL_ID = 11200101;
+const MOYIN_ULTIMATE_SKILL_ID = 11200113;
+const MOYIN_MAPPING = verifiedCombatMechanicsPackage.actionMappings.find(
   mapping =>
-    mapping.ownerId === PANGPANG_CHARACTER_ID &&
+    mapping.ownerId === MOYIN_CHARACTER_ID &&
     mapping.actionKind === 'normal-attack'
 );
-const PANGPANG_A3 = PANGPANG_MAPPING.attackInputSegments.find(
-  segment => segment.sequenceIndex === 3
+const MOYIN_A1 = MOYIN_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 1
 );
-const PANGPANG_HIT_IDENTITY = PANGPANG_A3.selectedHitIdentities[0];
+const MOYIN_HIT_IDENTITY = MOYIN_A1.selectedHitIdentities[0];
 
 beforeEach(() => {
   installVerifiedCombatMechanicsPackage(verifiedCombatMechanicsPackage);
@@ -143,6 +143,60 @@ describe('canonical headless combat core', () => {
     );
   });
 
+  it('projects verified normal-input authority evidence from runtime blocks', () => {
+    const trace = createCanonicalCombatTrace({
+      compilation: {
+        dataIdentity: { packageId: 'synthetic' },
+        scenario: {
+          time: { fps: 60 },
+          actors: [],
+          enemy: {},
+          actions: [],
+          combatScenario: {},
+        },
+      },
+      simulation: {
+        scenario: { durationMs: 1000 },
+        actionRuleDiagnostics: {
+          diagnostics: [
+            {
+              id: 'normal-input-conflict|a1-restart',
+              code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+              status: 'violated',
+              severity: 'error',
+              actionId: 'a1-restart',
+              actionIds: ['a1-restart'],
+              actorId: 'actor-112001',
+              timeMs: 300,
+              runtimeBlock: {
+                reason: 'verified-normal-attack-input-phase-conflict',
+                reasons: ['normal-attack-successor-window-target-conflict'],
+                sourceKind: 'verified-normal-attack-direct-successor',
+                sourceIdentity: 'verified:112001:a1-a2-window',
+                formIdentity: 'normal-attack-form:0123456789abcdef',
+                expectedAttackInput: { sequenceIndex: 2 },
+                actualAttackInput: { sequenceIndex: 1 },
+              },
+            },
+          ],
+          summary: {},
+        },
+      },
+    });
+
+    expect(trace.diagnostics.actionRules.diagnostics).toContainEqual(
+      expect.objectContaining({
+        code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+        reason: 'verified-normal-attack-input-phase-conflict',
+        reasons: ['normal-attack-successor-window-target-conflict'],
+        sourceKind: 'verified-normal-attack-direct-successor',
+        formIdentity: 'normal-attack-form:0123456789abcdef',
+        expectedAttackInput: { sequenceIndex: 2 },
+        actualAttackInput: { sequenceIndex: 1 },
+      })
+    );
+  });
+
   it('exposes one deterministic catalog/compile/validate/simulate/evaluate/explain contract', () => {
     const core = createCore();
     const project = createVerifiedProject();
@@ -153,8 +207,8 @@ describe('canonical headless combat core', () => {
     const second = core.simulate(project);
     const evaluation = core.evaluate(first);
     const explanation = core.explain(first, {
-      actionId: 'verified-pangpang-a3',
-      hitIdentity: PANGPANG_HIT_IDENTITY,
+      actionId: 'verified-moyin-a1',
+      hitIdentity: MOYIN_HIT_IDENTITY,
     });
 
     expect(catalog).toMatchObject({
@@ -169,13 +223,19 @@ describe('canonical headless combat core', () => {
       valid: true,
       inputHash: compilation.hashes.input,
     });
+    expect(compilation.dataIdentity.normalAttackInputAuthority).toMatchObject({
+      schemaVersion: expect.any(Number),
+      contractName: expect.any(String),
+      policyVersion: expect.any(Number),
+      contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
+    });
     expect(first.traceHash).toBe(second.traceHash);
     expect(first.hashes.evaluation).toBe(second.hashes.evaluation);
     expect(evaluation).toEqual(first.evaluation);
     expect(explanation).toMatchObject({
       kind: 'azpr-canonical-combat-explanation',
       traceHash: first.traceHash,
-      actions: [{ id: 'verified-pangpang-a3' }],
+      actions: [{ id: 'verified-moyin-a1' }],
     });
     expect(explanation.damage).toHaveLength(1);
   });
@@ -309,7 +369,7 @@ describe('canonical headless combat core', () => {
       createVerifiedProject({
         critical: { policy: 'non-critical', seed: 'per-hit-seed' },
         hitOverrides: {
-          [PANGPANG_HIT_IDENTITY]: {
+          [MOYIN_HIT_IDENTITY]: {
             willHit: true,
             criticalPolicy: 'sampled',
           },
@@ -334,7 +394,7 @@ describe('canonical headless combat core', () => {
     const project = createVerifiedProject({
       critical: { policy: 'non-critical' },
       hitOverrides: {
-        [PANGPANG_HIT_IDENTITY]: {
+        [MOYIN_HIT_IDENTITY]: {
           willHit: true,
           criticalPolicy: 'sampled',
         },
@@ -371,7 +431,7 @@ describe('canonical headless combat core', () => {
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          actionId: 'm11-blocked-pangpang-ultimate',
+          actionId: 'm11-blocked-moyin-ultimate',
         }),
       ])
     );
@@ -381,12 +441,11 @@ describe('canonical headless combat core', () => {
     expect(getDamage(withBlockedUltimate)).toBe(getDamage(onlyHit));
     expect(
       withBlockedUltimate.trace.damage.find(
-        event => event.actionId === 'verified-pangpang-a3'
+        event => event.actionId === 'verified-moyin-a1'
       )?.formula.randomBranch
     ).toEqual(
-      onlyHit.trace.damage.find(
-        event => event.actionId === 'verified-pangpang-a3'
-      )?.formula.randomBranch
+      onlyHit.trace.damage.find(event => event.actionId === 'verified-moyin-a1')
+        ?.formula.randomBranch
     );
   });
 
@@ -475,7 +534,7 @@ describe('canonical headless combat core', () => {
       createVerifiedProject({
         critical: { policy: 'critical' },
         hitOverrides: {
-          [PANGPANG_HIT_IDENTITY]: {
+          [MOYIN_HIT_IDENTITY]: {
             willHit: true,
             criticalPolicy: 'non-critical',
           },
@@ -491,7 +550,7 @@ describe('canonical headless combat core', () => {
     expect(getRandomBranch(overridden)).toMatchObject({
       policy: 'deterministic-non-critical-baseline',
       critical: false,
-      hitIdentity: PANGPANG_HIT_IDENTITY,
+      hitIdentity: MOYIN_HIT_IDENTITY,
     });
     expect(getDamage(overridden)).toBe(getDamage(nonCritical));
     expect(getRandomBranch(expected)).toMatchObject({
@@ -539,49 +598,54 @@ function createVerifiedProject({
   includeBlockedUltimate = false,
   targetCriticalDefenseRaw = null,
 } = {}) {
-  const teamSlots = createDefaultWorkbenchTeamSlots();
-  const actorConfigs = createDefaultWorkbenchActorConfigs(
-    DEFAULT_WORKBENCH_SELECTION
-  ).map(config => ({ ...config, initialSp: 0 }));
+  const selection = {
+    ...DEFAULT_WORKBENCH_SELECTION,
+    characterId: MOYIN_CHARACTER_ID,
+    skillId: MOYIN_SKILL_ID,
+  };
+  const teamSlots = createDefaultWorkbenchTeamSlots(selection);
+  const actorConfigs = createDefaultWorkbenchActorConfigs(selection).map(
+    config => ({ ...config, initialSp: 0 })
+  );
   const action = createWorkbenchActionDraft({
-    id: 'verified-pangpang-a3',
+    id: 'verified-moyin-a1',
     type: 'skill',
-    actorCharacterId: PANGPANG_CHARACTER_ID,
-    skillId: PANGPANG_SKILL_ID,
+    actorCharacterId: MOYIN_CHARACTER_ID,
+    skillId: MOYIN_SKILL_ID,
     actionVariantIndex: 0,
     startMs: 0,
-    durationMs: (PANGPANG_A3.durationFrames * 1000) / 60,
-    durationFrames: PANGPANG_A3.durationFrames,
-    attackGroupId: 'm11-pangpang-chain',
-    attackSequenceIndex: PANGPANG_A3.sequenceIndex,
-    attackSequenceTotal: PANGPANG_A3.sequenceTotal,
-    attackInput: PANGPANG_A3,
-    actionScheduling: PANGPANG_A3.actionScheduling,
+    durationMs: (MOYIN_A1.durationFrames * 1000) / 60,
+    durationFrames: MOYIN_A1.durationFrames,
+    attackGroupId: 'm11-moyin-chain',
+    attackSequenceIndex: MOYIN_A1.sequenceIndex,
+    attackSequenceTotal: MOYIN_A1.sequenceTotal,
+    attackInput: MOYIN_A1,
+    actionScheduling: MOYIN_A1.actionScheduling,
     hitOverrides,
   });
   const actions = [action];
   if (includeBlockedUltimate) {
     actions.push(
       createWorkbenchActionDraft({
-        id: 'm11-blocked-pangpang-ultimate',
+        id: 'm11-blocked-moyin-ultimate',
         type: 'skill',
-        actorCharacterId: PANGPANG_CHARACTER_ID,
-        skillId: PANGPANG_ULTIMATE_SKILL_ID,
+        actorCharacterId: MOYIN_CHARACTER_ID,
+        skillId: MOYIN_ULTIMATE_SKILL_ID,
         actionVariantIndex: 0,
         startMs: 600,
         durationMs: 800,
       })
     );
   }
-  const project = createWorkbenchProject(DEFAULT_WORKBENCH_SELECTION, {
+  const project = createWorkbenchProject(selection, {
     durationMs: 2000,
     teamSlots,
     actorConfigs,
     actions,
     initialRuntimeState: {
       controlledActor: {
-        actorId: `actor-${PANGPANG_CHARACTER_ID}`,
-        characterId: PANGPANG_CHARACTER_ID,
+        actorId: `actor-${MOYIN_CHARACTER_ID}`,
+        characterId: MOYIN_CHARACTER_ID,
       },
     },
     combatScenario: {

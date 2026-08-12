@@ -1,4 +1,4 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import xiaoyuVisualFixture from '../../../fixtures/character-acceptance/101010-visual.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
@@ -13,8 +13,7 @@ import {
 } from '../../simulation/runtime/effectRuntimeTimeline';
 import { createCanonicalCombatEvaluation } from '../../simulation/headless/canonicalHeadlessCombatCore';
 
-const PANGPANG_A3_HIT =
-  '10100703|0|elements|0|-9212100609153088879|14|1';
+const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
 describe('Machine Axis external audit boundaries', () => {
   beforeEach(() => {
@@ -29,23 +28,27 @@ describe('Machine Axis external audit boundaries', () => {
       [499, true],
       [500, false],
       [9999, false],
-    ])('interprets captured roll %i as basis points', (criticalRoll, critical) => {
-      const service = createMachineAxisService();
-      const axis = createPangpangA3Axis({ criticalRoll });
-      expect(service.validate(axis).issues).toEqual([]);
-      const run = service.simulate(axis);
-      const branch = run.trace.damage.find(
-        event => event.actionId === 'boundary-a3'
-      )?.formula?.randomBranch;
+    ])(
+      'interprets captured roll %i as basis points',
+      (criticalRoll, critical) => {
+        const service = createMachineAxisService();
+        const axis = createPangpangPlungingAxis({ criticalRoll });
+        expect(service.validate(axis).issues).toEqual([]);
+        const run = service.simulate(axis);
+        const branch = run.trace.damage.find(
+          event => event.actionId === 'boundary-plunging'
+        )?.formula?.randomBranch;
 
-      expect(branch).toMatchObject({
-        policy: 'captured-critical-roll',
-        criticalRoll,
-        criticalRollUnit: 'basis-points',
-        normalizedCriticalRoll: criticalRoll / 10_000,
-        critical,
-      });
-    }, 15_000);
+        expect(branch).toMatchObject({
+          policy: 'captured-critical-roll',
+          criticalRoll,
+          criticalRollUnit: 'basis-points',
+          normalizedCriticalRoll: criticalRoll / 10_000,
+          critical,
+        });
+      },
+      15_000
+    );
   });
 
   describe('M11-02 raw JSON Schema boundary', () => {
@@ -162,13 +165,13 @@ describe('Machine Axis external audit boundaries', () => {
   });
 
   describe('M11-04 context-resolved durations', () => {
-    it('uses Ruby enhanced E1 actual occupancy for after-action-end', () => {
+    it('uses Ruby plunging actual occupancy for after-action-end', () => {
       const axis = cloneFixture();
       axis.actions.push({
         ...createWaitAction('after-ruby-e1', null, 1),
         schedule: {
           mode: 'after-action-end',
-          actionId: 'ruby-enhanced-e1-intent',
+          actionId: 'ruby-plunging',
           frame: null,
           offsetFrames: 0,
         },
@@ -176,7 +179,7 @@ describe('Machine Axis external audit boundaries', () => {
 
       const prepared = createMachineAxisService().prepare(axis);
       const ruby = prepared.actionResolutions.find(
-        action => action.actionId === 'ruby-enhanced-e1-intent'
+        action => action.actionId === 'ruby-plunging'
       );
       const after = prepared.actionResolutions.find(
         action => action.actionId === 'after-ruby-e1'
@@ -184,9 +187,9 @@ describe('Machine Axis external audit boundaries', () => {
 
       expect(prepared.valid).toBe(true);
       expect(ruby).toMatchObject({
-        resolvedControlSkillId: 10300201,
-        resolvedSubSkillIndex: 1,
-        durationFrames: 24,
+        publicActionId: 10300201,
+        actionKind: 'plunging-attack',
+        durationFrames: 55,
       });
       expect(after.startFrame).toBe(ruby.startFrame + ruby.durationFrames);
     }, 30_000);
@@ -306,17 +309,9 @@ describe('Machine Axis external audit boundaries', () => {
           }),
           expect.objectContaining({
             severity: 'warning',
-            code: 'machine-axis-source-evidence-open',
-            actionId: 'ruby-enhanced-e1-intent',
-            sourceEvidenceStatus: 'runtime-dependent',
-          }),
-          expect.objectContaining({
-            severity: 'warning',
             code: 'machine-axis-action-conditions-unresolved',
-            actionId: 'a3-inherit',
-            unresolvedCodes: expect.arrayContaining([
-              'attack-input-chain-incomplete',
-            ]),
+            actionId: 'switch-to-xiaoyu--on-enter--actor-101010--star-carry',
+            unresolvedCodes: ['actor-switch-exit-tail-order-unresolved'],
           }),
         ])
       );
@@ -377,48 +372,38 @@ describe('Machine Axis external audit boundaries', () => {
         ])
       );
       expect(
-        evaluation.byAction.reduce(
-          (sum, row) => sum + row.combatHitCount,
-          0
-        )
+        evaluation.byAction.reduce((sum, row) => sum + row.combatHitCount, 0)
       ).toBe(evaluation.totals.combatHitCount);
       expect(
-        evaluation.byActor.reduce(
-          (sum, row) => sum + row.recoveredToughness,
-          0
-        )
+        evaluation.byActor.reduce((sum, row) => sum + row.recoveredToughness, 0)
       ).toBe(evaluation.totals.recoveredToughness);
     });
 
     it('conserves the merged 120 second fixture across totals and groups', () => {
-      const evaluation = createMachineAxisService().simulate(
-        cloneFixture()
-      ).evaluation;
+      const evaluation =
+        createMachineAxisService().simulate(cloneFixture()).evaluation;
       const ruby = evaluation.byAction.find(
-        row => row.identity === 'ruby-enhanced-e1-intent'
+        row => row.identity === 'ruby-plunging'
       );
 
       expect(evaluation.totals).toMatchObject({
-        combatHitCount: 34,
-        projectedHitCount: 34,
+        combatHitCount: 28,
+        projectedHitCount: 28,
         stateEventCount: 0,
-        hpDamage: 3836.7999877929688,
+        hpDamage: 4064,
         inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
       expect(ruby).toMatchObject({
-        combatHitCount: 3,
-        hitCount: 3,
+        combatHitCount: 1,
+        hitCount: 1,
         stateEventCount: 0,
-        hpDamage: 81,
+        hpDamage: 133,
         inflictedToughnessDamage: 0,
         recoveredToughness: 0,
       });
       expect(
-        evaluation.byAction.reduce(
-          (sum, row) => sum + row.combatHitCount,
-          0
-        )
+        evaluation.byAction.reduce((sum, row) => sum + row.combatHitCount, 0)
       ).toBe(evaluation.totals.combatHitCount);
       expect(
         evaluation.byActor.reduce(
@@ -492,21 +477,12 @@ describe('Machine Axis external audit boundaries', () => {
         ['xunlang-signature-slot-2', true],
       ]);
       expect(
-        cooldownStarts
-          .map(event => event.payload.runtimeOwnerIdentity)
-      ).toEqual([
-        'actor-101007|kibo:500001',
-        'actor-101010|kibo:500001',
-      ]);
+        cooldownStarts.map(event => event.payload.runtimeOwnerIdentity)
+      ).toEqual(['actor-101007|kibo:500001', 'actor-101010|kibo:500001']);
       expect(
-        new Set(
-          cooldownStarts.map(event => event.payload.runtimeOwnerIdentity)
-        )
+        new Set(cooldownStarts.map(event => event.payload.runtimeOwnerIdentity))
       ).toEqual(
-        new Set([
-          'actor-101007|kibo:500001',
-          'actor-101010|kibo:500001',
-        ])
+        new Set(['actor-101007|kibo:500001', 'actor-101010|kibo:500001'])
       );
       expect(
         run.trace.resources.kibos.filter(
@@ -567,7 +543,7 @@ describe('Machine Axis external audit boundaries', () => {
           schedule: { mode: 'absolute', frame: 60 },
         },
         {
-          ...axis.actions.find(action => action.id === 'a3-inherit'),
+          ...axis.actions.find(action => action.id === 'plunging-inherit'),
           schedule: { mode: 'absolute', frame: 60 },
         },
       ];
@@ -579,35 +555,22 @@ describe('Machine Axis external audit boundaries', () => {
         expect.objectContaining({
           code: 'machine-axis-same-frame-order-unresolved',
           absoluteFrame: 60,
-          actionIds: ['xunlang-signature', 'a3-inherit'],
+          actionIds: ['xunlang-signature', 'plunging-inherit'],
           ownerKinds: ['kibo', 'actor'],
         })
       );
       expect(validation.classification.evidenceStatus).toBe('evidence-open');
     }, 30_000);
 
-    it('orders 0+20 and 6+14 combat hits by source sequence on frame 20', () => {
-      const axis = cloneFixture();
-      const kibo = axis.actions.find(
-        action => action.id === 'xunlang-signature'
+    it('orders same-frame kibo and actor hits by source sequence', () => {
+      const run = createMachineAxisService().simulate(
+        createSameFrameCombatAxis({
+          kiboActionId: 'z-kibo-source-first',
+          actorActionId: 'a-actor-source-second',
+        })
       );
-      const actor = axis.actions.find(action => action.id === 'a3-inherit');
-      axis.actions = [
-        {
-          ...kibo,
-          id: 'z-kibo-source-first',
-          schedule: { mode: 'absolute', frame: 0 },
-        },
-        {
-          ...actor,
-          id: 'a-actor-source-second',
-          schedule: { mode: 'absolute', frame: 6 },
-        },
-      ];
-
-      const run = createMachineAxisService().simulate(axis);
       const sameFrame = run.trace.damage.filter(
-        event => event.absoluteFrame === 20
+        event => event.absoluteFrame === 80
       );
 
       expect(sameFrame).toHaveLength(4);
@@ -643,8 +606,7 @@ describe('Machine Axis external audit boundaries', () => {
         projectSameFrameCombatSemantics(kiboIdSortsFirst)
       );
       expect(
-        projectSameFrameCombatSemantics(actorIdSortsFirst)
-          .executionOwnerOrder
+        projectSameFrameCombatSemantics(actorIdSortsFirst).executionOwnerOrder
       ).toEqual(['kibo', 'actor']);
       expect(
         actorIdSortsFirst.trace.executionPlan.actions.map(action => ({
@@ -670,24 +632,22 @@ describe('Machine Axis external audit boundaries', () => {
           .map(warning => [warning.actionId, warning])
       );
 
-      expect(warningsByActionId.get('a3-inherit')?.path).toBe(
-        'executionPlan.actions.1'
-      );
-      expect(warningsByActionId.has('ruby-enhanced-e1-intent')).toBe(false);
+      expect(warningsByActionId.has('plunging-inherit')).toBe(false);
+      expect(warningsByActionId.has('ruby-plunging')).toBe(false);
     }, 30_000);
   });
 });
 
-function createPangpangA3Axis({ criticalRoll }) {
+function createPangpangPlungingAxis({ criticalRoll }) {
   const axis = cloneFixture();
-  const source = axis.actions.find(action => action.id === 'a3-inherit');
+  const source = axis.actions.find(action => action.id === 'plunging-inherit');
   axis.actions = [
     {
       ...source,
-      id: 'boundary-a3',
+      id: 'boundary-plunging',
       schedule: { mode: 'absolute', frame: 60 },
       hitOverrides: {
-        [PANGPANG_A3_HIT]: {
+        [PANGPANG_PLUNGING_HIT]: {
           landed: 'hit',
           criticalMode: 'sampled',
           criticalRoll,
@@ -830,8 +790,7 @@ function projectSameFrameCombatSemantics(run) {
       })),
     totals: {
       hpDamage: run.evaluation.totals.hpDamage,
-      inflictedToughnessDamage:
-        run.evaluation.totals.inflictedToughnessDamage,
+      inflictedToughnessDamage: run.evaluation.totals.inflictedToughnessDamage,
       recoveredToughness: run.evaluation.totals.recoveredToughness,
     },
     resourceEvents: {
