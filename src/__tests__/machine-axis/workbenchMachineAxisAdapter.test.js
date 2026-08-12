@@ -17,6 +17,11 @@ import {
   createWorkbenchMachineAxisAdapter,
 } from '../../machine-axis/workbenchMachineAxisAdapter';
 import { resolveWorkbenchMachineAxisConfigurationProjection } from '../../machine-axis/workbenchMachineAxisProjectProjection';
+import {
+  createRubyEnhancedContextAxis,
+  installRubyNormalAttackProfileOverlay,
+  restoreVerifiedCombatMechanicsPackage,
+} from '../helpers/rubyNormalAttackAuthorityFixture';
 
 const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
@@ -439,6 +444,60 @@ describe('Workbench Machine Axis adapter', () => {
     );
     expect(rebuiltRun.hashes).toEqual(originalRun.hashes);
   }, 30_000);
+
+  it('preserves a verified single-input normal attack through draft persistence and rebuild', () => {
+    installRubyNormalAttackProfileOverlay();
+    try {
+      const service = createMachineAxisService();
+      const adapter = createWorkbenchMachineAxisAdapter({ service });
+      const contract = createRubyEnhancedContextAxis(fixture);
+      const imported = adapter.importContract(contract);
+      const persistedDraft = JSON.parse(
+        JSON.stringify(
+          createWorkbenchDraftSnapshot(
+            createWorkbenchDraftFromMachineAxisImport(imported),
+            null
+          )
+        )
+      );
+      const rebuilt = createWorkbenchProject(persistedDraft.selection, {
+        ...persistedDraft,
+        ...resolveWorkbenchMachineAxisConfigurationProjection({
+          configurationLibrary: persistedDraft.configurationLibrary,
+          configurationSelection: persistedDraft.configurationSelection,
+          projectTransport: persistedDraft.projectTransport,
+        }),
+        actions: persistedDraft.actionDrafts,
+      });
+      const exported = adapter.exportProject(rebuilt);
+      const originalRun = adapter.simulate(contract);
+      const rebuiltRun = WORKBENCH_HEADLESS_COMBAT_CORE.simulate(rebuilt);
+
+      expect(
+        persistedDraft.actionDrafts.find(
+          action => action.id === 'ruby-enhanced-context'
+        )
+      ).toMatchObject({ attackInputExpansionMode: 'single-input' });
+      expect(
+        rebuilt.actions.find(action => action.id === 'ruby-enhanced-context')
+      ).not.toHaveProperty('attackInputExpansionMode');
+      expect(
+        exported.actions.find(action => action.id === 'ruby-enhanced-context')
+          .intent.attackInput
+      ).toMatchObject(
+        contract.actions.find(action => action.id === 'ruby-enhanced-context')
+          .intent.attackInput
+      );
+      expect(
+        exported.actions.find(action => action.id === 'ruby-enhanced-context')
+          .intent.attackInput.groupId
+      ).toBe('machine-axis-ruby-enhanced-context');
+      expect(rebuiltRun.hashes).toEqual(originalRun.hashes);
+    } finally {
+      restoreVerifiedCombatMechanicsPackage();
+    }
+  }, 30_000);
+
   it('projects Workbench edits and rejects unsupported project actions', () => {
     const service = createMachineAxisService();
     const adapter = createWorkbenchMachineAxisAdapter({ service });

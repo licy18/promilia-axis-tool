@@ -1,4 +1,4 @@
-import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-120s.json';
+import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -11,8 +11,12 @@ import {
   createSearchResourceThresholdBoundary,
   createVerifiedActionWindowBoundaries,
 } from '../../machine-axis/machineAxisSearchState';
+import {
+  installRubyNormalAttackProfileOverlay,
+  restoreVerifiedCombatMechanicsPackage,
+} from '../helpers/rubyNormalAttackAuthorityFixture';
 
-const PANGPANG_A3_HIT = '10100703|0|elements|0|-9212100609153088879|14|1';
+const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
 function cloneFixture({ durationFrames = 1800 } = {}) {
   const axis = structuredClone(fixture);
@@ -96,13 +100,14 @@ describe('M12-B-R1 search acceptance boundaries', () => {
   it('keeps depth 8 and 24 real-core searches non-empty with repeated semantic actions and unique IDs', async () => {
     const generator = createRepeatedActionGenerator({
       publicActionId: 10100701,
-      actionKind: 'normal-attack',
-      attackInput: { sequenceIndex: 3, groupId: 'search-repeat-a3' },
+      actionKind: 'plunging-attack',
     });
     const engine = createMachineAxisSearchEngine({ service, generator });
     for (const maxDepth of [8, 24]) {
+      const contract = cloneFixture({ durationFrames: maxDepth * 400 });
+      contract.scenario.enemy.hpMultiplier = 1_000_000_000;
       const result = await engine.search({
-        contract: cloneFixture(),
+        contract,
         options: {
           objective: 'damage',
           beamWidth: 1,
@@ -110,6 +115,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
           maxDepth,
           includeKibo: false,
           includeSwitch: false,
+          includeWait: false,
         },
       });
       expect(result.results).toHaveLength(1);
@@ -128,11 +134,15 @@ describe('M12-B-R1 search acceptance boundaries', () => {
         )
       );
       expect(result.results[0].state.currentFrame).toBe(nodeFrame);
-      expect(result.results[0].state.remainingFrames).toBe(1800 - nodeFrame);
+      expect(result.results[0].state.remainingFrames).toBe(
+        contract.scenario.durationFrames - nodeFrame
+      );
     }
   }, 300_000);
 
   it('places a Ruby derived E1 from the resolved A3 duration instead of a public template fallback', async () => {
+    installRubyNormalAttackProfileOverlay();
+    const rubyService = createMachineAxisService();
     const axis = cloneFixture();
     axis.scenario.team = [
       { ...axis.scenario.team[2], slotId: 'slot-1' },
@@ -149,6 +159,7 @@ describe('M12-B-R1 search acceptance boundaries', () => {
       generateNextActions({ axis: current, nextStartFrameByActor }) {
         const ordinal = current.actions.length + 1;
         const sequenceIndex = ordinal <= 3 ? ordinal : 1;
+        const enhanced = ordinal > 3;
         return [
           {
             action: createMachineAxisSearchAction({
@@ -159,7 +170,15 @@ describe('M12-B-R1 search acceptance boundaries', () => {
               actionKind: 'normal-attack',
               attackInput: {
                 sequenceIndex,
-                groupId: `ruby-search-${ordinal}`,
+                groupId: 'ruby-search-normal',
+                ...(enhanced
+                  ? {
+                      chainIdentity: 'ruby-enhanced-twelve-inputs',
+                      contextActionId: 'search-action-3',
+                    }
+                  : ordinal > 1
+                    ? { contextActionId: `search-action-${ordinal - 1}` }
+                    : {}),
               },
               startFrame: nextStartFrameByActor['actor-103002'] ?? 0,
             }),
@@ -172,55 +191,64 @@ describe('M12-B-R1 search acceptance boundaries', () => {
         ];
       },
     };
-    const result = await createMachineAxisSearchEngine({
-      service,
-      generator,
-    }).search({
-      contract: axis,
-      options: {
-        objective: 'damage',
-        beamWidth: 1,
-        topN: 1,
-        maxDepth: 4,
-        includeWait: false,
-        includeKibo: false,
-        includeSwitch: false,
-      },
-    });
-    const best = result.results[0];
-    expect(best.axis.actions).toHaveLength(4);
-    const resolutions = best.run.actionResolutions;
-    const a3 = resolutions.find(entry => entry.actionId === 'search-action-3');
-    const e1 = resolutions.find(entry => entry.actionId === 'search-action-4');
-    expect(a3).toMatchObject({ resolvedControlSkillId: 10300203 });
-    expect(e1).toMatchObject({
-      resolvedControlSkillId: 10300201,
-      resolvedSubSkillIndex: 1,
-      durationFrames: 24,
-    });
-    expect(e1.startFrame).toBe(a3.startFrame + a3.durationFrames);
-    const verifiedWindows = createVerifiedActionWindowBoundaries({
-      run: best.run,
-      graph: mechanicsPackage.actionVariantGraph,
-    });
-    expect(verifiedWindows).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          actionId: 'search-action-3',
-          frame: a3.startFrame + 34,
-          boundaryRole: 'start',
-          source: 'verified-attack-chain-transition',
-          targetChainIdentity: 'ruby-enhanced-twelve-inputs',
-        }),
-        expect.objectContaining({
-          actionId: 'search-action-3',
-          frame: a3.startFrame + 79,
-          boundaryRole: 'end',
-          source: 'verified-attack-chain-transition',
-          targetChainIdentity: 'ruby-enhanced-twelve-inputs',
-        }),
-      ])
-    );
+    try {
+      const result = await createMachineAxisSearchEngine({
+        service: rubyService,
+        generator,
+      }).search({
+        contract: axis,
+        options: {
+          objective: 'damage',
+          beamWidth: 1,
+          topN: 1,
+          maxDepth: 4,
+          includeWait: false,
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      });
+      const best = result.results[0];
+      expect(best.axis.actions).toHaveLength(4);
+      const resolutions = best.run.actionResolutions;
+      const a3 = resolutions.find(
+        entry => entry.actionId === 'search-action-3'
+      );
+      const e1 = resolutions.find(
+        entry => entry.actionId === 'search-action-4'
+      );
+      expect(a3).toMatchObject({ resolvedControlSkillId: 10300203 });
+      expect(e1).toMatchObject({
+        resolvedControlSkillId: 10300201,
+        resolvedSubSkillIndex: 1,
+        durationFrames: 24,
+      });
+      expect(e1.startFrame).toBe(a3.startFrame + a3.durationFrames);
+      const verifiedWindows = createVerifiedActionWindowBoundaries({
+        run: best.run,
+        graph: mechanicsPackage.actionVariantGraph,
+      });
+      expect(verifiedWindows).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            actionId: 'search-action-3',
+            frame: a3.startFrame + 34,
+            boundaryRole: 'start',
+            source: 'verified-attack-chain-transition',
+            targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+          }),
+          expect.objectContaining({
+            actionId: 'search-action-3',
+            frame: a3.startFrame + 79,
+            boundaryRole: 'end',
+            source: 'verified-attack-chain-transition',
+            targetChainIdentity: 'ruby-enhanced-twelve-inputs',
+          }),
+        ])
+      );
+    } finally {
+      restoreVerifiedCombatMechanicsPackage();
+      service = createMachineAxisService();
+    }
   }, 180_000);
 
   it('preserves the last legal frontier when the next repeated action is a real-core dead end', async () => {
@@ -496,14 +524,13 @@ describe('M12-B-R1 search acceptance boundaries', () => {
   }, 180_000);
 
   it('reuses the M12-A state-effect guard and evaluates explicit sampled seed sets', async () => {
-    const hit = findMechanicsHit(PANGPANG_A3_HIT);
+    const hit = findMechanicsHit(PANGPANG_PLUNGING_HIT);
     const originalIdentities = hit.criticalStateEffectIdentities;
     hit.criticalStateEffectIdentities = ['synthetic:critical-state-effect'];
     try {
       const generator = createRepeatedActionGenerator({
         publicActionId: 10100701,
-        actionKind: 'normal-attack',
-        attackInput: { sequenceIndex: 3, groupId: 'critical-state-a3' },
+        actionKind: 'plunging-attack',
       });
       const engine = createMachineAxisSearchEngine({ service, generator });
       const unsafe = await engine.search({

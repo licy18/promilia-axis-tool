@@ -184,7 +184,9 @@ describe('Machine Axis external audit boundaries', () => {
       });
 
       try {
-        const prepared = createMachineAxisService().prepare(axis);
+        const service = createMachineAxisService();
+        const validation = service.validate(axis);
+        const prepared = service.prepare(axis);
         const ruby = prepared.actionResolutions.find(
           action => action.actionId === 'ruby-enhanced-context'
         );
@@ -201,6 +203,13 @@ describe('Machine Axis external audit boundaries', () => {
           durationFrames: 24,
         });
         expect(after.startFrame).toBe(ruby.startFrame + ruby.durationFrames);
+        expect(validation.warnings).toContainEqual(
+          expect.objectContaining({
+            code: 'machine-axis-source-evidence-open',
+            actionId: 'ruby-enhanced-context',
+            sourceEvidenceStatus: 'runtime-dependent',
+          })
+        );
       } finally {
         restoreVerifiedCombatMechanicsPackage();
       }
