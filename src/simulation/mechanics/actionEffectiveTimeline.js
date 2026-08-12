@@ -23,7 +23,17 @@ export function projectScenarioEffectiveActionTimeline({
     const resolution = actionResolutionById?.get?.(action.id);
     const binding = resolution?.actionBinding ?? resolution ?? {};
     const selection = actionSelectionById?.get?.(action.id) ?? {};
-    const attackInput = binding.attackInputSegment ?? action.attackInput;
+    const resolvedAttackInput =
+      binding.attackInputSegment ?? action.attackInput;
+    const attackInput =
+      selection.sourceKind === 'verified-input-context-variant' &&
+      action.attackInput &&
+      Number.isInteger(Number(selection.publicControlSkillId))
+        ? {
+            ...resolvedAttackInput,
+            controlSkillId: Number(selection.publicControlSkillId),
+          }
+        : resolvedAttackInput;
     const genericDurationMs =
       action.type === 'switch'
         ? 0
@@ -59,6 +69,20 @@ export function projectScenarioEffectiveActionTimeline({
       requestedStartMs,
       contextualInputScheduling,
       contextualEffectiveEndMs: contextualEndMs ?? null,
+      ...(selection.sourceKind === 'verified-input-context-variant' &&
+      selection.edgeIdentity &&
+      selection.contextActionId
+        ? {
+            verifiedContextContinuation: {
+              status: 'verified-context-continuation-ready',
+              edgeIdentity: selection.edgeIdentity,
+              contextActionId: selection.contextActionId,
+              publicControlSkillId: selection.publicControlSkillId,
+              executionControlSkillId: selection.executionControlSkillId,
+              selectedSubSkillIndex: selection.selectedSubSkillIndex,
+            },
+          }
+        : {}),
     };
   });
 

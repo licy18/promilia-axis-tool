@@ -22,6 +22,7 @@ import {
   isKiboAutonomousActionKindDeferred,
 } from '../domain/kiboAxisActionScopePolicy';
 import { frameToMs, msToFrame } from '../domain/timebase';
+import { resolveVerifiedContextInputScheduling } from '../domain/verifiedActionContextScheduling';
 import { resolveWorkbenchActionScheduling } from '../domain/workbenchActionScheduling';
 import generatedCharacters from '../data/generated/characters.json';
 import generatedWorkbenchKiboActionCatalog from '../data/generated/workbench-kibo-action-catalog.json';
@@ -1908,13 +1909,64 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
   const contextAction = (contract.actions ?? []).find(
     candidate => String(candidate.id) === String(contextActionId)
   );
+  if (!contextAction) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-action-missing',
+        `actions.${index}.intent.attackInput.contextActionId`,
+        'Explicit normal attack context action does not exist',
+        { actionId: action.id, contextActionId: String(contextActionId) }
+      )
+    );
+    return null;
+  }
+  if (
+    String(contextAction.owner?.kind ?? '') !==
+      String(action.owner?.kind ?? '') ||
+    String(contextAction.owner?.slotId ?? '') !==
+      String(action.owner?.slotId ?? '')
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-owner-conflict',
+        `actions.${index}.intent.attackInput.contextActionId`,
+        'Normal attack context action must belong to the same actor slot',
+        { actionId: action.id, contextActionId: String(contextActionId) }
+      )
+    );
+    return null;
+  }
   const contextFrame = absoluteScheduleFrame(contextAction);
   const actionFrame = absoluteScheduleFrame(action);
   const contextSequenceIndex =
     contextAction?.intent?.attackInput?.sequenceIndex;
   if (!Number.isFinite(contextFrame) || !Number.isFinite(actionFrame)) {
-    return requestedSegment;
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-schedule-unresolved',
+        `actions.${index}.schedule`,
+        'Explicit normal attack context requires absolute source and target frames',
+        { actionId: action.id, contextActionId: contextAction.id }
+      )
+    );
+    return null;
   }
+  const graphContextResolution = resolveGraphContextualAttackInputSegment({
+    action,
+    mapping,
+    contract,
+    contextAction,
+    contextFrame,
+    actionFrame,
+    requestedChainIdentity,
+    requestedSegment,
+    index,
+    issues,
+  });
+  if (graphContextResolution.status === 'selected') {
+    return graphContextResolution.segment;
+  }
+  if (graphContextResolution.status === 'blocked') return null;
   if (!contextSequenceIndex) {
     const contextMapping = getVerifiedCombatActionMapping({
       type: ACTION_TYPES.SKILL,
@@ -2007,6 +2059,325 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
     requestedSegment,
     contextualSegments: linked,
   });
+}
+
+function resolveGraphContextualAttackInputSegment({
+  action,
+  mapping,
+  contract,
+  contextAction,
+  contextFrame,
+  actionFrame,
+  requestedChainIdentity,
+  requestedSegment,
+  index,
+  issues,
+}) {
+  const mechanicsPackage = requireMechanicsPackage();
+  const contextEdges = mechanicsPackage.actionVariantGraph?.contextEdges ?? [];
+  const sourceForm = resolveContractActionExecutionForm({
+    action: contextAction,
+    ownerId: mapping.ownerId,
+    contract,
+  });
+  if (!sourceForm) return { status: 'not-applicable', segment: null };
+  if (
+    sourceForm.actionKind === 'normal-attack' &&
+    sourceForm.contextDerived !== true
+  ) {
+    return { status: 'not-applicable', segment: null };
+  }
+  if (
+    sourceForm.actionKind === 'normal-attack' &&
+    String(contextAction.intent?.attackInput?.groupId ?? '') !==
+      String(action.intent?.attackInput?.groupId ?? '')
+  ) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-group-conflict',
+        `actions.${index}.intent.attackInput.groupId`,
+        'Context-derived normal attacks must remain in the predecessor input group',
+        { actionId: action.id, contextActionId: contextAction.id }
+      )
+    );
+    return { status: 'blocked', segment: null };
+  }
+  const sourceEdges = contextEdges.filter(
+    edge =>
+      edge.applied === true &&
+      Number(edge.ownerId) === Number(mapping.ownerId) &&
+      Number(edge.sourceControlSkillId) ===
+        Number(sourceForm.executionControlSkillId) &&
+      Number(edge.sourceSubSkillIndex ?? 0) ===
+        Number(sourceForm.executionSubSkillIndex ?? 0) &&
+      String(edge.inputCommand ?? '') === String(mapping.actionKind ?? '')
+  );
+  if (!sourceEdges.length) {
+    return { status: 'not-applicable', segment: null };
+  }
+  const scheduled = sourceEdges
+    .map(edge => ({
+      edge,
+      inputScheduling: resolveVerifiedContextInputScheduling({
+        edges: [edge],
+        predecessorStartMs: frameToMs(contextFrame),
+        predecessorEffectiveEndFrame: sourceForm.effectiveDurationFrames,
+        requestedExecutionStartMs: frameToMs(actionFrame),
+      }),
+    }))
+    .filter(candidate => candidate.inputScheduling);
+  if (!scheduled.length) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-window-missing',
+        `actions.${index}.intent.attackInput.contextActionId`,
+        'Explicit normal attack context is outside every verified context window',
+        {
+          actionId: action.id,
+          contextActionId: contextAction.id,
+          sourceControlSkillId: sourceForm.executionControlSkillId,
+          sourceSubSkillIndex: sourceForm.executionSubSkillIndex,
+        }
+      )
+    );
+    return { status: 'blocked', segment: null };
+  }
+  const targeted = scheduled.filter(
+    candidate =>
+      Number(candidate.edge.targetControlSkillId) ===
+        Number(mapping.controlSkillId) &&
+      Number(candidate.edge.executionControlSkillId) ===
+        Number(requestedSegment.controlSkillId)
+  );
+  if (targeted.length !== 1) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        targeted.length
+          ? 'machine-axis-normal-attack-context-window-ambiguous'
+          : 'machine-axis-normal-attack-context-window-conflict',
+        `actions.${index}.intent.attackInput.contextActionId`,
+        targeted.length
+          ? 'Verified context window does not select one unique normal attack form'
+          : 'Verified context window targets a different public normal attack form',
+        {
+          actionId: action.id,
+          contextActionId: contextAction.id,
+          requestedControlSkillId: mapping.controlSkillId,
+          candidateEdgeIdentities: scheduled.map(
+            candidate => candidate.edge.edgeIdentity
+          ),
+        }
+      )
+    );
+    return { status: 'blocked', segment: null };
+  }
+  if (requestedChainIdentity) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-chain-context-conflict',
+        `actions.${index}.intent.attackInput.chainIdentity`,
+        'Explicit default attack chain conflicts with a verified special context form',
+        {
+          actionId: action.id,
+          requestedChainIdentity: String(requestedChainIdentity),
+          contextEdgeIdentity: targeted[0].edge.edgeIdentity,
+        }
+      )
+    );
+    return { status: 'blocked', segment: null };
+  }
+  const { edge, inputScheduling } = targeted[0];
+  const occupancy = edge.executionTiming?.occupancy ?? {};
+  const durationFrames = positiveIntegerOrNull(occupancy.durationFrames);
+  if (durationFrames == null) {
+    issues.push(
+      createMachineAxisDiagnostic(
+        'machine-axis-normal-attack-context-duration-unresolved',
+        `actions.${index}.intent.attackInput.contextActionId`,
+        'Verified context form has no executable occupancy',
+        { actionId: action.id, contextEdgeIdentity: edge.edgeIdentity }
+      )
+    );
+    return { status: 'blocked', segment: null };
+  }
+  return {
+    status: 'selected',
+    segment: {
+      ...requestedSegment,
+      controlSkillId: Number(edge.targetControlSkillId),
+      subSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
+      selectedSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
+      effectiveDurationFrames: durationFrames,
+      durationFrames,
+      durationStatus: 'applied',
+      durationBasis: 'verified-input-context-variant',
+      durationSourceIdentity:
+        occupancy.sourceIdentity ?? edge.sourceIdentity ?? null,
+      actionScheduling: {
+        status: 'exact',
+        kind: 'exact-selected-context-variant-occupancy',
+        durationFrames,
+        planningDurationFrames: null,
+        selectedSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
+        sourceIdentity: occupancy.sourceIdentity ?? edge.sourceIdentity ?? null,
+        sourceStatus: 'verified-input-occupancy',
+        variantModelStatus: 'resolved',
+        reasons: [],
+      },
+      contextVariant: {
+        edgeIdentity: edge.edgeIdentity,
+        executionControlSkillId: Number(edge.executionControlSkillId),
+        executionSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
+        inputScheduling,
+        sourceIdentity: edge.sourceIdentity ?? null,
+      },
+    },
+  };
+}
+
+function resolveContractActionExecutionForm({
+  action,
+  ownerId,
+  contract,
+  visitedActionIds = new Set(),
+}) {
+  if (!action || visitedActionIds.has(String(action.id))) return null;
+  const nextVisitedActionIds = new Set(visitedActionIds);
+  nextVisitedActionIds.add(String(action.id));
+  const mapping = getVerifiedCombatActionMapping({
+    type: ACTION_TYPES.SKILL,
+    skillId: action.intent?.publicActionId,
+    actionKind: action.intent?.actionKind,
+    ...(action.intent?.semanticVariant?.publicVariantIndex != null
+      ? {
+          actionVariantIndex: Number(
+            action.intent.semanticVariant.publicVariantIndex
+          ),
+        }
+      : {}),
+    actor: { characterId: ownerId },
+  });
+  if (!mapping) return null;
+  if (mapping.actionKind === 'normal-attack') {
+    const sequenceIndex = Number(action.intent?.attackInput?.sequenceIndex);
+    const sourceSegment = (
+      mapping.attackInputSegments ??
+      mapping.attackInputSourceSegments ??
+      []
+    ).find(segment => Number(segment.sequenceIndex) === sequenceIndex);
+    if (!sourceSegment) return null;
+    const contextActionId = action.intent?.attackInput?.contextActionId;
+    if (contextActionId) {
+      const contextAction = (contract.actions ?? []).find(
+        candidate => String(candidate.id) === String(contextActionId)
+      );
+      const predecessor = resolveContractActionExecutionForm({
+        action: contextAction,
+        ownerId,
+        contract,
+        visitedActionIds: nextVisitedActionIds,
+      });
+      const contextFrame = absoluteScheduleFrame(contextAction);
+      const actionFrame = absoluteScheduleFrame(action);
+      if (
+        predecessor &&
+        Number.isFinite(contextFrame) &&
+        Number.isFinite(actionFrame)
+      ) {
+        const matches = (
+          requireMechanicsPackage().actionVariantGraph?.contextEdges ?? []
+        )
+          .filter(
+            edge =>
+              edge.applied === true &&
+              Number(edge.ownerId) === Number(ownerId) &&
+              Number(edge.sourceControlSkillId) ===
+                Number(predecessor.executionControlSkillId) &&
+              Number(edge.sourceSubSkillIndex ?? 0) ===
+                Number(predecessor.executionSubSkillIndex ?? 0) &&
+              String(edge.inputCommand ?? '') === 'normal-attack' &&
+              Number(edge.targetControlSkillId) ===
+                Number(mapping.controlSkillId)
+          )
+          .map(edge => ({
+            edge,
+            scheduling: resolveVerifiedContextInputScheduling({
+              edges: [edge],
+              predecessorStartMs: frameToMs(contextFrame),
+              predecessorEffectiveEndFrame: predecessor.effectiveDurationFrames,
+              requestedExecutionStartMs: frameToMs(actionFrame),
+            }),
+          }))
+          .filter(candidate => candidate.scheduling);
+        if (matches.length === 1) {
+          const edge = matches[0].edge;
+          return {
+            actionKind: mapping.actionKind,
+            contextDerived: true,
+            executionControlSkillId: Number(edge.executionControlSkillId),
+            executionSubSkillIndex: Number(edge.targetSubSkillIndex ?? 0),
+            effectiveDurationFrames: positiveIntegerOrNull(
+              edge.executionTiming?.occupancy?.durationFrames
+            ),
+          };
+        }
+      }
+    }
+    return {
+      actionKind: mapping.actionKind,
+      contextDerived: false,
+      executionControlSkillId: Number(sourceSegment.controlSkillId),
+      executionSubSkillIndex: Number(
+        sourceSegment.subSkillIndex ?? sourceSegment.selectedSubSkillIndex ?? 0
+      ),
+      effectiveDurationFrames: positiveIntegerOrNull(
+        sourceSegment.effectiveDurationFrames ?? sourceSegment.durationFrames
+      ),
+    };
+  }
+  const semanticVariant = action.intent?.semanticVariant;
+  if (semanticVariant) {
+    const graph = requireMechanicsPackage().actionVariantGraph;
+    const contracts = (graph?.derivedControlContracts ?? []).filter(
+      candidate =>
+        candidate.resolutionStatus === 'applied' &&
+        Number(candidate.ownerId) === Number(ownerId) &&
+        Number(candidate.controlSkillId) === Number(mapping.controlSkillId)
+    );
+    const options = contracts.flatMap(
+      candidate => candidate.inputSelector?.options ?? []
+    );
+    const matches = options.filter(
+      option =>
+        (semanticVariant.selectorIdentity == null ||
+          String(option.selectorIdentity) ===
+            String(semanticVariant.selectorIdentity)) &&
+        (semanticVariant.publicVariantIndex == null ||
+          Number(option.publicVariantIndex) ===
+            Number(semanticVariant.publicVariantIndex))
+    );
+    if (matches.length !== 1) return null;
+    return {
+      actionKind: mapping.actionKind,
+      executionControlSkillId: Number(matches[0].executionControlSkillId),
+      executionSubSkillIndex: Number(
+        matches[0].executionSubSkillIndex ?? matches[0].subSkillIndex ?? 0
+      ),
+      effectiveDurationFrames: positiveIntegerOrNull(
+        matches[0].executionTiming?.occupancy?.durationFrames ??
+          matches[0].durationFrames
+      ),
+    };
+  }
+  return {
+    actionKind: mapping.actionKind,
+    executionControlSkillId: Number(mapping.controlSkillId),
+    executionSubSkillIndex: Number(mapping.selectedSubSkillIndex ?? 0),
+    effectiveDurationFrames: positiveIntegerOrNull(
+      mapping.actionTiming?.occupancy?.durationFrames ??
+        mapping.actionScheduling?.durationFrames
+    ),
+  };
 }
 
 function selectContextualAttackInputSegment({

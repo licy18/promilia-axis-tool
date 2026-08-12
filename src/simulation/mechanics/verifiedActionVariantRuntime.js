@@ -1144,15 +1144,53 @@ export function createVerifiedActionVariantRuntime({
         scenarioActor?.characterId ??
         actorState?.profile?.ownerId
     );
-    const attackChainSelection = resolveAttackInputChainAction({
+    const contextPredecessor = resolveContextPredecessor({
       action,
-      mapping,
-      actorState,
-      attackInputChains,
-      activeSwitchWindows,
-      previous: lastResolvedActionByActorId.get(action.actorId),
-      timeMs: actionTimeMs,
+      lastResolvedActionByActorId,
+      resolvedActionContextById,
     });
+    const initialPublicControlSkillId = resolveActionControlSkillId(
+      action,
+      mapping
+    );
+    let contextSelection = actorState
+      ? resolveContextVariantSelection({
+          contextBindings,
+          previous: contextPredecessor,
+          actorState,
+          controlSkillId: initialPublicControlSkillId,
+          selectedSubSkillIndex:
+            mapping?.actionKind === 'normal-attack'
+              ? resolveRequestedContextTargetSubSkillIndex(action)
+              : null,
+          requestedExecutionControlSkillId:
+            mapping?.actionKind === 'normal-attack'
+              ? resolveRequestedContextExecutionControlSkillId(action, mapping)
+              : null,
+          timeMs: actionTimeMs,
+          inputCommand: mapping?.actionKind ?? null,
+          required: hasExplicitContextPredecessor(action),
+          attackGroupId: action.attackGroupId ?? null,
+        })
+      : { status: 'none', binding: null };
+    const contextConsumesInput = [
+      'selected',
+      'conflict',
+      'ambiguous',
+      'missing',
+      'group-conflict',
+    ].includes(contextSelection.status);
+    const attackChainSelection = contextConsumesInput
+      ? { status: 'context-selected', action, chain: null, segment: null }
+      : resolveAttackInputChainAction({
+          action,
+          mapping,
+          actorState,
+          attackInputChains,
+          activeSwitchWindows,
+          previous: lastResolvedActionByActorId.get(action.actorId),
+          timeMs: actionTimeMs,
+        });
     if (
       attackChainSelection.status === 'blocked' ||
       attackChainSelection.status === 'phase-blocked'
@@ -1199,10 +1237,32 @@ export function createVerifiedActionVariantRuntime({
       continue;
     }
     const runtimeAction = attackChainSelection.action ?? action;
-    const publicControlSkillId = resolveActionControlSkillId(
-      runtimeAction,
-      mapping
-    );
+    const publicControlSkillId = contextConsumesInput
+      ? initialPublicControlSkillId
+      : resolveActionControlSkillId(runtimeAction, mapping);
+    if (!contextConsumesInput && actorState) {
+      contextSelection = resolveContextVariantSelection({
+        contextBindings,
+        previous: contextPredecessor,
+        actorState,
+        controlSkillId: publicControlSkillId,
+        selectedSubSkillIndex:
+          mapping?.actionKind === 'normal-attack'
+            ? resolveRequestedContextTargetSubSkillIndex(runtimeAction)
+            : null,
+        requestedExecutionControlSkillId:
+          mapping?.actionKind === 'normal-attack'
+            ? resolveRequestedContextExecutionControlSkillId(
+                runtimeAction,
+                mapping
+              )
+            : null,
+        timeMs: actionTimeMs,
+        inputCommand: mapping?.actionKind ?? null,
+        required: hasExplicitContextPredecessor(action),
+        attackGroupId: runtimeAction.attackGroupId ?? null,
+      });
+    }
     const directExecutionForm = resolveDirectPublicActionExecutionForm({
       publicActionForms,
       ownerId: characterId,
@@ -1282,21 +1342,11 @@ export function createVerifiedActionVariantRuntime({
             actionKind: mapping?.actionKind,
           })
         : { status: 'none', binding: null };
-      const contextSelection = actorState
-        ? resolveContextVariantSelection({
-            contextBindings,
-            previous: resolveContextPredecessor({
-              action,
-              lastResolvedActionByActorId,
-              resolvedActionContextById,
-            }),
-            actorState,
-            controlSkillId: publicControlSkillId,
-            timeMs: actionTimeMs,
-            inputCommand: mapping?.actionKind ?? null,
-          })
-        : { status: 'none', binding: null };
-      if (contextSelection.status === 'conflict') {
+      if (
+        ['conflict', 'ambiguous', 'missing', 'group-conflict'].includes(
+          contextSelection.status
+        )
+      ) {
         const block = createContextWindowConflictBlock({
           action,
           actorState,
@@ -1856,6 +1906,7 @@ export function createVerifiedActionVariantRuntime({
         resolution,
         executionControlSkillId,
         selectedSubSkillIndex,
+        verifiedContextContinuation: contextSelection.status === 'selected',
       });
       lastResolvedActionByActorId.set(action.actorId, structuralContext);
       resolvedActionContextById.set(String(action.id), structuralContext);
@@ -2151,7 +2202,12 @@ function resolveContextPredecessor({
   if (contextActionId == null) {
     return lastResolvedActionByActorId.get(action.actorId) ?? null;
   }
-  return resolvedActionContextById.get(String(contextActionId)) ?? null;
+  const predecessor =
+    resolvedActionContextById.get(String(contextActionId)) ?? null;
+  return predecessor &&
+    String(predecessor.actorId ?? '') === String(action.actorId ?? '')
+    ? predecessor
+    : null;
 }
 
 function createResolvedActionContext({
@@ -2247,6 +2303,7 @@ function createVerifiedEmptyNormalAttackActionContext({
   resolution,
   executionControlSkillId,
   selectedSubSkillIndex,
+  verifiedContextContinuation = false,
 }) {
   return {
     ...createResolvedActionContext({
@@ -2259,9 +2316,10 @@ function createVerifiedEmptyNormalAttackActionContext({
       selectedSubSkillIndex,
     }),
     mechanicsReady: false,
-    contextReady: false,
+    contextReady: verifiedContextContinuation,
     structuralAuthorityOnly: true,
     verifiedEmptyTimingOnly: true,
+    verifiedContextContinuationOnly: verifiedContextContinuation,
   };
 }
 
@@ -2988,10 +3046,24 @@ function resolveContextVariantSelection({
   previous,
   actorState,
   controlSkillId,
+  selectedSubSkillIndex = null,
+  requestedExecutionControlSkillId = null,
   timeMs,
   inputCommand = null,
+  required = false,
+  attackGroupId = null,
 }) {
-  if (!previous?.ready || previous.contextReady === false) {
+  if (!previous?.ready) {
+    return required
+      ? {
+          status: 'missing',
+          binding: null,
+          previous: null,
+          conflictingEdges: [],
+        }
+      : { status: 'none', binding: null, previous: null };
+  }
+  if (previous.contextReady === false) {
     return { status: 'none', binding: null, previous: null };
   }
   const sourceCandidates = (contextBindings ?? []).filter(binding => {
@@ -3012,42 +3084,121 @@ function resolveContextVariantSelection({
   if (!sourceCandidates.length) {
     return { status: 'none', binding: null, previous };
   }
-  const sourceScheduling = resolveVerifiedContextInputScheduling({
-    edges: sourceCandidates,
-    predecessorStartMs: previous.startMs,
-    predecessorEffectiveEndFrame: previous.effectiveDurationFrames,
-    requestedExecutionStartMs: timeMs,
-  });
-  if (!sourceScheduling) {
-    return { status: 'none', binding: null, previous };
+  if (
+    required &&
+    inputCommand === 'normal-attack' &&
+    requestedExecutionControlSkillId == null
+  ) {
+    return {
+      status: 'conflict',
+      binding: null,
+      previous,
+      conflictingEdges: sourceCandidates,
+    };
   }
-  const candidates = sourceCandidates.filter(
-    binding => Number(binding.targetControlSkillId) === Number(controlSkillId)
+  if (
+    inputCommand === 'normal-attack' &&
+    previous.actionKind === 'normal-attack' &&
+    String(previous.attackGroupId ?? '') !== String(attackGroupId ?? '')
+  ) {
+    return {
+      status: 'group-conflict',
+      binding: null,
+      previous,
+      conflictingEdges: sourceCandidates,
+    };
+  }
+  const scheduled = sourceCandidates
+    .map(binding => ({
+      binding,
+      inputScheduling: resolveVerifiedContextInputScheduling({
+        edges: [binding],
+        predecessorStartMs: previous.startMs,
+        predecessorEffectiveEndFrame: previous.effectiveDurationFrames,
+        requestedExecutionStartMs: timeMs,
+      }),
+    }))
+    .filter(candidate => candidate.inputScheduling);
+  if (!scheduled.length) {
+    return required
+      ? {
+          status: 'missing',
+          binding: null,
+          previous,
+          conflictingEdges: sourceCandidates,
+        }
+      : { status: 'none', binding: null, previous };
+  }
+  const requestedSubSkillIndex = Number(selectedSubSkillIndex);
+  const hasRequestedSubSkillIndex =
+    selectedSubSkillIndex != null && Number.isInteger(requestedSubSkillIndex);
+  const candidates = scheduled.filter(
+    candidate =>
+      Number(candidate.binding.targetControlSkillId) ===
+        Number(controlSkillId) &&
+      (requestedExecutionControlSkillId == null ||
+        Number(candidate.binding.executionControlSkillId) ===
+          Number(requestedExecutionControlSkillId)) &&
+      (!hasRequestedSubSkillIndex ||
+        Number(candidate.binding.targetSubSkillIndex ?? 0) ===
+          requestedSubSkillIndex)
   );
   if (!candidates.length) {
     return {
       status: 'conflict',
       binding: null,
       previous,
-      inputScheduling: sourceScheduling,
-      conflictingEdges: sourceCandidates,
+      inputScheduling: scheduled[0].inputScheduling,
+      conflictingEdges: scheduled.map(candidate => candidate.binding),
     };
   }
-  const inputScheduling = resolveVerifiedContextInputScheduling({
-    edges: candidates,
-    predecessorStartMs: previous.startMs,
-    predecessorEffectiveEndFrame: previous.effectiveDurationFrames,
-    requestedExecutionStartMs: timeMs,
-  });
-  if (!inputScheduling) {
-    return { status: 'none', binding: null, previous };
+  if (candidates.length !== 1) {
+    return {
+      status: 'ambiguous',
+      binding: null,
+      previous,
+      inputScheduling: candidates[0].inputScheduling,
+      conflictingEdges: candidates.map(candidate => candidate.binding),
+    };
   }
   return {
     status: 'selected',
-    binding: inputScheduling.edge,
+    binding: candidates[0].binding,
     previous,
-    inputScheduling,
+    inputScheduling: candidates[0].inputScheduling,
   };
+}
+
+function hasExplicitContextPredecessor(action) {
+  return (
+    action?.runtimeContextActionId != null || action?.contextActionId != null
+  );
+}
+
+function resolveRequestedContextTargetSubSkillIndex(action) {
+  const value = Number(
+    action?.attackInput?.selectedSubSkillIndex ??
+      action?.attackInput?.subSkillIndex ??
+      action?.controlSubSkillIndex
+  );
+  return Number.isInteger(value) ? value : null;
+}
+
+function resolveRequestedContextExecutionControlSkillId(action, mapping) {
+  const identity = action?.attackInput?.identity;
+  if (!identity) return null;
+  const matches = [
+    ...(mapping?.attackInputSegments ?? []),
+    ...(mapping?.attackInputSourceSegments ?? []),
+  ].filter(segment => String(segment.identity ?? '') === String(identity));
+  const values = [
+    ...new Set(
+      matches
+        .map(segment => Number(segment.controlSkillId))
+        .filter(Number.isInteger)
+    ),
+  ];
+  return values.length === 1 ? values[0] : null;
 }
 
 function resolvePublicActionForm({
@@ -4026,6 +4177,35 @@ function createContextWindowConflictBlock({
   controlSkillId,
   contextSelection,
 }) {
+  const status = contextSelection.status;
+  const statusFields =
+    status === 'ambiguous'
+      ? {
+          code: 'VERIFIED_ACTION_CONTEXT_WINDOW_AMBIGUOUS',
+          reason: 'verified-context-window-input-ambiguous',
+          primaryReason: 'open-context-window-target-ambiguous',
+          message: `${action.name ?? '动作'}命中多个相同目标的派生衔接窗口，无法唯一选择执行形态`,
+        }
+      : status === 'missing'
+        ? {
+            code: 'VERIFIED_ACTION_CONTEXT_WINDOW_MISSING',
+            reason: 'verified-context-window-input-missing',
+            primaryReason: 'explicit-context-window-not-open',
+            message: `${action.name ?? '动作'}显式引用前动作，但执行时刻不在任何权威派生衔接窗口内`,
+          }
+        : status === 'group-conflict'
+          ? {
+              code: 'VERIFIED_ACTION_CONTEXT_GROUP_CONFLICT',
+              reason: 'verified-context-window-group-conflict',
+              primaryReason: 'normal-context-attack-group-mismatch',
+              message: `${action.name ?? '动作'}与前置普通攻击不属于同一输入组`,
+            }
+          : {
+              code: 'VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT',
+              reason: 'verified-context-window-input-conflict',
+              primaryReason: 'open-context-window-target-mismatch',
+              message: `${action.name ?? '动作'}落在前动作的派生衔接窗口内，但输入目标不是窗口允许的形态`,
+            };
   const edges = contextSelection.conflictingEdges ?? [];
   const scheduling = contextSelection.inputScheduling ?? null;
   const expectedTargets = [
@@ -4038,15 +4218,15 @@ function createContextWindowConflictBlock({
   ].sort();
   return {
     ...createActionSourceSequenceFields(action),
-    code: 'VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT',
+    code: statusFields.code,
     status: 'blocked',
-    reason: 'verified-context-window-input-conflict',
+    reason: statusFields.reason,
     reasons: [
-      'open-context-window-target-mismatch',
+      statusFields.primaryReason,
       `requested-control:${controlSkillId ?? ''}`,
       `expected-targets:${expectedTargets.join(',') || 'none'}`,
     ],
-    message: `${action.name ?? '动作'}落在前动作的派生衔接窗口内，但输入目标不是窗口允许的形态`,
+    message: statusFields.message,
     sourceKind: 'azpr-verified-action-variant-runtime',
     sourceIdentity: edges.map(edge => edge.sourceIdentity).filter(Boolean),
     actionId: action.id,
@@ -4057,7 +4237,7 @@ function createContextWindowConflictBlock({
     requestedControlSkillId: controlSkillId,
     expectedControlSkillIds: expectedTargets,
     contextActionId: contextSelection.previous?.actionId ?? null,
-    inputWindow: scheduling?.edge?.inputWindow ?? null,
+    inputWindow: scheduling?.edge?.inputWindow ?? edges[0]?.inputWindow ?? null,
     resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
     resourceName: actorState?.profile?.name ?? null,
     requiredValue: null,

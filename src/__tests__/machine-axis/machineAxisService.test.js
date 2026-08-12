@@ -177,6 +177,71 @@ function createOwnerNormalAttackAxis(ownerId, segmentCount) {
   return axis;
 }
 
+function createStarbornContextContinuationAxis({ ownerId, sourceKind }) {
+  const sourceActionId = `starborn-${ownerId}-${sourceKind}-source`;
+  const sourceFrame = 0;
+  const thrustFrame = sourceKind === 'charged-attack' ? 73 : 65;
+  const continuationGroupId = `starborn-${ownerId}-${sourceKind}-context-form`;
+  const sourceAction = {
+    id: sourceActionId,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId:
+        sourceKind === 'charged-attack'
+          ? ownerId * 100 + 1
+          : ownerId * 100 + 12,
+      actionKind: sourceKind,
+      ...(sourceKind === 'charged-attack'
+        ? {
+            semanticVariant: {
+              selectorIdentity: `starborn-${ownerId}-derived-charged`,
+              publicVariantIndex: 1,
+            },
+          }
+        : {}),
+    },
+    schedule: { mode: 'absolute', frame: sourceFrame },
+  };
+  const thrust = {
+    id: `starborn-${ownerId}-${sourceKind}-thrust`,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: ownerId * 100 + 1,
+      actionKind: 'normal-attack',
+      attackInput: {
+        sequenceIndex: 1,
+        groupId: continuationGroupId,
+        contextActionId: sourceActionId,
+      },
+    },
+    schedule: { mode: 'absolute', frame: thrustFrame },
+  };
+  const a3 = {
+    id: `starborn-${ownerId}-${sourceKind}-a3`,
+    owner: { kind: 'actor', slotId: 'slot-1' },
+    intent: {
+      kind: 'public-action',
+      publicActionId: ownerId * 100 + 1,
+      actionKind: 'normal-attack',
+      attackInput: {
+        sequenceIndex: 3,
+        groupId: continuationGroupId,
+        contextActionId: thrust.id,
+      },
+    },
+    schedule: { mode: 'absolute', frame: thrustFrame + 32 },
+  };
+  const axis = createAxis({ actions: [sourceAction, thrust, a3] });
+  axis.scenario.team[0] = {
+    ...axis.scenario.team[0],
+    characterId: Number(ownerId),
+    loadout: {},
+  };
+  return axis;
+}
+
 function createKiboAxis({
   publicActionId = 50000102,
   actionKind = 'signature',
@@ -366,8 +431,8 @@ describe('Machine Axis service', () => {
 
   it.each([
     [109001, 5, 10900105],
-    [199001, 2, 19900102],
-    [199002, 2, 19900202],
+    [199001, 5, 19900105],
+    [199002, 5, 19900205],
   ])(
     'keeps owner %s structural normal inputs executable across %s segments',
     (ownerId, segmentCount, finalControlSkillId) => {
@@ -405,6 +470,99 @@ describe('Machine Axis service', () => {
           )
         ).toBe(false);
       }
+    },
+    30_000
+  );
+
+  it.each([
+    [199001, 'charged-attack'],
+    [199001, 'star-skill'],
+    [199002, 'charged-attack'],
+    [199002, 'star-skill'],
+  ])(
+    'materializes STARBORN %s %s context thrust before the default normal chain',
+    (ownerId, sourceKind) => {
+      const prepared = createMachineAxisService().prepareValidated(
+        createStarbornContextContinuationAxis({ ownerId, sourceKind })
+      );
+      const thrustId = `starborn-${ownerId}-${sourceKind}-thrust`;
+      const a3Id = `starborn-${ownerId}-${sourceKind}-a3`;
+
+      expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+      expect(prepared.actionLegalityProof).toMatchObject({
+        passed: true,
+        finalScoreEligible: true,
+      });
+      expect(
+        prepared.run.trace.actions.find(action => action.id === thrustId)
+      ).toMatchObject({
+        controlSkillId: ownerId * 100 + 3,
+        subSkillIndex: 1,
+      });
+      expect(
+        prepared.run.trace.actions.find(action => action.id === a3Id)
+      ).toMatchObject({
+        controlSkillId: ownerId * 100 + 3,
+        subSkillIndex: 0,
+      });
+      expect(
+        prepared.compilation.actionResolutions.find(
+          resolution => resolution.actionId === thrustId
+        )
+      ).toMatchObject({
+        resolvedControlSkillId: ownerId * 100 + 1,
+        resolvedSubSkillIndex: 1,
+        variantResolutionStatus: 'verified-action-variant-selection-ready',
+      });
+    },
+    30_000
+  );
+
+  it.each([199001, 199002])(
+    'fails STARBORN %s contextual normal forms closed for missing owner, group, and sequence authority',
+    ownerId => {
+      const service = createMachineAxisService();
+      const createChargedAxis = () =>
+        createStarbornContextContinuationAxis({
+          ownerId,
+          sourceKind: 'charged-attack',
+        });
+
+      const missing = createChargedAxis();
+      missing.actions[1].intent.attackInput.contextActionId = 'missing-source';
+      expect(service.validate(missing).issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-context-action-missing',
+          actionId: missing.actions[1].id,
+        })
+      );
+
+      const crossActor = createChargedAxis();
+      crossActor.actions[0].owner = { kind: 'actor', slotId: 'slot-2' };
+      expect(service.validate(crossActor).issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-context-owner-conflict',
+          actionId: crossActor.actions[1].id,
+        })
+      );
+
+      const wrongGroup = createChargedAxis();
+      wrongGroup.actions[2].intent.attackInput.groupId = 'forged-other-group';
+      expect(service.validate(wrongGroup).issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-context-group-conflict',
+          actionId: wrongGroup.actions[2].id,
+        })
+      );
+
+      const wrongSequence = createChargedAxis();
+      wrongSequence.actions[1].intent.attackInput.sequenceIndex = 2;
+      expect(service.validate(wrongSequence).issues).toContainEqual(
+        expect.objectContaining({
+          code: 'machine-axis-normal-attack-context-window-conflict',
+          actionId: wrongSequence.actions[1].id,
+        })
+      );
     },
     30_000
   );

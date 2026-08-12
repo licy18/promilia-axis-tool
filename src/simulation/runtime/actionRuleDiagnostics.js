@@ -1275,7 +1275,12 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
   const structuralStatus = strict
     ? ACTION_RULE_STATUSES.VIOLATED
     : ACTION_RULE_STATUSES.UNRESOLVED;
-  const diagnostics = actions
+  const ordinaryAttackInputActions = actions.filter(
+    action =>
+      action.verifiedContextContinuation?.status !==
+      'verified-context-continuation-ready'
+  );
+  const diagnostics = ordinaryAttackInputActions
     .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
     .map(action =>
       createAttackInputDiagnostic({
@@ -1285,7 +1290,7 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
         status: ACTION_RULE_STATUSES.UNRESOLVED,
       })
     );
-  for (const action of actions) {
+  for (const action of ordinaryAttackInputActions) {
     const identities = uniqueValues(
       [
         action.attackInputChainIdentity,
@@ -1310,7 +1315,7 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
     );
   }
   const groups = groupByKey(
-    actions.filter(action => action.attackGroupId),
+    ordinaryAttackInputActions.filter(action => action.attackGroupId),
     action => action.attackGroupId
   );
   const chainInstances = [];
@@ -1581,6 +1586,13 @@ function createNormalAttackInputPhaseDiagnostics(
     }
     const mapping = getVerifiedCombatActionMapping(action);
     const actorId = String(action.actorId ?? '');
+    if (
+      action.verifiedContextContinuation?.status ===
+      'verified-context-continuation-ready'
+    ) {
+      acceptedByActorId.delete(actorId);
+      continue;
+    }
     if (mapping?.actionKind !== 'normal-attack') {
       if (actorId) acceptedByActorId.delete(actorId);
       continue;

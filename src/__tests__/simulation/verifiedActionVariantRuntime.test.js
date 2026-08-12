@@ -1232,6 +1232,296 @@ describe('verified action variant and special resource runtime', () => {
     }
   );
 
+  it.each([
+    [199001, 'charged-attack', 73],
+    [199001, 'star-skill', 65],
+    [199002, 'charged-attack', 73],
+    [199002, 'star-skill', 65],
+  ])(
+    'prioritizes STARBORN %s %s genuine context thrust over the default normal chain',
+    (ownerId, sourceKind, thrustFrame) => {
+      const mapping = normalMappingByOwnerId.get(ownerId);
+      const groupId = `starborn-${ownerId}-${sourceKind}-context-chain`;
+      const source = createStarbornContextSource({ ownerId, sourceKind });
+      const thrust = createStarbornContextNormalAction({
+        ownerId,
+        id: `starborn-${ownerId}-${sourceKind}-thrust`,
+        startFrame: thrustFrame,
+        contextActionId: source.id,
+        sequenceIndex: 1,
+        controlSkillId: ownerId * 100 + 3,
+        subSkillIndex: 1,
+        sourceSegment: mapping.attackInputSegments[0],
+        groupId,
+      });
+      const a3 = createStarbornContextNormalAction({
+        ownerId,
+        id: `starborn-${ownerId}-${sourceKind}-a3`,
+        startFrame: thrustFrame + 32,
+        contextActionId: thrust.id,
+        sequenceIndex: 3,
+        controlSkillId: ownerId * 100 + 3,
+        subSkillIndex: 0,
+        sourceSegment: mapping.attackInputSegments[2],
+        groupId,
+      });
+      const runtime = runVariantRuntime({
+        actors: [source.actor],
+        actions: [source, thrust, a3],
+        durationMs: frameTime(500),
+      });
+
+      expect(runtime.executionBlocks).toEqual([]);
+      expect(runtime.selectionByActionId.get(source.id)).toMatchObject(
+        sourceKind === 'charged-attack'
+          ? {
+              executionControlSkillId: ownerId * 100 + 10,
+              selectedSubSkillIndex: 1,
+            }
+          : {
+              executionControlSkillId: ownerId * 100 + 12,
+              selectedSubSkillIndex: 0,
+            }
+      );
+      expect(runtime.selectionByActionId.get(thrust.id)).toMatchObject({
+        publicControlSkillId: ownerId * 100 + 3,
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 1,
+        sourceKind: 'verified-input-context-variant',
+        contextActionId: source.id,
+        status: 'verified-action-variant-selection-ready',
+      });
+      expect(runtime.selectionByActionId.get(a3.id)).toMatchObject({
+        publicControlSkillId: ownerId * 100 + 3,
+        executionControlSkillId: ownerId * 100 + 3,
+        selectedSubSkillIndex: 0,
+        sourceKind: 'verified-input-context-variant',
+        contextActionId: thrust.id,
+        status: 'verified-action-variant-selection-ready',
+      });
+    }
+  );
+
+  it.each(STARBORN_IDS)(
+    'keeps STARBORN %i genuine context windows unique and right-open',
+    ownerId => {
+      const fixture = structuredClone(mechanicsPackage);
+      const edge = fixture.actionVariantGraph.contextEdges.find(
+        candidate =>
+          Number(candidate.ownerId) === ownerId &&
+          Number(candidate.sourceControlSkillId) === ownerId * 100 + 12 &&
+          candidate.inputCommand === 'normal-attack'
+      );
+      const source = createStarbornContextSource({
+        ownerId,
+        sourceKind: 'star-skill',
+      });
+      const mapping = normalMappingByOwnerId.get(ownerId);
+      const runAt = (frame, controlSkillId = ownerId * 100 + 3) => {
+        const thrust = createStarbornContextNormalAction({
+          ownerId,
+          id: `starborn-${ownerId}-boundary-${frame}-${controlSkillId}`,
+          startFrame: frame,
+          contextActionId: source.id,
+          sequenceIndex: 1,
+          controlSkillId,
+          subSkillIndex: controlSkillId === ownerId * 100 + 3 ? 1 : 0,
+          sourceSegment: mapping.attackInputSegments[0],
+        });
+        return {
+          thrust,
+          runtime: runVariantRuntime({
+            actors: [source.actor],
+            actions: [source, thrust],
+            durationMs: frameTime(500),
+          }),
+        };
+      };
+
+      const atStart = runAt(Number(edge.inputWindow.startFrame));
+      expect(
+        atStart.runtime.selectionByActionId.get(atStart.thrust.id)
+      ).toMatchObject({
+        sourceKind: 'verified-input-context-variant',
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 1,
+      });
+
+      const beforeStart = runAt(Number(edge.inputWindow.startFrame) - 1);
+      expect(beforeStart.runtime.executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: beforeStart.thrust.id,
+          reason: 'verified-context-window-input-missing',
+        })
+      );
+
+      const beforeEnd = runAt(Number(edge.inputWindow.endFrame) - 1);
+      expect(
+        beforeEnd.runtime.selectionByActionId.get(beforeEnd.thrust.id)
+      ).toMatchObject({
+        sourceKind: 'verified-input-context-variant',
+        contextualInputScheduling: {
+          resolutionKind: 'direct-input-window',
+          inputOffsetFrame: Number(edge.inputWindow.endFrame) - 1,
+        },
+      });
+
+      const atEnd = runAt(Number(edge.inputWindow.endFrame));
+      const edgeIntent = edge.inputScheduling?.edgeIntent;
+      if (
+        Number(edgeIntent?.predecessorGenericEndFrame) ===
+        Number(edge.inputWindow.endFrame)
+      ) {
+        expect(
+          atEnd.runtime.selectionByActionId.get(atEnd.thrust.id)
+        ).toMatchObject({
+          sourceKind: 'verified-input-context-variant',
+          contextualInputScheduling: {
+            resolutionKind: 'edge-intent-contextual-transition',
+            inputOffsetFrame: Number(edgeIntent.canonicalInputFrame),
+            executionStartOffsetFrame: Number(
+              edgeIntent.canonicalExecutionStartFrame
+            ),
+          },
+        });
+      } else {
+        expect(atEnd.runtime.executionBlocks).toContainEqual(
+          expect.objectContaining({
+            actionId: atEnd.thrust.id,
+            reason: 'verified-context-window-input-missing',
+          })
+        );
+      }
+
+      const outsideWindow = runAt(Number(edge.inputWindow.endFrame) + 1);
+      expect(outsideWindow.runtime.executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: outsideWindow.thrust.id,
+          reason: 'verified-context-window-input-missing',
+        })
+      );
+
+      const wrongTarget = runAt(
+        Number(edge.inputWindow.startFrame),
+        ownerId * 100 + 1
+      );
+      expect(wrongTarget.runtime.executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: wrongTarget.thrust.id,
+          reason: 'verified-context-window-input-conflict',
+        })
+      );
+
+      fixture.actionVariantGraph.contextEdges.push({
+        ...structuredClone(edge),
+        edgeIdentity: `${edge.edgeIdentity}:ambiguous-duplicate`,
+      });
+      installVerifiedCombatMechanicsPackage(fixture);
+      const ambiguous = runAt(Number(edge.inputWindow.startFrame));
+      expect(ambiguous.runtime.executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: ambiguous.thrust.id,
+          reason: 'verified-context-window-input-ambiguous',
+        })
+      );
+    }
+  );
+
+  it.each(STARBORN_IDS)(
+    'fails STARBORN %i special context closed for missing, cross-actor, wrong-group, and wrong-sequence inputs',
+    ownerId => {
+      const mapping = normalMappingByOwnerId.get(ownerId);
+      const source = createStarbornContextSource({
+        ownerId,
+        sourceKind: 'charged-attack',
+      });
+      const createThrust = overrides =>
+        createStarbornContextNormalAction({
+          ownerId,
+          id: `starborn-${ownerId}-${overrides.id}`,
+          startFrame: 73,
+          contextActionId: source.id,
+          sequenceIndex: 1,
+          controlSkillId: ownerId * 100 + 3,
+          subSkillIndex: 1,
+          sourceSegment: mapping.attackInputSegments[0],
+          groupId: 'starborn-special-context-group',
+          ...overrides,
+        });
+      const run = (actions, actors = [source.actor]) =>
+        runVariantRuntime({ actors, actions, durationMs: frameTime(500) });
+
+      const missing = createThrust({
+        id: 'missing-context',
+        contextActionId: 'missing-source',
+      });
+      expect(run([missing]).executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: missing.id,
+          reason: 'verified-context-window-input-missing',
+        })
+      );
+
+      const foreignSource = structuredClone(source);
+      foreignSource.actorId = `foreign-${ownerId}`;
+      foreignSource.actor.id = foreignSource.actorId;
+      const crossActor = createThrust({ id: 'cross-actor' });
+      expect(
+        run(
+          [foreignSource, crossActor],
+          [foreignSource.actor, crossActor.actor]
+        ).executionBlocks
+      ).toContainEqual(
+        expect.objectContaining({
+          actionId: crossActor.id,
+          reason: 'verified-context-window-input-missing',
+        })
+      );
+
+      const validThrust = createThrust({ id: 'valid-thrust' });
+      const wrongGroup = createStarbornContextNormalAction({
+        ownerId,
+        id: `starborn-${ownerId}-wrong-group-a3`,
+        startFrame: 105,
+        contextActionId: validThrust.id,
+        sequenceIndex: 3,
+        controlSkillId: ownerId * 100 + 3,
+        subSkillIndex: 0,
+        sourceSegment: mapping.attackInputSegments[2],
+        groupId: 'different-context-group',
+      });
+      expect(
+        run([source, validThrust, wrongGroup]).executionBlocks
+      ).toContainEqual(
+        expect.objectContaining({
+          actionId: wrongGroup.id,
+          reason: 'verified-context-window-group-conflict',
+        })
+      );
+
+      const wrongSequence = createThrust({
+        id: 'wrong-sequence',
+        sequenceIndex: 2,
+        sourceSegment: mapping.attackInputSegments[1],
+      });
+      expect(run([source, wrongSequence]).executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: wrongSequence.id,
+          reason: 'verified-context-window-input-conflict',
+        })
+      );
+
+      const strippedIdentity = createThrust({ id: 'stripped-identity' });
+      delete strippedIdentity.attackInput.identity;
+      expect(run([source, strippedIdentity]).executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: strippedIdentity.id,
+          reason: 'verified-context-window-input-conflict',
+        })
+      );
+    }
+  );
+
   it('blocks an explicit fresh 112001 A1 in the sourced A2 window even when its group changes', () => {
     const first = createActorAction({
       id: 'melania-exclusive-a1',
@@ -3189,6 +3479,57 @@ function createRuntimeContextNormalAttackAction({
     attackInput: opener,
     attackSequenceIndex: 1,
     attackInputIntent: createPublicNormalAttackIntent(mapping.sourceSkillId),
+  });
+  action.attackGroupId = groupId;
+  return action;
+}
+
+function createStarbornContextSource({ ownerId, sourceKind }) {
+  return createActorAction({
+    id: `starborn-${ownerId}-${sourceKind}-source`,
+    characterId: ownerId,
+    skillId:
+      sourceKind === 'charged-attack' ? ownerId * 100 + 1 : ownerId * 100 + 12,
+    actionKind: sourceKind,
+    actionVariantIndex: sourceKind === 'charged-attack' ? 1 : 0,
+    startMs: 0,
+    variantInputSelection:
+      sourceKind === 'charged-attack'
+        ? {
+            selectorIdentity: `starborn-${ownerId}-derived-charged`,
+            publicVariantIndex: 1,
+          }
+        : null,
+  });
+}
+
+function createStarbornContextNormalAction({
+  ownerId,
+  id,
+  startFrame,
+  contextActionId,
+  sequenceIndex,
+  controlSkillId,
+  subSkillIndex,
+  sourceSegment,
+  groupId = `${id}-group`,
+}) {
+  const action = createActorAction({
+    id,
+    characterId: ownerId,
+    skillId: ownerId * 100 + 1,
+    actionKind: 'normal-attack',
+    startMs: frameTime(startFrame),
+    contextActionId,
+    attackSequenceIndex: sequenceIndex,
+    attackInput: {
+      ...sourceSegment,
+      sequenceIndex,
+      controlSkillId,
+      subSkillIndex,
+      selectedSubSkillIndex: subSkillIndex,
+    },
+    attackInputIntent: createPublicNormalAttackIntent(ownerId * 100 + 1),
   });
   action.attackGroupId = groupId;
   return action;
