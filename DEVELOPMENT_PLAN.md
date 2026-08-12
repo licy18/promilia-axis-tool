@@ -936,6 +936,7 @@ M12-B-R1 已关闭原五项主体缺口；R2 进一步把资源等待从逐整�
 - 2026-08-12 状态纠正：`M12-C4/C5/C6` 重新锁定，既有正式 run `work/m12-c/formal-search-v1/runs/m12c4-moyin-top5-20260812-v1/` 的 Top-5、finalization、独立 replay、Workbench 签收和 overall closeout 全部撤回为受污染历史证据。根因是连段输入窗内的连续普攻被错误地反复解析成 `A1`，使单次 A1 被误判为闭环、击杀轴也能重复 A1；旧分数和排名不得继续引用或续跑。
 - 当前先重构统一 continuation state：`A1` 窗内普攻只能进入 `A2`，`A2` 窗内只能进入 `A3`，其余段按角色权威 transition graph 类推；技能打开特殊续段窗时只能进入该特殊段，必须拒绝回到 `A1`。只有链已合法结束、超时或取消后才允许新开 `A1`。
 - 无头 runtime、Machine Axis/Workbench 排轴与 search generator/beam/merge/proof 必须消费同一版本化合同；continuation state 进入 canonical identity、状态合并和循环闭合。旧 run 原地保留但不得作为 checkpoint，新实现完成聚焦反例、一次全量准入和重新搜索后，才能重建 `M12-C4/C5/C6`。
+- 当前技术闭合已覆盖统一 normal-input authority、Workbench 单次输入物化、Machine Axis legality、search/cycle/kill pre-score proof、STARBORN genuine context continuation 与 caller marker 防伪；109001、112001 的正向验收轴已全部改成合法完整链。107002 A1/A2 也已从既有 MonoBehaviour 命中源补齐真实 projectile impact（A1 两个、A2 八个伤害事务），不再以 `unresolved-action-variant-selection` 进入结构轴；错误 subskill、缺段、多义段、伪 context identity 继续 fail closed，A5 仍保持 unresolved。当前 package/hash 漂移使全部角色 fixture 与旧视觉记录需要在最终集成 HEAD 逐一重放和重新签收；在这之前不得启动搜索或把技术测试通过当作角色产品验收。
 
 - 权威实施合同见 `work/m12-c/STATE.md`。本阶段只枚举正式 9 人 roster 中以 `109001 末音` 为必选核心的三人队：另外两人从其余 8 个优化对象中选择，共 28 个对象队伍；STARBORN 仍是一个对象，但每条轴必须显式且互斥地选择 `199001` 或 `199002`，因此共有 35 个来源配置。队伍顺序不形成变体；初始前台由内层动作轴搜索并进入 `axisHash`，不进入队伍或 `buildHash`。
 - 固定培养为角色 80 级/星赐 7、奇波 80 级/四天赋 10/羁绊 1/`dnaFactors=[]`、灵子 80 级/`rank=6`/`star=1`、装备四星 `+9/同调110` 合法缘星实例。外层枚举合法队伍与角色到奇波、灵子、五部位装备的绑定及派生套装效果，内层再搜索动作轴；不得先按静态面板贪心选装，也不得让 illegal/unscoreable 候选进入评分。
