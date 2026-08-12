@@ -6,11 +6,16 @@
     "status": "pending",
     "acceptanceCommit": null,
     "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
+    "scenarioIdentities": ["m12-b3-starborn-199002-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199002-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
+        "fixturePath": "fixtures/character-acceptance/199002-starborn-visual.json",
+        "fixtureSha256": "e3c2efb7aa997b30cf9a17eabf1dfde3f6db4661415d871fc03687f238e88e20",
         "screenshotPath": "reports/m12-b3-199002-workbench-visual-evidence.png",
         "screenshotSha256": "236f6964b1e9c4c7d91895bdcc2cdcd4086dc5d3d3cee12f7da39e7e7528d415"
       }

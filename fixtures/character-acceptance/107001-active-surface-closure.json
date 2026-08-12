@@ -512,12 +512,6 @@
       "schedule": { "mode": "absolute", "frame": 4800 }
     },
     {
-      "id": "window-outside-before",
-      "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "wait", "durationFrames": 1 },
-      "schedule": { "mode": "absolute", "frame": 4819 }
-    },
-    {
       "id": "window-start-source",
       "owner": { "kind": "actor", "slotId": "slot-1" },
       "intent": {

@@ -6,11 +6,16 @@
     "status": "pending",
     "acceptanceCommit": null,
     "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
+    "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
+        "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
+        "fixtureSha256": "c0076775d267ae7314d561471f9e26d07a797f122ab768fe1ef632d3a4fbc06a",
         "screenshotPath": "reports/m12-b3-107001-workbench-visual-evidence.png",
         "screenshotSha256": "cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260"
       }
@@ -56,6 +61,59 @@
       }
     ]
   },
+  "negativeInputWindowBoundary": {
+    "sourceWindow": "[20,72) source frames",
+    "outsideBeforeOffset": 19,
+    "expectedAuthorityPhase": "recovery-locked",
+    "negativeCaseIdentity": "normal-input-window-outside-before-recovery-locked"
+  },
+  "negativeActionCases": [
+    {
+      "identity": "normal-input-window-outside-before-recovery-locked",
+      "assertionIdentity": "negative:input-window-outside-before-19f-recovery-locked",
+      "durationFrames": 200,
+      "actions": [
+        {
+          "id": "window-before-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10700101,
+            "actionKind": "normal-attack",
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "negative-window-before-source"
+            },
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "window-outside-before",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10700101,
+            "actionKind": "normal-attack",
+            "attackInput": {
+              "sequenceIndex": 1,
+              "groupId": "negative-window-before-fresh-a1",
+              "contextActionId": "window-before-source"
+            },
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 19 }
+        }
+      ],
+      "requiredExecutableActionIds": ["window-before-source"],
+      "expectedIssue": {
+        "actionId": "window-outside-before",
+        "code": "machine-axis-action-not-executable",
+        "reason": "verified-normal-attack-input-phase-conflict",
+        "violationCode": "VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT"
+      }
+    }
+  ],
   "buffLifecycle": {
     "effectIdentity": "battle-element:107001262",
     "targetId": "actor-107001",

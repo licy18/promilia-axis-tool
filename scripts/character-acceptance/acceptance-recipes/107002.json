@@ -5,6 +5,9 @@
     "status": "pending",
     "acceptanceCommit": null,
     "recordIdentity": null,
+    "qualificationSubjectHash": null,
+    "scenarioSetHash": null,
+    "scenarioIdentities": ["m12-b3-107002-reduced-action-surface-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
@@ -56,6 +59,20 @@
     }
   ],
   "probes": [
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-a3",
+      "controlSkillId": 10700203,
+      "subSkillIndex": 0,
+      "semanticName": "A3"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "misa-a4",
+      "controlSkillId": 10700204,
+      "subSkillIndex": 0,
+      "semanticName": "A4"
+    },
     {
       "kind": "variant-selection",
       "actionId": "misa-charged",
