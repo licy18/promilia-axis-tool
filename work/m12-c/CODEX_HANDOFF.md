@@ -1,47 +1,32 @@
 # AzPr M12-C 中央集成续接 Handoff
 
-时间：2026-08-12 14:53（北京）
+时间：2026-08-12 20:40（北京）
 仓库：`C:\Codex\AzPr Axis\promilia-axis-tool`
 
 ## 从这里开始
 
-1. 读取 `work/m12-c/STATE.md` 的 `0.00` 收口快照和本文件。
-2. 运行只读核对：`git status --short --branch`、`git rev-parse HEAD`、`git log -1 --oneline`。
-3. 预收口实现 HEAD：`32835990ff14deb2289d0070ade48b8125b6f0d7`；包含本 handoff 的 docs-only 提交是其直接后继。分支 `master`，当时相对 `origin/master` ahead 39。
+1. 完整读取 `work/m12-c/STATE.md` 的 `0.00`、`0.04`、`0.05` 与本文件。
+2. 只读核对：`git status --short --branch`、`git rev-parse HEAD`、`git log -2 --oneline`、`git stash list --format='%gd %H %s' | Select-Object -First 1`。
+3. 当前技术收口 HEAD：`d9efacbaedbba5c9cd9e78a56d28385b0af76b5b`（`test(m12-c): refresh signed owner fixtures`）；其父提交 `04e955e8c99118e3a255194f7f6cf0cc6ba4f619` 为全部 owner/STARBORN 视觉签收批。本 handoff 是其直接后继；提交后分支 `master` 相对 `origin/master` 预期 ahead 47，仍须以现场 Git 输出为准。
 
-## 当前工作树
+## 当前权威状态
 
-未提交 Ruby/103002 tracked WIP：
+- 101010、102001、103002、107001、107002、108003、109001、112001、199001、199002 已明确签收；199001/199002 只形成一个 `STARBORN` optimization-object 联合签收。101003 不在范围内，保持 pending/unready。
+- owner/alias 新视觉证据位于 `work/m12-c/product-review/visual-evidence/2026-08-12/`；签收汇总见 `work/m12-c/product-review/OWNER_VISUAL_SIGNOFF.md`。不要复用更早截图/hash，也不要把 199001/199002 拆为两个 optimization object。
+- character acceptance 当前为 11 owner 中 10 个 runtime-integrated、visually accepted、optimization-ready；qualification 263/263、E22 binding 22/22、visual acceptance 254/254。当前 mechanics package hash 为 `62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8`。
+- clean HEAD `04e955e8` 上按旧 handoff 唯一一次 8 GiB `release:verify` 已执行，并在 `test:trial-release` 失败。记录 `work/m12-c/gates/latest-release-verify.json` 为 `status=fail`、`failureStage=test`、release record `4b7afb2a5b81a4b7245efe6cf3202f5f0198e70fad1ee12a5b4a255fc3e89170`。不得把它记为 PASS/READY。
+- release 暴露的 32 个陈旧 fixture/test/report 文件已在 `d9efacba` 定向闭合；按组复验全部 32 files / 598 tests PASS，Prettier、JSON parse、`git diff --check` 通过。没有第二次运行 `release:verify`，没有 Formal Search Admission、推送或新搜索。
 
-- `fixtures/character-acceptance/103002-visual.json`
-- `fixtures/character-acceptance/103002-active-surface-closure.json`
-- `fixtures/character-acceptance/103002-marker-expiry-ordering.json`
-- `fixtures/character-acceptance/103002-window-boundaries.json`
-- `fixtures/character-acceptance/103002-joint-attack-runtime.json`
-- `scripts/character-acceptance/acceptance-recipes/103002.json`
+## 当前工作树与保护项
 
-本线程诊断恢复脚本：`.readonly-ruby-probe.mjs`（untracked）。不要误删其他 `work/**` evidence，不动 `stash@{0}`。
+- tracked tree 在 `d9efacba` 后应 clean；只允许既有 untracked evidence 存在。
+- `.readonly-ruby-probe.mjs` 与全部 `work/**` untracked evidence 原样保留，不删除、不移动、不纳入提交。
+- `stash@{0}` 必须保持 `900e193bf710b8f894b50e0bc966db70cbd7e717 On master: codex-preserve-master-before-m12-b3-c31e4c3f`。
+- `fixtures/machine-axis/m11-b-three-actor-120s.json` 是旧 mechanics hash 的必须失败历史反例，未更新且不得迁成正式输入。
 
-## 已完成与真实验证
+## 后续边界
 
-- authority v2、runtime/Workbench/search fail-closed、STARBORN context/marker 防伪、Misa A1/A2 projectile authority 已合入。
-- `ad6fb7d7`：Misa scoring/acceptance technical closure。
-- `32835990`：Xiaoyu technical migration；closure `6/6 PASS`，canonical `2 PASS / 6 SKIP`，owner required/pass `202/202`，零 gap/blocker，headless/canonical/Workbench true。
-- 本收口没有运行 full、trial-release、`release:verify`、formal admission 或搜索。
-
-## 当前 blocker
-
-Ruby WIP 把 package hash、main A1/A2/A3/E1、enhanced E1-E12、marker 与 reload window 开始迁到显式 absolute frame/group/context。带 owner overlay 的 probe 尚未到 E1，就被 active-surface 的旧密集独立 A1 critical cadence 拒绝：A1@0 后 120/360/420/480/600/700F 等 fresh A1 违反 successor/recovery phase。无输出或未到 E1 不是 PASS。
-
-恢复方案：保留 critical action IDs/hit overrides，把 critical 与 pre/post star-carry 普攻改成合法完整 A1→A2→A3 或经权威确认的 reopen 链；同步 switch/star/ultimate/E1-E12 absolute frames 和 recipe 时间断言；然后跑 Ruby owner-focused tests/generator。未达到完整 owner result 前不要提交 Ruby 批次。
-
-## 后续门禁顺序
-
-1. 完成 Ruby 技术闭合。
-2. 逐 owner/STARBORN 做真实 replay、Workbench/Playwright 视觉检查并生成新签收；旧截图/hash 不复用。
-3. 全部完成后一次性刷新派生产物。
-4. clean tracked HEAD 上只运行一次：`$env:NODE_OPTIONS='--max-old-space-size=8192'; npm run release:verify`。
-5. 独立确认 HEAD 不漂移、formal admission 15/15、authority v2 live descriptor 完整绑定、推送 `origin/master`。
-6. 创建新 run，按 source-family/team 分片，用 AI-guided bounded heuristic 重搜三个 objective；当前有效 Top-5 均为 `0/5`。
-
-禁止：复用旧 checkpoint/result/finalization/closeout；再次跑 35-source 无中间产物单体长跑；据技术绿灯自动代签产品视觉；删除或移动既有 untracked evidence。
+1. 当前 release authority 仍为 FAIL，Formal Search Admission 仍关闭；不得启动 `search:ai-guided`、正式搜索、推送或复用旧 checkpoint/result/finalization/closeout。
+2. 不要自动再次运行 `release:verify`。旧 handoff 的“只运行一次”额度已经使用且失败；必须等待用户或中央任务对“是否授权一个新的完整 release 建权”作出明确裁决。
+3. 若获得新的 release 授权，必须从当时的 clean tracked HEAD 重新完整执行，独立核对 HEAD 不漂移、formal admission 15/15、authority v2 live descriptor 全绑定；不得用本次 598 项定向 PASS 代替 release authority。
+4. 只有新的 release PASS、独立 admission READY、推送完成后，才可创建全新 run 并按 source-family/team 分片重搜三个 objective；当前有效 Top-5 仍为 `0/5`。
