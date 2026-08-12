@@ -56,6 +56,33 @@ describe('formal search admission', () => {
     });
   });
 
+  it('loads the normal attack input authority through native Node ESM', () => {
+    const moduleUrl = pathToFileURL(
+      resolve('src/domain/verifiedNormalAttackInputAuthority.js')
+    ).href;
+    const imported = spawnSync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '--eval',
+        `const authority = await import(${JSON.stringify(
+          moduleUrl
+        )}); process.stdout.write(JSON.stringify(authority.getVerifiedNormalAttackInputAuthorityDescriptor()));`,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+      }
+    );
+
+    expect(imported.status, imported.stderr).toBe(0);
+    expect(JSON.parse(imported.stdout)).toMatchObject({
+      contractName: 'AzPrVerifiedNormalAttackInputAuthority',
+      policyVersion: 2,
+      contractHash: expect.stringMatching(/^[a-f0-9]{16}$/),
+    });
+  });
+
   it('binds all admitted Kibo autonomous surfaces to the product-deferred scope', async () => {
     const result = await evaluateFormalSearchAdmission(currentEvidence);
 

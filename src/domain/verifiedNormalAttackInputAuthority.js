@@ -1,8 +1,8 @@
 import {
   CANONICAL_HASH_ALGORITHM,
   hashCanonicalValue,
-} from '../simulation/headless/canonicalSerialization';
-import { msToFrame } from './timebase';
+} from '../simulation/headless/canonicalSerialization.js';
+import { msToFrame } from './timebase.js';
 
 export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_SCHEMA_VERSION = 1;
 export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_CONTRACT_NAME =
