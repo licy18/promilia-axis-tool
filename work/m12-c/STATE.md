@@ -18,6 +18,7 @@
 - Workbench live 输入由 `bfd0b9f8f5d8576b09c41b2829b696edadd86ff3` 改为一次 click/drag 只物化一个精确输入，优先级为 special/context > successor > idle A1；缺失、多义或资源不足时零插入。迁移后的 Workbench 完整单文件为 109/109 PASS，M11-C 定向真实浏览器验证由 `861445b02d59e7ed33af7f9229003fe4301429a5` 通过。
 - Machine Axis service、canonical core 与 action-legality proof 已统一投影 authority descriptor、结构化 form/expected/actual 证据，并拒绝错误 sequence；新的 `m11-b-three-actor-authority.json` 取代共享消费者中的旧 standalone-A3 baseline。旧 `m11-b-three-actor-120s.json` 保留为必须失败的历史反例，不删除、不覆盖。
 - 当前中央聚焦复验：service 20/20、canonical core 15/15、Workbench 109/109；authority consumer 收口后的 acceptance/adapter/axis-boundary 合并集为 3 files、45/45 PASS，CLI/batch 示例已迁到 authority fixture。搜索/优化器已由 `dfadb9e8`、`70c2363d`、`959d6be4` 串行集成并以 9 files、114/114 PASS 复验：拒绝 `[0,18)` 单 A1 循环、允许 `[0,230)` 恢复终点闭合，Ruby 强化续段保留弹药缺口证明；旧 fixture 仅作为 service 明确负例。artifact/resume/finalization/pointer/closeout 现统一对 repo live descriptor 做全字段稳定比较，同 hash 伪造字段的负例已通过；最终独立复核、派生产物刷新与单次 release 准入尚未完成，因此 `optimizationFormalScoreReady=false`，不得启动新搜索。
+- 角色签收输入的技术迁移已由中央 `c6afa94a`、`da4aa093` 合入：10 份原 accepted recipe 全部先降为 `pending`，历史 `scenarioIdentities` 与 `automatedEvidence` 原样保留，签收身份字段显式清空；没有据测试或 hash 自动续签。107001 的 19F fresh A1 已从正向场景移为 `VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT` 负例，20/71/72F 正向边界保留；107002 恢复 A3/A4、critical、miss/pickup 原产品探针并补齐真实 A1→A2→A3/A4 前驱。当前仅建立待签技术基线，production structural authority、逐 owner replay/截图人工复核与新 acceptance 记录仍未完成。
 
 ## 0. 2026-08-11 中央集成快照
 
