@@ -1,10 +1,14 @@
 # M12-C owner / STARBORN Workbench 视觉签收
 
-状态：`pending-explicit-user-signoff`
+状态：`accepted-explicit-user-signoff`
 
 审阅基线：`bda6696e07969b82445a922e19f3c9739a315dc6`
 
-本轮为 normal-input authority v2 技术闭合后的全新证据，未复用旧截图或旧签收身份。每个 owner 都通过 `generate-character-acceptance.mjs --owner <id> --runtime-package-output ...` 生成精确 owner-only runtime package，再由 Playwright 在 1440×900 Workbench 页面执行真实 Machine Axis 文件导入、展开代表动作的 canonical trace，并保存导入对话框和 trace 截图。所有自动记录仍保持 `pending-explicit-user-signoff`；自动化不能代替用户产品签收。
+签收时间：`2026-08-12T18:46:16+08:00`
+
+签收指令：`签收全部 owner，并将 199001/199002 作为单一 STARBORN 对象联合签收。`
+
+本轮为 normal-input authority v2 技术闭合后的全新证据，未复用旧截图或旧签收身份。每个 owner 都通过 `generate-character-acceptance.mjs --owner <id> --runtime-package-output ...` 生成精确 owner-only runtime package，再由 Playwright 在 1440×900 Workbench 页面执行真实 Machine Axis 文件导入、展开代表动作的 canonical trace，并保存导入对话框和 trace 截图。用户已对下列全部 owner/alias 作出明确产品签收；`199001/199002` 的两份 alias 证据只共同支撑一个 `STARBORN` optimization-object 裁决，不构成两个对象。
 
 | owner / 对象          | 导入结果                | 代表动作                          | control / sub  | canonical trace    | 证据                                                                                                                                                                                                                                                 |
 | --------------------- | ----------------------- | --------------------------------- | -------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -26,8 +30,10 @@
 - 103002 Ruby 可见强化普攻 E1 `control 10300201 / sub 1`；107001 可见 A3 `control 10700103 / sub 4` 与风语资源事务；107002 可见合法 A3；112001 可见 Heavy3 `sub 3`。
 - STARBORN 两个别名都在同一 1588F 派生突刺后 A3 场景显示 `sub 0`，画面分别标识女主角/男主角，canonical trace 与截图 hash 各自独立；产品裁决仍只有一个 `STARBORN` optimization object。
 
-## 产品签收边界
+## 产品签收结果
 
-用户若确认这 10 组证据，可明确回复：`签收全部 owner，并将 199001/199002 作为单一 STARBORN 对象联合签收。`
+- 10/10 owner/alias review 记录均已绑定本次用户明确签收；正式 acceptance evidence commit 为 `13d28aa515312a63395f49ddff3c778967e1b20f`。
+- 8 个普通 owner 各自形成角色级产品裁决；`199001` 与 `199002` 保留各自角色级 manifest，但其对象级裁决统一绑定 `optimization-object-product-acceptance:STARBORN:13d28aa515312a63395f49ddff3c778967e1b20f:c94d6b6166226f10`。
+- `101003` 不在本轮审阅或签收范围，继续保持 pending/unready。
 
-收到明确签收后，下一步才是写入新的 acceptance identity、刷新一次派生产物、提交签收记录；仍需在签收提交后的 clean HEAD 上单次运行 `release:verify` 并重建 Formal Search Admission，之后才能启动全新搜索。
+新的 acceptance identity 与派生产物已刷新；仍需在签收提交后的 clean HEAD 上单次运行 `release:verify` 并重建 Formal Search Admission，之后才能启动全新搜索。

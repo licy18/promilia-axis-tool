@@ -46,6 +46,14 @@
 - 首次裸 Workbench 导入 107001 被诚实拒绝为 normal-input missing，证明 owner overlay 并非全局默认包；正式审阅严格采用仓库生成器导出的 owner-only runtime package。审阅夹具第一次因关闭对话框后读取已卸载节点超时，冻结状态文字后复跑 PASS；107002 最初所选 ultimate 无直接 hit 行，改用配方明确验证的 A3 后在不放宽 hit 断言的情况下 PASS。
 - 当前所有新 review 记录仍为 `pending-explicit-user-signoff`；recipe 未写入 accepted identity，STARBORN 旧对象级 accepted 记录未被沿用。等待用户明确签收前仍禁止刷新最终派生产物、运行 `release:verify` / formal admission 或启动任何正式搜索。
 
+## 0.04 2026-08-12 18:46 owner / STARBORN 明确签收与派生闭合
+
+- 用户明确回复：`签收全部 owner，并将 199001/199002 作为单一 STARBORN 对象联合签收。` 本轮 101010、102001、103002、107001、107002、108003、109001、112001、199001、199002 全部角色级记录已接受；199001/199002 的两份 alias 视觉证据同时只形成一个 `STARBORN` optimization-object 联合裁决。101003 不在签收范围，保持 pending/unready。
+- 10 份角色 recipe 与单一 STARBORN object recipe 均绑定新证据提交 `13d28aa515312a63395f49ddff3c778967e1b20f`；角色 qualification subject 分别为 `6c361b4ae3dc61a8`、`4a34ddcb5e9904e5`、`a87a71c9f84966c5`、`4aa2a54123438a90`、`bd44ed4ae5bace66`、`c7c62aa773bdfba5`、`885f1095802cc741`、`aae0ae0f9ebc0700`、`42d43e9176435686`、`aaefedcae3ad61aa`；STARBORN object subject 为 `c94d6b6166226f10`、bundle 为 `7d47f4085c8a6214`。
+- 全量 character acceptance 已一次写回：11 个 owner 中 10 个 runtime-integrated、visually accepted 且 optimization-ready；签收目标全部 blocker/source gap/acceptance gap/functional failure 为 0。未签收的 101003 诚实保留 41 blocked、13 source gap、34 acceptance gap、47 functional failure。optimization qualification 为 263/263、blocking unique gap 0、`m12cLocked=false`。
+- 派生刷新暴露并关闭两个通用一致性缺口：assertion 的深层 `undefined` 在 JSON 落盘时会改变 hash，现统一先做 JSON 值归一化并有序列化稳定性回归；E22 显式请求全局 normal-chain identity 时，Machine Axis 只查 profile overlay 导致裸全局包 missing，现优先匹配 owner profile，缺匹配且链等于全局 chain 时才回退 verified `attackInputSegments`。聚焦回归 2 files / 40 tests PASS，E22 binding 22/22 PASS，visual acceptance 254/254 ready。
+- 当前仍没有 release authority 或 Formal Search Admission；必须先提交本批，使 tracked tree clean，再按 handoff 只运行一次 8 GiB `release:verify`，独立确认 HEAD 稳定、formal admission 15/15 与 authority v2 live descriptor 后才能推送并启动全新搜索。所有既有 untracked evidence 与 `.readonly-ruby-probe.mjs` 保留，`stash@{0}` 未动。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。

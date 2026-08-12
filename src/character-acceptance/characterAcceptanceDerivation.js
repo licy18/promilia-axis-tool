@@ -594,7 +594,7 @@ function finalizeScenarioCase(record, index) {
         ),
         ...(assertion?.actual === undefined
           ? {}
-          : { actual: structuredClone(assertion.actual) }),
+          : { actual: cloneJsonValue(assertion.actual) }),
         reasons: passed
           ? []
           : uniqueStrings([
@@ -970,6 +970,11 @@ function uniqueStrings(values) {
   return [
     ...new Set((values ?? []).filter(value => value != null).map(String)),
   ].sort();
+}
+
+function cloneJsonValue(value) {
+  const serialized = JSON.stringify(value);
+  return serialized === undefined ? null : JSON.parse(serialized);
 }
 
 function dedupeBy(rows, selector) {

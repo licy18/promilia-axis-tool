@@ -121,7 +121,7 @@
       "dimension": "action-effect-binding",
       "subjectIdentity": "han-star-skill-fire-tuning-mark-1",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "857ff7c9dfd0e17a",
@@ -131,25 +131,21 @@
         "kind": "effect",
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:02eaf00818fc10bc",
-        "coverage-edge:9d2f1c5cd5113396",
-        "coverage-edge:cfe56df323ad5843"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@63F"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-star-skill-fire-tuning-mark-2",
       "dimension": "action-effect-binding",
       "subjectIdentity": "han-star-skill-fire-tuning-mark-2",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "applied",
       "sourceDisposition": "applied",
       "sourceRecordHash": "ef4871ddc17df0d4",
@@ -159,18 +155,14 @@
         "kind": "effect",
         "subSkillIndex": 0
       },
-      "coverageEdgeIds": [
-        "coverage-edge:38ac73b4d549fceb",
-        "coverage-edge:cd678d27355176ee",
-        "coverage-edge:ecffa646c00977d5"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_150.asset/MonoBehaviour/ast_150__-1498771669867596146.json#elementConfigId=150|skill_control_10100312.asset#elementConfigId=150@70F"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:action-effect-binding:han-ultimate-controlled-tuning-ratio",
@@ -360,12 +352,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:231fe72b87d6a204",
         "coverage-edge:c26378511a5404b2"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#attack-reopen-window-start=93F"
@@ -388,12 +378,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:bdc05bc7cdb9b416",
-        "coverage-edge:d36d253455e33c36"
+        "coverage-edge:bdc05bc7cdb9b416"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "characters.items[id=101003].skillSlots[group=ground,slot=2]"
@@ -619,17 +607,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:0bbdcfab2c04e77f",
-        "coverage-edge:69e004e4a649551b",
-        "coverage-edge:845ea5bba287ffb5",
-        "coverage-edge:8fb5954a16f83e7c",
-        "coverage-edge:c4ac1286ec3ba8cd",
-        "coverage-edge:c6234935200d5cc0",
-        "coverage-edge:d45e604a6b931141"
+        "coverage-edge:69e004e4a649551b"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-4295862534287682589__-4295862534287682589.json#behaviorlineControl[0].behaviorList[pathId=-5538885314074078237]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100301.asset/MonoBehaviour/MonoBehaviour_-5538885314074078237__-5538885314074078237.json"
@@ -778,12 +759,10 @@
         "kind": "conditional-hit-group"
       },
       "coverageEdgeIds": [
-        "coverage-edge:44ec1b804f4dd7e4",
         "coverage-edge:f704fa0ad1753b62"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012601.asset/MonoBehaviour/skill_control_48012601__-4439459879373897354.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-9168566004252254787|skill_control_10100310.asset#bullet101003101@28F|Battle/Element/ast_101003117.asset#condition101003079>0;summon480126|skill_control_48012601.asset#element101003110@[3,27,30,34,37]F|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003136.asset/MonoBehaviour/ast_101003136__7173182537092738998.json#elementConfigId=101003136|Battle/Element/ast_101003136.asset#IF(target.ELEMENT_LAYERS[101003079]>5,-6,0)"
@@ -1041,12 +1020,10 @@
         "windowIdentity": "actor:101003|control:10100310|sub:0|0-105|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:9fe8d0c6472e0950",
-        "coverage-edge:f50acf7c93a7ecc0"
+        "coverage-edge:9fe8d0c6472e0950"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-456694717529454100__-456694717529454100.json#behaviorlineControl[0].behaviorList[pathId=-2074826166610359828]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-2074826166610359828__-2074826166610359828.json"
@@ -1067,12 +1044,10 @@
         "windowIdentity": "actor:101003|control:10100310|sub:0|61-188|target:10100341/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0b04698b055b04d4",
-        "coverage-edge:2473db30f6a6fddd"
+        "coverage-edge:0b04698b055b04d4"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-4613693041038128660__-4613693041038128660.json#behaviorlineControl[0].behaviorList[pathId=8639014834962106860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_8639014834962106860__8639014834962106860.json"
@@ -1093,12 +1068,10 @@
         "windowIdentity": "actor:101003|control:10100310|sub:0|65-237|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6876219ed9580819",
         "coverage-edge:7128731049b978aa"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_4561095872199592428__4561095872199592428.json#behaviorlineControl[0].behaviorList[pathId=-6502154062530147860]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100310.asset/MonoBehaviour/MonoBehaviour_-6502154062530147860__-6502154062530147860.json"
@@ -1244,12 +1217,10 @@
         "windowIdentity": "actor:101003|control:10100312|sub:0|0-104|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:8b08116e7a6802b6",
         "coverage-edge:feee48577da88cb2"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/New Timeline__3755136986258826800.json#behaviorlineControl[0].behaviorList[pathId=6405600687811683888]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_6405600687811683888__6405600687811683888.json"
@@ -1270,12 +1241,10 @@
         "windowIdentity": "actor:101003|control:10100312|sub:0|93-129|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4dc807e26030ece7",
         "coverage-edge:f49cae712ec8c66a"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_3542946942757856816__3542946942757856816.json#behaviorlineControl[0].behaviorList[pathId=2052340225160144432]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2052340225160144432__2052340225160144432.json"
@@ -1296,12 +1265,10 @@
         "windowIdentity": "actor:101003|control:10100312|sub:0|97-181|target:0/sub:0|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json"
       },
       "coverageEdgeIds": [
-        "coverage-edge:305e999cfca2e57a",
         "coverage-edge:4f5158caec5cb083"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-1015219542526630352__-1015219542526630352.json#behaviorlineControl[0].behaviorList[pathId=-6294167101483162064]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_-6294167101483162064__-6294167101483162064.json"
@@ -2399,7 +2366,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:1:11d6156b178a2f94",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "5cd723cdcb32e284",
@@ -2407,20 +2374,16 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:068bb23fdba9f3c0",
-        "coverage-edge:2dc2e2cdeb8268df",
-        "coverage-edge:694b391b51607c5a"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:10:bf68f352d8f7a07b",
@@ -2436,9 +2399,7 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:26b6332d1c8c681f",
         "coverage-edge:30f9b0e69e835fc4",
-        "coverage-edge:5fe91d866d4071f1",
         "coverage-edge:6aa03364ef55fbfc",
         "coverage-edge:72b07bdf8c359895",
         "coverage-edge:8ba305548de25d6f",
@@ -2446,13 +2407,11 @@
         "coverage-edge:b2811df6d24ce53e",
         "coverage-edge:c7782301f21bfce7",
         "coverage-edge:c8bf7dd3b926ef7c",
-        "coverage-edge:cd9fbdf9a12f0dec",
         "coverage-edge:d786e9ce8f87d9b9"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType",
@@ -2477,9 +2436,6 @@
       "coverageEdgeIds": [
         "coverage-edge:02ca31fbd53d924f",
         "coverage-edge:069b14ca6d19e014",
-        "coverage-edge:0896e6aff59f578c",
-        "coverage-edge:0b996c8f4268efa9",
-        "coverage-edge:20bfde5ebea3bc92",
         "coverage-edge:2bfea2fcb4a15b47",
         "coverage-edge:81c787dbfce3b07c",
         "coverage-edge:8993c269d52dc140",
@@ -2490,8 +2446,7 @@
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType",
@@ -2505,7 +2460,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:12:d04a59f52e4ca876",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "762fcdcc81c0175a",
@@ -2513,26 +2468,23 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:0a9c164807750117",
-        "coverage-edge:a27c26dfa62d234e"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:13:6a692c7c3684a03d",
       "dimension": "effect",
       "subjectIdentity": "effect:13:6a692c7c3684a03d",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "e03eca1196e355fe",
@@ -2540,26 +2492,23 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:1890617f7d3e51d4",
-        "coverage-edge:696a282d924764ad"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:14:8e7d170ee7428d20",
       "dimension": "effect",
       "subjectIdentity": "effect:14:8e7d170ee7428d20",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "a27c9856bff09c4b",
@@ -2567,27 +2516,23 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:0b46db674c83934f",
-        "coverage-edge:6370906f38594790",
-        "coverage-edge:b1116516b79d5025"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:15:e0c75ccf1b501f65",
       "dimension": "effect",
       "subjectIdentity": "effect:15:e0c75ccf1b501f65",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "3b76e7e11b564265",
@@ -2595,27 +2540,23 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:177f552f2c9bb98d",
-        "coverage-edge:276082b4a8915554",
-        "coverage-edge:458457ffd42a329b"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:16:8949fb36aeee1be3",
       "dimension": "effect",
       "subjectIdentity": "effect:16:8949fb36aeee1be3",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "bd91ebe04e3f5ba1",
@@ -2623,20 +2564,16 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:3cad470e29f06118",
-        "coverage-edge:887c61bfcd0df4c6",
-        "coverage-edge:dcf994340b78c55b"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:17:85618ed562a26e52",
@@ -2687,16 +2624,13 @@
         "coverage-edge:4908bbe13b5a45c6",
         "coverage-edge:60f505e8adb42951",
         "coverage-edge:71367cd282fa7b0e",
-        "coverage-edge:7e1d4a34166a9b28",
         "coverage-edge:aaccdb930a0fde1c",
         "coverage-edge:b8505e92fe389168",
-        "coverage-edge:c051a0a79f79d823",
-        "coverage-edge:f812930c01758351"
+        "coverage-edge:c051a0a79f79d823"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType",
@@ -2734,7 +2668,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:2:8c8188c8190d3361",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "47b3f1f17128ef1a",
@@ -2742,20 +2676,16 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:378b29bcf2a83711",
-        "coverage-edge:af9107045fdd9a38",
-        "coverage-edge:be9bddbde5326187"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:20:900ac202cb212e62",
@@ -2795,23 +2725,19 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:00f96d433dfb60ef",
         "coverage-edge:0990e6982385e5e2",
         "coverage-edge:0f9c7a22f8f6d9bd",
         "coverage-edge:188cd3887c382a6e",
         "coverage-edge:4e80a7cfd0a0c43c",
         "coverage-edge:b17d2fb42f25e63d",
         "coverage-edge:bc1181e7d1f7d955",
-        "coverage-edge:c38c379116f1b35a",
         "coverage-edge:cbb3f873b4a29d15",
         "coverage-edge:e431d2d797034668",
-        "coverage-edge:faa5c16d59df9680",
         "coverage-edge:fce5868f6f5c8dba"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas",
@@ -2837,20 +2763,16 @@
         "coverage-edge:00f90fb82325db2d",
         "coverage-edge:1b49f30d39824735",
         "coverage-edge:1dbdda029119ea5e",
-        "coverage-edge:47d4d629e4db5e5b",
         "coverage-edge:79693d7c03533ab5",
-        "coverage-edge:8ef07c0dc5825ce8",
         "coverage-edge:8f289d73c2213ea4",
         "coverage-edge:976ed4290e391b7d",
-        "coverage-edge:a708dac695961392",
         "coverage-edge:c028a20de24e5ba6",
         "coverage-edge:d30e216b8cfa1240",
         "coverage-edge:f738da0f3cdfcfb2"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas",
@@ -2873,8 +2795,6 @@
         "kind": "effect"
       },
       "coverageEdgeIds": [
-        "coverage-edge:02d809c88b1d8519",
-        "coverage-edge:3a11653c499846d7",
         "coverage-edge:599ac232ca273ea5",
         "coverage-edge:768e3ee700df3ebd",
         "coverage-edge:78fe8c5c0777ce24",
@@ -2883,13 +2803,11 @@
         "coverage-edge:a02e22e4a4d5a08a",
         "coverage-edge:b4025f4cac9b9aa3",
         "coverage-edge:c9340e44ce62471f",
-        "coverage-edge:ea340a5a33aa9482",
         "coverage-edge:fe4d6d536ea6940a"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas",
@@ -2903,7 +2821,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:24:f131b1401cc6f162",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "83afdffcd0881b65",
@@ -2911,26 +2829,23 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:e5d305f54ddc5d18",
-        "coverage-edge:f0fa89a96426759d"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:25:e2f5793fe4461fdb",
       "dimension": "effect",
       "subjectIdentity": "effect:25:e2f5793fe4461fdb",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "761066e7fa116557",
@@ -2938,26 +2853,23 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:13ea034a72894cf0",
-        "coverage-edge:ee40c6e72c5b3a81"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:26:de3a178746013fed",
       "dimension": "effect",
       "subjectIdentity": "effect:26:de3a178746013fed",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "9ad8ad1ab97661ff",
@@ -2965,26 +2877,23 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:000b10ebb52ef8b4",
-        "coverage-edge:5112a6c598bc1ecd"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:27:350cba5ed2ce35ea",
       "dimension": "effect",
       "subjectIdentity": "effect:27:350cba5ed2ce35ea",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "5ab3c84ca8cf613c",
@@ -2992,20 +2901,16 @@
         "effectIdentity": "battle-element:150",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:2f12f226ddba2f53",
-        "coverage-edge:6e7577797ae5a68c",
-        "coverage-edge:756790b3758ffabe"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]",
         "battle-element-assets.jsonl#path_id=-1498771669867596146"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:28:bb8315a52cd3c027",
@@ -3103,19 +3008,15 @@
         "coverage-edge:0c970aabd9e6f1a7",
         "coverage-edge:226e4e48a5d111df",
         "coverage-edge:2ce34e20e97e707c",
-        "coverage-edge:3ce23f7e07dc3011",
         "coverage-edge:46a8fbfb5b74c0f7",
         "coverage-edge:5eb6b48016af095c",
-        "coverage-edge:8105a6f8141c7fa4",
-        "coverage-edge:8259990d403bf356",
         "coverage-edge:873cb1527b043324",
         "coverage-edge:c44f03d9dc001e5f",
         "coverage-edge:f1608f03781bc47e"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas",
@@ -3153,7 +3054,7 @@
       "dimension": "effect",
       "subjectIdentity": "effect:32:885c9593ca6cc1d4",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": null,
       "sourceDisposition": "applied",
       "sourceRecordHash": "92a6210566109f26",
@@ -3161,19 +3062,16 @@
         "effectIdentity": "battle-element:151",
         "kind": "effect"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:095b45999e39a0d4",
-        "coverage-edge:55b97b6f79d057e1"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas",
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]",
         "battle-element-assets.jsonl#path_id=466374251647106866"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "contract:effect:effect:33:1b0ade7dfe8d83a4",
@@ -3897,12 +3795,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:5142b6c6c24fd1e1",
         "coverage-edge:930c04962418d408"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012401.asset/MonoBehaviour/skill_control_48012401__-4277238474023214525.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-7636687166603453292|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_48012401.asset/MonoBehaviour/skill_control_48012401__-4277238474023214525.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-7636687166603453292|skill_control_10100310.asset#bullet101003101@28F->item480124|skill_control_48012401.asset#element101003104@[2,12,23]F"
@@ -4095,12 +3991,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:4aa5ea3fa073a65b",
-        "coverage-edge:975e47f08d8b26e2"
+        "coverage-edge:4aa5ea3fa073a65b"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668"
@@ -4121,12 +4015,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:18913ee84087219c",
-        "coverage-edge:719226bc0a489076"
+        "coverage-edge:18913ee84087219c"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668"
@@ -4147,12 +4039,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:628fe05b0c4bb1d0",
-        "coverage-edge:66f00ea70786e9a4"
+        "coverage-edge:628fe05b0c4bb1d0"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668"
@@ -4173,12 +4063,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:d6ffba08bf50a516",
-        "coverage-edge:de21f50339754ceb"
+        "coverage-edge:d6ffba08bf50a516"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562"
@@ -4199,12 +4087,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:6fe32ebeef77a7fa",
-        "coverage-edge:ca107854f7f6093b"
+        "coverage-edge:6fe32ebeef77a7fa"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562"
@@ -4225,12 +4111,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:9841b7367081791c",
-        "coverage-edge:f764e8708aef0116"
+        "coverage-edge:9841b7367081791c"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562"
@@ -4251,12 +4135,10 @@
         "kind": "hit"
       },
       "coverageEdgeIds": [
-        "coverage-edge:3dc2a7e0804e1b06",
         "coverage-edge:9578494a8b985e45"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562"
@@ -5460,12 +5342,10 @@
         "passiveIdentity": "actor:101003:passive:10100361"
       },
       "coverageEdgeIds": [
-        "coverage-edge:5d6bd21d25637555",
         "coverage-edge:9ae958f087d86d6a"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100361.asset/MonoBehaviour/skill_control_10100361__-4454120741835547178.json|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003186.asset/MonoBehaviour/ast_101003186__865127997397410363.json#elementConfigId=101003186|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset|NewTable/skill.rows[id=10100361]|Battle/Element/ast_101003186.asset|Battle/Element/ast_480124006.asset|Battle/Element/ast_480126003.asset"
@@ -5488,17 +5368,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:053413d8f36492c4",
-        "coverage-edge:2d6a8cff08dc0798",
-        "coverage-edge:4faaf21d50c1949d",
-        "coverage-edge:89989fc00566b1bc",
-        "coverage-edge:9083ceec4f00aa06",
-        "coverage-edge:da7fef8ced0f4c01",
         "coverage-edge:e51f608883a0c928"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [],
       "reasons": []
@@ -5519,12 +5392,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:1ef48977d2015708",
-        "coverage-edge:e0d2f19a3386d8dc"
+        "coverage-edge:1ef48977d2015708"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [],
       "reasons": []
@@ -5621,12 +5492,10 @@
         "subSkillIndex": 0
       },
       "coverageEdgeIds": [
-        "coverage-edge:31b39342c671506f",
-        "coverage-edge:96572bc73773e753"
+        "coverage-edge:31b39342c671506f"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [],
       "reasons": []
@@ -5803,13 +5672,10 @@
         "coverage-edge:018523b1b4e1eb94",
         "coverage-edge:667ad7f7debc47c3",
         "coverage-edge:6de7bce743d79fcc",
-        "coverage-edge:860e80d29f6b0a51",
-        "coverage-edge:93d9fc92269157ed",
-        "coverage-edge:d210d6f9e1778c6e"
+        "coverage-edge:93d9fc92269157ed"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480124006.asset/MonoBehaviour/ast_480124006__7905960758689617794.json#elementConfigId=480124006|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480124006.asset->ast_480126003.asset"
@@ -5832,14 +5698,11 @@
       "coverageEdgeIds": [
         "coverage-edge:1557566cd20ec945",
         "coverage-edge:5547f9c45445a9ec",
-        "coverage-edge:5ac4367303647f51",
         "coverage-edge:7406663063d94c44",
-        "coverage-edge:9f27e5a6d46935be",
         "coverage-edge:a5aebea5a5eb3ed3"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126002.asset/MonoBehaviour/ast_480126002__4072414477131374224.json#elementConfigId=480126002|NewTable/skill.rows[id=10100361]|Battle/Element/ast_480126002.asset->ast_480126003.asset"
@@ -5909,15 +5772,12 @@
         "coverage-edge:238556bf214b4ea0",
         "coverage-edge:74beb5013850bd47",
         "coverage-edge:807239b4f21f0736",
-        "coverage-edge:afc6636f00147a41",
         "coverage-edge:b4c13fb9de8b964d",
-        "coverage-edge:f5578ad44ec05374",
         "coverage-edge:fa59c194b3ee736d"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
@@ -5943,15 +5803,12 @@
         "coverage-edge:40ffed4e9b5f7852",
         "coverage-edge:5032792756d7f67b",
         "coverage-edge:8249b16c892a33f3",
-        "coverage-edge:9587fbb646ac608a",
         "coverage-edge:adba5e928bf92595",
-        "coverage-edge:b6c3d9d6de4538d3",
         "coverage-edge:c93acf46d7f6827b"
       ],
       "evidenceScenarioIds": [
         "m10-b2-r1:101003:ultimate-controlled-buff-switch",
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003205.asset/MonoBehaviour/ast_101003205__-5652413049857383353.json#elementConfigId=101003205|Battle/Element/ast_480126002.asset->ast_101003205.asset"
@@ -6021,16 +5878,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:1aa6bc4d1ce30a17",
         "coverage-edge:28e61619a8909ae3",
         "coverage-edge:50721b26fafcac29",
-        "coverage-edge:71e756ea405047d1",
-        "coverage-edge:9f06aff08350ff97",
-        "coverage-edge:f038652440c48756"
+        "coverage-edge:71e756ea405047d1"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079#time=10000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003171.asset/MonoBehaviour/ast_101003171__1689173673222703886.json#elementConfigId=101003171#combineNumber=15|Battle/Element/ast_101003079.asset#time=10000|Battle/Element/ast_101003171.asset#combineType=4;combineNumber=15"
@@ -6051,16 +5904,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0f5e32d7bf0fd4d1",
         "coverage-edge:6503a3df39237c63",
-        "coverage-edge:6875c5a60d471fca",
         "coverage-edge:852304f2f6332555",
-        "coverage-edge:b8137adfe1bdb49d",
-        "coverage-edge:fd9d33c5db5cb851"
+        "coverage-edge:b8137adfe1bdb49d"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@61F"
@@ -6082,15 +5931,11 @@
       },
       "coverageEdgeIds": [
         "coverage-edge:251a97048428c296",
-        "coverage-edge:661b5908d965c4a3",
         "coverage-edge:7cc1b20305fb2d5e",
-        "coverage-edge:a7fed509760e03b4",
-        "coverage-edge:b9bfd41b59c12034",
         "coverage-edge:fdcf2a9c174e7f90"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@68F"
@@ -6111,16 +5956,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:22a9fe3311e54347",
         "coverage-edge:2f13a88a06a59db3",
-        "coverage-edge:346afd44f5985fc7",
-        "coverage-edge:4b14c970c056ea70",
         "coverage-edge:97306b0c2cf86ac5",
         "coverage-edge:ffeb69f2633abc3b"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=8697618991190280668|skill_control_10100312.asset#element101003033+101003079@73F"
@@ -6141,16 +5982,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:05cb1681b08e4102",
-        "coverage-edge:178c159394415d82",
         "coverage-edge:1db0216962f6a5fc",
         "coverage-edge:704df5b0fdb12284",
-        "coverage-edge:7df162beeefd3159",
         "coverage-edge:f307181228c130d2"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@94F"
@@ -6171,16 +6008,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0afc6fdc9ea57015",
-        "coverage-edge:1cbd6eee82588c95",
         "coverage-edge:2762c941afdc7bff",
-        "coverage-edge:700f61039278a026",
         "coverage-edge:9145d8069c758399",
         "coverage-edge:b9086ed60af86b31"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@99F"
@@ -6201,16 +6034,12 @@
         "stateIdentity": "enemy:firework"
       },
       "coverageEdgeIds": [
-        "coverage-edge:0c4136e3de7de468",
         "coverage-edge:15f6a8de00e1bfa2",
         "coverage-edge:46412c4bc49319ca",
-        "coverage-edge:9113cd2fe5f6f38f",
-        "coverage-edge:cb4655df29e1822c",
-        "coverage-edge:fa8037d1facac7e8"
+        "coverage-edge:cb4655df29e1822c"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@104F"
@@ -6232,15 +6061,11 @@
       },
       "coverageEdgeIds": [
         "coverage-edge:2862e9045ec5630f",
-        "coverage-edge:47e487ade5bdea7c",
-        "coverage-edge:9f3332be8814739b",
-        "coverage-edge:b0f431d06bc7901b",
         "coverage-edge:bc7aeebda5dcca61",
         "coverage-edge:ebd429a8ab166df7"
       ],
       "evidenceScenarioIds": [
-        "m10-b2:101003:120s-three-actor-golden",
-        "m11-d-101003-visual-acceptance"
+        "m10-b2:101003:120s-three-actor-golden"
       ],
       "sourceIdentities": [
         "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_101003079.asset/MonoBehaviour/ast_101003079__-3716196104709416648.json#elementConfigId=101003079|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=642115531928830562|skill_control_10100312.asset#element101003108+101003079@109F"
@@ -6302,7 +6127,7 @@
       "dimension": "critical",
       "subjectIdentity": "critical-expected-no-random-side-effect",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "69517c7323439ab7",
@@ -6311,24 +6136,21 @@
         "factIdentity": "critical:expectedNoCriticalEvent",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:2ce1bbba8f386e60",
-        "coverage-edge:47b9dd911073d211"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:critical-integer-threshold-boundary",
       "dimension": "critical",
       "subjectIdentity": "critical-integer-threshold-boundary",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "03bda90b78e3bbd3",
@@ -6337,24 +6159,21 @@
         "factIdentity": "critical:integerThresholdBoundary",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:184f32116e235586",
-        "coverage-edge:5768446fa93d3e46"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:critical-miss-coexistence",
       "dimension": "critical",
       "subjectIdentity": "critical-miss-coexistence",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "1bcc0b06ed204c12",
@@ -6363,17 +6182,14 @@
         "factIdentity": "critical:missSuppressesHit",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:2b9b7dba3be0c5d0",
-        "coverage-edge:e4aa6ebe403fe506"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:critical-non-crittable-rejection",
@@ -6403,7 +6219,7 @@
       "dimension": "critical",
       "subjectIdentity": "critical-per-hit-modes",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "b53dc73f907e7502",
@@ -6412,17 +6228,14 @@
         "factIdentity": "critical:perHitModes",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:195ce7a70988d6af",
-        "coverage-edge:93899e59f68f089f"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:critical-pre-hit-attribute-change",
@@ -6496,7 +6309,7 @@
       "dimension": "critical",
       "subjectIdentity": "critical-sampled-same-seed",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "0afe0bbe5eb3d995",
@@ -6505,17 +6318,14 @@
         "factIdentity": "critical:sameSeedReplay",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:688531def832721f",
-        "coverage-edge:71deee3158bc5770"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:foreground-background-switch",
@@ -6549,7 +6359,7 @@
       "dimension": "hit-override",
       "subjectIdentity": "hit-landed-and-miss",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "1c694711d47a16ef",
@@ -6558,17 +6368,14 @@
         "factIdentity": "critical:missSuppressesHit",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:7ee8df4d16b89aa4",
-        "coverage-edge:e9e4e02ed81c1a02"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     },
     {
       "requirementIdentity": "protocol:101003:input-window-inside-outside-boundaries",
@@ -6650,7 +6457,7 @@
       "dimension": "persistence-replay",
       "subjectIdentity": "save-import-replay",
       "required": true,
-      "status": "passed",
+      "status": "blocked",
       "contractStatus": "protocol-required",
       "sourceDisposition": "applied",
       "sourceRecordHash": "624a48b663405a36",
@@ -6659,29 +6466,26 @@
         "factIdentity": "workbench-import-export-round-trip",
         "kind": "scenario-fact"
       },
-      "coverageEdgeIds": [
-        "coverage-edge:32ac6185b6aba11d",
-        "coverage-edge:f20f5c21c1e368f6"
-      ],
-      "evidenceScenarioIds": [
-        "m11-d-101003-visual-acceptance"
-      ],
+      "coverageEdgeIds": [],
+      "evidenceScenarioIds": [],
       "sourceIdentities": [
         "protocol:m11-d-character-acceptance-v1:owner:101003"
       ],
-      "reasons": []
+      "reasons": [
+        "acceptance-scenario-coverage-missing"
+      ]
     }
   ],
   "summary": {
     "requirementCount": 239,
     "requiredCount": 155,
-    "passedCount": 135,
-    "blockedCount": 20,
+    "passedCount": 114,
+    "blockedCount": 41,
     "notApplicableCount": 84,
     "statusCounts": {
-      "blocked": 20,
+      "blocked": 41,
       "not-applicable": 84,
-      "passed": 135
+      "passed": 114
     },
     "dimensionCounts": {
       "action-effect-binding": 11,
@@ -6710,5 +6514,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "1b3b38cefe3326a9"
+  "matrixHash": "60d710051c5a2f2c"
 }

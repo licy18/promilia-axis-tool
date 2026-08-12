@@ -745,27 +745,29 @@
     {
       "ownerId": 101003,
       "ownerName": "寒悠悠",
-      "maturityState": "runtime-integrated",
+      "maturityState": "extracted",
       "optimizationReady": false,
       "blockers": [
+        "acceptance-headless-replay-gate-failed",
+        "acceptance-functional-failure-present",
         "acceptance-product-visual-signoff-pending",
         "acceptance-required-matrix-incomplete",
         "acceptance-blocking-ledger-not-empty"
       ],
-      "blockingLedgerCount": 26,
+      "blockingLedgerCount": 47,
       "sourceGapCount": 13,
-      "acceptanceGapCount": 13,
+      "acceptanceGapCount": 34,
       "nonBlockingSourceCount": 2,
       "matrix": {
         "requirementCount": 239,
         "requiredCount": 155,
-        "passedCount": 135,
-        "blockedCount": 20,
+        "passedCount": 114,
+        "blockedCount": 41,
         "notApplicableCount": 84,
         "statusCounts": {
-          "blocked": 20,
+          "blocked": 41,
           "not-applicable": 84,
-          "passed": 135
+          "passed": 114
         },
         "dimensionCounts": {
           "action-effect-binding": 11,
@@ -794,15 +796,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "655c09d612d5fd72",
-      "sourceOfTruthHash": "ce17494aff338d1e",
+      "manifestHash": "cac792a4d6be2643",
+      "sourceOfTruthHash": "5ccf9ca7f5b99a8e",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "c8b46f828c346f0a",
-        "data": "7e17791ba49a9ea2",
-        "trace": "df58152d6ea369e4",
-        "evaluation": "53eb57b729f3a7e6",
-        "build": "23e9e105cc840873"
+        "input": "f0dbd89b720fc7aa",
+        "data": "e32f2d5837588cad",
+        "trace": "834e6f82d1a23767",
+        "evaluation": "afb7809d5ed9ff1a",
+        "build": "8e9b86f481205cfd"
       }
     },
     {
@@ -852,15 +854,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "ad1cc93d18806fcd",
-      "sourceOfTruthHash": "4f11225ab853ea92",
+      "manifestHash": "d1a189b0c2c5f4a7",
+      "sourceOfTruthHash": "4aa3cc43270ff8c9",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "93bb8b09eb5e75e3",
-        "data": "6af1c735c0f4c47c",
-        "trace": "d92d46b043dc203c",
-        "evaluation": "fd30dcfbaa6144f0",
-        "build": "6f7fe2a3ba4c7bfd"
+        "input": "b8f9391bf6c8d0ed",
+        "data": "48497e3ca2309f8a",
+        "trace": "1771ed0580495bd5",
+        "evaluation": "a753f6788d66964d",
+        "build": "c866662e89d1cbc8"
       }
     },
     {
@@ -908,15 +910,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "a012d485cd414022",
-      "sourceOfTruthHash": "9d0fabec472fc951",
+      "manifestHash": "5bd06b91ef42c8ef",
+      "sourceOfTruthHash": "7dd88f739e37977f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "5f92d3fdc025149b",
-        "data": "ddb9d0d90a619368",
-        "trace": "d6bfa490601f21ae",
-        "evaluation": "bc359ac3d0e7e77a",
-        "build": "2ec1a2ba88af2319"
+        "input": "9af5f2294b6c698b",
+        "data": "3f1ec76be2ef8a53",
+        "trace": "52fce6c80b00bef6",
+        "evaluation": "8060fd3423aac58d",
+        "build": "10cb82e3514fd700"
       }
     },
     {
@@ -966,15 +968,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "f6a63b01e86d7302",
-      "sourceOfTruthHash": "bd167a008c9d5117",
+      "manifestHash": "93e7330a75fb3756",
+      "sourceOfTruthHash": "930e8b4cedbaca9f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "e02fdcaf3fecae08",
-        "data": "b2c2e1cdfab8d024",
-        "trace": "6f9b6dd8e65865f6",
-        "evaluation": "208849308c4ec837",
-        "build": "171f3b4d3b4a7435"
+        "input": "0d81f27dc4ba1cea",
+        "data": "4b4e77c78408e1ef",
+        "trace": "9fadee844fa09040",
+        "evaluation": "b0acda242f007986",
+        "build": "d6adc7d6fdc52e02"
       }
     },
     {
@@ -1024,15 +1026,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "bae94300b3630a47",
-      "sourceOfTruthHash": "1bf0b949c7349476",
+      "manifestHash": "23b9da00db749906",
+      "sourceOfTruthHash": "f8b90de14dda9a1f",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "e5316166865b1cbe",
-        "data": "9c6063c26cc9c3f5",
-        "trace": "d2167e91fd5f95c6",
-        "evaluation": "a93eb4a82aa3ad26",
-        "build": "c38c9ba3650c727e"
+        "input": "f11283f659f0b195",
+        "data": "05b2088497f9ea79",
+        "trace": "23a2c1330d29e380",
+        "evaluation": "f19c38eb331bb52a",
+        "build": "919e93ea026c794f"
       }
     },
     {
@@ -1044,16 +1046,16 @@
       "blockingLedgerCount": 0,
       "sourceGapCount": 0,
       "acceptanceGapCount": 0,
-      "nonBlockingSourceCount": 19,
+      "nonBlockingSourceCount": 29,
       "matrix": {
-        "requirementCount": 181,
-        "requiredCount": 98,
-        "passedCount": 98,
+        "requirementCount": 191,
+        "requiredCount": 108,
+        "passedCount": 108,
         "blockedCount": 0,
         "notApplicableCount": 83,
         "statusCounts": {
           "not-applicable": 83,
-          "passed": 98
+          "passed": 108
         },
         "dimensionCounts": {
           "action-effect-binding": 4,
@@ -1063,7 +1065,7 @@
           "controlled-actor": 1,
           "critical": 9,
           "effect": 42,
-          "hit": 57,
+          "hit": 67,
           "hit-override": 1,
           "persistence-replay": 1,
           "public-action": 10,
@@ -1077,15 +1079,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "24cbedc701aeec68",
-      "sourceOfTruthHash": "7109855fb1b2b283",
+      "manifestHash": "0a48e990f9377a6e",
+      "sourceOfTruthHash": "eabae58b7d3287df",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "30780d8354ecceaf",
-        "data": "9167d13d5bd46dc0",
-        "trace": "9d108c00b14b69ae",
-        "evaluation": "5238bf8119e66446",
-        "build": "f39c094888ec4519"
+        "input": "fa89b0ef62c0e6be",
+        "data": "0a19ba6d4b57c996",
+        "trace": "1910eb5fa24efb76",
+        "evaluation": "6538894b2964b7e7",
+        "build": "2401261e979b6856"
       }
     },
     {
@@ -1134,15 +1136,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "d82942568b8b7f88",
-      "sourceOfTruthHash": "683a3e8cda460af8",
+      "manifestHash": "049fa43e45cf2cf7",
+      "sourceOfTruthHash": "aa69f3c2e473d5dc",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "76730e9947c44906",
-        "data": "3176ab37d9834506",
-        "trace": "a0a6dcc744f39520",
-        "evaluation": "b42113336570ef3e",
-        "build": "7bbaa04d09e8fc3c"
+        "input": "1ce25e86403c140c",
+        "data": "b3cd81ccfb54ca10",
+        "trace": "ceb231f9f9812e1b",
+        "evaluation": "e755244f73842807",
+        "build": "fbd4ff67f76e31cb"
       }
     },
     {
@@ -1190,15 +1192,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "de877c066391e98d",
-      "sourceOfTruthHash": "59c798e28e82708d",
+      "manifestHash": "3ac12a018faf3e21",
+      "sourceOfTruthHash": "c7c8daf8d4bcdf99",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "269ff7673999b42d",
-        "data": "b7af247f0ef075a2",
-        "trace": "d2b947ed718cad15",
-        "evaluation": "855dd5b0926bf110",
-        "build": "37ae3c4d9e9292a1"
+        "input": "745619ae689b6945",
+        "data": "2c2db383e560bf64",
+        "trace": "ff78b9d9ff0d2b93",
+        "evaluation": "e181489404062a9a",
+        "build": "55afe87b3fc14b2d"
       }
     },
     {
@@ -1242,15 +1244,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "f46f91e62fda4eac",
-      "sourceOfTruthHash": "536f2f7ebebb3eca",
+      "manifestHash": "afe739133fe89521",
+      "sourceOfTruthHash": "20dfe56e29a22b62",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "a245d19b866ff965",
-        "data": "9ba32c14dacd314b",
-        "trace": "7df581ed9bbdabcb",
-        "evaluation": "19c6115580d2ae5b",
-        "build": "9ce7308a0ce5abd1"
+        "input": "9a6e5676bd95858b",
+        "data": "c3fe9d75526d05fa",
+        "trace": "d3becf22243bcf71",
+        "evaluation": "92e963f2144702f5",
+        "build": "db1c9dcddbba4ac8"
       }
     },
     {
@@ -1297,15 +1299,15 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "b09c6f8770c97900",
-      "sourceOfTruthHash": "41485c012bb7e76d",
+      "manifestHash": "9e36f43785617140",
+      "sourceOfTruthHash": "4bd76af475915464",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "e4d5d1f3b0ef7b74",
-        "data": "0bc5052867de826d",
-        "trace": "1010869ab73c96ba",
-        "evaluation": "9d272f7cbb808162",
-        "build": "32c77726b1b0d963"
+        "input": "5b8d56ee7cc45309",
+        "data": "c598868c4069c557",
+        "trace": "16ecf9bdf80c0a24",
+        "evaluation": "85545eec4edcea7f",
+        "build": "40efd3bf5f7a1040"
       }
     },
     {
@@ -1352,33 +1354,33 @@
           "window-boundary": 1
         }
       },
-      "manifestHash": "7b06543f7c209f19",
-      "sourceOfTruthHash": "7e0ce567df1ecc3f",
+      "manifestHash": "d2851b2b31ca1a6a",
+      "sourceOfTruthHash": "9b0eac87e6c9b7a4",
       "machineScenario": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "4fa2e922807462a4",
-        "data": "a43330e4a30e59d1",
-        "trace": "b6cd73233e8a86bf",
-        "evaluation": "a68167fdfd3402eb",
-        "build": "67a7b2857e1fbd0e"
+        "input": "c8d29a1c6833fbfc",
+        "data": "3ba3fc0129e67d1b",
+        "trace": "de92ab91256337a8",
+        "evaluation": "63597e31bdb38761",
+        "build": "440887513ce5e16e"
       }
     }
   ],
-  "catalogHash": "661560e42cc26727",
-  "manifestIndexHash": "3b3b2ba820c148c8",
+  "catalogHash": "ad410c7c71b1ea6c",
+  "manifestIndexHash": "0aa333c33b67ab21",
   "summary": {
     "ownerCount": 11,
     "formalCharacterDenominator": 9,
     "productScenarioExcludedCharacterCount": 2,
-    "runtimeIntegratedCount": 11,
+    "runtimeIntegratedCount": 10,
     "visuallyAcceptedCount": 10,
     "optimizationReadyCount": 10,
-    "machineScenarioPassCount": 11,
+    "machineScenarioPassCount": 10,
     "workbenchRoundTripPassCount": 11,
     "sourceGapCount": 13,
-    "acceptanceGapCount": 13,
-    "nonBlockingSourceCount": 868,
-    "functionalBlockers": 26,
+    "acceptanceGapCount": 34,
+    "nonBlockingSourceCount": 878,
+    "functionalBlockers": 47,
     "performanceAndBundleRisksBlocking": false
   }
 }

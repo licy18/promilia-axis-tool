@@ -1,9 +1,19 @@
 {
   "schemaVersion": 1,
   "contractName": "M12COwnerWorkbenchVisualReview",
-  "status": "pending-explicit-user-signoff",
+  "status": "accepted-explicit-user-signoff",
   "ownerId": 199001,
   "optimizationObjectId": "STARBORN",
+  "userSignoff": {
+    "status": "accepted",
+    "signedAt": "2026-08-12T18:46:16+08:00",
+    "instruction": "签收全部 owner，并将 199001/199002 作为单一 STARBORN 对象联合签收。",
+    "scope": "single-optimization-object-joint-signoff",
+    "sourceAliasOwnerIds": [199001, 199002],
+    "evidenceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+    "ownerAcceptanceRecordIdentity": "character-product-acceptance:199001:13d28aa515312a63395f49ddff3c778967e1b20f:42d43e9176435686",
+    "optimizationObjectAcceptanceRecordIdentity": "optimization-object-product-acceptance:STARBORN:13d28aa515312a63395f49ddff3c778967e1b20f:c94d6b6166226f10"
+  },
   "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
   "fixturePath": "fixtures/character-acceptance/199001-starborn-visual.json",
   "fixtureSha256": "2b7c00a9c2f78fda7b8321eccc960dddc3ce3bdacecea8dd5de8f22ef15d4b32",

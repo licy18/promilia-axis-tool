@@ -1,9 +1,9 @@
 # M12-B3-E22 绑定矩阵与正式准入
 
-- bindingMatrixHash: `1743619246c73ec6`
+- bindingMatrixHash: `275cc4cc0f79deee`
 - 检查总数: 22，通过: 22，阻断: 0
 - 分母: {"characterOptimizationObjects":9,"sourceCharacterAliases":10,"kibos":43,"soulEssences":62,"equipment":137,"setSkills":12}
-- 包哈希: `fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58`
+- 包哈希: `62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8`
 
 | 维度 | 状态 | 检查 |
 | --- | --- | --- |

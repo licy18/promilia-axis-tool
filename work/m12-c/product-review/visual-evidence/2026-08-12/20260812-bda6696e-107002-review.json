@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
   "contractName": "M12COwnerWorkbenchVisualReview",
-  "status": "pending-explicit-user-signoff",
+  "status": "accepted-explicit-user-signoff",
   "ownerId": 107002,
   "optimizationObjectId": null,
+  "userSignoff": {
+    "status": "accepted",
+    "signedAt": "2026-08-12T18:46:16+08:00",
+    "instruction": "签收全部 owner，并将 199001/199002 作为单一 STARBORN 对象联合签收。",
+    "evidenceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+    "ownerAcceptanceRecordIdentity": "character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66"
+  },
   "repositoryHead": "bda6696e07969b82445a922e19f3c9739a315dc6",
   "fixturePath": "fixtures/character-acceptance/107002-visual.json",
   "fixtureSha256": "f34331dec754496e7ff97e33d92bda1603353a0daba281efaeba2ec3d0d14940",

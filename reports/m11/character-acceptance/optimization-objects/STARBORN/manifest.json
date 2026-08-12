@@ -9,9 +9,9 @@
   "productVisualAcceptance": "accepted",
   "productAcceptanceBinding": {
     "status": "verified",
-    "acceptanceCommit": "76605d759376a93a2981fc27f2fa18e3464b17f7",
-    "recordIdentity": "optimization-object-product-acceptance:STARBORN:76605d759376a93a2981fc27f2fa18e3464b17f7:c645f8836bf6fd0a",
-    "acceptanceSubjectHash": "c645f8836bf6fd0a"
+    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+    "recordIdentity": "optimization-object-product-acceptance:STARBORN:13d28aa515312a63395f49ddff3c778967e1b20f:c94d6b6166226f10",
+    "acceptanceSubjectHash": "c94d6b6166226f10"
   },
   "requiredSourceCharacterIds": [
     199001,
@@ -22,11 +22,11 @@
       "sourceCharacterId": 199001,
       "sourceAliasIdentity": "STARBORN:source-alias:199001",
       "profileIdentity": "actor:199001:character-combat-profile:v1",
-      "profileHash": "5577c04a31f96f15b5233300de314c7f1e5b8a49817783c975851fdd31dfc0b4",
+      "profileHash": "83d63154e2e0012159c9403ef933ee519c5b8e3e17ddbc26f56412c75257db0c",
       "sourceContractHash": "45d02a6ae1c70d47ec5d70dc4d88cb7220cd6edd817f138600c6e199c800fa78",
-      "selectionHash": "413c63c96377ba1f",
-      "qualificationSubjectHash": "138ea4ecfffc098c",
-      "manifestHash": "b09c6f8770c97900",
+      "selectionHash": "a4e30ccf0f0687e3",
+      "qualificationSubjectHash": "42d43e9176435686",
+      "manifestHash": "9e36f43785617140",
       "requirementCount": 322,
       "requiredCount": 195,
       "passedCount": 195,
@@ -36,17 +36,17 @@
       "acceptanceGapCount": 0,
       "scenarioCount": 2,
       "scenarioPassedCount": 2,
-      "assertionCount": 1511,
-      "assertionPassedCount": 1511,
+      "assertionCount": 1597,
+      "assertionPassedCount": 1597,
       "canonicalHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "e4d5d1f3b0ef7b74",
-        "data": "0bc5052867de826d",
-        "trace": "1010869ab73c96ba",
-        "evaluation": "9d272f7cbb808162",
-        "build": "32c77726b1b0d963"
+        "input": "5b8d56ee7cc45309",
+        "data": "c598868c4069c557",
+        "trace": "16ecf9bdf80c0a24",
+        "evaluation": "85545eec4edcea7f",
+        "build": "40efd3bf5f7a1040"
       },
-      "traceProjectionHash": "de74f305d3e40619",
+      "traceProjectionHash": "937c0cdb5c36c655",
       "productVisualAcceptance": "accepted",
       "optimizationReady": true
     },
@@ -54,11 +54,11 @@
       "sourceCharacterId": 199002,
       "sourceAliasIdentity": "STARBORN:source-alias:199002",
       "profileIdentity": "actor:199002:character-combat-profile:v1",
-      "profileHash": "456382abf7931a1ee7b1d22e473c1db7cb1ffb116b34cb4ab38124f0beab270c",
+      "profileHash": "54ec88b8ae90764c00fcd7fa4e28eb30d55df00a46de7163403dd0b19d93c9d8",
       "sourceContractHash": "bc5c7722ad39f36a3c65d64d3a2f4b35162158d476b4994e5a63303e1606bb8b",
-      "selectionHash": "99bee8c7d9e227d4",
-      "qualificationSubjectHash": "945d7bc7bafae60f",
-      "manifestHash": "7b06543f7c209f19",
+      "selectionHash": "604bbf5cdfd03438",
+      "qualificationSubjectHash": "aaefedcae3ad61aa",
+      "manifestHash": "d2851b2b31ca1a6a",
       "requirementCount": 321,
       "requiredCount": 195,
       "passedCount": 195,
@@ -68,17 +68,17 @@
       "acceptanceGapCount": 0,
       "scenarioCount": 2,
       "scenarioPassedCount": 2,
-      "assertionCount": 1553,
-      "assertionPassedCount": 1553,
+      "assertionCount": 1640,
+      "assertionPassedCount": 1640,
       "canonicalHashes": {
         "algorithm": "fnv1a64-utf8-v1",
-        "input": "4fa2e922807462a4",
-        "data": "a43330e4a30e59d1",
-        "trace": "b6cd73233e8a86bf",
-        "evaluation": "a68167fdfd3402eb",
-        "build": "67a7b2857e1fbd0e"
+        "input": "c8d29a1c6833fbfc",
+        "data": "3ba3fc0129e67d1b",
+        "trace": "de92ab91256337a8",
+        "evaluation": "63597e31bdb38761",
+        "build": "440887513ce5e16e"
       },
-      "traceProjectionHash": "1240f032d49ad9dc",
+      "traceProjectionHash": "890be4a7f5516de4",
       "productVisualAcceptance": "accepted",
       "optimizationReady": true
     }
@@ -95,12 +95,12 @@
     "acceptanceGapCount": 0,
     "scenarioCount": 4,
     "scenarioPassedCount": 4,
-    "assertionCount": 3064,
-    "assertionPassedCount": 3064
+    "assertionCount": 3237,
+    "assertionPassedCount": 3237
   },
   "validation": {
     "status": "optimization-object-alias-acceptance-bundle-valid",
     "issues": []
   },
-  "bundleHash": "3338e8e57a632564"
+  "bundleHash": "7d47f4085c8a6214"
 }

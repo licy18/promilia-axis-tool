@@ -253,17 +253,17 @@
     ],
     "machineEvidence": [],
     "productVisualAcceptance": {
-      "status": "pending",
+      "status": "accepted",
       "scenarioIdentities": [
         "m12-b3-107002-reduced-action-surface-acceptance"
       ],
-      "acceptanceCommit": null,
-      "recordIdentity": null,
-      "qualificationSubjectHash": null,
-      "scenarioSetHash": null,
-      "bindingStatus": "not-requested",
+      "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+      "recordIdentity": "character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66",
+      "qualificationSubjectHash": "bd44ed4ae5bace66",
+      "scenarioSetHash": "ca11b122ad34a2d4",
+      "bindingStatus": "verified",
       "bindingExpectation": {
-        "recordIdentity": "character-product-acceptance:107002::bd44ed4ae5bace66",
+        "recordIdentity": "character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66",
         "qualificationSubjectHash": "bd44ed4ae5bace66",
         "scenarioSetHash": "ca11b122ad34a2d4",
         "scenarioIdentities": [
@@ -273,10 +273,12 @@
       "automatedEvidence": [
         {
           "scenarioIdentity": "m12-b3-107002-reduced-action-surface-acceptance",
+          "evidenceKind": "workbench-playwright-screenshot",
           "status": "automated-workbench-import-passed",
-          "screenshotPath": "reports/m11-d-character-acceptance-107002-desktop.png",
-          "screenshotSha256": "349a930b34b38fa59e387655600d72bc9ba55695502504df7644c7aa7b16e2fc",
-          "evidenceKind": "workbench-playwright-screenshot"
+          "fixturePath": "fixtures/character-acceptance/107002-visual.json",
+          "fixtureSha256": "f34331dec754496e7ff97e33d92bda1603353a0daba281efaeba2ec3d0d14940",
+          "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107002-canonical-trace.png",
+          "screenshotSha256": "db997d1f34895e6c02a050b91e4d70d3e723d03b5ecc3425a05691aae8dd5307"
         }
       ]
     }
@@ -123904,12 +123906,14 @@
   },
   "qualificationSubjectHash": "bd44ed4ae5bace66",
   "maturity": {
-    "currentState": "runtime-integrated",
+    "currentState": "optimization-ready",
     "earnedStates": [
       "extracted",
-      "runtime-integrated"
+      "runtime-integrated",
+      "visually-accepted",
+      "optimization-ready"
     ],
-    "optimizationReady": false,
+    "optimizationReady": true,
     "facts": {
       "profileValid": true,
       "sourceEvidenceIndexed": true,
@@ -123919,7 +123923,7 @@
       "headlessReplayPassed": true,
       "canonicalReplayStable": true,
       "workbenchImportPassed": true,
-      "productVisualAccepted": false,
+      "productVisualAccepted": true,
       "matrixRequiredCount": 108,
       "matrixPassedCount": 108,
       "matrixComplete": true,
@@ -123929,16 +123933,14 @@
     "gates": {
       "extracted": true,
       "runtimeIntegrated": true,
-      "visuallyAccepted": false,
-      "optimizationReady": false
+      "visuallyAccepted": true,
+      "optimizationReady": true
     },
-    "blockers": [
-      "acceptance-product-visual-signoff-pending"
-    ]
+    "blockers": []
   },
   "validation": {
     "status": "character-acceptance-manifest-valid",
     "issues": []
   },
-  "manifestHash": "ecd5a19d4ce588b4"
+  "manifestHash": "0a48e990f9377a6e"
 }

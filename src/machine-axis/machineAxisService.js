@@ -1880,13 +1880,23 @@ function resolveAttackInputSegment(action, mapping, contract, index, issues) {
   const profileSegments = mapping.profileAttackInputSegments ?? [];
   const requestedChainIdentity =
     action.intent.attackInput?.chainIdentity ?? null;
-  const candidatePool = requestedChainIdentity
-    ? profileSegments.filter(
-        segment =>
-          String(segment.attackInputChainIdentity ?? '') ===
-          String(requestedChainIdentity)
-      )
-    : defaultSegments;
+  const requestedProfileSegments =
+    requestedChainIdentity == null
+      ? []
+      : profileSegments.filter(
+          segment =>
+            String(segment.attackInputChainIdentity ?? '') ===
+            String(requestedChainIdentity)
+        );
+  const candidatePool =
+    requestedChainIdentity == null
+      ? defaultSegments
+      : requestedProfileSegments.length > 0
+        ? requestedProfileSegments
+        : String(requestedChainIdentity) ===
+            String(mapping.attackInputChainIdentity ?? '')
+          ? defaultSegments
+          : requestedProfileSegments;
   const candidates = candidatePool.filter(
     segment => Number(segment.sequenceIndex) === sequenceIndex
   );

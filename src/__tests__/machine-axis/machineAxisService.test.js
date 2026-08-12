@@ -477,6 +477,30 @@ describe('Machine Axis service', () => {
     30_000
   );
 
+  it('resolves an explicit global normal-chain identity without a profile overlay', () => {
+    const axis = createOwnerNormalAttackAxis(107001, 1);
+    const mapping = mechanicsPackage.actionMappings.find(
+      candidate =>
+        Number(candidate.ownerId) === 107001 &&
+        candidate.actionKind === 'normal-attack'
+    );
+    axis.actions[0].intent.attackInput.chainIdentity =
+      mapping.attackInputChainIdentity;
+
+    const prepared = createMachineAxisService().prepare(axis);
+
+    expect(prepared.issues).toEqual([]);
+    expect(prepared.project.actions[0]).toMatchObject({
+      attackInputChainIdentity: mapping.attackInputChainIdentity,
+      attackInputChainSelectionSource: 'user-explicit',
+      attackInput: {
+        sequenceIndex: 1,
+        controlSkillId: 10700101,
+        selectedSubSkillIndex: 0,
+      },
+    });
+  });
+
   it.each([
     [199001, 'charged-attack'],
     [199001, 'star-skill'],

@@ -197,6 +197,33 @@ describe('character acceptance protocol', () => {
     });
   });
 
+  it('keeps assertion hashes stable after JSON serialization', () => {
+    const input = createManifestInput({ productVisualStatus: 'pending' });
+    input.scenarioCases.records[0].assertionDefinitions = [
+      {
+        assertionIdentity: 'json-normalized-actual',
+        status: 'blocked',
+        actual: {
+          nested: [undefined, { omitted: undefined }, null],
+        },
+      },
+    ];
+
+    const manifest = finalizeCharacterAcceptanceManifest(input);
+    const serialized = JSON.parse(JSON.stringify(manifest));
+
+    expect(
+      validateCharacterAcceptanceManifest(serialized, {
+        checkPublication: false,
+      })
+    ).toMatchObject({ valid: true, issues: [] });
+    expect(
+      serialized.scenarioCases.records[0].assertions.find(
+        assertion => assertion.assertionIdentity === 'json-normalized-actual'
+      ).actual
+    ).toEqual({ nested: [null, {}, null] });
+  });
+
   it('revokes optimizer eligibility when visual signoff, matrix, or ledger facts fail', () => {
     const pending = finalizeCharacterAcceptanceManifest(
       createManifestInput({ productVisualStatus: 'pending' })

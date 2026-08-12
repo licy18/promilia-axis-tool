@@ -3,11 +3,11 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
-    "qualificationSubjectHash": null,
-    "scenarioSetHash": null,
+    "status": "accepted",
+    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+    "recordIdentity": "character-product-acceptance:107001:13d28aa515312a63395f49ddff3c778967e1b20f:4aa2a54123438a90",
+    "qualificationSubjectHash": "4aa2a54123438a90",
+    "scenarioSetHash": "89d7f1e8447e78b8",
     "scenarioIdentities": ["m12-b3-107001-focused-acceptance"],
     "automatedEvidence": [
       {
@@ -15,9 +15,9 @@
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
         "fixturePath": "fixtures/character-acceptance/107001-active-surface-closure.json",
-        "fixtureSha256": "c0076775d267ae7314d561471f9e26d07a797f122ab768fe1ef632d3a4fbc06a",
-        "screenshotPath": "reports/m12-b3-107001-workbench-visual-evidence.png",
-        "screenshotSha256": "cd96f58561aa39af7a7469467d08e3c2b8e1ad70846eeb192b38cbab740ee260"
+        "fixtureSha256": "dc1cbc9cec361b9975be5f5525af56e5319c7d5c40aecc4e73d120ff4e1f3bcf",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-107001-canonical-trace.png",
+        "screenshotSha256": "195b980d9f464e887b24ba242b9e675df82bae5d79da34de063aa3b5c340bfea"
       }
     ]
   },

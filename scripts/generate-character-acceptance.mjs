@@ -4841,7 +4841,7 @@ function createMarkdownReport(report) {
     '',
     '- 初始基线：' + report.baselineCommit,
     '- R1 基线：' + report.r1.baseCommit,
-    '- 状态：可信派生收口完成，等待产品复验',
+    '- 状态：可信派生与已明确产品签收的 owner 已闭合；未签 owner 继续 fail closed',
     '- 规则：requirement、scenario case、coverage edge、ledger 与成熟度均从 committed source-of-truth 和 canonical replay 派生。',
     '- 性能、包体和外部 CPU 抖动仅记录，不参与功能资格判定。',
     '',
@@ -4871,7 +4871,7 @@ function createMarkdownReport(report) {
   }
   lines.push(
     '',
-    '三份 Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；产品可视签收仍为 pending，真实 source gap 与尚缺场景覆盖继续阻断优化资格。',
+    'Machine Axis 场景继续由唯一 canonical core 重放并通过 Workbench 导入/导出；已明确签收的 owner 可进入 optimization-ready，未签 owner 的真实 source gap 与尚缺场景覆盖继续阻断其优化资格。',
     ''
   );
   return lines.join('\n');

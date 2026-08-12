@@ -2,18 +2,21 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "pending",
-    "acceptanceCommit": null,
-    "recordIdentity": null,
-    "qualificationSubjectHash": null,
-    "scenarioSetHash": null,
+    "status": "accepted",
+    "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
+    "recordIdentity": "character-product-acceptance:109001:13d28aa515312a63395f49ddff3c778967e1b20f:885f1095802cc741",
+    "qualificationSubjectHash": "885f1095802cc741",
+    "scenarioSetHash": "e847ff61317e8b5a",
     "scenarioIdentities": ["m11-d-109001-visual-acceptance"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
+        "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "screenshotPath": "reports/m11-d-character-acceptance-109001-desktop.png",
-        "screenshotSha256": "3e4ea10d8ffe1b9c52f3a7cb53c36487fe2c3ecf63aa88f375cc4c5349e470dc"
+        "fixturePath": "fixtures/character-acceptance/109001-visual.json",
+        "fixtureSha256": "3512c5328d64de85aeb44930e646c1f361b9795da32fde607fbe42a497ba80cc",
+        "screenshotPath": "work/m12-c/product-review/visual-evidence/2026-08-12/20260812-bda6696e-109001-canonical-trace.png",
+        "screenshotSha256": "06ac256f80f76bc27831b32c9877573ef830ad7c1da5e25d236bb32b28d7705a"
       }
     ]
   },
