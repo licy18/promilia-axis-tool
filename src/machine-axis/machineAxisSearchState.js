@@ -114,11 +114,13 @@ export function createSearchAttackChainProjection({
   trace = {},
   currentFrame = 0,
   fps = 60,
+  excludeActionsAtCurrentFrame = false,
 } = {}) {
   const context = createNormalAttackAuthorityTraceContext({
     trace,
     currentFrame,
     fps,
+    excludeActionsAtCurrentFrame,
   });
   const states = [];
   for (const actorId of context.actorIds) {
@@ -139,6 +141,7 @@ export function createSearchAttackChainProjection({
     }
     const phase = resolveVerifiedNormalAttackInputPhase({
       mapping,
+      chain: resolveNormalAttackAuthorityChain({ mapping, accepted }),
       acceptedAction: accepted?.authorityAction ?? null,
       acceptedSelection: accepted?.authoritySelection ?? null,
       actorId,
@@ -219,6 +222,7 @@ export function createSearchNormalAttackInputProof({
     const accepted = acceptedByActorId.get(actorId) ?? null;
     const phase = resolveVerifiedNormalAttackInputPhase({
       mapping,
+      chain: resolveNormalAttackAuthorityChain({ mapping, accepted }),
       acceptedAction: accepted?.authorityAction ?? null,
       acceptedSelection: accepted?.authoritySelection ?? null,
       actorId,
@@ -283,7 +287,12 @@ export function createSearchNormalAttackInputProof({
   return { ...proof, proofHash: hashCanonicalValue(proof) };
 }
 
-function createNormalAttackAuthorityTraceContext({ trace, currentFrame, fps }) {
+function createNormalAttackAuthorityTraceContext({
+  trace,
+  currentFrame,
+  fps,
+  excludeActionsAtCurrentFrame = false,
+}) {
   const actionById = new Map(
     (trace.actions ?? []).map(action => [String(action.id), action])
   );
@@ -299,7 +308,13 @@ function createNormalAttackAuthorityTraceContext({ trace, currentFrame, fps }) {
     const action = actionById.get(String(entry.actionId));
     if (!action) continue;
     const actionStartFrame = msToFrame(Number(action.startMs) || 0, fps);
-    if (actionStartFrame > Number(currentFrame)) continue;
+    if (
+      actionStartFrame > Number(currentFrame) ||
+      (excludeActionsAtCurrentFrame === true &&
+        actionStartFrame === Number(currentFrame))
+    ) {
+      continue;
+    }
     executedActionIds.add(String(action.id));
     if (action.type === 'switch') {
       acceptedByActorId.clear();
@@ -370,6 +385,32 @@ function resolveNormalAttackMapping({ actorId, action = null }) {
       mapping.ownerKind === 'actor' &&
       Number(mapping.ownerId) === actorCharacterId &&
       mapping.actionKind === 'normal-attack'
+  );
+  return candidates.length === 1 ? candidates[0] : null;
+}
+
+function resolveNormalAttackAuthorityChain({ mapping, accepted }) {
+  const chainIdentity =
+    accepted?.selection?.attackInputChainIdentity ??
+    accepted?.authoritySelection?.attackInputChainIdentity ??
+    accepted?.action?.attackInputChainIdentity ??
+    null;
+  if (
+    !chainIdentity ||
+    String(chainIdentity) === String(mapping?.attackInputChainIdentity ?? '')
+  ) {
+    return null;
+  }
+  const actorCharacterId = parseActorCharacterId(
+    accepted?.action?.actorId ?? accepted?.authorityAction?.actorId
+  );
+  const candidates = (
+    getVerifiedActionVariantGraph()?.attackInputChains ?? []
+  ).filter(
+    chain =>
+      String(chain?.chainIdentity ?? '') === String(chainIdentity) &&
+      Number(chain?.ownerId) === Number(actorCharacterId) &&
+      Number(chain?.sourceSkillId) === Number(mapping?.sourceSkillId)
   );
   return candidates.length === 1 ? candidates[0] : null;
 }

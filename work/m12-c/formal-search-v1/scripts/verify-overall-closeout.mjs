@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import {
   FORMAL_SEARCH_RANKING_CLAIM,
   analyzeFinalCandidateInitialState,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   validateFinalCandidate,
@@ -19,6 +20,10 @@ const projectRoot = path.resolve(
   '..',
   '..'
 );
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor({
+    repositoryRoot: projectRoot,
+  });
 const runArgument = readArgument('--run-directory');
 if (!runArgument) {
   throw new Error(
@@ -156,7 +161,11 @@ for (const objective of objectiveIds) {
   for (let index = 0; index < results.length; index += 1) {
     const result = results[index];
     const rank = index + 1;
-    const validation = validateFinalCandidate(result, objective);
+    const validation = validateFinalCandidate(
+      result,
+      objective,
+      normalAttackInputAuthority
+    );
     const initialState = analyzeFinalCandidateInitialState(result, objective);
     const independentRow = independentRows.find(row => row.rank === rank);
     expect(

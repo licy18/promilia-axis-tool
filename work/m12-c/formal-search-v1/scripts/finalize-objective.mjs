@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { readJson, writeJsonAtomic } from './formal-search-artifacts.mjs';
-import { finalizeObjectiveArtifacts } from './formal-search-finalization.mjs';
+import { finalizeObjectiveArtifactsAgainstRepository } from './formal-search-finalization.mjs';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -77,7 +77,8 @@ for (const roundDirectory of roundDirectories) {
 }
 
 const first = rounds[0];
-const finalization = finalizeObjectiveArtifacts({
+const finalization = await finalizeObjectiveArtifactsAgainstRepository({
+  repositoryRoot: projectRoot,
   runId: first.manifest.runId,
   objective: first.manifest.objective,
   baseline: first.manifest.baseline,

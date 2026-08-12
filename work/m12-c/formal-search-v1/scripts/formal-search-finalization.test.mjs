@@ -1,16 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { sha256Canonical } from './formal-search-artifacts.mjs';
+import {
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
+  sha256Canonical,
+} from './formal-search-artifacts.mjs';
 import { finalizeObjectiveArtifacts } from './formal-search-finalization.mjs';
 
 const baseline = { head: 'baseline-head' };
-const normalAttackInputAuthority = {
-  schemaVersion: 1,
-  contractName: 'AzPrVerifiedNormalAttackInputAuthority',
-  policyVersion: '1.0.0',
-  contractHash: '0123456789abcdef',
-};
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor();
 
 test('finalization fixes shard-local ranks, deduplicates raw identities, and preserves ties', () => {
   const objective = 'cycle-dps-no-toughness';
@@ -29,6 +28,7 @@ test('finalization fixes shard-local ranks, deduplicates raw identities, and pre
     runId: 'run',
     objective,
     baseline,
+    normalAttackInputAuthority,
     rounds: [
       round({ roundId: 'round1', objective, rows }),
       round({ roundId: 'round2', objective, rows: [duplicate] }),
@@ -54,6 +54,7 @@ test('fastest-kill ranks lower killed-frame scores first', () => {
     runId: 'run',
     objective,
     baseline,
+    normalAttackInputAuthority,
     rounds: [
       round({
         roundId: 'round1',
@@ -83,6 +84,7 @@ test('incomplete or failed coverage fails closed without inventing candidates', 
     runId: 'run',
     objective,
     baseline,
+    normalAttackInputAuthority,
     rounds: [fixture],
   });
   assert.equal(finalized.validity.valid, false);
@@ -100,6 +102,7 @@ test('declared terminal rounds rank only terminal raw identities while retaining
     runId: 'run',
     objective,
     baseline,
+    normalAttackInputAuthority,
     rankingRoundIds: ['round2'],
     rounds: [
       round({
@@ -141,6 +144,7 @@ test('missing declared terminal round fails closed', () => {
     runId: 'run',
     objective,
     baseline,
+    normalAttackInputAuthority,
     rankingRoundIds: ['round-missing'],
     rounds: [
       round({
@@ -182,6 +186,78 @@ test('old finalization inputs without combo authority cannot rank', () => {
       'round-normal-attack-input-authority-missing:legacy-round'
     )
   );
+});
+
+test('every finalization layer must equal the repository authority', () => {
+  const objective = 'cycle-dps-no-toughness';
+  const mutations = [
+    ['manifest', descriptor => ({ ...descriptor, policyVersion: 999 })],
+    ['aggregate', descriptor => ({ ...descriptor, kind: 'forged' })],
+    [
+      'checkpoint',
+      descriptor => ({ ...descriptor, contractHash: '0000000000000000' }),
+    ],
+    [
+      'result',
+      descriptor => ({ ...descriptor, contractHash: '0123456789abcdef' }),
+    ],
+    ['candidate-legality', descriptor => ({ ...descriptor, kind: 'forged' })],
+    [
+      'candidate-objective',
+      descriptor => ({ ...descriptor, contractHash: '0000000000000000' }),
+    ],
+    [
+      'candidate-proof',
+      descriptor => ({ ...descriptor, contractHash: '0123456789abcdef' }),
+    ],
+  ];
+  for (const [layer, mutate] of mutations) {
+    const fixture = round({
+      roundId: `forged-${layer}`,
+      objective,
+      rows: [candidate({ objective, score: 1, suffix: layer, oldRank: 1 })],
+    });
+    const forged = mutate(normalAttackInputAuthority);
+    if (layer === 'manifest') {
+      fixture.manifest.normalAttackInputAuthority = forged;
+    } else if (layer === 'aggregate') {
+      fixture.aggregate.normalAttackInputAuthority = forged;
+    } else if (layer === 'checkpoint') {
+      fixture.shards[0].checkpoint.normalAttackInputAuthority = forged;
+    } else if (layer === 'result') {
+      fixture.shards[0].resultArtifact.normalAttackInputAuthority = forged;
+      fixture.shards[0].checkpoint.artifacts.resultCanonicalSha256 =
+        sha256Canonical(fixture.shards[0].resultArtifact);
+    } else if (layer === 'candidate-legality') {
+      const row = fixture.shards[0].resultArtifact.serviceResult.results[0];
+      row.legality.proof.normalAttackInputAuthority = forged;
+      fixture.shards[0].checkpoint.artifacts.resultCanonicalSha256 =
+        sha256Canonical(fixture.shards[0].resultArtifact);
+    } else if (layer === 'candidate-objective') {
+      const row = fixture.shards[0].resultArtifact.serviceResult.results[0];
+      row.objectiveProof.normalAttackInputProof.normalAttackInputAuthority =
+        forged;
+      fixture.shards[0].checkpoint.artifacts.resultCanonicalSha256 =
+        sha256Canonical(fixture.shards[0].resultArtifact);
+    } else {
+      const row = fixture.shards[0].resultArtifact.serviceResult.results[0];
+      row.legality.proof.normalAttackInputAuthority = forged;
+      row.objectiveProof.normalAttackInputProof.normalAttackInputAuthority =
+        forged;
+      fixture.shards[0].checkpoint.artifacts.resultCanonicalSha256 =
+        sha256Canonical(fixture.shards[0].resultArtifact);
+    }
+    const finalized = finalizeObjectiveArtifacts({
+      runId: 'forged-run',
+      objective,
+      baseline,
+      normalAttackInputAuthority,
+      rounds: [fixture],
+      topN: 1,
+    });
+    assert.equal(finalized.validity.valid, false, layer);
+    assert.equal(finalized.results.length, 0, layer);
+  }
 });
 
 function round({ roundId, objective, rows }) {

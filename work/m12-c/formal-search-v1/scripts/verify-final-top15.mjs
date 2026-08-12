@@ -64,14 +64,21 @@ const vite = await createServer({
 
 let report;
 try {
-  const [packageModule, serviceModule, killModule] = await Promise.all([
-    vite.ssrLoadModule('/src/data/verifiedCombatMechanicsPackage.js'),
-    vite.ssrLoadModule('/src/machine-axis/machineAxisService.js'),
-    vite.ssrLoadModule('/src/machine-axis/machineAxisKillEvaluator.js'),
-  ]);
+  const [packageModule, serviceModule, killModule, authorityModule] =
+    await Promise.all([
+      vite.ssrLoadModule('/src/data/verifiedCombatMechanicsPackage.js'),
+      vite.ssrLoadModule('/src/machine-axis/machineAxisService.js'),
+      vite.ssrLoadModule('/src/machine-axis/machineAxisKillEvaluator.js'),
+      vite.ssrLoadModule('/src/domain/verifiedNormalAttackInputAuthority.js'),
+    ]);
   packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
   const service = serviceModule.createMachineAxisService();
-  report = await verifyTop15({ service, killModule });
+  report = await verifyTop15({
+    service,
+    killModule,
+    normalAttackInputAuthority:
+      authorityModule.getVerifiedNormalAttackInputAuthorityDescriptor(),
+  });
 } finally {
   await vite.close();
 }
@@ -79,7 +86,11 @@ try {
 const verificationHash = sha256Canonical(report);
 const output = { ...report, verificationHash };
 const write = await writeJsonAtomic(
-  path.join(runDirectory, 'final-verification', 'independent-top15-verification.json'),
+  path.join(
+    runDirectory,
+    'final-verification',
+    'independent-top15-verification.json'
+  ),
   output
 );
 process.stdout.write(
@@ -93,17 +104,20 @@ process.stdout.write(
 );
 if (!output.valid) process.exitCode = 1;
 
-async function verifyTop15({ service, killModule }) {
+async function verifyTop15({
+  service,
+  killModule,
+  normalAttackInputAuthority,
+}) {
   const issues = [];
   const objectives = [];
   const rows = [];
   for (const objective of objectiveIds) {
-    const objectiveDirectory = path.join(
-      runDirectory,
-      'objectives',
-      objective
+    const objectiveDirectory = path.join(runDirectory, 'objectives', objective);
+    const pointerPath = path.join(
+      objectiveDirectory,
+      'latest-finalization.json'
     );
-    const pointerPath = path.join(objectiveDirectory, 'latest-finalization.json');
     const pointerText = await fs.readFile(pointerPath, 'utf8');
     const pointer = JSON.parse(pointerText);
     const finalizationPath = resolveRepositoryPath(
@@ -211,14 +225,20 @@ async function verifyTop15({ service, killModule }) {
       ) {
         rowIssues.push('top5-artifact-content-mismatch');
       }
-      const recomputedIdentity = createCandidateRawIdentity(candidate, objective);
+      const recomputedIdentity = createCandidateRawIdentity(
+        candidate,
+        objective
+      );
       if (
-        recomputedIdentity.identityHash !==
-        candidate.rawIdentity?.identityHash
+        recomputedIdentity.identityHash !== candidate.rawIdentity?.identityHash
       ) {
         rowIssues.push('raw-identity-recomputation-mismatch');
       }
-      const finalValidation = validateFinalCandidate(candidate, objective);
+      const finalValidation = validateFinalCandidate(
+        candidate,
+        objective,
+        normalAttackInputAuthority
+      );
       if (!finalValidation.valid) {
         rowIssues.push(
           ...finalValidation.issues.map(issue => `strict-final:${issue}`)
@@ -246,7 +266,9 @@ async function verifyTop15({ service, killModule }) {
         rowIssues.push('independent-simulation-reproduction-mismatch');
       }
       const autonomousKiboActions = (axis.actions ?? []).filter(action => {
-        const actionKind = String(action?.intent?.actionKind ?? '').toLowerCase();
+        const actionKind = String(
+          action?.intent?.actionKind ?? ''
+        ).toLowerCase();
         return (
           action?.owner?.kind === 'kibo' ||
           actionKind === 'kibo-normal-attack' ||
@@ -288,8 +310,7 @@ async function verifyTop15({ service, killModule }) {
         candidatePath: repositoryRelative(candidatePath),
         inputHash: firstSimulation.hashes?.input ?? null,
         traceHash: firstSimulation.hashes?.trace ?? null,
-        legalityProofHash:
-          validation.actionLegalityProof?.proofHash ?? null,
+        legalityProofHash: validation.actionLegalityProof?.proofHash ?? null,
         proofEvidence,
         valid: rowIssues.length === 0,
         issues: rowIssues,
@@ -344,9 +365,9 @@ async function verifyTop15({ service, killModule }) {
     },
     quarantine: {
       quarantineHash: quarantine.quarantineHash,
-      quarantinedRawIdentityHashes: [
-        ...quarantinedRawIdentityHashes,
-      ].sort(compareText),
+      quarantinedRawIdentityHashes: [...quarantinedRawIdentityHashes].sort(
+        compareText
+      ),
       quarantinedIdentitySurvivorCount: rows.filter(row =>
         quarantinedRawIdentityHashes.has(row.rawIdentity.identityHash)
       ).length,
@@ -499,7 +520,7 @@ function repositoryRelative(filePath) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function compareText(left, right) {

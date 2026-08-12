@@ -7,6 +7,7 @@ import {
   aggregateShardResults,
   analyzeFinalCandidateInitialState,
   createCandidateRawIdentity,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   writeJsonAtomic,
@@ -19,6 +20,10 @@ const projectRoot = path.resolve(
   '..',
   '..'
 );
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor({
+    repositoryRoot: projectRoot,
+  });
 const runArgument = readArgument('--run-directory');
 const objective = readArgument('--objective') ?? 'cycle-dps-no-toughness';
 const baseRoundIds = readArguments('--base-round-id');
@@ -58,9 +63,12 @@ if (
 }
 if (
   effectiveCoverage.valid !== true ||
-  Number(effectiveCoverage.coverage?.effectiveCompletedSourceConfigCount) !== 35 ||
-  Number(effectiveCoverage.coverage?.failedSourceConfigIdentities?.length) !== 0 ||
-  Number(effectiveCoverage.coverage?.missingSourceConfigIdentities?.length) !== 0
+  Number(effectiveCoverage.coverage?.effectiveCompletedSourceConfigCount) !==
+    35 ||
+  Number(effectiveCoverage.coverage?.failedSourceConfigIdentities?.length) !==
+    0 ||
+  Number(effectiveCoverage.coverage?.missingSourceConfigIdentities?.length) !==
+    0
 ) {
   issues.push('effective-coverage-not-valid-35-of-35');
 }
@@ -79,10 +87,7 @@ const composites = [];
 
 for (let index = 0; index < 3; index += 1) {
   const label = String.fromCharCode('a'.charCodeAt(0) + index);
-  const baseRound = await loadRound(
-    objectiveDirectory,
-    baseRoundIds[index]
-  );
+  const baseRound = await loadRound(objectiveDirectory, baseRoundIds[index]);
   const replacementRound = await loadRound(
     objectiveDirectory,
     replacementRoundIds[index]
@@ -102,7 +107,11 @@ for (let index = 0; index < 3; index += 1) {
   const replacements = replacementRound.shards.filter(
     shard => shard.sourceConfigIdentity === affectedSourceConfigIdentity
   );
-  if (excluded.length !== 1 || retained.length !== 7 || replacements.length !== 1) {
+  if (
+    excluded.length !== 1 ||
+    retained.length !== 7 ||
+    replacements.length !== 1
+  ) {
     issues.push(`composite-${label}:replacement-cardinality-invalid`);
   }
   const excludedRawIdentities = candidateIdentities(excluded, objective);
@@ -119,7 +128,8 @@ for (let index = 0; index < 3; index += 1) {
     for (const result of shard.result.serviceResult?.results ?? []) {
       const admission = analyzeFinalCandidateInitialState(result, objective);
       replacementAdmission.push({
-        rawIdentityHash: createCandidateRawIdentity(result, objective).identityHash,
+        rawIdentityHash: createCandidateRawIdentity(result, objective)
+          .identityHash,
         valid: admission.valid,
         issues: admission.issues,
         actualPresetHash: admission.actualPresetHash,
@@ -156,6 +166,7 @@ for (let index = 0; index < 3; index += 1) {
       affectedSourceConfigIdentity,
       quarantineHash: quarantine.quarantineHash,
     }),
+    normalAttackInputAuthority,
   });
   if (
     aggregate.coverage.completedSourceConfigIdentities.length !== 8 ||
@@ -327,8 +338,7 @@ const repairPayload = {
   compositeTerminalRounds: composites.map(composite => ({
     roundId: composite.aggregate.roundId,
     aggregateHash: composite.aggregate.aggregateHash,
-    replacementProvenanceHash:
-      composite.provenance.replacementProvenanceHash,
+    replacementProvenanceHash: composite.provenance.replacementProvenanceHash,
     checkpointHash: composite.checkpoint.checkpointHash,
     completedShardCount:
       composite.aggregate.coverage.completedSourceConfigIdentities.length,
@@ -443,9 +453,11 @@ async function loadRound(directory, roundId) {
   const feedback = await readJsonIfExists(
     path.join(roundDirectory, 'feedback-aggregate.json')
   );
-  const shardNames = (await fs.readdir(path.join(roundDirectory, 'shards'), {
-    withFileTypes: true,
-  }))
+  const shardNames = (
+    await fs.readdir(path.join(roundDirectory, 'shards'), {
+      withFileTypes: true,
+    })
+  )
     .filter(entry => entry.isDirectory())
     .map(entry => entry.name)
     .sort(compareText);
@@ -493,9 +505,7 @@ function familyIdentities(results) {
     new Set(
       (results ?? []).map(
         result =>
-          result.m12c?.teamIdentity ??
-          result.m12c?.sourceConfigIdentity ??
-          ''
+          result.m12c?.teamIdentity ?? result.m12c?.sourceConfigIdentity ?? ''
       )
     )
   ).filter(Boolean);
@@ -522,7 +532,7 @@ function sorted(values) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function readArguments(name) {

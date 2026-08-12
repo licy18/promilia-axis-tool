@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import {
   FORMAL_SEARCH_RANKING_CLAIM,
   aggregateShardResults,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   writeJsonAtomic,
@@ -17,6 +18,10 @@ const projectRoot = path.resolve(
   '..',
   '..'
 );
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor({
+    repositoryRoot: projectRoot,
+  });
 const objectiveArgument = readArgument('--objective-directory');
 const coverageRoundId = readArgument('--coverage-round-id');
 const coverageEvidenceArgument = readArgument('--coverage-evidence');
@@ -107,7 +112,9 @@ for (const round of terminalRounds) {
 for (let index = 1; index < terminalRounds.length; index += 1) {
   const previous = terminalRounds[index - 1];
   const current = terminalRounds[index];
-  if (Number(current.manifest.iteration) <= Number(previous.manifest.iteration)) {
+  if (
+    Number(current.manifest.iteration) <= Number(previous.manifest.iteration)
+  ) {
     issues.push(`${current.manifest.roundId}:iteration-not-increasing`);
   }
   if (
@@ -252,7 +259,9 @@ async function loadRound(
   }
   if (rebuildStrictRanking) {
     const shardDirectory = path.join(roundDirectory, 'shards');
-    const shardNames = (await fs.readdir(shardDirectory, { withFileTypes: true }))
+    const shardNames = (
+      await fs.readdir(shardDirectory, { withFileTypes: true })
+    )
       .filter(entry => entry.isDirectory())
       .map(entry => entry.name)
       .sort(compareText);
@@ -276,6 +285,7 @@ async function loadRound(
       presetSpecHash: round.manifest.presetSpecHash,
       contractTemplateHash: round.manifest.contractTemplateHash,
       orchestrationIdentityHash: round.manifest.orchestrationIdentityHash,
+      normalAttackInputAuthority,
     });
   }
   return round;
@@ -292,7 +302,10 @@ function validateRoundCommon(round, issues, expected) {
   if (round.manifest.runId !== expected.runId) {
     issues.push(`${roundId}:run-id-mismatch`);
   }
-  if (sha256Canonical(round.manifest.baseline) !== sha256Canonical(expected.baseline)) {
+  if (
+    sha256Canonical(round.manifest.baseline) !==
+    sha256Canonical(expected.baseline)
+  ) {
     issues.push(`${roundId}:baseline-mismatch`);
   }
   for (const artifact of [round.manifest, round.aggregate]) {
@@ -399,8 +412,7 @@ function summarizeRound(round) {
     cutoffScore: round.aggregate.summary.cutoffScore,
     cutoffTieCount: round.aggregate.summary.cutoffTieCount,
     topNFamilyCount: round.aggregate.summary.topNFamilyCount,
-    independentVerificationHash:
-      round.verification?.verificationHash ?? null,
+    independentVerificationHash: round.verification?.verificationHash ?? null,
   };
 }
 
@@ -455,7 +467,7 @@ function sorted(values) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function readArguments(name) {

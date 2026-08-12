@@ -1,6 +1,7 @@
 import cycleFixture from '../../../fixtures/machine-axis/m12-cycle-dps-example.json';
 import giseleFixture from '../../../fixtures/character-acceptance/112001-joint-attack-runtime.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
+import rubyOwnerContract from '../../data/generated/character-combat-owner-contracts/103002.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import {
   collectCycleDamageContributions,
@@ -93,23 +94,90 @@ function createStarSkillCooldownEnvelope() {
 
 function createRubyAmmoDeficitEnvelope() {
   const envelope = createNormalAttackCycleEnvelope();
-  envelope.contract.actions.push({
-    id: 'cycle-ruby-enhanced-e1',
-    owner: { kind: 'actor', slotId: 'slot-1' },
-    intent: {
-      kind: 'public-action',
-      publicActionId: 10300201,
-      actionKind: 'normal-attack',
-      attackInput: {
-        sequenceIndex: 1,
-        groupId: 'cycle-ruby-enhanced',
-        contextActionId: 'cycle-ruby-a3',
+  envelope.contract.scenario.durationFrames = 2400;
+  envelope.contract.scenario.initialRuntimeState.specialResourcesByActor[0].currentValue = 12;
+  envelope.contract.actions = [
+    {
+      id: 'cycle-ruby-star-skill',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300212,
+        actionKind: 'star-skill',
+        level: 1,
       },
-      level: 1,
+      schedule: { mode: 'absolute', frame: 0 },
     },
-    schedule: { mode: 'after-previous-end', offsetFrames: 0 },
-  });
+    {
+      id: 'cycle-ruby-enhanced-e1',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300201,
+        actionKind: 'normal-attack',
+        attackInput: {
+          sequenceIndex: 1,
+          groupId: 'cycle-ruby-enhanced',
+          contextActionId: 'cycle-ruby-star-skill',
+        },
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 204 },
+    },
+  ];
+  envelope.loop = { startFrame: 0, endFrame: 1200 };
   return envelope;
+}
+
+function installRubyProfileOverlay() {
+  const runtimePackage = structuredClone(mechanicsPackage);
+  const mapping = runtimePackage.actionMappings.find(
+    candidate =>
+      Number(candidate.ownerId) === 103002 &&
+      candidate.actionKind === 'normal-attack'
+  );
+  const chains = rubyOwnerContract.contracts.attackInputChains ?? [];
+  mapping.profileAttackInputSegments = chains.flatMap(chain =>
+    (chain.segments ?? []).map(segment => {
+      const selectedSubSkillIndex = Number(segment.subSkillIndex ?? 0);
+      const selectedHitIdentities = (segment.executionTiming?.hits ?? [])
+        .map(hit => hit.hitIdentity)
+        .filter(Boolean);
+      return {
+        ...structuredClone(segment),
+        identity: `${chain.chainIdentity}:segment:${segment.sequenceIndex}`,
+        attackInputChainIdentity: chain.chainIdentity,
+        chainSequenceIndex: segment.sequenceIndex,
+        sequenceTotal: segment.sequenceTotal ?? chain.segments.length,
+        selectedSubSkillIndex,
+        effectiveDurationFrames: segment.durationFrames,
+        durationStatus: 'applied',
+        effectiveDurationStatus: 'applied',
+        durationSourceIdentity: segment.sourceIdentity,
+        sourceEvidenceStatus: 'applied',
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        runtimeReady: true,
+        schedulable: true,
+        selectedHitIdentities,
+        hitCount: selectedHitIdentities.length,
+        actionScheduling: {
+          status: 'exact',
+          kind: 'exact-selected-variant-occupancy',
+          durationFrames: segment.durationFrames,
+          planningDurationFrames: null,
+          selectedSubSkillIndex,
+          sourceIdentity: segment.sourceIdentity,
+          sourceStatus: 'verified-input-occupancy',
+          variantModelStatus: 'resolved',
+          reasons: [],
+        },
+      };
+    })
+  );
+  mapping.profileVariantWindowBindings = structuredClone(
+    rubyOwnerContract.contracts.variantWindowBindings ?? []
+  );
+  installVerifiedCombatMechanicsPackage(runtimePackage);
 }
 
 function createOneTimeWarmupBuffEnvelope() {
@@ -696,6 +764,39 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   }, 30_000);
 
+  it('accepts an A1 [0,230) loop at the exact recovery boundary', () => {
+    const envelope = structuredClone(cycleFixture);
+    envelope.contract = structuredClone(giseleFixture);
+    envelope.contract.actions = [
+      {
+        id: 'melania-a1',
+        owner: { kind: 'actor', slotId: 'slot-1' },
+        intent: {
+          kind: 'public-action',
+          publicActionId: 11200101,
+          actionKind: 'normal-attack',
+          attackInput: { sequenceIndex: 1, groupId: 'melania-chain' },
+          level: 1,
+        },
+        schedule: { mode: 'absolute', frame: 0, offsetFrames: 0 },
+      },
+    ];
+    envelope.contract.scenario.durationFrames = 460;
+    envelope.contract.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-112001',
+      characterId: 112001,
+    };
+    envelope.loop = { startFrame: 0, endFrame: 230 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope);
+    expect(report).toMatchObject({
+      valid: true,
+      status: 'closed',
+      loop: { startFrame: 0, endFrame: 230 },
+    });
+    expect(report.formalScore).not.toBeNull();
+  }, 30_000);
+
   it('accepts an exact zero-frame loop boundary without including later frames', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.actions = envelope.contract.actions.filter(
@@ -1277,7 +1378,8 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('rejects an unresolved Ruby enhanced continuation before resource scoring', () => {
+  it('rejects a legal sourced Ruby enhanced continuation on ammo deficit', () => {
+    installRubyProfileOverlay();
     const report = createMachineAxisService().evaluateCycle(
       createRubyAmmoDeficitEnvelope()
     );
@@ -1286,12 +1388,14 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report.status).toBe('rejected');
     expect(report.issues).toContainEqual(
       expect.objectContaining({
-        code: 'attack-input-context-conflict',
-        actionId: 'cycle-ruby-enhanced-e1',
+        code: 'machine-axis-cycle-resource-deficit',
+        resourceIdentity: 'actor:103002:element:103002047',
+        startValue: 12,
+        endValue: 11,
       })
     );
     expect(report.issues).not.toContainEqual(
-      expect.objectContaining({ code: 'machine-axis-cycle-resource-deficit' })
+      expect.objectContaining({ code: 'attack-input-context-conflict' })
     );
   }, 30_000);
 

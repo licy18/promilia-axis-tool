@@ -3,18 +3,15 @@ import test from 'node:test';
 import {
   aggregateRoundAggregates,
   aggregateShardResults,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   sha256Canonical,
   stableJson,
   validateFinalCandidate,
 } from './formal-search-artifacts.mjs';
 
 const objective = 'cycle-dps-no-toughness';
-const normalAttackInputAuthority = {
-  schemaVersion: 1,
-  contractName: 'AzPrVerifiedNormalAttackInputAuthority',
-  policyVersion: '1.0.0',
-  contractHash: '0123456789abcdef',
-};
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor();
 
 test('stable hashing ignores object insertion order', () => {
   assert.equal(stableJson({ b: 2, a: 1 }), stableJson({ a: 1, b: 2 }));
@@ -32,6 +29,7 @@ test('aggregation keeps failures separate and never converts them to zero', () =
     objective,
     topN: 5,
     baseline: { head: 'a'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-a', 'source-b', 'source-c'],
     shardArtifacts: [
       createShard('source-a', [good]),
@@ -61,9 +59,11 @@ test('old checkpoints and candidates without combo authority fail closed', () =>
   delete candidate.objectiveProof.normalAttackInputProof
     .normalAttackInputAuthority;
   assert.ok(
-    validateFinalCandidate(candidate, objective).issues.includes(
-      'candidate-normal-attack-input-authority-missing'
-    )
+    validateFinalCandidate(
+      candidate,
+      objective,
+      normalAttackInputAuthority
+    ).issues.includes('candidate-normal-attack-input-authority-missing')
   );
 
   const legacyShard = createShard('legacy-source', [
@@ -92,6 +92,54 @@ test('old checkpoints and candidates without combo authority fail closed', () =>
   );
 });
 
+test('candidate authorities must equal the repository descriptor, not each other', () => {
+  for (const forgedAuthority of [
+    { ...normalAttackInputAuthority, policyVersion: 999 },
+    { ...normalAttackInputAuthority, kind: 'forged' },
+    { ...normalAttackInputAuthority, contractHash: '0000000000000000' },
+    { ...normalAttackInputAuthority, contractHash: '0123456789abcdef' },
+  ]) {
+    const forged = createResult({ score: 42, inputHash: 'forged' });
+    forged.legality.proof.normalAttackInputAuthority = forgedAuthority;
+    forged.objectiveProof.normalAttackInputProof.normalAttackInputAuthority =
+      forgedAuthority;
+    assert.ok(
+      validateFinalCandidate(
+        forged,
+        objective,
+        normalAttackInputAuthority
+      ).issues.includes('candidate-normal-attack-input-authority-mismatch')
+    );
+  }
+});
+
+test('aggregation never treats a forged wrapper as repository authority', () => {
+  const oldAuthority = {
+    ...normalAttackInputAuthority,
+    contractHash: '0123456789abcdef',
+  };
+  const forgedCandidate = createResult({ score: 42, inputHash: 'forged' });
+  forgedCandidate.legality.proof.normalAttackInputAuthority = oldAuthority;
+  forgedCandidate.objectiveProof.normalAttackInputProof.normalAttackInputAuthority =
+    oldAuthority;
+  const forgedShard = createShard('forged-source', [forgedCandidate]);
+  forgedShard.checkpoint.normalAttackInputAuthority = oldAuthority;
+  forgedShard.result.normalAttackInputAuthority = oldAuthority;
+  const aggregate = aggregateShardResults({
+    runId: 'run-forged',
+    roundId: 'round-forged',
+    objective,
+    topN: 1,
+    baseline: { head: 'a'.repeat(40) },
+    expectedSourceConfigIdentities: ['forged-source'],
+    shardArtifacts: [forgedShard],
+  });
+  assert.deepEqual(aggregate.results, []);
+  assert.deepEqual(aggregate.coverage.failedSourceConfigIdentities, [
+    'forged-source',
+  ]);
+});
+
 test('aggregation is deterministic, deduplicates raw identity, and preserves cutoff ties', () => {
   const rows = [50, 40, 30, 20, 10, 10, 5].map((score, index) =>
     createResult({ score, inputHash: `input-${index}` })
@@ -103,6 +151,7 @@ test('aggregation is deterministic, deduplicates raw identity, and preserves cut
     objective,
     topN: 5,
     baseline: { head: 'b'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-a', 'source-b'],
     shardArtifacts: [
       createShard('source-b', [rows[3], rows[4], rows[5], rows[6]]),
@@ -115,6 +164,7 @@ test('aggregation is deterministic, deduplicates raw identity, and preserves cut
     objective,
     topN: 5,
     baseline: { head: 'b'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-b', 'source-a'],
     shardArtifacts: [
       createShard('source-a', [rows[2], rows[1], duplicate, rows[0]], 9999),
@@ -137,6 +187,7 @@ test('fastest-kill sorts finite formal times ascending', () => {
     objective: 'fastest-kill',
     topN: 2,
     baseline: { head: 'c'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-a'],
     shardArtifacts: [
       createShard('source-a', [
@@ -166,6 +217,7 @@ test('combined objective aggregation keeps unique candidates across rounds', () 
     objective,
     topN: 5,
     baseline: { head: 'd'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-a'],
     shardArtifacts: [
       createShard('source-a', [createResult({ score: 10, inputHash: 'same' })]),
@@ -177,6 +229,7 @@ test('combined objective aggregation keeps unique candidates across rounds', () 
     objective,
     topN: 5,
     baseline: { head: 'd'.repeat(40) },
+    normalAttackInputAuthority,
     expectedSourceConfigIdentities: ['source-a'],
     shardArtifacts: [
       createShard('source-a', [
@@ -190,6 +243,7 @@ test('combined objective aggregation keeps unique candidates across rounds', () 
     objective,
     topN: 5,
     baseline: { head: 'd'.repeat(40) },
+    normalAttackInputAuthority,
     roundAggregates: [round2, round1],
   });
   assert.deepEqual(
@@ -213,51 +267,65 @@ test('strict final validation rejects a zero-value Ruby resource in a cold cycle
       activeStates: [],
     },
   ];
-  assert.deepEqual(validateFinalCandidate(result, objective), {
-    valid: false,
-    issues: ['candidate-cycle-special-resources-not-empty'],
-  });
+  assert.deepEqual(
+    validateFinalCandidate(result, objective, normalAttackInputAuthority),
+    {
+      valid: false,
+      issues: ['candidate-cycle-special-resources-not-empty'],
+    }
+  );
 });
 
 test('strict final validation rejects disguised cold-cycle resource fields', () => {
   const result = createResult({ score: 10, inputHash: 'cold-disguised-ruby' });
   result.axis.scenario.initialRuntimeState.rubyAmmo = 0;
   assert.ok(
-    validateFinalCandidate(result, objective).issues.includes(
-      'candidate-initial-runtime-state-field-forbidden'
-    )
+    validateFinalCandidate(
+      result,
+      objective,
+      normalAttackInputAuthority
+    ).issues.includes('candidate-initial-runtime-state-field-forbidden')
   );
 });
 
 test('fastest-kill admits only full actor/Kibo SP, Ruby 12, and zero marks', () => {
   const valid = createKillRubyResult(12);
-  assert.deepEqual(validateFinalCandidate(valid, 'fastest-kill'), {
-    valid: true,
-    issues: [],
-  });
+  assert.deepEqual(
+    validateFinalCandidate(valid, 'fastest-kill', normalAttackInputAuthority),
+    {
+      valid: true,
+      issues: [],
+    }
+  );
 
   const zeroRuby = createKillRubyResult(0);
   assert.ok(
-    validateFinalCandidate(zeroRuby, 'fastest-kill').issues.includes(
-      'candidate-kill-ruby-ammunition-preset-mismatch'
-    )
+    validateFinalCandidate(
+      zeroRuby,
+      'fastest-kill',
+      normalAttackInputAuthority
+    ).issues.includes('candidate-kill-ruby-ammunition-preset-mismatch')
   );
 
   const marked = createKillRubyResult(12);
   marked.axis.scenario.initialRuntimeState.tuningMarks = [{ markId: 1 }];
   assert.ok(
-    validateFinalCandidate(marked, 'fastest-kill').issues.includes(
-      'candidate-initial-tuning-marks-not-zero'
-    )
+    validateFinalCandidate(
+      marked,
+      'fastest-kill',
+      normalAttackInputAuthority
+    ).issues.includes('candidate-initial-tuning-marks-not-zero')
   );
 
   const disguised = createKillRubyResult(12);
   disguised.axis.scenario.initialRuntimeState.specialResourcesByActor[0].alias =
     'ruby';
   assert.ok(
-    validateFinalCandidate(disguised, 'fastest-kill').issues.includes(
-      'candidate-kill-ruby-ammunition-preset-mismatch'
-    )
+    validateFinalCandidate(
+      disguised,
+      'fastest-kill',
+      normalAttackInputAuthority
+    ).issues.includes('candidate-kill-ruby-ammunition-preset-mismatch')
   );
 });
 

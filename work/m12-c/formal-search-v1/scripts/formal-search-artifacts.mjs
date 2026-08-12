@@ -1,11 +1,14 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const FORMAL_SEARCH_ARTIFACT_SCHEMA_VERSION = 1;
 export const FORMAL_SEARCH_RANKING_CLAIM = 'AI-guided heuristic Top-N';
 
 const NORMAL_ATTACK_INPUT_CONTRACT_HASH_PATTERN = /^[0-9a-f]{16}$/;
+const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url));
+const REPOSITORY_ROOT = path.resolve(SCRIPT_DIRECTORY, '../../../..');
 
 const CYCLE_OBJECTIVES = new Set([
   'cycle-dps-no-toughness',
@@ -78,6 +81,36 @@ export function validateNormalAttackInputAuthorityDescriptor(value) {
   return { valid: issues.length === 0, issues };
 }
 
+export async function loadRepositoryNormalAttackInputAuthorityDescriptor({
+  repositoryRoot = REPOSITORY_ROOT,
+  createServer = null,
+} = {}) {
+  const createViteServer = createServer ?? (await import('vite')).createServer;
+  const vite = await createViteServer({
+    root: path.resolve(repositoryRoot),
+    server: { middlewareMode: true },
+    appType: 'custom',
+    logLevel: 'silent',
+  });
+  try {
+    const authorityModule = await vite.ssrLoadModule(
+      '/src/domain/verifiedNormalAttackInputAuthority.js'
+    );
+    const descriptor = structuredClone(
+      authorityModule.getVerifiedNormalAttackInputAuthorityDescriptor()
+    );
+    const validation = validateNormalAttackInputAuthorityDescriptor(descriptor);
+    if (!validation.valid) {
+      throw new TypeError(
+        `Repository normal-attack input authority is invalid: ${validation.issues.join(',')}`
+      );
+    }
+    return descriptor;
+  } finally {
+    await vite.close();
+  }
+}
+
 function validateArtifactNormalAttackInputAuthority({
   descriptor,
   expected,
@@ -89,10 +122,10 @@ function validateArtifactNormalAttackInputAuthority({
   }
   const expectedValidation =
     validateNormalAttackInputAuthorityDescriptor(expected);
-  if (
-    expectedValidation.valid &&
-    stableJson(descriptor) !== stableJson(expected)
-  ) {
+  if (!expectedValidation.valid) {
+    return [`${prefix}-normal-attack-input-authority-expected-missing`];
+  }
+  if (stableJson(descriptor) !== stableJson(expected)) {
     return [`${prefix}-normal-attack-input-authority-mismatch`];
   }
   return [];
@@ -143,7 +176,11 @@ export function createCandidateRawIdentity(result, objective) {
   };
 }
 
-export function validateFinalCandidate(result, objective) {
+export function validateFinalCandidate(
+  result,
+  objective,
+  currentNormalAttackInputAuthority = null
+) {
   const issues = [];
   if (!result || typeof result !== 'object') {
     return { valid: false, issues: ['candidate-not-object'] };
@@ -169,12 +206,26 @@ export function validateFinalCandidate(result, objective) {
     validateNormalAttackInputAuthorityDescriptor(legalityAuthority);
   const objectiveAuthorityValidation =
     validateNormalAttackInputAuthorityDescriptor(objectiveAuthority);
+  const currentAuthorityValidation =
+    validateNormalAttackInputAuthorityDescriptor(
+      currentNormalAttackInputAuthority
+    );
+  if (!currentAuthorityValidation.valid) {
+    issues.push('candidate-current-normal-attack-input-authority-missing');
+  }
   if (
     !legalityAuthorityValidation.valid ||
     !objectiveAuthorityValidation.valid
   ) {
     issues.push('candidate-normal-attack-input-authority-missing');
-  } else if (stableJson(legalityAuthority) !== stableJson(objectiveAuthority)) {
+  } else if (
+    stableJson(legalityAuthority) !== stableJson(objectiveAuthority) ||
+    !currentAuthorityValidation.valid ||
+    stableJson(legalityAuthority) !==
+      stableJson(currentNormalAttackInputAuthority) ||
+    stableJson(objectiveAuthority) !==
+      stableJson(currentNormalAttackInputAuthority)
+  ) {
     issues.push('candidate-normal-attack-input-authority-mismatch');
   }
   if (Number(result.legality?.proof?.skippedActionCount ?? 0) !== 0) {
@@ -604,19 +655,10 @@ export function aggregateShardResults({
   const summaryCounters = {};
   let aggregateWallTimeMs = 0;
   const resolvedNormalAttackInputAuthority =
-    normalAttackInputAuthority ??
-    [...shardArtifacts]
-      .map(
-        artifact =>
-          artifact?.checkpoint?.normalAttackInputAuthority ??
-          artifact?.normalAttackInputAuthority ??
-          null
-      )
-      .find(
-        descriptor =>
-          validateNormalAttackInputAuthorityDescriptor(descriptor).valid
-      ) ??
-    null;
+    validateNormalAttackInputAuthorityDescriptor(normalAttackInputAuthority)
+      .valid === true
+      ? normalAttackInputAuthority
+      : null;
 
   for (const artifact of [...shardArtifacts].sort(compareShardArtifact)) {
     const checkpoint = artifact?.checkpoint ?? artifact;
@@ -680,7 +722,11 @@ export function aggregateShardResults({
       }
     }
     for (const result of serviceResult.results ?? []) {
-      const validation = validateFinalCandidate(result, objective);
+      const validation = validateFinalCandidate(
+        result,
+        objective,
+        resolvedNormalAttackInputAuthority
+      );
       const identity = createCandidateRawIdentity(result, objective);
       if (!validation.valid) {
         invalidCandidates.push({
@@ -830,7 +876,7 @@ export function aggregateRoundAggregates({
         status: 'completed',
         shardId: `round:${aggregate?.roundId ?? 'unknown'}`,
         normalAttackInputAuthority:
-          aggregate?.normalAttackInputAuthority ?? normalAttackInputAuthority,
+          aggregate?.normalAttackInputAuthority ?? null,
         coverage: {
           sourceConfigIdentity: `round:${aggregate?.roundId ?? 'unknown'}`,
         },
@@ -838,7 +884,7 @@ export function aggregateRoundAggregates({
       result: {
         objective,
         normalAttackInputAuthority:
-          aggregate?.normalAttackInputAuthority ?? normalAttackInputAuthority,
+          aggregate?.normalAttackInputAuthority ?? null,
         summary: aggregate?.summary ?? {},
         results: [
           ...(aggregate?.results ?? []),
@@ -861,11 +907,7 @@ export function aggregateRoundAggregates({
     presetSpecHash,
     contractTemplateHash,
     orchestrationIdentityHash: null,
-    normalAttackInputAuthority:
-      normalAttackInputAuthority ??
-      roundAggregates.find(aggregate => aggregate?.normalAttackInputAuthority)
-        ?.normalAttackInputAuthority ??
-      null,
+    normalAttackInputAuthority,
   });
   return {
     ...combined,

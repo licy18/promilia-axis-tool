@@ -256,6 +256,14 @@ describe('Machine Axis search state', () => {
       characterId: 112001,
     };
     const melaniaRun = service.simulate(axis);
+    expect(
+      createSearchAttackChainProjection({
+        trace: melaniaRun.trace,
+        currentFrame: 0,
+        fps: 60,
+        excludeActionsAtCurrentFrame: true,
+      })
+    ).toEqual([]);
     const at17 = createSearchAttackChainProjection({
       trace: melaniaRun.trace,
       currentFrame: 17,
@@ -315,6 +323,52 @@ describe('Machine Axis search state', () => {
       hashSearchState(base)
     );
   }, 30_000);
+
+  it('projects the verified A5 reopen boundary at exact frames', () => {
+    const trace = {
+      actions: [
+        {
+          id: 'melania-a5',
+          type: 'skill',
+          actorId: 'actor-112001',
+          actionKind: 'normal-attack',
+          skillId: 11200101,
+          startMs: 0,
+          attackGroupId: 'melania-chain',
+          attackSequenceIndex: 5,
+          attackSequenceTotal: 5,
+        },
+      ],
+      executionPlan: {
+        actions: [
+          {
+            actionId: 'melania-a5',
+            execute: true,
+            sourceSequenceIndex: 0,
+            startMs: 0,
+          },
+        ],
+      },
+      variants: {
+        selections: [
+          {
+            actionId: 'melania-a5',
+            controlSkillId: 11200105,
+            subSkillIndex: 0,
+            attackGroupId: 'melania-chain',
+            attackSequenceIndex: 5,
+            attackSequenceTotal: 5,
+          },
+        ],
+      },
+    };
+    expect(
+      createSearchAttackChainProjection({ trace, currentFrame: 64, fps: 60 })
+    ).toEqual([expect.objectContaining({ authorityPhase: 'recovery-locked' })]);
+    expect(
+      createSearchAttackChainProjection({ trace, currentFrame: 65, fps: 60 })
+    ).toEqual([expect.objectContaining({ authorityPhase: 'reopen-window' })]);
+  });
 
   it('rejects a repeated A1 before an objective can score it', () => {
     const axis = structuredClone(giseleFixture);

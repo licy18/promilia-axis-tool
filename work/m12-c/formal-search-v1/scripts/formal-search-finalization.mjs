@@ -5,6 +5,7 @@ import {
   sha256Canonical,
   stableJson,
   validateFinalCandidate,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   validateNormalAttackInputAuthorityDescriptor,
 } from './formal-search-artifacts.mjs';
 
@@ -19,10 +20,13 @@ export function finalizeObjectiveArtifacts({
 } = {}) {
   const issues = [];
   const resolvedNormalAttackInputAuthority =
-    normalAttackInputAuthority ??
-    rounds.find(round => round?.manifest?.normalAttackInputAuthority)?.manifest
-      ?.normalAttackInputAuthority ??
-    null;
+    validateNormalAttackInputAuthorityDescriptor(normalAttackInputAuthority)
+      .valid === true
+      ? normalAttackInputAuthority
+      : null;
+  if (resolvedNormalAttackInputAuthority == null) {
+    issues.push('normal-attack-input-authority-current-missing');
+  }
   const normalizedRankingRoundIds =
     rankingRoundIds == null
       ? null
@@ -46,11 +50,6 @@ export function finalizeObjectiveArtifacts({
         `round-normal-attack-input-authority-${roundAuthorityIssues[0]}:${round.roundId}`
       );
     }
-    const rankingEligible =
-      roundAuthorityIssues.length === 0 &&
-      (normalizedRankingRoundIds == null ||
-        normalizedRankingRoundIds.includes(String(round.roundId)));
-    if (rankingEligible) observedRankingRoundIds.add(String(round.roundId));
     const aggregate = round?.aggregate ?? {};
     const aggregateAuthorityIssues = validateBoundAuthority(
       aggregate.normalAttackInputAuthority,
@@ -61,6 +60,12 @@ export function finalizeObjectiveArtifacts({
         `aggregate-normal-attack-input-authority-${aggregateAuthorityIssues[0]}:${round.roundId}`
       );
     }
+    const rankingEligible =
+      roundAuthorityIssues.length === 0 &&
+      aggregateAuthorityIssues.length === 0 &&
+      (normalizedRankingRoundIds == null ||
+        normalizedRankingRoundIds.includes(String(round.roundId)));
+    if (rankingEligible) observedRankingRoundIds.add(String(round.roundId));
     const completedSources =
       aggregate.coverage?.completedSourceConfigIdentities ?? [];
     const failedSources =
@@ -153,7 +158,11 @@ export function finalizeObjectiveArtifacts({
         resultCanonicalSha256,
       });
       for (const result of serviceResult.results ?? []) {
-        const validation = validateFinalCandidate(result, objective);
+        const validation = validateFinalCandidate(
+          result,
+          objective,
+          resolvedNormalAttackInputAuthority
+        );
         const rawIdentity = createCandidateRawIdentity(result, objective);
         if (!validation.valid) {
           invalidCandidates.push({
@@ -317,6 +326,23 @@ export function finalizeObjectiveArtifacts({
       sourceConfigIdentity: entry.sourceConfigIdentity,
     })),
   };
+}
+
+export async function finalizeObjectiveArtifactsAgainstRepository(
+  options = {}
+) {
+  const normalAttackInputAuthority =
+    await loadRepositoryNormalAttackInputAuthorityDescriptor({
+      repositoryRoot: options.repositoryRoot,
+      createServer: options.createServer,
+    });
+  const { repositoryRoot, createServer, ...finalizationOptions } = options;
+  void repositoryRoot;
+  void createServer;
+  return finalizeObjectiveArtifacts({
+    ...finalizationOptions,
+    normalAttackInputAuthority,
+  });
 }
 
 function validateBoundAuthority(actual, expected) {

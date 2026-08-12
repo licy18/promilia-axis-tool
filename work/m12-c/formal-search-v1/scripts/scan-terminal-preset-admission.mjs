@@ -6,6 +6,7 @@ import {
   FORMAL_SEARCH_RANKING_CLAIM,
   analyzeFinalCandidateInitialState,
   createCandidateRawIdentity,
+  loadRepositoryNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   validateFinalCandidate,
@@ -19,6 +20,10 @@ const projectRoot = path.resolve(
   '..',
   '..'
 );
+const normalAttackInputAuthority =
+  await loadRepositoryNormalAttackInputAuthorityDescriptor({
+    repositoryRoot: projectRoot,
+  });
 const runArgument = readArgument('--run-directory');
 if (!runArgument) {
   throw new Error(
@@ -59,9 +64,11 @@ for (const objective of objectiveIds) {
     const manifest = await readJson(
       path.join(roundDirectory, 'round-manifest.json')
     );
-    const shardNames = (await fs.readdir(path.join(roundDirectory, 'shards'), {
-      withFileTypes: true,
-    }))
+    const shardNames = (
+      await fs.readdir(path.join(roundDirectory, 'shards'), {
+        withFileTypes: true,
+      })
+    )
       .filter(entry => entry.isDirectory())
       .map(entry => entry.name)
       .sort(compareText);
@@ -88,7 +95,11 @@ for (const objective of objectiveIds) {
           result,
           objective
         );
-        const validation = validateFinalCandidate(result, objective);
+        const validation = validateFinalCandidate(
+          result,
+          objective,
+          normalAttackInputAuthority
+        );
         if (!initialStateAdmission.valid) {
           const occurrence = {
             objective,
@@ -123,7 +134,8 @@ for (const objective of objectiveIds) {
               specialResources:
                 initialStateAdmission.expectedSpecialResources ?? [],
             },
-            quarantineStatus: 'excluded-from-formal-ranking-pending-replacement',
+            quarantineStatus:
+              'excluded-from-formal-ranking-pending-replacement',
           };
           quarantinedOccurrences.push(occurrence);
           roundQuarantine.push(occurrence.rawIdentityHash);
@@ -189,7 +201,11 @@ const reportPayload = {
 const quarantineHash = sha256Canonical(reportPayload);
 const report = { ...reportPayload, quarantineHash };
 const output = await writeJsonAtomic(
-  path.join(runDirectory, 'final-verification', 'preset-admission-quarantine.json'),
+  path.join(
+    runDirectory,
+    'final-verification',
+    'preset-admission-quarantine.json'
+  ),
   report
 );
 
@@ -209,7 +225,9 @@ if (!report.valid) process.exitCode = 1;
 function describePollutionFields(result, admission) {
   const state = result.axis?.scenario?.initialRuntimeState ?? {};
   const fields = [];
-  if (admission.issues.includes('candidate-cycle-special-resources-not-empty')) {
+  if (
+    admission.issues.includes('candidate-cycle-special-resources-not-empty')
+  ) {
     for (const [index, resource] of (
       state.specialResourcesByActor ?? []
     ).entries()) {
@@ -243,7 +261,7 @@ function describePollutionFields(result, admission) {
 
 function readArgument(name) {
   const index = process.argv.indexOf(name);
-  return index >= 0 ? process.argv[index + 1] ?? null : null;
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null;
 }
 
 function repositoryRelative(filePath) {

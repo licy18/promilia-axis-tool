@@ -860,15 +860,17 @@ function evaluateCycleSample({
     {
       attackChains: createSearchAttackChainProjection({
         trace: firstPrepared.run?.trace ?? {},
-        currentFrame: Number(envelope.loop.startFrame) - 1,
+        currentFrame: Number(envelope.loop.startFrame),
         fps: Number(firstContract.scenario?.fps) || 60,
+        excludeActionsAtCurrentFrame: true,
       }),
     },
     {
       attackChains: createSearchAttackChainProjection({
         trace: firstPrepared.run?.trace ?? {},
-        currentFrame: Number(envelope.loop.endFrame) - 1,
+        currentFrame: Number(envelope.loop.endFrame),
         fps: Number(firstContract.scenario?.fps) || 60,
+        excludeActionsAtCurrentFrame: true,
       }),
     }
   );
@@ -1220,10 +1222,12 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
     (contract.actions ?? []).map(action => String(action.id))
   );
   const secondToSourceActionId = new Map();
+  const sourceToSecondActionId = new Map();
   const secondActions = loopActions.map(({ action, actionStart }, index) => {
     const secondId = createUniqueCycleActionId(action.id, existingIds, index);
     existingIds.add(secondId);
     secondToSourceActionId.set(secondId, String(action.id));
+    sourceToSecondActionId.set(String(action.id), secondId);
     const clone = structuredClone(action);
     clone.id = secondId;
     clone.schedule = {
@@ -1240,6 +1244,15 @@ function createLoopReplayPlan({ contract, actionResolutions, loop }) {
       .join(' | ');
     return clone;
   });
+  for (const clone of secondActions) {
+    const contextActionId = clone.intent?.attackInput?.contextActionId;
+    const replayContextActionId = sourceToSecondActionId.get(
+      String(contextActionId ?? '')
+    );
+    if (replayContextActionId) {
+      clone.intent.attackInput.contextActionId = replayContextActionId;
+    }
+  }
   const firstActions = [
     ...warmupActions,
     ...loopActions.map(entry => entry.action),
