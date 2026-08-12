@@ -13,6 +13,14 @@ const MELANIA_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     Number(mapping.ownerId) === 112001 && mapping.actionKind === 'normal-attack'
 );
+const SIFLIYA_MAPPING = mechanicsPackage.actionMappings.find(
+  mapping =>
+    Number(mapping.ownerId) === 107001 && mapping.actionKind === 'normal-attack'
+);
+const MISA_MAPPING = mechanicsPackage.actionMappings.find(
+  mapping =>
+    Number(mapping.ownerId) === 107002 && mapping.actionKind === 'normal-attack'
+);
 
 describe('verified normal attack input authority', () => {
   it('publishes a frozen hash-bound policy descriptor', () => {
@@ -21,9 +29,14 @@ describe('verified normal attack input authority', () => {
     expect(descriptor).toMatchObject({
       schemaVersion: 1,
       contractName: VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_CONTRACT_NAME,
-      policyVersion: 1,
+      policyVersion: 2,
+      structuralFallbackPolicy:
+        'verified-graph-then-unique-mapping-reachable-prefix',
+      reachablePrefixPolicy:
+        'unique-a1-exact-control-subskill-contiguous-adjacency',
       contractHash: expect.stringMatching(/^[0-9a-f]{16}$/),
     });
+    expect(descriptor.contractHash).not.toBe('780cb44a08c522eb');
     expect(Object.isFrozen(descriptor)).toBe(true);
     expect(Object.isFrozen(descriptor.phases)).toBe(true);
   });
@@ -80,6 +93,111 @@ describe('verified normal attack input authority', () => {
       formIdentity: null,
       reasons: expect.arrayContaining([
         'normal-attack-adjacency-source-identity-required',
+      ]),
+    });
+  });
+
+  it('follows only the uniquely verified reachable prefix when unrelated source segments remain', () => {
+    const sifliya = createVerifiedNormalAttackStructuralForm({
+      mapping: SIFLIYA_MAPPING,
+    });
+    const misa = createVerifiedNormalAttackStructuralForm({
+      mapping: MISA_MAPPING,
+    });
+
+    expect(sifliya).toMatchObject({
+      status: 'verified-normal-attack-structural-form-ready',
+      segmentCount: 2,
+      segments: [
+        {
+          sequenceIndex: 1,
+          controlSkillId: 10700101,
+          subSkillIndex: 0,
+          successor: {
+            sequenceIndex: 2,
+            controlSkillId: 10700102,
+            subSkillIndex: 4,
+          },
+        },
+        {
+          sequenceIndex: 2,
+          controlSkillId: 10700102,
+          subSkillIndex: 4,
+          successor: null,
+        },
+      ],
+    });
+    expect(misa).toMatchObject({
+      status: 'verified-normal-attack-structural-form-ready',
+      segmentCount: 4,
+    });
+    expect(misa.segments.map(segment => segment.controlSkillId)).toEqual([
+      10700201, 10700202, 10700203, 10700204,
+    ]);
+  });
+
+  it('keeps the sourced Sifliya A1 boundary right-open without inventing A3', () => {
+    const source = createMappingAttackAction({
+      id: 'sifliya-a1',
+      sequenceIndex: 1,
+      groupId: 'sifliya-chain',
+      startFrame: 0,
+      mapping: SIFLIYA_MAPPING,
+      actorId: 'actor-107001',
+    });
+    const at = frame =>
+      resolveVerifiedNormalAttackInputPhase({
+        mapping: SIFLIYA_MAPPING,
+        acceptedAction: source,
+        acceptedSelection: createSelection(source),
+        actorId: source.actorId,
+        inputTimeMs: frameToMs(frame),
+      });
+
+    expect(at(19)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      reasons: ['normal-attack-successor-window-not-open'],
+    });
+    for (const frame of [20, 71]) {
+      expect(at(frame)).toMatchObject({
+        phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW,
+        expected: {
+          sequenceIndex: 2,
+          controlSkillId: 10700102,
+          subSkillIndex: 4,
+        },
+      });
+    }
+    expect(at(72)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      reasons: ['normal-attack-recovery-not-complete'],
+    });
+  });
+
+  it('fails closed when a verified adjacency target is missing or ambiguous', () => {
+    const missing = structuredClone(MELANIA_MAPPING);
+    missing.attackInputSegments[0].linkWindow.targetControlSkillId = 99999901;
+    expect(
+      createVerifiedNormalAttackStructuralForm({ mapping: missing })
+    ).toMatchObject({
+      status: 'verified-normal-attack-structural-form-unresolved',
+      reasons: expect.arrayContaining([
+        'normal-attack-adjacency-target-unresolved',
+      ]),
+    });
+
+    const ambiguous = structuredClone(MELANIA_MAPPING);
+    ambiguous.attackInputSegments.push({
+      ...structuredClone(ambiguous.attackInputSegments[1]),
+      identity: 'ambiguous-a2',
+      sourceIdentity: 'ambiguous-a2-source',
+    });
+    expect(
+      createVerifiedNormalAttackStructuralForm({ mapping: ambiguous })
+    ).toMatchObject({
+      status: 'verified-normal-attack-structural-form-unresolved',
+      reasons: expect.arrayContaining([
+        'normal-attack-adjacency-target-ambiguous',
       ]),
     });
   });
@@ -344,16 +462,23 @@ describe('verified normal attack input authority', () => {
   });
 });
 
-function createMappingAttackAction({ id, sequenceIndex, groupId, startFrame }) {
-  const segment = MELANIA_MAPPING.attackInputSegments.find(
+function createMappingAttackAction({
+  id,
+  sequenceIndex,
+  groupId,
+  startFrame,
+  mapping = MELANIA_MAPPING,
+  actorId = 'actor-112001',
+}) {
+  const segment = mapping.attackInputSegments.find(
     candidate => Number(candidate.sequenceIndex) === Number(sequenceIndex)
   );
   return {
     id,
     type: 'skill',
     actionKind: 'normal-attack',
-    actorId: 'actor-112001',
-    skillId: 11200101,
+    actorId,
+    skillId: mapping.sourceSkillId,
     startMs: frameToMs(startFrame),
     attackGroupId: groupId,
     attackSequenceIndex: sequenceIndex,

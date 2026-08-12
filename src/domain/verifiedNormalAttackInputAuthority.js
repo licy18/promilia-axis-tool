@@ -7,7 +7,7 @@ import { msToFrame } from './timebase';
 export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_SCHEMA_VERSION = 1;
 export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_CONTRACT_NAME =
   'AzPrVerifiedNormalAttackInputAuthority';
-export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_POLICY_VERSION = 1;
+export const VERIFIED_NORMAL_ATTACK_INPUT_AUTHORITY_POLICY_VERSION = 2;
 
 export const VERIFIED_NORMAL_ATTACK_INPUT_PHASES = deepFreeze({
   SUCCESSOR_WINDOW: 'successor-window',
@@ -25,6 +25,10 @@ const AUTHORITY_DESCRIPTOR_SOURCE = deepFreeze({
   intervalPolicy: 'right-open',
   specialContinuationPrecedence: 'special-before-direct',
   openerPolicy: 'a1-only-outside-exclusive-successor-windows',
+  structuralFallbackPolicy:
+    'verified-graph-then-unique-mapping-reachable-prefix',
+  reachablePrefixPolicy:
+    'unique-a1-exact-control-subskill-contiguous-adjacency',
   structuralFormFields: [
     'mappingIdentity',
     'sourceSkillId',
@@ -62,6 +66,24 @@ export function createVerifiedNormalAttackStructuralForm({
   mapping,
   chain = null,
 } = {}) {
+  const primary = createStructuralForm({ mapping, chain });
+  if (
+    chain &&
+    chain?.entryPolicy?.kind !== 'derived-or-quick-entry' &&
+    primary.status === 'verified-normal-attack-structural-form-unresolved' &&
+    primary.reasons.some(reason =>
+      [
+        'normal-attack-adjacency-window-required',
+        'normal-attack-adjacency-target-mismatch',
+      ].includes(reason)
+    )
+  ) {
+    return createStructuralForm({ mapping, chain: null });
+  }
+  return primary;
+}
+
+function createStructuralForm({ mapping, chain }) {
   const reasons = [];
   const mappingIdentity = textOrNull(mapping?.identity);
   const sourceSkillId = positiveIntegerOrNull(mapping?.sourceSkillId);
@@ -78,14 +100,12 @@ export function createVerifiedNormalAttackStructuralForm({
     reasons.push('normal-attack-source-skill-id-required');
   }
 
-  const sourceSegments = [
-    ...(chain?.segments ??
-      mapping?.attackInputSegments ??
-      mapping?.attackInputSourceSegments ??
-      []),
-  ].sort(
-    (left, right) => Number(left?.sequenceIndex) - Number(right?.sequenceIndex)
-  );
+  const sourceSegments = chain?.segments
+    ? [...chain.segments].sort(
+        (left, right) =>
+          Number(left?.sequenceIndex) - Number(right?.sequenceIndex)
+      )
+    : collectMappingReachableSegments(mapping, reasons);
   if (sourceSegments.length === 0) {
     reasons.push('normal-attack-segments-required');
   }
@@ -138,12 +158,20 @@ export function createVerifiedNormalAttackStructuralForm({
           sourceIdentity: successor.sourceIdentity,
         }
       : null;
+    segment.reopenWindow = null;
     if (!segment.linkWindow) {
       reasons.push('normal-attack-adjacency-window-required');
       continue;
     }
     if (!segment.linkWindow.sourceIdentity) {
       reasons.push('normal-attack-adjacency-source-identity-required');
+    }
+    if (
+      chain &&
+      (segment.linkWindow.targetControlSkillId !== successor.controlSkillId ||
+        segment.linkWindow.targetSubSkillIndex !== successor.subSkillIndex)
+    ) {
+      reasons.push('normal-attack-adjacency-target-mismatch');
     }
   }
 
@@ -196,6 +224,58 @@ export function createVerifiedNormalAttackStructuralForm({
     segments,
     reasons: [],
   };
+}
+
+function collectMappingReachableSegments(mapping, reasons) {
+  const candidates = [
+    ...(mapping?.attackInputSegments ??
+      mapping?.attackInputSourceSegments ??
+      []),
+  ];
+  const openers = candidates.filter(
+    segment => positiveIntegerOrNull(segment?.sequenceIndex) === 1
+  );
+  if (openers.length !== 1) {
+    if (openers.length > 1) {
+      reasons.push('normal-attack-opener-target-ambiguous');
+    }
+    return openers.slice(0, 1);
+  }
+  const reachable = [openers[0]];
+  const visited = new Set([openers[0]]);
+  while (true) {
+    const current = reachable.at(-1);
+    const window = projectVerifiedWindow(resolveSegmentLinkWindow(current));
+    if (!window || window.targetControlSkillId == null) break;
+    const matches = candidates.filter(
+      candidate =>
+        !visited.has(candidate) &&
+        positiveIntegerOrNull(candidate?.controlSkillId) ===
+          window.targetControlSkillId &&
+        nonNegativeIntegerOrNull(
+          candidate?.subSkillIndex ?? candidate?.selectedSubSkillIndex
+        ) === window.targetSubSkillIndex
+    );
+    if (matches.length !== 1) {
+      reasons.push(
+        matches.length > 1
+          ? 'normal-attack-adjacency-target-ambiguous'
+          : 'normal-attack-adjacency-target-unresolved'
+      );
+      break;
+    }
+    const next = matches[0];
+    if (
+      positiveIntegerOrNull(next.sequenceIndex) !==
+      positiveIntegerOrNull(current.sequenceIndex) + 1
+    ) {
+      reasons.push('normal-attack-segment-sequence-not-contiguous');
+      break;
+    }
+    reachable.push(next);
+    visited.add(next);
+  }
+  return reachable;
 }
 
 export function resolveVerifiedNormalAttackInputPhase({

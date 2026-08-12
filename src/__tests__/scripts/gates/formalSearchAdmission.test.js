@@ -66,7 +66,11 @@ describe('formal search admission', () => {
     expect(currentEvidence.normalAttackInputAuthority).toMatchObject({
       schemaVersion: 1,
       contractName: 'AzPrVerifiedNormalAttackInputAuthority',
-      policyVersion: 1,
+      policyVersion: 2,
+      structuralFallbackPolicy:
+        'verified-graph-then-unique-mapping-reachable-prefix',
+      reachablePrefixPolicy:
+        'unique-a1-exact-control-subskill-contiguous-adjacency',
       contractHash: expect.stringMatching(/^[a-f0-9]{16}$/),
     });
     expect(currentEvidence.kiboAxisActionScope).toMatchObject({
@@ -118,6 +122,18 @@ describe('formal search admission', () => {
     const missingHash = structuredClone(currentEvidence);
     delete missingHash.normalAttackInputAuthority.contractHash;
     expect(evaluateFormalSearchAdmission(missingHash).blockers).toContain(
+      'normal-attack-combo-authority'
+    );
+
+    const stalePolicy = structuredClone(currentEvidence);
+    stalePolicy.normalAttackInputAuthority = {
+      ...stalePolicy.normalAttackInputAuthority,
+      policyVersion: 1,
+      contractHash: '780cb44a08c522eb',
+    };
+    delete stalePolicy.normalAttackInputAuthority.structuralFallbackPolicy;
+    delete stalePolicy.normalAttackInputAuthority.reachablePrefixPolicy;
+    expect(evaluateFormalSearchAdmission(stalePolicy).blockers).toContain(
       'normal-attack-combo-authority'
     );
   });

@@ -119,6 +119,7 @@ export function createFastestKillProof(
     ),
     ...profileValidation.issues,
     ...actionLegalityProof.issues,
+    ...actionLegalityProof.scoreExclusions,
     ...normalAttackInputProof.issues,
   ];
   if (

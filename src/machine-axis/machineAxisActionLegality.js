@@ -1,7 +1,7 @@
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../domain/verifiedNormalAttackInputAuthority';
 
-export const MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION = 1;
+export const MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION = 2;
 export const MACHINE_AXIS_ACTION_LEGALITY_CONTRACT =
   'AzPrMachineAxisActionLegalityProof';
 
@@ -128,18 +128,24 @@ export function createMachineAxisActionLegalityProof(
     );
   }
   issues.sort(compareLegalityIssues);
+  const scoreExclusions = collectScoreExclusions(run);
 
   const rejectionCodes = uniqueSorted(issues.map(issue => issue.code));
+  const scoreExclusionCodes = uniqueSorted(
+    scoreExclusions.map(issue => issue.code)
+  );
   const categories = uniqueSorted(issues.map(issue => issue.category));
   const value = {
     schemaVersion: MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_ACTION_LEGALITY_CONTRACT,
     status:
       issues.length === 0
-        ? 'axis-action-legality-passed'
+        ? scoreExclusions.length === 0
+          ? 'axis-action-legality-passed'
+          : 'axis-action-legality-passed-score-ineligible'
         : 'axis-action-legality-rejected',
     passed: issues.length === 0,
-    finalScoreEligible: issues.length === 0,
+    finalScoreEligible: issues.length === 0 && scoreExclusions.length === 0,
     objectiveId,
     normalAttackInputAuthority:
       getVerifiedNormalAttackInputAuthorityDescriptor(),
@@ -166,6 +172,14 @@ export function createMachineAxisActionLegalityProof(
       ])
     ),
     issues,
+    scoreExclusionCodes,
+    scoreExclusionCounts: Object.fromEntries(
+      scoreExclusionCodes.map(code => [
+        code,
+        scoreExclusions.filter(issue => issue.code === code).length,
+      ])
+    ),
+    scoreExclusions,
     minimalCounterexamples: issues.slice(0, 8).map(projectCounterexample),
     hashBindings: {
       input: run?.hashes?.input ?? null,
@@ -178,6 +192,49 @@ export function createMachineAxisActionLegalityProof(
     ...value,
     proofHash: hashCanonicalValue(value),
   });
+}
+
+function collectScoreExclusions(run) {
+  const exclusions = [];
+  const seen = new Set();
+  const add = exclusion => {
+    const identity = createLegalityIssueIdentity(exclusion);
+    if (seen.has(identity)) return;
+    seen.add(identity);
+    exclusions.push(
+      legalityIssue({
+        category: classifyLegalityIssue(exclusion),
+        status: 'score-ineligible',
+        ...exclusion,
+      })
+    );
+  };
+  for (const [index, warning] of (run?.validation?.warnings ?? []).entries()) {
+    if (warning?.code !== 'machine-axis-variant-resolution-open') continue;
+    add({
+      code: warning.code,
+      path: warning.path ?? `validation.warnings.${index}`,
+      message:
+        warning.message ??
+        `Action ${warning.actionId ?? '?'} has unresolved variant mechanics`,
+      actionId: warning.actionId ?? null,
+      reason: warning.reason ?? warning.variantResolutionStatus ?? null,
+      evidenceStatus: warning.variantResolutionStatus ?? null,
+    });
+  }
+  for (const [index, event] of (run?.trace?.events ?? []).entries()) {
+    if (event?.type !== 'DAMAGE_SKIPPED') continue;
+    add({
+      code: 'machine-axis-damage-skipped',
+      path: `trace.events.${index}`,
+      message: `Action ${event.actionId ?? '?'} has incomplete combat mechanics and cannot be scored`,
+      actionId: event.actionId ?? null,
+      reason: event.payload?.reason ?? 'verified-action-mechanics-unresolved',
+      reasons: event.payload?.reasons ?? [],
+      timeMs: event.timeMs ?? null,
+    });
+  }
+  return exclusions.sort(compareLegalityIssues);
 }
 
 export function isMachineAxisActionLegalityIssue(issue) {

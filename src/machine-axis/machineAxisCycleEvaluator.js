@@ -851,10 +851,20 @@ function evaluateCycleSample({
     firstPrepared.run,
     { objectiveId: objectiveContract?.objectiveId ?? null }
   );
-  if (firstActionLegality.passed !== true) {
-    return rejectedSample(seed, firstActionLegality.issues, {
-      actionLegalityProof: firstActionLegality,
-    });
+  if (
+    firstActionLegality.passed !== true ||
+    firstActionLegality.finalScoreEligible !== true
+  ) {
+    return rejectedSample(
+      seed,
+      [
+        ...(firstActionLegality.issues ?? []),
+        ...(firstActionLegality.scoreExclusions ?? []),
+      ],
+      {
+        actionLegalityProof: firstActionLegality,
+      }
+    );
   }
   const normalAttackBoundaryClosure = compareCycleBoundaryStates(
     {
@@ -974,14 +984,24 @@ function evaluateCycleSample({
     replayPrepared.run,
     { objectiveId: objectiveContract?.objectiveId ?? null }
   );
-  if (replayActionLegality.passed !== true) {
-    return rejectedSample(seed, replayActionLegality.issues, {
-      actionLegalityProof: {
-        passed: false,
-        firstCycle: firstActionLegality,
-        replay: replayActionLegality,
-      },
-    });
+  if (
+    replayActionLegality.passed !== true ||
+    replayActionLegality.finalScoreEligible !== true
+  ) {
+    return rejectedSample(
+      seed,
+      [
+        ...(replayActionLegality.issues ?? []),
+        ...(replayActionLegality.scoreExclusions ?? []),
+      ],
+      {
+        actionLegalityProof: {
+          passed: false,
+          firstCycle: firstActionLegality,
+          replay: replayActionLegality,
+        },
+      }
+    );
   }
 
   const replayRun = attachActionResolutions(

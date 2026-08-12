@@ -1830,7 +1830,21 @@ export function createVerifiedActionVariantRuntime({
       })
     );
     if (!resolution.ready || !Number.isInteger(executionControlSkillId)) {
-      lastResolvedActionByActorId.delete(action.actorId);
+      const structuralContext = createStructuralAuthorityOnlyActionContext({
+        action: runtimeAction,
+        mapping,
+        chain: attackChainSelection.chain,
+        selection: attackChainSelection,
+        resolution,
+        executionControlSkillId,
+        selectedSubSkillIndex,
+      });
+      if (structuralContext) {
+        lastResolvedActionByActorId.set(action.actorId, structuralContext);
+        resolvedActionContextById.set(String(action.id), structuralContext);
+      } else {
+        lastResolvedActionByActorId.delete(action.actorId);
+      }
       continue;
     }
     if (!actorState) {
@@ -2162,6 +2176,44 @@ function createResolvedActionContext({
     attackChainSequenceIndex:
       selection.sequenceIndex ?? action.attackSequenceIndex ?? null,
     ready: true,
+    mechanicsReady: true,
+    contextReady: true,
+  };
+}
+
+function createStructuralAuthorityOnlyActionContext({
+  action,
+  mapping,
+  chain,
+  selection,
+  resolution,
+  executionControlSkillId,
+  selectedSubSkillIndex,
+}) {
+  if (
+    mapping?.actionKind !== 'normal-attack' ||
+    selection?.status !== 'selected' ||
+    selection?.authorityMatch?.accepted !== true ||
+    !selection.segment?.sourceIdentity ||
+    !(Number(selection.segment.durationFrames) > 0) ||
+    !Number.isInteger(Number(executionControlSkillId)) ||
+    !Number.isInteger(Number(selectedSubSkillIndex))
+  ) {
+    return null;
+  }
+  return {
+    ...createResolvedActionContext({
+      action,
+      mapping,
+      chain,
+      selection,
+      resolution,
+      executionControlSkillId,
+      selectedSubSkillIndex,
+    }),
+    mechanicsReady: false,
+    contextReady: false,
+    structuralAuthorityOnly: true,
   };
 }
 
@@ -2473,6 +2525,7 @@ function materializeAuthorityAttackInputSelection({
     controlSkillId: expected.controlSkillId,
     subSkillIndex: expected.subSkillIndex,
     sequenceIndex: chain ? null : expected.sequenceIndex,
+    allowSubSkillProjection: Boolean(chain),
   });
   if (!sourceSegment || (chain && !segment)) return null;
   const projectedSegment = chain
@@ -2517,12 +2570,14 @@ function materializeExistingAttackInputSelection({
   const requestedSubSkillIndex =
     segment?.subSkillIndex ??
     action.attackInput?.subSkillIndex ??
-    action.attackInput?.selectedSubSkillIndex;
+    action.attackInput?.selectedSubSkillIndex ??
+    action.controlSubSkillIndex;
   const sourceSegment = findAttackInputSourceSegment({
     mapping,
     controlSkillId: requestedControlSkillId,
     subSkillIndex: requestedSubSkillIndex,
     sequenceIndex: chain ? null : sequenceIndex,
+    allowSubSkillProjection: Boolean(chain),
   });
   if (!sourceSegment || (chain && !segment)) return null;
   const projectedSegment = chain
@@ -2550,19 +2605,33 @@ function materializeExistingAttackInputSelection({
 function findAttackInputSourceSegment({
   mapping,
   controlSkillId,
+  subSkillIndex,
   sequenceIndex,
+  allowSubSkillProjection = false,
 }) {
-  return (
-    mapping.attackInputSourceSegments ??
-    mapping.attackInputSegments ??
-    []
-  ).find(
-    candidate =>
-      Number(candidate.controlSkillId) === Number(controlSkillId) &&
-      (sequenceIndex == null ||
-        candidate.sequenceIndex == null ||
-        Number(candidate.sequenceIndex) === Number(sequenceIndex))
-  );
+  const candidatePools = allowSubSkillProjection
+    ? [
+        mapping.attackInputSourceSegments ?? [],
+        mapping.attackInputSegments ?? [],
+      ]
+    : [
+        mapping.attackInputSegments ?? [],
+        mapping.attackInputSourceSegments ?? [],
+      ];
+  for (const candidates of candidatePools) {
+    const matches = candidates.filter(
+      candidate =>
+        Number(candidate.controlSkillId) === Number(controlSkillId) &&
+        (allowSubSkillProjection ||
+          Number(candidate.subSkillIndex ?? candidate.selectedSubSkillIndex) ===
+            Number(subSkillIndex)) &&
+        (sequenceIndex == null ||
+          candidate.sequenceIndex == null ||
+          Number(candidate.sequenceIndex) === Number(sequenceIndex))
+    );
+    if (matches.length > 0) return matches.length === 1 ? matches[0] : null;
+  }
+  return null;
 }
 
 function createMaterializedAttackInputSelection({
@@ -2817,14 +2886,17 @@ function applyAttackInputChainTimingResolution({
   segment,
   attackInputSegment,
 }) {
-  if (!resolution?.actionBinding || !chain || !segment) return resolution;
+  if (!resolution?.actionBinding || !segment) return resolution;
   const durationFrames = Number(segment.durationFrames);
   if (!(durationFrames > 0)) return resolution;
   const frameRate = Number(resolution.controlBinding?.frameRate) || FRAME_RATE;
+  const timingSourceKind = chain
+    ? 'verified-attack-input-chain'
+    : 'verified-normal-attack-structural-segment';
   const occupancy = {
     ...(resolution.actionBinding.actionTiming?.occupancy ?? {}),
     status: 'applied',
-    sourceKind: 'verified-attack-input-chain',
+    sourceKind: timingSourceKind,
     durationFrames,
     startFrame: 0,
     endFrame: durationFrames,
@@ -2842,7 +2914,7 @@ function applyAttackInputChainTimingResolution({
             durationFrames,
             effectiveDurationFrames: durationFrames,
             durationStatus: 'applied',
-            durationBasis: 'verified-attack-input-chain',
+            durationBasis: timingSourceKind,
             durationSourceIdentity: segment.sourceIdentity,
           }
         : resolution.actionBinding.attackInputSegment,
@@ -2858,7 +2930,7 @@ function applyAttackInputChainTimingResolution({
       actualDurationFrames: durationFrames,
       actualDurationMs: framesToMs(durationFrames, frameRate),
       timingStatus: 'applied',
-      attackInputChainIdentity: chain.chainIdentity,
+      attackInputChainIdentity: chain?.chainIdentity ?? null,
     },
   };
 }
@@ -2871,7 +2943,7 @@ function resolveContextVariantSelection({
   timeMs,
   inputCommand = null,
 }) {
-  if (!previous?.ready) {
+  if (!previous?.ready || previous.contextReady === false) {
     return { status: 'none', binding: null, previous: null };
   }
   const sourceCandidates = (contextBindings ?? []).filter(binding => {

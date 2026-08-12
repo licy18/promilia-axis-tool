@@ -307,6 +307,38 @@ export function resolveVerifiedCombatActionMechanics(
     const partialControlBinding = controlBindingBySkillId.get(
       actionBinding?.controlSkillId
     );
+    const verifiedEmptyNormalAttack =
+      createVerifiedEmptyNormalAttackMechanicsProof({
+        actionMapping,
+        actionBinding,
+        controlBinding: partialControlBinding,
+        appliedRuntimeEffectBindings,
+        hasAppliedSpecialResourceOperation,
+      });
+    if (verifiedEmptyNormalAttack) {
+      return {
+        schemaVersion: 1,
+        sourceKind: 'azpr-verified-combat-action-mechanics-resolution',
+        status: 'verified-combat-action-mechanics-verified-empty-timing-only',
+        packageId: installedPackage.packageId,
+        packageHash: installedPackage.packageHash,
+        owner,
+        characterCombatProfile,
+        actionBinding,
+        controlBinding: partialControlBinding,
+        hits: [],
+        effects: resolveSelectedEffects(actionBinding, partialControlBinding),
+        semanticEffects: resolveSelectedSemanticEffects(actionBinding),
+        runtimeEffectBindingIdentities: appliedRuntimeEffectBindings.map(
+          binding => binding.bindingIdentity
+        ),
+        reasons: actionBinding.reasons,
+        mechanicsSurface: verifiedEmptyNormalAttack,
+        complete: true,
+        ready: true,
+        applied: true,
+      };
+    }
     if (
       actionBinding?.selectedSubSkillIndex != null &&
       (Number(partialControlBinding?.logic?.spCost) > 0 ||
@@ -460,7 +492,83 @@ export function resolveVerifiedCombatActionMechanics(
   };
 }
 
-function resolveHitActivatedHits({ scenarioEligibleHits, directlyEnabledHits }) {
+function createVerifiedEmptyNormalAttackMechanicsProof({
+  actionMapping,
+  actionBinding,
+  controlBinding,
+  appliedRuntimeEffectBindings,
+  hasAppliedSpecialResourceOperation,
+}) {
+  const selectedSubSkillIndex = Number(actionBinding?.selectedSubSkillIndex);
+  const selectedControlHits = (controlBinding?.hits ?? []).filter(
+    hit => Number(hit.mapIndex) === selectedSubSkillIndex
+  );
+  const selectedControlEffects = (controlBinding?.effects ?? []).filter(
+    effect => Number(effect.mapIndex) === selectedSubSkillIndex
+  );
+  const selectedControlVariants = (controlBinding?.variants ?? []).filter(
+    variant => Number(variant.subSkillIndex) === selectedSubSkillIndex
+  );
+  const selectedControlVariant = selectedControlVariants[0] ?? null;
+  if (
+    actionMapping?.actionKind !== 'normal-attack' ||
+    actionBinding?.durationStatus !== 'applied' ||
+    !(Number(actionBinding?.durationFrames) > 0) ||
+    !actionBinding?.sourceIdentity ||
+    !Number.isInteger(selectedSubSkillIndex) ||
+    actionBinding?.reasons?.length !== 1 ||
+    actionBinding.reasons[0] !==
+      'selected-control-variant-has-no-three-value-elements' ||
+    (actionBinding.selectedHitIdentities ?? []).length !== 0 ||
+    (actionBinding.selectedEffectIdentities ?? []).length !== 0 ||
+    resolveSelectedSemanticEffects(actionBinding).length !== 0 ||
+    selectedControlHits.length !== 0 ||
+    selectedControlEffects.length !== 0 ||
+    (controlBinding?.effectGraph ?? []).length !== 0 ||
+    selectedControlVariants.length !== 1 ||
+    !selectedControlVariant?.sourceIdentity ||
+    [
+      'directElementReferenceCount',
+      'bulletElementReferenceCount',
+      'elementCount',
+      'runnableElementCount',
+      'effectNodeCount',
+      'runnableEffectCount',
+    ].some(key => Number(selectedControlVariant[key]) !== 0) ||
+    (appliedRuntimeEffectBindings ?? []).length !== 0 ||
+    hasAppliedSpecialResourceOperation ||
+    Number(controlBinding?.logic?.spCost) !== 0 ||
+    !controlBinding?.logic?.sourceIdentity ||
+    controlBinding?.logic?.status !== 'verified-skill-logic-ready' ||
+    controlBinding?.logic?.applied !== true
+  ) {
+    return null;
+  }
+  return {
+    kind: 'verified-empty-normal-attack-timing',
+    status: 'verified-empty-combat-surface',
+    selectedSubSkillIndex,
+    durationFrames: Number(actionBinding.durationFrames),
+    hitCount: 0,
+    effectCount: 0,
+    runtimeEffectCount: 0,
+    specialResourceOperationCount: 0,
+    spCost: 0,
+    sourceIdentity: [
+      actionBinding.sourceIdentity,
+      selectedControlVariant.sourceIdentity,
+      controlBinding.logic.sourceIdentity,
+    ]
+      .filter(Boolean)
+      .join('|'),
+    reason: actionBinding.reasons[0],
+  };
+}
+
+function resolveHitActivatedHits({
+  scenarioEligibleHits,
+  directlyEnabledHits,
+}) {
   let activeHits = [...directlyEnabledHits];
   let evaluations = [];
   for (let pass = 0; pass <= scenarioEligibleHits.length; pass += 1) {

@@ -29,6 +29,9 @@ const RUBY_ID = 103002;
 const JADE_ID = 101010;
 const CHARGED_INPUT_OWNER_ID = 107003;
 const MELANIA_ID = 112001;
+const SIFLIYA_ID = 107001;
+const MISA_ID = 107002;
+const MOYIN_ID = 109001;
 const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
@@ -55,6 +58,15 @@ const MELANIA_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
 );
 const MELANIA_A1 = MELANIA_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 1
+);
+
+const normalMappingByOwnerId = new Map(
+  mechanicsPackage.actionMappings
+    .filter(
+      mapping =>
+        mapping.ownerKind === 'actor' && mapping.actionKind === 'normal-attack'
+    )
+    .map(mapping => [Number(mapping.ownerId), mapping])
 );
 
 beforeEach(() => {
@@ -851,6 +863,264 @@ describe('verified action variant and special resource runtime', () => {
       status: 'verified-action-variant-selection-ready',
     });
   });
+
+  it('materializes Misa A1 through A4 from the uniquely linked mapping prefix', () => {
+    const actions = createRuntimeContextNormalAttackChain({
+      ownerId: MISA_ID,
+      segmentCount: 4,
+    });
+    const runtime = runVariantRuntime({
+      actors: [actions[0].actor],
+      actions,
+      durationMs: frameTime(1000),
+    });
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(
+      actions.map(action => runtime.selectionByActionId.get(action.id))
+    ).toEqual(
+      [10700201, 10700202, 10700203, 10700204].map(
+        (executionControlSkillId, index) =>
+          expect.objectContaining({
+            attackInputChainIdentity: null,
+            attackChainSequenceIndex: index + 1,
+            executionControlSkillId,
+            selectedSubSkillIndex: 0,
+            status:
+              index < 2
+                ? 'unresolved-action-variant-selection'
+                : 'verified-action-variant-selection-ready',
+          })
+      )
+    );
+    expect(runtime.actionResolutionById.get(actions[0].id)).toMatchObject({
+      ready: false,
+      status: 'verified-action-binding-unresolved',
+      hits: [],
+      reasons: expect.arrayContaining([
+        'projectile-impact-frame-runtime-dependent',
+      ]),
+    });
+    expect(runtime.actionResolutionById.get(actions[1].id)).toMatchObject({
+      ready: false,
+      status: 'verified-action-binding-unresolved',
+      hits: [],
+    });
+    expect(
+      runtime.resourceEvents.some(event =>
+        [actions[0].id, actions[1].id].includes(event.actionId)
+      )
+    ).toBe(false);
+    expect(
+      runtime.effectCommands.some(command =>
+        [actions[0].id, actions[1].id].includes(
+          command.actionId ?? command.sourceActionId
+        )
+      )
+    ).toBe(false);
+  });
+
+  it('does not let a structural-only Misa carrier open a special context edge', () => {
+    const fixture = structuredClone(mechanicsPackage);
+    const forgedContext = fixture.actionVariantGraph.contextEdges.find(
+      edge => edge.inputCommand === 'charged-attack' && edge.applied === true
+    );
+    forgedContext.ownerId = MISA_ID;
+    forgedContext.sourceControlSkillId = 10700201;
+    forgedContext.sourceSubSkillIndex = 0;
+    forgedContext.targetControlSkillId = 10700210;
+    forgedContext.executionControlSkillId = 10700210;
+    forgedContext.targetSubSkillIndex = 0;
+    forgedContext.inputWindow = {
+      ...forgedContext.inputWindow,
+      startFrame: 0,
+      endFrame: 100,
+    };
+    installVerifiedCombatMechanicsPackage(fixture);
+    const carrier = createRuntimeContextNormalAttackAction({
+      ownerId: MISA_ID,
+      id: 'misa-structural-carrier',
+      startFrame: 0,
+      groupId: 'misa-structural-carrier-chain',
+    });
+    const charged = createActorAction({
+      id: 'misa-charged-after-structural-carrier',
+      characterId: MISA_ID,
+      skillId: 10700201,
+      actionKind: 'charged-attack',
+      actionVariantIndex: 1,
+      startMs: frameTime(10),
+      contextActionId: carrier.id,
+    });
+    const runtime = runVariantRuntime({
+      actors: [carrier.actor],
+      actions: [carrier, charged],
+      durationMs: frameTime(500),
+    });
+
+    expect(runtime.actionResolutionById.get(carrier.id)).toMatchObject({
+      ready: false,
+    });
+    expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
+      executionControlSkillId: 10700210,
+      edgeIdentity: null,
+      contextActionId: null,
+    });
+  });
+
+  it('keeps Sifliya A1-to-A2 right-open and does not infer the unsourced A3 edge', () => {
+    const mapping = normalMappingByOwnerId.get(SIFLIYA_ID);
+    const opener = createRuntimeContextNormalAttackAction({
+      ownerId: SIFLIYA_ID,
+      id: 'sifliya-authority-a1',
+      startFrame: 0,
+      groupId: 'sifliya-authority-chain',
+    });
+    const runAt = frame => {
+      const successor = createRuntimeContextNormalAttackAction({
+        ownerId: SIFLIYA_ID,
+        id: `sifliya-authority-next-${frame}`,
+        startFrame: frame,
+        groupId: 'sifliya-authority-chain',
+      });
+      return {
+        successor,
+        runtime: runVariantRuntime({
+          actors: [opener.actor],
+          actions: [opener, successor],
+          durationMs: frameTime(400),
+        }),
+      };
+    };
+
+    for (const frame of [20, 71]) {
+      const { runtime, successor } = runAt(frame);
+      expect(runtime.selectionByActionId.get(successor.id)).toMatchObject({
+        attackInputChainIdentity: 'sifliya-normal-three-inputs',
+        attackChainSequenceIndex: 2,
+        executionControlSkillId: 10700102,
+        selectedSubSkillIndex: 4,
+        status: 'verified-action-variant-selection-ready',
+      });
+    }
+    for (const [frame, reason] of [
+      [19, 'normal-attack-successor-window-not-open'],
+      [72, 'normal-attack-recovery-not-complete'],
+    ]) {
+      const { runtime, successor } = runAt(frame);
+      expect(runtime.selectionByActionId.get(successor.id)).toMatchObject({
+        status: 'verified-normal-attack-input-phase-conflict',
+      });
+      expect(runtime.executionBlocks).toContainEqual(
+        expect.objectContaining({
+          actionId: successor.id,
+          reasons: [reason],
+        })
+      );
+    }
+    expect(mapping.attackInputSegments[1].linkWindow).toBeNull();
+  });
+
+  it('keeps Moyin A5 executable only after the complete verified mapping chain', () => {
+    const actions = createRuntimeContextNormalAttackChain({
+      ownerId: MOYIN_ID,
+      segmentCount: 5,
+    });
+    const runtime = runVariantRuntime({
+      actors: [actions[0].actor],
+      actions,
+      durationMs: frameTime(1500),
+    });
+    const a5 = actions[4];
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(runtime.selectionByActionId.get(a5.id)).toMatchObject({
+      attackInputChainIdentity: null,
+      attackChainSequenceIndex: 5,
+      executionControlSkillId: 10900105,
+      selectedSubSkillIndex: 0,
+      actualDurationFrames: 78,
+      status: 'verified-action-variant-selection-ready',
+    });
+    expect(runtime.actionResolutionById.get(a5.id)).toMatchObject({
+      ready: true,
+      actionBinding: {
+        attackInputSegment: expect.objectContaining({
+          controlSkillId: 10900105,
+          sequenceIndex: 5,
+        }),
+      },
+    });
+  });
+
+  it('retains mapping-only Melania A4 as the source of the verified heavy-3 context', () => {
+    const attacks = createRuntimeContextNormalAttackChain({
+      ownerId: MELANIA_ID,
+      segmentCount: 4,
+    });
+    const a4 = attacks[3];
+    const charged = createActorAction({
+      id: 'melania-heavy-3-after-a4',
+      characterId: MELANIA_ID,
+      skillId: 11200101,
+      actionKind: 'charged-attack',
+      actionVariantIndex: 1,
+      startMs: a4.startMs + frameTime(36),
+      contextActionId: a4.id,
+      variantInputSelection: {
+        mode: 'release',
+        inputFrame: 67,
+      },
+    });
+    const runtime = runVariantRuntime({
+      actors: [a4.actor],
+      actions: [...attacks, charged],
+      durationMs: frameTime(1500),
+    });
+
+    expect(runtime.selectionByActionId.get(a4.id)).toMatchObject({
+      executionControlSkillId: 11200104,
+      status: 'verified-action-variant-selection-ready',
+    });
+    expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
+      executionControlSkillId: 11200141,
+      selectedSubSkillIndex: 3,
+      sourceKind: 'verified-charging-release-window',
+      chargingRelease: {
+        bindingIdentity: 'gisele-heavy3-charge-release-sub3',
+      },
+      status: 'verified-action-variant-selection-ready',
+    });
+  });
+
+  it.each([199001, 199002])(
+    'uses the chain segment control for STARBORN %s A1 before admitting A2',
+    ownerId => {
+      const actions = createRuntimeContextNormalAttackChain({
+        ownerId,
+        segmentCount: 2,
+      });
+      const runtime = runVariantRuntime({
+        actors: [actions[0].actor],
+        actions,
+        durationMs: frameTime(500),
+      });
+
+      expect(runtime.executionBlocks).toEqual([]);
+      expect(runtime.selectionByActionId.get(actions[0].id)).toMatchObject({
+        publicControlSkillId: ownerId * 100 + 1,
+        executionControlSkillId: ownerId * 100 + 1,
+        selectedSubSkillIndex: 0,
+        status: 'verified-action-variant-selection-ready',
+      });
+      expect(runtime.selectionByActionId.get(actions[1].id)).toMatchObject({
+        attackChainSequenceIndex: 2,
+        executionControlSkillId: ownerId * 100 + 2,
+        selectedSubSkillIndex: 0,
+        status: 'verified-action-variant-selection-ready',
+      });
+    }
+  );
 
   it('blocks an explicit fresh 112001 A1 in the sourced A2 window even when its group changes', () => {
     const first = createActorAction({
@@ -2730,6 +3000,7 @@ function createActorAction({
   attackInputIntent = null,
   variantInputSelection = null,
   contextActionId = null,
+  actionKind = null,
 }) {
   const actor = {
     id: `actor-${characterId}`,
@@ -2743,6 +3014,7 @@ function createActorAction({
     actorId: actor.id,
     actor,
     skillId,
+    ...(actionKind ? { actionKind } : {}),
     level,
     actionVariantIndex,
     startMs,
@@ -2759,6 +3031,57 @@ function createActorAction({
         }
       : {}),
   };
+}
+
+function createRuntimeContextNormalAttackChain({ ownerId, segmentCount }) {
+  const mapping = normalMappingByOwnerId.get(Number(ownerId));
+  const actions = [];
+  let startFrame = 0;
+  for (
+    let sequenceIndex = 1;
+    sequenceIndex <= segmentCount;
+    sequenceIndex += 1
+  ) {
+    actions.push(
+      createRuntimeContextNormalAttackAction({
+        ownerId,
+        id: `authority-${ownerId}-a${sequenceIndex}`,
+        startFrame,
+        groupId: `authority-${ownerId}-chain`,
+      })
+    );
+    const segment = mapping.attackInputSegments.find(
+      candidate => Number(candidate.sequenceIndex) === sequenceIndex
+    );
+    if (sequenceIndex < segmentCount) {
+      startFrame += Number(segment.linkWindow.startFrame);
+    }
+  }
+  return actions;
+}
+
+function createRuntimeContextNormalAttackAction({
+  ownerId,
+  id,
+  startFrame,
+  groupId,
+}) {
+  const mapping = normalMappingByOwnerId.get(Number(ownerId));
+  const opener = mapping.attackInputSegments.find(
+    segment => Number(segment.sequenceIndex) === 1
+  );
+  const action = createActorAction({
+    id,
+    characterId: Number(ownerId),
+    skillId: Number(mapping.sourceSkillId),
+    actionKind: 'normal-attack',
+    startMs: frameTime(startFrame),
+    attackInput: opener,
+    attackSequenceIndex: 1,
+    attackInputIntent: createPublicNormalAttackIntent(mapping.sourceSkillId),
+  });
+  action.attackGroupId = groupId;
+  return action;
 }
 
 function readResourceGainAtFrame(runtime, actionId, frame) {

@@ -31,6 +31,7 @@ describe('Machine Axis action legality proof', () => {
       { objectiveId: 'cycle-dps-no-toughness' }
     );
     expect(proof).toMatchObject({
+      schemaVersion: 2,
       passed: true,
       finalScoreEligible: true,
       rejectionCodes: [],
@@ -72,6 +73,61 @@ describe('Machine Axis action legality proof', () => {
       rejectionCounts: {
         'attack-input-chain-incomplete': 1,
         'attack-input-link-timing-unresolved': 1,
+      },
+    });
+  });
+
+  it('keeps a structurally runnable carrier visible but excludes unresolved combat mechanics from scoring', () => {
+    const run = createRun([
+      {
+        actionId: 'misa-a1-carrier',
+        status: 'scheduled',
+        execute: true,
+        violationCodes: [],
+        unresolvedCodes: [],
+      },
+    ]);
+    run.trace.events = [
+      {
+        type: 'DAMAGE_SKIPPED',
+        actionId: 'misa-a1-carrier',
+        timeMs: 0,
+        payload: {
+          reason: 'verified-action-binding-unresolved',
+          reasons: ['projectile-impact-frame-runtime-dependent'],
+        },
+      },
+    ];
+    run.validation = {
+      issues: [],
+      warnings: [
+        {
+          code: 'machine-axis-variant-resolution-open',
+          severity: 'warning',
+          actionId: 'misa-a1-carrier',
+          path: 'actions.0.intent.semanticVariant',
+          variantResolutionStatus: 'unresolved-action-variant-selection',
+          reason: 'unresolved-action-variant-selection',
+        },
+      ],
+    };
+
+    expect(
+      createMachineAxisActionLegalityProof(run, {
+        objectiveId: 'cycle-dps-no-toughness',
+      })
+    ).toMatchObject({
+      status: 'axis-action-legality-passed-score-ineligible',
+      passed: true,
+      finalScoreEligible: false,
+      rejectionCodes: [],
+      scoreExclusionCodes: [
+        'machine-axis-damage-skipped',
+        'machine-axis-variant-resolution-open',
+      ],
+      scoreExclusionCounts: {
+        'machine-axis-damage-skipped': 1,
+        'machine-axis-variant-resolution-open': 1,
       },
     });
   });

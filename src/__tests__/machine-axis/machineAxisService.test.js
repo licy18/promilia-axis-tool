@@ -9,6 +9,7 @@ import {
   createMachineAxisService,
   MachineAxisValidationError,
 } from '../../machine-axis/machineAxisService';
+import { createMachineAxisObjectiveContract } from '../../machine-axis/machineAxisObjectiveContract';
 import { createSearchStateSnapshot } from '../../machine-axis/machineAxisSearchState';
 
 const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
@@ -126,6 +127,51 @@ function createMoyinContinuationAxis(actions) {
   axis.scenario.team[0] = {
     ...axis.scenario.team[0],
     characterId: 112001,
+    loadout: {},
+  };
+  return axis;
+}
+
+function createOwnerNormalAttackAxis(ownerId, segmentCount) {
+  const mapping = mechanicsPackage.actionMappings.find(
+    candidate =>
+      Number(candidate.ownerId) === Number(ownerId) &&
+      candidate.actionKind === 'normal-attack'
+  );
+  const actions = [];
+  let frame = 0;
+  for (
+    let sequenceIndex = 1;
+    sequenceIndex <= segmentCount;
+    sequenceIndex += 1
+  ) {
+    const previous = actions.at(-1);
+    actions.push({
+      id: `owner-${ownerId}-a${sequenceIndex}`,
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: Number(mapping.sourceSkillId),
+        actionKind: 'normal-attack',
+        attackInput: {
+          sequenceIndex,
+          groupId: `owner-${ownerId}-chain`,
+          ...(previous ? { contextActionId: previous.id } : {}),
+        },
+      },
+      schedule: { mode: 'absolute', frame },
+    });
+    const segment = mapping.attackInputSegments.find(
+      candidate => Number(candidate.sequenceIndex) === sequenceIndex
+    );
+    if (sequenceIndex < segmentCount) {
+      frame += Number(segment.linkWindow.startFrame);
+    }
+  }
+  const axis = createAxis({ actions });
+  axis.scenario.team[0] = {
+    ...axis.scenario.team[0],
+    characterId: Number(ownerId),
     loadout: {},
   };
   return axis;
@@ -316,6 +362,187 @@ describe('Machine Axis service', () => {
       passed: true,
       finalScoreEligible: true,
     });
+  }, 30_000);
+
+  it.each([
+    [109001, 5, 10900105],
+    [199001, 2, 19900102],
+    [199002, 2, 19900202],
+  ])(
+    'keeps owner %s structural normal inputs executable across %s segments',
+    (ownerId, segmentCount, finalControlSkillId) => {
+      const prepared = createMachineAxisService().prepareValidated(
+        createOwnerNormalAttackAxis(ownerId, segmentCount)
+      );
+
+      expect(prepared.valid, JSON.stringify(prepared.issues)).toBe(true);
+      expect(prepared.actionLegalityProof).toMatchObject({
+        passed: true,
+        finalScoreEligible: true,
+      });
+      expect(
+        prepared.run.trace.actions.find(
+          action => action.id === `owner-${ownerId}-a${segmentCount}`
+        )
+      ).toMatchObject({ controlSkillId: finalControlSkillId });
+      expect(
+        prepared.compilation.actionResolutions.map(resolution => ({
+          actionId: resolution.actionId,
+          variantResolutionStatus: resolution.variantResolutionStatus,
+        }))
+      ).toEqual(
+        Array.from({ length: segmentCount }, (_, index) => ({
+          actionId: `owner-${ownerId}-a${index + 1}`,
+          variantResolutionStatus: 'verified-action-variant-selection-ready',
+        }))
+      );
+      if (ownerId === 199001 || ownerId === 199002) {
+        expect(
+          prepared.run.trace.events.some(
+            event =>
+              event.type === 'DAMAGE_SKIPPED' &&
+              event.actionId === `owner-${ownerId}-a1`
+          )
+        ).toBe(false);
+      }
+    },
+    30_000
+  );
+
+  it('materializes the verified Misa A1-to-A4 prefix without hiding unresolved projectile setup', () => {
+    const prepared = createMachineAxisService().prepareValidated(
+      createOwnerNormalAttackAxis(107002, 4)
+    );
+
+    expect(prepared.valid).toBe(true);
+    expect(prepared.actionLegalityProof).toMatchObject({
+      status: 'axis-action-legality-passed-score-ineligible',
+      passed: true,
+      finalScoreEligible: false,
+      scoreExclusionCodes: [
+        'machine-axis-damage-skipped',
+        'machine-axis-variant-resolution-open',
+      ],
+    });
+    expect(
+      prepared.compilation.actionResolutions.map(resolution => ({
+        actionId: resolution.actionId,
+        controlSkillId: resolution.resolvedControlSkillId,
+        variantResolutionStatus: resolution.variantResolutionStatus,
+      }))
+    ).toEqual([
+      {
+        actionId: 'owner-107002-a1',
+        controlSkillId: 10700201,
+        variantResolutionStatus: 'unresolved-action-variant-selection',
+      },
+      {
+        actionId: 'owner-107002-a2',
+        controlSkillId: 10700202,
+        variantResolutionStatus: 'unresolved-action-variant-selection',
+      },
+      {
+        actionId: 'owner-107002-a3',
+        controlSkillId: 10700203,
+        variantResolutionStatus: 'verified-action-variant-selection-ready',
+      },
+      {
+        actionId: 'owner-107002-a4',
+        controlSkillId: 10700204,
+        variantResolutionStatus: 'verified-action-variant-selection-ready',
+      },
+    ]);
+    expect(
+      prepared.issues.filter(issue =>
+        ['owner-107002-a2', 'owner-107002-a3', 'owner-107002-a4'].includes(
+          issue.actionId
+        )
+      )
+    ).not.toContainEqual(
+      expect.objectContaining({
+        reason: 'verified-normal-attack-input-phase-conflict',
+      })
+    );
+    expect(prepared.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: 'owner-107002-a1',
+          code: 'machine-axis-variant-resolution-open',
+          reason: 'unresolved-action-variant-selection',
+        }),
+        expect.objectContaining({
+          actionId: 'owner-107002-a2',
+          code: 'machine-axis-variant-resolution-open',
+          reason: 'unresolved-action-variant-selection',
+        }),
+      ])
+    );
+    expect(
+      prepared.run.trace.events.filter(
+        event =>
+          event.type === 'DAMAGE_SKIPPED' &&
+          ['owner-107002-a1', 'owner-107002-a2'].includes(event.actionId)
+      )
+    ).toEqual([
+      expect.objectContaining({ actionId: 'owner-107002-a1' }),
+      expect.objectContaining({ actionId: 'owner-107002-a2' }),
+    ]);
+    expect(
+      prepared.run.trace.damage.some(event =>
+        ['owner-107002-a1', 'owner-107002-a2'].includes(event.actionId)
+      )
+    ).toBe(false);
+
+    const formalAxis = createOwnerNormalAttackAxis(107002, 4);
+    formalAxis.scenario.objectiveContract = createMachineAxisObjectiveContract(
+      'cycle-dps-no-toughness'
+    );
+    const formalPrepared =
+      createMachineAxisService().prepareValidated(formalAxis);
+    expect(formalPrepared.valid).toBe(false);
+    expect(formalPrepared.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-damage-skipped',
+          actionId: 'owner-107002-a1',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-variant-resolution-open',
+          actionId: 'owner-107002-a1',
+        }),
+      ])
+    );
+  }, 30_000);
+
+  it('rejects a fresh Sifliya A1 at frame 19 with the exact normal-input violation', () => {
+    const axis = createOwnerNormalAttackAxis(107001, 1);
+    axis.actions.push({
+      id: 'owner-107001-fresh-a1-19',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10700101,
+        actionKind: 'normal-attack',
+        attackInput: {
+          sequenceIndex: 1,
+          groupId: 'owner-107001-fresh-chain',
+          contextActionId: 'owner-107001-a1',
+        },
+      },
+      schedule: { mode: 'absolute', frame: 19 },
+    });
+    const prepared = createMachineAxisService().prepareValidated(axis);
+
+    expect(prepared.valid).toBe(false);
+    expect(prepared.issues).toContainEqual(
+      expect.objectContaining({
+        code: 'machine-axis-action-not-executable',
+        actionId: 'owner-107001-fresh-a1-19',
+        reason: 'verified-normal-attack-input-phase-conflict',
+        reasons: ['normal-attack-successor-window-not-open'],
+        violationCodes: ['VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT'],
+      })
+    );
   }, 30_000);
 
   it('gates Miti spawned lightning-orb packets on each landed parent arrow', () => {

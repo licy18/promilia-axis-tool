@@ -353,6 +353,66 @@ describe('Machine Axis fastest-kill proof', () => {
     );
   });
 
+  it('rejects a structurally scheduled DAMAGE_SKIPPED carrier before fastest-kill scoring', () => {
+    const run = createRun(
+      [
+        damagePacket({
+          frame: 30,
+          sequence: 1,
+          damage: 1000,
+          lethal: true,
+          actionId: 'resolved-lethal-after-carrier',
+        }),
+      ],
+      [
+        {
+          type: 'DAMAGE_SKIPPED',
+          actionId: 'misa-a1-carrier',
+          timeMs: 0,
+          payload: {
+            reason: 'verified-action-binding-unresolved',
+            reasons: ['projectile-impact-frame-runtime-dependent'],
+          },
+        },
+      ]
+    );
+    run.trace.executionPlan = {
+      actions: [
+        {
+          actionId: 'misa-a1-carrier',
+          execute: true,
+          status: 'scheduled',
+          violationCodes: [],
+          unresolvedCodes: [],
+        },
+        {
+          actionId: 'resolved-lethal-after-carrier',
+          execute: true,
+          status: 'scheduled',
+          violationCodes: [],
+          unresolvedCodes: [],
+        },
+      ],
+    };
+
+    expect(prove(run)).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      formalScore: null,
+      actionLegalityProof: {
+        passed: true,
+        finalScoreEligible: false,
+        scoreExclusionCodes: ['machine-axis-damage-skipped'],
+      },
+      issues: [
+        expect.objectContaining({
+          code: 'machine-axis-damage-skipped',
+          actionId: 'misa-a1-carrier',
+        }),
+      ],
+    });
+  });
+
   it('rejects repeated A1 inputs before fastest-kill scoring', () => {
     const run = createRun([
       damagePacket({

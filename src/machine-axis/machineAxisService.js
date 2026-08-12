@@ -573,8 +573,12 @@ export function createMachineAxisService({
       ...executionIssues,
       ...contextWindowIssues,
       ...((requiresFormalProof || executionIssues.length > 0) &&
-      actionLegalityProof.passed !== true
+      (actionLegalityProof.passed !== true ||
+        actionLegalityProof.finalScoreEligible !== true)
         ? actionLegalityProof.issues
+        : []),
+      ...(requiresFormalProof && actionLegalityProof.finalScoreEligible !== true
+        ? actionLegalityProof.scoreExclusions
         : []),
     ]);
     const finalClassification = createMachineAxisValidationClassification({

@@ -488,6 +488,67 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
+  it('rejects Misa structural carriers with unresolved projectile impact before cycle scoring', () => {
+    const envelope = createNormalAttackCycleEnvelope();
+    envelope.contract.scenario.team[0] = {
+      ...envelope.contract.scenario.team[0],
+      characterId: 107002,
+      loadout: {},
+    };
+    envelope.contract.actions = [
+      [1, 0],
+      [2, 14],
+      [3, 107],
+      [4, 194],
+    ].map(([sequenceIndex, frame]) => ({
+      id: `misa-a${sequenceIndex}`,
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10700201,
+        actionKind: 'normal-attack',
+        attackInput: {
+          sequenceIndex,
+          groupId: 'misa-verified-prefix',
+          ...(sequenceIndex > 1
+            ? { contextActionId: `misa-a${sequenceIndex - 1}` }
+            : {}),
+        },
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame },
+    }));
+    envelope.loop = { startFrame: 0, endFrame: 600 };
+
+    const report = createMachineAxisService().evaluateCycle(envelope, {
+      allowUnverifiedRuntimeTiming: true,
+    });
+    expect(report).toMatchObject({
+      valid: false,
+      status: 'rejected',
+      actionLegalityProof: {
+        passed: false,
+        finalScoreEligible: false,
+        rejectionCodes: [
+          'machine-axis-damage-skipped',
+          'machine-axis-variant-resolution-open',
+        ],
+      },
+    });
+    expect(report.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'machine-axis-damage-skipped',
+          actionId: 'misa-a1',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-variant-resolution-open',
+          actionId: 'misa-a1',
+        }),
+      ])
+    );
+  });
+
   it('rejects a mapped same-frame joint pair when the product runtime contract is missing', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.dataIdentity.verifiedMechanicsPackageHash =

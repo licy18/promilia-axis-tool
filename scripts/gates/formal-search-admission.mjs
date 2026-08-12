@@ -498,7 +498,11 @@ export function evaluateFormalSearchAdmission(evidence) {
       normalAttackInputAuthority?.schemaVersion === 1 &&
       normalAttackInputAuthority?.contractName ===
         'AzPrVerifiedNormalAttackInputAuthority' &&
-      normalAttackInputAuthority?.policyVersion === 1 &&
+      normalAttackInputAuthority?.policyVersion === 2 &&
+      normalAttackInputAuthority?.structuralFallbackPolicy ===
+        'verified-graph-then-unique-mapping-reachable-prefix' &&
+      normalAttackInputAuthority?.reachablePrefixPolicy ===
+        'unique-a1-exact-control-subskill-contiguous-adjacency' &&
       /^[a-f0-9]{16}$/u.test(normalAttackInputAuthority?.contractHash ?? ''),
     {
       authority: normalAttackInputAuthority ?? null,

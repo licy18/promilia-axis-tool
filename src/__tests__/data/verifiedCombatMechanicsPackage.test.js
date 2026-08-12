@@ -289,10 +289,10 @@ describe('verified combat mechanics package', () => {
     expect(mechanicsPackage.specialResourceCatalog).toMatchObject({
       status: 'verified-special-resource-catalog-ready',
       summary: {
-          profileCount: 3,
-          appliedProfileCount: 3,
-          operationCount: 79,
-          appliedOperationCount: 53,
+        profileCount: 3,
+        appliedProfileCount: 3,
+        operationCount: 79,
+        appliedOperationCount: 53,
         unresolvedOperationCount: 7,
         unresolvedOwnerCount: 1,
       },
@@ -566,8 +566,7 @@ describe('verified combat mechanics package', () => {
     expect(
       actionTimingCoverage.actions.find(
         action =>
-          action.identity ===
-          'actor|112001|11200112|0|11200112|star-skill'
+          action.identity === 'actor|112001|11200112|0|11200112|star-skill'
       )
     ).toMatchObject({
       status: 'applied',
@@ -1753,10 +1752,11 @@ describe('verified combat mechanics package', () => {
         mapping.sourceSkillId === 10800301 &&
         mapping.actionKind === 'charged-attack'
     );
-    const derivedControl = mechanicsPackage.actionVariantGraph.derivedControlContracts.find(
-      contract =>
-        contract.ownerId === 108003 && contract.controlSkillId === 10800310
-    );
+    const derivedControl =
+      mechanicsPackage.actionVariantGraph.derivedControlContracts.find(
+        contract =>
+          contract.ownerId === 108003 && contract.controlSkillId === 10800310
+      );
     const fullCharge = derivedControl.inputSelector.options.find(
       option => option.selectorIdentity === 'miti-charged-full'
     );
@@ -1785,12 +1785,12 @@ describe('verified combat mechanics package', () => {
       );
 
     const baseline = resolveFullCharge({});
-    expect(baseline.hits.filter(hit => hit.elementId === 108003126)).toHaveLength(
-      3
-    );
-    expect(baseline.hits.filter(hit => hit.elementId === 108003129)).toHaveLength(
-      36
-    );
+    expect(
+      baseline.hits.filter(hit => hit.elementId === 108003126)
+    ).toHaveLength(3);
+    expect(
+      baseline.hits.filter(hit => hit.elementId === 108003129)
+    ).toHaveLength(36);
 
     const firstExtraArrow = arrows.find(
       hit =>
@@ -1952,6 +1952,81 @@ describe('verified combat mechanics package', () => {
     });
   });
 
+  it.each([199001, 199002])(
+    'proves STARBORN %s A1 as a complete verified-empty timing surface only when every combat channel is empty',
+    ownerId => {
+      const fixture = structuredClone(mechanicsPackage);
+      installVerifiedCombatMechanicsPackage(fixture);
+      const mapping = fixture.actionMappings.find(
+        candidate =>
+          Number(candidate.ownerId) === ownerId &&
+          candidate.actionKind === 'normal-attack'
+      );
+      const segment = mapping.attackInputSegments.find(
+        candidate => Number(candidate.sequenceIndex) === 1
+      );
+      const action = {
+        id: `starborn-${ownerId}-a1`,
+        type: 'skill',
+        actionKind: 'normal-attack',
+        skillId: mapping.sourceSkillId,
+        attackSequenceIndex: 1,
+        attackInput: segment,
+        actor: { characterId: ownerId },
+      };
+
+      expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+        status: 'verified-combat-action-mechanics-verified-empty-timing-only',
+        ready: true,
+        complete: true,
+        applied: true,
+        hits: [],
+        effects: [],
+        semanticEffects: [],
+        runtimeEffectBindingIdentities: [],
+        mechanicsSurface: {
+          kind: 'verified-empty-normal-attack-timing',
+          status: 'verified-empty-combat-surface',
+          selectedSubSkillIndex: 0,
+          durationFrames: 20,
+          hitCount: 0,
+          effectCount: 0,
+          runtimeEffectCount: 0,
+          specialResourceOperationCount: 0,
+          spCost: 0,
+          reason: 'selected-control-variant-has-no-three-value-elements',
+        },
+      });
+
+      const control = fixture.controlBindings.find(
+        candidate =>
+          Number(candidate.controlSkillId) === Number(segment.controlSkillId)
+      );
+      const selectedVariant = control.variants.find(
+        candidate => Number(candidate.subSkillIndex) === 0
+      );
+      selectedVariant.directElementReferenceCount = 1;
+      expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+        status: 'verified-action-binding-unresolved',
+        ready: false,
+      });
+      selectedVariant.directElementReferenceCount = 0;
+      const sourceIdentity = segment.sourceIdentity;
+      segment.sourceIdentity = null;
+      expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+        status: 'verified-action-binding-unresolved',
+        ready: false,
+      });
+      segment.sourceIdentity = sourceIdentity;
+      control.logic.spCost = 1;
+      expect(resolveVerifiedCombatActionMechanics(action)).toMatchObject({
+        status: 'verified-combat-action-mechanics-resource-only',
+        ready: true,
+        complete: false,
+      });
+    }
+  );
+
   it('validates switch-trigger summaries from their all-applied profiles', () => {
     const upgraded = structuredClone(mechanicsPackage);
     const profiles = upgraded.switchTriggerCatalog.profiles;
@@ -2106,7 +2181,9 @@ describe('verified combat mechanics package', () => {
     const semanticTamper = cloneWithIndependentActionVariantGraph(contracted);
     semanticTamper.actionVariantGraph.headlessAssumptionContracts[0].assumptions[0].selectedSemantics.precedence =
       'old-tier';
-    expect(validateVerifiedCombatMechanicsPackage(semanticTamper)).toMatchObject({
+    expect(
+      validateVerifiedCombatMechanicsPackage(semanticTamper)
+    ).toMatchObject({
       valid: false,
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
@@ -2117,7 +2194,9 @@ describe('verified combat mechanics package', () => {
       1,
       1
     );
-    expect(validateVerifiedCombatMechanicsPackage(deletedAssumption)).toMatchObject({
+    expect(
+      validateVerifiedCombatMechanicsPackage(deletedAssumption)
+    ).toMatchObject({
       valid: false,
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
     });
@@ -2165,8 +2244,7 @@ describe('verified combat mechanics package', () => {
     });
 
     const parityClaim = cloneWithIndependentActionVariantGraph(contracted);
-    parityClaim.actionVariantGraph.headlessAssumptionContracts[0].clientParityReady =
-      true;
+    parityClaim.actionVariantGraph.headlessAssumptionContracts[0].clientParityReady = true;
     expect(validateVerifiedCombatMechanicsPackage(parityClaim)).toMatchObject({
       valid: false,
       issues: expect.arrayContaining(['headless-assumption-contract-invalid']),
