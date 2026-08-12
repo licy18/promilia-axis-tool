@@ -123,24 +123,28 @@
     "cases": [
       {
         "actionId": "window-outside-before",
-        "expectedOffset": 31,
+        "sourceActionId": "window-before-source",
+        "expectedOffset": -300,
         "expectedControlSkillId": 19900110,
         "expectedSubSkillIndex": 0
       },
       {
         "actionId": "window-inside-start",
+        "sourceActionId": "window-start-source",
         "expectedOffset": 32,
         "expectedControlSkillId": 19900110,
         "expectedSubSkillIndex": 1
       },
       {
         "actionId": "window-inside-end",
+        "sourceActionId": "window-end-source",
         "expectedOffset": 51,
         "expectedControlSkillId": 19900110,
         "expectedSubSkillIndex": 1
       },
       {
         "actionId": "window-outside-after",
+        "sourceActionId": "window-after-source",
         "expectedOffset": 52,
         "expectedControlSkillId": 19900110,
         "expectedSubSkillIndex": 0
@@ -199,6 +203,13 @@
     },
     {
       "kind": "variant-selection",
+      "actionId": "starborn-f-thrust-a3",
+      "controlSkillId": 19900103,
+      "subSkillIndex": 0,
+      "semanticName": "派生突刺后 A3"
+    },
+    {
+      "kind": "variant-selection",
       "actionId": "starborn-f-star",
       "controlSkillId": 19900112,
       "subSkillIndex": 0,
@@ -210,6 +221,13 @@
       "controlSkillId": 19900101,
       "subSkillIndex": 1,
       "semanticName": "星鸣后突刺"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "starborn-f-star-thrust-a3",
+      "controlSkillId": 19900103,
+      "subSkillIndex": 0,
+      "semanticName": "星鸣突刺后 A3"
     },
     {
       "kind": "variant-selection",
@@ -347,7 +365,6 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 1,
-              "chainIdentity": "context-form:actor:199001:normal-attack:starborn-199001-thrust-follow-up",
               "groupId": "starborn-f-derived-thrust",
               "contextActionId": "starborn-f-charged-derived"
             },
@@ -370,7 +387,7 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 1,
-              "groupId": "199001-thrust-window-a1",
+              "groupId": "starborn-f-derived-thrust",
               "contextActionId": "starborn-f-derived-thrust"
             },
             "level": 1
@@ -543,7 +560,6 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 1,
-              "chainIdentity": "context-form:actor:199001:normal-attack:starborn-199001-thrust-follow-up",
               "groupId": "199001-interruption-thrust",
               "contextActionId": "199001-interruption-star"
             },

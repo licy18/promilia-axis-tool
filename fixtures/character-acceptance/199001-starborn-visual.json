@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+    "verifiedMechanicsPackageHash": "8334e22113e45ce29b5d20828a3a13e36e8de3d8ff3f8afb02e0bcbe9d353fa2",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -24,7 +24,7 @@
       },
       {
         "slotId": "slot-2",
-        "characterId": 101010,
+        "characterId": 103002,
         "level": 1,
         "initialSp": 0,
         "loadout": {},
@@ -32,7 +32,7 @@
       },
       {
         "slotId": "slot-3",
-        "characterId": 103002,
+        "characterId": 101010,
         "level": 1,
         "initialSp": 0,
         "loadout": {},
@@ -177,7 +177,7 @@
       "sourceCharacterId": 199001,
       "sourceAliasIdentity": "STARBORN:source-alias:199001",
       "profileIdentity": "actor:199001:character-combat-profile:v1",
-      "profileHash": "5577c04a31f96f15b5233300de314c7f1e5b8a49817783c975851fdd31dfc0b4",
+      "profileHash": "83d63154e2e0012159c9403ef933ee519c5b8e3e17ddbc26f56412c75257db0c",
       "sourceContractHash": "45d02a6ae1c70d47ec5d70dc4d88cb7220cd6edd817f138600c6e199c800fa78",
       "sourceIdentity": "src/data/generated/characters.json#items[id=199001]|NewTable/hero.rows[id=199001]",
       "status": "verified-single-source-alias-selected"
@@ -677,7 +677,6 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "chainIdentity": "context-form:actor:199001:normal-attack:starborn-199001-thrust-follow-up",
           "groupId": "starborn-f-derived-thrust",
           "contextActionId": "starborn-f-charged-derived"
         },
@@ -700,7 +699,7 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 3,
-          "groupId": "starborn-f-thrust-a3",
+          "groupId": "starborn-f-derived-thrust",
           "contextActionId": "starborn-f-derived-thrust"
         },
         "level": 1
@@ -739,7 +738,6 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "chainIdentity": "context-form:actor:199001:normal-attack:starborn-199001-thrust-follow-up",
           "groupId": "starborn-f-star-thrust",
           "contextActionId": "starborn-f-star"
         },
@@ -748,6 +746,28 @@
       "schedule": {
         "mode": "absolute",
         "frame": 1835
+      }
+    },
+    {
+      "id": "starborn-f-star-thrust-a3",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 19900101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "starborn-f-star-thrust",
+          "contextActionId": "starborn-f-star-thrust"
+        },
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1867
       }
     },
     {
@@ -900,14 +920,13 @@
         },
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "window-before",
-          "contextActionId": "window-before-source"
+          "groupId": "window-before"
         },
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 3031
+        "frame": 2700
       }
     },
     {
@@ -1311,8 +1330,7 @@
         },
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "window-after",
-          "contextActionId": "window-after-source"
+          "groupId": "window-after"
         },
         "level": 1
       },

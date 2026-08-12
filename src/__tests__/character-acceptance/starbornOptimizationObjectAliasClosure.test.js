@@ -44,42 +44,23 @@ function createSources() {
 }
 
 describe('STARBORN optimization-object alias acceptance closure', () => {
-  it('admits one signed optimization object while retaining both source aliases', () => {
+  it('fails closed for the historical object signoff after the technical fixture migration', () => {
     const validation = validateOptimizationObjectAliasAcceptanceBundle({
       recipe: objectRecipe,
       sources: createSources(),
     });
 
-    expect(validation.valid).toBe(true);
-    expect(validation.bundle).toEqual(objectManifest);
-    expect(validation.bundle.summary).toEqual({
-      optimizationObjectCount: 1,
-      sourceAliasCount: 2,
-      requirementCount: 643,
-      requiredCount: 390,
-      passedCount: 390,
-      notApplicableCount: 253,
-      blockedCount: 0,
-      sourceGapCount: 0,
-      acceptanceGapCount: 0,
-      scenarioCount: 4,
-      scenarioPassedCount: 4,
-      assertionCount: 3064,
-      assertionPassedCount: 3064,
-    });
-    expect(validation.bundle).toMatchObject({
-      status: 'optimization-ready',
-      formalAdmission: true,
-      optimizationReady: true,
-      productVisualAcceptance: 'accepted',
-      productAcceptanceBinding: {
-        status: 'verified',
-        acceptanceCommit: '76605d759376a93a2981fc27f2fa18e3464b17f7',
-        recordIdentity:
-          'optimization-object-product-acceptance:STARBORN:76605d759376a93a2981fc27f2fa18e3464b17f7:c645f8836bf6fd0a',
-        acceptanceSubjectHash: 'c645f8836bf6fd0a',
-      },
-    });
+    expect(validation.valid).toBe(false);
+    expect(validation.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'optimization-object-product-acceptance-binding-invalid',
+          path: 'recipe.productVisualAcceptance',
+        }),
+      ])
+    );
+    expect(validation.bundle.formalAdmission).toBe(false);
+    expect(validation.bundle.optimizationReady).toBe(false);
   });
 
   it('fails closed for a partial product signoff or an unaccepted source alias', () => {
