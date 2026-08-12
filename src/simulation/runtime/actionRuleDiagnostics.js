@@ -7,6 +7,7 @@ import {
 } from '../../domain/actionSourceSequence';
 import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEffectSourceSequence';
 import {
+  VERIFIED_NORMAL_ATTACK_INPUT_PHASES,
   matchVerifiedNormalAttackInput,
   resolveVerifiedNormalAttackInputPhase,
 } from '../../domain/verifiedNormalAttackInputAuthority';
@@ -1312,7 +1313,11 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
     actions.filter(action => action.attackGroupId),
     action => action.attackGroupId
   );
+  const chainInstances = [];
   groups.forEach(groupActions => {
+    chainInstances.push(...splitAttackInputGroupInstances(groupActions, fps));
+  });
+  chainInstances.forEach(groupActions => {
     const byTimeline = [...groupActions].sort(compareActions);
     const bySequence = [...groupActions].sort(
       (left, right) =>
@@ -1580,7 +1585,6 @@ function createNormalAttackInputPhaseDiagnostics(
       if (actorId) acceptedByActorId.delete(actorId);
       continue;
     }
-    if (Number(action.attackSequenceIndex) !== 1) continue;
     if (
       action.attackInputChainIdentity != null ||
       action.attackInput?.attackInputChainIdentity != null
@@ -1592,10 +1596,6 @@ function createNormalAttackInputPhaseDiagnostics(
       action.attackInputIntent?.kind === 'public-normal-attack' &&
       action.attackInputIntent?.selectionMode === 'runtime-context' &&
       action.attackInputChainSelectionSource !== 'user-explicit';
-    if (runtimeContextIntent) {
-      acceptedByActorId.delete(actorId);
-      continue;
-    }
     const accepted = acceptedByActorId.get(actorId) ?? null;
     const phase = resolveVerifiedNormalAttackInputPhase({
       mapping,
@@ -1605,7 +1605,14 @@ function createNormalAttackInputPhaseDiagnostics(
       inputTimeMs: Number(action.startMs) || 0,
       fps,
     });
-    const match = matchVerifiedNormalAttackInput({ action, mapping, phase });
+    const resolvedAction = runtimeContextIntent
+      ? materializeRuntimeContextNormalAttackAction(action, phase)
+      : action;
+    const match = matchVerifiedNormalAttackInput({
+      action: resolvedAction,
+      mapping,
+      phase,
+    });
     if (!match.accepted) {
       diagnostics.push(
         createAttackInputDiagnostic({
@@ -1627,9 +1634,78 @@ function createNormalAttackInputPhaseDiagnostics(
       );
       continue;
     }
-    acceptedByActorId.set(actorId, { action });
+    acceptedByActorId.set(actorId, { action: resolvedAction });
   }
   return diagnostics;
+}
+
+function splitAttackInputGroupInstances(groupActions, fps) {
+  const instances = [];
+  let current = [];
+  for (const action of [...groupActions].sort(compareActions)) {
+    if (
+      Number(action.attackSequenceIndex) === 1 &&
+      current.length > 0 &&
+      canOpenVerifiedAttackInputGroupInstance({
+        action,
+        predecessor: current[current.length - 1],
+        fps,
+      })
+    ) {
+      instances.push(current);
+      current = [];
+    }
+    current.push(action);
+  }
+  if (current.length > 0) instances.push(current);
+  return instances;
+}
+
+function canOpenVerifiedAttackInputGroupInstance({ action, predecessor, fps }) {
+  if (
+    String(predecessor?.actorId ?? '') !== String(action?.actorId ?? '') ||
+    predecessor?.attackInputChainIdentity != null ||
+    predecessor?.attackInput?.attackInputChainIdentity != null ||
+    action?.attackInputChainIdentity != null ||
+    action?.attackInput?.attackInputChainIdentity != null
+  ) {
+    return false;
+  }
+  const mapping = getVerifiedCombatActionMapping(action);
+  if (mapping?.actionKind !== 'normal-attack') return false;
+  const phase = resolveVerifiedNormalAttackInputPhase({
+    mapping,
+    acceptedAction: predecessor,
+    acceptedSelection: null,
+    actorId: String(action.actorId ?? ''),
+    inputTimeMs: Number(action.startMs) || 0,
+    fps,
+  });
+  if (
+    phase.phase !== VERIFIED_NORMAL_ATTACK_INPUT_PHASES.REOPEN_WINDOW &&
+    phase.phase !== VERIFIED_NORMAL_ATTACK_INPUT_PHASES.IDLE
+  ) {
+    return false;
+  }
+  return matchVerifiedNormalAttackInput({ action, mapping, phase }).accepted;
+}
+
+function materializeRuntimeContextNormalAttackAction(action, phase) {
+  if (!phase?.expected) return action;
+  return {
+    ...action,
+    attackGroupId: phase.expected.groupId ?? action.attackGroupId ?? null,
+    attackSequenceIndex: phase.expected.sequenceIndex,
+    runtimeContextActionId: phase.sourceActionId ?? null,
+    attackInput: {
+      ...(action.attackInput ?? {}),
+      sequenceIndex: phase.expected.sequenceIndex,
+      controlSkillId: phase.expected.controlSkillId,
+      subSkillIndex: phase.expected.subSkillIndex,
+      selectedSubSkillIndex: phase.expected.subSkillIndex,
+      attackInputChainIdentity: phase.expected.chainIdentity ?? null,
+    },
+  };
 }
 
 function resolveVerifiedAttackChainContinuityBridge({

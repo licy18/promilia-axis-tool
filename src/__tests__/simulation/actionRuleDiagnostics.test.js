@@ -1615,6 +1615,47 @@ describe('action rule diagnostics', () => {
     expect(createBoundary(230).diagnostics).toEqual([]);
   });
 
+  it('opens a new mapping-backed chain instance after A3 reaches its verified reopen window', () => {
+    const mapping = mechanicsPackage.actionMappings.find(
+      candidate =>
+        Number(candidate.ownerId) === 108003 &&
+        candidate.actionKind === 'normal-attack'
+    );
+    const actor = { ...createActor(), characterId: 108003 };
+    const starts = [0, 35, 85, 155, 190, 240];
+    const sequenceIndexes = [1, 2, 3, 1, 2, 3];
+    const actions = sequenceIndexes.map((sequenceIndex, index) =>
+      createSkillAction({
+        id: `miti-cycle-${index + 1}`,
+        name: `A${sequenceIndex}`,
+        skillId: 10800301,
+        actionKind: 'normal-attack',
+        startMs: frameToMs(starts[index]),
+        durationMs: 0,
+        actor,
+        attackGroupId: 'miti-reused-group',
+        attackSequenceIndex: sequenceIndex,
+        attackSequenceTotal: 3,
+        attackInput: mapping.attackInputSegments[sequenceIndex - 1],
+      })
+    );
+
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        objectiveContract: { classification: 'primary' },
+        actors: [actor],
+        actions,
+      },
+    });
+
+    expect(
+      result.diagnostics.filter(
+        diagnostic => diagnostic.ruleKey === 'normal-attack-input-chain'
+      )
+    ).toEqual([]);
+  });
+
   it('rejects skipped, repeated, cross-owner, interrupted, and mismatched chain predecessors', () => {
     const actorA = createActor();
     const actorB = { ...createActor(), id: 'actor-2', name: '第二角色' };
