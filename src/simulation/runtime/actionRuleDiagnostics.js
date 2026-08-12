@@ -6,6 +6,10 @@ import {
   getActionSourceSequencePath,
 } from '../../domain/actionSourceSequence';
 import { createVerifiedEffectSourceSequencePath } from '../../domain/verifiedEffectSourceSequence';
+import {
+  matchVerifiedNormalAttackInput,
+  resolveVerifiedNormalAttackInputPhase,
+} from '../../domain/verifiedNormalAttackInputAuthority';
 import { VERIFIED_WORKBENCH_MECHANICS_PROFILE_ID } from '../../domain/workbenchMechanicsProfileSelection';
 import {
   getInstalledVerifiedCombatMechanicsPackage,
@@ -125,6 +129,11 @@ export function createActionRuleDiagnostics({
       scenario
     ),
     ...createAttackInputChainDiagnostics(
+      actions,
+      scenario.time?.fps,
+      isFormalActionLegalityScenario(scenario)
+    ),
+    ...createNormalAttackInputPhaseDiagnostics(
       actions,
       scenario.time?.fps,
       isFormalActionLegalityScenario(scenario)
@@ -1547,6 +1556,79 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
       );
     }
   });
+  return diagnostics;
+}
+
+function createNormalAttackInputPhaseDiagnostics(
+  actions,
+  fps = 60,
+  strict = false
+) {
+  const status = strict
+    ? ACTION_RULE_STATUSES.VIOLATED
+    : ACTION_RULE_STATUSES.UNRESOLVED;
+  const diagnostics = [];
+  const acceptedByActorId = new Map();
+  for (const action of [...actions].sort(compareActions)) {
+    if (action.type === ACTION_TYPES.SWITCH) {
+      acceptedByActorId.clear();
+      continue;
+    }
+    const mapping = getVerifiedCombatActionMapping(action);
+    const actorId = String(action.actorId ?? '');
+    if (mapping?.actionKind !== 'normal-attack') {
+      if (actorId) acceptedByActorId.delete(actorId);
+      continue;
+    }
+    if (Number(action.attackSequenceIndex) !== 1) continue;
+    if (
+      action.attackInputChainIdentity != null ||
+      action.attackInput?.attackInputChainIdentity != null
+    ) {
+      acceptedByActorId.delete(actorId);
+      continue;
+    }
+    const runtimeContextIntent =
+      action.attackInputIntent?.kind === 'public-normal-attack' &&
+      action.attackInputIntent?.selectionMode === 'runtime-context' &&
+      action.attackInputChainSelectionSource !== 'user-explicit';
+    if (runtimeContextIntent) {
+      acceptedByActorId.delete(actorId);
+      continue;
+    }
+    const accepted = acceptedByActorId.get(actorId) ?? null;
+    const phase = resolveVerifiedNormalAttackInputPhase({
+      mapping,
+      acceptedAction: accepted?.action ?? null,
+      acceptedSelection: null,
+      actorId,
+      inputTimeMs: Number(action.startMs) || 0,
+      fps,
+    });
+    const match = matchVerifiedNormalAttackInput({ action, mapping, phase });
+    if (!match.accepted) {
+      diagnostics.push(
+        createAttackInputDiagnostic({
+          code: ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
+          action,
+          groupActions: [accepted?.action, action].filter(Boolean),
+          message: `${action.name} 不符合当前普攻输入阶段 ${phase.phase}`,
+          extra: {
+            reason: match.reason,
+            formIdentity: phase.formIdentity,
+            sourceKind: phase.sourceKind,
+            sourceActionId: phase.sourceActionId,
+            sourceIdentity: phase.sourceIdentity,
+            expectedAttackInput: phase.expected,
+            actualAttackInput: match.actual,
+          },
+          status,
+        })
+      );
+      continue;
+    }
+    acceptedByActorId.set(actorId, { action });
+  }
   return diagnostics;
 }
 

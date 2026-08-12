@@ -216,6 +216,7 @@ export function resolveVerifiedNormalAttackInputPhase({
   const special = resolveSpecialContinuationPhase({
     form,
     actorId: normalizedActorId,
+    acceptedActionId: acceptedAction?.id ?? null,
     inputTimeMs,
     activeContinuationWindows,
     specialContinuationCandidates,
@@ -260,12 +261,8 @@ export function resolveVerifiedNormalAttackInputPhase({
     });
   }
 
-  const window =
-    projectVerifiedWindow(acceptedAction.attackInput?.linkWindow) ??
-    sourceSegment.linkWindow;
-  const linkTimingStatus =
-    textOrNull(acceptedAction.attackInput?.linkTimingStatus) ??
-    sourceSegment.linkTimingStatus;
+  const window = sourceSegment.linkWindow;
+  const linkTimingStatus = sourceSegment.linkTimingStatus;
   const relativeFrame = msToFrame(
     Number(inputTimeMs) - Number(acceptedAction.startMs ?? 0),
     fps
@@ -458,11 +455,12 @@ export function matchVerifiedNormalAttackInput({
 function resolveSpecialContinuationPhase({
   form,
   actorId,
+  acceptedActionId,
   inputTimeMs,
   activeContinuationWindows,
   specialContinuationCandidates,
 }) {
-  const candidates = [
+  const rawCandidates = [
     ...(activeContinuationWindows ?? [])
       .filter(
         window =>
@@ -484,17 +482,30 @@ function resolveSpecialContinuationPhase({
         endsAtMs: window.endsAtMs,
       })),
     ...(specialContinuationCandidates ?? []),
-  ]
+  ].filter(
+    candidate =>
+      (actorId == null ||
+        candidate?.actorId == null ||
+        String(candidate.actorId) === actorId) &&
+      acceptedActionId != null &&
+      String(candidate?.sourceActionId ?? '') === String(acceptedActionId) &&
+      Number(inputTimeMs) < Number(candidate?.endsAtMs)
+  );
+  if (rawCandidates.length === 0) return null;
+  const candidates = rawCandidates
     .map(normalizeSpecialContinuationCandidate)
-    .filter(Boolean)
-    .filter(
-      candidate =>
-        (actorId == null ||
-          candidate.actorId == null ||
-          candidate.actorId === actorId) &&
-        Number(inputTimeMs) < candidate.endsAtMs
-    );
-  if (candidates.length === 0) return null;
+    .filter(Boolean);
+  if (candidates.length !== rawCandidates.length) {
+    return createPhase({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      form,
+      actorId,
+      sourceKind: 'verified-special-continuation-unresolved',
+      sourceActionId: acceptedActionId,
+      sourceIdentity: null,
+      reasons: ['normal-attack-special-continuation-target-unresolved'],
+    });
+  }
   const latestStart = Math.max(
     ...candidates.map(candidate => candidate.startsAtMs)
   );
@@ -741,7 +752,8 @@ function resolveSegmentLinkWindow(segment) {
 
 function resolveSegmentRecoveryEndFrame(segment) {
   return nonNegativeIntegerOrNull(
-    segment?.actionTiming?.animation?.endFrame ??
+    segment?.executionTiming?.animation?.endFrame ??
+      segment?.actionTiming?.animation?.endFrame ??
       segment?.animationDurationFrames ??
       segment?.animationDuration
   );
@@ -749,15 +761,19 @@ function resolveSegmentRecoveryEndFrame(segment) {
 
 function resolveSegmentRecoverySourceIdentity(segment) {
   return textOrNull(
-    segment?.actionTiming?.animation?.sourceIdentity ??
+    segment?.executionTiming?.animation?.sourceIdentity ??
+      segment?.actionTiming?.animation?.sourceIdentity ??
       segment?.animationDurationSourceIdentity
   );
 }
 
 function resolveSegmentReopenWindow(segment) {
-  return (segment?.actionTiming?.windows ?? segment?.linkWindows ?? []).find(
-    window => window?.kind === 'attack-reopen-window'
-  );
+  return (
+    segment?.executionTiming?.windows ??
+    segment?.actionTiming?.windows ??
+    segment?.linkWindows ??
+    []
+  ).find(window => window?.kind === 'attack-reopen-window');
 }
 
 function isFrameInWindow(frame, window) {

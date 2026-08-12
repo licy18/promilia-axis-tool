@@ -1543,6 +1543,78 @@ describe('action rule diagnostics', () => {
     );
   });
 
+  it('rejects a fresh A1 while an accepted successor window owns the normal input', () => {
+    const mapping = mechanicsPackage.actionMappings.find(
+      candidate =>
+        Number(candidate.ownerId) === 112001 &&
+        candidate.actionKind === 'normal-attack'
+    );
+    const a1 = mapping.attackInputSegments[0];
+    const actor = { ...createActor(), characterId: 112001 };
+    const createBoundary = nextFrame =>
+      createActionRuleDiagnostics({
+        scenario: {
+          time: { fps: 60 },
+          objectiveContract: { classification: 'primary' },
+          actors: [actor],
+          actions: [
+            createSkillAction({
+              id: `exclusive-a1-${nextFrame}`,
+              name: 'A1',
+              skillId: 11200101,
+              actionKind: 'normal-attack',
+              startMs: 0,
+              durationMs: 0,
+              actor,
+              attackGroupId: 'exclusive-chain',
+              attackSequenceIndex: 1,
+              attackSequenceTotal: 5,
+              attackInput: a1,
+            }),
+            createSkillAction({
+              id: `fresh-a1-${nextFrame}`,
+              name: 'A1',
+              skillId: 11200101,
+              actionKind: 'normal-attack',
+              startMs: frameToMs(nextFrame),
+              durationMs: 0,
+              actor,
+              attackGroupId: `fresh-chain-${nextFrame}`,
+              attackSequenceIndex: 1,
+              attackSequenceTotal: 5,
+              attackInput: a1,
+            }),
+          ],
+        },
+      });
+
+    for (const frame of [18, 72]) {
+      expect(createBoundary(frame).diagnostics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            actionId: `fresh-a1-${frame}`,
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
+            reason: 'normal-attack-successor-window-target-conflict',
+            status: 'violated',
+          }),
+        ])
+      );
+    }
+    for (const frame of [73, 229]) {
+      expect(createBoundary(frame).diagnostics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            actionId: `fresh-a1-${frame}`,
+            code: ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
+            reason: 'normal-attack-recovery-not-complete',
+            status: 'violated',
+          }),
+        ])
+      );
+    }
+    expect(createBoundary(230).diagnostics).toEqual([]);
+  });
+
   it('rejects skipped, repeated, cross-owner, interrupted, and mismatched chain predecessors', () => {
     const actorA = createActor();
     const actorB = { ...createActor(), id: 'actor-2', name: '第二角色' };

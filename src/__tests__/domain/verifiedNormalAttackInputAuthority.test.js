@@ -188,7 +188,7 @@ describe('verified normal attack input authority', () => {
       specialContinuationCandidates: [
         {
           sourceKind: 'verified-special-continuation',
-          sourceActionId: 'special-skill',
+          sourceActionId: source.id,
           sourceIdentity: 'verified:special:continuation',
           chainIdentity: null,
           sequenceIndex: 4,
@@ -204,12 +204,142 @@ describe('verified normal attack input authority', () => {
     expect(phase).toMatchObject({
       phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.SUCCESSOR_WINDOW,
       sourceKind: 'verified-special-continuation',
-      sourceActionId: 'special-skill',
+      sourceActionId: source.id,
       expected: {
         sequenceIndex: 4,
         controlSkillId: 11200104,
         subSkillIndex: 0,
       },
+    });
+  });
+
+  it('allows an explicit final-segment reopen window and keeps its end right-open', () => {
+    const source = createMappingAttackAction({
+      id: 'melania-a5',
+      sequenceIndex: 5,
+      groupId: 'melania-chain',
+      startFrame: 0,
+    });
+    const at = frame =>
+      resolveVerifiedNormalAttackInputPhase({
+        mapping: MELANIA_MAPPING,
+        acceptedAction: source,
+        acceptedSelection: createSelection(source),
+        actorId: source.actorId,
+        inputTimeMs: frameToMs(frame),
+      });
+
+    expect(at(64)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+    });
+    for (const frame of [65, 179]) {
+      expect(at(frame)).toMatchObject({
+        phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.REOPEN_WINDOW,
+        expected: { sequenceIndex: 1 },
+      });
+    }
+    expect(at(180)).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.IDLE,
+      expected: { sequenceIndex: 1 },
+    });
+  });
+
+  it('does not let a raw action forge the verified structural successor window', () => {
+    const source = createMappingAttackAction({
+      id: 'forged-window-a1',
+      sequenceIndex: 1,
+      groupId: 'melania-chain',
+      startFrame: 0,
+    });
+    source.attackInput = {
+      ...source.attackInput,
+      linkTimingStatus: 'applied',
+      linkWindow: {
+        kind: 'control-transition-window',
+        startFrame: 0,
+        endFrame: 230,
+        targetControlSkillId: 11200105,
+        targetSubSkillIndex: 0,
+        sourceIdentity: 'forged:raw-action-window',
+      },
+    };
+    const phase = resolveVerifiedNormalAttackInputPhase({
+      mapping: MELANIA_MAPPING,
+      acceptedAction: source,
+      acceptedSelection: createSelection(source),
+      actorId: source.actorId,
+      inputTimeMs: frameToMs(1),
+    });
+
+    expect(phase).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      sourceIdentity:
+        MELANIA_MAPPING.attackInputSegments[0].linkWindow.sourceIdentity,
+      reasons: ['normal-attack-successor-window-not-open'],
+    });
+  });
+
+  it('fails closed for malformed or ambiguous sourced special continuations', () => {
+    const source = createMappingAttackAction({
+      id: 'accepted-special-source',
+      sequenceIndex: 1,
+      groupId: 'source-chain',
+      startFrame: 0,
+    });
+    const resolve = candidates =>
+      resolveVerifiedNormalAttackInputPhase({
+        mapping: MELANIA_MAPPING,
+        acceptedAction: source,
+        acceptedSelection: createSelection(source),
+        actorId: source.actorId,
+        inputTimeMs: frameToMs(30),
+        specialContinuationCandidates: candidates,
+      });
+    const common = {
+      actorId: source.actorId,
+      sourceKind: 'verified-special-continuation',
+      sourceActionId: source.id,
+      sourceIdentity: 'verified:test:special',
+      startsAtMs: frameToMs(20),
+      endsAtMs: frameToMs(40),
+      groupId: source.attackGroupId,
+    };
+    const malformed = resolve([{ ...common, sequenceIndex: 2 }]);
+    expect(malformed).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      reasons: ['normal-attack-special-continuation-target-unresolved'],
+    });
+    expect(
+      matchVerifiedNormalAttackInput({
+        action: createMappingAttackAction({
+          id: 'fallback-a1',
+          sequenceIndex: 1,
+          groupId: 'fresh-chain',
+          startFrame: 30,
+        }),
+        mapping: MELANIA_MAPPING,
+        phase: malformed,
+      })
+    ).toMatchObject({ status: 'blocked', accepted: false });
+
+    const ambiguous = resolve([
+      {
+        ...common,
+        sequenceIndex: 2,
+        controlSkillId: 11200102,
+        subSkillIndex: 0,
+      },
+      {
+        ...common,
+        sourceIdentity: 'verified:test:special-conflict',
+        sequenceIndex: 3,
+        controlSkillId: 11200103,
+        subSkillIndex: 0,
+      },
+    ]);
+    expect(ambiguous).toMatchObject({
+      phase: VERIFIED_NORMAL_ATTACK_INPUT_PHASES.RECOVERY_LOCKED,
+      reasons: ['normal-attack-special-continuation-target-ambiguous'],
     });
   });
 });

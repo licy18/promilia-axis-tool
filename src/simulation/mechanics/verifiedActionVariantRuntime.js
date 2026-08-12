@@ -28,6 +28,10 @@ import { msToFrame } from '../../domain/timebase';
 import { resolveActionHitWillHit } from '../../domain/actionHitOverrides';
 import { resolveVerifiedActionLevelValue } from '../../domain/verifiedActionLevel';
 import { resolveVerifiedChargingReleaseWindow } from '../../domain/verifiedChargingReleaseSelection';
+import {
+  matchVerifiedNormalAttackInput,
+  resolveVerifiedNormalAttackInputPhase,
+} from '../../domain/verifiedNormalAttackInputAuthority';
 
 export const VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME =
   'AzPrVerifiedActionVariantRuntime';
@@ -1046,7 +1050,7 @@ export function createVerifiedActionVariantRuntime({
     }
   }
 
-  for (const [actorId, actorState] of variantActorStateById) {
+  for (const actorState of variantActorStateById.values()) {
     const characterId = Number(
       actorState?.actor?.characterId ?? actorState?.profile?.ownerId
     );
@@ -1149,12 +1153,22 @@ export function createVerifiedActionVariantRuntime({
       previous: lastResolvedActionByActorId.get(action.actorId),
       timeMs: actionTimeMs,
     });
-    if (attackChainSelection.status === 'blocked') {
-      const block = createAttackChainExecutionBlock({
-        action,
-        actorState,
-        chain: attackChainSelection.chain,
-      });
+    if (
+      attackChainSelection.status === 'blocked' ||
+      attackChainSelection.status === 'phase-blocked'
+    ) {
+      const block =
+        attackChainSelection.status === 'phase-blocked'
+          ? createNormalAttackInputPhaseExecutionBlock({
+              action,
+              actorState,
+              selection: attackChainSelection,
+            })
+          : createAttackChainExecutionBlock({
+              action,
+              actorState,
+              chain: attackChainSelection.chain,
+            });
       executionBlocks.push(block);
       actionResolutionById.set(action.id, {
         ...resolveVerifiedCombatActionMechanics(action, {
@@ -1172,8 +1186,13 @@ export function createVerifiedActionVariantRuntime({
         controlSkillId: null,
         selectedSubSkillIndex: null,
         selectionReason: block.reason,
-        sourceKind: 'verified-active-attack-input-chain',
-        sourceIdentity: attackChainSelection.chain?.sourceIdentity ?? null,
+        sourceKind:
+          attackChainSelection.authorityPhase?.sourceKind ??
+          'verified-active-attack-input-chain',
+        sourceIdentity:
+          attackChainSelection.authorityPhase?.sourceIdentity ??
+          attackChainSelection.chain?.sourceIdentity ??
+          null,
         status: block.reason,
       });
       lastResolvedActionByActorId.delete(action.actorId);
@@ -1360,8 +1379,7 @@ export function createVerifiedActionVariantRuntime({
             ...resolvedInputSelection,
             status: 'delegated-to-charging-release',
             reason: 'release-frame-owned-by-charging-release-binding',
-            delegatedBindingIdentity:
-              delegatedChargingBinding.bindingIdentity,
+            delegatedBindingIdentity: delegatedChargingBinding.bindingIdentity,
           }
         : resolvedInputSelection;
       if (inputSelection.status === 'invalid') {
@@ -1458,18 +1476,24 @@ export function createVerifiedActionVariantRuntime({
           }
         : attackChainSelection.segment
           ? {
-              sourceKind: 'verified-active-attack-input-chain',
-              sourceIdentity: [
-                attackChainSelection.chain.sourceIdentity,
-                attackChainSelection.segment.sourceIdentity,
-              ].join('|'),
-              decisionFrame: attackChainSelection.chain.decisionFrame,
-              chainIdentity: attackChainSelection.chain.chainIdentity,
+              sourceKind:
+                attackChainSelection.authorityPhase?.sourceKind ??
+                'verified-active-attack-input-chain',
+              sourceIdentity:
+                attackChainSelection.authorityPhase?.sourceIdentity ??
+                [
+                  attackChainSelection.chain?.sourceIdentity,
+                  attackChainSelection.segment.sourceIdentity,
+                ]
+                  .filter(Boolean)
+                  .join('|'),
+              decisionFrame: attackChainSelection.chain?.decisionFrame ?? 0,
+              chainIdentity: attackChainSelection.chain?.chainIdentity ?? null,
               chainSequenceIndex: attackChainSelection.sequenceIndex,
-              semanticIdentity: `${attackChainSelection.chain.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
+              semanticIdentity: `${attackChainSelection.authorityPhase?.formIdentity ?? attackChainSelection.chain?.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
               semanticName: attackChainSelection.segment.semanticName
                 ? attackChainSelection.segment.semanticName
-                : attackChainSelection.chain.semanticNamePrefix
+                : attackChainSelection.chain?.semanticNamePrefix
                   ? `${attackChainSelection.chain.semanticNamePrefix} ${attackChainSelection.segment.label ?? `A${attackChainSelection.segment.sequenceIndex}`}`
                   : (action.name ??
                     `A${attackChainSelection.segment.sequenceIndex}`),
@@ -1693,9 +1717,7 @@ export function createVerifiedActionVariantRuntime({
       );
       const selectedRelease = chargingSelection.selected;
       const inheritedSource = selectionSource;
-      executionControlSkillId = Number(
-        selectedRelease.executionControlSkillId
-      );
+      executionControlSkillId = Number(selectedRelease.executionControlSkillId);
       selectedSubSkillIndex = Number(selectedRelease.executionSubSkillIndex);
       selectionSource = {
         ...(inheritedSource ?? {}),
@@ -1793,7 +1815,7 @@ export function createVerifiedActionVariantRuntime({
     selectionByActionId.set(
       action.id,
       createVariantSelectionRecord({
-        action,
+        action: runtimeAction,
         characterId,
         publicControlSkillId,
         executionControlSkillId,
@@ -1807,12 +1829,22 @@ export function createVerifiedActionVariantRuntime({
         resolution,
       })
     );
-    if (
-      !resolution.ready ||
-      !actorState ||
-      !Number.isInteger(executionControlSkillId)
-    ) {
+    if (!resolution.ready || !Number.isInteger(executionControlSkillId)) {
       lastResolvedActionByActorId.delete(action.actorId);
+      continue;
+    }
+    if (!actorState) {
+      const resolvedActionContext = createResolvedActionContext({
+        action: runtimeAction,
+        mapping,
+        chain: attackChainSelection.chain,
+        selection: attackChainSelection,
+        resolution,
+        executionControlSkillId,
+        selectedSubSkillIndex,
+      });
+      lastResolvedActionByActorId.set(action.actorId, resolvedActionContext);
+      resolvedActionContextById.set(String(action.id), resolvedActionContext);
       continue;
     }
 
@@ -1963,28 +1995,15 @@ export function createVerifiedActionVariantRuntime({
       runtimeSequenceIndex: runtimeSequenceIndex++,
       payload: selection,
     });
-    const resolvedActionContext = {
-      actionId: action.id,
-      actorId: action.actorId,
-      controlSkillId: executionControlSkillId,
+    const resolvedActionContext = createResolvedActionContext({
+      action: runtimeAction,
+      mapping,
+      chain: attackChainSelection.chain,
+      selection: attackChainSelection,
+      resolution,
+      executionControlSkillId,
       selectedSubSkillIndex,
-      startMs: actionTimeMs,
-      effectiveDurationFrames:
-        resolution.actionBinding?.effectiveOccupancyFrames ??
-        resolution.actionBinding?.actualDurationFrames ??
-        resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ??
-        null,
-      sourceIdentity:
-        resolution.actionBinding?.bindingSourceIdentity ??
-        resolution.actionBinding?.sourceIdentity ??
-        null,
-      attackGroupId: action.attackGroupId ?? null,
-      attackInputChainIdentity:
-        attackChainSelection.chain?.chainIdentity ?? null,
-      attackSequenceIndex: attackChainSelection.sequenceIndex ?? null,
-      attackChainSequenceIndex: attackChainSelection.sequenceIndex ?? null,
-      ready: true,
-    };
+    });
     lastResolvedActionByActorId.set(action.actorId, resolvedActionContext);
     resolvedActionContextById.set(String(action.id), resolvedActionContext);
   }
@@ -2107,6 +2126,45 @@ function resolveContextPredecessor({
   return resolvedActionContextById.get(String(contextActionId)) ?? null;
 }
 
+function createResolvedActionContext({
+  action,
+  mapping,
+  chain,
+  selection,
+  resolution,
+  executionControlSkillId,
+  selectedSubSkillIndex,
+}) {
+  return {
+    actionId: action.id,
+    action,
+    mapping,
+    chain,
+    actorId: action.actorId,
+    actionKind: mapping?.actionKind ?? action.actionKind ?? null,
+    controlSkillId: executionControlSkillId,
+    selectedSubSkillIndex,
+    startMs: Number(action.startMs) || 0,
+    effectiveDurationFrames:
+      resolution.actionBinding?.effectiveOccupancyFrames ??
+      resolution.actionBinding?.actualDurationFrames ??
+      resolution.actionBinding?.actionTiming?.occupancy?.durationFrames ??
+      null,
+    sourceIdentity:
+      resolution.actionBinding?.bindingSourceIdentity ??
+      resolution.actionBinding?.sourceIdentity ??
+      null,
+    attackGroupId: action.attackGroupId ?? null,
+    attackInputChainIdentity:
+      action.attackInputChainIdentity ?? chain?.chainIdentity ?? null,
+    attackSequenceIndex:
+      selection.sequenceIndex ?? action.attackSequenceIndex ?? null,
+    attackChainSequenceIndex:
+      selection.sequenceIndex ?? action.attackSequenceIndex ?? null,
+    ready: true,
+  };
+}
+
 function resolveAttackInputChainAction({
   action,
   mapping,
@@ -2119,15 +2177,15 @@ function resolveAttackInputChainAction({
   if (
     mapping?.actionKind !== 'normal-attack' ||
     mapping?.ownerKind === 'kibo' ||
-    !actorState ||
     !Number.isInteger(Number(action?.attackSequenceIndex))
   ) {
     return { status: 'not-required', action, chain: null, segment: null };
   }
+  const ownerId = Number(mapping.ownerId ?? actorState?.profile?.ownerId);
   const ownerChains = (attackInputChains ?? []).filter(
     chain =>
       chain.applied === true &&
-      Number(chain.ownerId) === Number(actorState.profile.ownerId) &&
+      Number(chain.ownerId) === ownerId &&
       Number(chain.sourceSkillId) === Number(mapping.sourceSkillId)
   );
   const explicitChainIdentity =
@@ -2138,6 +2196,25 @@ function resolveAttackInputChainAction({
     action.attackInputIntent?.kind === 'public-normal-attack' &&
     action.attackInputIntent?.selectionMode === 'runtime-context' &&
     action.attackInputChainSelectionSource !== 'user-explicit';
+  const matchingChains = ownerChains.filter(chain =>
+    isRuntimeConditionSatisfied(chain.stateCondition, actorState)
+  );
+  const derivedEntries = matchingChains
+    .filter(
+      candidate => candidate.entryPolicy?.kind === 'derived-or-quick-entry'
+    )
+    .map(candidate =>
+      resolveRuntimeDerivedAttackChainEntry({
+        chain: candidate,
+        ownerChains,
+        actorState,
+        actorId: action.actorId,
+        activeSwitchWindows,
+        previous,
+        timeMs,
+      })
+    )
+    .filter(Boolean);
   let chain = null;
   let derivedEntry = null;
   let continuedSequenceIndex = null;
@@ -2153,9 +2230,6 @@ function resolveAttackInputChainAction({
       return { status: 'blocked', action, chain, segment: null };
     }
   } else {
-    const matchingChains = ownerChains.filter(chain =>
-      isRuntimeConditionSatisfied(chain.stateCondition, actorState)
-    );
     const continuedChain =
       Number(action.attackSequenceIndex) > 1 &&
       previous?.ready &&
@@ -2177,21 +2251,6 @@ function resolveAttackInputChainAction({
           ? nextSequenceIndex + 1
           : null;
     }
-    const derivedEntries = matchingChains
-      .filter(
-        candidate => candidate.entryPolicy?.kind === 'derived-or-quick-entry'
-      )
-      .map(candidate =>
-        resolveRuntimeDerivedAttackChainEntry({
-          chain: candidate,
-          ownerChains,
-          actorState,
-          activeSwitchWindows,
-          previous,
-          timeMs,
-        })
-      )
-      .filter(Boolean);
     const conditionSelected = matchingChains.filter(
       candidate =>
         !candidate.entryPolicy ||
@@ -2214,19 +2273,118 @@ function resolveAttackInputChainAction({
     derivedEntry =
       chain && derivedEntries.length === 1 ? derivedEntries[0] : null;
   }
-  if (!chain) {
-    return { status: 'not-required', action, chain: null, segment: null };
+  const authorityRequired =
+    runtimeContextIntent ||
+    action.attackInputChainSelectionSource === 'user-explicit';
+  if (!authorityRequired) {
+    if (!chain) {
+      return { status: 'not-required', action, chain: null, segment: null };
+    }
+    const sequenceIndex =
+      continuedSequenceIndex ??
+      derivedEntry?.sequenceIndex ??
+      Number(action.attackSequenceIndex);
+    const legacySelection = materializeLegacyAttackInputSelection({
+      action,
+      mapping,
+      chain,
+      sequenceIndex,
+    });
+    return legacySelection
+      ? {
+          status: 'selected',
+          ...legacySelection,
+          derivedEntry,
+        }
+      : { status: 'blocked', action, chain, segment: null };
   }
-  const sequenceIndex =
-    continuedSequenceIndex ??
-    derivedEntry?.sequenceIndex ??
-    Number(action.attackSequenceIndex);
-  const segment = chain.segments.find(
-    item => Number(item.sequenceIndex) === sequenceIndex
+  const previousChain = matchingChains.find(
+    candidate =>
+      previous?.attackInputChainIdentity != null &&
+      String(candidate.chainIdentity) ===
+        String(previous.attackInputChainIdentity)
   );
-  if (!segment) {
-    return { status: 'blocked', action, chain, segment: null };
+  const phase = resolveVerifiedNormalAttackInputPhase({
+    mapping,
+    chain: previousChain ?? chain,
+    acceptedAction: previous?.action ?? null,
+    acceptedSelection: previous,
+    actorId: action.actorId,
+    inputTimeMs: timeMs,
+    fps: FRAME_RATE,
+    activeContinuationWindows: activeSwitchWindows,
+    specialContinuationCandidates: derivedEntries,
+  });
+  let selection = null;
+  if (runtimeContextIntent && phase.expected) {
+    selection = materializeAuthorityAttackInputSelection({
+      action,
+      mapping,
+      ownerChains,
+      expected: phase.expected,
+    });
+  } else {
+    const exactRequestedChain = resolveExactRequestedAttackInputChain({
+      action,
+      ownerChains: matchingChains,
+      explicitChainIdentity,
+    });
+    const sequenceIndex =
+      Number(action.attackSequenceIndex) || continuedSequenceIndex;
+    selection = materializeExistingAttackInputSelection({
+      action,
+      mapping,
+      chain: exactRequestedChain ?? chain,
+      sequenceIndex,
+    });
   }
+  if (!selection) {
+    return {
+      status: 'blocked',
+      action,
+      chain,
+      segment: null,
+      authorityPhase: phase,
+    };
+  }
+  const authorityMatch = matchVerifiedNormalAttackInput({
+    action: selection.action,
+    mapping,
+    phase,
+  });
+  if (!authorityMatch.accepted) {
+    return {
+      status: 'phase-blocked',
+      action: selection.action,
+      chain: selection.chain,
+      segment: selection.segment,
+      sequenceIndex: selection.sequenceIndex,
+      authorityPhase: phase,
+      authorityMatch,
+    };
+  }
+  return {
+    status: 'selected',
+    chain: selection.chain,
+    segment: selection.segment,
+    action: selection.action,
+    sequenceIndex: selection.sequenceIndex,
+    derivedEntry,
+    authorityPhase: phase,
+    authorityMatch,
+  };
+}
+
+function materializeLegacyAttackInputSelection({
+  action,
+  mapping,
+  chain,
+  sequenceIndex,
+}) {
+  const segment = chain.segments.find(
+    item => Number(item.sequenceIndex) === Number(sequenceIndex)
+  );
+  if (!segment) return null;
   const sourceSegment = (
     mapping.attackInputSourceSegments ??
     mapping.attackInputSegments ??
@@ -2234,30 +2392,216 @@ function resolveAttackInputChainAction({
   ).find(
     item => Number(item.controlSkillId) === Number(segment.controlSkillId)
   );
-  if (!sourceSegment) {
-    return { status: 'blocked', action, chain, segment: null };
-  }
+  if (!sourceSegment) return null;
   const projectedSegment = projectVerifiedAttackInputChainSegment(
     sourceSegment,
     segment,
     sequenceIndex,
     chain.segments.length
   );
-  if (!projectedSegment) {
-    return { status: 'blocked', action, chain, segment: null };
-  }
+  if (!projectedSegment) return null;
   return {
-    status: 'selected',
     chain,
     segment,
+    sequenceIndex,
     action: {
       ...action,
+      actionKind: mapping?.actionKind ?? action.actionKind ?? null,
       attackInputChainIdentity: chain.chainIdentity,
       controlSubSkillIndex: segment.subSkillIndex,
       attackInput: projectedSegment,
     },
+  };
+}
+
+function resolveExactRequestedAttackInputChain({
+  action,
+  ownerChains,
+  explicitChainIdentity,
+}) {
+  if (explicitChainIdentity) {
+    return (
+      (ownerChains ?? []).find(
+        candidate =>
+          String(candidate.chainIdentity) === String(explicitChainIdentity)
+      ) ?? null
+    );
+  }
+  const sequenceIndex = Number(action.attackSequenceIndex);
+  const controlSkillId = Number(action.attackInput?.controlSkillId);
+  const subSkillIndex = Number(
+    action.attackInput?.subSkillIndex ??
+      action.attackInput?.selectedSubSkillIndex
+  );
+  if (
+    !Number.isInteger(sequenceIndex) ||
+    !Number.isInteger(controlSkillId) ||
+    !Number.isInteger(subSkillIndex)
+  ) {
+    return null;
+  }
+  const matches = (ownerChains ?? []).filter(candidate =>
+    candidate.segments?.some(
+      segment =>
+        Number(segment.sequenceIndex) === sequenceIndex &&
+        Number(segment.controlSkillId) === controlSkillId &&
+        Number(segment.subSkillIndex) === subSkillIndex
+    )
+  );
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function materializeAuthorityAttackInputSelection({
+  action,
+  mapping,
+  ownerChains,
+  expected,
+}) {
+  const chain = (ownerChains ?? []).find(
+    candidate =>
+      expected.chainIdentity != null &&
+      String(candidate.chainIdentity) === String(expected.chainIdentity)
+  );
+  const segment = chain?.segments?.find(
+    candidate =>
+      Number(candidate.sequenceIndex) === Number(expected.sequenceIndex) &&
+      Number(candidate.controlSkillId) === Number(expected.controlSkillId) &&
+      Number(candidate.subSkillIndex) === Number(expected.subSkillIndex)
+  );
+  const sourceSegment = findAttackInputSourceSegment({
+    mapping,
+    controlSkillId: expected.controlSkillId,
+    subSkillIndex: expected.subSkillIndex,
+    sequenceIndex: chain ? null : expected.sequenceIndex,
+  });
+  if (!sourceSegment || (chain && !segment)) return null;
+  const projectedSegment = chain
+    ? projectVerifiedAttackInputChainSegment(
+        sourceSegment,
+        segment,
+        Number(expected.sequenceIndex),
+        chain.segments.length
+      )
+    : {
+        ...sourceSegment,
+        sequenceIndex: Number(expected.sequenceIndex),
+        sequenceTotal: Number(
+          sourceSegment.sequenceTotal ?? mapping.attackInputSegments?.length
+        ),
+        attackInputChainIdentity: null,
+      };
+  if (!projectedSegment) return null;
+  return createMaterializedAttackInputSelection({
+    action,
+    actionKind: mapping?.actionKind ?? action.actionKind ?? null,
+    chain,
+    segment: segment ?? sourceSegment,
+    projectedSegment,
+    sequenceIndex: Number(expected.sequenceIndex),
+    groupId: expected.groupId,
+    contextActionId: expected.contextActionId,
+  });
+}
+
+function materializeExistingAttackInputSelection({
+  action,
+  mapping,
+  chain,
+  sequenceIndex,
+}) {
+  const segment = chain?.segments?.find(
+    item => Number(item.sequenceIndex) === Number(sequenceIndex)
+  );
+  const requestedControlSkillId =
+    segment?.controlSkillId ?? action.attackInput?.controlSkillId;
+  const requestedSubSkillIndex =
+    segment?.subSkillIndex ??
+    action.attackInput?.subSkillIndex ??
+    action.attackInput?.selectedSubSkillIndex;
+  const sourceSegment = findAttackInputSourceSegment({
+    mapping,
+    controlSkillId: requestedControlSkillId,
+    subSkillIndex: requestedSubSkillIndex,
+    sequenceIndex: chain ? null : sequenceIndex,
+  });
+  if (!sourceSegment || (chain && !segment)) return null;
+  const projectedSegment = chain
+    ? projectVerifiedAttackInputChainSegment(
+        sourceSegment,
+        segment,
+        sequenceIndex,
+        chain.segments.length
+      )
+    : sourceSegment;
+  if (!projectedSegment) return null;
+  return createMaterializedAttackInputSelection({
+    action,
+    actionKind: mapping?.actionKind ?? action.actionKind ?? null,
+    chain,
+    segment: segment ?? sourceSegment,
+    projectedSegment,
     sequenceIndex,
-    derivedEntry,
+    groupId: action.attackGroupId,
+    contextActionId:
+      action.runtimeContextActionId ?? action.contextActionId ?? null,
+  });
+}
+
+function findAttackInputSourceSegment({
+  mapping,
+  controlSkillId,
+  sequenceIndex,
+}) {
+  return (
+    mapping.attackInputSourceSegments ??
+    mapping.attackInputSegments ??
+    []
+  ).find(
+    candidate =>
+      Number(candidate.controlSkillId) === Number(controlSkillId) &&
+      (sequenceIndex == null ||
+        candidate.sequenceIndex == null ||
+        Number(candidate.sequenceIndex) === Number(sequenceIndex))
+  );
+}
+
+function createMaterializedAttackInputSelection({
+  action,
+  actionKind,
+  chain,
+  segment,
+  projectedSegment,
+  sequenceIndex,
+  groupId,
+  contextActionId,
+}) {
+  const attackInputChainIdentity = chain?.chainIdentity ?? null;
+  const attackSequenceTotal = Number(
+    chain?.segments?.length ?? projectedSegment.sequenceTotal
+  );
+  return {
+    chain,
+    segment,
+    sequenceIndex,
+    action: {
+      ...action,
+      actionKind: actionKind ?? action.actionKind ?? null,
+      attackGroupId: groupId ?? action.attackGroupId,
+      attackSequenceIndex: sequenceIndex,
+      attackSequenceTotal,
+      attackInputChainIdentity,
+      runtimeContextActionId:
+        contextActionId ?? action.runtimeContextActionId ?? null,
+      controlSubSkillIndex: Number(
+        segment.subSkillIndex ?? segment.selectedSubSkillIndex
+      ),
+      attackInput: {
+        ...projectedSegment,
+        sequenceIndex,
+        sequenceTotal: attackSequenceTotal,
+        attackInputChainIdentity,
+      },
+    },
   };
 }
 
@@ -2265,6 +2609,7 @@ function resolveRuntimeDerivedAttackChainEntry({
   chain,
   ownerChains,
   actorState,
+  actorId,
   activeSwitchWindows,
   previous,
   timeMs,
@@ -2280,7 +2625,7 @@ function resolveRuntimeDerivedAttackChainEntry({
       window =>
         (window.compilerBindingIdentity != null ||
           window.relationType === 'attack-chain-continuity-window') &&
-        String(window.actorId) === String(actorState.actor.id) &&
+        String(window.actorId) === String(actorId) &&
         runtimeWindowContainsTime(window, timeMs)
     )
     .map(window => {
@@ -2311,6 +2656,14 @@ function resolveRuntimeDerivedAttackChainEntry({
       sequenceIndex: Number(quickEntries[0].segment.sequenceIndex),
       sourceKind: quickEntries[0].window.relationType,
       sourceIdentity: quickEntries[0].window.sourceIdentity,
+      sourceActionId: quickEntries[0].window.sourceActionId,
+      actorId,
+      chainIdentity: chain.chainIdentity,
+      controlSkillId: Number(quickEntries[0].segment.controlSkillId),
+      subSkillIndex: Number(quickEntries[0].segment.subSkillIndex),
+      groupId: previous?.attackGroupId ?? null,
+      startsAtMs: Number(quickEntries[0].window.startsAtMs),
+      endsAtMs: Number(quickEntries[0].window.endsAtMs),
     };
   }
   if (!previous?.ready) return null;
@@ -2348,6 +2701,18 @@ function resolveRuntimeDerivedAttackChainEntry({
         sequenceIndex: 1,
         sourceKind: 'attack-chain-phase-transition',
         sourceIdentity: transition.sourceIdentity,
+        sourceActionId: previous.actionId,
+        actorId,
+        chainIdentity: chain.chainIdentity,
+        controlSkillId: Number(chain.segments[0].controlSkillId),
+        subSkillIndex: Number(chain.segments[0].subSkillIndex),
+        groupId: previous.attackGroupId ?? null,
+        startsAtMs:
+          Number(previous.startMs) +
+          framesToMs(transition.inputWindow.startFrame, FRAME_RATE),
+        endsAtMs:
+          Number(previous.startMs) +
+          framesToMs(transition.inputWindow.endFrame, FRAME_RATE),
       };
     }
   }
@@ -2359,6 +2724,7 @@ function hasAttackChainEntryResource(chain, actorState) {
   if (!segmentLimit || segmentLimit.kind !== 'resource-current-value') {
     return true;
   }
+  if (!actorState) return false;
   const costPerSegment = Number(segmentLimit.costPerSegment);
   return costPerSegment > 0 && Number(actorState.current) >= costPerSegment;
 }
@@ -2652,6 +3018,7 @@ function resolveExecutionPrerequisite({ prerequisite, scenario, action }) {
 function isRuntimeConditionSatisfied(condition, actorState) {
   if (!condition) return true;
   if (condition.kind === 'always') return true;
+  if (!actorState) return false;
   if (condition.kind === 'resource-state-active') {
     return actorState.activeStates.has(Number(condition.stateElementId));
   }
@@ -3045,8 +3412,11 @@ function composeVerifiedChargingReleaseResolution({
   const sourceHits = (sourceResolution.hits ?? []).filter(
     hit => Number(hit.trigger?.startFrame) < releaseFrame
   );
-  const sourceAllHits = (sourceResolution.allHits ?? sourceResolution.hits ?? [])
-    .filter(hit => Number(hit.trigger?.startFrame) < releaseFrame);
+  const sourceAllHits = (
+    sourceResolution.allHits ??
+    sourceResolution.hits ??
+    []
+  ).filter(hit => Number(hit.trigger?.startFrame) < releaseFrame);
   const sourceEffects = (sourceResolution.effects ?? []).filter(
     effect => Number(effect.trigger?.startFrame) < releaseFrame
   );
@@ -3054,7 +3424,8 @@ function composeVerifiedChargingReleaseResolution({
     shiftChargingReleaseRecord(hit, releaseFrame, binding.bindingIdentity)
   );
   const releaseAllHits = (resolution.allHits ?? resolution.hits ?? []).map(
-    hit => shiftChargingReleaseRecord(hit, releaseFrame, binding.bindingIdentity)
+    hit =>
+      shiftChargingReleaseRecord(hit, releaseFrame, binding.bindingIdentity)
   );
   const releaseEffects = (resolution.effects ?? []).map(effect =>
     shiftChargingReleaseRecord(effect, releaseFrame, binding.bindingIdentity)
@@ -3066,12 +3437,8 @@ function composeVerifiedChargingReleaseResolution({
     bindingIdentity: binding.bindingIdentity,
     sourceControlSkillId: binding.sourceControlSkillId,
     sourceSubSkillIndex: binding.sourceSubSkillIndex,
-    executionControlSkillId: Number(
-      selection.selected.executionControlSkillId
-    ),
-    executionSubSkillIndex: Number(
-      selection.selected.executionSubSkillIndex
-    ),
+    executionControlSkillId: Number(selection.selected.executionControlSkillId),
+    executionSubSkillIndex: Number(selection.selected.executionSubSkillIndex),
     releaseFrame,
     releaseDurationFrames,
     durationFrames,
@@ -3105,12 +3472,8 @@ function composeVerifiedChargingReleaseResolution({
           boundary: 'right-open',
         },
         {
-          controlSkillId: Number(
-            selection.selected.executionControlSkillId
-          ),
-          subSkillIndex: Number(
-            selection.selected.executionSubSkillIndex
-          ),
+          controlSkillId: Number(selection.selected.executionControlSkillId),
+          subSkillIndex: Number(selection.selected.executionSubSkillIndex),
           startFrame: releaseFrame,
           endFrame: durationFrames,
           boundary: 'right-open',
@@ -3549,9 +3912,7 @@ function createContextWindowConflictBlock({
     ...new Set(
       edges.map(
         edge =>
-          `${edge.targetControlSkillId ?? ''}/${
-            edge.targetSubSkillIndex ?? 0
-          }`
+          `${edge.targetControlSkillId ?? ''}/${edge.targetSubSkillIndex ?? 0}`
       )
     ),
   ].sort();
@@ -3576,8 +3937,7 @@ function createContextWindowConflictBlock({
     requestedControlSkillId: controlSkillId,
     expectedControlSkillIds: expectedTargets,
     contextActionId: contextSelection.previous?.actionId ?? null,
-    inputWindow:
-      scheduling?.edge?.inputWindow ?? null,
+    inputWindow: scheduling?.edge?.inputWindow ?? null,
     resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
     resourceName: actorState?.profile?.name ?? null,
     requiredValue: null,
@@ -3660,6 +4020,43 @@ function createAttackChainExecutionBlock({ action, actorState, chain }) {
     message: `${actorState?.actor?.name ?? action.actor?.name ?? '角色'} 当前形态的普攻链只有 ${chain?.segments?.length ?? 0} 段，A${action.attackSequenceIndex} 不执行`,
     sourceKind: 'azpr-verified-action-variant-runtime',
     sourceIdentity: chain?.sourceIdentity ?? null,
+    actionId: action.id,
+    actionName: action.name,
+    actorId: action.actorId,
+    timeMs: action.startMs,
+    controlSkillId: null,
+    selectedSubSkillIndex: null,
+    resourceIdentity: actorState?.profile?.resourceIdentity ?? null,
+    resourceName: actorState?.profile?.name ?? null,
+    requiredValue: null,
+    currentValue: actorState?.current ?? null,
+    maxValue: actorState?.profile?.capacity ?? null,
+  };
+}
+
+function createNormalAttackInputPhaseExecutionBlock({
+  action,
+  actorState,
+  selection,
+}) {
+  const match = selection.authorityMatch;
+  const phase = selection.authorityPhase;
+  return {
+    ...createActionSourceSequenceFields(action),
+    code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+    status: 'blocked',
+    reason: 'verified-normal-attack-input-phase-conflict',
+    reasons: match?.reasons?.length
+      ? match.reasons
+      : ['normal-attack-input-phase-unresolved'],
+    message: `${actorState?.actor?.name ?? action.actor?.name ?? '角色'} 的普攻输入不符合当前 ${phase?.phase ?? 'unresolved'} 阶段，动作不执行`,
+    sourceKind:
+      phase?.sourceKind ?? 'azpr-verified-normal-attack-input-authority',
+    sourceIdentity: phase?.sourceIdentity ?? null,
+    formIdentity: phase?.formIdentity ?? null,
+    attackInputChainIdentity: phase?.chainIdentity ?? null,
+    expectedAttackInput: phase?.expected ?? null,
+    actualAttackInput: match?.actual ?? null,
     actionId: action.id,
     actionName: action.name,
     actorId: action.actorId,

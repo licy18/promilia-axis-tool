@@ -28,6 +28,7 @@ import { createEffectRuntimeTimeline } from '../../simulation/runtime/effectRunt
 const RUBY_ID = 103002;
 const JADE_ID = 101010;
 const CHARGED_INPUT_OWNER_ID = 107003;
+const MELANIA_ID = 112001;
 const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
     mapping.ownerId === RUBY_ID && mapping.actionKind === 'normal-attack'
@@ -35,8 +36,8 @@ const RUBY_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
 const RUBY_A1 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 1
 );
-const RUBY_A3 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
-  segment => segment.sequenceIndex === 3
+const RUBY_A2 = RUBY_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 2
 );
 const JADE_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
   mapping =>
@@ -47,6 +48,13 @@ const JADE_A1 = JADE_NORMAL_MAPPING.attackInputSegments.find(
 );
 const JADE_A5 = JADE_NORMAL_MAPPING.attackInputSegments.find(
   segment => segment.sequenceIndex === 5
+);
+const MELANIA_NORMAL_MAPPING = mechanicsPackage.actionMappings.find(
+  mapping =>
+    mapping.ownerId === MELANIA_ID && mapping.actionKind === 'normal-attack'
+);
+const MELANIA_A1 = MELANIA_NORMAL_MAPPING.attackInputSegments.find(
+  segment => segment.sequenceIndex === 1
 );
 
 beforeEach(() => {
@@ -468,27 +476,48 @@ describe('verified action variant and special resource runtime', () => {
   });
 
   it('replays public normal-attack intent into Ruby E1 only inside the sourced A3 transition window', () => {
+    const a1 = createActorAction({
+      id: 'ruby-public-a1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: 0,
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    a1.attackGroupId = 'ruby-public-default-chain';
+    const a2StartFrame = RUBY_A1.linkWindow.startFrame;
+    const a2 = createActorAction({
+      id: 'ruby-public-a2',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(a2StartFrame),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    const a3StartFrame = a2StartFrame + RUBY_A2.linkWindow.startFrame;
     const a3 = createActorAction({
       id: 'ruby-public-a3',
       characterId: RUBY_ID,
       skillId: 10300201,
-      startMs: 0,
-      attackInput: RUBY_A3,
-      attackSequenceIndex: 3,
+      startMs: frameTime(a3StartFrame),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
       attackInputIntent: createPublicNormalAttackIntent(),
     });
     const inside = createActorAction({
       id: 'ruby-public-after-a3-inside',
       characterId: RUBY_ID,
       skillId: 10300201,
-      startMs: frameTime(34),
+      startMs: frameTime(a3StartFrame + 34),
       attackInput: RUBY_A1,
       attackSequenceIndex: 1,
       attackInputIntent: createPublicNormalAttackIntent(),
     });
     const insideRuntime = runVariantRuntime({
       actors: [a3.actor],
-      actions: [a3, inside],
+      actions: [a1, a2, a3, inside],
       durationMs: 3000,
       initialRuntimeState: createRubyAmmoState(a3.actorId, 6),
     });
@@ -511,11 +540,11 @@ describe('verified action variant and special resource runtime', () => {
     const outside = {
       ...inside,
       id: 'ruby-public-after-a3-outside',
-      startMs: frameTime(79),
+      startMs: frameTime(a3StartFrame + 79),
     };
     const outsideRuntime = runVariantRuntime({
       actors: [a3.actor],
-      actions: [a3, outside],
+      actions: [a1, a2, a3, outside],
       durationMs: 3000,
       initialRuntimeState: createRubyAmmoState(a3.actorId, 6),
     });
@@ -591,22 +620,6 @@ describe('verified action variant and special resource runtime', () => {
   });
 
   it.each([
-    {
-      label: 'A3 transition',
-      startFrame: 34,
-      endFrame: 79,
-      initialAmmo: 6,
-      createSource: () =>
-        createActorAction({
-          id: 'ruby-entry-source-a3',
-          characterId: RUBY_ID,
-          skillId: 10300201,
-          startMs: 0,
-          attackInput: RUBY_A3,
-          attackSequenceIndex: 3,
-          attackInputIntent: createPublicNormalAttackIntent(),
-        }),
-    },
     {
       label: 'reload',
       startFrame: 24,
@@ -701,6 +714,186 @@ describe('verified action variant and special resource runtime', () => {
       }
     }
   );
+
+  it('blocks an explicit A1 fallback while a sourced Ruby dodge continuation owns the input', () => {
+    const chain = mechanicsPackage.actionVariantGraph.attackInputChains.find(
+      item => item.chainIdentity === 'ruby-enhanced-twelve-inputs'
+    );
+    const segment = chain.segments[0];
+    const source = RUBY_NORMAL_MAPPING.attackInputSourceSegments.find(
+      item => Number(item.controlSkillId) === Number(segment.controlSkillId)
+    );
+    const enhanced = createActorAction({
+      id: 'ruby-exclusive-e1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      attackInput: projectVerifiedAttackInputChainSegment(
+        source,
+        segment,
+        1,
+        chain.segments.length,
+        chain.chainIdentity
+      ),
+      attackSequenceIndex: 1,
+    });
+    enhanced.attackInputChainIdentity = chain.chainIdentity;
+    enhanced.attackGroupId = 'ruby-exclusive-chain';
+    const dodge = createActorAction({
+      id: 'ruby-exclusive-dodge',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      actionVariantIndex: 2,
+      startMs: frameTime(segment.durationFrames),
+    });
+    const fallback = createActorAction({
+      id: 'ruby-illegal-explicit-a1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(segment.durationFrames + 30),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+    });
+    fallback.attackInputChainSelectionSource = 'user-explicit';
+
+    const runtime = runVariantRuntime({
+      actors: [enhanced.actor],
+      actions: [enhanced, dodge, fallback],
+      durationMs: 10_000,
+      initialRuntimeState: createRubyAmmoState(enhanced.actorId, 12),
+    });
+
+    expect(runtime.executionBlocks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: fallback.id,
+          code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+          reason: 'verified-normal-attack-input-phase-conflict',
+          reasons: ['normal-attack-successor-window-target-conflict'],
+        }),
+      ])
+    );
+    expect(runtime.selectionByActionId.get(fallback.id)).toMatchObject({
+      status: 'verified-normal-attack-input-phase-conflict',
+    });
+  });
+
+  it('materializes the real A2 for one runtime-context input inside a direct successor window', () => {
+    const first = createActorAction({
+      id: 'ruby-single-input-a1',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+    first.attackGroupId = 'ruby-single-input-chain';
+    const generic = createActorAction({
+      id: 'ruby-single-input-next',
+      characterId: RUBY_ID,
+      skillId: 10300201,
+      startMs: frameTime(RUBY_A1.linkWindow.startFrame),
+      attackInput: RUBY_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(),
+    });
+
+    const runtime = runVariantRuntime({
+      actors: [first.actor],
+      actions: [first, generic],
+      durationMs: 10_000,
+      initialRuntimeState: createRubyAmmoState(first.actorId, 0),
+    });
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(runtime.selectionByActionId.get(generic.id)).toMatchObject({
+      attackGroupId: 'ruby-single-input-chain',
+      attackInputChainIdentity: 'ruby-normal-default-three-inputs',
+      attackChainSequenceIndex: 2,
+      executionControlSkillId: 10300202,
+      selectedSubSkillIndex: 0,
+      status: 'verified-action-variant-selection-ready',
+    });
+  });
+
+  it('materializes mapping-backed 112001 A2 without requiring a graph chain or special resource profile', () => {
+    const first = createActorAction({
+      id: 'melania-mapping-only-a1',
+      characterId: MELANIA_ID,
+      skillId: 11200101,
+      attackInput: MELANIA_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(11200101),
+    });
+    first.attackGroupId = 'melania-mapping-only-chain';
+    const generic = createActorAction({
+      id: 'melania-mapping-only-next',
+      characterId: MELANIA_ID,
+      skillId: 11200101,
+      startMs: frameTime(MELANIA_A1.linkWindow.startFrame),
+      attackInput: MELANIA_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(11200101),
+    });
+
+    const runtime = runVariantRuntime({
+      actors: [first.actor],
+      actions: [first, generic],
+      durationMs: 10_000,
+    });
+
+    expect(runtime.executionBlocks).toEqual([]);
+    expect(runtime.selectionByActionId.get(generic.id)).toMatchObject({
+      attackGroupId: 'melania-mapping-only-chain',
+      attackInputChainIdentity: null,
+      attackChainSequenceIndex: 2,
+      executionControlSkillId: 11200102,
+      selectedSubSkillIndex: 0,
+      status: 'verified-action-variant-selection-ready',
+    });
+  });
+
+  it('blocks an explicit fresh 112001 A1 in the sourced A2 window even when its group changes', () => {
+    const first = createActorAction({
+      id: 'melania-exclusive-a1',
+      characterId: MELANIA_ID,
+      skillId: 11200101,
+      attackInput: MELANIA_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(11200101),
+    });
+    first.attackGroupId = 'melania-original-chain';
+    const fallback = createActorAction({
+      id: 'melania-illegal-fresh-a1',
+      characterId: MELANIA_ID,
+      skillId: 11200101,
+      startMs: frameTime(MELANIA_A1.linkWindow.startFrame),
+      attackInput: MELANIA_A1,
+      attackSequenceIndex: 1,
+      attackInputIntent: createPublicNormalAttackIntent(11200101),
+    });
+    fallback.attackInputChainSelectionSource = 'user-explicit';
+    fallback.attackGroupId = 'melania-forged-fresh-group';
+
+    const runtime = runVariantRuntime({
+      actors: [first.actor],
+      actions: [first, fallback],
+      durationMs: 10_000,
+    });
+
+    expect(runtime.executionBlocks).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actionId: fallback.id,
+          code: 'VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT',
+          reason: 'verified-normal-attack-input-phase-conflict',
+          reasons: ['normal-attack-successor-window-target-conflict'],
+        }),
+      ])
+    );
+    expect(runtime.selectionByActionId.get(fallback.id)).toMatchObject({
+      status: 'verified-normal-attack-input-phase-conflict',
+    });
+  });
 
   it('emits one Red Heat stack per enhanced input through the compiled passive runtime', () => {
     const enhanced = createActorAction({
@@ -2577,13 +2770,13 @@ function readResourceGainAtFrame(runtime, actionId, frame) {
   )?.payload;
 }
 
-function createPublicNormalAttackIntent() {
+function createPublicNormalAttackIntent(sourceSkillId = 10300201) {
   return {
     schemaVersion: 1,
     contractName: 'AzPrWorkbenchAttackInputIntent',
     kind: 'public-normal-attack',
     selectionMode: 'runtime-context',
-    sourceSkillId: 10300201,
+    sourceSkillId,
     sourceIdentity: 'workbench-public-normal-attack-input',
   };
 }
