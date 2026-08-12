@@ -405,9 +405,10 @@ function createRuntimeProfileOverlay(
         String(row?.actionKind ?? ''),
       ].join('|')
   );
-  const profileAttackInputSegments = (
+  const profileAttackInputChains = projectRuntimeProfileAttackInputChains(
     profile.contracts?.attackInputChains ?? []
-  ).flatMap(chain =>
+  );
+  const profileAttackInputSegments = profileAttackInputChains.flatMap(chain =>
     (chain.segments ?? []).map(segment => ({
       ...structuredClone(segment),
       identity:
@@ -498,18 +499,39 @@ function createRuntimeProfileOverlay(
               String(segment.attackInputChainIdentity) &&
             Number(candidate.sequenceIndex) === Number(segment.sequenceIndex)
         );
+        const selectedSubSkillIndex = Number(
+          existing?.selectedSubSkillIndex ??
+            segment.subSkillIndex ??
+            segment.selectedSubSkillIndex ??
+            0
+        );
+        const projectedHitIdentities =
+          collectRuntimeProfileSegmentHitIdentities(
+            segment,
+            result.controlBindings
+          );
+        const existingHitIdentities = [
+          ...(existing?.selectedHitIdentities ?? []),
+        ];
+        const selectedHitIdentities = sameStringSet(
+          existingHitIdentities,
+          projectedHitIdentities
+        )
+          ? existingHitIdentities
+          : projectedHitIdentities.length > 0
+            ? projectedHitIdentities
+            : existingHitIdentities;
         if (existing) {
           return {
             ...segment,
             ...structuredClone(existing),
             attackInputChainIdentity: segment.attackInputChainIdentity,
+            selectedSubSkillIndex,
+            selectedHitIdentities,
+            hitCount: selectedHitIdentities.length,
           };
         }
         const durationFrames = Number(segment.durationFrames);
-        const selectedSubSkillIndex = Number(segment.subSkillIndex ?? 0);
-        const selectedHitIdentities = (segment.executionTiming?.hits ?? [])
-          .map(hit => hit.hitIdentity)
-          .filter(Boolean);
         return {
           ...segment,
           selectedSubSkillIndex,
@@ -613,7 +635,7 @@ function createRuntimeProfileOverlay(
   );
   graph.attackInputChains = upsertRows(
     graph.attackInputChains,
-    profile.contracts?.attackInputChains,
+    profileAttackInputChains,
     row => String(row?.chainIdentity ?? '')
   );
   graph.attackInputMechanicWindows = upsertRows(
@@ -777,6 +799,121 @@ function createRuntimeProfileOverlay(
     pickupAbsorbBindingCount: graph.pickupAbsorbBindings.length,
   };
   return result;
+}
+
+function collectRuntimeProfileSegmentHitIdentities(
+  segment,
+  controlBindings = []
+) {
+  const controlSkillId = Number(segment?.controlSkillId);
+  const subSkillIndex = Number(
+    segment?.subSkillIndex ?? segment?.selectedSubSkillIndex ?? 0
+  );
+  const timingHitIdentities = (segment?.executionTiming?.hits ?? [])
+    .map(hit => hit.hitIdentity)
+    .filter(Boolean);
+  const installedControlHitIdentities = (controlBindings ?? [])
+    .filter(binding => Number(binding?.controlSkillId) === controlSkillId)
+    .flatMap(binding => binding?.hits ?? [])
+    .filter(
+      hit =>
+        Number.isInteger(Number(hit?.mapIndex)) &&
+        Number(hit.mapIndex) === subSkillIndex
+    )
+    .map(hit => hit.hitIdentity)
+    .filter(Boolean);
+  return [
+    ...new Set([...timingHitIdentities, ...installedControlHitIdentities]),
+  ].sort((left, right) => left.localeCompare(right, 'en'));
+}
+
+function sameStringSet(left = [], right = []) {
+  if (left.length !== right.length) return false;
+  const rightValues = new Set(right.map(value => String(value)));
+  return left.every(value => rightValues.has(String(value)));
+}
+
+function projectRuntimeProfileAttackInputChains(chains) {
+  return structuredClone(chains ?? []).map(chain => {
+    const segments = chain.segments ?? [];
+    const chainSourceIdentity = chain.entryPolicy?.sourceIdentity;
+    return {
+      ...chain,
+      segments: segments.map((segment, index) => {
+        const successor = segments[index + 1] ?? null;
+        const linkWindow = segment.executionTiming?.occupancy?.linkWindow;
+        const successorSubSkillIndex = Number(
+          successor?.subSkillIndex ?? successor?.selectedSubSkillIndex
+        );
+        const canProjectIndexedSuccessor =
+          successor != null &&
+          Number.isInteger(successorSubSkillIndex) &&
+          successorSubSkillIndex >= 0 &&
+          Number(segment.nextControlSkillId) ===
+            Number(successor.controlSkillId) &&
+          linkWindow?.inputToIndex === true &&
+          linkWindow.allowAttack === true &&
+          (linkWindow.allowedInputCommands ?? []).includes('normal-attack') &&
+          Number(linkWindow.targetControlSkillId) ===
+            Number(successor.controlSkillId) &&
+          typeof linkWindow.sourceIdentity === 'string' &&
+          linkWindow.sourceIdentity.length > 0 &&
+          typeof chainSourceIdentity === 'string' &&
+          chainSourceIdentity.length > 0 &&
+          typeof successor.sourceIdentity === 'string' &&
+          successor.sourceIdentity.length > 0;
+        if (
+          !canProjectIndexedSuccessor ||
+          Number(linkWindow.targetSubSkillIndex ?? 0) === successorSubSkillIndex
+        ) {
+          return segment;
+        }
+        const projectedSourceIdentity = [
+          linkWindow.sourceIdentity,
+          chainSourceIdentity,
+          successor.sourceIdentity,
+        ].join('|');
+        const projectWindow = window => {
+          if (
+            window?.inputToIndex !== true ||
+            Number(window.targetControlSkillId) !==
+              Number(successor.controlSkillId) ||
+            Number(window.startFrame) !== Number(linkWindow.startFrame) ||
+            Number(window.endFrame) !== Number(linkWindow.endFrame) ||
+            String(window.sourceIdentity ?? '') !==
+              String(linkWindow.sourceIdentity)
+          ) {
+            return window;
+          }
+          return {
+            ...window,
+            targetSubSkillIndex: successorSubSkillIndex,
+            sourceIdentity: projectedSourceIdentity,
+            targetProjection: {
+              kind: 'verified-input-to-index-chain-successor',
+              chainIdentity: String(chain.chainIdentity),
+              sourceTargetSubSkillIndex: Number(
+                linkWindow.targetSubSkillIndex ?? 0
+              ),
+              projectedTargetSubSkillIndex: successorSubSkillIndex,
+              successorSourceIdentity: successor.sourceIdentity,
+            },
+          };
+        };
+        return {
+          ...segment,
+          executionTiming: {
+            ...segment.executionTiming,
+            occupancy: {
+              ...segment.executionTiming.occupancy,
+              linkWindow: projectWindow(linkWindow),
+            },
+            windows: (segment.executionTiming.windows ?? []).map(projectWindow),
+          },
+        };
+      }),
+    };
+  });
 }
 
 function upsertRows(existing = [], additions = [], identity) {
@@ -3759,6 +3896,11 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
         action => String(action.id ?? '') === actionId
       )
   );
+  const negativeEvidenceClassified =
+    validation.hashes?.trace != null ||
+    (validation.classification?.schemaStatus === 'schema-valid' &&
+      validation.classification?.runnabilityStatus === 'not-runnable' &&
+      validation.classification?.evidenceStatus === 'not-evaluated');
   return {
     identity:
       negativeCase.assertionIdentity ??
@@ -3770,7 +3912,7 @@ function inspectNegativeActionCase(service, fixture, negativeCase) {
       baselineValidation.valid === true &&
       baselinePrerequisiteIssues.length === 0 &&
       baselineMissingActionIds.length === 0 &&
-      validation.hashes?.trace != null,
+      negativeEvidenceClassified,
     actual: {
       issue: issue ?? null,
       initialActorResources: structuredClone(

@@ -5,6 +5,7 @@
   "fixturePath": "fixtures/character-acceptance/102001-visual.json",
   "goldenReports": ["reports/m10/102001/golden-trace.json"],
   "runtimeProfileOverlay": true,
+  "inputWindowBoundary": null,
   "productVisualAcceptance": {
     "status": "pending",
     "acceptanceCommit": null,
@@ -999,7 +1000,7 @@
           "operation": ["apply", "expire"],
           "absoluteFrame": [2851, 3211],
           "modifiers.0.valueRaw": [1900, 1900],
-          "targetId": ["actor-101010", "actor-101010"]
+          "targetId": ["actor-103002", "actor-103002"]
         }
       },
       "select": ["expiresAtMs"]

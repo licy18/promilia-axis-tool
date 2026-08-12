@@ -55,7 +55,7 @@
       },
       {
         "actionId": "window-outside-after",
-        "expectedOffset": 72,
+        "expectedOffset": 230,
         "expectedControlSkillId": 10700101,
         "expectedSubSkillIndex": 0
       }
@@ -81,6 +81,7 @@
             "publicActionId": 10700101,
             "actionKind": "normal-attack",
             "attackInput": {
+              "chainIdentity": "sifliya-normal-three-inputs",
               "sequenceIndex": 1,
               "groupId": "negative-window-before-source"
             },
@@ -96,6 +97,7 @@
             "publicActionId": 10700101,
             "actionKind": "normal-attack",
             "attackInput": {
+              "chainIdentity": "sifliya-normal-three-inputs",
               "sequenceIndex": 1,
               "groupId": "negative-window-before-fresh-a1",
               "contextActionId": "window-before-source"
@@ -108,6 +110,53 @@
       "requiredExecutableActionIds": ["window-before-source"],
       "expectedIssue": {
         "actionId": "window-outside-before",
+        "code": "machine-axis-action-not-executable",
+        "reason": "verified-normal-attack-input-phase-conflict",
+        "violationCode": "VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT"
+      }
+    },
+    {
+      "identity": "normal-input-window-outside-after-recovery-locked",
+      "assertionIdentity": "negative:input-window-outside-after-72f-recovery-locked",
+      "durationFrames": 300,
+      "actions": [
+        {
+          "id": "window-after-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10700101,
+            "actionKind": "normal-attack",
+            "attackInput": {
+              "chainIdentity": "sifliya-normal-three-inputs",
+              "sequenceIndex": 1,
+              "groupId": "negative-window-after-source"
+            },
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "window-outside-after",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10700101,
+            "actionKind": "normal-attack",
+            "attackInput": {
+              "chainIdentity": "sifliya-normal-three-inputs",
+              "sequenceIndex": 1,
+              "groupId": "negative-window-after-fresh-a1",
+              "contextActionId": "window-after-source"
+            },
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 72 }
+        }
+      ],
+      "requiredExecutableActionIds": ["window-after-source"],
+      "expectedIssue": {
+        "actionId": "window-outside-after",
         "code": "machine-axis-action-not-executable",
         "reason": "verified-normal-attack-input-phase-conflict",
         "violationCode": "VERIFIED_NORMAL_ATTACK_INPUT_PHASE_CONFLICT"
@@ -193,9 +242,9 @@
       "beforeValue": 9,
       "afterValue": 10,
       "missActionId": "107001-critical-miss-critical",
-      "missHitIdentity": "10700111|0|elements|0|3489400683992734411|37|1",
+      "missHitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0",
       "blockedActionId": "107001-blocked-arrow-negative",
-      "blockedHitIdentity": "10700111|0|elements|0|3489400683992734411|37|1"
+      "blockedHitIdentity": "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0"
     },
     {
       "kind": "tuning-hit-gate",
@@ -246,7 +295,7 @@
     {
       "kind": "companion-lifecycle",
       "assertionIdentity": "lumi-twelve-second-two-volley-cadence-ownership-target",
-      "summonActionId": "window-outside-after",
+      "summonActionId": "window-inside-end",
       "durationMs": 12000,
       "cadenceMs": 5000,
       "periodicCount": 2,
