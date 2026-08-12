@@ -17,7 +17,7 @@
 - runtime 接线提交为 `dc952acc686e4b147b1255ac2aa071fbc65aafc5` 与 `9c4b0c56e121ef7436e1c9b523d3830939688df6`：错误的显式 A1/new-group 不能绕过相位，generic 单输入物化真实后继；同 group 的合法多轮连段按 reopen/idle 分实例，不能误合并或重置相位。核心 authority/runtime/action-rule 聚焦为 3 files、86/86 PASS。
 - Workbench live 输入由 `bfd0b9f8f5d8576b09c41b2829b696edadd86ff3` 改为一次 click/drag 只物化一个精确输入，优先级为 special/context > successor > idle A1；缺失、多义或资源不足时零插入。迁移后的 Workbench 完整单文件为 109/109 PASS，M11-C 定向真实浏览器验证由 `861445b02d59e7ed33af7f9229003fe4301429a5` 通过。
 - Machine Axis service、canonical core 与 action-legality proof 已统一投影 authority descriptor、结构化 form/expected/actual 证据，并拒绝错误 sequence；新的 `m11-b-three-actor-authority.json` 取代共享消费者中的旧 standalone-A3 baseline。旧 `m11-b-three-actor-120s.json` 保留为必须失败的历史反例，不删除、不覆盖。
-- 当前中央聚焦复验：service 20/20、canonical core 15/15、axis boundary 23/23、共享 CLI/batch/adapter/project/trace 消费者 7 files 96/96、Workbench 109/109。搜索/优化器与旧 artifact/checkpoint 失效提交仍须串行审查合入；在最终 clean HEAD 的单次 release 准入通过前，`optimizationFormalScoreReady=false`，不得启动新搜索。
+- 当前中央聚焦复验：service 20/20、canonical core 15/15、Workbench 109/109；authority consumer 收口后的 acceptance/adapter/axis-boundary 合并集为 3 files、45/45 PASS，CLI/batch 示例已迁到 authority fixture。搜索/优化器已由 `dfadb9e8`、`70c2363d`、`959d6be4` 串行集成并以 9 files、114/114 PASS 复验：拒绝 `[0,18)` 单 A1 循环、允许 `[0,230)` 恢复终点闭合，Ruby 强化续段保留弹药缺口证明；旧 fixture 仅作为 service 明确负例。artifact/resume/finalization/pointer/closeout 现统一对 repo live descriptor 做全字段稳定比较，同 hash 伪造字段的负例已通过；最终独立复核、派生产物刷新与单次 release 准入尚未完成，因此 `optimizationFormalScoreReady=false`，不得启动新搜索。
 
 ## 0. 2026-08-11 中央集成快照
 

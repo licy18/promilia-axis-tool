@@ -7,6 +7,7 @@ import { createServer } from 'vite';
 import {
   FORMAL_SEARCH_RANKING_CLAIM,
   createCandidateRawIdentity,
+  matchesNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   sha256Text,
@@ -143,6 +144,16 @@ async function verifyTop15({
       index.finalizationHash !== finalization.finalizationHash
     ) {
       objectiveIssues.push('finalization-hash-pointer-mismatch');
+    }
+    for (const artifact of [pointer, finalization, index]) {
+      if (
+        !matchesNormalAttackInputAuthorityDescriptor(
+          artifact.normalAttackInputAuthority,
+          normalAttackInputAuthority
+        )
+      ) {
+        objectiveIssues.push('normal-attack-input-authority-mismatch');
+      }
     }
     if (
       sha256Text(finalizationText) !==

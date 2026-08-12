@@ -15,6 +15,7 @@ import {
   sha256Canonical,
   sha256Text,
   validateNormalAttackInputAuthorityDescriptor,
+  validateResumeNormalAttackInputAuthority,
   writeJsonAtomic,
 } from './formal-search-artifacts.mjs';
 import {
@@ -168,6 +169,20 @@ try {
     maxActionCount: config.maxActionCount,
     stopPolicy: config.stopPolicy,
   };
+  const existingRoundManifest = await readJsonIfExists(
+    path.join(roundDirectory, 'round-manifest.json')
+  );
+  if (
+    existingRoundManifest &&
+    !validateResumeNormalAttackInputAuthority({
+      expected: normalAttackInputAuthority,
+      roundManifest: existingRoundManifest,
+    }).valid
+  ) {
+    throw new Error(
+      'Existing greedy round predates or mismatches the verified normal-attack combo authority; preserve it in place and start a new run/round ID'
+    );
+  }
   await writeJsonAtomic(
     path.join(roundDirectory, 'round-manifest.json'),
     roundManifest
@@ -230,8 +245,10 @@ try {
       if (
         previousCheckpoint.inputHash !== inputHash ||
         previousCheckpoint.guidanceHash !== guidanceHash ||
-        previousCheckpoint.normalAttackInputAuthority?.contractHash !==
-          normalAttackInputAuthority.contractHash
+        !validateResumeNormalAttackInputAuthority({
+          expected: normalAttackInputAuthority,
+          checkpoint: previousCheckpoint,
+        }).valid
       ) {
         throw new Error(`Completed shard input drift: ${shardId}`);
       }
@@ -243,6 +260,16 @@ try {
         previousCheckpoint.artifacts?.resultCanonicalSha256
       ) {
         throw new Error(`Completed shard result hash mismatch: ${shardId}`);
+      }
+      if (
+        !validateResumeNormalAttackInputAuthority({
+          expected: normalAttackInputAuthority,
+          result: previousResult,
+        }).valid
+      ) {
+        throw new Error(
+          `Completed shard result normal-attack input authority mismatch: ${shardId}`
+        );
       }
       emit({
         event: 'shard-resumed',

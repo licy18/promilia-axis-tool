@@ -7,6 +7,7 @@ import {
   FORMAL_SEARCH_RANKING_CLAIM,
   analyzeFinalCandidateInitialState,
   loadRepositoryNormalAttackInputAuthorityDescriptor,
+  matchesNormalAttackInputAuthorityDescriptor,
   readJson,
   sha256Canonical,
   validateFinalCandidate,
@@ -125,6 +126,20 @@ for (const objective of objectiveIds) {
     validateBoundary(effectiveCoverage, `${objective}:effective-coverage`);
   }
   expect(latest.valid === true, `${objective}:latest-pointer-invalid`);
+  expect(
+    matchesNormalAttackInputAuthorityDescriptor(
+      latest.normalAttackInputAuthority,
+      normalAttackInputAuthority
+    ),
+    `${objective}:latest-pointer-normal-attack-input-authority-mismatch`
+  );
+  expect(
+    matchesNormalAttackInputAuthorityDescriptor(
+      finalization.normalAttackInputAuthority,
+      normalAttackInputAuthority
+    ),
+    `${objective}:finalization-normal-attack-input-authority-mismatch`
+  );
   expect(
     finalization.validity?.valid === true,
     `${objective}:finalization-invalid`
@@ -281,6 +296,7 @@ const report = {
   valid: issues.length === 0,
   rankingClaim: FORMAL_SEARCH_RANKING_CLAIM,
   formalRankingReady: false,
+  normalAttackInputAuthority,
   clientParityReady: false,
   optimizationFormalScoreReady: formallyQualifiedCandidateCount === 15,
   boundaries: {

@@ -81,6 +81,39 @@ export function validateNormalAttackInputAuthorityDescriptor(value) {
   return { valid: issues.length === 0, issues };
 }
 
+export function matchesNormalAttackInputAuthorityDescriptor(actual, expected) {
+  return (
+    validateNormalAttackInputAuthorityDescriptor(actual).valid &&
+    validateNormalAttackInputAuthorityDescriptor(expected).valid &&
+    stableJson(actual) === stableJson(expected)
+  );
+}
+
+export function validateResumeNormalAttackInputAuthority({
+  expected,
+  roundManifest,
+  checkpoint,
+  result,
+} = {}) {
+  const issues = [];
+  for (const [layer, artifact] of [
+    ['round-manifest', roundManifest],
+    ['checkpoint', checkpoint],
+    ['result', result],
+  ]) {
+    if (
+      artifact !== undefined &&
+      !matchesNormalAttackInputAuthorityDescriptor(
+        artifact?.normalAttackInputAuthority,
+        expected
+      )
+    ) {
+      issues.push(`${layer}-normal-attack-input-authority-mismatch`);
+    }
+  }
+  return { valid: issues.length === 0, issues };
+}
+
 export async function loadRepositoryNormalAttackInputAuthorityDescriptor({
   repositoryRoot = REPOSITORY_ROOT,
   createServer = null,
@@ -125,7 +158,7 @@ function validateArtifactNormalAttackInputAuthority({
   if (!expectedValidation.valid) {
     return [`${prefix}-normal-attack-input-authority-expected-missing`];
   }
-  if (stableJson(descriptor) !== stableJson(expected)) {
+  if (!matchesNormalAttackInputAuthorityDescriptor(descriptor, expected)) {
     return [`${prefix}-normal-attack-input-authority-mismatch`];
   }
   return [];

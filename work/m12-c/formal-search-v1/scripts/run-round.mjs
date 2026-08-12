@@ -13,6 +13,7 @@ import {
   sha256Canonical,
   sha256Text,
   validateNormalAttackInputAuthorityDescriptor,
+  validateResumeNormalAttackInputAuthority,
   writeJsonAtomic,
 } from './formal-search-artifacts.mjs';
 import {
@@ -185,8 +186,10 @@ try {
   );
   if (
     existingRoundManifest &&
-    existingRoundManifest.normalAttackInputAuthority?.contractHash !==
-      normalAttackInputAuthority.contractHash
+    !validateResumeNormalAttackInputAuthority({
+      expected: normalAttackInputAuthority,
+      roundManifest: existingRoundManifest,
+    }).valid
   ) {
     throw new Error(
       'Existing round predates or mismatches the verified normal-attack combo authority; preserve it in place and start a new run/round ID'
@@ -275,8 +278,10 @@ try {
       if (
         previousCheckpoint.inputHash !== inputHash ||
         previousCheckpoint.guidanceHash !== guidanceHash ||
-        previousCheckpoint.normalAttackInputAuthority?.contractHash !==
-          normalAttackInputAuthority.contractHash
+        !validateResumeNormalAttackInputAuthority({
+          expected: normalAttackInputAuthority,
+          checkpoint: previousCheckpoint,
+        }).valid
       ) {
         throw new Error(
           `Completed shard ${shardCoordinates.shardId} does not match the current input; create a new round instead of overwriting evidence`
@@ -295,6 +300,16 @@ try {
       ) {
         throw new Error(
           `Completed shard ${shardCoordinates.shardId} result hash mismatch`
+        );
+      }
+      if (
+        !validateResumeNormalAttackInputAuthority({
+          expected: normalAttackInputAuthority,
+          result,
+        }).valid
+      ) {
+        throw new Error(
+          `Completed shard ${shardCoordinates.shardId} result normal-attack input authority mismatch`
         );
       }
       process.stdout.write(

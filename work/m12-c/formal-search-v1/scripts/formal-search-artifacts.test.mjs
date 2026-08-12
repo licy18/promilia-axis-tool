@@ -4,9 +4,11 @@ import {
   aggregateRoundAggregates,
   aggregateShardResults,
   loadRepositoryNormalAttackInputAuthorityDescriptor,
+  matchesNormalAttackInputAuthorityDescriptor,
   sha256Canonical,
   stableJson,
   validateFinalCandidate,
+  validateResumeNormalAttackInputAuthority,
 } from './formal-search-artifacts.mjs';
 
 const objective = 'cycle-dps-no-toughness';
@@ -18,6 +20,62 @@ test('stable hashing ignores object insertion order', () => {
   assert.equal(
     sha256Canonical({ b: 2, a: 1 }),
     sha256Canonical({ a: 1, b: 2 })
+  );
+});
+
+test('authority equality checks every descriptor field, not only contract hash', () => {
+  assert.equal(
+    matchesNormalAttackInputAuthorityDescriptor(
+      { ...normalAttackInputAuthority },
+      normalAttackInputAuthority
+    ),
+    true
+  );
+  assert.equal(
+    matchesNormalAttackInputAuthorityDescriptor(
+      {
+        ...normalAttackInputAuthority,
+        policyVersion: `${normalAttackInputAuthority.policyVersion}-forged`,
+      },
+      normalAttackInputAuthority
+    ),
+    false
+  );
+  assert.equal(
+    matchesNormalAttackInputAuthorityDescriptor(
+      {
+        ...normalAttackInputAuthority,
+        forgedField: true,
+      },
+      normalAttackInputAuthority
+    ),
+    false
+  );
+});
+
+test('resume rejects same-hash forged descriptors at every artifact layer', () => {
+  for (const layer of ['roundManifest', 'checkpoint', 'result']) {
+    const forged = {
+      normalAttackInputAuthority: {
+        ...normalAttackInputAuthority,
+        policyVersion: `${normalAttackInputAuthority.policyVersion}-forged`,
+      },
+    };
+    const validation = validateResumeNormalAttackInputAuthority({
+      expected: normalAttackInputAuthority,
+      [layer]: forged,
+    });
+    assert.equal(validation.valid, false, layer);
+    assert.equal(validation.issues.length, 1, layer);
+  }
+  assert.deepEqual(
+    validateResumeNormalAttackInputAuthority({
+      expected: normalAttackInputAuthority,
+      roundManifest: { normalAttackInputAuthority },
+      checkpoint: { normalAttackInputAuthority },
+      result: { normalAttackInputAuthority },
+    }),
+    { valid: true, issues: [] }
   );
 });
 
