@@ -227,12 +227,8 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-zero"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
@@ -240,7 +236,7 @@
         "frame": 0
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 0
@@ -255,20 +251,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-full"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 650
+        "frame": 190
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 9999
@@ -283,20 +275,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1250
+        "frame": 380
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 499
@@ -311,20 +299,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1360
+        "frame": 570
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 500
@@ -339,20 +323,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1470
+        "frame": 1120
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "expected"
         }
@@ -366,20 +346,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1580
+        "frame": 1310
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "critical"
         }
@@ -393,20 +369,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1690
+        "frame": 1500
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
@@ -420,24 +392,32 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "critical-base"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 1800
+        "frame": 1690
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "miss",
           "criticalMode": "critical"
         }
       }
+    },
+    {
+      "id": "misa-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 2593 }
+    },
+    {
+      "id": "misa-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 2607 }
     },
     {
       "id": "misa-a3",
@@ -447,12 +427,8 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "misa-a3"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
@@ -468,12 +444,8 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 4,
-          "groupId": "misa-a4"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
@@ -597,6 +569,24 @@
       }
     },
     {
+      "id": "misa-a4-miss-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 4806 }
+    },
+    {
+      "id": "misa-a4-miss-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 4820 }
+    },
+    {
+      "id": "misa-a4-miss-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 4913 }
+    },
+    {
       "id": "misa-a4-required-hit-miss",
       "owner": {
         "kind": "actor",
@@ -604,24 +594,32 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 4,
-          "groupId": "misa-a4-miss"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-      "frame": 5000
+        "frame": 5000
       },
       "hitOverrides": {
-        "10700204|0|elements|1|1159803510611510720|84|6": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "miss",
           "criticalMode": "inherit"
         }
       }
+    },
+    {
+      "id": "misa-a3-miss-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 5293 }
+    },
+    {
+      "id": "misa-a3-miss-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 5307 }
     },
     {
       "id": "misa-a3-pickup-hits-miss",
@@ -631,40 +629,16 @@
       },
       "intent": {
         "kind": "public-action",
-        "publicActionId": 10700201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 3,
-          "groupId": "misa-a3-miss"
-        },
+        "publicActionId": 10700222,
+        "actionKind": "limit-counter",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-      "frame": 5400
+        "frame": 5400
       },
       "hitOverrides": {
-        "10700203|0|elements|2|-1404469563182445209|40|1": {
-          "landed": "miss",
-          "criticalMode": "inherit"
-        },
-        "10700203|0|elements|2|-1404469563182445209|46|2": {
-          "landed": "miss",
-          "criticalMode": "inherit"
-        },
-        "10700203|0|elements|2|-1404469563182445209|52|3": {
-          "landed": "miss",
-          "criticalMode": "inherit"
-        },
-        "10700203|0|elements|2|-1404469563182445209|58|4": {
-          "landed": "miss",
-          "criticalMode": "inherit"
-        },
-        "10700203|0|elements|2|-1404469563182445209|64|5": {
-          "landed": "miss",
-          "criticalMode": "inherit"
-        },
-        "10700203|0|elements|2|-1404469563182445209|70|6": {
+        "10700225|0|elements|0|5593300562289576764|15|1": {
           "landed": "miss",
           "criticalMode": "inherit"
         }
@@ -678,18 +652,18 @@
       },
       "intent": {
         "kind": "switch",
-        "targetSlotId": "slot-2"
+        "targetSlotId": "slot-3"
       },
       "schedule": {
         "mode": "absolute",
-      "frame": 5800
+        "frame": 5800
       }
     },
     {
       "id": "switch-back-to-misa",
       "owner": {
         "kind": "actor",
-        "slotId": "slot-2"
+        "slotId": "slot-3"
       },
       "intent": {
         "kind": "switch",
@@ -697,7 +671,7 @@
       },
       "schedule": {
         "mode": "absolute",
-      "frame": 6100
+        "frame": 6100
       }
     },
     {

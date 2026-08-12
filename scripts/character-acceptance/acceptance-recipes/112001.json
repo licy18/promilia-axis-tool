@@ -37,19 +37,14 @@
   "fixturePath": "fixtures/character-acceptance/112001-visual.json",
   "goldenReports": ["reports/m10/112001/golden-trace.json"],
   "productVisualAcceptance": {
-    "status": "accepted",
-    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
-    "recordIdentity": "character-product-acceptance:112001:be60e68d1c1bcf77a962426ddb0af37fc384c4da:715663339fc2d4d6",
-    "qualificationSubjectHash": "715663339fc2d4d6",
-    "scenarioSetHash": "df8659d33b2637b0",
-    "scenarioIdentities": ["m12-b3-112001-assumption-v1-focused-acceptance"],
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
         "status": "automated-workbench-import-passed",
-        "fixturePath": "fixtures/character-acceptance/112001-visual.json",
-        "fixtureSha256": "abab0b4b2e508611a2515612de1fd200f83320b8c81a6f47c46a42a3467f725b",
         "screenshotPath": "reports/m12-b3-112001-workbench-visual-evidence.png",
         "screenshotSha256": "15ad47c214c7572d6a16a86777ff16edca18a5606258ba6b8ca5e55420b10d46"
       }

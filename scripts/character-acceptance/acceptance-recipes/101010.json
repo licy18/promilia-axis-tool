@@ -3,10 +3,9 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "accepted",
-    "acceptanceCommit": "be60e68d1c1bcf77a962426ddb0af37fc384c4da",
-    "recordIdentity": "character-product-acceptance:101010:be60e68d1c1bcf77a962426ddb0af37fc384c4da:a66b48bd5404e38e",
-    "scenarioIdentities": ["m11-d-101010-visual-acceptance"],
+    "status": "pending",
+    "acceptanceCommit": null,
+    "recordIdentity": null,
     "automatedEvidence": [
       {
         "scenarioIdentity": "m11-d-101010-visual-acceptance",
@@ -14,9 +13,7 @@
         "screenshotPath": "reports/m11-d-character-acceptance-101010-desktop.png",
         "screenshotSha256": "73ff96230b426eaf1d23026f0764199c054f522352fb10adc7ee1a2ea8526928"
       }
-    ],
-    "qualificationSubjectHash": "a66b48bd5404e38e",
-    "scenarioSetHash": "ebde028fe5a24527"
+    ]
   },
   "ownerId": 101010,
   "fixturePath": "fixtures/character-acceptance/101010-visual.json",
@@ -246,7 +243,7 @@
       "where": {
         "actionId": "101010-blocked-hit-negative",
         "eventType": "VERIFIED_COMBAT_HIT",
-        "hitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1"
+        "hitIdentity": "10101011|0|elements|0|-9038391806014875439|36|1"
       },
       "expectation": {
         "count": 0

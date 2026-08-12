@@ -188,11 +188,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-zero"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -200,7 +196,7 @@
         "frame": 0
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 0
@@ -216,11 +212,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-full"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -228,7 +220,7 @@
         "frame": 100
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 9999
@@ -244,11 +236,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-sampled-low"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -256,7 +244,7 @@
         "frame": 250
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 499
@@ -272,11 +260,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-sampled-boundary"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -284,7 +268,7 @@
         "frame": 350
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 500
@@ -300,11 +284,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-expected"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -312,7 +292,7 @@
         "frame": 450
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "expected"
         }
@@ -327,11 +307,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-forced"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -339,7 +315,7 @@
         "frame": 550
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "critical"
         }
@@ -354,11 +330,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-forced-non"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -366,7 +338,7 @@
         "frame": 650
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
@@ -381,11 +353,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "critical-miss"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -393,7 +361,7 @@
         "frame": 750
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "miss",
           "criticalMode": "critical"
         }
@@ -408,19 +376,15 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10101001,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "blocked-negative"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 780
+        "frame": 700
       },
       "hitOverrides": {
-        "10101001|0|elements|0|-2245783402811878012|12|1": {
+        "10101011|0|elements|0|-9038391806014875439|36|1": {
           "landed": "blocked",
           "criticalMode": "sampled"
         }
@@ -498,7 +462,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 2,
-          "groupId": "insufficient-a5"
+          "groupId": "insufficient-a5",
+          "contextActionId": "xiaoyu-insufficient-a1"
         },
         "level": 1
       },
@@ -519,7 +484,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 3,
-          "groupId": "insufficient-a5"
+          "groupId": "insufficient-a5",
+          "contextActionId": "xiaoyu-insufficient-a2"
         },
         "level": 1
       },
@@ -540,7 +506,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 4,
-          "groupId": "insufficient-a5"
+          "groupId": "insufficient-a5",
+          "contextActionId": "xiaoyu-insufficient-a3"
         },
         "level": 1
       },
@@ -561,7 +528,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 5,
-          "groupId": "insufficient-a5"
+          "groupId": "insufficient-a5",
+          "contextActionId": "xiaoyu-a4-source-effects"
         },
         "level": 1
       },

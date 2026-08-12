@@ -104,6 +104,7 @@
         "attackInput": {
           "sequenceIndex": 1,
           "groupId": "marker-first-chain",
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
           "contextActionId": "marker-first-reload"
         },
         "level": 1
@@ -120,11 +121,12 @@
         "attackInput": {
           "sequenceIndex": 2,
           "groupId": "marker-first-chain",
-          "chainIdentity": "ruby-enhanced-twelve-inputs"
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "marker-first-apply"
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 100 }
+      "schedule": { "mode": "after-previous-end", "offsetFrames": 0 }
     },
     {
       "id": "marker-expiry-reload",
@@ -147,6 +149,7 @@
         "attackInput": {
           "sequenceIndex": 1,
           "groupId": "marker-reapply-chain",
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
           "contextActionId": "marker-expiry-reload"
         },
         "level": 1

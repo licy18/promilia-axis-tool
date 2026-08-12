@@ -135,13 +135,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 0 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 0
@@ -154,13 +153,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 650 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 9999
@@ -173,13 +171,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1250 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 499
@@ -192,13 +189,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1300 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 500
@@ -211,13 +207,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1350 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "expected"
         }
@@ -229,13 +224,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1400 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "critical"
         }
@@ -247,13 +241,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1450 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
@@ -265,13 +258,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10900101,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-base" },
+        "actionKind": "dodge-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1500 },
       "hitOverrides": {
-        "10900101|0|elements|0|3476557355496561381|12|1": {
+        "10900115|0|elements|2|5171384344998858661|9|1": {
           "landed": "miss",
           "criticalMode": "critical"
         }

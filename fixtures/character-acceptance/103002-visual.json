@@ -95,11 +95,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -107,7 +103,7 @@
         "frame": 0
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 499
@@ -123,11 +119,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -135,7 +127,7 @@
         "offsetFrames": 5
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 500
@@ -151,11 +143,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -163,7 +151,7 @@
         "offsetFrames": 5
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "hit",
           "criticalMode": "expected"
         }
@@ -178,11 +166,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -190,7 +174,7 @@
         "offsetFrames": 5
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "hit",
           "criticalMode": "critical"
         }
@@ -205,11 +189,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -217,7 +197,7 @@
         "offsetFrames": 5
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
@@ -232,11 +212,7 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10300201,
-        "actionKind": "normal-attack",
-        "attackInput": {
-          "sequenceIndex": 1,
-          "groupId": "m11-d-103002-critical"
-        },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": {
@@ -244,7 +220,7 @@
         "offsetFrames": 5
       },
       "hitOverrides": {
-        "10300201|0|projectile|103002000|103002002|0|0|control:10300201|sub:0|behavior:-8448165544886151388|config:0|bullet:103002002:0:0|element:103002000:0": {
+        "10300211|0|elements|1|-4704116628545342040|38|1": {
           "landed": "miss",
           "criticalMode": "critical"
         }
@@ -283,7 +259,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 2,
-          "groupId": "m11-d-ruby-normal"
+          "groupId": "m11-d-ruby-normal",
+          "contextActionId": "ruby-chain-a1"
         },
         "level": 1
       },
@@ -304,7 +281,8 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 3,
-          "groupId": "m11-d-ruby-normal"
+          "groupId": "m11-d-ruby-normal",
+          "contextActionId": "ruby-chain-a2"
         },
         "level": 1
       },
@@ -325,7 +303,9 @@
         "actionKind": "normal-attack",
         "attackInput": {
           "sequenceIndex": 1,
-          "groupId": "m11-d-ruby-enhanced"
+          "groupId": "m11-d-ruby-normal",
+          "chainIdentity": "ruby-enhanced-twelve-inputs",
+          "contextActionId": "ruby-chain-a3"
         },
         "level": 1
       },

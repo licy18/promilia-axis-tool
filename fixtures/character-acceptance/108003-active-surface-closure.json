@@ -135,13 +135,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 0 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 0
@@ -154,13 +153,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 650 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 9999
@@ -173,13 +171,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-low" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 1250 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 499
@@ -192,13 +189,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-boundary" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1300 },
+      "schedule": { "mode": "absolute", "frame": 1310 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 500
@@ -211,13 +207,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-expected" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1350 },
+      "schedule": { "mode": "absolute", "frame": 1370 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "expected"
         }
@@ -229,13 +224,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-critical" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1400 },
+      "schedule": { "mode": "absolute", "frame": 1430 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "critical"
         }
@@ -247,13 +241,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-non-critical" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1450 },
+      "schedule": { "mode": "absolute", "frame": 1490 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "non-critical"
         }
@@ -265,17 +258,28 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "miti-normal-chain" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1500 },
+      "schedule": { "mode": "absolute", "frame": 1550 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "miss",
           "criticalMode": "critical"
         }
       }
+    },
+    {
+      "id": "miti-normal-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "miti-normal-chain" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 800 }
     },
     {
       "id": "miti-normal-a2",
@@ -284,10 +288,14 @@
         "kind": "public-action",
         "publicActionId": 10800301,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 2, "groupId": "miti-normal-chain" },
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "miti-normal-chain",
+          "contextActionId": "miti-normal-a1"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1540 }
+      "schedule": { "mode": "absolute", "frame": 835 }
     },
     {
       "id": "miti-normal-a3",
@@ -296,10 +304,14 @@
         "kind": "public-action",
         "publicActionId": 10800301,
         "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 3, "groupId": "miti-normal-chain" },
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "miti-normal-chain",
+          "contextActionId": "miti-normal-a2"
+        },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1590 }
+      "schedule": { "mode": "absolute", "frame": 885 }
     },
     {
       "id": "miti-ultimate-positive",
@@ -412,13 +424,12 @@
       "intent": {
         "kind": "public-action",
         "publicActionId": 10800301,
-        "actionKind": "normal-attack",
-        "attackInput": { "sequenceIndex": 1, "groupId": "after-mark" },
+        "actionKind": "plunging-attack",
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 3850 },
       "hitOverrides": {
-        "10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:-6254956417268699008|config:0|bullet:10800301:0:0|element:108003002:0": {
+        "10800311|0|elements|0|-3355118331415165665|37|1": {
           "landed": "hit",
           "criticalMode": "sampled",
           "criticalRoll": 600

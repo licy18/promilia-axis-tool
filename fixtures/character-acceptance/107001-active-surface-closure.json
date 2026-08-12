@@ -160,139 +160,479 @@
     {
       "id": "107001-critical-rate-zero",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-zero" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 0 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 0 } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 0
+        }
+      }
     },
     {
       "id": "107001-critical-rate-one-hundred",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 120 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 9999 } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 9999
+        }
+      }
     },
     {
       "id": "107001-critical-sampled-low",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-low" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 300 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 499 } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 499
+        }
+      }
     },
     {
       "id": "107001-critical-sampled-boundary",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-sampled-boundary" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 360 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "sampled", "criticalRoll": 500 } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "sampled",
+          "criticalRoll": 500
+        }
+      }
     },
     {
       "id": "107001-critical-expected",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-expected" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 420 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "expected" } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "expected"
+        }
+      }
     },
     {
       "id": "107001-critical-critical",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-critical" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 480 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "critical" } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "critical"
+        }
+      }
     },
     {
       "id": "107001-critical-non-critical",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-forced-non-critical" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 540 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "hit", "criticalMode": "non-critical" } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "hit",
+          "criticalMode": "non-critical"
+        }
+      }
     },
     {
       "id": "107001-critical-miss-critical",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "critical-miss-critical" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 600 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "miss", "criticalMode": "critical" } }
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "miss",
+          "criticalMode": "critical"
+        }
+      }
     },
     {
       "id": "107001-blocked-arrow-negative",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "blocked-negative" }, "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 650 },
-      "hitOverrides": { "10700101|0|projectile|107001001|107001011|0|0|control:10700101|sub:0|behavior:3079963348562027120|config:0|bullet:107001011:0:0|element:107001001:0": { "landed": "blocked", "criticalMode": "sampled" } }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 660 },
+      "hitOverrides": {
+        "10700111|0|elements|0|3489400683992734411|37|1": {
+          "landed": "blocked",
+          "criticalMode": "sampled"
+        }
+      }
     },
     {
       "id": "sifliya-threshold-arrow-8",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "threshold-arrow-8" }, "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 700 }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 720 }
     },
     {
       "id": "sifliya-threshold-arrow-9",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "threshold-arrow-9" }, "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 760 }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 780 }
     },
     {
       "id": "sifliya-threshold-arrow-10",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "threshold-arrow-10" }, "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 820 }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "plunging-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 840 }
     },
     {
       "id": "sifliya-charged-with-lumi",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "charged-attack", "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 850 }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 900 }
     },
     {
       "id": "sifliya-star-response-missed-first-hit",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700112, "actionKind": "star-skill", "level": 1 },
-      "schedule": { "mode": "absolute", "frame": 900 },
-      "hitOverrides": { "conditional-damage:sifliya-star-hit-1:1": { "landed": "miss", "criticalMode": "sampled" } }
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 950 },
+      "hitOverrides": {
+        "conditional-damage:sifliya-star-hit-1:1": {
+          "landed": "miss",
+          "criticalMode": "sampled"
+        }
+      }
     },
     {
       "id": "sifliya-a1-cycle-1",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "chain-coverage" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "chain-coverage" },
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 1100 }
     },
     {
       "id": "sifliya-a2-cycle-1",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 2, "groupId": "chain-coverage" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "chain-coverage",
+          "contextActionId": "sifliya-a1-cycle-1"
+        },
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 1120 }
     },
     {
       "id": "sifliya-a3-cycle-1",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 3, "groupId": "chain-coverage" }, "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "chain-coverage",
+          "contextActionId": "sifliya-a2-cycle-1"
+        },
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 1143 }
     },
-    { "id": "sifliya-rebuild-1-a1", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "threshold-2a" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 1700 } },
-    { "id": "sifliya-rebuild-1-a2", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 2, "groupId": "threshold-2a" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 1720 } },
-    { "id": "sifliya-rebuild-1-a3", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 3, "groupId": "threshold-2a" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 1743 } },
+    {
+      "id": "sifliya-rebuild-1-a1",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "threshold-2a" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1700 }
+    },
+    {
+      "id": "sifliya-rebuild-1-a2",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "threshold-2a",
+          "contextActionId": "sifliya-rebuild-1-a1"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1720 }
+    },
+    {
+      "id": "sifliya-rebuild-1-a3",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "threshold-2a",
+          "contextActionId": "sifliya-rebuild-1-a2"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 1743 }
+    },
     {
       "id": "sifliya-charged-with-three-marks",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "charged-attack", "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 2180 }
     },
     {
       "id": "sifliya-star-interrupted-at-90",
       "owner": { "kind": "actor", "slotId": "slot-1" },
-      "intent": { "kind": "public-action", "publicActionId": 10700112, "actionKind": "star-skill", "level": 1 },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700112,
+        "actionKind": "star-skill",
+        "level": 1
+      },
       "schedule": { "mode": "absolute", "frame": 4090 }
     },
-    { "id": "sifliya-ultimate-three-marks", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700113, "actionKind": "ultimate", "level": 1 }, "schedule": { "mode": "absolute", "frame": 4180 } },
-    { "id": "window-before-source", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-before-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 4800 } },
-    { "id": "window-outside-before", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-before", "contextActionId": "window-before-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 4819 } },
-    { "id": "window-start-source", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-start-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5000 } },
-    { "id": "window-inside-start", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 2, "groupId": "window-start-source", "contextActionId": "window-start-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5020 } },
-    { "id": "window-end-source", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-end-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5200 } },
-    { "id": "window-inside-end", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 2, "groupId": "window-end-source", "contextActionId": "window-end-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5271 } },
-    { "id": "window-after-source", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-after-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5500 } },
-    { "id": "window-outside-after", "owner": { "kind": "actor", "slotId": "slot-1" }, "intent": { "kind": "public-action", "publicActionId": 10700101, "actionKind": "normal-attack", "attackInput": { "sequenceIndex": 1, "groupId": "window-after", "contextActionId": "window-after-source" }, "level": 1 }, "schedule": { "mode": "absolute", "frame": 5572 } }
+    {
+      "id": "sifliya-ultimate-three-marks",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700113,
+        "actionKind": "ultimate",
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4180 }
+    },
+    {
+      "id": "window-before-source",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-before-source"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 4800 }
+    },
+    {
+      "id": "window-outside-before",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": { "kind": "wait", "durationFrames": 1 },
+      "schedule": { "mode": "absolute", "frame": 4819 }
+    },
+    {
+      "id": "window-start-source",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "window-start-source" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5000 }
+    },
+    {
+      "id": "window-inside-start",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-start-source",
+          "contextActionId": "window-start-source"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5020 }
+    },
+    {
+      "id": "window-start-chain-close",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-start-source",
+          "contextActionId": "window-inside-start"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5043 }
+    },
+    {
+      "id": "window-end-source",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "window-end-source" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5200 }
+    },
+    {
+      "id": "window-inside-end",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 2,
+          "groupId": "window-end-source",
+          "contextActionId": "window-end-source"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5271 }
+    },
+    {
+      "id": "window-end-chain-close",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 3,
+          "groupId": "window-end-source",
+          "contextActionId": "window-inside-end"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5294 }
+    },
+    {
+      "id": "window-after-source",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": { "sequenceIndex": 1, "groupId": "window-after-source" },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5500 }
+    },
+    {
+      "id": "window-outside-after",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700101,
+        "actionKind": "normal-attack",
+        "attackInput": {
+          "sequenceIndex": 1,
+          "groupId": "window-after",
+          "contextActionId": "window-after-source"
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 5572 }
+    }
   ],
   "metadata": {
     "phase": "M12-B3-107001-line-a",
