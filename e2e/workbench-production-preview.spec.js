@@ -8704,7 +8704,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
 }) => {
   test.setTimeout(240_000);
   const canonicalFixturePath =
-    'fixtures/machine-axis/m11-b-three-actor-120s.json';
+    'fixtures/machine-axis/m11-b-three-actor-authority.json';
   const { stdout: canonicalFixtureRunJson } = await execFileAsync(
     process.execPath,
     ['scripts/run-machine-axis-cli.mjs', 'simulate', canonicalFixturePath],
@@ -8715,8 +8715,16 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     }
   );
   const canonicalFixtureRun = JSON.parse(canonicalFixtureRunJson);
+  const canonicalFixtureContract = JSON.parse(
+    await readFile(canonicalFixturePath, 'utf8')
+  );
+  const canonicalTraceActionCount = canonicalFixtureRun.trace.actions.length;
+  const canonicalExecutedActionCount =
+    canonicalFixtureRun.trace.executionPlan.actions.filter(
+      action => action.execute !== false
+    ).length;
   const canonicalExpectedDamage = canonicalFixtureRun.trace.damage.find(
-    entry => entry.actionId === 'a3-expected'
+    entry => entry.actionId === 'plunging-expected'
   );
   expect(canonicalExpectedDamage).toBeTruthy();
   const canonicalExpectedCritical =
@@ -8748,26 +8756,26 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   );
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-action-count',
-    '16'
+    String(canonicalTraceActionCount)
   );
   await expect(workbench).toHaveAttribute(
     'data-machine-axis-import-active',
     'true'
   );
   await expect(dialog.getByTestId('machine-axis-summary')).toContainText(
-    '机器输入 14'
+    `机器输入 ${canonicalFixtureContract.actions.length}`
   );
   await expect(dialog.getByTestId('machine-axis-summary')).toContainText(
-    '实际执行 16'
+    `实际执行 ${canonicalExecutedActionCount}`
   );
 
   for (const actionId of [
     'xunlang-signature',
-    'a3-sampled',
+    'plunging-sampled',
     'switch-to-xiaoyu',
     'xiaoyu-charged',
     'switch-to-ruby',
-    'ruby-enhanced-e1-intent',
+    'ruby-plunging',
   ]) {
     await expect(
       timeline.locator(
@@ -8794,7 +8802,9 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     throw new Error('Machine Axis export did not produce a local download');
   }
   const exportedContract = JSON.parse(await readFile(exportedPath, 'utf8'));
-  expect(exportedContract.actions).toHaveLength(14);
+  expect(exportedContract.actions).toHaveLength(
+    canonicalFixtureContract.actions.length
+  );
   const { stdout: exportedRunJson } = await execFileAsync(
     process.execPath,
     ['scripts/run-machine-axis-cli.mjs', 'simulate', exportedPath],
@@ -8807,9 +8817,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   const exportedRun = JSON.parse(exportedRunJson);
   expect(exportedRun.hashes).toEqual(canonicalFixtureRun.hashes);
 
-  const invalidContract = JSON.parse(
-    await readFile(canonicalFixturePath, 'utf8')
-  );
+  const invalidContract = structuredClone(canonicalFixtureContract);
   invalidContract.actions[1].intent.publicActionId = 99999999;
   await page.getByTestId('workbench-import-project-file').setInputFiles({
     name: 'invalid-machine-axis.json',
@@ -8830,7 +8838,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
   );
   await expect(workbench).toHaveAttribute(
     'data-canonical-trace-action-count',
-    '16'
+    String(canonicalTraceActionCount)
   );
   await dialog.getByTestId('workbench-close-machine-axis').click();
   await expect(dialog).toHaveCount(0);
@@ -8862,21 +8870,19 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     )
   ).toContainText('100 → 0');
 
-  const ruby = await openTraceAction('ruby-enhanced-e1-intent');
-  await expect(ruby.inspector).toContainText('control 10300201 / sub 1');
+  const ruby = await openTraceAction('ruby-plunging');
+  await expect(ruby.inspector).toContainText('control 10300211 / sub 0');
   await expect(
-    ruby.inspector.locator(
-      '[data-testid="canonical-trace-resource-event"][data-resource-identity="actor:103002:element:103002047"]'
-    )
-  ).toContainText('6 → 5');
+    ruby.inspector.getByTestId('canonical-trace-hit-row')
+  ).toHaveCount(1);
 
   const criticalCases = [
-    ['a3-inherit', 'hit', 'inherit'],
-    ['a3-sampled', 'hit', 'sampled'],
-    ['a3-expected', 'hit', 'expected'],
-    ['a3-critical', 'hit', 'critical'],
-    ['a3-non-critical', 'hit', 'non-critical'],
-    ['a3-miss', 'miss', 'inherit'],
+    ['plunging-inherit', 'hit', 'inherit'],
+    ['plunging-sampled', 'hit', 'sampled'],
+    ['plunging-expected', 'hit', 'expected'],
+    ['plunging-critical', 'hit', 'critical'],
+    ['plunging-non-critical', 'hit', 'non-critical'],
+    ['plunging-miss', 'miss', 'inherit'],
   ];
   for (const [actionId, landed, criticalMode] of criticalCases) {
     const { inspector } = await openTraceAction(actionId);
@@ -8890,7 +8896,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     ).toHaveValue(criticalMode);
   }
 
-  const sampled = await openTraceAction('a3-sampled');
+  const sampled = await openTraceAction('plunging-sampled');
   const sampledHit = sampled.inspector.getByTestId('canonical-trace-hit-row');
   await expect(sampledHit).toContainText('采样 Roll');
   await expect(
@@ -8912,7 +8918,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     sampledHit.getByTestId('canonical-trace-sampled-result')
   ).toHaveText('未暴击');
 
-  const expected = await openTraceAction('a3-expected');
+  const expected = await openTraceAction('plunging-expected');
   const expectedHit = expected.inspector.getByTestId('canonical-trace-hit-row');
   await expect(
     expectedHit.getByTestId('canonical-trace-critical-damage')
@@ -8945,7 +8951,7 @@ test('[m11-c-canonical-trace-workbench] imports, inspects, edits, and round-trip
     expectedHit.getByTestId('canonical-trace-critical-event-materialized')
   ).toHaveText('不生成暴击事件');
 
-  await openTraceAction('a3-sampled');
+  await openTraceAction('plunging-sampled');
   const originalTraceHash = await workbench.getAttribute(
     'data-canonical-trace-hash'
   );
