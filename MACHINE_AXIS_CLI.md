@@ -1,6 +1,6 @@
 # Machine Axis CLI
 
-Machine Axis is the versioned, semantic timeline contract for the canonical headless combat core. Its JSON Schema is `schemas/azpr-machine-axis-v1.schema.json`; the complete three-actor fixture is `fixtures/machine-axis/m11-b-three-actor-120s.json`.
+Machine Axis is the versioned, semantic timeline contract for the canonical headless combat core. Its JSON Schema is `schemas/azpr-machine-axis-v1.schema.json`; the current three-actor fixture under verified normal-input authority is `fixtures/machine-axis/m11-b-three-actor-authority.json`.
 
 ## Commands
 
@@ -14,10 +14,10 @@ The stable launcher rebuilds only when its source inputs are newer than the cach
 
 ```powershell
 node scripts/run-machine-axis-cli.mjs catalog
-node scripts/run-machine-axis-cli.mjs validate fixtures/machine-axis/m11-b-three-actor-120s.json
-node scripts/run-machine-axis-cli.mjs simulate fixtures/machine-axis/m11-b-three-actor-120s.json --output work/m11-b/run.json
-node scripts/run-machine-axis-cli.mjs compare --left fixtures/machine-axis/m11-b-three-actor-120s.json --right fixtures/machine-axis/m11-b-three-actor-120s.json
-node scripts/run-machine-axis-cli.mjs explain fixtures/machine-axis/m11-b-three-actor-120s.json --action a3-sampled
+node scripts/run-machine-axis-cli.mjs validate fixtures/machine-axis/m11-b-three-actor-authority.json
+node scripts/run-machine-axis-cli.mjs simulate fixtures/machine-axis/m11-b-three-actor-authority.json --output work/m11-b/run.json
+node scripts/run-machine-axis-cli.mjs compare --left fixtures/machine-axis/m11-b-three-actor-authority.json --right fixtures/machine-axis/m11-b-three-actor-authority.json
+node scripts/run-machine-axis-cli.mjs explain fixtures/machine-axis/m11-b-three-actor-authority.json --action plunging-sampled
 node scripts/run-machine-axis-cli.mjs batch fixtures/machine-axis/m12-batch-example.json --jobs 4 --output work/m12/batch-report.json
 node scripts/run-machine-axis-cli.mjs search fixtures/machine-axis/m12-search-example.json --beam-width 2 --top-n 3 --output work/m12/search-report.json
 ```
@@ -25,7 +25,7 @@ node scripts/run-machine-axis-cli.mjs search fixtures/machine-axis/m12-search-ex
 Use `-` for stdin. `--format jsonl` reads and writes one contract/result per line. `--critical-policy` and `--seed` are explicit input overrides and therefore change the canonical input hash.
 
 ```powershell
-Get-Content -Raw -LiteralPath fixtures/machine-axis/m11-b-three-actor-120s.json | node scripts/run-machine-axis-cli.mjs validate -
+Get-Content -Raw -LiteralPath fixtures/machine-axis/m11-b-three-actor-authority.json | node scripts/run-machine-axis-cli.mjs validate -
 ```
 
 Machine JSON is written only to stdout or `--output`. Diagnostics are written to stderr.

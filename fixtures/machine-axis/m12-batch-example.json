@@ -11,13 +11,13 @@
         "kind": "azpr-machine-axis",
         "dataIdentity": {
           "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+          "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
           "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
           "mechanicsProfileVersion": 1
         },
         "scenario": {
-          "id": "m11-b-three-actor-120s",
-          "name": "M11-B 三人机器轴",
+          "id": "m11-b-three-actor-authority",
+          "name": "M11-B 三人机器轴（普攻输入权威）",
           "fps": 60,
           "durationFrames": 7200,
           "team": [
@@ -108,11 +108,17 @@
           },
           "critical": {
             "policy": "sampled",
-            "seed": "m11-b-fixture-seed"
+            "seed": "m11-b-authority-fixture-seed"
           },
           "projectile": {
             "targetDistance": 0,
             "defaultWillHit": true
+          },
+          "target": {
+            "hpMode": "infinite",
+            "toughnessMode": "disabled",
+            "breakMode": "disabled",
+            "deathTruncation": "disabled"
           }
         },
         "actions": [
@@ -134,7 +140,7 @@
             }
           },
           {
-            "id": "a3-inherit",
+            "id": "plunging-inherit",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -142,11 +148,7 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
@@ -154,14 +156,14 @@
               "frame": 60
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "inherit"
               }
             }
           },
           {
-            "id": "a3-sampled",
+            "id": "plunging-sampled",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -169,19 +171,15 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 420
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "sampled",
                 "criticalRoll": 2345
@@ -189,7 +187,7 @@
             }
           },
           {
-            "id": "a3-expected",
+            "id": "plunging-expected",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -197,26 +195,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 780
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "expected"
               }
             }
           },
           {
-            "id": "a3-critical",
+            "id": "plunging-critical",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -224,27 +218,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "a3-expected",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1140
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "critical"
               }
             }
           },
           {
-            "id": "a3-non-critical",
+            "id": "plunging-non-critical",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -252,26 +241,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1500
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "non-critical"
               }
             }
           },
           {
-            "id": "a3-miss",
+            "id": "plunging-miss",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -279,19 +264,15 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1860
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "miss",
                 "criticalMode": "inherit"
               }
@@ -308,8 +289,8 @@
               "targetSlotId": "slot-2"
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 120
+              "mode": "absolute",
+              "frame": 2400
             }
           },
           {
@@ -332,9 +313,8 @@
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "switch-to-xiaoyu",
-              "offsetFrames": 180
+              "mode": "absolute",
+              "frame": 2700
             }
           },
           {
@@ -348,13 +328,12 @@
               "targetSlotId": "slot-3"
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "xiaoyu-charged",
-              "offsetFrames": 120
+              "mode": "absolute",
+              "frame": 5400
             }
           },
           {
-            "id": "ruby-a1",
+            "id": "ruby-plunging",
             "owner": {
               "kind": "actor",
               "slotId": "slot-3"
@@ -362,93 +341,20 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 1,
-                "groupId": "fixture-ruby-normal"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "switch-to-ruby",
-              "offsetFrames": 180
+              "mode": "absolute",
+              "frame": 5700
             }
-          },
-          {
-            "id": "ruby-a2",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 2,
-                "groupId": "fixture-ruby-normal"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            }
-          },
-          {
-            "id": "ruby-a3",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-ruby-normal"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            }
-          },
-          {
-            "id": "ruby-enhanced-e1-intent",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 1,
-                "groupId": "fixture-ruby-enhanced"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            },
-            "note": "Public normal-attack intent resolves to E1 from A3 context and ammo."
           }
         ],
         "metadata": {
-          "purpose": "M11-B API/CLI/Workbench canonical parity fixture",
-          "participants": [
-            "101007",
-            "101010",
-            "103002",
-            "kibo:500001"
-          ],
-          "resourceProof": "ruby-enhanced-e1-intent consumes actor:103002:element:103002047 from 6 to 5"
+          "purpose": "M11-B API/CLI/Workbench canonical parity under verified normal-input authority",
+          "participants": ["101007", "101010", "103002", "kibo:500001"],
+          "supersedesFixture": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+          "normalAttackPolicy": "No direct mid-chain normal segment is materialized without a verified predecessor."
         }
       },
       "options": {
@@ -463,13 +369,13 @@
         "kind": "azpr-machine-axis",
         "dataIdentity": {
           "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-        "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+          "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
           "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
           "mechanicsProfileVersion": 1
         },
         "scenario": {
-          "id": "m11-b-three-actor-120s",
-          "name": "M11-B 三人机器轴",
+          "id": "m11-b-three-actor-authority",
+          "name": "M11-B 三人机器轴（普攻输入权威）",
           "fps": 60,
           "durationFrames": 7200,
           "team": [
@@ -560,11 +466,17 @@
           },
           "critical": {
             "policy": "sampled",
-            "seed": "m11-b-fixture-seed"
+            "seed": "m11-b-authority-fixture-seed"
           },
           "projectile": {
             "targetDistance": 0,
             "defaultWillHit": true
+          },
+          "target": {
+            "hpMode": "infinite",
+            "toughnessMode": "disabled",
+            "breakMode": "disabled",
+            "deathTruncation": "disabled"
           }
         },
         "actions": [
@@ -586,7 +498,7 @@
             }
           },
           {
-            "id": "a3-inherit",
+            "id": "plunging-inherit",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -594,11 +506,7 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
@@ -606,14 +514,14 @@
               "frame": 60
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "inherit"
               }
             }
           },
           {
-            "id": "a3-sampled",
+            "id": "plunging-sampled",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -621,19 +529,15 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 420
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "sampled",
                 "criticalRoll": 2345
@@ -641,7 +545,7 @@
             }
           },
           {
-            "id": "a3-expected",
+            "id": "plunging-expected",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -649,26 +553,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 780
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "expected"
               }
             }
           },
           {
-            "id": "a3-critical",
+            "id": "plunging-critical",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -676,27 +576,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "a3-expected",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1140
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "critical"
               }
             }
           },
           {
-            "id": "a3-non-critical",
+            "id": "plunging-non-critical",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -704,26 +599,22 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1500
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "hit",
                 "criticalMode": "non-critical"
               }
             }
           },
           {
-            "id": "a3-miss",
+            "id": "plunging-miss",
             "owner": {
               "kind": "actor",
               "slotId": "slot-1"
@@ -731,19 +622,15 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10100701,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-a3"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 5
+              "mode": "absolute",
+              "frame": 1860
             },
             "hitOverrides": {
-              "10100703|0|elements|0|-9212100609153088879|14|1": {
+              "10100711|0|elements|0|-6537565703316603243|35|1": {
                 "landed": "miss",
                 "criticalMode": "inherit"
               }
@@ -760,8 +647,8 @@
               "targetSlotId": "slot-2"
             },
             "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 120
+              "mode": "absolute",
+              "frame": 2400
             }
           },
           {
@@ -784,9 +671,8 @@
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "switch-to-xiaoyu",
-              "offsetFrames": 180
+              "mode": "absolute",
+              "frame": 2700
             }
           },
           {
@@ -800,13 +686,12 @@
               "targetSlotId": "slot-3"
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "xiaoyu-charged",
-              "offsetFrames": 120
+              "mode": "absolute",
+              "frame": 5400
             }
           },
           {
-            "id": "ruby-a1",
+            "id": "ruby-plunging",
             "owner": {
               "kind": "actor",
               "slotId": "slot-3"
@@ -814,99 +699,23 @@
             "intent": {
               "kind": "public-action",
               "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 1,
-                "groupId": "fixture-ruby-normal"
-              },
+              "actionKind": "plunging-attack",
               "level": 1
             },
             "schedule": {
-              "mode": "after-action-end",
-              "actionId": "switch-to-ruby",
-              "offsetFrames": 180
+              "mode": "absolute",
+              "frame": 5700
             }
-          },
-          {
-            "id": "ruby-a2",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 2,
-                "groupId": "fixture-ruby-normal"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            }
-          },
-          {
-            "id": "ruby-a3",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 3,
-                "groupId": "fixture-ruby-normal"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            }
-          },
-          {
-            "id": "ruby-enhanced-e1-intent",
-            "owner": {
-              "kind": "actor",
-              "slotId": "slot-3"
-            },
-            "intent": {
-              "kind": "public-action",
-              "publicActionId": 10300201,
-              "actionKind": "normal-attack",
-              "attackInput": {
-                "sequenceIndex": 1,
-                "groupId": "fixture-ruby-enhanced"
-              },
-              "level": 1
-            },
-            "schedule": {
-              "mode": "after-previous-end",
-              "offsetFrames": 0
-            },
-            "note": "Public normal-attack intent resolves to E1 from A3 context and ammo."
           }
         ],
         "metadata": {
-          "purpose": "M11-B API/CLI/Workbench canonical parity fixture",
-          "participants": [
-            "101007",
-            "101010",
-            "103002",
-            "kibo:500001"
-          ],
-          "resourceProof": "ruby-enhanced-e1-intent consumes actor:103002:element:103002047 from 6 to 5"
+          "purpose": "M11-B API/CLI/Workbench canonical parity under verified normal-input authority",
+          "participants": ["101007", "101010", "103002", "kibo:500001"],
+          "supersedesFixture": "fixtures/machine-axis/m11-b-three-actor-120s.json",
+          "normalAttackPolicy": "No direct mid-chain normal segment is materialized without a verified predecessor."
         }
       },
-      "seeds": [
-        "m11-b-fixture-seed",
-        "m12-batch-seed-2"
-      ]
+      "seeds": ["m11-b-fixture-seed", "m12-batch-seed-2"]
     }
   ]
 }
