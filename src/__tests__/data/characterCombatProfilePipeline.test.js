@@ -131,6 +131,52 @@ describe('M10 character combat profile pipeline', () => {
     expect(
       readControl(10700204).hits.map(hit => hit.trigger.startFrame)
     ).toEqual([49, 56, 63, 70, 77, 84, 90, 96, 102]);
+
+    expect(misaRecipe.unresolvedRecordPolicies).toEqual([
+      expect.objectContaining({
+        policyIdentity: 'misa-zero-distance-a1-a2-projectile-hits',
+        sourceKinds: ['hit'],
+        statuses: ['runtime-evidence-required'],
+        scenarioRuntimeStatuses: ['scenario-assumed-zero-distance'],
+        controlVariants: [
+          { controlSkillId: 10700201, subSkillIndexes: [0] },
+          { controlSkillId: 10700202, subSkillIndexes: [0] },
+        ],
+        disposition: 'applied',
+        impactClassification: 'source-runtime-resolved',
+      }),
+    ]);
+    const misaProjectileClosures = misaProfile.unresolvedRecords.filter(
+      record =>
+        record.sourceKind === 'hit' &&
+        record.sourceClosurePolicyIdentity ===
+          'misa-zero-distance-a1-a2-projectile-hits'
+    );
+    expect(misaProjectileClosures).toHaveLength(10);
+    expect(
+      misaProjectileClosures.every(record =>
+        Object.entries({
+          status: 'source-closure-applied',
+          impactClassification: 'source-runtime-resolved',
+          sourceClosureDisposition: 'applied',
+          rawRecordCount: 1,
+        }).every(([key, value]) => record[key] === value)
+      )
+    ).toBe(true);
+    expect(
+      misaProjectileClosures.reduce(
+        (counts, record) => {
+          const rawIdentity = record.rawRecordIdentities[0];
+          if (rawIdentity.startsWith('hit:10700201|0|projectile|')) {
+            counts.a1 += 1;
+          } else if (rawIdentity.startsWith('hit:10700202|0|projectile|')) {
+            counts.a2 += 1;
+          }
+          return counts;
+        },
+        { a1: 0, a2: 0 }
+      )
+    ).toEqual({ a1: 2, a2: 8 });
   });
 
   it('fails closed when per-candidate source closure is removed or blanket-promoted', () => {

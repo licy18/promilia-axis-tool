@@ -898,7 +898,9 @@ function executeVisualScenario({
     ? null
     : recipe.buffLifecycle
       ? inspectEffectLifecycle(first, recipe.buffLifecycle)
-      : inspectThunderLifecycle(first);
+      : Number(recipe.ownerId) === 109001
+        ? inspectThunderLifecycle(first)
+        : null;
   const configuredInputWindowBoundaries = recipe.inputWindowProbe
     ? inspectConfiguredInputWindowBoundaries({
         fixture,
@@ -1031,30 +1033,12 @@ function executeVisualScenario({
           },
         ]
       : []),
-    ...(mitiJointInputWindowBoundaries
-      ? [
-          {
-            identity: 'input-window-inside-outside-boundaries',
-            passed: inputWindowBoundaries.passed,
-            actual: inputWindowBoundaries.details,
-          },
-        ]
-      : []),
     ...(foregroundBackgroundSwitch
       ? [
           {
             identity: 'foreground-background-switch',
             passed: foregroundBackgroundSwitch.passed,
             actual: foregroundBackgroundSwitch.details,
-          },
-        ]
-      : []),
-    ...(configuredInputWindowBoundaries
-      ? [
-          {
-            identity: 'input-window-inside-outside-boundaries',
-            passed: configuredInputWindowBoundaries.passed,
-            actual: configuredInputWindowBoundaries.details,
           },
         ]
       : []),

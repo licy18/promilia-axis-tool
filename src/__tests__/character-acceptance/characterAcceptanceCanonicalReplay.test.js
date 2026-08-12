@@ -65,10 +65,10 @@ const cases = [
     ownerId: 107002,
     fixture: misaFixture,
     hashes: {
-      input: '30780d8354ecceaf',
-      data: '9167d13d5bd46dc0',
-      trace: '9d108c00b14b69ae',
-      evaluation: '5238bf8119e66446',
+      input: 'fa89b0ef62c0e6be',
+      data: '0a19ba6d4b57c996',
+      trace: '1910eb5fa24efb76',
+      evaluation: '6538894b2964b7e7',
     },
   },
 ];

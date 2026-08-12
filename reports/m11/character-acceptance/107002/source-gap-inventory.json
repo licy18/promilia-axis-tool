@@ -3,6 +3,30 @@
   "kind": "character-acceptance-source-gap-inventory",
   "records": [
     {
+      "uniqueGapIdentity": "source-gap:0b9b2d5a1b7a6f62",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|1|0|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:1:0|element:107002248:0",
+        "semantic-gap:22bc01e547d9227f7769"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|1|0|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:1:0|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "d1b10172d3b48a01"
+    },
+    {
       "uniqueGapIdentity": "source-gap:0e12e635d684bb61",
       "sourceRecordIdentities": [
         "effect:10700212|1|bulletElements|1|element-107002138|element:3972142030532870442|unresolved-frame|0",
@@ -25,6 +49,54 @@
       "sourceRecordHash": "752f301670908268"
     },
     {
+      "uniqueGapIdentity": "source-gap:0e2f1bd10d490dca",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|0|0|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:0:0|element:107002248:0",
+        "semantic-gap:0010af6ad6ebf1afc222"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|0|0|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:0:0|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "16dc17641751a28e"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:1831297a23cae04f",
+      "sourceRecordIdentities": [
+        "hit:10700201|0|projectile|107002137|107002007|0|0|control:10700201|sub:0|behavior:-4073364461296781300|config:0|bullet:107002007:0:0|element:107002137:0",
+        "semantic-gap:88c47c854fcdaccb9e9f"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002137",
+        "hit:10700201|0|projectile|107002137|107002007|0|0|control:10700201|sub:0|behavior:-4073364461296781300|config:0|bullet:107002007:0:0|element:107002137:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "70ae30d6b2436395"
+    },
+    {
       "uniqueGapIdentity": "source-gap:2d07eb522b4262f9",
       "sourceRecordIdentities": [
         "effect:10700212|0|elements|9|-6104701335743815286|element:7183943640740465629|82|0",
@@ -43,6 +115,54 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "c0f798e389ae9d56"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:2f0550968ea25057",
+      "sourceRecordIdentities": [
+        "hit:10700201|0|projectile|107002137|107002007|0|0|control:10700201|sub:0|behavior:-1246740331492313076|config:0|bullet:107002007:0:0|element:107002137:0",
+        "semantic-gap:8e57f98282afb1c20991"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002137",
+        "hit:10700201|0|projectile|107002137|107002007|0|0|control:10700201|sub:0|behavior:-1246740331492313076|config:0|bullet:107002007:0:0|element:107002137:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "fb1cf8ef68a18310"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:32b2b04d84c9de6e",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|1|0|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:1:0|element:107002248:0",
+        "semantic-gap:5985fa4618c953ceddc6"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|1|0|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:1:0|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "7458e62b0d0b49fe"
     },
     {
       "uniqueGapIdentity": "source-gap:3dfc64799f2f1ef1",
@@ -245,6 +365,30 @@
       "sourceRecordHash": "ef44ff371f40491f"
     },
     {
+      "uniqueGapIdentity": "source-gap:8c88cf2e8583886e",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|1|1|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:1:1|element:107002248:0",
+        "semantic-gap:7bb0ee1f173e3b61251b"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|1|1|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:1:1|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "7cf61f62cb045cc7"
+    },
+    {
       "uniqueGapIdentity": "source-gap:8f346293d7c99244",
       "sourceRecordIdentities": [
         "effect:10700212|0|elements|5|-2174275479014567856|element:623176689467243005|82|0",
@@ -302,6 +446,78 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "1966aa89f4dd2d73"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a0ea12ff76e61836",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|0|1|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:0:1|element:107002248:0",
+        "semantic-gap:b7dc3c60ad60e6d1f0ba"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|0|1|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:0:1|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "1b0c291f3b74e3a9"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a7f1f31806520e3a",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|1|1|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:1:1|element:107002248:0",
+        "semantic-gap:c8fda1be4eb997a32c79"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|1|1|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:1:1|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "320cbc1187af6a19"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:a9b5fa04db21dec2",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|0|1|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:0:1|element:107002248:0",
+        "semantic-gap:e3f6896b67484528b4f4"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|0|1|control:10700202|sub:0|behavior:2699535759717445661|config:0|bullet:107002008:0:1|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "8ac0a28c15b39e69"
     },
     {
       "uniqueGapIdentity": "source-gap:b3a45fd6333b1202",
@@ -382,14 +598,39 @@
       "impactClassification": "not-applicable",
       "blocking": false,
       "sourceRecordHash": "5ef6c80847c0e779"
+    },
+    {
+      "uniqueGapIdentity": "source-gap:ed4f5c3485d7ee96",
+      "sourceRecordIdentities": [
+        "hit:10700202|0|projectile|107002248|107002008|0|0|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:0:0|element:107002248:0",
+        "semantic-gap:84f939c85e63d4e95a4e"
+      ],
+      "status": "source-closure-applied",
+      "reason": "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+        "hit:10700202|0|projectile|107002248|107002008|0|0|control:10700202|sub:0|behavior:7707672048730976285|config:0|bullet:107002008:0:0|element:107002248:0"
+      ],
+      "sourceClosureDisposition": "applied",
+      "sourceClosurePolicyIdentities": [
+        "misa-zero-distance-a1-a2-projectile-hits"
+      ],
+      "sourceClosureSourceIdentities": [
+        "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+      ],
+      "impactClassification": "source-runtime-resolved",
+      "blocking": false,
+      "sourceRecordHash": "d21e468fa1fd94d6"
     }
   ],
   "summary": {
-    "uniqueGapCount": 19,
+    "uniqueGapCount": 29,
     "blockingCount": 0,
-    "nonBlockingCount": 19,
+    "nonBlockingCount": 29,
     "statusCounts": {
-      "not-applicable": 19
+      "not-applicable": 19,
+      "source-closure-applied": 10
     },
     "reasonCounts": {
       "effect-trigger-frame-missing": 1,
@@ -399,10 +640,11 @@
       "nested-effect-wrapper-semantics-unresolved|property-formula-not-literal-function-5": 1,
       "nested-effect-wrapper-semantics-unresolved|sp-formula-not-literal-function-5": 2,
       "projectile-impact-frame-runtime-dependent|trigger-frame-missing": 1,
+      "runtime-dependent|verified-a1-a2-projectile-timing-is-canonical-trace-required|zero-distance-projectile-impact-is-source-bound": 10,
       "tuning-consume-current-packet-not-in-candidate-map|tuning-consume-judgment-missing|tuning-consume-mark-identity-ambiguous|tuning-consume-success-branch-unresolved": 1,
       "unnamed-secondary-passive-not-implemented-current-client": 1,
       "unresolved": 2
     }
   },
-  "inventoryHash": "9ce7d57025716cca"
+  "inventoryHash": "61ba52c1010bbc12"
 }

@@ -488,7 +488,7 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     );
   });
 
-  it('rejects Misa structural carriers with unresolved projectile impact before cycle scoring', () => {
+  it('accepts Misa projectile mechanics before rejecting only an unclosed def-down cycle state', () => {
     const envelope = createNormalAttackCycleEnvelope();
     envelope.contract.scenario.team[0] = {
       ...envelope.contract.scenario.team[0],
@@ -526,26 +526,29 @@ describe('Machine Axis sustainable cycle DPS evaluator', () => {
     expect(report).toMatchObject({
       valid: false,
       status: 'rejected',
-      actionLegalityProof: {
-        passed: false,
-        finalScoreEligible: false,
-        rejectionCodes: [
-          'machine-axis-damage-skipped',
-          'machine-axis-variant-resolution-open',
-        ],
-      },
+      actionLegalityProof: null,
+      normalAttackInputProof: { passed: true },
     });
     expect(report.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'machine-axis-damage-skipped',
-          actionId: 'misa-a1',
+          code: 'machine-axis-cycle-state-not-closed',
+          dimension: 'effects',
         }),
         expect.objectContaining({
-          code: 'machine-axis-variant-resolution-open',
-          actionId: 'misa-a1',
+          code: 'machine-axis-cycle-state-not-closed',
+          dimension: 'targetStates',
+        }),
+        expect.objectContaining({
+          code: 'machine-axis-cycle-damage-not-stable',
         }),
       ])
+    );
+    expect(report.issues.map(issue => issue.code)).not.toContain(
+      'machine-axis-damage-skipped'
+    );
+    expect(report.issues.map(issue => issue.code)).not.toContain(
+      'machine-axis-variant-resolution-open'
     );
   });
 

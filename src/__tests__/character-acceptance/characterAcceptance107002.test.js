@@ -41,10 +41,10 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: '30780d8354ecceaf',
-      data: '9167d13d5bd46dc0',
-      trace: '9d108c00b14b69ae',
-      evaluation: '5238bf8119e66446',
+      input: 'fa89b0ef62c0e6be',
+      data: '0a19ba6d4b57c996',
+      trace: '1910eb5fa24efb76',
+      evaluation: '6538894b2964b7e7',
     });
     expect(second.hashes).toEqual(first.hashes);
     expect(roundTrip.hashes).toEqual(first.hashes);
@@ -76,14 +76,14 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       ])
     ).toEqual(
       [
-        [2740, 55, 1],
-        [2746, 56, 1],
-        [2752, 57, 1],
-        [2758, 58, 1],
-        [2764, 59, 1],
-        [2770, 60, 1],
+        [6987, 55, 1],
+        [6993, 56, 1],
+        [6999, 57, 1],
+        [7005, 58, 1],
+        [7011, 59, 1],
+        [7017, 60, 1],
       ].map(([spawnFrame, entitySequence, ordinal]) => [
-        3370,
+        7484,
         'actor-107002',
         'actor-107002',
         `pickup-reward:pickup|misa-a3-hp-pickup|misa-a3|${spawnFrame}|0|${entitySequence}|${ordinal}`,
@@ -118,10 +118,10 @@ describe('M12-B3-107002 owner acceptance closure', () => {
         [62, 2],
         [63, 3],
       ].map(([entitySequence, ordinal]) => [
-        4680,
+        8794,
         'actor-107002',
         'actor-107002',
-        `pickup-reward:pickup|misa-ultimate-hp-pickup|misa-ultimate|3835|20|${entitySequence}|${ordinal}`,
+        `pickup-reward:pickup|misa-ultimate-hp-pickup|misa-ultimate|7949|20|${entitySequence}|${ordinal}`,
       ])
     );
     const missAbsorbSp = (first.trace?.events ?? []).filter(
@@ -145,7 +145,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       'actor-101010': 7,
       'actor-103002': 7,
     });
-    expect(missAbsorbSp.every(event => event.absoluteFrame === 4680)).toBe(
+    expect(missAbsorbSp.every(event => event.absoluteFrame === 8794)).toBe(
       true
     );
     expect(missAbsorbSp.every(event => event.payload.change === 1)).toBe(true);
@@ -166,6 +166,60 @@ describe('M12-B3-107002 owner acceptance closure', () => {
   }, 60_000);
 
   it('settles every critical mode, integer boundary, miss, and non-crittable event', () => {
+    expect(
+      [
+        ['107002-critical-rate-zero', 0],
+        ['107002-critical-rate-one-hundred', 600],
+        ['107002-critical-sampled-low', 1200],
+        ['107002-critical-sampled-boundary', 1800],
+        ['107002-critical-expected', 2400],
+        ['107002-critical-critical', 3000],
+        ['107002-critical-non-critical', 3600],
+        ['107002-critical-miss-critical', 4200],
+      ].map(([actionId]) =>
+        misaFixture.actions
+          .filter(action =>
+            [actionId + '-a1', actionId + '-a2', actionId].includes(action.id)
+          )
+          .map(action => ({
+            actionId: action.id,
+            frame: action.schedule.frame,
+            sequenceIndex: action.intent.attackInput.sequenceIndex,
+            contextActionId: action.intent.attackInput.contextActionId ?? null,
+          }))
+      )
+    ).toEqual(
+      [
+        ['107002-critical-rate-zero', 0],
+        ['107002-critical-rate-one-hundred', 600],
+        ['107002-critical-sampled-low', 1200],
+        ['107002-critical-sampled-boundary', 1800],
+        ['107002-critical-expected', 2400],
+        ['107002-critical-critical', 3000],
+        ['107002-critical-non-critical', 3600],
+        ['107002-critical-miss-critical', 4200],
+      ].map(([actionId, baseFrame]) => [
+        {
+          actionId: actionId + '-a1',
+          frame: baseFrame,
+          sequenceIndex: 1,
+          contextActionId: null,
+        },
+        {
+          actionId: actionId + '-a2',
+          frame: baseFrame + 14,
+          sequenceIndex: 2,
+          contextActionId: actionId + '-a1',
+        },
+        {
+          actionId,
+          frame: baseFrame + 107,
+          sequenceIndex: 3,
+          contextActionId: actionId + '-a2',
+        },
+      ])
+    );
+
     const run = createMachineAxisService().simulate(misaFixture);
     const rateZero = findCriticalHit(run, 'rate-zero');
     const rateOneHundred = findCriticalHit(run, 'rate-one-hundred');
@@ -177,7 +231,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
     const miss = findCriticalHit(run, 'miss-critical');
     const nonCrittable = (run.trace?.damage ?? []).find(
       event =>
-        event.actionId === '107002-critical-rate-zero' &&
+        event.actionId === '107002-critical-rate-zero-a1' &&
         event.eventType === 'VERIFIED_TUNING_DAMAGE' &&
         Number(event.elementId) === 552
     );
@@ -255,9 +309,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       })
     ).toMatchObject({ valid: true, issues: [] });
     expect(misaMatrix.summary).toMatchObject({
-      requirementCount: 181,
-      requiredCount: 98,
-      passedCount: 98,
+      requirementCount: 191,
+      requiredCount: 108,
+      passedCount: 108,
       blockedCount: 0,
       notApplicableCount: 83,
     });
@@ -267,7 +321,7 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       acceptanceGapCount: 0,
     });
     expect(misaCoverage.summary).toMatchObject({
-      coveredRequirementCount: 98,
+      coveredRequirementCount: 108,
     });
     expect(misaManifest.maturity.facts).toMatchObject({
       headlessReplayPassed: true,
@@ -278,13 +332,14 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       functionalFailureCount: 0,
     });
     expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'accepted',
-      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-      bindingStatus: 'verified',
+      status: 'pending',
+      acceptanceCommit: null,
+      recordIdentity: null,
+      bindingStatus: 'not-requested',
     });
     expect(misaManifest.maturity).toMatchObject({
-      optimizationReady: true,
-      blockers: [],
+      optimizationReady: false,
+      blockers: ['acceptance-product-visual-signoff-pending'],
     });
     expect(
       misaMatrix.requirements.filter(requirement =>

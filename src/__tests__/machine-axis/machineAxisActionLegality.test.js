@@ -80,7 +80,7 @@ describe('Machine Axis action legality proof', () => {
   it('keeps a structurally runnable carrier visible but excludes unresolved combat mechanics from scoring', () => {
     const run = createRun([
       {
-        actionId: 'misa-a1-carrier',
+        actionId: 'unresolved-projectile-carrier',
         status: 'scheduled',
         execute: true,
         violationCodes: [],
@@ -90,7 +90,7 @@ describe('Machine Axis action legality proof', () => {
     run.trace.events = [
       {
         type: 'DAMAGE_SKIPPED',
-        actionId: 'misa-a1-carrier',
+        actionId: 'unresolved-projectile-carrier',
         timeMs: 0,
         payload: {
           reason: 'verified-action-binding-unresolved',
@@ -104,7 +104,7 @@ describe('Machine Axis action legality proof', () => {
         {
           code: 'machine-axis-variant-resolution-open',
           severity: 'warning',
-          actionId: 'misa-a1-carrier',
+          actionId: 'unresolved-projectile-carrier',
           path: 'actions.0.intent.semanticVariant',
           variantResolutionStatus: 'unresolved-action-variant-selection',
           reason: 'unresolved-action-variant-selection',

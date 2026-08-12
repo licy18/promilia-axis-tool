@@ -12,9 +12,9 @@
   "headlessCore": {
     "schemaVersion": 1,
     "inputHash": "17fea25d7bb8402f",
-    "traceHash": "6c8fa934514ffad8",
+    "traceHash": "370d22c1f4400da6",
     "dataHash": "d4aab0a1100c67cf",
-    "buildHash": "c5c22fe45e9b0957",
+    "buildHash": "f8be9dd001d39f89",
     "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
@@ -37,17 +37,53 @@
         "starborn-m-a5",
         "starborn-m-charged",
         "starborn-m-charged-derived",
-        "starborn-m-derived-thrust",
         "starborn-m-star",
-        "starborn-m-star-thrust",
         "starborn-m-switch-back",
         "starborn-m-switch-out",
         "starborn-m-switch-out--on-enter--actor-101010--star-carry",
         "starborn-m-switch-out--on-exit--actor-199002--star-carry",
         "starborn-m-ultimate"
       ],
-      "blockedActionIds": [],
-      "blockedActionDetails": [],
+      "blockedActionIds": [
+        "starborn-m-derived-thrust",
+        "starborn-m-star-thrust"
+      ],
+      "blockedActionDetails": [
+        {
+          "actionId": "starborn-m-derived-thrust",
+          "contextActionId": "starborn-m-charged-derived",
+          "skipReason": "confirmed-action-rule-violation",
+          "unresolvedCodes": [
+            "attack-input-chain-incomplete",
+            "attack-input-context-conflict"
+          ],
+          "violationCodes": [
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT"
+          ],
+          "diagnosticIds": [
+            "attack-input-chain-incomplete|starborn-m-derived-thrust|golden-starborn-m-derived-thrust",
+            "attack-input-context-conflict|starborn-m-derived-thrust|golden-starborn-m-derived-thrust",
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT|starborn-m-derived-thrust"
+          ]
+        },
+        {
+          "actionId": "starborn-m-star-thrust",
+          "contextActionId": "starborn-m-star",
+          "skipReason": "confirmed-action-rule-violation",
+          "unresolvedCodes": [
+            "attack-input-chain-incomplete",
+            "attack-input-context-conflict"
+          ],
+          "violationCodes": [
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT"
+          ],
+          "diagnosticIds": [
+            "attack-input-chain-incomplete|starborn-m-star-thrust|golden-starborn-m-star-thrust",
+            "attack-input-context-conflict|starborn-m-star-thrust|golden-starborn-m-star-thrust",
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT|starborn-m-star-thrust"
+          ]
+        }
+      ],
       "selections": [
         {
           "actionId": "starborn-m-a1",
@@ -141,19 +177,6 @@
           "sourceKind": "verified-input-context-variant"
         },
         {
-          "actionId": "starborn-m-derived-thrust",
-          "ownerId": 199002,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900201,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "verified-input-context-variant"
-        },
-        {
           "actionId": "starborn-m-star",
           "ownerId": 199002,
           "semanticName": "星鸣技",
@@ -165,19 +188,6 @@
           "appliedAssumptionVersion": null,
           "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
-        },
-        {
-          "actionId": "starborn-m-star-thrust",
-          "ownerId": 199002,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900201,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "verified-input-context-variant"
         },
         {
           "actionId": "starborn-m-switch-out--on-enter--actor-101010--star-carry",
@@ -276,14 +286,6 @@
           "actualDurationFrames": 90,
           "sourceKind": "verified-input-context-variant"
         },
-        "starborn-m-derived-thrust": {
-          "ownerId": 199002,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900201,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "sourceKind": "verified-input-context-variant"
-        },
         "starborn-m-star": {
           "ownerId": 199002,
           "semanticName": "星鸣技",
@@ -291,14 +293,6 @@
           "subSkillIndex": 0,
           "actualDurationFrames": 83,
           "sourceKind": "workbench-explicit-input-variant"
-        },
-        "starborn-m-star-thrust": {
-          "ownerId": 199002,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900201,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "sourceKind": "verified-input-context-variant"
         },
         "starborn-m-switch-out--on-enter--actor-101010--star-carry": {
           "ownerId": 101010,
@@ -327,17 +321,17 @@
       }
     },
     "combat": {
-      "damageEventCount": 88,
-      "ownerDamageEventCount": 55,
-      "ownerHitEventCount": 49,
+      "damageEventCount": 92,
+      "ownerDamageEventCount": 58,
+      "ownerHitEventCount": 52,
       "ownerHitCountByActionId": {
         "starborn-m-a2": 4,
         "starborn-m-a3": 6,
         "starborn-m-a4": 4,
         "starborn-m-a5": 5,
         "starborn-m-charged": 9,
-        "starborn-m-charged-derived": 7,
-        "starborn-m-star": 8,
+        "starborn-m-charged-derived": 9,
+        "starborn-m-star": 9,
         "starborn-m-ultimate": 6
       },
       "ownerHitSummaryByActionId": {
@@ -405,7 +399,7 @@
           "totalToughnessDamage": 603
         },
         "starborn-m-charged-derived": {
-          "hitCount": 7,
+          "hitCount": 9,
           "frames": [
             1218,
             1224,
@@ -413,13 +407,15 @@
             1236,
             1242,
             1248,
-            1254
+            1254,
+            1260,
+            1266
           ],
-          "totalHpDamage": 455,
-          "totalToughnessDamage": 469
+          "totalHpDamage": 585,
+          "totalToughnessDamage": 603
         },
         "starborn-m-star": {
-          "hitCount": 8,
+          "hitCount": 9,
           "frames": [
             2036,
             2042,
@@ -428,10 +424,11 @@
             2060,
             2066,
             2072,
-            2078
+            2078,
+            2084
           ],
-          "totalHpDamage": 936,
-          "totalToughnessDamage": 688
+          "totalHpDamage": 1053,
+          "totalToughnessDamage": 774
         },
         "starborn-m-ultimate": {
           "hitCount": 6,
@@ -448,8 +445,8 @@
         }
       },
       "ownerDirectHealSummaryByActionId": {},
-      "ownerHitTotalHpDamage": 6796,
-      "ownerHitTotalToughnessDamage": 5264,
+      "ownerHitTotalHpDamage": 7043,
+      "ownerHitTotalToughnessDamage": 5484,
       "selectedHpDamageByActionId": {
         "starborn-m-a1": 0,
         "starborn-m-a2": 1383,
@@ -457,22 +454,22 @@
         "starborn-m-a4": 1532,
         "starborn-m-a5": 301,
         "starborn-m-charged": 585,
-        "starborn-m-charged-derived": 455,
+        "starborn-m-charged-derived": 585,
         "starborn-m-derived-thrust": 0,
-        "starborn-m-star": 936,
+        "starborn-m-star": 1053,
         "starborn-m-star-thrust": 0,
         "starborn-m-switch-out": 0,
         "starborn-m-switch-out--on-exit--actor-199002--star-carry": 0,
         "starborn-m-ultimate": 3644
       },
-      "totalHpDamage": 10914,
+      "totalHpDamage": 11161,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 10324,
-      "ownerTotalToughnessDamage": 7736,
+      "ownerTotalHpDamage": 10571,
+      "ownerTotalToughnessDamage": 7956,
       "enemy": {
-        "pointCount": 145,
+        "pointCount": 152,
         "initialHp": 8677869.84,
-        "finalHp": 8666955.84,
+        "finalHp": 8666708.84,
         "maxHp": 8677869.84,
         "initialToughness": 26822.0077,
         "finalToughness": 26822.0077,
@@ -486,9 +483,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 16.123184,
+          "currentValue": 16.223175,
           "maxValue": 100,
-          "eventCount": 1223,
+          "eventCount": 1224,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -689,6 +686,14 @@
               "beforeValue": 6.61496,
               "change": 0.099991,
               "afterValue": 6.714951
+            },
+            {
+              "timeMs": 34733.333334,
+              "actionId": "starborn-m-star",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 6.725357,
+              "change": 0.099991,
+              "afterValue": 6.825348
             }
           ]
         },
@@ -697,9 +702,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 15.602097,
+          "currentValue": 15.702087,
           "maxValue": 100,
-          "eventCount": 1223,
+          "eventCount": 1224,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -893,6 +898,14 @@
               "beforeValue": 6.61496,
               "change": 0.099991,
               "afterValue": 6.714951
+            },
+            {
+              "timeMs": 34733.333334,
+              "actionId": "starborn-m-star",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 6.725357,
+              "change": 0.099991,
+              "afterValue": 6.825348
             }
           ]
         },
@@ -939,9 +952,9 @@
           "actorId": "actor-101010",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 16.123184,
+          "currentValue": 16.223175,
           "maxValue": 100,
-          "eventCount": 1223,
+          "eventCount": 1224,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -1142,6 +1155,14 @@
               "beforeValue": 6.61496,
               "change": 0.099991,
               "afterValue": 6.714951
+            },
+            {
+              "timeMs": 34733.333334,
+              "actionId": "starborn-m-star",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 6.725357,
+              "change": 0.099991,
+              "afterValue": 6.825348
             }
           ]
         },
@@ -1150,9 +1171,9 @@
           "actorId": "actor-103002",
           "kiboId": null,
           "initialValue": 0,
-          "currentValue": 15.602097,
+          "currentValue": 15.702087,
           "maxValue": 100,
-          "eventCount": 1223,
+          "eventCount": 1224,
           "autoRecovery": [
             {
               "reason": "verified-auto-sp-background",
@@ -1346,6 +1367,14 @@
               "beforeValue": 6.61496,
               "change": 0.099991,
               "afterValue": 6.714951
+            },
+            {
+              "timeMs": 34733.333334,
+              "actionId": "starborn-m-star",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 6.725357,
+              "change": 0.099991,
+              "afterValue": 6.825348
             }
           ]
         },
@@ -2033,8 +2062,8 @@
         "skippedGroupCount": 0,
         "appliedActionEffectConditionCount": 0,
         "suppressedActionEffectConditionCount": 0,
-        "appliedActionHitConditionCount": 38,
-        "suppressedActionHitConditionCount": 3,
+        "appliedActionHitConditionCount": 41,
+        "suppressedActionHitConditionCount": 0,
         "effectCommandCount": 3,
         "directSpEventCount": 0
       },
@@ -2223,7 +2252,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "aa17e4b4ab24bf691b76832089f0e966758b128f988b94eeacc19556886989e3"
+      "baselineReplayHash": "7a9d32ff25579aa024ce09a97516da9daa2e5c81d101b9d6d93b06b34b7dbfea"
     },
     "trace": {
       "damage": [
@@ -2818,6 +2847,42 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-m-charged-derived",
+          "frame": 1260,
+          "hitIdentity": "19900210|1|elements|8|5437449760506671671|65|8",
+          "elementId": 199002146,
+          "sourceSequencePath": [
+            5,
+            8,
+            0
+          ],
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 67,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-m-charged-derived",
+          "frame": 1266,
+          "hitIdentity": "19900210|1|elements|4|-215733332709764470|71|9",
+          "elementId": 199002143,
+          "sourceSequencePath": [
+            5,
+            9,
+            0
+          ],
+          "rawDamage": 65,
+          "hpDamage": 65,
+          "toughnessDamage": 67,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "starborn-m-charged",
           "frame": 1463,
           "hitIdentity": "19900210|1|elements|4|-215733332709764470|23|1",
@@ -3113,6 +3178,24 @@
           "sourceSequencePath": [
             8,
             8,
+            0
+          ],
+          "rawDamage": 117,
+          "hpDamage": 117,
+          "toughnessDamage": 86,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-m-star",
+          "frame": 2084,
+          "hitIdentity": "19900212|0|elements|18|-5743057693017663501|64|9",
+          "elementId": 199002284,
+          "sourceSequencePath": [
+            8,
+            9,
             0
           ],
           "rawDamage": 117,
@@ -3697,7 +3780,21 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -124.87123,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "starborn-m-switch-out--on-enter--actor-101010--star-carry",
+          "frame": 6996,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -76.700271,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         }
@@ -4541,7 +4638,7 @@
         }
       ]
     },
-    "summaryHash": "68fe30ab5aef4d04a38a07e8c7c305d2f1c5c662b7b0696bfdd9093affb59cbc"
+    "summaryHash": "d744747bd2a38e520b58b41efd85faef349fa1635cdfd8a4abbfe717877b3c52"
   },
   "expected": {
     "exact": {
@@ -4568,11 +4665,11 @@
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 6796,
+        "actual": 7043,
         "passed": true
       }
     ]
   },
-  "replayHash": "7bed64aa1f8ecaae113cba9fadad6f4706de19163f8a308a15a9ae4d6824b3f9",
+  "replayHash": "3de71f3a1e301fce6a352cf6c937c001b7eb699c4ba9e22578494354ca2fa151",
   "profileHash": "54ec88b8ae90764c00fcd7fa4e28eb30d55df00a46de7163403dd0b19d93c9d8"
 }

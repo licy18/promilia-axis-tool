@@ -2,7 +2,7 @@
 
 - Owner: `107002`
 - Profile: `actor:107002:character-combat-profile:v1`
-- Hash: `53c0812c13897f82f6639da418cf51ea50945b00ddb12dbf3fde7fe3b62e0f5b`
+- Hash: `6e2ec76b8dfa16b608777f26460bc0119255ab288c83c877bc507f40b6592f7f`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -15,11 +15,11 @@
 - 战斗图：122 nodes / 117 edges
 - 描述覆盖：23
 - Runtime ready 动作：4/10
-- Runtime capture：10
+- Runtime capture：0
 - 零距离模拟完整：no
 - 实机证据完整：no
 - 零距离阻断 capture：0
-- 实机证据 capture：10
+- 实机证据 capture：0
 
 ## 维度状态
 
@@ -48,7 +48,7 @@
 
 ## 未闭环
 
-- runtime-evidence-required: 10
+- source-closure-applied: 10
 - static-evidence-gap: 18
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58",
+    "verifiedMechanicsPackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -12,7 +12,7 @@
     "id": "m12-b3-107002-reduced-action-surface-acceptance",
     "name": "M12-B3-107002 米砂缩减动作面验收轴",
     "fps": 60,
-    "durationFrames": 9000,
+    "durationFrames": 12000,
     "team": [
       {
         "slotId": "slot-1",
@@ -280,7 +280,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "critical-full" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 240 }
+      "schedule": { "mode": "absolute", "frame": 600 }
     },
     {
       "id": "107002-critical-rate-one-hundred-a2",
@@ -296,7 +296,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 254 }
+      "schedule": { "mode": "absolute", "frame": 614 }
     },
     {
       "id": "107002-critical-rate-one-hundred",
@@ -312,7 +312,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 347 },
+      "schedule": { "mode": "absolute", "frame": 707 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -331,7 +331,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "critical-low" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 480 }
+      "schedule": { "mode": "absolute", "frame": 1200 }
     },
     {
       "id": "107002-critical-sampled-low-a2",
@@ -347,7 +347,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 494 }
+      "schedule": { "mode": "absolute", "frame": 1214 }
     },
     {
       "id": "107002-critical-sampled-low",
@@ -363,7 +363,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 587 },
+      "schedule": { "mode": "absolute", "frame": 1307 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -382,7 +382,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "critical-boundary" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 720 }
+      "schedule": { "mode": "absolute", "frame": 1800 }
     },
     {
       "id": "107002-critical-sampled-boundary-a2",
@@ -398,7 +398,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 734 }
+      "schedule": { "mode": "absolute", "frame": 1814 }
     },
     {
       "id": "107002-critical-sampled-boundary",
@@ -414,7 +414,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 827 },
+      "schedule": { "mode": "absolute", "frame": 1907 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -433,7 +433,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "critical-expected" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 960 }
+      "schedule": { "mode": "absolute", "frame": 2400 }
     },
     {
       "id": "107002-critical-expected-a2",
@@ -449,7 +449,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 974 }
+      "schedule": { "mode": "absolute", "frame": 2414 }
     },
     {
       "id": "107002-critical-expected",
@@ -465,7 +465,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1067 },
+      "schedule": { "mode": "absolute", "frame": 2507 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -486,7 +486,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1200 }
+      "schedule": { "mode": "absolute", "frame": 3000 }
     },
     {
       "id": "107002-critical-critical-a2",
@@ -502,7 +502,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1214 }
+      "schedule": { "mode": "absolute", "frame": 3014 }
     },
     {
       "id": "107002-critical-critical",
@@ -518,7 +518,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1307 },
+      "schedule": { "mode": "absolute", "frame": 3107 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -539,7 +539,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1440 }
+      "schedule": { "mode": "absolute", "frame": 3600 }
     },
     {
       "id": "107002-critical-non-critical-a2",
@@ -555,7 +555,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1454 }
+      "schedule": { "mode": "absolute", "frame": 3614 }
     },
     {
       "id": "107002-critical-non-critical",
@@ -571,7 +571,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1547 },
+      "schedule": { "mode": "absolute", "frame": 3707 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "hit",
@@ -592,7 +592,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1680 }
+      "schedule": { "mode": "absolute", "frame": 4200 }
     },
     {
       "id": "107002-critical-miss-critical-a2",
@@ -608,7 +608,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1694 }
+      "schedule": { "mode": "absolute", "frame": 4214 }
     },
     {
       "id": "107002-critical-miss-critical",
@@ -624,7 +624,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 1787 },
+      "schedule": { "mode": "absolute", "frame": 4307 },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
           "landed": "miss",
@@ -642,7 +642,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "misa-main-chain" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3840 }
+      "schedule": { "mode": "absolute", "frame": 6840 }
     },
     {
       "id": "misa-a2",
@@ -658,7 +658,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 3854 }
+      "schedule": { "mode": "absolute", "frame": 6854 }
     },
     {
       "id": "misa-a3",
@@ -679,7 +679,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 3947
+        "frame": 6947
       }
     },
     {
@@ -701,7 +701,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 4034
+        "frame": 7034
       }
     },
     {
@@ -718,7 +718,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 4414
+        "frame": 7414
       }
     },
     {
@@ -735,7 +735,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 2000
+        "frame": 5000
       }
     },
     {
@@ -752,7 +752,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 3440
+        "frame": 6440
       }
     },
     {
@@ -769,7 +769,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 4814
+        "frame": 7814
       }
     },
     {
@@ -786,7 +786,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 5724
+        "frame": 8724
       },
       "hitOverrides": {
         "10700210|0|elements|2|-1211965369219084289|48|1": {
@@ -829,7 +829,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "misa-a4-miss" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6124 }
+      "schedule": { "mode": "absolute", "frame": 9124 }
     },
     {
       "id": "misa-a4-miss-a2",
@@ -845,7 +845,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6138 }
+      "schedule": { "mode": "absolute", "frame": 9138 }
     },
     {
       "id": "misa-a4-miss-a3",
@@ -861,7 +861,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6231 }
+      "schedule": { "mode": "absolute", "frame": 9231 }
     },
     {
       "id": "misa-a4-required-hit-miss",
@@ -882,7 +882,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 6318
+        "frame": 9318
       },
       "hitOverrides": {
         "10700204|0|elements|1|1159803510611510720|84|6": {
@@ -901,7 +901,7 @@
         "attackInput": { "sequenceIndex": 1, "groupId": "misa-a3-miss" },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6618 }
+      "schedule": { "mode": "absolute", "frame": 9618 }
     },
     {
       "id": "misa-a3-miss-a2",
@@ -917,7 +917,7 @@
         },
         "level": 1
       },
-      "schedule": { "mode": "absolute", "frame": 6632 }
+      "schedule": { "mode": "absolute", "frame": 9632 }
     },
     {
       "id": "misa-a3-pickup-hits-miss",
@@ -938,7 +938,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 6725
+        "frame": 9725
       },
       "hitOverrides": {
         "10700203|0|elements|2|-1404469563182445209|40|1": {
@@ -979,7 +979,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 7125
+        "frame": 10125
       }
     },
     {
@@ -994,7 +994,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 7425
+        "frame": 10425
       }
     },
     {
@@ -1011,7 +1011,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 5314
+        "frame": 8314
       }
     },
     {
@@ -1028,7 +1028,7 @@
       },
       "schedule": {
         "mode": "absolute",
-        "frame": 7825
+        "frame": 10825
       }
     }
   ],

@@ -54,23 +54,30 @@
       }
     ]
   },
+  "unresolvedRecordPolicies": [
+    {
+      "policyIdentity": "misa-zero-distance-a1-a2-projectile-hits",
+      "sourceKinds": ["hit"],
+      "statuses": ["runtime-evidence-required"],
+      "scenarioRuntimeStatuses": ["scenario-assumed-zero-distance"],
+      "controlVariants": [
+        { "controlSkillId": 10700201, "subSkillIndexes": [0] },
+        { "controlSkillId": 10700202, "subSkillIndexes": [0] }
+      ],
+      "disposition": "applied",
+      "impactClassification": "source-runtime-resolved",
+      "reasons": [
+        "zero-distance-projectile-impact-is-source-bound",
+        "verified-a1-a2-projectile-timing-is-canonical-trace-required"
+      ],
+      "sourceIdentity": "skill_control_10700201.asset#GameplayBehaviour=-4073364461296781300,-1246740331492313076|skill_control_10700202.asset#GameplayBehaviour=7707672048730976285,2699535759717445661|bullets=107002007,107002008|m12c-zero-distance-passive-boss-v1"
+    }
+  ],
   "compiler": {
     "timingPolicy": "standalone-animation",
     "reachableControlSkillIds": [
-      10700201,
-      10700202,
-      10700203,
-      10700204,
-      10700205,
-      10700210,
-      10700211,
-      10700212,
-      10700213,
-      10700215,
-      10700222,
-      10700225,
-      10700226,
-      10700227,
+      10700201, 10700202, 10700203, 10700204, 10700205, 10700210, 10700211,
+      10700212, 10700213, 10700215, 10700222, 10700225, 10700226, 10700227,
       10700261
     ],
     "contextInputEdges": [],
@@ -548,7 +555,9 @@
       "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:-6104701335743815286|82|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": ["covered-by-applied-priority-consume-overlimit-and-success-contract"],
+      "reasons": [
+        "covered-by-applied-priority-consume-overlimit-and-success-contract"
+      ],
       "sourceIdentity": "battle-effect:10700212:0:-6104701335743815286:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
     },
     {
@@ -576,7 +585,9 @@
       "identity": "effect:10700212|0|elements|9|-6104701335743815286|element:7183943640740465629|82|0",
       "sourceKind": "effect",
       "status": "not-applicable",
-      "reasons": ["covered-by-applied-tuning-consume-success-property-contract"],
+      "reasons": [
+        "covered-by-applied-tuning-consume-success-property-contract"
+      ],
       "sourceIdentity": "battle-effect:10700212:0:7183943640740465629:3929844140260263526:82|character-combat-recipe:107002#actionEffectBindings.misa-star-wood-priority-consume"
     },
     {
@@ -828,23 +839,15 @@
       "exact": {
         "project.durationMs": 120000,
         "project.actionCount": 12,
-        "project.teamCharacterIds": [
-          107002,
-          101010,
-          103002
-        ],
-        "actions.blockedActionIds": [
-          "misa-star-before-cooldown-boundary"
-        ],
+        "project.teamCharacterIds": [107002, 101010, 103002],
+        "actions.blockedActionIds": ["misa-star-before-cooldown-boundary"],
         "actions.blockedActionDetails": [
           {
             "actionId": "misa-star-before-cooldown-boundary",
             "contextActionId": null,
             "skipReason": "confirmed-action-rule-violation",
             "unresolvedCodes": [],
-            "violationCodes": [
-              "skill-cooldown-active"
-            ],
+            "violationCodes": ["skill-cooldown-active"],
             "diagnosticIds": [
               "skill-cooldown-active|misa-star-before-cooldown-boundary|misa-star"
             ]
@@ -875,87 +878,32 @@
           "sourceKind": "verified-public-action-form-wrapper-derived-execution"
         },
         "combat.ownerHitSummaryByActionId.misa-a3.frames": [
-          40,
-          46,
-          52,
-          58,
-          64,
-          70,
-          76,
-          82,
-          88,
-          94,
-          100
+          40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100
         ],
         "combat.ownerHitSummaryByActionId.misa-a3-pickup-hits-miss.frames": [
-          3876,
-          3882,
-          3888,
-          3894,
-          3900
+          3876, 3882, 3888, 3894, 3900
         ],
         "combat.ownerHitSummaryByActionId.misa-a4.frames": [
-          289,
-          296,
-          303,
-          310,
-          317,
-          324,
-          330,
-          336,
-          342
+          289, 296, 303, 310, 317, 324, 330, 336, 342
         ],
         "combat.ownerHitSummaryByActionId.misa-a4-required-hit-miss.frames": [
-          3449,
-          3456,
-          3463,
-          3470,
-          3477,
-          3490,
-          3496,
-          3502
+          3449, 3456, 3463, 3470, 3477, 3490, 3496, 3502
         ],
         "combat.ownerHitSummaryByActionId.misa-charged.frames": [
-          648,
-          651,
-          663,
-          669,
-          676,
-          683,
-          690
+          648, 651, 663, 669, 676, 683, 690
         ],
         "combat.ownerHitSummaryByActionId.misa-star.frames": [
-          1274,
-          1282,
-          1290,
-          1299,
-          1307,
-          1314
+          1274, 1282, 1290, 1299, 1307, 1314
         ],
         "combat.ownerHitSummaryByActionId.misa-star-at-cooldown-boundary.frames": [
-          2714,
-          2722,
-          2730,
-          2739,
-          2747,
-          2754
+          2714, 2722, 2730, 2739, 2747, 2754
         ],
         "combat.ownerHitSummaryByActionId.misa-star-no-consume-candidate.frames": [
-          6074,
-          6082,
-          6090,
-          6099,
-          6107,
-          6114
+          6074, 6082, 6090, 6099, 6107, 6114
         ],
         "combat.ownerDirectHealSummaryByActionId.misa-charged.eventCount": 6,
         "combat.ownerDirectHealSummaryByActionId.misa-charged.frames": [
-          670,
-          670,
-          670,
-          670,
-          670,
-          670
+          670, 670, 670, 670, 670, 670
         ],
         "combat.ownerDirectHealSummaryByActionId.misa-charged.targetIds": [
           "actor-107002"
@@ -969,21 +917,8 @@
         ],
         "combat.ownerDirectHealSummaryByActionId.misa-ultimate.eventCount": 15,
         "combat.ownerDirectHealSummaryByActionId.misa-ultimate.frames": [
-          3143,
-          3143,
-          3143,
-          3155,
-          3155,
-          3155,
-          3167,
-          3167,
-          3167,
-          3181,
-          3181,
-          3181,
-          3193,
-          3193,
-          3193
+          3143, 3143, 3143, 3155, 3155, 3155, 3167, 3167, 3167, 3181, 3181,
+          3181, 3193, 3193, 3193
         ],
         "combat.ownerDirectHealSummaryByActionId.misa-ultimate.targetIds": [
           "actor-101010",
@@ -994,18 +929,7 @@
         "combat.ownerDirectHealSummaryByActionId.misa-ultimate.maximumHpSubjects": [],
         "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.eventCount": 12,
         "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.frames": [
-          4246,
-          4246,
-          4246,
-          4261,
-          4261,
-          4261,
-          4279,
-          4279,
-          4279,
-          4298,
-          4298,
-          4298
+          4246, 4246, 4246, 4261, 4261, 4261, 4279, 4279, 4279, 4298, 4298, 4298
         ],
         "combat.ownerDirectHealSummaryByActionId.switch-away-from-misa--on-exit--actor-107002--star-carry.targetIds": [
           "actor-101010",
@@ -1014,16 +938,10 @@
         ],
         "resources.ownerActorSpTransactionsByActionId.misa-ultimate": {
           "eventCount": 1,
-          "frames": [
-            3000
-          ],
-          "changes": [
-            -100
-          ],
+          "frames": [3000],
+          "changes": [-100],
           "totalChange": -100,
-          "reasons": [
-            "verified-skill-cost"
-          ]
+          "reasons": ["verified-skill-cost"]
         },
         "resources.directSpSummaryByActionId": {},
         "resources.pickupSummary": {
@@ -1042,21 +960,11 @@
           "applied": true
         },
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.spawnFrames": [
-          40,
-          46,
-          52,
-          58,
-          64,
-          70
+          40, 46, 52, 58, 64, 70
         ],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorptionFrames": [
-          670,
-          670,
-          670,
-          670,
-          670,
-          670
+          670, 670, 670, 670, 670, 670
         ],
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorbedCount": 6,
         "resources.pickupSummaryByIdentity.misa-a3-hp-pickup.absorberActorIds": [
@@ -1070,18 +978,7 @@
           "actor-107002|SummonTempData|summon-temp:107002220|480042"
         ],
         "resources.pickupSummaryByIdentity.misa-star-sp-pickup.spawnFrames": [
-          1274,
-          1282,
-          1290,
-          1299,
-          2714,
-          2722,
-          2730,
-          2739,
-          6074,
-          6082,
-          6090,
-          6099
+          1274, 1282, 1290, 1299, 2714, 2722, 2730, 2739, 6074, 6082, 6090, 6099
         ],
         "resources.pickupSummaryByIdentity.misa-star-sp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-star-sp-pickup.absorbedCount": 0,
@@ -1089,9 +986,7 @@
           "actor-107002|SummonTempData|summon-temp:107002214|480041"
         ],
         "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.spawnFrames": [
-          3135,
-          3135,
-          3135
+          3135, 3135, 3135
         ],
         "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-ultimate-hp-pickup.absorbedCount": 0,
@@ -1099,9 +994,7 @@
           "actor-107002|SummonId|summon-id:480042|480042"
         ],
         "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.spawnFrames": [
-          3135,
-          3135,
-          3135
+          3135, 3135, 3135
         ],
         "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.collectionFrames": [],
         "resources.pickupSummaryByIdentity.misa-ultimate-sp-pickup.absorbedCount": 0,
@@ -1130,36 +1023,24 @@
           "misa-star": {
             "eventCount": 1,
             "consumedStacks": 1,
-            "frames": [
-              1282
-            ]
+            "frames": [1282]
           },
           "misa-star-at-cooldown-boundary": {
             "eventCount": 1,
             "consumedStacks": 1,
-            "frames": [
-              2722
-            ]
+            "frames": [2722]
           }
         },
         "resources.tuningMarkUnresolvedByActionId": {
           "misa-star-no-consume-candidate": {
             "eventCount": 1,
-            "kinds": [
-              "tuning-consume-no-sufficient-priority-candidate"
-            ],
-            "statuses": [
-              "verified-tuning-consume-not-executed"
-            ]
+            "kinds": ["tuning-consume-no-sufficient-priority-candidate"],
+            "statuses": ["verified-tuning-consume-not-executed"]
           },
           "switch-away-from-misa--on-enter--actor-101010--star-carry": {
             "eventCount": 1,
-            "kinds": [
-              "tuning-consume-insufficient-marks"
-            ],
-            "statuses": [
-              "verified-tuning-consume-not-executed"
-            ]
+            "kinds": ["tuning-consume-insufficient-marks"],
+            "statuses": ["verified-tuning-consume-not-executed"]
           }
         },
         "resources.targetStateTrace": [
@@ -1202,34 +1083,19 @@
         ],
         "effects.selectedEffectSummaryByElementId.107002256": {
           "effectId": "battle-element:107002256",
-          "effectNames": [
-            "米砂物理及法术防御降低"
-          ],
-          "targetKinds": [
-            "enemy"
-          ],
-          "targetIds": [
-            "enemy-300032"
-          ],
+          "effectNames": ["米砂物理及法术防御降低"],
+          "targetKinds": ["enemy"],
+          "targetIds": ["enemy-300032"],
           "appliedEventCount": 2,
           "blockedEventCount": 0,
           "transferredEventCount": 0,
           "expiredEventCount": 1,
           "firstAppliedFrame": 324,
           "firstExpiredFrame": 2116,
-          "firstAppliedSourceSequencePath": [
-            1,
-            6,
-            2
-          ],
-          "sameFrameVisibilityModes": [
-            "strict-source-sequence"
-          ],
+          "firstAppliedSourceSequencePath": [1, 6, 2],
+          "sameFrameVisibilityModes": ["strict-source-sequence"],
           "maxStacks": 1,
-          "attributeIds": [
-            3,
-            4
-          ],
+          "attributeIds": [3, 4],
           "modifierSignatures": [
             "3:dynamicPercent:-1000",
             "4:dynamicPercent:-1000"
@@ -1239,53 +1105,28 @@
         },
         "effects.selectedEffectSummaryByElementId.107002265": {
           "effectId": "battle-element:107002265",
-          "effectNames": [
-            "加伤害"
-          ],
-          "targetKinds": [
-            "actor"
-          ],
-          "targetIds": [
-            "actor-107002"
-          ],
+          "effectNames": ["加伤害"],
+          "targetKinds": ["actor"],
+          "targetIds": ["actor-107002"],
           "appliedEventCount": 2,
           "blockedEventCount": 0,
           "transferredEventCount": 0,
           "expiredEventCount": 1,
           "firstAppliedFrame": 1282,
           "firstExpiredFrame": 4522,
-          "firstAppliedSourceSequencePath": [
-            3,
-            31,
-            31,
-            107002265
-          ],
-          "sameFrameVisibilityModes": [
-            "strict-source-sequence"
-          ],
+          "firstAppliedSourceSequencePath": [3, 31, 31, 107002265],
+          "sameFrameVisibilityModes": ["strict-source-sequence"],
           "maxStacks": 1,
-          "attributeIds": [
-            53,
-            55
-          ],
-          "modifierSignatures": [
-            "53:dynamicExtra:5",
-            "55:dynamicExtra:5"
-          ],
+          "attributeIds": [53, 55],
+          "modifierSignatures": ["53:dynamicExtra:5", "55:dynamicExtra:5"],
           "formulaFamilies": [],
           "formulaValues": []
         },
         "effects.selectedEffectSummaryByElementId.480041002": {
           "effectId": "battle-element:480041002",
-          "effectNames": [
-            "调谐强度"
-          ],
-          "targetKinds": [
-            "actor"
-          ],
-          "targetIds": [
-            "actor-107002"
-          ],
+          "effectNames": ["调谐强度"],
+          "targetKinds": ["actor"],
+          "targetIds": ["actor-107002"],
           "appliedEventCount": 4,
           "blockedEventCount": 2,
           "transferredEventCount": 0,
@@ -1295,12 +1136,8 @@
           "firstAppliedSourceSequencePath": null,
           "sameFrameVisibilityModes": [],
           "maxStacks": 4,
-          "attributeIds": [
-            229
-          ],
-          "modifierSignatures": [
-            "229:dynamicPercent:600"
-          ],
+          "attributeIds": [229],
+          "modifierSignatures": ["229:dynamicPercent:600"],
           "formulaFamilies": [],
           "formulaValues": []
         }

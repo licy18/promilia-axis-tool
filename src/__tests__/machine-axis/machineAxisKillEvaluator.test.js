@@ -367,7 +367,7 @@ describe('Machine Axis fastest-kill proof', () => {
       [
         {
           type: 'DAMAGE_SKIPPED',
-          actionId: 'misa-a1-carrier',
+          actionId: 'unresolved-projectile-carrier',
           timeMs: 0,
           payload: {
             reason: 'verified-action-binding-unresolved',
@@ -379,7 +379,7 @@ describe('Machine Axis fastest-kill proof', () => {
     run.trace.executionPlan = {
       actions: [
         {
-          actionId: 'misa-a1-carrier',
+          actionId: 'unresolved-projectile-carrier',
           execute: true,
           status: 'scheduled',
           violationCodes: [],
@@ -407,7 +407,7 @@ describe('Machine Axis fastest-kill proof', () => {
       issues: [
         expect.objectContaining({
           code: 'machine-axis-damage-skipped',
-          actionId: 'misa-a1-carrier',
+          actionId: 'unresolved-projectile-carrier',
         }),
       ],
     });

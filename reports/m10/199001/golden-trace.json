@@ -12,9 +12,9 @@
   "headlessCore": {
     "schemaVersion": 1,
     "inputHash": "1bf2224f2d09d205",
-    "traceHash": "858afd5683f09b15",
+    "traceHash": "1a8386be1e65423c",
     "dataHash": "6af7219f229b490d",
-    "buildHash": "81e2f277d0ec2c6c",
+    "buildHash": "96419ac7aefa05c8",
     "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
@@ -37,17 +37,53 @@
         "starborn-f-a5",
         "starborn-f-charged",
         "starborn-f-charged-derived",
-        "starborn-f-derived-thrust",
         "starborn-f-star",
-        "starborn-f-star-thrust",
         "starborn-f-switch-back",
         "starborn-f-switch-out",
         "starborn-f-switch-out--on-enter--actor-101010--star-carry",
         "starborn-f-switch-out--on-exit--actor-199001--star-carry",
         "starborn-f-ultimate"
       ],
-      "blockedActionIds": [],
-      "blockedActionDetails": [],
+      "blockedActionIds": [
+        "starborn-f-derived-thrust",
+        "starborn-f-star-thrust"
+      ],
+      "blockedActionDetails": [
+        {
+          "actionId": "starborn-f-derived-thrust",
+          "contextActionId": "starborn-f-charged-derived",
+          "skipReason": "confirmed-action-rule-violation",
+          "unresolvedCodes": [
+            "attack-input-chain-incomplete",
+            "attack-input-context-conflict"
+          ],
+          "violationCodes": [
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT"
+          ],
+          "diagnosticIds": [
+            "attack-input-chain-incomplete|starborn-f-derived-thrust|golden-starborn-f-derived-thrust",
+            "attack-input-context-conflict|starborn-f-derived-thrust|golden-starborn-f-derived-thrust",
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT|starborn-f-derived-thrust"
+          ]
+        },
+        {
+          "actionId": "starborn-f-star-thrust",
+          "contextActionId": "starborn-f-star",
+          "skipReason": "confirmed-action-rule-violation",
+          "unresolvedCodes": [
+            "attack-input-chain-incomplete",
+            "attack-input-context-conflict"
+          ],
+          "violationCodes": [
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT"
+          ],
+          "diagnosticIds": [
+            "attack-input-chain-incomplete|starborn-f-star-thrust|golden-starborn-f-star-thrust",
+            "attack-input-context-conflict|starborn-f-star-thrust|golden-starborn-f-star-thrust",
+            "VERIFIED_ACTION_CONTEXT_WINDOW_CONFLICT|starborn-f-star-thrust"
+          ]
+        }
+      ],
       "selections": [
         {
           "actionId": "starborn-f-a1",
@@ -141,19 +177,6 @@
           "sourceKind": "verified-input-context-variant"
         },
         {
-          "actionId": "starborn-f-derived-thrust",
-          "ownerId": 199001,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900101,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "verified-input-context-variant"
-        },
-        {
           "actionId": "starborn-f-star",
           "ownerId": 199001,
           "semanticName": "星鸣技",
@@ -165,19 +188,6 @@
           "appliedAssumptionVersion": null,
           "appliedAssumptionHash": null,
           "sourceKind": "workbench-explicit-input-variant"
-        },
-        {
-          "actionId": "starborn-f-star-thrust",
-          "ownerId": 199001,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900101,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "verified-input-context-variant"
         },
         {
           "actionId": "starborn-f-switch-out--on-enter--actor-101010--star-carry",
@@ -276,14 +286,6 @@
           "actualDurationFrames": 90,
           "sourceKind": "verified-input-context-variant"
         },
-        "starborn-f-derived-thrust": {
-          "ownerId": 199001,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900101,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "sourceKind": "verified-input-context-variant"
-        },
         "starborn-f-star": {
           "ownerId": 199001,
           "semanticName": "星鸣技",
@@ -291,14 +293,6 @@
           "subSkillIndex": 0,
           "actualDurationFrames": 83,
           "sourceKind": "workbench-explicit-input-variant"
-        },
-        "starborn-f-star-thrust": {
-          "ownerId": 199001,
-          "semanticName": "突刺追击",
-          "controlSkillId": 19900101,
-          "subSkillIndex": 1,
-          "actualDurationFrames": 48,
-          "sourceKind": "verified-input-context-variant"
         },
         "starborn-f-switch-out--on-enter--actor-101010--star-carry": {
           "ownerId": 101010,
@@ -327,17 +321,17 @@
       }
     },
     "combat": {
-      "damageEventCount": 88,
-      "ownerDamageEventCount": 55,
-      "ownerHitEventCount": 49,
+      "damageEventCount": 92,
+      "ownerDamageEventCount": 58,
+      "ownerHitEventCount": 52,
       "ownerHitCountByActionId": {
         "starborn-f-a2": 4,
         "starborn-f-a3": 6,
         "starborn-f-a4": 4,
         "starborn-f-a5": 5,
         "starborn-f-charged": 9,
-        "starborn-f-charged-derived": 7,
-        "starborn-f-star": 8,
+        "starborn-f-charged-derived": 9,
+        "starborn-f-star": 9,
         "starborn-f-ultimate": 6
       },
       "ownerHitSummaryByActionId": {
@@ -405,7 +399,7 @@
           "totalToughnessDamage": 603
         },
         "starborn-f-charged-derived": {
-          "hitCount": 7,
+          "hitCount": 9,
           "frames": [
             1139,
             1145,
@@ -413,13 +407,15 @@
             1157,
             1163,
             1169,
-            1175
+            1175,
+            1181,
+            1187
           ],
-          "totalHpDamage": 462,
-          "totalToughnessDamage": 476
+          "totalHpDamage": 594,
+          "totalToughnessDamage": 612
         },
         "starborn-f-star": {
-          "hitCount": 8,
+          "hitCount": 9,
           "frames": [
             1916,
             1922,
@@ -428,10 +424,11 @@
             1940,
             1946,
             1952,
-            1958
+            1958,
+            1964
           ],
-          "totalHpDamage": 936,
-          "totalToughnessDamage": 688
+          "totalHpDamage": 1053,
+          "totalToughnessDamage": 774
         },
         "starborn-f-ultimate": {
           "hitCount": 6,
@@ -448,8 +445,8 @@
         }
       },
       "ownerDirectHealSummaryByActionId": {},
-      "ownerHitTotalHpDamage": 6803,
-      "ownerHitTotalToughnessDamage": 5271,
+      "ownerHitTotalHpDamage": 7052,
+      "ownerHitTotalToughnessDamage": 5493,
       "selectedHpDamageByActionId": {
         "starborn-f-a1": 0,
         "starborn-f-a2": 1383,
@@ -457,22 +454,22 @@
         "starborn-f-a4": 1532,
         "starborn-f-a5": 1477,
         "starborn-f-charged": 585,
-        "starborn-f-charged-derived": 462,
+        "starborn-f-charged-derived": 594,
         "starborn-f-derived-thrust": 0,
-        "starborn-f-star": 936,
+        "starborn-f-star": 1053,
         "starborn-f-star-thrust": 0,
         "starborn-f-switch-out": 0,
         "starborn-f-switch-out--on-exit--actor-199001--star-carry": 0,
         "starborn-f-ultimate": 3644
       },
-      "totalHpDamage": 10921,
+      "totalHpDamage": 11170,
       "totalToughnessDamage": 0,
-      "ownerTotalHpDamage": 10331,
-      "ownerTotalToughnessDamage": 7743,
+      "ownerTotalHpDamage": 10580,
+      "ownerTotalToughnessDamage": 7965,
       "enemy": {
-        "pointCount": 145,
+        "pointCount": 152,
         "initialHp": 8677869.84,
-        "finalHp": 8666948.84,
+        "finalHp": 8666699.84,
         "maxHp": 8677869.84,
         "initialToughness": 26822.0077,
         "finalToughness": 26822.0077,
@@ -1841,8 +1838,8 @@
         "skippedGroupCount": 0,
         "appliedActionEffectConditionCount": 0,
         "suppressedActionEffectConditionCount": 0,
-        "appliedActionHitConditionCount": 38,
-        "suppressedActionHitConditionCount": 3,
+        "appliedActionHitConditionCount": 41,
+        "suppressedActionHitConditionCount": 0,
         "effectCommandCount": 3,
         "directSpEventCount": 0
       },
@@ -2043,7 +2040,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "f126f0ce540ab284cefda30e3688359c18073a8f1d8b8d6645aadee83a7b2938"
+      "baselineReplayHash": "07895fe41c0e74d4e70a48b4c898b67a429eb4f3dd7c65eaefc087c48169ff3f"
     },
     "trace": {
       "damage": [
@@ -2638,6 +2635,42 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-f-charged-derived",
+          "frame": 1181,
+          "hitIdentity": "19900110|1|elements|7|-3303620080455896909|66|8",
+          "elementId": 199001152,
+          "sourceSequencePath": [
+            5,
+            8,
+            0
+          ],
+          "rawDamage": 66,
+          "hpDamage": 66,
+          "toughnessDamage": 68,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-f-charged-derived",
+          "frame": 1187,
+          "hitIdentity": "19900110|1|elements|3|-309319716341630615|72|9",
+          "elementId": 199001151,
+          "sourceSequencePath": [
+            5,
+            9,
+            0
+          ],
+          "rawDamage": 66,
+          "hpDamage": 66,
+          "toughnessDamage": 68,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "starborn-f-charged",
           "frame": 1384,
           "hitIdentity": "19900110|1|elements|3|-309319716341630615|24|1",
@@ -2933,6 +2966,24 @@
           "sourceSequencePath": [
             8,
             8,
+            0
+          ],
+          "rawDamage": 117,
+          "hpDamage": 117,
+          "toughnessDamage": 86,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "starborn-f-star",
+          "frame": 1964,
+          "hitIdentity": "19900112|0|elements|4|-7530867443862883934|64|9",
+          "elementId": 199001013,
+          "sourceSequencePath": [
+            8,
+            9,
             0
           ],
           "rawDamage": 117,
@@ -3517,7 +3568,21 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
-          "toughnessDamage": -131.87123,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "starborn-f-switch-out--on-enter--actor-101010--star-carry",
+          "frame": 6900,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -85.700271,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         }
@@ -4361,7 +4426,7 @@
         }
       ]
     },
-    "summaryHash": "b851aa648c22f88632de68b6ea6db1a95fccb8225f9b9f6f73ef29f54ec152fa"
+    "summaryHash": "c843630e4865ebc0555103c6a406a7f042545d4caa7b5398581aeec79ec4a87a"
   },
   "expected": {
     "exact": {
@@ -4388,11 +4453,11 @@
         "jsonPath": "combat.ownerHitTotalHpDamage",
         "operator": "greater-than",
         "expected": 0,
-        "actual": 6803,
+        "actual": 7052,
         "passed": true
       }
     ]
   },
-  "replayHash": "f8907a5f47c88b25da63c061a8cd40231010dc34fe7394344101fdbc558a4328",
+  "replayHash": "afa34d22adf46d54a8ec916ac8d4f55ed043a3e25476f5d94b8f063643a5c62f",
   "profileHash": "83d63154e2e0012159c9403ef933ee519c5b8e3e17ddbc26f56412c75257db0c"
 }
