@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-12T10:52:46.056Z",
+  "generatedAt": "2026-08-12T17:24:56.911Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -13,11 +13,11 @@
     "setSkills": 12
   },
   "hashes": {
-    "rosterHash": "604ff1ebce8cf68b",
-    "manifestsHash": "87c0ac512122a6c9",
-    "ledgerHash": "dc8f2eb907d5039a",
-    "bindingMatrixHash": "f0ad5b1ddeae730f",
-    "qualificationCatalogHash": "c7f5149166287d2b",
+    "rosterHash": "eaf6307fbcda3055",
+    "manifestsHash": "bb3f6aae02f5f195",
+    "ledgerHash": "3c6248725fe07866",
+    "bindingMatrixHash": "a525454b1409827f",
+    "qualificationCatalogHash": "9c6866fe1d68a3fd",
     "verifiedMechanicsPackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8"
   },
   "staticMatrix": {
@@ -968,9 +968,9 @@
         "identity": "artifact-hash-consistency",
         "passed": true,
         "detail": {
-          "rosterHash": "604ff1ebce8cf68b",
-          "bindingMatrixHash": "f0ad5b1ddeae730f",
-          "catalogHash": "c7f5149166287d2b"
+          "rosterHash": "eaf6307fbcda3055",
+          "bindingMatrixHash": "a525454b1409827f",
+          "catalogHash": "9c6866fe1d68a3fd"
         }
       }
     ]
@@ -1253,5 +1253,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "275cc4cc0f79deee"
+  "bindingMatrixHash": "2e1855d82b7ec7c6"
 }
