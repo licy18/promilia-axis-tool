@@ -38,7 +38,21 @@
     "defaultControlPolicy": {
       "behaviorTriggerScope": "skill-player",
       "sourceIdentity": "character-combat-recipe:107002#runtimePolicies.defaultControlPolicy.behaviorTriggerScope=skill-player"
-    }
+    },
+    "controlPolicies": [
+      {
+        "controlSkillId": 10700201,
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "skill_control_10700201.asset#sub0|GameplayBehaviour=-4073364461296781300,-1246740331492313076|bullet=107002007|element=107002137|m12c-zero-distance-passive-boss-v1"
+      },
+      {
+        "controlSkillId": 10700202,
+        "allowRuntimeTargetZeroDistance": true,
+        "runtimeEffectsUseScenarioTriggers": true,
+        "sourceIdentity": "skill_control_10700202.asset#sub0|GameplayBehaviour=7707672048730976285,2699535759717445661|bullet=107002008|element=107002248|m12c-zero-distance-passive-boss-v1"
+      }
+    ]
   },
   "compiler": {
     "timingPolicy": "standalone-animation",

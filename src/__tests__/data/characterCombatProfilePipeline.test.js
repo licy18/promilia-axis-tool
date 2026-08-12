@@ -26,7 +26,9 @@ import catalog from '../../data/generated/character-combat-profile-catalog.json'
 import ownerContract from '../../data/generated/character-combat-owner-contracts/101010.json';
 import giseleOwnerContract from '../../data/generated/character-combat-owner-contracts/112001.json';
 import profile from '../../data/generated/character-combat-profiles/101010.json';
+import misaProfile from '../../data/generated/character-combat-profiles/107002.json';
 import giseleProfile from '../../data/generated/character-combat-profiles/112001.json';
+import misaRecipe from '../../../scripts/character-combat/profile-recipes/107002.json';
 import giseleRecipe from '../../../scripts/character-combat/profile-recipes/112001.json';
 import schema from '../../data/generated/character-combat-profile-schema.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
@@ -68,6 +70,69 @@ afterEach(() => {
 });
 
 describe('M10 character combat profile pipeline', () => {
+  it('carries the scoped Misa A1/A2 zero-distance projectile authority into production controls', () => {
+    expect(misaRecipe.runtimePolicies.controlPolicies).toEqual([
+      {
+        controlSkillId: 10700201,
+        allowRuntimeTargetZeroDistance: true,
+        runtimeEffectsUseScenarioTriggers: true,
+        sourceIdentity:
+          'skill_control_10700201.asset#sub0|GameplayBehaviour=-4073364461296781300,-1246740331492313076|bullet=107002007|element=107002137|m12c-zero-distance-passive-boss-v1',
+      },
+      {
+        controlSkillId: 10700202,
+        allowRuntimeTargetZeroDistance: true,
+        runtimeEffectsUseScenarioTriggers: true,
+        sourceIdentity:
+          'skill_control_10700202.asset#sub0|GameplayBehaviour=7707672048730976285,2699535759717445661|bullet=107002008|element=107002248|m12c-zero-distance-passive-boss-v1',
+      },
+    ]);
+
+    const readControl = controlSkillId =>
+      misaProfile.contracts.controls.find(
+        control => control.controlSkillId === controlSkillId
+      );
+    expect(
+      [10700201, 10700202].map(controlSkillId => {
+        const control = readControl(controlSkillId);
+        return {
+          controlSkillId,
+          status: control.status,
+          applied: control.applied,
+          hitCount: control.hits.length,
+          runtimePolicy: control.runtimePolicy,
+        };
+      })
+    ).toEqual([
+      expect.objectContaining({
+        controlSkillId: 10700201,
+        status: 'verified-skill-control-mechanics-binding-applied',
+        applied: true,
+        hitCount: 2,
+        runtimePolicy: expect.objectContaining({
+          allowRuntimeTargetZeroDistance: true,
+          runtimeEffectsUseScenarioTriggers: true,
+        }),
+      }),
+      expect.objectContaining({
+        controlSkillId: 10700202,
+        status: 'verified-skill-control-mechanics-binding-applied',
+        applied: true,
+        hitCount: 8,
+        runtimePolicy: expect.objectContaining({
+          allowRuntimeTargetZeroDistance: true,
+          runtimeEffectsUseScenarioTriggers: true,
+        }),
+      }),
+    ]);
+    expect(
+      readControl(10700203).hits.map(hit => hit.trigger.startFrame)
+    ).toEqual([40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100]);
+    expect(
+      readControl(10700204).hits.map(hit => hit.trigger.startFrame)
+    ).toEqual([49, 56, 63, 70, 77, 84, 90, 96, 102]);
+  });
+
   it('fails closed when per-candidate source closure is removed or blanket-promoted', () => {
     expect(
       giseleRecipe.coveragePolicies

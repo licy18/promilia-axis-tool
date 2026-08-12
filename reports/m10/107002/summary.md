@@ -2,7 +2,7 @@
 
 - Owner: `107002`
 - Profile: `actor:107002:character-combat-profile:v1`
-- Hash: `93b91246c2ed41eb680f251c73bc9f54b6e39d7c3c100093a36de1d52911fc1c`
+- Hash: `53c0812c13897f82f6639da418cf51ea50945b00ddb12dbf3fde7fe3b62e0f5b`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -10,16 +10,16 @@
 - 执行形态：10
 - 可达 control：15
 - 窗口：0
-- Hit：57
-- 来源 identity：493
-- 战斗图：112 nodes / 107 edges
+- Hit：67
+- 来源 identity：501
+- 战斗图：122 nodes / 117 edges
 - 描述覆盖：23
 - Runtime ready 动作：4/10
-- Runtime capture：0
+- Runtime capture：10
 - 零距离模拟完整：no
 - 实机证据完整：no
 - 零距离阻断 capture：0
-- 实机证据 capture：0
+- 实机证据 capture：10
 
 ## 维度状态
 
@@ -29,7 +29,7 @@
 | hiddenAndDerivedForms | runtime-evidence-required | 9 | 1 | 10 |
 | inputAndExecutionTiming | not-applicable | 0 | 0 | 0 |
 | effectiveOccupancy | runtime-evidence-required | 9 | 1 | 10 |
-| hitsAndProjectiles | applied | 57 | 0 | 57 |
+| hitsAndProjectiles | static-evidence-gap | 57 | 10 | 67 |
 | hpDamage | static-evidence-gap | 13 | 30 | 43 |
 | toughnessDamage | static-evidence-gap | 10 | 30 | 43 |
 | actorSp | static-evidence-gap | 8 | 30 | 43 |
@@ -48,6 +48,7 @@
 
 ## 未闭环
 
+- runtime-evidence-required: 10
 - static-evidence-gap: 18
 
 > JSON 是权威产物；本摘要不作为运行时输入，也不从描述推断数值。

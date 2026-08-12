@@ -567,20 +567,17 @@ describe('Machine Axis service', () => {
     30_000
   );
 
-  it('materializes the verified Misa A1-to-A4 prefix without hiding unresolved projectile setup', () => {
+  it('materializes the verified Misa A1-to-A4 prefix with source-backed projectile impacts', () => {
     const prepared = createMachineAxisService().prepareValidated(
       createOwnerNormalAttackAxis(107002, 4)
     );
 
     expect(prepared.valid).toBe(true);
     expect(prepared.actionLegalityProof).toMatchObject({
-      status: 'axis-action-legality-passed-score-ineligible',
+      status: 'axis-action-legality-passed',
       passed: true,
-      finalScoreEligible: false,
-      scoreExclusionCodes: [
-        'machine-axis-damage-skipped',
-        'machine-axis-variant-resolution-open',
-      ],
+      finalScoreEligible: true,
+      scoreExclusionCodes: [],
     });
     expect(
       prepared.compilation.actionResolutions.map(resolution => ({
@@ -592,12 +589,12 @@ describe('Machine Axis service', () => {
       {
         actionId: 'owner-107002-a1',
         controlSkillId: 10700201,
-        variantResolutionStatus: 'unresolved-action-variant-selection',
+        variantResolutionStatus: 'verified-action-variant-selection-ready',
       },
       {
         actionId: 'owner-107002-a2',
         controlSkillId: 10700202,
-        variantResolutionStatus: 'unresolved-action-variant-selection',
+        variantResolutionStatus: 'verified-action-variant-selection-ready',
       },
       {
         actionId: 'owner-107002-a3',
@@ -621,35 +618,33 @@ describe('Machine Axis service', () => {
         reason: 'verified-normal-attack-input-phase-conflict',
       })
     );
-    expect(prepared.warnings).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          actionId: 'owner-107002-a1',
-          code: 'machine-axis-variant-resolution-open',
-          reason: 'unresolved-action-variant-selection',
-        }),
-        expect.objectContaining({
-          actionId: 'owner-107002-a2',
-          code: 'machine-axis-variant-resolution-open',
-          reason: 'unresolved-action-variant-selection',
-        }),
-      ])
-    );
+    expect(
+      prepared.warnings.some(warning =>
+        [
+          'machine-axis-variant-resolution-open',
+          'machine-axis-damage-skipped',
+        ].includes(warning.code)
+      )
+    ).toBe(false);
     expect(
       prepared.run.trace.events.filter(
         event =>
           event.type === 'DAMAGE_SKIPPED' &&
           ['owner-107002-a1', 'owner-107002-a2'].includes(event.actionId)
       )
-    ).toEqual([
-      expect.objectContaining({ actionId: 'owner-107002-a1' }),
-      expect.objectContaining({ actionId: 'owner-107002-a2' }),
-    ]);
+    ).toEqual([]);
     expect(
-      prepared.run.trace.damage.some(event =>
-        ['owner-107002-a1', 'owner-107002-a2'].includes(event.actionId)
+      Object.fromEntries(
+        ['owner-107002-a1', 'owner-107002-a2'].map(actionId => [
+          actionId,
+          prepared.run.trace.damage.filter(event => event.actionId === actionId)
+            .length,
+        ])
       )
-    ).toBe(false);
+    ).toEqual({
+      'owner-107002-a1': 2,
+      'owner-107002-a2': 8,
+    });
 
     const formalAxis = createOwnerNormalAttackAxis(107002, 4);
     formalAxis.scenario.objectiveContract = createMachineAxisObjectiveContract(
@@ -657,19 +652,11 @@ describe('Machine Axis service', () => {
     );
     const formalPrepared =
       createMachineAxisService().prepareValidated(formalAxis);
-    expect(formalPrepared.valid).toBe(false);
-    expect(formalPrepared.issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'machine-axis-damage-skipped',
-          actionId: 'owner-107002-a1',
-        }),
-        expect.objectContaining({
-          code: 'machine-axis-variant-resolution-open',
-          actionId: 'owner-107002-a1',
-        }),
-      ])
-    );
+    expect(formalPrepared.valid).toBe(true);
+    expect(formalPrepared.actionLegalityProof).toMatchObject({
+      passed: true,
+      finalScoreEligible: true,
+    });
   }, 30_000);
 
   it('rejects a fresh Sifliya A1 at frame 19 with the exact normal-input violation', () => {

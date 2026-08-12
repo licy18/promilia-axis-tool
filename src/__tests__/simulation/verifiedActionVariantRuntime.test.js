@@ -887,41 +887,99 @@ describe('verified action variant and special resource runtime', () => {
             attackChainSequenceIndex: index + 1,
             executionControlSkillId,
             selectedSubSkillIndex: 0,
-            status:
-              index < 2
-                ? 'unresolved-action-variant-selection'
-                : 'verified-action-variant-selection-ready',
+            status: 'verified-action-variant-selection-ready',
           })
       )
     );
     expect(runtime.actionResolutionById.get(actions[0].id)).toMatchObject({
-      ready: false,
-      status: 'verified-action-binding-unresolved',
-      hits: [],
-      reasons: expect.arrayContaining([
-        'projectile-impact-frame-runtime-dependent',
-      ]),
+      ready: true,
+      status: 'verified-combat-action-mechanics-ready',
+      hits: [
+        expect.objectContaining({
+          elementId: 107002137,
+          scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        }),
+        expect.objectContaining({
+          elementId: 107002137,
+          scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+        }),
+      ],
     });
     expect(runtime.actionResolutionById.get(actions[1].id)).toMatchObject({
-      ready: false,
-      status: 'verified-action-binding-unresolved',
-      hits: [],
+      ready: true,
+      status: 'verified-combat-action-mechanics-ready',
     });
-    expect(
-      runtime.resourceEvents.some(event =>
-        [actions[0].id, actions[1].id].includes(event.actionId)
-      )
-    ).toBe(false);
-    expect(
-      runtime.effectCommands.some(command =>
-        [actions[0].id, actions[1].id].includes(
-          command.actionId ?? command.sourceActionId
-        )
-      )
-    ).toBe(false);
+    expect(runtime.actionResolutionById.get(actions[1].id).hits).toHaveLength(
+      8
+    );
   });
 
-  it('does not let a structural-only Misa carrier open a special context edge', () => {
+  it('keeps Misa A1 fail closed for wrong subskill evidence', () => {
+    const fixture = structuredClone(mechanicsPackage);
+    const mapping = fixture.actionMappings.find(
+      candidate =>
+        candidate.ownerId === MISA_ID &&
+        candidate.actionKind === 'normal-attack'
+    );
+    mapping.attackInputSegments[0].selectedSubSkillIndex = 99;
+    installVerifiedCombatMechanicsPackage(fixture);
+    const [action] = createRuntimeContextNormalAttackChain({
+      ownerId: MISA_ID,
+      segmentCount: 1,
+    });
+    const runtime = runVariantRuntime({
+      actors: [action.actor],
+      actions: [action],
+      durationMs: frameTime(1000),
+    });
+
+    expect(runtime.selectionByActionId.get(action.id)).toMatchObject({
+      status: 'unresolved-action-variant-selection',
+    });
+    expect(runtime.actionResolutionById.get(action.id)).toMatchObject({
+      ready: false,
+      applied: false,
+      hits: [],
+    });
+  });
+
+  it.each([
+    [
+      'ambiguous segment evidence',
+      fixture => {
+        const mapping = fixture.actionMappings.find(
+          candidate =>
+            candidate.ownerId === MISA_ID &&
+            candidate.actionKind === 'normal-attack'
+        );
+        mapping.attackInputSegments.push({
+          ...structuredClone(mapping.attackInputSegments[0]),
+          identity: `${mapping.attackInputSegments[0].identity}|ambiguous`,
+        });
+      },
+    ],
+    [
+      'missing control evidence',
+      fixture => {
+        fixture.controlBindings = fixture.controlBindings.filter(
+          control => control.controlSkillId !== 10700201
+        );
+        fixture.actionVariantControlBindings =
+          fixture.actionVariantControlBindings.filter(
+            control => control.controlSkillId !== 10700201
+          );
+      },
+    ],
+  ])('rejects Misa A1 package installation for %s', (_label, mutateFixture) => {
+    const fixture = structuredClone(mechanicsPackage);
+    mutateFixture(fixture);
+
+    expect(() => installVerifiedCombatMechanicsPackage(fixture)).toThrow(
+      'attack-input-segments-invalid'
+    );
+  });
+
+  it('rejects a forged Misa context edge whose identity still belongs to another owner', () => {
     const fixture = structuredClone(mechanicsPackage);
     const forgedContext = fixture.actionVariantGraph.contextEdges.find(
       edge => edge.inputCommand === 'charged-attack' && edge.applied === true
@@ -937,36 +995,10 @@ describe('verified action variant and special resource runtime', () => {
       startFrame: 0,
       endFrame: 100,
     };
-    installVerifiedCombatMechanicsPackage(fixture);
-    const carrier = createRuntimeContextNormalAttackAction({
-      ownerId: MISA_ID,
-      id: 'misa-structural-carrier',
-      startFrame: 0,
-      groupId: 'misa-structural-carrier-chain',
-    });
-    const charged = createActorAction({
-      id: 'misa-charged-after-structural-carrier',
-      characterId: MISA_ID,
-      skillId: 10700201,
-      actionKind: 'charged-attack',
-      actionVariantIndex: 1,
-      startMs: frameTime(10),
-      contextActionId: carrier.id,
-    });
-    const runtime = runVariantRuntime({
-      actors: [carrier.actor],
-      actions: [carrier, charged],
-      durationMs: frameTime(500),
-    });
 
-    expect(runtime.actionResolutionById.get(carrier.id)).toMatchObject({
-      ready: false,
-    });
-    expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
-      executionControlSkillId: 10700210,
-      edgeIdentity: null,
-      contextActionId: null,
-    });
+    expect(() => installVerifiedCombatMechanicsPackage(fixture)).toThrow(
+      'action-variant-graph-invalid'
+    );
   });
 
   it.each(STARBORN_IDS)(

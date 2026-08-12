@@ -2,12 +2,243 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-capture-plan",
   "ownerId": 107002,
-  "status": "not-applicable",
-  "entries": [],
+  "status": "runtime-evidence-required",
+  "entries": [
+    {
+      "captureIdentity": "capture:semantic-gap:0e139bc4220c81b8e336",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:0e139bc4220c81b8e336",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002137",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:1a2f40f49d74fa2276e1",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:1a2f40f49d74fa2276e1",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:44ce844b05752dfcd193",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:44ce844b05752dfcd193",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:5dd4e76c6c1a7d172b93",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:5dd4e76c6c1a7d172b93",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:79e2a6bd7f4337d4a19e",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:79e2a6bd7f4337d4a19e",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:9c039de575a6f08a9214",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:9c039de575a6f08a9214",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:a486145a93775cd5efa1",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:a486145a93775cd5efa1",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:e2a83ddadc0247f5dd3e",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:e2a83ddadc0247f5dd3e",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:edc5ea19897e1155d082",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:edc5ea19897e1155d082",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700202.asset/MonoBehaviour/skill_control_10700202__6105815031656979318.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002248",
+      "sourceMetadata": null
+    },
+    {
+      "captureIdentity": "capture:semantic-gap:f4d112b703f8c9e1a992",
+      "ownerId": 107002,
+      "sourceRecordIdentity": "semantic-gap:f4d112b703f8c9e1a992",
+      "triggerScenario": "execute the referenced action while recording the unresolved runtime field and its source identity",
+      "observe": [
+        "ownerId",
+        "actionId",
+        "controlSkillId",
+        "subSkillIndex",
+        "sourceIdentity"
+      ],
+      "successCriteria": "captured runtime identity resolves the listed condition without changing static source status",
+      "evidenceScope": "real-client-projectile-impact",
+      "blocksZeroDistanceSimulation": false,
+      "scenarioRuntimeStatus": "scenario-assumed-zero-distance",
+      "sourceEvidenceStatus": "runtime-dependent",
+      "referenceKinds": [
+        "bulletElements"
+      ],
+      "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700201.asset/MonoBehaviour/skill_control_10700201__-3645463137003009339.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=107002137",
+      "sourceMetadata": null
+    }
+  ],
   "summary": {
-    "captureCount": 0,
+    "captureCount": 10,
     "zeroDistanceBlockingCaptureCount": 0,
-    "realClientEvidenceCaptureCount": 0
+    "realClientEvidenceCaptureCount": 10
   },
-  "profileHash": "93b91246c2ed41eb680f251c73bc9f54b6e39d7c3c100093a36de1d52911fc1c"
+  "profileHash": "53c0812c13897f82f6639da418cf51ea50945b00ddb12dbf3fde7fe3b62e0f5b"
 }

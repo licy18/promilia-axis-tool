@@ -1161,7 +1161,10 @@ export function validateVerifiedCombatMechanicsPackage(value) {
     !Array.isArray(value.actionVariantGraph.edges) ||
     !Array.isArray(value.actionVariantGraph.defaultSelections) ||
     !Array.isArray(value.actionVariantGraph.contextEdges) ||
-    value.actionVariantGraph.contextEdges.some(edge => edge.applied !== true) ||
+    value.actionVariantGraph.contextEdges.some(
+      edge =>
+        edge.applied !== true || !isVerifiedContextEdgeIdentityConsistent(edge)
+    ) ||
     !Array.isArray(value.actionVariantGraph.attackInputChains) ||
     value.actionVariantGraph.attackInputChains.some(
       chain =>
@@ -1348,6 +1351,21 @@ export function validateVerifiedCombatMechanicsPackage(value) {
       : 'verified-combat-mechanics-package-valid',
     issues,
   };
+}
+
+function isVerifiedContextEdgeIdentityConsistent(edge) {
+  const expectedIdentity = [
+    `actor:${Number(edge?.ownerId)}`,
+    `control:${Number(edge?.sourceControlSkillId)}`,
+    `sub:${Number(edge?.sourceSubSkillIndex)}`,
+    `context:${Number(edge?.inputWindow?.startFrame)}-${Number(
+      edge?.inputWindow?.endFrame
+    )}`,
+    `public-control:${Number(edge?.targetControlSkillId)}`,
+    `execution-control:${Number(edge?.executionControlSkillId)}`,
+    `sub:${Number(edge?.targetSubSkillIndex)}`,
+  ].join('|');
+  return String(edge?.edgeIdentity ?? '') === expectedIdentity;
 }
 
 function isPublishedControlRootNodeClassificationValid(root) {

@@ -45,8 +45,8 @@ describe('verified combat mechanics package', () => {
       summary: {
         candidateActionCount: 648,
         classifiedActionCount: 648,
-        appliedActionBindingCount: 697,
-        appliedHitBindingCount: 3454,
+        appliedActionBindingCount: 699,
+        appliedHitBindingCount: 3464,
         appliedEffectBindingCount: 1906,
         verifiedZeroEffectBindingCount: 12,
         unresolvedEffectBindingCount: 1271,
@@ -72,8 +72,8 @@ describe('verified combat mechanics package', () => {
         appliedEnemyProfileCount: 204,
         attackInputChainCount: 20,
         attackInputSegmentCount: 95,
-        appliedAttackInputSegmentCount: 80,
-        unresolvedAttackInputSegmentCount: 15,
+        appliedAttackInputSegmentCount: 82,
+        unresolvedAttackInputSegmentCount: 13,
         appliedAttackInputTimingCount: 78,
         unresolvedAttackInputTimingCount: 17,
         semanticEffectCount: 3580,
@@ -539,6 +539,70 @@ describe('verified combat mechanics package', () => {
         }),
       ],
     });
+  });
+
+  it('publishes the uniquely sourced Misa A1 and A2 projectile impacts for the frozen zero-distance scenario', () => {
+    const mapping = mechanicsPackage.actionMappings.find(
+      candidate =>
+        candidate.ownerId === 107002 && candidate.actionKind === 'normal-attack'
+    );
+    const controls = [
+      ...mechanicsPackage.controlBindings,
+      ...mechanicsPackage.actionVariantControlBindings,
+    ];
+    const readControl = controlSkillId =>
+      controls.find(control => control.controlSkillId === controlSkillId);
+    const readHitFrames = controlSkillId =>
+      readControl(controlSkillId).hits.map(hit => [
+        hit.elementId,
+        hit.trigger.startFrame,
+      ]);
+
+    expect(
+      mapping.attackInputSegments.slice(0, 4).map(segment => ({
+        sequenceIndex: segment.sequenceIndex,
+        controlSkillId: segment.controlSkillId,
+        classification: segment.classification,
+        runtimeReady: segment.runtimeReady,
+        scenarioRuntimeStatus: segment.scenarioRuntimeStatus,
+      }))
+    ).toEqual(
+      [10700201, 10700202, 10700203, 10700204].map((controlSkillId, index) => ({
+        sequenceIndex: index + 1,
+        controlSkillId,
+        classification: 'applied',
+        runtimeReady: true,
+        scenarioRuntimeStatus: 'scenario-assumed-zero-distance',
+      }))
+    );
+    expect(readControl(10700201).runtimePolicy).toMatchObject({
+      allowRuntimeTargetZeroDistance: true,
+      runtimeEffectsUseScenarioTriggers: true,
+    });
+    expect(readControl(10700202).runtimePolicy).toMatchObject({
+      allowRuntimeTargetZeroDistance: true,
+      runtimeEffectsUseScenarioTriggers: true,
+    });
+    expect(readHitFrames(10700201)).toEqual([
+      [107002137, 10],
+      [107002137, 13],
+    ]);
+    expect(readHitFrames(10700202)).toEqual([
+      [107002248, 29],
+      [107002248, 29],
+      [107002248, 32],
+      [107002248, 32],
+      [107002248, 57],
+      [107002248, 57],
+      [107002248, 63],
+      [107002248, 63],
+    ]);
+    expect(readHitFrames(10700203).map(([, frame]) => frame)).toEqual([
+      40, 46, 52, 58, 64, 70, 76, 82, 88, 94, 100,
+    ]);
+    expect(readHitFrames(10700204).map(([, frame]) => frame)).toEqual([
+      49, 56, 63, 70, 77, 84, 90, 96, 102,
+    ]);
   });
 
   it('keeps action occupancy separate from animation, hits, windows, and cooldown', () => {
