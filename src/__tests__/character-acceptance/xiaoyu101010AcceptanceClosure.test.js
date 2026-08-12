@@ -171,10 +171,17 @@ describe('Xiaoyu 101010 acceptance closure', () => {
         entry.actualSubSkillIndex,
       ])
     ).toEqual([
-      [74, 0],
+      [-200, 0],
       [75, 1],
       [99, 1],
       [100, 0],
+    ]);
+    expect(main.mechanismProbes.negativeActionCases).toEqual([
+      expect.objectContaining({
+        identity:
+          'negative:charged-input-window-start-minus-one-74f-lane-overlap',
+        passed: true,
+      }),
     ]);
     expect(a4Positive).toMatchObject({
       passed: true,
@@ -290,12 +297,12 @@ describe('Xiaoyu 101010 acceptance closure', () => {
     ).toBe(true);
   });
 
-  it('publishes stable owner evidence with the recorded product acceptance', () => {
+  it('publishes stable technical evidence while product acceptance remains pending', () => {
     expect(scenarioCases.summary).toMatchObject({
       scenarioCount: 4,
       executionPassedCount: 4,
-      assertionCount: 1301,
-      assertionPassedCount: 1301,
+      assertionCount: 1312,
+      assertionPassedCount: 1312,
     });
     expect(
       scenarioCases.records.every(
@@ -315,13 +322,17 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       )
     ).toBe(true);
     expect(manifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'accepted',
-      acceptanceCommit: 'be60e68d1c1bcf77a962426ddb0af37fc384c4da',
-      bindingStatus: 'verified',
+      status: 'pending',
+      acceptanceCommit: null,
+      recordIdentity: null,
+      qualificationSubjectHash: null,
+      scenarioSetHash: null,
+      bindingStatus: 'not-requested',
       automatedEvidence: [
         expect.objectContaining({
           scenarioIdentity: 'm11-d-101010-visual-acceptance',
           evidenceKind: 'workbench-playwright-screenshot',
+          status: 'automated-workbench-import-passed',
           screenshotPath:
             'reports/m11-d-character-acceptance-101010-desktop.png',
           screenshotSha256:
@@ -330,12 +341,13 @@ describe('Xiaoyu 101010 acceptance closure', () => {
       ],
     });
     expect(manifest.maturity).toMatchObject({
-      optimizationReady: true,
+      currentState: 'runtime-integrated',
+      optimizationReady: false,
       gates: {
-        visuallyAccepted: true,
-        optimizationReady: true,
+        visuallyAccepted: false,
+        optimizationReady: false,
       },
-      blockers: [],
+      blockers: ['acceptance-product-visual-signoff-pending'],
     });
   });
 

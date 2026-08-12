@@ -912,6 +912,9 @@ function executeVisualScenario({
   const declaredInputWindowBoundaries = recipe.inputWindowBoundary
     ? inspectInputWindowBoundaries(fixture, first, recipe.inputWindowBoundary)
     : null;
+  const implicitInputWindowBoundaryDisabled =
+    Object.hasOwn(recipe, 'inputWindowBoundary') &&
+    recipe.inputWindowBoundary == null;
   const mitiJointInputWindowBoundaries = recipe.mitiJointInputWindowBoundary
     ? inspectMitiInputWindowBoundaries(fixture, first, service)
     : null;
@@ -919,10 +922,11 @@ function executeVisualScenario({
     configuredInputWindowBoundaries ??
     declaredInputWindowBoundaries ??
     mitiJointInputWindowBoundaries ??
+    (implicitInputWindowBoundaryDisabled ||
     (Number(recipe.ownerId) === 109001 &&
-    (recipe.additionalScenarios ?? []).some(
-      definition => definition.inputWindowBoundary
-    )
+      (recipe.additionalScenarios ?? []).some(
+        definition => definition.inputWindowBoundary
+      ))
       ? null
       : inspectInputWindowBoundaries(fixture, first));
   const foregroundBackgroundSwitch = recipe.mitiForegroundBackgroundSwitch

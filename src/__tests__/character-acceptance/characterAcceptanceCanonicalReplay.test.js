@@ -15,10 +15,10 @@ const cases = [
     ownerId: 101010,
     fixture: xiaoyuFixture,
     hashes: {
-      input: '93bb8b09eb5e75e3',
-      data: '6af1c735c0f4c47c',
-      trace: 'd92d46b043dc203c',
-      evaluation: 'fd30dcfbaa6144f0',
+      input: 'b8f9391bf6c8d0ed',
+      data: '48497e3ca2309f8a',
+      trace: '1771ed0580495bd5',
+      evaluation: 'a753f6788d66964d',
     },
   },
   {

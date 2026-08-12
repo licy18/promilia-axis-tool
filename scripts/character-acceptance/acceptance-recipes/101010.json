@@ -135,30 +135,72 @@
     "cases": [
       {
         "actionId": "window-outside-before",
-        "expectedOffset": 74,
+        "sourceActionId": "window-before-source",
+        "expectedOffset": -200,
         "expectedControlSkillId": 10101010,
         "expectedSubSkillIndex": 0
       },
       {
         "actionId": "window-inside-start",
+        "sourceActionId": "window-start-source",
         "expectedOffset": 75,
         "expectedControlSkillId": 10101010,
         "expectedSubSkillIndex": 1
       },
       {
         "actionId": "window-inside-end",
+        "sourceActionId": "window-end-source",
         "expectedOffset": 99,
         "expectedControlSkillId": 10101010,
         "expectedSubSkillIndex": 1
       },
       {
         "actionId": "window-outside-after",
+        "sourceActionId": "window-after-source",
         "expectedOffset": 100,
         "expectedControlSkillId": 10101010,
         "expectedSubSkillIndex": 0
       }
     ]
   },
+  "negativeActionCases": [
+    {
+      "identity": "charged-input-window-start-minus-one-lane-overlap",
+      "assertionIdentity": "negative:charged-input-window-start-minus-one-74f-lane-overlap",
+      "durationFrames": 300,
+      "actions": [
+        {
+          "id": "negative-window-before-source",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10101001,
+            "actionKind": "charged-attack",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 0 }
+        },
+        {
+          "id": "negative-window-start-minus-one",
+          "owner": { "kind": "actor", "slotId": "slot-1" },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10101001,
+            "actionKind": "charged-attack",
+            "level": 1
+          },
+          "schedule": { "mode": "absolute", "frame": 74 }
+        }
+      ],
+      "requiredExecutableActionIds": ["negative-window-before-source"],
+      "expectedIssue": {
+        "actionId": "negative-window-start-minus-one",
+        "code": "machine-axis-action-not-executable",
+        "reason": "confirmed-action-rule-violation",
+        "violationCode": "action-lane-overlap"
+      }
+    }
+  ],
   "probes": [
     {
       "kind": "variant-selection",
@@ -549,13 +591,14 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 2,
-              "groupId": "isolated-a4-miss-blocked"
+              "groupId": "isolated-a4-miss-blocked",
+              "contextActionId": "isolated-a4-chain-a1"
             },
             "level": 1
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 100
+            "frame": 20
           }
         },
         {
@@ -570,13 +613,14 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 3,
-              "groupId": "isolated-a4-miss-blocked"
+              "groupId": "isolated-a4-miss-blocked",
+              "contextActionId": "isolated-a4-chain-a2"
             },
             "level": 1
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 200
+            "frame": 55
           }
         },
         {
@@ -591,13 +635,14 @@
             "actionKind": "normal-attack",
             "attackInput": {
               "sequenceIndex": 4,
-              "groupId": "isolated-a4-miss-blocked"
+              "groupId": "isolated-a4-miss-blocked",
+              "contextActionId": "isolated-a4-chain-a3"
             },
             "level": 1
           },
           "schedule": {
             "mode": "absolute",
-            "frame": 300
+            "frame": 102
           },
           "hitOverrides": {
             "10101004|0|projectile|101010107|101010002|0|0|control:10101004|sub:0|behavior:-3875140846970907040|config:0|bullet:101010001:0:0|nested-bullet:101010002|execution:bullet:101010002|logic:1|action:0|element:0|element:101010107:0": {
