@@ -12,6 +12,11 @@ import {
   createEffectRuntimeTimeline,
 } from '../../simulation/runtime/effectRuntimeTimeline';
 import { createCanonicalCombatEvaluation } from '../../simulation/headless/canonicalHeadlessCombatCore';
+import {
+  createRubyEnhancedContextAxis,
+  installRubyNormalAttackProfileOverlay,
+  restoreVerifiedCombatMechanicsPackage,
+} from '../helpers/rubyNormalAttackAuthorityFixture';
 
 const PANGPANG_PLUNGING_HIT = '10100711|0|elements|0|-6537565703316603243|35|1';
 
@@ -165,33 +170,40 @@ describe('Machine Axis external audit boundaries', () => {
   });
 
   describe('M11-04 context-resolved durations', () => {
-    it('uses Ruby plunging actual occupancy for after-action-end', () => {
-      const axis = cloneFixture();
+    it('uses Ruby enhanced context occupancy for after-action-end', () => {
+      installRubyNormalAttackProfileOverlay();
+      const axis = createRubyEnhancedContextAxis(fixture);
       axis.actions.push({
         ...createWaitAction('after-ruby-e1', null, 1),
         schedule: {
           mode: 'after-action-end',
-          actionId: 'ruby-plunging',
+          actionId: 'ruby-enhanced-context',
           frame: null,
           offsetFrames: 0,
         },
       });
 
-      const prepared = createMachineAxisService().prepare(axis);
-      const ruby = prepared.actionResolutions.find(
-        action => action.actionId === 'ruby-plunging'
-      );
-      const after = prepared.actionResolutions.find(
-        action => action.actionId === 'after-ruby-e1'
-      );
+      try {
+        const prepared = createMachineAxisService().prepare(axis);
+        const ruby = prepared.actionResolutions.find(
+          action => action.actionId === 'ruby-enhanced-context'
+        );
+        const after = prepared.actionResolutions.find(
+          action => action.actionId === 'after-ruby-e1'
+        );
 
-      expect(prepared.valid).toBe(true);
-      expect(ruby).toMatchObject({
-        publicActionId: 10300201,
-        actionKind: 'plunging-attack',
-        durationFrames: 55,
-      });
-      expect(after.startFrame).toBe(ruby.startFrame + ruby.durationFrames);
+        expect(prepared.valid).toBe(true);
+        expect(ruby).toMatchObject({
+          publicActionId: 10300201,
+          actionKind: 'normal-attack',
+          resolvedControlSkillId: 10300201,
+          resolvedSubSkillIndex: 1,
+          durationFrames: 24,
+        });
+        expect(after.startFrame).toBe(ruby.startFrame + ruby.durationFrames);
+      } finally {
+        restoreVerifiedCombatMechanicsPackage();
+      }
     }, 30_000);
 
     it('uses a state-selected Xiaoyu charged form before resolving the next action', () => {
