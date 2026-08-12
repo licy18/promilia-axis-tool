@@ -1,3 +1,5 @@
+const projectedVerifiedContextContinuationActions = new WeakSet();
+
 export function projectScenarioEffectiveActionTimeline({
   scenario = {},
   actionResolutionById = null,
@@ -57,8 +59,8 @@ export function projectScenarioEffectiveActionTimeline({
             0,
             Math.min(genericDurationMs, contextualEndMs - requestedStartMs)
           );
-    return {
-      ...action,
+    const projectedAction = {
+      ...omitCallerVerifiedContextContinuation(action),
       name: binding.semanticName ?? action.name,
       startMs,
       durationMs,
@@ -69,7 +71,9 @@ export function projectScenarioEffectiveActionTimeline({
       requestedStartMs,
       contextualInputScheduling,
       contextualEffectiveEndMs: contextualEndMs ?? null,
-      ...(selection.sourceKind === 'verified-input-context-variant' &&
+      ...(resolution?.ready === true &&
+      selection.status === 'verified-action-variant-selection-ready' &&
+      selection.sourceKind === 'verified-input-context-variant' &&
       selection.edgeIdentity &&
       selection.contextActionId
         ? {
@@ -84,6 +88,10 @@ export function projectScenarioEffectiveActionTimeline({
           }
         : {}),
     };
+    if (projectedAction.verifiedContextContinuation) {
+      projectedVerifiedContextContinuationActions.add(projectedAction);
+    }
+    return projectedAction;
   });
 
   return {
@@ -95,6 +103,22 @@ export function projectScenarioEffectiveActionTimeline({
       contextuallyTruncatedActionCount: contextualEndByActionId.size,
     },
   };
+}
+
+export function isProjectedVerifiedContextContinuation(action) {
+  return (
+    action != null &&
+    typeof action === 'object' &&
+    projectedVerifiedContextContinuationActions.has(action) &&
+    action.verifiedContextContinuation?.status ===
+      'verified-context-continuation-ready'
+  );
+}
+
+function omitCallerVerifiedContextContinuation(action) {
+  const projected = { ...action };
+  delete projected.verifiedContextContinuation;
+  return projected;
 }
 
 export function isActionFrameWithinContextualOccupancy(

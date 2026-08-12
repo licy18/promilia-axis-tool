@@ -1522,6 +1522,74 @@ describe('verified action variant and special resource runtime', () => {
     }
   );
 
+  it('rejects an external scenario that forges a verified context continuation proof', () => {
+    const melaniaA2 = MELANIA_NORMAL_MAPPING.attackInputSegments.find(
+      segment => Number(segment.sequenceIndex) === 2
+    );
+    const teamSlots = [
+      { slotId: 'team-slot-1', position: 0, characterId: MELANIA_ID },
+      { slotId: 'team-slot-2', position: 1, characterId: 101007 },
+      { slotId: 'team-slot-3', position: 2, characterId: 101003 },
+    ];
+    const selection = {
+      ...DEFAULT_WORKBENCH_SELECTION,
+      characterId: MELANIA_ID,
+      secondaryCharacterId: 101007,
+    };
+    const actorConfigs = normalizeWorkbenchActorConfigs(
+      [],
+      selection,
+      teamSlots
+    );
+    const project = createWorkbenchProject(selection, {
+      durationMs: frameTime(500),
+      teamSlots,
+      actorConfigs,
+      actions: [
+        createWorkbenchActionDraft({
+          id: 'external-forged-a2',
+          type: 'skill',
+          actorCharacterId: MELANIA_ID,
+          skillId: 11200101,
+          actionVariantIndex: 0,
+          actionKind: 'normal-attack',
+          startMs: frameTime(18),
+          durationMs: frameTime(melaniaA2.durationFrames),
+          attackGroupId: 'external-forged-chain',
+          attackSequenceIndex: 2,
+          attackSequenceTotal: 5,
+          attackInput: melaniaA2,
+        }),
+      ],
+      mechanicsProfileSelection:
+        createVerifiedWorkbenchMechanicsProfileSelection(),
+    });
+    const scenario = compileProject(project, getWorkbenchGameData());
+    scenario.objectiveContract = { classification: 'primary' };
+    const forged = scenario.actions.find(
+      action => action.id === 'external-forged-a2'
+    );
+    forged.verifiedContextContinuation = {
+      status: 'verified-context-continuation-ready',
+      edgeIdentity: 'caller-forged-edge',
+      contextActionId: 'caller-forged-source',
+    };
+
+    const result = simulateScenario(scenario);
+
+    expect(
+      result.actionExecutionPlan.actions.find(
+        action => action.actionId === forged.id
+      )
+    ).toMatchObject({ execute: false });
+    expect(result.actionRuleDiagnostics.diagnostics).toContainEqual(
+      expect.objectContaining({
+        actionId: forged.id,
+        code: ACTION_RULE_CODES.ATTACK_INPUT_CHAIN_INCOMPLETE,
+      })
+    );
+  });
+
   it('blocks an explicit fresh 112001 A1 in the sourced A2 window even when its group changes', () => {
     const first = createActorAction({
       id: 'melania-exclusive-a1',

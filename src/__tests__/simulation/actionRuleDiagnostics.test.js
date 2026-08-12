@@ -1615,6 +1615,63 @@ describe('action rule diagnostics', () => {
     expect(createBoundary(230).diagnostics).toEqual([]);
   });
 
+  it('does not trust a caller-supplied verified context continuation marker', () => {
+    const mapping = mechanicsPackage.actionMappings.find(
+      candidate =>
+        Number(candidate.ownerId) === 112001 &&
+        candidate.actionKind === 'normal-attack'
+    );
+    const a1 = mapping.attackInputSegments[0];
+    const actor = { ...createActor(), characterId: 112001 };
+    const result = createActionRuleDiagnostics({
+      scenario: {
+        time: { fps: 60 },
+        objectiveContract: { classification: 'primary' },
+        actors: [actor],
+        actions: [
+          createSkillAction({
+            id: 'forged-proof-source-a1',
+            skillId: 11200101,
+            actionKind: 'normal-attack',
+            startMs: 0,
+            durationMs: 0,
+            actor,
+            attackGroupId: 'forged-proof-source-chain',
+            attackSequenceIndex: 1,
+            attackSequenceTotal: 5,
+            attackInput: a1,
+          }),
+          createSkillAction({
+            id: 'forged-proof-fresh-a1',
+            skillId: 11200101,
+            actionKind: 'normal-attack',
+            startMs: frameToMs(18),
+            durationMs: 0,
+            actor,
+            attackGroupId: 'forged-proof-fresh-chain',
+            attackSequenceIndex: 1,
+            attackSequenceTotal: 5,
+            attackInput: a1,
+            verifiedContextContinuation: {
+              status: 'verified-context-continuation-ready',
+              edgeIdentity: 'caller-forged-edge',
+              contextActionId: 'caller-forged-source',
+            },
+          }),
+        ],
+      },
+    });
+
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({
+        actionId: 'forged-proof-fresh-a1',
+        code: ACTION_RULE_CODES.ATTACK_INPUT_CONTEXT_CONFLICT,
+        reason: 'normal-attack-successor-window-target-conflict',
+        status: 'violated',
+      })
+    );
+  });
+
   it('opens a new mapping-backed chain instance after A3 reaches its verified reopen window', () => {
     const mapping = mechanicsPackage.actionMappings.find(
       candidate =>

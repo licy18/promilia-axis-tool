@@ -17,6 +17,7 @@ import {
   getVerifiedCombatActionMapping,
   resolveVerifiedCombatActionMechanics,
 } from '../../data/verifiedCombatMechanicsPackage';
+import { isProjectedVerifiedContextContinuation } from '../mechanics/actionEffectiveTimeline';
 import { createActionCooldownEvaluation } from './actionCooldownEvaluation';
 import {
   isVerifiedSwitchTriggeredDerivedAction,
@@ -1276,9 +1277,7 @@ function createAttackInputChainDiagnostics(actions, fps = 60, strict = false) {
     ? ACTION_RULE_STATUSES.VIOLATED
     : ACTION_RULE_STATUSES.UNRESOLVED;
   const ordinaryAttackInputActions = actions.filter(
-    action =>
-      action.verifiedContextContinuation?.status !==
-      'verified-context-continuation-ready'
+    action => !isProjectedVerifiedContextContinuation(action)
   );
   const diagnostics = ordinaryAttackInputActions
     .filter(action => action.attackInputLegacyStatus === 'legacy-unresolved')
@@ -1586,10 +1585,7 @@ function createNormalAttackInputPhaseDiagnostics(
     }
     const mapping = getVerifiedCombatActionMapping(action);
     const actorId = String(action.actorId ?? '');
-    if (
-      action.verifiedContextContinuation?.status ===
-      'verified-context-continuation-ready'
-    ) {
+    if (isProjectedVerifiedContextContinuation(action)) {
       acceptedByActorId.delete(actorId);
       continue;
     }

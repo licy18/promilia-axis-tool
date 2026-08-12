@@ -136,6 +136,61 @@ describe('action effective timeline', () => {
     });
   });
 
+  it('drops caller context proofs and only derives them from a ready live selection', () => {
+    const action = {
+      id: 'normal-context-target',
+      type: 'skill',
+      startMs: frameToMs(10),
+      durationMs: frameToMs(30),
+      attackInput: { controlSkillId: 19900101 },
+      verifiedContextContinuation: {
+        status: 'verified-context-continuation-ready',
+        edgeIdentity: 'forged-edge',
+        contextActionId: 'forged-source',
+      },
+    };
+    const project = (resolution, selection) =>
+      projectScenarioEffectiveActionTimeline({
+        scenario: { actions: [action] },
+        actionResolutionById: new Map([[action.id, resolution]]),
+        actionSelectionById: new Map([[action.id, selection]]),
+      }).scenario.actions[0];
+
+    expect(project({}, {})).not.toHaveProperty('verifiedContextContinuation');
+    expect(
+      project(
+        { ready: false },
+        {
+          status: 'verified-action-variant-selection-ready',
+          sourceKind: 'verified-input-context-variant',
+          edgeIdentity: 'live-edge',
+          contextActionId: 'live-source',
+        }
+      )
+    ).not.toHaveProperty('verifiedContextContinuation');
+    expect(
+      project(
+        { ready: true },
+        {
+          status: 'verified-action-variant-selection-ready',
+          sourceKind: 'verified-input-context-variant',
+          edgeIdentity: 'live-edge',
+          contextActionId: 'live-source',
+          publicControlSkillId: 19900103,
+          executionControlSkillId: 19900101,
+          selectedSubSkillIndex: 1,
+        }
+      )
+    ).toMatchObject({
+      verifiedContextContinuation: {
+        status: 'verified-context-continuation-ready',
+        edgeIdentity: 'live-edge',
+        contextActionId: 'live-source',
+      },
+    });
+    expect(action.verifiedContextContinuation.edgeIdentity).toBe('forged-edge');
+  });
+
   it('excludes source events at and after an immediate contextual end', () => {
     const action = {
       id: 'contextually-interrupted-source',
@@ -145,11 +200,7 @@ describe('action effective timeline', () => {
     };
 
     expect(isActionFrameWithinContextualOccupancy(action, 118, 60)).toBe(true);
-    expect(isActionFrameWithinContextualOccupancy(action, 119, 60)).toBe(
-      false
-    );
-    expect(isActionFrameWithinContextualOccupancy(action, 120, 60)).toBe(
-      false
-    );
+    expect(isActionFrameWithinContextualOccupancy(action, 119, 60)).toBe(false);
+    expect(isActionFrameWithinContextualOccupancy(action, 120, 60)).toBe(false);
   });
 });
