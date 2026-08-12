@@ -6,6 +6,18 @@
 
 本文件是 M12-C 的实施合同。`DEVELOPMENT_PLAN.md` 保留阶段摘要，实际实现、测试和产品复验均以本文件为准。实现与优化资格全绿不等于客户端一致性或产品视觉自动签收；未满足对应产品边界前，不得把 M12-C 搜索结果声明为已获产品验收。
 
+## 0.00 2026-08-12 14:53 旧中央线程紧急收口快照
+
+- 收口原因：Codex 桌面端已无法可靠打开原中央线程。旧线程从此只作历史记录；没有启动新的长跑、Formal Search 或无关工程任务，也没有正在等待的本线程命令。
+- Git 恢复点：分支 `master`；收口文档提交前的实现 HEAD 为 `32835990ff14deb2289d0070ade48b8125b6f0d7`（`fix(m12-c): migrate Xiaoyu normal input acceptance`），相对 `origin/master` 为 ahead 39。包含本段的 docs-only 提交是该实现 HEAD 的直接后继；续接时必须以 `git rev-parse HEAD` 和 `git status --short --branch` 复核实际 checkout。
+- 已完成批次：normal-input authority v2、runtime/Workbench/search 评分前 fail-closed、STARBORN genuine context、防伪 continuation marker、107002 A1/A2 弹道机制与正式评分资格、109001/112001 技术轴，以及 101010 技术验收均已在主线形成独立提交。最近三个关键提交为 `2c86cc4b`（Misa mechanics）、`ad6fb7d7`（Misa scoring/acceptance closure）和 `32835990`（Xiaoyu acceptance migration）。这些是技术闭合，不等于产品视觉签收。
+- 最近真实聚焦结果：101010 closure tests `6/6 PASS`；canonical replay 过滤结果 `2 PASS / 6 SKIP`；owner generator required/pass `202/202`，blocked/source gap/acceptance gap/functional failure 均为 `0`，headless/canonical/Workbench 为 true。未在本收口阶段运行 full、trial-release、`release:verify` 或 formal admission。
+- 当前未提交 Ruby/103002 WIP（tracked）：`fixtures/character-acceptance/103002-visual.json`、`103002-active-surface-closure.json`、`103002-marker-expiry-ordering.json`、`103002-window-boundaries.json`、`103002-joint-attack-runtime.json`、`scripts/character-acceptance/acceptance-recipes/103002.json`。本线程自建恢复脚本 `.readonly-ruby-probe.mjs` 仍为 untracked；其他 `work/**` untracked evidence 均为既有资料，未删除、移动或改写，`stash@{0}` 未动。
+- Ruby WIP 已做但未签收：5 个 fixture 已改绑 package hash `62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8`；main A1/A2/A3/E1、enhanced E1-E12、marker 与 reload-window 边界开始改为显式 absolute frame、同 group/context/chain；recipe 新增 start-minus-one lane-overlap 负例。当前 diff 为 6 tracked files、`101 insertions / 43 deletions`，不是可提交批次。
+- Ruby 当前真实 blocker：带 owner overlay 的只读 probe 尚未到 E1，即先被 `103002-active-surface-closure.json` 中旧的密集独立 A1 critical cadence 拒绝。A1@0 后的 120/360/420/480/600/700F 等 fresh A1 落在 successor/recovery 约束内，产生 normal-input phase conflict；因此不能把“无输出/未到 E1”记为 PASS。下一步须把每个 critical/pre-post star-carry 普攻改成合法完整 A1→A2→A3 或经验证的 idle/reopen 链，并同步后续 switch/star/ultimate/E1-E12 绝对帧和 recipe 断言，再跑 owner-focused generator/tests。
+- 三条工作流状态：① authority/core/search fail-closed：技术实现完成，最终 release 仍未建立；② owner acceptance：技术迁移进行中，Ruby dirty，所有受影响角色和 STARBORN object 的新 Playwright/Workbench 产品视觉签收仍未完成，旧截图/hash 仅追溯；③ release/search：`optimizationFormalScoreReady=false`、formal admission 未重跑、最终 HEAD 未推送，三个目标当前有效 Top-5 均为 `0/5`，旧 release/admission/run/checkpoint/finalization/closeout 一律失效。
+- 严格续接顺序：先读本节与 `work/m12-c/CODEX_HANDOFF.md`，复核 HEAD/status；完成 Ruby 技术闭合；逐 owner 做真实 replay、Workbench/Playwright 视觉检查并独立签收；所有 owner/STARBORN 完成后一次性刷新派生产物；只运行一次 `NODE_OPTIONS=--max-old-space-size=8192 npm run release:verify`；要求 clean、HEAD 不漂移、formal admission 15/15、authority v2 live descriptor 全绑定并推送 `origin/master`；最后才创建全新 run，按 source-family/team 分片重新搜索三个 objective Top-5。
+
 ## 0.0 2026-08-12 普攻链合法性纠正（当前最高优先级）
 
 - 普攻输入是状态相关的输入意图，不是可以任意重复选择的 `A1` 动作。角色处于 `A1 -> A2` 连段输入窗时，再次输入普攻只能解析为 `A2`；处于 `A2 -> A3` 窗时只能解析为 `A3`，后续段以角色权威 transition graph 类推。

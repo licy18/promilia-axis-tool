@@ -1,6 +1,14 @@
 # promilia-axis-tool 对标 Endaxis 开发计划
 
-最后更新：2026-08-11
+最后更新：2026-08-12
+
+## 2026-08-12 M12-C 旧中央线程紧急收口
+
+- 旧 Codex 中央线程因桌面端无法可靠打开而停止继续扩展；未启动新的长跑或正式搜索。实现恢复点为 `master@32835990ff14deb2289d0070ade48b8125b6f0d7`，收口文档提交是其直接后继；续接以实际 `git rev-parse HEAD` 为准。
+- normal-input authority v2、评分前 fail-closed、STARBORN genuine context、Misa A1/A2 弹道/动作变体评分资格、109001/112001 与 Xiaoyu 技术轴已经进入主线。技术测试不构成产品视觉签收，旧截图、旧 release/admission 和旧 Top-5 不得复用。
+- 当前工作树保留未提交 Ruby/103002 恢复点：5 个 character-acceptance fixture、103002 recipe，以及 untracked `.readonly-ruby-probe.mjs`。现 probe 先被 active-surface 旧密集 fresh-A1 critical cadence 的 phase conflict 阻断，未得到 E1/E12 正向结果；必须先补完整 A1→A2→A3/合法 reopen 并同步时序。
+- 当前三阶段：核心技术闭合完成但未做最终 release；owner 技术/视觉验收进行中且 Ruby 未完成；正式 release/admission/push/search 未开始。三个 objective 的当前有效 Top-5 均为 `0/5`。
+- 精简续接合同见 `work/m12-c/CODEX_HANDOFF.md`。后续先完成 Ruby 与逐 owner 真实视觉签收，再一次性刷新派生产物、只运行一次最终 `release:verify`、完成 15/15 admission 与推送，最后用新 run 分片重搜。
 
 ## 1. 目标定义
 
