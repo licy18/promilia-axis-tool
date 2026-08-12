@@ -78,6 +78,9 @@ export async function createM12B3BindingMatrix({
     const canonicalModule = await vite.ssrLoadModule(
       '/src/simulation/headless/canonicalSerialization.js'
     );
+    const normalAttackAuthorityModule = await vite.ssrLoadModule(
+      '/src/domain/verifiedNormalAttackInputAuthority.js'
+    );
 
     packageModule.installVerifiedCombatMechanicsPackage(mechanicsPackage);
     const service = serviceModule.createMachineAxisService();
@@ -503,14 +506,11 @@ export async function createM12B3BindingMatrix({
     );
 
     // ---------- B7 保存重放 ----------
-    const cycleFixture = await readJson(
-      projectRoot,
-      'fixtures/machine-axis/m12-cycle-dps-example.json'
-    );
-    const replay = adapter.importContract(cycleFixture.contract);
+    const saveReplayFixture = structuredClone(threeActorFixture);
+    const replay = adapter.importContract(saveReplayFixture);
     const exported = adapter.exportProject(replay.project);
     const replayHashes = service.simulate(exported).hashes;
-    const directHashes = service.simulate(cycleFixture.contract).hashes;
+    const directHashes = service.simulate(saveReplayFixture).hashes;
     const jsonRoundTrip = service.simulate(
       JSON.parse(JSON.stringify(exported))
     ).hashes;
@@ -528,7 +528,10 @@ export async function createM12B3BindingMatrix({
     );
 
     // ---------- B8 连续循环 ----------
-    const cycleEnvelope = structuredClone(cycleFixture);
+    const cycleEnvelope = await readJson(
+      projectRoot,
+      'fixtures/machine-axis/m12-cycle-dps-example.json'
+    );
     cycleEnvelope.contract.dataIdentity.verifiedMechanicsPackageHash =
       mechanicsPackage.packageHash;
     cycleEnvelope.contract.scenario.team =
@@ -540,17 +543,98 @@ export async function createM12B3BindingMatrix({
       ...(cycleEnvelope.contract.scenario.initialRuntimeState ?? {}),
       kiboEnergyBySlot: [],
     };
+    const rubyNormalMapping = mechanicsPackage.actionMappings.find(
+      mapping =>
+        Number(mapping.ownerId) === 103002 &&
+        mapping.actionKind === 'normal-attack'
+    );
+    const rubyNormalForm =
+      normalAttackAuthorityModule.createVerifiedNormalAttackStructuralForm({
+        mapping: rubyNormalMapping,
+      });
+    if (
+      rubyNormalForm.status !==
+        'verified-normal-attack-structural-form-ready' ||
+      rubyNormalForm.segmentCount !== 3
+    ) {
+      throw new Error(
+        `m12-b3-ruby-normal-attack-form-unresolved:${rubyNormalForm.reasons.join(',')}`
+      );
+    }
+    const rubyActions = cycleEnvelope.contract.actions
+      .filter(action => action.id.startsWith('cycle-ruby-a'))
+      .sort(
+        (left, right) =>
+          Number(left.intent?.attackInput?.sequenceIndex) -
+          Number(right.intent?.attackInput?.sequenceIndex)
+      );
+    if (rubyActions.length !== rubyNormalForm.segmentCount) {
+      throw new Error('m12-b3-ruby-normal-attack-action-count-mismatch');
+    }
+    let nextInputFrame = Number(rubyActions[0].schedule?.frame);
+    for (let index = 0; index < rubyNormalForm.segments.length; index += 1) {
+      const action = rubyActions[index];
+      const segment = rubyNormalForm.segments[index];
+      if (
+        Number(action.intent?.attackInput?.sequenceIndex) !==
+        Number(segment.sequenceIndex)
+      ) {
+        throw new Error('m12-b3-ruby-normal-attack-sequence-mismatch');
+      }
+      action.intent.attackInput = {
+        sequenceIndex: segment.sequenceIndex,
+        groupId: 'cycle-ruby',
+        ...(index > 0 ? { contextActionId: rubyActions[index - 1].id } : {}),
+      };
+      action.schedule = { mode: 'absolute', frame: nextInputFrame };
+      if (index < rubyNormalForm.segments.length - 1) {
+        if (!Number.isInteger(Number(segment.linkWindow?.startFrame))) {
+          throw new Error(
+            'm12-b3-ruby-normal-attack-successor-window-unresolved'
+          );
+        }
+        nextInputFrame += Number(segment.linkWindow.startFrame);
+      }
+    }
     const cycleResult = service.evaluateCycle(cycleEnvelope);
+    const firstCycleInputProof =
+      cycleResult?.normalAttackInputProof?.samples?.[0]?.proof?.firstCycle;
+    const rubyInputDecisions = (firstCycleInputProof?.decisions ?? []).map(
+      decision => ({
+        actionId: decision.actionId,
+        phase: decision.phase?.phase ?? null,
+        sourceActionId: decision.phase?.sourceActionId ?? null,
+        sequenceIndex: decision.match?.actual?.sequenceIndex ?? null,
+        accepted: decision.match?.accepted === true,
+      })
+    );
+    const rubyContractInputs = rubyActions.map(action => ({
+      actionId: action.id,
+      sequenceIndex: action.intent.attackInput.sequenceIndex,
+      contextActionId: action.intent.attackInput.contextActionId ?? null,
+      frame: action.schedule.frame,
+    }));
     addCheck(
       'continuous-cycle',
       'cycle-closed-with-stable-hashes',
       cycleResult?.valid === true &&
         cycleResult?.status === 'closed' &&
-        Boolean(cycleResult?.hashes?.cycle),
+        Boolean(cycleResult?.hashes?.cycle) &&
+        cycleResult?.actionLegalityProof?.passed === true &&
+        cycleResult?.normalAttackInputProof?.passed === true &&
+        firstCycleInputProof?.passed === true &&
+        rubyInputDecisions.length === rubyNormalForm.segmentCount &&
+        rubyInputDecisions.every(decision => decision.accepted),
       {
         status: cycleResult?.status,
         cycleHash: cycleResult?.hashes?.cycle,
         traceHash: cycleResult?.hashes?.trace,
+        normalAttackInputAuthorityHash:
+          cycleResult?.normalAttackInputProof?.normalAttackInputAuthority
+            ?.contractHash ?? null,
+        rubyChainIdentity: rubyNormalForm.chainIdentity,
+        rubyContractInputs,
+        rubyInputDecisions,
       }
     );
 

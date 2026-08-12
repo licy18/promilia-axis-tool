@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createM12B3BindingMatrix } from '../../../scripts/generate-m12-b3-binding-matrix.mjs';
+import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../../domain/verifiedNormalAttackInputAuthority';
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -67,5 +68,61 @@ describe('M12-B3-E22 binding matrix and formal admission', () => {
     expect(report.hashes.verifiedMechanicsPackageHash).toBe(
       'fb3fafcd488371274e0c58bb9d3b62a6670abdc365fb210102905539cc827a58'
     );
+  });
+
+  it('binds the Ruby cycle probe to the verified normal-input chain and contexts', () => {
+    const detail = generatedReport.scenarioMatrix[
+      'continuous-cycle'
+    ].checks.find(
+      check => check.identity === 'cycle-closed-with-stable-hashes'
+    ).detail;
+
+    expect(detail.normalAttackInputAuthorityHash).toBe(
+      getVerifiedNormalAttackInputAuthorityDescriptor().contractHash
+    );
+    expect(detail.rubyChainIdentity).toBe('ruby-normal-default-three-inputs');
+    expect(detail.rubyContractInputs).toEqual([
+      {
+        actionId: 'cycle-ruby-a1',
+        sequenceIndex: 1,
+        contextActionId: null,
+        frame: 60,
+      },
+      {
+        actionId: 'cycle-ruby-a2',
+        sequenceIndex: 2,
+        contextActionId: 'cycle-ruby-a1',
+        frame: 75,
+      },
+      {
+        actionId: 'cycle-ruby-a3',
+        sequenceIndex: 3,
+        contextActionId: 'cycle-ruby-a2',
+        frame: 98,
+      },
+    ]);
+    expect(detail.rubyInputDecisions).toEqual([
+      {
+        actionId: 'cycle-ruby-a1',
+        phase: 'idle',
+        sourceActionId: null,
+        sequenceIndex: 1,
+        accepted: true,
+      },
+      {
+        actionId: 'cycle-ruby-a2',
+        phase: 'successor-window',
+        sourceActionId: 'cycle-ruby-a1',
+        sequenceIndex: 2,
+        accepted: true,
+      },
+      {
+        actionId: 'cycle-ruby-a3',
+        phase: 'successor-window',
+        sourceActionId: 'cycle-ruby-a2',
+        sequenceIndex: 3,
+        accepted: true,
+      },
+    ]);
   });
 });

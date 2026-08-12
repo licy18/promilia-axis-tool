@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-11T13:45:56.601Z",
+  "generatedAt": "2026-08-12T01:29:21.485Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -1047,7 +1047,7 @@
           "identity": "landed-effects-carry-source-and-target",
           "passed": true,
           "detail": {
-            "sourceTargetEventCount": 20
+            "sourceTargetEventCount": 19
           }
         }
       ]
@@ -1109,7 +1109,7 @@
           "identity": "same-frame-scenario-deterministic",
           "passed": true,
           "detail": {
-            "traceHash": "34c9ac74925254f9",
+            "traceHash": "f4dfa6053e7d79e9",
             "effectEventCount": 15
           }
         }
@@ -1125,19 +1125,19 @@
           "detail": {
             "replayHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "3ae1781e1937416b",
-              "data": "415750c314f02488",
-              "trace": "da6439122de36bfb",
-              "evaluation": "ab0536d43cd66b60",
-              "build": "64d50b5f36116b57"
+              "input": "eb6ab841a1cf79d2",
+              "data": "32923e5169853d17",
+              "trace": "f0da269bcac6d3ee",
+              "evaluation": "f97d7f73051e975c",
+              "build": "d1118d590459c224"
             },
             "directHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "3ae1781e1937416b",
-              "data": "415750c314f02488",
-              "trace": "da6439122de36bfb",
-              "evaluation": "ab0536d43cd66b60",
-              "build": "64d50b5f36116b57"
+              "input": "eb6ab841a1cf79d2",
+              "data": "32923e5169853d17",
+              "trace": "f0da269bcac6d3ee",
+              "evaluation": "f97d7f73051e975c",
+              "build": "d1118d590459c224"
             }
           }
         },
@@ -1148,11 +1148,11 @@
           "detail": {
             "jsonHashes": {
               "algorithm": "fnv1a64-utf8-v1",
-              "input": "3ae1781e1937416b",
-              "data": "415750c314f02488",
-              "trace": "da6439122de36bfb",
-              "evaluation": "ab0536d43cd66b60",
-              "build": "64d50b5f36116b57"
+              "input": "eb6ab841a1cf79d2",
+              "data": "32923e5169853d17",
+              "trace": "f0da269bcac6d3ee",
+              "evaluation": "f97d7f73051e975c",
+              "build": "d1118d590459c224"
             }
           }
         }
@@ -1167,8 +1167,53 @@
           "passed": true,
           "detail": {
             "status": "closed",
-            "cycleHash": "b5aceb1f7bcbb438",
-            "traceHash": "fb2b277cc9bf8e36"
+            "cycleHash": "751cd4a5cb568502",
+            "traceHash": "6f5b88bba5b202d0",
+            "normalAttackInputAuthorityHash": "780cb44a08c522eb",
+            "rubyChainIdentity": "ruby-normal-default-three-inputs",
+            "rubyContractInputs": [
+              {
+                "actionId": "cycle-ruby-a1",
+                "sequenceIndex": 1,
+                "contextActionId": null,
+                "frame": 60
+              },
+              {
+                "actionId": "cycle-ruby-a2",
+                "sequenceIndex": 2,
+                "contextActionId": "cycle-ruby-a1",
+                "frame": 75
+              },
+              {
+                "actionId": "cycle-ruby-a3",
+                "sequenceIndex": 3,
+                "contextActionId": "cycle-ruby-a2",
+                "frame": 98
+              }
+            ],
+            "rubyInputDecisions": [
+              {
+                "actionId": "cycle-ruby-a1",
+                "phase": "idle",
+                "sourceActionId": null,
+                "sequenceIndex": 1,
+                "accepted": true
+              },
+              {
+                "actionId": "cycle-ruby-a2",
+                "phase": "successor-window",
+                "sourceActionId": "cycle-ruby-a1",
+                "sequenceIndex": 2,
+                "accepted": true
+              },
+              {
+                "actionId": "cycle-ruby-a3",
+                "phase": "successor-window",
+                "sourceActionId": "cycle-ruby-a2",
+                "sequenceIndex": 3,
+                "accepted": true
+              }
+            ]
           }
         }
       ]
@@ -1208,5 +1253,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "86f1d0af5c870cb6"
+  "bindingMatrixHash": "1743619246c73ec6"
 }
