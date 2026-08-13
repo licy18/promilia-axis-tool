@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 107002,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "work/m12-c/charged-owner-signoff-20260813/review-fixtures/107002.json",
+  "fixtureSha256": "545b1d9b373a2280aa40615d27c402004167972c1993d819458f7696ed976798",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/107002.json",
+  "runtimePackageSha256": "85912b375e0a8bdc18d00ced558b6d24ebdac115d6273b453d6d17c69df8381b",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "25f9afdbd5a2eb1e",
+  "selectedAction": {
+    "actionId": "misa-charged",
+    "controlSkillId": 10700210,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10700210 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107002-import-dialog.png",
+    "importScreenshotSha256": "41ad79e209a36d1f1e0006ba8f1cbdc2c250a9f30f7a09d760d58af0e7283643",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107002-canonical-trace.png",
+    "traceScreenshotSha256": "a4aaa609a2cae9a9af869dcb3cf2d81805886aae92251afc7b1b8baac9a6b8e9",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n重击\n7414F\n请求\ncharged-attack · 10700201\n实际形态\n重击\n执行\ncontrol 10700210 / sub 0\n占轴\n7414F - 7510F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n7\n重击-第2段攻击效果\n48F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8704 · 未暴击\n重击-第2段攻击效果\n51F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n6151 · 未暴击\n重击-第2段攻击效果\n63F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n5664 · 未暴击\n重击-第2段攻击效果\n69F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n9389 · 未暴击\n重击-第2段攻击效果\n76F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n6005 · 未暴击\n重击-第2段攻击效果\n83F · HP -27 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n3127 · 未暴击\n重击-第2段攻击效果\n90F · HP -27 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4720 · 未暴击\n效果事务\n2\n米砂物理及法术防御降低\n施加 · enemy-300032 · 7490F\n0 → 1 · 3 -1,000 · 4 -1,000 · {\"actionBindingIdentity\":\"misa-def-down\",\"eff...\n米砂物理及法术防御降低\n到期 · enemy-300032 · 8930F\n1 → 0 · 3 -1,000 · 4 -1,000 · {\"actionBindingIdentity\":\"misa-def-down\",\"eff...\n效果区间\n1\n米砂物理及法术防御降低\nactor-107002 → enemy-300032 · 7490F - 8930F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n资源事务\n2\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 13.1086 → 13.3386 / 100 · 7462F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 13.1086 → 13.3386 / 100 · 7462F\n无来源\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n25f9afdbd5a2eb1e\nmisa-charged|controlSubSkillIndex=0",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

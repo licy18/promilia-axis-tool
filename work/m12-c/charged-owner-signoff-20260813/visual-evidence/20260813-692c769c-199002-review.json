@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 199002,
+  "optimizationObjectId": "STARBORN",
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "work/m12-c/charged-owner-signoff-20260813/review-fixtures/199002.json",
+  "fixtureSha256": "cc10f2ef2080f74e3739caa6aa04bb31cc60b6b69bdb717e8304703fa3eeb877",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/199002.json",
+  "runtimePackageSha256": "226b057d93caf3a3517d613e3629195140fd0841f620a8ef77546be079aacded",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "d7df1f9358e30fe6",
+  "selectedAction": {
+    "actionId": "starborn-m-charged-default",
+    "controlSkillId": 19900210,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 19900210 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199002-import-dialog.png",
+    "importScreenshotSha256": "806acf6ccb76130f416e311c2c9436839302a1538ebeeda312e0f31c167f2cdc",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-199002-canonical-trace.png",
+    "traceScreenshotSha256": "ccd5e509a8347e1b4f87e080627f46fa158a898ac7c63868c6216d615ce3447d",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n普通重击\n2300F\n请求\ncharged-attack · 19900201 · starborn-199002-default-charged\n实际形态\n普通重击\n执行\ncontrol 19900210 / sub 0\n占轴\n2300F - 2355F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n12\nS2 | hit 1\n16F · HP -19 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4064 · 未暴击\nS2 | hit 2~3 | 右\n33F · HP -28 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4149 · 未暴击\nS2 | hit 2~3 | 右\n39F · HP -28 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4145 · 未暴击\nHit 4\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 5\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 6\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 7\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 11\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 12\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n资源事务\n6\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 4.1219 → 4.4269 / 100 · 2316F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 4.1219 → 4.4269 / 100 · 2316F\n无来源\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 4.4581 → 4.7631 / 100 · 2333F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 4.4581 → 4.7631 / 100 · 2333F\n无来源\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 4.7735 → 5.0785 / 100 · 2339F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 4.7735 → 5.0785 / 100 · 2339F\n无来源\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\nd7df1f9358e30fe6\nskill_control_19900210.asset#skillPlayers[0]|...",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 103002,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "fixtures/character-acceptance/103002-window-boundaries.json",
+  "fixtureSha256": "76efe751c3860396fc5b2cfdb2bfe0dd0c1cb57152ed618084eacfba96cd341a",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/103002.json",
+  "runtimePackageSha256": "eaf1b03d05ede6987b1f74ff6d76b11e907001714263356da72726c347cf7b1e",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "ea55eda7a1dfc932",
+  "selectedAction": {
+    "actionId": "reload-before-source",
+    "controlSkillId": 10300210,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10300210 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-import-dialog.png",
+    "importScreenshotSha256": "d29580e872a3ef64b6cd06417492f9cd51ae76419196f66e7c134472a878aabc",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-103002-canonical-trace.png",
+    "traceScreenshotSha256": "618014ef0caa89b54cd27921f82237b5e6bcf80f804f4c1c74b0f76a76561cd3",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n重击\n300F\n请求\ncharged-attack · 10300201\n实际形态\n重击\n执行\ncontrol 10300210 / sub 0\n占轴\n300F - 362F\n就绪\nready\n来源状态\napplied / source-verified\n命中\n0\n资源事务\n1\nactor:103002:element:103002047\ngain · 0 → 6 / 12 · 324F\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...\nTRACE\nea55eda7a1dfc932\nreload-before-source|controlSubSkillIndex=0",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m12-b3-107002-reduced-action-surface-acceptance",
+    "name": "M12-B3-107002 米砂缩减动作面验收轴",
+    "fps": 60,
+    "durationFrames": 12000,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 107002,
+        "level": 1,
+        "initialSp": 90,
+        "loadout": {
+          "kiboId": 500001
+        },
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {
+          "kiboId": 500003
+        },
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {
+          "kiboId": 500039
+        },
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 80,
+      "hpMultiplier": 100,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "specialResourcesByActor": [],
+      "activeEffects": [
+        {
+          "instanceKey": "protocol:107002:critical-rate-boundary-source:actor-107002",
+          "effectId": "protocol:107002:critical-rate-boundary-source",
+          "effectName": "米砂暴击边界正向源属性",
+          "sourceActorId": "actor-107002",
+          "targetKind": "actor",
+          "targetId": "actor-107002",
+          "remainingDurationMs": 20000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 9500,
+              "propertyTags": []
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:107002:critical-rate-boundary-source",
+            "effectIdentity": "protocol:107002:critical-rate-boundary-source"
+          },
+          "appliedToCalculators": true
+        },
+        {
+          "instanceKey": "protocol:107002:critical-rate-zero-offset:actor-107002",
+          "effectId": "protocol:107002:critical-rate-zero-offset",
+          "effectName": "米砂暴击边界零点偏移",
+          "sourceActorId": "actor-107002",
+          "targetKind": "actor",
+          "targetId": "actor-107002",
+          "remainingDurationMs": 10000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": -10000,
+              "propertyTags": []
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": -1000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:107002:critical-rate-zero-offset",
+            "effectIdentity": "protocol:107002:critical-rate-zero-offset"
+          },
+          "appliedToCalculators": true
+        }
+      ],
+      "kiboEnergyBySlot": [
+        {
+          "slotId": "slot-1",
+          "actorId": "actor-107002",
+          "characterId": 107002,
+          "kiboId": 500001,
+          "currentValue": 100,
+          "maxValue": 100
+        },
+        {
+          "slotId": "slot-2",
+          "actorId": "actor-101010",
+          "characterId": 101010,
+          "kiboId": 500003,
+          "currentValue": 100,
+          "maxValue": 100
+        },
+        {
+          "slotId": "slot-3",
+          "actorId": "actor-103002",
+          "characterId": 103002,
+          "kiboId": 500039,
+          "currentValue": 100,
+          "maxValue": 100
+        }
+      ],
+      "tuningMarks": [
+        {
+          "markId": 550,
+          "profileKey": "wood",
+          "elementName": "木",
+          "decayRemainingMs": 30000,
+          "heldReadyRemainingMs": 0,
+          "layers": [
+            {
+              "sourceActionId": "inherited-wood-1",
+              "sourceActorId": "actor-107002",
+              "sourceIdentity": {
+                "profile": "character-combat-recipe:107002#initialTuningMarks.wood"
+              }
+            }
+          ]
+        },
+        {
+          "markId": 750,
+          "profileKey": "wind",
+          "elementName": "风",
+          "decayRemainingMs": 30000,
+          "heldReadyRemainingMs": 0,
+          "layers": [
+            {
+              "sourceActionId": "inherited-wind-1",
+              "sourceActorId": "actor-107002",
+              "sourceIdentity": {
+                "profile": "character-combat-recipe:107002#initialTuningMarks.wind"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-107002-s1-r-critical"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    },
+    "pickups": {
+      "policyId": "m12c-pickup-owner-source-action-absorb-v1",
+      "policyVersion": 1,
+      "policyHash": "2d4b4c4977e689bc",
+      "autoCollect": false,
+      "movementPolicy": "no-implicit-movement",
+      "collectionPolicy": "owner-source-action-absorb-only",
+      "sameFrameSpawnPolicy": "exclude-same-frame-fail-closed",
+      "sameFrameExpiryPolicy": "expire-before-absorb"
+    },
+    "target": {
+      "hpMode": "infinite",
+      "toughnessMode": "disabled",
+      "breakMode": "disabled",
+      "deathTruncation": "disabled"
+    },
+    "optimizationScenarioPolicy": {
+      "policyId": "m12c-zero-distance-passive-boss-v1",
+      "policyHash": "967b0667f315db5b",
+      "rosterPolicyId": "m12c-wind-thunder-mark-producer-roster-v1",
+      "rosterHash": "a690b860f0967e3d"
+    }
+  },
+  "actions": [
+    {
+      "id": "misa-charged",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10700201,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 7414
+      }
+    }
+  ],
+  "metadata": {
+    "phase": "M12-B3-107002-S1",
+    "purpose": "107002 reduced action surface focused acceptance and Workbench roundtrip",
+    "ownerId": 107002,
+    "requiredWorkbenchImport": true,
+    "optimizationScenarioPolicyId": "m12c-zero-distance-passive-boss-v1",
+    "kiboDnaFactors": [],
+    "evidencePurpose": "m12-c-charged-owner-visual-signoff",
+    "sourceFixturePath": "fixtures/character-acceptance/107002-visual.json",
+    "targetActionId": "misa-charged",
+    "contextClosureActionIds": [
+      "misa-charged"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 101010,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "fixtures/character-acceptance/101010-visual.json",
+  "fixtureSha256": "e4e05ce8a73ea53bcf8679638303cf7645f11aa7e688d1b305d49a5d924c6ddd",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/101010.json",
+  "runtimePackageSha256": "04b54767b4633e4ac2c1450ce025740762ca7933087623ab012a8a990ca56702",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "0b447cfb61e86705",
+  "selectedAction": {
+    "actionId": "xiaoyu-enhanced-charged",
+    "controlSkillId": 10101010,
+    "subSkillIndex": 2
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10101010 / sub 2"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis · 30 个机器输入 · 32 个实际执行项",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-import-dialog.png",
+    "importScreenshotSha256": "c38fdda712849b153c4ba143ef5bc78a7e8425d73cc69b55504027f6ee05aae1",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-101010-canonical-trace.png",
+    "traceScreenshotSha256": "9c75dc7c59e298be2eeebb7327a412fa11da38524c9f883049dee33dc929c977",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n强化重击\n1400F\n请求\ncharged-attack · 10101001\n实际形态\n强化重击\n执行\ncontrol 10101010 / sub 2\n占轴\n1400F - 1464F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n15\n重击爆发hit1\n20F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n629 · 未暴击\n重击爆发hit2\n31F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n1004 · 未暴击\n重击爆发hit2\n36F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n2522 · 未暴击\n重击爆发hit2\n41F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n3402 · 未暴击\n重击爆发hit2\n46F · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n5334 · 未暴击\nHit 6\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 7\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 11\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 12\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 13\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 14\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 15\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n效果事务\n1\n玉未央\n施加 · actor-101010 · 1401F\n3 → 4 · 1 500 · 229 3,200 · {\"actionBindingIdentity\":\"actor|101010|101010...\n资源事务\n4\nactor-sp:actor-101003\nverified-hit-sp-shared-recovery · 8.0494 → 8.2884 / 100 · 1420F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 8.0494 → 8.2884 / 100 · 1420F\n无来源\nactor-sp:actor-101003\nverified-hit-sp-shared-recovery · 8.3115 → 8.5505 / 100 · 1431F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 8.3115 → 8.5505 / 100 · 1431F\n无来源\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n0b447cfb61e86705\nC:/Codex/AzPr Extractor/ExtractedAssets/Unity...",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

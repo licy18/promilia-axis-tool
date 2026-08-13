@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxis",
+  "kind": "azpr-machine-axis",
+  "dataIdentity": {
+    "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+    "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+    "mechanicsProfileVersion": 1
+  },
+  "scenario": {
+    "id": "m11-d-101010-visual-acceptance",
+    "name": "M12-B3 涂山小玉缩减动作面聚焦验收轴",
+    "fps": 60,
+    "durationFrames": 7200,
+    "team": [
+      {
+        "slotId": "slot-1",
+        "characterId": 101010,
+        "level": 1,
+        "initialSp": 100,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-2",
+        "characterId": 103002,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      },
+      {
+        "slotId": "slot-3",
+        "characterId": 101003,
+        "level": 1,
+        "initialSp": 0,
+        "loadout": {},
+        "cultivation": {}
+      }
+    ],
+    "enemy": {
+      "enemyId": 300032,
+      "level": 1,
+      "hpMultiplier": 1,
+      "defenseMultiplier": 1,
+      "toughnessMultiplier": 1,
+      "initialToughnessRatio": 1,
+      "elementDefenseOverrides": {}
+    },
+    "initialRuntimeState": {
+      "kiboEnergyBySlot": [],
+      "specialResourcesByActor": [
+        {
+          "actorId": "actor-101010",
+          "characterId": 101010,
+          "actorName": "涂山小玉",
+          "resourceIdentity": "actor:101010:element:101010115",
+          "resourceName": "缘结值",
+          "currentValue": 95,
+          "maxValue": 100,
+          "inputStep": 1,
+          "scenarioConfigurable": true,
+          "baselineStatus": "scenario-configurable-initial-state"
+        }
+      ],
+      "tuningMarks": [
+        {
+          "markId": 750,
+          "profileKey": "wind",
+          "elementName": "风",
+          "decayRemainingMs": 20000,
+          "heldReadyRemainingMs": 0,
+          "layers": [
+            {
+              "sourceActionId": "initial-wind-1",
+              "sourceActorId": "actor-101010",
+              "sourceIdentity": {
+                "profile": "battle-element:750#layerDurationMs=20000"
+              }
+            }
+          ]
+        },
+        {
+          "markId": 950,
+          "profileKey": "light",
+          "elementName": "光",
+          "decayRemainingMs": 20000,
+          "heldReadyRemainingMs": 0,
+          "layers": [
+            {
+              "sourceActionId": "initial-light-1",
+              "sourceActorId": "actor-101010",
+              "sourceIdentity": {
+                "profile": "battle-element:950#layerDurationMs=20000"
+              }
+            }
+          ]
+        }
+      ],
+      "activeEffects": [
+        {
+          "instanceKey": "protocol:101010:critical-rate-boundary-source:actor-101010",
+          "effectId": "protocol:101010:critical-rate-boundary-source",
+          "effectName": "暴击边界正向源属性",
+          "sourceActorId": "actor-101010",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "remainingDurationMs": 4000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": 9500,
+              "propertyTags": []
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": 1000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:101010:critical-rate-boundary-source",
+            "effectIdentity": "protocol:101010:critical-rate-boundary-source"
+          },
+          "appliedToCalculators": true
+        },
+        {
+          "instanceKey": "protocol:101010:critical-rate-zero-offset:actor-101010",
+          "effectId": "protocol:101010:critical-rate-zero-offset",
+          "effectName": "暴击边界零点偏移",
+          "sourceActorId": "actor-101010",
+          "targetKind": "actor",
+          "targetId": "actor-101010",
+          "remainingDurationMs": 1000,
+          "stacks": 1,
+          "maxStacks": 1,
+          "modifiers": [
+            {
+              "kind": "battle-property",
+              "attributeId": 7,
+              "bucket": "dynamicExtra",
+              "valueRaw": -10000,
+              "propertyTags": []
+            },
+            {
+              "kind": "battle-property",
+              "attributeId": 8,
+              "bucket": "dynamicExtra",
+              "valueRaw": -1000,
+              "propertyTags": []
+            }
+          ],
+          "sourceStatus": "verified-battle-effect-generated",
+          "sourceIdentity": {
+            "packageId": "azpr-tc-2026-07-18",
+            "actionBindingIdentity": "protocol:101010:critical-rate-zero-offset",
+            "effectIdentity": "protocol:101010:critical-rate-zero-offset"
+          },
+          "appliedToCalculators": true
+        }
+      ]
+    },
+    "critical": {
+      "policy": "sampled",
+      "seed": "m12-b3-101010-critical-seed"
+    },
+    "projectile": {
+      "targetDistance": 0,
+      "defaultWillHit": true
+    }
+  },
+  "actions": [
+    {
+      "id": "xiaoyu-enhanced-charged",
+      "owner": {
+        "kind": "actor",
+        "slotId": "slot-1"
+      },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10101001,
+        "actionKind": "charged-attack",
+        "level": 1
+      },
+      "schedule": {
+        "mode": "absolute",
+        "frame": 1400
+      }
+    }
+  ],
+  "metadata": {
+    "phase": "M12-B3-101010-line-a",
+    "ownerId": 101010,
+    "scenarioPolicy": "m12c-zero-distance-passive-boss-v1",
+    "purpose": "source-driven acceptance closure with product visual pending",
+    "requiredWorkbenchImport": true,
+    "criticalHitIdentity": "10101001|0|elements|0|-2245783402811878012|12|1",
+    "evidencePurpose": "m12-c-charged-owner-visual-signoff",
+    "sourceFixturePath": "fixtures/character-acceptance/101010-visual.json",
+    "targetActionId": "xiaoyu-enhanced-charged",
+    "contextClosureActionIds": [
+      "xiaoyu-enhanced-charged"
+    ]
+  }
+}

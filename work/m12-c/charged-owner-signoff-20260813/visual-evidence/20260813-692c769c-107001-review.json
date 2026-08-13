@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 107001,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "work/m12-c/charged-owner-signoff-20260813/review-fixtures/107001.json",
+  "fixtureSha256": "fdd9aa6ffff0ec825b24d77af67c410523ac54c8930bd7703f15cb3abd6a7654",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/107001.json",
+  "runtimePackageSha256": "cd3af201449ac775d60547ac40e49aff863481b38aecb2c972aacbec4be426dd",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "e2899b090c13fc52",
+  "selectedAction": {
+    "actionId": "sifliya-charged-with-lumi",
+    "controlSkillId": 10700110,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10700110 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107001-import-dialog.png",
+    "importScreenshotSha256": "713fc7c74dc5115d4182cd2d7fac9b1f93a87ec77a5674fc77016d6bd28185a4",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-107001-canonical-trace.png",
+    "traceScreenshotSha256": "3ea8da520606a0217709278064534269606a26d61877e3ee43041a0da34d4d26",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n重击\n850F\n请求\ncharged-attack · 10700101\n实际形态\n重击\n执行\ncontrol 10700110 / sub 0\n占轴\n850F - 888F\n就绪\nready\n来源状态\nruntime-dependent / scenario-assumed-zero-distance\n命中\n10\n西芙莉雅 - 【重击】 hit1~2\n15F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4077 · 未暴击\n西芙莉雅 - 【重击】 hit1~2\n28F · HP -26 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n4929 · 未暴击\nHit 3\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 4\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 5\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 6\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 7\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 8\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 9\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 10\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n资源事务\n3\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 1.582 → 1.9145 / 100 · 865F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 1.582 → 1.9145 / 100 · 865F\n无来源\ntuning-mark:750\nheld-trigger · 1 → 1 / 5 · 865F\ncombat-overlimit-mechanics-20260718.json#tuni...\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\ne2899b090c13fc52\nsifliya-charged-with-lumi|controlSubSkillIndex=0",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 108003,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "work/m12-c/charged-owner-signoff-20260813/review-fixtures/108003.json",
+  "fixtureSha256": "21010ed92162f2c066398ef0e29a73f0fd8b732799708636718ebe12f5861ea8",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/108003.json",
+  "runtimePackageSha256": "875d90799edb37b6ecc575267c689cfd2179dd85197fb40c8ecc0345b8b4dce3",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "3c7aa098a5e9729f",
+  "selectedAction": {
+    "actionId": "miti-full-charge-state-on",
+    "controlSkillId": 10800342,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10800342 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-108003-import-dialog.png",
+    "importScreenshotSha256": "149f3917ebe6c9df09663a6de6964171ce85af88eae671eed20a35b7726fa32b",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-108003-canonical-trace.png",
+    "traceScreenshotSha256": "619035991e31b98fb8437844d8d6bda2f01c030c1c4fc71dc60bbb737c064d9b",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n重击满蓄力\n3600F\n请求\ncharged-attack · 10800301 · miti-full-charge\n实际形态\n重击满蓄力\n执行\ncontrol 10800342 / sub 0\n占轴\n3600F - 3692F\n就绪\nready\n来源状态\nstatic-evidence-gap / scenario-runtime-unresolved\n命中\n39\n重击满蓄力\n70F · HP -128 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n8453 · 未暴击\n强闪电球伤害\n70F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n7890 · 未暴击\n强闪电球伤害\n80F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n9260 · 未暴击\n强闪电球伤害\n90F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n2136 · 未暴击\n强闪电球伤害\n100F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n2867 · 未暴击\n强闪电球伤害\n110F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n3766 · 未暴击\n强闪电球伤害\n120F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n793 · 未暴击\n强闪电球伤害\n130F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n5758 · 未暴击\n强闪电球伤害\n140F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n2182 · 未暴击\n强闪电球伤害\n150F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n9444 · 未暴击\n强闪电球伤害\n160F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n9610 · 未暴击\n强闪电球伤害\n170F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n9000 · 未暴击\n强闪电球伤害\n180F · HP -7 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5.43%\n目标抗暴\n0%\n有效暴击率\n5.43%\n暴伤\n150.86%\n采样 ROLL\n3084 · 未暴击\nHit 14\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 15\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 16\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 17\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 18\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 19\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 20\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 21\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 22\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 23\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 24\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 25\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 26\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 27\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 28\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 29\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 30\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 31\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 32\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 33\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 34\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 35\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 36\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 37\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 38\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\nHit 39\n未结算 · HP -0 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n效果事务\n6\n雷调谐印记\n施加 · actor-101010 · 3670F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|108003|108003...\n雷调谐印记\n施加 · actor-103002 · 3670F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|108003|108003...\n雷调谐印记\n施加 · actor-108003 · 3670F\n0 → 1 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"actor|108003|108003...\n雷调谐印记\n移除 · actor-101010 · 4870F\n1 → 0 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"10800342|0|bulletEl...\n雷调谐印记\n移除 · actor-103002 · 4870F\n1 → 0 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"10800342|0|bulletEl...\n雷调谐印记\n移除 · actor-108003 · 4870F\n1 → 0 · 8 86 · 7 43 · {\"actionBindingIdentity\":\"10800342|0|bulletEl...\n效果区间\n3\n雷调谐印记\nactor-108003 → actor-101010 · 3670F - 4870F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n雷调谐印记\nactor-108003 → actor-103002 · 3670F - 4870F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n雷调谐印记\nactor-108003 · 3670F - 4870F · 1 层\n{\"packageId\":\"azpr-tc-2026-07-18\",\"packageHas...\n资源事务\n5\nactor-sp:actor-101010\nverified-hit-sp-shared-recovery · 6.3584 → 7.9234 / 100 · 3670F\n无来源\nactor-sp:actor-103002\nverified-hit-sp-shared-recovery · 6.3584 → 7.9234 / 100 · 3670F\n无来源\ntuning-mark:250\nheld-trigger · 1 → 1 / 5 · 3670F\ncombat-overlimit-mechanics-20260718.json#tuni...\ntuning-mark:250\nacquire · 0 → 1 / 5 · 3670F\nbattle-effect:10800342:0:-3809486317990090417...\ntuning-mark:250\nexpire · 1 → 0 / 5 · 4870F\nbattle-effect:10800342:0:-3809486317990090417...\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n3c7aa098a5e9729f\nmiti-full-charge-state-on|controlSubSkillInde...",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}

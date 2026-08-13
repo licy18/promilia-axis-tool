@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "contractName": "M12CChargedOwnerWorkbenchVisualReview",
+  "status": "pending-explicit-user-signoff",
+  "ownerId": 109001,
+  "optimizationObjectId": null,
+  "repositoryHead": "692c769cf0525044e3d33bba2fddb434b1d088aa",
+  "fixturePath": "work/m12-c/charged-owner-signoff-20260813/review-fixtures/109001.json",
+  "fixtureSha256": "4df633c62ac5dbe5ca6abc9db528926b374a933e29a5879bcd004c413fcc4cff",
+  "runtimePackageGenerator": "scripts/generate-character-acceptance.mjs",
+  "runtimePackageSourceProfilePath": "src/data/generated/character-combat-profiles/109001.json",
+  "runtimePackageSha256": "875d90799edb37b6ecc575267c689cfd2179dd85197fb40c8ecc0345b8b4dce3",
+  "runtimePackageId": "azpr-tc-2026-07-18",
+  "runtimePackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+  "canonicalTraceHash": "7086d47aebcdbd40",
+  "selectedAction": {
+    "actionId": "moyin-charged",
+    "controlSkillId": 10900110,
+    "subSkillIndex": 0
+  },
+  "chargedInputAuthority": {
+    "status": "applied",
+    "visualAssertion": "control 10900110 / sub 0"
+  },
+  "automatedEvidence": {
+    "importStatus": "已导入 Machine Axis",
+    "importScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-109001-import-dialog.png",
+    "importScreenshotSha256": "245214116874e9596f62d3f63c5cce4ce2a6c8fb1999cace9af2cd4a2e9f93a8",
+    "traceScreenshotPath": "work/m12-c/charged-owner-signoff-20260813/visual-evidence/20260813-692c769c-109001-canonical-trace.png",
+    "traceScreenshotSha256": "cfb5c179b6910e1e23c2f673a758019d3a42d65ad019810e1ebf21c3aadc099e",
+    "canonicalTraceInspectorText": "CANONICAL TRACE\n重击\n6700F\n请求\ncharged-attack · 10900101\n实际形态\n重击\n执行\ncontrol 10900110 / sub 0\n占轴\n6700F - 6783F\n就绪\nready\n来源状态\napplied / scenario-assumed-zero-distance\n命中\n3\n重击-hit1\n5F · HP -35 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n6932 · 未暴击\n重击-hit2\n20F · HP -35 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n5066 · 未暴击\n重击-第2段攻击效果\n60F · HP -150 · 韧性 -0\n命中\n继承\n命中\n未命中\n暴击\n继承\n采样\n期望\n暴击\n不暴击\n来源暴击率\n5%\n目标抗暴\n0%\n有效暴击率\n5%\n暴伤\n150%\n采样 ROLL\n7759 · 未暴击\n韧性事实\n命中削韧\n0\n命中削韧\n0\n命中削韧\n0\nTRACE\n7086d47aebcdbd40\nmoyin-charged|controlSubSkillIndex=0",
+    "viewport": {
+      "width": 1440,
+      "height": 1400
+    }
+  }
+}
