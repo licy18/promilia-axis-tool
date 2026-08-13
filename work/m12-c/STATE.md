@@ -1,5 +1,18 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.0000000 2026-08-13 22:00 bundle 等价修复与 production preview 复核
+
+- 未改任何预算、重击 authority payload 或 canonical 行为：通过去重 source identity/选择结果构造，并使用 `onlyExplicitManualChunks=true` 仅把 5 个既有懒加载分析面板合并为 `workbench-analysis-panels`，公共依赖保持原分包。真实 `audit:bundle:check` PASS：initial `119995/120000`、Workbench `488504/500000`、total JavaScript gzip `918092/920000`，相对失败值净降 `2537` bytes，总预算余量 `1908` bytes；projection guard 全部为真，全部 external catalogs 在位。
+- 实际 `vite preview` 上以非写入 reporter 定点验证新 chunk 的三个交互入口：`diagnostics-lazy-load`、`action-effect-relations`、`scenario-comparison` 均 PASS（`3/3`），未改写 production-preview acceptance 或任何 tracked 截图。完整 production preview 仍必须由新 clean HEAD 的 Gate V2 重跑。
+- charged authority/hash 最终定点复验为 5 files / 103 tests PASS，authority hash 保持 `d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446`；production import 为 240 source / 236 production-reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced，且报告无漂移。一次尝试删除 installed-package 唯一 mapping 查找导致 6 个 authority lookup 回归失败，已立即完整恢复该 fail-closed 路径且未重复该方案。
+- 下一步：完成格式、production-import、聚焦测试与保护项的提交前复核；形成新 clean stable HEAD 后再真实执行完整 `release:verify`。在 Gate V2 PASS 与 Formal Search Admission `15/15` 之前继续禁止正式搜索。
+
+## 0.000000 2026-08-13 21:42 Gate V2 bundle 预算失败与等价收敛
+
+- clean `master@17515c009d46207b2722547d894dc13493c102cb` 上的真实 `release:verify` 已通过 character-combat、visual `254/254`、binding `22/22`、Kibo headless、settlement、全量 Vitest `251/251 files` / `2102/2102 tests`、production imports、Workbench data、action-status、verified-combat、scenario policy、owner/STARBORN acceptance 与 optimization qualification `263/263`，但在 `audit:bundle:check` 诚实失败；Gate V2 record=`ae120b7647a052f2c153c2702853d35a59faec3139984c4e4ffca4c6e37bd441`、`failureStage=audit:bundle:check`，未授予 release/admission authority。
+- 精确预算差异为 total JavaScript gzip `920629 / 920000`，超 `629` bytes；initial entry `120000 / 120000` 与 Workbench `488532 / 500000` 仍通过。不得抬高预算或把该失败改写为 PASS；当前只允许在保持 charged authority hash 与 canonical 行为不变的前提下收敛生产实现，重建并提交新的 bundle composition 后，从新 clean HEAD 再完整执行 Gate V2。
+- runner 正确保留失败现场 `reports/bundle-composition.json` 作为唯一 tracked drift；全部 untracked evidence、两份污染配置、`.readonly-ruby-probe.mjs` 与 `stash@{0}` 均未触碰，未启动任何搜索。
+
 ## 0.00000 2026-08-13 21:09 Gate V2 首轮失败与重击循环复放修复
 
 - owner/STARBORN 签收与发布基线已在 `master@3feca4571c6dc7fc7fabf2adb320e5529adc9dd3` 形成三笔提交：`692c769c` 重击输入 authority、`829d628b` 全新 owner 视觉证据、`3feca457` 签收派生。199001/199002 仍只联合为一个 STARBORN optimization object；101003 保持 pending/unready。

@@ -1,7 +1,7 @@
 import {
+  createVerifiedChargedPhysicalInputContract,
   createVerifiedChargedInputScheduling,
   getConservativeChargedInputDelayFrames,
-  getVerifiedChargedInputAuthorityDescriptor,
   resolveVerifiedChargedInputAuthority,
 } from '../domain/verifiedChargedInputAuthority';
 import {
@@ -10,8 +10,8 @@ import {
 } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
 
-export const MACHINE_AXIS_CHARGED_INPUT_PROOF_SCHEMA_VERSION = 1;
-export const MACHINE_AXIS_CHARGED_INPUT_PROOF_CONTRACT =
+const MACHINE_AXIS_CHARGED_INPUT_PROOF_SCHEMA_VERSION = 1;
+const MACHINE_AXIS_CHARGED_INPUT_PROOF_CONTRACT =
   'AzPrMachineAxisChargedInputProof';
 
 export function createMachineAxisChargedInputProof(contract = {}) {
@@ -23,12 +23,13 @@ export function createMachineAxisChargedInputProof(contract = {}) {
   const schedules = [];
   const inputsBySlot = new Map();
   for (const action of contract?.actions ?? []) {
+    const intent = action?.intent;
     if (action?.owner?.kind !== 'actor') continue;
-    if (!['public-action', 'switch'].includes(action?.intent?.kind)) continue;
+    if (!['public-action', 'switch'].includes(intent?.kind)) continue;
     const slotId = String(action.owner.slotId ?? '');
     const executionFrame = nonNegativeInteger(action?.schedule?.frame);
     if (executionFrame == null || action?.schedule?.mode !== 'absolute') {
-      if (action?.intent?.actionKind === 'charged-attack') {
+      if (intent?.actionKind === 'charged-attack') {
         issues.push(
           issue(
             'charged-input-absolute-execution-frame-required',
@@ -53,7 +54,8 @@ export function createMachineAxisChargedInputProof(contract = {}) {
     let previousInput = null;
     for (const row of rows) {
       const action = row.action;
-      if (action?.intent?.actionKind !== 'charged-attack') {
+      const intent = action?.intent;
+      if (intent?.actionKind !== 'charged-attack') {
         previousInput = row;
         continue;
       }
@@ -99,7 +101,7 @@ export function createMachineAxisChargedInputProof(contract = {}) {
         earliestPressFrame,
         frameRate,
       });
-      const declared = action.intent.physicalInput ?? null;
+      const declared = intent.physicalInput ?? null;
       const schedule = declared
         ? {
             ...derived,
@@ -191,7 +193,6 @@ export function createMachineAxisChargedInputProof(contract = {}) {
     }
   }
 
-  const descriptor = getVerifiedChargedInputAuthorityDescriptor();
   return Object.freeze({
     schemaVersion: MACHINE_AXIS_CHARGED_INPUT_PROOF_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_CHARGED_INPUT_PROOF_CONTRACT,
@@ -201,7 +202,9 @@ export function createMachineAxisChargedInputProof(contract = {}) {
         : 'machine-axis-charged-input-proof-rejected',
     passed: issues.length === 0,
     finalScoreEligible: issues.length === 0,
-    authorityHash: descriptor.authorityHash,
+    authorityHash:
+      schedules[0]?.authorityHash ??
+      createVerifiedChargedPhysicalInputContract({ frameRate }).authorityHash,
     measuredClientParity: false,
     clientParityReady: false,
     schedules,
@@ -210,22 +213,22 @@ export function createMachineAxisChargedInputProof(contract = {}) {
 }
 
 function resolveChargedActionAuthority({ action, slot }) {
+  const intent = action?.intent;
   const packageMapping = (
     getInstalledVerifiedCombatMechanicsPackage()?.actionMappings ?? []
   ).find(
     candidate =>
       Number(candidate.ownerId) === Number(slot?.characterId) &&
-      Number(candidate.sourceSkillId) ===
-        Number(action?.intent?.publicActionId) &&
+      Number(candidate.sourceSkillId) === Number(intent?.publicActionId) &&
       candidate.actionKind === 'charged-attack'
   );
   const mapping =
     packageMapping ??
     getVerifiedCombatActionMapping({
       type: ACTION_TYPES.SKILL,
-      skillId: action?.intent?.publicActionId,
+      skillId: intent?.publicActionId,
       actionKind: 'charged-attack',
-      actionVariantIndex: action?.intent?.semanticVariant?.publicVariantIndex,
+      actionVariantIndex: intent?.semanticVariant?.publicVariantIndex,
       actor: { characterId: slot?.characterId },
     });
   return {
@@ -243,34 +246,36 @@ function resolveCompositeChargingReleaseFrame({
   authority,
 }) {
   const composite = authority?.compositeChargingRelease;
-  if (!composite) {
-    return { inputFrame: null, absoluteFrame: null, reason: null };
-  }
-  const inputFrame = nonNegativeInteger(
-    action?.intent?.semanticVariant?.inputFrame
-  );
+  if (!composite) return chargingRelease();
+  const semanticVariant = action?.intent?.semanticVariant;
+  const inputFrame = nonNegativeInteger(semanticVariant?.inputFrame);
   const [startFrame, endFrame] = composite.sourceWrapperFrameDomain ?? [];
-  if (
-    action?.intent?.semanticVariant?.mode !== 'release' ||
-    inputFrame == null
-  ) {
-    return {
+  if (semanticVariant?.mode !== 'release' || inputFrame == null) {
+    return chargingRelease(
       inputFrame,
-      absoluteFrame: null,
-      reason: 'charged-input-release-frame-required',
-    };
+      null,
+      'charged-input-release-frame-required'
+    );
   }
   if (inputFrame < Number(startFrame) || inputFrame >= Number(endFrame)) {
-    return {
+    return chargingRelease(
       inputFrame,
-      absoluteFrame: null,
-      reason: 'charged-input-release-frame-out-of-domain',
-    };
+      null,
+      'charged-input-release-frame-out-of-domain'
+    );
   }
+  return chargingRelease(inputFrame, Number(executionFrame) + inputFrame);
+}
+
+function chargingRelease(
+  inputFrame = null,
+  absoluteFrame = null,
+  reason = null
+) {
   return {
     inputFrame,
-    absoluteFrame: Number(executionFrame) + inputFrame,
-    reason: null,
+    absoluteFrame,
+    reason,
   };
 }
 

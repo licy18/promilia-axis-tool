@@ -1,16 +1,13 @@
 import { sha256Utf8 } from './headlessAssumptionContract.js';
 import { stableStringify } from '../simulation/headless/canonicalSerialization.js';
-import { VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD } from '../data/verifiedChargedInputAuthorityData.js';
+import {
+  VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD,
+  createVerifiedChargedInputAuthoritySourceIdentity,
+} from '../data/verifiedChargedInputAuthorityData.js';
 
-export const VERIFIED_CHARGED_INPUT_AUTHORITY_SCHEMA_VERSION = 1;
-export const VERIFIED_CHARGED_INPUT_AUTHORITY_CONTRACT =
-  'AzPrVerifiedChargedInputAuthority';
-export const VERIFIED_CHARGED_INPUT_AUTHORITY_KIND =
-  'azpr-verified-charged-input-authority';
+const VERIFIED_CHARGED_INPUT_AUTHORITY_SCHEMA_VERSION = 1;
 
 const AUTHORITY_PAYLOAD = VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD;
-const CLIENT_IDENTITY = AUTHORITY_PAYLOAD.clientIdentity;
-const AUDIT_IDENTITY = AUTHORITY_PAYLOAD.auditIdentity;
 const PHYSICAL_INPUT = AUTHORITY_PAYLOAD.physicalInput;
 const ACTIONS = AUTHORITY_PAYLOAD.actions;
 
@@ -57,7 +54,8 @@ export function createVerifiedChargedPhysicalInputContract({
       Math.ceil(exactThresholdFrames + 1),
     ]),
     authorityHash,
-    sourceIdentity: createAuthoritySourceIdentity('physical-input'),
+    sourceIdentity:
+      createVerifiedChargedInputAuthoritySourceIdentity('physical-input'),
     status: 'verified-charged-physical-input-static-ready',
     applied: true,
   });
@@ -114,18 +112,6 @@ export function createVerifiedChargedInputScheduling({
 export function getConservativeChargedInputDelayFrames(frameRate = 60) {
   return createVerifiedChargedPhysicalInputContract({ frameRate })
     .nominalThresholdFrameInterval[1];
-}
-
-function createAuthoritySourceIdentity(suffix) {
-  return [
-    `installed-client:GameAssembly.dll#sha256=${CLIENT_IDENTITY.gameAssemblySha256}`,
-    `charged-timing-matrix#sha256=${AUDIT_IDENTITY.chargedTimingMatrixSha256}`,
-    `binary-input-state-machine#sha256=${AUDIT_IDENTITY.binaryInputStateMachineSha256}`,
-    `giselle-heavy23-timing-matrix#sha256=${AUDIT_IDENTITY.giselleTimingMatrixSha256}`,
-    `miti-charged-release-timing-matrix#sha256=${AUDIT_IDENTITY.mitiTimingMatrixSha256}`,
-    `miti-charged-release-binary-logic#sha256=${AUDIT_IDENTITY.mitiBinaryReleaseLogicSha256}`,
-    suffix,
-  ].join('|');
 }
 
 function nonNegativeInteger(value) {

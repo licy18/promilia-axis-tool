@@ -1,4 +1,6 @@
-const CLIENT_IDENTITY = Object.freeze({
+const freeze = Object.freeze;
+
+const CLIENT_IDENTITY = freeze({
   gameAssemblySha256:
     'C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B',
   globalMetadataSha256:
@@ -7,7 +9,7 @@ const CLIENT_IDENTITY = Object.freeze({
     '090119217E95997077EDED03A791B98BAED1FE903DBE9B32E180F4AB35A76B4B',
 });
 
-const AUDIT_IDENTITY = Object.freeze({
+const AUDIT_IDENTITY = freeze({
   chargedTimingMatrixSha256:
     '85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4',
   binaryInputStateMachineSha256:
@@ -20,7 +22,7 @@ const AUDIT_IDENTITY = Object.freeze({
     'E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7',
 });
 
-const PHYSICAL_INPUT = Object.freeze({
+const PHYSICAL_INPUT = freeze({
   triggerType: 1,
   triggerTypeName: 'Press',
   thresholdMs: 250,
@@ -40,7 +42,16 @@ const PHYSICAL_INPUT = Object.freeze({
   evidenceClass: 'installed-client-static-binary-and-asset-evidence',
 });
 
-const ACTIONS = Object.freeze([
+const SOURCE_IDENTITY_PREFIX = [
+  `installed-client:GameAssembly.dll#sha256=${CLIENT_IDENTITY.gameAssemblySha256}`,
+  `charged-timing-matrix#sha256=${AUDIT_IDENTITY.chargedTimingMatrixSha256}`,
+  `binary-input-state-machine#sha256=${AUDIT_IDENTITY.binaryInputStateMachineSha256}`,
+  `giselle-heavy23-timing-matrix#sha256=${AUDIT_IDENTITY.giselleTimingMatrixSha256}`,
+  `miti-charged-release-timing-matrix#sha256=${AUDIT_IDENTITY.mitiTimingMatrixSha256}`,
+  `miti-charged-release-binary-logic#sha256=${AUDIT_IDENTITY.mitiBinaryReleaseLogicSha256}`,
+].join('|');
+
+const ACTIONS = freeze([
   action(101010, 10101010, 75, 'partially-resolved-public-variants'),
   action(102001, 10200110, 55, 'unresolved-public-variant-selection'),
   action(103002, 10300210, 62, 'same-skill1-reopen'),
@@ -80,7 +91,7 @@ const ACTIONS = Object.freeze([
   action(199002, 19900210, 60, 'starborn-alias-specific-timing'),
 ]);
 
-export const VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD = Object.freeze({
+export const VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD = freeze({
   schemaVersion: 1,
   contractName: 'AzPrVerifiedChargedInputAuthority',
   kind: 'azpr-verified-charged-input-authority',
@@ -89,9 +100,9 @@ export const VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD = Object.freeze({
   auditIdentity: AUDIT_IDENTITY,
   physicalInput: PHYSICAL_INPUT,
   actions: ACTIONS,
-  optimizationAliases: Object.freeze({
-    STARBORN: Object.freeze({
-      ownerIds: Object.freeze([199001, 199002]),
+  optimizationAliases: freeze({
+    STARBORN: freeze({
+      ownerIds: freeze([199001, 199002]),
       singleOptimizationObject: true,
       executionTimingInterchangeable: false,
     }),
@@ -102,26 +113,28 @@ export const VERIFIED_CHARGED_INPUT_AUTHORITY_PAYLOAD = Object.freeze({
 });
 
 function action(ownerId, controlSkillId, staticReopenFrame, variantStatus) {
-  return Object.freeze({
+  return freeze({
     ownerId,
     controlSkillId,
     actionKind: 'charged-attack',
     status: 'installed-client-static-charged-reopen-ready',
     applied: true,
     staticReopenFrame,
-    nextSameActionFrameInterval: Object.freeze([
+    nextSameActionFrameInterval: freeze([
       staticReopenFrame,
       staticReopenFrame + 1,
     ]),
     variantStatus,
     measuredClientParity: false,
-    sourceIdentity: createAuthoritySourceIdentity(`owner:${ownerId}`),
-    reasons: Object.freeze([]),
+    sourceIdentity: createVerifiedChargedInputAuthoritySourceIdentity(
+      `owner:${ownerId}`
+    ),
+    reasons: freeze([]),
   });
 }
 
 function compositeReleaseAction(ownerId, controlSkillId, releaseSelection) {
-  return Object.freeze({
+  return freeze({
     ownerId,
     controlSkillId,
     actionKind: 'charged-attack',
@@ -129,15 +142,17 @@ function compositeReleaseAction(ownerId, controlSkillId, releaseSelection) {
     applied: true,
     staticReopenFrame: releaseSelection.releaseReopenFrame,
     staticReopenFrameOrigin: 'release-execution-start',
-    nextSameActionFrameInterval: Object.freeze([
+    nextSameActionFrameInterval: freeze([
       releaseSelection.releaseReopenFrame,
       releaseSelection.releaseReopenFrame + 1,
     ]),
     variantStatus: 'resolved-three-tier-charging-release',
-    compositeChargingRelease: Object.freeze(structuredClone(releaseSelection)),
+    compositeChargingRelease: freeze(structuredClone(releaseSelection)),
     measuredClientParity: false,
-    sourceIdentity: createAuthoritySourceIdentity(`owner:${ownerId}`),
-    reasons: Object.freeze([]),
+    sourceIdentity: createVerifiedChargedInputAuthoritySourceIdentity(
+      `owner:${ownerId}`
+    ),
+    reasons: freeze([]),
   });
 }
 
@@ -149,7 +164,7 @@ function releaseWindow(
   executionSubSkillIndex,
   representativeReleaseFrame
 ) {
-  return Object.freeze({
+  return freeze({
     windowIdentity,
     startFrame,
     endFrame,
@@ -167,7 +182,7 @@ function effectiveTier(
   endFrame,
   representativeReleaseFrame
 ) {
-  return Object.freeze({
+  return freeze({
     tierIdentity,
     semanticName,
     chargeTier,
@@ -177,14 +192,6 @@ function effectiveTier(
   });
 }
 
-function createAuthoritySourceIdentity(suffix) {
-  return [
-    `installed-client:GameAssembly.dll#sha256=${CLIENT_IDENTITY.gameAssemblySha256}`,
-    `charged-timing-matrix#sha256=${AUDIT_IDENTITY.chargedTimingMatrixSha256}`,
-    `binary-input-state-machine#sha256=${AUDIT_IDENTITY.binaryInputStateMachineSha256}`,
-    `giselle-heavy23-timing-matrix#sha256=${AUDIT_IDENTITY.giselleTimingMatrixSha256}`,
-    `miti-charged-release-timing-matrix#sha256=${AUDIT_IDENTITY.mitiTimingMatrixSha256}`,
-    `miti-charged-release-binary-logic#sha256=${AUDIT_IDENTITY.mitiBinaryReleaseLogicSha256}`,
-    suffix,
-  ].join('|');
+export function createVerifiedChargedInputAuthoritySourceIdentity(suffix) {
+  return `${SOURCE_IDENTITY_PREFIX}|${suffix}`;
 }

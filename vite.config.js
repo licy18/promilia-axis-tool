@@ -27,6 +27,25 @@ const EXTERNALIZED_WORKBENCH_JSON_ASSETS = new Set([
   'workbench-skill-core.json',
 ]);
 
+const WORKBENCH_ANALYSIS_LAZY_MODULES = new Set([
+  'CanonicalTraceInspectorPanel.vue',
+  'WorkbenchScenarioComparisonDialog.vue',
+  'WorkbenchAnalysisReportDialog.vue',
+  'ActionRuleDiagnosticsPanel.vue',
+  'EffectTimelinePanel.vue',
+]);
+
+function groupWorkbenchAnalysisPanels(moduleId) {
+  const normalizedId = moduleId.replaceAll('\\', '/');
+  if (
+    normalizedId.includes('/src/features/workbench/') &&
+    WORKBENCH_ANALYSIS_LAZY_MODULES.has(basename(normalizedId))
+  ) {
+    return 'workbench-analysis-panels';
+  }
+  return undefined;
+}
+
 function externalizeWorkbenchJsonAssets() {
   const virtualPrefix = '\0external-workbench-json:';
   const virtualSuffix = ':module';
@@ -92,6 +111,12 @@ export default defineConfig({
   build: {
     target: 'es2022',
     minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: groupWorkbenchAnalysisPanels,
+        onlyExplicitManualChunks: true,
+      },
+    },
     terserOptions: {
       compress: { passes: 2 },
       format: { comments: false },

@@ -1,4 +1,4 @@
-export const VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT =
+const VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT =
   'AzPrVerifiedChargingReleaseSelection';
 
 /**
@@ -40,25 +40,17 @@ export function resolveVerifiedChargingReleaseWindow({
 
   if (precedence === 'source-order-first') {
     const selectedEntry = candidates[0];
-    const selected = selectedEntry.window;
-    return {
-      schemaVersion: 1,
-      contractName: VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT,
-      status: 'verified-charging-release-window-selected',
-      ready: true,
-      applied: true,
-      releaseFrame: frame,
+    return createSelection(
+      frame,
       precedence,
-      selected,
-      selectedWindowIdentity: selected.windowIdentity ?? null,
-      candidateWindowIdentities: candidates.map(
-        candidate => candidate.window.windowIdentity ?? null
-      ),
-      overlappingCandidateCount: candidates.length,
-      sourceOrderIndex: selectedEntry.sourceOrderIndex,
-      greatestStartFrame: null,
-      tieBreak: 'client-proven-source-registration-order',
-    };
+      selectedEntry.window,
+      candidates.map(candidate => candidate.window),
+      {
+        sourceOrderIndex: selectedEntry.sourceOrderIndex,
+        greatestStartFrame: null,
+        tieBreak: 'client-proven-source-registration-order',
+      }
+    );
   }
 
   const sortedCandidates = candidates
@@ -87,6 +79,16 @@ export function resolveVerifiedChargingReleaseWindow({
       String(right.sourceIdentity ?? right.windowIdentity ?? '')
     )
   )[0];
+  return createSelection(frame, precedence, selected, sortedCandidates, {
+    greatestStartFrame,
+    tieBreak:
+      greatestCandidates.length > 1
+        ? 'stable-source-identity-equivalent-semantics'
+        : 'not-required',
+  });
+}
+
+function createSelection(frame, precedence, selected, candidates, details) {
   return {
     schemaVersion: 1,
     contractName: VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT,
@@ -97,19 +99,15 @@ export function resolveVerifiedChargingReleaseWindow({
     precedence,
     selected,
     selectedWindowIdentity: selected.windowIdentity ?? null,
-    candidateWindowIdentities: sortedCandidates.map(
+    candidateWindowIdentities: candidates.map(
       candidate => candidate.windowIdentity ?? null
     ),
-    overlappingCandidateCount: sortedCandidates.length,
-    greatestStartFrame,
-    tieBreak:
-      greatestCandidates.length > 1
-        ? 'stable-source-identity-equivalent-semantics'
-        : 'not-required',
+    overlappingCandidateCount: candidates.length,
+    ...details,
   };
 }
 
-export function createChargingWindowSemanticIdentity(window = {}) {
+function createChargingWindowSemanticIdentity(window = {}) {
   return [
     Number(window.executionControlSkillId),
     Number(window.executionSubSkillIndex),
