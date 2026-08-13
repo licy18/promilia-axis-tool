@@ -22,6 +22,90 @@ function cloneFixture() {
   return axis;
 }
 
+function createRubyInputDerivedSuccessorAxis() {
+  const axis = structuredClone(fixture);
+  axis.scenario.durationFrames = 1000;
+  const rubySlot = axis.scenario.team.find(slot => slot.slotId === 'slot-3');
+  rubySlot.initialSp = 100;
+  rubySlot.loadout = { kiboId: 500001 };
+  axis.scenario.initialRuntimeState = {
+    controlledActor: {
+      actorId: 'actor-101007',
+      characterId: 101007,
+    },
+    kiboEnergyBySlot: [
+      {
+        slotId: 'slot-3',
+        actorId: 'actor-103002',
+        characterId: 103002,
+        kiboId: 500001,
+        currentValue: 100,
+        maxValue: 100,
+      },
+    ],
+    specialResourcesByActor: [
+      {
+        actorId: 'actor-103002',
+        characterId: 103002,
+        resourceIdentity: 'actor:103002:element:103002047',
+        currentValue: 12,
+        maxValue: 12,
+        inputStep: 1,
+        scenarioConfigurable: true,
+        activeStates: [],
+      },
+    ],
+  };
+  axis.actions = [
+    {
+      id: 'ruby-switch',
+      owner: { kind: 'actor', slotId: 'slot-1' },
+      intent: { kind: 'switch', targetSlotId: 'slot-3' },
+      schedule: { mode: 'absolute', frame: 0 },
+    },
+    {
+      id: 'ruby-kibo-signature',
+      owner: { kind: 'kibo', slotId: 'slot-3' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 50000102,
+        actionKind: 'signature',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 93 },
+    },
+    {
+      id: 'ruby-ultimate-context',
+      owner: { kind: 'actor', slotId: 'slot-3' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300213,
+        actionKind: 'ultimate',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 94 },
+    },
+    {
+      id: 'ruby-enhanced-context',
+      owner: { kind: 'actor', slotId: 'slot-3' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300201,
+        actionKind: 'normal-attack',
+        level: 1,
+        attackInput: {
+          sequenceIndex: 1,
+          groupId: 'ruby-enhanced-successor',
+          chainIdentity: 'ruby-enhanced-twelve-inputs',
+          contextActionId: 'ruby-ultimate-context',
+        },
+      },
+      schedule: { mode: 'absolute', frame: 423 },
+    },
+  ];
+  return axis;
+}
+
 describe('Machine Axis search state', () => {
   let service;
   let run;
@@ -430,6 +514,82 @@ describe('Machine Axis search state', () => {
           code: 'machine-axis-normal-attack-input-authority-rejected',
           actionId: 'melania-a1-2',
           phase: 'successor-window',
+        }),
+      ],
+    });
+  }, 30_000);
+
+  it('replays a Ruby ultimate-derived enhanced A1 with the same special continuation authority as runtime', () => {
+    const rubyRun = createMachineAxisService().simulate(
+      createRubyInputDerivedSuccessorAxis()
+    );
+    expect(
+      rubyRun.trace.variants.normalAttackSpecialContinuationCandidates
+    ).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-103002',
+        sourceKind: 'input-derived',
+        sourceActionId: 'ruby-ultimate-context',
+        targetActionId: 'ruby-enhanced-context',
+        chainIdentity: 'ruby-enhanced-twelve-inputs',
+        sequenceIndex: 1,
+        controlSkillId: 10300201,
+        subSkillIndex: 1,
+        applied: true,
+      }),
+    ]);
+    expect(
+      rubyRun.trace.variants.selections.find(
+        selection => selection.actionId === 'ruby-enhanced-context'
+      )
+    ).toMatchObject({
+      contextActionId: 'ruby-ultimate-context',
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackSequenceIndex: 1,
+    });
+
+    const proof = createSearchNormalAttackInputProof({
+      trace: rubyRun.trace,
+      fps: 60,
+    });
+    expect(proof).toMatchObject({
+      passed: true,
+      status: 'normal-attack-input-authority-passed',
+      issues: [],
+      decisions: [
+        expect.objectContaining({
+          actionId: 'ruby-enhanced-context',
+          phase: expect.objectContaining({
+            phase: 'successor-window',
+            sourceActionId: 'ruby-ultimate-context',
+            expected: expect.objectContaining({
+              chainIdentity: 'ruby-enhanced-twelve-inputs',
+              sequenceIndex: 1,
+              controlSkillId: 10300201,
+              subSkillIndex: 1,
+              contextActionId: 'ruby-ultimate-context',
+            }),
+          }),
+          match: expect.objectContaining({ accepted: true }),
+        }),
+      ],
+    });
+
+    const missingSourceTrace = structuredClone(rubyRun.trace);
+    missingSourceTrace.executionPlan.actions.find(
+      action => action.actionId === 'ruby-ultimate-context'
+    ).execute = false;
+    expect(
+      createSearchNormalAttackInputProof({
+        trace: missingSourceTrace,
+        fps: 60,
+      })
+    ).toMatchObject({
+      passed: false,
+      issues: [
+        expect.objectContaining({
+          actionId: 'ruby-enhanced-context',
+          reason: 'normal-attack-opener-required-outside-successor-window',
         }),
       ],
     });

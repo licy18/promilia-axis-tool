@@ -1,5 +1,14 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.00000000 2026-08-14 02:41 103002 successor canonical replay 集成修复进行中
+
+- 唯一全新 run `m12c-moyin-top5-fresh-20260813-231115989-f30892fe58f6` 已在两条冻结 A1 canary 后 fail closed 停止；当前无搜索 Node 进程，三目标 Top-5 尚未完成。旧 `0e02c64` release/admission 对受影响搜索已失效，不得恢复或复用结果。
+- 最小复现 `refinement/kill-103002-terminal-normal-phase-disagreement/minimal-production-reproduction.json`（SHA-256 `c38da13fc9fcf59aae96c472bc6e651548646af69e0c6ed3b4c904b7354a30f1`）确认：同一 103002 大招后强化 A1 在 production prepare/runtime 中使用 applied `input-derived` successor window 选中 `10300201/sub1`，但 canonical trace 没有投影 runtime 的 `specialContinuationCandidates`，search replay 因而回退 idle/default A1 并错误拒绝。
+- 中央已做最小生产修复 WIP：runtime 把唯一匹配 authority phase 的 derived candidate 与 `contextActionId` 投影到 canonical trace；search replay/state 只接受 source action 已执行的候选，并继续由既有 normal-input authority 严格比对 chain/sequence/control/subskill/context。没有放宽 legality，也没有创建或运行搜索。
+- 新增生产形状回归包含 switch on-enter、Kibo、103002 ultimate@94 与 enhanced E1@423，并有 source action 未执行的负例。runtime、canonical core、search state/service、cycle/kill evaluator、search engine 与 local-search result 共 `8 files / 203 tests PASS`；对原 92-action stopped-run 输入的只读 diagnostic 同样得到 prepare `0 issue`、canonical proof PASS、强化 E1 `10300201/sub1`、source=`input-derived`。
+- 提交前静态/生产检查已通过：Prettier、ESLint、`git diff --check`，production import `240 source / 236 reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced`，production build `1906 modules`。bundle 权威检查 PASS：initial `119996/120000`、Workbench `488799/500000`、total JavaScript gzip `918441/920000`，全部 projection guard 为真；派生 `reports/bundle-composition.json` 已随当前实现刷新。
+- 下一步：形成 clean commit 并推送；随后从新 clean HEAD 真实重跑 Gate V2 与独立 Formal Search Admission `15/15`。全部新 authority 建立前搜索保持停止，旧 run 不得按旧 admission 恢复。
+
 ## 0.0000000 2026-08-13 22:00 bundle 等价修复与 production preview 复核
 
 - 未改任何预算、重击 authority payload 或 canonical 行为：通过去重 source identity/选择结果构造，并使用 `onlyExplicitManualChunks=true` 仅把 5 个既有懒加载分析面板合并为 `workbench-analysis-panels`，公共依赖保持原分包。真实 `audit:bundle:check` PASS：initial `119995/120000`、Workbench `488504/500000`、total JavaScript gzip `918092/920000`，相对失败值净降 `2537` bytes，总预算余量 `1908` bytes；projection guard 全部为真，全部 external catalogs 在位。

@@ -266,6 +266,11 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
   const attackChainContinuityWindows = projectAttackChainContinuityWindows(
     simulation.verifiedActionVariantRuntime?.activeSwitchWindows
   );
+  const normalAttackSpecialContinuationCandidates =
+    projectNormalAttackSpecialContinuationCandidates(
+      simulation.verifiedActionVariantRuntime
+        ?.normalAttackSpecialContinuationCandidates
+    );
   const trace = {
     schemaVersion: CANONICAL_HEADLESS_COMBAT_CORE_SCHEMA_VERSION,
     kind: 'azpr-canonical-combat-trace',
@@ -378,6 +383,9 @@ export function createCanonicalCombatTrace({ compilation, simulation }) {
       ),
       ...(attackChainContinuityWindows.length > 0
         ? { attackChainContinuityWindows }
+        : {}),
+      ...(normalAttackSpecialContinuationCandidates.length > 0
+        ? { normalAttackSpecialContinuationCandidates }
         : {}),
       stateEvents: (
         simulation.verifiedActionVariantRuntime?.stateEvents ?? []
@@ -1335,6 +1343,38 @@ function projectAttackChainContinuityWindows(value) {
         Number(left.startsAtMs ?? 0) - Number(right.startsAtMs ?? 0) ||
         String(left.edgeIdentity).localeCompare(
           String(right.edgeIdentity),
+          'en'
+        )
+    );
+}
+
+function projectNormalAttackSpecialContinuationCandidates(value) {
+  return (value ?? [])
+    .filter(candidate => candidate?.applied === true)
+    .map(candidate => ({
+      actorId: candidate.actorId ?? null,
+      sourceKind: candidate.sourceKind ?? null,
+      sourceActionId: candidate.sourceActionId ?? null,
+      targetActionId: candidate.targetActionId ?? null,
+      sourceIdentity: candidate.sourceIdentity ?? null,
+      chainIdentity: candidate.chainIdentity ?? null,
+      sequenceIndex: candidate.sequenceIndex ?? null,
+      controlSkillId: candidate.controlSkillId ?? null,
+      subSkillIndex: candidate.subSkillIndex ?? null,
+      groupId: candidate.groupId ?? null,
+      startsAtMs: candidate.startsAtMs ?? null,
+      endsAtMs: candidate.endsAtMs ?? null,
+      applied: true,
+    }))
+    .sort(
+      (left, right) =>
+        Number(left.startsAtMs ?? 0) - Number(right.startsAtMs ?? 0) ||
+        String(left.sourceActionId).localeCompare(
+          String(right.sourceActionId),
+          'en'
+        ) ||
+        String(left.targetActionId).localeCompare(
+          String(right.targetActionId),
           'en'
         )
     );

@@ -148,6 +148,7 @@ export function createSearchAttackChainProjection({
       inputTimeMs: frameToMs(currentFrame, fps),
       fps,
       activeContinuationWindows: context.continuationWindows,
+      specialContinuationCandidates: context.specialContinuationCandidates,
     });
     if (phase.phase === VERIFIED_NORMAL_ATTACK_INPUT_PHASES.IDLE) continue;
     states.push(
@@ -232,6 +233,11 @@ export function createSearchNormalAttackInputProof({
         trace.variants?.attackChainContinuityWindows,
         executedActionIds
       ),
+      specialContinuationCandidates:
+        normalizeAuthoritySpecialContinuationCandidates(
+          trace.variants?.normalAttackSpecialContinuationCandidates,
+          executedActionIds
+        ),
     });
     const authorityAction = adaptTraceActionForNormalAttackAuthority(
       action,
@@ -339,6 +345,11 @@ function createNormalAttackAuthorityTraceContext({
     trace.variants?.attackChainContinuityWindows,
     executedActionIds
   );
+  const specialContinuationCandidates =
+    normalizeAuthoritySpecialContinuationCandidates(
+      trace.variants?.normalAttackSpecialContinuationCandidates,
+      executedActionIds
+    );
   const actorIds = new Set(acceptedByActorId.keys());
   const currentTimeMs = frameToMs(currentFrame, fps);
   for (const window of continuationWindows) {
@@ -346,9 +357,15 @@ function createNormalAttackAuthorityTraceContext({
       actorIds.add(String(window.actorId));
     }
   }
+  for (const candidate of specialContinuationCandidates) {
+    if (Number(candidate.endsAtMs) > currentTimeMs && candidate.actorId) {
+      actorIds.add(String(candidate.actorId));
+    }
+  }
   return {
     acceptedByActorId,
     continuationWindows,
+    specialContinuationCandidates,
     actorIds: [...actorIds].sort((left, right) =>
       left.localeCompare(right, 'en')
     ),
@@ -465,6 +482,17 @@ function normalizeAuthorityContinuationWindows(windows, executedActionIds) {
       ...window,
       relationType: window.relationType ?? 'attack-chain-continuity-window',
     }));
+}
+
+function normalizeAuthoritySpecialContinuationCandidates(
+  candidates,
+  executedActionIds
+) {
+  return (candidates ?? []).filter(
+    candidate =>
+      executedActionIds.has(String(candidate?.sourceActionId ?? '')) &&
+      candidate?.applied === true
+  );
 }
 
 function projectNormalAttackAuthorityPhase({

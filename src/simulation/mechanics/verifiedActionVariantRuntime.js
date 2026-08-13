@@ -220,6 +220,7 @@ export function createVerifiedActionVariantRuntime({
   const resourceEvents = [];
   const stateEvents = [];
   const variantEvents = [];
+  const normalAttackSpecialContinuationCandidates = [];
   const effectCommands = [];
   const tuningMarkTransactions = [];
   const resourceGateEvents = [];
@@ -1540,6 +1541,11 @@ export function createVerifiedActionVariantRuntime({
               decisionFrame: attackChainSelection.chain?.decisionFrame ?? 0,
               chainIdentity: attackChainSelection.chain?.chainIdentity ?? null,
               chainSequenceIndex: attackChainSelection.sequenceIndex,
+              contextActionId:
+                attackChainSelection.authorityPhase?.expected
+                  ?.contextActionId ??
+                attackChainSelection.derivedEntry?.sourceActionId ??
+                null,
               semanticIdentity: `${attackChainSelection.authorityPhase?.formIdentity ?? attackChainSelection.chain?.chainIdentity}:segment:${attackChainSelection.segment.sequenceIndex}`,
               semanticName: attackChainSelection.segment.semanticName
                 ? attackChainSelection.segment.semanticName
@@ -1833,6 +1839,25 @@ export function createVerifiedActionVariantRuntime({
             null,
         };
       }
+    }
+
+    if (attackChainSelection.derivedEntry) {
+      const candidate = attackChainSelection.derivedEntry;
+      normalAttackSpecialContinuationCandidates.push({
+        actorId: candidate.actorId,
+        sourceKind: candidate.sourceKind,
+        sourceActionId: candidate.sourceActionId,
+        sourceIdentity: candidate.sourceIdentity,
+        chainIdentity: candidate.chainIdentity,
+        sequenceIndex: candidate.sequenceIndex,
+        controlSkillId: candidate.controlSkillId,
+        subSkillIndex: candidate.subSkillIndex,
+        groupId: candidate.groupId,
+        startsAtMs: candidate.startsAtMs,
+        endsAtMs: candidate.endsAtMs,
+        targetActionId: action.id,
+        applied: true,
+      });
     }
 
     let resolution = applyAttackInputChainTimingResolution({
@@ -2165,6 +2190,7 @@ export function createVerifiedActionVariantRuntime({
     tuningMarkTransactions,
     companionEvents,
     companionAttackTransactions,
+    normalAttackSpecialContinuationCandidates,
     directSpEvents: targetStateRuntime.directSpEvents,
     targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
@@ -2217,6 +2243,8 @@ export function createVerifiedActionVariantRuntime({
       tuningMarkTransactionCount: tuningMarkTransactions.length,
       companionEventCount: companionEvents.length,
       companionAttackTransactionCount: companionAttackTransactions.length,
+      normalAttackSpecialContinuationCandidateCount:
+        normalAttackSpecialContinuationCandidates.length,
       targetStateEventCount: targetStateRuntime.events.length,
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
@@ -2508,6 +2536,23 @@ function resolveAttackInputChainAction({
     activeContinuationWindows: activeSwitchWindows,
     specialContinuationCandidates: derivedEntries,
   });
+  if (!derivedEntry && phase.expected) {
+    const authorityDerivedEntries = derivedEntries.filter(
+      candidate =>
+        String(candidate.sourceActionId ?? '') ===
+          String(phase.expected.contextActionId ?? '') &&
+        String(candidate.chainIdentity ?? '') ===
+          String(phase.expected.chainIdentity ?? '') &&
+        Number(candidate.sequenceIndex) ===
+          Number(phase.expected.sequenceIndex) &&
+        Number(candidate.controlSkillId) ===
+          Number(phase.expected.controlSkillId) &&
+        Number(candidate.subSkillIndex) === Number(phase.expected.subSkillIndex)
+    );
+    if (authorityDerivedEntries.length === 1) {
+      [derivedEntry] = authorityDerivedEntries;
+    }
+  }
   let selection = null;
   if (runtimeContextIntent && phase.expected) {
     selection = materializeAuthorityAttackInputSelection({
