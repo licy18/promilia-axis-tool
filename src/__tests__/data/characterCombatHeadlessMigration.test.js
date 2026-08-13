@@ -16,8 +16,8 @@ const GOLDENS = [
       'd77383d4f3df485a2b2ff3a1dd60958a8ad5f104074c21cf961f94e7f85e70bc',
     inputHash: '160b76c02e4130a4',
     dataHash: '96d41678c0af4aae',
-    traceHash: 'f7288eb9ac2a6e6a',
-    buildHash: '3b84188ca7a55b60',
+    traceHash: '4a0fc926d239eb60',
+    buildHash: '255047384ecaabac',
   },
   {
     identity: 'ruby-main',
@@ -30,8 +30,8 @@ const GOLDENS = [
       '5adf5248d1dfb31fef569d7be00782070cb85be11e54c65e0d99d29cfddcabe8',
     inputHash: 'fa49817b2171532e',
     dataHash: 'cc435872064bf403',
-    traceHash: '987a76c210638cec',
-    buildHash: '2cfbe94134267d21',
+    traceHash: '33bf4c0426d6b26c',
+    buildHash: 'c6a439fcfed6de41',
   },
   {
     identity: 'han-main',

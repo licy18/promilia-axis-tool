@@ -1,5 +1,15 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.0000000000000 2026-08-14 07:38 52a98164 Gate 首阶段 golden trace 漂移闭合
+
+- clean pushed `master@52a98164ded7682563a8b66323bfaf70c651ff3d` 的唯一 Gate V2 已在首个 `character-combat` 阶段按设计 fail closed：exit `1`、record=`2454f5866bf98e73fe9a89987a27f7f2be44d0b74dd15f052db710ad4b8d0d89`、`failureStage=character-combat`、completed stages `0`。runner 未进入后续测试/审计/preview，也未产生 Formal Search Admission；搜索任务保持 idle。
+- 唯一漂移为 `reports/m10/101010/golden-trace.json` 与 `reports/m10/103002/golden-trace.json`。权威生成器刷新后两者都仅改变 canonical `traceHash/buildHash`；各自 `inputHash/dataHash`、source package、动作与数值未变：101010 `f7288eb9ac2a6e6a/3b84188ca7a55b60 -> 4a0fc926d239eb60/255047384ecaabac`，103002 `987a76c210638cec/2cfbe94134267d21 -> 33bf4c0426d6b26c/c6a439fcfed6de41`。
+- 首次写回尝试未带 release 的 8 GiB `NODE_OPTIONS`，全量重算工作集逼近默认 V8 上限后退出且没有任何 tracked 产物；未把它计为成功，也未重复该配置。随后按 release 合同以 `--max-old-space-size=8192` 运行同一权威生成器，290.3 秒、exit `0`，原子写回后严格只有上述两文件漂移；同配置 `audit:character-combat` 304.6 秒 PASS。一次未带 8 GiB 且受 180 秒工具边界影响的 5 文件 Vitest 没有可靠终态输出，未计为 PASS；子进程自然退出且未产生额外 tracked 产物，后续不重复该调用。
+- 下游 `audit:character-acceptance` 首次准确阻断 101010 的旧 product record binding。以临时 pending recipe 运行 owner-only 权威生成器后取得新 binding expectation，再恢复既有 `829d628bff9476c489d03e152e9377fd8c8e9e3c` 视觉证据签收：101010 qualification subject `6a3877d3e52d8431 -> 81fa9f4067851a48`、product scenario hash 保持 `f47ed3bbb4551a6b`；103002 subject `af39e2ab7808d82b -> 1341fb521686b889`、product scenario hash `f8fa50a894427c98 -> 772e03bd84be8025`。其他 owner 不重签，STARBORN 仍是 199001/199002 联合的单一 optimization object。
+- 8 GiB 全量 character acceptance 写回 148.7 秒 PASS，恢复 `10/10` visually accepted / optimization-ready；随后 assert-clean + qualification + binding 链 167.7 秒 PASS。qualification 仍为 `263/263` 且零 blocker，新 hash 为 source snapshot `a12ba639b8a0241f`、roster `2e05d812634e9255`、manifests `1ab0a2c54addc3bc`、ledger `cdc23eb7c297b95d`、binding `608f02723e5a5c72`、catalog `28cb520282781801`；E22 binding `22/22 PASS`。
+- 聚焦 acceptance/qualification/binding 首轮 `5 files / 48 passed / 2 stale identity assertions failed`，只更新上述两个新签收身份后同组 `5 files / 50 tests PASS`；golden migration/profile/Ruby/tuning-mark 组以 8 GiB 运行 302.1 秒，`4 files / 41 tests PASS`。没有放宽验证、动作或数值语义。
+- 下一步只允许完成格式/保护项/精确 diff 复核，提交并推送最小派生刷新，再从新 clean HEAD 重建 Gate V2；在新 executed PASS 与独立 Admission 15/15 前不得交付 descriptor 或启动搜索。
+
 ## 0.000000000000 2026-08-14 06:44 c84d7efa 搜索封账与 103002 prefix successor 修复
 
 - 唯一 c84d7efa run `m12c-moyin-top5-c84d7efa-20260814-054532698-cce886124878` 已按中央裁决完整 fail closed：任务 idle、无存活 worker、未继续 canary/seed/shard，三个 objective 均无最终 Top-5。`STOP_REPORT.json` canonical SHA-256=`1355f7c025ef304a468a447e4d96672131eeb2aacc962897e401e81e51dedd97`；本 run 永久不可 resume，Phase 1 的 105/105 与两次 calibration 仅保留为历史诊断证据。

@@ -5,12 +5,10 @@
   "productVisualAcceptance": {
     "status": "accepted",
     "acceptanceCommit": "829d628bff9476c489d03e152e9377fd8c8e9e3c",
-    "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:af39e2ab7808d82b",
-    "qualificationSubjectHash": "af39e2ab7808d82b",
-    "scenarioSetHash": "f8fa50a894427c98",
-    "scenarioIdentities": [
-      "m12-b3-103002-reload-window-boundaries"
-    ],
+    "recordIdentity": "character-product-acceptance:103002:829d628bff9476c489d03e152e9377fd8c8e9e3c:1341fb521686b889",
+    "qualificationSubjectHash": "1341fb521686b889",
+    "scenarioSetHash": "772e03bd84be8025",
+    "scenarioIdentities": ["m12-b3-103002-reload-window-boundaries"],
     "automatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-103002-reload-window-boundaries",
@@ -35,9 +33,7 @@
   "ownerId": 103002,
   "fixturePath": "fixtures/character-acceptance/103002-visual.json",
   "inputWindowBoundary": null,
-  "goldenReports": [
-    "reports/m10/103002/golden-trace.json"
-  ],
+  "goldenReports": ["reports/m10/103002/golden-trace.json"],
   "unnamedSecondaryPassiveSkillId": 10300262,
   "machineEvidence": [
     {
@@ -215,9 +211,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -257,9 +251,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -307,9 +299,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -357,9 +347,7 @@
       "durationFrames": 600,
       "effectSelection": {
         "kind": "element-id",
-        "elementIds": [
-          103002273
-        ],
+        "elementIds": [103002273],
         "classification": "applied"
       },
       "initialRuntimeState": {
@@ -421,11 +409,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -563,26 +547,11 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "triggerFrame": [
-                173,
-                237
-              ],
-              "absoluteFrame": [
-                1973,
-                2037
-              ],
-              "markCountAtJudgment": [
-                1,
-                0
-              ],
-              "consumedCount": [
-                1,
-                0
-              ],
-              "applied": [
-                true,
-                false
-              ],
+              "triggerFrame": [173, 237],
+              "absoluteFrame": [1973, 2037],
+              "markCountAtJudgment": [1, 0],
+              "consumedCount": [1, 0],
+              "applied": [true, false],
               "status": [
                 "verified-tuning-consume-applied",
                 "verified-tuning-consume-insufficient-marks"
@@ -698,9 +667,7 @@
               }
             }
           ],
-          "requiredExecutableActionIds": [
-            "negative-reload-window-source"
-          ],
+          "requiredExecutableActionIds": ["negative-reload-window-source"],
           "expectedIssue": {
             "actionId": "negative-reload-window-start-minus-one",
             "code": "machine-axis-action-not-executable",
@@ -718,11 +685,7 @@
         "effectIdentity": "battle-element:103002279",
         "targetId": "actor-103002",
         "durationFrames": 240,
-        "requiredOperations": [
-          "apply",
-          "refresh",
-          "expire"
-        ],
+        "requiredOperations": ["apply", "refresh", "expire"],
         "rightOpenExpiry": true
       },
       "probes": [
@@ -737,17 +700,10 @@
           "expectation": {
             "count": 2,
             "orderedValues": {
-              "operation": [
-                "expire",
-                "apply"
-              ]
+              "operation": ["expire", "apply"]
             }
           },
-          "select": [
-            "actionId",
-            "operation",
-            "absoluteFrame"
-          ]
+          "select": ["actionId", "operation", "absoluteFrame"]
         }
       ]
     },
@@ -773,15 +729,9 @@
           "expectation": {
             "count": 1,
             "orderedValues": {
-              "absoluteFrame": [
-                40
-              ],
-              "toughnessAfter": [
-                0
-              ],
-              "breakTriggered": [
-                true
-              ]
+              "absoluteFrame": [40],
+              "toughnessAfter": [0],
+              "breakTriggered": [true]
             }
           },
           "select": [

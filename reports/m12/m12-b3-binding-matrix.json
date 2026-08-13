@@ -3,7 +3,7 @@
   "contractName": "AzPrM12B3BindingMatrix",
   "kind": "azpr-m12-b3-binding-matrix",
   "phase": "M12-B3-E22",
-  "generatedAt": "2026-08-13T19:32:36.762Z",
+  "generatedAt": "2026-08-13T23:27:17.398Z",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -13,11 +13,11 @@
     "setSkills": 12
   },
   "hashes": {
-    "rosterHash": "303421ced9f6f720",
-    "manifestsHash": "86c747adbb2271ec",
-    "ledgerHash": "96a5a0f07dc936c3",
-    "bindingMatrixHash": "296cf266686e15a9",
-    "qualificationCatalogHash": "1c179cc44e6c1dbb",
+    "rosterHash": "2e05d812634e9255",
+    "manifestsHash": "1ab0a2c54addc3bc",
+    "ledgerHash": "cdc23eb7c297b95d",
+    "bindingMatrixHash": "608f02723e5a5c72",
+    "qualificationCatalogHash": "28cb520282781801",
     "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216"
   },
   "staticMatrix": {
@@ -968,9 +968,9 @@
         "identity": "artifact-hash-consistency",
         "passed": true,
         "detail": {
-          "rosterHash": "303421ced9f6f720",
-          "bindingMatrixHash": "296cf266686e15a9",
-          "catalogHash": "1c179cc44e6c1dbb"
+          "rosterHash": "2e05d812634e9255",
+          "bindingMatrixHash": "608f02723e5a5c72",
+          "catalogHash": "28cb520282781801"
         }
       }
     ]
@@ -1127,17 +1127,17 @@
               "algorithm": "fnv1a64-utf8-v1",
               "input": "747baeae21722ae4",
               "data": "8d610a503303cfd1",
-              "trace": "c0464ef7e3b8e187",
+              "trace": "bb33a3a256dc31ad",
               "evaluation": "f97d7f73051e975c",
-              "build": "082353844f71b8cb"
+              "build": "8551af0dd4c21201"
             },
             "directHashes": {
               "algorithm": "fnv1a64-utf8-v1",
               "input": "747baeae21722ae4",
               "data": "8d610a503303cfd1",
-              "trace": "c0464ef7e3b8e187",
+              "trace": "bb33a3a256dc31ad",
               "evaluation": "f97d7f73051e975c",
-              "build": "082353844f71b8cb"
+              "build": "8551af0dd4c21201"
             }
           }
         },
@@ -1150,9 +1150,9 @@
               "algorithm": "fnv1a64-utf8-v1",
               "input": "747baeae21722ae4",
               "data": "8d610a503303cfd1",
-              "trace": "c0464ef7e3b8e187",
+              "trace": "bb33a3a256dc31ad",
               "evaluation": "f97d7f73051e975c",
-              "build": "082353844f71b8cb"
+              "build": "8551af0dd4c21201"
             }
           }
         }
@@ -1253,5 +1253,5 @@
     "blockedCount": 0,
     "allPassed": true
   },
-  "bindingMatrixHash": "da675aed06c51701"
+  "bindingMatrixHash": "7ee6fd9ae401eaf1"
 }

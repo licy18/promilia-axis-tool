@@ -3,11 +3,11 @@
   "contractName": "AzPrOptimizationQualificationCatalog",
   "kind": "azpr-optimization-qualification-catalog",
   "generatedAt": "2026-08-07T00:00:00.000Z",
-  "rosterHash": "303421ced9f6f720",
-  "manifestsHash": "86c747adbb2271ec",
-  "gapLedgerHash": "96a5a0f07dc936c3",
-  "bindingMatrixHash": "296cf266686e15a9",
-  "sourceSnapshotHash": "3c00684bb6300262",
+  "rosterHash": "2e05d812634e9255",
+  "manifestsHash": "1ab0a2c54addc3bc",
+  "gapLedgerHash": "cdc23eb7c297b95d",
+  "bindingMatrixHash": "608f02723e5a5c72",
+  "sourceSnapshotHash": "a12ba639b8a0241f",
   "denominators": {
     "characterOptimizationObjects": 9,
     "sourceCharacterAliases": 10,
@@ -24,7 +24,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "25b7fe68119c3db6"
+      "manifestHash": "f4bb7b98db70e933"
     },
     {
       "objectKind": "character",
@@ -42,7 +42,7 @@
       "maturityState": "optimization-ready",
       "optimizationReady": true,
       "blockerCodes": [],
-      "manifestHash": "966f4500e04db0de"
+      "manifestHash": "55da1182fba917b1"
     },
     {
       "objectKind": "character",
@@ -2665,7 +2665,7 @@
     "contractName": "AzPrOptimizationQualificationBindingMatrix",
     "kind": "azpr-optimization-qualification-binding-matrix",
     "generatedAt": "2026-08-07T00:00:00.000Z",
-    "rosterHash": "303421ced9f6f720",
+    "rosterHash": "2e05d812634e9255",
     "policy": {
       "duplicateKiboSpeciesAcrossDifferentActors": "allowed",
       "sameActorSlotDuplicateKiboBinding": "not-applicable-one-kibo-per-slot",
@@ -20637,7 +20637,7 @@
       "setSkillThresholdQualifiedCount": 12,
       "equipmentSlotCount": 5
     },
-    "bindingMatrixHash": "296cf266686e15a9"
+    "bindingMatrixHash": "608f02723e5a5c72"
   },
   "cultivation": {
     "schemaVersion": 1,
@@ -38321,5 +38321,5 @@
     "formalOptimizationUnlocked": true,
     "m12cLocked": false
   },
-  "catalogHash": "1c179cc44e6c1dbb"
+  "catalogHash": "28cb520282781801"
 }
