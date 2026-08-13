@@ -2,6 +2,7 @@ import { msToFrame } from '../domain/timebase';
 import {
   getVerifiedCombatActionMapping,
   getVerifiedCombatActionMappingByIdentity,
+  getVerifiedActionVariantGraph,
 } from '../data/verifiedCombatMechanicsPackage';
 import { ACTION_TYPES } from '../domain/projectSchema';
 import { isKiboAxisActionKindIncluded } from '../domain/kiboAxisActionScopePolicy';
@@ -559,10 +560,10 @@ function selectNextAttackInputSegment({
       phase,
     });
   }
-  const authoritySegments = [
-    ...(mapping.attackInputSegments ?? []),
-    ...(mapping.profileAttackInputSegments ?? []),
-  ].filter(
+  const authoritySegments = resolveVerifiedAttackInputAuthoritySegments({
+    mapping,
+    expected,
+  }).filter(
     segment =>
       Number(segment.sequenceIndex) === Number(expected.sequenceIndex) &&
       Number(segment.controlSkillId) === Number(expected.controlSkillId) &&
@@ -573,11 +574,22 @@ function selectNextAttackInputSegment({
         String(segment.attackInputChainIdentity) ===
           String(expected.chainIdentity))
   );
-  const catalogSegment = attackInputs.find(
-    segment =>
-      Number(segment.sequenceIndex) === Number(expected.sequenceIndex) &&
-      positiveIntegerOrNull(segment.durationFrames) != null
-  );
+  const catalogSegment =
+    attackInputs.find(
+      segment =>
+        Number(segment.sequenceIndex) === Number(expected.sequenceIndex) &&
+        Number(segment.controlSkillId) === Number(expected.controlSkillId) &&
+        Number(segment.subSkillIndex ?? segment.selectedSubSkillIndex) ===
+          Number(expected.subSkillIndex) &&
+        (expected.chainIdentity == null ||
+          segment.attackInputChainIdentity == null ||
+          String(segment.attackInputChainIdentity) ===
+            String(expected.chainIdentity)) &&
+        positiveIntegerOrNull(segment.durationFrames) != null
+    ) ??
+    authoritySegments.find(
+      segment => positiveIntegerOrNull(segment.durationFrames) != null
+    );
   if (authoritySegments.length !== 1 || !catalogSegment) {
     const special =
       phase.sourceKind !== 'verified-normal-attack-idle' &&
@@ -635,6 +647,73 @@ function selectNextAttackInputSegment({
     phase,
     match,
   };
+}
+
+function resolveVerifiedAttackInputAuthoritySegments({ mapping, expected }) {
+  const mappingSegments = [
+    ...new Map(
+      [
+        ...(mapping?.attackInputSegments ?? []),
+        ...(mapping?.profileAttackInputSegments ?? []),
+      ].map(segment => [
+        [
+          segment.attackInputChainIdentity ?? '',
+          segment.sequenceIndex ?? '',
+          segment.controlSkillId ?? '',
+          segment.subSkillIndex ?? segment.selectedSubSkillIndex ?? '',
+        ].join('|'),
+        segment,
+      ])
+    ).values(),
+  ];
+  if (expected?.chainIdentity == null) return mappingSegments;
+  const graphSegments = (
+    getVerifiedActionVariantGraph()?.attackInputChains ?? []
+  ).flatMap(chain => {
+    if (
+      chain?.applied !== true ||
+      Number(chain.ownerId) !== Number(mapping?.ownerId) ||
+      Number(chain.sourceSkillId) !== Number(mapping?.sourceSkillId) ||
+      (expected?.chainIdentity != null &&
+        String(chain.chainIdentity) !== String(expected.chainIdentity))
+    ) {
+      return [];
+    }
+    return (chain.segments ?? [])
+      .filter(segment => segment?.applied === true)
+      .map(segment => ({
+        ...segment,
+        attackInputChainIdentity: chain.chainIdentity,
+      }));
+  });
+  if (graphSegments.length > 0) {
+    return [
+      ...new Map(
+        graphSegments.map(segment => [
+          [
+            segment.attackInputChainIdentity ?? '',
+            segment.sequenceIndex ?? '',
+            segment.controlSkillId ?? '',
+            segment.subSkillIndex ?? segment.selectedSubSkillIndex ?? '',
+          ].join('|'),
+          segment,
+        ])
+      ).values(),
+    ];
+  }
+  return [
+    ...new Map(
+      mappingSegments.map(segment => [
+        [
+          segment.attackInputChainIdentity ?? '',
+          segment.sequenceIndex ?? '',
+          segment.controlSkillId ?? '',
+          segment.subSkillIndex ?? segment.selectedSubSkillIndex ?? '',
+        ].join('|'),
+        segment,
+      ])
+    ).values(),
+  ];
 }
 
 function rejectedNormalAttackSelection({

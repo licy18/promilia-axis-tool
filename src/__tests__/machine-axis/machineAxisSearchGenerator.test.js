@@ -9,11 +9,51 @@ import {
   createMachineAxisSearchGenerator,
   deriveNextStartFrameByActor,
 } from '../../machine-axis/machineAxisSearchGenerator';
+import { createSearchNormalAttackInputProof } from '../../machine-axis/machineAxisSearchState';
 import { createVerifiedJointAttackRuntimeBinding } from '../../domain/verifiedJointAttackRuntimeContract';
 
 function cloneFixture() {
   const axis = structuredClone(fixture);
   axis.actions = axis.actions.filter(action => !action.id.startsWith('a3-'));
+  return axis;
+}
+
+function createRubyUltimatePrefixAxis() {
+  const axis = structuredClone(fixture);
+  axis.scenario.durationFrames = 700;
+  const rubySlot = axis.scenario.team.find(slot => slot.slotId === 'slot-3');
+  rubySlot.initialSp = 100;
+  axis.scenario.initialRuntimeState = {
+    controlledActor: {
+      actorId: 'actor-103002',
+      characterId: 103002,
+    },
+    specialResourcesByActor: [
+      {
+        actorId: 'actor-103002',
+        characterId: 103002,
+        resourceIdentity: 'actor:103002:element:103002047',
+        currentValue: 12,
+        maxValue: 12,
+        inputStep: 1,
+        scenarioConfigurable: true,
+        activeStates: [],
+      },
+    ],
+  };
+  axis.actions = [
+    {
+      id: 'ruby-prefix-ultimate',
+      owner: { kind: 'actor', slotId: 'slot-3' },
+      intent: {
+        kind: 'public-action',
+        publicActionId: 10300213,
+        actionKind: 'ultimate',
+        level: 1,
+      },
+      schedule: { mode: 'absolute', frame: 0 },
+    },
+  ];
   return axis;
 }
 
@@ -388,6 +428,108 @@ describe('Machine Axis search generator', () => {
       })
     );
   });
+
+  it('derives the Ruby ultimate successor from a canonical prefix and replays the generated action', () => {
+    const axis = createRubyUltimatePrefixAxis();
+    const prefixRun = service.simulate(axis);
+    expect(
+      prefixRun.trace.variants.normalAttackSpecialContinuationCandidates
+    ).toEqual([
+      expect.objectContaining({
+        actorId: 'actor-103002',
+        sourceKind: 'input-derived',
+        sourceActionId: 'ruby-prefix-ultimate',
+        targetActionId: null,
+        chainIdentity: 'ruby-enhanced-twelve-inputs',
+        sequenceIndex: 1,
+        controlSkillId: 10300201,
+        subSkillIndex: 1,
+        applied: true,
+      }),
+    ]);
+
+    const nextStartFrameByActor = deriveNextStartFrameByActor(prefixRun);
+    expect(nextStartFrameByActor).toMatchObject({
+      'actor-103002': 329,
+    });
+    const generated = generator
+      .generateNextActions({
+        axis,
+        run: prefixRun,
+        nextStartFrameByActor,
+        options: {
+          activeActorId: 'actor-103002',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate => candidate.action.intent.actionKind === 'normal-attack'
+      );
+    expect(generated).toHaveLength(1);
+    expect(generated[0]).toMatchObject({
+      startFrame: 329,
+      action: {
+        schedule: { mode: 'absolute', frame: 329 },
+        intent: {
+          attackInput: {
+            sequenceIndex: 1,
+            chainIdentity: 'ruby-enhanced-twelve-inputs',
+            contextActionId: 'ruby-prefix-ultimate',
+          },
+        },
+      },
+    });
+
+    const atExactEnd = generator
+      .generateNextActions({
+        axis,
+        run: prefixRun,
+        nextStartFrameByActor: { 'actor-103002': 537 },
+        options: {
+          activeActorId: 'actor-103002',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate => candidate.action.intent.actionKind === 'normal-attack'
+      );
+    expect(
+      atExactEnd.some(
+        candidate =>
+          candidate.action.intent.attackInput?.chainIdentity ===
+            'ruby-enhanced-twelve-inputs' ||
+          candidate.action.intent.attackInput?.contextActionId ===
+            'ruby-prefix-ultimate'
+      )
+    ).toBe(false);
+
+    const replayAxis = structuredClone(axis);
+    replayAxis.actions.push(generated[0].action);
+    const prepared = service.prepare(replayAxis);
+    expect(prepared.issues).toEqual([]);
+    const replay = service.simulate(replayAxis);
+    expect(
+      replay.trace.variants.selections.find(
+        selection => selection.actionId === generated[0].action.id
+      )
+    ).toMatchObject({
+      contextActionId: 'ruby-prefix-ultimate',
+      attackInputChainIdentity: 'ruby-enhanced-twelve-inputs',
+      attackSequenceIndex: 1,
+    });
+    expect(
+      createSearchNormalAttackInputProof({
+        trace: replay.trace,
+        fps: 60,
+      })
+    ).toMatchObject({
+      passed: true,
+      status: 'normal-attack-input-authority-passed',
+      issues: [],
+    });
+  }, 30_000);
 
   it('uses the verified A5 reopen window before animation recovery completes', () => {
     const axis = structuredClone(giseleFixture);

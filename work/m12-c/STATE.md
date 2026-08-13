@@ -1,5 +1,15 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.000000000000 2026-08-14 06:44 c84d7efa 搜索封账与 103002 prefix successor 修复
+
+- 唯一 c84d7efa run `m12c-moyin-top5-c84d7efa-20260814-054532698-cce886124878` 已按中央裁决完整 fail closed：任务 idle、无存活 worker、未继续 canary/seed/shard，三个 objective 均无最终 Top-5。`STOP_REPORT.json` canonical SHA-256=`1355f7c025ef304a468a447e4d96672131eeb2aacc962897e401e81e51dedd97`；本 run 永久不可 resume，Phase 1 的 105/105 与两次 calibration 仅保留为历史诊断证据。
+- 两个独立 103002 canary 分别以 `verified-normal-attack-input-phase-conflict` 和 `103002 runtime continuation missing` 停止。`PRODUCTION_DEFECT_001.json` canonical SHA-256=`aec4c1a4549f7b64430bed2469be4668bde740cd900c1b6105d8cf2f7a46a2b1` 将根因缩小为 production canonical prefix→generator surface 缺失：ultimate-only prefix 已开启并满足条件的签名 quick-entry 窗口未投影到 `normalAttackSpecialContinuationCandidates`，而显式写入后继的完整轴可正常 replay。
+- 中央最小 tracked WIP 仅投影 `applied=true`、`normal-attack`、有限右开区间、可在 installed graph 中唯一映射到 `derived-or-quick-entry` chain/segment 的待消费窗口；歧义、非普通攻击、未应用或非法区间继续 fail closed。generator 对带显式 chain 的 successor 从 installed graph 取得唯一 authority segment，不猜帧、context、chain 或 subskill。
+- 新增 103002 ultimate-only prefix → canonical candidate → generator@329F → `prepare()` → `simulate()` → normal-input proof 的端到端正例，以及 exact-end 537F 不复用 successor 的负例；既有已消费 candidate 测试改为集合包含，以容纳同轴更早且独立的合法 pending window。聚焦 runtime/core/search-state/generator/service 为 `5 files / 151 tests PASS`，Prettier 与 `git diff --check` PASS。
+- 提交前生产闭合已完成：ESLint 与两个 production `node --check` PASS；`audit:production-imports:check` 为 240 source / 236 production-reachable / 4 allowed test-only / 0 unexpected / 0 unreferenced，报告无漂移；production build 1906 modules PASS；`audit:bundle:check` 三项预算 PASS（initial `119997/120000`、Workbench `489281/500000`、total JS gzip `919232/920000`），projection guards 全真，未抬预算，canonical bundle 派生报告已刷新。live normal/charged/mechanics hash 仍分别为 `530396bf773cc439`、`d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446`、`04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216`。
+- 从本 WIP 出现起，c84d7efa release/admission 对后续搜索失效；搜索任务保持 idle。下一步只允许提交并推送新的 clean HEAD，再重建 Gate V2 executed PASS 与独立 Formal Search Admission 15/15；新 descriptor 交付后必须以不同 runId 从零启动，任何旧 config/checkpoint/result 均不得复用。
+- 保护项保持：既有 untracked evidence 全部保留；`.readonly-ruby-probe.mjs` SHA-256=`68CBE4D07C1A23C1FE7EB25029B2C6A12819B2027E651B64209D60C4D0109B4A`；`stash@{0}=900e193bf710b8f894b50e0bc966db70cbd7e717`。两份污染配置未读取、未使用。
+
 ## 0.00000000000 2026-08-14 04:59 108003 generator/schema fail-closed 与中央最小修复
 
 - 唯一新 run `m12c-moyin-top5-6e1610f5-20260814-043250243-2fdf4a98` 在 Phase 1 计划生成前按 production-defect policy 停止并封账：未生成 105-shard plan、未启动 worker、未建立 objective front、未产出 Top-5。旧 `0e02c64` 产物和两份污染配置仍未读取或复用；停止报告为 `work/m12-c/runs/<runId>/STOP_REPORT.json`，SHA-256=`1c52c55c0f47b1bbfa5a07be8eabf9852b821e3666672d9fea5f1b6155f02679`。

@@ -525,19 +525,21 @@ describe('Machine Axis search state', () => {
     );
     expect(
       rubyRun.trace.variants.normalAttackSpecialContinuationCandidates
-    ).toEqual([
-      expect.objectContaining({
-        actorId: 'actor-103002',
-        sourceKind: 'input-derived',
-        sourceActionId: 'ruby-ultimate-context',
-        targetActionId: 'ruby-enhanced-context',
-        chainIdentity: 'ruby-enhanced-twelve-inputs',
-        sequenceIndex: 1,
-        controlSkillId: 10300201,
-        subSkillIndex: 1,
-        applied: true,
-      }),
-    ]);
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          actorId: 'actor-103002',
+          sourceKind: 'input-derived',
+          sourceActionId: 'ruby-ultimate-context',
+          targetActionId: 'ruby-enhanced-context',
+          chainIdentity: 'ruby-enhanced-twelve-inputs',
+          sequenceIndex: 1,
+          controlSkillId: 10300201,
+          subSkillIndex: 1,
+          applied: true,
+        }),
+      ])
+    );
     expect(
       rubyRun.trace.variants.selections.find(
         selection => selection.actionId === 'ruby-enhanced-context'

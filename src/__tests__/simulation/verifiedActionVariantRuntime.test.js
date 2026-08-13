@@ -771,6 +771,42 @@ describe('verified action variant and special resource runtime', () => {
     }
   );
 
+  it('publishes an unconsumed Ruby ultimate quick-entry window for canonical successor generation', () => {
+    const ultimate = createActorAction({
+      id: 'ruby-prefix-ultimate',
+      characterId: RUBY_ID,
+      skillId: 10300213,
+      startMs: 0,
+    });
+    const runtime = runVariantRuntime({
+      actors: [ultimate.actor],
+      actions: [ultimate],
+      durationMs: frameTime(537),
+      initialRuntimeState: createRubyAmmoState(ultimate.actorId, 0),
+    });
+
+    expect(runtime.normalAttackSpecialContinuationCandidates).toEqual([
+      expect.objectContaining({
+        actorId: ultimate.actorId,
+        sourceKind: 'input-derived',
+        sourceActionId: ultimate.id,
+        targetActionId: null,
+        chainIdentity: 'ruby-enhanced-twelve-inputs',
+        sequenceIndex: 1,
+        controlSkillId: 10300201,
+        subSkillIndex: 1,
+        groupId: null,
+        applied: true,
+      }),
+    ]);
+    const [candidate] = runtime.normalAttackSpecialContinuationCandidates;
+    expect(candidate.startsAtMs).toBeCloseTo(frameTime(329), 5);
+    expect(candidate.endsAtMs).toBeCloseTo(frameTime(537), 5);
+    expect(runtime.summary.normalAttackSpecialContinuationCandidateCount).toBe(
+      1
+    );
+  });
+
   it('blocks an explicit A1 fallback while a sourced Ruby dodge continuation owns the input', () => {
     const chain = mechanicsPackage.actionVariantGraph.attackInputChains.find(
       item => item.chainIdentity === 'ruby-enhanced-twelve-inputs'

@@ -2171,6 +2171,15 @@ export function createVerifiedActionVariantRuntime({
     resourceEvents,
     durationMs: Number(scenario?.time?.durationMs) || 0,
   });
+  const projectedNormalAttackSpecialContinuationCandidates =
+    mergeNormalAttackSpecialContinuationCandidates({
+      consumedCandidates: normalAttackSpecialContinuationCandidates,
+      pendingCandidates:
+        projectPendingNormalAttackSpecialContinuationCandidates({
+          switchWindowHistory,
+          attackInputChains,
+        }),
+    });
   return {
     schemaVersion: 1,
     contractName: VERIFIED_ACTION_VARIANT_RUNTIME_CONTRACT_NAME,
@@ -2190,7 +2199,8 @@ export function createVerifiedActionVariantRuntime({
     tuningMarkTransactions,
     companionEvents,
     companionAttackTransactions,
-    normalAttackSpecialContinuationCandidates,
+    normalAttackSpecialContinuationCandidates:
+      projectedNormalAttackSpecialContinuationCandidates,
     directSpEvents: targetStateRuntime.directSpEvents,
     targetStateRuntime,
     activeSwitchWindows: switchWindowHistory,
@@ -2244,7 +2254,7 @@ export function createVerifiedActionVariantRuntime({
       companionEventCount: companionEvents.length,
       companionAttackTransactionCount: companionAttackTransactions.length,
       normalAttackSpecialContinuationCandidateCount:
-        normalAttackSpecialContinuationCandidates.length,
+        projectedNormalAttackSpecialContinuationCandidates.length,
       targetStateEventCount: targetStateRuntime.events.length,
       conditionalHitGroupCount: targetStateRuntime.groupResults.length,
       directSpEventCount: targetStateRuntime.directSpEvents.length,
@@ -2253,6 +2263,120 @@ export function createVerifiedActionVariantRuntime({
     ready: true,
     applied: true,
   };
+}
+
+function projectPendingNormalAttackSpecialContinuationCandidates({
+  switchWindowHistory = [],
+  attackInputChains = [],
+} = {}) {
+  return (switchWindowHistory ?? [])
+    .filter(
+      window =>
+        window?.applied === true &&
+        window.compilerBindingIdentity != null &&
+        window.relationType !== 'attack-chain-continuity-window' &&
+        String(window.inputCommand ?? '') === 'normal-attack' &&
+        window.actorId != null &&
+        window.sourceActionId != null &&
+        Number.isFinite(Number(window.startsAtMs)) &&
+        Number.isFinite(Number(window.endsAtMs)) &&
+        Number(window.endsAtMs) > Number(window.startsAtMs) &&
+        Number.isInteger(Number(window.targetControlSkillId)) &&
+        Number.isInteger(Number(window.targetSubSkillIndex))
+    )
+    .map(window => {
+      const matches = (attackInputChains ?? []).flatMap(chain => {
+        if (
+          chain?.applied !== true ||
+          chain.entryPolicy?.kind !== 'derived-or-quick-entry' ||
+          Number(chain.ownerId) !== Number(window.ownerId) ||
+          Number(chain.sourceSkillId) !== Number(window.targetControlSkillId) ||
+          (window.targetChainIdentity != null &&
+            String(chain.chainIdentity) !== String(window.targetChainIdentity))
+        ) {
+          return [];
+        }
+        return (chain.segments ?? [])
+          .filter(
+            segment =>
+              segment?.applied === true &&
+              Number(segment.controlSkillId) ===
+                Number(window.targetControlSkillId) &&
+              Number(segment.subSkillIndex) ===
+                Number(window.targetSubSkillIndex)
+          )
+          .map(segment => ({ chain, segment }));
+      });
+      const uniqueMatches = [
+        ...new Map(
+          matches.map(match => [
+            `${match.chain.chainIdentity}|${match.segment.sequenceIndex}`,
+            match,
+          ])
+        ).values(),
+      ];
+      if (uniqueMatches.length !== 1) return null;
+      const [{ chain, segment }] = uniqueMatches;
+      return {
+        actorId: window.actorId,
+        sourceKind: window.relationType ?? 'input-derived',
+        sourceActionId: window.sourceActionId,
+        sourceIdentity: window.sourceIdentity ?? null,
+        chainIdentity: chain.chainIdentity,
+        sequenceIndex: Number(segment.sequenceIndex),
+        controlSkillId: Number(segment.controlSkillId),
+        subSkillIndex: Number(segment.subSkillIndex),
+        groupId: null,
+        startsAtMs: Number(window.startsAtMs),
+        endsAtMs: Number(window.endsAtMs),
+        targetActionId: null,
+        applied: true,
+      };
+    })
+    .filter(Boolean);
+}
+
+function mergeNormalAttackSpecialContinuationCandidates({
+  consumedCandidates = [],
+  pendingCandidates = [],
+} = {}) {
+  const byIdentity = new Map();
+  for (const candidate of [
+    ...(pendingCandidates ?? []),
+    ...(consumedCandidates ?? []),
+  ]) {
+    const identity = [
+      candidate.actorId ?? '',
+      candidate.sourceKind ?? '',
+      candidate.sourceActionId ?? '',
+      candidate.chainIdentity ?? '',
+      candidate.sequenceIndex ?? '',
+      candidate.controlSkillId ?? '',
+      candidate.subSkillIndex ?? '',
+      candidate.groupId ?? '',
+      candidate.startsAtMs ?? '',
+      candidate.endsAtMs ?? '',
+    ].join('|');
+    const previous = byIdentity.get(identity);
+    if (
+      !previous ||
+      (previous.targetActionId == null && candidate.targetActionId != null)
+    ) {
+      byIdentity.set(identity, candidate);
+    }
+  }
+  return [...byIdentity.values()].sort(
+    (left, right) =>
+      Number(left.startsAtMs ?? 0) - Number(right.startsAtMs ?? 0) ||
+      String(left.sourceActionId ?? '').localeCompare(
+        String(right.sourceActionId ?? ''),
+        'en'
+      ) ||
+      String(left.targetActionId ?? '').localeCompare(
+        String(right.targetActionId ?? ''),
+        'en'
+      )
+  );
 }
 
 function resolveContextPredecessor({
