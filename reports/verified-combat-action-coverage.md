@@ -75,7 +75,7 @@
 - `actor|108002|10800201|1|10800210|charged-attack` 璐璐卡 / charged-attack / 涟漪之舞: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved
 - `actor|108002|10800201|4|10800215|dodge-attack` 璐璐卡 / dodge-attack / 涟漪之舞: trigger-frame-missing
 - `actor|108002|10800222|0|10800222|star-carry` 璐璐卡 / star-carry / 幽浪之声: selected-control-variant-has-no-runnable-hit
-- `actor|108003|10800301|1|10800310|charged-attack` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit, verified-action-effective-occupancy-window-unresolved
+- `actor|108003|10800301|1|10800310|charged-attack` 米蒂 / charged-attack / 破空箭: selected-control-variant-has-no-runnable-hit
 - `actor|108003|10800301|6|10800315|dodge-attack` 米蒂 / dodge-attack / 破空箭: trigger-frame-missing, projectile-impact-frame-runtime-dependent
 - `actor|112002|11200201|0|11200203|normal-attack` 艾妮丝 / normal-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent, effect-trigger-frame-missing, effect-target-unresolved, effect-combine-semantics-unresolved, normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|1|11200210|charged-attack` 艾妮丝 / charged-attack / 慈爱的惩戒: trigger-frame-missing, projectile-impact-frame-runtime-dependent

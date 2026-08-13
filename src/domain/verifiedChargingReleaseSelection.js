@@ -4,10 +4,10 @@ export const VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT =
 /**
  * Resolves a release frame against right-open charging windows.
  *
- * The greatest startFrame wins when windows overlap. Source identity is only
- * a deterministic tie-break for semantically equivalent candidates; a tie
- * with different execution semantics is rejected instead of depending on
- * source array order.
+ * Installed-client evidence supports two explicit precedence contracts:
+ * `greatest-start-frame` for the legacy product assumption and
+ * `source-order-first` for controls whose event registration/dispatch order
+ * is proven. Unknown precedence modes fail closed.
  */
 export function resolveVerifiedChargingReleaseWindow({
   windows = [],
@@ -18,7 +18,7 @@ export function resolveVerifiedChargingReleaseWindow({
   if (!Number.isInteger(frame) || frame < 0) {
     return createUnresolved('charging-release-frame-invalid', frame, []);
   }
-  if (precedence !== 'greatest-start-frame') {
+  if (!['greatest-start-frame', 'source-order-first'].includes(precedence)) {
     return createUnresolved(
       'charging-release-precedence-unsupported',
       frame,
@@ -27,20 +27,48 @@ export function resolveVerifiedChargingReleaseWindow({
   }
 
   const candidates = (windows ?? [])
-    .filter(isValidWindow)
+    .map((window, sourceOrderIndex) => ({ window, sourceOrderIndex }))
+    .filter(entry => isValidWindow(entry.window))
     .filter(
-      window =>
-        frame >= Number(window.startFrame) && frame < Number(window.endFrame)
-    )
-    .sort(compareChargingWindows);
+      entry =>
+        frame >= Number(entry.window.startFrame) &&
+        frame < Number(entry.window.endFrame)
+    );
   if (candidates.length === 0) {
     return createUnresolved('charging-release-window-missing', frame, []);
   }
 
+  if (precedence === 'source-order-first') {
+    const selectedEntry = candidates[0];
+    const selected = selectedEntry.window;
+    return {
+      schemaVersion: 1,
+      contractName: VERIFIED_CHARGING_RELEASE_SELECTION_CONTRACT,
+      status: 'verified-charging-release-window-selected',
+      ready: true,
+      applied: true,
+      releaseFrame: frame,
+      precedence,
+      selected,
+      selectedWindowIdentity: selected.windowIdentity ?? null,
+      candidateWindowIdentities: candidates.map(
+        candidate => candidate.window.windowIdentity ?? null
+      ),
+      overlappingCandidateCount: candidates.length,
+      sourceOrderIndex: selectedEntry.sourceOrderIndex,
+      greatestStartFrame: null,
+      tieBreak: 'client-proven-source-registration-order',
+    };
+  }
+
+  const sortedCandidates = candidates
+    .map(entry => entry.window)
+    .sort(compareChargingWindows);
+
   const greatestStartFrame = Math.max(
-    ...candidates.map(window => Number(window.startFrame))
+    ...sortedCandidates.map(window => Number(window.startFrame))
   );
-  const greatestCandidates = candidates.filter(
+  const greatestCandidates = sortedCandidates.filter(
     window => Number(window.startFrame) === greatestStartFrame
   );
   const semantics = new Set(
@@ -69,10 +97,10 @@ export function resolveVerifiedChargingReleaseWindow({
     precedence,
     selected,
     selectedWindowIdentity: selected.windowIdentity ?? null,
-    candidateWindowIdentities: candidates.map(
+    candidateWindowIdentities: sortedCandidates.map(
       candidate => candidate.windowIdentity ?? null
     ),
-    overlappingCandidateCount: candidates.length,
+    overlappingCandidateCount: sortedCandidates.length,
     greatestStartFrame,
     tieBreak:
       greatestCandidates.length > 1

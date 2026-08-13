@@ -10,7 +10,7 @@ const MISA_ID = 107002;
 describe('M12-B3 Misa reduced action surface profile', () => {
   it('publishes an honest runtime-applied partial profile without qualification claims', () => {
     expect(ownerContract).toMatchObject({
-      compilerVersion: 7,
+      compilerVersion: 8,
       ownerId: MISA_ID,
       status: 'character-combat-owner-contracts-compiled',
       summary: {

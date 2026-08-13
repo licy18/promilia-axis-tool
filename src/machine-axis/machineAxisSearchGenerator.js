@@ -17,6 +17,10 @@ import {
 } from '../domain/verifiedJointAttackRuntimeContract';
 import { createSearchAttackChainProjection } from './machineAxisSearchState';
 import {
+  createVerifiedChargedInputScheduling,
+  getConservativeChargedInputDelayFrames,
+} from '../domain/verifiedChargedInputAuthority';
+import {
   isOptimizationCandidateCharacterInScope,
   isOptimizationScenarioActionKindInScope,
 } from '../optimization-scenario/optimizationScenarioPolicy';
@@ -175,14 +179,11 @@ export function createMachineAxisSearchGenerator({
         }
       );
       const maxActorActions = positiveIntegerOrNull(options.maxActionsPerOwner);
-      const limited = maxActorActions
-        ? characterCandidates.slice(0, maxActorActions)
-        : characterCandidates;
       const filtered = options.actionFilter
-        ? limited.filter(entry =>
+        ? characterCandidates.filter(entry =>
             options.actionFilter.character(entry, activeCharacterId)
           )
-        : limited;
+        : characterCandidates;
       const activeSlot = slotsByCharacterId.get(activeCharacterId);
       const kiboId = Number(activeSlot?.loadout?.kiboId);
       const kiboCandidates =
@@ -206,7 +207,14 @@ export function createMachineAxisSearchGenerator({
       const jointRuntimeValidation = validateVerifiedJointAttackRuntimeBinding(
         scenario.jointAttackRuntime
       );
+      let addedActorCandidateCount = 0;
       for (const entry of filtered) {
+        if (
+          maxActorActions != null &&
+          addedActorCandidateCount >= maxActorActions
+        ) {
+          break;
+        }
         const attackInputs = entry.attackInputs ?? [];
         if (String(entry.actionKind) === 'normal-attack') {
           const selection = selectNextAttackInputSegment({
@@ -288,6 +296,7 @@ export function createMachineAxisSearchGenerator({
             source: 'catalog:character-public-action',
             sourceIdentity: entry.mappingIdentity ?? null,
           });
+          addedActorCandidateCount += 1;
         } else {
           if (String(entry.actionKind) === 'star-combo') {
             const jointKiboEntry = verifiedJointKiboEntries[0] ?? null;
@@ -339,26 +348,64 @@ export function createMachineAxisSearchGenerator({
               runtimeBindingHash:
                 jointRuntimeValidation.binding?.bindingHash ?? null,
             });
+            addedActorCandidateCount += 1;
             continue;
           }
-          add({
-            action: createMachineAxisSearchAction({
-              id: nextActionId(),
+          const chargedInput = resolveGeneratedChargedInput({
+            axis,
+            entry,
+            slotId,
+            baseStartFrame,
+            frameRate: Number(scenario.fps) || 60,
+          });
+          if (!chargedInput.ready) {
+            rejectFormalSurface(options, {
+              code: chargedInput.reason,
+              path: 'actions',
+              message: `Charged input authority rejected ${entry.name ?? entry.actionKind}`,
+              actorId: activeActorId,
+              publicActionId: entry.publicActionId,
+              sourceIdentity:
+                entry.chargedInputAuthority?.sourceIdentity ??
+                entry.mappingIdentity ??
+                null,
+            });
+            continue;
+          }
+          for (const semanticVariant of chargedInput.semanticVariants) {
+            if (
+              maxActorActions != null &&
+              addedActorCandidateCount >= maxActorActions
+            ) {
+              break;
+            }
+            add({
+              action: createMachineAxisSearchAction({
+                id: nextActionId(),
+                ownerKind: 'actor',
+                slotId,
+                publicActionId: entry.publicActionId,
+                actionKind: entry.actionKind,
+                level: 1,
+                startFrame: chargedInput.startFrame,
+                physicalInput: chargedInput.physicalInput,
+                semanticVariant,
+              }),
+              ownerId: `actor:${activeCharacterId}`,
               ownerKind: 'actor',
               slotId,
-              publicActionId: entry.publicActionId,
-              actionKind: entry.actionKind,
-              level: 1,
-              startFrame: baseStartFrame,
-            }),
-            ownerId: `actor:${activeCharacterId}`,
-            ownerKind: 'actor',
-            slotId,
-            startFrame: baseStartFrame,
-            label: entry.name ?? entry.actionKind,
-            source: 'catalog:character-public-action',
-            sourceIdentity: entry.mappingIdentity ?? null,
-          });
+              startFrame: chargedInput.startFrame,
+              label: semanticVariant?.semanticName
+                ? `${entry.name ?? entry.actionKind} · ${semanticVariant.semanticName}`
+                : (entry.name ?? entry.actionKind),
+              source: 'catalog:character-public-action',
+              sourceIdentity:
+                semanticVariant?.sourceIdentity ??
+                entry.mappingIdentity ??
+                null,
+            });
+            addedActorCandidateCount += 1;
+          }
         }
       }
 
@@ -625,6 +672,7 @@ export function createMachineAxisSearchAction({
   actionKind = null,
   attackInput = null,
   semanticVariant = null,
+  physicalInput = null,
   targetSlotId = null,
   durationFrames = null,
   level = 1,
@@ -665,7 +713,146 @@ export function createMachineAxisSearchAction({
       level: Math.max(1, Number(level) || 1),
       ...(attackInput ? { attackInput } : {}),
       ...(semanticVariant ? { semanticVariant } : {}),
+      ...(physicalInput ? { physicalInput } : {}),
     },
+  };
+}
+
+function resolveGeneratedChargedInput({
+  axis,
+  entry,
+  slotId,
+  baseStartFrame,
+  frameRate,
+}) {
+  if (String(entry?.actionKind) !== 'charged-attack') {
+    return {
+      ready: true,
+      startFrame: baseStartFrame,
+      physicalInput: null,
+      semanticVariants: [null],
+    };
+  }
+  const authority = entry.chargedInputAuthority;
+  if (!authority || authority.applied !== true) {
+    return {
+      ready: false,
+      reason: authority
+        ? 'charged-input-authority-unresolved'
+        : 'charged-input-authority-missing',
+    };
+  }
+  const previous = (axis?.actions ?? [])
+    .filter(
+      action =>
+        action?.owner?.kind === 'actor' &&
+        String(action.owner.slotId ?? '') === String(slotId ?? '') &&
+        ['public-action', 'switch'].includes(action?.intent?.kind) &&
+        action?.schedule?.mode === 'absolute' &&
+        Number.isInteger(Number(action.schedule.frame))
+    )
+    .sort(
+      (left, right) =>
+        Number(left.schedule.frame) - Number(right.schedule.frame) ||
+        String(left.id).localeCompare(String(right.id), 'en')
+    )
+    .at(-1);
+  const previousBoundary = resolveGeneratedPreviousInputBoundary({
+    previous,
+    authority,
+  });
+  if (previousBoundary.reason) {
+    return { ready: false, reason: previousBoundary.reason };
+  }
+  const earliestPressFrame =
+    previousBoundary.releaseFrame == null
+      ? 0
+      : previousBoundary.releaseFrame + 1;
+  const minimumExecutionFrame =
+    earliestPressFrame + getConservativeChargedInputDelayFrames(frameRate);
+  const startFrame = Math.max(
+    Number(baseStartFrame) + (previous ? 1 : 0),
+    minimumExecutionFrame,
+    previousBoundary.gateFrame ?? 0
+  );
+  const scheduling = createVerifiedChargedInputScheduling({
+    executionFrame: startFrame,
+    earliestPressFrame,
+    frameRate,
+  });
+  if (!scheduling.ready) {
+    return { ready: false, reason: scheduling.reasons[0] };
+  }
+  return {
+    ready: true,
+    startFrame,
+    physicalInput: {
+      mode: 'hold',
+      pressFrame: scheduling.pressFrame,
+      releaseFrame: previousBoundary.releaseFrame,
+      executionFrame: startFrame,
+      authorityHash: authority.authorityHash,
+      sourceKind: 'canonical-generated-charged-prehold',
+    },
+    semanticVariants: createGeneratedChargedSemanticVariants(authority),
+  };
+}
+
+function createGeneratedChargedSemanticVariants(authority) {
+  const composite = authority?.compositeChargingRelease;
+  if (!composite) return [null];
+  return (composite.effectiveTiers ?? []).map(tier => ({
+    selectorIdentity: tier.tierIdentity,
+    selectorKind: 'charging-release-frame',
+    chargeTier: tier.chargeTier,
+    mode: 'release',
+    inputFrame: tier.representativeReleaseFrame,
+    semanticName: tier.semanticName ?? tier.tierIdentity,
+    sourceIdentity: authority.sourceIdentity,
+  }));
+}
+
+function resolveGeneratedPreviousInputBoundary({ previous, authority }) {
+  if (!previous) {
+    return { releaseFrame: null, gateFrame: null, reason: null };
+  }
+  const executionFrame = Number(previous.schedule?.frame);
+  if (previous.intent?.actionKind !== 'charged-attack') {
+    return {
+      releaseFrame: executionFrame + 1,
+      gateFrame: null,
+      reason: null,
+    };
+  }
+  const composite = authority?.compositeChargingRelease;
+  if (composite) {
+    const releaseInputFrame = Number(
+      previous.intent?.semanticVariant?.inputFrame
+    );
+    const [startFrame, endFrame] = composite.sourceWrapperFrameDomain ?? [];
+    if (
+      previous.intent?.semanticVariant?.mode !== 'release' ||
+      !Number.isInteger(releaseInputFrame) ||
+      releaseInputFrame < Number(startFrame) ||
+      releaseInputFrame >= Number(endFrame)
+    ) {
+      return {
+        releaseFrame: null,
+        gateFrame: null,
+        reason: 'charged-input-previous-release-frame-unresolved',
+      };
+    }
+    const releaseFrame = executionFrame + releaseInputFrame;
+    return {
+      releaseFrame,
+      gateFrame: releaseFrame + Number(authority.staticReopenFrame),
+      reason: null,
+    };
+  }
+  return {
+    releaseFrame: executionFrame + 1,
+    gateFrame: executionFrame + Number(authority.staticReopenFrame),
+    reason: null,
   };
 }
 

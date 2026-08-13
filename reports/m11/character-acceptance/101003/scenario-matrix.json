@@ -722,20 +722,20 @@
       "reasons": []
     },
     {
-      "requirementIdentity": "contract:attack-input-chain:attack-input-chain:0:75c5a469f58e8fb0",
+      "requirementIdentity": "contract:attack-input-chain:attack-input-chain:0:8a88087c46ef1784",
       "dimension": "attack-input-chain",
-      "subjectIdentity": "attack-input-chain:0:75c5a469f58e8fb0",
+      "subjectIdentity": "attack-input-chain:0:8a88087c46ef1784",
       "required": true,
       "status": "passed",
       "contractStatus": "verified-attack-input-chain-ready",
       "sourceDisposition": "applied",
-      "sourceRecordHash": "279afb3332e99fdf",
+      "sourceRecordHash": "68f360977e73740f",
       "coverageSelector": {
         "chainIdentity": "han-normal-five-inputs",
         "kind": "attack-input-chain"
       },
       "coverageEdgeIds": [
-        "coverage-edge:42fd14096163c89e"
+        "coverage-edge:a65c026de8505668"
       ],
       "evidenceScenarioIds": [
         "m10-b2:101003:120s-three-actor-golden"
@@ -6514,5 +6514,5 @@
       "window-boundary": 1
     }
   },
-  "matrixHash": "60d710051c5a2f2c"
+  "matrixHash": "6dbb13c3741c219c"
 }

@@ -64,6 +64,7 @@ describe('Machine Axis contract', () => {
       targetSlotId: null,
       durationFrames: null,
       level: null,
+      physicalInput: null,
       semanticVariant: null,
       attackInput: {
         sequenceIndex: 3,

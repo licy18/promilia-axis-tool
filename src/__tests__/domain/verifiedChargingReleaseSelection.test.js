@@ -35,6 +35,29 @@ describe('verified charging release selection', () => {
     }
   );
 
+  it.each([
+    [heavy2, 58, 0, 1],
+    [heavy2, 59, 0, 2],
+    [heavy2, 60, 1, 1],
+    [heavy3, 66, 2, 1],
+    [heavy3, 67, 2, 2],
+    [heavy3, 68, 3, 1],
+  ])(
+    'uses installed-client source order at release frame %i',
+    (windows, releaseFrame, expectedSubSkill, candidateCount) => {
+      const result = resolveVerifiedChargingReleaseWindow({
+        windows,
+        releaseFrame,
+        precedence: 'source-order-first',
+      });
+
+      expect(result.ready).toBe(true);
+      expect(result.selected.executionSubSkillIndex).toBe(expectedSubSkill);
+      expect(result.overlappingCandidateCount).toBe(candidateCount);
+      expect(result.tieBreak).toBe('client-proven-source-registration-order');
+    }
+  );
+
   it('keeps right-open end frames excluded', () => {
     const result = resolveVerifiedChargingReleaseWindow({
       windows: [createWindow('only', 0, 60, 11200141, 0)],
@@ -74,14 +97,15 @@ describe('verified charging release selection', () => {
 
     expect(result.ready).toBe(true);
     expect(result.selected.sourceIdentity).toBe('a-source');
-    expect(result.tieBreak).toBe(
-      'stable-source-identity-equivalent-semantics'
-    );
+    expect(result.tieBreak).toBe('stable-source-identity-equivalent-semantics');
   });
 
   it('normalizes a release-frame input without a public selector identity', () => {
     expect(
-      normalizeActionVariantInputSelection({ mode: 'release', releaseFrame: 67 })
+      normalizeActionVariantInputSelection({
+        mode: 'release',
+        releaseFrame: 67,
+      })
     ).toMatchObject({
       selectorIdentity: null,
       mode: 'release',

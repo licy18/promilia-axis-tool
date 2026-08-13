@@ -36,7 +36,7 @@ describe('107001 Sifliya source contract', () => {
   it('keeps resource, skill-logic, tuning, and Lumi values tied to source fields', () => {
     const contracts = ownerContract.contracts;
     expect(ownerContract).toMatchObject({
-      compilerVersion: 7,
+      compilerVersion: 8,
       ownerId: OWNER_ID,
       status: 'character-combat-owner-contracts-compiled',
       managesResourceContracts: true,

@@ -1,5 +1,6 @@
 import fixture from '../../../fixtures/machine-axis/m11-b-three-actor-authority.json';
 import giseleFixture from '../../../fixtures/character-acceptance/112001-joint-attack-runtime.json';
+import mitiFixture from '../../../fixtures/character-acceptance/108003-active-surface-closure.json';
 import mechanicsPackage from '../../data/generated/verified-combat-mechanics-package.json';
 import { installVerifiedCombatMechanicsPackage } from '../../data/verifiedCombatMechanicsPackage';
 import { createMachineAxisService } from '../../machine-axis/machineAxisService';
@@ -92,6 +93,49 @@ describe('Machine Axis search generator', () => {
     expect(secondRun.map(candidate => candidate.action)).toEqual(
       candidates.map(candidate => candidate.action)
     );
+  });
+
+  it('generates the three source-ordered Miti release tiers as distinct candidates', () => {
+    const axis = structuredClone(mitiFixture);
+    axis.actions = [];
+    axis.scenario.initialRuntimeState.controlledActor = {
+      actorId: 'actor-108003',
+      characterId: 108003,
+    };
+    const candidates = generator
+      .generateNextActions({
+        axis,
+        run: { trace: {} },
+        nextStartFrameByActor: {},
+        options: {
+          activeActorId: 'actor-108003',
+          includeKibo: false,
+          includeSwitch: false,
+        },
+      })
+      .filter(
+        candidate => candidate.action.intent.actionKind === 'charged-attack'
+      );
+
+    expect(
+      candidates.map(candidate => ({
+        tier: candidate.action.intent.semanticVariant.chargeTier,
+        releaseFrame: candidate.action.intent.semanticVariant.inputFrame,
+        selectorIdentity:
+          candidate.action.intent.semanticVariant.selectorIdentity,
+      }))
+    ).toEqual([
+      { tier: 1, releaseFrame: 0, selectorIdentity: 'miti-light-charge' },
+      { tier: 2, releaseFrame: 29, selectorIdentity: 'miti-medium-charge' },
+      { tier: 3, releaseFrame: 67, selectorIdentity: 'miti-full-charge' },
+    ]);
+    expect(
+      candidates.every(
+        candidate =>
+          candidate.action.intent.physicalInput.pressFrame === 0 &&
+          candidate.action.intent.physicalInput.executionFrame === 16
+      )
+    ).toBe(true);
   });
 
   it('exposes only a legal opener and then the exact sourced successor with one stable group', () => {

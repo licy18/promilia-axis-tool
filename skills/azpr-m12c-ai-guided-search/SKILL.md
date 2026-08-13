@@ -57,6 +57,10 @@ description: 用 AI 引导协议控制蓝色星原 AzPr Machine Axis 优化搜�
 - 观察 `prunedCandidates` 占比：过大说明 `maxDamagePerMsBound` 或深度设置过紧；过小说明搜索面仍太宽。
 - 每轮必须保留 `guidanceHash` 与上一轮 feedback 的对应关系；改任何字段都产生新 hash。
 
+### 5. 内层空间仍过大时改用 AI 粗轴
+
+如果动作级 beam 仍然持续过久，必须读取 [references/local-search.md](references/local-search.md)。先由 AI 给出少量完整宏观轴，再用 `search:ai-local` 对显式小邻域做有硬预算的多进程优化；不得用无界增加 beam/depth 代替这一步。
+
 ## 约束
 
 - 诚实：主目标只有在 closed cycle / killed proof 通过时才有 `formalScore`；搜索中间候选的 `score/heuristicScore` 不等于正式评分，不得冒充。
@@ -67,5 +71,6 @@ description: 用 AI 引导协议控制蓝色星原 AzPr Machine Axis 优化搜�
 ## 资源
 
 - [references/protocol.md](references/protocol.md)：guidance/feedback 完整 schema、字段说明、迭代启发、CLI 参数。
+- [references/local-search.md](references/local-search.md)：AI 粗轴合同、局部变量、小分片、多进程、checkpoint 和结果权威边界。
 - [examples/guidance.example.json](examples/guidance.example.json)：最小可用 guidance。
 - [examples/feedback.example.json](examples/feedback.example.json)：反馈输出示例。

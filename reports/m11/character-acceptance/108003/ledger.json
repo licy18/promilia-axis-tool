@@ -404,23 +404,6 @@
       "blocking": false
     },
     {
-      "recordIdentity": "source-gap:403fc37f817ab0a5",
-      "uniqueGapIdentity": "source-gap:403fc37f817ab0a5",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "selected-control-variant-has-no-runnable-hit|verified-action-effective-occupancy-window-unresolved",
-      "sourceKind": "public-action",
-      "sourceIdentities": [
-        "actor|108003|10800301|1|10800310|charged-attack"
-      ],
-      "sourceRecordIdentities": [
-        "actor|108003|10800301|1|10800310|charged-attack",
-        "semantic-gap:e72ebf1bb80bd56751a1"
-      ],
-      "sourceClosureDisposition": null,
-      "blocking": false
-    },
-    {
       "recordIdentity": "source-gap:43873c0ba956a60b",
       "uniqueGapIdentity": "source-gap:43873c0ba956a60b",
       "category": "non-gameplay-source-record",
@@ -598,6 +581,24 @@
       "sourceRecordIdentities": [
         "actor:101010:charged-attack:xiaoyu-continuous-charged|control:10101010|sub:1|window:100-310:2|target:0|sub:0",
         "semantic-gap:cde02510f45c6ca9d53e"
+      ],
+      "sourceClosureDisposition": null,
+      "blocking": false
+    },
+    {
+      "recordIdentity": "source-gap:5ccb0f3b15b4fc1c",
+      "uniqueGapIdentity": "source-gap:5ccb0f3b15b4fc1c",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#TrackGroupSelect-formula102100-self-element108003118@0F->group2-shoot-two-bullet10800317@3F|clear-separate@4F",
+        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0"
+      ],
+      "sourceRecordIdentities": [
+        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0",
+        "semantic-gap:ab1f99c99479703c05b8"
       ],
       "sourceClosureDisposition": null,
       "blocking": false
@@ -1060,6 +1061,23 @@
       "blocking": false
     },
     {
+      "recordIdentity": "source-gap:9fa7616a8aef2861",
+      "uniqueGapIdentity": "source-gap:9fa7616a8aef2861",
+      "category": "non-gameplay-source-record",
+      "status": "not-applicable",
+      "reason": "selected-control-variant-has-no-runnable-hit",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|108003|10800301|1|10800310|charged-attack"
+      ],
+      "sourceRecordIdentities": [
+        "actor|108003|10800301|1|10800310|charged-attack",
+        "semantic-gap:d11f08862e8543f9fa13"
+      ],
+      "sourceClosureDisposition": null,
+      "blocking": false
+    },
+    {
       "recordIdentity": "source-gap:a38c47350b89ed84",
       "uniqueGapIdentity": "source-gap:a38c47350b89ed84",
       "category": "non-gameplay-source-record",
@@ -1357,24 +1375,6 @@
       "sourceRecordIdentities": [
         "hit:10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:5972264583403352192|config:0|bullet:10800301:0:0|element:108003002:0",
         "semantic-gap:ce82ae13ed5369cf402d"
-      ],
-      "sourceClosureDisposition": null,
-      "blocking": false
-    },
-    {
-      "recordIdentity": "source-gap:d238e487170cd433",
-      "uniqueGapIdentity": "source-gap:d238e487170cd433",
-      "category": "non-gameplay-source-record",
-      "status": "not-applicable",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#condition-self-has-element108003118@3F->group2-shoot-two-bullet10800317|clear-separate@4F",
-        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0"
-      ],
-      "sourceRecordIdentities": [
-        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0",
-        "semantic-gap:ab1f99c99479703c05b8"
       ],
       "sourceClosureDisposition": null,
       "blocking": false
@@ -1713,7 +1713,7 @@
     "reasonCounts": {},
     "categoryCounts": {}
   },
-  "ledgerHash": "f95df2bce5c77997",
+  "ledgerHash": "94ecaf966df19d6f",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-form:actor|108003|10800301|1|10800310|charged-attack:default",
@@ -1723,11 +1723,11 @@
       "sourceIdentities": [
         "characters.items[id=108003].skillSlots[group=ground,slot=2]"
       ],
-      "sourceRecordHash": "6fde8d519607e9a2",
+      "sourceRecordHash": "7219b74f262a85a7",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
-          "semantic-gap:e72ebf1bb80bd56751a1"
+          "semantic-gap:d11f08862e8543f9fa13"
         ],
         "rawRecordIdentities": [
           "actor|108003|10800301|1|10800310|charged-attack",
@@ -1739,8 +1739,7 @@
         ],
         "reasons": [
           "nonblocking-source-record-projection",
-          "selected-control-variant-has-no-runnable-hit",
-          "verified-action-effective-occupancy-window-unresolved"
+          "selected-control-variant-has-no-runnable-hit"
         ]
       }
     },
@@ -3396,9 +3395,9 @@
       "reason": "nonblocking-source-record-projection",
       "sourceKind": "requirement-inventory",
       "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#condition-self-has-element108003118@3F->group2-shoot-two-bullet10800317|clear-separate@4F"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#TrackGroupSelect-formula102100-self-element108003118@0F->group2-shoot-two-bullet10800317@3F|clear-separate@4F"
       ],
-      "sourceRecordHash": "34f74ec7aa6d6fa7",
+      "sourceRecordHash": "5e4f7dad1e3d7f32",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
@@ -3452,11 +3451,11 @@
       "reason": "nonblocking-source-record-projection",
       "sourceKind": "requirement-inventory",
       "sourceIdentities": [],
-      "sourceRecordHash": "1151fb673d1d2e76",
+      "sourceRecordHash": "50df6ba14fbb10d5",
       "sourceGapDisposition": {
         "disposition": "not-applicable",
         "sourceRecordIdentities": [
-          "semantic-gap:e72ebf1bb80bd56751a1"
+          "semantic-gap:d11f08862e8543f9fa13"
         ],
         "rawRecordIdentities": [
           "actor|108003|10800301|1|10800310|charged-attack"
@@ -3467,8 +3466,7 @@
         ],
         "reasons": [
           "nonblocking-source-record-projection",
-          "selected-control-variant-has-no-runnable-hit",
-          "verified-action-effective-occupancy-window-unresolved"
+          "selected-control-variant-has-no-runnable-hit"
         ]
       }
     },
@@ -3847,16 +3845,6 @@
       "sourceRecordHash": "06cb115f3009df3a"
     },
     {
-      "recordIdentity": "not-applicable:source-gap:403fc37f817ab0a5",
-      "status": "not-applicable",
-      "reason": "selected-control-variant-has-no-runnable-hit|verified-action-effective-occupancy-window-unresolved",
-      "sourceKind": "public-action",
-      "sourceIdentities": [
-        "actor|108003|10800301|1|10800310|charged-attack"
-      ],
-      "sourceRecordHash": "44b4be34394e34c9"
-    },
-    {
       "recordIdentity": "not-applicable:source-gap:43873c0ba956a60b",
       "status": "not-applicable",
       "reason": "system-or-movement-control-is-not-public-action",
@@ -3966,6 +3954,17 @@
         "actor:101010:charged-attack:xiaoyu-continuous-charged|control:10101010|sub:1|window:100-310:2|target:0|sub:0"
       ],
       "sourceRecordHash": "c90fc80c14af5289"
+    },
+    {
+      "recordIdentity": "not-applicable:source-gap:5ccb0f3b15b4fc1c",
+      "status": "not-applicable",
+      "reason": "runtime-dependent",
+      "sourceKind": "hit",
+      "sourceIdentities": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#TrackGroupSelect-formula102100-self-element108003118@0F->group2-shoot-two-bullet10800317@3F|clear-separate@4F",
+        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0"
+      ],
+      "sourceRecordHash": "c9f66b255d9a59b9"
     },
     {
       "recordIdentity": "not-applicable:source-gap:5f48efd39b46e5e0",
@@ -4244,6 +4243,16 @@
       "sourceRecordHash": "b14cf93c54f21492"
     },
     {
+      "recordIdentity": "not-applicable:source-gap:9fa7616a8aef2861",
+      "status": "not-applicable",
+      "reason": "selected-control-variant-has-no-runnable-hit",
+      "sourceKind": "public-action",
+      "sourceIdentities": [
+        "actor|108003|10800301|1|10800310|charged-attack"
+      ],
+      "sourceRecordHash": "9240da56534a1fa1"
+    },
+    {
       "recordIdentity": "not-applicable:source-gap:a38c47350b89ed84",
       "status": "not-applicable",
       "reason": "effect-trigger-frame-missing",
@@ -4425,17 +4434,6 @@
         "hit:10800301|0|projectile|108003002|10800301|0|0|control:10800301|sub:0|behavior:5972264583403352192|config:0|bullet:10800301:0:0|element:108003002:0"
       ],
       "sourceRecordHash": "d5278344c85b949e"
-    },
-    {
-      "recordIdentity": "not-applicable:source-gap:d238e487170cd433",
-      "status": "not-applicable",
-      "reason": "runtime-dependent",
-      "sourceKind": "hit",
-      "sourceIdentities": [
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#conditional-group2-shoot-two-bullet10800317@3F#occurrence2|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillResourceMaps[0].bulletElements[0]|battle-element-assets.jsonl#elementConfigId=108003126|skill_control_10800342.asset#condition-self-has-element108003118@3F->group2-shoot-two-bullet10800317|clear-separate@4F",
-        "hit:10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0"
-      ],
-      "sourceRecordHash": "3103c2901c0ea755"
     },
     {
       "recordIdentity": "not-applicable:source-gap:d90a19a9e5417fd3",

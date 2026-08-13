@@ -6,16 +6,61 @@
   "scenarioIdentity": "m12-b3-e20-2-108003-s1:120s-canonical-mechanics-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22",
+  "sourcePackageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "bc53846632c5b6f5",
-    "traceHash": "193d4a437770a8c6",
-    "dataHash": "12c35b652b6cc222",
-    "buildHash": "4d1501d6ba4451a2",
-    "headlessAssumptionContracts": [],
+    "inputHash": "ec73ce5c2a12a3a0",
+    "traceHash": "c21f9691ed30e9ba",
+    "dataHash": "cc8df61cf06af728",
+    "buildHash": "b556c356566f4621",
+    "headlessAssumptionContracts": [
+      {
+        "assumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3",
+        "assumptionIdentities": [
+          "108003-charge-threshold-overlap-order-open"
+        ],
+        "assumptionVersion": "1.0.0",
+        "clientParityReady": false,
+        "contractIdentity": "m12-108003-assumption-runtime-v1",
+        "futureClientEvidencePolicy": "if future client evidence differs, increment assumptionVersion, invalidate this assumptionHash, and recompute every affected profile, input, data, trace, build, acceptance binding, and formal score",
+        "ownerId": 108003,
+        "policyAuthority": "user-approved-headless-assumption",
+        "settlementContract": {
+          "clientParityReady": false,
+          "contractHash": "2e3095db4b8c9232",
+          "contractIdentity": "m12-enemy-settlement-runtime-v2",
+          "declaredPacketOrder": [
+            "read-pre-break-state-for-hp-output",
+            "settle-toughness-and-break-transition",
+            "commit-current-packet-hp-mutation",
+            "publish-updated-break-state-to-later-canonical-packets"
+          ],
+          "formalScoring": {
+            "clientParityRequiredForCurrentFormalScore": false,
+            "clientParityStatus": "controlled-capture-pending-nonblocking",
+            "formalReady": true,
+            "formalStatus": "formal-score-ready-runtime-baseline",
+            "replacementPolicy": "new-client-evidence-contract-version-invalidates-and-recomputes-affected-scores",
+            "scoreAuthority": "formal-for-current-runtime-contract",
+            "scoreBasis": "product-approved-versioned-headless-runtime-semantics"
+          },
+          "semantics": {
+            "breakActivation": "after-breaking-packet-toughness-settlement",
+            "breakingPacketHpDamagePhase": "pre-break",
+            "breakIntervalEnd": "right-open",
+            "fastestKillScoreBoundary": "first-lethal-settlement-cursor-inclusive-tail-non-scoring",
+            "finiteDeathTruncation": "stop-enemy-hp-and-toughness-settlement-after-first-lethal-packet",
+            "formalScenarioExecutionPath": "local-controlled",
+            "sameFrameStateOrder": "weakness-state-tick-before-combat-hit",
+            "subsequentSameFramePacket": "post-break-by-canonical-source-sequence",
+            "toughnessAdvanceResolution": "fixed-100ms-runtime-tick"
+          }
+        },
+        "status": "headless-assumption-contract-applied"
+      }
+    ],
     "criticalPolicy": "non-critical"
   },
   "actual": {
@@ -69,12 +114,26 @@
           "semanticName": "重击满蓄力",
           "controlSkillId": 10800342,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 92,
+          "chargingRelease": {
+            "bindingIdentity": "miti-charge-release-sub0",
+            "sourceControlSkillId": 10800310,
+            "sourceSubSkillIndex": 0,
+            "releaseFrame": 67,
+            "selectedWindowIdentity": "miti-charge-full",
+            "candidateWindowIdentities": [
+              "miti-charge-full"
+            ],
+            "precedence": "source-order-first",
+            "boundary": "right-open",
+            "assumptionIdentity": "108003-charge-threshold-overlap-order-open",
+            "assumptionVersion": "1.0.0",
+            "assumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3"
+          },
+          "appliedAssumptionIdentity": "108003-charge-threshold-overlap-order-open",
+          "appliedAssumptionVersion": "1.0.0",
+          "appliedAssumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3",
+          "sourceKind": "verified-charging-release-window"
         },
         {
           "actionId": "miti-full-charge-electrified-on",
@@ -82,12 +141,26 @@
           "semanticName": "重击满蓄力",
           "controlSkillId": 10800342,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 92,
+          "chargingRelease": {
+            "bindingIdentity": "miti-charge-release-sub0",
+            "sourceControlSkillId": 10800310,
+            "sourceSubSkillIndex": 0,
+            "releaseFrame": 67,
+            "selectedWindowIdentity": "miti-charge-full",
+            "candidateWindowIdentities": [
+              "miti-charge-full"
+            ],
+            "precedence": "source-order-first",
+            "boundary": "right-open",
+            "assumptionIdentity": "108003-charge-threshold-overlap-order-open",
+            "assumptionVersion": "1.0.0",
+            "assumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3"
+          },
+          "appliedAssumptionIdentity": "108003-charge-threshold-overlap-order-open",
+          "appliedAssumptionVersion": "1.0.0",
+          "appliedAssumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3",
+          "sourceKind": "verified-charging-release-window"
         },
         {
           "actionId": "miti-normal-a1",
@@ -131,28 +204,56 @@
         {
           "actionId": "miti-short-charge-electrified-off",
           "ownerId": 108003,
-          "semanticName": "重击短蓄力",
+          "semanticName": "重击中蓄力",
           "controlSkillId": 10800341,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 54,
+          "chargingRelease": {
+            "bindingIdentity": "miti-charge-release-sub0",
+            "sourceControlSkillId": 10800310,
+            "sourceSubSkillIndex": 0,
+            "releaseFrame": 29,
+            "selectedWindowIdentity": "miti-charge-medium",
+            "candidateWindowIdentities": [
+              "miti-charge-medium"
+            ],
+            "precedence": "source-order-first",
+            "boundary": "right-open",
+            "assumptionIdentity": "108003-charge-threshold-overlap-order-open",
+            "assumptionVersion": "1.0.0",
+            "assumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3"
+          },
+          "appliedAssumptionIdentity": "108003-charge-threshold-overlap-order-open",
+          "appliedAssumptionVersion": "1.0.0",
+          "appliedAssumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3",
+          "sourceKind": "verified-charging-release-window"
         },
         {
           "actionId": "miti-short-charge-second-cycle",
           "ownerId": 108003,
-          "semanticName": "重击短蓄力",
+          "semanticName": "重击中蓄力",
           "controlSkillId": 10800341,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "chargingRelease": null,
-          "appliedAssumptionIdentity": null,
-          "appliedAssumptionVersion": null,
-          "appliedAssumptionHash": null,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 54,
+          "chargingRelease": {
+            "bindingIdentity": "miti-charge-release-sub0",
+            "sourceControlSkillId": 10800310,
+            "sourceSubSkillIndex": 0,
+            "releaseFrame": 29,
+            "selectedWindowIdentity": "miti-charge-medium",
+            "candidateWindowIdentities": [
+              "miti-charge-medium"
+            ],
+            "precedence": "source-order-first",
+            "boundary": "right-open",
+            "assumptionIdentity": "108003-charge-threshold-overlap-order-open",
+            "assumptionVersion": "1.0.0",
+            "assumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3"
+          },
+          "appliedAssumptionIdentity": "108003-charge-threshold-overlap-order-open",
+          "appliedAssumptionVersion": "1.0.0",
+          "appliedAssumptionHash": "0b5a2f3053f60ef2296c219b34e70f2da17db9ca47ed0584716bb1888b83eaa3",
+          "sourceKind": "verified-charging-release-window"
         },
         {
           "actionId": "miti-star-skill-1",
@@ -226,16 +327,16 @@
           "semanticName": "重击满蓄力",
           "controlSkillId": 10800342,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 92,
+          "sourceKind": "verified-charging-release-window"
         },
         "miti-full-charge-electrified-on": {
           "ownerId": 108003,
           "semanticName": "重击满蓄力",
           "controlSkillId": 10800342,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 92,
+          "sourceKind": "verified-charging-release-window"
         },
         "miti-normal-a1": {
           "ownerId": 108003,
@@ -263,19 +364,19 @@
         },
         "miti-short-charge-electrified-off": {
           "ownerId": 108003,
-          "semanticName": "重击短蓄力",
+          "semanticName": "重击中蓄力",
           "controlSkillId": 10800341,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 54,
+          "sourceKind": "verified-charging-release-window"
         },
         "miti-short-charge-second-cycle": {
           "ownerId": 108003,
-          "semanticName": "重击短蓄力",
+          "semanticName": "重击中蓄力",
           "controlSkillId": 10800341,
           "subSkillIndex": 0,
-          "actualDurationFrames": 25,
-          "sourceKind": "workbench-semantic-input-variant"
+          "actualDurationFrames": 54,
+          "sourceKind": "verified-charging-release-window"
         },
         "miti-star-skill-1": {
           "ownerId": 108003,
@@ -340,19 +441,19 @@
         "miti-full-charge-electrified-off": {
           "hitCount": 13,
           "frames": [
-            973,
-            973,
-            983,
-            993,
-            1003,
-            1013,
-            1023,
-            1033,
-            1043,
-            1053,
-            1063,
-            1073,
-            1083
+            1040,
+            1040,
+            1050,
+            1060,
+            1070,
+            1080,
+            1090,
+            1100,
+            1110,
+            1120,
+            1130,
+            1140,
+            1150
           ],
           "totalHpDamage": 1174,
           "totalToughnessDamage": 1148
@@ -360,45 +461,45 @@
         "miti-full-charge-electrified-on": {
           "hitCount": 39,
           "frames": [
-            723,
-            723,
-            723,
-            723,
-            723,
-            723,
-            733,
-            733,
-            733,
-            743,
-            743,
-            743,
-            753,
-            753,
-            753,
-            763,
-            763,
-            763,
-            773,
-            773,
-            773,
-            783,
-            783,
-            783,
-            793,
-            793,
-            793,
-            803,
-            803,
-            803,
-            813,
-            813,
-            813,
-            823,
-            823,
-            823,
-            833,
-            833,
-            833
+            790,
+            790,
+            790,
+            790,
+            790,
+            790,
+            800,
+            800,
+            800,
+            810,
+            810,
+            810,
+            820,
+            820,
+            820,
+            830,
+            830,
+            830,
+            840,
+            840,
+            840,
+            850,
+            850,
+            850,
+            860,
+            860,
+            860,
+            870,
+            870,
+            870,
+            880,
+            880,
+            880,
+            890,
+            890,
+            890,
+            900,
+            900,
+            900
           ],
           "totalHpDamage": 3522,
           "totalToughnessDamage": 3444
@@ -436,13 +537,13 @@
         "miti-short-charge-electrified-off": {
           "hitCount": 7,
           "frames": [
-            851,
-            851,
-            872,
-            892,
-            913,
-            933,
-            954
+            880,
+            880,
+            901,
+            921,
+            942,
+            962,
+            983
           ],
           "totalHpDamage": 339,
           "totalToughnessDamage": 331
@@ -450,13 +551,13 @@
         "miti-short-charge-second-cycle": {
           "hitCount": 7,
           "frames": [
-            1901,
-            1901,
-            1922,
-            1942,
-            1963,
-            1983,
-            2004
+            1930,
+            1930,
+            1951,
+            1971,
+            1992,
+            2012,
+            2033
           ],
           "totalHpDamage": 339,
           "totalToughnessDamage": 331
@@ -700,20 +801,20 @@
               "afterValue": 18.618668
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 18.618668,
-              "change": 1.564987,
-              "afterValue": 20.183655
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 20.28772,
+              "beforeValue": 18.722733,
               "change": 2,
-              "afterValue": 22.28772
+              "afterValue": 20.722733
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 20.733139,
+              "change": 1.564987,
+              "afterValue": 22.298126
             },
             {
               "timeMs": 14016.666667,
@@ -724,12 +825,12 @@
               "afterValue": 24.391785
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 24.402192,
+              "beforeValue": 24.454224,
               "change": 0.484985,
-              "afterValue": 24.887177
+              "afterValue": 24.939209
             },
             {
               "timeMs": 29016.666667,
@@ -780,20 +881,20 @@
               "afterValue": 33.499786
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 33.562226,
-              "change": 0.484985,
-              "afterValue": 34.047211
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 34.088837,
+              "beforeValue": 33.603851,
               "change": 2,
-              "afterValue": 36.088837
+              "afterValue": 35.603851
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 35.614258,
+              "change": 0.484985,
+              "afterValue": 36.099243
             },
             {
               "timeMs": 33016.666667,
@@ -976,20 +1077,20 @@
               "afterValue": 18.618668
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 18.618668,
-              "change": 1.564987,
-              "afterValue": 20.183655
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 20.28772,
+              "beforeValue": 18.722733,
               "change": 2,
-              "afterValue": 22.28772
+              "afterValue": 20.722733
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 20.733139,
+              "change": 1.564987,
+              "afterValue": 22.298126
             },
             {
               "timeMs": 14016.666667,
@@ -1000,12 +1101,12 @@
               "afterValue": 24.391785
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 24.402192,
+              "beforeValue": 24.454224,
               "change": 0.484985,
-              "afterValue": 24.887177
+              "afterValue": 24.939209
             },
             {
               "timeMs": 29016.666667,
@@ -1056,20 +1157,20 @@
               "afterValue": 33.155869
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 33.218308,
-              "change": 0.484985,
-              "afterValue": 33.703293
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 33.744919,
+              "beforeValue": 33.259933,
               "change": 2,
-              "afterValue": 35.744919
+              "afterValue": 35.259933
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 35.27034,
+              "change": 0.484985,
+              "afterValue": 35.755325
             },
             {
               "timeMs": 33016.666667,
@@ -1187,20 +1288,20 @@
               "afterValue": 8.770645
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.770645,
-              "change": 3.12999,
-              "afterValue": 11.900635
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp",
-              "beforeValue": 12.108917,
+              "beforeValue": 8.978928,
               "change": 2,
-              "afterValue": 14.108917
+              "afterValue": 10.978928
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 10.999755,
+              "change": 3.12999,
+              "afterValue": 14.129745
             },
             {
               "timeMs": 14016.666667,
@@ -1211,12 +1312,12 @@
               "afterValue": 16.3172
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.338028,
+              "beforeValue": 16.442169,
               "change": 0.969986,
-              "afterValue": 17.308014
+              "afterValue": 17.412155
             },
             {
               "timeMs": 29016.666667,
@@ -1275,20 +1376,20 @@
               "afterValue": 32.504059
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 32.629028,
-              "change": 0.969986,
-              "afterValue": 33.599014
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp",
-              "beforeValue": 33.682327,
+              "beforeValue": 32.712341,
               "change": 2,
-              "afterValue": 35.682327
+              "afterValue": 34.712341
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 34.73317,
+              "change": 0.969986,
+              "afterValue": 35.703156
             },
             {
               "timeMs": 33016.666667,
@@ -1518,20 +1619,20 @@
               "afterValue": 18.618668
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 18.618668,
-              "change": 1.564987,
-              "afterValue": 20.183655
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 20.28772,
+              "beforeValue": 18.722733,
               "change": 2,
-              "afterValue": 22.28772
+              "afterValue": 20.722733
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 20.733139,
+              "change": 1.564987,
+              "afterValue": 22.298126
             },
             {
               "timeMs": 14016.666667,
@@ -1542,12 +1643,12 @@
               "afterValue": 24.391785
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 24.402192,
+              "beforeValue": 24.454224,
               "change": 0.484985,
-              "afterValue": 24.887177
+              "afterValue": 24.939209
             },
             {
               "timeMs": 29016.666667,
@@ -1598,20 +1699,20 @@
               "afterValue": 33.499786
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 33.562226,
-              "change": 0.484985,
-              "afterValue": 34.047211
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 34.088837,
+              "beforeValue": 33.603851,
               "change": 2,
-              "afterValue": 36.088837
+              "afterValue": 35.603851
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 35.614258,
+              "change": 0.484985,
+              "afterValue": 36.099243
             },
             {
               "timeMs": 33016.666667,
@@ -1794,20 +1895,20 @@
               "afterValue": 18.618668
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 18.618668,
-              "change": 1.564987,
-              "afterValue": 20.183655
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 20.28772,
+              "beforeValue": 18.722733,
               "change": 2,
-              "afterValue": 22.28772
+              "afterValue": 20.722733
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 20.733139,
+              "change": 1.564987,
+              "afterValue": 22.298126
             },
             {
               "timeMs": 14016.666667,
@@ -1818,12 +1919,12 @@
               "afterValue": 24.391785
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 24.402192,
+              "beforeValue": 24.454224,
               "change": 0.484985,
-              "afterValue": 24.887177
+              "afterValue": 24.939209
             },
             {
               "timeMs": 29016.666667,
@@ -1874,20 +1975,20 @@
               "afterValue": 33.155869
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-shared-recovery",
-              "beforeValue": 33.218308,
-              "change": 0.484985,
-              "afterValue": 33.703293
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp-shared",
-              "beforeValue": 33.744919,
+              "beforeValue": 33.259933,
               "change": 2,
-              "afterValue": 35.744919
+              "afterValue": 35.259933
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-shared-recovery",
+              "beforeValue": 35.27034,
+              "change": 0.484985,
+              "afterValue": 35.755325
             },
             {
               "timeMs": 33016.666667,
@@ -2005,20 +2106,20 @@
               "afterValue": 8.770645
             },
             {
-              "timeMs": 12050,
-              "actionId": "miti-full-charge-electrified-on",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 8.770645,
-              "change": 3.12999,
-              "afterValue": 11.900635
-            },
-            {
               "timeMs": 13016.666667,
               "actionId": "miti-star-skill-1",
               "reason": "verified-direct-sp",
-              "beforeValue": 12.108917,
+              "beforeValue": 8.978928,
               "change": 2,
-              "afterValue": 14.108917
+              "afterValue": 10.978928
+            },
+            {
+              "timeMs": 13166.666667,
+              "actionId": "miti-full-charge-electrified-on",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 10.999755,
+              "change": 3.12999,
+              "afterValue": 14.129745
             },
             {
               "timeMs": 14016.666667,
@@ -2029,12 +2130,12 @@
               "afterValue": 16.3172
             },
             {
-              "timeMs": 14183.333334,
+              "timeMs": 14666.666667,
               "actionId": "miti-short-charge-electrified-off",
               "reason": "verified-hit-sp-recovery",
-              "beforeValue": 16.338028,
+              "beforeValue": 16.442169,
               "change": 0.969986,
-              "afterValue": 17.308014
+              "afterValue": 17.412155
             },
             {
               "timeMs": 29016.666667,
@@ -2093,20 +2194,20 @@
               "afterValue": 32.504059
             },
             {
-              "timeMs": 31683.333334,
-              "actionId": "miti-short-charge-second-cycle",
-              "reason": "verified-hit-sp-recovery",
-              "beforeValue": 32.629028,
-              "change": 0.969986,
-              "afterValue": 33.599014
-            },
-            {
               "timeMs": 32016.666667,
               "actionId": "miti-star-skill-2-exact-cooldown",
               "reason": "verified-direct-sp",
-              "beforeValue": 33.682327,
+              "beforeValue": 32.712341,
               "change": 2,
-              "afterValue": 35.682327
+              "afterValue": 34.712341
+            },
+            {
+              "timeMs": 32166.666667,
+              "actionId": "miti-short-charge-second-cycle",
+              "reason": "verified-hit-sp-recovery",
+              "beforeValue": 34.73317,
+              "change": 0.969986,
+              "afterValue": 35.703156
             },
             {
               "timeMs": 33016.666667,
@@ -2201,7 +2302,7 @@
         "miti-full-charge-electrified-on": {
           "eventCount": 1,
           "frames": [
-            723
+            790
           ],
           "changes": [
             3.12999
@@ -2214,7 +2315,7 @@
         "miti-short-charge-electrified-off": {
           "eventCount": 1,
           "frames": [
-            851
+            880
           ],
           "changes": [
             0.969986
@@ -2227,7 +2328,7 @@
         "miti-short-charge-second-cycle": {
           "eventCount": 1,
           "frames": [
-            1901
+            1930
           ],
           "changes": [
             0.969986
@@ -2386,9 +2487,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|12050|26",
+          "eventIdentity": "tuning-mark|250|acquire|13166.666667|26",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -2398,9 +2499,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|12050|27",
+          "eventIdentity": "tuning-mark|250|acquire|13166.666667|27",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -2410,9 +2511,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|15900|10800341|0|bulletElements|1|-5157550345730700713|104|7",
+          "eventIdentity": "tuning-held|250|15700|10800341|0|bulletElements|1|-5157550345730700713|63|5",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 954,
+          "frame": 942,
           "kind": "held-trigger",
           "profileKey": "thunder",
           "markId": 250,
@@ -2422,9 +2523,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|16216.666667|74",
+          "eventIdentity": "tuning-mark|250|acquire|17333.333334|74",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -2446,9 +2547,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|20950|10800322|0|elements|0|-9044920117113841032|157|10",
+          "eventIdentity": "tuning-held|250|20750|10800322|0|elements|0|-9044920117113841032|145|9",
           "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
-          "frame": 1257,
+          "frame": 1245,
           "kind": "held-trigger",
           "profileKey": "thunder",
           "markId": 250,
@@ -2600,7 +2701,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "stateIdentity": null,
           "stateName": null,
           "operation": null,
@@ -2612,7 +2713,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 724,
+          "frame": 791,
           "stateIdentity": "miti-electrified",
           "stateName": "蓄电",
           "operation": "consume",
@@ -2624,7 +2725,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "stateIdentity": null,
           "stateName": null,
           "operation": null,
@@ -2662,7 +2763,7 @@
         {
           "actionId": "miti-full-charge-electrified-on",
           "groupIdentity": "miti-electrified-full-charge-extra-arrows",
-          "frame": 723,
+          "frame": 787,
           "stateIdentity": "miti-electrified",
           "beforeStacks": 1,
           "consumedStacks": 0,
@@ -2673,7 +2774,7 @@
         {
           "actionId": "miti-full-charge-electrified-off",
           "groupIdentity": "miti-electrified-full-charge-extra-arrows",
-          "frame": 973,
+          "frame": 1037,
           "stateIdentity": "miti-electrified",
           "beforeStacks": 0,
           "consumedStacks": 0,
@@ -2832,6 +2933,24 @@
             "dynamicBaseRaw": 0,
             "dynamicPercentRaw": 0,
             "dynamicExtraRaw": 215,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 7,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 86,
+            "effectIds": [
+              "tuning-mark:250:persistent"
+            ]
+          },
+          {
+            "attributeId": 8,
+            "dynamicBaseRaw": 0,
+            "dynamicPercentRaw": 0,
+            "dynamicExtraRaw": 172,
             "effectIds": [
               "tuning-mark:250:persistent"
             ]
@@ -3198,7 +3317,7 @@
       ],
       "primaryEffectFormulaValuesById": {},
       "baselineEffectFormulaValuesById": {},
-      "baselineReplayHash": "00c482b1c57861ab01912d76f972ed9b08e20cbaf7ac20fcf5ae93a467b3ee86"
+      "baselineReplayHash": "a8a4ce9656a130b6f8227916954d1b23b2079e268a19424d6d6d54a0d1bb1bcd"
     },
     "trace": {
       "damage": [
@@ -3676,7 +3795,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|bulletElements|0|6551815408118607858|3|1",
           "elementId": 108003126,
           "sourceSequencePath": [
@@ -3694,7 +3813,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|bulletElements|0|6551815408118607858|3|2",
           "elementId": 108003126,
           "sourceSequencePath": [
@@ -3712,7 +3831,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0",
           "elementId": 108003126,
           "sourceSequencePath": [
@@ -3730,7 +3849,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|3|4",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3748,7 +3867,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|3|5",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3766,7 +3885,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|3|6",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3784,7 +3903,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 733,
+          "frame": 800,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|13|7",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3802,7 +3921,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 733,
+          "frame": 800,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|13|8",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3820,7 +3939,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 733,
+          "frame": 800,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|13|9",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3838,7 +3957,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 743,
+          "frame": 810,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|23|10",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3856,7 +3975,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 743,
+          "frame": 810,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|23|11",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3874,7 +3993,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 743,
+          "frame": 810,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|23|12",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3892,7 +4011,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 753,
+          "frame": 820,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|33|13",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3910,7 +4029,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 753,
+          "frame": 820,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|33|14",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3928,7 +4047,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 753,
+          "frame": 820,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|33|15",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3946,7 +4065,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 763,
+          "frame": 830,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|43|16",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3964,7 +4083,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 763,
+          "frame": 830,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|43|17",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -3982,7 +4101,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 763,
+          "frame": 830,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|43|18",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4000,7 +4119,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 773,
+          "frame": 840,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|53|19",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4018,7 +4137,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 773,
+          "frame": 840,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|53|20",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4036,7 +4155,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 773,
+          "frame": 840,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|53|21",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4054,7 +4173,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 783,
+          "frame": 850,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|63|22",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4072,7 +4191,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 783,
+          "frame": 850,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|63|23",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4090,7 +4209,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 783,
+          "frame": 850,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|63|24",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4108,7 +4227,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 793,
+          "frame": 860,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|73|25",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4126,7 +4245,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 793,
+          "frame": 860,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|73|26",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4144,7 +4263,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 793,
+          "frame": 860,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|73|27",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4162,7 +4281,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 803,
+          "frame": 870,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|83|28",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4180,7 +4299,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 803,
+          "frame": 870,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|83|29",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4198,7 +4317,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 803,
+          "frame": 870,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|83|30",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4216,7 +4335,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 813,
+          "frame": 880,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|93|31",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4234,7 +4353,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 813,
+          "frame": 880,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|93|32",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4252,7 +4371,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 813,
+          "frame": 880,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|93|33",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4269,116 +4388,8 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 823,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|34",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            34,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 823,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|35",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            35,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 823,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|36",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            36,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 833,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|37",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            37,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 833,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|38",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            38,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-on",
-          "frame": 833,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|39",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            5,
-            39,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 851,
+          "frame": 880,
           "hitIdentity": "10800341|0|projectile|108003125|10800314|0|0|control:10800341|sub:0|behavior:-5881325328861887341|config:0|bullet:10800314:0:0|element:108003125:0",
           "elementId": 108003125,
           "sourceSequencePath": [
@@ -4396,7 +4407,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 851,
+          "frame": 880,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|1|2",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4413,8 +4424,116 @@
         {
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 890,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|34",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            34,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 890,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|35",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            35,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 890,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|36",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            36,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 900,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|37",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            37,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 900,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|38",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            38,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-on",
+          "frame": 900,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|39",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            5,
+            39,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 872,
+          "frame": 901,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|22|3",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4432,7 +4551,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 892,
+          "frame": 921,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|42|4",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4450,7 +4569,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 913,
+          "frame": 942,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|63|5",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4466,9 +4585,29 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "miti-short-charge-electrified-off",
+          "frame": 942,
+          "hitIdentity": null,
+          "elementId": 251,
+          "sourceSequencePath": [
+            6,
+            50,
+            71,
+            251,
+            0
+          ],
+          "rawDamage": 2986,
+          "hpDamage": 2986,
+          "toughnessDamage": 2090,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 933,
+          "frame": 962,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|83|6",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4486,7 +4625,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 954,
+          "frame": 983,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|104|7",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -4502,29 +4641,9 @@
         },
         {
           "eventId": null,
-          "eventType": "VERIFIED_TUNING_DAMAGE",
-          "actionId": "miti-short-charge-electrified-off",
-          "frame": 954,
-          "hitIdentity": null,
-          "elementId": 251,
-          "sourceSequencePath": [
-            6,
-            50,
-            73,
-            251,
-            0
-          ],
-          "rawDamage": 2986,
-          "hpDamage": 2986,
-          "toughnessDamage": 2090,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "hitIdentity": "10800342|0|projectile|108003126|10800311|0|0|control:10800342|sub:0|behavior:-4957849651940093077|config:0|bullet:10800311:0:0|element:108003126:0",
           "elementId": 108003126,
           "sourceSequencePath": [
@@ -4542,7 +4661,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|3|6",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4560,7 +4679,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 983,
+          "frame": 1050,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|13|9",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4578,7 +4697,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 993,
+          "frame": 1060,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|23|12",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4596,7 +4715,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1003,
+          "frame": 1070,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|33|15",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4614,7 +4733,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1013,
+          "frame": 1080,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|43|18",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4632,7 +4751,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1023,
+          "frame": 1090,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|53|21",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4650,7 +4769,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1033,
+          "frame": 1100,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|63|24",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4668,7 +4787,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1043,
+          "frame": 1110,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|73|27",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4686,7 +4805,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1053,
+          "frame": 1120,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|83|30",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4704,7 +4823,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1063,
+          "frame": 1130,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|93|33",
           "elementId": 108003129,
           "sourceSequencePath": [
@@ -4722,30 +4841,12 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 1073,
+          "frame": 1140,
           "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|103|36",
           "elementId": 108003129,
           "sourceSequencePath": [
             7,
             36,
-            0
-          ],
-          "rawDamage": 40,
-          "hpDamage": 40,
-          "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_COMBAT_HIT",
-          "actionId": "miti-full-charge-electrified-off",
-          "frame": 1083,
-          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|39",
-          "elementId": 108003129,
-          "sourceSequencePath": [
-            7,
-            39,
             0
           ],
           "rawDamage": 40,
@@ -4770,6 +4871,24 @@
           "rawDamage": 50,
           "hpDamage": 50,
           "toughnessDamage": 35,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_COMBAT_HIT",
+          "actionId": "miti-full-charge-electrified-off",
+          "frame": 1150,
+          "hitIdentity": "10800342|0|bulletElements|4|8304950733444486178|113|39",
+          "elementId": 108003129,
+          "sourceSequencePath": [
+            7,
+            39,
+            0
+          ],
+          "rawDamage": 40,
+          "hpDamage": 40,
+          "toughnessDamage": 39,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -4965,6 +5084,27 @@
         },
         {
           "eventId": null,
+          "eventType": "VERIFIED_TUNING_DAMAGE",
+          "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
+          "frame": 1245,
+          "hitIdentity": null,
+          "elementId": 251,
+          "sourceSequencePath": [
+            8,
+            0,
+            50,
+            97,
+            251,
+            0
+          ],
+          "rawDamage": 2986,
+          "hpDamage": 2986,
+          "toughnessDamage": 2090,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
           "frame": 1257,
@@ -4979,27 +5119,6 @@
           "rawDamage": 50,
           "hpDamage": 50,
           "toughnessDamage": 35,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TUNING_DAMAGE",
-          "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
-          "frame": 1257,
-          "hitIdentity": null,
-          "elementId": 251,
-          "sourceSequencePath": [
-            8,
-            0,
-            50,
-            98,
-            251,
-            0
-          ],
-          "rawDamage": 2986,
-          "hpDamage": 2986,
-          "toughnessDamage": 2090,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -5244,7 +5363,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1901,
+          "frame": 1930,
           "hitIdentity": "10800341|0|projectile|108003125|10800314|0|0|control:10800341|sub:0|behavior:-5881325328861887341|config:0|bullet:10800314:0:0|element:108003125:0",
           "elementId": 108003125,
           "sourceSequencePath": [
@@ -5262,7 +5381,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1901,
+          "frame": 1930,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|1|2",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5280,7 +5399,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1922,
+          "frame": 1951,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|22|3",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5298,7 +5417,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1942,
+          "frame": 1971,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|42|4",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5316,7 +5435,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1963,
+          "frame": 1992,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|63|5",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5334,7 +5453,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 1983,
+          "frame": 2012,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|83|6",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5352,7 +5471,7 @@
           "eventId": null,
           "eventType": "VERIFIED_COMBAT_HIT",
           "actionId": "miti-short-charge-second-cycle",
-          "frame": 2004,
+          "frame": 2033,
           "hitIdentity": "10800341|0|bulletElements|1|-5157550345730700713|104|7",
           "elementId": 108003127,
           "sourceSequencePath": [
@@ -5363,62 +5482,6 @@
           "rawDamage": 40,
           "hpDamage": 40,
           "toughnessDamage": 39,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "miti-short-charge-second-cycle",
-          "frame": 5610,
-          "hitIdentity": null,
-          "elementId": null,
-          "sourceSequencePath": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": -268.170959,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "miti-short-charge-second-cycle",
-          "frame": 5616,
-          "hitIdentity": null,
-          "elementId": null,
-          "sourceSequencePath": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": -268.170959,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "miti-short-charge-second-cycle",
-          "frame": 5622,
-          "hitIdentity": null,
-          "elementId": null,
-          "sourceSequencePath": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": -268.170959,
-          "actorSpRecovery": null,
-          "kiboSpRecovery": null
-        },
-        {
-          "eventId": null,
-          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
-          "actionId": "miti-short-charge-second-cycle",
-          "frame": 5628,
-          "hitIdentity": null,
-          "elementId": null,
-          "sourceSequencePath": null,
-          "rawDamage": 0,
-          "hpDamage": 0,
-          "toughnessDamage": -268.170959,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
         },
@@ -6328,6 +6391,62 @@
           "sourceSequencePath": null,
           "rawDamage": 0,
           "hpDamage": 0,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "miti-short-charge-second-cycle",
+          "frame": 6024,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "miti-short-charge-second-cycle",
+          "frame": 6030,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "miti-short-charge-second-cycle",
+          "frame": 6036,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
+          "toughnessDamage": -268.170959,
+          "actorSpRecovery": null,
+          "kiboSpRecovery": null
+        },
+        {
+          "eventId": null,
+          "eventType": "VERIFIED_TOUGHNESS_STATE_CHANGE",
+          "actionId": "miti-short-charge-second-cycle",
+          "frame": 6042,
+          "hitIdentity": null,
+          "elementId": null,
+          "sourceSequencePath": null,
+          "rawDamage": 0,
+          "hpDamage": 0,
           "toughnessDamage": -179.374788,
           "actorSpRecovery": null,
           "kiboSpRecovery": null
@@ -6362,9 +6481,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|12050|26",
+          "eventIdentity": "tuning-mark|250|acquire|13166.666667|26",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -6374,9 +6493,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|12050|27",
+          "eventIdentity": "tuning-mark|250|acquire|13166.666667|27",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -6386,9 +6505,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|15900|10800341|0|bulletElements|1|-5157550345730700713|104|7",
+          "eventIdentity": "tuning-held|250|15700|10800341|0|bulletElements|1|-5157550345730700713|63|5",
           "actionId": "miti-short-charge-electrified-off",
-          "frame": 954,
+          "frame": 942,
           "kind": "held-trigger",
           "profileKey": "thunder",
           "markId": 250,
@@ -6398,9 +6517,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-mark|250|acquire|16216.666667|74",
+          "eventIdentity": "tuning-mark|250|acquire|17333.333334|74",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "kind": "acquire",
           "profileKey": "thunder",
           "markId": 250,
@@ -6422,9 +6541,9 @@
           "maximum": 5
         },
         {
-          "eventIdentity": "tuning-held|250|20950|10800322|0|elements|0|-9044920117113841032|157|10",
+          "eventIdentity": "tuning-held|250|20750|10800322|0|elements|0|-9044920117113841032|145|9",
           "actionId": "miti-switch-out-star-carry--on-exit--actor-108003--star-carry",
-          "frame": 1257,
+          "frame": 1245,
           "kind": "held-trigger",
           "profileKey": "thunder",
           "markId": 250,
@@ -6546,7 +6665,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "stateIdentity": null,
           "stateName": null,
           "operation": null,
@@ -6558,7 +6677,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 724,
+          "frame": 791,
           "stateIdentity": "miti-electrified",
           "stateName": "蓄电",
           "operation": "consume",
@@ -6570,7 +6689,7 @@
         {
           "eventId": null,
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "stateIdentity": null,
           "stateName": null,
           "operation": null,
@@ -6608,7 +6727,7 @@
         {
           "actionId": "miti-full-charge-electrified-on",
           "groupIdentity": "miti-electrified-full-charge-extra-arrows",
-          "frame": 723,
+          "frame": 787,
           "stateIdentity": "miti-electrified",
           "beforeStacks": 1,
           "consumedStacks": 0,
@@ -6619,7 +6738,7 @@
         {
           "actionId": "miti-full-charge-electrified-off",
           "groupIdentity": "miti-electrified-full-charge-extra-arrows",
-          "frame": 973,
+          "frame": 1037,
           "stateIdentity": "miti-electrified",
           "beforeStacks": 0,
           "consumedStacks": 0,
@@ -6828,11 +6947,11 @@
           ]
         },
         {
-          "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|2",
+          "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|13166.667|2",
           "eventType": "EFFECT_REFRESHED",
           "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
@@ -6876,11 +6995,11 @@
           ]
         },
         {
-          "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|3",
+          "eventId": "actor/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|13166.667|3",
           "eventType": "EFFECT_REFRESHED",
           "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
@@ -6924,11 +7043,11 @@
           ]
         },
         {
-          "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|2",
+          "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|13166.667|2",
           "eventType": "EFFECT_REFRESHED",
           "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
@@ -6972,11 +7091,11 @@
           ]
         },
         {
-          "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|12050|3",
+          "eventId": "kibo/actor-108003/tuning-mark:250:persistent/verified-calculator|EFFECT_REFRESHED|13166.667|3",
           "eventType": "EFFECT_REFRESHED",
           "status": "effect-runtime-refreshed",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "tuning-mark:250:persistent",
           "runtimeEffectId": "tuning-mark:250:persistent",
           "sourceElementId": null,
@@ -7020,11 +7139,11 @@
           ]
         },
         {
-          "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_REMOVED|12066.667|2",
+          "eventId": "actor/actor-108003/battle-element:108003118|EFFECT_REMOVED|13183.333|2",
           "eventType": "EFFECT_REMOVED",
           "status": "effect-runtime-removed",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 724,
+          "frame": 791,
           "effectId": "battle-element:108003118",
           "runtimeEffectId": "battle-element:108003118",
           "sourceElementId": 108003118,
@@ -7725,9 +7844,9 @@
           "operation": "acquire"
         },
         {
-          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|12050|26:723",
+          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|13166.666667|26:790",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "battle-element:250",
           "runtimeEffectId": null,
           "sourceElementId": 250,
@@ -7737,9 +7856,9 @@
           "operation": "acquire"
         },
         {
-          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|12050|27:723",
+          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|13166.666667|27:790",
           "actionId": "miti-full-charge-electrified-on",
-          "frame": 723,
+          "frame": 790,
           "effectId": "battle-element:250",
           "runtimeEffectId": null,
           "sourceElementId": 250,
@@ -7749,9 +7868,9 @@
           "operation": "acquire"
         },
         {
-          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|16216.666667|74:973",
+          "eventId": "synthesized:mark-acquire:tuning-mark|250|acquire|17333.333334|74:1040",
           "actionId": "miti-full-charge-electrified-off",
-          "frame": 973,
+          "frame": 1040,
           "effectId": "battle-element:250",
           "runtimeEffectId": null,
           "sourceElementId": 250,
@@ -7774,7 +7893,7 @@
         }
       ]
     },
-    "summaryHash": "2317fcf385f59caee3d25c9c413705e52bc363aa5d581b9951c4d19f57e5873d"
+    "summaryHash": "a2643894d634f77404b7668043700a002f76a1a3af723e2c7078bd5d7bc797c3"
   },
   "expected": {
     "exact": {
@@ -7926,6 +8045,6 @@
       }
     ]
   },
-  "replayHash": "827b81d23e0291de71d48845801f6759f34af4507ee596d39688d794aae96397",
-  "profileHash": "3d3dd432819029b58ea91f8267c37176c5dea6b06e367bfbbe9c6aa364f25d8d"
+  "replayHash": "ee0c6a8e4246349fa2a695afe1605e311c28e38c592ab6f4f13240783fbf734e",
+  "profileHash": "5780db448a9aeace951897ceefc35a5ab72b31339acc753c70b27aa558a1bf6f"
 }

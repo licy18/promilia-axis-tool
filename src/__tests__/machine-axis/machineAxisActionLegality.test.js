@@ -31,7 +31,7 @@ describe('Machine Axis action legality proof', () => {
       { objectiveId: 'cycle-dps-no-toughness' }
     );
     expect(proof).toMatchObject({
-      schemaVersion: 2,
+      schemaVersion: 3,
       passed: true,
       finalScoreEligible: true,
       rejectionCodes: [],

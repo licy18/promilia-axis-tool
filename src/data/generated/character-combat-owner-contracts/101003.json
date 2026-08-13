@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "azpr-character-combat-owner-compilation",
-  "compilerVersion": 7,
+  "compilerVersion": 8,
   "ownerId": 101003,
   "ownerName": "寒悠悠",
   "recipeIdentity": "actor:101003:character-combat-recipe:v1",
@@ -79,6 +79,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -203,6 +204,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -297,7 +299,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
               },
@@ -456,7 +458,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
                   },
@@ -623,7 +625,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
                 },
@@ -821,6 +823,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -903,7 +906,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
               },
@@ -1077,7 +1080,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
                   },
@@ -1259,7 +1262,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
                 },
@@ -1473,6 +1476,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -1555,7 +1559,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
               },
@@ -1738,7 +1742,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
                   },
@@ -1929,7 +1933,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
                 },
@@ -2153,6 +2157,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -2237,7 +2242,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
               },
@@ -2410,7 +2415,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
                   },
@@ -2591,7 +2596,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
                 },
@@ -2804,6 +2809,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -2898,7 +2904,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
               },
@@ -3075,7 +3081,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
                   },
@@ -3260,7 +3266,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
                 },
@@ -3482,6 +3488,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -3576,7 +3583,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
               },
@@ -3735,7 +3742,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
                   },
@@ -3902,7 +3909,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
                 },
@@ -4098,6 +4105,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -4180,7 +4188,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
               },
@@ -4354,7 +4362,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
                   },
@@ -4536,7 +4544,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
                 },
@@ -4748,6 +4756,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -4830,7 +4839,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
               },
@@ -5013,7 +5022,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
                   },
@@ -5204,7 +5213,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
                 },
@@ -5426,6 +5435,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -5510,7 +5520,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
               },
@@ -5683,7 +5693,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
                   },
@@ -5864,7 +5874,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
                 },
@@ -6075,6 +6085,7 @@
               "triggerTypeName": "Down",
               "mode": "press",
               "holdTriggerTimeMs": 0,
+              "physicalInput": null,
               "sourceKind": "azpr-skillsub-logic-input-trigger",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime",
               "status": "verified-input-trigger-ready",
@@ -6169,7 +6180,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
               },
@@ -6346,7 +6357,7 @@
                     "mode": "press",
                     "pressFrame": 0,
                     "holdDurationMs": null,
-                    "holdFrames": null,
+                    "physicalInput": null,
                     "status": "applied",
                     "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
                   },
@@ -6531,7 +6542,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
                 },
@@ -6763,6 +6774,40 @@
           "triggerTypeName": "Press",
           "mode": "hold",
           "holdTriggerTimeMs": 250,
+          "physicalInput": {
+            "schemaVersion": 1,
+            "contractName": "AzPrVerifiedChargedPhysicalInput",
+            "kind": "azpr-verified-charged-physical-input",
+            "triggerType": 1,
+            "triggerTypeName": "Press",
+            "thresholdMs": 250,
+            "thresholdComparison": "greater-than-or-equal",
+            "accumulation": "delta-time-per-input-update",
+            "pressCallbackAttemptsCast": true,
+            "retryWhilePressedAfterFailedCast": true,
+            "clearPressedStateAfterSuccessfulCast": true,
+            "continuingHoldRearmsNextCharge": false,
+            "nextChargeRequires": "physical-release-then-new-press",
+            "preholdAcrossPredecessor": true,
+            "sharedPreinputReplaysPress": false,
+            "nominal60HzThresholdIntervalMs": [
+              233.33333333333334,
+              266.6666666666667
+            ],
+            "upperBoundWhenOtherCastGatesFailMs": null,
+            "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+            "measuredClientParity": false,
+            "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+            "frameRate": 60,
+            "nominalThresholdFrameInterval": [
+              14,
+              16
+            ],
+            "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+            "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+            "status": "verified-charged-physical-input-static-ready",
+            "applied": true
+          },
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -6854,9 +6899,42 @@
           "frameRate": 60,
           "input": {
             "mode": "hold",
-            "pressFrame": 0,
+            "pressFrame": null,
             "holdDurationMs": 250,
-            "holdFrames": 15,
+            "physicalInput": {
+              "schemaVersion": 1,
+              "contractName": "AzPrVerifiedChargedPhysicalInput",
+              "kind": "azpr-verified-charged-physical-input",
+              "triggerType": 1,
+              "triggerTypeName": "Press",
+              "thresholdMs": 250,
+              "thresholdComparison": "greater-than-or-equal",
+              "accumulation": "delta-time-per-input-update",
+              "pressCallbackAttemptsCast": true,
+              "retryWhilePressedAfterFailedCast": true,
+              "clearPressedStateAfterSuccessfulCast": true,
+              "continuingHoldRearmsNextCharge": false,
+              "nextChargeRequires": "physical-release-then-new-press",
+              "preholdAcrossPredecessor": true,
+              "sharedPreinputReplaysPress": false,
+              "nominal60HzThresholdIntervalMs": [
+                233.33333333333334,
+                266.6666666666667
+              ],
+              "upperBoundWhenOtherCastGatesFailMs": null,
+              "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+              "measuredClientParity": false,
+              "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+              "frameRate": 60,
+              "nominalThresholdFrameInterval": [
+                14,
+                16
+              ],
+              "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+              "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+              "status": "verified-charged-physical-input-static-ready",
+              "applied": true
+            },
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
           },
@@ -7073,9 +7151,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
               },
@@ -7333,6 +7444,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100315].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100315].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -7413,7 +7525,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100315].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100315].holdTriggerTime"
           },
@@ -7628,7 +7740,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100315].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100315].holdTriggerTime"
               },
@@ -7882,6 +7994,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100311].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100311].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -7977,7 +8090,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100311].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100311].holdTriggerTime"
           },
@@ -8151,7 +8264,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100311].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100311].holdTriggerTime"
               },
@@ -8364,6 +8477,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100312].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100312].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -8478,7 +8592,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100312].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100312].holdTriggerTime"
           },
@@ -8656,7 +8770,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100312].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100312].holdTriggerTime"
               },
@@ -8869,7 +8983,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100312].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100312].holdTriggerTime"
               },
@@ -8932,6 +9046,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100326].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100326].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -9009,7 +9124,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100326].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100326].holdTriggerTime"
           },
@@ -9122,7 +9237,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100326].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100326].holdTriggerTime"
               },
@@ -9274,6 +9389,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100313].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100313].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -9388,7 +9504,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100313].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100313].holdTriggerTime"
           },
@@ -9593,7 +9709,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100313].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100313].holdTriggerTime"
               },
@@ -9837,6 +9953,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100322].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100322].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -9944,7 +10061,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100322].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100322].holdTriggerTime"
           },
@@ -10037,7 +10154,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100322].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100322].holdTriggerTime"
               },
@@ -10173,6 +10290,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100325].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100325].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -10254,7 +10372,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100325].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100325].holdTriggerTime"
           },
@@ -10403,7 +10521,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100325].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100325].holdTriggerTime"
               },
@@ -10591,6 +10709,7 @@
           "triggerTypeName": "Down",
           "mode": "press",
           "holdTriggerTimeMs": 0,
+          "physicalInput": null,
           "sourceKind": "azpr-skillsub-logic-input-trigger",
           "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100327].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100327].holdTriggerTime",
           "status": "verified-input-trigger-ready",
@@ -10688,7 +10807,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100327].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100327].holdTriggerTime"
           },
@@ -10808,7 +10927,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100327].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100327].holdTriggerTime"
               },
@@ -10989,7 +11108,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100349].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100349].holdTriggerTime"
               },
@@ -11048,7 +11167,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100349].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100349].holdTriggerTime"
           },
@@ -11102,7 +11221,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100312].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100312].holdTriggerTime"
           },
@@ -11283,7 +11402,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
           },
@@ -11462,7 +11581,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
           },
@@ -11656,7 +11775,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
           },
@@ -11859,7 +11978,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
           },
@@ -12018,7 +12137,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
           },
@@ -26906,7 +27025,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100349].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100349].holdTriggerTime"
           },
@@ -26940,7 +27059,7 @@
             "mode": "press",
             "pressFrame": 0,
             "holdDurationMs": null,
-            "holdFrames": null,
+            "physicalInput": null,
             "status": "applied",
             "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100349].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100349].holdTriggerTime"
           },
@@ -27055,7 +27174,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100301].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100301].holdTriggerTime"
               },
@@ -27228,7 +27347,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100302].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100302].holdTriggerTime"
               },
@@ -27416,7 +27535,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100303].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100303].holdTriggerTime"
               },
@@ -27613,7 +27732,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100304].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100304].holdTriggerTime"
               },
@@ -27765,7 +27884,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100305].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100305].holdTriggerTime"
               },
@@ -27936,9 +28055,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
               },
@@ -27985,7 +28137,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
               },
@@ -28042,9 +28194,42 @@
                 "frameRate": 60,
                 "input": {
                   "mode": "hold",
-                  "pressFrame": 0,
+                  "pressFrame": null,
                   "holdDurationMs": 250,
-                  "holdFrames": 15,
+                  "physicalInput": {
+                    "schemaVersion": 1,
+                    "contractName": "AzPrVerifiedChargedPhysicalInput",
+                    "kind": "azpr-verified-charged-physical-input",
+                    "triggerType": 1,
+                    "triggerTypeName": "Press",
+                    "thresholdMs": 250,
+                    "thresholdComparison": "greater-than-or-equal",
+                    "accumulation": "delta-time-per-input-update",
+                    "pressCallbackAttemptsCast": true,
+                    "retryWhilePressedAfterFailedCast": true,
+                    "clearPressedStateAfterSuccessfulCast": true,
+                    "continuingHoldRearmsNextCharge": false,
+                    "nextChargeRequires": "physical-release-then-new-press",
+                    "preholdAcrossPredecessor": true,
+                    "sharedPreinputReplaysPress": false,
+                    "nominal60HzThresholdIntervalMs": [
+                      233.33333333333334,
+                      266.6666666666667
+                    ],
+                    "upperBoundWhenOtherCastGatesFailMs": null,
+                    "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                    "measuredClientParity": false,
+                    "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                    "frameRate": 60,
+                    "nominalThresholdFrameInterval": [
+                      14,
+                      16
+                    ],
+                    "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                    "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                    "status": "verified-charged-physical-input-static-ready",
+                    "applied": true
+                  },
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
                 },
@@ -28091,7 +28276,7 @@
                   "mode": "press",
                   "pressFrame": 0,
                   "holdDurationMs": null,
-                  "holdFrames": null,
+                  "physicalInput": null,
                   "status": "applied",
                   "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
                 },
@@ -50257,7 +50442,7 @@
       "sourceIdentity": "NewTable/hero.rows[id=101003].propertyId=101003|NewTable/unit_property.rows[id=101003].baseAttributeId=101003|NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_value.rows[id=101003].baseAttribute|NewTable/template_hero.rows[type=1,level=1].baseAttribute=1001001|NewTable/template_value.rows[id=1001001].baseAttribute[6]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/Element/ast_480126003.asset/MonoBehaviour/ast_480126003__5615399876122137207.json#elementConfigId=480126003#attributeID=1;function=3;A=1000|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_1011852803228526128__1011852803228526128.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/MonoBehaviour_2749505792865494576__2749505792865494576.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100312.asset/MonoBehaviour/skill_control_10100312__7462157201267428951.json#skillResourceMaps[0].elements[3]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6060088285417807340__6060088285417807340.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[4]|battle-element-assets.jsonl#path_id=-5652413049857383353|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_-6215383830795215380__-6215383830795215380.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_2700200137312345580__2700200137312345580.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/MonoBehaviour_6998348329063063020__6998348329063063020.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100313.asset/MonoBehaviour/skill_control_10100313__1872115775388347640.json#skillResourceMaps[0].elements[1]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-15343624725538709|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|targetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[2]|battle-element-assets.jsonl#path_id=-7141218965533365560|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/MonoBehaviour_-5797025868792535592__-5797025868792535592.json#startFrame|toOwnElementBaseDatas|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100322.asset/MonoBehaviour/skill_control_10100322__8665853168605096890.json#skillResourceMaps[0].elements[6]|battle-element-assets.jsonl#path_id=466374251647106866|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/MonoBehaviour_2119769922617281174__2119769922617281174.json#startFrame|directInjectTargetType|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10100327.asset/MonoBehaviour/skill_control_10100327__739140358862992778.json#skillResourceMaps[0].elements[0]|battle-element-assets.jsonl#path_id=-1732209689403186369"
     }
   },
-  "contractHash": "d3fc7715b21d98003c61dd6f5977c648bfc7081a4d0011e6686ef837f8c3f5f6",
+  "contractHash": "5c5530336e5324ab8506d14965bd195a4288e232f6c69ad28f453e532282db3c",
   "status": "character-combat-owner-contracts-compiled",
   "summary": {
     "contextEdgeCount": 1,
@@ -50289,5 +50474,5 @@
     "thresholdTransitionCount": 0,
     "passiveEffectCount": 1
   },
-  "recipeContractHash": "3b6e6ed404d9bde1375987f15e03fa8e22eb92d1204ed5e011bd0b599e6b7b86"
+  "recipeContractHash": "0ae30f82ae2752a94b79cef918f774175773ab08e6dbd6bf94f81c82e7829b14"
 }

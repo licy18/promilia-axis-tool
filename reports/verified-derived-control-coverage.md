@@ -3,8 +3,8 @@
 - 包：`azpr-tc-2026-07-18`
 - 固定分母：20 名角色 / 155 个公开动作引用 / 138 个派生 control / 261 个 player/resourceMap 变体
 - 控制源：combined=11，input-controlled=110，not-yet-modeled=16，state-controlled=1
-- 解析状态：applied=7，not-yet-modeled=29，partially-resolved=99，static-evidence-gap=3
-- 输入选择器：7/23 已建立明确 public variant → subskill 关系
+- 解析状态：applied=6，not-yet-modeled=30，partially-resolved=99，static-evidence-gap=3
+- 输入选择器：6/23 已建立明确 public variant → subskill 关系
 - 静默遗漏：0
 
 ## Owner / 动作类型
@@ -59,7 +59,7 @@
 | 108002 | limit-counter | 1 | input-controlled=1 | partially-resolved=1 |
 | 108002 | normal-attack | 3 | input-controlled=3 | partially-resolved=3 |
 | 108002 | star-skill | 1 | input-controlled=1 | partially-resolved=1 |
-| 108003 | charged-attack | 1 | input-controlled=1 | applied=1 |
+| 108003 | charged-attack | 1 | input-controlled=1 | not-yet-modeled=1 |
 | 108003 | normal-attack | 2 | input-controlled=2 | partially-resolved=2 |
 | 108005 | charged-attack | 1 | input-controlled=1 | partially-resolved=1 |
 | 108005 | normal-attack | 2 | input-controlled=2 | partially-resolved=2 |
@@ -170,6 +170,7 @@
 - `actor:108002|control:10800225|derived-control` limit-counter：partially-resolved；event-bridge-input-semantics-partially-modeled
 - `actor:108003|control:10800301|derived-control` normal-attack：partially-resolved；event-bridge-input-semantics-partially-modeled
 - `actor:108003|control:10800302|derived-control` normal-attack：partially-resolved；event-bridge-input-semantics-partially-modeled
+- `actor:108003|control:10800310|derived-control` charged-attack：not-yet-modeled；variant-condition-source-families-audited-not-yet-modeled, input-selector-to-subskill-relation-not-yet-modeled
 - `actor:108005|control:10800501|derived-control` normal-attack：partially-resolved；event-bridge-input-semantics-partially-modeled
 - `actor:108005|control:10800502|derived-control` normal-attack：partially-resolved；event-bridge-input-semantics-partially-modeled
 - `actor:108005|control:10800510|derived-control` charged-attack：partially-resolved；variant-condition-source-families-audited-not-yet-modeled, event-bridge-input-semantics-partially-modeled

@@ -6,15 +6,15 @@
   "scenarioIdentity": "m10-b1:103002:120s-three-actor-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22",
+  "sourcePackageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "4156add41754d07e",
-    "traceHash": "f0d115c08eaaa7d8",
-    "dataHash": "ed95a9e97f048755",
-    "buildHash": "6970aa6d0e76cdcf",
+    "inputHash": "fa49817b2171532e",
+    "traceHash": "987a76c210638cec",
+    "dataHash": "cc435872064bf403",
+    "buildHash": "2cfbe94134267d21",
     "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
@@ -188,7 +188,7 @@
           "semanticName": "重击",
           "controlSkillId": 10300210,
           "subSkillIndex": 0,
-          "actualDurationFrames": 38,
+          "actualDurationFrames": 62,
           "chargingRelease": null,
           "appliedAssumptionIdentity": null,
           "appliedAssumptionVersion": null,
@@ -326,7 +326,7 @@
           "semanticName": "重击",
           "controlSkillId": 10300210,
           "subSkillIndex": 0,
-          "actualDurationFrames": 38,
+          "actualDurationFrames": 62,
           "sourceKind": "workbench-explicit-input-variant"
         },
         "ruby-star-skill": {
@@ -6292,7 +6292,7 @@
         }
       ]
     },
-    "summaryHash": "584a158a1c13856d3f4adaa4c01f5e0ece2d6dd768b075a5b2c734a78814d61f"
+    "summaryHash": "5adf5248d1dfb31fef569d7be00782070cb85be11e54c65e0d99d29cfddcabe8"
   },
   "expected": {
     "exact": {
@@ -6309,7 +6309,7 @@
       "actions.selectionByActionId.ruby-reload.semanticName": "重击",
       "actions.selectionByActionId.ruby-reload.controlSkillId": 10300210,
       "actions.selectionByActionId.ruby-reload.subSkillIndex": 0,
-      "actions.selectionByActionId.ruby-reload.actualDurationFrames": 38,
+      "actions.selectionByActionId.ruby-reload.actualDurationFrames": 62,
       "actions.selectionByActionId.ruby-enhanced-shot-1.semanticName": "强化普攻 E1",
       "actions.selectionByActionId.ruby-enhanced-shot-1.controlSkillId": 10300201,
       "actions.selectionByActionId.ruby-enhanced-shot-1.subSkillIndex": 1,
@@ -6513,8 +6513,8 @@
       {
         "jsonPath": "actions.selectionByActionId.ruby-reload.actualDurationFrames",
         "operator": "exact",
-        "expected": 38,
-        "actual": 38,
+        "expected": 62,
+        "actual": 62,
         "passed": true
       },
       {
@@ -7382,6 +7382,6 @@
       }
     ]
   },
-  "replayHash": "198d3e8ca71f63745d559a39db58d6bcf311f877cf0ebefcd9c58088491edc09",
-  "profileHash": "31908b45af1141bff3b97e92f7bf2e2d9b3f05bbd7d31a1d123bc24ace8f0bd0"
+  "replayHash": "f2080bfd5877760628ee678a104ec544c9b999c4a8b756742c3d86e10cea8395",
+  "profileHash": "cdd12e199439a031197a050f16cf4fb34fac28bc8693a9e3a32e5bd730fe8ec7"
 }

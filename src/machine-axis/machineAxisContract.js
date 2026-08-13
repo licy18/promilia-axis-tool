@@ -360,6 +360,7 @@ function normalizeMachineAxisAction(value, index) {
       level: positiveIntegerOrNull(intent.level),
       semanticVariant: normalizeSemanticVariant(intent.semanticVariant),
       attackInput: normalizeAttackInput(intent.attackInput),
+      physicalInput: normalizePhysicalInput(intent.physicalInput),
     },
     schedule: {
       mode: textOrNull(schedule.mode) ?? 'absolute',
@@ -398,6 +399,22 @@ function normalizeSemanticVariant(value) {
     chargeTier,
     inputFrame,
     mode,
+  };
+}
+
+function normalizePhysicalInput(value) {
+  if (!isRecord(value)) return null;
+  const pressFrame = nonNegativeIntegerOrNull(value.pressFrame);
+  const releaseFrame = nonNegativeIntegerOrNull(value.releaseFrame);
+  const executionFrame = nonNegativeIntegerOrNull(value.executionFrame);
+  if (pressFrame == null || executionFrame == null) return null;
+  return {
+    mode: value.mode === 'hold' ? 'hold' : null,
+    pressFrame,
+    releaseFrame,
+    executionFrame,
+    authorityHash: textOrNull(value.authorityHash),
+    sourceKind: textOrNull(value.sourceKind),
   };
 }
 
@@ -796,6 +813,27 @@ function validateIntent(action, index, issues) {
         { actionId: action.id }
       )
     );
+  }
+  if (action.intent.physicalInput != null) {
+    const physicalInput = action.intent.physicalInput;
+    if (
+      action.intent.kind !== 'public-action' ||
+      action.intent.actionKind !== 'charged-attack' ||
+      physicalInput.mode !== 'hold' ||
+      physicalInput.executionFrame !== action.schedule.frame ||
+      physicalInput.pressFrame > physicalInput.executionFrame ||
+      (physicalInput.releaseFrame != null &&
+        physicalInput.releaseFrame >= physicalInput.pressFrame)
+    ) {
+      issues.push(
+        diagnostic(
+          'machine-axis-charged-physical-input-invalid',
+          `${path}.physicalInput`,
+          'charged physical input must be a release-then-hold schedule ending at the absolute execution frame',
+          { actionId: action.id }
+        )
+      );
+    }
   }
 }
 

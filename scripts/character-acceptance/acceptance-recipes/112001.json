@@ -38,13 +38,13 @@
   "goldenReports": ["reports/m10/112001/golden-trace.json"],
   "inputWindowBoundary": null,
   "productVisualAcceptance": {
-    "status": "accepted",
+    "status": "pending",
     "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
     "recordIdentity": "character-product-acceptance:112001:13d28aa515312a63395f49ddff3c778967e1b20f:aae0ae0f9ebc0700",
     "qualificationSubjectHash": "aae0ae0f9ebc0700",
     "scenarioSetHash": "d66afb989d3e65ac",
-    "scenarioIdentities": ["m12-b3-112001-assumption-v1-focused-acceptance"],
-    "automatedEvidence": [
+    "scenarioIdentities": [],
+    "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-112001-assumption-v1-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
@@ -597,8 +597,8 @@
             "type": "VERIFIED_BREAK_TRIGGER_WATCHER_ARMED",
             "actionId": "isolated-watcher-same-packet",
             "payload.appliedAssumptionIdentity": "112001-ultimate-watcher-same-packet-order-open",
-            "payload.appliedAssumptionVersion": "1.0.0",
-            "payload.appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
+            "payload.appliedAssumptionVersion": "2.0.0",
+            "payload.appliedAssumptionHash": "bfd7b494024ab200806d531c9199f3379837c0361f8dfc0f80a2c6b06b490778",
             "payload.armOrder": "hit-then-arm",
             "payload.remainingTriggerCount": 1
           },
@@ -1282,8 +1282,8 @@
             "operation": "apply",
             "absoluteFrame": 191,
             "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
-            "appliedAssumptionVersion": "1.0.0",
-            "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71",
+            "appliedAssumptionVersion": "2.0.0",
+            "appliedAssumptionHash": "bfd7b494024ab200806d531c9199f3379837c0361f8dfc0f80a2c6b06b490778",
             "sameFrameVisibility": "strict-source-sequence"
           },
           "expectation": {
@@ -2170,8 +2170,8 @@
               "actionBindingIdentity": "gisele-ultimate-post-hit-wrapper",
               "effectIdentity": "semantic-effect:11200113|0|-316037334899252934|2617385811689971573:191",
               "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
-              "appliedAssumptionVersion": "1.0.0",
-              "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+              "appliedAssumptionVersion": "2.0.0",
+              "appliedAssumptionHash": "bfd7b494024ab200806d531c9199f3379837c0361f8dfc0f80a2c6b06b490778"
             },
             "appliedToCalculators": true
           },
@@ -2200,8 +2200,8 @@
               "actionBindingIdentity": "gisele-ultimate-post-hit-wrapper",
               "effectIdentity": "semantic-effect:11200113|0|3913813892884989758|2617385811689971573:191",
               "appliedAssumptionIdentity": "112001-ultimate-wrapper-same-packet-order-open",
-              "appliedAssumptionVersion": "1.0.0",
-              "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+              "appliedAssumptionVersion": "2.0.0",
+              "appliedAssumptionHash": "bfd7b494024ab200806d531c9199f3379837c0361f8dfc0f80a2c6b06b490778"
             },
             "appliedToCalculators": true
           }
@@ -2742,10 +2742,10 @@
       "factIdentity": "input-window-inside-outside-boundaries",
       "allOfAssertionIdentities": [
         "isolated:heavy2-release-58f-old-tier",
-        "assumption-v1-heavy2-59f-selects-new-tier",
+        "installed-client-heavy2-59f-selects-early-tier",
         "isolated:heavy2-release-60f-unique-new-tier",
         "isolated:heavy3-release-66f-old-tier",
-        "assumption-v1-heavy3-67f-selects-new-tier",
+        "installed-client-heavy3-67f-selects-early-tier",
         "isolated:heavy3-release-68f-unique-new-tier"
       ]
     },
@@ -2760,19 +2760,19 @@
   "probes": [
     {
       "kind": "variant-selection",
-      "assertionIdentity": "assumption-v1-heavy2-59f-selects-new-tier",
+      "assertionIdentity": "installed-client-heavy2-59f-selects-early-tier",
       "actionId": "gisele-heavy2-threshold59",
       "controlSkillId": 11200141,
-      "subSkillIndex": 1,
-      "semanticName": "特殊重击2完全释放"
+      "subSkillIndex": 0,
+      "semanticName": "特殊重击2提前释放"
     },
     {
       "kind": "variant-selection",
-      "assertionIdentity": "assumption-v1-heavy3-67f-selects-new-tier",
+      "assertionIdentity": "installed-client-heavy3-67f-selects-early-tier",
       "actionId": "gisele-heavy3-threshold67",
       "controlSkillId": 11200141,
-      "subSkillIndex": 3,
-      "semanticName": "特殊重击3完全释放"
+      "subSkillIndex": 2,
+      "semanticName": "特殊重击3提前释放"
     },
     {
       "kind": "variant-selection",
@@ -2784,21 +2784,21 @@
     },
     {
       "kind": "variant-selection",
-      "assertionIdentity": "star-carry-derived-heavy2-uses-assumption-v1",
+      "assertionIdentity": "star-carry-derived-heavy2-uses-installed-client-order",
       "actionId": "gisele-star-carry-heavy2-threshold59",
       "controlSkillId": 11200141,
-      "subSkillIndex": 1,
-      "semanticName": "星鸣协战派生特殊重击2"
+      "subSkillIndex": 0,
+      "semanticName": "星鸣协战派生特殊重击2提前释放"
     },
     {
       "kind": "trace-query",
-      "assertionIdentity": "charging-traces-bind-assumption-v1",
-      "identity": "charging-traces-bind-assumption-v1",
+      "assertionIdentity": "charging-traces-bind-installed-client-static-evidence",
+      "identity": "charging-traces-bind-installed-client-static-evidence",
       "path": "variants.selections",
       "where": {
         "appliedAssumptionIdentity": "112001-charge-threshold-overlap-order-open",
-        "appliedAssumptionVersion": "1.0.0",
-        "appliedAssumptionHash": "3ae5e3bf22fabf052d07cb005f3575395c6abcb135942f5bf24dbdc8735e3e71"
+        "appliedAssumptionVersion": "2.0.0",
+        "appliedAssumptionHash": "bfd7b494024ab200806d531c9199f3379837c0361f8dfc0f80a2c6b06b490778"
       },
       "expectation": {
         "count": 3

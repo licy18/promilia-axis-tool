@@ -96,18 +96,30 @@ export function applyVerifiedTargetStateRuntime({
     if (!resolution?.ready) continue;
     const action = actionById.get(String(actionId));
     if (!action) continue;
-    const controlSkillId = Number(resolution.actionBinding?.controlSkillId);
+    const controlSkillId = Number(
+      resolution.chargingRelease?.applied === true
+        ? resolution.chargingRelease.executionControlSkillId
+        : resolution.actionBinding?.controlSkillId
+    );
     const subSkillIndex = Number(
-      resolution.actionBinding?.selectedSubSkillIndex
+      resolution.chargingRelease?.applied === true
+        ? resolution.chargingRelease.executionSubSkillIndex
+        : resolution.actionBinding?.selectedSubSkillIndex
     );
     for (const transaction of transactions) {
+      const transactionFrame = resolveCompositeControlFrame({
+        resolution,
+        controlSkillId: transaction.controlSkillId,
+        subSkillIndex: transaction.subSkillIndex,
+        frame: transaction.triggerFrame,
+      });
       if (
         Number(transaction.controlSkillId) !== controlSkillId ||
         Number(transaction.subSkillIndex) !== subSkillIndex ||
         !hasRequiredHit(resolution, transaction, action, scenario) ||
         !isActionFrameWithinContextualOccupancy(
           action,
-          transaction.triggerFrame,
+          transactionFrame,
           transaction.frameRate
         )
       ) {
@@ -117,7 +129,7 @@ export function applyVerifiedTargetStateRuntime({
         kind: 'target-state-transaction',
         timeMs: actionFrameToMs(
           action,
-          transaction.triggerFrame,
+          transactionFrame,
           transaction.frameRate
         ),
         priority: Number(transaction.priority) || 0,
@@ -127,12 +139,18 @@ export function applyVerifiedTargetStateRuntime({
       });
     }
     for (const group of groups) {
+      const decisionFrame = resolveCompositeControlFrame({
+        resolution,
+        controlSkillId: group.controlSkillId,
+        subSkillIndex: group.subSkillIndex,
+        frame: group.decisionFrame,
+      });
       if (
         Number(group.controlSkillId) !== controlSkillId ||
         Number(group.subSkillIndex) !== subSkillIndex ||
         !isActionFrameWithinContextualOccupancy(
           action,
-          group.decisionFrame,
+          decisionFrame,
           group.frameRate
         )
       ) {
@@ -140,7 +158,7 @@ export function applyVerifiedTargetStateRuntime({
       }
       pending.push({
         kind: 'conditional-hit-group',
-        timeMs: actionFrameToMs(action, group.decisionFrame, group.frameRate),
+        timeMs: actionFrameToMs(action, decisionFrame, group.frameRate),
         priority: 100,
         action,
         resolution,
@@ -213,13 +231,15 @@ export function applyVerifiedTargetStateRuntime({
               String(candidate.hitIdentity) === String(hitBinding.hitIdentity)
           );
           if (!hit) continue;
+          const hitFrame = resolveCompositeControlFrame({
+            resolution,
+            controlSkillId: binding.controlSkillId,
+            subSkillIndex: binding.subSkillIndex,
+            frame: hitBinding.triggerFrame,
+          });
           pending.push({
             kind: 'runtime-effect-landed-hit',
-            timeMs: actionFrameToMs(
-              action,
-              hitBinding.triggerFrame,
-              binding.frameRate
-            ),
+            timeMs: actionFrameToMs(action, hitFrame, binding.frameRate),
             priority: 200,
             action,
             resolution,
@@ -231,6 +251,12 @@ export function applyVerifiedTargetStateRuntime({
         }
         continue;
       }
+      const bindingFrame = resolveCompositeControlFrame({
+        resolution,
+        controlSkillId: binding.controlSkillId,
+        subSkillIndex: binding.subSkillIndex,
+        frame: binding.triggerFrame,
+      });
       if (
         ![
           'action-frame',
@@ -240,7 +266,7 @@ export function applyVerifiedTargetStateRuntime({
         ].includes(binding.triggerKind) ||
         !isActionFrameWithinContextualOccupancy(
           action,
-          binding.triggerFrame,
+          bindingFrame,
           binding.frameRate
         )
       ) {
@@ -254,7 +280,7 @@ export function applyVerifiedTargetStateRuntime({
           bindingSequenceIndex,
           activationTimeMs: actionFrameToMs(
             action,
-            binding.triggerFrame,
+            bindingFrame,
             binding.frameRate
           ),
         });
@@ -286,11 +312,7 @@ export function applyVerifiedTargetStateRuntime({
                 landedHits.length === 0
               ? 'runtime-effect-hit-not-landed'
               : 'runtime-effect',
-        timeMs: actionFrameToMs(
-          action,
-          binding.triggerFrame,
-          binding.frameRate
-        ),
+        timeMs: actionFrameToMs(action, bindingFrame, binding.frameRate),
         priority: 200,
         action,
         resolution,
@@ -394,7 +416,12 @@ export function applyVerifiedTargetStateRuntime({
             resolution: descriptor.resolution,
             timeMs: actionFrameToMs(
               descriptor.action,
-              binding.triggerFrame,
+              resolveCompositeControlFrame({
+                resolution: descriptor.resolution,
+                controlSkillId: binding.controlSkillId,
+                subSkillIndex: binding.subSkillIndex,
+                frame: binding.triggerFrame,
+              }),
               binding.frameRate
             ),
             scenario,
@@ -1146,6 +1173,8 @@ function applyConditionalHitGroup({
   return {
     actionId: descriptor.action.id,
     groupIdentity: descriptor.group.groupIdentity,
+    controlSkillId: descriptor.group.controlSkillId,
+    subSkillIndex: descriptor.group.subSkillIndex,
     stateIdentity: descriptor.group.stateIdentity,
     timeMs: descriptor.timeMs,
     beforeStacks: before,
@@ -1202,7 +1231,12 @@ function createConditionalTuningEffect({ result, resolution }) {
     role: 'gameplay-effect',
     trigger: {
       behaviorPathId: `conditional-tuning:${result.groupIdentity}`,
-      startFrame: Number(mark.triggerFrame),
+      startFrame: resolveCompositeControlFrame({
+        resolution,
+        controlSkillId: result.controlSkillId,
+        subSkillIndex: result.subSkillIndex,
+        frame: mark.triggerFrame,
+      }),
       frameCount: 1,
       targetCode: 0,
       targetKind: 'team-tuning-pool',
@@ -1805,17 +1839,45 @@ function resolveRuntimeBindingLandedHits({
   action,
   scenario,
 }) {
+  const requiredHitFrame =
+    binding.requiredHitFrame == null
+      ? null
+      : resolveCompositeControlFrame({
+          resolution,
+          controlSkillId: binding.controlSkillId,
+          subSkillIndex: binding.subSkillIndex,
+          frame: binding.requiredHitFrame,
+        });
   return (resolution?.hits ?? []).filter(
     hit =>
       Number(hit.elementId) === Number(binding.requiredHitElementId) &&
       (binding.requiredHitFrame == null ||
-        Number(hit.trigger?.startFrame) === Number(binding.requiredHitFrame)) &&
+        Number(hit.trigger?.startFrame) === Number(requiredHitFrame)) &&
       resolveActionHitWillHit(
         action,
         hit.hitIdentity,
         resolveScenarioDefaultWillHit(scenario)
       )
   );
+}
+
+function resolveCompositeControlFrame({
+  resolution,
+  controlSkillId,
+  subSkillIndex,
+  frame,
+}) {
+  const normalizedFrame = Number(frame);
+  const chargingRelease = resolution?.chargingRelease;
+  if (
+    chargingRelease?.applied === true &&
+    Number(chargingRelease.executionControlSkillId) ===
+      Number(controlSkillId) &&
+    Number(chargingRelease.executionSubSkillIndex) === Number(subSkillIndex)
+  ) {
+    return Number(chargingRelease.releaseFrame) + normalizedFrame;
+  }
+  return normalizedFrame;
 }
 
 function resolveScenarioDefaultWillHit(scenario) {

@@ -13,7 +13,7 @@ const STAR_CARRY_CONTROL_ID = 10200122;
 describe('Lily M12-B3 active-surface qualification', () => {
   it('keeps the complete active inventory and source-retained frozen surface auditable', () => {
     expect(ownerContract).toMatchObject({
-      compilerVersion: 7,
+      compilerVersion: 8,
       ownerId: OWNER_ID,
       ownerName: '莉莉',
       status: 'character-combat-owner-contracts-compiled',

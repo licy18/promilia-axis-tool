@@ -1,7 +1,7 @@
 import { hashCanonicalValue } from '../simulation/headless/canonicalSerialization';
 import { getVerifiedNormalAttackInputAuthorityDescriptor } from '../domain/verifiedNormalAttackInputAuthority';
 
-export const MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION = 2;
+export const MACHINE_AXIS_ACTION_LEGALITY_SCHEMA_VERSION = 3;
 export const MACHINE_AXIS_ACTION_LEGALITY_CONTRACT =
   'AzPrMachineAxisActionLegalityProof';
 
@@ -20,7 +20,12 @@ const ACTION_LEGALITY_WARNING_CODES = new Set([
 
 export function createMachineAxisActionLegalityProof(
   run = {},
-  { objectiveId = null, preflightIssues = [], additionalIssues = [] } = {}
+  {
+    objectiveId = null,
+    preflightIssues = [],
+    additionalIssues = [],
+    chargedInputProof = null,
+  } = {}
 ) {
   const issues = [];
   const addIssue = issue => {
@@ -149,6 +154,7 @@ export function createMachineAxisActionLegalityProof(
     objectiveId,
     normalAttackInputAuthority:
       getVerifiedNormalAttackInputAuthorityDescriptor(),
+    chargedInputProof,
     actionCount: (plan.actions ?? []).length,
     skippedActionCount: (plan.actions ?? []).filter(
       entry => entry.execute === false

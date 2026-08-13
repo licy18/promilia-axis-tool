@@ -4,7 +4,7 @@
 - 原始控制窗口：55
 - 语义转移：2/2
 - 仅索引未接入窗口：0
-- 玩法影响缺口：1
+- 玩法影响缺口：0
 
 ## 已归一转移
 
@@ -18,7 +18,7 @@
 | 动作 | control/sub | 转移 | 资源事务 | 调谐效果 | 状态 |
 | --- | --- | ---: | ---: | ---: | --- |
 | normal-attack | 10800303/sub0 | 0/0 | 0 | 0 | not-applicable |
-| charged-attack | 10800310/sub0 | 0/0 | 0 | 0 | static-evidence-gap |
+| charged-attack | 10800310/sub0 | 0/0 | 0 | 0 | not-applicable |
 | dodge-attack | 10800315/sub0 | 0/0 | 0 | 0 | not-applicable |
 | plunging-attack | 10800311/sub0 | 0/0 | 0 | 0 | not-applicable |
 | star-skill | 10800312/sub0 | 0/0 | 0 | 0 | not-applicable |

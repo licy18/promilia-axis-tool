@@ -158,15 +158,33 @@ function createActionMarker({
       ? finiteNumber(inputTrigger.holdTriggerTimeMs)
       : null;
   const contextualInputScheduling = action.contextualInputScheduling ?? null;
+  const physicalInput = action.physicalInput ?? null;
+  const physicalFrameRate =
+    finiteNumber(inputTrigger?.physicalInput?.frameRate) || 60;
+  const physicalPressMs =
+    mode === 'hold' && physicalInput?.pressFrame != null
+      ? (finiteNumber(physicalInput.pressFrame) * 1000) / physicalFrameRate
+      : null;
   const startMs = clamp(
-    finiteNumber(contextualInputScheduling?.inputTimeMs ?? action.startMs),
+    finiteNumber(
+      physicalPressMs ??
+        contextualInputScheduling?.inputTimeMs ??
+        action.startMs
+    ),
     0,
     durationMs
   );
   const endMs =
-    holdDurationMs == null
-      ? null
-      : clamp(startMs + holdDurationMs, startMs, durationMs);
+    mode === 'hold' && physicalInput?.executionFrame != null
+      ? clamp(
+          (finiteNumber(physicalInput.executionFrame) * 1000) /
+            physicalFrameRate,
+          startMs,
+          durationMs
+        )
+      : holdDurationMs == null
+        ? null
+        : clamp(startMs + holdDurationMs, startMs, durationMs);
   const holdResolved = mode !== 'hold' || endMs > startMs;
   return {
     schemaVersion: TIMELINE_OPERATION_INPUT_SCHEMA_VERSION,
@@ -195,6 +213,7 @@ function createActionMarker({
     predecessorEffectiveEndMs:
       contextualInputScheduling?.predecessorEffectiveEndMs ?? null,
     contextualInputScheduling,
+    physicalInput,
     attackSequenceIndex: positiveIntegerOrNull(action.attackSequenceIndex),
     sourceKind: binding.sourceKind,
     sourceIdentity: binding.sourceIdentity,

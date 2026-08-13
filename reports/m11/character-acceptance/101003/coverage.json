@@ -865,19 +865,6 @@
       "edgeIdentity": "coverage-edge:427c55d87d314f63"
     },
     {
-      "requirementIdentity": "contract:attack-input-chain:attack-input-chain:0:75c5a469f58e8fb0",
-      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
-      "assertionIdentity": "trace-attack-input-chain:golden-attackInputChains-m10-b2:101003:120s-three-actor-golden-1",
-      "selector": {
-        "chainIdentity": "han-normal-five-inputs",
-        "kind": "attack-input-chain"
-      },
-      "assertionHash": "c6c7055ddfef980d",
-      "traceProjectionHash": "e1627b083d844813",
-      "status": "verified",
-      "edgeIdentity": "coverage-edge:42fd14096163c89e"
-    },
-    {
       "requirementIdentity": "contract:hit:10100310|0|elements|4|-7636687166603453292|40|4",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:31",
@@ -2070,6 +2057,19 @@
       "edgeIdentity": "coverage-edge:a5aebea5a5eb3ed3"
     },
     {
+      "requirementIdentity": "contract:attack-input-chain:attack-input-chain:0:8a88087c46ef1784",
+      "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
+      "assertionIdentity": "trace-attack-input-chain:golden-attackInputChains-m10-b2:101003:120s-three-actor-golden-1",
+      "selector": {
+        "chainIdentity": "han-normal-five-inputs",
+        "kind": "attack-input-chain"
+      },
+      "assertionHash": "c6c7055ddfef980d",
+      "traceProjectionHash": "e1627b083d844813",
+      "status": "verified",
+      "edgeIdentity": "coverage-edge:a65c026de8505668"
+    },
+    {
       "requirementIdentity": "contract:hit:10100310|0|elements|0|-9168566004252254787|58|7",
       "scenarioIdentity": "m10-b2:101003:120s-three-actor-golden",
       "assertionIdentity": "trace-hit:golden-hit:m10-b2:101003:120s-three-actor-golden:34",
@@ -3220,5 +3220,5 @@
       "m10-b2:101003:120s-three-actor-golden": 185
     }
   },
-  "coverageHash": "9739c38f681ee5a8"
+  "coverageHash": "984825308d925ef3"
 }

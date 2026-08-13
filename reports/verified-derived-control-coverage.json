@@ -3,7 +3,7 @@
   "kind": "azpr-verified-derived-control-coverage",
   "status": "verified-derived-control-coverage-ready",
   "packageId": "azpr-tc-2026-07-18",
-  "packageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+  "packageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
   "sourceDenominator": {
     "kind": "current-client-public-actor-derived-control-candidates",
     "actorOwnerCount": 20,
@@ -25,13 +25,13 @@
       "state-controlled": 8
     },
     "resolutionStatusCounts": {
-      "applied": 7,
-      "not-yet-modeled": 29,
+      "applied": 6,
+      "not-yet-modeled": 30,
       "partially-resolved": 99,
       "static-evidence-gap": 3
     },
     "inputSelectorCount": 23,
-    "appliedInputSelectorCount": 7,
+    "appliedInputSelectorCount": 6,
     "resourceControlledCount": 4,
     "stateControlledCount": 8,
     "automaticFollowUpCount": 0,
@@ -675,7 +675,7 @@
         "input-controlled": 1
       },
       "resolutionStatusCounts": {
-        "applied": 1
+        "not-yet-modeled": 1
       }
     },
     {
@@ -1463,9 +1463,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
               },
@@ -1512,7 +1545,7 @@
                 "mode": "press",
                 "pressFrame": 0,
                 "holdDurationMs": null,
-                "holdFrames": null,
+                "physicalInput": null,
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
               },
@@ -1569,9 +1602,42 @@
             "frameRate": 60,
             "input": {
               "mode": "hold",
-              "pressFrame": 0,
+              "pressFrame": null,
               "holdDurationMs": 250,
-              "holdFrames": 15,
+              "physicalInput": {
+                "schemaVersion": 1,
+                "contractName": "AzPrVerifiedChargedPhysicalInput",
+                "kind": "azpr-verified-charged-physical-input",
+                "triggerType": 1,
+                "triggerTypeName": "Press",
+                "thresholdMs": 250,
+                "thresholdComparison": "greater-than-or-equal",
+                "accumulation": "delta-time-per-input-update",
+                "pressCallbackAttemptsCast": true,
+                "retryWhilePressedAfterFailedCast": true,
+                "clearPressedStateAfterSuccessfulCast": true,
+                "continuingHoldRearmsNextCharge": false,
+                "nextChargeRequires": "physical-release-then-new-press",
+                "preholdAcrossPredecessor": true,
+                "sharedPreinputReplaysPress": false,
+                "nominal60HzThresholdIntervalMs": [
+                  233.33333333333334,
+                  266.6666666666667
+                ],
+                "upperBoundWhenOtherCastGatesFailMs": null,
+                "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                "measuredClientParity": false,
+                "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                "frameRate": 60,
+                "nominalThresholdFrameInterval": [
+                  14,
+                  16
+                ],
+                "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                "status": "verified-charged-physical-input-static-ready",
+                "applied": true
+              },
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100310].holdTriggerTime"
             },
@@ -1618,7 +1684,7 @@
               "mode": "press",
               "pressFrame": 0,
               "holdDurationMs": null,
-              "holdFrames": null,
+              "physicalInput": null,
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10100341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10100341].holdTriggerTime"
             },
@@ -15777,113 +15843,68 @@
       ],
       "decisionFrame": 0,
       "inputSelector": {
-        "selectorIdentity": "miti-charged-stage-selector",
         "kind": "charge-tier",
         "mode": "hold",
         "holdRange": {
-          "minimumFrames": 25,
-          "maximumFrames": 52,
-          "frameRate": 60,
-          "sourceIdentity": "skill_control_10800310.asset#transition[25F]->10800341;transition[52F]->10800342"
+          "minimumHoldMs": 250,
+          "maximumHoldMs": null,
+          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+          "resolutionStatus": "partially-resolved"
         },
         "options": [
           {
-            "selectorIdentity": "miti-charged-short",
-            "label": "重击短蓄力",
-            "publicVariantIndex": 2,
-            "executionControlSkillId": 10800341,
-            "executionSubSkillIndex": 0,
-            "subSkillIndex": 0,
-            "playerSkillId": 10800341,
-            "durationFrames": 25,
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
+            "label": "重击",
+            "publicVariantIndex": 1,
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
             "chargeTier": 1,
-            "executionTiming": {
-              "subSkillIndex": 0,
-              "frameRate": 60,
-              "input": {
-                "mode": "press",
-                "pressFrame": 0,
-                "holdDurationMs": null,
-                "holdFrames": null,
-                "status": "applied",
-                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800341].holdTriggerTime"
-              },
-              "occupancy": {
-                "startFrame": 0,
-                "endFrame": 25,
-                "durationFrames": 25,
-                "frameRate": 60,
-                "status": "applied",
-                "sourceKind": "declared-verified-input-reopen-occupancy",
-                "sourceIdentity": "skill_control_10800341.asset#attack-reopen-window-start=25F",
-                "conversion": "25 source frames at 60fps",
-                "reasons": []
-              },
-              "animation": {
-                "startFrame": 0,
-                "endFrame": 88,
-                "durationFrames": 88,
-                "frameRate": 60,
-                "status": "applied",
-                "sourceKind": "skill-control-player-animation-range",
-                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-                "conversion": "88 source frames at 60fps"
-              },
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
-            },
-            "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F",
-            "resolutionStatus": "applied"
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
+            "resolutionStatus": "not-yet-modeled"
           },
           {
-            "selectorIdentity": "miti-charged-full",
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+            "label": "重击短蓄力",
+            "publicVariantIndex": 2,
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
+            "chargeTier": 2,
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
+            "resolutionStatus": "not-yet-modeled"
+          },
+          {
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
             "label": "重击满蓄力",
             "publicVariantIndex": 4,
-            "executionControlSkillId": 10800342,
-            "executionSubSkillIndex": 0,
-            "subSkillIndex": 0,
-            "playerSkillId": 10800342,
-            "durationFrames": 25,
-            "chargeTier": 2,
-            "executionTiming": {
-              "subSkillIndex": 0,
-              "frameRate": 60,
-              "input": {
-                "mode": "press",
-                "pressFrame": 0,
-                "holdDurationMs": null,
-                "holdFrames": null,
-                "status": "applied",
-                "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800342].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800342].holdTriggerTime"
-              },
-              "occupancy": {
-                "startFrame": 0,
-                "endFrame": 25,
-                "durationFrames": 25,
-                "frameRate": 60,
-                "status": "applied",
-                "sourceKind": "declared-verified-input-reopen-occupancy",
-                "sourceIdentity": "skill_control_10800342.asset#attack-reopen-window-start=25F",
-                "conversion": "25 source frames at 60fps",
-                "reasons": []
-              },
-              "animation": {
-                "startFrame": 0,
-                "endFrame": 112,
-                "durationFrames": 112,
-                "frameRate": 60,
-                "status": "applied",
-                "sourceKind": "skill-control-player-animation-range",
-                "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-                "conversion": "112 source frames at 60fps"
-              },
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
-            },
-            "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
-            "resolutionStatus": "applied"
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
+            "chargeTier": 3,
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
+            "resolutionStatus": "not-yet-modeled"
           }
         ],
-        "sourceIdentity": "skill_control_10800310.asset#hold-selector-25F-short-52F-full|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json|hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F|hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
-        "resolutionStatus": "applied"
+        "eventBridgeRelations": [
+          {
+            "sourceSubSkillIndex": 0,
+            "targetControlSkillId": 10800310,
+            "targetSubSkillIndex": null,
+            "startFrame": 0,
+            "endFrame": 29,
+            "baseOnInput": false,
+            "inputToIndex": false,
+            "bridgeType": 4,
+            "continuousAttackType": 0,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+          }
+        ],
+        "sourceIdentity": [
+          "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+        ],
+        "resolutionStatus": "not-yet-modeled"
       },
       "inputRelations": [
         {
@@ -15900,105 +15921,44 @@
         }
       ],
       "holdRange": {
-        "minimumFrames": 25,
-        "maximumFrames": 52,
-        "frameRate": 60,
-        "sourceIdentity": "skill_control_10800310.asset#transition[25F]->10800341;transition[52F]->10800342"
+        "minimumHoldMs": 250,
+        "maximumHoldMs": null,
+        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+        "resolutionStatus": "partially-resolved"
       },
       "chargeTier": [
         {
-          "selectorIdentity": "miti-charged-short",
-          "label": "重击短蓄力",
-          "publicVariantIndex": 2,
-          "executionControlSkillId": 10800341,
-          "executionSubSkillIndex": 0,
-          "subSkillIndex": 0,
-          "playerSkillId": 10800341,
-          "durationFrames": 25,
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
+          "label": "重击",
+          "publicVariantIndex": 1,
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
           "chargeTier": 1,
-          "executionTiming": {
-            "subSkillIndex": 0,
-            "frameRate": 60,
-            "input": {
-              "mode": "press",
-              "pressFrame": 0,
-              "holdDurationMs": null,
-              "holdFrames": null,
-              "status": "applied",
-              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800341].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800341].holdTriggerTime"
-            },
-            "occupancy": {
-              "startFrame": 0,
-              "endFrame": 25,
-              "durationFrames": 25,
-              "frameRate": 60,
-              "status": "applied",
-              "sourceKind": "declared-verified-input-reopen-occupancy",
-              "sourceIdentity": "skill_control_10800341.asset#attack-reopen-window-start=25F",
-              "conversion": "25 source frames at 60fps",
-              "reasons": []
-            },
-            "animation": {
-              "startFrame": 0,
-              "endFrame": 88,
-              "durationFrames": 88,
-              "frameRate": 60,
-              "status": "applied",
-              "sourceKind": "skill-control-player-animation-range",
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-              "conversion": "88 source frames at 60fps"
-            },
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
-          },
-          "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F",
-          "resolutionStatus": "applied"
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
+          "resolutionStatus": "not-yet-modeled"
         },
         {
-          "selectorIdentity": "miti-charged-full",
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+          "label": "重击短蓄力",
+          "publicVariantIndex": 2,
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
+          "chargeTier": 2,
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
+          "resolutionStatus": "not-yet-modeled"
+        },
+        {
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
           "label": "重击满蓄力",
           "publicVariantIndex": 4,
-          "executionControlSkillId": 10800342,
-          "executionSubSkillIndex": 0,
-          "subSkillIndex": 0,
-          "playerSkillId": 10800342,
-          "durationFrames": 25,
-          "chargeTier": 2,
-          "executionTiming": {
-            "subSkillIndex": 0,
-            "frameRate": 60,
-            "input": {
-              "mode": "press",
-              "pressFrame": 0,
-              "holdDurationMs": null,
-              "holdFrames": null,
-              "status": "applied",
-              "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800342].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800342].holdTriggerTime"
-            },
-            "occupancy": {
-              "startFrame": 0,
-              "endFrame": 25,
-              "durationFrames": 25,
-              "frameRate": 60,
-              "status": "applied",
-              "sourceKind": "declared-verified-input-reopen-occupancy",
-              "sourceIdentity": "skill_control_10800342.asset#attack-reopen-window-start=25F",
-              "conversion": "25 source frames at 60fps",
-              "reasons": []
-            },
-            "animation": {
-              "startFrame": 0,
-              "endFrame": 112,
-              "durationFrames": 112,
-              "frameRate": 60,
-              "status": "applied",
-              "sourceKind": "skill-control-player-animation-range",
-              "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0].frameCountDict[key=0]",
-              "conversion": "112 source frames at 60fps"
-            },
-            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
-          },
-          "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F",
-          "resolutionStatus": "applied"
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
+          "chargeTier": 3,
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
+          "resolutionStatus": "not-yet-modeled"
         }
       ],
       "resourceCondition": [],
@@ -16017,18 +15977,16 @@
       },
       "variants": [
         {
-          "executionControlSkillId": 10800341,
           "subSkillIndex": 0,
-          "playerSkillId": 10800341,
-          "durationFrames": 25,
-          "sourceIdentity": "hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F"
+          "playerSkillId": 0,
+          "durationFrames": 209,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
         },
         {
-          "executionControlSkillId": 10800342,
-          "subSkillIndex": 0,
-          "playerSkillId": 10800342,
-          "durationFrames": 25,
-          "sourceIdentity": "hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
+          "subSkillIndex": 1,
+          "playerSkillId": 1,
+          "durationFrames": 86,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
         }
       ],
       "sourceIdentity": [
@@ -16037,11 +15995,13 @@
         "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
         "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
         "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
-        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json",
-        "skill_control_10800310.asset#hold-selector-25F-short-52F-full|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json|hero-module:108003#skill:10800301#重击短蓄力|skill_control_10800310.asset#25F->10800341|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800341.asset/MonoBehaviour/skill_control_10800341__-2826463879442195665.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800341.asset#attack-reopen-window-start=25F|hero-module:108003#skill:10800301#重击满蓄力|skill_control_10800310.asset#52F->10800342|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800342.asset/MonoBehaviour/skill_control_10800342__3068511579440593635.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|skill_control_10800342.asset#attack-reopen-window-start=25F"
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
       ],
-      "resolutionStatus": "applied",
-      "reasons": []
+      "resolutionStatus": "not-yet-modeled",
+      "reasons": [
+        "variant-condition-source-families-audited-not-yet-modeled",
+        "input-selector-to-subskill-relation-not-yet-modeled"
+      ]
     },
     {
       "contractIdentity": "actor:108005|control:10800501|derived-control",
@@ -20515,9 +20475,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
               },
@@ -20585,9 +20578,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
               },
@@ -20680,9 +20706,42 @@
             "frameRate": 60,
             "input": {
               "mode": "hold",
-              "pressFrame": 0,
+              "pressFrame": null,
               "holdDurationMs": 250,
-              "holdFrames": 15,
+              "physicalInput": {
+                "schemaVersion": 1,
+                "contractName": "AzPrVerifiedChargedPhysicalInput",
+                "kind": "azpr-verified-charged-physical-input",
+                "triggerType": 1,
+                "triggerTypeName": "Press",
+                "thresholdMs": 250,
+                "thresholdComparison": "greater-than-or-equal",
+                "accumulation": "delta-time-per-input-update",
+                "pressCallbackAttemptsCast": true,
+                "retryWhilePressedAfterFailedCast": true,
+                "clearPressedStateAfterSuccessfulCast": true,
+                "continuingHoldRearmsNextCharge": false,
+                "nextChargeRequires": "physical-release-then-new-press",
+                "preholdAcrossPredecessor": true,
+                "sharedPreinputReplaysPress": false,
+                "nominal60HzThresholdIntervalMs": [
+                  233.33333333333334,
+                  266.6666666666667
+                ],
+                "upperBoundWhenOtherCastGatesFailMs": null,
+                "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                "measuredClientParity": false,
+                "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                "frameRate": 60,
+                "nominalThresholdFrameInterval": [
+                  14,
+                  16
+                ],
+                "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                "status": "verified-charged-physical-input-static-ready",
+                "applied": true
+              },
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
             },
@@ -20750,9 +20809,42 @@
             "frameRate": 60,
             "input": {
               "mode": "hold",
-              "pressFrame": 0,
+              "pressFrame": null,
               "holdDurationMs": 250,
-              "holdFrames": 15,
+              "physicalInput": {
+                "schemaVersion": 1,
+                "contractName": "AzPrVerifiedChargedPhysicalInput",
+                "kind": "azpr-verified-charged-physical-input",
+                "triggerType": 1,
+                "triggerTypeName": "Press",
+                "thresholdMs": 250,
+                "thresholdComparison": "greater-than-or-equal",
+                "accumulation": "delta-time-per-input-update",
+                "pressCallbackAttemptsCast": true,
+                "retryWhilePressedAfterFailedCast": true,
+                "clearPressedStateAfterSuccessfulCast": true,
+                "continuingHoldRearmsNextCharge": false,
+                "nextChargeRequires": "physical-release-then-new-press",
+                "preholdAcrossPredecessor": true,
+                "sharedPreinputReplaysPress": false,
+                "nominal60HzThresholdIntervalMs": [
+                  233.33333333333334,
+                  266.6666666666667
+                ],
+                "upperBoundWhenOtherCastGatesFailMs": null,
+                "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                "measuredClientParity": false,
+                "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                "frameRate": 60,
+                "nominalThresholdFrameInterval": [
+                  14,
+                  16
+                ],
+                "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                "status": "verified-charged-physical-input-static-ready",
+                "applied": true
+              },
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900110].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900110].holdTriggerTime"
             },
@@ -21441,9 +21533,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
               },
@@ -21511,9 +21636,42 @@
               "frameRate": 60,
               "input": {
                 "mode": "hold",
-                "pressFrame": 0,
+                "pressFrame": null,
                 "holdDurationMs": 250,
-                "holdFrames": 15,
+                "physicalInput": {
+                  "schemaVersion": 1,
+                  "contractName": "AzPrVerifiedChargedPhysicalInput",
+                  "kind": "azpr-verified-charged-physical-input",
+                  "triggerType": 1,
+                  "triggerTypeName": "Press",
+                  "thresholdMs": 250,
+                  "thresholdComparison": "greater-than-or-equal",
+                  "accumulation": "delta-time-per-input-update",
+                  "pressCallbackAttemptsCast": true,
+                  "retryWhilePressedAfterFailedCast": true,
+                  "clearPressedStateAfterSuccessfulCast": true,
+                  "continuingHoldRearmsNextCharge": false,
+                  "nextChargeRequires": "physical-release-then-new-press",
+                  "preholdAcrossPredecessor": true,
+                  "sharedPreinputReplaysPress": false,
+                  "nominal60HzThresholdIntervalMs": [
+                    233.33333333333334,
+                    266.6666666666667
+                  ],
+                  "upperBoundWhenOtherCastGatesFailMs": null,
+                  "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                  "measuredClientParity": false,
+                  "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                  "frameRate": 60,
+                  "nominalThresholdFrameInterval": [
+                    14,
+                    16
+                  ],
+                  "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                  "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                  "status": "verified-charged-physical-input-static-ready",
+                  "applied": true
+                },
                 "status": "applied",
                 "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
               },
@@ -21606,9 +21764,42 @@
             "frameRate": 60,
             "input": {
               "mode": "hold",
-              "pressFrame": 0,
+              "pressFrame": null,
               "holdDurationMs": 250,
-              "holdFrames": 15,
+              "physicalInput": {
+                "schemaVersion": 1,
+                "contractName": "AzPrVerifiedChargedPhysicalInput",
+                "kind": "azpr-verified-charged-physical-input",
+                "triggerType": 1,
+                "triggerTypeName": "Press",
+                "thresholdMs": 250,
+                "thresholdComparison": "greater-than-or-equal",
+                "accumulation": "delta-time-per-input-update",
+                "pressCallbackAttemptsCast": true,
+                "retryWhilePressedAfterFailedCast": true,
+                "clearPressedStateAfterSuccessfulCast": true,
+                "continuingHoldRearmsNextCharge": false,
+                "nextChargeRequires": "physical-release-then-new-press",
+                "preholdAcrossPredecessor": true,
+                "sharedPreinputReplaysPress": false,
+                "nominal60HzThresholdIntervalMs": [
+                  233.33333333333334,
+                  266.6666666666667
+                ],
+                "upperBoundWhenOtherCastGatesFailMs": null,
+                "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                "measuredClientParity": false,
+                "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                "frameRate": 60,
+                "nominalThresholdFrameInterval": [
+                  14,
+                  16
+                ],
+                "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                "status": "verified-charged-physical-input-static-ready",
+                "applied": true
+              },
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
             },
@@ -21676,9 +21867,42 @@
             "frameRate": 60,
             "input": {
               "mode": "hold",
-              "pressFrame": 0,
+              "pressFrame": null,
               "holdDurationMs": 250,
-              "holdFrames": 15,
+              "physicalInput": {
+                "schemaVersion": 1,
+                "contractName": "AzPrVerifiedChargedPhysicalInput",
+                "kind": "azpr-verified-charged-physical-input",
+                "triggerType": 1,
+                "triggerTypeName": "Press",
+                "thresholdMs": 250,
+                "thresholdComparison": "greater-than-or-equal",
+                "accumulation": "delta-time-per-input-update",
+                "pressCallbackAttemptsCast": true,
+                "retryWhilePressedAfterFailedCast": true,
+                "clearPressedStateAfterSuccessfulCast": true,
+                "continuingHoldRearmsNextCharge": false,
+                "nextChargeRequires": "physical-release-then-new-press",
+                "preholdAcrossPredecessor": true,
+                "sharedPreinputReplaysPress": false,
+                "nominal60HzThresholdIntervalMs": [
+                  233.33333333333334,
+                  266.6666666666667
+                ],
+                "upperBoundWhenOtherCastGatesFailMs": null,
+                "sameFrameCallbackVsUpdateOrder": "unresolved-retain-one-update-interval",
+                "measuredClientParity": false,
+                "evidenceClass": "installed-client-static-binary-and-asset-evidence",
+                "frameRate": 60,
+                "nominalThresholdFrameInterval": [
+                  14,
+                  16
+                ],
+                "authorityHash": "d44151784c01218413e4a8b0d3950f938b91947684c38f9c68eebc7223b07446",
+                "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+                "status": "verified-charged-physical-input-static-ready",
+                "applied": true
+              },
               "status": "applied",
               "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=19900210].inputTriggerType|NewTable/skillsub_logic.rows[skillId=19900210].holdTriggerTime"
             },
@@ -36487,6 +36711,207 @@
       "resolutionStatus": "partially-resolved",
       "reasons": [
         "event-bridge-input-semantics-partially-modeled"
+      ]
+    },
+    {
+      "contractIdentity": "actor:108003|control:10800310|derived-control",
+      "ownerKind": "actor",
+      "ownerId": 108003,
+      "controlSkillId": 10800310,
+      "actionKinds": [
+        "charged-attack"
+      ],
+      "publicActions": [
+        {
+          "ownerKind": "actor",
+          "ownerId": 108003,
+          "sourceSkillId": 10800301,
+          "actionKind": "charged-attack",
+          "actionVariantIndex": 1,
+          "publicVariants": [
+            {
+              "index": 1,
+              "label": "重击",
+              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]"
+            },
+            {
+              "index": 2,
+              "label": "重击短蓄力",
+              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]"
+            },
+            {
+              "index": 4,
+              "label": "重击满蓄力",
+              "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]"
+            }
+          ],
+          "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=2]"
+        }
+      ],
+      "controlSource": "input-controlled",
+      "candidateControlSources": [
+        "input-controlled"
+      ],
+      "decisionFrame": 0,
+      "inputSelector": {
+        "kind": "charge-tier",
+        "mode": "hold",
+        "holdRange": {
+          "minimumHoldMs": 250,
+          "maximumHoldMs": null,
+          "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+          "resolutionStatus": "partially-resolved"
+        },
+        "options": [
+          {
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
+            "label": "重击",
+            "publicVariantIndex": 1,
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
+            "chargeTier": 1,
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
+            "resolutionStatus": "not-yet-modeled"
+          },
+          {
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+            "label": "重击短蓄力",
+            "publicVariantIndex": 2,
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
+            "chargeTier": 2,
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
+            "resolutionStatus": "not-yet-modeled"
+          },
+          {
+            "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
+            "label": "重击满蓄力",
+            "publicVariantIndex": 4,
+            "subSkillIndex": null,
+            "playerSkillId": null,
+            "durationFrames": null,
+            "chargeTier": 3,
+            "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
+            "resolutionStatus": "not-yet-modeled"
+          }
+        ],
+        "eventBridgeRelations": [
+          {
+            "sourceSubSkillIndex": 0,
+            "targetControlSkillId": 10800310,
+            "targetSubSkillIndex": null,
+            "startFrame": 0,
+            "endFrame": 29,
+            "baseOnInput": false,
+            "inputToIndex": false,
+            "bridgeType": 4,
+            "continuousAttackType": 0,
+            "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+          }
+        ],
+        "sourceIdentity": [
+          "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+          "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+        ],
+        "resolutionStatus": "not-yet-modeled"
+      },
+      "inputRelations": [
+        {
+          "sourceSubSkillIndex": 0,
+          "targetControlSkillId": 10800310,
+          "targetSubSkillIndex": null,
+          "startFrame": 0,
+          "endFrame": 29,
+          "baseOnInput": false,
+          "inputToIndex": false,
+          "bridgeType": 4,
+          "continuousAttackType": 0,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+        }
+      ],
+      "holdRange": {
+        "minimumHoldMs": 250,
+        "maximumHoldMs": null,
+        "sourceIdentity": "NewTable/skillsub_logic.rows[skillId=10800310].inputTriggerType|NewTable/skillsub_logic.rows[skillId=10800310].holdTriggerTime",
+        "resolutionStatus": "partially-resolved"
+      },
+      "chargeTier": [
+        {
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:1",
+          "label": "重击",
+          "publicVariantIndex": 1,
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
+          "chargeTier": 1,
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
+          "resolutionStatus": "not-yet-modeled"
+        },
+        {
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:2",
+          "label": "重击短蓄力",
+          "publicVariantIndex": 2,
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
+          "chargeTier": 2,
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
+          "resolutionStatus": "not-yet-modeled"
+        },
+        {
+          "selectorIdentity": "actor:108003|control:10800310|public-variant:4",
+          "label": "重击满蓄力",
+          "publicVariantIndex": 4,
+          "subSkillIndex": null,
+          "playerSkillId": null,
+          "durationFrames": null,
+          "chargeTier": 3,
+          "sourceIdentity": "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
+          "resolutionStatus": "not-yet-modeled"
+        }
+      ],
+      "resourceCondition": [],
+      "resourceCost": [],
+      "stateCondition": [],
+      "automaticFollowUps": [],
+      "selectedSubSkillIndex": null,
+      "defaultSelection": {
+        "ownerId": 108003,
+        "controlSkillId": 10800310,
+        "subSkillIndex": 0,
+        "decisionFrame": 0,
+        "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]|client-skill-sub-index-default=0",
+        "status": "verified-default-subskill-selection-ready",
+        "applied": true
+      },
+      "variants": [
+        {
+          "subSkillIndex": 0,
+          "playerSkillId": 0,
+          "durationFrames": 209,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[0]|skillResourceMaps[0]"
+        },
+        {
+          "subSkillIndex": 1,
+          "playerSkillId": 1,
+          "durationFrames": 86,
+          "sourceIdentity": "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json#skillControlData.skillPlayers[1]|skillResourceMaps[1]"
+        }
+      ],
+      "sourceIdentity": [
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/skill_control_10800310__-8587852103554743305.json",
+        "NewTable/skillsub_logic.rows[skillId=10800310]",
+        "workbench-seed.gameData.skills[id=10800301].level.labels[1]",
+        "workbench-seed.gameData.skills[id=10800301].level.labels[2]",
+        "workbench-seed.gameData.skills[id=10800301].level.labels[4]",
+        "C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-3741559844055099657__-3741559844055099657.json#behaviorlineControl[0].behaviorList[pathId=-8835718126057695497]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10800310.asset/MonoBehaviour/MonoBehaviour_-8835718126057695497__-8835718126057695497.json"
+      ],
+      "resolutionStatus": "not-yet-modeled",
+      "reasons": [
+        "variant-condition-source-families-audited-not-yet-modeled",
+        "input-selector-to-subskill-relation-not-yet-modeled"
       ]
     },
     {

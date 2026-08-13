@@ -22,7 +22,7 @@
 | 动作 | 就绪 | 状态 | 剩余缺口 |
 | --- | --- | --- | --- |
 | normal-attack | 是 | applied |  |
-| charged-attack | 否 | static-evidence-gap | selected-control-variant-has-no-runnable-hit；verified-action-effective-occupancy-window-unresolved |
+| charged-attack | 否 | static-evidence-gap | selected-control-variant-has-no-runnable-hit |
 | dodge-attack | 否 | static-evidence-gap | projectile-impact-frame-runtime-dependent；trigger-frame-missing |
 | plunging-attack | 是 | applied |  |
 | star-skill | 是 | applied |  |

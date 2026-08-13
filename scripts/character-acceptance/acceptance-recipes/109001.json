@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "accepted",
+    "status": "pending",
     "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
     "recordIdentity": "character-product-acceptance:109001:13d28aa515312a63395f49ddff3c778967e1b20f:885f1095802cc741",
     "qualificationSubjectHash": "885f1095802cc741",
     "scenarioSetHash": "e847ff61317e8b5a",
-    "scenarioIdentities": ["m11-d-109001-visual-acceptance"],
-    "automatedEvidence": [
+    "scenarioIdentities": [],
+    "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m11-d-109001-visual-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
@@ -114,6 +114,13 @@
       "controlSkillId": 50005701,
       "subSkillIndex": 0,
       "semanticName": "猪突猛进"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "moyin-charged",
+      "controlSkillId": 10900110,
+      "subSkillIndex": 0,
+      "semanticName": "重击"
     }
   ]
 }

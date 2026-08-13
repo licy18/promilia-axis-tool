@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "contractName": "AzPrMachineAxisCoarsePlan",
+  "kind": "azpr-machine-axis-coarse-plan",
+  "planId": "m12-ai-local-example-v1",
+  "objective": "damage",
+  "topN": 2,
+  "provenance": {
+    "authority": "ai-authored-coarse-axis",
+    "model": "example-only",
+    "promptHash": "example-not-formal-authority",
+    "note": "The AI chooses the macro order; the optimizer may only touch the listed local variables."
+  },
+  "contractTemplate": {
+    "schemaVersion": 1,
+    "contractName": "AzPrMachineAxis",
+    "kind": "azpr-machine-axis",
+    "dataIdentity": {
+      "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
+    "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
+      "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
+      "mechanicsProfileVersion": 1
+    },
+    "scenario": {
+      "id": "m12-ai-local-example",
+      "name": "M12 AI coarse axis local optimization example",
+      "fps": 60,
+      "durationFrames": 480,
+      "team": [
+        {
+          "slotId": "slot-1",
+          "characterId": 101007,
+          "level": 1,
+          "initialSp": 35,
+          "loadout": {},
+          "cultivation": {}
+        },
+        {
+          "slotId": "slot-2",
+          "characterId": 101010,
+          "level": 1,
+          "initialSp": 50,
+          "loadout": {},
+          "cultivation": {}
+        },
+        {
+          "slotId": "slot-3",
+          "characterId": 103002,
+          "level": 1,
+          "initialSp": 80,
+          "loadout": {},
+          "cultivation": {}
+        }
+      ],
+      "enemy": {
+        "enemyId": 300032,
+        "level": 1,
+        "hpMultiplier": 1,
+        "defenseMultiplier": 1,
+        "toughnessMultiplier": 1,
+        "initialToughnessRatio": 1,
+        "elementDefenseOverrides": {}
+      },
+      "initialRuntimeState": {},
+      "projectile": {
+        "targetDistance": 0,
+        "defaultWillHit": true
+      },
+      "critical": {
+        "policy": "expected",
+        "seed": "m12-ai-local-example"
+      }
+    },
+    "actions": [],
+    "metadata": {
+      "purpose": "bounded multi-process smoke fixture only",
+      "formalAuthority": false
+    }
+  },
+  "seeds": [
+    {
+      "seedId": "ai-switch-then-charged",
+      "rationale": "AI chooses the macro sequence: switch to Xiaoyu, then execute one charged attack.",
+      "maxChangedVariables": 1,
+      "maxCandidates": 4,
+      "actions": [
+        {
+          "id": "switch-to-xiaoyu",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-1"
+          },
+          "intent": {
+            "kind": "switch",
+            "targetSlotId": "slot-2"
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 0
+          }
+        },
+        {
+          "id": "xiaoyu-charged",
+          "owner": {
+            "kind": "actor",
+            "slotId": "slot-2"
+          },
+          "intent": {
+            "kind": "public-action",
+            "publicActionId": 10101001,
+            "actionKind": "charged-attack",
+            "level": 1,
+            "physicalInput": {
+              "mode": "hold",
+              "pressFrame": 284,
+              "releaseFrame": null,
+              "executionFrame": 300,
+              "authorityHash": "01f4f5dfb70e196a59ee17e0e94aacab89c244f02428688f8fff95182b4cab80",
+              "sourceKind": "installed-client-static-binary-and-asset-evidence"
+            }
+          },
+          "schedule": {
+            "mode": "absolute",
+            "frame": 300
+          }
+        }
+      ],
+      "variables": [
+        {
+          "variableId": "charged-local-frame",
+          "kind": "schedule-frame-offset",
+          "actionId": "xiaoyu-charged",
+          "values": [-2, 0, 2],
+          "cascade": "single"
+        },
+        {
+          "variableId": "macro-one-frame-shift",
+          "kind": "schedule-frame-offset",
+          "actionId": "switch-to-xiaoyu",
+          "values": [0, 1],
+          "cascade": "suffix"
+        }
+      ]
+    }
+  ],
+  "budget": {
+    "maxCandidatesTotal": 4,
+    "maxShards": 2,
+    "maxWallTimeMs": 120000,
+    "perShard": {
+      "maxCandidates": 2,
+      "maxEvaluations": 2,
+      "maxSimulations": 8,
+      "maxWallTimeMs": 60000
+    }
+  },
+  "parallelism": {
+    "workers": 2,
+    "memoryMbPerWorker": 1024
+  }
+}

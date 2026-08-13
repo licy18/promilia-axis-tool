@@ -4,7 +4,7 @@
   "kind": "azpr-machine-axis",
   "dataIdentity": {
     "verifiedMechanicsPackageId": "azpr-tc-2026-07-18",
-    "verifiedMechanicsPackageHash": "62906a98964fa5948c80519e4454a4c8056f841d620a4c40b959c725f1941fc8",
+    "verifiedMechanicsPackageHash": "04794a7c3de2ddc5bfea9ba2808e33241494c228c7428ba838777486ce305216",
     "mechanicsProfileId": "azpr-three-value-verified-tc-20260718",
     "mechanicsProfileVersion": 1
   },
@@ -343,15 +343,33 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-short",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 2,
-          "chargeTier": 1,
-          "mode": "hold"
+          "selectorIdentity": "miti-medium-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 2,
+          "mode": "release",
+          "inputFrame": 29
         },
         "level": 1
       },
       "schedule": { "mode": "absolute", "frame": 2170 }
+    },
+    {
+      "id": "miti-light-charge-state-on",
+      "owner": { "kind": "actor", "slotId": "slot-1" },
+      "intent": {
+        "kind": "public-action",
+        "publicActionId": 10800301,
+        "actionKind": "charged-attack",
+        "semanticVariant": {
+          "selectorIdentity": "miti-light-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 1,
+          "mode": "release",
+          "inputFrame": 0
+        },
+        "level": 1
+      },
+      "schedule": { "mode": "absolute", "frame": 2300 }
     },
     {
       "id": "miti-full-charge-expiry-boundary",
@@ -361,11 +379,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-full",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 4,
-          "chargeTier": 2,
-          "mode": "hold"
+          "selectorIdentity": "miti-full-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 3,
+          "mode": "release",
+          "inputFrame": 67
         },
         "level": 1
       },
@@ -390,11 +408,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-full",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 4,
-          "chargeTier": 2,
-          "mode": "hold"
+          "selectorIdentity": "miti-full-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 3,
+          "mode": "release",
+          "inputFrame": 67
         },
         "level": 1
       },
@@ -408,11 +426,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-full",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 4,
-          "chargeTier": 2,
-          "mode": "hold"
+          "selectorIdentity": "miti-full-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 3,
+          "mode": "release",
+          "inputFrame": 67
         },
         "level": 1
       },
@@ -461,11 +479,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-full",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 4,
-          "chargeTier": 2,
-          "mode": "hold"
+          "selectorIdentity": "miti-full-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 3,
+          "mode": "release",
+          "inputFrame": 67
         },
         "level": 1
       },
@@ -493,11 +511,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-short",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 2,
-          "chargeTier": 1,
-          "mode": "hold"
+          "selectorIdentity": "miti-medium-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 2,
+          "mode": "release",
+          "inputFrame": 29
         },
         "level": 1
       },
@@ -572,11 +590,11 @@
         "publicActionId": 10800301,
         "actionKind": "charged-attack",
         "semanticVariant": {
-          "selectorIdentity": "miti-charged-short",
-          "selectorKind": "charge-tier",
-          "publicVariantIndex": 2,
-          "chargeTier": 1,
-          "mode": "hold"
+          "selectorIdentity": "miti-medium-charge",
+          "selectorKind": "charging-release-frame",
+          "chargeTier": 2,
+          "mode": "release",
+          "inputFrame": 29
         },
         "level": 1
       },

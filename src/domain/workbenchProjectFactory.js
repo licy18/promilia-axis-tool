@@ -206,6 +206,7 @@ export function createWorkbenchActionDraft({
   needsTimingData = null,
   controlSubSkillIndex = null,
   variantInputSelection = null,
+  physicalInput = null,
   actionScheduling = null,
   sourceEvidenceStatus = null,
   scenarioRuntimeStatus = null,
@@ -299,6 +300,7 @@ export function createWorkbenchActionDraft({
     variantInputSelection: normalizeActionVariantInputSelection(
       variantInputSelection
     ),
+    ...(physicalInput ? { physicalInput: structuredClone(physicalInput) } : {}),
     actionScheduling:
       normalizeWorkbenchActionSchedulingContract(actionScheduling),
     sourceEvidenceStatus: textOrNull(sourceEvidenceStatus),

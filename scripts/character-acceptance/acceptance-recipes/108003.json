@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "productVisualAcceptance": {
-    "status": "accepted",
+    "status": "pending",
     "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
     "recordIdentity": "character-product-acceptance:108003:13d28aa515312a63395f49ddff3c778967e1b20f:c7c62aa773bdfba5",
     "qualificationSubjectHash": "c7c62aa773bdfba5",
     "scenarioSetHash": "37bb88a781814277",
-    "scenarioIdentities": ["m12-b3-e20-2-108003-s1-visual-acceptance"],
-    "automatedEvidence": [
+    "scenarioIdentities": [],
+    "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-e20-2-108003-s1-visual-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",
@@ -30,7 +30,14 @@
       "actionId": "miti-short-charge-state-on",
       "controlSkillId": 10800341,
       "subSkillIndex": 0,
-      "semanticName": "重击短蓄力"
+      "semanticName": "重击中蓄力"
+    },
+    {
+      "kind": "variant-selection",
+      "actionId": "miti-light-charge-state-on",
+      "controlSkillId": 10800310,
+      "subSkillIndex": 1,
+      "semanticName": "重击轻蓄力"
     },
     {
       "kind": "variant-selection",

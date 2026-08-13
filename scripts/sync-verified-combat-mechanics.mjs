@@ -12,6 +12,10 @@ import {
   isSourceDisplayTextSafe,
 } from '../src/domain/sourceDisplayText.js';
 import { VERIFIED_EFFECT_SOURCE_SEQUENCE_CONTRACT_NAME } from '../src/domain/verifiedEffectSourceSequence.js';
+import {
+  createVerifiedChargedPhysicalInputContract,
+  resolveVerifiedChargedInputAuthority,
+} from '../src/domain/verifiedChargedInputAuthority.js';
 import { createCharacterCombatOutputRecords } from './character-combat/character-combat-profile-pipeline.mjs';
 import { createCharacterCombatStatDependencies } from './character-combat/character-combat-contract-compiler.mjs';
 import { createCharacterCombatGoldenRuntime } from './character-combat/character-combat-golden-runtime.mjs';
@@ -8158,8 +8162,7 @@ function createStaticPropertyCatalog({
   for (const alias of optimizationObjectSourceAliases ?? []) {
     const characterId = Number(alias.sourceCharacterId);
     const hero = heroById.get(characterId);
-    const expectedCharacterSource =
-      `src/data/generated/characters.json#items[id=${characterId}]`;
+    const expectedCharacterSource = `src/data/generated/characters.json#items[id=${characterId}]`;
     const expectedHeroSource = `NewTable/hero.rows[id=${characterId}]`;
     if (
       !Number.isInteger(characterId) ||
@@ -8188,9 +8191,9 @@ function createStaticPropertyCatalog({
     ...new Map(
       [
         ...verifiedHeroes,
-        ...optimizationAliasByCharacterId.keys().map(characterId =>
-          heroById.get(characterId)
-        ),
+        ...optimizationAliasByCharacterId
+          .keys()
+          .map(characterId => heroById.get(characterId)),
       ].map(hero => [Number(hero.id), hero])
     ).values(),
   ].sort((left, right) => Number(left.id) - Number(right.id));
@@ -8562,12 +8565,11 @@ function createStaticPropertyIdentityAudit({
       inWorkbenchCatalog: workbenchActors.has(id),
       inVerifiedCollectibleSet: verifiedActorIds.has(id),
       inOptimizationObjectSourceAliasSet: optimizationAliasIds.has(id),
-      classification:
-        optimizationAliasIds.has(id)
-          ? actorProfileById.get(id)?.applied
-            ? 'optimization-object-source-alias-applicable'
-            : 'optimization-object-source-alias-unresolved'
-          : workbenchActors.has(id) && verifiedActorIds.has(id)
+      classification: optimizationAliasIds.has(id)
+        ? actorProfileById.get(id)?.applied
+          ? 'optimization-object-source-alias-applicable'
+          : 'optimization-object-source-alias-unresolved'
+        : workbenchActors.has(id) && verifiedActorIds.has(id)
           ? actorProfileById.get(id)?.applied
             ? 'applicable'
             : 'unresolved'
@@ -8612,9 +8614,7 @@ function createOptimizationObjectStaticSourceAliases(recipes = []) {
     .map(recipe => ({
       ownerId: Number(recipe.ownerId),
       optimizationObjectId: recipe.optimizationObject.optimizationObjectId,
-      sourceCharacterId: Number(
-        recipe.optimizationObject.sourceCharacterId
-      ),
+      sourceCharacterId: Number(recipe.optimizationObject.sourceCharacterId),
       sourceAliasIdentity: recipe.optimizationObject.sourceAliasIdentity,
       sourceIdentity: recipe.optimizationObject.sourceIdentity,
     }))
@@ -9865,10 +9865,8 @@ function createSemanticEffectCandidate({
   const settlementOrderedEffect = rawEffects.find(
     effect =>
       effect.hitSettlementOrder != null &&
-      effect.sourceOrder?.contractName ===
-        'AzPrVerifiedEffectSourceSequence' &&
-      effect.sourceOrder?.status ===
-        'verified-battle-effect-source-order-ready'
+      effect.sourceOrder?.contractName === 'AzPrVerifiedEffectSourceSequence' &&
+      effect.sourceOrder?.status === 'verified-battle-effect-source-order-ready'
   );
   const runtimeBoundEffect = rawEffects.find(
     effect =>
@@ -9903,8 +9901,7 @@ function createSemanticEffectCandidate({
     relationPath,
     trigger,
     sourceOrder: settlementOrderedEffect?.sourceOrder ?? null,
-    hitSettlementOrder:
-      settlementOrderedEffect?.hitSettlementOrder ?? null,
+    hitSettlementOrder: settlementOrderedEffect?.hitSettlementOrder ?? null,
     hitGate: runtimeBoundEffect?.hitGate ?? null,
     landedHitActivationCondition:
       runtimeBoundEffect?.landedHitActivationCondition ?? null,
@@ -10446,14 +10443,18 @@ function createPublicActionTimingContract({
           ...selected,
           occupancy: declaredForm.executionTiming.occupancy,
         };
-    return createSelectedActionTimingContract({
-      actionKind: candidate.actionKind,
+    return applyVerifiedChargedInputTimingAuthority({
+      candidate,
       control,
-      selected: selectedTiming,
-      variantTimings,
-      sourceKind: usesDeclaredOccupancy
-        ? 'declared-public-action-form-occupancy'
-        : 'selected-skill-control-player-variant',
+      timing: createSelectedActionTimingContract({
+        actionKind: candidate.actionKind,
+        control,
+        selected: selectedTiming,
+        variantTimings,
+        sourceKind: usesDeclaredOccupancy
+          ? 'declared-public-action-form-occupancy'
+          : 'selected-skill-control-player-variant',
+      }),
     });
   }
   const appliedVariants = variantTimings.filter(
@@ -10468,35 +10469,217 @@ function createPublicActionTimingContract({
     uniqueDurations.length === 1
   ) {
     const representative = appliedVariants[0];
-    return createSelectedActionTimingContract({
-      actionKind: candidate.actionKind,
+    return applyVerifiedChargedInputTimingAuthority({
+      candidate,
       control,
-      selected: {
-        ...representative,
-        occupancy: {
-          ...representative.occupancy,
-          sourceKind: 'invariant-across-control-player-variants',
-          sourceIdentity: appliedVariants
-            .map(timing => timing.occupancy.sourceIdentity)
-            .join('|'),
+      timing: createSelectedActionTimingContract({
+        actionKind: candidate.actionKind,
+        control,
+        selected: {
+          ...representative,
+          occupancy: {
+            ...representative.occupancy,
+            sourceKind: 'invariant-across-control-player-variants',
+            sourceIdentity: appliedVariants
+              .map(timing => timing.occupancy.sourceIdentity)
+              .join('|'),
+          },
         },
-      },
-      variantTimings,
-      sourceKind: 'invariant-across-control-player-variants',
+        variantTimings,
+        sourceKind: 'invariant-across-control-player-variants',
+      }),
     });
   }
-  return createUnresolvedActionTimingContract({
-    actionKind: candidate.actionKind,
+  return applyVerifiedChargedInputTimingAuthority({
+    candidate,
     control,
-    variantTimings,
-    reasons: [
-      variantTimings.length === 0
-        ? 'skill-control-player-variant-missing'
-        : appliedVariants.length !== variantTimings.length
-          ? 'control-player-variant-duration-unresolved'
-          : 'control-player-variant-duration-not-invariant',
-    ],
+    timing: createUnresolvedActionTimingContract({
+      actionKind: candidate.actionKind,
+      control,
+      variantTimings,
+      reasons: [
+        variantTimings.length === 0
+          ? 'skill-control-player-variant-missing'
+          : appliedVariants.length !== variantTimings.length
+            ? 'control-player-variant-duration-unresolved'
+            : 'control-player-variant-duration-not-invariant',
+      ],
+    }),
   });
+}
+
+function applyVerifiedChargedInputTimingAuthority({
+  candidate,
+  control,
+  timing,
+}) {
+  if (candidate?.actionKind !== 'charged-attack') return timing;
+  const authority = resolveVerifiedChargedInputAuthority({
+    ownerId: candidate.ownerId,
+    controlSkillId: candidate.controlSkillId,
+  });
+  if (!authority) return timing;
+  const physicalInput = createVerifiedChargedPhysicalInputContract({
+    frameRate: timing.frameRate ?? control?.frameRate ?? 60,
+  });
+  const input = {
+    ...(timing.input ?? {}),
+    mode: 'hold',
+    pressFrame: null,
+    holdDurationMs: physicalInput.thresholdMs,
+    physicalInput,
+    status: 'applied',
+    sourceIdentity: physicalInput.sourceIdentity,
+  };
+  if (!authority.applied) {
+    const reasons = dedupeBy(
+      [...(authority.reasons ?? []), ...(timing.reasons ?? [])],
+      value => value
+    );
+    return {
+      ...timing,
+      input,
+      occupancy: createUnresolvedOccupancy(reasons[0], {
+        sourceIdentity: authority.sourceIdentity,
+        frameRate: timing.frameRate ?? control?.frameRate ?? 60,
+      }),
+      status: 'unresolved',
+      sourceKind: 'installed-client-static-charged-reopen-unresolved',
+      sourceIdentity: authority.sourceIdentity,
+      reasons,
+      chargedInputAuthority: authority,
+    };
+  }
+  const selectedSubSkillIndex = Number(timing.selectedSubSkillIndex);
+  const selectedVariant = (timing.variantTimings ?? []).find(
+    variant => Number(variant.subSkillIndex) === selectedSubSkillIndex
+  );
+  const compositeRelease = authority.compositeChargingRelease ?? null;
+  if (compositeRelease) {
+    const [domainStartFrame, domainEndFrame] =
+      compositeRelease.sourceWrapperFrameDomain ?? [];
+    const rawWindows = compositeRelease.rawWindows ?? [];
+    const controlWindows = selectedVariant?.windows ?? timing.windows ?? [];
+    const releaseWindowsMatch = rawWindows.every(expected =>
+      controlWindows.some(
+        actual =>
+          Number(actual.startFrame) === Number(expected.startFrame) &&
+          Number(actual.endFrame) === Number(expected.endFrame) &&
+          Number(actual.targetControlSkillId) ===
+            Number(expected.executionControlSkillId) &&
+          Number(actual.targetSubSkillIndex) ===
+            Number(expected.executionSubSkillIndex) &&
+          Number(actual.bridgeType) ===
+            Number(compositeRelease.releaseEventCode)
+      )
+    );
+    if (
+      selectedSubSkillIndex !== Number(compositeRelease.sourceSubSkillIndex) ||
+      !Number.isInteger(Number(domainStartFrame)) ||
+      !Number.isInteger(Number(domainEndFrame)) ||
+      Number(domainStartFrame) !== 0 ||
+      Number(domainEndFrame) <= Number(domainStartFrame) ||
+      rawWindows.length < 2 ||
+      !releaseWindowsMatch
+    ) {
+      throw new Error(
+        `charged composite release authority drift: ${candidate.ownerId}/${candidate.controlSkillId}/sub${selectedSubSkillIndex}`
+      );
+    }
+    const occupancy = {
+      ...(timing.occupancy ?? {}),
+      startFrame: Number(domainStartFrame),
+      endFrame: Number(domainEndFrame),
+      durationFrames: Number(domainEndFrame) - Number(domainStartFrame),
+      frameRate: timing.frameRate ?? control?.frameRate ?? 60,
+      status: 'applied',
+      sourceKind: 'installed-client-static-charged-wrapper-release-domain',
+      sourceIdentity: [
+        authority.sourceIdentity,
+        ...controlWindows
+          .filter(window =>
+            rawWindows.some(
+              expected =>
+                Number(expected.startFrame) === Number(window.startFrame) &&
+                Number(expected.endFrame) === Number(window.endFrame)
+            )
+          )
+          .map(window => window.sourceIdentity),
+      ]
+        .filter(Boolean)
+        .join('|'),
+      conversion:
+        'source wrapper release domain; effective occupancy is release frame plus selected release reopen',
+      effectiveDurationRequiresChargingRelease: true,
+      releaseFrameDomain: [Number(domainStartFrame), Number(domainEndFrame)],
+      nextSameActionFromReleaseFrameInterval:
+        authority.nextSameActionFrameInterval,
+      measuredClientParity: false,
+      reasons: [],
+    };
+    return {
+      ...timing,
+      input,
+      occupancy,
+      variantTimings: (timing.variantTimings ?? []).map(variant =>
+        Number(variant.subSkillIndex) === selectedSubSkillIndex
+          ? { ...variant, input, occupancy }
+          : variant
+      ),
+      status: 'applied',
+      sourceKind: occupancy.sourceKind,
+      sourceIdentity: occupancy.sourceIdentity,
+      reasons: [],
+      chargedInputAuthority: authority,
+    };
+  }
+  const matchingWindow = (
+    selectedVariant?.windows ??
+    timing.windows ??
+    []
+  ).find(
+    window =>
+      Number(window.startFrame) === Number(authority.staticReopenFrame) &&
+      window.allowAttack === true &&
+      (window.allowedInputCommands ?? []).includes('charged-attack')
+  );
+  if (!matchingWindow) {
+    throw new Error(
+      `charged input authority drift: ${candidate.ownerId}/${candidate.controlSkillId}/sub${selectedSubSkillIndex}; expected charged reopen ${authority.staticReopenFrame}F`
+    );
+  }
+  const occupancy = {
+    ...(timing.occupancy ?? {}),
+    startFrame: 0,
+    endFrame: authority.staticReopenFrame,
+    durationFrames: authority.staticReopenFrame,
+    frameRate: timing.frameRate ?? control?.frameRate ?? 60,
+    status: 'applied',
+    sourceKind: 'installed-client-static-charged-same-action-reopen',
+    sourceIdentity: [authority.sourceIdentity, matchingWindow.sourceIdentity]
+      .filter(Boolean)
+      .join('|'),
+    conversion: `${authority.staticReopenFrame} source frames plus one input-update uncertainty`,
+    reopenWindow: matchingWindow,
+    nextSameActionFrameInterval: authority.nextSameActionFrameInterval,
+    measuredClientParity: false,
+    reasons: [],
+  };
+  return {
+    ...timing,
+    input,
+    occupancy,
+    variantTimings: (timing.variantTimings ?? []).map(variant =>
+      Number(variant.subSkillIndex) === selectedSubSkillIndex
+        ? { ...variant, input, occupancy }
+        : variant
+    ),
+    status: 'applied',
+    sourceKind: occupancy.sourceKind,
+    sourceIdentity: occupancy.sourceIdentity,
+    reasons: [],
+    chargedInputAuthority: authority,
+  };
 }
 
 function createControlVariantTimingContract({
@@ -10567,11 +10750,11 @@ function createControlVariantTimingContract({
     frameRate,
     input: {
       mode: inputMode,
-      pressFrame: 0,
+      pressFrame: inputMode === 'hold' ? null : 0,
       holdDurationMs: inputMode === 'hold' ? holdDurationMs : null,
-      holdFrames:
+      physicalInput:
         inputMode === 'hold'
-          ? Math.round((holdDurationMs / 1000) * frameRate)
+          ? createVerifiedChargedPhysicalInputContract({ frameRate })
           : null,
       status:
         control?.logic?.inputTriggerType == null ? 'unresolved' : 'applied',
@@ -11804,6 +11987,7 @@ function createControlInputTrigger(logic) {
     0,
     finiteNumberOrNull(logic?.holdTriggerTimeMs) ?? 0
   );
+  const mode = triggerType === 1 && holdTriggerTimeMs > 0 ? 'hold' : 'press';
   return {
     triggerType,
     triggerTypeName:
@@ -11814,8 +11998,12 @@ function createControlInputTrigger(logic) {
           : triggerType === 2
             ? 'Up'
             : 'Unknown',
-    mode: triggerType === 1 && holdTriggerTimeMs > 0 ? 'hold' : 'press',
+    mode,
     holdTriggerTimeMs,
+    physicalInput:
+      mode === 'hold'
+        ? createVerifiedChargedPhysicalInputContract({ frameRate: 60 })
+        : null,
     sourceKind: 'azpr-skillsub-logic-input-trigger',
     sourceIdentity: `${logic.sourceIdentity}.inputTriggerType|${logic.sourceIdentity}.holdTriggerTime`,
     status: 'verified-input-trigger-ready',
@@ -14840,7 +15028,7 @@ function injectStackOverLimitElementFactor(source) {
   const insertion = [
     '  if (Number(input.attackerElementUp ?? 0) !== 0) {',
     '    const element = calculateElementFactor(input);',
-    '    raw = applyFactor(raw, BigInt(element.raw), \'element\', trace);',
+    "    raw = applyFactor(raw, BigInt(element.raw), 'element', trace);",
     '  }',
     marker,
   ].join('\n');

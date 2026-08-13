@@ -2,8 +2,34 @@
   "schemaVersion": 1,
   "kind": "character-acceptance-derived-ledger",
   "sourceGaps": [],
-  "acceptanceGaps": [],
-  "records": [],
+  "acceptanceGaps": [
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "protocol:m11-d-character-acceptance-v1:owner:103002"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:d4e08854309c4bab",
+      "uniqueGapIdentity": "acceptance-gap:d4e08854309c4bab"
+    }
+  ],
+  "records": [
+    {
+      "category": "acceptance-scenario-gap",
+      "requirementIdentity": "protocol:103002:input-window-inside-outside-boundaries",
+      "status": "static-evidence-gap",
+      "reason": "acceptance-scenario-coverage-missing",
+      "sourceIdentities": [
+        "protocol:m11-d-character-acceptance-v1:owner:103002"
+      ],
+      "blocking": true,
+      "recordIdentity": "acceptance-gap:d4e08854309c4bab",
+      "uniqueGapIdentity": "acceptance-gap:d4e08854309c4bab"
+    }
+  ],
   "nonBlockingRecords": [
     {
       "recordIdentity": "source-gap:008e0cbae33c4525",
@@ -6648,15 +6674,21 @@
     }
   ],
   "summary": {
-    "uniqueBlockingCount": 0,
+    "uniqueBlockingCount": 1,
     "sourceGapCount": 0,
-    "acceptanceGapCount": 0,
+    "acceptanceGapCount": 1,
     "nonBlockingCount": 368,
-    "statusCounts": {},
-    "reasonCounts": {},
-    "categoryCounts": {}
+    "statusCounts": {
+      "static-evidence-gap": 1
+    },
+    "reasonCounts": {
+      "acceptance-scenario-coverage-missing": 1
+    },
+    "categoryCounts": {
+      "acceptance-scenario-gap": 1
+    }
   },
-  "ledgerHash": "3a98832790b860ce",
+  "ledgerHash": "bb6fad355553cc95",
   "notApplicableRecords": [
     {
       "recordIdentity": "not-applicable:contract:action-form:actor:103002:perfect-parry:ruby-focus-dodge-counter",

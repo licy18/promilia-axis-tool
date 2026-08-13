@@ -1206,7 +1206,10 @@ export function validateVerifiedCombatMechanicsPackage(value) {
         contract.assumptions.length === 0 ||
         contract.assumptions.some(
           assumption =>
-            assumption.resolution !== 'resolved-by-product-assumption' ||
+            ![
+              'resolved-by-product-assumption',
+              'resolved-by-installed-client-static-evidence',
+            ].includes(assumption.resolution) ||
             !String(assumption.identity ?? '').trim()
         )
     ) ||

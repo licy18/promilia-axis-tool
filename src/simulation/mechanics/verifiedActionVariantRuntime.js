@@ -3741,7 +3741,14 @@ function composeVerifiedChargingReleaseResolution({
   binding,
   selection,
 }) {
-  if (!resolution?.ready || !sourceResolution?.ready || !selection?.ready) {
+  const sourceWrapperReady =
+    sourceResolution?.ready === true ||
+    isVerifiedChargingReleaseSourceWrapperResolution({
+      sourceResolution,
+      binding,
+      selection,
+    });
+  if (!resolution?.ready || !sourceWrapperReady || !selection?.ready) {
     return {
       ...(resolution ?? {}),
       ready: false,
@@ -3866,10 +3873,58 @@ function composeVerifiedChargingReleaseResolution({
   };
 }
 
+function isVerifiedChargingReleaseSourceWrapperResolution({
+  sourceResolution,
+  binding,
+  selection,
+}) {
+  const actionBinding = sourceResolution?.actionBinding;
+  const timing = actionBinding?.actionTiming;
+  const occupancy = timing?.occupancy;
+  const authority = timing?.chargedInputAuthority;
+  const [domainStartFrame, domainEndFrame] =
+    occupancy?.releaseFrameDomain ?? [];
+  const releaseFrame = Number(selection?.releaseFrame);
+  return (
+    binding?.applied === true &&
+    selection?.ready === true &&
+    Number(actionBinding?.controlSkillId) ===
+      Number(binding.sourceControlSkillId) &&
+    Number(actionBinding?.selectedSubSkillIndex) ===
+      Number(binding.sourceSubSkillIndex) &&
+    timing?.status === 'applied' &&
+    occupancy?.status === 'applied' &&
+    occupancy?.effectiveDurationRequiresChargingRelease === true &&
+    occupancy?.sourceKind ===
+      'installed-client-static-charged-wrapper-release-domain' &&
+    authority?.applied === true &&
+    authority?.compositeChargingRelease != null &&
+    Number.isInteger(Number(domainStartFrame)) &&
+    Number.isInteger(Number(domainEndFrame)) &&
+    releaseFrame >= Number(domainStartFrame) &&
+    releaseFrame < Number(domainEndFrame)
+  );
+}
+
 function shiftChargingReleaseRecord(record, frameOffset, bindingIdentity) {
   const trigger = record?.trigger ?? {};
   const shift = value =>
     Number.isFinite(Number(value)) ? Number(value) + frameOffset : value;
+  const shiftFrameCondition = condition =>
+    condition && typeof condition === 'object'
+      ? {
+          ...condition,
+          ...(condition.triggerFrame == null
+            ? {}
+            : { triggerFrame: shift(condition.triggerFrame) }),
+          ...(condition.decisionFrame == null
+            ? {}
+            : { decisionFrame: shift(condition.decisionFrame) }),
+          ...(Array.isArray(condition.triggerFrames)
+            ? { triggerFrames: condition.triggerFrames.map(shift) }
+            : {}),
+        }
+      : condition;
   return {
     ...record,
     trigger: {
@@ -3884,6 +3939,11 @@ function shiftChargingReleaseRecord(record, frameOffset, bindingIdentity) {
         .filter(Boolean)
         .join('|'),
     },
+    hitActivation: shiftFrameCondition(record.hitActivation),
+    landedHitActivationCondition: shiftFrameCondition(
+      record.landedHitActivationCondition
+    ),
+    runtimeCondition: shiftFrameCondition(record.runtimeCondition),
     chargingReleaseFrameOffset: frameOffset,
     sourceIdentity: [
       record.sourceIdentity,

@@ -67,6 +67,7 @@ import {
   validateMachineAxisObjectiveContract,
 } from './machineAxisObjectiveContract';
 import { createMachineAxisActionLegalityProof } from './machineAxisActionLegality';
+import { createMachineAxisChargedInputProof } from './machineAxisChargedInputProof';
 import { createVerifiedJointAttackRuntimePair } from '../domain/verifiedJointAttackRuntimePair';
 import {
   MACHINE_AXIS_TRANSPORT_METADATA_KEY,
@@ -563,11 +564,16 @@ export function createMachineAxisService({
         classification,
       },
     };
+    const chargedInputProof = createMachineAxisChargedInputProof(
+      compilation.contract
+    );
     const actionLegalityProof = createMachineAxisActionLegalityProof(
       runWithValidation,
       {
         objectiveId:
           compilation.contract.scenario?.objectiveContract?.objectiveId ?? null,
+        additionalIssues: chargedInputProof.issues,
+        chargedInputProof,
       }
     );
     const requiresFormalProof =
@@ -977,11 +983,14 @@ export function createMachineAxisService({
       ),
     };
     for (const template of templates.filter(Boolean)) {
+      const availableHitIdentities = collectResolvedTemplateHitIdentities({
+        template,
+        actionVariantPreflight,
+      });
       issues.push(
         ...validateResolvedHitOverrides({
           machineAction: template.machineAction,
-          availableHitIdentities:
-            template.resolution.availableHitIdentities ?? [],
+          availableHitIdentities,
           actionIndex: template.index,
         })
       );
@@ -993,8 +1002,13 @@ export function createMachineAxisService({
       actionResolutions: templates.filter(Boolean).map(template => {
         const variantSelection =
           actionVariantPreflight?.selectionByActionId.get(template.actionId);
+        const availableHitIdentities = collectResolvedTemplateHitIdentities({
+          template,
+          actionVariantPreflight,
+        });
         return {
           ...template.resolution,
+          availableHitIdentities,
           index: template.index,
           sourceSequenceIndex: template.index,
           sourceSequencePath: [template.index],
@@ -1670,6 +1684,7 @@ function createActorActionTemplate({
         selectedVariant?.subSkillIndex ??
         mapping.selectedSubSkillIndex,
       variantInputSelection: semanticVariant,
+      physicalInput: action.intent.physicalInput,
       actionScheduling:
         segment?.actionScheduling ??
         selectedVariantScheduling ??
@@ -2673,10 +2688,42 @@ function collectMappingHitIdentities(mapping, segment = null) {
 function collectSelectedVariantHitIdentities(selectedVariant) {
   const controlSkillId = Number(selectedVariant?.executionControlSkillId);
   if (!Number.isInteger(controlSkillId)) return [];
-  const mechanicsPackage = requireMechanicsPackage();
   const selectedSubSkillIndex = Number(
     selectedVariant.executionSubSkillIndex ?? selectedVariant.subSkillIndex ?? 0
   );
+  return collectControlHitIdentities({
+    controlSkillId,
+    selectedSubSkillIndex,
+  });
+}
+
+function collectResolvedTemplateHitIdentities({
+  template,
+  actionVariantPreflight,
+}) {
+  const variantSelection =
+    actionVariantPreflight?.selectionByActionId.get(template.actionId);
+  const controlSkillId = Number(
+    variantSelection?.executionControlSkillId ??
+      variantSelection?.controlSkillId
+  );
+  const selectedSubSkillIndex = Number(variantSelection?.selectedSubSkillIndex);
+  return [
+    ...new Set([
+      ...(template.resolution.availableHitIdentities ?? []),
+      ...(Number.isInteger(controlSkillId) &&
+      Number.isInteger(selectedSubSkillIndex)
+        ? collectControlHitIdentities({
+            controlSkillId,
+            selectedSubSkillIndex,
+          })
+        : []),
+    ]),
+  ].sort((left, right) => left.localeCompare(right, 'en'));
+}
+
+function collectControlHitIdentities({ controlSkillId, selectedSubSkillIndex }) {
+  const mechanicsPackage = requireMechanicsPackage();
   return [
     ...new Set(
       [
@@ -2982,6 +3029,9 @@ function createActorCatalogEntries(character, gameData) {
       sourceEvidenceStatus: mapping?.sourceEvidenceStatus ?? 'unresolved',
       scenarioRuntimeStatus: mapping?.scenarioRuntimeStatus ?? 'unresolved',
       durationFrames: mapping?.actionTiming?.occupancy?.durationFrames ?? null,
+      inputTrigger: mapping?.inputTrigger ?? null,
+      chargedInputAuthority:
+        mapping?.actionTiming?.chargedInputAuthority ?? null,
       attackInputs: (mapping?.attackInputSegments ?? []).map(segment => ({
         identity: segment.identity ?? null,
         sequenceIndex: segment.sequenceIndex,

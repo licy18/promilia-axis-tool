@@ -72,6 +72,28 @@ export function createMachineAxisSearchEngine({
     throw new Error('Machine Axis search engine requires a simulate service');
   }
 
+  async function evaluateAxis({ axis, options = {} } = {}) {
+    if (!axis || typeof axis !== 'object') {
+      throw new TypeError('Machine Axis local evaluation requires an axis');
+    }
+    const settings = normalizeSearchOptions(options);
+    if (settings.objective == null) {
+      throw new RangeError(
+        `machine-axis-objective-unsupported:${String(options.objective ?? '')}`
+      );
+    }
+    const evaluation = await evaluateCandidateAxis(axis, settings);
+    return createCandidateEntry({
+      ...evaluation,
+      chain: (axis.actions ?? []).map(action => ({
+        action,
+        label: action.intent?.actionKind ?? action.intent?.kind ?? null,
+        source: 'ai-coarse-axis-local-neighborhood',
+      })),
+      parentLabel: 'ai-coarse-axis',
+    });
+  }
+
   async function search({ contract, options = {} }) {
     const startedAt = Date.now();
     const guidanceApplication =
@@ -332,11 +354,15 @@ export function createMachineAxisSearchEngine({
     }
     const resolvedNodeFrame =
       nodeFrame ?? deriveExecutionNodeFrame(runs[0]?.run?.trace ?? {});
-    const actionLegalityProofs = runs.map(sample =>
-      createMachineAxisActionLegalityProof(sample.run, {
+    const actionLegalityProofs = runs.map(sample => {
+      const chargedInputProof =
+        sample.run?.actionLegalityProof?.chargedInputProof ?? null;
+      return createMachineAxisActionLegalityProof(sample.run, {
         objectiveId: settings.objective,
-      })
-    );
+        additionalIssues: chargedInputProof?.issues ?? [],
+        chargedInputProof,
+      });
+    });
     const normalAttackInputProofs = runs.map(sample =>
       createSearchNormalAttackInputProof({
         trace: sample.run?.trace ?? {},
@@ -504,6 +530,7 @@ export function createMachineAxisSearchEngine({
     schemaVersion: MACHINE_AXIS_SEARCH_ENGINE_SCHEMA_VERSION,
     contractName: MACHINE_AXIS_SEARCH_ENGINE_CONTRACT,
     search,
+    evaluateAxis,
   });
 }
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "kind": "azpr-character-combat-runtime-coverage",
   "ownerId": 108003,
-  "sourcePackageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22",
+  "sourcePackageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb",
   "actionRows": [
     {
       "actionIdentity": "actor|108003|10800301|0|10800303|normal-attack",
@@ -202,8 +202,7 @@
       },
       "reasons": [
         "public-action-damage-settlement-evidence-missing",
-        "selected-control-variant-has-no-runnable-hit",
-        "verified-action-effective-occupancy-window-unresolved"
+        "selected-control-variant-has-no-runnable-hit"
       ]
     },
     {
@@ -803,5 +802,5 @@
       "static-evidence-gap": 9
     }
   },
-  "profileHash": "3d3dd432819029b58ea91f8267c37176c5dea6b06e367bfbbe9c6aa364f25d8d"
+  "profileHash": "5780db448a9aeace951897ceefc35a5ab72b31339acc753c70b27aa558a1bf6f"
 }

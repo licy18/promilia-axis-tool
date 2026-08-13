@@ -98,8 +98,8 @@ describe('M12-C 112001 acceptance normal-input migration', () => {
     ]);
     expect(findSelection(run, 'gisele-heavy3-threshold67')).toMatchObject({
       controlSkillId: 11200141,
-      subSkillIndex: 3,
-      semanticName: '特殊重击3完全释放',
+      subSkillIndex: 2,
+      semanticName: '特殊重击3提前释放',
     });
   }, 60_000);
 
@@ -406,15 +406,15 @@ describe('M12-C 112001 acceptance normal-input migration', () => {
     ).toEqual([]);
   }, 60_000);
 
-  it('binds the fresh evidence replay to the accepted product record', () => {
+  it('invalidates the old visual authority after the charged timing repair', () => {
     expect(giseleRecipe.productVisualAcceptance).toMatchObject({
-      status: 'accepted',
+      status: 'pending',
       acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
       recordIdentity:
         'character-product-acceptance:112001:13d28aa515312a63395f49ddff3c778967e1b20f:aae0ae0f9ebc0700',
       qualificationSubjectHash: 'aae0ae0f9ebc0700',
       scenarioSetHash: 'd66afb989d3e65ac',
-      automatedEvidence: [
+      supersededAutomatedEvidence: [
         expect.objectContaining({
           fixtureSha256:
             '21d7c303df902e247c21b079f478f2dd528ba7250270d4f38ef63f3d9931ce63',

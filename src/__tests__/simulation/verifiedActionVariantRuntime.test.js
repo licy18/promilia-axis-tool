@@ -32,6 +32,7 @@ const MELANIA_ID = 112001;
 const SIFLIYA_ID = 107001;
 const MISA_ID = 107002;
 const MOYIN_ID = 109001;
+const MITI_ID = 108003;
 const STARBORN_IDS = [199001, 199002];
 const createVerifiedContextEdgeIdentity = edge =>
   [
@@ -1270,13 +1271,88 @@ describe('verified action variant and special resource runtime', () => {
     });
     expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
       executionControlSkillId: 11200141,
-      selectedSubSkillIndex: 3,
+      selectedSubSkillIndex: 2,
       sourceKind: 'verified-charging-release-window',
       chargingRelease: {
         bindingIdentity: 'gisele-heavy3-charge-release-sub3',
       },
       status: 'verified-action-variant-selection-ready',
     });
+  });
+
+  it.each([
+    [25, 10800310, 1, 'miti-charge-light', 50],
+    [29, 10800341, 0, 'miti-charge-medium', 54],
+    [52, 10800341, 0, 'miti-charge-medium', 77],
+    [67, 10800342, 0, 'miti-charge-full', 92],
+  ])(
+    'uses source-order-first for Miti Charging at %sF',
+    (
+      inputFrame,
+      executionControlSkillId,
+      selectedSubSkillIndex,
+      selectedWindowIdentity,
+      durationFrames
+    ) => {
+      const charged = createActorAction({
+        id: `miti-charged-release-${inputFrame}`,
+        characterId: MITI_ID,
+        skillId: 10800301,
+        actionKind: 'charged-attack',
+        actionVariantIndex: 1,
+        variantInputSelection: { mode: 'release', inputFrame },
+      });
+      const runtime = runVariantRuntime({
+        actors: [charged.actor],
+        actions: [charged],
+        durationMs: frameTime(500),
+      });
+
+      expect(runtime.executionBlocks).toEqual([]);
+      expect(runtime.selectionByActionId.get(charged.id)).toMatchObject({
+        executionControlSkillId,
+        selectedSubSkillIndex,
+        sourceKind: 'verified-charging-release-window',
+        chargingRelease: {
+          bindingIdentity: 'miti-charge-release-sub0',
+          selectedWindowIdentity,
+          releaseFrame: inputFrame,
+        },
+        actualDurationFrames: durationFrames,
+        status: 'verified-action-variant-selection-ready',
+      });
+      expect(runtime.actionResolutionById.get(charged.id)).toMatchObject({
+        ready: true,
+        chargingRelease: {
+          selectedWindowIdentity,
+          durationFrames,
+        },
+      });
+    }
+  );
+
+  it('fails Miti Charging closed at the right-open 209F boundary', () => {
+    const charged = createActorAction({
+      id: 'miti-charged-release-209',
+      characterId: MITI_ID,
+      skillId: 10800301,
+      actionKind: 'charged-attack',
+      actionVariantIndex: 1,
+      variantInputSelection: { mode: 'release', inputFrame: 209 },
+    });
+    const runtime = runVariantRuntime({
+      actors: [charged.actor],
+      actions: [charged],
+      durationMs: frameTime(500),
+    });
+
+    expect(runtime.executionBlocks).toContainEqual(
+      expect.objectContaining({
+        actionId: charged.id,
+        code: 'verified-charging-release-selection-unresolved',
+        reason: 'charging-release-window-missing',
+      })
+    );
   });
 
   it.each([199001, 199002])(

@@ -41,9 +41,9 @@ describe('M12-B3-107002 owner acceptance closure', () => {
 
     expect(validation.valid).toBe(true);
     expect(first.hashes).toMatchObject({
-      input: 'fa89b0ef62c0e6be',
-      data: '0a19ba6d4b57c996',
-      trace: '1910eb5fa24efb76',
+      input: '8a82ef9e87458e27',
+      data: '74f991d439e64485',
+      trace: 'b0f84fe288d7391f',
       evaluation: '6538894b2964b7e7',
     });
     expect(second.hashes).toEqual(first.hashes);
@@ -332,22 +332,28 @@ describe('M12-B3-107002 owner acceptance closure', () => {
       functionalFailureCount: 0,
     });
     expect(misaManifest.evidence.productVisualAcceptance).toMatchObject({
-      status: 'accepted',
+      status: 'pending',
       acceptanceCommit: '13d28aa515312a63395f49ddff3c778967e1b20f',
       recordIdentity:
         'character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:bd44ed4ae5bace66',
       qualificationSubjectHash: 'bd44ed4ae5bace66',
       scenarioSetHash: 'ca11b122ad34a2d4',
-      bindingStatus: 'verified',
+      bindingStatus: 'not-requested',
+      bindingExpectation: {
+        recordIdentity:
+          'character-product-acceptance:107002:13d28aa515312a63395f49ddff3c778967e1b20f:ae4da5c88b34b11a',
+        qualificationSubjectHash: 'ae4da5c88b34b11a',
+        scenarioSetHash: '09612b07b5ecb5a5',
+      },
     });
     expect(misaManifest.maturity).toMatchObject({
-      currentState: 'optimization-ready',
-      optimizationReady: true,
+      currentState: 'runtime-integrated',
+      optimizationReady: false,
       gates: {
-        visuallyAccepted: true,
-        optimizationReady: true,
+        visuallyAccepted: false,
+        optimizationReady: false,
       },
-      blockers: [],
+      blockers: ['acceptance-product-visual-signoff-pending'],
     });
     expect(
       misaMatrix.requirements.filter(requirement =>

@@ -4,10 +4,10 @@
   "ownerId": 103002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22"
+    "packageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/103002.json",
-  "recipeHash": "757be7d44832cdf09aea99c9c28ed708183a1708b2d8ecf0d4a16da8c8146091",
+  "recipeHash": "42cf74e15850b375127090a7c4be577b099e2119c9b7ccdab8ac45cc95c65de0",
   "authoritativeSources": [
     {
       "id": "calculator",
@@ -13459,6 +13459,27 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002",
+      "identityHash": "f6bc340c5e6539e69b09d5756c3fbc29e0ed36c8d9d466a516a360c2a30ac164",
+      "sourceKind": "client-code",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_8068404130320522655__8068404130320522655.json#behaviorlineControl[1].behaviorList[pathId=-2534695760953762401]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-2534695760953762401__-2534695760953762401.json",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:103002|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_8068404130320522655__8068404130320522655.json#behaviorlineControl[1].behaviorList[pathId=-2534695760953762401]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10300210.asset/MonoBehaviour/MonoBehaviour_-2534695760953762401__-2534695760953762401.json",
+      "identityHash": "ec4df072ea624f9130eba6bd1df2e0e0ac981501eb3f8464fe47af0dc9b38fda",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+      "identityHash": "f0bda7ba3cffc2173ac1eddb542dc2dc09e8e2fc6599826c258ed03258d170f8",
+      "sourceKind": "client-code",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
       "sourceIdentity": "skill_control_10300212.asset#skillResourceMaps[0].frameCountDict[0]=204|reports/m10/103002/golden-trace.json#actions.selectionByActionId.ruby-star-skill.actualDurationFrames=204",
       "identityHash": "197cb40934a0efb27d5fde330756127295bc7c36071a898a5478148ef11d7715",
@@ -13600,15 +13621,15 @@
     }
   ],
   "summary": {
-    "identityCount": 1897,
+    "identityCount": 1900,
     "sourceKindCounts": {
       "battle-element": 67,
-      "client-code": 3,
+      "client-code": 5,
       "new-table": 64,
       "other": 197,
       "runtime-contract": 27,
-      "skill-control": 1539
+      "skill-control": 1540
     }
   },
-  "profileHash": "31908b45af1141bff3b97e92f7bf2e2d9b3f05bbd7d31a1d123bc24ace8f0bd0"
+  "profileHash": "cdd12e199439a031197a050f16cf4fb34fac28bc8693a9e3a32e5bd730fe8ec7"
 }

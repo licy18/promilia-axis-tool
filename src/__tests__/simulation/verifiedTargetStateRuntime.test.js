@@ -6,6 +6,62 @@ import {
 import { applyVerifiedTargetStateRuntime } from '../../simulation/mechanics/verifiedTargetStateRuntime';
 
 describe('verified target-state runtime', () => {
+  it('matches and offsets the selected execution control inside a charged wrapper', () => {
+    const packageFixture = createMechanicsPackage();
+    const gain = createResolution({
+      controlSkillId: 424201,
+      hits: [createHit(9001, 5)],
+    });
+    const burst = createResolution({
+      controlSkillId: 424299,
+      hits: [createHit(9002, 68, 'synthetic-firework-burst')],
+    });
+    burst.chargingRelease = {
+      applied: true,
+      executionControlSkillId: 424202,
+      executionSubSkillIndex: 0,
+      releaseFrame: 67,
+    };
+    burst.actionBinding.actualDurationFrames = 92;
+
+    const result = applyVerifiedTargetStateRuntime({
+      scenario: {
+        time: { durationMs: 5000 },
+        actors: [
+          {
+            id: 'actor-1',
+            characterId: 424242,
+            name: 'Synthetic Owner',
+          },
+        ],
+        enemy: { id: 'enemy-1', name: 'Synthetic Enemy' },
+        actions: [createAction('gain', 0), createAction('burst', 1000)],
+      },
+      actionResolutionById: new Map([
+        ['gain', gain],
+        ['burst', burst],
+      ]),
+      mechanicsPackage: packageFixture,
+    });
+
+    expect(result.groupResults).toEqual([
+      expect.objectContaining({
+        actionId: 'burst',
+        controlSkillId: 424202,
+        beforeStacks: 1,
+        applied: true,
+        timeMs: 2116.666667,
+      }),
+    ]);
+    expect(result.directSpEvents).toEqual([
+      expect.objectContaining({
+        actionId: 'burst',
+        timeMs: 2133.333333,
+        value: 2,
+      }),
+    ]);
+  });
+
   it('reuses generic target-state contracts for gain, conditional settlement, and skipped hits', () => {
     const actionResolutionById = new Map([
       [

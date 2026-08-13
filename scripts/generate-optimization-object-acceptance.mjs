@@ -34,7 +34,15 @@ const validation = validateOptimizationObjectAliasAcceptanceBundle({
   recipe,
   sources,
 });
-if (!validation.valid) {
+const requestedProductAcceptance = recipe.productVisualAcceptance ?? {};
+const explicitlyPendingFailClosed =
+  requestedProductAcceptance.status === 'pending' &&
+  requestedProductAcceptance.formalAdmission === false &&
+  requestedProductAcceptance.optimizationReady === false &&
+  requestedProductAcceptance.acceptanceCommit == null &&
+  requestedProductAcceptance.recordIdentity == null &&
+  requestedProductAcceptance.acceptanceSubjectHash == null;
+if (!validation.valid && !explicitlyPendingFailClosed) {
   throw new Error(
     'Optimization object alias acceptance invalid: ' +
       JSON.stringify(validation.issues)
@@ -70,6 +78,8 @@ console.log(
       bundleHash: validation.bundle.bundleHash,
       productVisualAcceptance: validation.bundle.productVisualAcceptance,
       optimizationReady: validation.bundle.optimizationReady,
+      validationIssueCount: validation.issues.length,
+      failClosedPendingBundle: !validation.valid && explicitlyPendingFailClosed,
     },
     null,
     2

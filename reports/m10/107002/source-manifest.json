@@ -4,7 +4,7 @@
   "ownerId": 107002,
   "sourcePackage": {
     "packageId": "azpr-tc-2026-07-18",
-    "packageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22"
+    "packageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb"
   },
   "recipeIdentity": "scripts/character-combat/profile-recipes/107002.json",
   "recipeHash": "de0190059618c04ec8409d64921fcee2f5016d947c0381035916f4697d4fe06e",
@@ -3673,6 +3673,27 @@
       "status": "evidence-indexed"
     },
     {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:107002",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:107002",
+      "identityHash": "631f551ad3bcceeeeaa20592689fc2bc69a2a64da76f9ec55f06aad19105aa57",
+      "sourceKind": "client-code",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:107002|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-6823727149174431564__-6823727149174431564.json#behaviorlineControl[0].behaviorList[pathId=1445712293676572852]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_1445712293676572852__1445712293676572852.json",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|owner:107002|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_-6823727149174431564__-6823727149174431564.json#behaviorlineControl[0].behaviorList[pathId=1445712293676572852]|C:/Codex/AzPr Extractor/ExtractedAssets/Unity/default_package/ResourcesAssets/Config/Battle/SkillList/skill_control_10700210.asset/MonoBehaviour/MonoBehaviour_1445712293676572852__1445712293676572852.json",
+      "identityHash": "fb08226c855fd0578783e961f5cad5dcaa2f544ac36400d33933bc6114c51bb8",
+      "sourceKind": "skill-control",
+      "status": "evidence-indexed"
+    },
+    {
+      "identity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+      "sourceIdentity": "installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|charged-timing-matrix#sha256=85167622A4E5B2A30240F77B4542DEFD0E90659FDE636D933B21FB5935CC4AD4|binary-input-state-machine#sha256=3EA47B544AA82B80D3F4C52D610204F1CE392A2CF2774884C160630568C8547E|giselle-heavy23-timing-matrix#sha256=D941951120941F3405F4DF32BA543722907BDCD5CB0E02B78D2E99D1ECA26ADA|miti-charged-release-timing-matrix#sha256=CA46430EA50BA3CA8F9A4722122414CFA63796B7312B88A53BE0B50CC66C014B|miti-charged-release-binary-logic#sha256=E69739356703C51380951B64E4C41754041BA91D0A088CAD5C9D691BFF5110F7|physical-input",
+      "identityHash": "f0bda7ba3cffc2173ac1eddb542dc2dc09e8e2fc6599826c258ed03258d170f8",
+      "sourceKind": "client-code",
+      "status": "evidence-indexed"
+    },
+    {
       "identity": "skill_control_10700201.asset#sub0|GameplayBehaviour=-4073364461296781300,-1246740331492313076|bullet=107002007|element=107002137|m12c-zero-distance-passive-boss-v1",
       "sourceIdentity": "skill_control_10700201.asset#sub0|GameplayBehaviour=-4073364461296781300,-1246740331492313076|bullet=107002007|element=107002137|m12c-zero-distance-passive-boss-v1",
       "identityHash": "30adc44eb62e2025928ee32f6b0434af16dfcd6e1c89031bfad5917e950cc161",
@@ -3828,15 +3849,15 @@
     }
   ],
   "summary": {
-    "identityCount": 501,
+    "identityCount": 504,
     "sourceKindCounts": {
       "battle-element": 45,
-      "client-code": 7,
+      "client-code": 9,
       "new-table": 44,
       "other": 57,
       "runtime-contract": 13,
-      "skill-control": 335
+      "skill-control": 336
     }
   },
-  "profileHash": "6e2ec76b8dfa16b608777f26460bc0119255ab288c83c877bc507f40b6592f7f"
+  "profileHash": "623cc4de5e2b2487cfcb2ffc3aa1e2a9cb0c3f149b07e90a742a5921585909f2"
 }

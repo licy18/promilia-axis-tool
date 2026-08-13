@@ -1,14 +1,14 @@
 # M9-A 全动作时长与输入占轴审计
 
 - 包：`azpr-tc-2026-07-18`
-- 公开动作：648（来源占轴已确认 637，尚未确认 11；公开动作均按独立 schedulable 合同判断）
-- 公开变体：678（来源占轴已确认 637，尚未确认 41）
+- 公开动作：648（来源占轴已确认 638，尚未确认 10；公开动作均按独立 schedulable 合同判断）
+- 公开变体：678（来源占轴已确认 638，尚未确认 40）
 - 普攻输入段：95（输入占轴已确认 78，尚未确认 17）
 - SkillControl/player 变体：1437
 - 一帧占轴：0
 - 异常长占轴（>600f）：5
-- 精确选中变体占轴：700
-- 来源动画规划长度：27
+- 精确选中变体占轴：701
+- 来源动画规划长度：26
 - 通用规划长度：1
 - control 身份未解析：1
 - 变体条件发现：partially-resolved 6 / resolved 2 / static-evidence-gap 4 / variant-condition-not-yet-modeled 204
@@ -17,10 +17,10 @@
 
 | Owner | 动作类型 | 占轴来源 | 状态 | 数量 |
 | --- | --- | --- | --- | ---: |
-| actor | charged-attack | skill-control-player-action-range | applied | 11 |
-| actor | charged-attack | unresolved-action-occupancy | unresolved | 1 |
-| actor | charged-attack | verified-specific-input-window | applied | 4 |
-| actor | charged-attack | verified-unconditional-attack-reopen-window | applied | 4 |
+| actor | charged-attack | installed-client-static-charged-same-action-reopen | applied | 9 |
+| actor | charged-attack | installed-client-static-charged-wrapper-release-domain | applied | 1 |
+| actor | charged-attack | skill-control-player-action-range | applied | 9 |
+| actor | charged-attack | verified-unconditional-attack-reopen-window | applied | 1 |
 | actor | dodge-attack | skill-control-player-action-range | applied | 11 |
 | actor | dodge-attack | unresolved-action-occupancy | unresolved | 1 |
 | actor | dodge-attack | verified-specific-input-window | applied | 1 |
@@ -98,7 +98,6 @@
 - `actor|107002|10700201|0|10700203|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|107003|10700301|0|10700303|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|108002|10800201|0|10800203|normal-attack`：normal-attack-input-segment-duration-unresolved
-- `actor|108003|10800301|1|10800310|charged-attack`：verified-action-effective-occupancy-window-unresolved
 - `actor|109002|10900201|0|10900203|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|112002|11200201|0|11200203|normal-attack`：normal-attack-input-segment-duration-unresolved
 - `actor|101007|10100701|0|10100701|normal-attack|attack-input-1`：selected-control-player-variant-duration-unresolved、next-control-event-bridge-window-unavailable

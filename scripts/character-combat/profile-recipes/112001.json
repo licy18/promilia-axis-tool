@@ -86,10 +86,10 @@
       11200161
     ],
     "headlessAssumptionContract": {
-      "contractIdentity": "m12-112001-assumption-runtime-v1",
+      "contractIdentity": "m12-112001-assumption-runtime-v2",
       "policyAuthority": "user-approved-headless-assumption",
       "clientParityReady": false,
-      "assumptionVersion": "1.0.0",
+      "assumptionVersion": "2.0.0",
       "settlementContract": {
         "contractIdentity": "m12-enemy-settlement-runtime-v2",
         "contractHash": "2e3095db4b8c9232",
@@ -104,29 +104,32 @@
       "assumptions": [
         {
           "identity": "112001-charge-threshold-overlap-order-open",
-          "sourceIdentity": "skill_control_11200110.asset#Charging-right-open-overlap@59F,67F|user-product-decision:M12-B3-112001-S1#A",
-          "resolution": "resolved-by-product-assumption",
+          "sourceIdentity": "skill_control_11200110.asset#Charging-right-open-overlap@59F,67F|installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|ISubSkillPlayer.Dispatch+EventBridge.OnEvent+StopAllBehaviors",
+          "resolution": "resolved-by-installed-client-static-evidence",
           "selectedSemantics": {
-            "identity": "threshold-inclusive-new-tier",
-            "precedence": "greatest-start-frame",
-            "equivalentTieBreak": "stable-source-identity",
-            "semanticConflictPolicy": "fail-closed"
-          },
-          "alternateSemantics": {
-            "identity": "old-tier-precedence",
+            "identity": "source-registration-order-early-window-first",
+            "precedence": "source-order-first",
             "thresholdResults": {
               "59": "11200141/sub0",
               "67": "11200141/sub2"
+            },
+            "semanticConflictPolicy": "fail-closed-on-client-identity-drift"
+          },
+          "alternateSemantics": {
+            "identity": "greatest-start-frame-new-tier",
+            "thresholdResults": {
+              "59": "11200141/sub1",
+              "67": "11200141/sub3"
             }
           },
           "sensitivity": {
             "formalThresholdResults": {
-              "59": "11200141/sub1",
-              "67": "11200141/sub3"
+              "59": "11200141/sub0",
+              "67": "11200141/sub2"
             },
             "expectedDifference": "selected-control-subskill-and-all-downstream-packets-change"
           },
-          "preservedFailureToPass": "without an explicit precedence contract, exact 59F and 67F match two right-open windows and must fail closed"
+          "preservedFailureToPass": "if the bound installed-client binary identity changes, exact 59F and 67F must fail closed until dispatch order is re-audited"
         },
         {
           "identity": "112001-damage-toughness-client-order-open",
@@ -189,7 +192,7 @@
         }
       ],
       "futureClientEvidencePolicy": "if future client evidence differs, increment assumptionVersion, invalidate this assumptionHash, and recompute every affected profile, input, data, trace, build, acceptance binding, and formal score",
-      "sourceIdentity": "user-product-decision:M12-B3-112001-S1#versioned-auditable-headless-assumption-authority"
+      "sourceIdentity": "user-product-decision:M12-B3-112001-S1#versioned-auditable-headless-assumption-authority|installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B#charged-overlap-order-v2"
     },
     "contextInputEdges": [
       {
@@ -326,7 +329,7 @@
         "sourceControlSkillId": 11200110,
         "sourceSubSkillIndex": 1,
         "actionKind": "charged-attack",
-        "precedence": "greatest-start-frame",
+        "precedence": "source-order-first",
         "boundary": "right-open",
         "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
         "windows": [
@@ -341,7 +344,7 @@
         "sourceControlSkillId": 11200110,
         "sourceSubSkillIndex": 2,
         "actionKind": "charged-attack",
-        "precedence": "greatest-start-frame",
+        "precedence": "source-order-first",
         "boundary": "right-open",
         "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
         "windows": [
@@ -356,7 +359,7 @@
         "sourceControlSkillId": 11200110,
         "sourceSubSkillIndex": 3,
         "actionKind": "charged-attack",
-        "precedence": "greatest-start-frame",
+        "precedence": "source-order-first",
         "boundary": "right-open",
         "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
         "windows": [
@@ -371,7 +374,7 @@
         "sourceControlSkillId": 11200110,
         "sourceSubSkillIndex": 4,
         "actionKind": "charged-attack",
-        "precedence": "greatest-start-frame",
+        "precedence": "source-order-first",
         "boundary": "right-open",
         "assumptionIdentity": "112001-charge-threshold-overlap-order-open",
         "windows": [
@@ -670,12 +673,12 @@
   "unresolvedRecords": [
     {
       "identity": "112001-charge-threshold-overlap-order-open",
-      "sourceKind": "product-assumption-boundary",
+      "sourceKind": "installed-client-static-evidence-boundary",
       "status": "applied",
-      "reasons": ["resolved-by-product-assumption", "m12-112001-assumption-runtime-v1"],
-      "impactClassification": "resolved-by-product-assumption",
+      "reasons": ["resolved-by-installed-client-static-evidence", "m12-112001-assumption-runtime-v2"],
+      "impactClassification": "resolved-by-installed-client-static-evidence",
       "blocksReadiness": false,
-      "sourceIdentity": "skill_control_11200110.asset#Charging-overlap@59F,67F|headless-assumption:m12-112001-assumption-runtime-v1"
+      "sourceIdentity": "skill_control_11200110.asset#Charging-overlap@59F,67F|installed-client:GameAssembly.dll#sha256=C60D13795629F0851B1399338F375EB378AEF2098515D41841F30CCC3463C22B|headless-assumption:m12-112001-assumption-runtime-v2"
     },
     {
       "identity": "112001-damage-toughness-client-order-open",
@@ -684,7 +687,7 @@
       "reasons": ["resolved-by-product-assumption", "m12-enemy-settlement-runtime-v2"],
       "impactClassification": "resolved-by-product-assumption",
       "blocksReadiness": false,
-      "sourceIdentity": "m12-enemy-settlement-runtime-v2#contractHash=2e3095db4b8c9232|headless-assumption:m12-112001-assumption-runtime-v1"
+      "sourceIdentity": "m12-enemy-settlement-runtime-v2#contractHash=2e3095db4b8c9232|headless-assumption:m12-112001-assumption-runtime-v2"
     },
     {
       "identity": "112001-ultimate-watcher-same-packet-order-open",
@@ -693,7 +696,7 @@
       "reasons": ["resolved-by-product-assumption", "hit-then-arm-no-retroactive-trigger"],
       "impactClassification": "resolved-by-product-assumption",
       "blocksReadiness": false,
-      "sourceIdentity": "skill_control_11200113.asset#128F|headless-assumption:m12-112001-assumption-runtime-v1"
+      "sourceIdentity": "skill_control_11200113.asset#128F|headless-assumption:m12-112001-assumption-runtime-v2"
     },
     {
       "identity": "112001-ultimate-wrapper-same-packet-order-open",
@@ -702,7 +705,7 @@
       "reasons": ["resolved-by-product-assumption", "target-consumer-then-post-hit-wrapper"],
       "impactClassification": "resolved-by-product-assumption",
       "blocksReadiness": false,
-      "sourceIdentity": "skill_control_11200113.asset#191F|headless-assumption:m12-112001-assumption-runtime-v1"
+      "sourceIdentity": "skill_control_11200113.asset#191F|headless-assumption:m12-112001-assumption-runtime-v2"
     },
     {
       "identity": "112001-current-client-orphan-skill-level-2193",

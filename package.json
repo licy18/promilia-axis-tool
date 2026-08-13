@@ -66,6 +66,7 @@
     "test:coverage": "vitest run --coverage",
     "machine-axis": "node scripts/run-machine-axis-cli.mjs",
     "search:ai-guided": "node scripts/run-ai-guided-search.mjs",
+    "search:ai-local": "node scripts/run-ai-local-search.mjs",
     "machine-axis:build": "vite build --config vite.machine-axis-cli.config.js",
     "data:sync-kibo-headless": "node scripts/generate-kibo-headless-census.mjs --write",
     "audit:kibo-headless": "node scripts/generate-kibo-headless-census.mjs --assert-clean",

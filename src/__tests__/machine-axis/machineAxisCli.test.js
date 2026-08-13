@@ -113,43 +113,20 @@ describe('Machine Axis CLI', () => {
     expect(parseJson(harness.output.stdout).hashes).toEqual(fileResult.hashes);
   }, 30_000);
 
-  it('exposes the M12-C outer pool and bounded lazy build enumeration', async () => {
+  it('blocks the stale M12-C outer pool after mechanics authority changes', async () => {
     const poolHarness = createHarness();
     const poolExit = await runMachineAxisCli(
       ['m12c-outer-pool'],
       poolHarness.io
     );
     const pool = parseJson(poolHarness.output.stdout);
-    expect(poolExit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
-    expect(pool.summary).toMatchObject({
-      teamCount: 28,
-      sourceConfigCount: 35,
-    });
-
-    const sourceConfig = pool.teamCatalog.sourceConfigs.find(
-      config => !config.optimizationObjectIds.includes('STARBORN')
-    );
-    const buildsHarness = createHarness({
-      stdin: JSON.stringify({
-        sourceConfigIdentity: sourceConfig.sourceConfigIdentity,
-      }),
-    });
-    const buildsExit = await runMachineAxisCli(
-      ['m12c-outer-builds', '-', '--max-candidates', '1'],
-      buildsHarness.io
-    );
-    const builds = parseJson(buildsHarness.output.stdout);
-
-    expect(buildsExit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.OK);
-    expect(builds).toMatchObject({
-      kind: 'azpr-m12c-outer-build-batch',
-      valid: true,
-      candidateCount: 1,
-      candidates: [
-        expect.objectContaining({
-          buildHash: expect.stringMatching(/^[0-9a-f]{16}$/),
-        }),
-      ],
+    expect(poolExit).toBe(MACHINE_AXIS_CLI_EXIT_CODES.VALIDATION);
+    expect(pool).toMatchObject({
+      kind: 'azpr-machine-axis-cli-error',
+      error: {
+        code: 'machine-axis-cli-validation-failed',
+        issues: ['machine-axis-m12c-mechanics-package-authority-mismatch'],
+      },
     });
   }, 30_000);
 

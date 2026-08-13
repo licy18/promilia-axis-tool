@@ -614,12 +614,12 @@ describe('verified combat mechanics package', () => {
         normalAttackInputSegmentCount: 95,
       },
       summary: {
-        appliedActionCount: 637,
-        unresolvedActionCount: 11,
+        appliedActionCount: 638,
+        unresolvedActionCount: 10,
         appliedAttackInputSegmentCount: 78,
         unresolvedAttackInputSegmentCount: 17,
-        exactSelectedVariantOccupancyCount: 700,
-        sourceAnimationPlanningDurationCount: 27,
+        exactSelectedVariantOccupancyCount: 701,
+        sourceAnimationPlanningDurationCount: 26,
         genericPlanningDurationCount: 1,
         variantConditionFocusCount: 23,
         oneFrameCount: 0,
@@ -754,7 +754,7 @@ describe('verified combat mechanics package', () => {
         subSkillIndex: 0,
         animationFrames: 310,
         occupancyFrames: 75,
-        sourceKind: 'verified-specific-input-window',
+        sourceKind: 'installed-client-static-charged-same-action-reopen',
       },
       {
         subSkillIndex: 1,
@@ -1816,13 +1816,14 @@ describe('verified combat mechanics package', () => {
         mapping.sourceSkillId === 10800301 &&
         mapping.actionKind === 'charged-attack'
     );
-    const derivedControl =
-      mechanicsPackage.actionVariantGraph.derivedControlContracts.find(
-        contract =>
-          contract.ownerId === 108003 && contract.controlSkillId === 10800310
+    const releaseBinding =
+      mechanicsPackage.actionVariantGraph.chargingReleaseBindings.find(
+        binding =>
+          binding.ownerId === 108003 &&
+          binding.bindingIdentity === 'miti-charge-release-sub0'
       );
-    const fullCharge = derivedControl.inputSelector.options.find(
-      option => option.selectorIdentity === 'miti-charged-full'
+    const fullCharge = releaseBinding.windows.find(
+      window => window.windowIdentity === 'miti-charge-full'
     );
     const control = mechanicsPackage.actionVariantControlBindings.find(
       binding => binding.controlSkillId === fullCharge.executionControlSkillId

@@ -2,7 +2,7 @@
 
 - Owner: `109001`
 - Profile: `actor:109001:character-combat-profile:v1`
-- Hash: `ba20305c98b98218bfe9fd69c0a35d24046632f42b95d708cb9f60a708e20875`
+- Hash: `1b9d43a992f639850a7d3a030ca9c97fedb649c55ec13c0cc3e5046272ca9ffb`
 - 流水线成熟度：runtime-applied
 - 战斗覆盖：partial
 - 角色完成：no
@@ -11,7 +11,7 @@
 - 可达 control：23
 - 窗口：0
 - Hit：71
-- 来源 identity：540
+- 来源 identity：543
 - 战斗图：142 nodes / 130 edges
 - 描述覆盖：25
 - Runtime ready 动作：9/10

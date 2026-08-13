@@ -9,8 +9,8 @@
     "semanticTransitionCount": 2,
     "appliedTransitionCount": 2,
     "staticEvidenceOnlyWindowCount": 0,
-    "gameplayGapCount": 1,
-    "notApplicableActionCount": 7
+    "gameplayGapCount": 0,
+    "notApplicableActionCount": 8
   },
   "transitions": [
     {
@@ -115,11 +115,8 @@
       "directWindowCount": 4,
       "appliedResourceTransactionCount": 0,
       "appliedTuningEffectCount": 0,
-      "status": "static-evidence-gap",
-      "reasons": [
-        "selected-control-variant-has-no-runnable-hit",
-        "verified-action-effective-occupancy-window-unresolved"
-      ],
+      "status": "not-applicable",
+      "reasons": [],
       "sourceIdentity": "characters.items[id=108003].skillSlots[group=ground,slot=2]"
     },
     {
@@ -2281,5 +2278,5 @@
       "runtimeStatus": "not-runtime-transition"
     }
   ],
-  "profileHash": "3d3dd432819029b58ea91f8267c37176c5dea6b06e367bfbbe9c6aa364f25d8d"
+  "profileHash": "5780db448a9aeace951897ceefc35a5ab72b31339acc753c70b27aa558a1bf6f"
 }

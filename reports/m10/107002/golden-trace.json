@@ -6,15 +6,15 @@
   "scenarioIdentity": "m12-b3:107002:120s-reduced-action-surface-golden",
   "durationMs": 120000,
   "frameRate": 60,
-  "sourcePackageHash": "97e24ffe35eacffaead6914987873f122958dc0663639b68a5faeb9c803d7c22",
+  "sourcePackageHash": "79b1af97bc9c48fd3f0db5c57fb81dfd753ffd005769afd823a4a1e5b917cfdb",
   "compilerPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#compile",
   "simulatorPath": "src/simulation/headless/canonicalHeadlessCombatCore.js#simulate",
   "headlessCore": {
     "schemaVersion": 1,
-    "inputHash": "4e0300a772ebac0e",
-    "traceHash": "90109e58770ebc23",
-    "dataHash": "94d27af11b0e2439",
-    "buildHash": "334d2081aad85fb4",
+    "inputHash": "3ef7cc2af932e5d6",
+    "traceHash": "eda0e2043aee9428",
+    "dataHash": "4408b586449d94db",
+    "buildHash": "de7c14fc807d31d4",
     "headlessAssumptionContracts": [],
     "criticalPolicy": "non-critical"
   },
@@ -120,7 +120,7 @@
           "semanticName": "重击",
           "controlSkillId": 10700210,
           "subSkillIndex": 0,
-          "actualDurationFrames": 330,
+          "actualDurationFrames": 96,
           "chargingRelease": null,
           "appliedAssumptionIdentity": null,
           "appliedAssumptionVersion": null,
@@ -244,7 +244,7 @@
           "semanticName": "重击",
           "controlSkillId": 10700210,
           "subSkillIndex": 0,
-          "actualDurationFrames": 330,
+          "actualDurationFrames": 96,
           "sourceKind": "workbench-explicit-input-variant"
         },
         "misa-star": {
@@ -10350,7 +10350,7 @@
         }
       ]
     },
-    "summaryHash": "90c3bb67ce8d933d55627da6d3ae6f85da14f542e0c3a73bde518e10693caaa2"
+    "summaryHash": "44403af60493beb7471cc5239c67a290b9fb9e71c4e7777a0421f27aa78f13bc"
   },
   "expected": {
     "exact": {
@@ -12098,6 +12098,6 @@
       }
     ]
   },
-  "replayHash": "d748ef7e1fabff6ad9e26b58c5d20bbb42a7fa718fa3884f8123517f590c37e0",
-  "profileHash": "6e2ec76b8dfa16b608777f26460bc0119255ab288c83c877bc507f40b6592f7f"
+  "replayHash": "551dbf81f40f0a9f064811227acd6628863681f55ae7b38003b0e953343d9f67",
+  "profileHash": "623cc4de5e2b2487cfcb2ffc3aa1e2a9cb0c3f149b07e90a742a5921585909f2"
 }

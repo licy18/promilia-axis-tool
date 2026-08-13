@@ -183,8 +183,8 @@ function createOwnerNormalAttackAxis(ownerId, segmentCount) {
 
 function createStarbornContextContinuationAxis({ ownerId, sourceKind }) {
   const sourceActionId = `starborn-${ownerId}-${sourceKind}-source`;
-  const sourceFrame = 0;
-  const thrustFrame = sourceKind === 'charged-attack' ? 73 : 65;
+  const sourceFrame = sourceKind === 'charged-attack' ? 16 : 0;
+  const thrustFrame = sourceFrame + (sourceKind === 'charged-attack' ? 73 : 65);
   const continuationGroupId = `starborn-${ownerId}-${sourceKind}-context-form`;
   const sourceAction = {
     id: sourceActionId,
@@ -201,6 +201,12 @@ function createStarbornContextContinuationAxis({ ownerId, sourceKind }) {
             semanticVariant: {
               selectorIdentity: `starborn-${ownerId}-derived-charged`,
               publicVariantIndex: 1,
+            },
+            physicalInput: {
+              mode: 'hold',
+              pressFrame: 0,
+              releaseFrame: null,
+              executionFrame: sourceFrame,
             },
           }
         : {}),
@@ -733,6 +739,9 @@ describe('Machine Axis service', () => {
     expect(damageCounts('miti-short-charge-state-on')).toMatchObject({
       108003125: 1,
       108003127: 6,
+    });
+    expect(damageCounts('miti-light-charge-state-on')).toMatchObject({
+      108003124: 1,
     });
     expect(damageCounts('miti-full-charge-expiry-boundary')).toMatchObject({
       108003126: 1,

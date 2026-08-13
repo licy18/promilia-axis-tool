@@ -3,13 +3,13 @@
   "contractName": "AzPrCharacterAcceptanceRecipe",
   "runtimeProfileOverlay": true,
   "productVisualAcceptance": {
-    "status": "accepted",
+    "status": "pending",
     "acceptanceCommit": "13d28aa515312a63395f49ddff3c778967e1b20f",
     "recordIdentity": "character-product-acceptance:199001:13d28aa515312a63395f49ddff3c778967e1b20f:138965042f15f3bc",
     "qualificationSubjectHash": "138965042f15f3bc",
     "scenarioSetHash": "e754f8ccacbe99f3",
-    "scenarioIdentities": ["m12-b3-starborn-199001-focused-acceptance"],
-    "automatedEvidence": [
+    "scenarioIdentities": [],
+    "supersededAutomatedEvidence": [
       {
         "scenarioIdentity": "m12-b3-starborn-199001-focused-acceptance",
         "evidenceKind": "workbench-playwright-screenshot",

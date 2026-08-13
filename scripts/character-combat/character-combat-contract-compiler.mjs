@@ -6,7 +6,7 @@ import {
   createHeadlessAssumptionCanonicalPayload,
 } from '../../src/domain/headlessAssumptionContract.js';
 
-export const CHARACTER_COMBAT_COMPILER_VERSION = 7;
+export const CHARACTER_COMBAT_COMPILER_VERSION = 8;
 const TARGET_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 101100;
 const SELF_STATE_CONDITIONAL_COMMON_FUNCTION_ID = 102100;
 const EXISTING_TUNING_MARK_CONDITIONAL_COMMON_FUNCTION_ID = 1007;
@@ -457,9 +457,7 @@ export function mergeCharacterCombatOwnerCompilations({
   );
   const chargingReleaseBindings = replaceOwnerRecords(
     actionVariantGraph.chargingReleaseBindings ?? [],
-    compilations.flatMap(
-      item => item.contracts.chargingReleaseBindings ?? []
-    )
+    compilations.flatMap(item => item.contracts.chargingReleaseBindings ?? [])
   );
   const breakTriggerWatchers = replaceOwnerRecords(
     actionVariantGraph.breakTriggerWatchers ?? [],
@@ -550,8 +548,7 @@ export function mergeCharacterCombatOwnerCompilations({
   actionVariantGraph.pickupProfiles = pickupProfiles;
   actionVariantGraph.pickupSpawnBindings = pickupSpawnBindings;
   actionVariantGraph.pickupAbsorbBindings = pickupAbsorbBindings;
-  actionVariantGraph.headlessAssumptionContracts =
-    headlessAssumptionContracts;
+  actionVariantGraph.headlessAssumptionContracts = headlessAssumptionContracts;
   actionVariantGraph.chargingReleaseBindings = chargingReleaseBindings;
   actionVariantGraph.breakTriggerWatchers = breakTriggerWatchers;
   actionVariantGraph.derivedControlContracts =
@@ -2097,8 +2094,7 @@ export function createCharacterCombatOwnerRuntimeContracts({
   const ownerControls = (controls ?? []).map(control =>
     projectOwnerRuntimeControl(control, {
       includeSettlementNodeClassifications:
-        compilation.coverageCandidateMode ===
-        'selected-root-source-closure-v1',
+        compilation.coverageCandidateMode === 'selected-root-source-closure-v1',
     })
   );
   const contracts = {
@@ -2120,8 +2116,7 @@ export function createCharacterCombatOwnerRuntimeContracts({
     inputVariantSelectors: compilation.contracts.inputVariantSelectors,
     controlTransitionWindows: compilation.contracts.controlTransitionWindows,
     variantWindowBindings: compilation.contracts.variantWindowBindings,
-    chargingReleaseBindings:
-      compilation.contracts.chargingReleaseBindings,
+    chargingReleaseBindings: compilation.contracts.chargingReleaseBindings,
     breakTriggerWatchers: compilation.contracts.breakTriggerWatchers,
     actionEffectBindings: compilation.contracts.actionEffectBindings,
     actionHitBindings: compilation.contracts.actionHitBindings,
@@ -2180,9 +2175,7 @@ export function createCharacterCombatStatDependencies({
     staticPropertyCatalog?.actor?.profiles ??
     staticPropertyCatalog?.actorProfiles ??
     []
-  ).find(
-    profile => Number(profile.characterId) === Number(ownerId)
-  );
+  ).find(profile => Number(profile.characterId) === Number(ownerId));
   const actorSp = (actorProfiles ?? []).find(
     profile => Number(profile.characterId) === Number(ownerId)
   );
@@ -2779,18 +2772,21 @@ function compileHeadlessAssumptionContract({ ownerId, definition }) {
       assumption =>
         !assumption.identity ||
         !assumption.sourceIdentity ||
-        assumption.resolution !== 'resolved-by-product-assumption' ||
+        ![
+          'resolved-by-product-assumption',
+          'resolved-by-installed-client-static-evidence',
+        ].includes(assumption.resolution) ||
         assumption.selectedSemantics == null ||
         assumption.alternateSemantics == null ||
         assumption.sensitivity == null ||
         !assumption.preservedFailureToPass
     ) ||
-    !String(definition.futureClientEvidencePolicy ?? '').trim()
-    || declaredSettlementContract?.contractIdentity !==
-      enemySettlementContract.contractId
-    || declaredSettlementContract?.contractHash !==
-      enemySettlementContract.contractHash
-    || declaredSettlementContract?.clientParityReady !== false
+    !String(definition.futureClientEvidencePolicy ?? '').trim() ||
+    declaredSettlementContract?.contractIdentity !==
+      enemySettlementContract.contractId ||
+    declaredSettlementContract?.contractHash !==
+      enemySettlementContract.contractHash ||
+    declaredSettlementContract?.clientParityReady !== false
   ) {
     throw new Error(
       `character combat headless assumption contract invalid: ${ownerId}`
@@ -2815,9 +2811,7 @@ function compileHeadlessAssumptionContract({ ownerId, definition }) {
       ),
     },
     assumptions,
-    futureClientEvidencePolicy: String(
-      definition.futureClientEvidencePolicy
-    ),
+    futureClientEvidencePolicy: String(definition.futureClientEvidencePolicy),
     sourceIdentity: String(definition.sourceIdentity ?? '').trim(),
   });
   if (!payload.sourceIdentity) {
@@ -2862,9 +2856,7 @@ function compileChargingReleaseBindings({
         window.executionControlSkillId,
         'charging release execution control'
       );
-      const executionSubSkillIndex = Number(
-        window.executionSubSkillIndex
-      );
+      const executionSubSkillIndex = Number(window.executionSubSkillIndex);
       const executionTiming = operators.resolveControlVariantTiming({
         control: executionControl,
         subSkillIndex: executionSubSkillIndex,
@@ -2903,7 +2895,9 @@ function compileChargingReleaseBindings({
       !String(definition.bindingIdentity ?? '').trim() ||
       !sourceVariant ||
       !assumption ||
-      definition.precedence !== 'greatest-start-frame' ||
+      !['greatest-start-frame', 'source-order-first'].includes(
+        definition.precedence
+      ) ||
       definition.boundary !== 'right-open' ||
       windows.length < 2
     ) {
@@ -2921,7 +2915,7 @@ function compileChargingReleaseBindings({
       sourceSubSkillIndex,
       actionKind: definition.actionKind ?? 'charged-attack',
       inputField: definition.inputField ?? 'variantInputSelection.inputFrame',
-      precedence: 'greatest-start-frame',
+      precedence: definition.precedence,
       boundary: 'right-open',
       compositionMode: 'source-before-release-plus-shifted-release',
       assumptionIdentity,
@@ -2987,9 +2981,7 @@ function compileBreakTriggerWatchers({
     );
     const modifier = triggeredEffect?.propertyChange;
     const durationMs = Number(armEffect?.lifecycle?.durationMs);
-    const effectDurationMs = Number(
-      triggeredEffect?.lifecycle?.durationMs
-    );
+    const effectDurationMs = Number(triggeredEffect?.lifecycle?.durationMs);
     if (
       !String(definition.watcherIdentity ?? '').trim() ||
       !hit ||
@@ -3765,10 +3757,7 @@ function compileExistingTuningMarkAcquisitionDefinitions({
   operators,
 }) {
   const profileByMarkId = new Map(
-    (tuningMarkProfiles ?? []).map(profile => [
-      Number(profile.markId),
-      profile,
-    ])
+    (tuningMarkProfiles ?? []).map(profile => [Number(profile.markId), profile])
   );
   return definitions.flatMap(definition => {
     const groupIdentity = String(definition.groupIdentity ?? '').trim();
@@ -3861,8 +3850,7 @@ function compileExistingTuningMarkAcquisitionDefinitions({
           wrapperMatches[0].trigger?.behaviorPathId == null
             ? null
             : String(wrapperMatches[0].trigger.behaviorPathId),
-        tuningMarkProfileKey:
-          tuningProfile.profileKey ?? tuningProfile.key,
+        tuningMarkProfileKey: tuningProfile.profileKey ?? tuningProfile.key,
         stackDelta,
         existingTuningMarkActivationCondition: {
           conditionIdentity: `${groupIdentity}:${tuningProfile.profileKey ?? tuningProfile.key}`,
@@ -3894,9 +3882,7 @@ function compileExistingTuningMarkActivationCondition({
   operators,
 }) {
   if (!definition) return null;
-  const conditionIdentity = String(
-    definition.conditionIdentity ?? ''
-  ).trim();
+  const conditionIdentity = String(definition.conditionIdentity ?? '').trim();
   const sourceElementId = Number(definition.sourceElementId);
   const expectedMarkId = Number(definition.expectedMarkId);
   const asset = operators.readElementAsset(sourceElementId);
@@ -6337,9 +6323,7 @@ function compileTuningMarkConditionalDamageGroup({
   }
   const branchSelectionMode =
     definition.branchSelectionMode ?? 'current-mark-count';
-  const expectedJudgmentType = Number(
-    definition.expectedJudgmentType ?? 5
-  );
+  const expectedJudgmentType = Number(definition.expectedJudgmentType ?? 5);
   const expectedCanConsume = Number(
     definition.expectedCanConsume ??
       (branchSelectionMode === 'same-consume-judgment-outcome' ? 1 : 0)
@@ -6347,11 +6331,12 @@ function compileTuningMarkConditionalDamageGroup({
   const candidateMarkIds = (definition.expectedCandidateMarkIds ?? []).map(
     Number
   );
-  const profile = (tuningMarkProfiles ?? []).find(
-    candidate =>
-      (candidate.profileKey ?? candidate.key) ===
-      definition.tuningMarkProfileKey
-  ) ??
+  const profile =
+    (tuningMarkProfiles ?? []).find(
+      candidate =>
+        (candidate.profileKey ?? candidate.key) ===
+        definition.tuningMarkProfileKey
+    ) ??
     (tuningMarkProfiles ?? []).find(candidate =>
       candidateMarkIds.includes(Number(candidate.markId))
     );
@@ -6393,10 +6378,9 @@ function compileTuningMarkConditionalDamageGroup({
           candidateMarkIds.join('|') ||
         !String(definition.consumeJudgmentGroupIdentity ?? '').trim() ||
         definition.noCandidatePolicy !== 'base-branch-no-overlimit')) ||
-    ![
-      'current-mark-count',
-      'same-consume-judgment-outcome',
-    ].includes(branchSelectionMode) ||
+    !['current-mark-count', 'same-consume-judgment-outcome'].includes(
+      branchSelectionMode
+    ) ||
     !basePathIds.includes(String(base.pathId)) ||
     !enhancedPathIds.includes(String(enhanced.pathId)) ||
     triggerFrames.length === 0 ||
@@ -6421,8 +6405,7 @@ function compileTuningMarkConditionalDamageGroup({
     tuningMarkProfileKey: profile.profileKey ?? profile.key,
     markId,
     minimumStacks,
-    consumesStacks:
-      branchSelectionMode === 'same-consume-judgment-outcome',
+    consumesStacks: branchSelectionMode === 'same-consume-judgment-outcome',
     branchSelectionMode,
     judgmentType: expectedJudgmentType,
     canConsume: expectedCanConsume,

@@ -521,6 +521,9 @@
         },
         "attackInput": {
           "anyOf": [{ "$ref": "#/$defs/attackInput" }, { "type": "null" }]
+        },
+        "physicalInput": {
+          "anyOf": [{ "$ref": "#/$defs/physicalInput" }, { "type": "null" }]
         }
       }
     },
@@ -548,6 +551,19 @@
         "groupId": { "type": ["string", "null"] },
         "contextActionId": { "type": ["string", "null"] },
         "chainIdentity": { "type": ["string", "null"] }
+      }
+    },
+    "physicalInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "pressFrame", "executionFrame"],
+      "properties": {
+        "mode": { "const": "hold" },
+        "pressFrame": { "type": "integer", "minimum": 0 },
+        "releaseFrame": { "type": ["integer", "null"], "minimum": 0 },
+        "executionFrame": { "type": "integer", "minimum": 0 },
+        "authorityHash": { "type": ["string", "null"] },
+        "sourceKind": { "type": ["string", "null"] }
       }
     },
     "schedule": {
