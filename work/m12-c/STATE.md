@@ -1,5 +1,12 @@
 # M12-C 末音配队、装配与动作轴优化计划
 
+## 0.00000000000000 2026-08-14 07:59 035fcfee Gate 单一 E21 封套漂移闭合
+
+- clean pushed `master@035fcfee85ac3cc2e7c3a966685dba32d8e3547a` 的唯一 Gate V2 已真实通过 character-combat、visual acceptance `254/254`、binding `22/22`、Kibo headless 与 machine-axis settlement；全量 Vitest 为 `250/251 files`、`2104/2105 tests`，随后以 exit `1`、record=`4797d93ac315132dc9f220ba23be5fe5cb4edb06bf4dd1bd8fd9c94728cac6fe`、`failureStage=test` 诚实封账。runner restoration 零残留，HEAD/remote 相等且 tracked tree 恢复 clean；未产生 Formal Search Admission，搜索任务保持 idle。
+- 唯一失败为 `beforeSkillCompositeEvidence.test.js`：历史 E21 产品验收封套 `reports/m12/m12-b3-c-dynamic-loadout-effect-acceptance.json` 的六个 qualification hash 仍指向上一轮全 owner 重绑基线，而当前 101010/103002 successor trace 定向重绑后的权威 qualification 已稳定为 source snapshot `a12ba639b8a0241f`、roster `2e05d812634e9255`、manifests `1ab0a2c54addc3bc`、ledger `cdc23eb7c297b95d`、binding `608f02723e5a5c72`、catalog `28cb520282781801`。其余 249 个对象属性一致，没有生产运行时、动作、数值或 authority 漂移。
+- 最小修复只同步上述六个封套 hash；`audit:optimization-qualification` 继续 `263/263`、零 blocker 且 assert-clean。全部 10 个引用该封套的 evidence tests 为 `10 files / 35 tests PASS`，没有放宽断言或修改生成器。
+- 下一步只允许完成格式、精确 diff、保护项复核，提交并推送该单一封套派生修复；随后从新 clean HEAD 重建 Gate V2。新的 executed PASS、独立 Formal Search Admission `15/15` 与 live authority 复核完成前，搜索保持 idle，任何旧 run/config/checkpoint/result 均不得恢复或复用。
+
 ## 0.0000000000000 2026-08-14 07:38 52a98164 Gate 首阶段 golden trace 漂移闭合
 
 - clean pushed `master@52a98164ded7682563a8b66323bfaf70c651ff3d` 的唯一 Gate V2 已在首个 `character-combat` 阶段按设计 fail closed：exit `1`、record=`2454f5866bf98e73fe9a89987a27f7f2be44d0b74dd15f052db710ad4b8d0d89`、`failureStage=character-combat`、completed stages `0`。runner 未进入后续测试/审计/preview，也未产生 Formal Search Admission；搜索任务保持 idle。
